@@ -14,6 +14,7 @@ import os
 import datetime
 from corsheaders.defaults import default_headers
 import logging
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -138,31 +139,10 @@ CORS_ALLOW_HEADERS = default_headers + (
 
 DATABASES = {
 
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
-
-     #'default': {
-     #    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-     #    'NAME': 'postgres',
-     #    'USER': 'postgres',
-     #    'PASSWORD': 'postgres',
-     #    'HOST': 'localhost',
-     #    'PORT': '5432',
-     #}
-
-     'default': {
-         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-         'NAME': os.environ.get('DB_NAME', 'postgres'),
-         'USER': os.environ.get('DB_USERNAME', 'postgres'),
-         'PASSWORD': os.environ.get('DB_PASSWORD', 'postgres'),
-         'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-         'PORT': os.environ.get('DB_PORT', '5432')
-     }
-
+    # Be sure to set the DATABASE_URL environment variable on your local
+    # development machine so that the local database can be connected to.
+    'default': dj_database_url.config()
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
