@@ -10,13 +10,13 @@ RUN npm install -g npm to update
 
 # install and cache app dependencies
 COPY package.json /usr/src/app/package.json
-RUN npm install
+RUN npm install --legacy-peer-deps
 RUN npm install -g @angular/cli
 
 # add app
 COPY . /usr/src/app
 
-RUN node --max-old-space-size=4096 /usr/src/app/node_modules/.bin/ng build --aot --source-map --configuration=local
+RUN node --max-old-space-size=8192 /usr/src/app/node_modules/.bin/ng build --aot --source-map --configuration=local
 
 # start app
 #CMD ng serve --host 0.0.0.0

@@ -6,7 +6,7 @@ applications:
     disk_quota: 2G
     stack: cflinuxfs3
     # command: node ng build
-    path: dist/
+    # path: dist/
     buildpacks:
       - nginx_buildpack
     random-route: true
