@@ -15,6 +15,10 @@
     "e2e": "ng e2e",
     "json-server": "nodemon ./server/server.js"
   },
+  "engines": {
+    "node": "15.x",
+    "npm": "7.x"
+  },
   "private": true,
   "dependencies": {
     "@angular-builders/dev-server": "^7.1.1",

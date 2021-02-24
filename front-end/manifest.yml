@@ -1,0 +1,17 @@
+---
+applications:
+  - name: efile-frontend
+    instances: 1
+    memory: 1.5G
+    disk_quota: 2G
+    stack: cflinuxfs3
+    # command: node ng build
+    path: dist/
+    buildpacks:
+      - nginx_buildpack
+    random-route: true
+    services:
+      - efile-creds
+    env:
+      NODE_OPTIONS: "--max-old-space-size=8192"
+      #PATH: "$HOME/.npm-packages/bin:$PATH"
