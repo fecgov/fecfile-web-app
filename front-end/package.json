@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-docker": "npm install ; node --max_old_space_size=3072 ./node_modules/@angular/cli/bin/ng serve --port 80 --host 0.0.0.0 --configuration=local",
     "local": "ng serve --configuration=local",
     "local_memory": "node --max_old_space_size=3072 ./node_modules/@angular/cli/bin/ng serve --configuration=local",
     "local_aot": "ng serve --configuration=local --aot",
@@ -62,12 +63,13 @@
   "devDependencies": {
     "@angular-builders/custom-webpack": "^7.5.2",
     "@angular-devkit/build-angular": "^0.13.10",
-    "@angular/cli": "~6.0.8",
+    "@angular/cli": "^6.0.8",
     "@angular/compiler-cli": "^6.0.3",
     "@angular/language-service": "^6.0.3",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "12.12.6",
+    "angular-password-strength-meter": "~2.0.0",
     "codelyzer": "~4.2.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
@@ -82,7 +84,6 @@
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
     "typescript": ">=2.7.0 <2.8.0",
-    "angular-password-strength-meter": "~2.0.0",
     "zxcvbn": "~4.4.2"
   },
   "browser": {
