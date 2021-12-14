@@ -878,7 +878,7 @@ def form1M(request):
                     request_dict[column_name[:-2] + 'con'] = request.data['contribution_date']
                     previous_f1m_dict = get_sql_f1m(request_dict)
                     if candidate_number == '1':
-                        if 'committeeType' in request.data: 
+                        if 'committeeType' in request.data:
                             request_dict['committee_type'] = request.data.get('committeeType') if request.data['committeeType'] else None
                         check_clear_establishment_status(cmte_id, request_dict['report_id'], 'A')
                         request_dict['est_status'] = 'Q'

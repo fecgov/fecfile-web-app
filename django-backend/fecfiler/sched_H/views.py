@@ -1809,7 +1809,7 @@ def get_h2_summary_table(request):
             return Response(json_result, status=status.HTTP_200_OK)
     except:
         raise
-#: get the paginator page with other details like  
+#: get the paginator page with other details like
 def get_pagination_dataset(json_res, itemsperpage, page_num):
     if check_null_value(json_res) is False  or json_res is None:
         json_result = {
@@ -1837,11 +1837,11 @@ def get_pagination_dataset(json_res, itemsperpage, page_num):
 
 
 def get_int_value(num):
-    if num is not None: 
+    if num is not None:
         num = int(num)
     else:
-        num = 1 
-    return int(num)          
+        num = 1
+    return int(num)
 
 
 def count_h2_transactions(cmte_id, report_id, activity_event_name):
@@ -5474,7 +5474,7 @@ def schedH6(request):
                 ):
                     data["transaction_id"] = request.query_params.get("transaction_id")
                 datum = get_schedH6(data)
-                if query_params.get("page") is None and query_params.get("itemsPerPage") is None: 
+                if query_params.get("page") is None and query_params.get("itemsPerPage") is None:
                     return JsonResponse(datum, status=status.HTTP_200_OK, safe=False)
 
                 #: update for pagination
@@ -5482,7 +5482,7 @@ def schedH6(request):
                 return Response(json_result, status=status.HTTP_200_OK)
             except NoOPError as e:
                 logger.debug(e)
-                #: tobe removed after development testing for 
+                #: tobe removed after development testing for
                 forms_obj =  {
                     "transactions": "",
                     "totaltransactionsCount": "",

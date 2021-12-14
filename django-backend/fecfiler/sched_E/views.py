@@ -507,13 +507,13 @@ def get_sched_e_ytd_amount(request):
 
         # if cand_office == "P":
         #     _sql = """
-        #     SELECT calendar_ytd_amount, COALESCE(dissemination_date, disbursement_date) as transaction_dt 
+        #     SELECT calendar_ytd_amount, COALESCE(dissemination_date, disbursement_date) as transaction_dt
         #     FROM public.sched_e
         #     WHERE cmte_id = %s
-        #     AND so_cand_office = %s 
-        #     AND election_code = %s 
+        #     AND so_cand_office = %s
+        #     AND election_code = %s
         #     AND delete_ind is distinct from 'Y'
-        #     ORDER BY transaction_dt DESC, create_date DESC; 
+        #     ORDER BY transaction_dt DESC, create_date DESC;
         #     """
         #     _v = (cmte_id, cand_office, election_code)
         # elif cand_office == "S":
@@ -521,14 +521,14 @@ def get_sched_e_ytd_amount(request):
         #     if not cand_state:
         #         raise Exception("cand_state is required for cand_office S")
         #     _sql = """
-        #     SELECT calendar_ytd_amount, COALESCE(dissemination_date, disbursement_date) as transaction_dt 
+        #     SELECT calendar_ytd_amount, COALESCE(dissemination_date, disbursement_date) as transaction_dt
         #     FROM public.sched_e
         #     WHERE cmte_id = %s
-        #     AND so_cand_office = %s 
-        #     AND election_code = %s 
-        #     AND so_cand_state = %s 
+        #     AND so_cand_office = %s
+        #     AND election_code = %s
+        #     AND so_cand_state = %s
         #     AND delete_ind is distinct from 'Y'
-        #     ORDER BY transaction_dt DESC, create_date DESC; 
+        #     ORDER BY transaction_dt DESC, create_date DESC;
         #     """
         #     _v = (cmte_id, cand_office, election_code, cand_state)
         # elif cand_office == "H":
@@ -542,12 +542,12 @@ def get_sched_e_ytd_amount(request):
         #     SELECT calendar_ytd_amount, COALESCE(dissemination_date, disbursement_date) as transaction_dt
         #     FROM public.sched_e
         #     WHERE cmte_id = %s
-        #     AND so_cand_office = %s 
-        #     AND election_code = %s 
-        #     AND so_cand_state = %s 
-        #     AND so_cand_district = %s 
+        #     AND so_cand_office = %s
+        #     AND election_code = %s
+        #     AND so_cand_state = %s
+        #     AND so_cand_district = %s
         #     AND delete_ind is distinct from 'Y'
-        #     ORDER BY transaction_dt DESC, create_date DESC; 
+        #     ORDER BY transaction_dt DESC, create_date DESC;
         #     """
         #     _v = (cmte_id, cand_office, election_code, cand_state, cand_district)
         # else:
@@ -716,7 +716,7 @@ def update_aggregate_amt_se(data):
             )
             aggregate_amount = 0
             # dissemination_date, disbursement_date = data.get('dissemination_date'), data.get('disbursement_date')
-            # curr_tran_date = dissemination_date if dissemination_date else disbursement_date 
+            # curr_tran_date = dissemination_date if dissemination_date else disbursement_date
             # curr_tran_date =  datetime.datetime.strptime(
             #                     curr_tran_date, "%Y-%m-%d"
             #                 ).date()
@@ -1377,7 +1377,7 @@ def schedE(request):
             else:
                 report_id = check_report_id(request.data.get("report_id"))
             # end of handling
-            #also check if an 'override' report_id present, and if so, use that instead. 
+            #also check if an 'override' report_id present, and if so, use that instead.
             if(request.data.get("associated_report_id") and check_null_value(request.data.get("associated_report_id"))):
                 report_id = request.data.get("associated_report_id")
                 associatedbydissemination = True
@@ -1528,7 +1528,7 @@ def schedE(request):
                 report_id = "0"
             else:
                 report_id = check_report_id(request.data.get("report_id"))
-            #also check if an 'override' report_id present, and if so, use that instead. 
+            #also check if an 'override' report_id present, and if so, use that instead.
             if(request.data.get("associated_report_id") and check_null_value(request.data.get("associated_report_id"))):
                 report_id = request.data.get("associated_report_id")
                 associatedbydissemination = True
@@ -1581,7 +1581,7 @@ def mirror_to_F24(request):
             transaction_id
             FROM public.sched_e WHERE cmte_id=%s AND transaction_id=%s AND delete_ind IS DISTINCT FROM 'Y'"""
         _value_list = [request.data['reportId'], transaction_id, datetime.datetime.now(),
-              datetime.datetime.now(), cmte_id, request.data['transactionId']] 
+              datetime.datetime.now(), cmte_id, request.data['transactionId']]
 
         _sql2 = """UPDATE public.sched_e SET mirror_report_id = %s, mirror_transaction_id = %s
                 WHERE transaction_id = %s"""

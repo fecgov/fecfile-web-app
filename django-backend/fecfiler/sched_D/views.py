@@ -279,13 +279,13 @@ def schedD(request):
 '''
 
 def get_int_value(num):
-    if num is not None: 
+    if num is not None:
         num = int(num)
     else:
-        num = 1 
-    return int(num)          
+        num = 1
+    return int(num)
 
-#: get the paginator page with other details like  
+#: get the paginator page with other details like
 def get_pagination_dataset(json_res, itemsperpage, page_num):
     if check_null_value(json_res) is False or json_res is None:
         json_result = {
@@ -321,10 +321,10 @@ def schedD(request):
     #: Get the request parameters and set for Pagination
     query_params = request.query_params
     page_num = get_int_value(query_params.get("page"))
-    # if query_params.get("page") is not None: 
+    # if query_params.get("page") is not None:
     #     page_num = int(page_num)
     # else:
-    #     page_num = 1       
+    #     page_num = 1
 
     descending = query_params.get("descending")
     if not (
@@ -404,7 +404,7 @@ def schedD(request):
     elif request.method == "GET":
         try:
             #: Hardcode cmte value for now and remove after dev complete
-            #data = {"cmte_id": "C00000935"} 
+            #data = {"cmte_id": "C00000935"}
             data =  {"cmte_id": get_comittee_id(request.user.username)}
      
             if "report_id" in request.query_params:

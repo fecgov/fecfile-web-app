@@ -29,7 +29,7 @@ from fecfiler.core.views import (
     post_entities,
     put_entities,
     remove_entities,
-    undo_delete_entities, 
+    undo_delete_entities,
     get_comittee_id,
     get_report_ids,
 )
@@ -2064,7 +2064,7 @@ def get_sla_summary_table(request):
         )
 
 
-#: get the paginator page with other details like  
+#: get the paginator page with other details like
 def get_pagination_dataset(json_res, itemsperpage, page_num):
     if check_null_value(json_res) is False or json_res is None:
         json_result = {
@@ -2092,11 +2092,11 @@ def get_pagination_dataset(json_res, itemsperpage, page_num):
 
 
 def get_int_value(num):
-    if num is not None: 
+    if num is not None:
         num = int(num)
     else:
-        num = 1 
-    return int(num)          
+        num = 1
+    return int(num)
 
 
 def load_levin_account_data(transaction_id):

@@ -48,7 +48,7 @@ from fecfiler.core.carryover_helper import (
 from fecfiler.core.transactions_chk_csv_duplicates import (
     chk_csv_uploaded,
     load_file_hash_to_db
-)    
+)
 from fecfiler.core.transactions_validate_contacts import (
     get_contact_details_from_transactions
 )
@@ -1624,10 +1624,10 @@ def put_reports(data):
             forms_obj = check_list_cvg_dates(args)
         if data.get("form_type") == 'F3L' and data.get('semi_annual_start_date') and data.get('semi_annual_end_date'):
             semi_args = [
-                cmte_id, 
-                data.get("form_type"), 
-                data.get('semi_annual_start_date'), 
-                data.get('semi_annual_end_date'), 
+                cmte_id,
+                data.get("form_type"),
+                data.get('semi_annual_start_date'),
+                data.get('semi_annual_end_date'),
                 data.get("report_id")]
             semi_forms_obj = check_list_semi_cvg_dates(semi_args)
             forms_obj.extend(semi_forms_obj)
@@ -3961,7 +3961,7 @@ def get_trans_view_name(category_type):
         view_name = "all_other_transactions_view"
     else:
         view_name = "all_receipts_transactions_view"
-    return view_name    
+    return view_name
 
 def get_trans_query(category_type, cmte_id, param_string):
     if category_type == "disbursements_tran":
@@ -4577,7 +4577,7 @@ def get_transactions(request, transaction_id):
                 param_string + " AND memo_code IS NOT NULL AND memo_code != ''"
         )
 
-    trans_query_string = get_trans_query(ctgry_type, cmte_id, param_string)       
+    trans_query_string = get_trans_query(ctgry_type, cmte_id, param_string)
     #: get the total count
     trans_query_string_count = get_trans_query_for_total_count(trans_query_string)
 
@@ -4679,7 +4679,7 @@ def get_transactions(request, transaction_id):
                         output_list.append(transaction)
         else:
             status_value = status.HTTP_200_OK
-        #: run the record count query        
+        #: run the record count query
         cursor.execute(
             """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
         )
@@ -4691,7 +4691,7 @@ def get_transactions(request, transaction_id):
 #: tweak the query to get the transactions count as per page
 #       set the pagination and page details
     # total_count = len(output_list)
-    # :tweaked and using the paginator class for now as need more time to research on the page usage in UI, need to revisit !!! 
+    # :tweaked and using the paginator class for now as need more time to research on the page usage in UI, need to revisit !!!
     if transaction_id is None:
         numofpages = get_num_of_pages(totalcount, itemsperpage)
         paginator = Paginator(output_list, itemsperpage)
@@ -4703,7 +4703,7 @@ def get_transactions(request, transaction_id):
         numofpages = 1
         forms_obj = output_list
 
-    print("total form objects : ", len(list(forms_obj)))     
+    print("total form objects : ", len(list(forms_obj)))
     json_result = {
         "transactions": list(forms_obj),
         "totalTransactionCount": totalcount,
@@ -5945,46 +5945,46 @@ def load_loan_debt_summary(request_dict):
     }
 
     # _sql_rep = """
-    #     SELECT transaction_type_identifier, 
-    #     SUM(loan_balance) 
-    #     FROM   sched_c 
-    #     WHERE  cmte_id = %s 
-    #         AND report_id = %s 
+    #     SELECT transaction_type_identifier,
+    #     SUM(loan_balance)
+    #     FROM   sched_c
+    #     WHERE  cmte_id = %s
+    #         AND report_id = %s
     #         AND delete_ind is distinct from 'Y'
-    #         AND transaction_type_identifier IN ( 
-    #             'LOANS_OWED_TO_CMTE', 'LOANS_OWED_BY_CMTE' ) 
-    #     GROUP  BY transaction_type_identifier 
-    #     UNION 
-    #     SELECT transaction_type_identifier, 
-    #         SUM(balance_at_close) 
-    #     FROM   sched_d 
-    #     WHERE  cmte_id = %s 
-    #         AND report_id = %s 
+    #         AND transaction_type_identifier IN (
+    #             'LOANS_OWED_TO_CMTE', 'LOANS_OWED_BY_CMTE' )
+    #     GROUP  BY transaction_type_identifier
+    #     UNION
+    #     SELECT transaction_type_identifier,
+    #         SUM(balance_at_close)
+    #     FROM   sched_d
+    #     WHERE  cmte_id = %s
+    #         AND report_id = %s
     #         AND delete_ind is distinct from 'Y'
-    #         AND transaction_type_identifier IN ( 
-    #             'DEBT_TO_VENDOR', 'DEBT_BY_VENDOR') 
-    #     GROUP  BY transaction_type_identifier 
+    #         AND transaction_type_identifier IN (
+    #             'DEBT_TO_VENDOR', 'DEBT_BY_VENDOR')
+    #     GROUP  BY transaction_type_identifier
     # """
     # _sql_ytd = """
-    #     SELECT transaction_type_identifier AS ytd, 
-    #         Sum(loan_balance) 
-    #     FROM   sched_c 
-    #     WHERE  cmte_id = %s 
+    #     SELECT transaction_type_identifier AS ytd,
+    #         Sum(loan_balance)
+    #     FROM   sched_c
+    #     WHERE  cmte_id = %s
     #         AND delete_ind is distinct from 'Y'
-    #         AND loan_incurred_date BETWEEN %s AND %s 
-    #         AND transaction_type_identifier IN ( 
-    #             'LOANS_OWED_TO_CMTE', 'LOANS_OWED_BY_CMTE' ) 
-    #     GROUP  BY transaction_type_identifier 
-    #     UNION 
-    #     SELECT transaction_type_identifier AS ytd, 
-    #         Sum(balance_at_close) 
-    #     FROM   sched_d 
+    #         AND loan_incurred_date BETWEEN %s AND %s
+    #         AND transaction_type_identifier IN (
+    #             'LOANS_OWED_TO_CMTE', 'LOANS_OWED_BY_CMTE' )
+    #     GROUP  BY transaction_type_identifier
+    #     UNION
+    #     SELECT transaction_type_identifier AS ytd,
+    #         Sum(balance_at_close)
+    #     FROM   sched_d
     #     WHERE  cmte_id = %s
     #         AND delete_ind is distinct from 'Y'
     #         AND create_date BETWEEN %s AND %s
-    #         AND transaction_type_identifier IN ( 
-    #             'DEBT_TO_VENDOR', 'DEBT_BY_VENDOR') 
-    #     GROUP  BY transaction_type_identifier 
+    #         AND transaction_type_identifier IN (
+    #             'DEBT_TO_VENDOR', 'DEBT_BY_VENDOR')
+    #     GROUP  BY transaction_type_identifier
     # """
     # try:
     #     with connection.cursor() as cursor:
@@ -6121,10 +6121,10 @@ def get_cvg_dates(report_id, cmte_id, include_deleted=False):
     try:
         with connection.cursor() as cursor:
             if include_deleted:
-                param_string = ""                    
+                param_string = ""
             else:
                 param_string = "AND delete_ind is distinct from 'Y'"
-            cursor.execute( 
+            cursor.execute(
                 "SELECT cvg_start_date, cvg_end_date from public.reports where cmte_id = %s AND report_id = %s {}".format(param_string),
                 [cmte_id, report_id],
             )
@@ -6313,20 +6313,20 @@ def loansanddebts(report_list, cmte_id):
 
 # def loansanddebts(report_id, cmte_id):
 #     try:
-#         loans_sc_sql = """SELECT ((SELECT COALESCE(SUM(loan_balance), 0.0) FROM public.sched_c 
-#         WHERE transaction_type_identifier = 'LOANS_OWED_BY_CMTE' AND memo_code IS NULL 
-#         AND cmte_id = %s AND report_id = %s AND delete_ind is distinct from 'Y') - 
-#         (SELECT COALESCE(SUM(loan_balance), 0.0) FROM public.sched_c 
-#         WHERE transaction_type_identifier = 'LOANS_OWED_TO_CMTE' AND memo_code IS NULL 
+#         loans_sc_sql = """SELECT ((SELECT COALESCE(SUM(loan_balance), 0.0) FROM public.sched_c
+#         WHERE transaction_type_identifier = 'LOANS_OWED_BY_CMTE' AND memo_code IS NULL
+#         AND cmte_id = %s AND report_id = %s AND delete_ind is distinct from 'Y') -
+#         (SELECT COALESCE(SUM(loan_balance), 0.0) FROM public.sched_c
+#         WHERE transaction_type_identifier = 'LOANS_OWED_TO_CMTE' AND memo_code IS NULL
 #         AND cmte_id = %s AND report_id = %s AND delete_ind is distinct from 'Y')) AS loans"""
 
 #         error_message_sc = "The loans sql is throwing an error for sched_c table: "
 
-#         loans_sd_sql = """SELECT ((SELECT COALESCE(SUM(balance_at_close), 0.0) FROM public.sched_d 
-#         WHERE transaction_type_identifier = 'DEBT_TO_VENDOR' AND cmte_id = %s AND report_id = %s 
+#         loans_sd_sql = """SELECT ((SELECT COALESCE(SUM(balance_at_close), 0.0) FROM public.sched_d
+#         WHERE transaction_type_identifier = 'DEBT_TO_VENDOR' AND cmte_id = %s AND report_id = %s
 #         AND delete_ind is distinct from 'Y') -
-#         (SELECT COALESCE(SUM(balance_at_close), 0.0) FROM public.sched_d 
-#         WHERE transaction_type_identifier = 'DEBT_BY_VENDOR' AND cmte_id = %s AND report_id = %s 
+#         (SELECT COALESCE(SUM(balance_at_close), 0.0) FROM public.sched_d
+#         WHERE transaction_type_identifier = 'DEBT_BY_VENDOR' AND cmte_id = %s AND report_id = %s
 #         AND delete_ind is distinct from 'Y')) AS debts"""
 
 #         error_message_sd = "The debts sql is throwing an error for sched_d table: "
@@ -7224,7 +7224,7 @@ def contactsTable(request):
                                             + cmte_id
                                             + """' """
                                             + param_string
-                                        ) 
+                                        )
 
             # print("contacts trans_query_string: ",trans_query_string)
             # import ipdb;ipdb.set_trace()
@@ -7238,7 +7238,7 @@ def contactsTable(request):
                 )
             elif sortcolumn == "default":
                 trans_query_string = trans_query_string + """ ORDER BY name ASC"""
-            #: Set the offset and record count to start getting the data 
+            #: Set the offset and record count to start getting the data
             trans_query_string = set_offset_n_fetch(trans_query_string, page_num, itemsperpage)
             with connection.cursor() as cursor:
                 cursor.execute(
@@ -7258,7 +7258,7 @@ def contactsTable(request):
                                     d[i] = ""
 
                         status_value = status.HTTP_200_OK
-                #: run the record count query        
+                #: run the record count query
                 cursor.execute(
                     """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
                 )
@@ -7291,7 +7291,7 @@ def contactsTable(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-#: build 
+#: build
 def get_trans_query_for_total_count(trans_query_string):
     temp_string = """select count(*) from """
     i = trans_query_string.index(""" from """)
@@ -7299,16 +7299,16 @@ def get_trans_query_for_total_count(trans_query_string):
     final_query = trans_query_string.replace(s, temp_string,1)
     return final_query
 
-#: build query offset and record count to start getting the data 
+#: build query offset and record count to start getting the data
 def set_offset_n_fetch(trans_query_string, page_num, itemsperpage):
     trans_query_string = trans_query_string + """ OFFSET """
-    if page_num > 0 : 
-        trans_query_string = trans_query_string + str((page_num-1) * itemsperpage) 
-    else:    
+    if page_num > 0 :
+        trans_query_string = trans_query_string + str((page_num-1) * itemsperpage)
+    else:
         trans_query_string = trans_query_string + """ 0 """
-    trans_query_string = trans_query_string + """ ROWS """ + """ FETCH FIRST """ 
+    trans_query_string = trans_query_string + """ ROWS """ + """ FETCH FIRST """
     trans_query_string = trans_query_string + str( itemsperpage)
-    trans_query_string = trans_query_string + """ ROW ONLY """  
+    trans_query_string = trans_query_string + """ ROW ONLY """
     return trans_query_string
 
 #: get page count or number of pages for pagination
@@ -7316,7 +7316,7 @@ def get_num_of_pages(totalcount, itemsperpage):
     if (totalcount % itemsperpage) == 0:
         numofpages = totalcount / itemsperpage
     else:
-        numofpages = int(totalcount/itemsperpage) + 1                    
+        numofpages = int(totalcount/itemsperpage) + 1
     return numofpages
 
 
@@ -7487,7 +7487,7 @@ def prepare_json_builders_data(request):
         # with connection.cursor() as cursor:
         #     cursor.execute(
         #         """
-        #         SELECT line_number, sum(contribution_amount) from public.sched_a 
+        #         SELECT line_number, sum(contribution_amount) from public.sched_a
         #         where cmte_id = '%s' AND report_id = '%s' group by line_number;"""
         #         % (cmte_id, report_id)
         #     )
@@ -7500,7 +7500,7 @@ def prepare_json_builders_data(request):
         # with connection.cursor() as cursor:
         #     cursor.execute(
         #         """
-        #         SELECT line_number, sum(expenditure_amount) from public.sched_b 
+        #         SELECT line_number, sum(expenditure_amount) from public.sched_b
         #         where cmte_id = '%s' AND report_id = '%s' group by line_number;"""
         #         % (cmte_id, report_id)
         #     )
@@ -7528,8 +7528,8 @@ def prepare_json_builders_data(request):
 
         # with connection.cursor() as cursor:
         #     cursor.execute(
-        #         """ 
-        #         SELECT line_number, sum(contribution_amount) from public.sched_a 
+        #         """
+        #         SELECT line_number, sum(contribution_amount) from public.sched_a
         #         where cmte_id = %s AND contribution_date >= %s AND contribution_date <= %s AND delete_ind is distinct from 'Y' group by line_number;""",
         #         [cmte_id, from_date, to_date],
         #     )
@@ -7542,7 +7542,7 @@ def prepare_json_builders_data(request):
         # with connection.cursor() as cursor:
         #     cursor.execute(
         #         """
-        #         SELECT line_number, sum(expenditure_amount) from public.sched_b 
+        #         SELECT line_number, sum(expenditure_amount) from public.sched_b
         #         where cmte_id = %s AND expenditure_date >= %s AND expenditure_date <= %s AND delete_ind is distinct from 'Y' group by line_number;""",
         #         [cmte_id, from_date, to_date],
         #     )
@@ -9689,11 +9689,11 @@ def get_report_ids(cmte_id, from_date, submit_flag=True, including=True, form_ty
                                 check_string, "<=" if from_date.month <= 6 else ">")
                     values_list = [cmte_id, from_date, from_date, from_date, form_type]
                     # if from_date.month <= 6:
-                    #     check_string = """(({} AND date_part('month',cvg_start_date) <= 6) 
+                    #     check_string = """(({} AND date_part('month',cvg_start_date) <= 6)
                     #         OR (%s >= semi_annual_start_date AND %s <= semi_annual_end_date))""".format(check_string)
                     #     values_list = [cmte_id, from_date, from_date, from_date, form_type]
                     # else:
-                    #     check_string = """(({} AND date_part('month',cvg_start_date) > 6) 
+                    #     check_string = """(({} AND date_part('month',cvg_start_date) > 6)
                     #         OR (%s >= semi_annual_start_date AND %s <= semi_annual_end_date))""".format(check_string)
                 elif semi_date:
                     check_string = "%s >= semi_annual_start_date AND %s <= semi_annual_end_date"
@@ -9830,7 +9830,7 @@ def post_amend_f1m_report(request_dict):
             param_string += "%s, "
             value_list.append(value)
         with connection.cursor() as cursor:
-            sql = """INSERT INTO public.{}({}) VALUES ({})""".format('reports', 
+            sql = """INSERT INTO public.{}({}) VALUES ({})""".format('reports',
                 key_string[:-2], param_string[:-2])
             cursor.execute(sql,value_list)
             logger.debug("REPORTS POST")
@@ -11174,7 +11174,7 @@ def update_f3x_coh_cop_subsequent_report(report_id, cmte_id):
             # _sql = """UPDATE public.form_3x SET coh_cop = coh_cop-coh_bop+%s, coh_bop = %s,
             #         coh_coy = coh_coy-coh_begin_calendar_yr+%s, coh_begin_calendar_yr = %s
             #         WHERE cmte_id=%s and report_id=%s"""
-            # values = [str(coh_bop), str(coh_bop), str(coh_begin_yr), 
+            # values = [str(coh_bop), str(coh_bop), str(coh_begin_yr),
             #     str(coh_begin_yr), cmte_id, report]
             # with connection.cursor() as cursor:
             #     cursor.execute(_sql, values)
@@ -11203,14 +11203,14 @@ def update_f3x_details(report_id, cmte_id):
         # sd_line_number_list = ["10", "9"]
         # for sd_line in sd_line_number_list:
         #     # _sql_sched_d = """SELECT COALESCE(SUM(COALESCE(beginning_balance,0.0)+COALESCE(incurred_amount,0.0)),0.0)
-        #     #                   FROM public.sched_d WHERE line_num = %s AND delete_ind IS DISTINCT FROM 'Y' 
+        #     #                   FROM public.sched_d WHERE line_num = %s AND delete_ind IS DISTINCT FROM 'Y'
         #     #                   AND cmte_id = %s AND report_id = %s """
         #     _sql_sched_d = """ SELECT COALESCE((
-        #                     (SELECT COALESCE(SUM(beginning_balance),0.0) FROM public.sched_d 
-        #                     WHERE line_num = %s AND delete_ind IS DISTINCT FROM 'Y' 
-        #                     AND cmte_id = %s AND report_id = %s AND back_ref_transaction_id IS NULL) + 
-        #                     (SELECT COALESCE(SUM(incurred_amount),0.0) FROM public.sched_d 
-        #                     WHERE line_num = %s AND delete_ind IS DISTINCT FROM 'Y' 
+        #                     (SELECT COALESCE(SUM(beginning_balance),0.0) FROM public.sched_d
+        #                     WHERE line_num = %s AND delete_ind IS DISTINCT FROM 'Y'
+        #                     AND cmte_id = %s AND report_id = %s AND back_ref_transaction_id IS NULL) +
+        #                     (SELECT COALESCE(SUM(incurred_amount),0.0) FROM public.sched_d
+        #                     WHERE line_num = %s AND delete_ind IS DISTINCT FROM 'Y'
         #                     AND cmte_id = %s AND report_id = %s)),0.0)"""
         #     _sd_values = [sd_line, cmte_id, report_id, sd_line, cmte_id, report_id]
 
@@ -11229,9 +11229,9 @@ def update_f3x_details(report_id, cmte_id):
         output_dict['ttl_disb_sum_page_per'] = output_dict[f3x_col_line_dict['31'][0]]
         output_dict['ttl_receipts_sum_page_ytd'] = output_dict[f3x_col_line_dict['19'][3]]
         output_dict['ttl_disb_sum_page_ytd'] = output_dict[f3x_col_line_dict['31'][3]]
-        output_dict['coh_cop'] = (output_dict['coh_bop'] + output_dict['ttl_receipts_sum_page_per'] - 
+        output_dict['coh_cop'] = (output_dict['coh_bop'] + output_dict['ttl_receipts_sum_page_per'] -
             output_dict['ttl_disb_sum_page_per'])
-        output_dict['coh_coy'] = (output_dict['coh_begin_calendar_yr'] + output_dict['ttl_receipts_sum_page_ytd'] - 
+        output_dict['coh_coy'] = (output_dict['coh_begin_calendar_yr'] + output_dict['ttl_receipts_sum_page_ytd'] -
             output_dict['ttl_disb_sum_page_ytd'])
         return put_F3X(report_id, cmte_id, output_dict)
 
@@ -11313,32 +11313,32 @@ def F3X_values(cmte_id, report_list, year_flag=False):
                             output_dict[column] += amount_tuple[1]
                     else:
                         output_dict[column] = amount_tuple[1]
-        output_dict[f3x_col_line_dict['11A'][i]] = (output_dict.get(f3x_col_line_dict['11AI'][i],0) + 
+        output_dict[f3x_col_line_dict['11A'][i]] = (output_dict.get(f3x_col_line_dict['11AI'][i],0) +
                 output_dict.get(f3x_col_line_dict['11AII'][i],0))
-        output_dict[f3x_col_line_dict['11D'][i]] = (output_dict.get(f3x_col_line_dict['11A'][i],0) + 
+        output_dict[f3x_col_line_dict['11D'][i]] = (output_dict.get(f3x_col_line_dict['11A'][i],0) +
             output_dict.get(f3x_col_line_dict['11B'][i],0) + output_dict.get(f3x_col_line_dict['11C'][i],0))
-        output_dict[f3x_col_line_dict['18'][i]] = (output_dict.get(f3x_col_line_dict['18A'][i],0) + 
+        output_dict[f3x_col_line_dict['18'][i]] = (output_dict.get(f3x_col_line_dict['18A'][i],0) +
             output_dict.get(f3x_col_line_dict['18B'][i],0))
-        output_dict[f3x_col_line_dict['19'][i]] = (output_dict.get(f3x_col_line_dict['11D'][i],0) + 
-            output_dict.get(f3x_col_line_dict['12'][i],0) + output_dict.get(f3x_col_line_dict['13'][i],0) + 
+        output_dict[f3x_col_line_dict['19'][i]] = (output_dict.get(f3x_col_line_dict['11D'][i],0) +
+            output_dict.get(f3x_col_line_dict['12'][i],0) + output_dict.get(f3x_col_line_dict['13'][i],0) +
             output_dict.get(f3x_col_line_dict['14'][i],0) + output_dict.get(f3x_col_line_dict['15'][i],0) +
             output_dict.get(f3x_col_line_dict['16'][i],0) + output_dict.get(f3x_col_line_dict['17'][i],0) +
             output_dict.get(f3x_col_line_dict['18'][i],0))
-        output_dict[f3x_col_line_dict['20'][i]] = (output_dict.get(f3x_col_line_dict['19'][i],0) - 
+        output_dict[f3x_col_line_dict['20'][i]] = (output_dict.get(f3x_col_line_dict['19'][i],0) -
                 output_dict.get(f3x_col_line_dict['18'][i],0))
-        output_dict[f3x_col_line_dict['21'][i]] = (output_dict.get(f3x_col_line_dict['21AI'][i],0) + 
+        output_dict[f3x_col_line_dict['21'][i]] = (output_dict.get(f3x_col_line_dict['21AI'][i],0) +
                 output_dict.get(f3x_col_line_dict['21AII'][i],0) + output_dict.get(f3x_col_line_dict['21B'][i],0))
-        output_dict[f3x_col_line_dict['28'][i]] = (output_dict.get(f3x_col_line_dict['28A'][i],0) + 
+        output_dict[f3x_col_line_dict['28'][i]] = (output_dict.get(f3x_col_line_dict['28A'][i],0) +
                 output_dict.get(f3x_col_line_dict['28B'][i],0) + output_dict.get(f3x_col_line_dict['28C'][i],0))
-        output_dict[f3x_col_line_dict['30'][i]] = (output_dict.get(f3x_col_line_dict['30AI'][i],0) + 
+        output_dict[f3x_col_line_dict['30'][i]] = (output_dict.get(f3x_col_line_dict['30AI'][i],0) +
                 output_dict.get(f3x_col_line_dict['30AII'][i],0) + output_dict.get(f3x_col_line_dict['30B'][i],0))
-        output_dict[f3x_col_line_dict['31'][i]] = (output_dict.get(f3x_col_line_dict['21'][i],0) + 
-            output_dict.get(f3x_col_line_dict['22'][i],0) + output_dict.get(f3x_col_line_dict['23'][i],0) + 
+        output_dict[f3x_col_line_dict['31'][i]] = (output_dict.get(f3x_col_line_dict['21'][i],0) +
+            output_dict.get(f3x_col_line_dict['22'][i],0) + output_dict.get(f3x_col_line_dict['23'][i],0) +
             output_dict.get(f3x_col_line_dict['24'][i],0) + output_dict.get(f3x_col_line_dict['25'][i],0) +
             output_dict.get(f3x_col_line_dict['26'][i],0) + output_dict.get(f3x_col_line_dict['27'][i],0) +
             output_dict.get(f3x_col_line_dict['28'][i],0) + output_dict.get(f3x_col_line_dict['29'][i],0) +
             output_dict.get(f3x_col_line_dict['30'][i],0))
-        output_dict[f3x_col_line_dict['32'][i]] = (output_dict.get(f3x_col_line_dict['31'][i],0)  - 
+        output_dict[f3x_col_line_dict['32'][i]] = (output_dict.get(f3x_col_line_dict['31'][i],0)  -
                 output_dict.get(f3x_col_line_dict['21AII'][i],0)  - output_dict.get(f3x_col_line_dict['30AII'][i],0))
         return output_dict
     except Exception as e:
@@ -11606,7 +11606,7 @@ class NotificationsSwitch:
         viewtype = request.data.get("view", "Prior Notices")
 
         pageNumber = int(request.data.get("page", 1))
-        sortColumn = request.data.get("sortColumnName", "") 
+        sortColumn = request.data.get("sortColumnName", "")
         descending = request.data.get("descending", False)
         itemsperpage = request.data.get("itemsPerPage", 10)
 
@@ -11658,7 +11658,7 @@ class NotificationsSwitch:
             { "name": "subject", "header": "Subject (Email Subject)" }
         ]""")
 
-        return (sql_count, sql_items, keys)      
+        return (sql_count, sql_items, keys)
  
     def case_ReminderEmails(self):
 
@@ -11779,7 +11779,7 @@ class NotificationsSwitch:
             { "name": "date_time", "header": "Date/Time" }
         ]""")
 
-        return (sql_count, sql_items, keys) 
+        return (sql_count, sql_items, keys)
 
     def case_Rfais(self):
         
@@ -11841,7 +11841,7 @@ class NotificationsSwitch:
             { "name": "check_sum", "header": "Checksum" }
         ]""")
 
-        return (sql_count, sql_items, keys) 
+        return (sql_count, sql_items, keys)
 
 def construct_notifications_response(request):
     s = NotificationsSwitch()
@@ -11872,7 +11872,7 @@ def get_notifications_count(request):
                 from public.notifications_import_statuses
                 where cmte_id = %(cmte_id)s
             ) as V
-        """     
+        """
         sql = """SELECT json_agg(t) FROM (""" + sql_count + """) t"""
 
         with connection.cursor() as cursor:
@@ -11941,7 +11941,7 @@ def get_notifications_counts(request):
             items = [] if not result[0][0] else result[0][0]
         itemsCount = len(items)
 
-        output = { 
+        output = {
             'items': items,
             'totalItems': itemsCount
         }
@@ -11978,7 +11978,7 @@ def get_notifications(request):
             result = cursor.fetchall()
             items = [] if not result[0][0] else result[0][0]
 
-        output = { 
+        output = {
             'keys': keys,
             'items': items,
             'totalItems': totalCount
@@ -12030,7 +12030,7 @@ def get_notification(request):
                     select COALESCE(max(submission_id), '0') as submission_id
                     from public.notifications_filing_confirmations
                     where report_id = %(notification_id)s
-                """     
+                """
                 sql = """SELECT json_agg(t) FROM (""" + sql_submission_id + """) t"""
 
                 with connection.cursor() as cursor:
@@ -12048,12 +12048,12 @@ def get_notification(request):
                 )
                 if responses.status_code == status.HTTP_200_OK:
                     blob = responses.text.replace("\n", "")
-                    output = { 
+                    output = {
                         'contentType': 'binary',
                         'blob': blob
                     }
                 else:
-                    output = { 
+                    output = {
                         'contentType': 'html',
                         'blob': responses.content
                     }
@@ -12077,10 +12077,10 @@ def get_notification(request):
             email_text_body =  row1[0]['email_text_body']
 
         email = email_html_body
-        #blob = ''.join(format(ord(i), 'b') for i in email) 
+        #blob = ''.join(format(ord(i), 'b') for i in email)
         blob = email
 
-        output = { 
+        output = {
             'contentType': 'html',
             'blob': blob
         }
@@ -12165,11 +12165,11 @@ def cashOnHandInfoStatus(request):
         _sql = """SELECT * FROM cash_on_hand_info_status WHERE username = %s"""
         with connection.cursor() as cursor:
             cursor.execute(_sql, [cmte_id])
-            if cursor.rowcount == 0: 
+            if cursor.rowcount == 0:
                 status_flag = True
                 _sql1 = """INSERT INTO cash_on_hand_info_status VALUES(%s)"""
                 cursor.execute(_sql1, [cmte_id])
-        return Response({'showMessage': status_flag}, status=status.HTTP_200_OK) 
+        return Response({'showMessage': status_flag}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
           "The cashOnHandInfoStatus API is throwing an error: " + str(e),
@@ -12259,7 +12259,7 @@ def chk_csv_uploaded_in_db(request):
         return JsonResponse(resp, status=status.HTTP_201_CREATED, safe=False)
     except Exception as e:
         json_result = {'message': str(e)}
-        return JsonResponse(json_result, status=status.HTTP_400_BAD_REQUEST, safe=False)        
+        return JsonResponse(json_result, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
 @api_view(["POST"])
 def save_csv_md5_to_db(request):
@@ -12268,7 +12268,7 @@ def save_csv_md5_to_db(request):
         filename = request.data.get("file_name") #request.file_name
         hash = request.data.get("md5hash") #request.md5hash
         resp = load_file_hash_to_db(cmteid, filename, hash)
-        return Response(resp, status=status.HTTP_200_OK)              
+        return Response(resp, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
           "The save_csv_md5_to_db API is throwing an error: " + str(e),
@@ -12281,12 +12281,12 @@ def generate_contact_details_from_csv(request):
         cmteid = request.user.username
         filename = request.data.get("file_name") #request.file_name
         resp = get_contact_details_from_transactions(cmteid, filename)
-        return Response(resp, status=status.HTTP_200_OK)              
+        return Response(resp, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
           "The get_contact_details_from_csv API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
-          )        
+          )
 
 
 @api_view(["POST"])
@@ -12300,7 +12300,7 @@ def validate_import_transactions(request):
         #print('cmteid ', cmteid,' bkt_name ',bktname,' key: ', key )
         if bktname and key:
             resp = validate_transactions(bktname, key, cmteid)
-        else: 
+        else:
             resp = "No data: both bktname and key need to be sent"
 
         '''
@@ -12329,12 +12329,12 @@ def validate_import_transactions(request):
         # End Contacts code commented out   
         print(res)
         '''
-        return Response(resp, status=status.HTTP_200_OK)              
+        return Response(resp, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
           "The validate_import_transactions API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
-          )        
+          )
 @api_view(["POST"])
 def queue_transaction_message(request):
     try:
@@ -12345,15 +12345,15 @@ def queue_transaction_message(request):
         print('cmteid ', cmteid,' bkt_name ',bktname,' key: ', key )
         if bktname and key:
             resp = send_message_to_queue(bktname, key)
-        else: 
+        else:
             resp = "No data: both bktname and key need to be sent"
 
-        return Response(resp, status=status.HTTP_200_OK)              
+        return Response(resp, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
           "The queue_transaction_message API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
-          )        
+          )
 
 
 @api_view(["POST"])

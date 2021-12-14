@@ -38,7 +38,7 @@ class CommitteeInfoTest(TestCase):
         self.assertEqual(comm.committeename, "Test Committee 1")
 
     def test_committee_create_full_info(self):
-        comm = CommitteeInfo.objects.get(committeeid='C11234567')            
+        comm = CommitteeInfo.objects.get(committeeid='C11234567')
         self.assertEqual(comm.committeename, "Test Committee 2")
 
 class CommitteeTest(TestCase):
@@ -47,7 +47,7 @@ class CommitteeTest(TestCase):
     def setUp(self):
         Committee.objects.create(
             committeeid='C01234567', committeename = 'Test Committee 1', street1='Street1 ',
-            street2 = 'Street 2', city='Washington DC', state='DC', zipcode='912853', 
+            street2 = 'Street 2', city='Washington DC', state='DC', zipcode='912853',
             treasurerfirstname='John', treasurerlastname='Smith', treasurerprefix='Mr')
             
         save_data = {

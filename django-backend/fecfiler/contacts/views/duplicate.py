@@ -565,7 +565,7 @@ def validate_contact(request):
                 client = boto3.client('s3',
                                       settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY
                                       )
-                bucket = AWS_STORAGE_IMPORT_CONTACT_BUCKET_NAME        
+                bucket = AWS_STORAGE_IMPORT_CONTACT_BUCKET_NAME
                 transaction_included = request.data.get("transaction_included")
                 csv_obj = client.get_object(Bucket=bucket, Key='contacts/' + cmte_id + '/' + file_name)
                 body = csv_obj['Body']

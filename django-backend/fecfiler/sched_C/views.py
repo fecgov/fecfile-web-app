@@ -1421,7 +1421,7 @@ def get_outstanding_loans(request):
     1. it has a outstannding balance(>0) in current report
     2. it has live payment(even the balance become 0) in current report
     """
-    #: adding pagination, sorting and dynamic fields listing funcitonality  
+    #: adding pagination, sorting and dynamic fields listing funcitonality
     # URL coded for: GET /api/v1/sc/get_outstanding_loans?username=C00000935&report_id=737&page=1&itemsPerPage=5&sortColumnName=default&descending=false HTTP/1.1"
     param_string = ""
     query_params = request.query_params
@@ -1492,12 +1492,12 @@ def get_outstanding_loans(request):
             trans_query_string_count = """ select count(*) FROM ( """ + _sql + """ ) AS CNT_TABLE """
             #: set transaction query with offsets.
             _sql = set_offset_n_fetch(_sql, page_num, itemsperpage)
-            #set prefix and suffix 
+            #set prefix and suffix
             _sql = _sql_prefix + _sql + _sql_suffix
             with connection.cursor() as cursor:
                 cursor.execute(_sql, [cmte_id, tran_type, report_id])
                 json_result = cursor.fetchone()[0]
-                #: run the record count query        
+                #: run the record count query
                 cursor.execute(
                     """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
                 )
@@ -1561,7 +1561,7 @@ def get_outstanding_loans(request):
             with connection.cursor() as cursor:
                 cursor.execute(_sql, [cmte_id, report_id, cmte_id, report_id])
                 json_result = cursor.fetchone()[0]
-            #: run the record count query        
+            #: run the record count query
                 #print(trans_query_string_count)
                 trans_query_string_count = """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
                 cursor.execute(trans_query_string_count, [cmte_id, report_id, cmte_id, report_id])
@@ -1598,10 +1598,10 @@ def get_outstanding_loans(request):
 
 
 #: Adding the pagination and composing response params
-        if totalcount > 0: 
+        if totalcount > 0:
             numofpages = get_num_of_pages(totalcount, itemsperpage)
         else:
-            numofpages = 0    
+            numofpages = 0
         json_result = {
             "items": list(json_result),
             "totalItems": totalcount,
@@ -1626,16 +1626,16 @@ def get_trans_query_for_total_count(trans_query_string):
     final_query = trans_query_string.replace(s, temp_string, 1)
     return final_query
 
-#: build query offset and record count to start getting the data 
+#: build query offset and record count to start getting the data
 def set_offset_n_fetch(trans_query_string, page_num, itemsperpage):
     trans_query_string = trans_query_string + """ OFFSET """
-    if page_num > 0 : 
-        trans_query_string = trans_query_string + str((page_num-1) * itemsperpage) 
-    else:    
+    if page_num > 0 :
+        trans_query_string = trans_query_string + str((page_num-1) * itemsperpage)
+    else:
         trans_query_string = trans_query_string + """ 0 """
-    trans_query_string = trans_query_string + """ ROWS """ + """ FETCH FIRST """ 
+    trans_query_string = trans_query_string + """ ROWS """ + """ FETCH FIRST """
     trans_query_string = trans_query_string + str( itemsperpage)
-    trans_query_string = trans_query_string + """ ROW ONLY """  
+    trans_query_string = trans_query_string + """ ROW ONLY """
     return trans_query_string
 
 #: get page count or number of pages for pagination
@@ -1643,11 +1643,11 @@ def get_num_of_pages(totalcount, itemsperpage):
     if (totalcount % itemsperpage) == 0:
         numofpages = totalcount / itemsperpage
     else:
-        numofpages = int(totalcount/itemsperpage) + 1                    
+        numofpages = int(totalcount/itemsperpage) + 1
     return numofpages
 
 
-#: get the paginator page with other details like  
+#: get the paginator page with other details like
 def get_pagination_dataset(json_res, itemsperpage, page_num):
     if check_null_value(json_res) is False or json_res is None:
         json_result = {

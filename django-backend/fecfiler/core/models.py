@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 #class Reports(models.Model):
 #    reporttype = models.Charfield(max_length=50)
     
-class Cmte_Report_Types_View(models.Model):   
+class Cmte_Report_Types_View(models.Model):
     cmte_id = models.CharField(max_length=9)
     filing_freq = models.CharField(max_length=1, blank=True, null=True)
     form_type = models.CharField(max_length=10)

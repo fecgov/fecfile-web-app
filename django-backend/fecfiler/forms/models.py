@@ -131,8 +131,8 @@ class CommitteeMaster(models.Model):
 class My_Forms_View(models.Model):
     cmte_id = models.CharField(primary_key=True, max_length=9)
     category = models.CharField(max_length=25)
-    form_type = models.CharField(max_length=10)   
-    due_date = models.DateField(blank=True, null=True) 
+    form_type = models.CharField(max_length=10)
+    due_date = models.DateField(blank=True, null=True)
     form_description = models.CharField(max_length=300, blank=True, null=True)
     form_info = models.CharField(max_length=1000, blank=True, null=True)
         

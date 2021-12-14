@@ -1,7 +1,7 @@
 import hashlib
 import os
 import psycopg2
-import pandas as pd 
+import pandas as pd
 import boto3
 from pandas.util import hash_pandas_object
 import numpy
@@ -18,48 +18,48 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 #logging.basicConfig(level=logging.ERROR)
 
-#mapping null columns for the contacts API 
+#mapping null columns for the contacts API
 def get_columns_to_add(filename):
     columnlist=[]
     filename = filename.lower()
     if 'f3x' in filename:
         if 'schedulea' in filename:
             columnlist=['CAND_OFFICE','CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
-            print('schedulea')     
+            print('schedulea')
         elif 'scheduleb' in filename:
             columnlist=['REF_CAND_CMTE_ID', 'CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
             #columnlist=['EMPLOYER','OCCUPATION']
-            print('scheduleb')     
+            print('scheduleb')
         elif 'schedulee' in filename:
             #columnlist=['EMPLOYER','OCCUPATION']
             columnlist=['CAND_OFFICE','CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
-            print('schedulee')     
+            print('schedulee')
         elif 'schedulef' in filename:
             #columnlist=['EMPLOYER','OCCUPATION']
             columnlist=[]
-            print('schedulef')     
+            print('schedulef')
         elif 'scheduleh4' in filename:
             #columnlist=['EMPLOYER','OCCUPATION']
             columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE', 'CAND_OFFICE_DISTRICT']
-            print('scheduleh4')     
+            print('scheduleh4')
         elif 'scheduleh6' in filename:
             #columnlist=['EMPLOYER','OCCUPATION']
             columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
-            print('scheduleh6')     
-        elif 'schedulela' in filename: 
-            #columnlist=['OCCUPATION']               
+            print('scheduleh6')
+        elif 'schedulela' in filename:
+            #columnlist=['OCCUPATION']
             columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
-        elif 'schedulelb' in filename: 
-            #columnlist=['OCCUPATION']               
+        elif 'schedulelb' in filename:
+            #columnlist=['OCCUPATION']
             columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
         else:
             print('In F3X get_columns_to_add, Sched type not available!!!')
     elif 'f3l' in filename:
-        if 'schedulea' in filename: 
-            #columnlist=['OCCUPATION']               
+        if 'schedulea' in filename:
+            #columnlist=['OCCUPATION']
             columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
-        elif 'scheduleb' in filename: 
-            #columnlist=['EMPLOYER','OCCUPATION']               
+        elif 'scheduleb' in filename:
+            #columnlist=['EMPLOYER','OCCUPATION']
             columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
         else:
             print('In F3L get_columns_to_add, Sched type not available!!!')
@@ -91,7 +91,7 @@ def get_columns_for_schedules(filename):
                             'CONTRIBUTOR PREFIX',
                             'CONTRIBUTOR SUFFIX',
                             'DONOR COMMITTEE FEC ID',
-                            'TRANSACTION IDENTIFIER']            
+                            'TRANSACTION IDENTIFIER']
             print('schedulea')
         elif 'scheduleb' in filename:
             #6,13,14,15,16,17,'EMPLOYER','OCCUPATION',7,8,9,10,11,12,'REF_CAND_CMTE_ID', 'CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT','COMMITTEE_ID'
@@ -112,7 +112,7 @@ def get_columns_for_schedules(filename):
                                 'PAYEE PREFIX',
                                 'PAYEE SUFFIX',
                                 'TRANSACTION IDENTIFIER']
-            print('scheduleb')     
+            print('scheduleb')
         elif 'schedulee' in filename:
             #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16]
             columnlist=[6,13,14,15,16,17,7,8,9,10,11,12,25,4]
@@ -133,7 +133,7 @@ def get_columns_for_schedules(filename):
                                 'PAYEE CMTTE FEC ID NUMBER',
                                 'TRANSACTION IDENTIFIER'
                                 ]
-            print('schedulee')     
+            print('schedulee')
         elif 'schedulef' in filename:
             #columnlist=[3,15,16,17,18,19,20,21,22,23,24,25,26]
             columnlist=[16,22,23,24,25,26,17,18,19,20,21,33,4,39,40,41]
@@ -145,7 +145,7 @@ def get_columns_for_schedules(filename):
                                 'PAYEE ZIP',
                                 'EMPLOYER',
                                 'OCCUPATION',
-                                'ORGANIZATION_NAME', 
+                                'ORGANIZATION_NAME',
                                 'PAYEE LAST NAME',
                                 'PAYEE FIRST NAME',
                                 'PAYEE MIDDLE NAME',
@@ -153,11 +153,11 @@ def get_columns_for_schedules(filename):
                                 'PAYEE SUFFIX',
                                 'PAYEE CANDIDATE FEC ID',
                                 'TRANSACTION IDENTIFIER',
-                                'CAND_OFFICE', 
+                                'CAND_OFFICE',
                                 'CAND_OFFICE_STATE',
                                 'CAND_OFFICE_DISTRICT'
-                                ]      
-            print('schedulef')     
+                                ]
+            print('schedulef')
         elif 'schedulela' in filename:
             #columnlist=[3,6,7,8,9,10,11,12,13,14,15,16,17,21,22]
             columnlist=[7,14,15,16,17,18,23,24,8,9,10,11,12,13,4]
@@ -175,9 +175,9 @@ def get_columns_for_schedules(filename):
                                 'CONTRIBUTOR MIDDLE NAME',
                                 'CONTRIBUTOR PREFIX',
                                 'CONTRIBUTOR SUFFIX',
-                                'REF_CAND_CMTE_ID', 
+                                'REF_CAND_CMTE_ID',
                                 'TRANSACTION IDENTIFIER']
-            print('schedulela')     
+            print('schedulela')
         elif 'schedulelb' in filename:
             #columnlist=[3,6,7,8,9,10,11,12,13,14,15,16,17]
             columnlist=[7,14,15,16,17,18,8,9,10,11,12,13,4]
@@ -195,9 +195,9 @@ def get_columns_for_schedules(filename):
                                 'PAYEE MIDDLE NAME',
                                 'PAYEE PREFIX',
                                 'PAYEE SUFFIX',
-                                'REF_CAND_CMTE_ID', 
+                                'REF_CAND_CMTE_ID',
                                 'TRANSACTION IDENTIFIER']
-            print('schedulelb')     
+            print('schedulelb')
         elif 'scheduleh4' in filename:
             #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16]
             columnlist=[6,13,14,15,16,17,7,8,9,10,11,12,4]
@@ -215,10 +215,10 @@ def get_columns_for_schedules(filename):
                                 'PAYEE MIDDLE NAME',
                                 'PAYEE PREFIX',
                                 'PAYEE SUFFIX',
-                                'REF_CAND_CMTE_ID', 
+                                'REF_CAND_CMTE_ID',
                                 'TRANSACTION IDENTIFIER'
                                 ]
-            print('scheduleh4')     
+            print('scheduleh4')
         elif 'scheduleh6' in filename:
             #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16]
             columnlist=[6,13,14,15,16,17,7,8,9,10,11,12,4]
@@ -236,10 +236,10 @@ def get_columns_for_schedules(filename):
                                 'PAYEE MIDDLE NAME',
                                 'PAYEE PREFIX',
                                 'PAYEE SUFFIX',
-                                'REF_CAND_CMTE_ID', 
+                                'REF_CAND_CMTE_ID',
                                 'TRANSACTION IDENTIFIER']
                                 
-            print('scheduleh6')     
+            print('scheduleh6')
         else:
             print('In F3X, Sched type not available!!!')
     elif 'f3l' in filename:
@@ -254,17 +254,17 @@ def get_columns_for_schedules(filename):
                                 'CONTRIBUTOR ZIP',
                                 'CONTRIBUTOR EMPLOYER',
                                 'OCCUPATION',
-                                'ORGANIZATION_NAME', 
+                                'ORGANIZATION_NAME',
                                 'CONTRIBUTOR LAST NAME',
                                 'CONTRIBUTOR FIRST NAME',
                                 'CONTRIBUTOR MIDDLE NAME',
                                 'CONTRIBUTOR PREFIX',
                                 'CONTRIBUTOR SUFFIX',
-                                'REF_CAND_CMTE_ID', 
+                                'REF_CAND_CMTE_ID',
                                 'TRANSACTION IDENTIFIER']
-            print('f3l schedulea')     
+            print('f3l schedulea')
         elif 'scheduleb' in filename:
-            #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16] 
+            #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16]
             columnlist=[6,12,13,14,15,16,7,8,9,10,11,4]
             col_names_reindex=['ENTITY TYPE',
                                 'CONTRIBUTOR STREET  1',
@@ -274,15 +274,15 @@ def get_columns_for_schedules(filename):
                                 'CONTRIBUTOR ZIP',
                                 'EMPLOYER',
                                 'OCCUPATION',
-                                'ORGANIZATION_NAME', 
+                                'ORGANIZATION_NAME',
                                 'CONTRIBUTOR LAST NAME',
                                 'CONTRIBUTOR FIRST NAME',
                                 'CONTRIBUTOR MIDDLE NAME',
                                 'CONTRIBUTOR PREFIX',
                                 'CONTRIBUTOR SUFFIX',
-                                'REF_CAND_CMTE_ID', 
+                                'REF_CAND_CMTE_ID',
                                 'TRANSACTION IDENTIFIER']
-            print('f3l scheduleb')     
+            print('f3l scheduleb')
         else:
             print('In F3L, Sched type not available!!!')
     return columnlist, col_names_reindex;
@@ -290,24 +290,24 @@ def get_columns_for_schedules(filename):
 def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
     print(bktname, key)
     try:
-        filename = 'temp' 
+        filename = 'temp'
         if "/" in key:
             filename=key[key.find("/")+1:-4].split()[0]
         else:
             raise Exception('S3 key not having a / char')
-        filename = filename.lower() 
+        filename = filename.lower()
         s3 = boto3.client('s3')
         s3_resource = boto3.resource('s3')
         obj = s3.get_object(Bucket=bktname, Key=key)
         body = obj['Body']
         csv_string = body.read().decode('utf-8')
-        filepath = 'contacts/' + cmteid + '_' + filename +'.csv' 
+        filepath = 'contacts/' + cmteid + '_' + filename +'.csv'
         col_to_read, col_names_reindex = get_columns_for_schedules(filename)
         col_to_add  = get_columns_to_add(filename)
         chkf = False
         for data in pd.read_csv(StringIO(csv_string), dtype=object, index_col=False, iterator=True, chunksize=size, usecols=col_to_read):
-            data = data.reindex(columns = col_names_reindex)            
-            #data = data[col_to_read] 
+            data = data.reindex(columns = col_names_reindex)
+            #data = data[col_to_read]
             if col_to_add:
                 for x in col_to_add:
                     data[x] = ''
@@ -328,15 +328,15 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
             chkf = True
             #time.sleep(sleeptime)
         if chkf:
-            return filepath.split('/')[1]       
+            return filepath.split('/')[1]
     except Exception as e:
         print('error in load_dataframe_from_s3:',e)
         logging.debug(e)
 
-#main method to call the process 
+#main method to call the process
 def get_contact_details_from_transactions(cmteid, filename):
     try:
-        cmteid = cmteid[0:9]        
+        cmteid = cmteid[0:9]
         client = boto3.client('s3',
                                 settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY
                                 )
@@ -346,7 +346,7 @@ def get_contact_details_from_transactions(cmteid, filename):
             #cmte_id C00111476mkancherla.ctr@fec.gov , bucket:  fecfile-filing-frontend , file_name :  Disbursements_1q2020.csv
             if bucket:
                 print(bucket)
-                key = "transactions/" + file_name 
+                key = "transactions/" + file_name
                 return load_dataframe_from_s3(cmteid,bucket, key , 100000, 1) #100,000 records and 1s timer is for testing and need to be updated.
             else:
                 print("Queue is empty!!!")

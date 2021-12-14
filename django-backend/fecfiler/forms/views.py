@@ -919,7 +919,7 @@ def get_form99list(request):
 
             forms_obj = None
             with connection.cursor() as cursor:
-                if reportid in ["None", "null", " ", "","0"]:    
+                if reportid in ["None", "null", " ", "","0"]:
                     query_string =  """SELECT json_agg(t) FROM 
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, delete_ind, create_date, last_update_date,report_type_desc, viewtype, 
                                             deleteddate, memo_text,
@@ -958,7 +958,7 @@ def get_form99list(request):
                 # print("query_string = ", query_string)
                 # Pull reports from reports_view
                 #query_string = """select form_fields from dynamic_forms_view where form_type='""" + form_type + """' and transaction_type='""" + transaction_type + """'"""
-                if reportid in ["None", "null", " ", "","0"]:  
+                if reportid in ["None", "null", " ", "","0"]:
                     cursor.execute(query_string, [cmte_id, parentid, viewtype])
                 else:
                     cursor.execute(query_string, [cmte_id, reportid, parentid, viewtype])
@@ -978,7 +978,7 @@ def get_form99list(request):
 
             with connection.cursor() as cursor:
 
-                if reportid in ["None", "null", " ", "","0"]:    
+                if reportid in ["None", "null", " ", "","0"]:
                     query_count_string =  """SELECT count('a') as totalreportsCount FROM 
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, 
                                             superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, 
@@ -1013,7 +1013,7 @@ def get_form99list(request):
                 #commented by Mahendra 10052019
                 #print("query_count_string =", query_count_string)
 
-                if reportid in ["None", "null", " ", "","0"]:  
+                if reportid in ["None", "null", " ", "","0"]:
                     cursor.execute(query_count_string, [cmte_id, viewtype])
                 else:
                     cursor.execute(query_count_string, [cmte_id, reportid, viewtype])
@@ -1025,7 +1025,7 @@ def get_form99list(request):
             if forms_cnt_obj is None:
                 forms_cnt_obj = []
 
-            json_result = { 'reports': forms_obj, 'totalreportsCount':forms_cnt_obj}    
+            json_result = { 'reports': forms_obj, 'totalreportsCount':forms_cnt_obj}
         except Exception as e:
             # print (str(e))
             return Response("The reports view api - get_form99list is throwing an error" + str(e), status=status.HTTP_400_BAD_REQUEST)
@@ -1054,7 +1054,7 @@ def get_previous_amend_reports(request):
             report_list = superceded_report_id_list(parentid)
             forms_obj = None
             with connection.cursor() as cursor:
-                if reportid in ["None", "null", " ", "","0"]:    
+                if reportid in ["None", "null", " ", "","0"]:
                     query_string =  """SELECT json_agg(t) FROM 
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, delete_ind, create_date, last_update_date,report_type_desc, viewtype, 
                                             deleteddate, memo_text,
@@ -1093,7 +1093,7 @@ def get_previous_amend_reports(request):
                 # print("query_string = ", query_string)
                 # Pull reports from reports_view
                 #query_string = """select form_fields from dynamic_forms_view where form_type='""" + form_type + """' and transaction_type='""" + transaction_type + """'"""
-                if reportid in ["None", "null", " ", "","0"]:  
+                if reportid in ["None", "null", " ", "","0"]:
                     cursor.execute(query_string, [cmte_id, viewtype])
                 else:
                     cursor.execute(query_string, [cmte_id, reportid, viewtype])
@@ -1113,7 +1113,7 @@ def get_previous_amend_reports(request):
 
             with connection.cursor() as cursor:
 
-                if reportid in ["None", "null", " ", "","0"]:    
+                if reportid in ["None", "null", " ", "","0"]:
                     query_count_string =  """SELECT count('a') as totalreportsCount FROM 
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, 
                                             superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, 
@@ -1148,7 +1148,7 @@ def get_previous_amend_reports(request):
                 #commented by Mahendra 10052019
                 #print("query_count_string =", query_count_string)
 
-                if reportid in ["None", "null", " ", "","0"]:  
+                if reportid in ["None", "null", " ", "","0"]:
                     cursor.execute(query_count_string, [cmte_id, viewtype])
                 else:
                     cursor.execute(query_count_string, [cmte_id, reportid, viewtype])
@@ -1160,7 +1160,7 @@ def get_previous_amend_reports(request):
             if forms_cnt_obj is None:
                 forms_cnt_obj = []
 
-            json_result = { 'reports': forms_obj, 'totalreportsCount':forms_cnt_obj}    
+            json_result = { 'reports': forms_obj, 'totalreportsCount':forms_cnt_obj}
         except Exception as e:
             # print (str(e))
             return Response("The reports view api - get_form99list is throwing an error" + str(e), status=status.HTTP_400_BAD_REQUEST)
@@ -1217,7 +1217,7 @@ def email(boolean, data):
     
     #print(data.get('additional_email_1'))
     if 'additional_email_1' in data and (not (data.get('additional_email_1')=='-' or data.get('additional_email_1') is None or data.get('additional_email_1') == 'null')):
-        RECIPIENT.append("%s" % data.get('additional_email_1')) 
+        RECIPIENT.append("%s" % data.get('additional_email_1'))
     
     #print(data.get('additional_email_2'))
     if 'additional_email_2' in data and (not (data.get('additional_email_2')=='-' or data.get('additional_email_2') is None or data.get('additional_email_2') == 'null')):
@@ -1264,7 +1264,7 @@ def email(boolean, data):
         #Provide the contents of the email.
         response = client.send_email(
             Destination={
-                'ToAddresses': 
+                'ToAddresses':
                     RECIPIENT,
                 
             },
@@ -1287,7 +1287,7 @@ def email(boolean, data):
             Source=SENDER,
            
         )
-    # Display an error if something goes wrong. 
+    # Display an error if something goes wrong.
     except ClientError as e:
         print(e.response['Error']['Message'])
 
@@ -1377,7 +1377,7 @@ def save_print_f99(request):
     #     #request._request.content
     #     #'file': ('attachment.pdf', myfile, 'application/pdf')
     #     createresp = requests.post(settings.NXG_FEC_API_URL + settings.NXG_FEC_API_VERSION + "f99/create_f99_info", data=request.data, files=files, headers={'Authorization': token_use})
-    #     #createresp = 
+    #     #createresp =
     # else:
     #     createresp = requests.post(settings.NXG_FEC_API_URL + settings.NXG_FEC_API_VERSION + "f99/create_f99_info", data=request.data, headers={'Authorization': token_use})
     
@@ -1440,11 +1440,11 @@ def save_print_f99(request):
 
         #data_obj['data'] = serializer.data
         data_obj['data'] = f99data
-        k.set_contents_from_string(json.dumps(data_obj))            
+        k.set_contents_from_string(json.dumps(data_obj))
         url = k.generate_url(expires_in=0, query_auth=False).replace(":443","")
 
-        tmp_filename = '/tmp/' + comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'   
-        #tmp_filename = comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'            
+        tmp_filename = '/tmp/' + comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
+        #tmp_filename = comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
         vdata = {}
         #commented by Mahendra 10052019
         #print ("url= ", url)
@@ -1471,7 +1471,7 @@ def save_print_f99(request):
         #print(comm_info.file)
         
         if not (comm_info.file in [None, '', 'null', ' ',""]):
-            filename = comm_info.file.name 
+            filename = comm_info.file.name
             #print(filename)
             myurl = "https://{}.s3.amazonaws.com/media/".format(settings.AWS_STORAGE_BUCKET_NAME) + filename
             #print(myurl)
@@ -1596,11 +1596,11 @@ def update_print_f99(request):
 
             #data_obj['data'] = serializer.data
             data_obj['data'] = f99data
-            k.set_contents_from_string(json.dumps(data_obj))            
+            k.set_contents_from_string(json.dumps(data_obj))
             url = k.generate_url(expires_in=0, query_auth=False).replace(":443","")
 
-            tmp_filename = '/tmp/' + comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'   
-            #tmp_filename = comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'            
+            tmp_filename = '/tmp/' + comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
+            #tmp_filename = comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
             vdata = {}
             #commented by Mahendra 10052019
             #print ("url= ", url)
@@ -1631,7 +1631,7 @@ def update_print_f99(request):
             #print(comm_info.file)
             
             if not (comm_info.file in [None, '', 'null', ' ',""]):
-                filename = comm_info.file.name 
+                filename = comm_info.file.name
                 #print(filename)
                 myurl = "https://{}.s3.amazonaws.com/media/".format(settings.AWS_STORAGE_BUCKET_NAME) + filename
                 #myurl = "https://fecfile-filing.s3.amazonaws.com/media/" + filename
@@ -1721,7 +1721,7 @@ def update_checkbox_values(page, fields):
                writer_annot.update({
                    NameObject("/V"): NameObject(fields[field]),
                    NameObject("/AS"): NameObject(fields[field])
-               }) 
+               })
  
 
 # API which prints Form 99 data
@@ -1839,10 +1839,10 @@ def check_F99_Reason_Text(strReasonText):
             for word in line.split():
                 validate_HTMLtag(word)      
         return "" 
-        """ 
+        """
         for word in strReasonText.split():
-            validate_HTMLtag(word)      
-        return "" 
+            validate_HTMLtag(word)
+        return ""
     except Exception as e:
         return Response("The check_F99_Reason_Text function is throwing an error: " + str(e), status=status.HTTP_400_BAD_REQUEST)
 
@@ -1852,16 +1852,16 @@ def validate_HTMLtag(strWord):
     print(" strWord = ", strWord)
     try:
         valideTags=['div','br','span','blockquote','ul','ol','li','b','u','i']
-        if ('</' in strWord and '>' in strWord) and ('<div' not in strWord or '<span' not in strWord ): 
+        if ('</' in strWord and '>' in strWord) and ('<div' not in strWord or '<span' not in strWord ):
             print(" word check strWord = ", strWord)
-            intstartpos=strWord.find('</'); 
+            intstartpos=strWord.find('</');
             substr=strWord[intstartpos+2]
-            intendpos=substr.find('>'); 
+            intendpos=substr.find('>');
             strsearch=strWord[intstartpos+2:intendpos]
             print(strsearch)
             if strsearch not in valideTags:
-                print(" Wrong tag =", strsearch) 
-        return ""  
+                print(" Wrong tag =", strsearch)
+        return ""
     except Exception as e:
         return Response("The validate_HTMLtag function is throwing an error: " + str(e), status=status.HTTP_400_BAD_REQUEST)
 
@@ -1938,11 +1938,11 @@ def submit_formf99(request):
             f99data['password'] = "test"
 
             data_obj['data'] = f99data
-            k.set_contents_from_string(json.dumps(data_obj))            
+            k.set_contents_from_string(json.dumps(data_obj))
             url = k.generate_url(expires_in=0, query_auth=False).replace(":443","")
 
-            tmp_filename = '/tmp/' + comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'   
-            #tmp_filename = comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'            
+            tmp_filename = '/tmp/' + comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
+            #tmp_filename = comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
             vdata = {}
             vdata['wait'] = 'false'
             json.dump(data_obj, open(tmp_filename, 'w'))
@@ -1958,7 +1958,7 @@ def submit_formf99(request):
                 }
 
             if not (comm_info.file in [None, '', 'null', ' ',""]):
-                filename = comm_info.file.name 
+                filename = comm_info.file.name
                 myurl = "https://{}.s3.amazonaws.com/media/".format(settings.AWS_STORAGE_BUCKET_NAME) + filename
                 myfile = urllib.request.urlopen(myurl)
 

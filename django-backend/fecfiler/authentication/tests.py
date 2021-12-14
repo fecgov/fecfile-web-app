@@ -19,5 +19,5 @@ class SimpleTest(TestCase):
     def test_login_success(self):
         #import ipdb; ipdb.set_trace()
         response = self.client.post('/api/v1/auth/login/', **self.credentials)
-        # should be logged in now, fails however        
+        # should be logged in now, fails however
         #self.assertEqual(response.context['user']==self.user)

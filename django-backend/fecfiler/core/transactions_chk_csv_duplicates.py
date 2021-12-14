@@ -1,7 +1,7 @@
 import hashlib
 import os
 import psycopg2
-import pandas as pd 
+import pandas as pd
 import boto3
 from io import StringIO
 from pandas.util import hash_pandas_object
@@ -50,7 +50,7 @@ def check_for_file_hash_in_db(cmteid, filename, hash, fecfilename):
                                       password=PG_PASSWORD,
                                       host=PG_HOST,
                                       port=PG_PORT,
-                                      database=PG_DATABASE)        
+                                      database=PG_DATABASE)
         cur = conn.cursor()
         cur.execute(selectsql, (cmteid, filename, hash, fecfilename))
         dbhash = cur.fetchone()
@@ -82,7 +82,7 @@ def load_file_hash_to_db(cmteid, filename, hash, fecfilename):
                                       password = PG_PASSWORD,
                                       host=PG_HOST,
                                       port=PG_PORT,
-                                      database=PG_DATABASE)        
+                                      database=PG_DATABASE)
         cur = conn.cursor()
         cur.execute(insertsql, (cmteid, filename, hash, fecfilename))
         conn.commit()
@@ -96,7 +96,7 @@ def load_file_hash_to_db(cmteid, filename, hash, fecfilename):
 
 
 def generate_md5_hash(filename):
-    print('generate_md5_hash')        
+    print('generate_md5_hash')
     try:
         bucket  = 'fecfile-filing-frontend'
         #key     = 'transactions/Disbursements_1q2020.csv'
@@ -108,15 +108,15 @@ def generate_md5_hash(filename):
         csv_string = body.read().decode('utf-8')
         #print(csv_string)
         #i=0
-        for data in pd.read_csv(StringIO(csv_string), dtype=object,  iterator=True, chunksize=200000): 
+        for data in pd.read_csv(StringIO(csv_string), dtype=object,  iterator=True, chunksize=200000):
             #print(i)
             #i+=1
             filehash = hash_pandas_object(data).sum()
         filehash=str(filehash)
-        print(filehash)    
+        print(filehash)
         return filehash
     except Exception as ex:
-        print(ex)    
+        print(ex)
 '''
 
 @api_view(["POST"])
@@ -170,7 +170,7 @@ def chk_csv_uploaded(request):
         hash_value = md5 #generate_md5_hash(filename)
         fecfilename = fec_file_name #"F3X_ScheduleLA_Import_Transactions_C0011147_part1_11_25.csv"
         fileexists = check_for_file_hash_in_db(cmte_id, filename, hash_value, fecfilename)
-        if fileexists is None: 
+        if fileexists is None:
             load_file_hash_to_db(cmte_id, filename, hash_value, fecfilename)
 
         rcmteid      = ""
@@ -196,7 +196,7 @@ def chk_csv_uploaded(request):
                         "fileName": filename,
                         "duplicate_file_list": [],
                         "duplicate_db_count": 0
-                    }  
+                    }
         return returnstr
     except Exception as e:
         returnstr = {'message': str(e)}
@@ -206,7 +206,7 @@ def chk_csv_uploaded(request):
 
 # try:
 #     cmte_id = 'C0011147'
-#     dirname = os.path.dirname 
+#     dirname = os.path.dirname
 #     filepath = dirname(dirname(os.getcwd()))+"/csv/"
 #     filename = "srini_test14.csv" #"Disbursements_1q2020.csv"
 #     fecfilename = "F3X_ScheduleLA_Import_Transactions_C0011147_part1_11_25.csv"
@@ -236,8 +236,8 @@ def chk_csv_uploaded(request):
 #                     "fileName": filename,
 #                     "duplicate_file_list": [],
 #                     "duplicate_db_count": 0
-#                 }                    
-#     if fileexists is None: 
+#                 }
+#     if fileexists is None:
 #         load_file_hash_to_db(cmte_id, filename, hash_value, fecfilename)
 #     print(returnstr)
 # except Exception as e:
