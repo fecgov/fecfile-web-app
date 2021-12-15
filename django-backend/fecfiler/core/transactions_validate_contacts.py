@@ -19,6 +19,8 @@ logging.basicConfig(level=logging.DEBUG)
 # logging.basicConfig(level=logging.ERROR)
 
 # mapping null columns for the contacts API
+
+
 def get_columns_to_add(filename):
     columnlist = []
     filename = filename.lower()
@@ -57,6 +59,8 @@ def get_columns_to_add(filename):
     return columnlist
     
 # mapping columns for each schedule against the contacts API req.
+
+
 def get_columns_for_schedules(filename):
     columnlist = []
     col_names_reindex = []
@@ -268,6 +272,7 @@ def get_columns_for_schedules(filename):
             print('In F3L, Sched type not available!!!')
     return columnlist, col_names_reindex
 
+
 def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
     print(bktname, key)
     try:
@@ -314,6 +319,8 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
         logging.debug(e)
 
 # main method to call the process
+
+
 def get_contact_details_from_transactions(cmteid, filename):
     try:
         cmteid = cmteid[0:9]

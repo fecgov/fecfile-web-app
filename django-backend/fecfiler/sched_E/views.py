@@ -232,6 +232,7 @@ def get_existing_expenditure_amount(cmte_id, transaction_id):
     except:
         raise
 
+
 @update_F3X
 @new_report_date
 def put_schedE(data):
@@ -313,6 +314,7 @@ def put_schedE(data):
     except:
         raise
 
+
 def update_mirror_report_id(data):
     try:
         with connection.cursor() as cursor:
@@ -326,6 +328,7 @@ def update_mirror_report_id(data):
                     found.""".format(data.get('transaction_id'), data.get('cmte_id')))
     except Exception as e:
         raise Exception('the update_mirror_report_id function is throwing an error: ' + str(e))
+
 
 def put_sql_schedE(data):
     """
@@ -568,6 +571,7 @@ def get_sched_e_ytd_amount(request):
             """The get_sched_e_ytd_amount API is throwing following error: """ + str(e)
         )
 
+
 def get_transactions_election_and_office(start_date, end_date, data, form_type='F3X'):
     """
     load all transactions by electtion code and office within the date range.
@@ -798,6 +802,7 @@ def put_completing_entities(data):
     logger.debug("put_auth_entity with data:{}".format(comp_data))
     return put_entities(comp_data)
 
+
 @update_F3X
 @new_report_date
 def post_schedE(data):
@@ -937,6 +942,7 @@ def post_schedE(data):
         return data
     except:
         raise
+
 
 def post_sql_schedE(data):
     """
@@ -1274,6 +1280,7 @@ def delete_schedE(data):
     except Exception as e:
         raise
 
+
 def trash_sql_schedE(cmte_id, report_id, transaction_id):
     """
     do permanent delete sql transaction
@@ -1549,6 +1556,7 @@ def schedE(request):
 
     else:
         raise NotImplementedError
+
 
 @api_view(['POST'])
 def mirror_to_F24(request):

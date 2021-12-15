@@ -11,6 +11,8 @@ from psycopg2.extensions import register_adapter, AsIs
 
 def addapt_numpy_float64(numpy_float64):
     return AsIs(numpy_float64)
+
+
 def addapt_numpy_int64(numpy_int64):
     return AsIs(numpy_int64)
 register_adapter(numpy.float64, addapt_numpy_float64)
@@ -39,6 +41,8 @@ CREATE TABLE public.transactions_file_details
 '''
 
 # check if file is new
+
+
 def check_for_file_hash_in_db(cmteid, filename, hash, fecfilename):
     conn = None
     try:
@@ -149,12 +153,15 @@ def file_verify_upload(request):
 
 
 '''
+
+
 def get_comittee_id(username):
     cmte_id = ""
     if len(username) > 9:
         cmte_id = username[0:9]
 
     return cmte_id
+
 
 def chk_csv_uploaded(request):
     try:

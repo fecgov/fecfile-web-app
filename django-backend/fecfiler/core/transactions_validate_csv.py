@@ -41,6 +41,7 @@ BACKEND_DB_PASSWORD = os.getenv('BACKEND_DB_PASSWORD')
 # logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.ERROR)
 
+
 def validate_dataframe(data):
     # check if the column contains only values of a particular schedule
     sched = data['SCHEDULE NAME'][0][0:2]
@@ -109,6 +110,7 @@ def export_excel_to_db(filename, path):
         print("In export_excel_to_db EXCEPTION BLOCK ")
         print(ex)
 
+
 def rename_files_folder(filelocation):
     with os.scandir(filelocation) as entries:
         for entry in entries:
@@ -116,6 +118,7 @@ def rename_files_folder(filelocation):
                 res = re.split(' |-|_|!', entry.name)
                 filename = 'F3L_Schedule' + res[4] + '_FormatSpecs_Import_Transactions_MAPPED.xlsx'
                 os.rename(filelocation+entry.name, filelocation+filename)
+
 
 def move_data_from_excel_to_db(form):
     try:
@@ -168,6 +171,7 @@ def schema_validation(dataframe, schema, bktname, key, errorfilename):
         logging.debug("error in schema_validation method")
         logging.debug(e)
         raise
+
 
 def build_schemas(formname, sched, trans_type):
     try:
@@ -232,6 +236,7 @@ def build_schemas(formname, sched, trans_type):
     finally:
         connection.close()
 
+
 def check_errkey_exists(bktname, key):
     errkey = key.split('/')
     print()
@@ -241,6 +246,7 @@ def check_errkey_exists(bktname, key):
     exists = False
     if "Contents" not in result:
         s3.put_object(Bucket=bktname, Key=(errkey+'/'))
+
 
 def create_cmte_error_folder(bktname, key, errfilerelpath):
     s3 = boto3.client('s3')
@@ -271,6 +277,7 @@ def move_error_files_to_s3(bktname, key, errorfilename, cmteid):
         logging.debug("error in move_error_files_to_s3 method")
         logging.debug(e)
         raise
+
 
 def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
     # print(bktname, key)
@@ -346,8 +353,6 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
         raise
 
 
-
-
 # main method to call the process
 def validate_transactions(bktname, key, cmteid):
     try:
@@ -400,6 +405,7 @@ def check_file_exists(bktname, key):
     except ClientError:
         # Not found
         raise
+
 
 def check_data_processed(md5, fecfilename):
     conn = None

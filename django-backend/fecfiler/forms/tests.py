@@ -41,6 +41,7 @@ class CommitteeInfoTest(TestCase):
         comm = CommitteeInfo.objects.get(committeeid='C11234567')
         self.assertEqual(comm.committeename, "Test Committee 2")
 
+
 class CommitteeTest(TestCase):
     """ Test module for Committee model """
 
@@ -70,6 +71,7 @@ class CommitteeTest(TestCase):
         comm = Committee.objects.get(committeeid='C01234567')
         
         self.assertEqual(comm.committeename, "Test Committee 1")
+
 
 class Validate_F99(TestCase):
     """docstring for Validate_F99"TestCase def __init__(self, arg):
@@ -115,6 +117,7 @@ class Setup_submit_comm_info(TestCase):
            }
 
         CommitteeInfo.objects.create(**submit_data)
+
 
 class submit_comm_info_Test(TestCase):
     

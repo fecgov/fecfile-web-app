@@ -202,6 +202,7 @@ class NoOPError(Exception):
             args = (default_message,)
         super().__init__(*args, **kwargs)
 
+
 def update_F3X(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -215,6 +216,7 @@ def update_F3X(func):
             logger.debug("F3X data updated")
         return res
     return wrapper
+
 
 @api_view(["GET"])
 def get_filed_report_types(request):
@@ -814,6 +816,7 @@ def check_list_cvg_dates(args):
     except Exception:
         raise
 
+
 def check_list_semi_cvg_dates(args):
     try:
         cmte_id = args[0]
@@ -864,6 +867,7 @@ def check_list_semi_cvg_dates(args):
     except Exception:
         raise
 
+
 def date_format(cvg_date):
     try:
         if cvg_date == None or cvg_date in ["none", "null", " ", ""]:
@@ -888,6 +892,7 @@ def get_comittee_id(username):
         cmte_id = username[0:9]
 
     return cmte_id
+
 
 def get_email(username):
     email = ""
@@ -959,6 +964,7 @@ def check_mandatory_fields_form3x(data):
 """
 **************************************************** FUNCTIONS - REPORT IDS **********************************************************
 """
+
 
 def get_next_report_id():
     try:
@@ -1181,6 +1187,7 @@ def get_recently_submitted_reports(data):
         return forms_obj
     except Exception:
         raise
+
 
 def get_recently_saved_reports(data):
     try:
@@ -1728,6 +1735,7 @@ def delete_reports(data):
     except:
         raise
 
+
 def update_transactions_change_cvg_dates(cmte_id, report_id, present_cvg_start_dt, prev_cvg_start_dt, end_date_include=False):
     try:
         logger.debug('update_transactions_change_cvg_dates function STARTED...')
@@ -1801,6 +1809,7 @@ def update_transactions_change_cvg_dates(cmte_id, report_id, present_cvg_start_d
         return Response('success',  status=status.HTTP_200_OK)
     except Exception as e:
         raise Exception('The update_transactions_change_cvg_dates function is throwing an error: ' + str(e))
+
 
 def count_orphaned_transactions(report_id, cmte_id):
     try:
@@ -1939,6 +1948,7 @@ def reposit_f3x_data(cmte_id, report_id, form_type='F3X'):
 
     back_cursor.close()
     backend_connection.close()
+
 
 def reposit_f99_data(cmte_id, report_id):
     """
@@ -3949,6 +3959,7 @@ TRANSACTIONS TABLE ENHANCE- GET ALL TRANSACTIONS API - CORE APP - SPRINT 11 - FN
 **********************************************************************************************************************************************
 """
 
+
 def get_trans_view_name(category_type):
     if category_type == "disbursements_tran":
         view_name = "all_disbursements_transactions_view"
@@ -3959,6 +3970,7 @@ def get_trans_view_name(category_type):
     else:
         view_name = "all_receipts_transactions_view"
     return view_name
+
 
 def get_trans_query(category_type, cmte_id, param_string):
     if category_type == "disbursements_tran":
@@ -4334,6 +4346,7 @@ def get_core_sched_c2(cmte_id, back_ref_transaction_id):
         raise Exception(
             "The get_core_sched_c2 function is throwing an error: " + str(e)
         )
+
 
 def get_transactions(request, transaction_id):
     # print("request.data: ", request.data)
@@ -4716,6 +4729,7 @@ def get_transactions(request, transaction_id):
         json_result["totalSemiAnnualAmount"] = totalSemiAnnualAmount
     
     return json_result, status_value
+
 
 @api_view(["GET", "POST"])
 def get_all_transactions(request):
@@ -5627,6 +5641,7 @@ def summary_disbursements_for_sumamry_table(request_dict):
     except Exception as e:
         raise Exception("The summary_receipts API is throwing the error: " + str(e))
 
+
 def summary_receipts_for_sumamry_table(request_dict):
     try:
         # XIAI_amount = 0
@@ -6137,6 +6152,7 @@ def get_cvg_dates(report_id, cmte_id, include_deleted=False):
     except Exception as e:
         raise Exception("The get_cvg_dates function is throwing an error: " + str(e))
 
+
 def get_cvg_dates_with_semi(report_id, cmte_id, include_deleted=False):
     try:
         with connection.cursor() as cursor:
@@ -6195,6 +6211,7 @@ def prev_cash_on_hand_cop(report_id, cmte_id, prev_yr):
             "The prev_cash_on_hand_cop function is throwing an error: " + str(e)
         )
 
+
 def prev_cash_on_hand_cop_3rd_nav(report_id, cmte_id, year_flag=False):
     try:
         cvg_start_date, cvg_end_date = get_cvg_dates(report_id, cmte_id)
@@ -6228,6 +6245,7 @@ def prev_cash_on_hand_cop_3rd_nav(report_id, cmte_id, year_flag=False):
         raise Exception(
             "The prev_cash_on_hand_cop_3rd_nav function is throwing an error: " + str(e)
         )
+
 
 def get_coh_f3x_table(cov_year, cmte_id, exact_match=True):
     try:
@@ -6275,6 +6293,7 @@ def get_coh_f3x_table(cov_year, cmte_id, exact_match=True):
 GET THIRD NAVIGATION TRANSACTION TYPES VALUES API - CORE APP - SPRINT 13 - FNE 1093 - BY PRAVEEN JINKA
 ******************************************************************************************************************************
 """
+
 
 def loansanddebts(report_list, cmte_id):
     try:
@@ -6428,6 +6447,7 @@ def get_thirdNavigationTransactionTypes(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+
 def get_F24_data(cmte_id, report_id):
     try:
         report_list = superceded_report_id_list(report_id)
@@ -6450,6 +6470,7 @@ def get_F24_data(cmte_id, report_id):
         raise Exception(
             "The get_F24_data function is throwing an error: " + str(e)
         )
+
 
 def get_F3X_data(cmte_id, report_id):
     try:
@@ -6498,6 +6519,7 @@ def get_F3X_data(cmte_id, report_id):
         raise Exception(
             "The get_F3X_data function is throwing an error: " + str(e)
         )
+
 
 def get_F3L_data(cmte_id, report_id):
     try:
@@ -7062,6 +7084,8 @@ def contactsTable(request):
         )
 
 #: build
+
+
 def get_trans_query_for_total_count(trans_query_string):
     temp_string = """select count(*) from """
     i = trans_query_string.index(""" from """)
@@ -7070,6 +7094,8 @@ def get_trans_query_for_total_count(trans_query_string):
     return final_query
 
 #: build query offset and record count to start getting the data
+
+
 def set_offset_n_fetch(trans_query_string, page_num, itemsperpage):
     trans_query_string = trans_query_string + """ OFFSET """
     if page_num > 0:
@@ -7082,6 +7108,8 @@ def set_offset_n_fetch(trans_query_string, page_num, itemsperpage):
     return trans_query_string
 
 #: get page count or number of pages for pagination
+
+
 def get_num_of_pages(totalcount, itemsperpage):
     if (totalcount % itemsperpage) == 0:
         numofpages = totalcount / itemsperpage
@@ -9486,6 +9514,7 @@ def get_report_ids(cmte_id, from_date, submit_flag=True, including=True, form_ty
         print(e)
         return data_ids
 
+
 @api_view(["POST"])
 def create_amended_reports(request):
 
@@ -9530,6 +9559,7 @@ def create_amended_reports(request):
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
 
+
 def amend_form3x_3l(reportid, cmte_id, form_type, error_flag=True):
     try:
         cvg_start_date, cvg_end_date, semi_annual_start_date, semi_annual_end_date = get_cvg_dates_with_semi(reportid, cmte_id)
@@ -9549,6 +9579,7 @@ def amend_form3x_3l(reportid, cmte_id, form_type, error_flag=True):
         return data_obj
     except Exception as e:
         raise Exception("""The amend_form3x_3l function is throwing an error: """ + str(e))
+
 
 def amend_form1m(request_dict):
     try:
@@ -9587,6 +9618,7 @@ def amend_form1m(request_dict):
             remove_reports_f1m(output_dict['report_id'], report_dict['previous_report_id'])
         raise Exception("""The amend_form1m function is throwing an error: """ + str(e))
 
+
 def post_amend_f1m_report(request_dict):
     try:
         request_dict['report_id'] = str(get_next_report_id())
@@ -9616,6 +9648,7 @@ def post_amend_f1m_report(request_dict):
     except Exception as e:
         raise Exception("""The post_amend_f1m_report function is throwing an error: """ + str(e))
 
+
 def remove_reports_f1m(delete_id, update_id):
     try:
         with connection.cursor() as cursor:
@@ -9628,6 +9661,7 @@ def remove_reports_f1m(delete_id, update_id):
                   table for report: {}""".format(update_id))
     except Exception as e:
         raise Exception("""The remove_reports_f1m function is throwing an error: """ + str(e))
+
 
 def none_text_to_none(text):
     try:
@@ -10932,6 +10966,7 @@ def get_original_amount_by_redesignation_id(transaction_id):
     except Exception:
         raise
 
+
 def update_f3x_coh_cop_subsequent_report(report_id, cmte_id):
     try:
         output_string = ""
@@ -10957,6 +10992,7 @@ def update_f3x_coh_cop_subsequent_report(report_id, cmte_id):
 
     except Exception as e:
         raise Exception("The update_F3X is throwing an exception: " + str(e))
+
 
 def update_f3x_details(report_id, cmte_id):
     try:
@@ -11140,6 +11176,7 @@ def put_F3X(report_id, cmte_id, request_dict):
             "The put_F3X function is throwing an exception: " + str(e)
         )
 
+
 def get_year_reports(cmte_id, report_id):
     data_ids = []
     try:
@@ -11159,6 +11196,7 @@ def get_year_reports(cmte_id, report_id):
     except Exception as e:
         print(e)
         return data_ids
+
 
 @update_F3X
 def function_to_call_wrapper_update_F3X(cmte_id, report_id):
@@ -11187,6 +11225,7 @@ def post_sql_form24(
             )
     except Exception:
         raise
+
 
 def post_sql_form3l(
         report_id,
@@ -11235,6 +11274,7 @@ def put_sql_form3l(
     except Exception:
         raise
                         
+
 def find_form_type(report_id, cmte_id):
     """
     load form type based on report_id and cmte_id
@@ -11260,6 +11300,7 @@ def find_form_type(report_id, cmte_id):
             return form_types[0]
     except Exception as e:
         raise Exception("The form_type function is throwing an error:" + str(e))
+
 
 @api_view(['PUT'])
 def reports_memo_text(request):
@@ -11293,6 +11334,7 @@ def reports_memo_text(request):
             status=status.HTTP_400_BAD_REQUEST,
             )
 
+
 @api_view(['GET'])
 def get_child_max_transaction_amount(request):
     try:
@@ -11318,6 +11360,7 @@ def get_child_max_transaction_amount(request):
           "The get_child_max_transaction_amount API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
           )
+
 
 @api_view(['POST', 'PUT'])
 def save_additional_email(request):
@@ -11353,6 +11396,7 @@ def save_additional_email(request):
           status=status.HTTP_400_BAD_REQUEST
           )
 
+
 @api_view(['GET'])
 def get_f24_reports(request):
     try:
@@ -11372,6 +11416,7 @@ def get_f24_reports(request):
           "The get_f24_reports API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
           )
+
 
 class NotificationsSwitch:
 
@@ -11616,9 +11661,11 @@ class NotificationsSwitch:
 
         return (sql_count, sql_items, keys)
 
+
 def construct_notifications_response(request):
     s = NotificationsSwitch()
     return s.switch(request)
+
 
 @api_view(['GET'])
 def get_notifications_count(request):
@@ -11665,6 +11712,7 @@ def get_notifications_count(request):
           "The get_notifications_count API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
           )
+
 
 @api_view(['GET'])
 def get_notifications_counts(request):
@@ -11728,6 +11776,7 @@ def get_notifications_counts(request):
           status=status.HTTP_400_BAD_REQUEST
           )
 
+
 @api_view(["POST"])
 def get_notifications(request):
     try:
@@ -11765,6 +11814,7 @@ def get_notifications(request):
           "The get_notifications API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
           )
+
 
 @api_view(["GET"])
 def get_notification(request):
@@ -11866,6 +11916,7 @@ def get_notification(request):
           status=status.HTTP_400_BAD_REQUEST
           )
 
+
 @api_view(['GET', 'PUT'])
 def cashOnHand(request):
     try:
@@ -11929,6 +11980,7 @@ def cashOnHand(request):
           status=status.HTTP_400_BAD_REQUEST
           )
 
+
 @api_view(['GET'])
 def cashOnHandInfoStatus(request):
     try:
@@ -11947,6 +11999,7 @@ def cashOnHandInfoStatus(request):
           "The cashOnHandInfoStatus API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
           )
+
 
 @api_view(['GET'])
 def contact_logs(request):
@@ -11975,6 +12028,7 @@ def contact_logs(request):
           "The contact_logs API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
           )
+
 
 @api_view(['GET'])
 def contact_report_details(request):
@@ -12024,6 +12078,7 @@ def contact_report_details(request):
           status=status.HTTP_400_BAD_REQUEST
           )
 
+
 @api_view(["POST"])
 def chk_csv_uploaded_in_db(request):
     try:
@@ -12032,6 +12087,7 @@ def chk_csv_uploaded_in_db(request):
     except Exception as e:
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_400_BAD_REQUEST, safe=False)
+
 
 @api_view(["POST"])
 def save_csv_md5_to_db(request):
@@ -12046,6 +12102,7 @@ def save_csv_md5_to_db(request):
           "The save_csv_md5_to_db API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
           )
+
 
 @api_view(["POST"])
 def generate_contact_details_from_csv(request):
@@ -12107,6 +12164,8 @@ def validate_import_transactions(request):
           "The validate_import_transactions API is throwing an error: " + str(e),
           status=status.HTTP_400_BAD_REQUEST
           )
+
+
 @api_view(["POST"])
 def queue_transaction_message(request):
     try:

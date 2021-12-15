@@ -324,6 +324,7 @@ def get_data_details(report_id, cmte_id):
     except Exception:
         raise
 
+
 def get_f3l_summary_details(report_id, cmte_id):
     try:
         cvg_start_date, cvg_end_date = get_cvg_dates(report_id, cmte_id)

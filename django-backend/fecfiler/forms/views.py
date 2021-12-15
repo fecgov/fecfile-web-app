@@ -39,6 +39,8 @@ from ..authentication.authorization import is_read_only_or_filer_submit, is_read
 logger = logging.getLogger(__name__)
 
 # API which prints Form 99 data
+
+
 @api_view(['POST'])
 def print_pdf_info(request):
     """
@@ -160,6 +162,8 @@ def print_f99_info(request):
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)    
 """
+
+
 @api_view(['GET'])
 def fetch_f99_info(request):
     """"
@@ -180,6 +184,7 @@ def fetch_f99_info(request):
             return Response({})
 
 parser_classes = (MultiPartParser, FormParser)
+
 
 @api_view(['POST'])
 def create_f99_info(request):
@@ -317,6 +322,8 @@ def f99_file_upload(self, request, format=None):
     mymodel.my_file_field.save(f.name, f, save=True)
     return Response(status=status.HTTP_201_CREATED)
 """
+
+
 @api_view(['POST'])
 def update_f99_info(request, print_flag=False):
     try:
@@ -436,6 +443,8 @@ def update_f99_info(request, print_flag=False):
          
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     """
+
+
 @api_view(['POST'])
 def submit_comm_info(request):
     if request.method == 'POST':
@@ -612,6 +621,7 @@ def create_json_file(request):
 
 """
 
+
 @api_view(['GET'])
 def get_f99_reasons(request):
     """
@@ -624,6 +634,7 @@ def get_f99_reasons(request):
             return Response(reason_data, status=status.HTTP_200_OK)
         except:
             return Response({'error': 'ERR_0001: Server Error: F99 reasons file not retrievable.'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 def get_committee_details(request):
@@ -678,6 +689,7 @@ def get_committee_details(request):
     except Exception as e:
         return Response("The get_committee_details API is throwing  an error: " + str(e), status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 def get_committee(request):
     """
@@ -726,6 +738,8 @@ def update_committee(request, cid):
     except Exception as e:
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
+
+
 @api_view(['POST'])
 def create_committee(request):
     # insert a new record for a committee
@@ -760,6 +774,8 @@ def create_committee(request):
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
 
 # validate api for Form 99
+
+
 @api_view(['POST'])
 def validate_f99(request):
     # # get all comm info
@@ -870,6 +886,7 @@ def validate_f99(request):
     else:
         return JsonResponse(errormess, status=400, safe=False)
 
+
 @api_view(['GET'])
 def get_rad_analyst_info(request):
     """
@@ -884,6 +901,7 @@ def get_rad_analyst_info(request):
                 return JsonResponse({"ERROR": "You must be logged in  for this operation."})
         except:
             return JsonResponse({"ERROR": "ERR_f99_03: Unexpected Error. Please contact administrator."})
+
 
 @api_view(['GET'])
 def get_form99list(request):
@@ -1180,6 +1198,8 @@ def delete_forms(request):
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
 
 # email through AWS SES
+
+
 def email(boolean, data):
     SENDER = "donotreply@fec.gov"
     RECIPIENT = []
@@ -1325,6 +1345,7 @@ def get_report_types_(request):
     except:
         return Response({}, status=status.HTTP_404_NOT_FOUND)
 """
+
 
 @api_view(['POST'])
 def save_print_f99(request):
@@ -1483,6 +1504,7 @@ def save_print_f99(request):
         return Response({"FEC Error 006":"This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
     """
 
+
 @api_view(['POST'])
 def update_print_f99(request):
     """"
@@ -1625,6 +1647,7 @@ def update_print_f99(request):
     except Exception as e:
         return Response('The update_print_f99 is throwing an error: ' + str(e))
     
+
 def set_need_appearances_writer(writer):
 
     try:
@@ -1654,6 +1677,7 @@ def set_need_appearances_writer(writer):
         print('set_need_appearances_writer() catch : ', repr(e))
 
         return writer
+
 
 def update_checkbox_values(page, fields):
     for j in range(0, len(page['/Annots'])):
@@ -1789,6 +1813,7 @@ def validate_HTMLtag(strWord):
     except Exception as e:
         return Response("The validate_HTMLtag function is throwing an error: " + str(e), status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 def get_f99_report_info(request):
     """
@@ -1811,6 +1836,7 @@ def get_f99_report_info(request):
                     return JsonResponse(response, status=status.HTTP_200_OK)
     except CommitteeInfo.DoesNotExist:
         return Response({"FEC Error 004": "There is no submitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 def submit_formf99(request):

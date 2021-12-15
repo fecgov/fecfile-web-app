@@ -55,6 +55,7 @@ class CommitteeInfoSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class CommitteeInfoListSerializer(serializers.ListSerializer):
     child = CommitteeInfoSerializer()
     allow_null = True

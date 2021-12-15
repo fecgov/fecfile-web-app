@@ -7,12 +7,16 @@ from db_file_storage.model_utils import delete_file, delete_file_if_needed
 from fecfiler.custom_storages import MediaStorage
 
 # Table to store F99 attachment data (Refer this documentation: https://django-db-file-storage.readthedocs.io/en/master/)
+
+
 class F99Attachment(models.Model):
     bytes = models.TextField()
     filename = models.CharField(max_length=255)
     mimetype = models.CharField(max_length=50)
 
 # added blank=True for null=True to avoid exception while saving to db.
+
+
 class CommitteeInfo(models.Model):
     # Committee Information Table Model
     id = models.AutoField(primary_key=True)
@@ -99,6 +103,7 @@ class Committee(models.Model):
         verbose_name = _('Committee')
         verbose_name_plural = _('Committee')
 
+
 class CommitteeMaster(models.Model):
     cmte_id = models.CharField(primary_key=True, max_length=9)
     cmte_name = models.CharField(max_length=200, blank=True, null=True)
@@ -125,6 +130,7 @@ class CommitteeMaster(models.Model):
         managed = False
         db_table = 'committee_lookup'
 
+
 class My_Forms_View(models.Model):
     cmte_id = models.CharField(primary_key=True, max_length=9)
     category = models.CharField(max_length=25)
@@ -133,6 +139,7 @@ class My_Forms_View(models.Model):
     form_description = models.CharField(max_length=300, blank=True, null=True)
     form_info = models.CharField(max_length=1000, blank=True, null=True)
         
+
 class RefCmteTypeVsForms(models.Model):
     cmte_type = models.CharField(primary_key=True, max_length=1)
     cmte_dsgn = models.CharField(max_length=1)

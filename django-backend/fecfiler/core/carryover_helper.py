@@ -8,6 +8,7 @@ from django.db import connection
 
 logger = logging.getLogger(__name__)
 
+
 def get_next_transaction_id(trans_char):
     """get next transaction_id with seeding letter, like 'SA' """
     try:
@@ -20,6 +21,7 @@ def get_next_transaction_id(trans_char):
         return transaction_id
     except Exception:
         raise
+
 
 def is_pac(cmte_id):
     _sql = """
@@ -646,6 +648,7 @@ def do_carryover_sc_payments(cmte_id, report_id, rowcount):
                 # carryover_sched_h6_payments(cmte_id, report_id, parent_id, current_id)
     except:
         raise
+
 
 def do_in_between_report_carryover(cmte_id, report_id):
     try:

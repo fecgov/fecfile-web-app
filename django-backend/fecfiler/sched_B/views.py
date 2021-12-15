@@ -722,6 +722,7 @@ def put_cand_entity(data):
     """
     return save_cand_entity(data)
 
+
 @update_F3X
 @new_report_date
 def post_schedB(datum):
@@ -988,6 +989,7 @@ def get_existing_expenditure(cmte_id, transaction_id):
             return cursor.fetchone()[0]
     except:
         raise
+
 
 @update_F3X
 @new_report_date

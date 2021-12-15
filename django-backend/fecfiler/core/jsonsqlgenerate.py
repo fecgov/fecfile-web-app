@@ -19,6 +19,7 @@ from django.conf import settings
 import re
 import csv
 
+
 @api_view(["GET"])
 def sample_sql_generate(request):
         tran = request.query_params.get("tran_type")

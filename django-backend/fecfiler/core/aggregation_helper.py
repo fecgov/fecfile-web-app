@@ -159,6 +159,7 @@ def date_agg_format(cvg_date):
     except:
         raise
 
+
 def list_all_transactions_entity_lb(
     aggregate_start_date, aggregate_end_date, entity_id, cmte_id, levin_account_id
 ):
@@ -715,6 +716,7 @@ def get_transactions_election_and_office(start_date, end_date, data, form_type='
             "Getting transactions for election and office is throwing an error: "
             + str(e)
         )
+
 
 def update_aggregate_on_transaction(
     cmte_id, report_id, transaction_id, aggregate_amount
@@ -1823,6 +1825,7 @@ def list_all_transactions_entity(
             "The list_all_transactions_entity function is throwing an error: " + str(e)
         )
 
+
 @update_F3X
 def update_sa_itmization_status(data, item_status=None):
     """
@@ -1855,6 +1858,7 @@ def update_sa_itmization_status(data, item_status=None):
                 "update itemization status failed for {}".format(transaction_id)
             )
     return data
+
 
 def get_linenumber_itemization(
     transaction_type_identifier, aggregate_amount, itemization_value, line_number

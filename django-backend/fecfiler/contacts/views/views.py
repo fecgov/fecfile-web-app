@@ -328,6 +328,7 @@ def delete_contact(request):
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
 
+
 @api_view(["GET"])
 def download_template(request):
 

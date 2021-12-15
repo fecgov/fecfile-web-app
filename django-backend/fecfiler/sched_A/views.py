@@ -748,6 +748,7 @@ def get_in_kind_entity_name(entity_data):
 **************************************************** API FUNCTIONS - SCHED A TRANSACTION *************************************************************
 """
 
+
 @update_F3X
 @new_report_date
 def post_schedA(datum):
@@ -983,6 +984,7 @@ def get_schedA(data):
         return forms_obj
     except:
         raise
+
 
 @update_F3X
 @new_earmarkout_expenditure_amount

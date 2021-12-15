@@ -199,6 +199,7 @@ def get_existing_expenditure_amount(cmte_id, transaction_id):
     except:
         raise
 
+
 @update_F3X
 @new_report_date
 def put_schedF(data):
@@ -350,6 +351,7 @@ def validate_sF_data(data):
     validate sF json data
     """
     check_mandatory_fields_SF(data)
+
 
 @update_F3X
 @new_report_date
@@ -1128,6 +1130,7 @@ def get_election_year(office_sought, election_state, election_district):
         raise Exception(
             "The get_election_year function is throwing an error: " + str(e)
         )
+
 
 def update_sf_aggregation_status(transaction_id, status):
     """

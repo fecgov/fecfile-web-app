@@ -5,6 +5,7 @@ from .views import *
 # Create your tests here
 from fecfiler.authentication.models import Account
 
+
 class SimpleTest(TestCase):
     def setUp(self):
         self.credentials = {

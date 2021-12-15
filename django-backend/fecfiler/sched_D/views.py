@@ -278,6 +278,7 @@ def schedD(request):
 
 '''
 
+
 def get_int_value(num):
     if num is not None:
         num = int(num)
@@ -286,6 +287,8 @@ def get_int_value(num):
     return int(num)
 
 #: get the paginator page with other details like
+
+
 def get_pagination_dataset(json_res, itemsperpage, page_num):
     if check_null_value(json_res) is False or json_res is None:
         json_result = {
@@ -522,6 +525,7 @@ def schedD(request):
     else:
         raise NotImplementedError
 
+
 def do_post_carryover(transaction_id, cmte_id, report_id):
     try:
         _sql = """SELECT json_agg(t) FROM (
@@ -645,6 +649,7 @@ def valid_transaction_amounts(data):
         float(beginning_balance) +
         float(incurred_amount) - float(payment_amount)
     ) == float(balance_at_close)
+
 
 @update_F3X
 @new_report_date
@@ -858,6 +863,7 @@ def validate_sd_data(data):
     check_mandatory_fields_SD(data)
     # validate_transaction_type(data)
 
+
 @update_F3X
 @new_report_date
 def post_schedD(datum):
@@ -1061,6 +1067,7 @@ def get_child_transactions(report_id, cmte_id, transaction_id):
     # child_forms_obj = childA_forms_obj + childB_forms_obj
     # # for obj in childB_forms_obj:
     # #     obj.update({'api_call':''})
+
 
 def get_schedD(data):
     """"

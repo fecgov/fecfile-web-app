@@ -317,6 +317,7 @@ def initial_loan(transaction_id):
             return True
         return False
 
+
 @update_F3X
 @new_report_date
 def put_schedC(data):
@@ -705,6 +706,7 @@ def remove_schedC(data):
         remove_sql_schedC(transaction_id, report_id, cmte_id)
     except:
         raise
+
 
 @update_F3X
 @new_report_date
@@ -1401,6 +1403,7 @@ def get_outstanding_loans(request):
         raise
 '''
 
+
 @api_view(["GET"])
 def get_outstanding_loans(request):
     """
@@ -1627,6 +1630,8 @@ def get_trans_query_for_total_count(trans_query_string):
     return final_query
 
 #: build query offset and record count to start getting the data
+
+
 def set_offset_n_fetch(trans_query_string, page_num, itemsperpage):
     trans_query_string = trans_query_string + """ OFFSET """
     if page_num > 0:
@@ -1639,6 +1644,8 @@ def set_offset_n_fetch(trans_query_string, page_num, itemsperpage):
     return trans_query_string
 
 #: get page count or number of pages for pagination
+
+
 def get_num_of_pages(totalcount, itemsperpage):
     if (totalcount % itemsperpage) == 0:
         numofpages = totalcount / itemsperpage
@@ -3221,6 +3228,7 @@ def get_endorser_summary(request):
 
     except:
         raise
+
 
 def put_duplicate_future_reports(data):
     try:

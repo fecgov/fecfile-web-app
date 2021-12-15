@@ -48,6 +48,7 @@ from django.db import models
   last_update_date
 """
 
+
 class SchedL(models.Model):
     cmte_id = models.CharField(max_length=9)
     report_id = models.BigIntegerField()
