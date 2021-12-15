@@ -236,12 +236,12 @@ def create_f99_info(request):
         """
         logger.debug("Incoming parameters: create_f99_info" + str(request.data))
         incoming_data = data
-        #import ipdb; ipdb.set_trace()
+
         # overwrite is_submitted just in case user sends it, all submit changes to go via submit_comm_info api as we save to s3 and call fec api.
 
-        #if not(incoming_data['is_submitted'] in['False',False,'false'] and incoming_data['committeeid'] == get_comittee_id(request.user.username)):
-            #logger.debug("FEC Error 001:is_submitted and committeeid field changes are restricted for this api call. Please use the submit api to finalize and submit the data")
-            #return Response({"FEC Error 001":"is_submitted and committeeid field changes are restricted for this api call. Please use the submit api to finalize and submit the data"}, status=status.HTTP_400_BAD_REQUEST)
+        # if not(incoming_data['is_submitted'] in['False',False,'false'] and incoming_data['committeeid'] == get_comittee_id(request.user.username)):
+        #     logger.debug("FEC Error 001:is_submitted and committeeid field changes are restricted for this api call. Please use the submit api to finalize and submit the data")
+        #     return Response({"FEC Error 001":"is_submitted and committeeid field changes are restricted for this api call. Please use the submit api to finalize and submit the data"}, status=status.HTTP_400_BAD_REQUEST)
         # just making sure that committeeid is not updated by mistake
         
         print("Reason text= ", request.data.get('text'))

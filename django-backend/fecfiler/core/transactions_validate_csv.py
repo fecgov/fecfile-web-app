@@ -93,9 +93,9 @@ def export_excel_to_db(filename, path):
                 df = pd.read_excel(filewithpath,
                                     sheet_name=sheet_name,
                                     index_col=0,
-                                    skiprows = range(0, 2)
+                                    skiprows = range(0, 2),
+                                    #dtype=String,
                                     ,usecols="A,B,C,D,E,F,G")
-                                    #,dtype=String)
                 df.dropna(how="all", inplace=True)
                 df.rename(columns = {'Auto populate ': 'AUTO-GENERATE',
                                         'Auto populate': 'AUTO-GENERATE',
