@@ -27,7 +27,7 @@ PG_PORT = os.getenv('FECFILE_DB_PORT', '5432')
 PG_DATABASE = os.getenv('FECFILE_DB_NAME', 'postgres')
 PG_USER = os.getenv('FECFILE_DB_USERNAME', 'postgres')
 PG_PASSWORD = os.getenv('FECFILE_DB_PASSWORD', 'postgres')
-SQS_QUEUE_NAME = os.getenv('SQS_QUEUE_NAME') #
+SQS_QUEUE_NAME = os.getenv('SQS_QUEUE_NAME')
 
 
 BACKEND_DB_HOST = os.getenv('BACKEND_DB_HOST')
@@ -367,7 +367,7 @@ def validate_transactions(bktname, key, cmteid):
         check_errkey_exists(bktname, key)
         if check_file_exists(bktname, key):
             if bktname and key:
-                res = load_dataframe_from_s3(bktname, key, 100000, 1, cmteid) #100,000 records and 1s timer is for testing and need to be updated.
+                res = load_dataframe_from_s3(bktname, key, 100000, 1, cmteid)  # 100,000 records and 1s timer is for testing and need to be updated.
                 #print(res)
                 if res != 'Validate_Pass':
                     print("Error with data validation:", res)
@@ -506,11 +506,11 @@ def send_message_to_queue(bktname, key):
                 'MessageAttributes': {
                     "bktname": {
                         'DataType': "String",
-                        'StringValue': bktname #"fecfile-filing-frontend"
+                        'StringValue': bktname  # "fecfile-filing-frontend"
                     },
                     "key": {
                         'DataType': "String",
-                        'StringValue': key #"transactions/F3X_ScheduleA_Import_Transactions_11_25_TEST_Data.csv"
+                        'StringValue': key  # "transactions/F3X_ScheduleA_Import_Transactions_11_25_TEST_Data.csv"
                     }
                 }
             }

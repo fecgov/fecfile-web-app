@@ -22,7 +22,7 @@ PG_PORT = os.getenv('FECFILE_DB_PORT', 5432)
 PG_DATABASE = os.getenv('FECFILE_DB_NAME', 'postgres')
 PG_USER = os.getenv('FECFILE_DB_USERNAME', 'postgres')
 PG_PASSWORD = os.getenv('FECFILE_DB_PASSWORD', 'postgres')
-SQS_QUEUE_NAME = os.getenv('SQS_QUEUE_NAME') #
+SQS_QUEUE_NAME = os.getenv('SQS_QUEUE_NAME')
 
 
 
@@ -100,7 +100,7 @@ def generate_md5_hash(filename):
     try:
         bucket = 'fecfile-filing-frontend'
         #key     = 'transactions/Disbursements_1q2020.csv'
-        key = 'transactions/' + filename #srini_test1.csv
+        key = 'transactions/' + filename  # srini_test1.csv
         s3 = boto3.client('s3')
         obj = s3.get_object(Bucket=bucket, Key=key)
         body = obj['Body']
@@ -162,13 +162,13 @@ def get_comittee_id(username):
 def chk_csv_uploaded(request):
     try:
         cmte_id = get_comittee_id(request.user.username)
-        file_name = request.data.get("file_name") #request.file_name
-        md5 = request.data.get("md5hash") #request.md5hash
+        file_name = request.data.get("file_name")  # request.file_name
+        md5 = request.data.get("md5hash")  # request.md5hash
         fec_file_name = request.data.get("fecfilename")
         print(cmte_id, file_name, md5, fec_file_name)
-        filename = file_name #"srini_test1.csv"#"Disbursements_1q2020.csv"
-        hash_value = md5 #generate_md5_hash(filename)
-        fecfilename = fec_file_name #"F3X_ScheduleLA_Import_Transactions_C0011147_part1_11_25.csv"
+        filename = file_name  # "srini_test1.csv"#"Disbursements_1q2020.csv"
+        hash_value = md5  # generate_md5_hash(filename)
+        fecfilename = fec_file_name  # "F3X_ScheduleLA_Import_Transactions_C0011147_part1_11_25.csv"
         fileexists = check_for_file_hash_in_db(cmte_id, filename, hash_value, fecfilename)
         if fileexists is None:
             load_file_hash_to_db(cmte_id, filename, hash_value, fecfilename)

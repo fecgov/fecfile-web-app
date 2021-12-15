@@ -1426,7 +1426,7 @@ def get_outstanding_loans(request):
     param_string = ""
     query_params = request.query_params
     page_num = int(query_params.get("page"))
-    descending = query_params.get("descending")#request.data.get("descending", "false")
+    descending = query_params.get("descending")  # request.data.get("descending", "false")
     if not (
         "sortColumnName" in query_params
         and check_null_value(query_params.get("sortColumnName"))
@@ -1444,7 +1444,7 @@ def get_outstanding_loans(request):
         descending = "DESC"
     else:
         descending = "ASC"
-    trans_query_string_count = "" #get_trans_query_for_total_count(trans_query_string)
+    trans_query_string_count = ""  # get_trans_query_for_total_count(trans_query_string)
     row1 = ""
     totalcount = ""
 

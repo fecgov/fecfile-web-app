@@ -344,7 +344,7 @@ def schedD(request):
         descending = "DESC"
     else:
         descending = "ASC"
-    trans_query_string_count = "" #get_trans_query_for_total_count(trans_query_string)
+    trans_query_string_count = ""  # get_trans_query_for_total_count(trans_query_string)
     row1 = ""
     totalcount = ""
 

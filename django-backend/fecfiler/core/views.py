@@ -12239,8 +12239,8 @@ def chk_csv_uploaded_in_db(request):
 def save_csv_md5_to_db(request):
     try:
         cmteid = request.user.username
-        filename = request.data.get("file_name") #request.file_name
-        hash = request.data.get("md5hash") #request.md5hash
+        filename = request.data.get("file_name")  # request.file_name
+        hash = request.data.get("md5hash")  # request.md5hash
         resp = load_file_hash_to_db(cmteid, filename, hash)
         return Response(resp, status=status.HTTP_200_OK)
     except Exception as e:
@@ -12253,7 +12253,7 @@ def save_csv_md5_to_db(request):
 def generate_contact_details_from_csv(request):
     try:
         cmteid = request.user.username
-        filename = request.data.get("file_name") #request.file_name
+        filename = request.data.get("file_name")  # request.file_name
         resp = get_contact_details_from_transactions(cmteid, filename)
         return Response(resp, status=status.HTTP_200_OK)
     except Exception as e:
@@ -12268,8 +12268,8 @@ def validate_import_transactions(request):
     try:
 
         cmteid = get_comittee_id(request.user.username)
-        bktname = request.data.get("bkt_name") #"fecfile-filing-frontend"
-        key = request.data.get("key") #"transactions/F3X_ScheduleE_Import_Transactions_11_25_TEST_Data.csv"
+        bktname = request.data.get("bkt_name")  # "fecfile-filing-frontend"
+        key = request.data.get("key")  # "transactions/F3X_ScheduleE_Import_Transactions_11_25_TEST_Data.csv"
         auth = request.auth
         #print('cmteid ', cmteid,' bkt_name ',bktname,' key: ', key )
         if bktname and key:
@@ -12313,8 +12313,8 @@ def validate_import_transactions(request):
 def queue_transaction_message(request):
     try:
         cmteid = get_comittee_id(request.user.username)
-        bktname = request.data.get("bkt_name") #"fecfile-filing-frontend"
-        key = request.data.get("key") #"transactions/F3X_ScheduleE_Import_Transactions_11_25_TEST_Data.csv"
+        bktname = request.data.get("bkt_name")  # "fecfile-filing-frontend"
+        key = request.data.get("key")  # "transactions/F3X_ScheduleE_Import_Transactions_11_25_TEST_Data.csv"
 
         print('cmteid ', cmteid, ' bkt_name ', bktname, ' key: ', key)
         if bktname and key:
@@ -12335,7 +12335,7 @@ def contact_notes(request):
     try:
         cmte_id = get_comittee_id(request.user.username)
         entity_id = request.data.get('entity_id')
-        notes = request.data.get('notes') #request.md5hash
+        notes = request.data.get('notes')  # request.md5hash
         with connection.cursor() as cursor:
             _sql = """UPDATE public.entity SET notes=%s WHERE entity_id=%s and cmte_id=%s"""
             cursor.execute(_sql, [notes, entity_id, cmte_id])

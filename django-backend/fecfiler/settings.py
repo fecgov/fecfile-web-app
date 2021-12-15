@@ -211,13 +211,13 @@ COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', not DEBUG)
 AWS_HOST_NAME = 'us-east-1'
 AWS_REGION = 'us-east-1'
 
-AWS_SES_AUTO_THROTTLE = 0.5 # (default; safety factor applied to rate limit, turn off automatic throttling, set this to None)
+AWS_SES_AUTO_THROTTLE = 0.5  # (default; safety factor applied to rate limit, turn off automatic throttling, set this to None)
 
 
 
 # add the credentials from IAM and bucket name
-AWS_STORAGE_BUCKET_NAME = 'fecfile-filing' # or None if using service role
-AWS_STORAGE_UPLOAD_BUCKET_NAME = 'fecfile-filing-uploads' # or None if using service role
+AWS_STORAGE_BUCKET_NAME = 'fecfile-filing'  # or None if using service role
+AWS_STORAGE_UPLOAD_BUCKET_NAME = 'fecfile-filing-uploads'  # or None if using service role
 AWS_STORAGE_IMPORT_CONTACT_BUCKET_NAME = 'fecfile-filing-frontend'
 #AWS_ACCESS_KEY_ID = '<aws access key >' # or None if using service role
 #AWS_SECRET_ACCESS_KEY = '<aws secret access key>'
@@ -311,7 +311,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/access.log',
-            'maxBytes': 1024*1024*5, # 5 MB
+            'maxBytes': 1024*1024*5,  # 5 MB
             'backupCount': 5,
             'formatter': 'standard',
         },
@@ -319,7 +319,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/access.log',
-            'maxBytes': 1024*1024*5, # 5 MB
+            'maxBytes': 1024*1024*5,  # 5 MB
             'backupCount': 5,
             'formatter': 'standard',
         },
@@ -353,7 +353,7 @@ AWS_SECRET_ACCESS_KEY = os.environ.get('SECRET_KEY', None)
 AWS_HOST_NAME = 'us-east-1'
 AWS_REGION = 'us-east-1'
 AWS_DEFAULT_ACL = None
-AWS_SES_AUTO_THROTTLE = 0.5 # (default; safety factor applied to rate limit, turn off automatic throttling, set this to None)
+AWS_SES_AUTO_THROTTLE = 0.5  # (default; safety factor applied to rate limit, turn off automatic throttling, set this to None)
 
 USPS_USERNAME = os.environ.get('USPS_USERNAME', None)
 USPS_API_URL = os.environ.get('USPS_API_URL', None)
@@ -361,10 +361,10 @@ USPS_API_URL = os.environ.get('USPS_API_URL', None)
 
 # add the credentials from IAM and bucket name
 
-AWS_STORAGE_BUCKET_NAME = 'dev-efile-repo' # or None if using service role
+AWS_STORAGE_BUCKET_NAME = 'dev-efile-repo'  # or None if using service role
 #AWS_STORAGE_BUCKET_NAME = 'fecfile-filing'
 
-AWS_STORAGE_UPLOAD_BUCKET_NAME = 'dev-efile-upload' # or None if using service role
+AWS_STORAGE_UPLOAD_BUCKET_NAME = 'dev-efile-upload'  # or None if using service role
 
 
 # if False it will create unique file names for every uploaded file

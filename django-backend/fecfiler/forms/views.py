@@ -171,9 +171,9 @@ def fetch_f99_info(request):
     #import ipdb; ipdb.set_trace()
     try:
         # fetch last comm_info object created that is not submitted, else return None
-        comm_info = CommitteeInfo.objects.filter(committeeid=get_comittee_id(request.user.username),  is_submitted=False).last() #,)
+        comm_info = CommitteeInfo.objects.filter(committeeid=get_comittee_id(request.user.username),  is_submitted=False).last()  # ,)
     except CommitteeInfo.DoesNotExist:
-        return Response({}) #status=status.HTTP_404_NOT_FOUND)
+        return Response({})  # status=status.HTTP_404_NOT_FOUND)
 
     # get details of a single comm_info
     if request.method == 'GET':

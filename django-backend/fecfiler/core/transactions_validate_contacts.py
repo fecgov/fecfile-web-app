@@ -347,7 +347,7 @@ def get_contact_details_from_transactions(cmteid, filename):
             if bucket:
                 print(bucket)
                 key = "transactions/" + file_name
-                return load_dataframe_from_s3(cmteid, bucket, key, 100000, 1) #100,000 records and 1s timer is for testing and need to be updated.
+                return load_dataframe_from_s3(cmteid, bucket, key, 100000, 1)  # 100,000 records and 1s timer is for testing and need to be updated.
             else:
                 print("Queue is empty!!!")
         else:
