@@ -105,7 +105,7 @@ class Setup_submit_comm_info(TestCase):
                 "street2": "Street 2",
                 "city": "Washington",
                 "state": "DC",
-                "text" : "--",
+                "text": "--",
                 "zipcode": 20001,
                 "treasurerprefix": "Mr",
                 "treasurerfirstname": "John",

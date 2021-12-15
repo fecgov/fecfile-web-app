@@ -186,9 +186,9 @@ def chk_csv_uploaded(request):
                 "error_list": [],
                 "fileName": filename,
                 "duplicate_file_list": [{
-                    "fileName"  : rfilename,
+                    "fileName": rfilename,
                     "uploadDate": rcreate_date,
-                    "checkSum"  : rhash
+                    "checkSum": rhash
                 }],
                 "duplicate_db_count": 0
             }

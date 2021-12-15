@@ -145,44 +145,44 @@ SCHEDULE_TO_TABLE_DICT = {
 
 
 f3x_col_line_dict = {
-    "11AI" : ["indv_item_contb_per", 4, "Itemized Individual Contributions", "indv_item_contb_ytd"],
-    "11AII" : ["indv_unitem_contb_per", 4, "Unitemized Individual Contributions", "indv_unitem_contb_ytd"],
-    "11A" : ["ttl_indv_contb", 3, "Total Individual Contributions", "ttl_indv_contb_ytd"],
-    "11B" : ["pol_pty_cmte_contb_per_i", 3, "Party Committee Contributions", "pol_pty_cmte_contb_ytd_i"],
-    "11C" : ["other_pol_cmte_contb_per_i", 3, "Other Committee Contributions", "other_pol_cmte_contb_ytd_i"],
-    "11D" : ["ttl_contb_col_ttl_per", 2, "Total Contributions", "ttl_contb_col_ttl_ytd"],
-    "12" : ["tranf_from_affiliated_pty_per", 2, "Transfers From Affiliated Committees", "tranf_from_affiliated_pty_ytd"],
-    "13" : ["all_loans_received_per", 2, "All Loans Received", "all_loans_received_ytd"],
-    "14" : ["loan_repymts_received_per", 2, "Loan Repayments Received", "loan_repymts_received_ytd"],
-    "15" : ["offsets_to_op_exp_per_i", 2, "Offsets To Operating Expenditures", "offsets_to_op_exp_ytd_i"],
-    "16" : ["fed_cand_contb_ref_per", 2, "Candidate Refunds", "fed_cand_cmte_contb_ytd"],
-    "17" : ["other_fed_receipts_per", 2, "Other Receipts", "other_fed_receipts_ytd"],
-    "18A" : ["tranf_from_nonfed_acct_per", 3, "Non-federal Transfers", "tranf_from_nonfed_acct_ytd"],
-    "18B" : ["tranf_from_nonfed_levin_per", 3, "Levin Funds", "tranf_from_nonfed_levin_ytd"],
-    "18" : ["ttl_nonfed_tranf_per", 2, "Total Transfers", "ttl_nonfed_tranf_ytd"],
-    "19" : ["ttl_receipts_per", 1, "Total Receipts", "ttl_receipts_ytd"],
-    "20" : ["ttl_fed_receipts_per", 2, "Total Federal Receipts", "ttl_fed_receipts_ytd"],
-    "21" : ["ttl_op_exp_per", 2, "Operating Expenditures", "ttl_op_exp_ytd"],
-    "21AI" : ["shared_fed_op_exp_per", 3, "Allocated Operating Expenditures - Federal", "shared_fed_op_exp_ytd"],
-    "21AII" : ["shared_nonfed_op_exp_per", 3, "Allocated Operating Expenditures - Non-Federal", "shared_nonfed_op_exp_ytd"],
-    "21B" : ["other_fed_op_exp_per", 3, "Other Federal Operating Expenditures", "other_fed_op_exp_ytd"],
-    "22" : ["tranf_to_affliliated_cmte_per", 2, "Transfer From Affiliated Committees", "tranf_to_affilitated_cmte_ytd"],
-    "23" : ["fed_cand_cmte_contb_per", 2, "Contributions To Other Committees", "fed_cand_cmte_contb_ref_ytd"],
-    "24" : ["indt_exp_per", 2, "Independent Expenditures", "indt_exp_ytd"],
-    "25" : ["coord_exp_by_pty_cmte_per", 2, "Party Coordinated Expenditures", "coord_exp_by_pty_cmte_ytd"],
-    "26" : ["loan_repymts_made_per", 2, "Loan Repayments Made", "loan_repymts_made_ytd"],
-    "27" : ["loans_made_per", 2, "Loans Made", "loans_made_ytd"],
-    "28A" : ["indv_contb_ref_per", 3, "Individual Refunds", "indv_contb_ref_ytd"],
-    "28B" : ["pol_pty_cmte_contb_per_ii", 3, "Political Party Refunds", "pol_pty_cmte_contb_ytd_ii"],
-    "28C" : ["other_pol_cmte_contb_per_ii", 3, "Other Committee Refunds", "other_pol_cmte_contb_ytd_ii"],
-    "28" : ["ttl_contb_ref_per_i", 2, "Total Contribution Refunds", "ttl_contb_ref_ytd_i"],
-    "29" : ["other_disb_per", 2, "Other Disbursements", "other_disb_ytd"],
-    "30AI" : ["shared_fed_actvy_fed_shr_per", 3, "Allocated Federal Election Activity - Federal Share", "shared_fed_actvy_fed_shr_ytd"],
-    "30AII" : ["shared_fed_actvy_nonfed_per", 3, "Allocated Federal Election Activity - Levin Share", "shared_fed_actvy_nonfed_ytd"],
-    "30B" : ["non_alloc_fed_elect_actvy_per", 3, "Federal Election Activity - Federal Only", "non_alloc_fed_elect_actvy_ytd"],
-    "30" : ["ttl_fed_elect_actvy_per", 2, "Total Federal Election Activity", "ttl_fed_elect_actvy_ytd"],
-    "31" : ["ttl_disb_per", 1, "Total Disbursements", "ttl_disb_ytd"],
-    "32" : ["ttl_fed_disb_per", 2, "Total Federal Disbursements", "ttl_fed_disb_ytd"],
+    "11AI": ["indv_item_contb_per", 4, "Itemized Individual Contributions", "indv_item_contb_ytd"],
+    "11AII": ["indv_unitem_contb_per", 4, "Unitemized Individual Contributions", "indv_unitem_contb_ytd"],
+    "11A": ["ttl_indv_contb", 3, "Total Individual Contributions", "ttl_indv_contb_ytd"],
+    "11B": ["pol_pty_cmte_contb_per_i", 3, "Party Committee Contributions", "pol_pty_cmte_contb_ytd_i"],
+    "11C": ["other_pol_cmte_contb_per_i", 3, "Other Committee Contributions", "other_pol_cmte_contb_ytd_i"],
+    "11D": ["ttl_contb_col_ttl_per", 2, "Total Contributions", "ttl_contb_col_ttl_ytd"],
+    "12": ["tranf_from_affiliated_pty_per", 2, "Transfers From Affiliated Committees", "tranf_from_affiliated_pty_ytd"],
+    "13": ["all_loans_received_per", 2, "All Loans Received", "all_loans_received_ytd"],
+    "14": ["loan_repymts_received_per", 2, "Loan Repayments Received", "loan_repymts_received_ytd"],
+    "15": ["offsets_to_op_exp_per_i", 2, "Offsets To Operating Expenditures", "offsets_to_op_exp_ytd_i"],
+    "16": ["fed_cand_contb_ref_per", 2, "Candidate Refunds", "fed_cand_cmte_contb_ytd"],
+    "17": ["other_fed_receipts_per", 2, "Other Receipts", "other_fed_receipts_ytd"],
+    "18A": ["tranf_from_nonfed_acct_per", 3, "Non-federal Transfers", "tranf_from_nonfed_acct_ytd"],
+    "18B": ["tranf_from_nonfed_levin_per", 3, "Levin Funds", "tranf_from_nonfed_levin_ytd"],
+    "18": ["ttl_nonfed_tranf_per", 2, "Total Transfers", "ttl_nonfed_tranf_ytd"],
+    "19": ["ttl_receipts_per", 1, "Total Receipts", "ttl_receipts_ytd"],
+    "20": ["ttl_fed_receipts_per", 2, "Total Federal Receipts", "ttl_fed_receipts_ytd"],
+    "21": ["ttl_op_exp_per", 2, "Operating Expenditures", "ttl_op_exp_ytd"],
+    "21AI": ["shared_fed_op_exp_per", 3, "Allocated Operating Expenditures - Federal", "shared_fed_op_exp_ytd"],
+    "21AII": ["shared_nonfed_op_exp_per", 3, "Allocated Operating Expenditures - Non-Federal", "shared_nonfed_op_exp_ytd"],
+    "21B": ["other_fed_op_exp_per", 3, "Other Federal Operating Expenditures", "other_fed_op_exp_ytd"],
+    "22": ["tranf_to_affliliated_cmte_per", 2, "Transfer From Affiliated Committees", "tranf_to_affilitated_cmte_ytd"],
+    "23": ["fed_cand_cmte_contb_per", 2, "Contributions To Other Committees", "fed_cand_cmte_contb_ref_ytd"],
+    "24": ["indt_exp_per", 2, "Independent Expenditures", "indt_exp_ytd"],
+    "25": ["coord_exp_by_pty_cmte_per", 2, "Party Coordinated Expenditures", "coord_exp_by_pty_cmte_ytd"],
+    "26": ["loan_repymts_made_per", 2, "Loan Repayments Made", "loan_repymts_made_ytd"],
+    "27": ["loans_made_per", 2, "Loans Made", "loans_made_ytd"],
+    "28A": ["indv_contb_ref_per", 3, "Individual Refunds", "indv_contb_ref_ytd"],
+    "28B": ["pol_pty_cmte_contb_per_ii", 3, "Political Party Refunds", "pol_pty_cmte_contb_ytd_ii"],
+    "28C": ["other_pol_cmte_contb_per_ii", 3, "Other Committee Refunds", "other_pol_cmte_contb_ytd_ii"],
+    "28": ["ttl_contb_ref_per_i", 2, "Total Contribution Refunds", "ttl_contb_ref_ytd_i"],
+    "29": ["other_disb_per", 2, "Other Disbursements", "other_disb_ytd"],
+    "30AI": ["shared_fed_actvy_fed_shr_per", 3, "Allocated Federal Election Activity - Federal Share", "shared_fed_actvy_fed_shr_ytd"],
+    "30AII": ["shared_fed_actvy_nonfed_per", 3, "Allocated Federal Election Activity - Levin Share", "shared_fed_actvy_nonfed_ytd"],
+    "30B": ["non_alloc_fed_elect_actvy_per", 3, "Federal Election Activity - Federal Only", "non_alloc_fed_elect_actvy_ytd"],
+    "30": ["ttl_fed_elect_actvy_per", 2, "Total Federal Election Activity", "ttl_fed_elect_actvy_ytd"],
+    "31": ["ttl_disb_per", 1, "Total Disbursements", "ttl_disb_ytd"],
+    "32": ["ttl_fed_disb_per", 2, "Total Federal Disbursements", "ttl_fed_disb_ytd"],
 }
 
 # NOT_DELETE_TRANSACTION_TYPE_IDENTIFIER = ['LOAN_FROM_IND', 'LOAN_FROM_BANK', 'LOAN_OWN_TO_CMTE_OUT', 'IK_OUT', 'IK_BC_OUT',
@@ -2357,8 +2357,8 @@ def reports(request):
                     return JsonResponse(data, status=status.HTTP_201_CREATED, safe=False)
                 elif type(data) is list:
                     output_dict = {
-                          'status' : "fail",
-                          'data' : data
+                          'status': "fail",
+                          'data': data
                       }
                     return JsonResponse(output_dict, status=status.HTTP_200_OK, safe=False)
                 else:
@@ -2479,9 +2479,9 @@ def reports(request):
                     return JsonResponse(data, status=status.HTTP_201_CREATED, safe=False)
                 elif type(data) is list:
                     output_dict = {
-                          'status' : "fail",
+                          'status': "fail",
                           'orphanedTransactionsExist': orphanedTransactionsExist,
-                          'data' : data
+                          'data': data
                       }
                     return JsonResponse(output_dict, status=status.HTTP_200_OK, safe=False)
                 else:
@@ -6303,42 +6303,13 @@ def loansanddebts(report_list, cmte_id):
 
         value_list = [cmte_id, cmte_id]
         output = [
-                loans_sql(loans_sc_sql, value_list, error_message_sc)[0]
-                ,loans_sql(loans_sd_sql, value_list, error_message_sd)[0]
+            loans_sql(loans_sc_sql, value_list, error_message_sc)[0],
+            loans_sql(loans_sd_sql, value_list, error_message_sd)[0]
         ]
         print(output)
         return output
     except Exception as e:
         raise Exception("The loansanddebts function is throwing an error" + str(e))
-
-# def loansanddebts(report_id, cmte_id):
-#     try:
-#         loans_sc_sql = """SELECT ((SELECT COALESCE(SUM(loan_balance), 0.0) FROM public.sched_c
-#         WHERE transaction_type_identifier = 'LOANS_OWED_BY_CMTE' AND memo_code IS NULL
-#         AND cmte_id = %s AND report_id = %s AND delete_ind is distinct from 'Y') -
-#         (SELECT COALESCE(SUM(loan_balance), 0.0) FROM public.sched_c
-#         WHERE transaction_type_identifier = 'LOANS_OWED_TO_CMTE' AND memo_code IS NULL
-#         AND cmte_id = %s AND report_id = %s AND delete_ind is distinct from 'Y')) AS loans"""
-
-#         error_message_sc = "The loans sql is throwing an error for sched_c table: "
-
-#         loans_sd_sql = """SELECT ((SELECT COALESCE(SUM(balance_at_close), 0.0) FROM public.sched_d
-#         WHERE transaction_type_identifier = 'DEBT_TO_VENDOR' AND cmte_id = %s AND report_id = %s
-#         AND delete_ind is distinct from 'Y') -
-#         (SELECT COALESCE(SUM(balance_at_close), 0.0) FROM public.sched_d
-#         WHERE transaction_type_identifier = 'DEBT_BY_VENDOR' AND cmte_id = %s AND report_id = %s
-#         AND delete_ind is distinct from 'Y')) AS debts"""
-
-#         error_message_sd = "The debts sql is throwing an error for sched_d table: "
-
-#         value_list = [cmte_id, report_id, cmte_id, report_id]
-#         output = (
-#                 loans_sql(loans_sc_sql, value_list, error_message_sc)[0]
-#                 + loans_sql(loans_sd_sql, value_list, error_message_sd)[0]
-#         )
-#         return output
-#     except Exception as e:
-#         raise Exception("The loansanddebts function is throwing an error" + str(e))
 
 
 def getthirdnavamounts(cmte_id, report_id):
@@ -7295,14 +7266,14 @@ def contactsTable(request):
 def get_trans_query_for_total_count(trans_query_string):
     temp_string = """select count(*) from """
     i = trans_query_string.index(""" from """)
-    s = trans_query_string[0 : i+6]
+    s = trans_query_string[0: i+6]
     final_query = trans_query_string.replace(s, temp_string,1)
     return final_query
 
 #: build query offset and record count to start getting the data
 def set_offset_n_fetch(trans_query_string, page_num, itemsperpage):
     trans_query_string = trans_query_string + """ OFFSET """
-    if page_num > 0 :
+    if page_num > 0:
         trans_query_string = trans_query_string + str((page_num-1) * itemsperpage)
     else:
         trans_query_string = trans_query_string + """ 0 """
@@ -11249,34 +11220,34 @@ def F3X_values(cmte_id, report_list, year_flag=False):
         else:
             i=0
         output_dict = {
-            f3x_col_line_dict['11AI'][i] : 0,
-            f3x_col_line_dict['11AII'][i] : 0,
-            f3x_col_line_dict['11B'][i] : 0,
-            f3x_col_line_dict['11C'][i] : 0,
-            f3x_col_line_dict['12'][i] : 0,
-            f3x_col_line_dict['13'][i] : 0,
-            f3x_col_line_dict['14'][i] : 0,
-            f3x_col_line_dict['15'][i] : 0,
-            f3x_col_line_dict['16'][i] : 0,
-            f3x_col_line_dict['17'][i] : 0,
-            f3x_col_line_dict['18A'][i] : 0,
-            f3x_col_line_dict['18B'][i] : 0,
-            f3x_col_line_dict['21AI'][i] : 0,
-            f3x_col_line_dict['21AII'][i] : 0,
-            f3x_col_line_dict['21B'][i] : 0,
-            f3x_col_line_dict['22'][i] : 0,
-            f3x_col_line_dict['23'][i] : 0,
-            f3x_col_line_dict['24'][i] : 0,
-            f3x_col_line_dict['25'][i] : 0,
-            f3x_col_line_dict['26'][i] : 0,
-            f3x_col_line_dict['27'][i] : 0,
-            f3x_col_line_dict['28A'][i] : 0,
-            f3x_col_line_dict['28B'][i] : 0,
-            f3x_col_line_dict['28C'][i] : 0,
-            f3x_col_line_dict['29'][i] : 0,
-            f3x_col_line_dict['30AI'][i] : 0,
-            f3x_col_line_dict['30AII'][i] : 0,
-            f3x_col_line_dict['30B'][i] : 0,
+            f3x_col_line_dict['11AI'][i]: 0,
+            f3x_col_line_dict['11AII'][i]: 0,
+            f3x_col_line_dict['11B'][i]: 0,
+            f3x_col_line_dict['11C'][i]: 0,
+            f3x_col_line_dict['12'][i]: 0,
+            f3x_col_line_dict['13'][i]: 0,
+            f3x_col_line_dict['14'][i]: 0,
+            f3x_col_line_dict['15'][i]: 0,
+            f3x_col_line_dict['16'][i]: 0,
+            f3x_col_line_dict['17'][i]: 0,
+            f3x_col_line_dict['18A'][i]: 0,
+            f3x_col_line_dict['18B'][i]: 0,
+            f3x_col_line_dict['21AI'][i]: 0,
+            f3x_col_line_dict['21AII'][i]: 0,
+            f3x_col_line_dict['21B'][i]: 0,
+            f3x_col_line_dict['22'][i]: 0,
+            f3x_col_line_dict['23'][i]: 0,
+            f3x_col_line_dict['24'][i]: 0,
+            f3x_col_line_dict['25'][i]: 0,
+            f3x_col_line_dict['26'][i]: 0,
+            f3x_col_line_dict['27'][i]: 0,
+            f3x_col_line_dict['28A'][i]: 0,
+            f3x_col_line_dict['28B'][i]: 0,
+            f3x_col_line_dict['28C'][i]: 0,
+            f3x_col_line_dict['29'][i]: 0,
+            f3x_col_line_dict['30AI'][i]: 0,
+            f3x_col_line_dict['30AII'][i]: 0,
+            f3x_col_line_dict['30B'][i]: 0,
         }
         _sql = """SELECT CASE 
                     WHEN line_number = '11A' AND itemized IS DISTINCT FROM 'U' AND itemized IS DISTINCT FROM 'FU' THEN '11AI'
@@ -11392,8 +11363,10 @@ def get_year_reports(cmte_id, report_id):
 
 @update_F3X
 def function_to_call_wrapper_update_F3X(cmte_id, report_id):
-    return {"report_id" : report_id,
-            "cmte_id" : cmte_id}
+    return {
+        "report_id": report_id,
+        "cmte_id": cmte_id,
+    }
 
 
 def post_sql_form24(

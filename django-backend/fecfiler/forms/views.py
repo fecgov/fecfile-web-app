@@ -201,8 +201,7 @@ def create_f99_info(request):
             'city': request.data.get('city'),
             'state': request.data.get('state'),
             'text': request.data.get('text'),
-            #'reason' :request.data.get('text'),
-            'reason' :request.data.get('reason'),
+            'reason': request.data.get('reason'),
             'zipcode': request.data.get('zipcode'),
             'treasurerlastname': request.data.get('treasurerlastname'),
             'treasurerfirstname': request.data.get('treasurerfirstname'),
@@ -211,10 +210,10 @@ def create_f99_info(request):
             'treasurersuffix': request.data.get('treasurersuffix'),
             'is_submitted': request.data.get('is_submitted'),
             'signee': request.data.get('signee'),
-            'email_on_file' : request.data.get('email_on_file'),
+            'email_on_file': request.data.get('email_on_file'),
             'email_on_file_1': request.data.get('email_on_file_1'),
 
-            'additional_email_1' : request.data.get('additional_email_1'),
+            'additional_email_1': request.data.get('additional_email_1'),
             'additional_email_2': request.data.get('additional_email_2'),
             'file': request.data.get('file'),
             'form_type': request.data.get('form_type'),
@@ -460,8 +459,7 @@ def submit_comm_info(request):
                 'city': request.data.get('city'),
                 'state': request.data.get('state'),
                 'text': request.data.get('text'),
-                #'reason' :request.data.get('text'),
-                'reason' :request.data.get('reason'),
+                'reason': request.data.get('reason'),
                 'zipcode': request.data.get('zipcode'),
                 'treasurerlastname': request.data.get('treasurerlastname'),
                 'treasurerfirstname': request.data.get('treasurerfirstname'),
@@ -470,10 +468,10 @@ def submit_comm_info(request):
                 'treasurersuffix': request.data.get('treasurersuffix'),
 
                 'signee': request.data.get('signee'),
-                'email_on_file' : request.data.get('email_on_file'),
+                'email_on_file': request.data.get('email_on_file'),
                 'email_on_file_1': request.data.get('email_on_file_1'),
 
-                'additional_email_1' : request.data.get('additional_email_1'),
+                'additional_email_1': request.data.get('additional_email_1'),
                 'additional_email_2': request.data.get('additional_email_2'),
                 'form_type': request.data.get('form_type'),
                 'coverage_start_date': request.data.get('coverage_start_date'),
@@ -758,8 +756,8 @@ def create_committee(request):
                 'treasurermiddlename': request.data.get('treasurermiddlename'),
                 'treasurerprefix': request.data.get('treasurerprefix'),
                 'treasurersuffix': request.data.get('treasurersuffix'),
-                'email_on_file' : request.data.get('email_on_file'),
-                'email_on_file_1' : request.data.get('email_on_file_1'),
+                'email_on_file': request.data.get('email_on_file'),
+                'email_on_file_1': request.data.get('email_on_file_1'),
             }
 
 
@@ -791,15 +789,15 @@ def validate_f99(request):
             'city': request.data.get('city'),
             'state': request.data.get('state'),
             'text': request.data.get('text'),
-            'reason' :request.data.get('reason'),
+            'reason': request.data.get('reason'),
             'zipcode': request.data.get('zipcode'),
             'treasurerlastname': request.data.get('treasurerlastname'),
             'treasurerfirstname': request.data.get('treasurerfirstname'),
             'treasurermiddlename': request.data.get('treasurermiddlename'),
             'treasurerprefix': request.data.get('treasurerprefix'),
             'treasurersuffix': request.data.get('treasurersuffix'),
-            'email_on_file' : request.data.get('email_on_file'),
-            'email_on_file_1' : request.data.get('email_on_file_1'),
+            'email_on_file': request.data.get('email_on_file'),
+            'email_on_file_1': request.data.get('email_on_file_1'),
             'file': request.data.get('file')
         }
     else:
@@ -1823,8 +1821,8 @@ def print_pdf(request):
     s3.Bucket(settings.AWS_STORAGE_BUCKET_NAME).upload_file(outfile, 'media/{}.pdf'.format(data_decode['IMGNO']))
 
     resp = {
-        'printpriview_filename' : '{}.pdf'.format(data_decode['IMGNO']),
-        'printpriview_fileurl' : "https://" + "{}".format(settings.AWS_STORAGE_BUCKET_NAME) + ".s3.amazonaws.com/media/" + "{}.pdf".format(data_decode['IMGNO'])
+        'printpriview_filename': '{}.pdf'.format(data_decode['IMGNO']),
+        'printpriview_fileurl': "https://" + "{}".format(settings.AWS_STORAGE_BUCKET_NAME) + ".s3.amazonaws.com/media/" + "{}.pdf".format(data_decode['IMGNO'])
     }
 
     return JsonResponse(resp, status=status.HTTP_201_CREATED)
