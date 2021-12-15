@@ -1606,9 +1606,9 @@ def do_h2_carryover(report_id, cmte_id):
                     back_ref_transaction_id,
                     create_date,
                     last_update_date
-					)
-					SELECT 
-					h.cmte_id, 
+                    )
+                    SELECT
+                    h.cmte_id,
                     %s, 
                     h.line_number,
                     h.transaction_type_identifier, 

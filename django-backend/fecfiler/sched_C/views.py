@@ -135,13 +135,13 @@ def do_loan_carryover(report_id, cmte_id):
     """
     _sql = """
     insert into public.sched_c(
-					cmte_id, 
-                    report_id, 
+                    cmte_id,
+                    report_id,
                     line_number,
-					transaction_type,
-                    transaction_type_identifier, 
-                    transaction_id, 
-                    entity_id, 
+                    transaction_type,
+                    transaction_type_identifier,
+                    transaction_id,
+                    entity_id,
                     election_code,
                     election_other_description,
                     loan_amount_original,
@@ -164,17 +164,17 @@ def do_loan_carryover(report_id, cmte_id):
                     lender_cand_district,
                     memo_code,
                     memo_text,
-					back_ref_transaction_id,
+                    back_ref_transaction_id,
                     create_date
-					)
-					SELECT 
-					c.cmte_id, 
-                    %s, 
+                    )
+                    SELECT
+                    c.cmte_id,
+                    %s,
                     c.line_number,
-					'',
-                    c.transaction_type_identifier, 
-                    get_next_transaction_id('SC'), 
-                    c.entity_id, 
+                    '',
+                    c.transaction_type_identifier,
+                    get_next_transaction_id('SC'),
+                    c.entity_id,
                     c.election_code,
                     c.election_other_description,
                     c.loan_amount_original,
@@ -197,7 +197,7 @@ def do_loan_carryover(report_id, cmte_id):
                     c.lender_cand_district,
                     c.memo_code,
                     c.memo_text,
-					c.transaction_id,
+                    c.transaction_id,
                     now()
             FROM public.sched_c c, public.reports r
             WHERE 

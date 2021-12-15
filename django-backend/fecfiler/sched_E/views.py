@@ -585,12 +585,12 @@ def get_transactions_election_and_office(start_date, end_date, data, form_type='
         _sql = """
         SELECT  
                 e.transaction_id, 
-				e.expenditure_amount as transaction_amt,
-				COALESCE(e.dissemination_date, e.disbursement_date) as transaction_dt,
+                e.expenditure_amount as transaction_amt,
+                COALESCE(e.dissemination_date, e.disbursement_date) as transaction_dt,
                 e.aggregation_ind
         FROM public.sched_e e
         LEFT JOIN public.reports r ON r.report_id = e.report_id
-        WHERE  
+        WHERE
             e.cmte_id = %s
             AND COALESCE(e.dissemination_date, e.disbursement_date) >= %s
             AND COALESCE(e.dissemination_date, e.disbursement_date) <= %s
@@ -604,24 +604,24 @@ def get_transactions_election_and_office(start_date, end_date, data, form_type='
         _params = (data.get("cmte_id"), start_date, end_date, data.get("election_code"), cand_office, form_type)
     elif cand_office == "S" or (cand_office == "H" and data.get("so_cand_state") in ['AK','DE','MT','ND','SD','VT','WY']):
         _sql = """
-        SELECT  
-                e.transaction_id, 
-				e.expenditure_amount as transaction_amt,
+        SELECT
+                e.transaction_id,
+                e.expenditure_amount as transaction_amt,
                 COALESCE(e.dissemination_date, e.disbursement_date) as transaction_dt,
                 e.aggregation_ind
         FROM public.sched_e e
         LEFT JOIN public.reports r ON r.report_id = e.report_id
-        WHERE  
+        WHERE
             e.cmte_id = %s
             AND COALESCE(e.dissemination_date, e.disbursement_date) >= %s
             AND COALESCE(e.dissemination_date, e.disbursement_date) <= %s
             AND e.election_code = %s
             AND e.so_cand_office = %s
             AND e.so_cand_state = %s
-            AND e.delete_ind is distinct FROM 'Y' 
+            AND e.delete_ind is distinct FROM 'Y'
             AND e.transaction_type_identifier in ('IE_MULTI', 'IE_STAF_REIM', 'IE_PMT_TO_PROL', 'IE_VOID', 'IE_CC_PAY', 'IE')
             AND r.form_type = %s
-            ORDER BY transaction_dt ASC, e.create_date ASC; 
+            ORDER BY transaction_dt ASC, e.create_date ASC;
         """
         _params = (
             data.get("cmte_id"),
@@ -634,10 +634,10 @@ def get_transactions_election_and_office(start_date, end_date, data, form_type='
         )
     elif cand_office == "H" and data.get("so_cand_state") not in ['AK','DE','MT','ND','SD','VT','WY']:
         _sql = """
-        SELECT  
-                e.transaction_id, 
-				e.expenditure_amount as transaction_amt,
-				COALESCE(e.dissemination_date, e.disbursement_date) as transaction_dt,
+        SELECT
+                e.transaction_id,
+                e.expenditure_amount as transaction_amt,
+                COALESCE(e.dissemination_date, e.disbursement_date) as transaction_dt,
                 e.aggregation_ind
         FROM public.sched_e e
         LEFT JOIN public.reports r ON r.report_id = e.report_id

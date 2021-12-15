@@ -1201,32 +1201,32 @@ def do_carryover(report_id, cmte_id):
     """
     _sql = """
     insert into public.sched_d(
-					cmte_id, 
-                    report_id, 
+                    cmte_id,
+                    report_id,
                     line_num,
-                    transaction_type_identifier, 
-                    transaction_id, 
-                    entity_id, 
-                    beginning_balance, 
-                    balance_at_close, 
-                    incurred_amount, 
-                    payment_amount, 
-					purpose,
+                    transaction_type_identifier,
+                    transaction_id,
+                    entity_id,
+                    beginning_balance,
+                    balance_at_close,
+                    incurred_amount,
+                    payment_amount,
+                    purpose,
                     back_ref_transaction_id,
                     create_date
-					)
-					SELECT 
-					d.cmte_id, 
-                    %s, 
+                    )
+                    SELECT
+                    d.cmte_id,
+                    %s,
                     d.line_num,
-                    d.transaction_type_identifier, 
-                    get_next_transaction_id('SD'), 
-                    d.entity_id, 
-                    d.balance_at_close, 
-                    d.balance_at_close, 
-                    0, 
-                    0, 
-					d.purpose,
+                    d.transaction_type_identifier,
+                    get_next_transaction_id('SD'),
+                    d.entity_id,
+                    d.balance_at_close,
+                    d.balance_at_close,
+                    0,
+                    0,
+                    d.purpose,
                     d.transaction_id,
                     now()
             FROM public.sched_d d, public.reports r

@@ -142,10 +142,11 @@ def schema_validation(dataframe, schema, bktname, key, errorfilename):
         for error in errors:
             msg = error.message
             error.message = re.sub("[\"@*&?].*[\"@*&?]", "", msg)
-            errdf.append({  	'row_no':       error.row,
-				'field_name':   error.column,
-				'msg':          error.message
-				})
+            errdf.append({
+                'row_no':       error.row,
+                'field_name':   error.column,
+                'msg':          error.message
+                })
 
         errors_index_rows = [e.row for e in errors]
         if len(errors_index_rows) > 0:
@@ -183,7 +184,7 @@ def build_schemas(formname, sched, trans_type):
                                       port=PG_PORT,
                                       database=PG_DATABASE)
         cursor = connection.cursor()
-        cursor.execute("SELECT rfsfs.formname, rfsfs.schedname, rfsfs.transaction_type, rfsfs.field_description, rfsfs.type, rfsfs.required	FROM public.ref_forms_scheds_format_specs rfsfs WHERE rfsfs.formname  = %s AND rfsfs.schedname = %s AND rfsfs.transaction_type = %s and rfsfs.type IS NOT NULL",(formname, sched, trans_type))
+        cursor.execute("SELECT rfsfs.formname, rfsfs.schedname, rfsfs.transaction_type, rfsfs.field_description, rfsfs.type, rfsfs.required FROM public.ref_forms_scheds_format_specs rfsfs WHERE rfsfs.formname  = %s AND rfsfs.schedname = %s AND rfsfs.transaction_type = %s and rfsfs.type IS NOT NULL",(formname, sched, trans_type))
         format_specs = cursor.fetchall()
         columns = []
         headers = []
