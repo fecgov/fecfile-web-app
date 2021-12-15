@@ -3445,7 +3445,7 @@ def autolookup_expand(request):
         )
 
 
-############################ PARTIALLY IMPLEMENTED FOR INDIVIDUALS, ORGANIZATIONS, COMMITTEES. NOT IMPLEMENTED FOR CANDIDATES
+# PARTIALLY IMPLEMENTED FOR INDIVIDUALS, ORGANIZATIONS, COMMITTEES. NOT IMPLEMENTED FOR CANDIDATES
 @api_view(["GET"])
 def autolookup_search_contacts(request):
     """
