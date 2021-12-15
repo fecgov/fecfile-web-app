@@ -45,10 +45,10 @@ def validate_dataframe(data):
     #check if the column contains only values of a particular schedule
     sched = data['SCHEDULE NAME'][0][0:2]
     if data['SCHEDULE NAME'].str.contains(sched).any():
-        print ("schedule matches")
+        print("schedule matches")
         return "Validate_Pass"
     else:
-        print ("Non schedule matches available")
+        print("Non schedule matches available")
         return "Multiple_Sched"
 
 
@@ -102,9 +102,9 @@ def export_excel_to_db(filename, path):
                                         'FIELD DESCRIPTION':'FIELD\nDESCRIPTION',
                                         'SAMPLE DATA':'SAMPLE\nDATA',
                                         'VALUE REFERENCE':'VALUE\nREFERENCE'}, inplace=True)
-                df.insert (0, "formname", formname)
-                df.insert (1, "schedname", schedname)
-                df.insert (2, "transaction_type", sheet_name)
+                df.insert(0, "formname", formname)
+                df.insert(1, "schedname", schedname)
+                df.insert(2, "transaction_type", sheet_name)
                 save_data_from_excel_to_db(df)
                 #break
     except Exception as ex:

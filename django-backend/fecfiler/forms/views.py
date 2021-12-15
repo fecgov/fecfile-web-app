@@ -246,7 +246,7 @@ def create_f99_info(request):
         print("Reason text= ", request.data.get('text'))
         strcheck_Reason=check_F99_Reason_Text(request.data.get('text'))
 
-        print ("strcheck_Reason", strcheck_Reason)
+        print("strcheck_Reason", strcheck_Reason)
         if strcheck_Reason != "":
             return Response({"FEC Error 999":"The reason text is not in proper format - HTML tag violation...!"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -484,7 +484,7 @@ def submit_comm_info(request):
             print("Reason text= ", request.data.get('text'))
             strcheck_Reason=check_F99_Reason_Text(request.data.get('text'))
 
-            print ("strcheck_Reason", strcheck_Reason)
+            print("strcheck_Reason", strcheck_Reason)
             if strcheck_Reason != "":
                 return Response({"FEC Error 999":"The reason text is not in proper format - HTML tag violation...!"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -911,9 +911,9 @@ def get_form99list(request):
 
             #commented by Mahendra 10052019
             #print ("[cmte_id]", cmte_id)
-            print ("[viewtype]", viewtype)
-            print ("[reportid]", reportid)
-            print ("[parentid]", parentid)
+            print("[viewtype]", viewtype)
+            print("[reportid]", reportid)
+            print("[parentid]", parentid)
 
             forms_obj = None
             with connection.cursor() as cursor:
@@ -1046,9 +1046,9 @@ def get_previous_amend_reports(request):
 
             #commented by Mahendra 10052019
             #print ("[cmte_id]", cmte_id)
-            print ("[viewtype]", viewtype)
-            print ("[reportid]", reportid)
-            print ("[parentid]", parentid)
+            print("[viewtype]", viewtype)
+            print("[reportid]", reportid)
+            print("[parentid]", parentid)
             report_list = superceded_report_id_list(parentid)
             forms_obj = None
             with connection.cursor() as cursor:
