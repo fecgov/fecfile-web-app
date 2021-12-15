@@ -60,11 +60,11 @@ class SchedL(models.Model):
     cvg_end_date = models.DateField(blank=True, null=True)
     item_receipts = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    unitem_receipts =models.DecimalField(
+    unitem_receipts = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    ttl_receipts =models.DecimalField(
+    ttl_receipts = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    other_receipts =models.DecimalField(
+    other_receipts = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
     total_receipts = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
@@ -76,11 +76,11 @@ class SchedL(models.Model):
         max_digits=12, decimal_places=2, blank=True, null=True)
     generic_campaign_disb_amount = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    total_disb_sub =models.DecimalField(
+    total_disb_sub = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    other_disb =models.DecimalField(
+    other_disb = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    total_disb =models.DecimalField(
+    total_disb = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
     coh_bop = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
@@ -90,7 +90,7 @@ class SchedL(models.Model):
         max_digits=12, decimal_places=2, blank=True, null=True)
     disbursements = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    coh_cop =models.DecimalField(
+    coh_cop = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
     item_receipts_ytd = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)

@@ -130,7 +130,7 @@ def move_data_from_excel_to_db(form):
         with os.scandir(filelocation) as entries:
             for entry in entries:
                 export_excel_to_db(entry.name,filelocation)
-                counter+=1
+                counter += 1
     except Exception as ex:
         print(ex)
 
@@ -215,7 +215,7 @@ def build_schemas(formname, sched, trans_type):
                 #print(field)
             elif 'NUM' in type:
                 #print(field)
-                pattern = '^[0-9]\d{0,'+ len + '}(\.\d{1,3})?%?$'
+                pattern = '^[0-9]\d{0,' + len + '}(\.\d{1,3})?%?$'
                 mpv = MatchesPatternValidation(pattern)
                 column = Column(field, [mpv])
                 columns.append(column)
@@ -223,7 +223,7 @@ def build_schemas(formname, sched, trans_type):
             elif 'AMT' in type:
                 #print(field)
                 #pattern = '^-?\d\d*[,]?\d*[,]?\d*[.,]?\d*\d$' #'^((\d){1,3},*){1,5}\.(\d){2}$' #'^[\\w\\s]{1,'+ len + '}$'
-                pattern = '^[0-9]\d{0,'+ len + '}(\.\d{1,3})?%?$'
+                pattern = '^[0-9]\d{0,' + len + '}(\.\d{1,3})?%?$'
                 mpv = MatchesPatternValidation(pattern)
                 column = Column(field, [mpv])
                 columns.append(column)
@@ -246,14 +246,14 @@ def check_errkey_exists(bktname, key):
     errkey = errkey[0] + '/error_files/' + errkey[1]
     s3 = boto3.client('s3')
     result = s3.list_objects(Bucket=bktname, Prefix=errkey)
-    exists=False
+    exists = False
     if "Contents" not in result:
         s3.put_object(Bucket=bktname, Key=(errkey+'/'))
 
 def create_cmte_error_folder(bktname, key, errfilerelpath):
     s3 = boto3.client('s3')
     result = s3.list_objects(Bucket=bktname, Prefix=errfilerelpath)
-    exists=False
+    exists = False
     if "Contents" not in result:
         s3.put_object(Bucket=bktname, Key=(errfilerelpath+'/'))
     
@@ -282,8 +282,8 @@ def move_error_files_to_s3(bktname, key, errorfilename, cmteid):
 
 def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
     #print(bktname, key)
-    resvalidation=""
-    errorfilename=""
+    resvalidation = ""
+    errorfilename = ""
     try:
         str = key.split('_')
         schedule = str[1]
@@ -297,7 +297,7 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
         # print('formname ',formname)
         tablename = 'temp'
         if "/" in key:
-            tablename=key[key.find("/")+1:-4].split()[0]
+            tablename = key[key.find("/")+1:-4].split()[0]
         else:
             raise Exception('S3 key not having a / char')
         tablename = tablename.lower()
@@ -321,7 +321,7 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
             # print(data['TRANSACTION IDENTIFIER'].unique())
             for tranid in data['TRANSACTION IDENTIFIER'].unique():
                 if tranid:
-                    cntr+=1
+                    cntr += 1
                     # print('cntr',cntr)
                     # print('tranid:',tranid)
                     # build schema based on tranid
@@ -413,8 +413,11 @@ def check_data_processed(md5, fecfilename):
     conn = None
     try:
         res = ''
-        selectsql= '''SELECT csv_data_processed FROM public.transactions_file_details tfd WHERE tfd.fec_file_name = %s 
-                        ORDER BY create_Date DESC   limit 1;'''
+        selectsql = '''
+            SELECT csv_data_processed FROM public.transactions_file_details tfd
+            WHERE tfd.fec_file_name = %s
+            ORDER BY create_Date DESC   limit 1;
+        '''
         #psyconnstr = 'host='+ PG_HOST + ' ' + ' dbname=' + ' ' + PG_DATABASE + ' ' + ' user=' + PG_USER
         conn = psycopg2.connect(user=PG_USER,
                                       password=PG_PASSWORD,
@@ -449,7 +452,7 @@ def load_transactions_from_temp_perm_tables(fecfilename):
     conn = None
     try:
         res = ''
-        selectsql= '''import_schedules'''
+        selectsql = '''import_schedules'''
         #psyconnstr = 'host='+ PG_HOST + ' ' + ' dbname=' + ' ' + PG_DATABASE + ' ' + ' user=' + PG_USER
         #conn = psycopg2.connect(psyconnstr)
         conn = psycopg2.connect(user=PG_USER,
@@ -482,7 +485,7 @@ def load_transactions_from_temp_perm_tables(fecfilename):
 
 
 def send_message_to_queue(bktname, key):
-    returnstr=''
+    returnstr = ''
     try:
         # Get the service resource
         sqs = boto3.resource('sqs')
@@ -521,7 +524,7 @@ def send_message_to_queue(bktname, key):
                     elapsed_time = current_time - start_time
                     if 'Success' == check_data_processed('',key.split('/')[1]):
                         temp_to_perm = load_transactions_from_temp_perm_tables(key.split('/')[1])
-                        res='Fail'
+                        res = 'Fail'
                         if 0 == temp_to_perm:
                             res = 'Success'
                             returnstr = {

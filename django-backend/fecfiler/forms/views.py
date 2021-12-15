@@ -56,7 +56,7 @@ def print_pdf_info(request):
     WIDGET_SUBTYPE_KEY = '/Widget'
 
     input_pdf_path = 'templates/forms/F99.pdf'
-    output_pdf_path = 'templates/forms/media/%s.pdf' %request.data.get('id')
+    output_pdf_path = 'templates/forms/media/%s.pdf' % request.data.get('id')
 
     #code to generate form 99 using form99 template
     template_pdf = pdfrw.PdfReader(input_pdf_path)
@@ -244,7 +244,7 @@ def create_f99_info(request):
         # just making sure that committeeid is not updated by mistake
         
         print("Reason text= ", request.data.get('text'))
-        strcheck_Reason=check_F99_Reason_Text(request.data.get('text'))
+        strcheck_Reason = check_F99_Reason_Text(request.data.get('text'))
 
         print("strcheck_Reason", strcheck_Reason)
         if strcheck_Reason != "":
@@ -258,13 +258,13 @@ def create_f99_info(request):
             #import ipdb; ipdb.set_trace()
             # fetch last comm_info object created, else return 404
         try:
-            if 'id' in request.data and (not request.data['id']==''):
-                if int(request.data['id'])>=1:
+            if 'id' in request.data and (not request.data['id'] == ''):
+                if int(request.data['id']) >= 1:
                     id_comm = CommitteeInfo()
                     id_comm.id = request.data['id']
                     comm_info = CommitteeInfo.objects.filter(id=id_comm.id).last()
                     if comm_info:
-                        if comm_info.is_submitted==False:
+                        if comm_info.is_submitted == False:
                             #print(comm_info.created_at)
                             incoming_data['created_at'] = comm_info.created_at
                             id_comm.created_at = comm_info.created_at
@@ -333,13 +333,13 @@ def update_f99_info(request, print_flag=False):
 
         if request.method == 'POST':
             try:
-                if 'id' in request.data and (not request.data['id']=='') and int(request.data['id'])>=1:
+                if 'id' in request.data and (not request.data['id'] == '') and int(request.data['id']) >= 1:
                     comm_info = CommitteeInfo.objects.filter(id=request.data['id']).last()
                     print(request.data.get('email_on_file_1'))
                     print(comm_info.email_on_file_1)
 
                     if comm_info:
-                        if comm_info.is_submitted==False:
+                        if comm_info.is_submitted == False:
                             comm_info.committeeid = request.data.get('committeeid')
                             comm_info.committeename = request.data.get('committeename')
                             comm_info.street1 = request.data.get('street1')
@@ -482,7 +482,7 @@ def submit_comm_info(request):
             incoming_data = data
 
             print("Reason text= ", request.data.get('text'))
-            strcheck_Reason=check_F99_Reason_Text(request.data.get('text'))
+            strcheck_Reason = check_F99_Reason_Text(request.data.get('text'))
 
             print("strcheck_Reason", strcheck_Reason)
             if strcheck_Reason != "":
@@ -499,10 +499,10 @@ def submit_comm_info(request):
             try:
                 comm_info = CommitteeInfo.objects.filter(id=request.data['id']).last()
                 if comm_info:
-                    if comm_info.is_submitted==False:
+                    if comm_info.is_submitted == False:
                         incoming_data['updated_at'] = datetime.datetime.now()
                         incoming_data['created_at'] = comm_info.created_at
-                        comm_info.is_submitted=True
+                        comm_info.is_submitted = True
                         serializer = CommitteeInfoSerializer(comm_info, data=incoming_data)
                     else:
                         return Response({"FEC Error 002":"This form is already submitted"}, status=status.HTTP_400_BAD_REQUEST)
@@ -812,52 +812,52 @@ def validate_f99(request):
 
     errormess = []
 
-    if comm.committeename!=request.data.get('committeename'):
+    if comm.committeename != request.data.get('committeename'):
         errormess.append('Committee Name does not match the Form 1 data.')
 
-    if comm.street1!=request.data.get('street1'):
+    if comm.street1 != request.data.get('street1'):
         errormess.append('Street1 does not match the Form 1 data.')
 
-    if 'street2' in request.data and comm.street2!=request.data.get('street2'):
+    if 'street2' in request.data and comm.street2 != request.data.get('street2'):
         errormess.append('Street2 does not match the Form 1 data.')
 
-    if comm.city!=request.data.get('city'):
+    if comm.city != request.data.get('city'):
         errormess.append('City does not match the Form 1 data.')
 
-    if comm.state!=request.data.get('state'):
+    if comm.state != request.data.get('state'):
         errormess.append('State does not match the Form 1 data.')
 
-    if comm.zipcode!= int(request.data.get('zipcode')) if request.data.get('zipcode') else '':
+    if comm.zipcode != int(request.data.get('zipcode')) if request.data.get('zipcode') else '':
         errormess.append('Zipcode does not match the Form 1 data.')
 
-    if comm.treasurerlastname!=request.data.get('treasurerlastname'):
+    if comm.treasurerlastname != request.data.get('treasurerlastname'):
         errormess.append('Treasurer Last Name does not match the Form 1 data.')
 
-    if comm.treasurerfirstname!=request.data.get('treasurerfirstname'):
+    if comm.treasurerfirstname != request.data.get('treasurerfirstname'):
         errormess.append('Treasurer First Name does not match the Form 1 data.')
 
-    if 'treasurermiddlename' in request.data and comm.treasurermiddlename!=request.data.get('treasurermiddlename'):
+    if 'treasurermiddlename' in request.data and comm.treasurermiddlename != request.data.get('treasurermiddlename'):
         errormess.append('Treasurer Middle Name does not match the Form 1 data.')
 
-    if 'treasurerprefix' in request.data and comm.treasurerprefix!=request.data.get('treasurerprefix'):
+    if 'treasurerprefix' in request.data and comm.treasurerprefix != request.data.get('treasurerprefix'):
         errormess.append('Treasurer Prefix does not match the Form 1 data.')
 
-    if 'treasurersuffix' in request.data and comm.treasurersuffix!=request.data.get('treasurersuffix'):
+    if 'treasurersuffix' in request.data and comm.treasurersuffix != request.data.get('treasurersuffix'):
         errormess.append('Treasurer Suffix does not match the Form 1 data.')
 
-    if 'email_on_file_1' in request.data and comm.email_on_file_1!=request.data.get('email_on_file_1'):
+    if 'email_on_file_1' in request.data and comm.email_on_file_1 != request.data.get('email_on_file_1'):
         errormess.append('email_on_file_1 does not match the Form 1 data.')
 
-    if 'email_on_file' in request.data and comm.email_on_file!=request.data.get('email_on_file'):
+    if 'email_on_file' in request.data and comm.email_on_file != request.data.get('email_on_file'):
         errormess.append('email_on_file does not match the Form 1 data.')
 
-    if len(request.data.get('text'))>20000:
+    if len(request.data.get('text')) > 20000:
         errormess.append('Text greater than 20000.')
 
-    if len(request.data.get('text'))==0:
+    if len(request.data.get('text')) == 0:
         errormess.append('Text field is empty.')
 
-    conditions = [request.data.get('reason')=='MST', request.data.get('reason')=='MSM', request.data.get('reason')=='MSI', request.data.get('reason')=='MSW']
+    conditions = [request.data.get('reason') == 'MST', request.data.get('reason') == 'MSM', request.data.get('reason') == 'MSI', request.data.get('reason') == 'MSW']
     if not any(conditions):
         errormess.append('Reason does not match the pre-defined codes.')
     """
@@ -875,7 +875,7 @@ def validate_f99(request):
         if file._size > 33554432:
             errormess.append('The File size is more than 32 MB. Kindly reduce the size of the file before you upload it.')
     """
-    if len(errormess)==0:
+    if len(errormess) == 0:
         errormess.append('Validation successful!')
         return JsonResponse(errormess, status=200, safe=False)
     else:
@@ -963,7 +963,7 @@ def get_form99list(request):
 
                 for row in cursor.fetchall():
                     data_row = list(row)
-                    forms_obj=data_row[0]
+                    forms_obj = data_row[0]
             print(forms_obj)
             if forms_obj is None:
                 forms_obj = []
@@ -1018,7 +1018,7 @@ def get_form99list(request):
 
                 for row in cursor.fetchall():
                     data_row = list(row)
-                    forms_cnt_obj=data_row[0]
+                    forms_cnt_obj = data_row[0]
 
             if forms_cnt_obj is None:
                 forms_cnt_obj = []
@@ -1098,7 +1098,7 @@ def get_previous_amend_reports(request):
 
                 for row in cursor.fetchall():
                     data_row = list(row)
-                    forms_obj=data_row[0]
+                    forms_obj = data_row[0]
             print(forms_obj)
             if forms_obj is None:
                 forms_obj = []
@@ -1153,7 +1153,7 @@ def get_previous_amend_reports(request):
 
                 for row in cursor.fetchall():
                     data_row = list(row)
-                    forms_cnt_obj=data_row[0]
+                    forms_cnt_obj = data_row[0]
 
             if forms_cnt_obj is None:
                 forms_cnt_obj = []
@@ -1186,8 +1186,8 @@ def delete_forms(request):
                         if comm_info:
                             #print('%s') %new_data.get('committeename')
                             new_data = vars(comm_info)
-                            new_data["isdeleted"]=True
-                            new_data["deleted_at"]=datetime.datetime.now()
+                            new_data["isdeleted"] = True
+                            new_data["deleted_at"] = datetime.datetime.now()
                             serializer = CommitteeInfoSerializer(comm_info, data=new_data)
                             if serializer.is_valid():
                                 serializer.save()
@@ -1196,7 +1196,7 @@ def delete_forms(request):
                                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                         else:
                             #print(comm_info.id)
-                            return Response({"error":"ERRCODE: FEC03. Form with id %d is already deleted or has been submitted beforehand." %obj.get('id')}, status=status.HTTP_400_BAD_REQUEST)
+                            return Response({"error":"ERRCODE: FEC03. Form with id %d is already deleted or has been submitted beforehand." % obj.get('id')}, status=status.HTTP_400_BAD_REQUEST)
                 except:
                     return Response({"error":"There is an error while deleting forms."}, status=status.HTTP_400_BAD_REQUEST)
             return Response({"Forms deleted successfully"}, status=status.HTTP_200_OK)
@@ -1214,15 +1214,15 @@ def email(boolean, data):
     RECIPIENT.append("%s" % data.get('email_on_file'))
     
     #print(data.get('additional_email_1'))
-    if 'additional_email_1' in data and (not (data.get('additional_email_1')=='-' or data.get('additional_email_1') is None or data.get('additional_email_1') == 'null')):
+    if 'additional_email_1' in data and (not (data.get('additional_email_1') == '-' or data.get('additional_email_1') is None or data.get('additional_email_1') == 'null')):
         RECIPIENT.append("%s" % data.get('additional_email_1'))
     
     #print(data.get('additional_email_2'))
-    if 'additional_email_2' in data and (not (data.get('additional_email_2')=='-' or data.get('additional_email_2') is None or data.get('additional_email_2') == 'null')):
+    if 'additional_email_2' in data and (not (data.get('additional_email_2') == '-' or data.get('additional_email_2') is None or data.get('additional_email_2') == 'null')):
         RECIPIENT.append("%s" % data.get('additional_email_2'))
 
     #print(data.get('email_on_file_1'))
-    if 'email_on_file_1' in data and (not (data.get('email_on_file_1')=='-' or data.get('email_on_file_1') is None or data.get('email_on_file_1') == 'null')):
+    if 'email_on_file_1' in data and (not (data.get('email_on_file_1') == '-' or data.get('email_on_file_1') is None or data.get('email_on_file_1') == 'null')):
         RECIPIENT.append("%s" % data.get('email_on_file_1'))
     
     SUBJECT = "Test - Form 99 submitted successfully"
@@ -1457,8 +1457,8 @@ def save_print_f99(request):
         #   json.dump(data, outfile, ensure_ascii=False)
         
         # variables to be sent along the JSON file in form-data
-        filing_type='FEC'
-        vendor_software_name='FECFILE'
+        filing_type = 'FEC'
+        vendor_software_name = 'FECFILE'
 
         data_obj = {
                 'form_type': 'F99',
@@ -1617,8 +1617,8 @@ def update_print_f99(request):
             #obj.close
 
             # variables to be sent along the JSON file in form-data
-            filing_type='FEC'
-            vendor_software_name='FECFILE'
+            filing_type = 'FEC'
+            vendor_software_name = 'FECFILE'
 
             data_obj = {
                     'form_type':'F99',
@@ -1848,13 +1848,13 @@ def validate_HTMLtag(strWord):
     print("validate_HTMLtag...")
     print(" strWord = ", strWord)
     try:
-        valideTags=['div','br','span','blockquote','ul','ol','li','b','u','i']
+        valideTags = ['div','br','span','blockquote','ul','ol','li','b','u','i']
         if ('</' in strWord and '>' in strWord) and ('<div' not in strWord or '<span' not in strWord):
             print(" word check strWord = ", strWord)
-            intstartpos=strWord.find('</')
-            substr=strWord[intstartpos+2]
-            intendpos=substr.find('>')
-            strsearch=strWord[intstartpos+2:intendpos]
+            intstartpos = strWord.find('</')
+            substr = strWord[intstartpos+2]
+            intendpos = substr.find('>')
+            strsearch = strWord[intstartpos+2:intendpos]
             print(strsearch)
             if strsearch not in valideTags:
                 print(" Wrong tag =", strsearch)
@@ -1869,9 +1869,9 @@ def get_f99_report_info(request):
     """
     #print("request.query_params.get('reportid')=", request.query_params.get('reportid'))
     try:
-        if ('reportid' in request.query_params and (not request.query_params.get('reportid') =='')):
+        if ('reportid' in request.query_params and (not request.query_params.get('reportid') == '')):
             #print("you are here1")
-            if int(request.query_params.get('reportid'))>=1:
+            if int(request.query_params.get('reportid')) >= 1:
                 #print("you are here2")
                 id_comm = CommitteeInfo()
                 id_comm.id = request.query_params.get('reportid')
@@ -1881,8 +1881,8 @@ def get_f99_report_info(request):
                 if comm_info:
                     # add additional attributes as attribute names being used are inconsistent
                     response = serializer.data
-                    response['additionalemail1']= response['additional_email_1']
-                    response['additionalemail2']= response['additional_email_2']
+                    response['additionalemail1'] = response['additional_email_1']
+                    response['additionalemail2'] = response['additional_email_2']
                     return JsonResponse(response, status=status.HTTP_200_OK)
     except CommitteeInfo.DoesNotExist:
         return Response({"FEC Error 004":"There is no submitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
@@ -1945,8 +1945,8 @@ def submit_formf99(request):
             json.dump(data_obj, open(tmp_filename, 'w'))
 
             # variables to be sent along the JSON file in form-data
-            filing_type='FEC'
-            vendor_software_name='FECFILE'
+            filing_type = 'FEC'
+            vendor_software_name = 'FECFILE'
             form_type = comm_info.form_type
             data_obj = {
                     'form_type':form_type,

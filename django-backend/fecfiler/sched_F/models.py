@@ -39,7 +39,7 @@ class SchedF(models.Model):
     payee_cand_suffix = models.CharField(max_length=10)
     payee_cand_office = models.CharField(max_length=1)
     payee_cand_state = models.CharField(max_length=2)
-    payee_cand_district= models.CharField(max_length=2)
+    payee_cand_district = models.CharField(max_length=2)
     memo_code = models.CharField(max_length=1, blank=True, null=True)
     memo_text = models.CharField(max_length=90, blank=True, null=True)
     delete_ind = models.CharField(max_length=1, blank=True, null=True)

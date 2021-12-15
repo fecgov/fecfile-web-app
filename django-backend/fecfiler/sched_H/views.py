@@ -2665,8 +2665,8 @@ def get_h3_summary(request):
         else:
             descending = "ASC"
         trans_query_string_count = ""
-        row1=""
-        totalcount=""
+        row1 = ""
+        totalcount = ""
 
         #: Hardcode cmte value for now and remove after dev complete
         #cmte_id = "C00000935"

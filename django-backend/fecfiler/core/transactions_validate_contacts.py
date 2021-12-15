@@ -20,63 +20,63 @@ logging.basicConfig(level=logging.DEBUG)
 
 #mapping null columns for the contacts API
 def get_columns_to_add(filename):
-    columnlist=[]
+    columnlist = []
     filename = filename.lower()
     if 'f3x' in filename:
         if 'schedulea' in filename:
-            columnlist=['CAND_OFFICE','CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
+            columnlist = ['CAND_OFFICE','CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
             print('schedulea')
         elif 'scheduleb' in filename:
-            columnlist=['REF_CAND_CMTE_ID', 'CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
+            columnlist = ['REF_CAND_CMTE_ID', 'CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
             #columnlist=['EMPLOYER','OCCUPATION']
             print('scheduleb')
         elif 'schedulee' in filename:
             #columnlist=['EMPLOYER','OCCUPATION']
-            columnlist=['CAND_OFFICE','CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
+            columnlist = ['CAND_OFFICE','CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
             print('schedulee')
         elif 'schedulef' in filename:
             #columnlist=['EMPLOYER','OCCUPATION']
-            columnlist=[]
+            columnlist = []
             print('schedulef')
         elif 'scheduleh4' in filename:
             #columnlist=['EMPLOYER','OCCUPATION']
-            columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE', 'CAND_OFFICE_DISTRICT']
+            columnlist = ['CAND_OFFICE', 'CAND_OFFICE_STATE', 'CAND_OFFICE_DISTRICT']
             print('scheduleh4')
         elif 'scheduleh6' in filename:
             #columnlist=['EMPLOYER','OCCUPATION']
-            columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
+            columnlist = ['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
             print('scheduleh6')
         elif 'schedulela' in filename:
             #columnlist=['OCCUPATION']
-            columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
+            columnlist = ['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
         elif 'schedulelb' in filename:
             #columnlist=['OCCUPATION']
-            columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
+            columnlist = ['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
         else:
             print('In F3X get_columns_to_add, Sched type not available!!!')
     elif 'f3l' in filename:
         if 'schedulea' in filename:
             #columnlist=['OCCUPATION']
-            columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
+            columnlist = ['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
         elif 'scheduleb' in filename:
             #columnlist=['EMPLOYER','OCCUPATION']
-            columnlist=['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
+            columnlist = ['CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT']
         else:
             print('In F3L get_columns_to_add, Sched type not available!!!')
     return columnlist
     
 #mapping columns for each schedule against the contacts API req.
 def get_columns_for_schedules(filename):
-    columnlist=[]
-    col_names_reindex=[]
+    columnlist = []
+    col_names_reindex = []
     if 'f3x' in filename:
 
         #SA: COMMITTEE ID', 6,13,14,15,16,17,23,24,7,8,9,10,11,12, 'CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT',25,4
 
         if 'schedulea' in filename:
             #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16,22,23]
-            columnlist=[6,13,14,15,16,17,23,24,7,8,9,10,11,12,25,4]
-            col_names_reindex=['ENTITY TYPE',
+            columnlist = [6,13,14,15,16,17,23,24,7,8,9,10,11,12,25,4]
+            col_names_reindex = ['ENTITY TYPE',
                             'CONTRIBUTOR STREET  1',
                             'CONTRIBUTOR STREET  2',
                             'CONTRIBUTOR CITY',
@@ -96,8 +96,8 @@ def get_columns_for_schedules(filename):
         elif 'scheduleb' in filename:
             #6,13,14,15,16,17,'EMPLOYER','OCCUPATION',7,8,9,10,11,12,'REF_CAND_CMTE_ID', 'CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT','COMMITTEE_ID'
             #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16]
-            columnlist=[6,13,14,15,16,17,7,8,9,10,11,12]
-            col_names_reindex=['ENTITY TYPE',
+            columnlist = [6,13,14,15,16,17,7,8,9,10,11,12]
+            col_names_reindex = ['ENTITY TYPE',
                                 'PAYEE STREET  1',
                                 'PAYEE STREET  2',
                                 'PAYEE CITY',
@@ -115,8 +115,8 @@ def get_columns_for_schedules(filename):
             print('scheduleb')
         elif 'schedulee' in filename:
             #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16]
-            columnlist=[6,13,14,15,16,17,7,8,9,10,11,12,25,4]
-            col_names_reindex=['ENTITY TYPE',
+            columnlist = [6,13,14,15,16,17,7,8,9,10,11,12,25,4]
+            col_names_reindex = ['ENTITY TYPE',
                                 'PAYEE STREET  1',
                                 'PAYEE STREET  2',
                                 'PAYEE CITY',
@@ -136,8 +136,8 @@ def get_columns_for_schedules(filename):
             print('schedulee')
         elif 'schedulef' in filename:
             #columnlist=[3,15,16,17,18,19,20,21,22,23,24,25,26]
-            columnlist=[16,22,23,24,25,26,17,18,19,20,21,33,4,39,40,41]
-            col_names_reindex=['ENTITY TYPE',
+            columnlist = [16,22,23,24,25,26,17,18,19,20,21,33,4,39,40,41]
+            col_names_reindex = ['ENTITY TYPE',
                                 'PAYEE STREET  1',
                                 'PAYEE STREET  2',
                                 'PAYEE CITY',
@@ -160,8 +160,8 @@ def get_columns_for_schedules(filename):
             print('schedulef')
         elif 'schedulela' in filename:
             #columnlist=[3,6,7,8,9,10,11,12,13,14,15,16,17,21,22]
-            columnlist=[7,14,15,16,17,18,23,24,8,9,10,11,12,13,4]
-            col_names_reindex=['ENTITY TYPE',
+            columnlist = [7,14,15,16,17,18,23,24,8,9,10,11,12,13,4]
+            col_names_reindex = ['ENTITY TYPE',
                                 'CONTRIBUTOR STREET  1',
                                 'CONTRIBUTOR STREET  2',
                                 'CONTRIBUTOR CITY',
@@ -180,8 +180,8 @@ def get_columns_for_schedules(filename):
             print('schedulela')
         elif 'schedulelb' in filename:
             #columnlist=[3,6,7,8,9,10,11,12,13,14,15,16,17]
-            columnlist=[7,14,15,16,17,18,8,9,10,11,12,13,4]
-            col_names_reindex=['ENTITY TYPE',
+            columnlist = [7,14,15,16,17,18,8,9,10,11,12,13,4]
+            col_names_reindex = ['ENTITY TYPE',
                                 'PAYEE STREET  1',
                                 'PAYEE STREET  2',
                                 'PAYEE CITY',
@@ -200,8 +200,8 @@ def get_columns_for_schedules(filename):
             print('schedulelb')
         elif 'scheduleh4' in filename:
             #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16]
-            columnlist=[6,13,14,15,16,17,7,8,9,10,11,12,4]
-            col_names_reindex=['ENTITY TYPE',
+            columnlist = [6,13,14,15,16,17,7,8,9,10,11,12,4]
+            col_names_reindex = ['ENTITY TYPE',
                                 'PAYEE STREET  1',
                                 'PAYEE STREET  2',
                                 'PAYEE CITY',
@@ -221,8 +221,8 @@ def get_columns_for_schedules(filename):
             print('scheduleh4')
         elif 'scheduleh6' in filename:
             #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16]
-            columnlist=[6,13,14,15,16,17,7,8,9,10,11,12,4]
-            col_names_reindex=['ENTITY TYPE',
+            columnlist = [6,13,14,15,16,17,7,8,9,10,11,12,4]
+            col_names_reindex = ['ENTITY TYPE',
                                 'PAYEE STREET  1',
                                 'PAYEE STREET  2',
                                 'PAYEE CITY',
@@ -245,8 +245,8 @@ def get_columns_for_schedules(filename):
     elif 'f3l' in filename:
         if 'schedulea' in filename:
             #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16,19]
-            columnlist=[6,12,13,14,15,16,19,7,8,9,10,11,4]
-            col_names_reindex=['ENTITY TYPE',
+            columnlist = [6,12,13,14,15,16,19,7,8,9,10,11,4]
+            col_names_reindex = ['ENTITY TYPE',
                                 'CONTRIBUTOR STREET  1',
                                 'CONTRIBUTOR STREET  2',
                                 'CONTRIBUTOR CITY',
@@ -265,8 +265,8 @@ def get_columns_for_schedules(filename):
             print('f3l schedulea')
         elif 'scheduleb' in filename:
             #columnlist=[3,5,6,7,8,9,10,11,12,13,14,15,16]
-            columnlist=[6,12,13,14,15,16,7,8,9,10,11,4]
-            col_names_reindex=['ENTITY TYPE',
+            columnlist = [6,12,13,14,15,16,7,8,9,10,11,4]
+            col_names_reindex = ['ENTITY TYPE',
                                 'CONTRIBUTOR STREET  1',
                                 'CONTRIBUTOR STREET  2',
                                 'CONTRIBUTOR CITY',
@@ -292,7 +292,7 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
     try:
         filename = 'temp'
         if "/" in key:
-            filename=key[key.find("/")+1:-4].split()[0]
+            filename = key[key.find("/")+1:-4].split()[0]
         else:
             raise Exception('S3 key not having a / char')
         filename = filename.lower()
@@ -301,7 +301,7 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
         obj = s3.get_object(Bucket=bktname, Key=key)
         body = obj['Body']
         csv_string = body.read().decode('utf-8')
-        filepath = 'contacts/' + cmteid + '_' + filename +'.csv'
+        filepath = 'contacts/' + cmteid + '_' + filename + '.csv'
         col_to_read, col_names_reindex = get_columns_for_schedules(filename)
         col_to_add = get_columns_to_add(filename)
         chkf = False

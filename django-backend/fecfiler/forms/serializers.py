@@ -5,7 +5,7 @@ from .models import CommitteeInfo, Committee
 class CommitteeInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommitteeInfo
-        fields=('id','committeeid', 'committeename', 'street1', 'street2', 'city',
+        fields = ('id','committeeid', 'committeename', 'street1', 'street2', 'city',
                 'state','zipcode', 'treasurerprefix', 'treasurerfirstname', 'text','reason',
                 'treasurermiddlename', 'treasurerlastname', 'treasurersuffix',
                 'filename', 'file',
@@ -64,7 +64,7 @@ class CommitteeInfoListSerializer(serializers.ListSerializer):
 class CommitteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Committee
-        fields=('committeeid', 'committeename', 'street1', 'street2', 'city',
+        fields = ('committeeid', 'committeename', 'street1', 'street2', 'city',
                 'state','zipcode', 'treasurerprefix', 'treasurerfirstname',
                 'treasurermiddlename', 'treasurerlastname', 'treasurersuffix', 'email_on_file', 'email_on_file_1',
                 'created_at')

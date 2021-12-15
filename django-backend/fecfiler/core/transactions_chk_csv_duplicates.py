@@ -112,7 +112,7 @@ def generate_md5_hash(filename):
             #print(i)
             #i+=1
             filehash = hash_pandas_object(data).sum()
-        filehash=str(filehash)
+        filehash = str(filehash)
         print(filehash)
         return filehash
     except Exception as ex:

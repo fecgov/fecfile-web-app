@@ -1445,8 +1445,8 @@ def get_outstanding_loans(request):
     else:
         descending = "ASC"
     trans_query_string_count = "" #get_trans_query_for_total_count(trans_query_string)
-    row1=""
-    totalcount=""
+    row1 = ""
+    totalcount = ""
 
     valid_transaction_types = ["LOANS_OWED_BY_CMTE", "LOANS_OWED_TO_CMTE"]
     logger.debug("POST request received.")
@@ -3243,4 +3243,4 @@ def put_duplicate_future_reports(data):
             else:
                 break
     except Exception as e:
-        raise Exception("""The put_duplicate_future_reports function is throwing an error: """+ str(e))
+        raise Exception("""The put_duplicate_future_reports function is throwing an error: """ + str(e))

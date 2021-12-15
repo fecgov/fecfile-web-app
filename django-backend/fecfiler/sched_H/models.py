@@ -107,13 +107,13 @@ class SchedH6(models.Model):
         max_length=8, blank=True, null=True)
     transaction_type_identifier = models.CharField(
         max_length=12, blank=True, null=True)
-    transaction_type=models.CharField(max_length=12)
+    transaction_type = models.CharField(max_length=12)
     transaction_id = models.CharField(primary_key=True, max_length=20)
     back_ref_transaction_id = models.CharField(max_length=20)
     back_ref_sched_name = models.CharField(max_length=8)
     entity_id = models.CharField(max_length=20)
     account_event_identifier = models.CharField(max_length=90)
-    expenditure_date= models.DateField(blank=True, null=True)
+    expenditure_date = models.DateField(blank=True, null=True)
     total_fed_levin_amount = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
     federal_share = models.DecimalField(

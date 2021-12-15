@@ -767,4 +767,4 @@ def do_in_between_report_carryover(cmte_id, report_id):
                 logger.debug("done with transaction id: {}".format(next_transaction_id))
             logger.debug("debts carryover done...")
     except Exception as e:
-        raise Exception('The do_in_between_report_carryover function is throwing an error: ' +str(e))
+        raise Exception('The do_in_between_report_carryover function is throwing an error: ' + str(e))

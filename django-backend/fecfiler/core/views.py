@@ -4683,7 +4683,7 @@ def get_transactions(request, transaction_id):
         cursor.execute(
             """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
         )
-        row1=cursor.fetchone()[0]
+        row1 = cursor.fetchone()[0]
         totalcount = row1[0]['count']
         print(totalcount)
     
@@ -7233,7 +7233,7 @@ def contactsTable(request):
                 cursor.execute(
                     """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
                 )
-                row1=cursor.fetchone()[0]
+                row1 = cursor.fetchone()[0]
                 totalcount = row1[0]['count']
                 #print(totalcount)
             #: removed the paginator code references and replaced with custom pagination
@@ -11216,9 +11216,9 @@ def update_f3x_details(report_id, cmte_id):
 def F3X_values(cmte_id, report_list, year_flag=False):
     try:
         if year_flag:
-            i=3
+            i = 3
         else:
-            i=0
+            i = 0
         output_dict = {
             f3x_col_line_dict['11AI'][i]: 0,
             f3x_col_line_dict['11AII'][i]: 0,
@@ -11853,7 +11853,7 @@ def get_notifications_count(request):
             cursor.execute(sql, {
                 "cmte_id": cmte_id
             })
-            row1=cursor.fetchone()[0]
+            row1 = cursor.fetchone()[0]
             totalcount = row1[0]['count']
 
         output = {'notification_count': totalcount}
@@ -11941,7 +11941,7 @@ def get_notifications(request):
             cursor.execute(sql, {
                 "cmte_id": cmte_id
             })
-            row1=cursor.fetchone()[0]
+            row1 = cursor.fetchone()[0]
             totalCount = row1[0]['count']
 
         sql = """SELECT json_agg(t) FROM (""" + sql_items + """) t"""
@@ -12011,7 +12011,7 @@ def get_notification(request):
                     cursor.execute(sql, {
                         "notification_id": notification_id
                     })
-                    row1=cursor.fetchone()[0]
+                    row1 = cursor.fetchone()[0]
                     submission_id = row1[0]['submission_id']
 
                 #submission_id = "4d074079-53d3-4b3b-9d37-caf011633c55"
@@ -12045,7 +12045,7 @@ def get_notification(request):
             cursor.execute(sql, {
                 "notification_id": notification_id
             })
-            row1=cursor.fetchone()[0]
+            row1 = cursor.fetchone()[0]
             email_subject = row1[0]['email_subject']
             email_html_body = row1[0]['email_html_body']
             email_text_body = row1[0]['email_text_body']
@@ -12082,7 +12082,7 @@ def cashOnHand(request):
                       coh_year = %s) t"""
             with connection.cursor() as cursor:
                 cursor.execute(_sql, [cmte_id, coh_year])
-                output=cursor.fetchone()[0]
+                output = cursor.fetchone()[0]
             result = output[0] if output else {}
             return Response(result, status=status.HTTP_200_OK)
 
@@ -12121,7 +12121,7 @@ def cashOnHand(request):
                     coh_year = %s) t"""
             with connection.cursor() as cursor:
                 cursor.execute(_sql, [cmte_id, coh_year])
-                output=cursor.fetchone()[0]
+                output = cursor.fetchone()[0]
                 result = output[0] if output else {}
             return Response(result, status=status.HTTP_200_OK)
 
@@ -12169,7 +12169,7 @@ def contact_logs(request):
             if cursor.rowcount == 0:
                 result = []
             else:
-                output=cursor.fetchone()[0]
+                output = cursor.fetchone()[0]
                 result = output if output else []
         return Response(result, status=status.HTTP_200_OK)
     except Exception as e:
@@ -12217,7 +12217,7 @@ def contact_report_details(request):
             if cursor.rowcount == 0:
                 result = []
             else:
-                output=cursor.fetchone()[0]
+                output = cursor.fetchone()[0]
                 result = output if output else []
         return Response(result, status=status.HTTP_200_OK)
     except Exception as e:
