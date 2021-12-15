@@ -7,4 +7,5 @@ class PostAdmin(admin.ModelAdmin):
     ordering = ('-updated_at',)
     list_display = ('content', 'author')
 
+
 admin.site.register(Post, PostAdmin)

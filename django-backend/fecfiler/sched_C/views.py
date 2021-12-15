@@ -1258,6 +1258,7 @@ def schedC(request):
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
 
+
 # get_outstanding_loans before pagination implementation in DB as well as for front end
 '''@api_view(["GET"])
 def get_outstanding_loans(request):

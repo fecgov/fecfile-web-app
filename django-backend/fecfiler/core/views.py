@@ -1826,6 +1826,8 @@ def count_orphaned_transactions(report_id, cmte_id):
             return False
     except Exception as e:
         raise Exception('The count_orphaned_transactions function is throwing an error: ' + str(e))
+
+
 """
 ***************************************************** REPORTS - POST API CALL STARTS HERE **********************************************************
 """
@@ -4766,6 +4768,7 @@ def get_all_transactions(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
+
 """
 *****************************************************************************************************************************
 END - GET ALL TRANSACTIONS API - CORE APP
@@ -6280,6 +6283,7 @@ def get_coh_f3x_table(cov_year, cmte_id, exact_match=True):
 #         coh_bop = prev_cash_on_hand_cop(report_id, cmte_id, False)
 #         coh_cop = COH_cop(coh_bop, period_receipt, period_disbursement)
 
+
 #         forms_obj = {'COH': coh_cop}
 #         return Response(forms_obj, status=status.HTTP_200_OK)
 #     except Exception as e:
@@ -6539,6 +6543,7 @@ def get_F3L_data(cmte_id, report_id):
         raise Exception(
             "The get_F3L_data function is throwing an error: " + str(e)
         )
+
 
 """
 ******************************************************************************************************************************

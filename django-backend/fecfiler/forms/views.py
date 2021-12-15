@@ -120,6 +120,7 @@ def print_pdf_info(request):
     response['content-Disposition'] = 'inline; filename = {}.pdf'.format(request.data.get('id'))"""
     return response
 
+
 # API to create a .fec which can be used on webprint module to print pdf. The data being used is the data that was last saved in the database for f99.
 """@api_view(['GET'])
 def print_f99_info(request):
@@ -182,6 +183,7 @@ def fetch_f99_info(request):
             return Response(serializer.data)
         else:
             return Response({})
+
 
 parser_classes = (MultiPartParser, FormParser)
 
@@ -306,6 +308,8 @@ def create_f99_info(request):
             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
          
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 """
 @api_view(['POST'])
 #class f99_file_upload(APIView):
@@ -608,6 +612,7 @@ def submit_comm_info(request):
 
 #     else:
 #         return Response({"error":"ERRCODE: FEC02. Error occured while trying to submit form f99."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 """
 @api_view(["POST"])
