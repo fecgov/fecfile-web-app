@@ -579,5 +579,3 @@ def send_message_to_queue(bktname, key):
 #     #get_message_from_queue()
 # except Exception as ex:
 #     print(ex)
-
-

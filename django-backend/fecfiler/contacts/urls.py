@@ -24,4 +24,3 @@ urlpatterns = [
     url(r"^contact/transaction/merge/options$", merge.merge_option, name="mergeOption"),
     url(r"^contact/transaction/merge/save$", merge.merge_contact, name="mergeContact"),
 ]
-

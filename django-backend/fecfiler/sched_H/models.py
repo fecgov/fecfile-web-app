@@ -135,14 +135,3 @@ class SchedH6(models.Model):
     class Meta:
         managed = False
         db_table = 'sched_h6'
-
-
-
-
-
-
-
-
-
-
-
