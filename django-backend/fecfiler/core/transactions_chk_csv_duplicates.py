@@ -182,21 +182,23 @@ def chk_csv_uploaded(request):
             rhash = fileexists[1]
             rfilename = fileexists[2]
             rcreate_date = fileexists[3].strftime("%Y-%m-%d %H:%M:%S")
-            returnstr = {    "error_list": [],
-                            "fileName": filename,
-                            "duplicate_file_list": [{
-                            "fileName"  : rfilename,
-                            "uploadDate": rcreate_date,
-                            "checkSum"  : rhash
-                            }],
-                            "duplicate_db_count": 0
-                        }
+            returnstr = {
+                "error_list": [],
+                "fileName": filename,
+                "duplicate_file_list": [{
+                    "fileName"  : rfilename,
+                    "uploadDate": rcreate_date,
+                    "checkSum"  : rhash
+                }],
+                "duplicate_db_count": 0
+            }
         else:
-            returnstr = {    "error_list": [],
-                        "fileName": filename,
-                        "duplicate_file_list": [],
-                        "duplicate_db_count": 0
-                    }
+            returnstr = {
+                "error_list": [],
+                "fileName": filename,
+                "duplicate_file_list": [],
+                "duplicate_db_count": 0
+            }
         return returnstr
     except Exception as e:
         returnstr = {'message': str(e)}

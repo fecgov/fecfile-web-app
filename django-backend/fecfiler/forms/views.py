@@ -1025,7 +1025,7 @@ def get_form99list(request):
             if forms_cnt_obj is None:
                 forms_cnt_obj = []
 
-            json_result = { 'reports': forms_obj, 'totalreportsCount':forms_cnt_obj}
+            json_result = {'reports': forms_obj, 'totalreportsCount':forms_cnt_obj}
         except Exception as e:
             # print (str(e))
             return Response("The reports view api - get_form99list is throwing an error" + str(e), status=status.HTTP_400_BAD_REQUEST)
@@ -1160,7 +1160,7 @@ def get_previous_amend_reports(request):
             if forms_cnt_obj is None:
                 forms_cnt_obj = []
 
-            json_result = { 'reports': forms_obj, 'totalreportsCount':forms_cnt_obj}
+            json_result = {'reports': forms_obj, 'totalreportsCount':forms_cnt_obj}
         except Exception as e:
             # print (str(e))
             return Response("The reports view api - get_form99list is throwing an error" + str(e), status=status.HTTP_400_BAD_REQUEST)

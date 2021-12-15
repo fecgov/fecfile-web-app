@@ -379,18 +379,22 @@ def validate_transactions(bktname, key, cmteid):
             if returnstr is not "File_not_found":
                 print(returnstr.split('/'))
 
-            returnstr = {    "errorfilename": returnstr,
-                            "bktname" : bktname,
-                            "key"     : key }
+            returnstr = {
+                "errorfilename": returnstr,
+                "bktname": bktname,
+                "key": key,
+            }
             
             
             return returnstr
     except Exception as ex:
         print(ex)
         logging.debug("error in process_transactions method")
-        returnstr = {    "errorfilename": "File_not_found",
-                        "bktname" : bktname,
-                        "key"     : key }
+        returnstr = {
+            "errorfilename": "File_not_found",
+            "bktname": bktname,
+            "key": key,
+        }
         print(returnstr)
         return returnstr
 
@@ -487,9 +491,11 @@ def send_message_to_queue(bktname, key):
         # You can now access identifiers and attributes
         # print('URL:',queue.url)
         # print(queue.attributes.get('DelaySeconds'))
-        returnstr = {   "sendmessage": 'Fail',
-                        "bktname" : bktname,
-                        "key"     : key}
+        returnstr = {
+            "sendmessage": 'Fail',
+            "bktname": bktname,
+            "key": key,
+        }
         response = queue.send_messages(Entries=[
             {
                 'Id': '1',
@@ -518,9 +524,11 @@ def send_message_to_queue(bktname, key):
                         res='Fail'
                         if 0 == temp_to_perm:
                             res = 'Success'
-                            returnstr = {   "sendmessage": res,
-                                            "bktname" : bktname,
-                                            "key"     : key }
+                            returnstr = {
+                                "sendmessage": res,
+                                "bktname": bktname,
+                                "key": key,
+                            }
                         break
                     #time.sleep(5)
                     if elapsed_time > seconds:
@@ -531,10 +539,12 @@ def send_message_to_queue(bktname, key):
     except Exception as ex:
         print(ex)
         logging.debug("error in send_message_to_queue method")
-        returnstr = {   "sendmessage": 'Fail',
-                        "bktname" : bktname,
-                        "key"     : key,
-                        "error"   : ex }
+        returnstr = {
+            "sendmessage": 'Fail',
+            "bktname": bktname,
+            "key": key,
+            "error": ex,
+        }
         return returnstr
 
 

@@ -7295,7 +7295,7 @@ def contactsTable(request):
 def get_trans_query_for_total_count(trans_query_string):
     temp_string = """select count(*) from """
     i = trans_query_string.index(""" from """)
-    s = trans_query_string[ 0 : i+6]
+    s = trans_query_string[0 : i+6]
     final_query = trans_query_string.replace(s, temp_string,1)
     return final_query
 
@@ -7307,7 +7307,7 @@ def set_offset_n_fetch(trans_query_string, page_num, itemsperpage):
     else:
         trans_query_string = trans_query_string + """ 0 """
     trans_query_string = trans_query_string + """ ROWS """ + """ FETCH FIRST """
-    trans_query_string = trans_query_string + str( itemsperpage)
+    trans_query_string = trans_query_string + str(itemsperpage)
     trans_query_string = trans_query_string + """ ROW ONLY """
     return trans_query_string
 

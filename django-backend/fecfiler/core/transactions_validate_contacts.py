@@ -313,7 +313,7 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
                     data[x] = ''
             data['COMMITTEE_ID'] = cmteid
             
-            data.columns = [ 'ENTITY_TYPE', 'STREET_1',
+            data.columns = ['ENTITY_TYPE', 'STREET_1',
                             'STREET_2', 'CITY', 'STATE', 'ZIP_CODE', 'EMPLOYER',
                             'OCCUPATION',
                             'ORGANIZATION_NAME', 'LAST_NAME', 'FIRST_NAME',
