@@ -12343,7 +12343,7 @@ def queue_transaction_message(request):
         bktname = request.data.get("bkt_name") #"fecfile-filing-frontend"
         key = request.data.get("key") #"transactions/F3X_ScheduleE_Import_Transactions_11_25_TEST_Data.csv"
 
-        print('cmteid ', cmteid,' bkt_name ',bktname,' key: ', key )
+        print('cmteid ', cmteid,' bkt_name ',bktname,' key: ', key)
         if bktname and key:
             resp = send_message_to_queue(bktname, key)
         else:

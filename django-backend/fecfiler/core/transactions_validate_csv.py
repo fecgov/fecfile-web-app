@@ -61,7 +61,7 @@ def save_data_from_excel_to_db(data):
         #print("connectionstring : ",connectionstring)
         engine   = create_engine(connectionstring, pool_recycle=3600)
         postgreSQLConnection = engine.connect()
-        data.to_sql(postgreSQLTable, postgreSQLConnection,  if_exists='append', index=False, dtype={'AUTO-GENERATE': Text} )
+        data.to_sql(postgreSQLTable, postgreSQLConnection,  if_exists='append', index=False, dtype={'AUTO-GENERATE': Text})
     except ValueError as vx:
         print("valuerror; ")
         print(vx)
@@ -245,14 +245,14 @@ def check_errkey_exists(bktname, key):
     print()
     errkey = errkey[0] + '/error_files/' + errkey[1]
     s3 = boto3.client('s3')
-    result = s3.list_objects(Bucket=bktname, Prefix=errkey )
+    result = s3.list_objects(Bucket=bktname, Prefix=errkey)
     exists=False
     if "Contents" not in result:
         s3.put_object(Bucket=bktname, Key=(errkey+'/'))
 
 def create_cmte_error_folder(bktname, key, errfilerelpath):
     s3 = boto3.client('s3')
-    result = s3.list_objects(Bucket=bktname, Prefix=errfilerelpath )
+    result = s3.list_objects(Bucket=bktname, Prefix=errfilerelpath)
     exists=False
     if "Contents" not in result:
         s3.put_object(Bucket=bktname, Key=(errfilerelpath+'/'))

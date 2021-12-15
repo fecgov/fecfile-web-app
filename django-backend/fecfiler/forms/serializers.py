@@ -67,7 +67,7 @@ class CommitteeSerializer(serializers.ModelSerializer):
         fields=('committeeid', 'committeename', 'street1', 'street2', 'city',
                 'state','zipcode', 'treasurerprefix', 'treasurerfirstname',
                 'treasurermiddlename', 'treasurerlastname', 'treasurersuffix', 'email_on_file', 'email_on_file_1',
-                'created_at' )
+                'created_at')
         read_only_fields = ('created_at', 'updated_at')
         
     # Methods to save the model objects to the database

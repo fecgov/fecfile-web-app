@@ -1851,7 +1851,7 @@ def validate_HTMLtag(strWord):
     print(" strWord = ", strWord)
     try:
         valideTags=['div','br','span','blockquote','ul','ol','li','b','u','i']
-        if ('</' in strWord and '>' in strWord) and ('<div' not in strWord or '<span' not in strWord ):
+        if ('</' in strWord and '>' in strWord) and ('<div' not in strWord or '<span' not in strWord):
             print(" word check strWord = ", strWord)
             intstartpos=strWord.find('</')
             substr=strWord[intstartpos+2]
