@@ -416,6 +416,6 @@ NXG_FEC_DCF_CONVERTER_API_URL = os.environ.get('DCF_CONVERTER_URL', 'https://dev
 NXG_FEC_DCF_CONVERTER_API_VERSION = "/v1/import"
 
 try:
-  from .local_settings import *
+    from .local_settings import *
 except:
-   pass
+    pass

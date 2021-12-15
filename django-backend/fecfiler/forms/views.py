@@ -249,7 +249,7 @@ def create_f99_info(request):
 
         print ("strcheck_Reason", strcheck_Reason)
         if strcheck_Reason != "":
-           return Response({"FEC Error 999":"The reason text is not in proper format - HTML tag violation...!"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"FEC Error 999":"The reason text is not in proper format - HTML tag violation...!"}, status=status.HTTP_400_BAD_REQUEST)
 
 
         if 'file' in request.data:
@@ -488,7 +488,7 @@ def submit_comm_info(request):
 
             print ("strcheck_Reason", strcheck_Reason)
             if strcheck_Reason != "":
-               return Response({"FEC Error 999":"The reason text is not in proper format - HTML tag violation...!"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"FEC Error 999":"The reason text is not in proper format - HTML tag violation...!"}, status=status.HTTP_400_BAD_REQUEST)
 
 
             #import ipdb; ipdb.set_trace()
@@ -514,7 +514,7 @@ def submit_comm_info(request):
             except CommitteeInfo.DoesNotExist:
                 return Response({"FEC Error 004":"There is no unsubmitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
             except ValueError:
-                        return Response({"FEC Error 006":"This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"FEC Error 006":"This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
 
             if serializer.is_valid():
                 serializer.save()
@@ -732,10 +732,10 @@ def update_committee(request, cid):
         is_read_only_or_filer_reports(request)
         # # update details of a single comm
         if request.method == 'POST':
-             serializer = CommitteeSerializer(comm, data=request.data)
-             if serializer.is_valid():
-                 serializer.save()
-                 return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
+            serializer = CommitteeSerializer(comm, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
     except Exception as e:
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
@@ -968,7 +968,7 @@ def get_form99list(request):
                     forms_obj=data_row[0]
             print(forms_obj)
             if forms_obj is None:
-               forms_obj = []
+                forms_obj = []
 
             # for submitted report, add FEC- to fec_id
             SUBMIT_STATUS = 'Filed'
@@ -1103,7 +1103,7 @@ def get_previous_amend_reports(request):
                     forms_obj=data_row[0]
             print(forms_obj)
             if forms_obj is None:
-               forms_obj = []
+                forms_obj = []
 
             # for submitted report, add FEC- to fec_id
             SUBMIT_STATUS = 'Filed'
@@ -1456,9 +1456,9 @@ def save_print_f99(request):
         json.dump(data_obj, open(tmp_filename, 'w'))
 
         #with open('data.json', 'w') as outfile:
-         #   json.dump(data, outfile, ensure_ascii=False)
+        #   json.dump(data, outfile, ensure_ascii=False)
         
-         # variables to be sent along the JSON file in form-data
+        # variables to be sent along the JSON file in form-data
         filing_type='FEC'
         vendor_software_name='FECFILE'
 
@@ -1611,8 +1611,8 @@ def update_print_f99(request):
             #print("vdata",vdata)
             json.dump(data_obj, open(tmp_filename, 'w'))
 
-            #with open('data.json', 'w') as outfile:
-             #   json.dump(data, outfile, ensure_ascii=False)
+            # with open('data.json', 'w') as outfile:
+            #   json.dump(data, outfile, ensure_ascii=False)
             
             #obj = open('data.json', 'w')
             #obj.write(serializer.data)
@@ -1714,14 +1714,14 @@ def set_need_appearances_writer(writer):
         return writer
 
 def update_checkbox_values(page, fields):
-   for j in range(0, len(page['/Annots'])):
-       writer_annot = page['/Annots'][j].getObject()
-       for field in fields:
-           if writer_annot.get('/T') == field:
-               writer_annot.update({
-                   NameObject("/V"): NameObject(fields[field]),
-                   NameObject("/AS"): NameObject(fields[field])
-               })
+    for j in range(0, len(page['/Annots'])):
+        writer_annot = page['/Annots'][j].getObject()
+        for field in fields:
+            if writer_annot.get('/T') == field:
+                writer_annot.update({
+                    NameObject("/V"): NameObject(fields[field]),
+                    NameObject("/AS"): NameObject(fields[field])
+                })
  
 
 # API which prints Form 99 data

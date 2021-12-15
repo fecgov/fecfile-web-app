@@ -3019,7 +3019,7 @@ def trash_restore_transactions(request):
                     )
 
             except Exception as e:
-                     return Response("The trash_restore_transactions API is throwing an error: " + str(e) + ". Deleted transactions are: {}".format(",".join(deleted_transaction_ids)),
+                return Response("The trash_restore_transactions API is throwing an error: " + str(e) + ". Deleted transactions are: {}".format(",".join(deleted_transaction_ids)),
                          status=status.HTTP_400_BAD_REQUEST)
 
             # update report last_update_date

@@ -2362,7 +2362,7 @@ def reports(request):
                       }
                     return JsonResponse(output_dict, status=status.HTTP_200_OK, safe=False)
                 else:
-                      raise Exception("The output returned from post_reports function is neither dict nor list")
+                    raise Exception("The output returned from post_reports function is neither dict nor list")
             except Exception as e:
                 logger.debug(e)
                 return Response(
@@ -8785,34 +8785,34 @@ def trash_restore_sql_report(cmte_id, report_id, _delete="Y"):
                 # commented by Mahendra 10052019
                 # print("report_type4", report_type)
             if report_type == "F1M":
-                 cursor.execute(
+                cursor.execute(
                     """UPDATE public.reports SET delete_ind = '{}', last_update_date = '{}' WHERE cmte_id = '{}' AND report_id = '{}'  """.format(
                         _delete, datetime.datetime.now(), cmte_id, report_id
                     )
                 )
-                 cursor.execute(
+                cursor.execute(
                     """UPDATE public.form_1m SET delete_ind = '{}', last_update_date = '{}' WHERE cmte_id = '{}' AND report_id = '{}'  """.format(
                         _delete, datetime.datetime.now(), cmte_id, report_id
                     )
                 )
             if report_type == "F24":
-                 cursor.execute(
+                cursor.execute(
                     """UPDATE public.reports SET delete_ind = '{}', last_update_date = '{}' WHERE cmte_id = '{}' AND report_id = '{}'  """.format(
                         _delete, datetime.datetime.now(), cmte_id, report_id
                     )
                 )
-                 cursor.execute(
+                cursor.execute(
                     """UPDATE public.form_24 SET delete_ind = '{}', last_update_date = '{}' WHERE cmte_id = '{}' AND report_id = '{}'  """.format(
                         _delete, datetime.datetime.now(), cmte_id, report_id
                     )
                 )
             if report_type == "F3L":
-                 cursor.execute(
+                cursor.execute(
                     """UPDATE public.reports SET delete_ind = '{}', last_update_date = '{}' WHERE cmte_id = '{}' AND report_id = '{}'  """.format(
                         _delete, datetime.datetime.now(), cmte_id, report_id
                     )
                 )
-                 cursor.execute(
+                cursor.execute(
                     """UPDATE public.form_3l SET delete_ind = '{}', last_update_date = '{}' WHERE cmte_id = '{}' AND report_id = '{}'  """.format(
                         _delete, datetime.datetime.now(), cmte_id, report_id
                     )
@@ -9782,36 +9782,36 @@ def amend_form3x_3l(reportid, cmte_id, form_type, error_flag=True):
 
 def amend_form1m(request_dict):
     try:
-      report_flag = False
-      report_dict = {}
-      f1m_dict = {}
-      for key, value in request_dict.items():
-         if key in ['form_type', 'cmte_id', 'email_1', 'email_2']:
-            report_dict[key] = value
-      report_dict['previous_report_id'] = request_dict['report_id']
-      report_dict["amend_ind"] = "A"
-      report_dict["amend_number"] = (
-          request_dict.get("amend_number") + 1 if request_dict.get("amend_number") else 1)
-      report_dict["status"] = "Saved"
-      report_flag, output_dict = post_amend_f1m_report(report_dict)
-      _sql = """INSERT INTO public.form_1m(
-            report_id, est_status, cmte_id, aff_cmte_id, aff_date, can1_id, 
-            can1_con, can2_id, can2_con, can3_id, can3_con, can4_id, can4_con, 
-            can5_id, can5_con, date_51, orig_date, metreq_date,
-            create_date, last_update_date, committee_type)
-            SELECT %s, est_status, cmte_id, aff_cmte_id, aff_date, can1_id, 
-            can1_con, can2_id, can2_con, can3_id, can3_con, can4_id, can4_con, 
-            can5_id, can5_con, date_51, orig_date, metreq_date, %s, %s, committee_type
-            FROM public.form_1m WHERE cmte_id=%s AND report_id= %s"""
-      value_list = [output_dict['report_id'], datetime.datetime.now(), datetime.datetime.now(),
+        report_flag = False
+        report_dict = {}
+        f1m_dict = {}
+        for key, value in request_dict.items():
+            if key in ['form_type', 'cmte_id', 'email_1', 'email_2']:
+                report_dict[key] = value
+        report_dict['previous_report_id'] = request_dict['report_id']
+        report_dict["amend_ind"] = "A"
+        report_dict["amend_number"] = (
+            request_dict.get("amend_number") + 1 if request_dict.get("amend_number") else 1)
+        report_dict["status"] = "Saved"
+        report_flag, output_dict = post_amend_f1m_report(report_dict)
+        _sql = """INSERT INTO public.form_1m(
+              report_id, est_status, cmte_id, aff_cmte_id, aff_date, can1_id,
+              can1_con, can2_id, can2_con, can3_id, can3_con, can4_id, can4_con,
+              can5_id, can5_con, date_51, orig_date, metreq_date,
+              create_date, last_update_date, committee_type)
+              SELECT %s, est_status, cmte_id, aff_cmte_id, aff_date, can1_id,
+              can1_con, can2_id, can2_con, can3_id, can3_con, can4_id, can4_con,
+              can5_id, can5_con, date_51, orig_date, metreq_date, %s, %s, committee_type
+              FROM public.form_1m WHERE cmte_id=%s AND report_id= %s"""
+        value_list = [output_dict['report_id'], datetime.datetime.now(), datetime.datetime.now(),
             report_dict['cmte_id'], report_dict['previous_report_id']]
-      with connection.cursor() as cursor:
-          cursor.execute(_sql,value_list)
-          logger.debug("FORM-1M POST")
-          # logger.debug(cursor.query)
-          if cursor.rowcount == 0:
-              raise Exception('Failed to insert data into form_1m table.')
-      return output_dict
+        with connection.cursor() as cursor:
+            cursor.execute(_sql,value_list)
+            logger.debug("FORM-1M POST")
+            # logger.debug(cursor.query)
+            if cursor.rowcount == 0:
+                raise Exception('Failed to insert data into form_1m table.')
+        return output_dict
     except Exception as e:
         if report_flag:
             remove_reports_f1m(output_dict['report_id'], report_dict['previous_report_id'])
@@ -11539,7 +11539,7 @@ def get_child_max_transaction_amount(request):
             if result:
                 return Response({'amount': result[0]}, status=status.HTTP_200_OK)
             else:
-              raise Exception('The transaction_id: {} does not exist or is deleted'.format(transaction_id))
+                raise Exception('The transaction_id: {} does not exist or is deleted'.format(transaction_id))
     except Exception as e:
         return Response(
           "The get_child_max_transaction_amount API is throwing an error: " + str(e),

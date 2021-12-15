@@ -313,7 +313,7 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
             data = data.dropna(axis=[0], how='all')
             res = validate_dataframe(data)
             if "Validate_Pass" != res:
-               return res
+                return res
             data = data.sort_values(by=["TRANSACTION IDENTIFIER"], ascending=False)
             # print('...............')
             #loop through the data set to pick unique tranid's
