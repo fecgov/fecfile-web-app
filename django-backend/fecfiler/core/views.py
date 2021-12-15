@@ -530,9 +530,12 @@ def get_report_types(request):
             forms_obj['selected'] = odd
             for dates in forms_obj['report_type']:
                 # Temporary fix till we get EFO dates
-                if dates.get('cvg_start_date') == 'EFO': dates['cvg_start_date'] = None
-                if dates.get('cvg_end_date') == 'EFO': dates['cvg_end_date'] = None
-                if dates.get('due_date') == 'EFO': dates['due_date'] = None
+                if dates.get('cvg_start_date') == 'EFO':
+                    dates['cvg_start_date'] = None
+                if dates.get('cvg_end_date') == 'EFO':
+                    dates['cvg_end_date'] = None
+                if dates.get('due_date') == 'EFO':
+                    dates['due_date'] = None
 
                 if dates.get('election_date'):
                     dates['election_date'] = dates.get('election_date').replace("YYYY", str(_nyear))
@@ -6238,7 +6241,8 @@ def prev_cash_on_hand_cop_3rd_nav(report_id, cmte_id, year_flag=False):
                 coh_cop = result[0]
                 if result[1].year < cvg_start_date.year:
                     input_coh = get_coh_f3x_table(cvg_start_date.year, cmte_id, True)
-                    if input_coh != None: coh_cop = input_coh
+                    if input_coh != None:
+                        coh_cop = input_coh
         return coh_cop
     except Exception as e:
         raise Exception(
@@ -8087,14 +8091,17 @@ def contacts(request):
                 )
                 if 'entity_type' in dict_data and dict_data['entity_type'] in ['IND', 'CAN']:
                     dict_data['name'] = ', '.join([dict_data['last_name'], dict_data['first_name']])
-                    if dict_data.get('middle_name'): dict_data['name'] += ', ' + dict_data.get('middle_name')
-                    if dict_data.get('prefix'): dict_data['name'] += ', ' + dict_data.get('prefix')
-                    if dict_data.get('suffix'): dict_data['name'] += ', ' + dict_data.get('suffix')
+                    if dict_data.get('middle_name'):
+                        dict_data['name'] += ', ' + dict_data.get('middle_name')
+                    if dict_data.get('prefix'):
+                        dict_data['name'] += ', ' + dict_data.get('prefix')
+                    if dict_data.get('suffix'):
+                        dict_data['name'] += ', ' + dict_data.get('suffix')
                 else:
                     dict_data['name'] = dict_data['entity_name']
                 dict_data['address'] = dict_data.get('street1')
-                if dict_data.get('street2'): dict_data['address'] += ', ' + dict_data.get('street2')
-
+                if dict_data.get('street2'):
+                    dict_data['address'] += ', ' + dict_data.get('street2')
                 return JsonResponse(dict_data, status=status.HTTP_200_OK, safe=False)
             except Exception as e:
                 return Response(
@@ -11924,7 +11931,8 @@ def cashOnHand(request):
         is_read_only_or_filer_reports(request)
         cmte_id = get_comittee_id(request.user.username)
         if request.method == "GET":
-            if not request.query_params.get('year'): raise Exception('year field is mandatory')
+            if not request.query_params.get('year'):
+                raise Exception('year field is mandatory')
             coh_year = request.query_params.get('year')
             _sql = """SELECT json_agg(t) FROM (
                       SELECT coh as amount, coh_year as year FROM
@@ -11937,7 +11945,8 @@ def cashOnHand(request):
             return Response(result, status=status.HTTP_200_OK)
 
         if request.method == "PUT":
-            if not request.data.get('year'): raise Exception('year field is mandatory')
+            if not request.data.get('year'):
+                raise Exception('year field is mandatory')
             coh_year = request.data.get('year')
             coh_amount = request.data.get('amount')
 

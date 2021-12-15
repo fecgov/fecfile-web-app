@@ -1563,7 +1563,8 @@ def mirror_to_F24(request):
     try:
         cmte_id = get_comittee_id(request.user.username)
         for param in ['transactionId', 'reportId']:
-            if not request.data.get(param): raise Exception('The parameter {} is mandatory.'.format(param))
+            if not request.data.get(param):
+                raise Exception('The parameter {} is mandatory.'.format(param))
 
         transaction_id = get_next_transaction_id("SE")
         _sql = """INSERT INTO public.sched_e(
@@ -1597,10 +1598,11 @@ def mirror_to_F24(request):
 
         with connection.cursor() as cursor:
             cursor.execute(_sql, _value_list)
-            if not cursor.rowcount: raise Exception('failed to create new transaction')
+            if not cursor.rowcount:
+                raise Exception('failed to create new transaction')
             cursor.execute(_sql2, _value_list2)
-            if not cursor.rowcount: raise Exception('failed to update transaction: {}'.format(
-                request.data['transactionId']))
+            if not cursor.rowcount:
+                raise Exception('failed to update transaction: {}'.format(request.data['transactionId']))
         data = {"cmte_id": cmte_id,
                 "report_id": request.data['reportId'],
                 "transaction_id": transaction_id}
