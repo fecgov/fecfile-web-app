@@ -1727,7 +1727,6 @@ def update_checkbox_values(page, fields):
 # API which prints Form 99 data
 
 @api_view(['POST'])
-
 def print_pdf(request):
 
     #try:
