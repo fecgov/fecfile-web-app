@@ -1715,7 +1715,7 @@ def get_h2_summary_table(request):
             ) t;
     """
     try:
-    #: Get the request parameters and set for Pagination
+        # Get the request parameters and set for Pagination
         query_params = request.query_params
         page_num = get_int_value(query_params.get("page"))
 
@@ -4456,7 +4456,7 @@ def get_h5_summary(request):
     # TODO: what is gonna happen when people click edit button? 
     """
     try:
-    #: Get the request parameters and set for Pagination
+        # Get the request parameters and set for Pagination
         query_params = request.query_params
         page_num = get_int_value(query_params.get("page"))
 

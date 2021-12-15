@@ -11169,17 +11169,17 @@ def update_f3x_coh_cop_subsequent_report(report_id, cmte_id):
         report_id_list = get_report_ids(cmte_id, cvg_start_date, False, False)
         for report in report_id_list:
             if update_f3x_details(report, cmte_id) != "Success":
-            # coh_bop = prev_cash_on_hand_cop_3rd_nav(report, cmte_id)
-            # coh_begin_yr = prev_cash_on_hand_cop_3rd_nav(report, cmte_id, True)
-            # _sql = """UPDATE public.form_3x SET coh_cop = coh_cop-coh_bop+%s, coh_bop = %s,
-            #         coh_coy = coh_coy-coh_begin_calendar_yr+%s, coh_begin_calendar_yr = %s
-            #         WHERE cmte_id=%s and report_id=%s"""
-            # values = [str(coh_bop), str(coh_bop), str(coh_begin_yr),
-            #     str(coh_begin_yr), cmte_id, report]
-            # with connection.cursor() as cursor:
-            #     cursor.execute(_sql, values)
-            #     # print("update_f3x_coh_cop_subsequent_report")
-            #     # print(cursor.query)
+                # coh_bop = prev_cash_on_hand_cop_3rd_nav(report, cmte_id)
+                # coh_begin_yr = prev_cash_on_hand_cop_3rd_nav(report, cmte_id, True)
+                # _sql = """UPDATE public.form_3x SET coh_cop = coh_cop-coh_bop+%s, coh_bop = %s,
+                #         coh_coy = coh_coy-coh_begin_calendar_yr+%s, coh_begin_calendar_yr = %s
+                #         WHERE cmte_id=%s and report_id=%s"""
+                # values = [str(coh_bop), str(coh_bop), str(coh_begin_yr),
+                #     str(coh_begin_yr), cmte_id, report]
+                # with connection.cursor() as cursor:
+                #     cursor.execute(_sql, values)
+                #     # print("update_f3x_coh_cop_subsequent_report")
+                #     # print(cursor.query)
                 # if cursor.rowcount == 0:
                     output_string += "," + report
         return output_string
