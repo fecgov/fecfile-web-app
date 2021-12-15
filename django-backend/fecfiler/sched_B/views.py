@@ -1730,7 +1730,7 @@ def update_schedB_aggamt_transactions(
     3/1/2018, 100, 210, 11AI (aggregate_amount > 200, update line number)
     """
     try:
-        if transaction_type_identifier not in ('IND_REFUND','REG_ORG_REFUND'):
+        if transaction_type_identifier not in ('IND_REFUND', 'REG_ORG_REFUND'):
             itemization_value = 200
             # itemized_transaction_list = []
             # unitemized_transaction_list = []

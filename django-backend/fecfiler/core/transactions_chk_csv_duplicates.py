@@ -69,10 +69,10 @@ def check_for_file_hash_in_db(cmteid, filename, hash, fecfilename):
 def load_file_hash_to_db(cmteid, filename, hash, fecfilename):
     conn = None
     try:
-        print("cmteid :",cmteid)
-        print("filename :",filename)
-        print("hash :",hash)
-        print("fecfilename:",fecfilename)
+        print("cmteid :", cmteid)
+        print("filename :", filename)
+        print("hash :", hash)
+        print("fecfilename:", fecfilename)
         """ insert a transactions_file_details """
         insertsql = """INSERT INTO transactions_file_details(cmte_id, file_name, md5, fec_file_name)
                 VALUES(%s, %s, %s, %s);"""

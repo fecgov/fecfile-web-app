@@ -11,7 +11,7 @@ class SimpleTest(TestCase):
         self.credentials = {
             'username': 'C01234567',
             'password': 'test',
-            'email':'test1@test.com'
+            'email': 'test1@test.com'
         }
         self.user = Account.objects.create_user(**self.credentials)
         

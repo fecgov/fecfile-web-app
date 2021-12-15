@@ -3541,7 +3541,7 @@ def update_activity_event_amount_ytd(data):
             if transaction[2] != "N":
                 aggregate_amount += transaction[0]
             transaction_id = transaction[1]
-            list_sub_transaction = list_all_sub_transaction(aggregate_start_date,aggregate_end_date,transaction_id,data.get("cmte_id"))
+            list_sub_transaction = list_all_sub_transaction(aggregate_start_date, aggregate_end_date, transaction_id, data.get("cmte_id"))
             for sub_transaction in list_sub_transaction:
                 sub_transaction_id = sub_transaction[1]
                 update_transaction_ytd_amount(

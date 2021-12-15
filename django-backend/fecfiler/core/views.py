@@ -365,7 +365,7 @@ def get_transaction_types(request):
 
             cursor.execute(
                 "select tran_identifier,tran_desc,category_type  from ref_transaction_types where %s is null or form_type = %s",
-                [form_type,form_type],
+                [form_type, form_type],
             )
             rows = cursor.fetchall()
 
@@ -5481,148 +5481,148 @@ def summary_disbursements_for_sumamry_table(request_dict):
                 "line_item": "31",
                 "level": 1,
                 "description": "Total Disbursements",
-                "amt": request_dict.get('ttl_disb_per',0.0),
-                "amt_ytd": request_dict.get('ttl_disb_ytd',0.0),
+                "amt": request_dict.get('ttl_disb_per', 0.0),
+                "amt_ytd": request_dict.get('ttl_disb_ytd', 0.0),
             },
             {
                 "line_item": "21",
                 "level": 2,
                 "description": "Operating Expenditures",
-                "amt": request_dict.get('ttl_op_exp_per',0.0),
-                "amt_ytd": request_dict.get('ttl_op_exp_ytd',0.0),
+                "amt": request_dict.get('ttl_op_exp_per', 0.0),
+                "amt_ytd": request_dict.get('ttl_op_exp_ytd', 0.0),
             },
             {
                 "line_item": "21AI",
                 "level": 3,
                 "description": "Allocated Operating Expenditures - Federal",
-                "amt": request_dict.get('shared_fed_op_exp_per',0.0),
-                "amt_ytd": request_dict.get('shared_fed_op_exp_ytd',0.0),
+                "amt": request_dict.get('shared_fed_op_exp_per', 0.0),
+                "amt_ytd": request_dict.get('shared_fed_op_exp_ytd', 0.0),
             },
             {
                 "line_item": "21AII",
                 "level": 3,
                 "description": "Allocated Operating Expenditures - Non-Federal",
-                "amt": request_dict.get('shared_nonfed_op_exp_per',0.0),
-                "amt_ytd": request_dict.get('shared_nonfed_op_exp_ytd',0.0),
+                "amt": request_dict.get('shared_nonfed_op_exp_per', 0.0),
+                "amt_ytd": request_dict.get('shared_nonfed_op_exp_ytd', 0.0),
             },
             {
                 "line_item": "21B",
                 "level": 3,
                 "description": "Other Federal Operating Expenditures",
-                "amt": request_dict.get('other_fed_op_exp_per',0.0),
-                "amt_ytd": request_dict.get('other_fed_op_exp_ytd',0.0),
+                "amt": request_dict.get('other_fed_op_exp_per', 0.0),
+                "amt_ytd": request_dict.get('other_fed_op_exp_ytd', 0.0),
             },
             {
                 "line_item": "22",
                 "level": 2,
                 "description": "Transfer From Affiliated Committees",
-                "amt": request_dict.get('tranf_to_affliliated_cmte_per',0.0),
-                "amt_ytd": request_dict.get('tranf_to_affilitated_cmte_ytd',0.0),
+                "amt": request_dict.get('tranf_to_affliliated_cmte_per', 0.0),
+                "amt_ytd": request_dict.get('tranf_to_affilitated_cmte_ytd', 0.0),
             },
             {
                 "line_item": "23",
                 "level": 2,
                 "description": "Contributions To Other Committees",
-                "amt": request_dict.get('fed_cand_cmte_contb_per',0.0),
-                "amt_ytd": request_dict.get('fed_cand_cmte_contb_ref_ytd',0.0),
+                "amt": request_dict.get('fed_cand_cmte_contb_per', 0.0),
+                "amt_ytd": request_dict.get('fed_cand_cmte_contb_ref_ytd', 0.0),
             },
             {
                 "line_item": "24",
                 "level": 2,
                 "description": "Independent Expenditures",
-                "amt": request_dict.get('indt_exp_per',0.0),
-                "amt_ytd": request_dict.get('indt_exp_ytd',0.0),
+                "amt": request_dict.get('indt_exp_per', 0.0),
+                "amt_ytd": request_dict.get('indt_exp_ytd', 0.0),
             },
             {
                 "line_item": "25",
                 "level": 2,
                 "description": "Party Coordinated Expenditures",
-                "amt": request_dict.get('coord_exp_by_pty_cmte_per',0.0),
-                "amt_ytd": request_dict.get('coord_exp_by_pty_cmte_ytd',0.0),
+                "amt": request_dict.get('coord_exp_by_pty_cmte_per', 0.0),
+                "amt_ytd": request_dict.get('coord_exp_by_pty_cmte_ytd', 0.0),
             },
             {
                 "line_item": "26",
                 "level": 2,
                 "description": "Loan Repayments Made",
-                "amt": request_dict.get('loan_repymts_made_per',0.0),
-                "amt_ytd": request_dict.get('loan_repymts_made_ytd',0.0),
+                "amt": request_dict.get('loan_repymts_made_per', 0.0),
+                "amt_ytd": request_dict.get('loan_repymts_made_ytd', 0.0),
             },
             {
                 "line_item": "27",
                 "level": 2,
                 "description": "Loans Made",
-                "amt": request_dict.get('loans_made_per',0.0),
-                "amt_ytd": request_dict.get('loans_made_ytd',0.0),
+                "amt": request_dict.get('loans_made_per', 0.0),
+                "amt_ytd": request_dict.get('loans_made_ytd', 0.0),
             },
             {
                 "line_item": "28",
                 "level": 2,
                 "description": "Total Contribution Refunds",
-                "amt": request_dict.get('ttl_contb_ref_per_i',0.0),
-                "amt_ytd": request_dict.get('ttl_contb_ref_ytd_i',0.0),
+                "amt": request_dict.get('ttl_contb_ref_per_i', 0.0),
+                "amt_ytd": request_dict.get('ttl_contb_ref_ytd_i', 0.0),
             },
             {
                 "line_item": "28A",
                 "level": 3,
                 "description": "Individual Refunds",
-                "amt": request_dict.get('indv_contb_ref_per',0.0),
-                "amt_ytd": request_dict.get('indv_contb_ref_ytd',0.0),
+                "amt": request_dict.get('indv_contb_ref_per', 0.0),
+                "amt_ytd": request_dict.get('indv_contb_ref_ytd', 0.0),
             },
             {
                 "line_item": "28B",
                 "level": 3,
                 "description": "Political Party Refunds",
-                "amt": request_dict.get('pol_pty_cmte_contb_per_ii',0.0),
-                "amt_ytd": request_dict.get('pol_pty_cmte_contb_ytd_ii',0.0),
+                "amt": request_dict.get('pol_pty_cmte_contb_per_ii', 0.0),
+                "amt_ytd": request_dict.get('pol_pty_cmte_contb_ytd_ii', 0.0),
             },
             {
                 "line_item": "28C",
                 "level": 3,
                 "description": "Other Committee Refunds",
-                "amt": request_dict.get('other_pol_cmte_contb_per_ii',0.0),
-                "amt_ytd": request_dict.get('other_pol_cmte_contb_ytd_ii',0.0),
+                "amt": request_dict.get('other_pol_cmte_contb_per_ii', 0.0),
+                "amt_ytd": request_dict.get('other_pol_cmte_contb_ytd_ii', 0.0),
             },
             {
                 "line_item": "29",
                 "level": 2,
                 "description": "Other Disbursements",
-                "amt": request_dict.get('other_disb_per',0.0),
-                "amt_ytd": request_dict.get('other_disb_ytd',0.0),
+                "amt": request_dict.get('other_disb_per', 0.0),
+                "amt_ytd": request_dict.get('other_disb_ytd', 0.0),
             },
             {
                 "line_item": "30",
                 "level": 2,
                 "description": "Total Federal Election Activity",
-                "amt": request_dict.get('ttl_fed_elect_actvy_per',0.0),
-                "amt_ytd": request_dict.get('ttl_fed_elect_actvy_ytd',0.0),
+                "amt": request_dict.get('ttl_fed_elect_actvy_per', 0.0),
+                "amt_ytd": request_dict.get('ttl_fed_elect_actvy_ytd', 0.0),
             },
             {
                 "line_item": "30AI",
                 "level": 3,
                 "description": "Allocated Federal Election Activity - Federal Share",
-                "amt": request_dict.get('shared_fed_actvy_fed_shr_per',0.0),
-                "amt_ytd": request_dict.get('shared_fed_actvy_fed_shr_ytd',0.0),
+                "amt": request_dict.get('shared_fed_actvy_fed_shr_per', 0.0),
+                "amt_ytd": request_dict.get('shared_fed_actvy_fed_shr_ytd', 0.0),
             },
             {
                 "line_item": "30AII",
                 "level": 3,
                 "description": "Allocated Federal Election Activity - Levin Share",
-                "amt": request_dict.get('shared_fed_actvy_nonfed_per',0.0),
-                "amt_ytd": request_dict.get('shared_fed_actvy_nonfed_ytd',0.0),
+                "amt": request_dict.get('shared_fed_actvy_nonfed_per', 0.0),
+                "amt_ytd": request_dict.get('shared_fed_actvy_nonfed_ytd', 0.0),
             },
             {
                 "line_item": "30B",
                 "level": 3,
                 "description": "Federal Election Activity - Federal Only",
-                "amt": request_dict.get('non_alloc_fed_elect_actvy_per',0.0),
-                "amt_ytd": request_dict.get('non_alloc_fed_elect_actvy_ytd',0.0),
+                "amt": request_dict.get('non_alloc_fed_elect_actvy_per', 0.0),
+                "amt_ytd": request_dict.get('non_alloc_fed_elect_actvy_ytd', 0.0),
             },
             {
                 "line_item": "32",
                 "level": 2,
                 "description": "Total Federal Disbursements",
-                "amt": request_dict.get('ttl_fed_disb_per',0.0),
-                "amt_ytd": request_dict.get('ttl_fed_disb_ytd',0.0),
+                "amt": request_dict.get('ttl_fed_disb_per', 0.0),
+                "amt_ytd": request_dict.get('ttl_fed_disb_ytd', 0.0),
             },
         ]
 
@@ -5805,120 +5805,120 @@ def summary_receipts_for_sumamry_table(request_dict):
                 "line_item": "19",
                 "level": 1,
                 "description": "Total Receipts",
-                "amt": request_dict.get('ttl_receipts_per',0.0),
-                "amt_ytd": request_dict.get('ttl_receipts_ytd',0.0),
+                "amt": request_dict.get('ttl_receipts_per', 0.0),
+                "amt_ytd": request_dict.get('ttl_receipts_ytd', 0.0),
             },
             {
                 "line_item": "11D",
                 "level": 2,
                 "description": "Total Contributions",
-                "amt": request_dict.get('ttl_contb_col_ttl_per',0.0),
-                "amt_ytd": request_dict.get('ttl_contb_col_ttl_ytd',0.0),
+                "amt": request_dict.get('ttl_contb_col_ttl_per', 0.0),
+                "amt_ytd": request_dict.get('ttl_contb_col_ttl_ytd', 0.0),
             },
             {
                 "line_item": "11A",
                 "level": 3,
                 "description": "Total Individual Contributions",
-                "amt": request_dict.get('ttl_indv_contb',0.0),
-                "amt_ytd": request_dict.get('ttl_indv_contb_ytd',0.0),
+                "amt": request_dict.get('ttl_indv_contb', 0.0),
+                "amt_ytd": request_dict.get('ttl_indv_contb_ytd', 0.0),
             },
             {
                 "line_item": "11AI",
                 "level": 4,
                 "description": "Itemized Individual Contributions",
-                "amt": request_dict.get('indv_item_contb_per',0.0),
-                "amt_ytd": request_dict.get('indv_item_contb_ytd',0.0),
+                "amt": request_dict.get('indv_item_contb_per', 0.0),
+                "amt_ytd": request_dict.get('indv_item_contb_ytd', 0.0),
             },
             {
                 "line_item": "11AII",
                 "level": 4,
                 "description": "Unitemized Individual Contributions",
-                "amt": request_dict.get('indv_unitem_contb_per',0.0),
-                "amt_ytd": request_dict.get('indv_unitem_contb_ytd',0.0),
+                "amt": request_dict.get('indv_unitem_contb_per', 0.0),
+                "amt_ytd": request_dict.get('indv_unitem_contb_ytd', 0.0),
             },
             {
                 "line_item": "11B",
                 "level": 3,
                 "description": "Party Committee Contributions",
-                "amt": request_dict.get('pol_pty_cmte_contb_per_i',0.0),
-                "amt_ytd": request_dict.get('pol_pty_cmte_contb_ytd_i',0.0),
+                "amt": request_dict.get('pol_pty_cmte_contb_per_i', 0.0),
+                "amt_ytd": request_dict.get('pol_pty_cmte_contb_ytd_i', 0.0),
             },
             {
                 "line_item": "11C",
                 "level": 3,
                 "description": "Other Committee Contributions",
-                "amt": request_dict.get('other_pol_cmte_contb_per_i',0.0),
-                "amt_ytd": request_dict.get('other_pol_cmte_contb_ytd_i',0.0),
+                "amt": request_dict.get('other_pol_cmte_contb_per_i', 0.0),
+                "amt_ytd": request_dict.get('other_pol_cmte_contb_ytd_i', 0.0),
             },
             {
                 "line_item": "12",
                 "level": 2,
                 "description": "Transfers From Affiliated Committees",
-                "amt": request_dict.get('tranf_from_affiliated_pty_per',0.0),
-                "amt_ytd": request_dict.get('tranf_from_affiliated_pty_ytd',0.0),
+                "amt": request_dict.get('tranf_from_affiliated_pty_per', 0.0),
+                "amt_ytd": request_dict.get('tranf_from_affiliated_pty_ytd', 0.0),
             },
             {
                 "line_item": "13",
                 "level": 2,
                 "description": "All Loans Received",
-                "amt": request_dict.get('all_loans_received_per',0.0),
-                "amt_ytd": request_dict.get('all_loans_received_ytd',0.0),
+                "amt": request_dict.get('all_loans_received_per', 0.0),
+                "amt_ytd": request_dict.get('all_loans_received_ytd', 0.0),
             },
             {
                 "line_item": "14",
                 "level": 2,
                 "description": "Loan Repayments Received",
-                "amt": request_dict.get('loan_repymts_received_per',0.0),
-                "amt_ytd": request_dict.get('loan_repymts_received_ytd',0.0),
+                "amt": request_dict.get('loan_repymts_received_per', 0.0),
+                "amt_ytd": request_dict.get('loan_repymts_received_ytd', 0.0),
             },
             {
                 "line_item": "15",
                 "level": 2,
                 "description": "Offsets To Operating Expenditures",
-                "amt": request_dict.get('offsets_to_op_exp_per_i',0.0),
-                "amt_ytd": request_dict.get('offsets_to_op_exp_ytd_i',0.0),
+                "amt": request_dict.get('offsets_to_op_exp_per_i', 0.0),
+                "amt_ytd": request_dict.get('offsets_to_op_exp_ytd_i', 0.0),
             },
             {
                 "line_item": "16",
                 "level": 2,
                 "description": "Candidate Refunds",
-                "amt": request_dict.get('fed_cand_contb_ref_per',0.0),
-                "amt_ytd": request_dict.get('fed_cand_cmte_contb_ytd',0.0),
+                "amt": request_dict.get('fed_cand_contb_ref_per', 0.0),
+                "amt_ytd": request_dict.get('fed_cand_cmte_contb_ytd', 0.0),
             },
             {
                 "line_item": "17",
                 "level": 2,
                 "description": "Other Receipts",
-                "amt": request_dict.get('other_fed_receipts_per',0.0),
-                "amt_ytd": request_dict.get('other_fed_receipts_ytd',0.0),
+                "amt": request_dict.get('other_fed_receipts_per', 0.0),
+                "amt_ytd": request_dict.get('other_fed_receipts_ytd', 0.0),
             },
             {
                 "line_item": "18",
                 "level": 2,
                 "description": "Total Transfers",
-                "amt": request_dict.get('ttl_nonfed_tranf_per',0.0),
-                "amt_ytd": request_dict.get('ttl_nonfed_tranf_ytd',0.0),
+                "amt": request_dict.get('ttl_nonfed_tranf_per', 0.0),
+                "amt_ytd": request_dict.get('ttl_nonfed_tranf_ytd', 0.0),
             },
             {
                 "line_item": "18A",
                 "level": 3,
                 "description": "Non-federal Transfers",
-                "amt": request_dict.get('tranf_from_nonfed_acct_per',0.0),
-                "amt_ytd": request_dict.get('tranf_from_nonfed_acct_ytd',0.0),
+                "amt": request_dict.get('tranf_from_nonfed_acct_per', 0.0),
+                "amt_ytd": request_dict.get('tranf_from_nonfed_acct_ytd', 0.0),
             },
             {
                 "line_item": "18B",
                 "level": 3,
                 "description": "Levin Funds",
-                "amt": request_dict.get('tranf_from_nonfed_levin_per',0.0),
-                "amt_ytd": request_dict.get('tranf_from_nonfed_levin_ytd',0.0),
+                "amt": request_dict.get('tranf_from_nonfed_levin_per', 0.0),
+                "amt_ytd": request_dict.get('tranf_from_nonfed_levin_ytd', 0.0),
             },
             {
                 "line_item": "20",
                 "level": 2,
                 "description": "Total Federal Receipts",
-                "amt": request_dict.get('ttl_fed_receipts_per',0.0),
-                "amt_ytd": request_dict.get('ttl_fed_receipts_ytd',0.0),
+                "amt": request_dict.get('ttl_fed_receipts_per', 0.0),
+                "amt_ytd": request_dict.get('ttl_fed_receipts_ytd', 0.0),
             },
         ]
         return summary_receipt_list
@@ -5938,8 +5938,8 @@ def load_loan_debt_summary(request_dict):
     # cmte_id = period_args[2]
     # report_id = period_args[3]
     loan_debt_dic = {
-        "DEBTS/LOANS OWED TO COMMITTEE": request_dict.get('debts_owed_to_cmte',0.0),
-        "DEBTS/LOANS OWED BY COMMITTEE": request_dict.get('debts_owed_by_cmte',0.0),
+        "DEBTS/LOANS OWED TO COMMITTEE": request_dict.get('debts_owed_to_cmte', 0.0),
+        "DEBTS/LOANS OWED BY COMMITTEE": request_dict.get('debts_owed_by_cmte', 0.0),
         "DEBTS/LOANS OWED TO COMMITTEE YTD": 0,
         "DEBTS/LOANS OWED BY COMMITTEE YTD": 0,
     }
@@ -6038,9 +6038,9 @@ def get_summary_table(request):
             period_disbursement = summary_disbursements_for_sumamry_table(output_dict)
 
             cash_summary = {
-                "COH AS OF JANUARY 1": output_dict.get('coh_begin_calendar_yr',0.0),
-                "BEGINNING CASH ON HAND": output_dict.get('coh_bop',0.0),
-                "ENDING CASH ON HAND": output_dict.get('coh_cop',0.0),
+                "COH AS OF JANUARY 1": output_dict.get('coh_begin_calendar_yr', 0.0),
+                "BEGINNING CASH ON HAND": output_dict.get('coh_bop', 0.0),
+                "ENDING CASH ON HAND": output_dict.get('coh_cop', 0.0),
             }
             logger.debug("cash summary:{}".format(cash_summary))
 
@@ -6202,7 +6202,7 @@ def prev_cash_on_hand_cop_3rd_nav(report_id, cmte_id, year_flag=False):
     try:
         cvg_start_date, cvg_end_date = get_cvg_dates(report_id, cmte_id)
         if year_flag:
-            cvg_start_date = datetime.date(cvg_end_date.year,1,1)
+            cvg_start_date = datetime.date(cvg_end_date.year, 1, 1)
         with connection.cursor() as cursor:
             cursor.execute(
                 """SELECT COALESCE(t1.coh_cop, 0), rp.cvg_end_date FROM public.form_3x t1, public.reports rp 
@@ -7267,7 +7267,7 @@ def get_trans_query_for_total_count(trans_query_string):
     temp_string = """select count(*) from """
     i = trans_query_string.index(""" from """)
     s = trans_query_string[0: i+6]
-    final_query = trans_query_string.replace(s, temp_string,1)
+    final_query = trans_query_string.replace(s, temp_string, 1)
     return final_query
 
 #: build query offset and record count to start getting the data
@@ -8258,7 +8258,7 @@ def contacts(request):
                     str(dict_data["phone_number"]) if dict_data.get("phone_number") else ""
                 )
                 if 'entity_type' in dict_data and dict_data['entity_type'] in ['IND', 'CAN']:
-                    dict_data['name'] = ', '.join([dict_data['last_name'],dict_data['first_name']])
+                    dict_data['name'] = ', '.join([dict_data['last_name'], dict_data['first_name']])
                     if dict_data.get('middle_name'): dict_data['name'] += ', ' + dict_data.get('middle_name')
                     if dict_data.get('prefix'): dict_data['name'] += ', ' + dict_data.get('prefix')
                     if dict_data.get('suffix'): dict_data['name'] += ', ' + dict_data.get('suffix')
@@ -9455,7 +9455,7 @@ def clone_a_transaction(request):
                 mirror_report_id = request.data.get("mirror_report_id")
                 if not mirror_report_id:
                     raise Exception("Error: Mirror report id is missing.")
-                select_str = select_str.replace("mirror_transaction_id","'" + new_mirror_tran_id + "'")
+                select_str = select_str.replace("mirror_transaction_id", "'" + new_mirror_tran_id + "'")
 
                 duplicate_select_str = duplicate_select_str.replace(",report_id", ",'" + mirror_report_id + "'")
                 duplicate_select_str = duplicate_select_str.replace(",transaction_id", ",'" + new_mirror_tran_id + "'")
@@ -9705,7 +9705,7 @@ def create_amended_reports(request):
                                 status=status.HTTP_400_BAD_REQUEST,
                     )
                 data = val_data[0]
-                if data.get('form_type') in ['F3X','F3L']:
+                if data.get('form_type') in ['F3X', 'F3L']:
                     data_obj = amend_form3x_3l(reportid, cmte_id, data.get('form_type'))
 
                 elif data.get('form_type') == 'F1M':
@@ -9777,7 +9777,7 @@ def amend_form1m(request_dict):
         value_list = [output_dict['report_id'], datetime.datetime.now(), datetime.datetime.now(),
             report_dict['cmte_id'], report_dict['previous_report_id']]
         with connection.cursor() as cursor:
-            cursor.execute(_sql,value_list)
+            cursor.execute(_sql, value_list)
             logger.debug("FORM-1M POST")
             # logger.debug(cursor.query)
             if cursor.rowcount == 0:
@@ -9803,7 +9803,7 @@ def post_amend_f1m_report(request_dict):
         with connection.cursor() as cursor:
             sql = """INSERT INTO public.{}({}) VALUES ({})""".format('reports',
                 key_string[:-2], param_string[:-2])
-            cursor.execute(sql,value_list)
+            cursor.execute(sql, value_list)
             logger.debug("REPORTS POST")
             # logger.debug(cursor.query)
             if cursor.rowcount == 0:
@@ -11136,7 +11136,7 @@ def get_original_amount_by_redesignation_id(transaction_id):
 def update_f3x_coh_cop_subsequent_report(report_id, cmte_id):
     try:
         output_string = ""
-        cvg_start_date, cvg_end_date = get_cvg_dates(report_id, cmte_id,True)
+        cvg_start_date, cvg_end_date = get_cvg_dates(report_id, cmte_id, True)
         report_id_list = get_report_ids(cmte_id, cvg_start_date, False, False)
         for report in report_id_list:
             if update_f3x_details(report, cmte_id) != "Success":
@@ -11285,33 +11285,33 @@ def F3X_values(cmte_id, report_list, year_flag=False):
                             output_dict[column] += amount_tuple[1]
                     else:
                         output_dict[column] = amount_tuple[1]
-        output_dict[f3x_col_line_dict['11A'][i]] = (output_dict.get(f3x_col_line_dict['11AI'][i],0) +
-                output_dict.get(f3x_col_line_dict['11AII'][i],0))
-        output_dict[f3x_col_line_dict['11D'][i]] = (output_dict.get(f3x_col_line_dict['11A'][i],0) +
-            output_dict.get(f3x_col_line_dict['11B'][i],0) + output_dict.get(f3x_col_line_dict['11C'][i],0))
-        output_dict[f3x_col_line_dict['18'][i]] = (output_dict.get(f3x_col_line_dict['18A'][i],0) +
-            output_dict.get(f3x_col_line_dict['18B'][i],0))
-        output_dict[f3x_col_line_dict['19'][i]] = (output_dict.get(f3x_col_line_dict['11D'][i],0) +
-            output_dict.get(f3x_col_line_dict['12'][i],0) + output_dict.get(f3x_col_line_dict['13'][i],0) +
-            output_dict.get(f3x_col_line_dict['14'][i],0) + output_dict.get(f3x_col_line_dict['15'][i],0) +
-            output_dict.get(f3x_col_line_dict['16'][i],0) + output_dict.get(f3x_col_line_dict['17'][i],0) +
-            output_dict.get(f3x_col_line_dict['18'][i],0))
-        output_dict[f3x_col_line_dict['20'][i]] = (output_dict.get(f3x_col_line_dict['19'][i],0) -
-                output_dict.get(f3x_col_line_dict['18'][i],0))
-        output_dict[f3x_col_line_dict['21'][i]] = (output_dict.get(f3x_col_line_dict['21AI'][i],0) +
-                output_dict.get(f3x_col_line_dict['21AII'][i],0) + output_dict.get(f3x_col_line_dict['21B'][i],0))
-        output_dict[f3x_col_line_dict['28'][i]] = (output_dict.get(f3x_col_line_dict['28A'][i],0) +
-                output_dict.get(f3x_col_line_dict['28B'][i],0) + output_dict.get(f3x_col_line_dict['28C'][i],0))
-        output_dict[f3x_col_line_dict['30'][i]] = (output_dict.get(f3x_col_line_dict['30AI'][i],0) +
-                output_dict.get(f3x_col_line_dict['30AII'][i],0) + output_dict.get(f3x_col_line_dict['30B'][i],0))
-        output_dict[f3x_col_line_dict['31'][i]] = (output_dict.get(f3x_col_line_dict['21'][i],0) +
-            output_dict.get(f3x_col_line_dict['22'][i],0) + output_dict.get(f3x_col_line_dict['23'][i],0) +
-            output_dict.get(f3x_col_line_dict['24'][i],0) + output_dict.get(f3x_col_line_dict['25'][i],0) +
-            output_dict.get(f3x_col_line_dict['26'][i],0) + output_dict.get(f3x_col_line_dict['27'][i],0) +
-            output_dict.get(f3x_col_line_dict['28'][i],0) + output_dict.get(f3x_col_line_dict['29'][i],0) +
-            output_dict.get(f3x_col_line_dict['30'][i],0))
-        output_dict[f3x_col_line_dict['32'][i]] = (output_dict.get(f3x_col_line_dict['31'][i],0) -
-                output_dict.get(f3x_col_line_dict['21AII'][i],0) - output_dict.get(f3x_col_line_dict['30AII'][i],0))
+        output_dict[f3x_col_line_dict['11A'][i]] = (output_dict.get(f3x_col_line_dict['11AI'][i], 0) +
+                output_dict.get(f3x_col_line_dict['11AII'][i], 0))
+        output_dict[f3x_col_line_dict['11D'][i]] = (output_dict.get(f3x_col_line_dict['11A'][i], 0) +
+            output_dict.get(f3x_col_line_dict['11B'][i], 0) + output_dict.get(f3x_col_line_dict['11C'][i], 0))
+        output_dict[f3x_col_line_dict['18'][i]] = (output_dict.get(f3x_col_line_dict['18A'][i], 0) +
+            output_dict.get(f3x_col_line_dict['18B'][i], 0))
+        output_dict[f3x_col_line_dict['19'][i]] = (output_dict.get(f3x_col_line_dict['11D'][i], 0) +
+            output_dict.get(f3x_col_line_dict['12'][i], 0) + output_dict.get(f3x_col_line_dict['13'][i], 0) +
+            output_dict.get(f3x_col_line_dict['14'][i], 0) + output_dict.get(f3x_col_line_dict['15'][i], 0) +
+            output_dict.get(f3x_col_line_dict['16'][i], 0) + output_dict.get(f3x_col_line_dict['17'][i], 0) +
+            output_dict.get(f3x_col_line_dict['18'][i], 0))
+        output_dict[f3x_col_line_dict['20'][i]] = (output_dict.get(f3x_col_line_dict['19'][i], 0) -
+                output_dict.get(f3x_col_line_dict['18'][i], 0))
+        output_dict[f3x_col_line_dict['21'][i]] = (output_dict.get(f3x_col_line_dict['21AI'][i], 0) +
+                output_dict.get(f3x_col_line_dict['21AII'][i], 0) + output_dict.get(f3x_col_line_dict['21B'][i], 0))
+        output_dict[f3x_col_line_dict['28'][i]] = (output_dict.get(f3x_col_line_dict['28A'][i], 0) +
+                output_dict.get(f3x_col_line_dict['28B'][i], 0) + output_dict.get(f3x_col_line_dict['28C'][i], 0))
+        output_dict[f3x_col_line_dict['30'][i]] = (output_dict.get(f3x_col_line_dict['30AI'][i], 0) +
+                output_dict.get(f3x_col_line_dict['30AII'][i], 0) + output_dict.get(f3x_col_line_dict['30B'][i], 0))
+        output_dict[f3x_col_line_dict['31'][i]] = (output_dict.get(f3x_col_line_dict['21'][i], 0) +
+            output_dict.get(f3x_col_line_dict['22'][i], 0) + output_dict.get(f3x_col_line_dict['23'][i], 0) +
+            output_dict.get(f3x_col_line_dict['24'][i], 0) + output_dict.get(f3x_col_line_dict['25'][i], 0) +
+            output_dict.get(f3x_col_line_dict['26'][i], 0) + output_dict.get(f3x_col_line_dict['27'][i], 0) +
+            output_dict.get(f3x_col_line_dict['28'][i], 0) + output_dict.get(f3x_col_line_dict['29'][i], 0) +
+            output_dict.get(f3x_col_line_dict['30'][i], 0))
+        output_dict[f3x_col_line_dict['32'][i]] = (output_dict.get(f3x_col_line_dict['31'][i], 0) -
+                output_dict.get(f3x_col_line_dict['21AII'][i], 0) - output_dict.get(f3x_col_line_dict['30AII'][i], 0))
         return output_dict
     except Exception as e:
         raise Exception(
@@ -11328,7 +11328,7 @@ def put_F3X(report_id, cmte_id, request_dict):
             values_list.append(value)
         _sql = """UPDATE public.form_3x t SET {} last_update_date=%s 
                 WHERE t.cmte_id=%s AND t.report_id= get_original_amend_report(%s)""".format(param_string)
-        values_list.extend([datetime.datetime.now(),cmte_id,report_id])
+        values_list.extend([datetime.datetime.now(), cmte_id, report_id])
         with connection.cursor() as cursor:
             cursor.execute(_sql, values_list)
             # print(cursor.query)
@@ -11350,7 +11350,7 @@ def get_year_reports(cmte_id, report_id):
                 (SELECT date_part('year',cvg_start_date) FROM public.reports cr1 WHERE cr1.cmte_id=%s AND cr1.report_id=%s) 
                 AND cvg_end_date <= (SELECT cvg_end_date FROM public.reports cr2 WHERE cr2.cmte_id=%s AND cr2.report_id=%s) 
                 AND form_type = 'F3X' AND delete_ind IS DISTINCT FROM 'Y'
-                ORDER BY cvg_start_date ASC""",[cmte_id, cmte_id, report_id, cmte_id, report_id]
+                ORDER BY cvg_start_date ASC""", [cmte_id, cmte_id, report_id, cmte_id, report_id]
             )
             if cursor.rowcount > 0:
                 for row in cursor.fetchall():
@@ -12316,7 +12316,7 @@ def queue_transaction_message(request):
         bktname = request.data.get("bkt_name") #"fecfile-filing-frontend"
         key = request.data.get("key") #"transactions/F3X_ScheduleE_Import_Transactions_11_25_TEST_Data.csv"
 
-        print('cmteid ', cmteid,' bkt_name ',bktname,' key: ', key)
+        print('cmteid ', cmteid, ' bkt_name ', bktname, ' key: ', key)
         if bktname and key:
             resp = send_message_to_queue(bktname, key)
         else:

@@ -602,7 +602,7 @@ def get_transactions_election_and_office(start_date, end_date, data, form_type='
             ORDER BY transaction_dt ASC, e.create_date ASC;
         """
         _params = (data.get("cmte_id"), start_date, end_date, data.get("election_code"), cand_office, form_type)
-    elif cand_office == "S" or (cand_office == "H" and data.get("so_cand_state") in ['AK','DE','MT','ND','SD','VT','WY']):
+    elif cand_office == "S" or (cand_office == "H" and data.get("so_cand_state") in ['AK', 'DE', 'MT', 'ND', 'SD', 'VT', 'WY']):
         _sql = """
         SELECT
                 e.transaction_id,
@@ -632,7 +632,7 @@ def get_transactions_election_and_office(start_date, end_date, data, form_type='
             data.get("so_cand_state"),
             form_type
         )
-    elif cand_office == "H" and data.get("so_cand_state") not in ['AK','DE','MT','ND','SD','VT','WY']:
+    elif cand_office == "H" and data.get("so_cand_state") not in ['AK', 'DE', 'MT', 'ND', 'SD', 'VT', 'WY']:
         _sql = """
         SELECT
                 e.transaction_id,
@@ -1554,7 +1554,7 @@ def schedE(request):
 def mirror_to_F24(request):
     try:
         cmte_id = get_comittee_id(request.user.username)
-        for param in ['transactionId','reportId']:
+        for param in ['transactionId', 'reportId']:
             if not request.data.get(param): raise Exception('The parameter {} is mandatory.'.format(param))
 
         transaction_id = get_next_transaction_id("SE")

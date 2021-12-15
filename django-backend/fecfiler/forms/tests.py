@@ -126,5 +126,5 @@ class submit_comm_info_Test(TestCase):
 
     def invalid_submit_data_test():
         data != submit_data
-        self.assertEqual(resp.status_code,400)
+        self.assertEqual(resp.status_code, 400)
         

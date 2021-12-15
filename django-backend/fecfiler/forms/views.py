@@ -248,7 +248,7 @@ def create_f99_info(request):
 
         print("strcheck_Reason", strcheck_Reason)
         if strcheck_Reason != "":
-            return Response({"FEC Error 999":"The reason text is not in proper format - HTML tag violation...!"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"FEC Error 999": "The reason text is not in proper format - HTML tag violation...!"}, status=status.HTTP_400_BAD_REQUEST)
 
 
         if 'file' in request.data:
@@ -282,10 +282,10 @@ def create_f99_info(request):
                             serializer = CommitteeInfoSerializer(id_comm, data=incoming_data)
                         else:
                             logger.debug("FEC Error 002:This form is already submitted")
-                            return Response({"FEC Error 002":"This form is already submitted"}, status=status.HTTP_400_BAD_REQUEST)
+                            return Response({"FEC Error 002": "This form is already submitted"}, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         logger.debug("FEC Error 003:This form Id number does not exist")
-                        return Response({"FEC Error 003":"This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({"FEC Error 003": "This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     incoming_data['created_at'] = datetime.datetime.now()
                     incoming_data['updated_at'] = incoming_data['created_at']
@@ -296,10 +296,10 @@ def create_f99_info(request):
                 serializer = CommitteeInfoSerializer(data=incoming_data)
         except CommitteeInfo.DoesNotExist:
             logger.debug("FEC Error 004:There is no unsubmitted data. Please create f99 form object before submitting")
-            return Response({"FEC Error 004":"There is no unsubmitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"FEC Error 004": "There is no unsubmitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
         except ValueError:
             logger.debug("FEC Error 006:This form Id number is not an integer")
-            return Response({"FEC Error 006":"This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"FEC Error 006": "This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
         #except:
             #logger.
             #return Response({"error":"An unexpected error occurred" + str(sys.exc_info()[0]) + ". Please contact administrator"}, status=status.HTTP_400_BAD_REQUEST)
@@ -386,20 +386,20 @@ def update_f99_info(request, print_flag=False):
                                     return Response({})
                             else:
                                 logger.debug("FEC Error 002:This form is already submitted")
-                                return Response({"FEC Error 002":"This form is already submitted"}, status=status.HTTP_400_BAD_REQUEST)
+                                return Response({"FEC Error 002": "This form is already submitted"}, status=status.HTTP_400_BAD_REQUEST)
                     else:
                         logger.debug("FEC Error 003:This form Id number does not exist")
-                        return Response({"FEC Error 003":"This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({"FEC Error 003": "This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                     print('new id is created')
                     #create_f99_info(request)
             except CommitteeInfo.DoesNotExist:
                 logger.debug("FEC Error 004:There is no unsubmitted data. Please create f99 form object before submitting")
-                return Response({"FEC Error 004":"There is no unsubmitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"FEC Error 004": "There is no unsubmitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
 
             except ValueError:
                 logger.debug("FEC Error 006:This form Id number is not an integer")
-                return Response({"FEC Error 006":"This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"FEC Error 006": "This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
@@ -486,7 +486,7 @@ def submit_comm_info(request):
 
             print("strcheck_Reason", strcheck_Reason)
             if strcheck_Reason != "":
-                return Response({"FEC Error 999":"The reason text is not in proper format - HTML tag violation...!"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"FEC Error 999": "The reason text is not in proper format - HTML tag violation...!"}, status=status.HTTP_400_BAD_REQUEST)
 
 
             #import ipdb; ipdb.set_trace()
@@ -505,14 +505,14 @@ def submit_comm_info(request):
                         comm_info.is_submitted = True
                         serializer = CommitteeInfoSerializer(comm_info, data=incoming_data)
                     else:
-                        return Response({"FEC Error 002":"This form is already submitted"}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({"FEC Error 002": "This form is already submitted"}, status=status.HTTP_400_BAD_REQUEST)
                 else:
-                    return Response({"FEC Error 003":"This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"FEC Error 003": "This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 
             except CommitteeInfo.DoesNotExist:
-                return Response({"FEC Error 004":"There is no unsubmitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"FEC Error 004": "There is no unsubmitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
             except ValueError:
-                return Response({"FEC Error 006":"This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"FEC Error 006": "This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
 
             if serializer.is_valid():
                 serializer.save()
@@ -631,10 +631,10 @@ def get_f99_reasons(request):
     if request.method == 'GET':
         try:
             from django.conf import settings
-            reason_data = json.load(open(os.path.join(settings.BASE_DIR,'sys_data', 'f99_default_reasons.json'),'r'))
+            reason_data = json.load(open(os.path.join(settings.BASE_DIR, 'sys_data', 'f99_default_reasons.json'), 'r'))
             return Response(reason_data, status=status.HTTP_200_OK)
         except:
-            return Response({'error':'ERR_0001: Server Error: F99 reasons file not retrievable.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'ERR_0001: Server Error: F99 reasons file not retrievable.'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def get_committee_details(request):
@@ -718,7 +718,7 @@ def get_signee(request):
     # get details of a single comm
     if request.method == 'GET':
         serializer = CommitteeSerializer(comm)
-        filtered_d = {key: val for key, val in serializer.data.items() if key not in ['street1', 'street2', 'created_at','state','city','zipcode']}
+        filtered_d = {key: val for key, val in serializer.data.items() if key not in ['street1', 'street2', 'created_at', 'state', 'city', 'zipcode']}
         # FIXME: This is to be redone after there is a discussion on how to model data for the signatories of each committee.
         filtered_d['email'] = request.user.email
         return Response(filtered_d)
@@ -891,11 +891,11 @@ def get_rad_analyst_info(request):
             #import ipdb; ipdb.set_trace();
             if get_comittee_id(request.user.username):
                 ab = requests.get('https://api.open.fec.gov/v1/rad-analyst/?page=1&per_page=20&api_key=50nTHLLMcu3XSSzLnB0hax2Jg5LFniladU5Yf25j&committee_id=' + get_comittee_id(request.user.username) + '&sort_hide_null=false&sort_null_only=false')
-                return JsonResponse({"response":ab.json()['results']})
+                return JsonResponse({"response": ab.json()['results']})
             else:
-                return JsonResponse({"ERROR":"You must be logged in  for this operation."})
+                return JsonResponse({"ERROR": "You must be logged in  for this operation."})
         except:
-            return JsonResponse({"ERROR":"ERR_f99_03: Unexpected Error. Please contact administrator."})
+            return JsonResponse({"ERROR": "ERR_f99_03: Unexpected Error. Please contact administrator."})
 
 @api_view(['GET'])
 def get_form99list(request):
@@ -917,7 +917,7 @@ def get_form99list(request):
 
             forms_obj = None
             with connection.cursor() as cursor:
-                if reportid in ["None", "null", " ", "","0"]:
+                if reportid in ["None", "null", " ", "", "0"]:
                     query_string = """SELECT json_agg(t) FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, delete_ind, create_date, last_update_date,report_type_desc, viewtype, 
                                             deleteddate, memo_text,
@@ -956,7 +956,7 @@ def get_form99list(request):
                 # print("query_string = ", query_string)
                 # Pull reports from reports_view
                 #query_string = """select form_fields from dynamic_forms_view where form_type='""" + form_type + """' and transaction_type='""" + transaction_type + """'"""
-                if reportid in ["None", "null", " ", "","0"]:
+                if reportid in ["None", "null", " ", "", "0"]:
                     cursor.execute(query_string, [cmte_id, parentid, viewtype])
                 else:
                     cursor.execute(query_string, [cmte_id, reportid, parentid, viewtype])
@@ -976,7 +976,7 @@ def get_form99list(request):
 
             with connection.cursor() as cursor:
 
-                if reportid in ["None", "null", " ", "","0"]:
+                if reportid in ["None", "null", " ", "", "0"]:
                     query_count_string = """SELECT count('a') as totalreportsCount FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, 
                                             superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, 
@@ -1011,7 +1011,7 @@ def get_form99list(request):
                 #commented by Mahendra 10052019
                 #print("query_count_string =", query_count_string)
 
-                if reportid in ["None", "null", " ", "","0"]:
+                if reportid in ["None", "null", " ", "", "0"]:
                     cursor.execute(query_count_string, [cmte_id, viewtype])
                 else:
                     cursor.execute(query_count_string, [cmte_id, reportid, viewtype])
@@ -1023,7 +1023,7 @@ def get_form99list(request):
             if forms_cnt_obj is None:
                 forms_cnt_obj = []
 
-            json_result = {'reports': forms_obj, 'totalreportsCount':forms_cnt_obj}
+            json_result = {'reports': forms_obj, 'totalreportsCount': forms_cnt_obj}
         except Exception as e:
             # print (str(e))
             return Response("The reports view api - get_form99list is throwing an error" + str(e), status=status.HTTP_400_BAD_REQUEST)
@@ -1052,7 +1052,7 @@ def get_previous_amend_reports(request):
             report_list = superceded_report_id_list(parentid)
             forms_obj = None
             with connection.cursor() as cursor:
-                if reportid in ["None", "null", " ", "","0"]:
+                if reportid in ["None", "null", " ", "", "0"]:
                     query_string = """SELECT json_agg(t) FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, delete_ind, create_date, last_update_date,report_type_desc, viewtype, 
                                             deleteddate, memo_text,
@@ -1091,7 +1091,7 @@ def get_previous_amend_reports(request):
                 # print("query_string = ", query_string)
                 # Pull reports from reports_view
                 #query_string = """select form_fields from dynamic_forms_view where form_type='""" + form_type + """' and transaction_type='""" + transaction_type + """'"""
-                if reportid in ["None", "null", " ", "","0"]:
+                if reportid in ["None", "null", " ", "", "0"]:
                     cursor.execute(query_string, [cmte_id, viewtype])
                 else:
                     cursor.execute(query_string, [cmte_id, reportid, viewtype])
@@ -1111,7 +1111,7 @@ def get_previous_amend_reports(request):
 
             with connection.cursor() as cursor:
 
-                if reportid in ["None", "null", " ", "","0"]:
+                if reportid in ["None", "null", " ", "", "0"]:
                     query_count_string = """SELECT count('a') as totalreportsCount FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, 
                                             superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, 
@@ -1146,7 +1146,7 @@ def get_previous_amend_reports(request):
                 #commented by Mahendra 10052019
                 #print("query_count_string =", query_count_string)
 
-                if reportid in ["None", "null", " ", "","0"]:
+                if reportid in ["None", "null", " ", "", "0"]:
                     cursor.execute(query_count_string, [cmte_id, viewtype])
                 else:
                     cursor.execute(query_count_string, [cmte_id, reportid, viewtype])
@@ -1158,7 +1158,7 @@ def get_previous_amend_reports(request):
             if forms_cnt_obj is None:
                 forms_cnt_obj = []
 
-            json_result = {'reports': forms_obj, 'totalreportsCount':forms_cnt_obj}
+            json_result = {'reports': forms_obj, 'totalreportsCount': forms_cnt_obj}
         except Exception as e:
             # print (str(e))
             return Response("The reports view api - get_form99list is throwing an error" + str(e), status=status.HTTP_400_BAD_REQUEST)
@@ -1196,12 +1196,12 @@ def delete_forms(request):
                                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                         else:
                             #print(comm_info.id)
-                            return Response({"error":"ERRCODE: FEC03. Form with id %d is already deleted or has been submitted beforehand." % obj.get('id')}, status=status.HTTP_400_BAD_REQUEST)
+                            return Response({"error": "ERRCODE: FEC03. Form with id %d is already deleted or has been submitted beforehand." % obj.get('id')}, status=status.HTTP_400_BAD_REQUEST)
                 except:
-                    return Response({"error":"There is an error while deleting forms."}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"error": "There is an error while deleting forms."}, status=status.HTTP_400_BAD_REQUEST)
             return Response({"Forms deleted successfully"}, status=status.HTTP_200_OK)
         else:
-            return Response({"error":"ERRCODE: FEC02. POST method is expected."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "ERRCODE: FEC02. POST method is expected."}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
@@ -1240,7 +1240,7 @@ def email(boolean, data):
     data['updated_at'] = maya.parse(data['updated_at']).datetime(to_timezone='US/Eastern', naive=True).strftime("%m-%d-%Y %T")
     data['created_at'] = maya.parse(data['created_at']).datetime(to_timezone='US/Eastern', naive=True).strftime("%m-%d-%Y %T")
 
-    BODY_HTML = render_to_string('email_ack.html',{'data':data})
+    BODY_HTML = render_to_string('email_ack.html', {'data': data})
     #data.get('committeeid')
 
     """<html>
@@ -1255,7 +1255,7 @@ def email(boolean, data):
     CHARSET = "UTF-8"
 
     # Create a new SES resource and specify a region.
-    client = boto3.client('ses',region_name='us-east-1')
+    client = boto3.client('ses', region_name='us-east-1')
 
     # Try to send the email.
     try:
@@ -1400,10 +1400,10 @@ def save_print_f99(request):
     comm_info = CommitteeInfo.objects.filter(id=create_json_data['id']).last()
     if comm_info:
         header = {
-                "version":"8.3",
-                "softwareName":"ABC Inc",
-                "softwareVersion":"1.02 Beta",
-                "additionalInfomation":"Any other useful information"
+                "version": "8.3",
+                "softwareName": "ABC Inc",
+                "softwareVersion": "1.02 Beta",
+                "additionalInfomation": "Any other useful information"
         }
 
         serializer = CommitteeInfoSerializer(comm_info)
@@ -1439,7 +1439,7 @@ def save_print_f99(request):
         #data_obj['data'] = serializer.data
         data_obj['data'] = f99data
         k.set_contents_from_string(json.dumps(data_obj))
-        url = k.generate_url(expires_in=0, query_auth=False).replace(":443","")
+        url = k.generate_url(expires_in=0, query_auth=False).replace(":443", "")
 
         tmp_filename = '/tmp/' + comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
         #tmp_filename = comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
@@ -1462,13 +1462,13 @@ def save_print_f99(request):
 
         data_obj = {
                 'form_type': 'F99',
-                'filing_type':filing_type,
-                'vendor_software_name':vendor_software_name,
+                'filing_type': filing_type,
+                'vendor_software_name': vendor_software_name,
             }
 
         #print(comm_info.file)
         
-        if not (comm_info.file in [None, '', 'null', ' ',""]):
+        if not (comm_info.file in [None, '', 'null', ' ', ""]):
             filename = comm_info.file.name
             #print(filename)
             myurl = "https://{}.s3.amazonaws.com/media/".format(settings.AWS_STORAGE_BUCKET_NAME) + filename
@@ -1517,7 +1517,7 @@ def save_print_f99(request):
             #return Response(printresp.json(), status=status.HTTP_201_CREATED)
         
     else:
-        return Response({"FEC Error 003":"This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"FEC Error 003": "This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
     """    
     except CommitteeInfo.DoesNotExist:
         return Response({"FEC Error 004":"There is no unsubmitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
@@ -1556,10 +1556,10 @@ def update_print_f99(request):
         comm_info = CommitteeInfo.objects.filter(id=update_json_data['id']).last()
         if comm_info:
             header = {
-                    "version":"8.3",
-                    "softwareName":"ABC Inc",
-                    "softwareVersion":"1.02 Beta",
-                    "additionalInfomation":"Any other useful information"
+                    "version": "8.3",
+                    "softwareName": "ABC Inc",
+                    "softwareVersion": "1.02 Beta",
+                    "additionalInfomation": "Any other useful information"
             }
 
             serializer = CommitteeInfoSerializer(comm_info)
@@ -1595,7 +1595,7 @@ def update_print_f99(request):
             #data_obj['data'] = serializer.data
             data_obj['data'] = f99data
             k.set_contents_from_string(json.dumps(data_obj))
-            url = k.generate_url(expires_in=0, query_auth=False).replace(":443","")
+            url = k.generate_url(expires_in=0, query_auth=False).replace(":443", "")
 
             tmp_filename = '/tmp/' + comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
             #tmp_filename = comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
@@ -1621,14 +1621,14 @@ def update_print_f99(request):
             vendor_software_name = 'FECFILE'
 
             data_obj = {
-                    'form_type':'F99',
-                    'filing_type':filing_type,
-                    'vendor_software_name':vendor_software_name,
+                    'form_type': 'F99',
+                    'filing_type': filing_type,
+                    'vendor_software_name': vendor_software_name,
                 }
 
             #print(comm_info.file)
             
-            if not (comm_info.file in [None, '', 'null', ' ',""]):
+            if not (comm_info.file in [None, '', 'null', ' ', ""]):
                 filename = comm_info.file.name
                 #print(filename)
                 myurl = "https://{}.s3.amazonaws.com/media/".format(settings.AWS_STORAGE_BUCKET_NAME) + filename
@@ -1676,7 +1676,7 @@ def update_print_f99(request):
                 return JsonResponse(merged_dict, status=status.HTTP_201_CREATED)
                 #return Response(printresp.json(), status=status.HTTP_201_CREATED)
         else:
-            return Response({"FEC Error 003":"This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"FEC Error 003": "This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 
     except Exception as e:
         return Response('The update_print_f99 is throwing an error: ' + str(e))
@@ -1746,16 +1746,16 @@ def print_pdf(request):
     data_decode['FILER_FEC_ID_NUMBER'] = data_decode['FILER_FEC_ID_NUMBER'][1:]
 
     if data_decode['REASON_TYPE'] == 'MST':
-        reason_type_data = {"REASON_TYPE_MST":"/MST"}
+        reason_type_data = {"REASON_TYPE_MST": "/MST"}
 
     if data_decode['REASON_TYPE'] == 'MSM':
-        reason_type_data = {"REASON_TYPE_MSM":"/MSM"}
+        reason_type_data = {"REASON_TYPE_MSM": "/MSM"}
 
     if data_decode['REASON_TYPE'] == 'MSI':
-        reason_type_data = {"REASON_TYPE_MSI":"/MSI"}
+        reason_type_data = {"REASON_TYPE_MSI": "/MSI"}
 
     if data_decode['REASON_TYPE'] == 'MSW':
-        reason_type_data = {"REASON_TYPE_MSW":"/MSW"}
+        reason_type_data = {"REASON_TYPE_MSW": "/MSW"}
     # open the input file
 
     input_stream = open(infile, "rb")
@@ -1848,7 +1848,7 @@ def validate_HTMLtag(strWord):
     print("validate_HTMLtag...")
     print(" strWord = ", strWord)
     try:
-        valideTags = ['div','br','span','blockquote','ul','ol','li','b','u','i']
+        valideTags = ['div', 'br', 'span', 'blockquote', 'ul', 'ol', 'li', 'b', 'u', 'i']
         if ('</' in strWord and '>' in strWord) and ('<div' not in strWord or '<span' not in strWord):
             print(" word check strWord = ", strWord)
             intstartpos = strWord.find('</')
@@ -1885,7 +1885,7 @@ def get_f99_report_info(request):
                     response['additionalemail2'] = response['additional_email_2']
                     return JsonResponse(response, status=status.HTTP_200_OK)
     except CommitteeInfo.DoesNotExist:
-        return Response({"FEC Error 004":"There is no submitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"FEC Error 004": "There is no submitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def submit_formf99(request):
@@ -1899,10 +1899,10 @@ def submit_formf99(request):
         
         if comm_info:
             header = {
-                    "version":"8.3",
-                    "softwareName":"ABC Inc",
-                    "softwareVersion":"1.02 Beta",
-                    "additionalInfomation":"Any other useful information"
+                    "version": "8.3",
+                    "softwareName": "ABC Inc",
+                    "softwareVersion": "1.02 Beta",
+                    "additionalInfomation": "Any other useful information"
             }
 
             serializer = CommitteeInfoSerializer(comm_info)
@@ -1936,7 +1936,7 @@ def submit_formf99(request):
 
             data_obj['data'] = f99data
             k.set_contents_from_string(json.dumps(data_obj))
-            url = k.generate_url(expires_in=0, query_auth=False).replace(":443","")
+            url = k.generate_url(expires_in=0, query_auth=False).replace(":443", "")
 
             tmp_filename = '/tmp/' + comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
             #tmp_filename = comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
@@ -1949,12 +1949,12 @@ def submit_formf99(request):
             vendor_software_name = 'FECFILE'
             form_type = comm_info.form_type
             data_obj = {
-                    'form_type':form_type,
-                    'filing_type':filing_type,
-                    'vendor_software_name':vendor_software_name,
+                    'form_type': form_type,
+                    'filing_type': filing_type,
+                    'vendor_software_name': vendor_software_name,
                 }
 
-            if not (comm_info.file in [None, '', 'null', ' ',""]):
+            if not (comm_info.file in [None, '', 'null', ' ', ""]):
                 filename = comm_info.file.name
                 myurl = "https://{}.s3.amazonaws.com/media/".format(settings.AWS_STORAGE_BUCKET_NAME) + filename
                 myfile = urllib.request.urlopen(myurl)
@@ -1977,11 +1977,11 @@ def submit_formf99(request):
                 return JsonResponse(resp.json(), status=status.HTTP_201_CREATED)
 
         else:
-            return Response({"FEC Error 003":"This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"FEC Error 003": "This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
 
     except comm_info.DoesNotExist:
-        return Response({"FEC Error 004":"There is no unsubmitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"FEC Error 004": "There is no unsubmitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
     except ValueError:
-        return Response({"FEC Error 006":"This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"FEC Error 006": "This form Id number is not an integer"}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response("The submit_f99 API is throwing an error: " + str(e), status=status.HTTP_400_BAD_REQUEST)

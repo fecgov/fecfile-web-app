@@ -30,7 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = os.environ.get('DEBUG', True)
 
 TEMPLATE_DEBUG = DEBUG
-CSRF_TRUSTED_ORIGINS = ['localhost',os.environ.get('FRONTEND_URL', 'api')]
+CSRF_TRUSTED_ORIGINS = ['localhost', os.environ.get('FRONTEND_URL', 'api')]
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 DATA_RECEIVE_API_URL = os.environ.get('DATA_RECEIVER_URL', '0.0.0.0:8090')
@@ -118,7 +118,7 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates','static/templates'],
+        'DIRS': ['templates', 'static/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -253,8 +253,8 @@ REST_FRAMEWORK = {
 JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3600),
-    'JWT_RESPONSE_PAYLOAD_HANDLER':'fecfiler.authentication.views.jwt_response_payload_handler',
-    'JWT_PAYLOAD_HANDLER':'fecfiler.authentication.token.jwt_payload_handler',
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'fecfiler.authentication.views.jwt_response_payload_handler',
+    'JWT_PAYLOAD_HANDLER': 'fecfiler.authentication.token.jwt_payload_handler',
 }
 
 
@@ -308,20 +308,20 @@ LOGGING = {
             'formatter': 'standard'
         },
         'default': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/access.log',
             'maxBytes': 1024*1024*5, # 5 MB
             'backupCount': 5,
-            'formatter':'standard',
+            'formatter': 'standard',
         },
         'request_handler': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/access.log',
             'maxBytes': 1024*1024*5, # 5 MB
             'backupCount': 5,
-            'formatter':'standard',
+            'formatter': 'standard',
         },
     },
     'loggers': {

@@ -480,7 +480,7 @@ VALUES ('F3X', 'SB', '{0}', '{1}');\n""".format(tran, query)
                 file.write(OPEX_REC_STRING)
                 file.close()
 
-                List_SB_similar_OPEX__CC = ['OPEXP_CC_PAY','OPEXP_PMT_TO_PROL','OTH_DISB_CC_PAY','OTH_DISB_PMT_TO_PROL','OTH_DISB_RECNT',
+                List_SB_similar_OPEX__CC = ['OPEXP_CC_PAY', 'OPEXP_PMT_TO_PROL', 'OTH_DISB_CC_PAY', 'OTH_DISB_PMT_TO_PROL', 'OTH_DISB_RECNT',
                 'OTH_DISB_NP_RECNT_ACC', 'OTH_DISB_NC_ACC_CC_PAY', 'OTH_DISB_NC_ACC_PMT_TO_PROL', 'OPEXP_HQ_ACC_TRIB_REF',
                 'OPEXP_CONV_ACC_TRIB_REF', 'OTH_DISB_NP_RECNT_TRIB_REF']
 
@@ -522,7 +522,7 @@ VALUES ('F3X', 'SB', '{0}', '{1}');\n""".format(tran, query)
                 file.write(OPEX__CC_STRING)
                 file.close()
 
-                List_SB_similar_PAY_MEMO = ['OPEXP_PMT_TO_PROL_MEMO','REF_CONT_IND', 'REF_CONT_IND_VOID','OTH_DISB_PMT_TO_PROL_MEMO',
+                List_SB_similar_PAY_MEMO = ['OPEXP_PMT_TO_PROL_MEMO', 'REF_CONT_IND', 'REF_CONT_IND_VOID', 'OTH_DISB_PMT_TO_PROL_MEMO',
                 'OTH_DISB_NC_ACC_PMT_TO_PROL_MEMO', 'OPEXP_HQ_ACC_IND_REF', 'OPEXP_CONV_ACC_IND_REF', 'OTH_DISB_NP_RECNT_IND_REF']
 
                 PAY_MEMO_STRING = ""
@@ -1849,7 +1849,7 @@ VALUES ('F3X', 'SA', '{0}', '{1}');\n""".format(tran, query)
                 List_SH_similar_SH2 = ['ALLOC_H2_RATIO']
                 List_SH_similar_SH3 = ['TRAN_FROM_NON_FED_ACC']
                 List_SH_similar_SH5 = ['TRAN_FROM_LEVIN_ACC']
-                parent = {'ALLOC_EXP_CC_PAY': 'ALLOC_EXP_CC_PAY_MEMO', 'ALLOC_EXP_STAF_REIM':'ALLOC_EXP_STAF_REIM_MEMO',
+                parent = {'ALLOC_EXP_CC_PAY': 'ALLOC_EXP_CC_PAY_MEMO', 'ALLOC_EXP_STAF_REIM': 'ALLOC_EXP_STAF_REIM_MEMO',
                 'ALLOC_EXP_PMT_TO_PROL': 'ALLOC_EXP_PMT_TO_PROL_MEMO', 'ALLOC_FEA_CC_PAY': 'ALLOC_FEA_CC_PAY_MEMO',
                 'ALLOC_FEA_STAF_REIM': 'ALLOC_FEA_STAF_REIM_MEMO'
                 }
@@ -2883,7 +2883,7 @@ def print_query(request):
         cursor.execute(_sql)
         result = cursor.fetchall()
         if result:
-            for i,item in enumerate(result):
+            for i, item in enumerate(result):
                 output += item[0] + " \n\n\n "
     file = open("/tmp/print_query.txt", 'w')
     file.write(output)

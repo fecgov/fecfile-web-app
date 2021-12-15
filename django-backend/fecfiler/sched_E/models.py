@@ -9,7 +9,7 @@ class SchedE(models.Model):
     report_id = models.BigIntegerField()
     transaction_type_identifier = models.CharField(
         max_length=12, blank=True, null=True)
-    transaction_id = models.CharField(primary_key=True,max_length=20)
+    transaction_id = models.CharField(primary_key=True, max_length=20)
     back_ref_transaction_id = models.CharField(max_length=20)
     back_ref_sched_name = models.CharField(max_length=8)
     payee_entity_id = models.CharField(max_length=20)

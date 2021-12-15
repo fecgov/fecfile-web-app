@@ -646,7 +646,7 @@ def get_transactions_election_and_office(start_date, end_date, data, form_type='
             ORDER BY transaction_dt ASC, e.create_date ASC;
         """
         _params = (data.get("cmte_id"), start_date, end_date, data.get("election_code"), form_type)
-    elif cand_office == "S" or (cand_office == "H" and data.get("so_cand_state") in ['AK','DE','MT','ND','SD','VT','WY']):
+    elif cand_office == "S" or (cand_office == "H" and data.get("so_cand_state") in ['AK', 'DE', 'MT', 'ND', 'SD', 'VT', 'WY']):
         _sql = """
         SELECT  
                 e.transaction_id, 
@@ -674,7 +674,7 @@ def get_transactions_election_and_office(start_date, end_date, data, form_type='
             data.get("so_cand_state"),
             form_type
         )
-    elif cand_office == "H" and data.get("so_cand_state") not in ['AK','DE','MT','ND','SD','VT','WY']:
+    elif cand_office == "H" and data.get("so_cand_state") not in ['AK', 'DE', 'MT', 'ND', 'SD', 'VT', 'WY']:
         _sql = """
         SELECT  
                 e.transaction_id, 
@@ -1558,7 +1558,7 @@ def update_linenumber_aggamt_transactions_SA(
 
     """
     try:
-        if transaction_type_identifier not in ('IND_BNDLR','REG_ORG_BNDLR'):
+        if transaction_type_identifier not in ('IND_BNDLR', 'REG_ORG_BNDLR'):
             child_flag_SB = False
             child_flag_SA = False
             itemization_value = 200

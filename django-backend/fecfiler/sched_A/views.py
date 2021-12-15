@@ -2793,7 +2793,7 @@ def trash_restore_transactions(request):
                         # Handling aggregate update for sched_A transactions
                         if transaction_id[:2] == "SA":
                             datum = get_list_schedA(report_id, cmte_id, transaction_id, True)[0]
-                            if datum.get("transaction_type_identifier") not in ['IND_BNDLR','REG_ORG_BNDLR']:
+                            if datum.get("transaction_type_identifier") not in ['IND_BNDLR', 'REG_ORG_BNDLR']:
                                 update_linenumber_aggamt_transactions_SA(
                                     datetime.datetime.strptime(
                                         datum.get("contribution_date"), "%Y-%m-%d"
@@ -2909,7 +2909,7 @@ def trash_restore_transactions(request):
                                     )
                                 )
                             # datum = get_list_schedB(report_id, cmte_id, transaction_id, True)[0]
-                            if datum["transaction_type_identifier"] not in ['IND_REFUND','REG_ORG_REFUND']:
+                            if datum["transaction_type_identifier"] not in ['IND_REFUND', 'REG_ORG_REFUND']:
                                 update_schedB_aggamt_transactions(
                                     datetime.datetime.strptime(
                                         datum.get("expenditure_date"), "%Y-%m-%d"
@@ -3025,7 +3025,7 @@ def trash_restore_transactions(request):
             # update report last_update_date
             renew_report_update_date(report_id)
 
-            function_to_call_wrapper_update_F3X(cmte_id,report_id)
+            function_to_call_wrapper_update_F3X(cmte_id, report_id)
 
         return Response(
             {

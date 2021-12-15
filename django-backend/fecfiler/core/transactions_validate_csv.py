@@ -77,7 +77,7 @@ def export_excel_to_db(filename, path):
     try:
         filelocation = path
         filewithpath = filelocation + filename
-        print("File name",filewithpath)
+        print("File name", filewithpath)
         str = filename.split('_')
         formname = str[0]
         schedname = str[1]
@@ -95,13 +95,13 @@ def export_excel_to_db(filename, path):
                                     index_col=0,
                                     skiprows = range(0, 2),
                                     #dtype=String,
-                                    ,usecols="A,B,C,D,E,F,G")
+                                    usecols="A,B,C,D,E,F,G")
                 df.dropna(how="all", inplace=True)
                 df.rename(columns = {'Auto populate ': 'AUTO-GENERATE',
                                         'Auto populate': 'AUTO-GENERATE',
-                                        'FIELD DESCRIPTION':'FIELD\nDESCRIPTION',
-                                        'SAMPLE DATA':'SAMPLE\nDATA',
-                                        'VALUE REFERENCE':'VALUE\nREFERENCE'}, inplace=True)
+                                        'FIELD DESCRIPTION': 'FIELD\nDESCRIPTION',
+                                        'SAMPLE DATA': 'SAMPLE\nDATA',
+                                        'VALUE REFERENCE': 'VALUE\nREFERENCE'}, inplace=True)
                 df.insert(0, "formname", formname)
                 df.insert(1, "schedname", schedname)
                 df.insert(2, "transaction_type", sheet_name)
@@ -117,7 +117,7 @@ def rename_files_folder(filelocation):
             if ' - ' in entry.name:
                 res = re.split(' |-|_|!', entry.name)
                 filename = 'F3L_Schedule' + res[4] + '_FormatSpecs_Import_Transactions_MAPPED.xlsx'
-                os.rename(filelocation+entry.name,filelocation+filename)
+                os.rename(filelocation+entry.name, filelocation+filename)
 
 def move_data_from_excel_to_db(form):
     try:
@@ -129,7 +129,7 @@ def move_data_from_excel_to_db(form):
         rename_files_folder(filelocation)
         with os.scandir(filelocation) as entries:
             for entry in entries:
-                export_excel_to_db(entry.name,filelocation)
+                export_excel_to_db(entry.name, filelocation)
                 counter += 1
     except Exception as ex:
         print(ex)
@@ -161,12 +161,12 @@ def schema_validation(dataframe, schema, bktname, key, errorfilename):
         #print('data_dirty:',data_dirty)
         return data
     except ClientError as e:
-        print('ClientError Exception in schema_validation:',e)
+        print('ClientError Exception in schema_validation:', e)
         logging.debug("error in schema_validation method")
         logging.debug(e)
         raise
     except Exception as e:
-        print('Exception Regular in schema_validation:',e)
+        print('Exception Regular in schema_validation:', e)
         logging.debug("error in schema_validation method")
         logging.debug(e)
         raise
@@ -184,7 +184,7 @@ def build_schemas(formname, sched, trans_type):
                                       port=PG_PORT,
                                       database=PG_DATABASE)
         cursor = connection.cursor()
-        cursor.execute("SELECT rfsfs.formname, rfsfs.schedname, rfsfs.transaction_type, rfsfs.field_description, rfsfs.type, rfsfs.required FROM public.ref_forms_scheds_format_specs rfsfs WHERE rfsfs.formname  = %s AND rfsfs.schedname = %s AND rfsfs.transaction_type = %s and rfsfs.type IS NOT NULL",(formname, sched, trans_type))
+        cursor.execute("SELECT rfsfs.formname, rfsfs.schedname, rfsfs.transaction_type, rfsfs.field_description, rfsfs.type, rfsfs.required FROM public.ref_forms_scheds_format_specs rfsfs WHERE rfsfs.formname  = %s AND rfsfs.schedname = %s AND rfsfs.transaction_type = %s and rfsfs.type IS NOT NULL", (formname, sched, trans_type))
         format_specs = cursor.fetchall()
         columns = []
         headers = []
@@ -199,7 +199,7 @@ def build_schemas(formname, sched, trans_type):
                 if required is None:
                     pattern = '^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$'
                     mpv = MatchesPatternValidation(pattern)
-                    column = Column(field, [mpv],allow_empty=True)
+                    column = Column(field, [mpv], allow_empty=True)
                 else:
                     #print('A/N is mandatory with len: ', len,' field: ',field)
                     if field in ['REPORT TYPE', 'REPORT YEAR', 'SCHEDULE NAME', 'TRANSACTION IDENTIFIER', 'TRANSACTION NUMBER', 'ENTITY TYPE']:
@@ -229,14 +229,14 @@ def build_schemas(formname, sched, trans_type):
                 columns.append(column)
                 headers.append(field)
         schema = Schema(columns)
-        head_schema = [headers,schema]
+        head_schema = [headers, schema]
         return head_schema
     except ValueError as vx:
         print("valuerror; ")
-        print('Exception in build_schemas:',vx)
+        print('Exception in build_schemas:', vx)
     except Exception as ex:
         print("In EXCEPTION BLOCK ")
-        print('Exception in build_schemas:',ex)
+        print('Exception in build_schemas:', ex)
     finally:
         connection.close()
 
@@ -289,9 +289,9 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
         schedule = str[1]
         formname = (str[0].split('/'))[1]
         if 'H' in schedule or 'h' in schedule:
-            sched = schedule.replace('Schedule','')
+            sched = schedule.replace('Schedule', '')
         else:
-            sched = schedule.replace('Schedule','S')
+            sched = schedule.replace('Schedule', 'S')
         # print('sched:',sched)
         # print('schedule ',schedule)
         # print('formname ',formname)
@@ -343,12 +343,12 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
         else:
             return 'Validate_Fail'
     except ClientError as e:
-        print('Exception in load_dataframe_from_s3:',e)
+        print('Exception in load_dataframe_from_s3:', e)
         logging.debug("error in load_dataframe_from_s3 method")
         logging.debug(e)
         raise
     except Exception as e:
-        print('Exception in load_dataframe_from_s3:',e)
+        print('Exception in load_dataframe_from_s3:', e)
         logging.debug("error in load_dataframe_from_s3 method")
         logging.debug(e)
         raise
@@ -440,7 +440,7 @@ def check_data_processed(md5, fecfilename):
         print(error)
         logging.debug(error)
     except Exception as ex:
-        print('error in check_data_processed:',ex)
+        print('error in check_data_processed:', ex)
         logging.debug("error in check_data_processed method")
         logging.debug(error)
     finally:
@@ -476,7 +476,7 @@ def load_transactions_from_temp_perm_tables(fecfilename):
         print(error)
         logging.debug(error)
     except Exception as ex:
-        print('error in load_transactions_from_temp_perm_tables:',ex)
+        print('error in load_transactions_from_temp_perm_tables:', ex)
         logging.debug("error in load_transactions_from_temp_perm_tables method")
         logging.debug(error)
     finally:
@@ -522,7 +522,7 @@ def send_message_to_queue(bktname, key):
                 while True:
                     current_time = time.time()
                     elapsed_time = current_time - start_time
-                    if 'Success' == check_data_processed('',key.split('/')[1]):
+                    if 'Success' == check_data_processed('', key.split('/')[1]):
                         temp_to_perm = load_transactions_from_temp_perm_tables(key.split('/')[1])
                         res = 'Fail'
                         if 0 == temp_to_perm:

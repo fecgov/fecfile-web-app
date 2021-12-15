@@ -455,7 +455,7 @@ def get_back_ref_transaction_ids(DB_table, identifier, report_list, cmte_id, tra
         output = []
         query = """SELECT DISTINCT(back_ref_transaction_id) FROM {} 
             WHERE transaction_type_identifier = %s AND report_id in ('{}') AND cmte_id = %s
-            AND transaction_id in ('{}') AND delete_ind is distinct from 'Y'""".format(DB_table,"', '".join(report_list),
+            AND transaction_id in ('{}') AND delete_ind is distinct from 'Y'""".format(DB_table, "', '".join(report_list),
                                                                                        "', '".join(transaction_id_list))
         query_values_list = [identifier, cmte_id]
         results = json_query(query, query_values_list, DB_table, True)
@@ -473,7 +473,7 @@ def get_transaction_type_identifier(DB_table, report_list, cmte_id, transaction_
             # if DB_table in ["public.sched_d", "public.sched_c", "public.sched_h1", "public.sched_h2", "public.sched_h3", "public.sched_h5", "public.sched_l"]:
             query = """SELECT DISTINCT(transaction_type_identifier) FROM {} WHERE report_id in ('{}') 
                 AND cmte_id = %s AND transaction_id in ('{}') AND delete_ind is distinct from 'Y'""".format(
-                DB_table, "', '".join(report_list),"', '".join(transaction_id_list))
+                DB_table, "', '".join(report_list), "', '".join(transaction_id_list))
             # else:
             #     query = """SELECT DISTINCT(transaction_type_identifier) FROM {} WHERE report_id = %s AND cmte_id = %s AND transaction_id in ('{}') AND back_ref_transaction_id is NULL AND delete_ind is distinct from 'Y'""".format(
             #         DB_table, "', '".join(transaction_id_list))
