@@ -93,11 +93,11 @@ def export_excel_to_db(filename, path):
                 df = pd.read_excel(filewithpath,
                                     sheet_name=sheet_name,
                                     index_col=0,
-                                    skiprows = range(0, 2),
+                                    skiprows=range(0, 2),
                                     #dtype=String,
                                     usecols="A,B,C,D,E,F,G")
                 df.dropna(how="all", inplace=True)
-                df.rename(columns = {'Auto populate ': 'AUTO-GENERATE',
+                df.rename(columns={'Auto populate ': 'AUTO-GENERATE',
                                         'Auto populate': 'AUTO-GENERATE',
                                         'FIELD DESCRIPTION': 'FIELD\nDESCRIPTION',
                                         'SAMPLE DATA': 'SAMPLE\nDATA',
@@ -151,9 +151,9 @@ def schema_validation(dataframe, schema, bktname, key, errorfilename):
         errors_index_rows = [e.row for e in errors]
         if len(errors_index_rows) > 0:
             if path.exists(errorfilename):
-                pd.DataFrame(errdf, columns=['row_no', 'field_name', 'msg']).to_csv(errorfilename, mode='a', header=False, index = False)
+                pd.DataFrame(errdf, columns=['row_no', 'field_name', 'msg']).to_csv(errorfilename, mode='a', header=False, index=False)
             else:
-                pd.DataFrame(errdf, columns=['row_no', 'field_name', 'msg']).to_csv(errorfilename, mode='a', header=True, index = False)
+                pd.DataFrame(errdf, columns=['row_no', 'field_name', 'msg']).to_csv(errorfilename, mode='a', header=True, index=False)
 
         data_clean = dataframe.drop(index=errors_index_rows)
         data_dirty = pd.concat([data_clean, dataframe]).drop_duplicates(keep=False)
@@ -179,7 +179,7 @@ def build_schemas(formname, sched, trans_type):
         #                               port='5432',
         #                               database='postgres'  )
         connection = psycopg2.connect(user=PG_USER,
-                                      password = PG_PASSWORD,
+                                      password=PG_PASSWORD,
                                       host=PG_HOST,
                                       port=PG_PORT,
                                       database=PG_DATABASE)
@@ -209,7 +209,7 @@ def build_schemas(formname, sched, trans_type):
                         pattern = '^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$'
                     #pattern = '^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$'
                     mpv = MatchesPatternValidation(pattern)
-                    column = Column(field, [mpv], allow_empty= False)
+                    column = Column(field, [mpv], allow_empty=False)
                 columns.append(column)
                 headers.append(field)
                 #print(field)

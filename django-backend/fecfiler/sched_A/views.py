@@ -544,8 +544,8 @@ def put_sql_schedA(
     levin_account_id,
     transaction_type_identifier,
     aggregation_ind,
-    semi_annual_refund_bundled_amount = None,
-    election_year = None,
+    semi_annual_refund_bundled_amount=None,
+    election_year=None,
 ):
     """
     update a schedule_a item

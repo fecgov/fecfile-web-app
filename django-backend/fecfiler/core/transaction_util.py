@@ -895,7 +895,7 @@ def get_sched_c2_child(cmte_id, transaction_id):
 
 
 def get_sched_b_transactions(
-    report_id, cmte_id, include_deleted_trans_flag = False, transaction_id=None, back_ref_transaction_id=None
+    report_id, cmte_id, include_deleted_trans_flag=False, transaction_id=None, back_ref_transaction_id=None
 ):
 
     """

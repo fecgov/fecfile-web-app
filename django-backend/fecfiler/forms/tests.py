@@ -11,8 +11,8 @@ class CommitteeInfoTest(TestCase):
 
     def setUp(self):
         CommitteeInfo.objects.create(
-            committeeid='C01234567', committeename = 'Test Committee 1', street1='Street1 ',
-            street2 = 'Street 2', city='Washington DC', state='DC', zipcode='912853', text="-",
+            committeeid='C01234567', committeename='Test Committee 1', street1='Street1 ',
+            street2='Street 2', city='Washington DC', state='DC', zipcode='912853', text="-",
             treasurerfirstname='John', treasurerlastname='Smith', treasurerprefix='Mr')
             
         save_data = {
@@ -46,8 +46,8 @@ class CommitteeTest(TestCase):
 
     def setUp(self):
         Committee.objects.create(
-            committeeid='C01234567', committeename = 'Test Committee 1', street1='Street1 ',
-            street2 = 'Street 2', city='Washington DC', state='DC', zipcode='912853',
+            committeeid='C01234567', committeename='Test Committee 1', street1='Street1 ',
+            street2='Street 2', city='Washington DC', state='DC', zipcode='912853',
             treasurerfirstname='John', treasurerlastname='Smith', treasurerprefix='Mr')
             
         save_data = {
@@ -94,8 +94,8 @@ class Setup_submit_comm_info(TestCase):
 
     def setup(self):
         CommitteeInfo.objects.create(
-            committeeid='C01234567', committeename = 'Test Committee 1', street1='Street1 ',
-            street2 = 'Street 2', city='Washington DC', state='DC', zipcode='912853', text="-",
+            committeeid='C01234567', committeename='Test Committee 1', street1='Street1 ',
+            street2='Street 2', city='Washington DC', state='DC', zipcode='912853', text="-",
             treasurerfirstname='John', treasurerlastname='Smith', treasurerprefix='Mr')
         
         submit_data = {

@@ -306,7 +306,7 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
         col_to_add = get_columns_to_add(filename)
         chkf = False
         for data in pd.read_csv(StringIO(csv_string), dtype=object, index_col=False, iterator=True, chunksize=size, usecols=col_to_read):
-            data = data.reindex(columns = col_names_reindex)
+            data = data.reindex(columns=col_names_reindex)
             #data = data[col_to_read]
             if col_to_add:
                 for x in col_to_add:

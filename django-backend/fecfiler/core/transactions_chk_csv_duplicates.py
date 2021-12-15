@@ -79,7 +79,7 @@ def load_file_hash_to_db(cmteid, filename, hash, fecfilename):
  
         # conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
         conn = psycopg2.connect(user=PG_USER,
-                                      password = PG_PASSWORD,
+                                      password=PG_PASSWORD,
                                       host=PG_HOST,
                                       port=PG_PORT,
                                       database=PG_DATABASE)

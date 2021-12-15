@@ -1729,7 +1729,7 @@ def delete_reports(data):
     except:
         raise
 
-def update_transactions_change_cvg_dates(cmte_id, report_id, present_cvg_start_dt, prev_cvg_start_dt, end_date_include = False):
+def update_transactions_change_cvg_dates(cmte_id, report_id, present_cvg_start_dt, prev_cvg_start_dt, end_date_include=False):
     try:
         logger.debug('update_transactions_change_cvg_dates function STARTED...')
         if isinstance(present_cvg_start_dt, str):
@@ -1799,7 +1799,7 @@ def update_transactions_change_cvg_dates(cmte_id, report_id, present_cvg_start_d
             else:
                 logger.debug("no transactions found in Modified report coverage dates.")
         logger.debug('update_transactions_change_cvg_dates function FINISHED...')
-        return Response('success',  status= status.HTTP_200_OK)
+        return Response('success',  status=status.HTTP_200_OK)
     except Exception as e:
         raise Exception('The update_transactions_change_cvg_dates function is throwing an error: ' + str(e))
 
