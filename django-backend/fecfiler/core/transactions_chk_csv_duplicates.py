@@ -27,7 +27,6 @@ PG_PASSWORD = os.getenv('FECFILE_DB_PASSWORD', 'postgres')
 SQS_QUEUE_NAME = os.getenv('SQS_QUEUE_NAME')
 
 
-
 '''
 
 

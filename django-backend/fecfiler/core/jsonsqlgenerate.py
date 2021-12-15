@@ -485,7 +485,6 @@ VALUES ('F3X', 'SB', '{0}', '{1}');\n""".format(tran, query)
                 'OTH_DISB_NP_RECNT_ACC', 'OTH_DISB_NC_ACC_CC_PAY', 'OTH_DISB_NC_ACC_PMT_TO_PROL', 'OPEXP_HQ_ACC_TRIB_REF',
                 'OPEXP_CONV_ACC_TRIB_REF', 'OTH_DISB_NP_RECNT_TRIB_REF']
 
-
                 OPEX__CC_STRING = ""
                 if tran in List_SB_similar_OPEX__CC:
                     query = """
@@ -1138,7 +1137,6 @@ VALUES ('F3X', 'SB', '{0}', '{1}');\n""".format(tran, query)
                 file.write(IE_CC_STRING)
                 file.close()
 
-
                 List_SE_similar_IE_STAF_REIM = ['IE_STAF_REIM', 'IE_PMT_TO_PROL_MEMO']
                 IE_STAF_REIM_STRING = ""
                 if tran in List_SE_similar_IE_STAF_REIM:
@@ -1269,7 +1267,6 @@ VALUES ('F3X', 'SB', '{0}', '{1}');\n""".format(tran, query)
                 file = open("/tmp/CORD_EXP_sql.sql", 'w')
                 file.write(CORD_EXP_STRING)
                 file.close()
-
 
                 List_SF_similar_CORD_EXP_CC = ['COEXP_CC_PAY', 'COEXP_PMT_PROL']
 
@@ -1504,7 +1501,6 @@ VALUES ('F3X', 'SB', '{0}', '{1}');\n""".format(tran, query)
                 file = open("/tmp/SD_DEBT_STRING_sql.sql", 'w')
                 file.write(DEBT_STRING)
                 file.close()
-
 
                 List_SH6_similar_ALLOC_FEA_DEBT_VEN = ['ALLOC_FEA_DISB_DEBT']
                 ALLOC_FEA_DEBT_VEN_STRING = ""
@@ -1843,7 +1839,6 @@ VALUES ('F3X', 'SA', '{0}', '{1}');\n""".format(tran, query)
                 file.write(SC1_STRING)
                 file.write(SC2_STRING)
                 file.close()
-
 
                 List_SH_similar_SH1 = ['ALLOC_H1']
                 List_SH_similar_SH2 = ['ALLOC_H2_RATIO']

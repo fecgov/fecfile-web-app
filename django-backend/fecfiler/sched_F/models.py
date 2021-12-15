@@ -46,7 +46,6 @@ class SchedF(models.Model):
     create_date = models.DateTimeField(blank=True, null=True)
     last_update_date = models.DateTimeField(blank=True, null=True)
 
-
     class Meta:
         managed = False
         db_table = 'sched_F'

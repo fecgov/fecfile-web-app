@@ -214,7 +214,6 @@ AWS_REGION = 'us-east-1'
 AWS_SES_AUTO_THROTTLE = 0.5  # (default; safety factor applied to rate limit, turn off automatic throttling, set this to None)
 
 
-
 # add the credentials from IAM and bucket name
 AWS_STORAGE_BUCKET_NAME = 'fecfile-filing'  # or None if using service role
 AWS_STORAGE_UPLOAD_BUCKET_NAME = 'fecfile-filing-uploads'  # or None if using service role
@@ -258,7 +257,6 @@ JWT_AUTH = {
 }
 
 
-
 ADMIN_SHORTCUTS = [
     {
         'shortcuts': [
@@ -273,7 +271,6 @@ ADMIN_SHORTCUTS = [
         ]
     },
 ]
-
 
 
 """
@@ -343,8 +340,6 @@ for logger in LOGGING['loggers']:
     LOGGING['loggers'][logger]['handlers'] = ['console']
 
 
-
-
 # AWS SES Configuration Settings
 # EMAIL_BACKEND = 'django_ses_boto3.ses_email_backend.SESEmailBackend'
 
@@ -376,7 +371,6 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 AWS_S3_CUSTOM_UPLOAD_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_UPLOAD_BUCKET_NAME
-
 
 
 # the sub-directories of media and static files

@@ -1356,7 +1356,6 @@ def list_all_transactions_event_type_h4(start_dt, end_dt, activity_event_type, c
 
 
 def update_transaction_ytd_amount_h4(cmte_id, transaction_id, aggregate_amount):
-
     """
     update h4 ytd amount
     """
@@ -1517,7 +1516,6 @@ def list_all_transactions_event_type_h6(start_dt, end_dt, activity_event_type, c
 
 
 def update_transaction_ytd_amount_h6(cmte_id, transaction_id, aggregate_amount):
-
     """
     update h4 ytd amount
     """
@@ -1711,7 +1709,6 @@ def update_linenumber_aggamt_transactions_SA(
                                 entity_id,
                                 aggregate_amount,
                             )
-
 
                     # Updating aggregate amount to child auto generate sched A transactions
                     if child_flag_SA:

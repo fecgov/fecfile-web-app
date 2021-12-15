@@ -763,7 +763,6 @@ def create_committee(request):
                 'email_on_file_1': request.data.get('email_on_file_1'),
             }
 
-
             serializer = CommitteeSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
@@ -1283,7 +1282,6 @@ def email(boolean, data):
         print(e.response['Error']['Message'])
 
 
-
 """
 @api_view(['GET'])
 def get_comm_lookup(request):
@@ -1613,7 +1611,6 @@ def update_print_f99(request):
 
                 # attachment = open(file_object['Body'], 'rb')
 
-                
                 """
                 file_obj = {
                     'json_file': ('data.json', open('data.json', 'rb'), 'application/json'),
@@ -1662,15 +1659,11 @@ def set_need_appearances_writer(writer):
 
                 NameObject("/AcroForm"): IndirectObject(len(writer._objects), 0, writer)})
 
- 
-
         need_appearances = NameObject("/NeedAppearances")
 
         writer._root_object["/AcroForm"][need_appearances] = BooleanObject(True)
 
         return writer
-
- 
 
     except Exception as e:
 
@@ -1698,7 +1691,6 @@ def print_pdf(request):
     # try:
     data1 = request.data.get('data1')
     # buff = data1.read()
-
 
     data_decode = json.load(data1)
     # print(data_decode['IMGNO'])
@@ -1736,8 +1728,6 @@ def print_pdf(request):
 
             {NameObject("/NeedAppearances"): BooleanObject(True)})
 
-
-
     pdf_writer = PdfFileWriter()
 
     set_need_appearances_writer(pdf_writer)
@@ -1760,8 +1750,6 @@ def print_pdf(request):
         for attachment_page_num in range(attachment_reader.numPages):
             attachment_page_obj = attachment_reader.getPage(attachment_page_num)
             pdf_writer.addPage(attachment_page_obj)
-
- 
 
     output_stream = open(outfile, "wb")
     pdf_writer.write(output_stream)

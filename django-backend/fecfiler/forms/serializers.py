@@ -18,7 +18,6 @@ class CommitteeInfoSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return CommitteeInfo.objects.create(**validated_data)
 
-
     def update(self, instance, validated_data):
         instance.id = validated_data.get('id', instance.id)
         instance.committeeid = validated_data.get('committeeid', instance.committeeid)
@@ -75,7 +74,6 @@ class CommitteeSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         return Committee.objects.create(**validated_data)
-    
     
     def update(self, instance, validated_data):
         instance.committeeid = validated_data.get('committeeid', instance.committeeid)

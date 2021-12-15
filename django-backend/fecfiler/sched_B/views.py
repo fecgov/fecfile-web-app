@@ -234,7 +234,6 @@ def put_sql_schedA_from_schedB(
         raise
 
 
-
 def get_next_transaction_id(trans_char):
     """
     query the db for next transarion id
@@ -1281,7 +1280,6 @@ def validate_parent_transaction_exist(data):
             pass
 
 
-
 def schedB_sql_dict(data):
     """
     build a formulated data dictionary based on loaded 
@@ -1394,7 +1392,6 @@ def redesignation_auto_generate_transactions(
     contribution_amount,
     redesignated_id,
 ):
-
     """ This function auto generates 2 copies of the transaction_id in the report_id. One will be an exact copy 
     of the transaction_id and other will have modifications to contribution date and amount. Kindly check FNE-1878
     ticket for the business rules that apply to reattribution"""

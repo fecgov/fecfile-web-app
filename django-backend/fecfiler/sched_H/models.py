@@ -28,7 +28,6 @@ class SchedH3(models.Model):
     create_date = models.DateTimeField(blank=True, null=True)
     last_update_date = models.DateTimeField(blank=True, null=True)
 
-
     class Meta:
         managed = False
         db_table = 'sched_h3'
@@ -62,11 +61,9 @@ class SchedH4(models.Model):
     create_date = models.DateTimeField(blank=True, null=True)
     last_update_date = models.DateTimeField(blank=True, null=True)
 
-
     class Meta:
         managed = False
         db_table = 'sched_h4'
-
 
 
 class SchedH5(models.Model):
@@ -93,11 +90,9 @@ class SchedH5(models.Model):
     create_date = models.DateTimeField(blank=True, null=True)
     last_update_date = models.DateTimeField(blank=True, null=True)
 
-
     class Meta:
         managed = False
         db_table = 'sched_h5'
-
 
 
 class SchedH6(models.Model):
@@ -130,7 +125,6 @@ class SchedH6(models.Model):
     delete_ind = models.CharField(max_length=1, blank=True, null=True)
     create_date = models.DateTimeField(blank=True, null=True)
     last_update_date = models.DateTimeField(blank=True, null=True)
-
 
     class Meta:
         managed = False

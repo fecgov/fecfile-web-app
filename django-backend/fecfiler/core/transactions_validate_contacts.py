@@ -305,8 +305,6 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
                             'MIDDLE_NAME', 'PREFIX', 'SUFFIX', 'REF_CAND_CMTE_ID', 'TRANSACTION_ID',
                             'CAND_OFFICE', 'CAND_OFFICE_STATE', 'CAND_OFFICE_DISTRICT', 'COMMITTEE_ID']
 
-
-
             csv_buffer = StringIO()
             data.to_csv(csv_buffer, index=False)
             s3_resource.Object(bktname, filepath).put(Body=csv_buffer.getvalue())

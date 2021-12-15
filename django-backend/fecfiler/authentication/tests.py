@@ -15,7 +15,6 @@ class SimpleTest(TestCase):
         }
         self.user = Account.objects.create_user(**self.credentials)
         
-
     def test_login_success(self):
         response = self.client.post('/api/v1/auth/login/', **self.credentials)
         # should be logged in now, fails however

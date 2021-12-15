@@ -1681,7 +1681,6 @@ def get_pagination_dataset(json_res, itemsperpage, page_num):
         return json_result
 
 
-
 @api_view(["GET"])
 def get_outstanding_loans_old(request):
     """
@@ -2655,7 +2654,6 @@ def schedC1(request):
     except Exception as e:
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
-
 
 
 """

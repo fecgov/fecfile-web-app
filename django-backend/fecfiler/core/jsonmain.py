@@ -408,7 +408,6 @@ def get_f3x_summary_details(report_id, cmte_id):
                                 FROM public.form_3x, reports r Where form_3x.report_id = r.report_id and r.cvg_start_date = %s
                                         and previous_report_id is NULL and form_3x.cmte_id = %s AND form_3x.delete_ind is distinct from 'Y'"""
 
-
         values = [cvg_start_date, cmte_id]
 
         return {

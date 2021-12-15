@@ -1740,7 +1740,6 @@ def reattribution_auto_generate_transactions(
     contribution_amount,
     reattributed_id,
 ):
-
     """ This function auto generates 2 copies of the transaction_id in the report_id. One will be an exact copy 
     of the transaction_id and other will have modifications to contribution date and amount. Kindly check FNE-1878
     ticket for the business rules that apply to reattribution"""
@@ -2260,7 +2259,6 @@ def force_aggregate_sa(request):
     except Exception as e:
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
-
 
 
 @api_view(["PUT"])

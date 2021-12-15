@@ -71,7 +71,6 @@ def save_data_from_excel_to_db(data):
         postgreSQLConnection.close()
 
 
-
 def export_excel_to_db(filename, path):
     try:
         filelocation = path
@@ -382,7 +381,6 @@ def validate_transactions(bktname, key, cmteid):
                 "key": key,
             }
             
-            
             return returnstr
     except Exception as ex:
         print(ex)
@@ -394,7 +392,6 @@ def validate_transactions(bktname, key, cmteid):
         }
         print(returnstr)
         return returnstr
-
 
 
 def check_file_exists(bktname, key):
@@ -545,8 +542,6 @@ def send_message_to_queue(bktname, key):
         return returnstr
 
 
-
-
 # cmteid =  "C00011111"
 # bktname = "fecfile-filing-frontend"
 # # key = "transactions/F3X_ScheduleE_Import_Transactions_11_25_TEST_Data.csv"
@@ -558,7 +553,6 @@ def send_message_to_queue(bktname, key):
 
 # move_data_from_excel_to_db('F3X')
 # move_data_from_excel_to_db('F3L')
-
 
 
 # errfilerelpath = 'transactions/error_files/' + cmteid

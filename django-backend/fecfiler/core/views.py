@@ -2379,8 +2379,6 @@ def reports(request):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-
-
         """
         *********************************************** REPORTS - GET API CALL STARTS HERE **********************************************************
         """
@@ -5481,8 +5479,6 @@ def summary_disbursements_for_sumamry_table(request_dict):
         #     + XXIX_amount_ytd
         #     + XXX_amount_ytd
         # )
-
-
 
         # XXXII_amount = XXXI_amount - XXIAII_amount - XXXAII_amount
         # XXXII_amount_ytd = XXXI_amount_ytd - XXIAII_amount_ytd - XXXAII_amount_ytd

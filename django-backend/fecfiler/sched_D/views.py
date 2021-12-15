@@ -315,7 +315,6 @@ def get_pagination_dataset(json_res, itemsperpage, page_num):
         return json_result
 
 
-
 @api_view(["POST", "GET", "DELETE", "PUT"])
 def schedD(request):
     """
@@ -350,7 +349,6 @@ def schedD(request):
     trans_query_string_count = ""  # get_trans_query_for_total_count(trans_query_string)
     row1 = ""
     totalcount = ""
-
 
     # create new sched_d transaction
     if request.method == "POST":

@@ -72,7 +72,6 @@ class CommitteeInfo(models.Model):
         verbose_name_plural = _('CommitteeInfo')
 
 
-
 class Committee(models.Model):
     # Committee Model
     id = models.AutoField(primary_key=True)
