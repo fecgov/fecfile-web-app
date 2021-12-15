@@ -1811,7 +1811,7 @@ def get_h2_summary_table(request):
         raise
 #: get the paginator page with other details like
 def get_pagination_dataset(json_res, itemsperpage, page_num):
-    if check_null_value(json_res) is False  or json_res is None:
+    if check_null_value(json_res) is False or json_res is None:
         json_result = {
             "items": "",
             "totalItems": "",
