@@ -1887,7 +1887,7 @@ def get_f99_report_info(request):
                     response['additionalemail2']= response['additional_email_2']
                     return JsonResponse(response, status=status.HTTP_200_OK)
     except CommitteeInfo.DoesNotExist:
-            return Response({"FEC Error 004":"There is no submitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"FEC Error 004":"There is no submitted data. Please create f99 form object before submitting."}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def submit_formf99(request):

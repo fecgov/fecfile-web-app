@@ -1774,8 +1774,8 @@ def update_transactions_change_cvg_dates(cmte_id, report_id, present_cvg_start_d
             _value_list.extend([cmte_id, 'SC%', cmte_id, 'SC%', cmte_id, cmte_id])
             _value_list.extend(value_list)
             with connection.cursor() as cursor:
-                    cursor.execute(_sql, _value_list)
-                    transactions_list =  cursor.fetchall()
+                cursor.execute(_sql, _value_list)
+                transactions_list =  cursor.fetchall()
             if transactions_list:
                 update_tran_list = []
                 for transaction in transactions_list:
@@ -1794,8 +1794,8 @@ def update_transactions_change_cvg_dates(cmte_id, report_id, present_cvg_start_d
                            UPDATE public.sched_h6 SET report_id=%s WHERE transaction_id in ('{0}');""".format("', '".join(update_tran_list))
                 _value_list2 = [new_report_id]*11
                 with connection.cursor() as cursor:
-                        cursor.execute(_sql2, _value_list2)
-                        logger.debug("transactions updated...")
+                    cursor.execute(_sql2, _value_list2)
+                    logger.debug("transactions updated...")
             else:
                 logger.debug("no transactions found in Modified report coverage dates.")
         logger.debug('update_transactions_change_cvg_dates function FINISHED...')
@@ -4696,7 +4696,7 @@ def get_transactions(request, transaction_id):
         numofpages = get_num_of_pages(totalcount, itemsperpage)
         paginator = Paginator(output_list, itemsperpage)
         if paginator.num_pages > 0:
-                forms_obj = paginator.page(1)
+            forms_obj = paginator.page(1)
         else:
             forms_obj = []
     else:
@@ -7468,401 +7468,401 @@ def get_line_sum_value(line_number, formula, sched_a_line_sum_dict, cmte_id, rep
 @api_view(["POST"])
 def prepare_json_builders_data(request):
     # try:
-        # print("request.data: ", request.data)
-        # commented by Mahendra 10052019
-        # cmte_id = get_comittee_id(request.user.username)
-        # param_string = ""
-        # report_id = request.data.get("report_id")
-        # sched_a_line_sum = {}
-        # sched_b_line_sum = {}
+    #     print("request.data: ", request.data)
+    #     commented by Mahendra 10052019
+    #     cmte_id = get_comittee_id(request.user.username)
+    #     param_string = ""
+    #     report_id = request.data.get("report_id")
+    #     sched_a_line_sum = {}
+    #     sched_b_line_sum = {}
 
-        # cvg_start_date, cvg_end_date = get_cvg_dates(report_id, cmte_id)
+    #     cvg_start_date, cvg_end_date = get_cvg_dates(report_id, cmte_id)
 
-        # cdate = date.today()
-        # from_date = date(cvg_start_date.year, 1, 1)
+    #     cdate = date.today()
+    #     from_date = date(cvg_start_date.year, 1, 1)
 
-        # to_date = date(cvg_end_date.year, 12, 31)
+    #     to_date = date(cvg_end_date.year, 12, 31)
 
-        # schedule_a_b_line_sum_dict = {}
-        # with connection.cursor() as cursor:
-        #     cursor.execute(
-        #         """
-        #         SELECT line_number, sum(contribution_amount) from public.sched_a
-        #         where cmte_id = '%s' AND report_id = '%s' group by line_number;"""
-        #         % (cmte_id, report_id)
-        #     )
-        #     print(cursor.query)
-        #     commented by Mahendra 10052019
-        #     sched_a_line_sum_result = cursor.fetchall()
-        #     sched_a_line_sum = {
-        #         str(i[0].lower()): i[1] if i[1] else 0 for i in sched_a_line_sum_result
-        #     }
-        # with connection.cursor() as cursor:
-        #     cursor.execute(
-        #         """
-        #         SELECT line_number, sum(expenditure_amount) from public.sched_b
-        #         where cmte_id = '%s' AND report_id = '%s' group by line_number;"""
-        #         % (cmte_id, report_id)
-        #     )
-            # print(cursor.query)
-            # commented by Mahendra 10052019
-            # sched_b_line_sum_result = cursor.fetchall()
-            # sched_b_line_sum = {
-            #     str(i[0].lower()): i[1] if i[1] else 0 for i in sched_b_line_sum_result
-            # }
+    #     schedule_a_b_line_sum_dict = {}
+    #     with connection.cursor() as cursor:
+    #         cursor.execute(
+    #             """
+    #             SELECT line_number, sum(contribution_amount) from public.sched_a
+    #             where cmte_id = '%s' AND report_id = '%s' group by line_number;"""
+    #             % (cmte_id, report_id)
+    #         )
+    #         print(cursor.query)
+    #         commented by Mahendra 10052019
+    #         sched_a_line_sum_result = cursor.fetchall()
+    #         sched_a_line_sum = {
+    #             str(i[0].lower()): i[1] if i[1] else 0 for i in sched_a_line_sum_result
+    #         }
+    #     with connection.cursor() as cursor:
+    #         cursor.execute(
+    #             """
+    #             SELECT line_number, sum(expenditure_amount) from public.sched_b
+    #             where cmte_id = '%s' AND report_id = '%s' group by line_number;"""
+    #             % (cmte_id, report_id)
+    #         )
+    #         print(cursor.query)
+    #         commented by Mahendra 10052019
+    #         sched_b_line_sum_result = cursor.fetchall()
+    #         sched_b_line_sum = {
+    #             str(i[0].lower()): i[1] if i[1] else 0 for i in sched_b_line_sum_result
+    #         }
 
-        # sched_a_line_sum.update(sched_b_line_sum)
-        # print(sched_a_line_sum, "sched_a_line_sum")
-        # commented by Mahendra 10052019
-        # print(sched_b_line_sum, "sched_b_line_sum")
-        # commented by Mahendra 10052019
+    #     sched_a_line_sum.update(sched_b_line_sum)
+    #     print(sched_a_line_sum, "sched_a_line_sum")
+    #     commented by Mahendra 10052019
+    #     print(sched_b_line_sum, "sched_b_line_sum")
+    #     commented by Mahendra 10052019
 
-        ##schedule_a_b_line_sum_dict.update(sched_a_line_sum)
-        ##schedule_a_b_line_sum_dict.update(sched_b_line_sum)
-        # schedule_a_b_line_sum_dict = {}
-        # schedule_a_b_line_sum_dict.update(sched_a_line_sum)
-        # schedule_a_b_line_sum_dict.update(sched_b_line_sum)
+    #     #schedule_a_b_line_sum_dict.update(sched_a_line_sum)
+    #     #schedule_a_b_line_sum_dict.update(sched_b_line_sum)
+    #     schedule_a_b_line_sum_dict = {}
+    #     schedule_a_b_line_sum_dict.update(sched_a_line_sum)
+    #     schedule_a_b_line_sum_dict.update(sched_b_line_sum)
 
-        # col_a_line_sum = {}
-        # col_b_line_sum = {}
+    #     col_a_line_sum = {}
+    #     col_b_line_sum = {}
 
-        # with connection.cursor() as cursor:
-        #     cursor.execute(
-        #         """
-        #         SELECT line_number, sum(contribution_amount) from public.sched_a
-        #         where cmte_id = %s AND contribution_date >= %s AND contribution_date <= %s AND delete_ind is distinct from 'Y' group by line_number;""",
-        #         [cmte_id, from_date, to_date],
-        #     )
-        #     # print(cursor.query)
-        #     # commented by Mahendra 10052019
-        #     col_a_line_sum_result = cursor.fetchall()
-        #     col_a_line_sum = {
-        #         str(i[0].lower()): i[1] if i[1] else 0 for i in col_a_line_sum_result
-        #     }
-        # with connection.cursor() as cursor:
-        #     cursor.execute(
-        #         """
-        #         SELECT line_number, sum(expenditure_amount) from public.sched_b
-        #         where cmte_id = %s AND expenditure_date >= %s AND expenditure_date <= %s AND delete_ind is distinct from 'Y' group by line_number;""",
-        #         [cmte_id, from_date, to_date],
-        #     )
-        #     # print(cursor.query)
-        #     # commented by Mahendra 10052019
-        #     col_b_line_sum_result = cursor.fetchall()
-        #     col_b_line_sum = {
-        #         str(i[0].lower()): i[1] if i[1] else 0 for i in col_b_line_sum_result
-        #     }
+    #     with connection.cursor() as cursor:
+    #         cursor.execute(
+    #             """
+    #             SELECT line_number, sum(contribution_amount) from public.sched_a
+    #             where cmte_id = %s AND contribution_date >= %s AND contribution_date <= %s AND delete_ind is distinct from 'Y' group by line_number;""",
+    #             [cmte_id, from_date, to_date],
+    #         )
+    #         # print(cursor.query)
+    #         # commented by Mahendra 10052019
+    #         col_a_line_sum_result = cursor.fetchall()
+    #         col_a_line_sum = {
+    #             str(i[0].lower()): i[1] if i[1] else 0 for i in col_a_line_sum_result
+    #         }
+    #     with connection.cursor() as cursor:
+    #         cursor.execute(
+    #             """
+    #             SELECT line_number, sum(expenditure_amount) from public.sched_b
+    #             where cmte_id = %s AND expenditure_date >= %s AND expenditure_date <= %s AND delete_ind is distinct from 'Y' group by line_number;""",
+    #             [cmte_id, from_date, to_date],
+    #         )
+    #         # print(cursor.query)
+    #         # commented by Mahendra 10052019
+    #         col_b_line_sum_result = cursor.fetchall()
+    #         col_b_line_sum = {
+    #             str(i[0].lower()): i[1] if i[1] else 0 for i in col_b_line_sum_result
+    #         }
 
-        # col_line_sum_dict = {}
-        # col_line_sum_dict.update(col_a_line_sum)
-        # col_line_sum_dict.update(col_b_line_sum)
+    #     col_line_sum_dict = {}
+    #     col_line_sum_dict.update(col_a_line_sum)
+    #     col_line_sum_dict.update(col_b_line_sum)
 
-        # # print(col_a_line_sum, "col_a_line_sum")
-        # # commented by Mahendra 10052019
-        # # print(col_b_line_sum, "col_b_line_sum")
-        # # commented by Mahendra 10052019
+    #     # print(col_a_line_sum, "col_a_line_sum")
+    #     # commented by Mahendra 10052019
+    #     # print(col_b_line_sum, "col_b_line_sum")
+    #     # commented by Mahendra 10052019
 
-        # col_a = [
-        #     ("9", "0"),
-        #     ("10", "0"),
-        #     ("11ai", ""),
-        #     ("11aii", ""),
-        #     ("11aiii", "11ai + 11aii"),
-        #     ("11b", ""),
-        #     ("11c", ""),
-        #     ("11d", "11aiii + 11b + 11c"),
-        #     ("12", ""),
-        #     ("13", ""),
-        #     ("14", ""),
-        #     ("15", ""),
-        #     ("16", ""),
-        #     ("17", ""),
-        #     ("18a", "0"),
-        #     ("18b", "0"),
-        #     ("18c", "18a+18b"),
-        #     ("19", "11d+12+13+14+15+16+17+18c"),
-        #     ("20", "19 - 18c"),
-        #     ("21ai", "0"),
-        #     ("21aii", "0"),
-        #     ("21b", ""),
-        #     ("21c", "21ai + 21aii + 21b"),
-        #     ("22", ""),
-        #     ("23", ""),
-        #     ("24", ""),
-        #     ("25", "0"),
-        #     ("26", ""),
-        #     ("27", ""),
-        #     ("28a", ""),
-        #     ("28b", ""),
-        #     ("28c", ""),
-        #     ("28d", "28a + 28b + 28c"),
-        #     ("29", ""),
-        #     ("30ai", "0"),
-        #     ("30aii", "0"),
-        #     ("30b", ""),
-        #     ("30c", "30ai + 30aii + 30b"),
-        #     ("31", "21c + 22 - 27 + 28d + 29"),
-        #     ("32", "31 - 21aii + 30aii"),
-        #     ("33", "11d"),
-        #     ("34", "28d"),
-        #     ("35", "11d - 28d"),
-        #     ("36", "21ai + 21b"),
-        #     ("37", "15"),
-        #     ("38", "36 - 37"),
-        #     ("6a", ""),
-        #     ("6b", ""),
-        #     ("6c", "19"),
-        #     ("6d", "6b + 6c"),
-        #     ("7", "31"),
-        #     ("8", "6d - 7"),
-        # ]
+    #     col_a = [
+    #         ("9", "0"),
+    #         ("10", "0"),
+    #         ("11ai", ""),
+    #         ("11aii", ""),
+    #         ("11aiii", "11ai + 11aii"),
+    #         ("11b", ""),
+    #         ("11c", ""),
+    #         ("11d", "11aiii + 11b + 11c"),
+    #         ("12", ""),
+    #         ("13", ""),
+    #         ("14", ""),
+    #         ("15", ""),
+    #         ("16", ""),
+    #         ("17", ""),
+    #         ("18a", "0"),
+    #         ("18b", "0"),
+    #         ("18c", "18a+18b"),
+    #         ("19", "11d+12+13+14+15+16+17+18c"),
+    #         ("20", "19 - 18c"),
+    #         ("21ai", "0"),
+    #         ("21aii", "0"),
+    #         ("21b", ""),
+    #         ("21c", "21ai + 21aii + 21b"),
+    #         ("22", ""),
+    #         ("23", ""),
+    #         ("24", ""),
+    #         ("25", "0"),
+    #         ("26", ""),
+    #         ("27", ""),
+    #         ("28a", ""),
+    #         ("28b", ""),
+    #         ("28c", ""),
+    #         ("28d", "28a + 28b + 28c"),
+    #         ("29", ""),
+    #         ("30ai", "0"),
+    #         ("30aii", "0"),
+    #         ("30b", ""),
+    #         ("30c", "30ai + 30aii + 30b"),
+    #         ("31", "21c + 22 - 27 + 28d + 29"),
+    #         ("32", "31 - 21aii + 30aii"),
+    #         ("33", "11d"),
+    #         ("34", "28d"),
+    #         ("35", "11d - 28d"),
+    #         ("36", "21ai + 21b"),
+    #         ("37", "15"),
+    #         ("38", "36 - 37"),
+    #         ("6a", ""),
+    #         ("6b", ""),
+    #         ("6c", "19"),
+    #         ("6d", "6b + 6c"),
+    #         ("7", "31"),
+    #         ("8", "6d - 7"),
+    #     ]
 
-        # col_a_dict_original = OrderedDict()
-        # for i in col_a:
-        #     col_a_dict_original[i[0]] = i[1]
-        # final_col_a_dict = {}
-        # for line_number in col_a_dict_original:
-        #     final_col_a_dict[line_number] = get_line_sum_value(
-        #         line_number,
-        #         col_a_dict_original[line_number],
-        #         schedule_a_b_line_sum_dict,
-        #         cmte_id,
-        #         report_id,
-        #     )
-        #     schedule_a_b_line_sum_dict[line_number] = final_col_a_dict[line_number]
+    #     col_a_dict_original = OrderedDict()
+    #     for i in col_a:
+    #         col_a_dict_original[i[0]] = i[1]
+    #     final_col_a_dict = {}
+    #     for line_number in col_a_dict_original:
+    #         final_col_a_dict[line_number] = get_line_sum_value(
+    #             line_number,
+    #             col_a_dict_original[line_number],
+    #             schedule_a_b_line_sum_dict,
+    #             cmte_id,
+    #             report_id,
+    #         )
+    #         schedule_a_b_line_sum_dict[line_number] = final_col_a_dict[line_number]
 
-        # # print(final_col_a_dict, "col_a_dict")
-        # # commented by Mahendra 10052019
+    #     # print(final_col_a_dict, "col_a_dict")
+    #     # commented by Mahendra 10052019
 
-        # col_b = [
-        #     ("11ai", ""),
-        #     ("11aii", ""),
-        #     ("11aiii", "11ai + 11aii"),
-        #     ("11b", ""),
-        #     ("11c", ""),
-        #     ("11d", "11aiii + 11b + 11c"),
-        #     ("12", ""),
-        #     ("13", ""),
-        #     ("14", ""),
-        #     ("15", ""),
-        #     ("16", ""),
-        #     ("17", ""),
-        #     ("18a", "0"),
-        #     ("18b", "0"),
-        #     ("18c", "18a+18b"),
-        #     ("19", "11d+12+13+14+15+16+17+18c"),
-        #     ("20", "19 - 18c"),
-        #     ("21ai", "0"),
-        #     ("21aii", "0"),
-        #     ("21b", ""),
-        #     ("21c", "21ai + 21aii + 21b"),
-        #     ("22", ""),
-        #     ("23", ""),
-        #     ("24", ""),
-        #     ("25", "0"),
-        #     ("26", ""),
-        #     ("27", ""),
-        #     ("28a", ""),
-        #     ("28b", ""),
-        #     ("28c", ""),
-        #     ("28d", "28a + 28b + 28c"),
-        #     ("29", ""),
-        #     ("30ai", "0"),
-        #     ("30aii", "0"),
-        #     ("30b", ""),
-        #     ("30c", "30ai + 30aii + 30b"),
-        #     ("31", "21c + 22 - 27 + 28d + 29"),
-        #     ("32", "31 - 21aii + 30aii"),
-        #     ("33", "11d"),
-        #     ("34", "28d"),
-        #     ("35", "11d - 28d"),
-        #     ("36", "21ai + 21b"),
-        #     ("37", "15"),
-        #     ("38", "36 - 37"),
-        #     ("6a", ""),
-        #     ("6b", ""),
-        #     ("6c", "19"),
-        #     ("6d", "6a + 6c"),
-        #     ("7", "31"),
-        #     ("8", "6d - 7"),
-        # ]
+    #     col_b = [
+    #         ("11ai", ""),
+    #         ("11aii", ""),
+    #         ("11aiii", "11ai + 11aii"),
+    #         ("11b", ""),
+    #         ("11c", ""),
+    #         ("11d", "11aiii + 11b + 11c"),
+    #         ("12", ""),
+    #         ("13", ""),
+    #         ("14", ""),
+    #         ("15", ""),
+    #         ("16", ""),
+    #         ("17", ""),
+    #         ("18a", "0"),
+    #         ("18b", "0"),
+    #         ("18c", "18a+18b"),
+    #         ("19", "11d+12+13+14+15+16+17+18c"),
+    #         ("20", "19 - 18c"),
+    #         ("21ai", "0"),
+    #         ("21aii", "0"),
+    #         ("21b", ""),
+    #         ("21c", "21ai + 21aii + 21b"),
+    #         ("22", ""),
+    #         ("23", ""),
+    #         ("24", ""),
+    #         ("25", "0"),
+    #         ("26", ""),
+    #         ("27", ""),
+    #         ("28a", ""),
+    #         ("28b", ""),
+    #         ("28c", ""),
+    #         ("28d", "28a + 28b + 28c"),
+    #         ("29", ""),
+    #         ("30ai", "0"),
+    #         ("30aii", "0"),
+    #         ("30b", ""),
+    #         ("30c", "30ai + 30aii + 30b"),
+    #         ("31", "21c + 22 - 27 + 28d + 29"),
+    #         ("32", "31 - 21aii + 30aii"),
+    #         ("33", "11d"),
+    #         ("34", "28d"),
+    #         ("35", "11d - 28d"),
+    #         ("36", "21ai + 21b"),
+    #         ("37", "15"),
+    #         ("38", "36 - 37"),
+    #         ("6a", ""),
+    #         ("6b", ""),
+    #         ("6c", "19"),
+    #         ("6d", "6a + 6c"),
+    #         ("7", "31"),
+    #         ("8", "6d - 7"),
+    #     ]
 
-        # col_b_dict_original = OrderedDict()
-        # for i in col_b:
-        #     col_b_dict_original[i[0]] = i[1]
-        # final_col_b_dict = {}
-        # for line_number in col_b_dict_original:
-        #     final_col_b_dict[line_number] = get_line_sum_value(
-        #         line_number,
-        #         col_b_dict_original[line_number],
-        #         col_line_sum_dict,
-        #         cmte_id,
-        #         report_id,
-        #     )
-        #     col_line_sum_dict[line_number] = final_col_b_dict[line_number]
-        # # print(final_col_b_dict, "col_b_dict")
-        # # commented by Mahendra 10052019
+    #     col_b_dict_original = OrderedDict()
+    #     for i in col_b:
+    #         col_b_dict_original[i[0]] = i[1]
+    #     final_col_b_dict = {}
+    #     for line_number in col_b_dict_original:
+    #         final_col_b_dict[line_number] = get_line_sum_value(
+    #             line_number,
+    #             col_b_dict_original[line_number],
+    #             col_line_sum_dict,
+    #             cmte_id,
+    #             report_id,
+    #         )
+    #         col_line_sum_dict[line_number] = final_col_b_dict[line_number]
+    #     # print(final_col_b_dict, "col_b_dict")
+    #     # commented by Mahendra 10052019
 
-        # for i in final_col_a_dict:
-        #     a_val = final_col_a_dict[i]
-        #     b_val = final_col_b_dict.get(i)
-        #     a_formula = col_a_dict_original.get(i, "")
-        #     b_formula = col_b_dict_original.get(i, "")
-        #     if a_formula:
-        #         a_formula = a_formula.replace(" ", "")
-        #     if b_formula:
-        #         b_formula = b_formula.replace(" ", "")
+    #     for i in final_col_a_dict:
+    #         a_val = final_col_a_dict[i]
+    #         b_val = final_col_b_dict.get(i)
+    #         a_formula = col_a_dict_original.get(i, "")
+    #         b_formula = col_b_dict_original.get(i, "")
+    #         if a_formula:
+    #             a_formula = a_formula.replace(" ", "")
+    #         if b_formula:
+    #             b_formula = b_formula.replace(" ", "")
 
-            # if a_formula == b_formula and a_val != b_val:
-            #     try:
-            #         correc_val = a_val if a_val > b_val else b_val
-            #     except Exception as e:
-            #         print("Exception--- same formula and values changes", a_formula, b_formula, e)
-            #         correc_val = 0
-            #     final_col_b_dict[i] = correc_val
-            #     final_col_a_dict[i] = correc_val
-            # final_col_b_dict[i] = b_val
-            # final_col_a_dict[i] = a_val
+    #         if a_formula == b_formula and a_val != b_val:
+    #             try:
+    #                 correc_val = a_val if a_val > b_val else b_val
+    #             except Exception as e:
+    #                 print("Exception--- same formula and values changes", a_formula, b_formula, e)
+    #                 correc_val = 0
+    #             final_col_b_dict[i] = correc_val
+    #             final_col_a_dict[i] = correc_val
+    #         final_col_b_dict[i] = b_val
+    #         final_col_a_dict[i] = a_val
 
-        # commented by Mahendra 10052019
-        # print("---------------------------------")
-        # print("Final AAAA", final_col_a_dict)
-        # print("---------------------------------")
-        # print("Final B", final_col_b_dict)
+    #     commented by Mahendra 10052019
+    #     print("---------------------------------")
+    #     print("Final AAAA", final_col_a_dict)
+    #     print("---------------------------------")
+    #     print("Final B", final_col_b_dict)
 
-        # update_col_a_dict = {
-        #     "6b": "coh_bop",
-        #     "6c": "ttl_receipts_sum_page_per",
-        #     "6d": "subttl_sum_page_per",
-        #     "7": "ttl_disb_sum_page_per",
-        #     "8": "coh_cop",
-        #     "9": "debts_owed_to_cmte",
-        #     "10": "debts_owed_by_cmte",
-        #     "11ai": "indv_item_contb_per",
-        #     "11aii": "indv_unitem_contb_per",
-        #     "11aiii": "ttl_indv_contb",
-        #     "11b": "pol_pty_cmte_contb_per_i",
-        #     "11c": "other_pol_cmte_contb_per_i",
-        #     "11d": "ttl_contb_col_ttl_per",
-        #     "12": "tranf_from_affiliated_pty_per",
-        #     "13": "all_loans_received_per",
-        #     "14": "loan_repymts_received_per",
-        #     "15": "offsets_to_op_exp_per_i",
-        #     "16": "fed_cand_contb_ref_per",
-        #     "17": "other_fed_receipts_per",
-        #     "18a": "tranf_from_nonfed_acct_per",
-        #     "18b": "tranf_from_nonfed_levin_per",
-        #     "18c": "ttl_nonfed_tranf_per",
-        #     "19": "ttl_receipts_per",
-        #     "20": "ttl_fed_receipts_per",
-        #     "21ai": "shared_fed_op_exp_per",
-        #     "21aii": "shared_nonfed_op_exp_per",
-        #     "21b": "other_fed_op_exp_per",
-        #     "21c": "ttl_op_exp_per",
-        #     "22": "tranf_to_affliliated_cmte_per",
-        #     "23": "fed_cand_cmte_contb_per",
-        #     "24": "indt_exp_per",
-        #     "25": "coord_exp_by_pty_cmte_per",
-        #     "26": "loan_repymts_made_per",
-        #     "27": "loans_made_per",
-        #     "28a": "indv_contb_ref_per",
-        #     "28b": "pol_pty_cmte_contb_per_ii",
-        #     "28c": "other_pol_cmte_contb_per_ii",
-        #     "28d": "ttl_contb_ref_per_i",
-        #     "29": "other_disb_per",
-        #     "30ai": "shared_fed_actvy_fed_shr_per",
-        #     "30aii": "shared_fed_actvy_nonfed_per",
-        #     "30b": "non_alloc_fed_elect_actvy_per",
-        #     "30c": "ttl_fed_elect_actvy_per",
-        #     "31": "ttl_disb_per",
-        #     "32": "ttl_fed_disb_per",
-        #     "33": "ttl_contb_per",
-        #     "34": "ttl_contb_ref_per_ii",
-        #     "35": "net_contb_per",
-        #     "36": "ttl_fed_op_exp_per",
-        #     "37": "offsets_to_op_exp_per_ii",
-        #     "38": "net_op_exp_per",
-        # }
+    #     update_col_a_dict = {
+    #         "6b": "coh_bop",
+    #         "6c": "ttl_receipts_sum_page_per",
+    #         "6d": "subttl_sum_page_per",
+    #         "7": "ttl_disb_sum_page_per",
+    #         "8": "coh_cop",
+    #         "9": "debts_owed_to_cmte",
+    #         "10": "debts_owed_by_cmte",
+    #         "11ai": "indv_item_contb_per",
+    #         "11aii": "indv_unitem_contb_per",
+    #         "11aiii": "ttl_indv_contb",
+    #         "11b": "pol_pty_cmte_contb_per_i",
+    #         "11c": "other_pol_cmte_contb_per_i",
+    #         "11d": "ttl_contb_col_ttl_per",
+    #         "12": "tranf_from_affiliated_pty_per",
+    #         "13": "all_loans_received_per",
+    #         "14": "loan_repymts_received_per",
+    #         "15": "offsets_to_op_exp_per_i",
+    #         "16": "fed_cand_contb_ref_per",
+    #         "17": "other_fed_receipts_per",
+    #         "18a": "tranf_from_nonfed_acct_per",
+    #         "18b": "tranf_from_nonfed_levin_per",
+    #         "18c": "ttl_nonfed_tranf_per",
+    #         "19": "ttl_receipts_per",
+    #         "20": "ttl_fed_receipts_per",
+    #         "21ai": "shared_fed_op_exp_per",
+    #         "21aii": "shared_nonfed_op_exp_per",
+    #         "21b": "other_fed_op_exp_per",
+    #         "21c": "ttl_op_exp_per",
+    #         "22": "tranf_to_affliliated_cmte_per",
+    #         "23": "fed_cand_cmte_contb_per",
+    #         "24": "indt_exp_per",
+    #         "25": "coord_exp_by_pty_cmte_per",
+    #         "26": "loan_repymts_made_per",
+    #         "27": "loans_made_per",
+    #         "28a": "indv_contb_ref_per",
+    #         "28b": "pol_pty_cmte_contb_per_ii",
+    #         "28c": "other_pol_cmte_contb_per_ii",
+    #         "28d": "ttl_contb_ref_per_i",
+    #         "29": "other_disb_per",
+    #         "30ai": "shared_fed_actvy_fed_shr_per",
+    #         "30aii": "shared_fed_actvy_nonfed_per",
+    #         "30b": "non_alloc_fed_elect_actvy_per",
+    #         "30c": "ttl_fed_elect_actvy_per",
+    #         "31": "ttl_disb_per",
+    #         "32": "ttl_fed_disb_per",
+    #         "33": "ttl_contb_per",
+    #         "34": "ttl_contb_ref_per_ii",
+    #         "35": "net_contb_per",
+    #         "36": "ttl_fed_op_exp_per",
+    #         "37": "offsets_to_op_exp_per_ii",
+    #         "38": "net_op_exp_per",
+    #     }
 
-        # update_col_b_dict = {
-        #     "6a": "coh_begin_calendar_yr",
-        #     "6c": "ttl_receipts_sum_page_ytd",
-        #     "6d": "subttl_sum_ytd",
-        #     "7": "ttl_disb_sum_page_ytd",
-        #     "8": "coh_coy",
-        #     "11ai": "indv_item_contb_ytd",
-        #     "11aii": "indv_unitem_contb_ytd",
-        #     "11aiii": "ttl_indv_contb_ytd",
-        #     "11b": "pol_pty_cmte_contb_ytd_i",
-        #     "11c": "other_pol_cmte_contb_ytd_i",
-        #     "11d": "ttl_contb_col_ttl_ytd",
-        #     "12": "tranf_from_affiliated_pty_ytd",
-        #     "13": "all_loans_received_ytd",
-        #     "14": "loan_repymts_received_ytd",
-        #     "15": "offsets_to_op_exp_ytd_i",
-        #     "16": "fed_cand_cmte_contb_ytd",
-        #     "17": "other_fed_receipts_ytd",
-        #     "18a": "tranf_from_nonfed_acct_ytd",
-        #     "18b": "tranf_from_nonfed_levin_ytd",
-        #     "18c": "ttl_nonfed_tranf_ytd",
-        #     "19": "ttl_receipts_ytd",
-        #     "20": "ttl_fed_receipts_ytd",
-        #     "21ai": "shared_fed_op_exp_ytd",
-        #     "21aii": "shared_nonfed_op_exp_ytd",
-        #     "21b": "other_fed_op_exp_ytd",
-        #     "21c": "ttl_op_exp_ytd",
-        #     "22": "tranf_to_affilitated_cmte_ytd",
-        #     "23": "fed_cand_cmte_contb_ref_ytd",
-        #     "24_independentExpenditures": "indt_exp_ytd",
-        #     "25": "coord_exp_by_pty_cmte_ytd",
-        #     "26": "loan_repymts_made_ytd",
-        #     "27": "loans_made_ytd",
-        #     "28a": "indv_contb_ref_ytd",
-        #     "28b": "pol_pty_cmte_contb_ytd_ii",
-        #     "28c": "other_pol_cmte_contb_ytd_ii",
-        #     "28d": "ttl_contb_ref_ytd_i",
-        #     "29": "other_disb_ytd",
-        #     "30ai": "shared_fed_actvy_fed_shr_ytd",
-        #     "30aii": "shared_fed_actvy_nonfed_ytd",
-        #     "30b": "non_alloc_fed_elect_actvy_ytd",
-        #     "30c": "ttl_fed_elect_actvy_ytd",
-        #     "31": "ttl_disb_ytd",
-        #     "32": "ttl_fed_disb_ytd",
-        #     "33": "ttl_contb_ytd",
-        #     "34": "ttl_contb_ref_ytd_ii",
-        #     "35": "net_contb_ytd",
-        #     "36": "ttl_fed_op_exp_ytd",
-        #     "37": "offsets_to_op_exp_ytd_ii",
-        #     "38": "net_op_exp_ytd",
-        # }
+    #     update_col_b_dict = {
+    #         "6a": "coh_begin_calendar_yr",
+    #         "6c": "ttl_receipts_sum_page_ytd",
+    #         "6d": "subttl_sum_ytd",
+    #         "7": "ttl_disb_sum_page_ytd",
+    #         "8": "coh_coy",
+    #         "11ai": "indv_item_contb_ytd",
+    #         "11aii": "indv_unitem_contb_ytd",
+    #         "11aiii": "ttl_indv_contb_ytd",
+    #         "11b": "pol_pty_cmte_contb_ytd_i",
+    #         "11c": "other_pol_cmte_contb_ytd_i",
+    #         "11d": "ttl_contb_col_ttl_ytd",
+    #         "12": "tranf_from_affiliated_pty_ytd",
+    #         "13": "all_loans_received_ytd",
+    #         "14": "loan_repymts_received_ytd",
+    #         "15": "offsets_to_op_exp_ytd_i",
+    #         "16": "fed_cand_cmte_contb_ytd",
+    #         "17": "other_fed_receipts_ytd",
+    #         "18a": "tranf_from_nonfed_acct_ytd",
+    #         "18b": "tranf_from_nonfed_levin_ytd",
+    #         "18c": "ttl_nonfed_tranf_ytd",
+    #         "19": "ttl_receipts_ytd",
+    #         "20": "ttl_fed_receipts_ytd",
+    #         "21ai": "shared_fed_op_exp_ytd",
+    #         "21aii": "shared_nonfed_op_exp_ytd",
+    #         "21b": "other_fed_op_exp_ytd",
+    #         "21c": "ttl_op_exp_ytd",
+    #         "22": "tranf_to_affilitated_cmte_ytd",
+    #         "23": "fed_cand_cmte_contb_ref_ytd",
+    #         "24_independentExpenditures": "indt_exp_ytd",
+    #         "25": "coord_exp_by_pty_cmte_ytd",
+    #         "26": "loan_repymts_made_ytd",
+    #         "27": "loans_made_ytd",
+    #         "28a": "indv_contb_ref_ytd",
+    #         "28b": "pol_pty_cmte_contb_ytd_ii",
+    #         "28c": "other_pol_cmte_contb_ytd_ii",
+    #         "28d": "ttl_contb_ref_ytd_i",
+    #         "29": "other_disb_ytd",
+    #         "30ai": "shared_fed_actvy_fed_shr_ytd",
+    #         "30aii": "shared_fed_actvy_nonfed_ytd",
+    #         "30b": "non_alloc_fed_elect_actvy_ytd",
+    #         "30c": "ttl_fed_elect_actvy_ytd",
+    #         "31": "ttl_disb_ytd",
+    #         "32": "ttl_fed_disb_ytd",
+    #         "33": "ttl_contb_ytd",
+    #         "34": "ttl_contb_ref_ytd_ii",
+    #         "35": "net_contb_ytd",
+    #         "36": "ttl_fed_op_exp_ytd",
+    #         "37": "offsets_to_op_exp_ytd_ii",
+    #         "38": "net_op_exp_ytd",
+    #     }
 
-        # update_str = ""
-        # for i in update_col_a_dict:
-        #     sum_value = final_col_a_dict.get(i, None)
-        #     if sum_value in ["", None, "None"]:
-        #         sum_value = 0
-        #     update_str += "%s=%s," % (update_col_a_dict[i], str(sum_value))
-        # for i in update_col_b_dict:
-        #     sum_value = final_col_b_dict.get(i, None)
-        #     if sum_value in ["", None, "None"]:
-        #         sum_value = 0
-        #     update_str += "%s=%s," % (update_col_b_dict[i], str(sum_value))
+    #     update_str = ""
+    #     for i in update_col_a_dict:
+    #         sum_value = final_col_a_dict.get(i, None)
+    #         if sum_value in ["", None, "None"]:
+    #             sum_value = 0
+    #         update_str += "%s=%s," % (update_col_a_dict[i], str(sum_value))
+    #     for i in update_col_b_dict:
+    #         sum_value = final_col_b_dict.get(i, None)
+    #         if sum_value in ["", None, "None"]:
+    #             sum_value = 0
+    #         update_str += "%s=%s," % (update_col_b_dict[i], str(sum_value))
 
-        # update_str = update_str[:-1]
-        # print("-------------------------")
-        # print(update_str, "update_str")
-        # commented by Mahendra 10052019
-        # return Response({'Response':'Success'}, status=status_value)
+    #     update_str = update_str[:-1]
+    #     print("-------------------------")
+    #     print(update_str, "update_str")
+    #     commented by Mahendra 10052019
+    #     return Response({'Response':'Success'}, status=status_value)
 
-        # with connection.cursor() as cursor:
-            # query_string = """SELECT * FROM public.form_3x WHERE cmte_id = %s AND report_id = %s"""
-            # cursor.execute("""SELECT json_agg(t) FROM (""" + query_string + """) t;""", [cmte_id, report_id])
-            # update_query = (
-            #         """update public.form_3x set %s WHERE cmte_id = '%s' AND report_id = '%s';"""
-            #         % (update_str, cmte_id, report_id)
-            # # )
-            # cursor.execute(update_query)
-            # print("Updated on Database ---- yoyooooo")
+    #     with connection.cursor() as cursor:
+    #         query_string = """SELECT * FROM public.form_3x WHERE cmte_id = %s AND report_id = %s"""
+    #         cursor.execute("""SELECT json_agg(t) FROM (""" + query_string + """) t;""", [cmte_id, report_id])
+    #         update_query = (
+    #                 """update public.form_3x set %s WHERE cmte_id = '%s' AND report_id = '%s';"""
+    #                 % (update_str, cmte_id, report_id)
+    #         # )
+    #         cursor.execute(update_query)
+    #         print("Updated on Database ---- yoyooooo")
     return Response({"Response": "Success"}, status=status.HTTP_200_OK)
     # except Exception as e:
     #     return Response(
@@ -11181,7 +11181,8 @@ def update_f3x_coh_cop_subsequent_report(report_id, cmte_id):
                 #     # print("update_f3x_coh_cop_subsequent_report")
                 #     # print(cursor.query)
                 # if cursor.rowcount == 0:
-                    output_string += "," + report
+                #    output_string += "," + report
+                output_string += "," + report
         return output_string
 
     except Exception as e:
