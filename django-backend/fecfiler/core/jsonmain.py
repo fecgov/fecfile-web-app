@@ -28,7 +28,7 @@ import csv
 from django.core.paginator import Paginator
 import time
 from fecfiler.core.views import (get_list_entity, NoOPError, get_cvg_dates, get_comittee_id, superceded_report_id_list)
-from fecfiler.password_management.views import  treasurer_encrypted_password
+from fecfiler.password_management.views import treasurer_encrypted_password
 
 # conn = boto.connect_s3()
 

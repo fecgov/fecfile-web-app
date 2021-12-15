@@ -15,7 +15,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from fecfiler.authentication.authorization import  is_read_only_or_filer_reports
+from fecfiler.authentication.authorization import is_read_only_or_filer_reports
 from fecfiler.core.views import (
     NoOPError,
     check_null_value,

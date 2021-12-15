@@ -534,7 +534,7 @@ def send_message_to_queue(bktname, key):
                         "bktname" : bktname,
                         "key"     : key,
                         "error"   : ex }
-        return  returnstr
+        return returnstr
 
 
 
