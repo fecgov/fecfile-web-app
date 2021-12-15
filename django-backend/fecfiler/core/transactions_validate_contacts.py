@@ -285,7 +285,7 @@ def get_columns_for_schedules(filename):
             print('f3l scheduleb')
         else:
             print('In F3L, Sched type not available!!!')
-    return columnlist, col_names_reindex;
+    return columnlist, col_names_reindex
 
 def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
     print(bktname, key)

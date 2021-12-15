@@ -59,7 +59,7 @@ def save_data_from_excel_to_db(data):
         # "postgres://PG_USER:PG_PASSWORD@PG_HOST:PG_PORT/PG_DATABASE"
         connectionstring = "postgres://" + PG_USER + ":" + PG_PASSWORD + "@" + PG_HOST + ":" + PG_PORT + "/" + PG_DATABASE
         #print("connectionstring : ",connectionstring)
-        engine   = create_engine(connectionstring, pool_recycle=3600);
+        engine   = create_engine(connectionstring, pool_recycle=3600)
         postgreSQLConnection = engine.connect()
         data.to_sql(postgreSQLTable, postgreSQLConnection,  if_exists='append', index=False, dtype={'AUTO-GENERATE': Text} )
     except ValueError as vx:
@@ -237,7 +237,7 @@ def build_schemas(formname, sched, trans_type):
         print("In EXCEPTION BLOCK ")
         print('Exception in build_schemas:',ex)
     finally:
-        connection.close();
+        connection.close()
 
 def check_errkey_exists(bktname, key):
     errkey = key.split('/')

@@ -57,7 +57,7 @@ def check_for_file_hash_in_db(cmteid, filename, hash, fecfilename):
         #print('dbhash : ', dbhash)
         conn.commit()
         cur.close
-        return dbhash;
+        return dbhash
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
     finally:
