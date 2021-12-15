@@ -1256,7 +1256,7 @@ def schedC(request):
         json_result = {'message': str(e)}
         return JsonResponse(json_result, status=status.HTTP_403_FORBIDDEN, safe=False)
 
-#get_outstanding_loans before pagination implementation in DB as well as for front end
+# get_outstanding_loans before pagination implementation in DB as well as for front end
 '''@api_view(["GET"])
 def get_outstanding_loans(request):
     """
@@ -1492,7 +1492,7 @@ def get_outstanding_loans(request):
             trans_query_string_count = """ select count(*) FROM ( """ + _sql + """ ) AS CNT_TABLE """
             #: set transaction query with offsets.
             _sql = set_offset_n_fetch(_sql, page_num, itemsperpage)
-            #set prefix and suffix
+            # set prefix and suffix
             _sql = _sql_prefix + _sql + _sql_suffix
             with connection.cursor() as cursor:
                 cursor.execute(_sql, [cmte_id, tran_type, report_id])
@@ -1557,12 +1557,12 @@ def get_outstanding_loans(request):
             #: set transaction query with offsets.
             _sql = set_offset_n_fetch(_sql, page_num, itemsperpage)
             _sql = _sql_prefix + _sql + _sql_suffix
-            #print(_sql)
+            # print(_sql)
             with connection.cursor() as cursor:
                 cursor.execute(_sql, [cmte_id, report_id, cmte_id, report_id])
                 json_result = cursor.fetchone()[0]
             #: run the record count query
-                #print(trans_query_string_count)
+                # print(trans_query_string_count)
                 trans_query_string_count = """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
                 cursor.execute(trans_query_string_count, [cmte_id, report_id, cmte_id, report_id])
                 row1 = cursor.fetchone()[0]
@@ -1594,7 +1594,7 @@ def get_outstanding_loans(request):
                     tran["child"] = child_tran
                 if loan_pyaments_obj:
                     tran["payments"] = loan_pyaments_obj
-            #return Response(json_result, status=status.HTTP_200_OK)
+            # return Response(json_result, status=status.HTTP_200_OK)
 
 
 #: Adding the pagination and composing response params

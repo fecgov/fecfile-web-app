@@ -281,7 +281,7 @@ def put_schedE(data):
                         data.get("expenditure_amount"),
                         existing_expenditure,
                     )
-            #for F24 editing a duplicate transaction
+            # for F24 editing a duplicate transaction
             form_type = find_form_type(data.get("report_id"), data.get("cmte_id"))
             se_data = {}
             if form_type == 'F24' and data.get('mirror_report_id'):
@@ -885,7 +885,7 @@ def post_schedE(data):
                 )
                 parent_update_fail = False
 
-            #for F24 creating a duplicate transaction
+            # for F24 creating a duplicate transaction
             se_data = {}
             if form_type == 'F24' and data.get('mirror_report_id'):
                 se_data = data.copy()
@@ -1377,13 +1377,13 @@ def schedE(request):
             else:
                 report_id = check_report_id(request.data.get("report_id"))
             # end of handling
-            #also check if an 'override' report_id present, and if so, use that instead.
+            # also check if an 'override' report_id present, and if so, use that instead.
             if(request.data.get("associated_report_id") and check_null_value(request.data.get("associated_report_id"))):
                 report_id = request.data.get("associated_report_id")
                 associatedbydissemination = True
             # datum = schedE_sql_dict(request.data)
             datum = request.data.copy()
-            #handling F24
+            # handling F24
             if find_form_type(report_id, cmte_id) == 'F24':
                 if 'mirror_report_id' not in request.data:
                     raise Exception("Missing Input: mirror_report_id is mandatory")
@@ -1528,7 +1528,7 @@ def schedE(request):
                 report_id = "0"
             else:
                 report_id = check_report_id(request.data.get("report_id"))
-            #also check if an 'override' report_id present, and if so, use that instead.
+            # also check if an 'override' report_id present, and if so, use that instead.
             if(request.data.get("associated_report_id") and check_null_value(request.data.get("associated_report_id"))):
                 report_id = request.data.get("associated_report_id")
                 associatedbydissemination = True

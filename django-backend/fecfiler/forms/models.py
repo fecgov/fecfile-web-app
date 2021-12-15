@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from db_file_storage.model_utils import delete_file, delete_file_if_needed
 from fecfiler.custom_storages import MediaStorage
 
-#Table to store F99 attachment data (Refer this documentation: https://django-db-file-storage.readthedocs.io/en/master/)
+# Table to store F99 attachment data (Refer this documentation: https://django-db-file-storage.readthedocs.io/en/master/)
 class F99Attachment(models.Model):
     bytes = models.TextField()
     filename = models.CharField(max_length=255)
@@ -25,7 +25,6 @@ class CommitteeInfo(models.Model):
     city = models.CharField(max_length=30, null=False)
     state = models.CharField(max_length=2, null=False)
     zipcode = models.TextField(null=False, max_length=9)
-    #zipcode = models.IntegerField(null=False)
     treasurerlastname = models.CharField(max_length=30, null=False)
     treasurerfirstname = models.CharField(max_length=20, null=False)
     treasurermiddlename = models.CharField(max_length=20, null=True, blank=True)
@@ -42,7 +41,7 @@ class CommitteeInfo(models.Model):
     additional_email_1 = models.TextField(max_length=100, null=True, blank=True)
     additional_email_2 = models.TextField(max_length=100, null=True, blank=True)
     filename = models.CharField(max_length=128, null=True, blank=True)
-    #file = models.FileField(upload_to='forms.F99Attachment/bytes/filename/mimetype', null=True, blank=True, validators=[validate_is_pdf,])
+    # file = models.FileField(upload_to='forms.F99Attachment/bytes/filename/mimetype', null=True, blank=True, validators=[validate_is_pdf,])
     file = models.FileField(storage=MediaStorage(), null=True, blank=True)
     # implememted file upload using the following module: https://django-db-file-storage.readthedocs.io/en/master/
     form_type = models.CharField(max_length=3, default="F99")

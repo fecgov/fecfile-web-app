@@ -38,11 +38,11 @@ BACKEND_DB_PASSWORD = os.getenv('BACKEND_DB_PASSWORD')
 
 
 # Setting the logging level
-#logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.ERROR)
 
 def validate_dataframe(data):
-    #check if the column contains only values of a particular schedule
+    # check if the column contains only values of a particular schedule
     sched = data['SCHEDULE NAME'][0][0:2]
     if data['SCHEDULE NAME'].str.contains(sched).any():
         print("schedule matches")
@@ -53,12 +53,10 @@ def validate_dataframe(data):
 
 
 def save_data_from_excel_to_db(data):
-    #print('in the get_data_from_csv')
     postgreSQLTable = 'ref_forms_scheds_format_specs'
     try:
         # "postgres://PG_USER:PG_PASSWORD@PG_HOST:PG_PORT/PG_DATABASE"
         connectionstring = "postgres://" + PG_USER + ":" + PG_PASSWORD + "@" + PG_HOST + ":" + PG_PORT + "/" + PG_DATABASE
-        #print("connectionstring : ",connectionstring)
         engine = create_engine(connectionstring, pool_recycle=3600)
         postgreSQLConnection = engine.connect()
         data.to_sql(postgreSQLTable, postgreSQLConnection,  if_exists='append', index=False, dtype={'AUTO-GENERATE': Text})
@@ -86,7 +84,7 @@ def export_excel_to_db(filename, path):
         sheet_to_start = 1
         if res == 1:
             sheet_to_start = 0
-        #print(xls.sheet_names)
+        # print(xls.sheet_names)
         for sheet_name in xls.sheet_names[sheet_to_start:]:
             print(sheet_name)
             if sheet_name != 'All Receipts':
@@ -94,7 +92,7 @@ def export_excel_to_db(filename, path):
                                     sheet_name=sheet_name,
                                     index_col=0,
                                     skiprows=range(0, 2),
-                                    #dtype=String,
+                                    # dtype=String,
                                     usecols="A,B,C,D,E,F,G")
                 df.dropna(how="all", inplace=True)
                 df.rename(columns={'Auto populate ': 'AUTO-GENERATE',
@@ -106,7 +104,7 @@ def export_excel_to_db(filename, path):
                 df.insert(1, "schedname", schedname)
                 df.insert(2, "transaction_type", sheet_name)
                 save_data_from_excel_to_db(df)
-                #break
+                # break
     except Exception as ex:
         print("In export_excel_to_db EXCEPTION BLOCK ")
         print(ex)
@@ -158,7 +156,7 @@ def schema_validation(dataframe, schema, bktname, key, errorfilename):
         data_clean = dataframe.drop(index=errors_index_rows)
         data_dirty = pd.concat([data_clean, dataframe]).drop_duplicates(keep=False)
         data = {"errors": data_dirty, "data_clean": data_clean}
-        #print('data_dirty:',data_dirty)
+        # print('data_dirty:',data_dirty)
         return data
     except ClientError as e:
         print('ClientError Exception in schema_validation:', e)
@@ -173,11 +171,6 @@ def schema_validation(dataframe, schema, bktname, key, errorfilename):
 
 def build_schemas(formname, sched, trans_type):
     try:
-        # connection = psycopg2.connect(user='postgres',
-        #                               password = 'postgres',
-        #                               host='localhost',
-        #                               port='5432',
-        #                               database='postgres'  )
         connection = psycopg2.connect(user=PG_USER,
                                       password=PG_PASSWORD,
                                       host=PG_HOST,
@@ -192,7 +185,6 @@ def build_schemas(formname, sched, trans_type):
             field = row[3]
             type = row[4]
             required = row[5]
-            #print('----------------------------------------------------------------------------')
             s = type.split('-')
             len = s[1]
             if 'A/N' in type:
@@ -201,28 +193,28 @@ def build_schemas(formname, sched, trans_type):
                     mpv = MatchesPatternValidation(pattern)
                     column = Column(field, [mpv], allow_empty=True)
                 else:
-                    #print('A/N is mandatory with len: ', len,' field: ',field)
+                    # print('A/N is mandatory with len: ', len,' field: ',field)
                     if field in ['REPORT TYPE', 'REPORT YEAR', 'SCHEDULE NAME', 'TRANSACTION IDENTIFIER', 'TRANSACTION NUMBER', 'ENTITY TYPE']:
                         pattern = '^(\\S)+[A-Za-z0-9_-]{1,' + len + '}$'
                     else:
-                        #print('field:',field)
+                        # print('field:',field)
                         pattern = '^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$'
-                    #pattern = '^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$'
+                    # pattern = '^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$'
                     mpv = MatchesPatternValidation(pattern)
                     column = Column(field, [mpv], allow_empty=False)
                 columns.append(column)
                 headers.append(field)
-                #print(field)
+                # print(field)
             elif 'NUM' in type:
-                #print(field)
+                # print(field)
                 pattern = '^[0-9]\d{0,' + len + '}(\.\d{1,3})?%?$'
                 mpv = MatchesPatternValidation(pattern)
                 column = Column(field, [mpv])
                 columns.append(column)
                 headers.append(field)
             elif 'AMT' in type:
-                #print(field)
-                #pattern = '^-?\d\d*[,]?\d*[,]?\d*[.,]?\d*\d$' #'^((\d){1,3},*){1,5}\.(\d){2}$' #'^[\\w\\s]{1,'+ len + '}$'
+                # print(field)
+                # pattern = '^-?\d\d*[,]?\d*[,]?\d*[.,]?\d*\d$' #'^((\d){1,3},*){1,5}\.(\d){2}$' #'^[\\w\\s]{1,'+ len + '}$'
                 pattern = '^[0-9]\d{0,' + len + '}(\.\d{1,3})?%?$'
                 mpv = MatchesPatternValidation(pattern)
                 column = Column(field, [mpv])
@@ -281,7 +273,7 @@ def move_error_files_to_s3(bktname, key, errorfilename, cmteid):
         raise
 
 def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
-    #print(bktname, key)
+    # print(bktname, key)
     resvalidation = ""
     errorfilename = ""
     try:
@@ -309,14 +301,14 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
         res = ''
         flag = False
         for data in pd.read_csv(StringIO(csv_string), dtype=object,  iterator=True, chunksize=size, na_filter=False):
-            #pd.core.strings.str_strip(data)
+            # pd.core.strings.str_strip(data)
             data = data.dropna(axis=[0], how='all')
             res = validate_dataframe(data)
             if "Validate_Pass" != res:
                 return res
             data = data.sort_values(by=["TRANSACTION IDENTIFIER"], ascending=False)
             # print('...............')
-            #loop through the data set to pick unique tranid's
+            # loop through the data set to pick unique tranid's
             cntr = 1
             # print(data['TRANSACTION IDENTIFIER'].unique())
             for tranid in data['TRANSACTION IDENTIFIER'].unique():
@@ -356,26 +348,26 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
 
 
 
-#main method to call the process
+# main method to call the process
 def validate_transactions(bktname, key, cmteid):
     try:
-        #send_message_to_queue()
-        #aws sqs receive-message --queue-url https://queue.amazonaws.com/813218302951/fecfile-importtransactions --attribute-names All --message-attribute-names All --max-number-of-messages 10
-        #aws sqs purge-queue --queue-url https://queue.amazonaws.com/813218302951/fecfile-importtransactions
-        #print("bktname: ",bktname, ", Key : ", key)
+        # send_message_to_queue()
+        # aws sqs receive-message --queue-url https://queue.amazonaws.com/813218302951/fecfile-importtransactions --attribute-names All --message-attribute-names All --max-number-of-messages 10
+        # aws sqs purge-queue --queue-url https://queue.amazonaws.com/813218302951/fecfile-importtransactions
+        # print("bktname: ",bktname, ", Key : ", key)
         returnstr = "File_not_found"
         check_errkey_exists(bktname, key)
         if check_file_exists(bktname, key):
             if bktname and key:
                 res = load_dataframe_from_s3(bktname, key, 100000, 1, cmteid)  # 100,000 records and 1s timer is for testing and need to be updated.
-                #print(res)
+                # print(res)
                 if res != 'Validate_Pass':
                     print("Error with data validation:", res)
                     returnstr = res
                 else:
                     print("~~~~~~~~~~~~~~~~~~~~Parsing Success!!! Error Queue is empty!!!~~~~~~~~~~~~~~")
 
-            #print(returnstr)
+            # print(returnstr)
             if returnstr is not "File_not_found":
                 print(returnstr.split('/'))
 
@@ -418,13 +410,11 @@ def check_data_processed(md5, fecfilename):
             WHERE tfd.fec_file_name = %s
             ORDER BY create_Date DESC   limit 1;
         '''
-        #psyconnstr = 'host='+ PG_HOST + ' ' + ' dbname=' + ' ' + PG_DATABASE + ' ' + ' user=' + PG_USER
         conn = psycopg2.connect(user=PG_USER,
                                       password=PG_PASSWORD,
                                       host=PG_HOST,
                                       port=PG_PORT,
                                       database=PG_DATABASE)
-        #conn = psycopg2.connect(psyconnstr)
         cur = conn.cursor()
         cur.execute(selectsql, (fecfilename,))
         if cur.rowcount == 1:
@@ -453,8 +443,6 @@ def load_transactions_from_temp_perm_tables(fecfilename):
     try:
         res = ''
         selectsql = '''import_schedules'''
-        #psyconnstr = 'host='+ PG_HOST + ' ' + ' dbname=' + ' ' + PG_DATABASE + ' ' + ' user=' + PG_USER
-        #conn = psycopg2.connect(psyconnstr)
         conn = psycopg2.connect(user=PG_USER,
                                 password=PG_PASSWORD,
                                 host=PG_HOST,
@@ -533,7 +521,7 @@ def send_message_to_queue(bktname, key):
                                 "key": key,
                             }
                         break
-                    #time.sleep(5)
+                    # time.sleep(5)
                     if elapsed_time > seconds:
                         print("Finished iterating in: " + str(int(elapsed_time)) + " seconds")
                         break
@@ -562,8 +550,8 @@ def send_message_to_queue(bktname, key):
 # else:
 #     print("No data")
 
-#move_data_from_excel_to_db('F3X')
-#move_data_from_excel_to_db('F3L')
+# move_data_from_excel_to_db('F3X')
+# move_data_from_excel_to_db('F3L')
 
 
 
@@ -578,7 +566,7 @@ def send_message_to_queue(bktname, key):
 # else:
 #     print("list objects exist:")
 
-#code to send and receive mesg from queues
+# code to send and receive mesg from queues
 # try:
 #     # SQS_QUEUE_NAME = 'fecfile-importtransactions'
 #     # SQS_QUEUE_ARN  = 'arn:aws:sqs:us-east-1:813218302951:fecfile-importtransactions'

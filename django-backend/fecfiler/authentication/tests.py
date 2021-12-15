@@ -1,5 +1,4 @@
 from django.test import TestCase
-#from django.urls import resolve
 from django.core.urlresolvers import reverse
 from .views import *
 
@@ -17,7 +16,6 @@ class SimpleTest(TestCase):
         
 
     def test_login_success(self):
-        #import ipdb; ipdb.set_trace()
         response = self.client.post('/api/v1/auth/login/', **self.credentials)
         # should be logged in now, fails however
-        #self.assertEqual(response.context['user']==self.user)
+        # self.assertEqual(response.context['user']==self.user)

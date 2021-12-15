@@ -82,12 +82,12 @@ INSTALLED_APPS = [
     'compressor',
     'corsheaders',
     'fecfiler.authentication',
-    #'fecfiler.posts',
+    # 'fecfiler.posts',
     'fecfiler.forms',
     'db_file_storage',
 
     'fecfiler.core',
-    #'fecfiler.form3x',
+    # 'fecfiler.form3x',
     'fecfiler.sched_A',
     'fecfiler.sched_B',
     'fecfiler.sched_E',
@@ -131,10 +131,10 @@ TEMPLATES = [
     },
 ]
 
-#if DEBUG == True:
+# if DEBUG == True:
 CORS_ORIGIN_ALLOW_ALL = True
 
-#else:
+# else:
 #    CORS_ORIGIN_WHITELIST = ['localhost',os.environ.get('FRONTEND_URL', 'api')]
 
 CORS_ALLOW_HEADERS = default_headers + (
@@ -183,7 +183,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-#TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 TIME_ZONE = "America/New_York"
 
 USE_I18N = True
@@ -205,9 +205,9 @@ STATIC_ROOT = 'static'
 
 COMPRESS_ENABLED = os.environ.get('COMPRESS_ENABLED', not DEBUG)
 
-#DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
-#AWS_ACCESS_KEY_ID = os.environ.get('ACCESS_KEY', None)
-#AWS_SECRET_ACCESS_KEY = os.environ.get('SECRET_KEY', None)
+# DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
+# AWS_ACCESS_KEY_ID = os.environ.get('ACCESS_KEY', None)
+# AWS_SECRET_ACCESS_KEY = os.environ.get('SECRET_KEY', None)
 AWS_HOST_NAME = 'us-east-1'
 AWS_REGION = 'us-east-1'
 
@@ -219,8 +219,8 @@ AWS_SES_AUTO_THROTTLE = 0.5  # (default; safety factor applied to rate limit, tu
 AWS_STORAGE_BUCKET_NAME = 'fecfile-filing'  # or None if using service role
 AWS_STORAGE_UPLOAD_BUCKET_NAME = 'fecfile-filing-uploads'  # or None if using service role
 AWS_STORAGE_IMPORT_CONTACT_BUCKET_NAME = 'fecfile-filing-frontend'
-#AWS_ACCESS_KEY_ID = '<aws access key >' # or None if using service role
-#AWS_SECRET_ACCESS_KEY = '<aws secret access key>'
+# AWS_ACCESS_KEY_ID = '<aws access key >' # or None if using service role
+# AWS_SECRET_ACCESS_KEY = '<aws secret access key>'
 
 
 # if False it will create unique file names for every uploaded file
@@ -346,7 +346,7 @@ for logger in LOGGING['loggers']:
 
 
 # AWS SES Configuration Settings
-#EMAIL_BACKEND = 'django_ses_boto3.ses_email_backend.SESEmailBackend'
+# EMAIL_BACKEND = 'django_ses_boto3.ses_email_backend.SESEmailBackend'
 
 AWS_ACCESS_KEY_ID = os.environ.get('ACCESS_KEY', None)
 AWS_SECRET_ACCESS_KEY = os.environ.get('SECRET_KEY', None)
@@ -362,7 +362,7 @@ USPS_API_URL = os.environ.get('USPS_API_URL', None)
 # add the credentials from IAM and bucket name
 
 AWS_STORAGE_BUCKET_NAME = 'dev-efile-repo'  # or None if using service role
-#AWS_STORAGE_BUCKET_NAME = 'fecfile-filing'
+# AWS_STORAGE_BUCKET_NAME = 'fecfile-filing'
 
 AWS_STORAGE_UPLOAD_BUCKET_NAME = 'dev-efile-upload'  # or None if using service role
 

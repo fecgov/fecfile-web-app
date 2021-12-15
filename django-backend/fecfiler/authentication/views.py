@@ -96,7 +96,6 @@ class LoginView(views.APIView):
         username = data.get('username', None)
         password = data.get('password', None)
         email = data.get('email', None)
-        # import ipdb; ipdb.set_trace()
         account = authenticate(request=request, username=username, password=password, email=email)
 
         # fail, bad login info

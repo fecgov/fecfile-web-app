@@ -38,14 +38,13 @@ CREATE TABLE public.transactions_file_details
 )
 '''
 
-#check if file is new
+# check if file is new
 def check_for_file_hash_in_db(cmteid, filename, hash, fecfilename):
     conn = None
     try:
         """ insert a transactions_file_details """
         selectsql = """SELECT cmte_id, md5, file_name, create_date FROM public.transactions_file_details WHERE cmte_id = %s AND file_name = %s AND md5 = %s AND fec_file_name = %s;"""
  
-        #conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
         conn = psycopg2.connect(user=PG_USER,
                                       password=PG_PASSWORD,
                                       host=PG_HOST,
@@ -54,7 +53,6 @@ def check_for_file_hash_in_db(cmteid, filename, hash, fecfilename):
         cur = conn.cursor()
         cur.execute(selectsql, (cmteid, filename, hash, fecfilename))
         dbhash = cur.fetchone()
-        #print('dbhash : ', dbhash)
         conn.commit()
         cur.close
         return dbhash
@@ -77,7 +75,6 @@ def load_file_hash_to_db(cmteid, filename, hash, fecfilename):
         insertsql = """INSERT INTO transactions_file_details(cmte_id, file_name, md5, fec_file_name)
                 VALUES(%s, %s, %s, %s);"""
  
-        # conn = psycopg2.connect("host=localhost dbname=postgres user=postgres")
         conn = psycopg2.connect(user=PG_USER,
                                       password=PG_PASSWORD,
                                       host=PG_HOST,
@@ -99,18 +96,18 @@ def generate_md5_hash(filename):
     print('generate_md5_hash')
     try:
         bucket = 'fecfile-filing-frontend'
-        #key     = 'transactions/Disbursements_1q2020.csv'
+        # key = 'transactions/Disbursements_1q2020.csv'
         key = 'transactions/' + filename  # srini_test1.csv
         s3 = boto3.client('s3')
         obj = s3.get_object(Bucket=bucket, Key=key)
         body = obj['Body']
-        #print(body)
+        # print(body)
         csv_string = body.read().decode('utf-8')
-        #print(csv_string)
-        #i=0
+        # print(csv_string)
+        # i=0
         for data in pd.read_csv(StringIO(csv_string), dtype=object,  iterator=True, chunksize=200000):
-            #print(i)
-            #i+=1
+            # print(i)
+            # i+=1
             filehash = hash_pandas_object(data).sum()
         filehash = str(filehash)
         print(filehash)

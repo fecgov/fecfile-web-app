@@ -1,12 +1,7 @@
-# Create your models here.
-
 from django.db import models
 from django.core.validators import FileExtensionValidator
-#from .validators import validate_is_pdf
 from django.utils.translation import ugettext_lazy as _
 
-#class Reports(models.Model):
-#    reporttype = models.Charfield(max_length=50)
     
 class Cmte_Report_Types_View(models.Model):
     cmte_id = models.CharField(max_length=9)

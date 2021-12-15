@@ -403,18 +403,12 @@ def schedD(request):
 
     elif request.method == "GET":
         try:
-            #: Hardcode cmte value for now and remove after dev complete
-            #data = {"cmte_id": "C00000935"}
             data = {"cmte_id": get_comittee_id(request.user.username)}
      
             if "report_id" in request.query_params:
                 data["report_id"] = check_report_id(
                     request.query_params.get("report_id")
                 )
-            # elif "report_id" in request.query_params:
-            #     data["report_id"] = check_report_id(
-            #         request.query_params.get("report_id")
-            #     )
             else:
                 raise Exception("Missing Input: report_id is mandatory")
             if "transaction_id" in request.query_params and check_null_value(

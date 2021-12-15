@@ -221,7 +221,6 @@ def get_filed_report_types(request):
     # Fields for identifying the committee type and committee design and filter the forms category
 
     try:
-        # import ipdb;ipdb.set_trace()
         comm_id = get_comittee_id(request.user.username)
 
         # forms_obj = [obj.__dict__ for obj in Cmte_Report_Types_View.objects.raw("select report_type,rpt_type_desc,regular_special_report_ind,rpt_type_info, cvg_start_date,
@@ -3909,8 +3908,6 @@ def create_json_file(request):
                 files=file_obj,
             )
 
-            # import ipdb; ipdb.set_trace()
-            # print(res.text)
             return Response(res.text, status=status.HTTP_200_OK)
             # return Response("successful", status=status.HTTP_200_OK)
             if not res.ok:
@@ -4603,7 +4600,7 @@ def get_transactions(request, transaction_id):
     #: set transaction query with offsets.
     if transaction_id is None:
         trans_query_string = set_offset_n_fetch(trans_query_string, page_num, itemsperpage)
-    #if ctgry_type == "receipts_tran" or ctgry_type == "disbursements_tran" or ctgry_type == "other_tran":
+    # if ctgry_type == "receipts_tran" or ctgry_type == "disbursements_tran" or ctgry_type == "other_tran":
     #    trans_query_string = "(" + trans_query_string + ") UNION (" + trans_query_string[0:trans_query_string.index(" from ")] + " from ( SELECT W.* FROM (" + trans_query_string + ") V join " + get_trans_view_name(ctgry_type) + " W on V.transaction_id = W.back_ref_transaction_id) Z)"
 
     with connection.cursor() as cursor:
@@ -6861,203 +6858,6 @@ def print_preview_pdf(request):
         raise
 
 
-"""
-*********************************************************************************************************************************************
-end print priview api
-*********************************************************************************************************************************************
-"""
-"""
-**********************************************************************************************************************************************
-Create Contacts API - CORE APP - SPRINT 16 - FNE 1248 - BY  Yeswanth Kumar Tella
-**********************************************************************************************************************************************
-"""
-'''
-Old Code 
-
-
-@api_view(["GET", "POST"])
-def contactsTable(request):
-    try:
-
-        if request.method == "POST":
-            cmte_id = get_comittee_id(request.user.username)
-            param_string = ""
-            page_num = int(request.data.get("page", 1))
-            descending = request.data.get("descending", "false")
-            sortcolumn = request.data.get("sortColumnName")
-            itemsperpage = request.data.get("itemsPerPage", 5)
-            search_string = request.data.get("search")
-            # import ipdb;ipdb.set_trace()
-            params = request.data.get("filters", {})
-            keywords = params.get("keywords")
-            if str(descending).lower() == "true":
-                descending = "DESC"
-            else:
-                descending = "ASC"
-
-            keys = [
-                "id",
-                "entity_type",
-                "name",
-                "street1",
-                "street2",
-                "city",
-                "state",
-                "zip",
-                "occupation",
-                "employer",
-                "candOfficeState",
-                "candOfficeDistrict",
-                "candCmteId",
-                "phone_number",
-                "deleteddate",
-            ]
-            search_keys = [
-                "id",
-                "entity_type",
-                "name",
-                "street1",
-                "street2",
-                "city",
-                "state",
-                "zip",
-                "occupation",
-                "employer",
-                "candOfficeState",
-                "candOfficeDistrict",
-                "candCmteId",
-                "phone_number",
-                "deleteddate",
-            ]
-            if search_string:
-                for key in search_keys:
-                    if not param_string:
-                        param_string = (
-                                param_string
-                                + " AND (CAST("
-                                + key
-                                + " as CHAR(100)) ILIKE '%"
-                                + str(search_string)
-                                + "%'"
-                        )
-                    else:
-                        param_string = (
-                                param_string
-                                + " OR CAST("
-                                + key
-                                + " as CHAR(100)) ILIKE '%"
-                                + str(search_string)
-                                + "%'"
-                        )
-                param_string = param_string + " )"
-            keywords_string = ""
-            if keywords:
-                for key in keys:
-                    for word in keywords:
-                        if '"' in word:
-                            continue
-                        elif "'" in word:
-                            if not keywords_string:
-                                keywords_string = (
-                                        keywords_string
-                                        + " AND ( CAST("
-                                        + key
-                                        + " as CHAR(100)) = "
-                                        + str(word)
-                                )
-                            else:
-                                keywords_string = (
-                                        keywords_string
-                                        + " OR CAST("
-                                        + key
-                                        + " as CHAR(100)) = "
-                                        + str(word)
-                                )
-                        else:
-                            if not keywords_string:
-                                keywords_string = (
-                                        keywords_string
-                                        + " AND ( CAST("
-                                        + key
-                                        + " as CHAR(100)) ILIKE '%"
-                                        + str(word)
-                                        + "%'"
-                                )
-                            else:
-                                keywords_string = (
-                                        keywords_string
-                                        + " OR CAST("
-                                        + key
-                                        + " as CHAR(100)) ILIKE '%"
-                                        + str(word)
-                                        + "%'"
-                                )
-                keywords_string = keywords_string + " )"
-            param_string = param_string + keywords_string
-
-            trans_query_string = (
-                    """SELECT id, entity_type, name, street1, street2, city, state, zip, occupation, employer, candOffice, candOfficeState, candOfficeDistrict, candCmteId, phone_number, deleteddate, active_transactions_cnt from all_contacts_view
-                                        where (deletedFlag <> 'Y' OR deletedFlag is NULL) AND cmte_id='"""
-                    + cmte_id
-                    + """' """
-                    + param_string
-            )
-            # print("contacts trans_query_string: ",trans_query_string)
-            # import ipdb;ipdb.set_trace()
-            if sortcolumn and sortcolumn != "default":
-                trans_query_string = (
-                        trans_query_string
-                        + """ ORDER BY """
-                        + sortcolumn
-                        + """ """
-                        + descending
-                )
-            elif sortcolumn == "default":
-                trans_query_string = trans_query_string + """ ORDER BY name ASC"""
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    """SELECT  w(t) FROM (""" + trans_query_string + """) t"""
-                )
-                print("contacts trans_query_string: ",trans_query_string)                
-                for row in cursor.fetchall():
-                    data_row = list(row)
-                    forms_obj = data_row[0]
-                    forms_obj = data_row[0]
-                    if forms_obj is None:
-                        forms_obj = []
-                        status_value = status.HTTP_200_OK
-                    else:
-                        for d in forms_obj:
-                            for i in d:
-                                if not d[i]:
-                                    d[i] = ""
-
-                        status_value = status.HTTP_200_OK
-
-            # import ipdb; ipdb.set_trace()
-            total_count = len(forms_obj)
-            paginator = Paginator(forms_obj, itemsperpage)
-            if paginator.num_pages < page_num:
-                page_num = paginator.num_pages
-            forms_obj = paginator.page(page_num)
-            json_result = {
-                "contacts": list(forms_obj),
-                "totalcontactsCount": total_count,
-                "itemsPerPage": itemsperpage,
-                "pageNumber": page_num,
-                "totalPages": paginator.num_pages,
-            }
-        return Response(json_result, status=status_value)
-
-    except Exception as e:
-        return Response(
-            "The contactsTable API is throwing an error: " + str(e),
-            status=status.HTTP_400_BAD_REQUEST,
-        )
-
-
-'''
-
 @api_view(["GET", "POST"])
 def contactsTable(request):
     try:
@@ -7071,7 +6871,6 @@ def contactsTable(request):
             sortcolumn = request.data.get("sortColumnName")
             itemsperpage = request.data.get("itemsPerPage", 5)
             search_string = request.data.get("search")
-            # import ipdb;ipdb.set_trace()
             params = request.data.get("filters", {})
             keywords = params.get("keywords")
             if str(descending).lower() == "true":
@@ -7235,10 +7034,10 @@ def contactsTable(request):
                 )
                 row1 = cursor.fetchone()[0]
                 totalcount = row1[0]['count']
-                #print(totalcount)
-            #: removed the paginator code references and replaced with custom pagination
+                # print(totalcount)
+            # removed the paginator code references and replaced with custom pagination
             # get the total records count
-            #print("my totalcount", totalcount)
+            # print("my totalcount", totalcount)
             # import ipdb; ipdb.set_trace()
             # total_count = len(forms_obj)
             # print("paginator total_count", total_count)
@@ -9449,7 +9248,7 @@ def clone_a_transaction(request):
             logger.debug("new transaction id:{}".format(new_tran_id))
 
             if mirror_transaction_flag:
-                #this requires an additional transaction to be saved in the mirror report
+                # this requires an additional transaction to be saved in the mirror report
                 duplicate_select_str = select_str
                 new_mirror_tran_id = get_next_transaction_id(transaction_id[0:2])
                 mirror_report_id = request.data.get("mirror_report_id")
@@ -12014,7 +11813,7 @@ def get_notification(request):
                     row1 = cursor.fetchone()[0]
                     submission_id = row1[0]['submission_id']
 
-                #submission_id = "4d074079-53d3-4b3b-9d37-caf011633c55"
+                # submission_id = "4d074079-53d3-4b3b-9d37-caf011633c55"
                 responses = requests.get(
                     settings.NXG_FEC_FILING_CONFIRMATION_URL + "?submissionId={}".format(
                         submission_id
@@ -12051,7 +11850,6 @@ def get_notification(request):
             email_text_body = row1[0]['email_text_body']
 
         email = email_html_body
-        #blob = ''.join(format(ord(i), 'b') for i in email)
         blob = email
 
         output = {
@@ -12271,7 +12069,7 @@ def validate_import_transactions(request):
         bktname = request.data.get("bkt_name")  # "fecfile-filing-frontend"
         key = request.data.get("key")  # "transactions/F3X_ScheduleE_Import_Transactions_11_25_TEST_Data.csv"
         auth = request.auth
-        #print('cmteid ', cmteid,' bkt_name ',bktname,' key: ', key )
+        # print('cmteid ', cmteid,' bkt_name ',bktname,' key: ', key )
         if bktname and key:
             resp = validate_transactions(bktname, key, cmteid)
         else:

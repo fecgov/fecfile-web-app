@@ -1,5 +1,4 @@
 from django.conf.urls import url
-#from . import views, duplicate, merge, export
 from . import contacts_committee
 from .views import views
 from .views import duplicate

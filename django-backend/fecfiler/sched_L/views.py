@@ -1985,8 +1985,6 @@ def get_sla_summary_table(request):
             descending = "ASC"
         trans_query_string_count = ""
 
-        #: Hardcode cmte value for now and remove after dev complete
-        #cmte_id = "C00000935"
         cmte_id = get_comittee_id(request.user.username)
 
         if not (
@@ -2153,8 +2151,6 @@ def get_slb_summary_table(request):
             descending = "ASC"
         trans_query_string_count = ""
 
-        #: Hardcode cmte value for now and remove after dev complete
-        #cmte_id = "C00000935"
         cmte_id = get_comittee_id(request.user.username)
 
         if not (
@@ -2208,7 +2204,7 @@ def get_slb_summary_table(request):
         #: update for pagination
         json_result = get_pagination_dataset(result, itemsperpage, page_num)
         return Response(json_result, status=status.HTTP_200_OK)
-        #return Response(result, status=status.HTTP_200_OK)
+        # return Response(result, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
             "The get_slb_summary_table API is throwing an error: " + str(e),

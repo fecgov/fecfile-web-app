@@ -574,8 +574,6 @@ def preappending_purpose_description(transaction):
 @api_view(["POST"])
 def create_json_builders(request):
     try:
-        # import ipdb;ipdb.set_trace()
-        # print("request",request)
         logger.debug('create json builder with {}'.format(request))
         MANDATORY_INPUTS = ['report_id', 'call_from']
         error_string = ""

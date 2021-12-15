@@ -1739,8 +1739,6 @@ def get_h2_summary_table(request):
             descending = "ASC"
         trans_query_string_count = ""
 
-        #: Hardcode cmte value for now and remove after dev complete
-        #cmte_id = "C00000935"
         cmte_id = get_comittee_id(request.user.username)
         report_id = request.query_params.get("report_id")
         # logger.debug('checking if it is a new report')
@@ -2668,8 +2666,6 @@ def get_h3_summary(request):
         row1 = ""
         totalcount = ""
 
-        #: Hardcode cmte value for now and remove after dev complete
-        #cmte_id = "C00000935"
         cmte_id = get_comittee_id(request.user.username)
 
         report_id = request.query_params.get("report_id")
@@ -2727,7 +2723,7 @@ def get_h3_summary(request):
 
             json_result = get_pagination_dataset(_sum, itemsperpage, page_num)
             return Response(json_result, status=status.HTTP_200_OK)
-            #return Response(_sum, status=status.HTTP_200_OK)
+            # return Response(_sum, status=status.HTTP_200_OK)
     except:
         raise
 
@@ -4480,8 +4476,6 @@ def get_h5_summary(request):
             descending = "ASC"
         trans_query_string_count = ""
                 
-        #: Hardcode cmte value for now and remove after dev complete
-        #cmte_id = "C00000935"
         cmte_id = get_comittee_id(request.user.username)
         report_id = request.query_params.get("report_id")
         # aggregate_dic = load_h3_aggregate_amount(cmte_id, report_id)
@@ -5457,8 +5451,6 @@ def schedH6(request):
                     descending = "ASC"
                 trans_query_string_count = ""
                         
-                #: Hardcode cmte value for now and remove after dev complete
-                #data = {"cmte_id": "C00000935"}
                 data = {"cmte_id": get_comittee_id(request.user.username)}
                 # make sure we get query parameters from both
                 # request.data.update(request.query_params)
