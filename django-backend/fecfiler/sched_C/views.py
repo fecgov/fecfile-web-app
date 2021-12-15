@@ -1502,7 +1502,7 @@ def get_outstanding_loans(request):
                     """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
                 )
                 row1 = cursor.fetchone()[0]
-                totalcount =  row1[0]['count']
+                totalcount = row1[0]['count']
         else:
             _sql = """
                         SELECT 
@@ -1566,7 +1566,7 @@ def get_outstanding_loans(request):
                 trans_query_string_count = """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
                 cursor.execute(trans_query_string_count, [cmte_id, report_id, cmte_id, report_id])
                 row1 = cursor.fetchone()[0]
-                totalcount =  row1[0]['count']
+                totalcount = row1[0]['count']
 
         if not json_result:
             return Response([], status=status.HTTP_200_OK)

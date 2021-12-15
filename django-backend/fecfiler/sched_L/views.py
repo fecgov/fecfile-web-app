@@ -1975,7 +1975,7 @@ def get_sla_summary_table(request):
             sortcolumn = "name"
         else:
             sortcolumn = query_params.get("sortColumnName")
-        itemsperpage =  get_int_value(query_params.get("itemsPerPage"))
+        itemsperpage = get_int_value(query_params.get("itemsPerPage"))
         search_string = query_params.get("search")
         params = query_params.get("filters", {})
         keywords = params.get("keywords")
@@ -2143,7 +2143,7 @@ def get_slb_summary_table(request):
             sortcolumn = "name"
         else:
             sortcolumn = query_params.get("sortColumnName")
-        itemsperpage =  get_int_value(query_params.get("itemsPerPage"))
+        itemsperpage = get_int_value(query_params.get("itemsPerPage"))
         search_string = query_params.get("search")
         params = query_params.get("filters", {})
         keywords = params.get("keywords")

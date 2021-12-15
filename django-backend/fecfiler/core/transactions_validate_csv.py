@@ -59,7 +59,7 @@ def save_data_from_excel_to_db(data):
         # "postgres://PG_USER:PG_PASSWORD@PG_HOST:PG_PORT/PG_DATABASE"
         connectionstring = "postgres://" + PG_USER + ":" + PG_PASSWORD + "@" + PG_HOST + ":" + PG_PORT + "/" + PG_DATABASE
         #print("connectionstring : ",connectionstring)
-        engine   = create_engine(connectionstring, pool_recycle=3600)
+        engine = create_engine(connectionstring, pool_recycle=3600)
         postgreSQLConnection = engine.connect()
         data.to_sql(postgreSQLTable, postgreSQLConnection,  if_exists='append', index=False, dtype={'AUTO-GENERATE': Text})
     except ValueError as vx:
@@ -79,7 +79,7 @@ def export_excel_to_db(filename, path):
         filewithpath = filelocation + filename
         print("File name",filewithpath)
         str = filename.split('_')
-        formname  = str[0]
+        formname = str[0]
         schedname = str[1]
         xls = pd.ExcelFile(filewithpath)
         res = len(xls.sheet_names)
@@ -190,7 +190,7 @@ def build_schemas(formname, sched, trans_type):
         headers = []
         for counter, row in enumerate(format_specs):
             field = row[3]
-            type  = row[4]
+            type = row[4]
             required = row[5]
             #print('----------------------------------------------------------------------------')
             s = type.split('-')
@@ -286,7 +286,7 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
     errorfilename=""
     try:
         str = key.split('_')
-        schedule  = str[1]
+        schedule = str[1]
         formname = (str[0].split('/'))[1]
         if 'H' in schedule or 'h' in schedule:
             sched = schedule.replace('Schedule','')
@@ -327,7 +327,7 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
                     # build schema based on tranid
                     head_schema = build_schemas(formname, schedule, tranid)
                     headers = head_schema[0]
-                    schema  = head_schema[1]
+                    schema = head_schema[1]
 
                     data_temp = data[headers]
                     data_temp = data_temp.loc[(data['TRANSACTION IDENTIFIER'] == tranid)]
@@ -532,7 +532,7 @@ def send_message_to_queue(bktname, key):
                         break
                     #time.sleep(5)
                     if elapsed_time > seconds:
-                        print("Finished iterating in: " + str(int(elapsed_time))  + " seconds")
+                        print("Finished iterating in: " + str(int(elapsed_time)) + " seconds")
                         break
 
         return returnstr

@@ -1775,7 +1775,7 @@ def update_transactions_change_cvg_dates(cmte_id, report_id, present_cvg_start_d
             _value_list.extend(value_list)
             with connection.cursor() as cursor:
                 cursor.execute(_sql, _value_list)
-                transactions_list =  cursor.fetchall()
+                transactions_list = cursor.fetchall()
             if transactions_list:
                 update_tran_list = []
                 for transaction in transactions_list:
@@ -1811,7 +1811,7 @@ def count_orphaned_transactions(report_id, cmte_id):
         _values = [FIXED_REPORT_ID_FOR_ORPHANED_TRANSACTIONS, cmte_id, cmte_id, report_id]
         with connection.cursor() as cursor:
             cursor.execute(_sql, _values)
-            value =  cursor.fetchone()[0]
+            value = cursor.fetchone()[0]
         if value:
             return True
         else:
@@ -4684,7 +4684,7 @@ def get_transactions(request, transaction_id):
             """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
         )
         row1=cursor.fetchone()[0]
-        totalcount =  row1[0]['count']
+        totalcount = row1[0]['count']
         print(totalcount)
     
     # logger.debug(output_list)
@@ -7234,7 +7234,7 @@ def contactsTable(request):
                     """SELECT json_agg(t) FROM (""" + trans_query_string_count + """) t"""
                 )
                 row1=cursor.fetchone()[0]
-                totalcount =  row1[0]['count']
+                totalcount = row1[0]['count']
                 #print(totalcount)
             #: removed the paginator code references and replaced with custom pagination
             # get the total records count
@@ -9742,7 +9742,7 @@ def amend_form3x_3l(reportid, cmte_id, form_type, error_flag=True):
         print(report_id_list, from_date)
         if report_id_list:
             for i in report_id_list:
-                amended_obj =  create_amended(i)
+                amended_obj = create_amended(i)
                 if str(i) == str(reportid):
                     data_obj = amended_obj
         elif error_flag:
@@ -11310,8 +11310,8 @@ def F3X_values(cmte_id, report_list, year_flag=False):
             output_dict.get(f3x_col_line_dict['26'][i],0) + output_dict.get(f3x_col_line_dict['27'][i],0) +
             output_dict.get(f3x_col_line_dict['28'][i],0) + output_dict.get(f3x_col_line_dict['29'][i],0) +
             output_dict.get(f3x_col_line_dict['30'][i],0))
-        output_dict[f3x_col_line_dict['32'][i]] = (output_dict.get(f3x_col_line_dict['31'][i],0)  -
-                output_dict.get(f3x_col_line_dict['21AII'][i],0)  - output_dict.get(f3x_col_line_dict['30AII'][i],0))
+        output_dict[f3x_col_line_dict['32'][i]] = (output_dict.get(f3x_col_line_dict['31'][i],0) -
+                output_dict.get(f3x_col_line_dict['21AII'][i],0) - output_dict.get(f3x_col_line_dict['30AII'][i],0))
         return output_dict
     except Exception as e:
         raise Exception(
@@ -11854,7 +11854,7 @@ def get_notifications_count(request):
                 "cmte_id": cmte_id
             })
             row1=cursor.fetchone()[0]
-            totalcount =  row1[0]['count']
+            totalcount = row1[0]['count']
 
         output = {'notification_count': totalcount}
 
@@ -11942,7 +11942,7 @@ def get_notifications(request):
                 "cmte_id": cmte_id
             })
             row1=cursor.fetchone()[0]
-            totalCount =  row1[0]['count']
+            totalCount = row1[0]['count']
 
         sql = """SELECT json_agg(t) FROM (""" + sql_items + """) t"""
         with connection.cursor() as cursor:
@@ -12012,7 +12012,7 @@ def get_notification(request):
                         "notification_id": notification_id
                     })
                     row1=cursor.fetchone()[0]
-                    submission_id =  row1[0]['submission_id']
+                    submission_id = row1[0]['submission_id']
 
                 #submission_id = "4d074079-53d3-4b3b-9d37-caf011633c55"
                 responses = requests.get(
@@ -12046,9 +12046,9 @@ def get_notification(request):
                 "notification_id": notification_id
             })
             row1=cursor.fetchone()[0]
-            email_subject =  row1[0]['email_subject']
-            email_html_body =  row1[0]['email_html_body']
-            email_text_body =  row1[0]['email_text_body']
+            email_subject = row1[0]['email_subject']
+            email_html_body = row1[0]['email_html_body']
+            email_text_body = row1[0]['email_text_body']
 
         email = email_html_body
         #blob = ''.join(format(ord(i), 'b') for i in email)
@@ -12267,7 +12267,7 @@ def generate_contact_details_from_csv(request):
 def validate_import_transactions(request):
     try:
 
-        cmteid =  get_comittee_id(request.user.username)
+        cmteid = get_comittee_id(request.user.username)
         bktname = request.data.get("bkt_name") #"fecfile-filing-frontend"
         key = request.data.get("key") #"transactions/F3X_ScheduleE_Import_Transactions_11_25_TEST_Data.csv"
         auth = request.auth
@@ -12312,7 +12312,7 @@ def validate_import_transactions(request):
 @api_view(["POST"])
 def queue_transaction_message(request):
     try:
-        cmteid =  get_comittee_id(request.user.username)
+        cmteid = get_comittee_id(request.user.username)
         bktname = request.data.get("bkt_name") #"fecfile-filing-frontend"
         key = request.data.get("key") #"transactions/F3X_ScheduleE_Import_Transactions_11_25_TEST_Data.csv"
 

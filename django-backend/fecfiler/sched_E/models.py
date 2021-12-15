@@ -28,7 +28,7 @@ class SchedE(models.Model):
     so_cand_id = models.CharField(max_length=9)
     so_cand_last_name = models.CharField(max_length=30)
     so_cand_fist_name = models.CharField(max_length=20)
-    so_cand_middle_name  = models.CharField(max_length=20)
+    so_cand_middle_name = models.CharField(max_length=20)
     so_cand_prefix = models.CharField(max_length=10)
     so_cand_suffix = models.CharField(max_length=10)
     so_cand_office = models.CharField(max_length=1)

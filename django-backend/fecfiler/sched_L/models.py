@@ -70,7 +70,7 @@ class SchedL(models.Model):
         max_digits=12, decimal_places=2, blank=True, null=True)
     voter_reg_disb_amount = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    voter_id_disb_amount  =models.DecimalField(
+    voter_id_disb_amount = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
     gotv_disb_amount = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
@@ -82,7 +82,7 @@ class SchedL(models.Model):
         max_digits=12, decimal_places=2, blank=True, null=True)
     total_disb =models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    coh_bop  = models.DecimalField(
+    coh_bop = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
     receipts = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
@@ -120,7 +120,7 @@ class SchedL(models.Model):
         max_digits=12, decimal_places=2, blank=True, null=True)
     receipts_ytd = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    sub_total_ytd  = models.DecimalField(
+    sub_total_ytd = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
     disbursements_ytd = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)

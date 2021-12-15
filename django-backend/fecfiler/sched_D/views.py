@@ -336,7 +336,7 @@ def schedD(request):
         sortcolumn = "name"
     else:
         sortcolumn = query_params.get("sortColumnName")
-    itemsperpage =  get_int_value(query_params.get("itemsPerPage"))
+    itemsperpage = get_int_value(query_params.get("itemsPerPage"))
     search_string = query_params.get("search")
     params = query_params.get("filters", {})
     keywords = params.get("keywords")
@@ -405,7 +405,7 @@ def schedD(request):
         try:
             #: Hardcode cmte value for now and remove after dev complete
             #data = {"cmte_id": "C00000935"}
-            data =  {"cmte_id": get_comittee_id(request.user.username)}
+            data = {"cmte_id": get_comittee_id(request.user.username)}
      
             if "report_id" in request.query_params:
                 data["report_id"] = check_report_id(

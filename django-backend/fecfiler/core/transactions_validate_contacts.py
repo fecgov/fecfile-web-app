@@ -303,7 +303,7 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
         csv_string = body.read().decode('utf-8')
         filepath = 'contacts/' + cmteid + '_' + filename +'.csv'
         col_to_read, col_names_reindex = get_columns_for_schedules(filename)
-        col_to_add  = get_columns_to_add(filename)
+        col_to_add = get_columns_to_add(filename)
         chkf = False
         for data in pd.read_csv(StringIO(csv_string), dtype=object, index_col=False, iterator=True, chunksize=size, usecols=col_to_read):
             data = data.reindex(columns = col_names_reindex)

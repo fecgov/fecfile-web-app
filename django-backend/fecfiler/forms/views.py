@@ -340,7 +340,7 @@ def update_f99_info(request, print_flag=False):
 
                     if comm_info:
                         if comm_info.is_submitted==False:
-                            comm_info.committeeid =  request.data.get('committeeid')
+                            comm_info.committeeid = request.data.get('committeeid')
                             comm_info.committeename = request.data.get('committeename')
                             comm_info.street1 = request.data.get('street1')
                             comm_info.street2 = request.data.get('street2')
@@ -918,7 +918,7 @@ def get_form99list(request):
             forms_obj = None
             with connection.cursor() as cursor:
                 if reportid in ["None", "null", " ", "","0"]:
-                    query_string =  """SELECT json_agg(t) FROM 
+                    query_string = """SELECT json_agg(t) FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, delete_ind, create_date, last_update_date,report_type_desc, viewtype, 
                                             deleteddate, memo_text,
                                             (select count(1) from public.reports_view c where c.superceded_report_id = t1.report_id) as child_records_count
@@ -934,7 +934,7 @@ def get_form99list(request):
                                     ) t1
                                     WHERE  viewtype = %s ORDER BY last_update_date DESC ) t; """
                 else:
-                    query_string =  """SELECT json_agg(t) FROM 
+                    query_string = """SELECT json_agg(t) FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, delete_ind, create_date, last_update_date,report_type_desc, viewtype,
                                             deleteddate, memo_text,
                                             (select count(1) from public.reports_view c where c.superceded_report_id = t1.report_id) as child_records_count
@@ -977,7 +977,7 @@ def get_form99list(request):
             with connection.cursor() as cursor:
 
                 if reportid in ["None", "null", " ", "","0"]:
-                    query_count_string =  """SELECT count('a') as totalreportsCount FROM 
+                    query_count_string = """SELECT count('a') as totalreportsCount FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, 
                                             superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, 
                                             delete_ind, create_date, last_update_date,report_type_desc, viewtype, deleteddate    
@@ -993,7 +993,7 @@ def get_form99list(request):
                                     ) t1
                                     WHERE  viewtype = %s ORDER BY last_update_date DESC ) t; """
                 else:
-                    query_count_string =  """SELECT count('a') as totalreportsCount FROM 
+                    query_count_string = """SELECT count('a') as totalreportsCount FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, 
                                         superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, 
                                         delete_ind, create_date, last_update_date,report_type_desc, viewtype, deleteddate    
@@ -1053,7 +1053,7 @@ def get_previous_amend_reports(request):
             forms_obj = None
             with connection.cursor() as cursor:
                 if reportid in ["None", "null", " ", "","0"]:
-                    query_string =  """SELECT json_agg(t) FROM 
+                    query_string = """SELECT json_agg(t) FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, delete_ind, create_date, last_update_date,report_type_desc, viewtype, 
                                             deleteddate, memo_text,
                                             (select count(1) from public.reports_view c where c.superceded_report_id = t1.report_id) as child_records_count
@@ -1069,7 +1069,7 @@ def get_previous_amend_reports(request):
                                     ) t1
                                     WHERE  viewtype = %s ORDER BY last_update_date DESC ) t; """.format("', '".join(report_list))
                 else:
-                    query_string =  """SELECT json_agg(t) FROM 
+                    query_string = """SELECT json_agg(t) FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, delete_ind, create_date, last_update_date,report_type_desc, viewtype,
                                             deleteddate, memo_text,
                                             (select count(1) from public.reports_view c where c.superceded_report_id = t1.report_id) as child_records_count
@@ -1112,7 +1112,7 @@ def get_previous_amend_reports(request):
             with connection.cursor() as cursor:
 
                 if reportid in ["None", "null", " ", "","0"]:
-                    query_count_string =  """SELECT count('a') as totalreportsCount FROM 
+                    query_count_string = """SELECT count('a') as totalreportsCount FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, 
                                             superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, 
                                             delete_ind, create_date, last_update_date,report_type_desc, viewtype, deleteddate    
@@ -1128,7 +1128,7 @@ def get_previous_amend_reports(request):
                                     ) t1
                                     WHERE  viewtype = %s ORDER BY last_update_date DESC ) t; """
                 else:
-                    query_count_string =  """SELECT count('a') as totalreportsCount FROM 
+                    query_count_string = """SELECT count('a') as totalreportsCount FROM
                                     (SELECT report_id, form_type, amend_ind, amend_number, cmte_id, report_type, cvg_start_date, cvg_end_date, due_date, 
                                         superceded_report_id, previous_report_id, status, filed_date, fec_id, fec_accepted_date, fec_status, most_recent_flag, 
                                         delete_ind, create_date, last_update_date,report_type_desc, viewtype, deleteddate    

@@ -98,9 +98,9 @@ def load_file_hash_to_db(cmteid, filename, hash, fecfilename):
 def generate_md5_hash(filename):
     print('generate_md5_hash')
     try:
-        bucket  = 'fecfile-filing-frontend'
+        bucket = 'fecfile-filing-frontend'
         #key     = 'transactions/Disbursements_1q2020.csv'
-        key     = 'transactions/' + filename #srini_test1.csv
+        key = 'transactions/' + filename #srini_test1.csv
         s3 = boto3.client('s3')
         obj = s3.get_object(Bucket=bucket, Key=key)
         body = obj['Body']
@@ -173,12 +173,12 @@ def chk_csv_uploaded(request):
         if fileexists is None:
             load_file_hash_to_db(cmte_id, filename, hash_value, fecfilename)
 
-        rcmteid      = ""
-        rhash        = ""
-        rfilename    = ""
+        rcmteid = ""
+        rhash = ""
+        rfilename = ""
         rcreate_date = ""
         if fileexists is not None:
-            rcmteid =  fileexists[0]
+            rcmteid = fileexists[0]
             rhash = fileexists[1]
             rfilename = fileexists[2]
             rcreate_date = fileexists[3].strftime("%Y-%m-%d %H:%M:%S")

@@ -31,10 +31,10 @@ class SchedF(models.Model):
     purpose = models.CharField(max_length=100)
     category_code = models.CharField(max_length=3)
     payee_cmte_id = models.CharField(max_length=9)
-    payee_cand_id  = models.CharField(max_length=9)
+    payee_cand_id = models.CharField(max_length=9)
     payee_cand_last_name = models.CharField(max_length=30)
     payee_cand_fist_name = models.CharField(max_length=20)
-    payee_cand_middle_name  = models.CharField(max_length=20),
+    payee_cand_middle_name = models.CharField(max_length=20),
     payee_cand_prefix = models.CharField(max_length=10)
     payee_cand_suffix = models.CharField(max_length=10)
     payee_cand_office = models.CharField(max_length=1)

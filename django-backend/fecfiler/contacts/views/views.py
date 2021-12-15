@@ -333,7 +333,7 @@ def download_template(request):
 
     filename = r'Import Contacts Specs & Template.xlsx'
     dirname = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__))))
-    xls_file_path = dirname +  '/../resources/' + filename
+    xls_file_path = dirname + '/../resources/' + filename
     response = FileResponse(open(xls_file_path, 'rb'), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'inline; filename = {}'.format(filename)
 

@@ -83,7 +83,7 @@ class SchedH5(models.Model):
         max_digits=12, decimal_places=2, blank=True, null=True)
     voter_id_amount = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
-    gotv_amount =  models.DecimalField(
+    gotv_amount = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
     generic_campaign_amount = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
@@ -123,8 +123,8 @@ class SchedH6(models.Model):
     activity_event_total_ytd = models.DecimalField(
         max_digits=12, decimal_places=2, blank=True, null=True)
     expenditure_purpose = models.CharField(max_length=100)
-    category_code =  models.CharField(max_length=3)
-    activity_event_type =  models.CharField(max_length=20)
+    category_code = models.CharField(max_length=3)
+    activity_event_type = models.CharField(max_length=20)
     memo_code = models.CharField(max_length=1, blank=True, null=True)
     memo_text = models.CharField(max_length=90, blank=True, null=True)
     delete_ind = models.CharField(max_length=1, blank=True, null=True)

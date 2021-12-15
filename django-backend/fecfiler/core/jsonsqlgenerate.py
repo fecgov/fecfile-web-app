@@ -1129,7 +1129,7 @@ VALUES ('F3X', 'SB', '{0}', '{1}');\n""".format(tran, query)
                     (t1.back_ref_transaction_id IS NULL AND %s IS NULL)) AND t1.delete_ind is distinct from ''Y''
                     """.format(tran)
 
-                    IE_CC_STRING  += """
+                    IE_CC_STRING += """
                     INSERT INTO public.tran_query_string(form_type, sched_type, tran_type_identifier, query_string)
                     VALUES ('F3X', 'SE', '{0}', '{1}');\n
                     """.format(tran, query)
@@ -2631,7 +2631,7 @@ VALUES ('F3X', 'SL-B', '{0}', '{1}');\n""".format(tran, query)
                     WHERE t1.transaction_type_identifier = ''{}'' AND t1.report_id = %s AND t1.cmte_id = %s AND (t1.back_ref_transaction_id = %s OR
                     (t1.back_ref_transaction_id IS NULL AND %s IS NULL)) AND t1.delete_ind is distinct from ''Y''
                     """.format(tran)
-                    IE_CC_STRING  += """
+                    IE_CC_STRING += """
                     INSERT INTO public.tran_query_string(form_type, sched_type, tran_type_identifier, query_string)
                     VALUES ('F3X', 'SE', '{0}', '{1}');\n
                     """.format(tran, query)

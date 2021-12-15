@@ -1729,7 +1729,7 @@ def get_h2_summary_table(request):
             sortcolumn = "name"
         else:
             sortcolumn = query_params.get("sortColumnName")
-        itemsperpage =  get_int_value(query_params.get("itemsPerPage"))
+        itemsperpage = get_int_value(query_params.get("itemsPerPage"))
         search_string = query_params.get("search")
         params = query_params.get("filters", {})
         keywords = params.get("keywords")
@@ -2656,7 +2656,7 @@ def get_h3_summary(request):
             sortcolumn = "name"
         else:
             sortcolumn = query_params.get("sortColumnName")
-        itemsperpage =  get_int_value(query_params.get("itemsPerPage"))
+        itemsperpage = get_int_value(query_params.get("itemsPerPage"))
         search_string = query_params.get("search")
         params = query_params.get("filters", {})
         keywords = params.get("keywords")
@@ -3854,7 +3854,7 @@ def schedH4(request):
         sortcolumn = "name"
     else:
         sortcolumn = query_params.get("sortColumnName")
-    itemsperpage =  get_int_value(query_params.get("itemsPerPage"))
+    itemsperpage = get_int_value(query_params.get("itemsPerPage"))
     search_string = query_params.get("search")
     params = query_params.get("filters", {})
     keywords = params.get("keywords")
@@ -4470,7 +4470,7 @@ def get_h5_summary(request):
             sortcolumn = "name"
         else:
             sortcolumn = query_params.get("sortColumnName")
-        itemsperpage =  get_int_value(query_params.get("itemsPerPage"))
+        itemsperpage = get_int_value(query_params.get("itemsPerPage"))
         search_string = query_params.get("search")
         params = query_params.get("filters", {})
         keywords = params.get("keywords")
@@ -5447,7 +5447,7 @@ def schedH6(request):
                     sortcolumn = "name"
                 else:
                     sortcolumn = query_params.get("sortColumnName")
-                itemsperpage =  get_int_value(query_params.get("itemsPerPage"))
+                itemsperpage = get_int_value(query_params.get("itemsPerPage"))
                 search_string = query_params.get("search")
                 params = query_params.get("filters", {})
                 keywords = params.get("keywords")
@@ -5483,7 +5483,7 @@ def schedH6(request):
             except NoOPError as e:
                 logger.debug(e)
                 #: tobe removed after development testing for
-                forms_obj =  {
+                forms_obj = {
                     "transactions": "",
                     "totaltransactionsCount": "",
                     "itemsPerPage": "",
