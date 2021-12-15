@@ -92,11 +92,9 @@ class Committee(models.Model):
     deleted_at = models.DateTimeField(null=True)
     isdeleted = models.BooleanField(default=False)
 
-
-    # class constructor
     def __unicode__(self):
+        # class constructor
         return self.committeename
-    
 
     class Meta():
         verbose_name = _('Committee')
