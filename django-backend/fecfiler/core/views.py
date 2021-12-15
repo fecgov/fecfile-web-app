@@ -442,7 +442,7 @@ def get_report_types(request):
         if datetime.date.today() <= datetime.date(_year, 1, 31):
             _year = _year-1
 
-        if _year%2 == 1:
+        if _year % 2 == 1:
             odd = True
             even = False
             _nyear = _year
