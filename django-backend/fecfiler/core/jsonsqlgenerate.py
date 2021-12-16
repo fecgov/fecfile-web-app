@@ -1846,8 +1846,7 @@ VALUES ('F3X', 'SA', '{0}', '{1}');\n""".format(tran, query)
                 List_SH_similar_SH5 = ['TRAN_FROM_LEVIN_ACC']
                 parent = {'ALLOC_EXP_CC_PAY': 'ALLOC_EXP_CC_PAY_MEMO', 'ALLOC_EXP_STAF_REIM': 'ALLOC_EXP_STAF_REIM_MEMO',
                 'ALLOC_EXP_PMT_TO_PROL': 'ALLOC_EXP_PMT_TO_PROL_MEMO', 'ALLOC_FEA_CC_PAY': 'ALLOC_FEA_CC_PAY_MEMO',
-                'ALLOC_FEA_STAF_REIM': 'ALLOC_FEA_STAF_REIM_MEMO'
-                }
+                'ALLOC_FEA_STAF_REIM': 'ALLOC_FEA_STAF_REIM_MEMO'}
 
                 SH1_STRING = ""
                 if tran in List_SH_similar_SH1:

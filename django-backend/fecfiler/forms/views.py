@@ -1224,9 +1224,10 @@ def email(boolean, data):
     SUBJECT = "Test - Form 99 submitted successfully"
 
     # The email body for recipients with non-HTML email clients.
-    BODY_TEXT = ("Form 99 that we received has been validated and submitted\r\n"
-                 "This email was sent by FEC.gov. If you are receiving this email in error or have any questions, please contact the FEC Electronic Filing Office toll-free at (800) 424-9530 ext. 1307 or locally at (202) 694-1307."
-                )
+    BODY_TEXT = (
+        "Form 99 that we received has been validated and submitted\r\n"
+        "This email was sent by FEC.gov. If you are receiving this email in error or have any questions, please contact the FEC Electronic Filing Office toll-free at (800) 424-9530 ext. 1307 or locally at (202) 694-1307."
+    )
 
     # The HTML body of the email.
     # final_html = email_ack1.html.replace('{{@REPID}}',1234567).replace('{{@REPLACE_CMTE_ID}}',C0123456)

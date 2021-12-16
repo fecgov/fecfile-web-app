@@ -1937,7 +1937,8 @@ def schedH2(request):
                 output = get_schedH2(data)
                 return JsonResponse(output[0], status=status.HTTP_201_CREATED)
             except Exception as e:
-                return Response(str(e),
+                return Response(
+                    str(e),
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 

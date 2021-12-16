@@ -70,161 +70,174 @@ def get_columns_for_schedules(filename):
 
         if 'schedulea' in filename:
             columnlist = [6, 13, 14, 15, 16, 17, 23, 24, 7, 8, 9, 10, 11, 12, 25, 4]
-            col_names_reindex = ['ENTITY TYPE',
-                            'CONTRIBUTOR STREET  1',
-                            'CONTRIBUTOR STREET  2',
-                            'CONTRIBUTOR CITY',
-                            'CONTRIBUTOR STATE',
-                            'CONTRIBUTOR ZIP',
-                            'CONTRIBUTOR EMPLOYER',
-                            'CONTRIBUTOR OCCUPATION',
-                            'CONTRIBUTOR ORGANIZATION NAME',
-                            'CONTRIBUTOR LAST NAME',
-                            'CONTRIBUTOR FIRST NAME',
-                            'CONTRIBUTOR MIDDLE NAME',
-                            'CONTRIBUTOR PREFIX',
-                            'CONTRIBUTOR SUFFIX',
-                            'DONOR COMMITTEE FEC ID',
-                            'TRANSACTION IDENTIFIER']
+            col_names_reindex = [
+                'ENTITY TYPE',
+                'CONTRIBUTOR STREET  1',
+                'CONTRIBUTOR STREET  2',
+                'CONTRIBUTOR CITY',
+                'CONTRIBUTOR STATE',
+                'CONTRIBUTOR ZIP',
+                'CONTRIBUTOR EMPLOYER',
+                'CONTRIBUTOR OCCUPATION',
+                'CONTRIBUTOR ORGANIZATION NAME',
+                'CONTRIBUTOR LAST NAME',
+                'CONTRIBUTOR FIRST NAME',
+                'CONTRIBUTOR MIDDLE NAME',
+                'CONTRIBUTOR PREFIX',
+                'CONTRIBUTOR SUFFIX',
+                'DONOR COMMITTEE FEC ID',
+                'TRANSACTION IDENTIFIER'
+            ]
             print('schedulea')
         elif 'scheduleb' in filename:
             # 6,13,14,15,16,17,'EMPLOYER','OCCUPATION',7,8,9,10,11,12,'REF_CAND_CMTE_ID', 'CAND_OFFICE', 'CAND_OFFICE_STATE','CAND_OFFICE_DISTRICT','COMMITTEE_ID'
             columnlist = [6, 13, 14, 15, 16, 17, 7, 8, 9, 10, 11, 12]
-            col_names_reindex = ['ENTITY TYPE',
-                                'PAYEE STREET  1',
-                                'PAYEE STREET  2',
-                                'PAYEE CITY',
-                                'PAYEE STATE',
-                                'PAYEE ZIP',
-                                'CONTRIBUTOR EMPLOYER',
-                                'CONTRIBUTOR OCCUPATION',
-                                'PAYEE ORGANIZATION NAME',
-                                'PAYEE LAST NAME',
-                                'PAYEE FIRST NAME',
-                                'PAYEE MIDDLE NAME',
-                                'PAYEE PREFIX',
-                                'PAYEE SUFFIX',
-                                'TRANSACTION IDENTIFIER']
+            col_names_reindex = [
+                'ENTITY TYPE',
+                'PAYEE STREET  1',
+                'PAYEE STREET  2',
+                'PAYEE CITY',
+                'PAYEE STATE',
+                'PAYEE ZIP',
+                'CONTRIBUTOR EMPLOYER',
+                'CONTRIBUTOR OCCUPATION',
+                'PAYEE ORGANIZATION NAME',
+                'PAYEE LAST NAME',
+                'PAYEE FIRST NAME',
+                'PAYEE MIDDLE NAME',
+                'PAYEE PREFIX',
+                'PAYEE SUFFIX',
+                'TRANSACTION IDENTIFIER'
+            ]
             print('scheduleb')
         elif 'schedulee' in filename:
             columnlist = [6, 13, 14, 15, 16, 17, 7, 8, 9, 10, 11, 12, 25, 4]
-            col_names_reindex = ['ENTITY TYPE',
-                                'PAYEE STREET  1',
-                                'PAYEE STREET  2',
-                                'PAYEE CITY',
-                                'PAYEE STATE',
-                                'PAYEE ZIP',
-                                'EMPLOYER',
-                                'OCCUPATION',
-                                'PAYEE ORGANIZATION NAME',
-                                'PAYEE LAST NAME',
-                                'PAYEE FIRST NAME',
-                                'PAYEE MIDDLE NAME',
-                                'PAYEE PREFIX',
-                                'PAYEE SUFFIX',
-                                'PAYEE CMTTE FEC ID NUMBER',
-                                'TRANSACTION IDENTIFIER'
-                                ]
+            col_names_reindex = [
+                'ENTITY TYPE',
+                'PAYEE STREET  1',
+                'PAYEE STREET  2',
+                'PAYEE CITY',
+                'PAYEE STATE',
+                'PAYEE ZIP',
+                'EMPLOYER',
+                'OCCUPATION',
+                'PAYEE ORGANIZATION NAME',
+                'PAYEE LAST NAME',
+                'PAYEE FIRST NAME',
+                'PAYEE MIDDLE NAME',
+                'PAYEE PREFIX',
+                'PAYEE SUFFIX',
+                'PAYEE CMTTE FEC ID NUMBER',
+                'TRANSACTION IDENTIFIER'
+            ]
             print('schedulee')
         elif 'schedulef' in filename:
             columnlist = [16, 22, 23, 24, 25, 26, 17, 18, 19, 20, 21, 33, 4, 39, 40, 41]
-            col_names_reindex = ['ENTITY TYPE',
-                                'PAYEE STREET  1',
-                                'PAYEE STREET  2',
-                                'PAYEE CITY',
-                                'PAYEE STATE',
-                                'PAYEE ZIP',
-                                'EMPLOYER',
-                                'OCCUPATION',
-                                'ORGANIZATION_NAME',
-                                'PAYEE LAST NAME',
-                                'PAYEE FIRST NAME',
-                                'PAYEE MIDDLE NAME',
-                                'PAYEE PREFIX',
-                                'PAYEE SUFFIX',
-                                'PAYEE CANDIDATE FEC ID',
-                                'TRANSACTION IDENTIFIER',
-                                'CAND_OFFICE',
-                                'CAND_OFFICE_STATE',
-                                'CAND_OFFICE_DISTRICT'
-                                ]
+            col_names_reindex = [
+                'ENTITY TYPE',
+                'PAYEE STREET  1',
+                'PAYEE STREET  2',
+                'PAYEE CITY',
+                'PAYEE STATE',
+                'PAYEE ZIP',
+                'EMPLOYER',
+                'OCCUPATION',
+                'ORGANIZATION_NAME',
+                'PAYEE LAST NAME',
+                'PAYEE FIRST NAME',
+                'PAYEE MIDDLE NAME',
+                'PAYEE PREFIX',
+                'PAYEE SUFFIX',
+                'PAYEE CANDIDATE FEC ID',
+                'TRANSACTION IDENTIFIER',
+                'CAND_OFFICE',
+                'CAND_OFFICE_STATE',
+                'CAND_OFFICE_DISTRICT'
+            ]
             print('schedulef')
         elif 'schedulela' in filename:
             columnlist = [7, 14, 15, 16, 17, 18, 23, 24, 8, 9, 10, 11, 12, 13, 4]
-            col_names_reindex = ['ENTITY TYPE',
-                                'CONTRIBUTOR STREET  1',
-                                'CONTRIBUTOR STREET  2',
-                                'CONTRIBUTOR CITY',
-                                'CONTRIBUTOR STATE',
-                                'CONTRIBUTOR ZIP',
-                                'CONTRIBUTOR EMPLOYER',
-                                'CONTRIBUTOR OCCUPATION',
-                                'CONTRIBUTOR ORGANIZATION NAME',
-                                'CONTRIBUTOR LAST NAME',
-                                'CONTRIBUTOR FIRST NAME',
-                                'CONTRIBUTOR MIDDLE NAME',
-                                'CONTRIBUTOR PREFIX',
-                                'CONTRIBUTOR SUFFIX',
-                                'REF_CAND_CMTE_ID',
-                                'TRANSACTION IDENTIFIER']
+            col_names_reindex = [
+                'ENTITY TYPE',
+                'CONTRIBUTOR STREET  1',
+                'CONTRIBUTOR STREET  2',
+                'CONTRIBUTOR CITY',
+                'CONTRIBUTOR STATE',
+                'CONTRIBUTOR ZIP',
+                'CONTRIBUTOR EMPLOYER',
+                'CONTRIBUTOR OCCUPATION',
+                'CONTRIBUTOR ORGANIZATION NAME',
+                'CONTRIBUTOR LAST NAME',
+                'CONTRIBUTOR FIRST NAME',
+                'CONTRIBUTOR MIDDLE NAME',
+                'CONTRIBUTOR PREFIX',
+                'CONTRIBUTOR SUFFIX',
+                'REF_CAND_CMTE_ID',
+                'TRANSACTION IDENTIFIER'
+            ]
             print('schedulela')
         elif 'schedulelb' in filename:
             columnlist = [7, 14, 15, 16, 17, 18, 8, 9, 10, 11, 12, 13, 4]
-            col_names_reindex = ['ENTITY TYPE',
-                                'PAYEE STREET  1',
-                                'PAYEE STREET  2',
-                                'PAYEE CITY',
-                                'PAYEE STATE',
-                                'PAYEE ZIP',
-                                'EMPLOYER',
-                                'OCCUPATION',
-                                'PAYEE ORGANIZATION NAME',
-                                'PAYEE LAST NAME',
-                                'PAYEE FIRST NAME',
-                                'PAYEE MIDDLE NAME',
-                                'PAYEE PREFIX',
-                                'PAYEE SUFFIX',
-                                'REF_CAND_CMTE_ID',
-                                'TRANSACTION IDENTIFIER']
+            col_names_reindex = [
+                'ENTITY TYPE',
+                'PAYEE STREET  1',
+                'PAYEE STREET  2',
+                'PAYEE CITY',
+                'PAYEE STATE',
+                'PAYEE ZIP',
+                'EMPLOYER',
+                'OCCUPATION',
+                'PAYEE ORGANIZATION NAME',
+                'PAYEE LAST NAME',
+                'PAYEE FIRST NAME',
+                'PAYEE MIDDLE NAME',
+                'PAYEE PREFIX',
+                'PAYEE SUFFIX',
+                'REF_CAND_CMTE_ID',
+                'TRANSACTION IDENTIFIER'
+            ]
             print('schedulelb')
         elif 'scheduleh4' in filename:
             columnlist = [6, 13, 14, 15, 16, 17, 7, 8, 9, 10, 11, 12, 4]
-            col_names_reindex = ['ENTITY TYPE',
-                                'PAYEE STREET  1',
-                                'PAYEE STREET  2',
-                                'PAYEE CITY',
-                                'PAYEE STATE',
-                                'PAYEE ZIP',
-                                'EMPLOYER',
-                                'OCCUPATION',
-                                'PAYEE ORGANIZATION NAME',
-                                'PAYEE LAST NAME',
-                                'PAYEE FIRST NAME',
-                                'PAYEE MIDDLE NAME',
-                                'PAYEE PREFIX',
-                                'PAYEE SUFFIX',
-                                'REF_CAND_CMTE_ID',
-                                'TRANSACTION IDENTIFIER'
-                                ]
+            col_names_reindex = [
+                'ENTITY TYPE',
+                'PAYEE STREET  1',
+                'PAYEE STREET  2',
+                'PAYEE CITY',
+                'PAYEE STATE',
+                'PAYEE ZIP',
+                'EMPLOYER',
+                'OCCUPATION',
+                'PAYEE ORGANIZATION NAME',
+                'PAYEE LAST NAME',
+                'PAYEE FIRST NAME',
+                'PAYEE MIDDLE NAME',
+                'PAYEE PREFIX',
+                'PAYEE SUFFIX',
+                'REF_CAND_CMTE_ID',
+                'TRANSACTION IDENTIFIER'
+            ]
             print('scheduleh4')
         elif 'scheduleh6' in filename:
             columnlist = [6, 13, 14, 15, 16, 17, 7, 8, 9, 10, 11, 12, 4]
-            col_names_reindex = ['ENTITY TYPE',
-                                'PAYEE STREET  1',
-                                'PAYEE STREET  2',
-                                'PAYEE CITY',
-                                'PAYEE STATE',
-                                'PAYEE ZIP',
-                                'EMPLOYER',
-                                'OCCUPATION',
-                                'PAYEE ORGANIZATION NAME',
-                                'PAYEE LAST NAME',
-                                'PAYEE FIRST NAME',
-                                'PAYEE MIDDLE NAME',
-                                'PAYEE PREFIX',
-                                'PAYEE SUFFIX',
-                                'REF_CAND_CMTE_ID',
-                                'TRANSACTION IDENTIFIER']
+            col_names_reindex = [
+                'ENTITY TYPE',
+                'PAYEE STREET  1',
+                'PAYEE STREET  2',
+                'PAYEE CITY',
+                'PAYEE STATE',
+                'PAYEE ZIP',
+                'EMPLOYER',
+                'OCCUPATION',
+                'PAYEE ORGANIZATION NAME',
+                'PAYEE LAST NAME',
+                'PAYEE FIRST NAME',
+                'PAYEE MIDDLE NAME',
+                'PAYEE PREFIX',
+                'PAYEE SUFFIX',
+                'REF_CAND_CMTE_ID',
+                'TRANSACTION IDENTIFIER'
+            ]
 
             print('scheduleh6')
         else:
@@ -232,41 +245,45 @@ def get_columns_for_schedules(filename):
     elif 'f3l' in filename:
         if 'schedulea' in filename:
             columnlist = [6, 12, 13, 14, 15, 16, 19, 7, 8, 9, 10, 11, 4]
-            col_names_reindex = ['ENTITY TYPE',
-                                'CONTRIBUTOR STREET  1',
-                                'CONTRIBUTOR STREET  2',
-                                'CONTRIBUTOR CITY',
-                                'CONTRIBUTOR STATE',
-                                'CONTRIBUTOR ZIP',
-                                'CONTRIBUTOR EMPLOYER',
-                                'OCCUPATION',
-                                'ORGANIZATION_NAME',
-                                'CONTRIBUTOR LAST NAME',
-                                'CONTRIBUTOR FIRST NAME',
-                                'CONTRIBUTOR MIDDLE NAME',
-                                'CONTRIBUTOR PREFIX',
-                                'CONTRIBUTOR SUFFIX',
-                                'REF_CAND_CMTE_ID',
-                                'TRANSACTION IDENTIFIER']
+            col_names_reindex = [
+                'ENTITY TYPE',
+                'CONTRIBUTOR STREET  1',
+                'CONTRIBUTOR STREET  2',
+                'CONTRIBUTOR CITY',
+                'CONTRIBUTOR STATE',
+                'CONTRIBUTOR ZIP',
+                'CONTRIBUTOR EMPLOYER',
+                'OCCUPATION',
+                'ORGANIZATION_NAME',
+                'CONTRIBUTOR LAST NAME',
+                'CONTRIBUTOR FIRST NAME',
+                'CONTRIBUTOR MIDDLE NAME',
+                'CONTRIBUTOR PREFIX',
+                'CONTRIBUTOR SUFFIX',
+                'REF_CAND_CMTE_ID',
+                'TRANSACTION IDENTIFIER'
+            ]
             print('f3l schedulea')
         elif 'scheduleb' in filename:
             columnlist = [6, 12, 13, 14, 15, 16, 7, 8, 9, 10, 11, 4]
-            col_names_reindex = ['ENTITY TYPE',
-                                'CONTRIBUTOR STREET  1',
-                                'CONTRIBUTOR STREET  2',
-                                'CONTRIBUTOR CITY',
-                                'CONTRIBUTOR STATE',
-                                'CONTRIBUTOR ZIP',
-                                'EMPLOYER',
-                                'OCCUPATION',
-                                'ORGANIZATION_NAME',
-                                'CONTRIBUTOR LAST NAME',
-                                'CONTRIBUTOR FIRST NAME',
-                                'CONTRIBUTOR MIDDLE NAME',
-                                'CONTRIBUTOR PREFIX',
-                                'CONTRIBUTOR SUFFIX',
-                                'REF_CAND_CMTE_ID',
-                                'TRANSACTION IDENTIFIER']
+            col_names_reindex = [
+                'ENTITY TYPE',
+                'CONTRIBUTOR STREET  1',
+                'CONTRIBUTOR STREET  2',
+                'CONTRIBUTOR CITY',
+                'CONTRIBUTOR STATE',
+                'CONTRIBUTOR ZIP',
+                'EMPLOYER',
+                'OCCUPATION',
+                'ORGANIZATION_NAME',
+                'CONTRIBUTOR LAST NAME',
+                'CONTRIBUTOR FIRST NAME',
+                'CONTRIBUTOR MIDDLE NAME',
+                'CONTRIBUTOR PREFIX',
+                'CONTRIBUTOR SUFFIX',
+                'REF_CAND_CMTE_ID',
+                'TRANSACTION IDENTIFIER'
+            ]
             print('f3l scheduleb')
         else:
             print('In F3L, Sched type not available!!!')
@@ -322,9 +339,11 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
 def get_contact_details_from_transactions(cmteid, filename):
     try:
         cmteid = cmteid[0:9]
-        client = boto3.client('s3',
-                                settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY
-                                )
+        client = boto3.client(
+            's3',
+            settings.AWS_ACCESS_KEY_ID,
+            settings.AWS_SECRET_ACCESS_KEY,
+        )
         bucket = AWS_STORAGE_IMPORT_CONTACT_BUCKET_NAME
         file_name = filename
         if '.csv' in filename:
