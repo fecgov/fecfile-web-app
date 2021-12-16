@@ -2556,28 +2556,19 @@ def load_h3_aggregate_amount(cmte_id, report_id, back_ref_transaction_id):
            GROUP BY activity_event_type
             ) t
     """
-    # _sql = """
-    # SELECT json_agg(t) FROM(
-    #         SELECT activity_event_name as event,
-    #                SUM(transferred_amount) as sum
-    #         FROM   public.sched_h3
-    #         WHERE  cmte_id = %s
-    #             AND report_id = %s
-    #         GROUP BY activity_event_name
-    #         UNION
-    #         SELECT activity_event_type as event,
-    #                SUM(transferred_amount) as sum
-    #         FROM   public.sched_h3
-    #         WHERE  cmte_id = %s
-    #             AND report_id = %s
-    #         GROUP BY activity_event_type
-    #         ) t
-    # """.format(cmte_id, report_id, cmte_id, report_id)
     try:
         with connection.cursor() as cursor:
-            cursor.execute(_sql, [cmte_id, report_id, back_ref_transaction_id,
-                cmte_id, report_id, back_ref_transaction_id])
-            # cursor.execute(_sql)
+            cursor.execute(
+                _sql,
+                [
+                    cmte_id,
+                    report_id,
+                    back_ref_transaction_id,
+                    cmte_id,
+                    report_id,
+                    back_ref_transaction_id
+                ]
+            )
             records = cursor.fetchone()[0]
             if records:
                 for _rec in records:

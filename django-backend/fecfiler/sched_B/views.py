@@ -1645,10 +1645,17 @@ def list_all_sb_transactions_entity(
                     AND transaction_type_identifier = 'ALLOC_EXP_DEBT'
                 ORDER BY expenditure_date ASC, create_date ASC
                 """,
-                [entity_id, cmte_id, aggregate_start_date, aggregate_end_date,
-                entity_id, cmte_id, aggregate_start_date, aggregate_end_date],
+                [
+                    entity_id,
+                    cmte_id,
+                    aggregate_start_date,
+                    aggregate_end_date,
+                    entity_id,
+                    cmte_id,
+                    aggregate_start_date,
+                    aggregate_end_date,
+                ],
             )
-            # print(cursor.query)
             transactions_list = cursor.fetchall()
         return transactions_list
     except Exception as e:

@@ -5,12 +5,36 @@ from .models import CommitteeInfo, Committee
 class CommitteeInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommitteeInfo
-        fields = ('id', 'committeeid', 'committeename', 'street1', 'street2', 'city',
-                'state', 'zipcode', 'treasurerprefix', 'treasurerfirstname', 'text', 'reason',
-                'treasurermiddlename', 'treasurerlastname', 'treasurersuffix',
-                'filename', 'file',
-                'created_at', 'is_submitted', 'signee', 'email_on_file', 'email_on_file_1', 'additional_email_1', 'additional_email_2',
-                'form_type', 'coverage_start_date', 'coverage_end_date', 'updated_at')
+        fields = (
+            "id",
+            "committeeid",
+            "committeename",
+            "street1",
+            "street2",
+            "city",
+            "state",
+            "zipcode",
+            "treasurerprefix",
+            "treasurerfirstname",
+            "text",
+            "reason",
+            "treasurermiddlename",
+            "treasurerlastname",
+            "treasurersuffix",
+            "filename",
+            "file",
+            "created_at",
+            "is_submitted",
+            "signee",
+            "email_on_file",
+            "email_on_file_1",
+            "additional_email_1",
+            "additional_email_2",
+            "form_type",
+            "coverage_start_date",
+            "coverage_end_date",
+            "updated_at",
+        )
         # read_only_fields = ('created_at', 'updated_at')
 
         # Methods to save the model objects to the database
@@ -64,11 +88,24 @@ class CommitteeInfoListSerializer(serializers.ListSerializer):
 class CommitteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Committee
-        fields = ('committeeid', 'committeename', 'street1', 'street2', 'city',
-                'state', 'zipcode', 'treasurerprefix', 'treasurerfirstname',
-                'treasurermiddlename', 'treasurerlastname', 'treasurersuffix', 'email_on_file', 'email_on_file_1',
-                'created_at')
-        read_only_fields = ('created_at', 'updated_at')
+        fields = (
+            "committeeid",
+            "committeename",
+            "street1",
+            "street2",
+            "city",
+            "state",
+            "zipcode",
+            "treasurerprefix",
+            "treasurerfirstname",
+            "treasurermiddlename",
+            "treasurerlastname",
+            "treasurersuffix",
+            "email_on_file",
+            "email_on_file_1",
+            "created_at",
+        )
+        read_only_fields = ("created_at", "updated_at")
 
     # Methods to save the model objects to the database
 

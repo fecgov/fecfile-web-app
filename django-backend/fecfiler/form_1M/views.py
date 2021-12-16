@@ -753,9 +753,12 @@ def form1M(request):
                             check_clear_establishment_status(cmte_id, request_dict['report_id'], 'A')
                         f1m_flag, output_dict = f1m_put(request_dict)
                     elif candidate_number == '1':
-                        noneCheckMissingParameters(['committeeType'],
-                                               checking_dict=request.data, value_dict=request.data,
-                                               function_name='form1M-POST: step-2 Qualification cmtetype')
+                        noneCheckMissingParameters(
+                            ['committeeType'],
+                            checking_dict=request.data,
+                            value_dict=request.data,
+                            function_name='form1M-POST: step-2 Qualification cmtetype'
+                        )
                         request_dict['committee_type'] = request.data.get('committeeType')
                         report_flag, request_dict['report_id'] = report_post(request)
                         f1m_flag, output_dict = f1m_post(request_dict)

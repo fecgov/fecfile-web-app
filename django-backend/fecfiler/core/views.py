@@ -9612,8 +9612,13 @@ def amend_form1m(request_dict):
               can1_con, can2_id, can2_con, can3_id, can3_con, can4_id, can4_con,
               can5_id, can5_con, date_51, orig_date, metreq_date, %s, %s, committee_type
               FROM public.form_1m WHERE cmte_id=%s AND report_id= %s"""
-        value_list = [output_dict['report_id'], datetime.datetime.now(), datetime.datetime.now(),
-            report_dict['cmte_id'], report_dict['previous_report_id']]
+        value_list = [
+            output_dict['report_id'],
+            datetime.datetime.now(),
+            datetime.datetime.now(),
+            report_dict['cmte_id'],
+            report_dict['previous_report_id']
+        ]
         with connection.cursor() as cursor:
             cursor.execute(_sql, value_list)
             logger.debug("FORM-1M POST")
@@ -9629,19 +9634,20 @@ def amend_form1m(request_dict):
 
 def post_amend_f1m_report(request_dict):
     try:
-        request_dict['report_id'] = str(get_next_report_id())
-        request_dict['create_date'] = datetime.datetime.now()
-        request_dict['last_update_date'] = datetime.datetime.now()
+        request_dict["report_id"] = str(get_next_report_id())
+        request_dict["create_date"] = datetime.datetime.now()
+        request_dict["last_update_date"] = datetime.datetime.now()
         value_list = []
         key_string = ""
         param_string = ""
         for key, value in request_dict.items():
-            key_string += key+", "
+            key_string += key + ", "
             param_string += "%s, "
             value_list.append(value)
         with connection.cursor() as cursor:
-            sql = """INSERT INTO public.{}({}) VALUES ({})""".format('reports',
-                key_string[:-2], param_string[:-2])
+            sql = """INSERT INTO public.{}({}) VALUES ({})""".format(
+                "reports", key_string[:-2], param_string[:-2]
+            )
             cursor.execute(sql, value_list)
             logger.debug("REPORTS POST")
             # logger.debug(cursor.query)
@@ -11041,10 +11047,16 @@ def update_f3x_details(report_id, cmte_id):
         output_dict['ttl_disb_sum_page_per'] = output_dict[f3x_col_line_dict['31'][0]]
         output_dict['ttl_receipts_sum_page_ytd'] = output_dict[f3x_col_line_dict['19'][3]]
         output_dict['ttl_disb_sum_page_ytd'] = output_dict[f3x_col_line_dict['31'][3]]
-        output_dict['coh_cop'] = (output_dict['coh_bop'] + output_dict['ttl_receipts_sum_page_per'] -
-            output_dict['ttl_disb_sum_page_per'])
-        output_dict['coh_coy'] = (output_dict['coh_begin_calendar_yr'] + output_dict['ttl_receipts_sum_page_ytd'] -
-            output_dict['ttl_disb_sum_page_ytd'])
+        output_dict["coh_cop"] = (
+            output_dict["coh_bop"]
+            + output_dict["ttl_receipts_sum_page_per"]
+            - output_dict["ttl_disb_sum_page_per"]
+        )
+        output_dict["coh_coy"] = (
+            output_dict["coh_begin_calendar_yr"]
+            + output_dict["ttl_receipts_sum_page_ytd"]
+            - output_dict["ttl_disb_sum_page_ytd"]
+        )
         return put_F3X(report_id, cmte_id, output_dict)
 
     except Exception as e:
@@ -11060,54 +11072,56 @@ def F3X_values(cmte_id, report_list, year_flag=False):
         else:
             i = 0
         output_dict = {
-            f3x_col_line_dict['11AI'][i]: 0,
-            f3x_col_line_dict['11AII'][i]: 0,
-            f3x_col_line_dict['11B'][i]: 0,
-            f3x_col_line_dict['11C'][i]: 0,
-            f3x_col_line_dict['12'][i]: 0,
-            f3x_col_line_dict['13'][i]: 0,
-            f3x_col_line_dict['14'][i]: 0,
-            f3x_col_line_dict['15'][i]: 0,
-            f3x_col_line_dict['16'][i]: 0,
-            f3x_col_line_dict['17'][i]: 0,
-            f3x_col_line_dict['18A'][i]: 0,
-            f3x_col_line_dict['18B'][i]: 0,
-            f3x_col_line_dict['21AI'][i]: 0,
-            f3x_col_line_dict['21AII'][i]: 0,
-            f3x_col_line_dict['21B'][i]: 0,
-            f3x_col_line_dict['22'][i]: 0,
-            f3x_col_line_dict['23'][i]: 0,
-            f3x_col_line_dict['24'][i]: 0,
-            f3x_col_line_dict['25'][i]: 0,
-            f3x_col_line_dict['26'][i]: 0,
-            f3x_col_line_dict['27'][i]: 0,
-            f3x_col_line_dict['28A'][i]: 0,
-            f3x_col_line_dict['28B'][i]: 0,
-            f3x_col_line_dict['28C'][i]: 0,
-            f3x_col_line_dict['29'][i]: 0,
-            f3x_col_line_dict['30AI'][i]: 0,
-            f3x_col_line_dict['30AII'][i]: 0,
-            f3x_col_line_dict['30B'][i]: 0,
+            f3x_col_line_dict["11AI"][i]: 0,
+            f3x_col_line_dict["11AII"][i]: 0,
+            f3x_col_line_dict["11B"][i]: 0,
+            f3x_col_line_dict["11C"][i]: 0,
+            f3x_col_line_dict["12"][i]: 0,
+            f3x_col_line_dict["13"][i]: 0,
+            f3x_col_line_dict["14"][i]: 0,
+            f3x_col_line_dict["15"][i]: 0,
+            f3x_col_line_dict["16"][i]: 0,
+            f3x_col_line_dict["17"][i]: 0,
+            f3x_col_line_dict["18A"][i]: 0,
+            f3x_col_line_dict["18B"][i]: 0,
+            f3x_col_line_dict["21AI"][i]: 0,
+            f3x_col_line_dict["21AII"][i]: 0,
+            f3x_col_line_dict["21B"][i]: 0,
+            f3x_col_line_dict["22"][i]: 0,
+            f3x_col_line_dict["23"][i]: 0,
+            f3x_col_line_dict["24"][i]: 0,
+            f3x_col_line_dict["25"][i]: 0,
+            f3x_col_line_dict["26"][i]: 0,
+            f3x_col_line_dict["27"][i]: 0,
+            f3x_col_line_dict["28A"][i]: 0,
+            f3x_col_line_dict["28B"][i]: 0,
+            f3x_col_line_dict["28C"][i]: 0,
+            f3x_col_line_dict["29"][i]: 0,
+            f3x_col_line_dict["30AI"][i]: 0,
+            f3x_col_line_dict["30AII"][i]: 0,
+            f3x_col_line_dict["30B"][i]: 0,
         }
-        _sql = """SELECT CASE 
+        _sql = """SELECT CASE
                     WHEN line_number = '11A' AND itemized IS DISTINCT FROM 'U' AND itemized IS DISTINCT FROM 'FU' THEN '11AI'
                     WHEN line_number = '11A' AND itemized in ('U', 'FU') THEN '11AII'
                     WHEN line_number = '21A' THEN '21AI'
                     WHEN line_number = '30A' THEN '30AI'
                     ELSE line_number
-                    END AS line_num, 
+                    END AS line_num,
                 COALESCE(SUM(transaction_amount),0.0),
                 COALESCE(SUM(fed_amount),0.0),
                 COALESCE(SUM(non_fed_amount),0.0)
-                FROM public.all_transactions_view 
-                WHERE memo_code IS DISTINCT FROM 'X' AND delete_ind IS DISTINCT FROM 'Y' 
-                    AND transaction_table NOT IN ('sched_c') AND report_id IN ('{}') 
+                FROM public.all_transactions_view
+                WHERE memo_code IS DISTINCT FROM 'X' AND delete_ind IS DISTINCT FROM 'Y'
+                    AND transaction_table NOT IN ('sched_c') AND report_id IN ('{}')
                     AND cmte_id = %s
                     AND line_number IN ('11A','11AI','11AII','11B','11C','12','13','14','15','16',
                     '17','18A','18B','21A','21AI','21AII','21B','22','23','24','25','26','27',
                     '28A','28B','28C','29','30A','30AI','30AII','30B')
                 GROUP BY line_num
-                ORDER BY line_num""".format("', '".join(list(map(str, report_list))))
+                ORDER BY line_num""".format(
+            "', '".join(list(map(str, report_list)))
+        )
         with connection.cursor() as cursor:
             cursor.execute(_sql, [cmte_id])
             amounts_list = cursor.fetchall()
@@ -11115,48 +11129,79 @@ def F3X_values(cmte_id, report_list, year_flag=False):
                 for amount_tuple in amounts_list:
                     column = f3x_col_line_dict[amount_tuple[0]][i]
                     if column in output_dict:
-                        if amount_tuple[0] == '21AI':
+                        if amount_tuple[0] == "21AI":
                             output_dict[column] += amount_tuple[2]
-                            output_dict[f3x_col_line_dict['21AII'][i]] += amount_tuple[3]
-                        elif amount_tuple[0] == '30AI':
+                            output_dict[f3x_col_line_dict["21AII"][i]] += amount_tuple[
+                                3
+                            ]
+                        elif amount_tuple[0] == "30AI":
                             output_dict[column] += amount_tuple[2]
-                            output_dict[f3x_col_line_dict['30AII'][i]] += amount_tuple[3]
+                            output_dict[f3x_col_line_dict["30AII"][i]] += amount_tuple[
+                                3
+                            ]
                         else:
                             output_dict[column] += amount_tuple[1]
                     else:
                         output_dict[column] = amount_tuple[1]
-        output_dict[f3x_col_line_dict['11A'][i]] = (output_dict.get(f3x_col_line_dict['11AI'][i], 0) +
-                output_dict.get(f3x_col_line_dict['11AII'][i], 0))
-        output_dict[f3x_col_line_dict['11D'][i]] = (output_dict.get(f3x_col_line_dict['11A'][i], 0) +
-            output_dict.get(f3x_col_line_dict['11B'][i], 0) + output_dict.get(f3x_col_line_dict['11C'][i], 0))
-        output_dict[f3x_col_line_dict['18'][i]] = (output_dict.get(f3x_col_line_dict['18A'][i], 0) +
-            output_dict.get(f3x_col_line_dict['18B'][i], 0))
-        output_dict[f3x_col_line_dict['19'][i]] = (output_dict.get(f3x_col_line_dict['11D'][i], 0) +
-            output_dict.get(f3x_col_line_dict['12'][i], 0) + output_dict.get(f3x_col_line_dict['13'][i], 0) +
-            output_dict.get(f3x_col_line_dict['14'][i], 0) + output_dict.get(f3x_col_line_dict['15'][i], 0) +
-            output_dict.get(f3x_col_line_dict['16'][i], 0) + output_dict.get(f3x_col_line_dict['17'][i], 0) +
-            output_dict.get(f3x_col_line_dict['18'][i], 0))
-        output_dict[f3x_col_line_dict['20'][i]] = (output_dict.get(f3x_col_line_dict['19'][i], 0) -
-                output_dict.get(f3x_col_line_dict['18'][i], 0))
-        output_dict[f3x_col_line_dict['21'][i]] = (output_dict.get(f3x_col_line_dict['21AI'][i], 0) +
-                output_dict.get(f3x_col_line_dict['21AII'][i], 0) + output_dict.get(f3x_col_line_dict['21B'][i], 0))
-        output_dict[f3x_col_line_dict['28'][i]] = (output_dict.get(f3x_col_line_dict['28A'][i], 0) +
-                output_dict.get(f3x_col_line_dict['28B'][i], 0) + output_dict.get(f3x_col_line_dict['28C'][i], 0))
-        output_dict[f3x_col_line_dict['30'][i]] = (output_dict.get(f3x_col_line_dict['30AI'][i], 0) +
-                output_dict.get(f3x_col_line_dict['30AII'][i], 0) + output_dict.get(f3x_col_line_dict['30B'][i], 0))
-        output_dict[f3x_col_line_dict['31'][i]] = (output_dict.get(f3x_col_line_dict['21'][i], 0) +
-            output_dict.get(f3x_col_line_dict['22'][i], 0) + output_dict.get(f3x_col_line_dict['23'][i], 0) +
-            output_dict.get(f3x_col_line_dict['24'][i], 0) + output_dict.get(f3x_col_line_dict['25'][i], 0) +
-            output_dict.get(f3x_col_line_dict['26'][i], 0) + output_dict.get(f3x_col_line_dict['27'][i], 0) +
-            output_dict.get(f3x_col_line_dict['28'][i], 0) + output_dict.get(f3x_col_line_dict['29'][i], 0) +
-            output_dict.get(f3x_col_line_dict['30'][i], 0))
-        output_dict[f3x_col_line_dict['32'][i]] = (output_dict.get(f3x_col_line_dict['31'][i], 0) -
-                output_dict.get(f3x_col_line_dict['21AII'][i], 0) - output_dict.get(f3x_col_line_dict['30AII'][i], 0))
+        output_dict[f3x_col_line_dict["11A"][i]] = output_dict.get(
+            f3x_col_line_dict["11AI"][i], 0
+        ) + output_dict.get(f3x_col_line_dict["11AII"][i], 0)
+        output_dict[f3x_col_line_dict["11D"][i]] = (
+            output_dict.get(f3x_col_line_dict["11A"][i], 0)
+            + output_dict.get(f3x_col_line_dict["11B"][i], 0)
+            + output_dict.get(f3x_col_line_dict["11C"][i], 0)
+        )
+        output_dict[f3x_col_line_dict["18"][i]] = output_dict.get(
+            f3x_col_line_dict["18A"][i], 0
+        ) + output_dict.get(f3x_col_line_dict["18B"][i], 0)
+        output_dict[f3x_col_line_dict["19"][i]] = (
+            output_dict.get(f3x_col_line_dict["11D"][i], 0)
+            + output_dict.get(f3x_col_line_dict["12"][i], 0)
+            + output_dict.get(f3x_col_line_dict["13"][i], 0)
+            + output_dict.get(f3x_col_line_dict["14"][i], 0)
+            + output_dict.get(f3x_col_line_dict["15"][i], 0)
+            + output_dict.get(f3x_col_line_dict["16"][i], 0)
+            + output_dict.get(f3x_col_line_dict["17"][i], 0)
+            + output_dict.get(f3x_col_line_dict["18"][i], 0)
+        )
+        output_dict[f3x_col_line_dict["20"][i]] = output_dict.get(
+            f3x_col_line_dict["19"][i], 0
+        ) - output_dict.get(f3x_col_line_dict["18"][i], 0)
+        output_dict[f3x_col_line_dict["21"][i]] = (
+            output_dict.get(f3x_col_line_dict["21AI"][i], 0)
+            + output_dict.get(f3x_col_line_dict["21AII"][i], 0)
+            + output_dict.get(f3x_col_line_dict["21B"][i], 0)
+        )
+        output_dict[f3x_col_line_dict["28"][i]] = (
+            output_dict.get(f3x_col_line_dict["28A"][i], 0)
+            + output_dict.get(f3x_col_line_dict["28B"][i], 0)
+            + output_dict.get(f3x_col_line_dict["28C"][i], 0)
+        )
+        output_dict[f3x_col_line_dict["30"][i]] = (
+            output_dict.get(f3x_col_line_dict["30AI"][i], 0)
+            + output_dict.get(f3x_col_line_dict["30AII"][i], 0)
+            + output_dict.get(f3x_col_line_dict["30B"][i], 0)
+        )
+        output_dict[f3x_col_line_dict["31"][i]] = (
+            output_dict.get(f3x_col_line_dict["21"][i], 0)
+            + output_dict.get(f3x_col_line_dict["22"][i], 0)
+            + output_dict.get(f3x_col_line_dict["23"][i], 0)
+            + output_dict.get(f3x_col_line_dict["24"][i], 0)
+            + output_dict.get(f3x_col_line_dict["25"][i], 0)
+            + output_dict.get(f3x_col_line_dict["26"][i], 0)
+            + output_dict.get(f3x_col_line_dict["27"][i], 0)
+            + output_dict.get(f3x_col_line_dict["28"][i], 0)
+            + output_dict.get(f3x_col_line_dict["29"][i], 0)
+            + output_dict.get(f3x_col_line_dict["30"][i], 0)
+        )
+        output_dict[f3x_col_line_dict["32"][i]] = (
+            output_dict.get(f3x_col_line_dict["31"][i], 0)
+            - output_dict.get(f3x_col_line_dict["21AII"][i], 0)
+            - output_dict.get(f3x_col_line_dict["30AII"][i], 0)
+        )
         return output_dict
     except Exception as e:
-        raise Exception(
-            "The F3X_values function is throwing an exception: " + str(e)
-        )
+        raise Exception("The F3X_values function is throwing an exception: " + str(e))
 
 
 def put_F3X(report_id, cmte_id, request_dict):
@@ -12071,8 +12116,14 @@ def contact_report_details(request):
             """
         with connection.cursor() as cursor:
             _sql = """SELECT json_agg(t) FROM ( {} ) t""".format(sql)
-            cursor.execute(_sql, [request.query_params.get('entity_id'),
-                request.query_params.get('entity_id'), cmte_id])
+            cursor.execute(
+                _sql,
+                [
+                    request.query_params.get('entity_id'),
+                    request.query_params.get('entity_id'),
+                    cmte_id
+                ]
+            )
             if cursor.rowcount == 0:
                 result = []
             else:

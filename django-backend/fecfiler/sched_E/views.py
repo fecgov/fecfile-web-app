@@ -1588,8 +1588,14 @@ def mirror_to_F24(request):
             line_number, aggregation_ind, associatedbydissemination, report_id, 
             transaction_id
             FROM public.sched_e WHERE cmte_id=%s AND transaction_id=%s AND delete_ind IS DISTINCT FROM 'Y'"""
-        _value_list = [request.data['reportId'], transaction_id, datetime.datetime.now(),
-              datetime.datetime.now(), cmte_id, request.data['transactionId']]
+        _value_list = [
+            request.data['reportId'],
+            transaction_id,
+            datetime.datetime.now(),
+            datetime.datetime.now(),
+            cmte_id,
+            request.data['transactionId']
+        ]
 
         _sql2 = """UPDATE public.sched_e SET mirror_report_id = %s, mirror_transaction_id = %s
                 WHERE transaction_id = %s"""
@@ -1602,9 +1608,11 @@ def mirror_to_F24(request):
             cursor.execute(_sql2, _value_list2)
             if not cursor.rowcount:
                 raise Exception('failed to update transaction: {}'.format(request.data['transactionId']))
-        data = {"cmte_id": cmte_id,
-                "report_id": request.data['reportId'],
-                "transaction_id": transaction_id}
+        data = {
+            "cmte_id": cmte_id,
+            "report_id": request.data['reportId'],
+            "transaction_id": transaction_id
+        }
         get_data = get_schedE(data)[0]
         return Response(get_data, status=status.HTTP_201_CREATED)
     except Exception as e:

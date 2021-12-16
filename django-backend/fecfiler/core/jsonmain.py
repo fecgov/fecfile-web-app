@@ -838,25 +838,41 @@ def add_log(reportid,
             host_name=platform.uname()[1],
             process_name="create_json_builders"):
     with connection.cursor() as cursor:
-        cursor.execute("""INSERT INTO public.upload_logs(
-                                        report_id, 
-                                        cmte_id, 
-                                        process_name, 
-                                        message_type, 
-                                        message_text, 
-                                        response_json, 
-                                        error_code, 
-                                        error_json, 
-                                        app_error, 
-                                        host_name)
-                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-                       [reportid, cmte_id, process_name, message_type, message_text, response_json, error_code,
-                        error_json, app_error, host_name])
+        cursor.execute(
+            """INSERT INTO public.upload_logs(
+            report_id,
+            cmte_id,
+            process_name,
+            message_type,
+            message_text,
+            response_json,
+            error_code,
+            error_json,
+            app_error,
+            host_name)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+            [
+                reportid,
+                cmte_id,
+                process_name,
+                message_type,
+                message_text,
+                response_json,
+                error_code,
+                error_json,
+                app_error,
+                host_name
+            ]
+        )
 
 
 def checkForReportSubmission(submissionId):
-    filing_status_response = requests.get(settings.DATA_RECEIVE_API_URL + settings.DATA_RECEIVE_API_VERSION +
-                                        "track_filing", data={'submissionId': submissionId})
+    filing_status_response = requests.get(
+        + settings.DATA_RECEIVE_API_URL
+        + settings.DATA_RECEIVE_API_VERSION
+        + "track_filing",
+        data={'submissionId': submissionId}
+    )
     if filing_status_response.ok:
         if filing_status_response.json()['result'][0]['status'] == 'PROCESSING':
             time.sleep(5)
