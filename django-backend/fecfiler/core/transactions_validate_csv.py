@@ -192,7 +192,7 @@ def build_schemas(formname, sched, trans_type):
             len = s[1]
             if 'A/N' in type:
                 if required is None:
-                    pattern = '^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$'
+                    pattern = r"""^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$"""
                     mpv = MatchesPatternValidation(pattern)
                     column = Column(field, [mpv], allow_empty=True)
                 else:
@@ -201,7 +201,7 @@ def build_schemas(formname, sched, trans_type):
                         pattern = '^(\\S)+[A-Za-z0-9_-]{1,' + len + '}$'
                     else:
                         # print('field:',field)
-                        pattern = '^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$'
+                        pattern = r"""^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$"""
                     # pattern = '^[-@.\/#&+*%:;=?!=.-^*()\'%!\\w\\s]{1,' + len + '}$'
                     mpv = MatchesPatternValidation(pattern)
                     column = Column(field, [mpv], allow_empty=False)
@@ -210,7 +210,7 @@ def build_schemas(formname, sched, trans_type):
                 # print(field)
             elif 'NUM' in type:
                 # print(field)
-                pattern = '^[0-9]\d{0,' + len + '}(\.\d{1,3})?%?$'
+                pattern = r"""^[0-9]\d{0,' + len + '}(\.\d{1,3})?%?$"""
                 mpv = MatchesPatternValidation(pattern)
                 column = Column(field, [mpv])
                 columns.append(column)
@@ -218,7 +218,7 @@ def build_schemas(formname, sched, trans_type):
             elif 'AMT' in type:
                 # print(field)
                 # pattern = '^-?\d\d*[,]?\d*[,]?\d*[.,]?\d*\d$' #'^((\d){1,3},*){1,5}\.(\d){2}$' #'^[\\w\\s]{1,'+ len + '}$'
-                pattern = '^[0-9]\d{0,' + len + '}(\.\d{1,3})?%?$'
+                pattern = r"""^[0-9]\d{0,' + len + '}(\.\d{1,3})?%?$"""
                 mpv = MatchesPatternValidation(pattern)
                 column = Column(field, [mpv])
                 columns.append(column)
