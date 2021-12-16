@@ -148,13 +148,7 @@ def schema_validation(dataframe, schema, bktname, key, errorfilename):
         for error in errors:
             msg = error.message
             error.message = re.sub("[\"@*&?].*[\"@*&?]", "", msg)
-            errdf.append(
-                {
-                'row_no':       error.row,
-                'field_name':   error.column,
-                'msg':          error.message
-                }
-            )
+            errdf.append({'row_no': error.row, 'field_name': error.column, 'msg': error.message})
 
         errors_index_rows = [e.row for e in errors]
         if len(errors_index_rows) > 0:
