@@ -2074,31 +2074,31 @@ def submit_report(request, submission_id, beginning_image_number, fec_id):
 
         if form_tp in ["F3X", "F24", "F3L"]:
             _sql_update = (
-                    """
+                """
                 UPDATE {}""".format(
-                        update_tbl
-                    )
-                    + """
+                    update_tbl
+                )
+                + """
                 SET filed_date = %s, status = %s, fec_id = %s, submission_id= %s, begining_image_number = %s"""
-                    + """
+                + """
                 WHERE {} = %s
                 """.format(
-                f_id
-            )
+                    f_id
+                )
             )
         elif form_tp == "F99":
             _sql_update = (
-                    """
+                """
                 UPDATE {}""".format(
-                        update_tbl
-                    )
-                    + """
+                    update_tbl
+                )
+                + """
                 SET is_submitted = true, updated_at = %s, status = %s, fec_id = %s, submission_id= %s, begining_image_number = %s"""
-                    + """
+                + """
                 WHERE {} = %s
                 """.format(
-                f_id
-            )
+                    f_id
+                )
             )
         else:
             raise Exception("Error: invalid form type.")
@@ -2874,8 +2874,8 @@ def put_sql_entity(
                     FROM public.entity WHERE entity_id=%s
                     """,
                     [
-                    username,
-                    entity_id
+                        username,
+                        entity_id
                     ]
                 )
             cursor.execute(
@@ -4498,69 +4498,69 @@ def get_transactions(request, transaction_id):
             if cmte_type(cmte_id) == "PTY":
                 logger.debug("pty cmte all_other transactions")
                 param_string = (
-                        param_string
-                        + """AND ((transaction_table != 'sched_h2' AND report_id = '{0}')
-                                                OR 
-                                                (transaction_table = 'sched_h2' AND report_id = '{0}' AND ratio_code = 'n')
-                                                OR
-                                                (transaction_table = 'sched_h2' AND report_id = '{0}' AND name IN (
-                                                SELECT h4.activity_event_identifier FROM public.sched_h4 h4
-                                                WHERE  h4.report_id = '{0}'
-                                                AND h4.cmte_id = '{1}'
-                                                UNION
-                                                SELECT h3.activity_event_name
-                                                FROM   public.sched_h3 h3
-                                                WHERE  h3.report_id = '{0}'
-                                                AND h3.cmte_id = '{1}')))""".format(
-                    request.data.get("reportid"), cmte_id
-                )
+                    param_string
+                    + """AND ((transaction_table != 'sched_h2' AND report_id = '{0}')
+                    OR
+                    (transaction_table = 'sched_h2' AND report_id = '{0}' AND ratio_code = 'n')
+                    OR
+                    (transaction_table = 'sched_h2' AND report_id = '{0}' AND name IN (
+                    SELECT h4.activity_event_identifier FROM public.sched_h4 h4
+                    WHERE  h4.report_id = '{0}'
+                    AND h4.cmte_id = '{1}'
+                    UNION
+                    SELECT h3.activity_event_name
+                    FROM   public.sched_h3 h3
+                    WHERE  h3.report_id = '{0}'
+                    AND h3.cmte_id = '{1}')))""".format(
+                        request.data.get("reportid"), cmte_id
+                    )
                 )
             else:
                 # for PAC, h1 and h2 will show up only when there are transactions tied to it
                 logger.debug("pac cmte all_other transactions")
                 param_string = (
-                        param_string
-                        + """AND (((transaction_table = 'sched_h3' or transaction_table = 'sched_h4') AND report_id = '{0}')
-                                                OR
-                                                (transaction_table = 'sched_h1' AND report_id = '{0}' AND back_ref_transaction_id is null)
-                                                OR
-                                                (transaction_table = 'sched_h1' AND report_id = '{0}' AND transaction_id IN (
-                                                with h1_set as (select  (
-                                                case when administrative is true then 'AD'
-                                                when public_communications is true then 'PC'
-                                                when generic_voter_drive is true then 'GV'
-                                                end) as event_type, transaction_id, cmte_id, report_id
-                                                from sched_h1 where delete_ind is distinct from 'Y' and report_id = '{0}')
-                                                select distinct t.transaction_id from h1_set t
-                                                join sched_h4 h4 on t.event_type = h4.activity_event_type and h4.report_id = t.report_id
-                                                where h4.delete_ind is distinct from 'Y'
-                                                union
-                                                select distinct t.transaction_id from h1_set t
-                                                join sched_h3 h3 on t.event_type = h3.activity_event_type and h3.report_id = t.report_id
-                                                where h3.delete_ind is distinct from 'Y'
-                                                ))
-                                                OR 
-                                                (transaction_table = 'sched_h2' AND report_id = '{0}' AND ratio_code = 'n')
-                                                OR
-                                                (transaction_table = 'sched_h2' AND report_id = '{0}' AND name IN (
-                                                SELECT h4.activity_event_identifier FROM public.sched_h4 h4
-                                                WHERE  h4.report_id = '{0}'
-                                                AND h4.cmte_id = '{1}'
-                                                AND h4.delete_ind is distinct from 'Y'
-                                                UNION
-                                                SELECT h3.activity_event_name
-                                                FROM   public.sched_h3 h3
-                                                WHERE  h3.report_id = '{0}'
-                                                AND h3.delete_ind is distinct from 'Y'
-                                                AND h3.cmte_id = '{1}')))""".format(
-                    request.data.get("reportid"), cmte_id
-                )
+                    param_string
+                    + """AND (((transaction_table = 'sched_h3' or transaction_table = 'sched_h4') AND report_id = '{0}')
+                    OR
+                    (transaction_table = 'sched_h1' AND report_id = '{0}' AND back_ref_transaction_id is null)
+                    OR
+                    (transaction_table = 'sched_h1' AND report_id = '{0}' AND transaction_id IN (
+                    with h1_set as (select  (
+                    case when administrative is true then 'AD'
+                    when public_communications is true then 'PC'
+                    when generic_voter_drive is true then 'GV'
+                    end) as event_type, transaction_id, cmte_id, report_id
+                    from sched_h1 where delete_ind is distinct from 'Y' and report_id = '{0}')
+                    select distinct t.transaction_id from h1_set t
+                    join sched_h4 h4 on t.event_type = h4.activity_event_type and h4.report_id = t.report_id
+                    where h4.delete_ind is distinct from 'Y'
+                    union
+                    select distinct t.transaction_id from h1_set t
+                    join sched_h3 h3 on t.event_type = h3.activity_event_type and h3.report_id = t.report_id
+                    where h3.delete_ind is distinct from 'Y'
+                    ))
+                    OR
+                    (transaction_table = 'sched_h2' AND report_id = '{0}' AND ratio_code = 'n')
+                    OR
+                    (transaction_table = 'sched_h2' AND report_id = '{0}' AND name IN (
+                    SELECT h4.activity_event_identifier FROM public.sched_h4 h4
+                    WHERE  h4.report_id = '{0}'
+                    AND h4.cmte_id = '{1}'
+                    AND h4.delete_ind is distinct from 'Y'
+                    UNION
+                    SELECT h3.activity_event_name
+                    FROM   public.sched_h3 h3
+                    WHERE  h3.report_id = '{0}'
+                    AND h3.delete_ind is distinct from 'Y'
+                    AND h3.cmte_id = '{1}')))""".format(
+                        request.data.get("reportid"), cmte_id
+                    )
                 )
 
     # To determine if we are searching for regular or trashed transactions
     if (
-            "trashed_flag" in request.data
-            and str(request.data.get("trashed_flag")).lower() == "true"
+        "trashed_flag" in request.data
+        and str(request.data.get("trashed_flag")).lower() == "true"
     ):
         param_string += " AND delete_ind = 'Y'"
     else:
@@ -4597,17 +4597,17 @@ def get_transactions(request, transaction_id):
     # transactions ordering ASC or DESC
     if ctgry_type == "loans_tran":
         trans_query_string = (
-                trans_query_string
-                + """ ORDER BY {} {}, loan_incurred_date  ASC, create_date ASC""".format(
-            sortcolumn, descending
-        )
+            trans_query_string
+            + """ ORDER BY {} {}, loan_incurred_date  ASC, create_date ASC""".format(
+                sortcolumn, descending
+            )
         )
     else:
         trans_query_string = (
-                trans_query_string
-                + """ ORDER BY {} {}, transaction_date  ASC, create_date ASC""".format(
-            sortcolumn, descending
-        )
+            trans_query_string
+            + """ ORDER BY {} {}, transaction_date  ASC, create_date ASC""".format(
+                sortcolumn, descending
+            )
         )
 
     output_list = []
@@ -7910,26 +7910,26 @@ def put_contact_data(data, username):
         with connection.cursor() as cursor:
             # creating a log of the entity modified
             cursor.execute(
-              """
-              INSERT INTO public.entity_log(
-              entity_id, entity_type, cmte_id, entity_name, first_name, last_name, 
-              middle_name, preffix, suffix, street_1, street_2, city, state, 
-              zip_code, occupation, employer, ref_cand_cmte_id, delete_ind, 
-              create_date, last_update_date, cand_office, cand_office_state, 
-              cand_office_district, cand_election_year, phone_number, principal_campaign_committee, 
-              ref_entity_id, logged_date, username, notes)
-              SELECT entity_id, entity_type, cmte_id, entity_name, first_name, last_name, 
-              middle_name, preffix, suffix, street_1, street_2, city, state, 
-              zip_code, occupation, employer, ref_cand_cmte_id, delete_ind, 
-              create_date, last_update_date, cand_office, cand_office_state, 
-              cand_office_district, cand_election_year, phone_number, principal_campaign_committee, 
-              ref_entity_id, now(), %s, notes
-              FROM public.entity WHERE entity_id=%s
-              """,
-              [
-              username,
-              data.get("entity_id")
-              ]
+                """
+                INSERT INTO public.entity_log(
+                entity_id, entity_type, cmte_id, entity_name, first_name, last_name,
+                middle_name, preffix, suffix, street_1, street_2, city, state,
+                zip_code, occupation, employer, ref_cand_cmte_id, delete_ind,
+                create_date, last_update_date, cand_office, cand_office_state,
+                cand_office_district, cand_election_year, phone_number, principal_campaign_committee,
+                ref_entity_id, logged_date, username, notes)
+                SELECT entity_id, entity_type, cmte_id, entity_name, first_name, last_name,
+                middle_name, preffix, suffix, street_1, street_2, city, state,
+                zip_code, occupation, employer, ref_cand_cmte_id, delete_ind,
+                create_date, last_update_date, cand_office, cand_office_state,
+                cand_office_district, cand_election_year, phone_number, principal_campaign_committee,
+                ref_entity_id, now(), %s, notes
+                FROM public.entity WHERE entity_id=%s
+                """,
+                [
+                    username,
+                    data.get("entity_id")
+                ]
             )
             print(cursor.query)
             cursor.execute(
@@ -9344,13 +9344,13 @@ def clone_a_transaction(request):
             )
 
             load_sql = (
-                    """SELECT json_agg(t) 
-            FROM ("""
-                    + load_sql
-                    + """WHERE transaction_id = '{}' ) t
-            """.format(
-                new_tran_id
-            )
+                """SELECT json_agg(t)
+                FROM ("""
+                + load_sql
+                + """WHERE transaction_id = '{}' ) t
+                """.format(
+                    new_tran_id
+                )
             )
             logger.debug("load_sql:{}".format(load_sql))
             cursor.execute(load_sql)
@@ -10605,45 +10605,15 @@ def get_sl_line_sum_value(
 
             cl_n = formula_split[0].replace(" ", "")
             val += (
-                    get_sl_line_sum_value(
-                        cl_n.split("-")[0],
-                        levin_accnt_name,
-                        "",
-                        sched_la_line_sum_dict,
-                        cmte_id,
-                        report_id,
-                    )[0]
-                    - get_sl_line_sum_value(
-                cl_n.split("-")[1],
-                levin_accnt_name,
-                "",
-                sched_la_line_sum_dict,
-                cmte_id,
-                report_id,
-            )[0]
-            )
-        else:
-
-            line_number = formula_split[0]
-            val += (
-                sched_la_line_sum_dict.get(line_number, 0)[0]
-                if sched_la_line_sum_dict.get(line_number, 0)
-                else 0
-            )
-
-    else:
-        for cl_n in formula_split:
-            if "-" in cl_n:
-                val += (
-                        get_sl_line_sum_value(
-                            cl_n.split("-")[0],
-                            levin_accnt_name,
-                            "",
-                            sched_la_line_sum_dict,
-                            cmte_id,
-                            report_id,
-                        )
-                        - get_sl_line_sum_value(
+                get_sl_line_sum_value(
+                    cl_n.split("-")[0],
+                    levin_accnt_name,
+                    "",
+                    sched_la_line_sum_dict,
+                    cmte_id,
+                    report_id,
+                )[0]
+                - get_sl_line_sum_value(
                     cl_n.split("-")[1],
                     levin_accnt_name,
                     "",
@@ -10651,10 +10621,37 @@ def get_sl_line_sum_value(
                     cmte_id,
                     report_id,
                 )[0]
+            )
+        else:
+            line_number = formula_split[0]
+            val += (
+                sched_la_line_sum_dict.get(line_number, 0)[0]
+                if sched_la_line_sum_dict.get(line_number, 0)
+                else 0
+            )
+    else:
+        for cl_n in formula_split:
+            if "-" in cl_n:
+                val += (
+                    get_sl_line_sum_value(
+                        cl_n.split("-")[0],
+                        levin_accnt_name,
+                        "",
+                        sched_la_line_sum_dict,
+                        cmte_id,
+                        report_id,
+                    )
+                    - get_sl_line_sum_value(
+                        cl_n.split("-")[1],
+                        levin_accnt_name,
+                        "",
+                        sched_la_line_sum_dict,
+                        cmte_id,
+                        report_id,
+                    )[0]
                 )
             else:
-
-                # print(cl_n,levin_accnt_name, "", sched_la_line_sum_dict, cmte_id, report_id,'addddddddddddddddddddddddddddddddddddddddddddddddd')
+                # print(cl_n,levin_accnt_name, "", sched_la_line_sum_dict, cmte_id, report_id,'add')
 
                 # line_val = get_sl_line_sum_value(cl_n,levin_accnt_name, "", sched_la_line_sum_dict, cmte_id, report_id)
                 val_l_changed = (

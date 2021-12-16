@@ -3933,7 +3933,7 @@ def schedH4(request):
                     "totalPages": "",
                 }
                 return JsonResponse(
-                forms_obj, status=status.HTTP_200_OK, safe=False
+                    forms_obj, status=status.HTTP_200_OK, safe=False
                 )
         elif request.method == "DELETE":
             try:
@@ -5460,7 +5460,7 @@ def schedH6(request):
                 ):
                     data["report_id"] = check_report_id(
                         request.query_params.get("report_id")
-                )
+                    )
 
                 if "transaction_id" in request.query_params and check_null_value(
                     request.query_params.get("transaction_id")
