@@ -1563,14 +1563,14 @@ def post_reports(data, reportid=None):
                     post_sql_form24(
                         report_id,
                         data.get("cmte_id"),
-                        )
+                    )
                 elif data.get("form_type") == "F3L":
                     post_sql_form3l(
                         report_id,
                         data.get("cmte_id"),
                         data.get("date_of_election"),
                         data.get("state_of_election"),
-                        )
+                    )
 
                 # print('here4')
             except Exception as e:
@@ -1686,7 +1686,7 @@ def put_reports(data):
                         cmte_id,
                         data.get('date_of_election'),
                         data.get('state_of_election')
-                        )
+                    )
             except Exception as e:
                 put_sql_report(
                     prev_report_type,
@@ -8551,13 +8551,11 @@ def get_all_trashed_reports(request):
 
             json_result = {"reports": forms_obj, "totalreportsCount": forms_cnt_obj}
         except Exception as e:
-            # print (str(e))
             return Response(
                 "The reports view api - get_all_trashed_reports is throwing an error" + str(e),
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # return Response(forms_obj, status=status.HTTP_200_OK)
         return Response(json_result, status=status.HTTP_200_OK)
 
 
@@ -9947,7 +9945,7 @@ def duplicate_address(cmte_id, data):
         )
         combined_dataframe = combined_dataframe[
             combined_dataframe.Score >= moderation_score
-            ]
+        ]
         if combined_dataframe.empty:
             return []
         else:

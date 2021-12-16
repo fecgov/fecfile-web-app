@@ -513,7 +513,7 @@ def update_aggregate_lb(datum):
                         transaction_id,
                         aggregate_amount,
                         itemized_ind
-                        )
+                    )
 
                     # child_SA_transaction_list = get_list_agg_child_schedA(report_id, cmte_id, transaction[1])
                     # for child_SA_transaction in child_SA_transaction_list:

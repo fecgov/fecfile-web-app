@@ -288,7 +288,7 @@ def schema_validation(uploaded_df, cmte_id, transaction_included, file_name):
                 )
                 combined_dataframe = combined_dataframe[
                     combined_dataframe.Score >= moderation_score
-                    ]
+                ]
 
                 score_val = combined_dataframe["Score"].values.tolist()
                 if combined_dataframe.empty:
