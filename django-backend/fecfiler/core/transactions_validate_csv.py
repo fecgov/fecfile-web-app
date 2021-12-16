@@ -88,18 +88,24 @@ def export_excel_to_db(filename, path):
         for sheet_name in xls.sheet_names[sheet_to_start:]:
             print(sheet_name)
             if sheet_name != 'All Receipts':
-                df = pd.read_excel(filewithpath,
-                                    sheet_name=sheet_name,
-                                    index_col=0,
-                                    skiprows=range(0, 2),
-                                    # dtype=String,
-                                    usecols="A,B,C,D,E,F,G")
+                df = pd.read_excel(
+                    filewithpath,
+                    sheet_name=sheet_name,
+                    index_col=0,
+                    skiprows=range(0, 2),
+                    # dtype=String,
+                    usecols="A,B,C,D,E,F,G"
+                )
                 df.dropna(how="all", inplace=True)
-                df.rename(columns={'Auto populate ': 'AUTO-GENERATE',
-                                        'Auto populate': 'AUTO-GENERATE',
-                                        'FIELD DESCRIPTION': 'FIELD\nDESCRIPTION',
-                                        'SAMPLE DATA': 'SAMPLE\nDATA',
-                                        'VALUE REFERENCE': 'VALUE\nREFERENCE'}, inplace=True)
+                df.rename(
+                    columns={
+                        'Auto populate ': 'AUTO-GENERATE',
+                        'Auto populate': 'AUTO-GENERATE',
+                        'FIELD DESCRIPTION': 'FIELD\nDESCRIPTION',
+                        'SAMPLE DATA': 'SAMPLE\nDATA',
+                        'VALUE REFERENCE': 'VALUE\nREFERENCE'},
+                    inplace=True
+                )
                 df.insert(0, "formname", formname)
                 df.insert(1, "schedname", schedname)
                 df.insert(2, "transaction_type", sheet_name)
@@ -413,11 +419,13 @@ def check_data_processed(md5, fecfilename):
             WHERE tfd.fec_file_name = %s
             ORDER BY create_Date DESC   limit 1;
         '''
-        conn = psycopg2.connect(user=PG_USER,
-                                      password=PG_PASSWORD,
-                                      host=PG_HOST,
-                                      port=PG_PORT,
-                                      database=PG_DATABASE)
+        conn = psycopg2.connect(
+            user=PG_USER,
+            password=PG_PASSWORD,
+            host=PG_HOST,
+            port=PG_PORT,
+            database=PG_DATABASE
+        )
         cur = conn.cursor()
         cur.execute(selectsql, (fecfilename,))
         if cur.rowcount == 1:

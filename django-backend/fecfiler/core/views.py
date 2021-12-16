@@ -7015,16 +7015,16 @@ def contactsTable(request):
                 + param_string
             )
             #: get the total count
-            trans_query_string_count = ("""SELECT count(*) 
-                                            FROM all_contacts_view
-                                            WHERE (deletedFlag <> 'Y' OR deletedFlag is NULL) AND cmte_id='"""
-                                            + cmte_id
-                                            + """' """
-                                            + param_string
-                                        )
+            trans_query_string_count = (
+                """SELECT count(*)
+                FROM all_contacts_view
+                WHERE (deletedFlag <> 'Y' OR deletedFlag is NULL) AND cmte_id='"""
+                + cmte_id
+                + """' """
+                + param_string
+            )
 
             # print("contacts trans_query_string: ",trans_query_string)
-            # import ipdb;ipdb.set_trace()
             if sortcolumn and sortcolumn != "default":
                 trans_query_string = (
                     trans_query_string

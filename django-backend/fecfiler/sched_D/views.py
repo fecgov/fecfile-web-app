@@ -774,10 +774,15 @@ def update_child(transaction_id, new_beginning_balance, new_close_balance, data)
             WHERE transaction_id = %s 
             AND delete_ind is distinct from 'Y';
         """
-    _v = (new_close_balance, new_close_balance,
-            datetime.datetime.now(), data.get("entity_id"),
-            data.get("purpose"), data.get("memo_text"),
-            transaction_id)
+    _v = (
+        new_close_balance,
+        new_close_balance,
+        datetime.datetime.now(),
+        data.get("entity_id"),
+        data.get("purpose"),
+        data.get("memo_text"),
+        transaction_id,
+    )
     logger.debug("update child sched_d with values: {}".format(_v))
     do_transaction(_sql, _v)
 
