@@ -1448,10 +1448,10 @@ def save_print_f99(request):
         vendor_software_name = 'FECFILE'
 
         data_obj = {
-                'form_type': 'F99',
-                'filing_type': filing_type,
-                'vendor_software_name': vendor_software_name,
-            }
+            'form_type': 'F99',
+            'filing_type': filing_type,
+            'vendor_software_name': vendor_software_name,
+        }
 
         # print(comm_info.file)
 
@@ -1595,10 +1595,10 @@ def update_print_f99(request):
             vendor_software_name = 'FECFILE'
 
             data_obj = {
-                    'form_type': 'F99',
-                    'filing_type': filing_type,
-                    'vendor_software_name': vendor_software_name,
-                }
+                'form_type': 'F99',
+                'filing_type': filing_type,
+                'vendor_software_name': vendor_software_name,
+            }
 
             # print(comm_info.file)
 
@@ -1890,10 +1890,10 @@ def submit_formf99(request):
             vendor_software_name = 'FECFILE'
             form_type = comm_info.form_type
             data_obj = {
-                    'form_type': form_type,
-                    'filing_type': filing_type,
-                    'vendor_software_name': vendor_software_name,
-                }
+                'form_type': form_type,
+                'filing_type': filing_type,
+                'vendor_software_name': vendor_software_name,
+            }
 
             if not (comm_info.file in [None, '', 'null', ' ', ""]):
                 filename = comm_info.file.name

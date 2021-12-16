@@ -1686,11 +1686,11 @@ def update_linenumber_aggamt_transactions_SA(
                     ]:
 
                         line_number, itemized_ind = get_linenumber_itemization(
-                                transaction[8],
-                                aggregate_amount,
-                                itemization_value,
-                                transaction[3],
-                            )
+                            transaction[8],
+                            aggregate_amount,
+                            itemization_value,
+                            transaction[3],
+                        )
                         if not transaction[11] in ["FU", "FI"]:  # if not forced
                             put_sql_linenumber_schedA(
                                 cmte_id,

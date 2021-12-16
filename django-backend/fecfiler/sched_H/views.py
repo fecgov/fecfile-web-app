@@ -2431,8 +2431,8 @@ def get_list_schedH3(report_id, cmte_id, transaction_id):
             if schedH3_list:
                 for _rec in schedH3_list:
                     aggregate_dic = load_h3_aggregate_amount(
-                            cmte_id, report_id, _rec.get("back_ref_transaction_id")
-                        )
+                        cmte_id, report_id, _rec.get("back_ref_transaction_id")
+                    )
                     if _rec["activity_event_name"]:
                         _rec["aggregate_amount"] = aggregate_dic.get(
                             _rec["activity_event_name"], 0
@@ -2441,7 +2441,6 @@ def get_list_schedH3(report_id, cmte_id, transaction_id):
                         _rec["aggregate_amount"] = aggregate_dic.get(
                             _rec["activity_event_type"], 0
                         )
-                        # pass
             merged_list = []
             for dictH3 in schedH3_list:
                 merged_list.append(dictH3)
@@ -2700,8 +2699,8 @@ def get_h3_summary(request):
             if _sum:
                 for _rec in _sum:
                     aggregate_dic = load_h3_aggregate_amount(
-                            cmte_id, report_id, _rec.get("back_ref_transaction_id")
-                        )
+                        cmte_id, report_id, _rec.get("back_ref_transaction_id")
+                    )
                     if _rec["activity_event_name"] not in [None, '']:
                         _rec["aggregate_amount"] = aggregate_dic.get(
                             _rec["activity_event_name"], 0
@@ -2712,11 +2711,9 @@ def get_h3_summary(request):
                         _rec["aggregate_amount"] = aggregate_dic.get(
                             _rec["activity_event_type"], 0
                         )
-                        # pass
 
             json_result = get_pagination_dataset(_sum, itemsperpage, page_num)
             return Response(json_result, status=status.HTTP_200_OK)
-            # return Response(_sum, status=status.HTTP_200_OK)
     except:
         raise
 

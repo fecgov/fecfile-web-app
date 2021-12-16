@@ -147,14 +147,14 @@ CORS_ALLOW_HEADERS = default_headers + (
 
 DATABASES = {
 
-     'default': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ.get('FECFILE_DB_NAME', 'postgres'),
         'USER': os.environ.get('FECFILE_DB_USER', 'postgres'),
         'PASSWORD': os.environ.get('FECFILE_DB_PASSWORD', 'postgres'),
         'HOST': os.environ.get('FECFILE_DB_HOST', 'localhost'),
         'PORT': '5432',
-     }
+    }
 
 }
 
@@ -198,8 +198,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, 'staticfiles'),
-    )
+    os.path.join(BASE_DIR, 'staticfiles'),
+)
 
 STATIC_ROOT = 'static'
 

@@ -29,7 +29,7 @@ class CommitteeInfoTest(TestCase):
                 "treasurermiddlename": "Doe",
                 "treasurerlastname": "Smith",
                 "treasurersuffix": "IV"
-            }
+        }
         CommitteeInfo.objects.create(**save_data)
 
     def test_committee_create_partial_info(self):
@@ -52,19 +52,19 @@ class CommitteeTest(TestCase):
             treasurerfirstname='John', treasurerlastname='Smith', treasurerprefix='Mr')
 
         save_data = {
-                "committeeid": "C11234567",
-                "committeename": "Test Committee 2",
-                "street1": "Street 1",
-                "street2": "Street 2",
-                "city": "Washington",
-                "state": "DC",
-                "zipcode": 20001,
-                "treasurerprefix": "Mr",
-                "treasurerfirstname": "John",
-                "treasurermiddlename": "Doe",
-                "treasurerlastname": "Smith",
-                "treasurersuffix": "IV"
-            }
+            "committeeid": "C11234567",
+            "committeename": "Test Committee 2",
+            "street1": "Street 1",
+            "street2": "Street 2",
+            "city": "Washington",
+            "state": "DC",
+            "zipcode": 20001,
+            "treasurerprefix": "Mr",
+            "treasurerfirstname": "John",
+            "treasurermiddlename": "Doe",
+            "treasurerlastname": "Smith",
+            "treasurersuffix": "IV"
+        }
         Committee.objects.create(**save_data)
 
     def test_committee_create(self):
@@ -100,20 +100,20 @@ class Setup_submit_comm_info(TestCase):
             treasurerfirstname='John', treasurerlastname='Smith', treasurerprefix='Mr')
 
         submit_data = {
-                "committeeid": "C11234567",
-                "committeename": "Test Committee 2",
-                "street1": "Street 1",
-                "street2": "Street 2",
-                "city": "Washington",
-                "state": "DC",
-                "text": "--",
-                "zipcode": 20001,
-                "treasurerprefix": "Mr",
-                "treasurerfirstname": "John",
-                "treasurermiddlename": "Doe",
-                "treasurerlastname": "Smith",
-                "treasurersuffix": "IV"
-           }
+            "committeeid": "C11234567",
+            "committeename": "Test Committee 2",
+            "street1": "Street 1",
+            "street2": "Street 2",
+            "city": "Washington",
+            "state": "DC",
+            "text": "--",
+            "zipcode": 20001,
+            "treasurerprefix": "Mr",
+            "treasurerfirstname": "John",
+            "treasurermiddlename": "Doe",
+            "treasurerlastname": "Smith",
+            "treasurersuffix": "IV"
+        }
 
         CommitteeInfo.objects.create(**submit_data)
 

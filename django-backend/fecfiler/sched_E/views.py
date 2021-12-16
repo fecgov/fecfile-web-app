@@ -498,8 +498,8 @@ def get_sched_e_ytd_amount(request):
             data['so_cand_district'] = cand_district
 
         aggregate_start_date, aggregate_end_date = find_aggregate_date(
-                form_type, trans_dt
-            )
+            form_type, trans_dt
+        )
         transaction_list = get_transactions_election_and_office(
             aggregate_start_date, trans_dt, data, 'F3X'
         )
@@ -733,8 +733,8 @@ def update_aggregate_amt_se(data):
                 logger.debug("current aggregate amount:{}".format(aggregate_amount))
                 # if curr_tran_date <= transaction[2]:
                 update_aggregate_on_transaction(
-                        cmte_id, report_id, transaction[0], aggregate_amount
-                    )
+                    cmte_id, report_id, transaction[0], aggregate_amount
+                )
                 # # checking in reports table if the delete_ind flag is false for the corresponding report
                 # if transaction[5] != 'Y':
                 #     # checking if the back_ref_transaction_id is null or not.
@@ -1331,8 +1331,8 @@ def force_aggregate_se(request):
         tran_data = get_list_schedE(report_id, cmte_id, transaction_id)[0]
         update_aggregate_amt_se(tran_data)
         return JsonResponse(
-                {"status": "success"}, status=status.HTTP_200_OK
-            )
+            {"status": "success"}, status=status.HTTP_200_OK
+        )
     except Exception as e:
         return Response(
             "The force_aggregate_se API is throwing an error: " + str(e),
@@ -1357,8 +1357,8 @@ def force_unaggregate_se(request):
         tran_data = get_list_schedE(report_id, cmte_id, transaction_id)[0]
         update_aggregate_amt_se(tran_data)
         return JsonResponse(
-                {"status": "success"}, status=status.HTTP_200_OK
-            )
+            {"status": "success"}, status=status.HTTP_200_OK
+        )
     except Exception as e:
         return Response(
             "The force_aggregate_se API is throwing an error: " + str(e),
@@ -1617,6 +1617,6 @@ def mirror_to_F24(request):
         return Response(get_data, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response(
-          "The mirror_to_F24 API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The mirror_to_F24 API is throwing an error: " + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )

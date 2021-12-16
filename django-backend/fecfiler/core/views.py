@@ -2331,23 +2331,23 @@ def reports(request):
                     additional_email_2 = None
 
                 datum = {
-                      "cmte_id": get_comittee_id(request.user.username),
-                      "form_type": request.data.get("form_type", None),
-                      "amend_ind": amend_ind,
-                      "report_type": request.data.get("report_type", None),
-                      "election_code": election_code,
-                      "date_of_election": date_format(request.data.get("date_of_election")),
-                      "state_of_election": request.data.get("state_of_election", None),
-                      "cvg_start_dt": date_format(request.data.get("cvg_start_dt")),
-                      "cvg_end_dt": date_format(request.data.get("cvg_end_dt")),
-                      "due_dt": date_format(request.data.get("due_dt")),
-                      "coh_bop": int(request.data.get("coh_bop", '0')),
-                      "status": f_status,
-                      "email_1": email_1,
-                      "email_2": email_2,
-                      "additional_email_1": additional_email_1,
-                      "additional_email_2": additional_email_2,
-                  }
+                    "cmte_id": get_comittee_id(request.user.username),
+                    "form_type": request.data.get("form_type", None),
+                    "amend_ind": amend_ind,
+                    "report_type": request.data.get("report_type", None),
+                    "election_code": election_code,
+                    "date_of_election": date_format(request.data.get("date_of_election")),
+                    "state_of_election": request.data.get("state_of_election", None),
+                    "cvg_start_dt": date_format(request.data.get("cvg_start_dt")),
+                    "cvg_end_dt": date_format(request.data.get("cvg_end_dt")),
+                    "due_dt": date_format(request.data.get("due_dt")),
+                    "coh_bop": int(request.data.get("coh_bop", '0')),
+                    "status": f_status,
+                    "email_1": email_1,
+                    "email_2": email_2,
+                    "additional_email_1": additional_email_1,
+                    "additional_email_2": additional_email_2,
+                }
 
                 datum['semi_annual_start_date'] = date_format(request.data.get('semi_annual_start_date')) if request.data.get('semi_annual_start_date') else None
                 datum['semi_annual_end_date'] = date_format(request.data.get('semi_annual_end_date')) if request.data.get('semi_annual_end_date') else None
@@ -2371,9 +2371,9 @@ def reports(request):
                     return JsonResponse(data, status=status.HTTP_201_CREATED, safe=False)
                 elif type(data) is list:
                     output_dict = {
-                          'status': "fail",
-                          'data': data
-                      }
+                        'status': "fail",
+                        'data': data
+                    }
                     return JsonResponse(output_dict, status=status.HTTP_200_OK, safe=False)
                 else:
                     raise Exception("The output returned from post_reports function is neither dict nor list")
@@ -2491,10 +2491,10 @@ def reports(request):
                     return JsonResponse(data, status=status.HTTP_201_CREATED, safe=False)
                 elif type(data) is list:
                     output_dict = {
-                          'status': "fail",
-                          'orphanedTransactionsExist': orphanedTransactionsExist,
-                          'data': data
-                      }
+                        'status': "fail",
+                        'orphanedTransactionsExist': orphanedTransactionsExist,
+                        'data': data
+                    }
                     return JsonResponse(output_dict, status=status.HTTP_200_OK, safe=False)
                 else:
                     raise Exception(
@@ -6070,7 +6070,7 @@ def get_summary_table(request):
             }
         elif form_type == 'F3L':
             forms_obj = {
-              "Summary": get_F3L_data(cmte_id, report_id)
+                "Summary": get_F3L_data(cmte_id, report_id)
             }
         else:
             raise Exception('This API is implemented for only Form 3X and 3L')
@@ -6446,8 +6446,7 @@ def get_thirdNavigationTransactionTypes(request):
         return Response(forms_obj, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-            "The get_thirdNavigationTransactionTypes API is throwing an error: "
-            + str(e),
+            "The get_thirdNavigationTransactionTypes API is throwing an error: " + str(e),
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -8554,8 +8553,7 @@ def get_all_trashed_reports(request):
         except Exception as e:
             # print (str(e))
             return Response(
-                "The reports view api - get_all_trashed_reports is throwing an error"
-                + str(e),
+                "The reports view api - get_all_trashed_reports is throwing an error" + str(e),
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -9537,8 +9535,8 @@ def create_amended_reports(request):
                 val_data = get_reports_data(reportid)
                 if not val_data:
                     return Response(
-                                "Given Report_id canot be amended",
-                                status=status.HTTP_400_BAD_REQUEST,
+                        "Given Report_id canot be amended",
+                        status=status.HTTP_400_BAD_REQUEST,
                     )
                 data = val_data[0]
                 if data.get('form_type') in ['F3X', 'F3L']:
@@ -11382,7 +11380,7 @@ def reports_memo_text(request):
         return Response(
             "The reports_memo_text API is throwing an error: " + str(e),
             status=status.HTTP_400_BAD_REQUEST,
-            )
+        )
 
 
 @api_view(['GET'])
@@ -11407,9 +11405,10 @@ def get_child_max_transaction_amount(request):
                 raise Exception('The transaction_id: {} does not exist or is deleted'.format(transaction_id))
     except Exception as e:
         return Response(
-          "The get_child_max_transaction_amount API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The get_child_max_transaction_amount API is throwing an error: "
+            + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(['POST', 'PUT'])
@@ -11442,9 +11441,9 @@ def save_additional_email(request):
         return Response(output_dict, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-          "The save_additional_email API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The save_additional_email API is throwing an error: " + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(['GET'])
@@ -11463,9 +11462,9 @@ def get_f24_reports(request):
         return Response(output, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-          "The get_f24_reports API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The get_f24_reports API is throwing an error: " + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class NotificationsSwitch:
@@ -11759,9 +11758,9 @@ def get_notifications_count(request):
         if cursor != None and cursor.query != None:
             print(cursor.query.decode('utf8'))
         return Response(
-          "The get_notifications_count API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The get_notifications_count API is throwing an error: " + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(['GET'])
@@ -11822,9 +11821,9 @@ def get_notifications_counts(request):
         if cursor != None and cursor.query != None:
             print(cursor.query.decode('utf8'))
         return Response(
-          "The get_notifications_counts API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The get_notifications_counts API is throwing an error: " + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["POST"])
@@ -11861,9 +11860,9 @@ def get_notifications(request):
         if cursor != None and cursor.query != None:
             print(cursor.query.decode('utf8'))
         return Response(
-          "The get_notifications API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The get_notifications API is throwing an error: " + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["GET"])
@@ -11937,7 +11936,7 @@ def get_notification(request):
                 return Response(
                     "Unsupported viewtype = " + viewtype,
                     status=status.HTTP_400_BAD_REQUEST
-                    )
+                )
 
         sql = """SELECT json_agg(t) FROM (""" + sql_item + """) t"""
         with connection.cursor() as cursor:
@@ -11962,9 +11961,9 @@ def get_notification(request):
         if cursor != None and cursor.query != None:
             print(cursor.query.decode('utf8'))
         return Response(
-          "The get_notification API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The get_notification API is throwing an error: " + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(['GET', 'PUT'])
@@ -12028,9 +12027,10 @@ def cashOnHand(request):
 
     except Exception as e:
         return Response(
-          "The cashOnHand API - {} is throwing an error: ".format(request.method) + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The cashOnHand API - {} is throwing an error: ".format(request.method)
+            + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(['GET'])
@@ -12048,9 +12048,10 @@ def cashOnHandInfoStatus(request):
         return Response({'showMessage': status_flag}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-          "The cashOnHandInfoStatus API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The cashOnHandInfoStatus API is throwing an error: "
+            + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(['GET'])
@@ -12077,9 +12078,9 @@ def contact_logs(request):
         return Response(result, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-          "The contact_logs API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The contact_logs API is throwing an error: " + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(['GET'])
@@ -12132,9 +12133,10 @@ def contact_report_details(request):
         return Response(result, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-          "The contact_report_details API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The contact_report_details API is throwing an error: "
+            + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["POST"])
@@ -12157,9 +12159,10 @@ def save_csv_md5_to_db(request):
         return Response(resp, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-          "The save_csv_md5_to_db API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The save_csv_md5_to_db API is throwing an error: "
+            + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["POST"])
@@ -12171,9 +12174,10 @@ def generate_contact_details_from_csv(request):
         return Response(resp, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-          "The get_contact_details_from_csv API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The get_contact_details_from_csv API is throwing an error: "
+            + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["POST"])
@@ -12219,9 +12223,10 @@ def validate_import_transactions(request):
         return Response(resp, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-          "The validate_import_transactions API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The validate_import_transactions API is throwing an error: "
+            + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["POST"])
@@ -12240,9 +12245,10 @@ def queue_transaction_message(request):
         return Response(resp, status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-          "The queue_transaction_message API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The queue_transaction_message API is throwing an error: "
+            + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["POST"])
@@ -12260,9 +12266,10 @@ def contact_notes(request):
                 return Response("Sucessfully updated the notes for entity_id: {}".format(entity_id), status=status.HTTP_200_OK)
     except Exception as e:
         return Response(
-          "The contact_notes API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The contact_notes API is throwing an error: "
+            + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(["POST"])
@@ -12279,6 +12286,6 @@ def import_fecfile(request):
             return JsonResponse(dictprint, status=status.HTTP_201_CREATED)
     except Exception as e:
         return Response(
-          "The import_fecfile API is throwing an error: " + str(e),
-          status=status.HTTP_400_BAD_REQUEST
-          )
+            "The import_fecfile API is throwing an error: " + str(e),
+            status=status.HTTP_400_BAD_REQUEST
+        )
