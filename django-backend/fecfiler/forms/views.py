@@ -125,9 +125,8 @@ def print_pdf_info(request):
 """@api_view(['GET'])
 def print_f99_info(request):
 
-    
     #Fetches the last unsubmitted comm_info object saved in db and creates a .fec file which is used as input to print form99 in webprint module.
-    
+
     try: 
         # fetch last comm_info object created that is not submitted, else return None
         comm_info = CommitteeInfo.objects.filter(committeeid=get_comittee_id(request.user.username),  is_submitted=False).last() #,)
@@ -195,7 +194,7 @@ def create_f99_info(request):
     """
     # insert a new record for a comm_info
     if request.method == 'POST':
-        
+
         data = {
             'committeeid': request.data.get('committeeid'),
             'committeename': request.data.get('committeename'),
@@ -244,7 +243,7 @@ def create_f99_info(request):
         #     logger.debug("FEC Error 001:is_submitted and committeeid field changes are restricted for this api call. Please use the submit api to finalize and submit the data")
         #     return Response({"FEC Error 001":"is_submitted and committeeid field changes are restricted for this api call. Please use the submit api to finalize and submit the data"}, status=status.HTTP_400_BAD_REQUEST)
         # just making sure that committeeid is not updated by mistake
-        
+
         print("Reason text= ", request.data.get('text'))
         strcheck_Reason = check_F99_Reason_Text(request.data.get('text'))
 
@@ -306,7 +305,7 @@ def create_f99_info(request):
                 if is_not_read_only_or_filer:
                     serializer.save()
             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-         
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -322,7 +321,7 @@ def f99_file_upload(self, request, format=None):
 
     f = request.data['file']
     #import ipdb; ipdb.set_trace()
-    
+
     mymodel.my_file_field.save(f.name, f, save=True)
     return Response(status=status.HTTP_201_CREATED)
 """
@@ -408,7 +407,7 @@ def update_f99_info(request, print_flag=False):
 
     """   
     #Updates the last unsubmitted comm_info object only. you can use this to change the 'text' and 'is_submitted' field as well as any other field.
-    
+
     # update details of a single comm_info
     if request.method == 'POST':
 
@@ -439,12 +438,12 @@ def update_f99_info(request, print_flag=False):
         if 'file' in request.data:
             incoming_data['filename'] = request.data.get('file').name
 
-                
+
         serializer = CommitteeInfoSerializer(id_comm, data=incoming_data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-         
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     """
 
@@ -454,7 +453,7 @@ def submit_comm_info(request):
     if request.method == 'POST':
         try:
             is_read_only_or_filer_reports(request)
-        
+
             data = {
                 'committeeid': request.data.get('committeeid'),
                 'committeename': request.data.get('committeename'),
@@ -542,7 +541,7 @@ def submit_comm_info(request):
                 #if serializer.is_valid():
                 #if True:
                 comm_info.save()
-                    
+
                 email(True, serializer.data)
                 return Response(serializer.data, status=status.HTTP_200_OK)
                 #else:
@@ -553,7 +552,7 @@ def submit_comm_info(request):
     else:
         return Response({"error":"ERRCODE: FEC02. Error occured while trying to submit form f99."}, status=status.HTTP_400_BAD_REQUEST)
     """
-    
+
 # @api_view(['POST'])
 # def submit_comm_info(request):
 #     """
@@ -617,9 +616,9 @@ def submit_comm_info(request):
 """
 @api_view(["POST"])
 def create_json_file(request):
-   
+
    #creating a JSON file so that it is handy for all the public API's
-   
+
    try:
        tmp_filename = '/tmp/' + new_data['committeeid'] + "_" + 'f99' + new_data['updated_at'].strftime("%Y_%m_%d_%H_%M") + ".json"
        json.dump(serializer.data, open(tmp_filename, 'w'))
@@ -811,9 +810,9 @@ def validate_f99(request):
         }
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    
+
     try:
-        
+
         comm = Committee.objects.filter(committeeid=request.data.get('committeeid')).last()
 
     except Committee.DoesNotExist:
@@ -1162,7 +1161,7 @@ def get_previous_amend_reports(request):
         # return Response(forms_obj, status=status.HTTP_200_OK)
         return Response(json_result, status=status.HTTP_200_OK)
 
-        
+
 # API to delete saved forms
 @api_view(['POST'])
 def delete_forms(request):
@@ -1209,11 +1208,11 @@ def email(boolean, data):
     RECIPIENT = []
 
     RECIPIENT.append("%s" % data.get('email_on_file'))
-    
+
     # print(data.get('additional_email_1'))
     if 'additional_email_1' in data and (not (data.get('additional_email_1') == '-' or data.get('additional_email_1') is None or data.get('additional_email_1') == 'null')):
         RECIPIENT.append("%s" % data.get('additional_email_1'))
-    
+
     # print(data.get('additional_email_2'))
     if 'additional_email_2' in data and (not (data.get('additional_email_2') == '-' or data.get('additional_email_2') is None or data.get('additional_email_2') == 'null')):
         RECIPIENT.append("%s" % data.get('additional_email_2'))
@@ -1221,14 +1220,14 @@ def email(boolean, data):
     # print(data.get('email_on_file_1'))
     if 'email_on_file_1' in data and (not (data.get('email_on_file_1') == '-' or data.get('email_on_file_1') is None or data.get('email_on_file_1') == 'null')):
         RECIPIENT.append("%s" % data.get('email_on_file_1'))
-    
+
     SUBJECT = "Test - Form 99 submitted successfully"
 
     # The email body for recipients with non-HTML email clients.
     BODY_TEXT = ("Form 99 that we received has been validated and submitted\r\n"
                  "This email was sent by FEC.gov. If you are receiving this email in error or have any questions, please contact the FEC Electronic Filing Office toll-free at (800) 424-9530 ext. 1307 or locally at (202) 694-1307."
                 )
-                
+
     # The HTML body of the email.
     # final_html = email_ack1.html.replace('{{@REPID}}',1234567).replace('{{@REPLACE_CMTE_ID}}',C0123456)
     # t = Template(email_ack1)
@@ -1261,7 +1260,7 @@ def email(boolean, data):
             Destination={
                 'ToAddresses':
                     RECIPIENT,
-                
+
             },
             Message={
                 'Body': {
@@ -1280,7 +1279,7 @@ def email(boolean, data):
                 },
             },
             Source=SENDER,
-           
+
         )
     # Display an error if something goes wrong.
     except ClientError as e:
@@ -1290,9 +1289,9 @@ def email(boolean, data):
 """
 @api_view(['GET'])
 def get_comm_lookup(request):
-   
+
     #fields for comm lookup
-    
+
     try:
         import ipdb; ipdb.set_trace()
 
@@ -1308,19 +1307,19 @@ def get_comm_lookup(request):
 """
 @api_view(['GET'])
 def get_filed_form_types(request):
-   
+
     #Fields for identifying the committee type and committee design and filter the forms category 
-    
+
     try:
         comm_id = get_comittee_id(request.user.username)
-        
+
         #forms_obj = [obj.__dict__ for obj in RefFormTypes.objects.raw("select  rctf.category,rft.form_type,rft.form_description,rft.form_tooltip,rft.form_pdf_url from ref_form_types rft join ref_cmte_type_vs_forms rctf on rft.form_type=rctf.form_type where rctf.cmte_type='" + cmte_type + "' and rctf.cmte_dsgn='" + cmte_dsgn +  "'")]
         forms_obj = [obj.__dict__ for obj in My_Forms_View.objects.raw("select * from my_forms_view where cmte_id='"  + comm_id + "' order by category,form_type")]
 
         for form_obj in forms_obj:
             if form_obj['due_date']:
                 form_obj['due_date'] = form_obj['due_date'].strftime("%m-%d-%Y")
-            
+
         resp_data = [{k:v.strip(" ") for k,v in form_obj.items() if k not in ["_state"] and type(v) == str } for form_obj in forms_obj]
         return Response(resp_data, status=status.HTTP_200_OK)
     except:
@@ -1330,9 +1329,9 @@ def get_filed_form_types(request):
 """
 @api_view(['GET'])
 def get_report_types_(request):
-    
+
     #fields fordentifying the committee type and committee design and filter the forms category 
-    
+
     try:
         comm_id = get_comittee_id(request.user.username)
 
@@ -1374,7 +1373,7 @@ def save_print_f99(request):
     #     #createresp =
     # else:
     #     createresp = requests.post(settings.NXG_FEC_API_URL + settings.NXG_FEC_API_VERSION + "f99/create_f99_info", data=request.data, headers={'Authorization': token_use})
-    
+
     createresp = create_f99_info(request._request)
 
     if createresp.status_code != 201:
@@ -1442,7 +1441,7 @@ def save_print_f99(request):
 
         # with open('data.json', 'w') as outfile:
         #   json.dump(data, outfile, ensure_ascii=False)
-        
+
         # variables to be sent along the JSON file in form-data
         filing_type = 'FEC'
         vendor_software_name = 'FECFILE'
@@ -1454,7 +1453,7 @@ def save_print_f99(request):
             }
 
         # print(comm_info.file)
-        
+
         if not (comm_info.file in [None, '', 'null', ' ', ""]):
             filename = comm_info.file.name
             # print(filename)
@@ -1497,7 +1496,7 @@ def save_print_f99(request):
             dictprint = printresp.json()
             merged_dict = {**create_json_data, **dictprint}
             return JsonResponse(merged_dict, status=status.HTTP_201_CREATED)
-        
+
     else:
         return Response({"FEC Error 003": "This form Id number does not exist"}, status=status.HTTP_400_BAD_REQUEST)
     """    
@@ -1585,7 +1584,7 @@ def update_print_f99(request):
 
             # with open('data.json', 'w') as outfile:
             #   json.dump(data, outfile, ensure_ascii=False)
-            
+
             # obj = open('data.json', 'w')
             # obj.write(serializer.data)
             # obj.close
@@ -1601,7 +1600,7 @@ def update_print_f99(request):
                 }
 
             # print(comm_info.file)
-            
+
             if not (comm_info.file in [None, '', 'null', ' ', ""]):
                 filename = comm_info.file.name
                 # print(filename)
@@ -1648,7 +1647,7 @@ def update_print_f99(request):
 
     except Exception as e:
         return Response('The update_print_f99 is throwing an error: ' + str(e))
-    
+
 
 def set_need_appearances_writer(writer):
 
@@ -1686,7 +1685,7 @@ def update_checkbox_values(page, fields):
                     NameObject("/V"): NameObject(fields[field]),
                     NameObject("/AS"): NameObject(fields[field])
                 })
- 
+
 
 # API which prints Form 99 data
 
@@ -1838,7 +1837,7 @@ def submit_formf99(request):
     """
     try:
         comm_info = CommitteeInfo.objects.filter(committeeid=request.data.get('cmte_id'), id=request.data.get('reportid')).last()
-        
+
         if comm_info:
             header = {
                     "version": "8.3",

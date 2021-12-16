@@ -2472,7 +2472,7 @@ def reports(request):
 
                 if "election_code" in request.data:
                     datum["election_code"] = request.data.get("election_code")
-                
+
                 datum['semi_annual_start_date'] = date_format(request.data.get('semi_annual_start_date')) if request.data.get('semi_annual_start_date') else None
                 datum['semi_annual_end_date'] = date_format(request.data.get('semi_annual_end_date')) if request.data.get('semi_annual_end_date') else None
                 datum['election_date'] = date_format(request.data.get('election_date')) if request.data.get('election_date') else None
@@ -4565,7 +4565,7 @@ def get_transactions(request, transaction_id):
         param_string += " AND delete_ind = 'Y'"
     else:
         param_string += " AND delete_ind is distinct from 'Y'"
-    
+
     if ctgry_type == "receipts_tran" or ctgry_type == "other_tran":
         parent_transaction_id = "null" if transaction_id is None else ("'" + transaction_id + "'")
         param_string += " AND ( COALESCE(back_ref_transaction_id, 'NONE') = COALESCE(" + parent_transaction_id + ", 'NONE')"
@@ -4699,7 +4699,7 @@ def get_transactions(request, transaction_id):
         row1 = cursor.fetchone()[0]
         totalcount = row1[0]['count']
         print(totalcount)
-    
+
     # logger.debug(output_list)
 #: tweak the query to get the transactions count as per page
 #       set the pagination and page details
@@ -4730,7 +4730,7 @@ def get_transactions(request, transaction_id):
         json_result["totalAmount"] = total_amount
     if totalSemiAnnualAmount:
         json_result["totalSemiAnnualAmount"] = totalSemiAnnualAmount
-    
+
     return json_result, status_value
 
 
@@ -6645,7 +6645,7 @@ def get_Statuss(request):
             for row in cursor.fetchall():
                 data_row = list(row)
             forms_obj=data_row[0]
-                
+
         if not bool(forms_obj):
             return Response("No entries were found for the get_FormTypes API for this committee", status=status.HTTP_400_BAD_REQUEST)                              
         """
@@ -6687,7 +6687,7 @@ def get_AmendmentIndicators(request):
             for row in cursor.fetchall():
                 data_row = list(row)
             forms_obj=data_row[0]
-                
+
         if not bool(forms_obj):
             return Response("No entries were found for the get_FormTypes API for this committee", status=status.HTTP_400_BAD_REQUEST)                              
         """
@@ -7769,7 +7769,7 @@ def get_entityTypes(request):
                             "type_code": "COM",
                             "type_desc": "Committee"
                         },
-                      
+
                         {
                             "type_code": "IND",
                             "type_desc": "Individual"
@@ -11281,7 +11281,7 @@ def put_sql_form3l(
             )
     except Exception:
         raise
-                        
+
 
 def find_form_type(report_id, cmte_id):
     """
@@ -11485,7 +11485,7 @@ class NotificationsSwitch:
         ]""")
 
         return (sql_count, sql_items, keys)
- 
+
     def case_ReminderEmails(self):
 
         sql_count = """
@@ -11523,9 +11523,9 @@ class NotificationsSwitch:
         ]""")
 
         return (sql_count, sql_items, keys)
- 
+
     def case_LateNotificationEmails(self):
-        
+
         sql_count = """
             select count(1) as count
             from public.notifications_late_notification
@@ -11608,7 +11608,7 @@ class NotificationsSwitch:
         return (sql_count, sql_items, keys)
 
     def case_Rfais(self):
-        
+
         sql_count = """
             SELECT 0 as count WHERE %(cmte_id)s is not null
         """

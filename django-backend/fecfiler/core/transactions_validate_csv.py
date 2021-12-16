@@ -253,7 +253,7 @@ def create_cmte_error_folder(bktname, key, errfilerelpath):
     exists = False
     if "Contents" not in result:
         s3.put_object(Bucket=bktname, Key=(errfilerelpath+'/'))
-    
+
 
 def move_error_files_to_s3(bktname, key, errorfilename, cmteid):
     try:
@@ -380,7 +380,7 @@ def validate_transactions(bktname, key, cmteid):
                 "bktname": bktname,
                 "key": key,
             }
-            
+
             return returnstr
     except Exception as ex:
         print(ex)

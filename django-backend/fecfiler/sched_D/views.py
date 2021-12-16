@@ -406,7 +406,7 @@ def schedD(request):
     elif request.method == "GET":
         try:
             data = {"cmte_id": get_comittee_id(request.user.username)}
-     
+
             if "report_id" in request.query_params:
                 data["report_id"] = check_report_id(
                     request.query_params.get("report_id")

@@ -1958,9 +1958,9 @@ def get_sla_summary_table(request):
     """
     # response = {}
     logger.debug("get_sql_summary with data:{}".format(request.query_params))
- 
+
     try:
-    
+
         #: Get the request parameters and set for Pagination
         query_params = request.query_params
         page_num = get_int_value(query_params.get("page"))
@@ -2124,7 +2124,7 @@ def get_slb_summary_table(request):
     """
     # response = {}
     logger.debug("get_sql_summary with data:{}".format(request.query_params))
-    
+
     try:
 
         #: Get the request parameters and set for Pagination

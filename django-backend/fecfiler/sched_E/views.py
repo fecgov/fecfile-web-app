@@ -1215,7 +1215,6 @@ def get_list_schedE(report_id, cmte_id, transaction_id, is_back_ref=False):
             mirror_report_id
             FROM public.sched_e
             WHERE 
-            
             cmte_id = %s 
             AND delete_ind is distinct from 'Y'
             """

@@ -2729,7 +2729,7 @@ def update_redes_original_trans(
 def trash_restore_transactions(request):
     """api for trash and resore transactions. 
        we are doing soft-delete only, mark delete_ind to 'Y'
-       
+
        request payload in this format:
         {
             "actions": [
@@ -2745,7 +2745,7 @@ def trash_restore_transactions(request):
                 }
             ]
         }
- 
+
     """
     try:
         is_read_only_or_filer_reports(request)

@@ -129,7 +129,7 @@ def do_loan_carryover(report_id, cmte_id):
     - non-zero loan_balance
     - outstanding and dangled(not carried over before)
     - loan report date < current report coverge start(forward carryover only)
-    
+
     2. update all records with new transaction_id, new report_id
     3. set new loan back_ref_transaction_id to parent transaction_id
     """

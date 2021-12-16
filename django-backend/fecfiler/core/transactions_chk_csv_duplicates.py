@@ -49,7 +49,7 @@ def check_for_file_hash_in_db(cmteid, filename, hash, fecfilename):
     try:
         """ insert a transactions_file_details """
         selectsql = """SELECT cmte_id, md5, file_name, create_date FROM public.transactions_file_details WHERE cmte_id = %s AND file_name = %s AND md5 = %s AND fec_file_name = %s;"""
- 
+
         conn = psycopg2.connect(user=PG_USER,
                                       password=PG_PASSWORD,
                                       host=PG_HOST,
@@ -79,7 +79,7 @@ def load_file_hash_to_db(cmteid, filename, hash, fecfilename):
         """ insert a transactions_file_details """
         insertsql = """INSERT INTO transactions_file_details(cmte_id, file_name, md5, fec_file_name)
                 VALUES(%s, %s, %s, %s);"""
- 
+
         conn = psycopg2.connect(user=PG_USER,
                                       password=PG_PASSWORD,
                                       host=PG_HOST,

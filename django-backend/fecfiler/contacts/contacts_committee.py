@@ -242,7 +242,7 @@ def upload_cand_contact(request):
 
                 print(df.head())
                 file_name = file_name[(file_name.rfind("/") + 1):]
-                
+
                 data = custom_validate_cand_df(df, cmte_id)
 
                 contacts_added = data.get("final_list")

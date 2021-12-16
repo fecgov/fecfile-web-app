@@ -51,7 +51,7 @@ class CommitteeInfo(models.Model):
     form_type = models.CharField(max_length=3, default="F99")
     coverage_start_date = models.DateField(null=True, blank=True)
     coverage_end_date = models.DateField(null=True, blank=True)
-    
+
     # class constructor
     def __unicode__(self):
         return self.committeename
@@ -64,7 +64,7 @@ class CommitteeInfo(models.Model):
     def delete(self, *args, **kwargs):
         super(CommitteeInfo, self).delete(*args, **kwargs)
         delete_file(self, 'file')
-    
+
     """
 
     class Meta():
@@ -137,7 +137,7 @@ class My_Forms_View(models.Model):
     due_date = models.DateField(blank=True, null=True)
     form_description = models.CharField(max_length=300, blank=True, null=True)
     form_info = models.CharField(max_length=1000, blank=True, null=True)
-        
+
 
 class RefCmteTypeVsForms(models.Model):
     cmte_type = models.CharField(primary_key=True, max_length=1)

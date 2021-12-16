@@ -657,7 +657,6 @@ def schedH1(request):
 def validate_h1_h2_exist(request):
     """
     validate h1 or h2 exist or not - used to enable h3/h5 warning message
-    
     """
 
     logger.debug("validate h1/h2 exist with request:{}".format(request.query_params))
@@ -1786,7 +1785,7 @@ def get_h2_summary_table(request):
         # calendar_year = check_calendar_year(request.query_params.get('calendar_year'))
         # start_dt = datetime.date(int(calendar_year), 1, 1)
         # end_dt = datetime.date(int(calendar_year), 12, 31)
-        
+
 
 # : insert pagination functionality
 
@@ -2141,7 +2140,7 @@ def put_schedH3(data):
 def put_sql_schedH3(data):
     """
     update a schedule_H3 item                    
-            
+
     """
     _sql = """UPDATE public.sched_h3
               SET transaction_type_identifier = %s, 
@@ -3207,7 +3206,7 @@ def get_existing_h4_total(cmte_id, transaction_id):
 def put_schedH4(data):
     """
     update sched_H4 item
-    
+
     """
     try:
         check_mandatory_fields_SH4(data)
@@ -3864,7 +3863,7 @@ def schedH4(request):
 
     try:
         is_read_only_or_filer_reports(request)
-    
+
         if request.method == "POST":
             try:
                 cmte_id = get_comittee_id(request.user.username)
@@ -4096,7 +4095,7 @@ def update_h5_total_amount(data):
 def put_schedH5(data):
     """
     update sched_H5 item
-    
+
     """
     try:
         check_mandatory_fields_SH5(data)
@@ -4121,7 +4120,7 @@ def put_schedH5(data):
 def put_sql_schedH5(data):
     """
     update a schedule_H5 item                    
-            
+
     """
     _sql = """UPDATE public.sched_h5
               SET transaction_type_identifier= %s, 
@@ -4477,7 +4476,7 @@ def get_h5_summary(request):
         else:
             descending = "ASC"
         trans_query_string_count = ""
-                
+
         cmte_id = get_comittee_id(request.user.username)
         report_id = request.query_params.get("report_id")
         # aggregate_dic = load_h3_aggregate_amount(cmte_id, report_id)
@@ -4523,7 +4522,7 @@ def get_h5_summary(request):
             #         _rec['aggregate_amount'] = aggregate_dic.get(_rec['activity_event_type'])
             #     else:
             #         pass
-            
+
             #: update for pagination
             json_result = get_pagination_dataset(_sum, itemsperpage, page_num)
             return Response(json_result, status=status.HTTP_200_OK)
@@ -4936,7 +4935,7 @@ def put_schedH6(data):
 def put_sql_schedH6(data):
     """
     update a schedule_H6 item                    
-            
+
     """
     _sql = """UPDATE public.sched_h6
               SET line_number = %s,
@@ -5452,7 +5451,7 @@ def schedH6(request):
                 else:
                     descending = "ASC"
                 trans_query_string_count = ""
-                        
+
                 data = {"cmte_id": get_comittee_id(request.user.username)}
                 # make sure we get query parameters from both
                 # request.data.update(request.query_params)

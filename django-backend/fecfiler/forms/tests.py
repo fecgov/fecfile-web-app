@@ -14,7 +14,7 @@ class CommitteeInfoTest(TestCase):
             committeeid='C01234567', committeename='Test Committee 1', street1='Street1 ',
             street2='Street 2', city='Washington DC', state='DC', zipcode='912853', text="-",
             treasurerfirstname='John', treasurerlastname='Smith', treasurerprefix='Mr')
-            
+
         save_data = {
                 "committeeid": "C11234567",
                 "committeename": "Test Committee 2",
@@ -31,10 +31,10 @@ class CommitteeInfoTest(TestCase):
                 "treasurersuffix": "IV"
             }
         CommitteeInfo.objects.create(**save_data)
-        
+
     def test_committee_create_partial_info(self):
         comm = CommitteeInfo.objects.get(committeeid='C01234567')
-        
+
         self.assertEqual(comm.committeename, "Test Committee 1")
 
     def test_committee_create_full_info(self):
@@ -50,7 +50,7 @@ class CommitteeTest(TestCase):
             committeeid='C01234567', committeename='Test Committee 1', street1='Street1 ',
             street2='Street 2', city='Washington DC', state='DC', zipcode='912853',
             treasurerfirstname='John', treasurerlastname='Smith', treasurerprefix='Mr')
-            
+
         save_data = {
                 "committeeid": "C11234567",
                 "committeename": "Test Committee 2",
@@ -66,10 +66,10 @@ class CommitteeTest(TestCase):
                 "treasurersuffix": "IV"
             }
         Committee.objects.create(**save_data)
-        
+
     def test_committee_create(self):
         comm = Committee.objects.get(committeeid='C01234567')
-        
+
         self.assertEqual(comm.committeename, "Test Committee 1")
 
 
@@ -98,7 +98,7 @@ class Setup_submit_comm_info(TestCase):
             committeeid='C01234567', committeename='Test Committee 1', street1='Street1 ',
             street2='Street 2', city='Washington DC', state='DC', zipcode='912853', text="-",
             treasurerfirstname='John', treasurerlastname='Smith', treasurerprefix='Mr')
-        
+
         submit_data = {
                 "committeeid": "C11234567",
                 "committeename": "Test Committee 2",
@@ -119,7 +119,7 @@ class Setup_submit_comm_info(TestCase):
 
 
 class submit_comm_info_Test(TestCase):
-    
+
     def valid_submit_data_test():
         data == submit_data
         self.assertEqual(resp.status_code, 200)
@@ -127,4 +127,4 @@ class submit_comm_info_Test(TestCase):
     def invalid_submit_data_test():
         data != submit_data
         self.assertEqual(resp.status_code, 400)
-        
+

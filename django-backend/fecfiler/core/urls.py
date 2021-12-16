@@ -3,7 +3,7 @@ from . import views, jsonmain, jsonsqlgenerate
 
 
 urlpatterns = [
-    
+
     url(
         r"^core/queue_transaction_message$",
         views.queue_transaction_message,

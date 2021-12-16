@@ -12,9 +12,9 @@ class CommitteeInfoSerializer(serializers.ModelSerializer):
                 'created_at', 'is_submitted', 'signee', 'email_on_file', 'email_on_file_1', 'additional_email_1', 'additional_email_2',
                 'form_type', 'coverage_start_date', 'coverage_end_date', 'updated_at')
         # read_only_fields = ('created_at', 'updated_at')
-  
+
         # Methods to save the model objects to the database
-        
+
     def create(self, validated_data):
         return CommitteeInfo.objects.create(**validated_data)
 
@@ -50,7 +50,7 @@ class CommitteeInfoSerializer(serializers.ModelSerializer):
             instance.file = validated_data.get('file', instance.file)
         except:
             pass
-        
+
         instance.save()
         return instance
 
@@ -69,12 +69,12 @@ class CommitteeSerializer(serializers.ModelSerializer):
                 'treasurermiddlename', 'treasurerlastname', 'treasurersuffix', 'email_on_file', 'email_on_file_1',
                 'created_at')
         read_only_fields = ('created_at', 'updated_at')
-        
+
     # Methods to save the model objects to the database
-    
+
     def create(self, validated_data):
         return Committee.objects.create(**validated_data)
-    
+
     def update(self, instance, validated_data):
         instance.committeeid = validated_data.get('committeeid', instance.committeeid)
         instance.committeename = validated_data.get('committeename', instance.committeename)
@@ -94,11 +94,11 @@ class CommitteeSerializer(serializers.ModelSerializer):
         return instance
 
 
-            
 
 
 
 
 
 
-            
+
+

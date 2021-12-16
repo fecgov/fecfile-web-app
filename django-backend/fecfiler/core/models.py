@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.utils.translation import ugettext_lazy as _
 
-    
+
 class Cmte_Report_Types_View(models.Model):
     cmte_id = models.CharField(max_length=9)
     filing_freq = models.CharField(max_length=1, blank=True, null=True)

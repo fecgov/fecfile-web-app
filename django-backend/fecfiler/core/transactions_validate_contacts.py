@@ -57,7 +57,7 @@ def get_columns_to_add(filename):
         else:
             print('In F3L get_columns_to_add, Sched type not available!!!')
     return columnlist
-    
+
 # mapping columns for each schedule against the contacts API req.
 
 
@@ -225,7 +225,7 @@ def get_columns_for_schedules(filename):
                                 'PAYEE SUFFIX',
                                 'REF_CAND_CMTE_ID',
                                 'TRANSACTION IDENTIFIER']
-                                
+
             print('scheduleh6')
         else:
             print('In F3X, Sched type not available!!!')
@@ -297,7 +297,7 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
                 for x in col_to_add:
                     data[x] = ''
             data['COMMITTEE_ID'] = cmteid
-            
+
             data.columns = ['ENTITY_TYPE', 'STREET_1',
                             'STREET_2', 'CITY', 'STATE', 'ZIP_CODE', 'EMPLOYER',
                             'OCCUPATION',
