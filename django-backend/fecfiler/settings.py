@@ -264,10 +264,10 @@ ADMIN_SHORTCUTS = [
                 'url': '/',
                 'open_new_window': True,
             },
-             {
-                 'url_name': 'admin:authentication_account_changelist',
-                 'title': 'Users',
-             },
+            {
+                'url_name': 'admin:authentication_account_changelist',
+                'title': 'Users',
+            },
         ]
     },
 ]
