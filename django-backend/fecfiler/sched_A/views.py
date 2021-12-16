@@ -2955,10 +2955,10 @@ def trash_restore_transactions(request):
                             update_aggregate_se(tran_data)
                             if find_form_type(report_id, cmte_id) == "F24":
                                 _actions.append({
-                                            "action": action,
-                                            "report_id": tran_data.get('mirror_report_id'),
-                                            "transaction_id": tran_data.get('mirror_transaction_id')
-                                        })
+                                    "action": action,
+                                    "report_id": tran_data.get('mirror_report_id'),
+                                    "transaction_id": tran_data.get('mirror_transaction_id')
+                                })
 
                         # Handling delete of schedule H4/H6 transactions: delete child trans and update aggregate
                         if transaction_id[:2] == "SH" and _delete == "Y":

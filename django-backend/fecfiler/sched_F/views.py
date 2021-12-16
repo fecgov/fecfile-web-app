@@ -1206,10 +1206,10 @@ def force_unaggregate_sf(request):
             update_sf_aggregation_status(transaction_id, "N")
             tran_data = get_list_schedF(report_id, cmte_id, transaction_id)[0]
             update_aggregate_general_elec_exp(
-                    tran_data["cmte_id"], tran_data["payee_cand_id"], tran_data["expenditure_date"]
+                tran_data["cmte_id"], tran_data["payee_cand_id"], tran_data["expenditure_date"]
             )
             return JsonResponse(
-                    {"status": "success"}, status=status.HTTP_200_OK
+                {"status": "success"}, status=status.HTTP_200_OK
             )
         except Exception as e:
             return Response(

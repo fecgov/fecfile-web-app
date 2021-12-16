@@ -1395,10 +1395,10 @@ def save_print_f99(request):
     comm_info = CommitteeInfo.objects.filter(id=create_json_data['id']).last()
     if comm_info:
         header = {
-                "version": "8.3",
-                "softwareName": "ABC Inc",
-                "softwareVersion": "1.02 Beta",
-                "additionalInfomation": "Any other useful information"
+            "version": "8.3",
+            "softwareName": "ABC Inc",
+            "softwareVersion": "1.02 Beta",
+            "additionalInfomation": "Any other useful information"
         }
 
         serializer = CommitteeInfoSerializer(comm_info)
@@ -1538,10 +1538,10 @@ def update_print_f99(request):
         comm_info = CommitteeInfo.objects.filter(id=update_json_data['id']).last()
         if comm_info:
             header = {
-                    "version": "8.3",
-                    "softwareName": "ABC Inc",
-                    "softwareVersion": "1.02 Beta",
-                    "additionalInfomation": "Any other useful information"
+                "version": "8.3",
+                "softwareName": "ABC Inc",
+                "softwareVersion": "1.02 Beta",
+                "additionalInfomation": "Any other useful information"
             }
 
             serializer = CommitteeInfoSerializer(comm_info)
@@ -1841,10 +1841,10 @@ def submit_formf99(request):
 
         if comm_info:
             header = {
-                    "version": "8.3",
-                    "softwareName": "ABC Inc",
-                    "softwareVersion": "1.02 Beta",
-                    "additionalInfomation": "Any other useful information"
+                "version": "8.3",
+                "softwareName": "ABC Inc",
+                "softwareVersion": "1.02 Beta",
+                "additionalInfomation": "Any other useful information"
             }
 
             serializer = CommitteeInfoSerializer(comm_info)

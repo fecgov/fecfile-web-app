@@ -229,10 +229,10 @@ def validate_federal_nonfed_ratio(data):
     0.45 + 0.55 == 1.00
     """
     if not (
-            (
-                    float(data.get("federal_percent")) + float(data.get("non_federal_percent"))
-                    == float(1)
-            )
+        (
+            float(data.get("federal_percent")) + float(data.get("non_federal_percent"))
+            == float(1)
+        )
     ):
         raise Exception("Error: combined federal and non-federal value should be 100%.")
 
@@ -4558,10 +4558,10 @@ def get_sched_h5_breakdown(request):
             _t = {k: 0 for k, v in result[0].items() if not v}
             result[0].update(_t)
             result[0]["total"] = (
-                    float(result[0].get("voter_id", 0))
-                    + float(result[0].get("voter_registration", 0))
-                    + float(result[0].get("gotv", 0))
-                    + float(result[0].get("generic_campaign", 0))
+                float(result[0].get("voter_id", 0))
+                + float(result[0].get("voter_registration", 0))
+                + float(result[0].get("gotv", 0))
+                + float(result[0].get("generic_campaign", 0))
             )
         return Response(result, status=status.HTTP_200_OK)
     except Exception as e:

@@ -1925,8 +1925,8 @@ def reposit_f3x_data(cmte_id, report_id, form_type='F3X'):
                 table_name=transaction_table, _select=select_str
             )
             clone_sql = (
-                    clone_sql
-                    + """ WHERE cmte_id = %s and report_id = %s and delete_ind is distinct from 'Y';"""
+                clone_sql
+                + """ WHERE cmte_id = %s and report_id = %s and delete_ind is distinct from 'Y';"""
             )
             logger.debug("clone transaction with sql:{}".format(clone_sql))
 
@@ -3532,7 +3532,7 @@ def autolookup_search_contacts(request):
                     # irrespective of principal campaign committee
                     if "expand" in request.query_params:
                         query_string = (
-                                """
+                            """
                             SELECT json_agg(t) FROM 
                             (SELECT e.ref_cand_cmte_id as cmte_id,e.entity_id,e.entity_type,e.entity_name as cmte_name,e.entity_name,e.first_name,e.last_name,e.middle_name,
                             e.preffix,e.suffix,e.street_1,e.street_2,e.city,e.state,e.zip_code,e.occupation,e.employer,e.ref_cand_cmte_id,e.delete_ind,e.create_date,
@@ -3542,14 +3542,14 @@ def autolookup_search_contacts(request):
                             AND substr(e.ref_cand_cmte_id,1,1)='C' 
                             AND e.entity_id not in (select ex.entity_id from excluded_entity ex where ex.cmte_id = %s and ex.delete_ind is null)
                             """
-                                + param_string
-                                + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
-                                + order_string
-                                + """) t"""
+                            + param_string
+                            + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
+                            + order_string
+                            + """) t"""
                         )
                     else:
                         query_string = (
-                                """
+                            """
                             SELECT json_agg(t) FROM 
                             (SELECT e.ref_cand_cmte_id as cmte_id,e.entity_id,e.entity_type,e.entity_name as cmte_name,e.entity_name,e.first_name,e.last_name,e.middle_name,
                             e.preffix,e.suffix,e.street_1,e.street_2,e.city,e.state,e.zip_code,e.occupation,e.employer,e.ref_cand_cmte_id,e.delete_ind,e.create_date,
@@ -3558,16 +3558,16 @@ def autolookup_search_contacts(request):
                             AND substr(e.ref_cand_cmte_id,1,1)='C'
                             AND e.entity_id not in (select ex.entity_id from excluded_entity ex where ex.cmte_id = %s and ex.delete_ind is null)
                             """
-                                + param_string
-                                + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
-                                + order_string
-                                + """) t"""
+                            + param_string
+                            + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
+                            + order_string
+                            + """) t"""
                         )
                 elif (
-                        "cand_id" in request.query_params
-                        or "cand_first_name" in request.query_params
-                        or "cand_last_name" in request.query_params
-                        or "payee_cmte_id" in request.query_params
+                    "cand_id" in request.query_params
+                    or "cand_first_name" in request.query_params
+                    or "cand_last_name" in request.query_params
+                    or "payee_cmte_id" in request.query_params
                 ):
                     # Checking for global search flag, by default search is global.
                     # Expecting "global_search" parameter from front-end to be "OFF" when Auto lookup should not
@@ -3583,7 +3583,7 @@ def autolookup_search_contacts(request):
                         parameters = [global_search_id, committee_id, committee_id]
 
                         query_string = (
-                                """
+                            """
                             SELECT json_agg(t) FROM 
                             (SELECT e.ref_cand_cmte_id as beneficiary_cand_id,e.entity_id as beneficiary_cand_entity_id,e.preffix as cand_prefix,e.last_name as cand_last_name,
                             e.first_name as cand_first_name,e.middle_name as cand_middle_name,e.suffix as cand_suffix,e.entity_id,e.entity_type,e.street_1,e.street_2,
@@ -3594,15 +3594,15 @@ def autolookup_search_contacts(request):
                             AND substr(e.ref_cand_cmte_id,1,1) != 'C'
                             AND e.entity_id not in (select ex.entity_id from excluded_entity ex where ex.cmte_id = %s and ex.delete_ind is null) 
                             """
-                                + param_string
-                                + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
-                                + order_string
-                                + """) t"""
+                            + param_string
+                            + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
+                            + order_string
+                            + """) t"""
                         )
                     else:
                         parameters = [global_search_id, committee_id, committee_id]
                         query_string = (
-                                """
+                            """
                             SELECT json_agg(t) FROM 
                             (SELECT e.ref_cand_cmte_id as beneficiary_cand_id,e.entity_id as beneficiary_cand_entity_id,e.preffix as cand_prefix,e.last_name as cand_last_name,
                             e.first_name as cand_first_name,e.middle_name as cand_middle_name,e.suffix as cand_suffix,e.entity_id,e.entity_type,e.street_1,e.street_2,
@@ -3612,10 +3612,10 @@ def autolookup_search_contacts(request):
                             AND e.entity_id not in (select ex.entity_id from excluded_entity ex where ex.cmte_id = %s and ex.delete_ind is null)
                             AND substr(e.ref_cand_cmte_id,1,1) != 'C'
                             """
-                                + param_string
-                                + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
-                                + order_string
-                                + """) t"""
+                            + param_string
+                            + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
+                            + order_string
+                            + """) t"""
                         )
                 elif "entity_name" in request.query_params:
                     # Checking for global search flag, by default search is global.
@@ -3629,35 +3629,35 @@ def autolookup_search_contacts(request):
                     if "expand" in request.query_params:
                         parameters = [global_search_id, committee_id, committee_id]
                         query_string = (
-                                """
-                                SELECT json_agg(t) FROM 
-                                (SELECT distinct e.entity_name, e.ref_cand_cmte_id as cmte_id,e.entity_id,e.entity_type,e.entity_name as cmte_name, e.first_name,e.last_name,e.middle_name,
-                                e.preffix,e.suffix,e.street_1,e.street_2,e.city,e.state,e.zip_code,e.occupation,e.employer,e.ref_cand_cmte_id,e.delete_ind,e.create_date,
-                                e.last_update_date
-                                FROM public.entity e left join public.entity c ON  e.ref_cand_cmte_id = c.principal_campaign_committee 
-                                WHERE e.cmte_id in (%s, %s) 
-                                AND e.entity_id not in (select ex.entity_id from excluded_entity ex where ex.cmte_id = %s and ex.delete_ind is null)
-                                """
-                                + param_string
-                                + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
-                                + order_string
-                                + """) t"""
+                            """
+                            SELECT json_agg(t) FROM
+                            (SELECT distinct e.entity_name, e.ref_cand_cmte_id as cmte_id,e.entity_id,e.entity_type,e.entity_name as cmte_name, e.first_name,e.last_name,e.middle_name,
+                            e.preffix,e.suffix,e.street_1,e.street_2,e.city,e.state,e.zip_code,e.occupation,e.employer,e.ref_cand_cmte_id,e.delete_ind,e.create_date,
+                            e.last_update_date
+                            FROM public.entity e left join public.entity c ON  e.ref_cand_cmte_id = c.principal_campaign_committee
+                            WHERE e.cmte_id in (%s, %s)
+                            AND e.entity_id not in (select ex.entity_id from excluded_entity ex where ex.cmte_id = %s and ex.delete_ind is null)
+                            """
+                            + param_string
+                            + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
+                            + order_string
+                            + """) t"""
                         )
                     else:
                         parameters = [global_search_id, committee_id, committee_id]
                         query_string = (
-                                """
-                                SELECT json_agg(t) FROM 
-                                (SELECT e.ref_cand_cmte_id as cmte_id,e.entity_id,e.entity_type,e.entity_name as cmte_name,e.entity_name,e.first_name,e.last_name,e.middle_name,
-                                e.preffix,e.suffix,e.street_1,e.street_2,e.city,e.state,e.zip_code,e.occupation,e.employer,e.ref_cand_cmte_id,e.delete_ind,e.create_date,
-                                e.last_update_date
-                                FROM public.entity e WHERE e.cmte_id in (%s, %s)
-                                AND e.entity_id not in (select ex.entity_id from excluded_entity ex where ex.cmte_id = %s and ex.delete_ind is null)
-                                """
-                                + param_string
-                                + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
-                                + order_string
-                                + """) t"""
+                            """
+                            SELECT json_agg(t) FROM
+                            (SELECT e.ref_cand_cmte_id as cmte_id,e.entity_id,e.entity_type,e.entity_name as cmte_name,e.entity_name,e.first_name,e.last_name,e.middle_name,
+                            e.preffix,e.suffix,e.street_1,e.street_2,e.city,e.state,e.zip_code,e.occupation,e.employer,e.ref_cand_cmte_id,e.delete_ind,e.create_date,
+                            e.last_update_date
+                            FROM public.entity e WHERE e.cmte_id in (%s, %s)
+                            AND e.entity_id not in (select ex.entity_id from excluded_entity ex where ex.cmte_id = %s and ex.delete_ind is null)
+                            """
+                            + param_string
+                            + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
+                            + order_string
+                            + """) t"""
                         )
                 else:
                     # parameters = [committee_id, committee_id]
@@ -3673,7 +3673,7 @@ def autolookup_search_contacts(request):
 
                         parameters = [committee_id]
                         query_string = (
-                                """
+                            """
                             SELECT json_agg(t) FROM 
                             (SELECT distinct e.entity_name, e.ref_cand_cmte_id as cmte_id,e.entity_id,e.entity_type,e.entity_name as cmte_name, e.first_name,e.last_name,e.middle_name,
                             e.preffix,e.suffix,e.street_1,e.street_2,e.city,e.state,e.zip_code,e.occupation,e.employer,e.ref_cand_cmte_id,e.delete_ind,e.create_date,
@@ -3684,29 +3684,15 @@ def autolookup_search_contacts(request):
                             AND c.principal_campaign_committee is not null
                             AND e.entity_id not in (select ex.entity_id from excluded_entity ex where ex.cmte_id = %s and ex.delete_ind is null)
                             """
-                                # query_string = (
-                                #     """
-                                #     SELECT json_agg(t) FROM
-                                #     (SELECT e.ref_cand_cmte_id as cmte_id,e.entity_id,e.entity_type,e.entity_name as cmte_name,e.entity_name,e.first_name,e.last_name,e.middle_name,
-                                #     e.preffix,e.suffix,e.street_1,e.street_2,e.city,e.state,e.zip_code,e.occupation,e.employer,e.ref_cand_cmte_id,e.delete_ind,e.create_date,
-                                #     e.last_update_date
-                                #     FROM public.entity e, public.entity c
-                                #     WHERE e.ref_cand_cmte_id = c.principal_campaign_committee
-                                #     AND e.entity_type in ('IND','ORG')
-                                #     AND c.principal_campaign_committee is not null
-                                #     AND e.cmte_id in (%s, 'C00000000')
-                                #     AND e.entity_id not in (select ex.entity_id from excluded_entity ex where cmte_id = %s)
-                                #     """
-                                + param_string
-                                + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
-                                + order_string
-                                + """) t"""
+                            + param_string
+                            + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
+                            + order_string
+                            + """) t"""
                         )
-                        # pass
                     else:
                         parameters = [global_search_id, committee_id, committee_id]
                         query_string = (
-                                """
+                            """
                             SELECT json_agg(t) FROM 
                             (SELECT e.ref_cand_cmte_id as cmte_id,e.entity_id,e.entity_type,e.entity_name as cmte_name,e.entity_name,e.first_name,e.last_name,e.middle_name,
                             e.preffix,e.suffix,e.street_1,e.street_2,e.city,e.state,e.zip_code,e.occupation,e.employer,e.ref_cand_cmte_id,e.delete_ind,e.create_date,
@@ -3715,10 +3701,10 @@ def autolookup_search_contacts(request):
                             AND e.entity_type in ('IND','ORG') 
                             AND e.entity_id not in (select ex.entity_id from excluded_entity ex where ex.cmte_id = %s and ex.delete_ind is null)
                             """
-                                + param_string
-                                + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
-                                + order_string
-                                + """) t"""
+                            + param_string
+                            + """ AND e.delete_ind is distinct from 'Y' ORDER BY """
+                            + order_string
+                            + """) t"""
                         )
 
                 parameters.append(value + "%")
@@ -3814,7 +3800,7 @@ def create_json_file(request):
             url = k.generate_url(expires_in=0, query_auth=False).replace(":443", "")
 
             tmp_filename = (
-                    "/tmp/" + comm_info.committeeid + "_" + str(comm_info.id) + "_f99.json"
+                "/tmp/" + comm_info.committeeid + "_" + str(comm_info.id) + "_f99.json"
             )
             # tmp_filename = comm_info.committeeid + '_' + str(comm_info.id) + '_f99.json'
             vdata = {}
@@ -3860,10 +3846,10 @@ def create_json_file(request):
                 filename = comm_info.file.name
                 # print(filename)
                 myurl = (
-                        "https://{}.s3.amazonaws.com/media/".format(
-                            settings.AWS_STORAGE_BUCKET_NAME
-                        )
-                        + filename
+                    "https://{}.s3.amazonaws.com/media/".format(
+                        settings.AWS_STORAGE_BUCKET_NAME
+                    )
+                    + filename
                 )
                 # myurl = "https://fecfile-filing.s3.amazonaws.com/media/" + filename
                 # print(myurl)
@@ -3978,58 +3964,58 @@ def get_trans_view_name(category_type):
 def get_trans_query(category_type, cmte_id, param_string):
     if category_type == "disbursements_tran":
         query_string = (
-                """SELECT report_id, form_type, report_type, reportStatus, transaction_type, transaction_type_desc, transaction_id, api_call, name, street_1, street_2, city, state, zip_code, transaction_date, 
-                                COALESCE(transaction_amount, 0.0) AS transaction_amount, back_ref_transaction_id,
-                                COALESCE(aggregate_amt, 0.0) AS aggregate_amt, purpose_description, occupation, employer, memo_code, memo_text, itemized, beneficiary_cmte_id, election_code, 
-                                election_year, election_other_description,transaction_type_identifier, entity_id, entity_type, deleteddate, isEditable, forceitemizable, aggregation_ind, hasChild, isredesignatable, "isRedesignation",
-                                mirror_report_id, mirror_transaction_id, semi_annual_refund_bundled_amount 
-                                from all_disbursements_transactions_view
-                            where cmte_id='"""
-                + cmte_id
-                + """' """
-                + param_string
-                + """ """
+            """SELECT report_id, form_type, report_type, reportStatus, transaction_type, transaction_type_desc, transaction_id, api_call, name, street_1, street_2, city, state, zip_code, transaction_date,
+                            COALESCE(transaction_amount, 0.0) AS transaction_amount, back_ref_transaction_id,
+                            COALESCE(aggregate_amt, 0.0) AS aggregate_amt, purpose_description, occupation, employer, memo_code, memo_text, itemized, beneficiary_cmte_id, election_code,
+                            election_year, election_other_description,transaction_type_identifier, entity_id, entity_type, deleteddate, isEditable, forceitemizable, aggregation_ind, hasChild, isredesignatable, "isRedesignation",
+                            mirror_report_id, mirror_transaction_id, semi_annual_refund_bundled_amount
+                            from all_disbursements_transactions_view
+                        where cmte_id='"""
+            + cmte_id
+            + """' """
+            + param_string
+            + """ """
         )
 
     elif category_type == "loans_tran":
         query_string = (
-                """SELECT report_id, form_type, report_type, reportStatus, transaction_type, transaction_type_desc, transaction_id, api_call, name, street_1, street_2, city, state, zip_code, occupation, employer, 
-                          purpose_description, loan_amount, loan_payment_to_date, loan_incurred_date, loan_due_date, loan_beginning_balance, loan_incurred_amt, loan_payment_amt, 
-                          loan_closing_balance, memo_code, memo_text, transaction_type_identifier, entity_id, entity_type, deleteddate, isEditable, hasChild, istrashable 
-                          from all_loans_debts_transactions_view
-                            where cmte_id='"""
-                + cmte_id
-                + """' """
-                + param_string
-                + """ """
+            """SELECT report_id, form_type, report_type, reportStatus, transaction_type, transaction_type_desc, transaction_id, api_call, name, street_1, street_2, city, state, zip_code, occupation, employer,
+                      purpose_description, loan_amount, loan_payment_to_date, loan_incurred_date, loan_due_date, loan_beginning_balance, loan_incurred_amt, loan_payment_amt,
+                      loan_closing_balance, memo_code, memo_text, transaction_type_identifier, entity_id, entity_type, deleteddate, isEditable, hasChild, istrashable
+                      from all_loans_debts_transactions_view
+                        where cmte_id='"""
+            + cmte_id
+            + """' """
+            + param_string
+            + """ """
         )
 
     elif category_type == "other_tran":
         query_string = (
-                """SELECT report_id, schedule, form_type, report_type, reportStatus, activity_event_identifier, transaction_type, transaction_type_desc, transaction_id, back_ref_transaction_id, api_call, 
-                          name, street_1, street_2, city, state, zip_code, transaction_date, COALESCE(transaction_amount, 0.0) AS transaction_amount, 
-                                COALESCE(aggregate_amt, 0.0) AS aggregate_amt, purpose_description, occupation, employer, memo_code, memo_text, itemized, forceitemizable, 
-                                election_code, election_other_description, transaction_type_identifier, entity_id, entity_type, deleteddate, isEditable, aggregation_ind, hasChild, istrashable
-                            from all_other_transactions_view
-                            where cmte_id='"""
-                + cmte_id
-                + """' """
-                + param_string
-                + """ """
+            """SELECT report_id, schedule, form_type, report_type, reportStatus, activity_event_identifier, transaction_type, transaction_type_desc, transaction_id, back_ref_transaction_id, api_call,
+                      name, street_1, street_2, city, state, zip_code, transaction_date, COALESCE(transaction_amount, 0.0) AS transaction_amount,
+                            COALESCE(aggregate_amt, 0.0) AS aggregate_amt, purpose_description, occupation, employer, memo_code, memo_text, itemized, forceitemizable,
+                            election_code, election_other_description, transaction_type_identifier, entity_id, entity_type, deleteddate, isEditable, aggregation_ind, hasChild, istrashable
+                        from all_other_transactions_view
+                        where cmte_id='"""
+            + cmte_id
+            + """' """
+            + param_string
+            + """ """
         )
     else:
         query_string = (
-                """SELECT report_id, form_type, report_type, reportStatus, transaction_type, transaction_type_desc, transaction_id, api_call, name, street_1, street_2, city, state, zip_code, transaction_date, 
-                                COALESCE(transaction_amount, 0.0) AS transaction_amount, back_ref_transaction_id,
-                                COALESCE(aggregate_amt, 0.0) AS aggregate_amt, purpose_description, occupation, employer, memo_code, memo_text, itemized, election_code, election_other_description, 
-                                transaction_type_identifier, entity_id, entity_type, deleteddate, isEditable, forceitemizable, aggregation_ind, hasChild, isreattributable, "isReattribution", 
-                                semi_annual_refund_bundled_amount 
-                                from all_receipts_transactions_view
-                            where cmte_id='"""
-                + cmte_id
-                + """' """
-                + param_string
-                + """ """
+            """SELECT report_id, form_type, report_type, reportStatus, transaction_type, transaction_type_desc, transaction_id, api_call, name, street_1, street_2, city, state, zip_code, transaction_date,
+                            COALESCE(transaction_amount, 0.0) AS transaction_amount, back_ref_transaction_id,
+                            COALESCE(aggregate_amt, 0.0) AS aggregate_amt, purpose_description, occupation, employer, memo_code, memo_text, itemized, election_code, election_other_description,
+                            transaction_type_identifier, entity_id, entity_type, deleteddate, isEditable, forceitemizable, aggregation_ind, hasChild, isreattributable, "isReattribution",
+                            semi_annual_refund_bundled_amount
+                            from all_receipts_transactions_view
+                        where cmte_id='"""
+            + cmte_id
+            + """' """
+            + param_string
+            + """ """
         )
     return query_string
 
@@ -4045,75 +4031,75 @@ def filter_get_all_trans(request, param_string):
         param_string = param_string + " AND transaction_type_desc In " + cat_tuple
     if filt_dict.get("filterDateFrom") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND transaction_date >= '"
-                + filt_dict["filterDateFrom"]
-                + "'"
+            param_string
+            + " AND transaction_date >= '"
+            + filt_dict["filterDateFrom"]
+            + "'"
         )
     if filt_dict.get("filterDateTo") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND transaction_date <= '"
-                + filt_dict["filterDateTo"]
-                + "'"
+            param_string
+            + " AND transaction_date <= '"
+            + filt_dict["filterDateTo"]
+            + "'"
         )
     # The below code was added by Praveen. This is added to reuse this function in get_all_trashed_transactions API.
     if filt_dict.get("filterDeletedDateFrom") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND date(last_update_date) >= '"
-                + filt_dict["filterDeletedDateFrom"]
-                + "'"
+            param_string
+            + " AND date(last_update_date) >= '"
+            + filt_dict["filterDeletedDateFrom"]
+            + "'"
         )
     if filt_dict.get("filterDeletedDateTo") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND date(last_update_date) <= '"
-                + filt_dict["filterDeletedDateTo"]
-                + "'"
+            param_string
+            + " AND date(last_update_date) <= '"
+            + filt_dict["filterDeletedDateTo"]
+            + "'"
         )
     # End of Addition
     if filt_dict.get("filterAmountMin") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND transaction_amount >= '"
-                + str(filt_dict["filterAmountMin"])
-                + "'"
+            param_string
+            + " AND transaction_amount >= '"
+            + str(filt_dict["filterAmountMin"])
+            + "'"
         )
     if filt_dict.get("filterAmountMax") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND transaction_amount <= '"
-                + str(filt_dict["filterAmountMax"])
-                + "'"
+            param_string
+            + " AND transaction_amount <= '"
+            + str(filt_dict["filterAmountMax"])
+            + "'"
         )
     if filt_dict.get("filterAggregateAmountMin") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND aggregate_amt >= '"
-                + str(filt_dict["filterAggregateAmountMin"])
-                + "'"
+            param_string
+            + " AND aggregate_amt >= '"
+            + str(filt_dict["filterAggregateAmountMin"])
+            + "'"
         )
     if filt_dict.get("filterAggregateAmountMax") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND aggregate_amt <= '"
-                + str(filt_dict["filterAggregateAmountMax"])
-                + "'"
+            param_string
+            + " AND aggregate_amt <= '"
+            + str(filt_dict["filterAggregateAmountMax"])
+            + "'"
         )
     if filt_dict.get("filterSemiAnnualAmountMin") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND semi_annual_refund_bundled_amount >= '"
-                + str(filt_dict["filterSemiAnnualAmountMin"])
-                + "'"
+            param_string
+            + " AND semi_annual_refund_bundled_amount >= '"
+            + str(filt_dict["filterSemiAnnualAmountMin"])
+            + "'"
         )
     if filt_dict.get("filterSemiAnnualAmountMax") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND semi_annual_refund_bundled_amount <= '"
-                + str(filt_dict["filterSemiAnnualAmountMax"])
-                + "'"
+            param_string
+            + " AND semi_annual_refund_bundled_amount <= '"
+            + str(filt_dict["filterSemiAnnualAmountMax"])
+            + "'"
         )
     if filt_dict.get("filterStates"):
         state_tuple = "('" + "','".join(filt_dict["filterStates"]) + "')"
@@ -4126,17 +4112,17 @@ def filter_get_all_trans(request, param_string):
         param_string = param_string + " AND election_code In " + election_tuple
     if filt_dict.get("filterElectionYearFrom") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND election_year >= '"
-                + filt_dict["filterElectionYearFrom"]
-                + "'"
+            param_string
+            + " AND election_year >= '"
+            + filt_dict["filterElectionYearFrom"]
+            + "'"
         )
     if filt_dict.get("filterElectionYearTo") not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND election_year <= '"
-                + filt_dict["filterElectionYearTo"]
-                + "'"
+            param_string
+            + " AND election_year <= '"
+            + filt_dict["filterElectionYearTo"]
+            + "'"
         )
     if filt_dict.get("filterReportTypes"):
         reportTypes_tuple = "('" + "','".join(filt_dict["filterReportTypes"]) + "')"
@@ -4149,56 +4135,56 @@ def filter_get_all_trans(request, param_string):
         "null",
     ]:
         param_string = (
-                param_string
-                + " AND loan_amount >= '"
-                + str(filt_dict["filterLoanAmountMin"])
-                + "'"
+            param_string
+            + " AND loan_amount >= '"
+            + str(filt_dict["filterLoanAmountMin"])
+            + "'"
         )
     if ctgry_type == "loans_tran" and filt_dict.get("filterLoanAmountMax") not in [
         None,
         "null",
     ]:
         param_string = (
-                param_string
-                + " AND loan_amount <= '"
-                + str(filt_dict["filterLoanAmountMax"])
-                + "'"
+            param_string
+            + " AND loan_amount <= '"
+            + str(filt_dict["filterLoanAmountMax"])
+            + "'"
         )
     if ctgry_type == "loans_tran" and filt_dict.get(
             "filterLoanClosingBalanceMin"
     ) not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND loan_closing_balance >= '"
-                + str(filt_dict["filterLoanClosingBalanceMin"])
-                + "'"
+            param_string
+            + " AND loan_closing_balance >= '"
+            + str(filt_dict["filterLoanClosingBalanceMin"])
+            + "'"
         )
     if ctgry_type == "loans_tran" and filt_dict.get(
             "filterLoanClosingBalanceMax"
     ) not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND loan_closing_balance <= '"
-                + str(filt_dict["filterLoanClosingBalanceMax"])
-                + "'"
+            param_string
+            + " AND loan_closing_balance <= '"
+            + str(filt_dict["filterLoanClosingBalanceMax"])
+            + "'"
         )
     if ctgry_type == "loans_tran" and filt_dict.get(
             "filterDebtBeginningBalanceMin"
     ) not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND loan_beginning_balance >= '"
-                + str(filt_dict["filterDebtBeginningBalanceMin"])
-                + "'"
+            param_string
+            + " AND loan_beginning_balance >= '"
+            + str(filt_dict["filterDebtBeginningBalanceMin"])
+            + "'"
         )
     if ctgry_type == "loans_tran" and filt_dict.get(
             "filterDebtBeginningBalanceMax"
     ) not in [None, "null"]:
         param_string = (
-                param_string
-                + " AND loan_beginning_balance <= '"
-                + str(filt_dict["filterDebtBeginningBalanceMax"])
-                + "'"
+            param_string
+            + " AND loan_beginning_balance <= '"
+            + str(filt_dict["filterDebtBeginningBalanceMax"])
+            + "'"
         )
     # print(param_string)
     return param_string
@@ -4412,21 +4398,21 @@ def get_transactions(request, transaction_id):
         for key in search_keys:
             if not param_string:
                 param_string = (
-                        param_string
-                        + " AND (CAST("
-                        + key
-                        + " as CHAR(100)) ILIKE '%"
-                        + str(search_string)
-                        + "%'"
+                    param_string
+                    + " AND (CAST("
+                    + key
+                    + " as CHAR(100)) ILIKE '%"
+                    + str(search_string)
+                    + "%'"
                 )
             else:
                 param_string = (
-                        param_string
-                        + " OR CAST("
-                        + key
-                        + " as CHAR(100)) ILIKE '%"
-                        + str(search_string)
-                        + "%'"
+                    param_string
+                    + " OR CAST("
+                    + key
+                    + " as CHAR(100)) ILIKE '%"
+                    + str(search_string)
+                    + "%'"
                 )
         param_string = param_string + " )"
     keywords_string = ""
@@ -4438,38 +4424,38 @@ def get_transactions(request, transaction_id):
                 elif "'" in word:
                     if not keywords_string:
                         keywords_string = (
-                                keywords_string
-                                + " AND ( CAST("
-                                + key
-                                + " as CHAR(100)) = "
-                                + str(word)
+                            keywords_string
+                            + " AND ( CAST("
+                            + key
+                            + " as CHAR(100)) = "
+                            + str(word)
                         )
                     else:
                         keywords_string = (
-                                keywords_string
-                                + " OR CAST("
-                                + key
-                                + " as CHAR(100)) = "
-                                + str(word)
+                            keywords_string
+                            + " OR CAST("
+                            + key
+                            + " as CHAR(100)) = "
+                            + str(word)
                         )
                 else:
                     if not keywords_string:
                         keywords_string = (
-                                keywords_string
-                                + " AND ( CAST("
-                                + key
-                                + " as CHAR(100)) ILIKE '%"
-                                + str(word)
-                                + "%'"
+                            keywords_string
+                            + " AND ( CAST("
+                            + key
+                            + " as CHAR(100)) ILIKE '%"
+                            + str(word)
+                            + "%'"
                         )
                     else:
                         keywords_string = (
-                                keywords_string
-                                + " OR CAST("
-                                + key
-                                + " as CHAR(100)) ILIKE '%"
-                                + str(word)
-                                + "%'"
+                            keywords_string
+                            + " OR CAST("
+                            + key
+                            + " as CHAR(100)) ILIKE '%"
+                            + str(word)
+                            + "%'"
                         )
         keywords_string = keywords_string + " )"
     param_string = param_string + keywords_string
@@ -4587,7 +4573,7 @@ def get_transactions(request, transaction_id):
     memo_code_d = filters_post.get("filterMemoCode", False)
     if str(memo_code_d).lower() == "true":
         param_string = (
-                param_string + " AND memo_code IS NOT NULL AND memo_code != ''"
+            param_string + " AND memo_code IS NOT NULL AND memo_code != ''"
         )
 
     trans_query_string = get_trans_query(ctgry_type, cmte_id, param_string)
@@ -4831,8 +4817,8 @@ def get_all_trashed_transactions(request):
         page_num = int(request.data.get("page", 1))
         descending = request.data.get("descending", "false")
         if not (
-                "sortColumnName" in request.data
-                and check_null_value(request.data.get("sortColumnName"))
+            "sortColumnName" in request.data
+            and check_null_value(request.data.get("sortColumnName"))
         ):
             sortcolumn = "default"
         else:
@@ -4881,21 +4867,21 @@ def get_all_trashed_transactions(request):
             for key in search_keys:
                 if not param_string:
                     param_string = (
-                            param_string
-                            + " AND ( CAST("
-                            + key
-                            + " as CHAR(100)) ILIKE '%"
-                            + str(search_string)
-                            + "%'"
+                        param_string
+                        + " AND ( CAST("
+                        + key
+                        + " as CHAR(100)) ILIKE '%"
+                        + str(search_string)
+                        + "%'"
                     )
                 else:
                     param_string = (
-                            param_string
-                            + " OR CAST("
-                            + key
-                            + " as CHAR(100)) ILIKE '%"
-                            + str(search_string)
-                            + "%'"
+                        param_string
+                        + " OR CAST("
+                        + key
+                        + " as CHAR(100)) ILIKE '%"
+                        + str(search_string)
+                        + "%'"
                     )
             param_string = param_string + " )"
         keywords_string = ""
@@ -4907,38 +4893,38 @@ def get_all_trashed_transactions(request):
                     elif "'" in word:
                         if not keywords_string:
                             keywords_string = (
-                                    keywords_string
-                                    + " AND ( CAST("
-                                    + key
-                                    + " as CHAR(100)) = "
-                                    + str(word)
+                                keywords_string
+                                + " AND ( CAST("
+                                + key
+                                + " as CHAR(100)) = "
+                                + str(word)
                             )
                         else:
                             keywords_string = (
-                                    keywords_string
-                                    + " OR CAST("
-                                    + key
-                                    + " as CHAR(100)) = "
-                                    + str(word)
+                                keywords_string
+                                + " OR CAST("
+                                + key
+                                + " as CHAR(100)) = "
+                                + str(word)
                             )
                     else:
                         if not keywords_string:
                             keywords_string = (
-                                    keywords_string
-                                    + " AND ( CAST("
-                                    + key
-                                    + " as CHAR(100)) ILIKE '%"
-                                    + str(word)
-                                    + "%'"
+                                keywords_string
+                                + " AND ( CAST("
+                                + key
+                                + " as CHAR(100)) ILIKE '%"
+                                + str(word)
+                                + "%'"
                             )
                         else:
                             keywords_string = (
-                                    keywords_string
-                                    + " OR CAST("
-                                    + key
-                                    + " as CHAR(100)) ILIKE '%"
-                                    + str(word)
-                                    + "%'"
+                                keywords_string
+                                + " OR CAST("
+                                + key
+                                + " as CHAR(100)) ILIKE '%"
+                                + str(word)
+                                + "%'"
                             )
             keywords_string = keywords_string + " )"
         param_string = param_string + keywords_string
@@ -4950,14 +4936,14 @@ def get_all_trashed_transactions(request):
             param_string = param_string + " AND memo_code IS NOT NULL"
 
         trans_query_string = (
-                """SELECT transaction_type as "transactionTypeId", transaction_type_desc as "type", transaction_id as "transactionId", name, street_1 as "street", street_2 as "street2", city, state, zip_code as "zip", transaction_date as "date", date(last_update_date) as "deletedDate", COALESCE(transaction_amount,0) as "amount", COALESCE(aggregate_amt,0) as "aggregate", purpose_description as "purposeDescription", occupation as "contributorOccupation", employer as "contributorEmployer", memo_code as "memoCode", memo_text as "memoText", itemized, transaction_type_identifier, entity_id from all_transactions_view
-                                    where cmte_id='"""
-                + cmte_id
-                + """' AND report_id="""
-                + str(report_id)
-                + """ """
-                + param_string
-                + """ AND delete_ind = 'Y'"""
+            """SELECT transaction_type as "transactionTypeId", transaction_type_desc as "type", transaction_id as "transactionId", name, street_1 as "street", street_2 as "street2", city, state, zip_code as "zip", transaction_date as "date", date(last_update_date) as "deletedDate", COALESCE(transaction_amount,0) as "amount", COALESCE(aggregate_amt,0) as "aggregate", purpose_description as "purposeDescription", occupation as "contributorOccupation", employer as "contributorEmployer", memo_code as "memoCode", memo_text as "memoText", itemized, transaction_type_identifier, entity_id from all_transactions_view
+                                where cmte_id='"""
+            + cmte_id
+            + """' AND report_id="""
+            + str(report_id)
+            + """ """
+            + param_string
+            + """ AND delete_ind = 'Y'"""
         )
 
         if sortcolumn and sortcolumn != "default":
@@ -4987,15 +4973,15 @@ def get_all_trashed_transactions(request):
             else:
                 sorttablecolumn = "name ASC, transaction_date"
             trans_query_string = (
-                    trans_query_string
-                    + """ ORDER BY """
-                    + sorttablecolumn
-                    + """ """
-                    + descending
+                trans_query_string
+                + """ ORDER BY """
+                + sorttablecolumn
+                + """ """
+                + descending
             )
         elif sortcolumn == "default":
             trans_query_string = (
-                    trans_query_string + """ ORDER BY name ASC, transaction_date ASC"""
+                trans_query_string + """ ORDER BY name ASC, transaction_date ASC"""
             )
         with connection.cursor() as cursor:
             cursor.execute(
@@ -8866,21 +8852,21 @@ def get_all_trashed_contacts(request):
                 for key in search_keys:
                     if not param_string:
                         param_string = (
-                                param_string
-                                + " AND (CAST("
-                                + key
-                                + " as CHAR(100)) ILIKE '%"
-                                + str(search_string)
-                                + "%'"
+                            param_string
+                            + " AND (CAST("
+                            + key
+                            + " as CHAR(100)) ILIKE '%"
+                            + str(search_string)
+                            + "%'"
                         )
                     else:
                         param_string = (
-                                param_string
-                                + " OR CAST("
-                                + key
-                                + " as CHAR(100)) ILIKE '%"
-                                + str(search_string)
-                                + "%'"
+                            param_string
+                            + " OR CAST("
+                            + key
+                            + " as CHAR(100)) ILIKE '%"
+                            + str(search_string)
+                            + "%'"
                         )
                 param_string = param_string + " )"
             keywords_string = ""
@@ -8892,38 +8878,38 @@ def get_all_trashed_contacts(request):
                         elif "'" in word:
                             if not keywords_string:
                                 keywords_string = (
-                                        keywords_string
-                                        + " AND ( CAST("
-                                        + key
-                                        + " as CHAR(100)) = "
-                                        + str(word)
+                                    keywords_string
+                                    + " AND ( CAST("
+                                    + key
+                                    + " as CHAR(100)) = "
+                                    + str(word)
                                 )
                             else:
                                 keywords_string = (
-                                        keywords_string
-                                        + " OR CAST("
-                                        + key
-                                        + " as CHAR(100)) = "
-                                        + str(word)
+                                    keywords_string
+                                    + " OR CAST("
+                                    + key
+                                    + " as CHAR(100)) = "
+                                    + str(word)
                                 )
                         else:
                             if not keywords_string:
                                 keywords_string = (
-                                        keywords_string
-                                        + " AND ( CAST("
-                                        + key
-                                        + " as CHAR(100)) ILIKE '%"
-                                        + str(word)
-                                        + "%'"
+                                    keywords_string
+                                    + " AND ( CAST("
+                                    + key
+                                    + " as CHAR(100)) ILIKE '%"
+                                    + str(word)
+                                    + "%'"
                                 )
                             else:
                                 keywords_string = (
-                                        keywords_string
-                                        + " OR CAST("
-                                        + key
-                                        + " as CHAR(100)) ILIKE '%"
-                                        + str(word)
-                                        + "%'"
+                                    keywords_string
+                                    + " OR CAST("
+                                    + key
+                                    + " as CHAR(100)) ILIKE '%"
+                                    + str(word)
+                                    + "%'"
                                 )
                 keywords_string = keywords_string + " )"
             param_string = param_string + keywords_string
@@ -8934,23 +8920,22 @@ def get_all_trashed_contacts(request):
             # cursor.execute("""SELECT cmte_id, entity_type, entity_name, first_name, last_name, middle_name, preffix, suffix, street_1, street_2, city, state, zip_code, occupation, employer, , candOffice, candOfficeState, candOfficeDistrict, candCmteId, phone_number FROM public.entity WHERE cmte_id = %s AND delete_ind = 'Y' """.format(cmte_id))
 
             # print("trans_query_string: ",trans_query_string)
-            # import ipdb;ipdb.set_trace()
 
             trans_query_string = (
-                    """SELECT id, entity_type, name, street1, street2, city, state, zip, occupation, employer, candOffice, candOfficeState, candOfficeDistrict, candCmteId, phone_number, deleteddate, active_transactions_cnt from all_contacts_view
-                    where  deletedFlag = 'Y' AND cmte_id='"""
-                    + cmte_id
-                    + """' """
-                    + param_string
+                """SELECT id, entity_type, name, street1, street2, city, state, zip, occupation, employer, candOffice, candOfficeState, candOfficeDistrict, candCmteId, phone_number, deleteddate, active_transactions_cnt from all_contacts_view
+                where  deletedFlag = 'Y' AND cmte_id='"""
+                + cmte_id
+                + """' """
+                + param_string
             )
 
             if sortcolumn and sortcolumn != "default":
                 trans_query_string = (
-                        trans_query_string
-                        + """ ORDER BY """
-                        + sortcolumn
-                        + """ """
-                        + descending
+                    trans_query_string
+                    + """ ORDER BY """
+                    + sortcolumn
+                    + """ """
+                    + descending
                 )
             elif sortcolumn == "default":
                 trans_query_string = trans_query_string + """ ORDER BY name ASC"""
@@ -8976,7 +8961,6 @@ def get_all_trashed_contacts(request):
 
                         status_value = status.HTTP_200_OK
 
-            # import ipdb; ipdb.set_trace()
             total_count = len(forms_obj)
             paginator = Paginator(forms_obj, itemsperpage)
             if paginator.num_pages < page_num:
@@ -9486,9 +9470,11 @@ def get_report_ids(cmte_id, from_date, submit_flag=True, including=True, form_ty
             #     values_list = [cmte_id, from_date, form_type]
             if form_type == 'F3L':
                 if from_date:
-                    check_string = """(({} AND date_part('month',cvg_start_date) {} 6) 
-                            OR (%s >= semi_annual_start_date AND %s <= semi_annual_end_date))""".format(
-                                check_string, "<=" if from_date.month <= 6 else ">")
+                    check_string = """
+                        (({} AND date_part('month',cvg_start_date) {} 6)
+                        OR (%s >= semi_annual_start_date AND %s <= semi_annual_end_date))""".format(
+                        check_string, "<=" if from_date.month <= 6 else ">"
+                    )
                     values_list = [cmte_id, from_date, from_date, from_date, form_type]
                     # if from_date.month <= 6:
                     #     check_string = """(({} AND date_part('month',cvg_start_date) <= 6)
@@ -10941,8 +10927,8 @@ def prepare_Schedl_summary_data(request):
             update_str = update_str[:-1]
             with connection.cursor() as cursor:
                 update_query = (
-                        """update public.sched_l set %s WHERE cmte_id = '%s' AND report_id = '%s';"""
-                        % (update_str, cmte_id, report_id)
+                    """update public.sched_l set %s WHERE cmte_id = '%s' AND report_id = '%s';"""
+                    % (update_str, cmte_id, report_id)
                 )
                 cursor.execute(update_query)
             return Response({"Response": "Success"}, status=status.HTTP_200_OK)
