@@ -645,8 +645,7 @@ def valid_transaction_amounts(data):
     if not payment_amount:
         payment_amount = 0
     return (
-        float(beginning_balance) +
-        float(incurred_amount) - float(payment_amount)
+        float(beginning_balance) + float(incurred_amount) - float(payment_amount)
     ) == float(balance_at_close)
 
 
@@ -825,8 +824,7 @@ def do_downstream_propagation(transaction_id, new_balance, data):
             incurred_amt = child_tran[1]
             payment_amt = child_tran[2]
             new_close_balance = (
-                float(new_beginning_balance) +
-                float(incurred_amt) - float(payment_amt)
+                float(new_beginning_balance) + float(incurred_amt) - float(payment_amt)
             )
             logger.debug("new close balance:{}".format(new_close_balance))
             update_child(child_id, new_beginning_balance, new_close_balance, data)
@@ -1305,8 +1303,10 @@ def get_list_all_schedD(report_id, cmte_id, transaction_type_identifier):
             type_filter = 'AND transaction_type_identifier = %s'
             if transaction_type_identifier:
                 cursor.execute(
-                    """SELECT json_agg(t) FROM (""" +
-                    query_string + type_filter + """) t""",
+                    """SELECT json_agg(t) FROM ("""
+                    + query_string
+                    + type_filter
+                    + """) t""",
                     (report_id, cmte_id, transaction_type_identifier),
                 )
             else:

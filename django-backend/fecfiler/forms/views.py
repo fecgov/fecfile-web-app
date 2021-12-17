@@ -1909,8 +1909,11 @@ def submit_formf99(request):
                     'fecDataFile': ('data.json', open(tmp_filename, 'rb'), 'application/json')
                 }
 
-            resp = requests.post("http://" + settings.DATA_RECEIVE_API_URL +
-                                 "/v1/upload_filing", data=data_obj, files=file_obj)
+            resp = requests.post(
+                "http://" + settings.DATA_RECEIVE_API_URL + "/v1/upload_filing",
+                data=data_obj,
+                files=file_obj,
+            )
             if not resp.ok:
                 return Response(resp.json(), status=status.HTTP_400_BAD_REQUEST)
             else:

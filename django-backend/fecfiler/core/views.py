@@ -12261,8 +12261,11 @@ def import_fecfile(request):
     try:
         data_obj = json.loads(request.body)
         print(data_obj)
-        resp = requests.post(settings.NXG_FEC_DCF_CONVERTER_API_URL +
-                             settings.NXG_FEC_DCF_CONVERTER_API_VERSION, data=json.dumps(data_obj))
+        resp = requests.post(
+            settings.NXG_FEC_DCF_CONVERTER_API_URL
+            + settings.NXG_FEC_DCF_CONVERTER_API_VERSION,
+            data=json.dumps(data_obj)
+        )
         if not resp.ok:
             return Response(resp.json(), status=status.HTTP_400_BAD_REQUEST)
         else:

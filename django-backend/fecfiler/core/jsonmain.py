@@ -160,10 +160,14 @@ def json_query(query, query_values_list, error_string, empty_list_flag):
                 if empty_list_flag:
                     return []
                 else:
-                    raise NoOPError('No results are found in ' + error_string +
-                                    ' Table. Input received:{}'.format(','.join(query_values_list)))
+                    raise NoOPError(
+                        "No results are found in "
+                        + error_string
+                        + " Table. Input received:{}".format(
+                            ",".join(query_values_list)
+                        )
+                    )
             else:
-                # print(result)
                 return result
     except:
         raise
@@ -740,14 +744,16 @@ def create_json_builders(request):
         transfer.upload_file(tmp_path, 'dev-efile-repo', tmp_filename)
         # return Response("Success", status=status.HTTP_201_CREATED)
         if call_from == "PrintPreviewPDF":
-            data_obj = {'form_type': form_type}
-            file_obj = {'json_file': ('data.json', open(
-                tmp_path, 'rb'), 'application/json')}
-
-            # print("data_obj = ", data_obj)
-            # print("file_obj = ", file_obj)
-            resp = requests.post(settings.NXG_FEC_PRINT_API_URL +
-                                 settings.NXG_FEC_PRINT_API_VERSION, data=data_obj, files=file_obj)
+            data_obj = {"form_type": form_type}
+            file_obj = {
+                "json_file": ("data.json", open(tmp_path, "rb"), "application/json")
+            }
+            resp = requests.post(
+                settings.NXG_FEC_PRINT_API_URL
+                + settings.NXG_FEC_PRINT_API_VERSION,
+                data=data_obj,
+                files=file_obj
+            )
             if not resp.ok:
                 return Response(resp.json(), status=status.HTTP_400_BAD_REQUEST)
             else:
@@ -800,8 +806,13 @@ def create_json_builders(request):
                     '',
                     ''
                     )
-            resp = requests.post(settings.DATA_RECEIVE_API_URL + settings.DATA_RECEIVE_API_VERSION +
-                                 "upload_filing", data=data_obj, files=file_obj)
+            resp = requests.post(
+                settings.DATA_RECEIVE_API_URL
+                + settings.DATA_RECEIVE_API_VERSION
+                + "upload_filing",
+                data=data_obj,
+                files=file_obj
+            )
             if not resp.ok:
                 return Response(resp.json(), status=status.HTTP_400_BAD_REQUEST)
             else:
