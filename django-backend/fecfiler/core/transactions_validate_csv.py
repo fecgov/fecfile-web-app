@@ -60,7 +60,7 @@ def save_data_from_excel_to_db(data):
         connectionstring = "postgres://" + PG_USER + ":" + PG_PASSWORD + "@" + PG_HOST + ":" + PG_PORT + "/" + PG_DATABASE
         engine = create_engine(connectionstring, pool_recycle=3600)
         postgreSQLConnection = engine.connect()
-        data.to_sql(postgreSQLTable, postgreSQLConnection,  if_exists='append', index=False, dtype={'AUTO-GENERATE': Text})
+        data.to_sql(postgreSQLTable, postgreSQLConnection, if_exists='append', index=False, dtype={'AUTO-GENERATE': Text})
     except ValueError as vx:
         print("valuerror; ")
         print(vx)
@@ -308,7 +308,7 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
         csv_string = body.read().decode('utf-8')
         res = ''
         flag = False
-        for data in pd.read_csv(StringIO(csv_string), dtype=object,  iterator=True, chunksize=size, na_filter=False):
+        for data in pd.read_csv(StringIO(csv_string), dtype=object, iterator=True, chunksize=size, na_filter=False):
             # pd.core.strings.str_strip(data)
             data = data.dropna(axis=[0], how='all')
             res = validate_dataframe(data)

@@ -114,7 +114,7 @@ def generate_md5_hash(filename):
         csv_string = body.read().decode('utf-8')
         # print(csv_string)
         # i=0
-        for data in pd.read_csv(StringIO(csv_string), dtype=object,  iterator=True, chunksize=200000):
+        for data in pd.read_csv(StringIO(csv_string), dtype=object, iterator=True, chunksize=200000):
             # print(i)
             # i+=1
             filehash = hash_pandas_object(data).sum()
