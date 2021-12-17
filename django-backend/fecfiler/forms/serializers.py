@@ -129,13 +129,3 @@ class CommitteeSerializer(serializers.ModelSerializer):
         instance.email_on_file_1 = validated_data.get('email_on_file_1', instance.email_on_file_1)
         instance.save()
         return instance
-
-
-
-
-
-
-
-
-
-
