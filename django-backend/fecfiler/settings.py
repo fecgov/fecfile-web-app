@@ -308,7 +308,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/access.log',
-            'maxBytes': 1024*1024*5,  # 5 MB
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
             'formatter': 'standard',
         },
@@ -316,7 +316,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'logs/access.log',
-            'maxBytes': 1024*1024*5,  # 5 MB
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
             'formatter': 'standard',
         },

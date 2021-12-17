@@ -545,7 +545,7 @@ def do_post_carryover(transaction_id, cmte_id, report_id):
             for report in new_reports_list:
                 do_carryover(report['report_id'], cmte_id)
     except Exception as e:
-        raise Exception('The do_post_carryover is throwing an error: '+str(e))
+        raise Exception('The do_post_carryover is throwing an error: ' + str(e))
 
 
 def delete_schedD(data):

@@ -738,7 +738,7 @@ def form1M(request):
                                                function_name='form1M-POST: step-2 Qualification')
                     if request.data['beneficiary_cand_entity_id'].startswith("FEC"):
                         new_entity_id = clone_fec_entity(cmte_id, 'CAN', request.data['beneficiary_cand_entity_id'])
-                        logger.debug('NEW candidate entity_id: '+new_entity_id)
+                        logger.debug('NEW candidate entity_id: ' + new_entity_id)
                     candidate_number = check_candidate_number(request.data['candidate_number'])
                     request_dict = f1m_sql_dict(cmte_id, step, request.data)
                     column_name = 'can' + candidate_number + '_id'
@@ -873,7 +873,7 @@ def form1M(request):
                                                function_name='form1M-PUT: step-2 Qualification')
                     if request.data['beneficiary_cand_entity_id'].startswith("FEC"):
                         new_entity_id = clone_fec_entity(cmte_id, 'CAN', request.data['beneficiary_cand_entity_id'])
-                        logger.debug('NEW candidate entity_id: '+new_entity_id)
+                        logger.debug('NEW candidate entity_id: ' + new_entity_id)
                     request_dict = f1m_sql_dict(cmte_id, step, request.data)
                     check_report_id_status(cmte_id, request_dict['report_id'])
                     candidate_number = check_candidate_number(request.data['candidate_number'])

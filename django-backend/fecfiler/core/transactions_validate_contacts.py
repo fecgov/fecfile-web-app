@@ -295,7 +295,7 @@ def load_dataframe_from_s3(cmteid, bktname, key, size, sleeptime):
     try:
         filename = 'temp'
         if "/" in key:
-            filename = key[key.find("/")+1:-4].split()[0]
+            filename = key[key.find("/") + 1:-4].split()[0]
         else:
             raise Exception('S3 key not having a / char')
         filename = filename.lower()

@@ -122,15 +122,15 @@ def rename_files_folder(filelocation):
             if ' - ' in entry.name:
                 res = re.split(' |-|_|!', entry.name)
                 filename = 'F3L_Schedule' + res[4] + '_FormatSpecs_Import_Transactions_MAPPED.xlsx'
-                os.rename(filelocation+entry.name, filelocation+filename)
+                os.rename(filelocation + entry.name, filelocation + filename)
 
 
 def move_data_from_excel_to_db(form):
     try:
         dirname = os.path.dirname
-        filelocation = dirname(dirname(os.getcwd()))+"/csv/Final_SPECS/F3L/unique_code_final/"
+        filelocation = dirname(dirname(os.getcwd())) + "/csv/Final_SPECS/F3L/unique_code_final/"
         if form == 'F3X':
-            filelocation = dirname(dirname(os.getcwd()))+"/csv/Final_SPECS/F3X/unique_code_final/"
+            filelocation = dirname(dirname(os.getcwd())) + "/csv/Final_SPECS/F3X/unique_code_final/"
         counter = 1
         rename_files_folder(filelocation)
         with os.scandir(filelocation) as entries:
@@ -246,7 +246,7 @@ def check_errkey_exists(bktname, key):
     result = s3.list_objects(Bucket=bktname, Prefix=errkey)
     exists = False
     if "Contents" not in result:
-        s3.put_object(Bucket=bktname, Key=(errkey+'/'))
+        s3.put_object(Bucket=bktname, Key=(errkey + '/'))
 
 
 def create_cmte_error_folder(bktname, key, errfilerelpath):
@@ -254,7 +254,7 @@ def create_cmte_error_folder(bktname, key, errfilerelpath):
     result = s3.list_objects(Bucket=bktname, Prefix=errfilerelpath)
     exists = False
     if "Contents" not in result:
-        s3.put_object(Bucket=bktname, Key=(errfilerelpath+'/'))
+        s3.put_object(Bucket=bktname, Key=(errfilerelpath + '/'))
 
 
 def move_error_files_to_s3(bktname, key, errorfilename, cmteid):
@@ -297,7 +297,7 @@ def load_dataframe_from_s3(bktname, key, size, sleeptime, cmteid):
         # print('formname ',formname)
         tablename = 'temp'
         if "/" in key:
-            tablename = key[key.find("/")+1:-4].split()[0]
+            tablename = key[key.find("/") + 1:-4].split()[0]
         else:
             raise Exception('S3 key not having a / char')
         tablename = tablename.lower()
@@ -513,7 +513,7 @@ def send_message_to_queue(bktname, key):
         if response.get('Successful'):
             if response.get('Successful')[0].get('Id'):
                 start_time = time.time()
-                seconds = 60*3
+                seconds = 60 * 3
                 while True:
                     current_time = time.time()
                     elapsed_time = current_time - start_time

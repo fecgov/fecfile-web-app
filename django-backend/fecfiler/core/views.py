@@ -441,7 +441,7 @@ def get_report_types(request):
 
         _year = datetime.date.today().year
         if datetime.date.today() <= datetime.date(_year, 1, 31):
-            _year = _year-1
+            _year = _year - 1
 
         if _year % 2 == 1:
             odd = True
@@ -495,7 +495,7 @@ def get_report_types(request):
         if form_type == 'F3L' or form_type == 'F3X':
             # 12/23/2020 changes made by mahi
             # this is not the right way to do it but due to the time constraint I am utilizing the existing code
-            forms_obj = data[form_type].get(parameter+"-Election-Year")
+            forms_obj = data[form_type].get(parameter + "-Election-Year")
             forms_obj['selected'] = even
             for dates in forms_obj['report_type']:
                 # Temporary fix till we get EFO dates
@@ -514,7 +514,7 @@ def get_report_types(request):
                     dates['cvg_end_date'] = dates.get('cvg_end_date').replace("YYYY", str(_year))
                 if dates.get('due_date'):
                     if "YYYY-01" in dates.get('due_date'):
-                        dates['due_date'] = dates.get('due_date').replace("YYYY", str(_year+1))
+                        dates['due_date'] = dates.get('due_date').replace("YYYY", str(_year + 1))
                     else:
                         dates['due_date'] = dates.get('due_date').replace("YYYY", str(_year))
                 if dates.get('semi-annual_dates'):
@@ -526,7 +526,7 @@ def get_report_types(request):
 
             reps.append(forms_obj)
 
-            forms_obj = data[form_type].get(parameter+"-Non-Election-Year")
+            forms_obj = data[form_type].get(parameter + "-Non-Election-Year")
             forms_obj['selected'] = odd
             for dates in forms_obj['report_type']:
                 # Temporary fix till we get EFO dates
@@ -1802,7 +1802,7 @@ def update_transactions_change_cvg_dates(cmte_id, report_id, present_cvg_start_d
                            UPDATE public.sched_h4 SET report_id=%s WHERE transaction_id in ('{0}');
                            UPDATE public.sched_h5 SET report_id=%s WHERE transaction_id in ('{0}');
                            UPDATE public.sched_h6 SET report_id=%s WHERE transaction_id in ('{0}');""".format("', '".join(update_tran_list))
-                _value_list2 = [new_report_id]*11
+                _value_list2 = [new_report_id] * 11
                 with connection.cursor() as cursor:
                     cursor.execute(_sql2, _value_list2)
                     logger.debug("transactions updated...")
@@ -7079,7 +7079,7 @@ def contactsTable(request):
 def get_trans_query_for_total_count(trans_query_string):
     temp_string = """select count(*) from """
     i = trans_query_string.index(""" from """)
-    s = trans_query_string[0: i+6]
+    s = trans_query_string[0: i + 6]
     final_query = trans_query_string.replace(s, temp_string, 1)
     return final_query
 
@@ -7089,7 +7089,7 @@ def get_trans_query_for_total_count(trans_query_string):
 def set_offset_n_fetch(trans_query_string, page_num, itemsperpage):
     trans_query_string = trans_query_string + """ OFFSET """
     if page_num > 0:
-        trans_query_string = trans_query_string + str((page_num-1) * itemsperpage)
+        trans_query_string = trans_query_string + str((page_num - 1) * itemsperpage)
     else:
         trans_query_string = trans_query_string + """ 0 """
     trans_query_string = trans_query_string + """ ROWS """ + """ FETCH FIRST """
@@ -7104,7 +7104,7 @@ def get_num_of_pages(totalcount, itemsperpage):
     if (totalcount % itemsperpage) == 0:
         numofpages = totalcount / itemsperpage
     else:
-        numofpages = int(totalcount/itemsperpage) + 1
+        numofpages = int(totalcount / itemsperpage) + 1
     return numofpages
 
 

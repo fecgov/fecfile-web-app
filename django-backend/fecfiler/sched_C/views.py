@@ -1626,7 +1626,7 @@ def get_trans_query_for_total_count(trans_query_string):
     j = trans_query_string.index(""" FROM """)
     if i > j:
         i = j
-    s = trans_query_string[0: i+6]
+    s = trans_query_string[0: i + 6]
     final_query = trans_query_string.replace(s, temp_string, 1)
     return final_query
 
@@ -1636,7 +1636,7 @@ def get_trans_query_for_total_count(trans_query_string):
 def set_offset_n_fetch(trans_query_string, page_num, itemsperpage):
     trans_query_string = trans_query_string + """ OFFSET """
     if page_num > 0:
-        trans_query_string = trans_query_string + str((page_num-1) * itemsperpage)
+        trans_query_string = trans_query_string + str((page_num - 1) * itemsperpage)
     else:
         trans_query_string = trans_query_string + """ 0 """
     trans_query_string = trans_query_string + """ ROWS """ + """ FETCH FIRST """
@@ -1651,7 +1651,7 @@ def get_num_of_pages(totalcount, itemsperpage):
     if (totalcount % itemsperpage) == 0:
         numofpages = totalcount / itemsperpage
     else:
-        numofpages = int(totalcount/itemsperpage) + 1
+        numofpages = int(totalcount / itemsperpage) + 1
     return numofpages
 
 
