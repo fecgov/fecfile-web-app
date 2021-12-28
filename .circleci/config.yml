@@ -6,6 +6,7 @@ version: 2.1
 orbs:
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   python: circleci/python@1.2
+  browser-tools: circleci/browser-tools@x.y
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -100,6 +101,8 @@ jobs:
       - image: cimg/node:14.18-browsers
     steps:
       - checkout
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
 
       - run:
           name: Ensure packages are installed
