@@ -110,13 +110,13 @@ jobs:
           command: ls ~/project/front-end/node_modules/ || echo not found
 
       - run:
-          name: run linter version
-          command: ./node_modules/.bin/eslint --version
+          name: run unit tests
+          command: ./node_modules/@angular/cli/bin/ng test
           working_directory: ~/project/front-end/
 
       - run:
-          name: run linter
-          command: ./node_modules/.bin/eslint "src/**/*.ts"
+          name: run e2e tests
+          command: ./node_modules/@angular/cli/bin/ng e2e
           working_directory: ~/project/front-end/
 
 
@@ -128,6 +128,6 @@ workflows:
       - unit-test-django
       - lint-python
       - lint-angular
-#      - unit-test-angular
+      - unit-test-angular
 
 
