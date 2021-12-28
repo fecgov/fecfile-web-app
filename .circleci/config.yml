@@ -6,7 +6,7 @@ version: 2.1
 orbs:
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   python: circleci/python@1.2
-  browser-tools: circleci/browser-tools@x.y
+  browser-tools: circleci/browser-tools@1.2.3
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
