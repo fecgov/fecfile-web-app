@@ -112,7 +112,7 @@ jobs:
 
       - run:
           name: run unit tests
-          command: ./node_modules/@angular/cli/bin/ng test
+          command: ./node_modules/@angular/cli/bin/ng test --watch=false
           working_directory: ~/project/front-end/
 
   e2e-test-angular:
