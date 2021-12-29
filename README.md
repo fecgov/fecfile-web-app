@@ -94,3 +94,14 @@ Container structure
         | Port "5432:5432"    |
         -----------------------
 ```
+
+# Git Secrets
+Set up git secrets to protect oneself from committing sensitive information
+such as passwords to the repository.
+- First install AWS git-secret utility in your PATH so it can be run at the
+command line: https://github.com/awslabs/git-secrets#installing-git-secrets
+- Once you have git-secrets installed locally, run the
+fecfile-online/install-git-secrets-hook.sh shell script in the root
+directory of your cloned fecfile-online repo to install the pre-commit hook.
+- See git-secrets README for more features:
+https://github.com/awslabs/git-secrets#readme
