@@ -15,5 +15,10 @@ ignore =
     F811  # redefinition of unused 'datetime' from line 11
     F821  # undefined name 'get_entities'
     F841  # local variable 'e' is assigned to but never used
+    N802  # function names should be lowercase
+    N806  # variable in function should be lowercase
+    N803  # argument name should be lowercase
+    N801  # class name should use CapWords convention
+    N816  # variable in global scope should not be mixedCase
 exclude:
     fecfiler/core/jsonsqlgenerate.py  # this file needs significant work
