@@ -4,8 +4,8 @@ version: 2.1
 
 # See: https://circleci.com/docs/2.0/orb-intro/
 orbs:
-  # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   browser-tools: circleci/browser-tools@1.2.3
+  node: circleci/node@5.0.0
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -18,24 +18,11 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          command: ls ~/project/front-end
-
-      # TODO: Decide if we should also incorporate package-lock.json in the cache
-      - restore_cache:
-          keys:
-            - front-end-modules-v1-{{ checksum "~/project/front-end/package.json" }}
-
-      - run:
-          name: Ensure packages are installed
-          command: npm install
-          working_directory: ~/project/front-end/
-
-      - save_cache:
-          key: front-end-modules-v1-{{ checksum "~/project/front-end/package.json" }}
-          paths:
-            - ~/project/front-end/node_modules
-
+      # If we need to modify the params for install-packages:
+      # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
+      - node/install-packages:
+          override-ci-command: npm install
+          app-dir: ~/project/front-end/
 
       - run:
           name: print the linter version
@@ -54,18 +41,9 @@ jobs:
       - checkout
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
-
-      - run:
-          name: Ensure packages are installed
-          command: npm install
-          working_directory: ~/project/front-end/
-
-      - run:
-          command: ls ~/project/front-end/node_modules/ || echo not found
-
       - run:
           name: run unit tests
-          command: ./node_modules/@angular/cli/bin/ng test --watch=false
+          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --watch=false
           working_directory: ~/project/front-end/
 
   e2e-test:
@@ -76,17 +54,14 @@ jobs:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
 
-      - run:
-          name: Ensure packages are installed
-          command: npm install
-          working_directory: ~/project/front-end/
-
-      - run:
-          command: ls ~/project/front-end/node_modules/ || echo not found
+      #install-packages documentation: https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
+      - node/install-packages:
+          override-ci-command: npm install
+          app-dir: ~/project/front-end/
 
       - run:
           name: run e2e tests
-          command: ./node_modules/@angular/cli/bin/ng e2e
+          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e
           working_directory: ~/project/front-end/
 
 # Invoke jobs via workflows
