@@ -18,8 +18,8 @@ finance information. The project code is distributed across these repositories:
 #### Prerequisites
 Software necessary to run the application locally
 
-Docker 
-docker-compose
+[Docker](https://docs.docker.com/get-docker/)
+[Docker Compose](https://docs.docker.com/compose/install/)
 
 ## Docker basic usage.
 when running docker-compose you will need to be in the root directory of the project. The reason for this is that docker-compose looks for docker-compose.yml to be in the same directory where it's run. You will also need at least 3GB of memory allocated for docker during the build. 
