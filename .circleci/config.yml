@@ -71,6 +71,7 @@ jobs:
   deploy:
     docker:
       - image: cimg/node:14.18-browsers
+    resource_class: large
     steps:
       - checkout
       - run:
@@ -89,7 +90,7 @@ jobs:
             cf auth $FEC_CF_USERNAME_DEV $FEC_CF_PASSWORD_DEV
 
       - run:
-          name: Install node packaged
+          name: Install node packages
           command: |
             cd ~/project/front-end
             npm install

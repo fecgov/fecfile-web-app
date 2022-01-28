@@ -9,7 +9,7 @@
     "local_memory": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve --configuration=local",
     "local_aot": "ng serve --configuration=local --aot",
     "local_aot_memory": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve --configuration=local --aot",
-    "build-prod": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng build",
+    "build-prod": "node --max_old_space_size=4500 ./node_modules/@angular/cli/bin/ng build",
     "build-prod-correctly": "ng build --configuration=production",
     "build-safe": "ng build",
     "build-local": "ng build --configuration=local",
