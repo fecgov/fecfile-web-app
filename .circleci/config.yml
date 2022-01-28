@@ -90,12 +90,6 @@ jobs:
             cf auth $FEC_CF_USERNAME_DEV $FEC_CF_PASSWORD_DEV
 
       - run:
-          name: Install node packages
-          command: |
-            cd ~/project/front-end
-            npm install
-
-      - run:
           name: run deploy script
           no_output_timeout: 15m
           command: pip install -r requirements.txt && invoke deploy
