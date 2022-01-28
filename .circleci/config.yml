@@ -75,6 +75,7 @@ jobs:
       - checkout
       - run:
           name: run deploy script
+          no_output_timeout: 15m
           command: pip install -r requirements.txt && invoke deploy
 
 # Invoke jobs via workflows
