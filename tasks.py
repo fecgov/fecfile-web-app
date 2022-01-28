@@ -41,7 +41,10 @@ def _resolve_rule(repo, branch):
     """Get space associated with first matching rule."""
     for space, rule in DEPLOY_RULES:
         if rule(repo, branch):
+            print(f"Deploying to {space} due to matching branch name {branch}")
             return space
+    print(f"Current branch {branch} does not match any deployment specifications.")
+    print(f"Skipping deployment.")
     return None
 
 
@@ -56,14 +59,16 @@ DEPLOY_RULES = (
     ("prod", _detect_prod),
     ("stage", lambda _, branch: branch.startswith("release")),
     # ("dev", lambda _, branch: branch == "develop"),
-    ("dev", lambda _, branch: branch == "dev"),
+    ("dev", lambda _, branch: branch == "develop"),
+    ("dev", lambda _, branch: branch == "feature/40-deploy-to-cloud.gov"),
 )
 
 
-def build_angular_app(ctx):
+def _build_angular_app(ctx):
     orig_directory = os.getcwd()
     os.chdir(os.path.join(orig_directory, 'front-end'))
 
+    result = ctx.run("npm install", warn=True, echo=True)
     result = ctx.run("npm run build-prod", warn=True, echo=True)
 
     if result.return_code != 0:
@@ -73,7 +78,7 @@ def build_angular_app(ctx):
     os.chdir (orig_directory)
 
 # copies a few nginx config files into the Angualr app distribution directory
-def prep_distribution_directory(ctx):
+def _prep_distribution_directory(ctx):
     dist_directory = os.path.join(os.getcwd(), 'front-end', 'dist')
     nginx_config_dir = os.path.join(os.getcwd(), 'deploy-config', 'front-end-nginx-config')
 
@@ -81,7 +86,7 @@ def prep_distribution_directory(ctx):
     copyfile(os.path.join(nginx_config_dir, 'mime.types'), os.path.join(dist_directory, 'mime.types'))
 
 
-def do_login(ctx, space):
+def _login_to_cf(ctx, space):
     # Set api
     api = "https://api.fr.cloud.gov"
     ctx.run("cf api {0}".format(api), echo=True)
@@ -118,7 +123,7 @@ def do_login(ctx, space):
 
         exit (1)
 
-def do_deploy(ctx, space):
+def _do_deploy(ctx, space):
     orig_directory = os.getcwd()
     os.chdir( os.path.join(orig_directory, 'front-end', 'dist') )
     print (f'new dir {os.getcwd()}')
@@ -137,16 +142,19 @@ def do_deploy(ctx, space):
     os.chdir(orig_directory)
     return new_deploy
 
-def print_help_text():
+def _print_help_text():
     help_text = """
     Usage:
-    invoke deploy --space SPACE [--branch BRANCH] [--login LOGIN] [--help] [--nobuild]
+    invoke deploy [--space SPACE] [--branch BRANCH] [--login LOGIN] [--help] [--nobuild]
     
-    --space SPACE    Required parameter saying want space in cloud.gov to target
-                     Allowd values are dev, stage, and prod.
+    --space SPACE    If provided, the SPACE space in cloud.gov will be targeted for deployment.
+                     Either --space or --branch must be provided
+                     Allowed values are dev, stage, and prod.
+                     
                      
     --branch BRANCH  Name of the branch to use for deployment. Will auto-detect
-                     by default
+                     the git branch in the current directory by default
+                     Either --space or --branch must be provided
                      
     --login          If this flag is set, deploy with attempt to login to a 
                      service account specified in the environemnt variables
@@ -160,9 +168,37 @@ def print_help_text():
     """
     print(help_text)
 
+def _rollback(ctx):
+    print("Build failed!")
+    # Check if there are active deployments
+    app_guid = ctx.run("cf app {} --guid".format(APP_NAME), hide=True, warn=True)
+    app_guid_formatted = app_guid.stdout.strip()
+    status = ctx.run(
+        'cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'.format(
+            app_guid_formatted
+        ),
+        hide=True,
+        warn=True,
+    )
+    active_deployments = (
+        json.loads(status.stdout).get("pagination").get("total_results")
+    )
+    # Try to roll back
+    if active_deployments > 0:
+        print("Attempting to roll back any deployment in progress...")
+        # Show the in-between state
+        ctx.run("cf app {}".format(APP_NAME), echo=True, warn=True)
+        cancel_deploy = ctx.run(
+            "cf cancel-deployment {}".format(APP_NAME), echo=True, warn=True
+        )
+        if cancel_deploy.ok:
+            print("Successfully cancelled deploy. Check logs.")
+        else:
+            print("Unable to cancel deploy. Check logs.")
+
 
 @task
-def deploy(ctx, space=None, branch=None, login=None, help=False, nobuild=False):
+def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False):
     """Deploy app to Cloud Foundry.
     Log in using credentials stored per environment
     like `FEC_CF_USERNAME_DEV` and `FEC_CF_PASSWORD_DEV`;
@@ -175,7 +211,7 @@ def deploy(ctx, space=None, branch=None, login=None, help=False, nobuild=False):
     """
 
     if help:
-        print_help_text()
+        _print_help_text()
         exit (0)
 
 
@@ -184,15 +220,18 @@ def deploy(ctx, space=None, branch=None, login=None, help=False, nobuild=False):
     branch = branch or _detect_branch(repo)
     space = space or _detect_space(repo, branch)
     if space is None:
-        return
-
-    if not nobuild:
-        build_angular_app(ctx)
-
-    prep_distribution_directory(ctx)
+        # this is not an error condition, it just means the current space/branch is not
+        # a candidate for deployment. Return successful exit code
+        return sys.exit(0)
 
     if login == "True":
-        do_login(ctx, space)
+        _login_to_cf(ctx, space)
+
+    if not nobuild:
+        _build_angular_app(ctx)
+
+    _prep_distribution_directory(ctx)
+
 
     # Target space
     ctx.run("cf target -o {0} -s {1}".format(ORG_NAME, space), echo=True)
@@ -201,44 +240,14 @@ def deploy(ctx, space=None, branch=None, login=None, help=False, nobuild=False):
     with open(".cfmeta", "w") as fp:
         json.dump({"user": os.getenv("USER"), "branch": branch}, fp)
 
-    new_deploy = do_deploy(ctx,space)
+    new_deploy = _do_deploy(ctx, space)
 
     if not new_deploy.ok:
-        print("Build failed!")
-        # Check if there are active deployments
-        app_guid = ctx.run("cf app {} --guid".format(APP_NAME), hide=True, warn=True)
-        app_guid_formatted = app_guid.stdout.strip()
-        status = ctx.run(
-            'cf curl "/v3/deployments?app_guids={}&status_values=ACTIVE"'.format(
-                app_guid_formatted
-            ),
-            hide=True,
-            warn=True,
-        )
-        active_deployments = (
-            json.loads(status.stdout).get("pagination").get("total_results")
-        )
-        # Try to roll back
-        if active_deployments > 0:
-            print("Attempting to roll back any deployment in progress...")
-            # Show the in-between state
-            ctx.run("cf app {}".format(APP_NAME), echo=True, warn=True)
-            cancel_deploy = ctx.run(
-                "cf cancel-deployment {}".format(APP_NAME), echo=True, warn=True
-            )
-            if cancel_deploy.ok:
-                print("Successfully cancelled deploy. Check logs.")
-            else:
-                print("Unable to cancel deploy. Check logs.")
-
+        _rollback(ctx)
         return sys.exit(1)
 
-        print(
-            "\nA new version of your application '{}' has been successfully pushed!".format(
-                APP_NAME
-            )
-        )
-        ctx.run("cf apps", echo=True, warn=True)
+    ctx.run("cf apps", echo=True, warn=True)
+    print(f"A new version of your application '{APP_NAME}' has been successfully pushed!")
 
     # Needed for CircleCI
     return sys.exit(0)
