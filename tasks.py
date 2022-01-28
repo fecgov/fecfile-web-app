@@ -3,11 +3,13 @@ import json
 import os
 import sys
 
+from shutil import copyfile
 from invoke import task
 
 
 APP_NAME = "fecfile-web-app"
 ORG_NAME = "fec-fecfileonline-prototyping"
+APP_BUILD_NAME = "fec-eFilling"
 
 
 def _detect_space(repo, branch=None):
@@ -54,21 +56,14 @@ DEPLOY_RULES = (
     ("prod", _detect_prod),
     ("stage", lambda _, branch: branch.startswith("release")),
     # ("dev", lambda _, branch: branch == "develop"),
-    ("dev", lambda _, branch: branch == "test-cloud-gov-deploy"),
+    ("dev", lambda _, branch: branch == "dev"),
 )
 
 
-SPACE_URLS = {
-    "dev": [("app.cloud.gov", "fecfile-dev-validate")],
-    "stage": [("app.cloud.gov", "fecfile-stage-validate")],
-    "prod": [("app.cloud.gov", "fecfile-prod-validate")],
-}
-
 def build_angular_app(ctx):
     orig_directory = os.getcwd()
-    print (f'orig_dir {orig_directory}')
-    os.chdir('front-end/')
-    print (f'new dir {os.getcwd()}')
+    os.chdir(os.path.join(orig_directory, 'front-end'))
+
     result = ctx.run("npm run build-prod", warn=True, echo=True)
 
     if result.return_code != 0:
@@ -76,6 +71,15 @@ def build_angular_app(ctx):
         exit(result.return_code)
 
     os.chdir (orig_directory)
+
+# copies a few nginx config files into the Angualr app distribution directory
+def prep_distribution_directory(ctx):
+    dist_directory = os.path.join(os.getcwd(), 'front-end', 'dist')
+    nginx_config_dir = os.path.join(os.getcwd(), 'deploy-config', 'front-end-nginx-config')
+
+    copyfile(os.path.join(nginx_config_dir, 'nginx.conf'), os.path.join(dist_directory, 'nginx.conf'))
+    copyfile(os.path.join(nginx_config_dir, 'mime.types'), os.path.join(dist_directory, 'mime.types'))
+
 
 def do_login(ctx, space):
     # Set api
@@ -89,16 +93,73 @@ def do_login(ctx, space):
     if result.return_code != 0:
         print("\n\nError logging into cloud.gov.")
         print("Please check your authentication environment variables:")
+
         user_var = f'$FEC_CF_USERNAME_{space.upper()}'
         pass_var = f'$FEC_CF_PASSWORD_{space.upper()}'
-        user = os.getenv(user_var)
-        passwd = os.getenv(pass_var) or ''
-        print (f"passwd is {passwd}")
-        safe_passwd = ('*' * len(passwd )) + os.getenv(passwd)[-3:]
 
-        print(f"${user_var} = {user}");
-        print(f"${pass_var} = {safe_passwd}");
+        if os.getenv(user_var) and os.getenv(pass_var):
+            user = os.getenv(user_var)
+            passwd = os.getenv(pass_var) or ''
+            print(f"passwd is {passwd}")
+            safe_passwd = ('*' * len(passwd )) + os.getenv(passwd)[-3:]
+
+            print(f"${user_var} = {user}");
+            print(f"${pass_var} = {safe_passwd}");
+        else:
+            print(f"You must set the {user_var} and {pass_var} environment ")
+            print(f"variables with space-deployer service account credentials")
+            print(f"")
+            print(f"If you don't have a service account, you can create one with the following commands:")
+            print(f"   cf login -u [email-address] -o {ORG_NAME} -a api.fr.cloud.gov --sso")
+            print(f"   cf target -o {ORG_NAME} -s {space}")
+            print(f"   cf create-service cloud-gov-service-account space-deployer [my-service-account-name]")
+            print(f"   cf create-service-key  [my-server-account-name] [my-service-key-name]")
+            print(f"   cf service-key  [my-server-account-name] [my-service-key-name]")
+
         exit (1)
+
+def do_deploy(ctx, space):
+    orig_directory = os.getcwd()
+    os.chdir( os.path.join(orig_directory, 'front-end', 'dist') )
+    print (f'new dir {os.getcwd()}')
+
+    manifest_filename = os.path.join(orig_directory, "deploy-config", f"fecfile-web-app-{space}-manifest.yml")
+
+    existing_deploy = ctx.run("cf app {0}".format(APP_NAME), echo=True, warn=True)
+    print("\n")
+    cmd = "push --strategy rolling" if existing_deploy.ok else "push"
+    new_deploy = ctx.run(
+        f"cf {cmd} {APP_NAME} -f {manifest_filename}",
+        echo=True,
+        warn=True,
+    )
+
+    os.chdir(orig_directory)
+    return new_deploy
+
+def print_help_text():
+    help_text = """
+    Usage:
+    invoke deploy --space SPACE [--branch BRANCH] [--login LOGIN] [--help] [--nobuild]
+    
+    --space SPACE    Required parameter saying want space in cloud.gov to target
+                     Allowd values are dev, stage, and prod.
+                     
+    --branch BRANCH  Name of the branch to use for deployment. Will auto-detect
+                     by default
+                     
+    --login          If this flag is set, deploy with attempt to login to a 
+                     service account specified in the environemnt variables
+                     $FEC_CF_USERNAME_[SPACE] and $FEC_CF_PASSWORD_[SPACE]
+                     
+    --help           If set, display help/usage text and exit
+    
+    --nobuild        If set, skip the Angular applicaiton build process. Useful
+                     for debugging, but should not be used in most cases.
+                    
+    """
+    print(help_text)
+
 
 @task
 def deploy(ctx, space=None, branch=None, login=None, help=False, nobuild=False):
@@ -114,11 +175,7 @@ def deploy(ctx, space=None, branch=None, login=None, help=False, nobuild=False):
     """
 
     if help:
-        help_text="""
-        Usage:
-        invoke deploy --space SPACE [--branch BRANCH] [--login LOGIN] [--help] 
-        """
-        print (help_text)
+        print_help_text()
         exit (0)
 
 
@@ -132,6 +189,8 @@ def deploy(ctx, space=None, branch=None, login=None, help=False, nobuild=False):
     if not nobuild:
         build_angular_app(ctx)
 
+    prep_distribution_directory(ctx)
+
     if login == "True":
         do_login(ctx, space)
 
@@ -142,17 +201,7 @@ def deploy(ctx, space=None, branch=None, login=None, help=False, nobuild=False):
     with open(".cfmeta", "w") as fp:
         json.dump({"user": os.getenv("USER"), "branch": branch}, fp)
 
-    # Deploy application
-    existing_deploy = ctx.run("cf app {0}".format(APP_NAME), echo=True, warn=True)
-    print("\n")
-    cmd = "push --strategy rolling" if existing_deploy.ok else "push"
-    new_deploy = ctx.run(
-        "cf {cmd} {app} -f manifest-{space}.yml".format(
-            cmd=cmd, app=APP_NAME, space=space
-        ),
-        echo=True,
-        warn=True,
-    )
+    new_deploy = do_deploy(ctx,space)
 
     if not new_deploy.ok:
         print("Build failed!")

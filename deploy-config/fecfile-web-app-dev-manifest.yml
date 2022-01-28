@@ -1,0 +1,6 @@
+applications:
+ - name: fecfile-web-app
+   instances: 1
+   memory: 256M
+   buildpack: nginx_buildpack
+
