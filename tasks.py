@@ -89,7 +89,7 @@ def _prep_distribution_directory(ctx):
 def _login_to_cf(ctx, space):
     # Set api
     api = "https://api.fr.cloud.gov"
-    ctx.run("cf api {0}".format(api), echo=True)
+    ctx.run(f"cf api {api}", echo=True)
     # Authenticate
     login_command = 'cf auth "$FEC_CF_USERNAME_{0}" "$FEC_CF_PASSWORD_{0}"'.format(
         space.upper()
