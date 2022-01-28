@@ -74,6 +74,12 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install python
+          command: |
+            sudo apt update
+            sudo apt install python3 python3-pip
+
+      - run:
           name: Install cf cli
           command: |
             mkdir -p $HOME/bin
