@@ -4,3 +4,8 @@ applications:
    memory: 256M
    buildpack: nginx_buildpack
 
+   routes:
+     - route:  fecfile-web-app-dev.app.cloud.gov
+
+   env:
+     EXAMPLE: example

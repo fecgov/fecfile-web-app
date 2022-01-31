@@ -47,6 +47,15 @@ def _resolve_rule(repo, branch):
     print(f"Skipping deployment.")
     return None
 
+def _resolve_environment_file(repo, branch):
+    """Get spacenvironment file associated with first matching rule."""
+    for file, rule in ENVIRONMENT_FILE_RULES:
+        if rule(repo, branch):
+            print(f"Using env file {file} due to matching branch name {branch}")
+            return file
+    print(f"Current branch {branch} does not match any deployment specifications.")
+    return None
+
 
 def _detect_branch(repo):
     try:
@@ -63,6 +72,21 @@ DEPLOY_RULES = (
     ("dev", lambda _, branch: branch == "feature/40-deploy-to-cloud.gov"),
 )
 
+ENVIRONMENT_FILE_RULES = (
+    ("front-end/src/environments/environment.cloud.gov.prod.ts", _detect_prod),
+    ("front-end/src/environments/environment.cloud.gov.stage.ts", lambda _, branch: branch.startswith("release")),
+    ("front-end/src/environments/environment.cloud.gov.dev.ts", lambda _, branch: branch == "develop"),
+    ("front-end/src/environments/environment.cloud.gov.dev.ts", lambda _, branch: branch == "feature/40-deploy-to-cloud.gov"),
+)
+
+def _configure_environment(ctx, repo, branch):
+    orig_directory = os.getcwd()
+    source_file = os.path.join(orig_directory, _resolve_environment_file(repo, branch) )
+    destination = os.path.join(orig_directory, "front-end", "src", "environments", "environment.ts")
+    print(f"Using environment file {source_file}:")
+    with open(source_file) as env_file:
+        print (env_file.read())
+    copyfile(source_file, destination)
 
 def _build_angular_app(ctx):
     orig_directory = os.getcwd()
@@ -228,6 +252,7 @@ def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False)
         _login_to_cf(ctx, space)
 
     if not nobuild:
+        _configure_environment(ctx,repo, branch)
         _build_angular_app(ctx)
 
     _prep_distribution_directory(ctx)
