@@ -19,7 +19,7 @@ def _detect_space(repo, branch=None):
     """
     space = _resolve_rule(repo, branch)
     if space is None:
-        print("No space detected")
+        print("The current configuration does not require a deployment to cloud.gov.   ")
         return None
     print("Detected space {space}".format(**locals()))
     return space
