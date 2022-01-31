@@ -72,28 +72,14 @@ DEPLOY_RULES = (
     ("dev", lambda _, branch: branch == "feature/40-deploy-to-cloud.gov"),
 )
 
-ENVIRONMENT_FILE_RULES = (
-    ("front-end/src/environments/environment.cloud.gov.prod.ts", _detect_prod),
-    ("front-end/src/environments/environment.cloud.gov.stage.ts", lambda _, branch: branch.startswith("release")),
-    ("front-end/src/environments/environment.cloud.gov.dev.ts", lambda _, branch: branch == "develop"),
-    ("front-end/src/environments/environment.cloud.gov.dev.ts", lambda _, branch: branch == "feature/40-deploy-to-cloud.gov"),
-)
-
-def _configure_environment(ctx, repo, branch):
-    orig_directory = os.getcwd()
-    source_file = os.path.join(orig_directory, _resolve_environment_file(repo, branch) )
-    destination = os.path.join(orig_directory, "front-end", "src", "environments", "environment.ts")
-    print(f"Using environment file {source_file}:")
-    with open(source_file) as env_file:
-        print (env_file.read())
-    copyfile(source_file, destination)
-
-def _build_angular_app(ctx):
+def _build_angular_app(ctx,space):
     orig_directory = os.getcwd()
     os.chdir(os.path.join(orig_directory, 'front-end'))
 
     ctx.run("npm install", warn=True, echo=True)
-    result = ctx.run("npm run build-prod", warn=True, echo=True)
+    print(f"Starting build: npm run build-{space}")
+    exit(1)
+    result = ctx.run(f"npm run build-{space}", warn=True, echo=True)
 
     if result.return_code != 0:
         print (f"error building Angular app.  Exiting with code {result.return_code}")
@@ -252,8 +238,7 @@ def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False)
         _login_to_cf(ctx, space)
 
     if not nobuild:
-        _configure_environment(ctx,repo, branch)
-        _build_angular_app(ctx)
+        _build_angular_app(ctx, space)
 
     _prep_distribution_directory(ctx)
 
