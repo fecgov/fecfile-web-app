@@ -78,7 +78,6 @@ def _build_angular_app(ctx,space):
 
     ctx.run("npm install", warn=True, echo=True)
     print(f"Starting build: npm run build-{space}")
-    exit(1)
     result = ctx.run(f"npm run build-{space}", warn=True, echo=True)
 
     if result.return_code != 0:
