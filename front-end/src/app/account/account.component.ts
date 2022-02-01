@@ -25,7 +25,10 @@ import {AuthService} from '../shared/services/AuthService/auth.service';
 
 export class AccountComponent implements OnInit, OnDestroy {
   accounts: IAccount;
+
   public showSideBar: boolean = true;
+  public Another_ISSUE: boolean = true;
+
   public showLegalDisclaimer: boolean = false;
   public levin_accounts: any[] = [];
   private onDestroy$ = new Subject();
