@@ -15,25 +15,25 @@ jobs:
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
       - image: cimg/node:14.18-browsers
-    resource_class: large
+    resource_class: medium
     steps:
       - checkout
 
       # If we need to modify the params for install-packages:
       # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
-      - node/install-packages:
-          override-ci-command: npm install
-          app-dir: ~/project/front-end/
+#      - node/install-packages:
+#          override-ci-command: npm install
+#          app-dir: ~/project/front-end/
 
-      - run:
-          name: print the linter version
-          command: ./node_modules/.bin/eslint --version
-          working_directory: ~/project/front-end/
+#      - run:
+#          name: print the linter version
+#          command: ./node_modules/.bin/eslint --version
+#          working_directory: ~/project/front-end/
 
-      - run:
-          name: run linter
-          command: ./node_modules/.bin/eslint -o ~/project/eslint.json -f json "src/**/*.ts" || echo "Found linting issues" && cat ~/project/eslint.json
-          working_directory: ~/project/front-end/
+#      - run:
+#          name: run linter
+#          command: ./node_modules/.bin/eslint -o ~/project/eslint.json -f json "src/**/*.ts" || echo "Found linting issues" && cat ~/project/eslint.json
+#          working_directory: ~/project/front-end/
 
       # Sonar cloud setup and scanning
       - run:
