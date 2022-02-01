@@ -44,7 +44,10 @@ export class AccountComponent implements OnInit, OnDestroy {
     private _dialogService: DialogService,
     public _authService: AuthService,
   ) {
-    this.getLevinAccounts().takeUntil(this.onDestroy$).subscribe(res => {
+    this.getLevinAccounts().takeUntil(  this.onDestroy$  ).subscribe(res =>
+
+
+    {
       //console.log(res);
       if (res) {
         this.levin_accounts = res;
