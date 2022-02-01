@@ -15,7 +15,7 @@ jobs:
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
       - image: cimg/node:14.18-browsers
-    resource_class: medium
+    resource_class: large
     steps:
       - checkout
 
