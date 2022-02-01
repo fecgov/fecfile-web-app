@@ -39,5 +39,5 @@ Authentication must be configured in a set of evironment variables:
 * $FEC_CF_USERNAME_STAGE
 * $FEC_CF_PASSWORD_STAGE
 * $FEC_CF_USERNAME_PROD
-* $FEC_CF_PASSWORD_RROD
+* $FEC_CF_PASSWORD_PROD
   

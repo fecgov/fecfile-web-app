@@ -86,8 +86,6 @@ jobs:
             mkdir -p $HOME/bin
             export PATH=$HOME/bin:$PATH
             curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=7.1.0" | tar xzv -C $HOME/bin
-            cf api https://api.fr.cloud.gov
-            cf auth $FEC_CF_USERNAME_DEV $FEC_CF_PASSWORD_DEV
 
       - run:
           name: run deploy script
