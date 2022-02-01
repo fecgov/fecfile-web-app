@@ -10,7 +10,7 @@ orbs:
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
 
-  lint:
+  test:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
@@ -21,19 +21,15 @@ jobs:
 
       # If we need to modify the params for install-packages:
       # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
-#      - node/install-packages:
-#          override-ci-command: npm install
-#          app-dir: ~/project/front-end/
+      - node/install-packages:
+          override-ci-command: npm install
+          app-dir: ~/project/front-end/
 
-#      - run:
-#          name: print the linter version
-#          command: ./node_modules/.bin/eslint --version
-#          working_directory: ~/project/front-end/
 
-#      - run:
-#          name: run linter
-#          command: ./node_modules/.bin/eslint -o ~/project/eslint.json -f json "src/**/*.ts" || echo "Found linting issues" && cat ~/project/eslint.json
-#          working_directory: ~/project/front-end/
+      - run:
+          name: run unit tests
+          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --code-coverage --watch=false
+          working_directory: ~/project/front-end/
 
       # Sonar cloud setup and scanning
       - run:
@@ -69,21 +65,6 @@ jobs:
           key: v1-sonarcloud-scanner-4.6.2.2472
           paths: /tmp/cache/scanner
 
-  unit-test:
-    docker:
-      - image: cimg/node:14.18-browsers
-    steps:
-      - checkout
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-      #install-packages documentation: https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
-      - node/install-packages:
-          override-ci-command: npm install
-          app-dir: ~/project/front-end/
-      - run:
-          name: run unit tests
-          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --watch=false
-          working_directory: ~/project/front-end/
 
   e2e-test:
     docker:
@@ -108,8 +89,7 @@ jobs:
 workflows:
   test: # This is the name of the workflow, feel free to change it to better match your workflow.
     jobs:
-      - lint
-#      - unit-test
+      - test
 #      - e2e-test
 
 
