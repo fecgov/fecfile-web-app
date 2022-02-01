@@ -25,10 +25,7 @@ import {AuthService} from '../shared/services/AuthService/auth.service';
 
 export class AccountComponent implements OnInit, OnDestroy {
   accounts: IAccount;
-
   public showSideBar: boolean = true;
-  public Another_ISSUE: boolean = true;
-
   public showLegalDisclaimer: boolean = false;
   public levin_accounts: any[] = [];
   private onDestroy$ = new Subject();
@@ -47,10 +44,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     private _dialogService: DialogService,
     public _authService: AuthService,
   ) {
-    this.getLevinAccounts().takeUntil(  this.onDestroy$  ).subscribe(res =>
-
-
-    {
+    this.getLevinAccounts().takeUntil(this.onDestroy$).subscribe(res => {
       //console.log(res);
       if (res) {
         this.levin_accounts = res;
