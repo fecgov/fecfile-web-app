@@ -27,7 +27,7 @@
     "@angular/forms": "^11.2.14",
     "@angular/localize": "^11.2.14",
     "@angular/platform-browser": "^11.2.14",
-    "@angular/platform-browser-dynamic": "^11.2.14",
+    "@angular/platform-browser-dynamic": "^13.2.0",
     "@angular/router": "^11.2.14",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@kolkov/angular-editor": "^0.11.2",
