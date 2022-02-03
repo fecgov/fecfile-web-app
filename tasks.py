@@ -67,7 +67,7 @@ DEPLOY_RULES = (
     ("prod", _detect_prod),
     ("stage", lambda _, branch: branch.startswith("release")),
     ("dev", lambda _, branch: branch == "develop"),
-    #("dev", lambda _, branch: branch == "feature/40-deploy-to-cloud.gov"),
+    ("dev", lambda _, branch: branch == "feature/40-deploy-to-cloud.gov"),
 )
 
 def _build_angular_app(ctx,space):
@@ -104,13 +104,16 @@ def _login_to_cf(ctx, space):
     result = ctx.run(login_command, echo=True, warn=True)
     if result.return_code != 0:
         print("\n\nError logging into cloud.gov.")
-        print("Please check your authentication environment variables:")
 
-        print (f'  FEC_CF_USERNAME_{space.upper()}')
-        print (f'  FEC_CF_PASSWORD_{space.upper()}')
+        user_var_name = f'FEC_CF_USERNAME_{space.upper()}'
+        pass_var_name = f'FEC_CF_PASSWORD_{space.upper()}'
 
-    else:
-            print(f"You must set the {user_var} and {pass_var} environment ")
+        if os.getenv(user_var_name) and os.getenv(pass_var_name):
+            print("Please check your authentication environment variables:")
+            print(f"    - {user_var_name}")
+            print(f"    - {pass_var_name}")
+        else:
+            print(f"You must set the {user_var_name} and {pass_var_name} environment ")
             print(f"variables with space-deployer service account credentials")
             print(f"")
             print(f"If you don't have a service account, you can create one with the following commands:")
@@ -223,7 +226,7 @@ def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False)
         # a candidate for deployment. Return successful exit code
         return sys.exit(0)
 
-    if login == "True":
+    if login:
         _login_to_cf(ctx, space)
 
     if not nobuild:
