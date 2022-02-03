@@ -97,17 +97,14 @@ def _login_to_cf(ctx, space):
     # Set api
     api = "https://api.fr.cloud.gov"
     ctx.run(f"cf api {api}", echo=True)
+
     # Authenticate
-    login_command = 'cf auth "$FEC_CF_USERNAME_{0}" "$FEC_CF_PASSWORD_{0}"'.format(
-        space.upper()
-    )
+    user_var_name = f'FEC_CF_USERNAME_{space.upper()}'
+    pass_var_name = f'FEC_CF_PASSWORD_{space.upper()}'
+    login_command = f'cf auth "${user_var_name}" "${pass_var_name}"'
     result = ctx.run(login_command, echo=True, warn=True)
     if result.return_code != 0:
         print("\n\nError logging into cloud.gov.")
-
-        user_var_name = f'FEC_CF_USERNAME_{space.upper()}'
-        pass_var_name = f'FEC_CF_PASSWORD_{space.upper()}'
-
         if os.getenv(user_var_name) and os.getenv(pass_var_name):
             print("Please check your authentication environment variables:")
             print(f"    - {user_var_name}")
