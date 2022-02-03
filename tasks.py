@@ -9,7 +9,6 @@ from invoke import task
 
 APP_NAME = "fecfile-web-app"
 ORG_NAME = "fec-fecfileonline-prototyping"
-APP_BUILD_NAME = "fec-eFilling"
 
 
 def _detect_space(repo, branch=None):
@@ -27,7 +26,7 @@ def _detect_space(repo, branch=None):
 
 def _detect_prod(repo, branch):
     """Deploy to production if master is checked out and tagged."""
-    if branch != "master":
+    if branch != "main":
         return False
     try:
         # Equivalent to `git describe --tags --exact-match`
@@ -107,18 +106,10 @@ def _login_to_cf(ctx, space):
         print("\n\nError logging into cloud.gov.")
         print("Please check your authentication environment variables:")
 
-        user_var = f'$FEC_CF_USERNAME_{space.upper()}'
-        pass_var = f'$FEC_CF_PASSWORD_{space.upper()}'
+        print (f'  FEC_CF_USERNAME_{space.upper()}')
+        print (f'  FEC_CF_PASSWORD_{space.upper()}')
 
-        if os.getenv(user_var) and os.getenv(pass_var):
-            user = os.getenv(user_var)
-            passwd = os.getenv(pass_var) or ''
-            print(f"passwd is {passwd}")
-            safe_passwd = ('*' * len(passwd )) + os.getenv(passwd)[-3:]
-
-            print(f"${user_var} = {user}");
-            print(f"${pass_var} = {safe_passwd}");
-        else:
+    else:
             print(f"You must set the {user_var} and {pass_var} environment ")
             print(f"variables with space-deployer service account credentials")
             print(f"")
@@ -136,7 +127,7 @@ def _do_deploy(ctx, space):
     os.chdir( os.path.join(orig_directory, 'front-end', 'dist') )
     print (f'new dir {os.getcwd()}')
 
-    manifest_filename = os.path.join(orig_directory, "deploy-config", f"fecfile-web-app-{space}-manifest.yml")
+    manifest_filename = os.path.join(orig_directory, "deploy-config", f"{APP_NAME}-{space}-manifest.yml")
 
     existing_deploy = ctx.run("cf app {0}".format(APP_NAME), echo=True, warn=True)
     print("\n")
