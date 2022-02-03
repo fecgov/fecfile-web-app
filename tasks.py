@@ -67,8 +67,8 @@ def _detect_branch(repo):
 DEPLOY_RULES = (
     ("prod", _detect_prod),
     ("stage", lambda _, branch: branch.startswith("release")),
-    ("dev", lambda _, branch: branch == "develop"),
-    #("dev", lambda _, branch: branch == "feature/40-deploy-to-cloud.gov"),
+    #("dev", lambda _, branch: branch == "develop"),
+    ("dev", lambda _, branch: branch == "feature/40-deploy-to-cloud.gov-lb"),
 )
 
 def _build_angular_app(ctx,space):
@@ -99,35 +99,24 @@ def _login_to_cf(ctx, space):
     api = "https://api.fr.cloud.gov"
     ctx.run(f"cf api {api}", echo=True)
     # Authenticate
-    login_command = 'cf auth "$FEC_CF_USERNAME_{0}" "$FEC_CF_PASSWORD_{0}"'.format(
-        space.upper()
-    )
+    user_var = f'$FEC_CF_USERNAME_BROKEN_{space.upper()}'
+    pass_var = f'$FEC_CF_PASSWORD_{space.upper()}'
+
+    login_command = f'cf auth "{user_var}" "{pass_var}"'
     result = ctx.run(login_command, echo=True, warn=True)
     if result.return_code != 0:
         print("\n\nError logging into cloud.gov.")
         print("Please check your authentication environment variables:")
 
-        user_var = f'$FEC_CF_USERNAME_{space.upper()}'
-        pass_var = f'$FEC_CF_PASSWORD_{space.upper()}'
-
-        if os.getenv(user_var) and os.getenv(pass_var):
-            user = os.getenv(user_var)
-            passwd = os.getenv(pass_var) or ''
-            print(f"passwd is {passwd}")
-            safe_passwd = ('*' * len(passwd )) + os.getenv(passwd)[-3:]
-
-            print(f"${user_var} = {user}");
-            print(f"${pass_var} = {safe_passwd}");
-        else:
-            print(f"You must set the {user_var} and {pass_var} environment ")
-            print(f"variables with space-deployer service account credentials")
-            print(f"")
-            print(f"If you don't have a service account, you can create one with the following commands:")
-            print(f"   cf login -u [email-address] -o {ORG_NAME} -a api.fr.cloud.gov --sso")
-            print(f"   cf target -o {ORG_NAME} -s {space}")
-            print(f"   cf create-service cloud-gov-service-account space-deployer [my-service-account-name]")
-            print(f"   cf create-service-key  [my-server-account-name] [my-service-key-name]")
-            print(f"   cf service-key  [my-server-account-name] [my-service-key-name]")
+        print(f"You must set the {user_var} and {pass_var} environment ")
+        print(f"variables with space-deployer service account credentials")
+        print(f"")
+        print(f"If you don't have a service account, you can create one with the following commands:")
+        print(f"   cf login -u [email-address] -o {ORG_NAME} -a api.fr.cloud.gov --sso")
+        print(f"   cf target -o {ORG_NAME} -s {space}")
+        print(f"   cf create-service cloud-gov-service-account space-deployer [my-service-account-name]")
+        print(f"   cf create-service-key  [my-server-account-name] [my-service-key-name]")
+        print(f"   cf service-key  [my-server-account-name] [my-service-key-name]")
 
         exit (1)
 
