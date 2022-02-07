@@ -1,28 +1,27 @@
-import { Directive, OnInit, EventEmitter, Output, OnDestroy, Input } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
-import {SortService} from '../service/sort-service/sort.service';
-
-
+import { Directive, OnInit, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { SortService } from '../service/sort-service/sort.service';
 
 @Directive({
-  selector: '[sortable-table]'
+  selector: '[sortable-table]',
 })
 export class SortableTableDirective implements OnInit, OnDestroy {
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private sortService: SortService) {}
 
   @Output()
   sorted = new EventEmitter();
 
-  private columnSortedSubscription: Subscription;
-
   ngOnInit() {
-    this.columnSortedSubscription = this.sortService.columnSorted$.subscribe(event => {
+    this.sortService.columnSorted$.pipe(takeUntil(this.destroy$)).subscribe((event) => {
       this.sorted.emit(event);
     });
   }
 
   ngOnDestroy() {
-    this.columnSortedSubscription.unsubscribe();
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

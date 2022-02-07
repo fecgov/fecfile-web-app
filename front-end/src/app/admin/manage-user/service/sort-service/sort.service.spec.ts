@@ -5,7 +5,7 @@ import { SortService } from './sort.service';
 describe('SortService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [SortService]
+      providers: [SortService],
     });
   });
 

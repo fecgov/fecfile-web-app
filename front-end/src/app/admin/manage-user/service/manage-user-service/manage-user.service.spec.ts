@@ -5,7 +5,7 @@ import { ManageUserService } from './manage-user.service';
 describe('ManageUserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ManageUserService]
+      providers: [ManageUserService],
     });
   });
 

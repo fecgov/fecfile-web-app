@@ -49,7 +49,8 @@ export class UtilService {
     let arr: any = [];
 
     for (let i = 0; i < localStorage.length; i++) {
-      if (localStorage.key(i).substring(0, length) === val) {
+      const key: string | null = localStorage.key(i);
+      if (key && key.substring(0, length) === val) {
         arr.push(localStorage.key(i));
       }
     }
@@ -107,7 +108,7 @@ export class UtilService {
    */
   public compareDatesAfter(date1: Date, date2: Date): boolean {
     if (!date1 || !date2) {
-      return null;
+      return false;
     }
     if (date2.getTime() > date1.getTime()) {
       return true;
@@ -151,7 +152,7 @@ export class UtilService {
   }
 
   public addOrEditObjectValueInArray(array: any, type: string, name: string, value: string) {
-    let field = array.find(element => element.name === name);
+    let field = array.find((element: any) => element.name === name);
     if (field) {
       field.value = value.toString();
     }
@@ -196,7 +197,7 @@ export class UtilService {
         }
       } 
       let numberOfPages = 1;
-      if (config.totalItems > config.itemsPerPage) { 
+      if (config.totalItems && config.totalItems > config.itemsPerPage) { 
         numberOfPages = Math.floor(config.totalItems / config.itemsPerPage);
         if (numberOfPages * config.itemsPerPage < config.totalItems) {
           numberOfPages++;
@@ -227,18 +228,18 @@ export class UtilService {
     }
 
     let start = 0;
-    let end = 0;
+    let end: number  = 0;
     config.currentPage = this.isNumber(config.currentPage) ? config.currentPage : 1;
     if (config.currentPage > 0 && config.itemsPerPage > 0 && items.length > 0) {
       let numberOfPages = 1;
-      if (config.totalItems > config.itemsPerPage) { 
+      if (config.totalItems && config.totalItems > config.itemsPerPage) { 
         numberOfPages = Math.floor(config.totalItems / config.itemsPerPage);
         if (numberOfPages * config.itemsPerPage < config.totalItems) {
           numberOfPages++;
         }
       }
       if (config.currentPage === numberOfPages) {
-        end = config.totalItems;
+        end = config.totalItems ?? 0;
         start = (config.currentPage - 1) * config.itemsPerPage + 1;
       } else {
         end = config.currentPage * config.itemsPerPage;
