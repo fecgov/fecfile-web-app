@@ -22,9 +22,9 @@
         margin-left: 10px;
         display: block;
         width: 20%;
-        h1 {
+        // h1 {
           //font-family: sans-serif;
-        }
+        // }
         @include clearfix();
         .btn-options {
           color: $shuttleGray;
@@ -155,7 +155,7 @@
   }
 }
 
-.ng-select.disabled.ng-select .ng-select-container{
+.ng-select.disabled.ng-select .ng-select-container {
   background-color: #e9ecef;
 }
 

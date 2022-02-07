@@ -28,7 +28,7 @@
     "@angular/platform-browser": "~13.2.0",
     "@angular/platform-browser-dynamic": "~13.2.0",
     "@angular/router": "~13.2.0",
-    "@fortawesome/fontawesome-free": "*",
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@kolkov/angular-editor": "*",
     "@ng-bootstrap/ng-bootstrap": "*",
     "@ng-select/ng-select": "*",

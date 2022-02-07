@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone , ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, NgZone, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
@@ -12,21 +12,20 @@ import { SessionService } from '../../shared/services/SessionService/session.ser
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-
   public frm: FormGroup;
   public isBusy: boolean = false;
   public hasFailed: boolean = false;
   public committeeIdInputError: boolean = false;
   public passwordInputError: boolean = false;
   public loginEmailInputError: boolean = false;
-  public appTitle: string = null;
+  public appTitle: string | null = null;
   public loggedOut: any = '';
   private _subscription: Subscription;
-  public titleF: string;
-  public titleR: string;
+  public titleF!: string;
+  public titleR!: string;
   public show: boolean;
 
   constructor(
@@ -43,18 +42,15 @@ export class LoginComponent implements OnInit {
     this.frm = _fb.group({
       commiteeId: ['', Validators.required],
       loginPassword: ['', Validators.required],
-      emailId: ['', [Validators.required, Validators.email]]
+      emailId: ['', [Validators.required, Validators.email]],
     });
-    this._subscription =
-      this._messageService
-        .getMessage()
-        .subscribe(res => {
-          if (typeof res.loggedOut !== 'undefined') {
-            this.loggedOut = res;
-          }
-        });
+    this._subscription = this._messageService.getMessage().subscribe((res) => {
+      if (typeof res.loggedOut !== 'undefined') {
+        this.loggedOut = res;
+      }
+    });
     this.show = false;
- }
+  }
 
   ngOnInit() {
     this._sessionService.destroy();
@@ -77,17 +73,17 @@ export class LoginComponent implements OnInit {
    *
    */
   public updateStatus(): void {
-    if (this.frm.get('commiteeId').valid) {
+    if (this.frm.get('commiteeId')?.valid) {
       this.committeeIdInputError = false;
     }
 
-    if (this.frm.get('loginPassword').valid) {
+    if (this.frm.get('loginPassword')?.valid) {
       this.passwordInputError = false;
     }
 
-      if (this.frm.get('emailId').valid) {
-          this.loginEmailInputError = false;
-      }
+    if (this.frm.get('emailId')?.valid) {
+      this.loginEmailInputError = false;
+    }
   }
 
   /**
@@ -96,36 +92,35 @@ export class LoginComponent implements OnInit {
    */
   public doSignIn(): void {
     if (this.frm.invalid) {
-      this.committeeIdInputError = (this.frm.get('commiteeId').invalid) ? true : false;
+      this.committeeIdInputError = this.frm.get('commiteeId')?.invalid ? true : false;
 
-      this.passwordInputError = (this.frm.get('loginPassword').invalid) ? true : false;
+      this.passwordInputError = this.frm.get('loginPassword')?.invalid ? true : false;
 
-      this.loginEmailInputError = (this.frm.get('emailId').invalid) ? true : false;
-       return;
+      this.loginEmailInputError = this.frm.get('emailId')?.invalid ? true : false;
+      return;
     }
 
     this.isBusy = true;
     this.hasFailed = false;
 
-    const committeeId: string = this.frm.get('commiteeId').value;
-    const password: string = this.frm.get('loginPassword').value;
-    const email: string = this.frm.get('emailId').value;
+    const committeeId: string = this.frm.get('commiteeId')?.value;
+    const password: string = this.frm.get('loginPassword')?.value;
+    const email: string = this.frm.get('emailId')?.value;
 
-    this._apiService
-      .signIn(email, committeeId, password)
-      .subscribe(res => {
+    this._apiService.signIn(email, committeeId, password).subscribe({
+      next: (res) => {
         if (res.token) {
-          this._authService
-              .doSignIn(res.token);
+          this._authService.doSignIn(res.token);
 
           this._router.navigate(['twoFactLogin']);
         }
       },
-      (error) => {
+      error: (error) => {
         //console.log('error: ', error);
         this.isBusy = false;
         this.hasFailed = true;
-      });
+      }
+    });
   }
 
   showPassword() {

@@ -11,7 +11,7 @@ import {ContactsService} from '../service/contacts.service';
 })
 export class ContactDetailsModalComponent implements OnInit {
 
-  contact: ContactModel;
+  contact!: ContactModel;
   showResponse: boolean = false;
   responseMessage: string = '';
   notesValue: string = '';

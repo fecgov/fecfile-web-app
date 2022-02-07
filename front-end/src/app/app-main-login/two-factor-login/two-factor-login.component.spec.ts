@@ -6,12 +6,13 @@ describe('TwoFactorLoginComponent', () => {
   let component: TwoFactorLoginComponent;
   let fixture: ComponentFixture<TwoFactorLoginComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TwoFactorLoginComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [TwoFactorLoginComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TwoFactorLoginComponent);

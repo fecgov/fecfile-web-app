@@ -12,55 +12,51 @@ import { LoginComponent } from './login.component';
 class MockAuthService extends AuthService {
   private _authenticated: boolean = false;
 
-  public isSignedIn(): boolean {
+  public override isSignedIn(): boolean {
     return this._authenticated;
   }
 }
 
 class MockApiService extends ApiService {
-  public signIn(usr: string, pass: string): Observable<any> {
+  public override signIn(usr: string, pass: string): Observable<any> {
     const username: string = '1078935131';
     const password: string = 'test';
 
-    if ((usr === username) && (pass === password)) {
-      return of([{authenticated: true}]);
+    if (usr === username && pass === password) {
+      return of([{ authenticated: true }]);
     }
 
-    return of([{authenticated: false}]);
+    return of([{ authenticated: false }]);
   }
 }
 
 describe('LoginComponent', () => {
-  let component:  LoginComponent;
+  let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let authService: MockAuthService;
   let apiService: MockApiService;
   let httpMock: HttpTestingController;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
-      declarations: [ LoginComponent ],
-      providers: [
-        {
-          provide: AuthService,
-          useClass: MockAuthService
-        },
-        {
-          provide: ApiService,
-          useClass: MockApiService
-        },
-        FormBuilder,
-        CookieService
-      ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule, RouterTestingModule],
+        declarations: [LoginComponent],
+        providers: [
+          {
+            provide: AuthService,
+            useClass: MockAuthService,
+          },
+          {
+            provide: ApiService,
+            useClass: MockApiService,
+          },
+          FormBuilder,
+          CookieService,
+        ],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
@@ -111,10 +107,9 @@ describe('LoginComponent', () => {
 
     fixture.debugElement.query(By.css('form')).triggerEventHandler('ngSubmit', null);
 
-    apiService.signIn(userValue, passwordValue)
-      .subscribe(res => {
-        expect(res.authenticated).toBeFalsy();
-      });
+    apiService.signIn(userValue, passwordValue).subscribe((res) => {
+      expect(res.authenticated).toBeFalsy();
+    });
 
     expect(component.frm.valid).toBeTruthy();
   });
@@ -134,11 +129,10 @@ describe('LoginComponent', () => {
 
     fixture.debugElement.query(By.css('form')).triggerEventHandler('ngSubmit', null);
 
-    apiService.signIn(userValue, passwordValue)
-      .subscribe(res => {
-        console.log('res: ', res);
-        expect(res[0].authenticated).toBeTruthy();
-      });
+    apiService.signIn(userValue, passwordValue).subscribe((res) => {
+      console.log('res: ', res);
+      expect(res[0].authenticated).toBeTruthy();
+    });
 
     expect(component.frm.valid).toBeTruthy();
   });

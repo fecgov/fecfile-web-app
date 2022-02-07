@@ -5,7 +5,7 @@ import { TwoFactorHelperService } from './two-factor-helper.service';
 describe('TwoFactorHelperService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TwoFactorHelperService]
+      providers: [TwoFactorHelperService],
     });
   });
 

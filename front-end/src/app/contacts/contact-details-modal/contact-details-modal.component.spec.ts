@@ -6,12 +6,13 @@ describe('ContactDetailsModalComponent', () => {
   let component: ContactDetailsModalComponent;
   let fixture: ComponentFixture<ContactDetailsModalComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ContactDetailsModalComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ContactDetailsModalComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ContactDetailsModalComponent);

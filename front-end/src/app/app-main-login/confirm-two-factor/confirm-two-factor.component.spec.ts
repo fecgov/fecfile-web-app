@@ -6,12 +6,13 @@ describe('ConfirmTwoFactorComponent', () => {
   let component: ConfirmTwoFactorComponent;
   let fixture: ComponentFixture<ConfirmTwoFactorComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ConfirmTwoFactorComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ConfirmTwoFactorComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConfirmTwoFactorComponent);

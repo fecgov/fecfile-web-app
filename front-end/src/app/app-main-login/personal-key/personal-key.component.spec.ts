@@ -6,12 +6,13 @@ describe('PersonalKeyComponent', () => {
   let component: PersonalKeyComponent;
   let fixture: ComponentFixture<PersonalKeyComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ PersonalKeyComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [PersonalKeyComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PersonalKeyComponent);

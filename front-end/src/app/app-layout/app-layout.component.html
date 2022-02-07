@@ -3,7 +3,7 @@
     <nav class="navbar py-0 navbar-expand-lg">
       <div class="navbar-brand app__top-logo">
         <a href="http://www.fec.gov/" draggable="false" target="_blank">
-          <img src="assets/img/logo-transparent.png" draggable="false" style=""/>
+          <img src="assets/img/logo-transparent.png" draggable="false" />
         </a>
       </div>
       <button
@@ -31,9 +31,7 @@
         <!-- <button type="button" class="btn btn-dark">Dark</button>
         <button type="button" class="btn btn-outline-secondary">Primary</button> -->
 
-        <app-header style="display: block;width: 100%;"
-          [formType]="formType"
-        ></app-header>
+        <app-header style="display: block; width: 100%" [formType]="formType"></app-header>
       </div>
     </nav>
   </div>
@@ -49,19 +47,29 @@
           </h1>
           <h2 class="committee-name">
             {{ committeeName }}
-          </h2> 
+          </h2>
         </div>
-        <div class="float-right"  [hidden]="_activatedRoute?.snapshot?.queryParams?.allTransactions === 'true'  || _router?.url?.indexOf('/forms/form') === -1">
+        <div
+          class="float-right"
+          [hidden]="
+            _activatedRoute?.snapshot?.queryParams?.allTransactions === 'true' ||
+            _router?.url?.indexOf('/forms/form') === -1
+          "
+        >
           <div class="float-right" *ngIf="showFormDueDate">
             <div>
               <div>
                 Form {{ formType }}
-                <ng-container *ngIf="currentReportData && currentReportData.amend_indicator === 'A' && currentReportData.reportsequence">
-                  - A{{currentReportData.reportsequence}}
-                </ng-container> 
+                <ng-container
+                  *ngIf="
+                    currentReportData && currentReportData.amend_indicator === 'A' && currentReportData.reportsequence
+                  "
+                >
+                  - A{{ currentReportData.reportsequence }}
+                </ng-container>
                 | {{ formDescription }} | {{ formStartDate | date: 'MM/dd/yyyy' }} -
                 {{ formEndDate | date: 'MM/dd/yyyy' }}
-              </div>              
+              </div>
               <ng-container *ngIf="reportOverDue && dueDate">
                 <span class="text-error">
                   Overdue by {{ formDaysUntilDue }} days ({{ dueDate | date: 'MM/dd/yyyy' }})
@@ -72,9 +80,12 @@
               </ng-container>
               <ng-container *ngIf="currentReportData && currentReportData.reportstatus !== 'Submitted'">
                 <span *ngIf="!dueDate">Edit Report</span>
-                <a class="btn btn-link btn-edit" (click)="editFrom()"
-                   [style.pointer-events]="_authService.isReadOnly() ?'none':'auto'"
-                   tabindex="{{_authService.isReadOnly()?-1:0}}">
+                <a
+                  class="btn btn-link btn-edit"
+                  (click)="editFrom()"
+                  [style.pointer-events]="_authService.isReadOnly() ? 'none' : 'auto'"
+                  tabindex="{{ _authService.isReadOnly() ? -1 : 0 }}"
+                >
                   <i class="edit-icon" aria-hidden="true"></i>
                   <span class="sr-only">Click to edit date.</span>
                 </a>
@@ -83,9 +94,7 @@
           </div>
           <div class="float-right py-3" *ngIf="!showFormDueDate && formType">
             <div>
-              <div>
-                Form {{ formType }} 
-              </div>              
+              <div>Form {{ formType }}</div>
             </div>
           </div>
         </div>
@@ -132,7 +141,11 @@
               <ng-container *ngIf="radAnalystInfo"> (202)-694-1000 x{{ radAnalystInfo?.telephone_ext }} </ng-container>
               <br />
               <ng-container>
-                <a href="https://www.fec.gov/help-candidates-and-committees/question-rad/" draggable="false" target="_blank">
+                <a
+                  href="https://www.fec.gov/help-candidates-and-committees/question-rad/"
+                  draggable="false"
+                  target="_blank"
+                >
                   Find & contact your committee's analyst
                 </a>
               </ng-container>
@@ -145,23 +158,17 @@
             <br />
             <address>
               (202) 694-1307<br />
-              <a href="mailto:eFiletechsupport@fec.gov">
-                eFiletechsupport@fec.gov
-              </a>
+              <a href="mailto:eFiletechsupport@fec.gov"> eFiletechsupport@fec.gov </a>
             </address>
           </h6>
         </div>
       </div>
       <!-- ./contact-info -->
       <div class="legal-disclaimer">
-        <button type="button" class="btn btn-link" (click)="open(legalDisclaimer)">
-          Legal Disclaimer
-        </button>
+        <button type="button" class="btn btn-link" (click)="open(legalDisclaimer)">Legal Disclaimer</button>
         <ng-template #legalDisclaimer let-d="dismiss">
           <div class="modal-header">
-            <h4 class="modal-title">
-              Legal Disclaimer
-            </h4>
+            <h4 class="modal-title">Legal Disclaimer</h4>
           </div>
           <div class="modal-body">
             <p>

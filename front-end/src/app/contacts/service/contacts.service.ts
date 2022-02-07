@@ -1,15 +1,14 @@
-import { Injectable , ChangeDetectionStrategy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
+import { Observable, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../environments/environment';
 import { ContactModel } from '../model/contacts.model';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
-import { FilterPipe, FilterTypeEnum } from 'src/app/shared/pipes/filter/filter.pipe';
+import { OrderByPipe } from '../../shared/pipes/order-by/order-by.pipe';
+import { FilterPipe } from '../../shared/pipes/filter/filter.pipe';
 import { ContactFilterModel } from '../model/contacts-filter.model';
 import { DatePipe } from '@angular/common';
-import { ZipCodePipe } from 'src/app/shared/pipes/zip-code/zip-code.pipe';
+import { ZipCodePipe } from '../../shared/pipes/zip-code/zip-code.pipe';
 import { map } from 'rxjs/operators';
 
 export interface GetContactsResponse {
@@ -25,14 +24,13 @@ export interface GetContactsResponse {
 
 export enum ContactActions {
   add = 'add',
-  edit = 'edit'
+  edit = 'edit',
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ContactsService {
-
   // only for mock data
   private mockRestoreTrxArray = [];
   private mockTrxArray = [];
@@ -46,14 +44,11 @@ export class ContactsService {
   private _filterPipe: FilterPipe;
   private _zipCodePipe: ZipCodePipe;
   private _datePipe: DatePipe;
-  private _propertyNameConverterMap: Map<string, string> = new Map([
-    ['zip', 'zip_code'],
-  ]);
+  private _propertyNameConverterMap: Map<string, string> = new Map([['zip', 'zip_code']]);
 
-
-  //data container for sharing entityList info for all transactions table. 
+  //data container for sharing entityList info for all transactions table.
   private _entityListToFilterBy: any = [];
-  
+
   public get entityListToFilterBy(): any {
     return this._entityListToFilterBy;
   }
@@ -61,16 +56,12 @@ export class ContactsService {
     this._entityListToFilterBy = value;
   }
 
-
-  constructor(
-    private _http: HttpClient,
-    private _cookieService: CookieService,
-  ) {
+  constructor(private _http: HttpClient, private _cookieService: CookieService) {
     // mock out the recycle cnt
     for (let i = 0; i < 13; i++) {
       const t1: any = this.createMockTrx();
       t1.transaction_id = this.mockContactIdRecycle + i;
-      this.mockRestoreTrxArray.push(t1);
+      // this.mockRestoreTrxArray.push(t1);
     }
 
     this._orderByPipe = new OrderByPipe();
@@ -81,7 +72,7 @@ export class ContactsService {
 
   /**
    * Gets the contacts by Report ID.
-   * 
+   *
    * @param formType
    * @param reportId
    * @param page
@@ -92,15 +83,16 @@ export class ContactsService {
    * @return     {Observable}
    */
   public getContacts(
-      formType: string,
-      reportId: string,
-      page: number,
-      itemsPerPage: number,
-      sortColumnName: string,
-      descending: boolean,
-      filters: ContactFilterModel): Observable<any> {
+    formType: string,
+    reportId: string,
+    page: number,
+    itemsPerPage: number,
+    sortColumnName: string,
+    descending: boolean,
+    filters: ContactFilterModel
+  ): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/core/contactsTable';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -137,21 +129,19 @@ export class ContactsService {
     }
 
     return this._http
-      .post(
-        `${environment.apiUrl}${url}`,
-        request,
-        {
-          headers: httpOptions
-        }
-      )
-      .pipe(map(res => {
+      .post(`${environment.apiUrl}${url}`, request, {
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res) => {
           if (res) {
             //console.log('Contact Table res: ', res);
 
             return res;
           }
           return false;
-      }));
+        })
+      );
   }
 
   /**
@@ -172,10 +162,10 @@ export class ContactsService {
     itemsPerPage: number,
     sortColumnName: string,
     descending: boolean,
-    filters: ContactFilterModel): Observable<any> {
-
+    filters: ContactFilterModel
+  ): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/core/get_all_trashed_contacts';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -221,29 +211,24 @@ export class ContactsService {
     // return Observable.of(mockResponse);
 
     return this._http
-      .post(
-        `${environment.apiUrl}${url}`,
-        request,
-        {
-          headers: httpOptions
-        }
-      )
-      .pipe(map(res => {
+      .post(`${environment.apiUrl}${url}`, request, {
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res) => {
           if (res) {
             //console.log('Contact Recycle Bin Table res: ', res);
 
             return res;
           }
           return false;
-      }));
+        })
+      );
   }
 
-
-  public getExportContactsData(selectedContactArray: Array<string>,
-      sendAll: boolean): Observable<any> {
-
+  public getExportContactsData(selectedContactArray: Array<string>, sendAll: boolean): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/contact/details';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -257,19 +242,18 @@ export class ContactsService {
     request.entity = selectedContactArray;
     request.sendAll = sendAll;
     return this._http
-    .post(`${environment.apiUrl}${url}`, request, {
-      headers: httpOptions
-    })
-    .pipe(
-      map(res => {
-        if (res) {
-          return res;
-        }
-        return false;
+      .post(`${environment.apiUrl}${url}`, request, {
+        headers: httpOptions,
       })
-    );
+      .pipe(
+        map((res) => {
+          if (res) {
+            return res;
+          }
+          return false;
+        })
+      );
   }
-
 
   /**
    * Map server fields from the response to the model Array.
@@ -294,30 +278,29 @@ export class ContactsService {
    *
    */
   public convertRowToModel(row: any) {
-
-      const model = new ContactModel({});
-      model.entity_type = row.entity_type;
-      model.id = row.id;
-      model.name = row.name;
-      model.street1 = row.street1;
-      model.street2 = row.street2;
-      model.city = row.city;
-      model.state = row.state;
-      model.zip = row.zip;
-      model.employer = row.employer;
-      model.occupation = row.occupation;
-      model.phoneNumber = row.phone_number;
-      model.entity_name = row.entity_name;
-      model.candOffice = row.candOffice;
-      model.candOfficeState = row.candOfficeState;
-      model.candOfficeDistrict = row.candofficedistrict;
-      model.activeTransactionsCnt = row.active_transactions_cnt;
-      model.candCmteId = row.candCmteId;
-      model.deletedDate = row.deleteddate;
-      model.candOffice = row.candoffice;
-      model.candOfficeState = row.candofficestate;
-      model.candCmteId = row.candcmteid;
-      model.notes = row.notes;
+    const model = new ContactModel({});
+    model.entity_type = row.entity_type;
+    model.id = row.id;
+    model.name = row.name;
+    model.street1 = row.street1;
+    model.street2 = row.street2;
+    model.city = row.city;
+    model.state = row.state;
+    model.zip = row.zip;
+    model.employer = row.employer;
+    model.occupation = row.occupation;
+    model.phoneNumber = row.phone_number;
+    model.entity_name = row.entity_name;
+    model.candOffice = row.candOffice;
+    model.candOfficeState = row.candOfficeState;
+    model.candOfficeDistrict = row.candofficedistrict;
+    model.activeTransactionsCnt = row.active_transactions_cnt;
+    model.candCmteId = row.candCmteId;
+    model.deletedDate = row.deleteddate;
+    model.candOffice = row.candoffice;
+    model.candOfficeState = row.candofficestate;
+    model.candCmteId = row.candcmteid;
+    model.notes = row.notes;
 
     return model;
   }
@@ -327,7 +310,6 @@ export class ContactsService {
    *
    */
   public convertRowToModelPut(row: any) {
-
     const model = new ContactModel({});
     model.entity_type = row.entity_type;
     model.id = row.entity_id;
@@ -361,7 +343,6 @@ export class ContactsService {
    * TODO The API should be changed to pass the property names expected by the front end.
    */
   public mapToSingleServerName(appFieldName: string) {
-
     // TODO map field names in constructor
     let name = '';
 
@@ -376,7 +357,7 @@ export class ContactsService {
         break;
       case 'entity_name':
         name = 'entity_name';
-        break;  
+        break;
       case 'entityType':
         name = 'entityType';
         break;
@@ -385,19 +366,19 @@ export class ContactsService {
         break;
       case 'street1':
         name = 'street1';
-        break; 
+        break;
       case 'street2':
         name = 'street2';
-        break;         
+        break;
       case 'city':
         name = 'city';
-        break;         
+        break;
       case 'state':
         name = 'state';
-        break;                                
+        break;
       case 'zip':
         name = 'zip';
-        break;                        
+        break;
       case 'employer':
         name = 'employer';
         break;
@@ -406,31 +387,31 @@ export class ContactsService {
         break;
       case 'phoneNumber':
         name = 'phoneNumber';
-        break;  
+        break;
       case 'entityName':
-        name= 'entityName';
+        name = 'entityName';
         break;
       case 'officeSought':
-        name= 'officeSought';
-        break;  
+        name = 'officeSought';
+        break;
       case 'candOffice':
-        name= 'candOffice';
+        name = 'candOffice';
         break;
       case 'candOfficeState':
-        name= 'candOfficeState';
+        name = 'candOfficeState';
         break;
       case 'candOfficeDistrict':
-        name= 'candOfficeDistrict';
-        break;       
+        name = 'candOfficeDistrict';
+        break;
       case 'candCmteId':
-        name= 'candCmteId';
-        break;     
+        name = 'candCmteId';
+        break;
       case 'deletedDate':
-        name= 'deletedDate';
-        break;   
+        name = 'deletedDate';
+        break;
       case 'activeTransactionsCnt':
-        name= 'activeTransactionsCnt';
-        break;           
+        name = 'activeTransactionsCnt';
+        break;
       default:
     }
     return name ? name : '';
@@ -441,13 +422,12 @@ export class ContactsService {
    * TODO The API should be changed to pass the property names expected by the front end.
    */
   public mapToServerFields(model: ContactModel) {
-
     const serverObject: any = {};
     if (!model) {
       return serverObject;
     }
 
-    serverObject.name =  model.name;
+    serverObject.name = model.name;
     serverObject.entity_type = model.entity_type;
     serverObject.id = model.id;
     serverObject.street1 = model.street1;
@@ -465,7 +445,7 @@ export class ContactsService {
     serverObject.candCmteId = model.candCmteId;
     serverObject.activeTransactionsCnt = model.activeTransactionsCnt;
     serverObject.deletedDate = model.deletedDate;
-    
+
     return serverObject;
   }
 
@@ -473,11 +453,10 @@ export class ContactsService {
   public mockApplyRestoredContact(response: any) {
     for (const cnt of this.mockRecycleBinArray) {
       response.contacts.push(cnt);
-      response.totalAmount += cnt.transaction_amount;
+      // response.totalAmount += cnt.transaction_amount;
       response.totalContactCount++;
     }
   }
-
 
   /**
    * Some data from the server is formatted for display in the UI.  Users will search
@@ -498,13 +477,11 @@ export class ContactsService {
     }
   }
 
-
   /**
    * This method handles filtering the contacts array and will be replaced
    * by a backend API.
    */
   public mockApplyFilters(response: any, filters: ContactFilterModel) {
-
     if (!response.contacts) {
       return;
     }
@@ -539,7 +516,7 @@ export class ContactsService {
       if (filters.filterStates.length > 0) {
         isFilter = true;
         const fields = ['state'];
-        let filteredStateArray = [];
+        let filteredStateArray: any[] = [];
         for (const state of filters.filterStates) {
           const filtered = this._filterPipe.transform(response.contacts, fields, state);
           filteredStateArray = filteredStateArray.concat(filtered);
@@ -552,7 +529,7 @@ export class ContactsService {
       if (filters.filterTypes.length > 0) {
         isFilter = true;
         const fields = ['type'];
-        let filteredTypeArray = [];
+        let filteredTypeArray: any[] = [];
         for (const type of filters.filterTypes) {
           const filtered = this._filterPipe.transform(response.contacts, fields, type);
           filteredTypeArray = filteredTypeArray.concat(filtered);
@@ -587,8 +564,8 @@ export class ContactsService {
 
   private getDateMMDDYYYYformat(dateValue: Date): Date {
     var utc = new Date(dateValue.getUTCFullYear(), dateValue.getUTCMonth() + 1, dateValue.getUTCDate());
-    utc.setUTCHours(0,0,0,0);
-    return utc
+    utc.setUTCHours(0, 0, 0, 0);
+    return utc;
   }
 
   /**
@@ -599,19 +576,18 @@ export class ContactsService {
    */
   public sortContacts(array: any, sortColumnName: string, descending: boolean) {
     const direction = descending ? -1 : 1;
-    this._orderByPipe.transform(array, {property: sortColumnName, direction: direction});
+    this._orderByPipe.transform(array, { property: sortColumnName, direction: direction });
     return array;
   }
 
-
   /**
    * Get transaction category types
-   * 
+   *
    * @param formType
    */
   public getContactCategories(formType: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     let url = '';
     let params = new HttpParams();
 
@@ -622,14 +598,10 @@ export class ContactsService {
 
     params = params.append('form_type', `F${formType}`);
 
-    return this._http
-       .get(
-          `${environment.apiUrl}${url}`,
-          {
-            params,
-            headers: httpOptions
-          }
-       );
+    return this._http.get(`${environment.apiUrl}${url}`, {
+      params,
+      headers: httpOptions,
+    });
   }
 
   public getStates(): Observable<any> {
@@ -642,10 +614,10 @@ export class ContactsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(`${environment.apiUrl}${url}`, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
-  
+
   public getTypes(): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url = '/core/get_entityTypes';
@@ -655,7 +627,7 @@ export class ContactsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(`${environment.apiUrl}${url}`, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
 
@@ -684,17 +656,16 @@ export class ContactsService {
     return t1;
   }
 
-     /**
-    * Trash or restore tranactions to/from the Recycling Bin.
-    * 
-    * @param action the action to be applied to the contacts (e.g. trash, restore)
-    * @param reportId the unique identifier for the Report
-    * @param contacts the contacts to trash or restore
-    */
-   public trashOrRestoreContacts(action: string, contacts: Array<ContactModel>) {
-
+  /**
+   * Trash or restore tranactions to/from the Recycling Bin.
+   *
+   * @param action the action to be applied to the contacts (e.g. trash, restore)
+   * @param reportId the unique identifier for the Report
+   * @param contacts the contacts to trash or restore
+   */
+  public trashOrRestoreContacts(action: string, contacts: Array<ContactModel>) {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/core/trash_restore_contact';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -705,30 +676,24 @@ export class ContactsService {
     for (const cnt of contacts) {
       actions.push({
         action: action,
-        id: cnt.id
+        id: cnt.id,
       });
     }
     request.actions = actions;
 
-    return this._http
-    .put(
-      `${environment.apiUrl}${url}`,
-      request,
-      {
-        headers: httpOptions
-      }
-    )
-    .pipe(map(res => {
-        if (res) {
-          //console.log('Trash Restore response: ', res);
-          return res;
-        }
-        return false;
-    }));
+    return this._http.put(`${environment.apiUrl}${url}`, request, {
+      headers: httpOptions,
+    });
+    // .pipe(map(res => {
+    //     if (res) {
+    //       //console.log('Trash Restore response: ', res);
+    //       return res;
+    //     }
+    //     return false;
+    // }));
+  }
 
-   }
-
-    /**
+  /**
    * Gets the schedule after submitted.
    *
    * @param      {string}  formType  The form type
@@ -745,12 +710,12 @@ export class ContactsService {
     return this._http.get(url, {
       headers: httpOptions,
       params: {
-        report_id: receipt.report_id
-      }
+        report_id: receipt.report_id,
+      },
     });
   }
 
-   /**
+  /**
    * Saves a schedule.
    *
    * @param      {string}           formType  The form type
@@ -767,45 +732,48 @@ export class ContactsService {
     }*/
 
     //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`));
-    const contact: any = JSON.parse(localStorage.getItem(`contactObj`));
+    const contactString: string | null = localStorage.getItem(`contactObj`);
     const formData: FormData = new FormData();
     let httpOptions = new HttpHeaders();
 
-    httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
-    for (const [key, value] of Object.entries(contact)) {
-      if (value !== null) {
-        if (typeof value === 'string') {
-          formData.append(key, value);
+    if (contactString) {
+      const contact: any = JSON.parse(contactString);
 
-          if(key === 'office_Sought') {
-            formData.append('candOffice', value.toString());
+      httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
+      for (const [key, value] of Object.entries(contact)) {
+        if (value !== null) {
+          if (typeof value === 'string') {
+            formData.append(key, value);
+  
+            if (key === 'office_Sought') {
+              formData.append('candOffice', value.toString());
+            }
+  
+            if (key === 'Office_State') {
+              formData.append('candOfficeState', value.toString());
+            }
+  
+            if (key === 'candidate_id') {
+              formData.append('candCmteId', value.toString());
+            }
+  
+            if (key === 'Prefix') {
+              formData.append('prefix', value.toString());
+            }
+          } else if (key === 'phone_number') {
+            formData.append(key, String(value));
           }
-
-          if(key === 'Office_State') {
-            formData.append('candOfficeState', value.toString());
-          }
-
-          if(key === 'candidate_id') {
-            formData.append('candCmteId', value.toString());
-          }
-
-          if(key === 'Prefix') {
-            formData.append('prefix', value.toString());
-          }
-
-        }else if(key === 'phone_number') {
-          formData.append(key, value.toString());
         }
       }
     }
 
-    if (scheduleAction === ContactActions.add) {
+    if (contactString && scheduleAction === ContactActions.add) {
       return this._http
         .post(`${environment.apiUrl}${url}`, formData, {
-          headers: httpOptions
+          headers: httpOptions,
         })
         .pipe(
-          map(res => {
+          map((res) => {
             if (res) {
               //console.log(" saveContact called res...!", res);
               return res;
@@ -813,14 +781,14 @@ export class ContactsService {
             return false;
           })
         );
-    } else if (scheduleAction === ContactActions.edit) {
+    } else if (contactString && scheduleAction === ContactActions.edit) {
       //console.log(" editContact formData...!", formData);
       return this._http
         .put(`${environment.apiUrl}${url}`, formData, {
-          headers: httpOptions
+          headers: httpOptions,
         })
         .pipe(
-          map(res => {
+          map((res) => {
             if (res) {
               //console.log(" editContact called res...!", res);
               return res;
@@ -829,6 +797,7 @@ export class ContactsService {
           })
         );
     } else {
+      return of(null);
     }
   }
 
@@ -843,11 +812,10 @@ export class ContactsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(url, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
-  
-  
+
   public deleteRecycleBinContact(contacts: Array<ContactModel>): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     let httpOptions = new HttpHeaders();
@@ -860,70 +828,66 @@ export class ContactsService {
     const actions = [];
     for (const con of contacts) {
       actions.push({
-        id: con.id
+        id: con.id,
       });
     }
     request.actions = actions;
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
-     .map(res => {
-          return false;
-        });
+      .pipe(map((res) => {
+        return false;
+      }));
   }
 
   public getContactDetails(entityId: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    const url =  `${environment.apiUrl}/core/contactReportDetails`;
+    const url = `${environment.apiUrl}/core/contactReportDetails`;
     let httpOptions = new HttpHeaders();
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
     let params = new HttpParams();
     params = params.append('entity_id', entityId);
-    return this._http.get(
-        url, {params, headers: httpOptions});
+    return this._http.get(url, { params, headers: httpOptions });
   }
 
   public getContactLog(entityId: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    const url =  `${environment.apiUrl}/core/contactLogs`;
+    const url = `${environment.apiUrl}/core/contactLogs`;
     let httpOptions = new HttpHeaders();
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
     let params = new HttpParams();
     params = params.append('entity_id', entityId);
-    return this._http.get(
-        url, {params, headers: httpOptions});
+    return this._http.get(url, { params, headers: httpOptions });
   }
 
   public updateNotes(entityId: string, notes: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    const url =  `${environment.apiUrl}/core/contact_notes`;
+    const url = `${environment.apiUrl}/core/contact_notes`;
     let httpOptions = new HttpHeaders();
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
     const request = {
-      'entity_id' : entityId,
-      'notes': notes,
+      entity_id: entityId,
+      notes: notes,
     };
     return this._http
-        .post(url, request, {
-          headers: httpOptions
+      .post(url, request, {
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res) => {
+          if (res) {
+            return res;
+          }
+          return false;
         })
-        .pipe(
-            map(res => {
-              if (res) {
-                return res;
-              }
-              return false;
-            })
-        );
+      );
   }
-
 }
-

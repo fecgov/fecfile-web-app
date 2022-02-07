@@ -6,12 +6,13 @@ describe('ConsentModalComponent', () => {
   let component: ConsentModalComponent;
   let fixture: ComponentFixture<ConsentModalComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ConsentModalComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ConsentModalComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConsentModalComponent);
