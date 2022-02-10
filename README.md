@@ -22,12 +22,14 @@ Software necessary to run the application locally
 * [Docker Compose](https://docs.docker.com/compose/install/)
 
 ### Docker basic usage.
-When running docker-compose you will need to be in the root directory of the project. The reason for this is that docker-compose looks for docker-compose.yml to be in the same directory where it's run. You will also need at least 3GB of memory allocated for docker during the build. 
+When running docker-compose you will need to be in the root directory of the project. The reason for this is that docker-compose looks for docker-compose.yml to be in the same directory where it's run. You will also need at least 3GB of memory allocated for docker during the build.
+
+A Snyk authentication token is needed and should be set as the SNYK_AUTH_TOKEN environment varialbe.  This is needed so that the `snyk protect` command can be run to apply security patches to package dependencies.  You can setup a free account with [Snyk](https://app.snyk.io/) and obtain a token on the Snyk [Account Settings](https://app.snyk.io/account) page. 
 
 ### Run the front-end application
-`docker-compose up -d`
+`docker-compose up --build`
 ### Shut down the containers
-`docker-compose down`
+Ctrl-c in the terminal where you ran docker-compose up or `docker-compose down`
 ### see all running containers
 `docker ps`
 ### running commands in a running container

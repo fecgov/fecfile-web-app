@@ -6,6 +6,8 @@ services:
     build:
       context: './front-end'
       dockerfile: './build-scripts/Dockerfile'
+      args:
+        - SNYK_AUTH_TOKEN
     image: fecfile-web
     container_name: fecfile-web
     restart: always
