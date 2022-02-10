@@ -12,7 +12,7 @@ import { FormGroup } from '@angular/forms';
         const control = formGroup.controls[controlName];
         const matchingControl = formGroup.controls[matchingControlName];
 
-        if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+        if (matchingControl.errors && !matchingControl.errors['mustMatch']) {
             // return if another validator has already found an error on the matchingControl
             return;
         }

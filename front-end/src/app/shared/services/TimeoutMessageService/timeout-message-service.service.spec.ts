@@ -5,7 +5,7 @@ import { TimeoutMessageService } from './timeout-message-service.service';
 describe('TimeoutMessageServiceService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TimeoutMessageService]
+      providers: [TimeoutMessageService],
     });
   });
 

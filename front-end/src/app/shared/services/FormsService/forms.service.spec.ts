@@ -6,13 +6,8 @@ import { FormsService } from './forms.service';
 describe('FormsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [
-        FormsService,
-        CookieService
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [FormsService, CookieService],
     });
   });
 

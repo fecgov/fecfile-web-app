@@ -12,7 +12,7 @@ import { SignAndSubmitComponent } from './partials/sign-and-submit/sign-and-subm
 import { SubTransactionsTableComponent } from './components/sub-transactions-table/sub-transactions-table.component';
 import { UtilService } from './utils/util.service';
 import { OrderByPipe } from 'ngx-pipes';
-import { ModalModule } from 'ngx-bootstrap';
+// import { ModalModule } from 'ngx-bootstrap';
 import { InputModalComponent } from './partials/input-modal/input-modal.component';
 import { ExportDirective } from './directives/export.directive';
 import { ReportTypeSidebarComponent } from '../forms/form-3x/report-type-sidebar/report-type-sidebar.component';
@@ -45,7 +45,7 @@ import { SpinnerComponent } from './partials/spinner/spinner.component';
     FormsModule,
     ReactiveFormsModule,
     NgxPaginationModule,
-    ModalModule,
+    // ModalModule,
     StepsComponent,
     ReportTypeSidebarComponent,
     SignAndSubmitComponent,

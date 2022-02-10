@@ -6,12 +6,13 @@ describe('FinancialSummaryComponent', () => {
   let component: FinancialSummaryComponent;
   let fixture: ComponentFixture<FinancialSummaryComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ FinancialSummaryComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [FinancialSummaryComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FinancialSummaryComponent);

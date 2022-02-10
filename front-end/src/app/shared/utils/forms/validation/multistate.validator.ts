@@ -19,7 +19,7 @@ export class MultiStateValidator {
         if (array && array.length < minStatesToBeSelected) {
             return { minStates: true };
           }
-          return null;
+          return {};
         }
     };
 }

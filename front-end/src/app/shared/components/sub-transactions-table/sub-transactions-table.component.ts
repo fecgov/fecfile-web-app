@@ -17,21 +17,21 @@ import { DialogService } from '../../services/DialogService/dialog.service';
 })
 export class SubTransactionsTableComponent implements OnInit, OnChanges {
   @Input()
-  public formType: string;
+  public formType!: string;
 
   @Input()
-  public subTransactionsTableType: string;
+  public subTransactionsTableType!: string;
 
   @Input()
-  public subTransactions: any[];
+  public subTransactions!: any[];
 
   @Input()
-  public returnToDebtSummary: boolean;
+  public returnToDebtSummary!: boolean;
 
   @Input()
-  public returnToDebtSummaryInfo: any;
+  public returnToDebtSummaryInfo!: any;
 
-  public transactionsModel: Array<TransactionModel>;
+  public transactionsModel!: Array<TransactionModel>;
 
   public constructor(
     private _transactionsMessageService: TransactionsMessageService,
@@ -158,7 +158,7 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
   public trashTransaction(trx: TransactionModel): void {
     this._dialogService
       .confirm('You are about to delete this transaction ' + trx.transactionId + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res) => {
         if (res === 'okay') {
           const reportId = this._receiptService.getReportIdFromStorage(this.formType);
           this._transactionsService
@@ -190,7 +190,7 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
 
   private _getSubTransactions(reportId: string, transactionId: string, apiCall: string): void {
     this.transactionsModel = [];
-    this._receiptService.getDataSchedule(reportId, transactionId, apiCall).subscribe(res => {
+    this._receiptService.getDataSchedule(reportId, transactionId, apiCall).subscribe((res) => {
       if (Array.isArray(res)) {
         for (const trx of res) {
           if (trx.hasOwnProperty('transaction_id')) {
@@ -224,7 +224,7 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
     if (this.returnToDebtSummary) {
       const debtSummary = {
         returnToDebtSummary: this.returnToDebtSummary,
-        returnToDebtSummaryInfo: this.returnToDebtSummaryInfo
+        returnToDebtSummaryInfo: this.returnToDebtSummaryInfo,
       };
       this._transactionsMessageService.sendEditDebtSummaryTransactionMessage({ trx: trx, debtSummary: debtSummary });
     } else {

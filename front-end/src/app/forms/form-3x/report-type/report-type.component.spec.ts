@@ -9,19 +9,14 @@ describe('ReportTypeComponent', () => {
   let component: ReportTypeComponent;
   let fixture: ComponentFixture<ReportTypeComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        FormsModule,
-        RouterTestingModule,
-        CollapseModule,
-        ReactiveFormsModule
-      ],
-      declarations: [ ReportTypeComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, FormsModule, RouterTestingModule, CollapseModule, ReactiveFormsModule],
+        declarations: [ReportTypeComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ReportTypeComponent);

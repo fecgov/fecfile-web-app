@@ -4,10 +4,10 @@ import { ChangeDetectorRef, Component, Input, OnInit, ViewEncapsulation } from '
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTooltipConfig, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
-import { Observable, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { ContactsService } from 'src/app/contacts/service/contacts.service';
-import { ReportsService } from 'src/app/reports/service/report.service';
+import { Observable, Subject, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
+import { ContactsService } from '../../../../contacts/service/contacts.service';
+import { ReportsService } from '../../../../reports/service/report.service';
 import { AuthService } from '../../../../shared/services/AuthService/auth.service';
 import { FormsService } from '../../../../shared/services/FormsService/forms.service';
 import { MessageService } from '../../../../shared/services/MessageService/message.service';
@@ -32,40 +32,39 @@ import { ScheduleActions } from './../../individual-receipt/schedule-actions.enu
   templateUrl: './sched-e.component.html',
   styleUrls: ['./sched-e.component.scss'],
   providers: [NgbTooltipConfig, CurrencyPipe, DecimalPipe],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class SchedEComponent extends IndividualReceiptComponent implements OnInit {
-
-
-  @Input() transactionData: any;
-  @Input() transactionDataForChild: any;
+  // @Input() transactionData: any;
+  // @Input() transactionDataForChild: any;
   @Input() parentTransactionModel: any;
 
-  public addByDissemination : boolean = false;
+  public addByDissemination: boolean = false;
 
   public hideCandidateState = false;
   public coverageStartDate = '';
   public coverageEndDate = '';
-  private _currentAggregate = null;
-  private _reportId;
+  private _currentAggregate: any = null;
+  private _reportId: any;
   public displayCandStateField = false;
   private _minStateSelectionForMultistate = 6;
-  
 
   public supportOpposeTypes = [
-    { 'code': 'S', 'description': 'Support' },
-    { 'code': 'O', 'description': 'Oppose' }
+    { code: 'S', description: 'Support' },
+    { code: 'O', description: 'Oppose' },
   ];
 
-  private prepopulatedMemoText = 'Multistate independent expenditure, publicly distributed or disseminated in the following states: ';
-  public selectedStates: string;
+  private prepopulatedMemoText =
+    'Multistate independent expenditure, publicly distributed or disseminated in the following states: ';
+  public selectedStates!: string;
   private multistateMemoTextDelimiter = ' - ';
 
   private _schedEonDestroy$ = new Subject();
   _originalExpenditureAggregate: any;
   _originalExpenditureAmount: any;
 
-  constructor(_http: HttpClient,
+  constructor(
+    _http: HttpClient,
     _fb: FormBuilder,
     _formService: FormsService,
     _receiptService: IndividualReceiptService,
@@ -89,7 +88,7 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
     private _changeDetector: ChangeDetectorRef,
     private _schedEService: SchedEService,
     _schedHMessageServiceService: SchedHMessageServiceService,
-     _authService: AuthService,
+    _authService: AuthService
   ) {
     super(
       _http,
@@ -113,97 +112,107 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
       _transactionsService,
       _reportsService,
       _schedHMessageServiceService,
-      _authService,
+      _authService
     );
 
-    _messageService.getMessage().takeUntil(this._schedEonDestroy$).subscribe(message => {
-      if (message && message.parentFormPopulated && message.component === this.abstractScheduleComponent) {
-        this.populateChildData();
-      }
-      else if(message && message.action === 'forceUpdateSchedEScheduleAction' && message.scheduleAction){
-        this.scheduleAction = message.scheduleAction;
-      }
-    });
+    _messageService
+      .getMessage()
+      .pipe(takeUntil(this._schedEonDestroy$))
+      .subscribe((message) => {
+        if (message && message.parentFormPopulated && message.component === this.abstractScheduleComponent) {
+          this.populateChildData();
+        } else if (message && message.action === 'forceUpdateSchedEScheduleAction' && message.scheduleAction) {
+          this.scheduleAction = message.scheduleAction;
+        }
+      });
 
-    _messageService.getPopulateChildComponentMessage().takeUntil(this._schedEonDestroy$).subscribe(message => {
-      if (message && message.populateChildForEdit && message.transactionData && message.component === this.abstractScheduleComponent) {
-        this.populateFormForEdit(message.transactionData);
-      }
-    });
+    _messageService
+      .getPopulateChildComponentMessage()
+      .pipe(takeUntil(this._schedEonDestroy$))
+      .subscribe((message) => {
+        if (
+          message &&
+          message.populateChildForEdit &&
+          message.transactionData &&
+          message.component === this.abstractScheduleComponent
+        ) {
+          this.populateFormForEdit(message.transactionData);
+        }
+      });
 
-    _messageService.getRollbackChangesMessage().takeUntil(this._schedEonDestroy$).subscribe(message => {
-      if (message && message.rollbackChanges) {
-        this.rollbackIfSaveFailed();
-      }
-    })
+    _messageService
+      .getRollbackChangesMessage()
+      .pipe(takeUntil(this._schedEonDestroy$))
+      .subscribe((message) => {
+        if (message && message.rollbackChanges) {
+          this.rollbackIfSaveFailed();
+        }
+      });
   }
 
   get electionCode() {
     if (this.frmIndividualReceipt && this.frmIndividualReceipt.get('election_code')) {
-      return this.frmIndividualReceipt.get('election_code').value;
+      return this.frmIndividualReceipt.get('election_code')?.value;
     }
     return null;
   }
 
   get electionYear() {
     if (this.frmIndividualReceipt && this.frmIndividualReceipt.get('cand_election_year')) {
-      return this.frmIndividualReceipt.get('cand_election_year').value;
+      return this.frmIndividualReceipt.get('cand_election_year')?.value;
     }
     return null;
   }
 
   get officeSought() {
     if (this.frmIndividualReceipt && this.frmIndividualReceipt.get('cand_office')) {
-      return this.frmIndividualReceipt.get('cand_office').value;
+      return this.frmIndividualReceipt.get('cand_office')?.value;
     }
     return null;
   }
 
-  get disseminationDate(){
+  get disseminationDate() {
     if (this.frmIndividualReceipt && this.frmIndividualReceipt.get('dissemination_date')) {
-      return this.frmIndividualReceipt.get('dissemination_date').value;
+      return this.frmIndividualReceipt.get('dissemination_date')?.value;
     }
     return null;
   }
 
-  get disbursementDate(){
+  get disbursementDate() {
     if (this.frmIndividualReceipt && this.frmIndividualReceipt.get('disbursement_date')) {
-      return this.frmIndividualReceipt.get('disbursement_date').value;
+      return this.frmIndividualReceipt.get('disbursement_date')?.value;
     }
     return null;
   }
 
-
-  public ngOnInit() {
+  public override ngOnInit() {
     this.loaded = false;
     this.formFieldsPrePopulated = true;
-    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
+    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
     this._parentTransactionModel = this.parentTransactionModel;
     super.ngOnInit();
     this.abstractScheduleComponent = AbstractScheduleParentEnum.schedEComponent;
-    this._reportId = this._activatedRoute.snapshot.queryParams.reportId;
-    if(this.formType !== '24' && this._reportId){
-      this._reportsService.getCoverageDates(this._reportId).subscribe(res => {
+    this._reportId = this._activatedRoute.snapshot.queryParams['reportId'];
+    if (this.formType !== '24' && this._reportId) {
+      this._reportsService.getCoverageDates(this._reportId).subscribe((res) => {
         if (res) {
           this.coverageStartDate = this._utilService.formatDate(res.cvg_start_date);
           this.coverageEndDate = this._utilService.formatDate(res.cvg_end_date);
         }
       });
+    } else if (this.formType === 'F24') {
     }
-    else if(this.formType === 'F24'){}
-
   }
 
-  public ngOnDestroy(): void {
+  public override ngOnDestroy(): void {
     this._schedEonDestroy$.next(true);
     super.ngOnDestroy();
   }
 
-  public toggleDissemination(){
-    if(!this.addByDissemination){
+  public toggleDissemination() {
+    if (!this.addByDissemination) {
       this.addIeByDissemination();
-    }
-    else{
+    } else {
       this.addIeByDisbursement();
     }
     this.addByDissemination = !this.addByDissemination;
@@ -215,49 +224,53 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
     this.frmIndividualReceipt.controls['disbursement_date'].clearValidators();
     this.frmIndividualReceipt.controls['disbursement_date'].updateValueAndValidity();
 
-    this._receiptService.getReportIdByTransactionDate(this._utilService.formatDate(this.disseminationDate)).subscribe(res => {
-      if (res) {
-        if (res.reportId) {
-          if (res.status && res.status !== 'Filed') {
-            let elementName = 'associated_report_id';
-              let field = this.hiddenFields.find(element => element.name === elementName);
+    this._receiptService
+      .getReportIdByTransactionDate(this._utilService.formatDate(this.disseminationDate))
+      .subscribe((res) => {
+        if (res) {
+          if (res.reportId) {
+            if (res.status && res.status !== 'Filed') {
+              let elementName = 'associated_report_id';
+              let field = this.hiddenFields.find((element: any) => element.name === elementName);
               if (field) {
                 field.value = res.reportId.toString();
-              }
-              else {
+              } else {
                 this.hiddenFields.push({ type: 'hidden', name: elementName, value: res.reportId.toString() });
               }
-          }
-          else if (res.status && res.status === 'Filed') {
-            this.frmIndividualReceipt.controls['dissemination_date'].setErrors({ reportFiled: true });
+            } else if (res.status && res.status === 'Filed') {
+              this.frmIndividualReceipt.controls['dissemination_date'].setErrors({ reportFiled: true });
+            }
+          } else {
+            this.frmIndividualReceipt.controls['dissemination_date'].setErrors({ reportNotFound: true });
           }
         }
-        else {
-          this.frmIndividualReceipt.controls['dissemination_date'].setErrors({ reportNotFound: true });
-        }
-      }
-    })
-  } 
+      });
+  }
 
   public addIeByDisbursement() {
-
     this.frmIndividualReceipt.controls['disbursement_date'].clearValidators();
-    this.frmIndividualReceipt.controls['disbursement_date'].setValidators([Validators.required, this._contributionDateValidator.contributionDate(this.coverageStartDate, this.coverageEndDate)]);
+    this.frmIndividualReceipt.controls['disbursement_date'].setValidators([
+      Validators.required,
+      this._contributionDateValidator.contributionDate(this.coverageStartDate, this.coverageEndDate),
+    ]);
     this.frmIndividualReceipt.controls['disbursement_date'].updateValueAndValidity();
 
     this.frmIndividualReceipt.controls['dissemination_date'].setErrors(null);
     let elementName = 'associated_report_id';
-    this.hiddenFields = this.hiddenFields.filter(element => element.name !== elementName);
+    this.hiddenFields = this.hiddenFields.filter((element: any) => element.name !== elementName);
   }
 
   /**Add any child specific initializations, validators here */
   private populateChildData() {
-    if(this.formType !== '24'){
+    if (this.formType !== '24') {
       if (this.frmIndividualReceipt.controls['disbursement_date']) {
         if (this.memoCode) {
           this.frmIndividualReceipt.controls['disbursement_date'].setValidators([Validators.required]);
         } else {
-          this.frmIndividualReceipt.controls['disbursement_date'].setValidators([this._contributionDateValidator.contributionDate(this.coverageStartDate, this.coverageEndDate), Validators.required]);
+          this.frmIndividualReceipt.controls['disbursement_date'].setValidators([
+            this._contributionDateValidator.contributionDate(this.coverageStartDate, this.coverageEndDate),
+            Validators.required,
+          ]);
         }
         this.frmIndividualReceipt.controls['disbursement_date'].updateValueAndValidity();
       }
@@ -268,18 +281,20 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
       this.frmIndividualReceipt.controls['election_other_description'].updateValueAndValidity();
     }
 
-    if(!this.entityTypes || (this.entityTypes && this.entityTypes.length === 0)){
-      this.entityTypes = [{ entityType: "ORG", entityTypeDescription: "Organization", group: "org-group"}, { entityType: "IND", entityTypeDescription: "Individual", group: "ind-group"}];
+    if (!this.entityTypes || (this.entityTypes && this.entityTypes.length === 0)) {
+      this.entityTypes = [
+        { entityType: 'ORG', entityTypeDescription: 'Organization', group: 'org-group' },
+        { entityType: 'IND', entityTypeDescription: 'Individual', group: 'ind-group' },
+      ];
     }
-    
+
     //TODO -- currently for some of the forms api is sending entityTypes as null. Setting it here based on transaction type until that is fixed
     if (this.transactionType === 'IE_CC_PAY' || this.transactionType === 'IE_PMT_TO_PROL') {
-      let entityItem = { entityType: "ORG", entityTypeDescription: "Organization", group: "org-group", selected: true };
+      let entityItem = { entityType: 'ORG', entityTypeDescription: 'Organization', group: 'org-group', selected: true };
       this.handleEntityTypeChange(entityItem);
       this.selectedEntityType = entityItem;
-    }
-    else if (this.transactionType === 'IE_STAF_REIM' || this.transactionType === 'IE_PMT_TO_PROL_MEMO') {
-      let entityItem = { entityType: "IND", entityTypeDescription: "Individual", group: "ind-group", selected: true };
+    } else if (this.transactionType === 'IE_STAF_REIM' || this.transactionType === 'IE_PMT_TO_PROL_MEMO') {
+      let entityItem = { entityType: 'IND', entityTypeDescription: 'Individual', group: 'ind-group', selected: true };
       this.handleEntityTypeChange(entityItem);
       this.selectedEntityType = entityItem;
     }
@@ -288,57 +303,106 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
     // let candOfficeTypes = this._utilService.deepClone(this.candidateOfficeTypes);
     if (this.transactionType === 'IE_MULTI') {
       this.frmIndividualReceipt.patchValue({ memo_text_states: this.prepopulatedMemoText }, { onlySelf: true });
-      this.candOfficeStatesByTransactionType = this.candidateOfficeTypes.filter(element => element.code === 'P');
+      this.candOfficeStatesByTransactionType = this.candidateOfficeTypes.filter((element: any) => element.code === 'P');
       this.displayCandStateField = true;
       if (this.frmIndividualReceipt.controls['cand_office_state']) {
         this.frmIndividualReceipt.controls['cand_office_state'].clearValidators();
-        this.frmIndividualReceipt.controls['cand_office_state'].setValidators([Validators.required, Validators.maxLength(2)]);
+        this.frmIndividualReceipt.controls['cand_office_state'].setValidators([
+          Validators.required,
+          Validators.maxLength(2),
+        ]);
       }
       if (this.frmIndividualReceipt.controls['cand_office_district']) {
         this.frmIndividualReceipt.controls['cand_office_district'].clearValidators();
       }
       if (this.frmIndividualReceipt.controls['multi_state_options']) {
-        this.frmIndividualReceipt.controls['multi_state_options'].setValidators([this._multistateValidator.multistateSelection(this._minStateSelectionForMultistate), Validators.required]);
+        this.frmIndividualReceipt.controls['multi_state_options'].setValidators([
+          this._multistateValidator.multistateSelection(this._minStateSelectionForMultistate),
+          Validators.required,
+        ]);
       }
       this.frmIndividualReceipt.updateValueAndValidity();
       this._changeDetector.detectChanges();
-    }
-    else {
+    } else {
       this.candOfficeStatesByTransactionType = this.candidateOfficeTypes;
       this._changeDetector.detectChanges();
     }
-    
-    //if memo transaction, populate candidate information 
-    if(this.transactionType.endsWith('_MEMO')){
+
+    //if memo transaction, populate candidate information
+    if (this.transactionType.endsWith('_MEMO')) {
       this.populateCandidateInfoFromParent();
     }
   }
   populateCandidateInfoFromParent() {
-    if(this._parentTransactionModel && this.frmIndividualReceipt){
-      this.frmIndividualReceipt.patchValue({cand_last_name:this._parentTransactionModel.candLastName},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({cand_first_name:this._parentTransactionModel.candFirstName},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({cand_middle_name:this._parentTransactionModel.candMiddleName},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({cand_prefix:this._parentTransactionModel.candPrefix},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({cand_suffix:this._parentTransactionModel.candSuffix},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({cand_last_name:this._parentTransactionModel.candLastName},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({payee_cmte_id:this._parentTransactionModel.candFECId},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({beneficiary_cand_id:this._parentTransactionModel.benificiaryCandId},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({cand_office:this._parentTransactionModel.candOffice},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({cand_office_state:this._parentTransactionModel.candOfficeState},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({cand_office_district:this._parentTransactionModel.candOfficeDistrict},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({cand_election_year:this._parentTransactionModel.candElectionYear},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({support_oppose_code:this._parentTransactionModel.candSupportOpposeFlag},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({election_other_description:this._parentTransactionModel.candElectionOtherDesc},{onlySelf:true});
-      this.frmIndividualReceipt.patchValue({election_code:this._parentTransactionModel.candElectionCode},{onlySelf:true});
+    if (this._parentTransactionModel && this.frmIndividualReceipt) {
+      this.frmIndividualReceipt.patchValue(
+        { cand_last_name: this._parentTransactionModel.candLastName },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { cand_first_name: this._parentTransactionModel.candFirstName },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { cand_middle_name: this._parentTransactionModel.candMiddleName },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { cand_prefix: this._parentTransactionModel.candPrefix },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { cand_suffix: this._parentTransactionModel.candSuffix },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { cand_last_name: this._parentTransactionModel.candLastName },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { payee_cmte_id: this._parentTransactionModel.candFECId },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { beneficiary_cand_id: this._parentTransactionModel.benificiaryCandId },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { cand_office: this._parentTransactionModel.candOffice },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { cand_office_state: this._parentTransactionModel.candOfficeState },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { cand_office_district: this._parentTransactionModel.candOfficeDistrict },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { cand_election_year: this._parentTransactionModel.candElectionYear },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { support_oppose_code: this._parentTransactionModel.candSupportOpposeFlag },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { election_other_description: this._parentTransactionModel.candElectionOtherDesc },
+        { onlySelf: true }
+      );
+      this.frmIndividualReceipt.patchValue(
+        { election_code: this._parentTransactionModel.candElectionCode },
+        { onlySelf: true }
+      );
 
-      if(this._parentTransactionModel.candOffice){
-        if(this._parentTransactionModel.candOffice === 'P'){
+      if (this._parentTransactionModel.candOffice) {
+        if (this._parentTransactionModel.candOffice === 'P') {
           this.frmIndividualReceipt.controls['cand_office_state'].clearValidators();
           this.frmIndividualReceipt.controls['cand_office_state'].updateValueAndValidity();
           this.frmIndividualReceipt.controls['cand_office_district'].clearValidators();
           this.frmIndividualReceipt.controls['cand_office_district'].updateValueAndValidity();
-        }
-        else if(this._parentTransactionModel.candOffice === 'S'){
+        } else if (this._parentTransactionModel.candOffice === 'S') {
           this.frmIndividualReceipt.controls['cand_office_district'].clearValidators();
           this.frmIndividualReceipt.controls['cand_office_district'].updateValueAndValidity();
         }
@@ -360,33 +424,60 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
       this.frmIndividualReceipt.patchValue({ memo_text_states: memoTextStates }, { onlySelf: true });
 
       let statesText = memoTextStates.substring(memoTextStates.indexOf(': ') + 1);
-      statesText = statesText.replace(/\s/g, "");
+      statesText = statesText.replace(/\s/g, '');
       let states = statesText.split(',');
 
       this.frmIndividualReceipt.patchValue({ multi_state_options: states }, { onlySelf: true });
     }
 
-    this.frmIndividualReceipt.patchValue({ expenditure_aggregate: this._decimalPipe.transform(this._convertAmountToNumber(trx.expenditure_aggregate), '.2-2') }, { onlySelf: true })
+    this.frmIndividualReceipt.patchValue(
+      {
+        expenditure_aggregate: this._decimalPipe.transform(
+          this._convertAmountToNumber(trx.expenditure_aggregate),
+          '.2-2'
+        ),
+      },
+      { onlySelf: true }
+    );
     if (this.frmIndividualReceipt.controls['cand_office']) {
       this.updateOfficeSoughtValidations(this.frmIndividualReceipt.controls['cand_office'].value);
     }
     if (this.hiddenFields && this.hiddenFields.length > 0) {
-      this._utilService.addOrEditObjectValueInArray(this.hiddenFields,'hidden','completing_entity_id',trx.completing_entity_id);
-      this._utilService.addOrEditObjectValueInArray(this.hiddenFields,'hidden','payee_entity_id',trx.payee_entity_id);
-      if(trx.mirror_transaction_id){
-        this._utilService.addOrEditObjectValueInArray(this.hiddenFields,'hidden','mirror_transaction_id',trx.mirror_transaction_id);
+      this._utilService.addOrEditObjectValueInArray(
+        this.hiddenFields,
+        'hidden',
+        'completing_entity_id',
+        trx.completing_entity_id
+      );
+      this._utilService.addOrEditObjectValueInArray(
+        this.hiddenFields,
+        'hidden',
+        'payee_entity_id',
+        trx.payee_entity_id
+      );
+      if (trx.mirror_transaction_id) {
+        this._utilService.addOrEditObjectValueInArray(
+          this.hiddenFields,
+          'hidden',
+          'mirror_transaction_id',
+          trx.mirror_transaction_id
+        );
       }
-      if(trx.mirror_report_id){
-        this._utilService.addOrEditObjectValueInArray(this.hiddenFields,'hidden','mirror_report_id',trx.mirror_report_id);
+      if (trx.mirror_report_id) {
+        this._utilService.addOrEditObjectValueInArray(
+          this.hiddenFields,
+          'hidden',
+          'mirror_report_id',
+          trx.mirror_report_id
+        );
       }
     }
 
     this.handleTransactionIfAssociatedByDisseminationDate(trx);
   }
 
-
-  private handleTransactionIfAssociatedByDisseminationDate(trx:any) {
-    if(trx && trx.associatedbydissemination){
+  private handleTransactionIfAssociatedByDisseminationDate(trx: any) {
+    if (trx && trx.associatedbydissemination) {
       this.toggleDissemination();
     }
   }
@@ -401,7 +492,7 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
         return false;
       }
     } else if (colName === 'cand_office_district') {
-      if ((this.officeSought === 'P' || this.officeSought === 'S') || (this.transactionType === 'IE_MULTI')) {
+      if (this.officeSought === 'P' || this.officeSought === 'S' || this.transactionType === 'IE_MULTI') {
         return false;
       }
     }
@@ -409,7 +500,7 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
     return true;
   }
 
-  public handleOfficeSoughtChangeForSchedE($event, col) {
+  public handleOfficeSoughtChangeForSchedE($event: any, col: any) {
     this.updateOfficeSoughtFields($event, col);
   }
 
@@ -431,21 +522,26 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
 
   private updateYTDAmount() {
     // console.log('YTD is being recalculated ...');
-    let currentExpenditureAmount = this._convertAmountToNumber(this.frmIndividualReceipt.controls['expenditure_amount'].value);
-    const currentAggregate = this._convertAmountToNumber(this.frmIndividualReceipt.controls['expenditure_aggregate'].value);
+    let currentExpenditureAmount = this._convertAmountToNumber(
+      this.frmIndividualReceipt.controls['expenditure_amount'].value
+    );
+    const currentAggregate = this._convertAmountToNumber(
+      this.frmIndividualReceipt.controls['expenditure_aggregate'].value
+    );
 
     if (this.scheduleAction === ScheduleActions.edit) {
       let newAggregate = null;
-      const originalAggregationInd = this._utilService.aggregateIndToBool(this._transactionToEdit.aggregation_ind);
+      const originalAggregationInd = this._utilService.aggregateIndToBool(this._transactionToEdit?.aggregation_ind ?? '');
       if (this._transactionToEdit) {
         if (originalAggregationInd === this.isAggregate) {
           // the aggregation indicator is same since initial load
           if (this.isAggregate && originalAggregationInd === true) {
-          // is Aggregated already check if amount changed
+            // is Aggregated already check if amount changed
             if (this._originalExpenditureAmount !== currentExpenditureAmount) {
               // amount has changed since last load
               // recalculate aggregate with new amount
-              newAggregate = this._originalExpenditureAggregate - this._originalExpenditureAmount + currentExpenditureAmount;
+              newAggregate =
+                this._originalExpenditureAggregate - this._originalExpenditureAmount + currentExpenditureAmount;
             } else {
               newAggregate = this._originalExpenditureAggregate;
             }
@@ -463,44 +559,55 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
           if (this.isAggregate && originalAggregationInd === false) {
             // amount was not aggregated during initial load
             // aggregate the amount now
-            newAggregate = currentExpenditureAmount  + this._originalExpenditureAggregate;
+            newAggregate = currentExpenditureAmount + this._originalExpenditureAggregate;
             this.frmIndividualReceipt.patchValue(
-                {expenditure_aggregate: this._decimalPipe.transform(newAggregate, '.2-2')}, {onlySelf: true});
+              { expenditure_aggregate: this._decimalPipe.transform(newAggregate, '.2-2') },
+              { onlySelf: true }
+            );
           } else if (this.isAggregate === false && originalAggregationInd === true) {
             // amount was aggregated during initial load
             // un-aggregate the amount now
-              newAggregate = this._originalExpenditureAggregate - this._originalExpenditureAmount;
+            newAggregate = this._originalExpenditureAggregate - this._originalExpenditureAmount;
           }
         }
-
       }
-      if (newAggregate != null ) {
+      if (newAggregate != null) {
         this.frmIndividualReceipt.patchValue(
-            {expenditure_aggregate: this._decimalPipe.transform(newAggregate, '.2-2')}, {onlySelf: true});
+          { expenditure_aggregate: this._decimalPipe.transform(newAggregate, '.2-2') },
+          { onlySelf: true }
+        );
       }
-    } else  {
-      this._schedEService.getAggregate(this.frmIndividualReceipt.value, this.formType).subscribe(res => {
+    } else {
+      this._schedEService.getAggregate(this.frmIndividualReceipt.value, this.formType).subscribe({
+        next: (res) => {
+          this._currentAggregate = '0';
+          if (!this.isAggregate) {
+            currentExpenditureAmount = 0;
+          }
 
-        this._currentAggregate = '0';
-        if (!this.isAggregate) {
-          currentExpenditureAmount = 0;
+          if (res && res.ytd_amount) {
+            this._currentAggregate = res.ytd_amount;
+          }
+          this.frmIndividualReceipt.patchValue(
+            {
+              expenditure_aggregate: this._decimalPipe.transform(
+                currentExpenditureAmount + this._convertAmountToNumber(this._currentAggregate),
+                '.2-2'
+              ),
+            },
+            { onlySelf: true }
+          );
+        },
+        error: (error) => {
+          this.frmIndividualReceipt.patchValue(
+            {
+              expenditure_aggregate: this._decimalPipe.transform(currentExpenditureAmount, '.2-2'),
+            },
+            { onlySelf: true }
+          );
         }
-
-        if (res && res.ytd_amount) {
-          this._currentAggregate = res.ytd_amount;
-        }
-        this.frmIndividualReceipt.patchValue({
-          expenditure_aggregate:
-            this._decimalPipe.transform(currentExpenditureAmount + this._convertAmountToNumber(this._currentAggregate), '.2-2')
-        }, { onlySelf: true });
-      }, error => {
-        this.frmIndividualReceipt.patchValue({
-          expenditure_aggregate:
-            this._decimalPipe.transform(currentExpenditureAmount, '.2-2')
-        }, { onlySelf: true });
-      });
+        });
     }
-
   }
 
   private _convertAmountToNumber(amount: string) {
@@ -510,7 +617,7 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
     return 0;
   }
 
-  public handleOnBlurEvent($event: any, col: any) {
+  public override handleOnBlurEvent($event: any, col: any) {
     super.handleOnBlurEvent($event, col);
     this.updateYTDAmount();
   }
@@ -530,74 +637,86 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
   private updateOfficeSoughtValidations(office: string) {
     if (office === 'H') {
       this.frmIndividualReceipt.controls['cand_office_state'].clearValidators();
-      this.frmIndividualReceipt.controls['cand_office_state'].setValidators([Validators.required, Validators.maxLength(2)]);
+      this.frmIndividualReceipt.controls['cand_office_state'].setValidators([
+        Validators.required,
+        Validators.maxLength(2),
+      ]);
       this.frmIndividualReceipt.controls['cand_office_district'].clearValidators();
-      this.frmIndividualReceipt.controls['cand_office_district'].setValidators([Validators.required, Validators.maxLength(2)]);
+      this.frmIndividualReceipt.controls['cand_office_district'].setValidators([
+        Validators.required,
+        Validators.maxLength(2),
+      ]);
       this.frmIndividualReceipt.updateValueAndValidity();
-    }
-    else if (office === 'S') {
+    } else if (office === 'S') {
       this.frmIndividualReceipt.controls['cand_office_state'].clearValidators();
-      this.frmIndividualReceipt.controls['cand_office_state'].setValidators([Validators.required, Validators.maxLength(2)]);
+      this.frmIndividualReceipt.controls['cand_office_state'].setValidators([
+        Validators.required,
+        Validators.maxLength(2),
+      ]);
       this.frmIndividualReceipt.controls['cand_office_district'].clearValidators();
       this.frmIndividualReceipt.updateValueAndValidity();
 
       // also clear any district fields
-      this.frmIndividualReceipt.patchValue({ 'cand_office_district': null }, { onlySelf: true });
+      this.frmIndividualReceipt.patchValue({ cand_office_district: null }, { onlySelf: true });
     }
-    //TODO -- below logic is very confusing. try to clean this up . 
+    //TODO -- below logic is very confusing. try to clean this up .
     else if (office === 'P') {
-      if(this.transactionType === 'IE_MULTI' && this.scheduleAction === ScheduleActions.edit) {
+      if (this.transactionType === 'IE_MULTI' && this.scheduleAction === ScheduleActions.edit) {
         this.frmIndividualReceipt.controls['cand_office_district'].clearValidators();
         this.frmIndividualReceipt.updateValueAndValidity();
         // also clear any district fields
-        this.frmIndividualReceipt.patchValue({ 'cand_office_district': null }, { onlySelf: true });
-      }
-
-      else if(this.transactionType === 'IE_MULTI' && this.scheduleAction !== ScheduleActions.edit){
+        this.frmIndividualReceipt.patchValue({ cand_office_district: null }, { onlySelf: true });
+      } else if (this.transactionType === 'IE_MULTI' && this.scheduleAction !== ScheduleActions.edit) {
         // this.frmIndividualReceipt.controls['cand_office_state'].clearValidators();
         this.frmIndividualReceipt.controls['cand_office_district'].clearValidators();
         this.frmIndividualReceipt.updateValueAndValidity();
-        
+
         // also clear any district & state fields
-        this.frmIndividualReceipt.patchValue({ 'cand_office_state': null }, { onlySelf: true });
-        this.frmIndividualReceipt.patchValue({ 'cand_office_district': null }, { onlySelf: true });
-      }
-      else {
+        this.frmIndividualReceipt.patchValue({ cand_office_state: null }, { onlySelf: true });
+        this.frmIndividualReceipt.patchValue({ cand_office_district: null }, { onlySelf: true });
+      } else {
         this.frmIndividualReceipt.controls['cand_office_state'].clearValidators();
         this.frmIndividualReceipt.controls['cand_office_district'].clearValidators();
         this.frmIndividualReceipt.updateValueAndValidity();
-        
+
         // also clear any district & state fields
-        this.frmIndividualReceipt.patchValue({ 'cand_office_state': null }, { onlySelf: true });
-        this.frmIndividualReceipt.patchValue({ 'cand_office_district': null }, { onlySelf: true });
+        this.frmIndividualReceipt.patchValue({ cand_office_state: null }, { onlySelf: true });
+        this.frmIndividualReceipt.patchValue({ cand_office_district: null }, { onlySelf: true });
       }
-     
     }
   }
 
-  public handleSelectedIndividual($event: NgbTypeaheadSelectItemEvent, col: any) {
+  public override handleSelectedIndividual($event: NgbTypeaheadSelectItemEvent, col: any) {
     super.handleSelectedIndividual($event, col);
-    this._utilService.addOrEditObjectValueInArray(this.hiddenFields,'hidden','payee_entity_id',$event.item.entity_id);
+    this._utilService.addOrEditObjectValueInArray(
+      this.hiddenFields,
+      'hidden',
+      'payee_entity_id',
+      $event.item.entity_id
+    );
   }
 
-  public handleSelectedOrg($event: NgbTypeaheadSelectItemEvent, col: any) {
+  public override handleSelectedOrg($event: NgbTypeaheadSelectItemEvent, col: any) {
     super.handleSelectedOrg($event, col);
-    this._utilService.addOrEditObjectValueInArray(this.hiddenFields,'hidden','payee_entity_id',$event.item.entity_id);
+    this._utilService.addOrEditObjectValueInArray(
+      this.hiddenFields,
+      'hidden',
+      'payee_entity_id',
+      $event.item.entity_id
+    );
   }
 
-  public handleSelectedCandidate($event: NgbTypeaheadSelectItemEvent, col: any) {
+  public override handleSelectedCandidate($event: NgbTypeaheadSelectItemEvent, col: any) {
     super.handleSelectedCandidate($event, col);
 
     //also populate election year here since the variable name is different
-    this._utilService.addOrEditObjectValueInArray(this.hiddenFields,'hidden','cand_entity_id',$event.item.entity_id);
+    this._utilService.addOrEditObjectValueInArray(this.hiddenFields, 'hidden', 'cand_entity_id', $event.item.entity_id);
     if ($event && $event.item && $event.item.cand_office) {
       this.updateOfficeSoughtFields({ code: $event.item.cand_office }, col);
     }
   }
 
-
   public handleCompletingSelectedIndividual($event: NgbTypeaheadSelectItemEvent, col: any) {
-
     const entity = $event.item;
     let namePrefix = 'completing_';
     const fieldNames = [];
@@ -608,11 +727,15 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
     fieldNames.push('suffix');
     this._patchFormFields(fieldNames, entity, namePrefix);
 
-    this._utilService.addOrEditObjectValueInArray(this.hiddenFields,'hidden','completing_entity_id',$event.item.entity_id);
+    this._utilService.addOrEditObjectValueInArray(
+      this.hiddenFields,
+      'hidden',
+      'completing_entity_id',
+      $event.item.entity_id
+    );
   }
 
-
-  public handleElectionCodeChange($event: any, col: any) {
+  public override handleElectionCodeChange($event: any, col: any) {
     super.handleElectionCodeChange($event, col);
     this.updateYTDAmount();
   }
@@ -620,56 +743,71 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
   public handleMultiStateChange(statesArray: any[], col: any) {
     this.selectedStates = statesArray.reduce(this._concatenateStates, '');
 
-    this.frmIndividualReceipt.patchValue({ 'memo_text_states': this.prepopulatedMemoText + this.selectedStates }, { onlySelf: true });
+    this.frmIndividualReceipt.patchValue(
+      { memo_text_states: this.prepopulatedMemoText + this.selectedStates },
+      { onlySelf: true }
+    );
   }
 
   private _concatenateStates(currentConcatenatedValue: string, currentState: any) {
     if (currentConcatenatedValue === '') {
       currentConcatenatedValue = currentState.code;
     } else {
-      currentConcatenatedValue = currentConcatenatedValue + ", " + currentState.code;
+      currentConcatenatedValue = currentConcatenatedValue + ', ' + currentState.code;
     }
     return currentConcatenatedValue;
   }
 
-  public dateChange(fieldName: string) {
+  public override dateChange(fieldName: string) {
+    //Remove valdiations from the other date field if one is present
+    if (this.formType !== '24') {
+      if (
+        fieldName === 'disbursement_date' &&
+        this.frmIndividualReceipt.controls[fieldName] &&
+        this.frmIndividualReceipt.controls[fieldName].value
+      ) {
+        this.frmIndividualReceipt.controls['dissemination_date'].clearValidators();
+        this.frmIndividualReceipt.controls['dissemination_date'].updateValueAndValidity();
+      } else if (
+        fieldName === 'dissemination_date' &&
+        this.frmIndividualReceipt.controls[fieldName] &&
+        this.frmIndividualReceipt.controls[fieldName].value
+      ) {
+        this.frmIndividualReceipt.controls['disbursement_date'].clearValidators();
+        this.frmIndividualReceipt.controls['disbursement_date'].setValidators([
+          this._contributionDateValidator.contributionDate(this.coverageStartDate, this.coverageEndDate),
+        ]);
+        this.frmIndividualReceipt.controls['disbursement_date'].updateValueAndValidity();
+      } else if (
+        this.frmIndividualReceipt.controls['dissemination_date'] &&
+        this.frmIndividualReceipt.controls['disbursement_date'] &&
+        !this.frmIndividualReceipt.controls['dissemination_date'].value &&
+        !this.frmIndividualReceipt.controls['disbursement_date'].value
+      ) {
+        this.frmIndividualReceipt.controls['disbursement_date'].setValidators([
+          this._contributionDateValidator.contributionDate(this.coverageStartDate, this.coverageEndDate),
+          Validators.required,
+        ]);
+        this.frmIndividualReceipt.controls['dissemination_date'].setValidators([Validators.required]);
+        this.frmIndividualReceipt.controls['disbursement_date'].updateValueAndValidity();
+        this.frmIndividualReceipt.controls['dissemination_date'].updateValueAndValidity();
+      }
 
-      //Remove valdiations from the other date field if one is present
-      if(this.formType !== '24'){
-        if (fieldName === 'disbursement_date' && this.frmIndividualReceipt.controls[fieldName] && this.frmIndividualReceipt.controls[fieldName].value) {
-          this.frmIndividualReceipt.controls['dissemination_date'].clearValidators();
-          this.frmIndividualReceipt.controls['dissemination_date'].updateValueAndValidity();
-        }
-        else if (fieldName === 'dissemination_date' && this.frmIndividualReceipt.controls[fieldName] && this.frmIndividualReceipt.controls[fieldName].value) {
-          this.frmIndividualReceipt.controls['disbursement_date'].clearValidators();
-          this.frmIndividualReceipt.controls['disbursement_date'].setValidators([this._contributionDateValidator.contributionDate(this.coverageStartDate, this.coverageEndDate)]);
-          this.frmIndividualReceipt.controls['disbursement_date'].updateValueAndValidity();
-        }
-        else if ((this.frmIndividualReceipt.controls['dissemination_date'] && this.frmIndividualReceipt.controls['disbursement_date']) &&
-         (!this.frmIndividualReceipt.controls['dissemination_date'].value && !this.frmIndividualReceipt.controls['disbursement_date'].value)) {
-          this.frmIndividualReceipt.controls['disbursement_date'].setValidators([this._contributionDateValidator.contributionDate(this.coverageStartDate, this.coverageEndDate), Validators.required]);
-          this.frmIndividualReceipt.controls['dissemination_date'].setValidators([Validators.required]);
-          this.frmIndividualReceipt.controls['disbursement_date'].updateValueAndValidity();
-          this.frmIndividualReceipt.controls['dissemination_date'].updateValueAndValidity();
-        }
-
-      if(this.addByDissemination){
-        if(!this.disseminationDate || !this.disbursementDate){
-          if(!this.disseminationDate){
+      if (this.addByDissemination) {
+        if (!this.disseminationDate || !this.disbursementDate) {
+          if (!this.disseminationDate) {
             this.frmIndividualReceipt.controls['dissemination_date'].setErrors({ dateEmpty: true });
           }
-          if(!this.disbursementDate){
+          if (!this.disbursementDate) {
             this.frmIndividualReceipt.controls['disbursement_date'].setErrors({ dateEmpty: true });
           }
-        }
-        else{
+        } else {
           this.addIeByDissemination();
         }
       }
-    }
-    else{
-      if(fieldName === 'dissemination_date'){
-        this.applyValidationByCoverageDate(this.frmIndividualReceipt.controls[fieldName].value,fieldName);
+    } else {
+      if (fieldName === 'dissemination_date') {
+        this.applyValidationByCoverageDate(this.frmIndividualReceipt.controls[fieldName].value, fieldName);
         if (this.frmIndividualReceipt.controls[fieldName] && this.frmIndividualReceipt.controls[fieldName].value) {
           this.frmIndividualReceipt.controls['disbursement_date'].clearValidators();
           this.frmIndividualReceipt.controls['disbursement_date'].updateValueAndValidity();
@@ -681,15 +819,15 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
 
   /**
    * This method will run through the dateChange event on both fields and based on which fields are present
-   * it will update the validators. 
+   * it will update the validators.
    */
-  private updateDateValidators(trx:any) {
+  private updateDateValidators(trx: any) {
     this.dateChange('disbursement_date');
     this.dateChange('dissemination_date');
 
     //if current transaction is a F3X transaction but is a mirror transaction for a F24, then disbursement date doesnt not need
     //coverage validation
-    if(trx.mirror_report_id && trx.mirror_transaction_id && this.formType.endsWith('3X')){
+    if (trx.mirror_report_id && trx.mirror_transaction_id && this.formType.endsWith('3X')) {
       this.frmIndividualReceipt.controls['disbursement_date'].clearValidators();
       this.frmIndividualReceipt.controls['disbursement_date'].setValidators([Validators.required]);
       this.frmIndividualReceipt.controls['disbursement_date'].updateValueAndValidity();
@@ -700,55 +838,57 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
     return amount.toString().replace(new RegExp(',', 'g'), '');
   }
 
-  public viewTransactions() {
+  public override viewTransactions() {
     this.addSchedESpecificMetadata();
     super.viewTransactions();
   }
 
-  public saveOnly() {
+  public override saveOnly() {
     this.addSchedESpecificMetadata();
     super.saveOnly();
     this.rollbackIfSaveFailed();
   }
 
-  public saveOrWarn(){
+  public override saveOrWarn() {
     this.addSchedESpecificMetadata();
     super.saveOrWarn();
   }
 
-  public updateOnly() {
+  public override updateOnly() {
     this.addSchedESpecificMetadata();
     super.updateOnly();
   }
 
-  public saveForAddSub() {
+  public override saveForAddSub() {
     this.addSchedESpecificMetadata();
     super.saveForAddSub();
   }
 
-  public saveAndReturnToParent() {
+  public override saveAndReturnToParent() {
     this.addSchedESpecificMetadata();
     super.saveAndReturnToParent();
   }
 
-  public returnToParent(scheduleAction: ScheduleActions) {
+  public override returnToParent(scheduleAction: ScheduleActions) {
     this.addSchedESpecificMetadata();
     super.returnToParent(scheduleAction);
   }
 
- 
   private addSchedESpecificMetadata() {
-    if(this.hiddenFields && this.electionCode && this.electionYear){
-      this._utilService.addOrEditObjectValueInArray(this.hiddenFields, 'hidden','full_election_code', this.electionCode[0] + this.electionYear);
-
+    if (this.hiddenFields && this.electionCode && this.electionYear) {
+      this._utilService.addOrEditObjectValueInArray(
+        this.hiddenFields,
+        'hidden',
+        'full_election_code',
+        this.electionCode[0] + this.electionYear
+      );
     }
   }
-
 
   private rollbackIfSaveFailed() {
     if (this._rollbackAfterUnsuccessfulSave) {
       if (this.transactionType === 'IE_MULTI') {
-        let originalMemoText = (this.frmIndividualReceipt.controls['memo_text'].value).split('-');
+        let originalMemoText = this.frmIndividualReceipt.controls['memo_text'].value.split('-');
         if (originalMemoText && originalMemoText.length > 1) {
           originalMemoText = originalMemoText[1];
           this.frmIndividualReceipt.patchValue({ memo_text: originalMemoText }, { onlySelf: true });
@@ -757,77 +897,79 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
     }
   }
 
+  /**
+   * Search for Candidate when first name input value changes.
+   */
+  override searchCandLastName = (text$: Observable<string>) => of([]);
+  // NG-UPGRADE-ISSUE
+    // text$.pipe(
+    //   debounceTime(500),
+    //   distinctUntilChanged(),
+    //   switchMap((searchText) => {
+    //     if (searchText) {
+    //       let result = this._typeaheadService.getContacts(searchText, 'cand_last_name');
+    //       if (this.transactionType === 'IE_MULTI') {
+    //         result = result.map((contacts: any) => contacts.filter((element: any) => element.cand_office === 'P'));
+    //       }
+    //       return result;
+    //     } else {
+    //       return of([]);
+    //     }
+    //   })
+    // );
 
   /**
    * Search for Candidate when first name input value changes.
    */
-  searchCandLastName = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(500),
-      distinctUntilChanged(),
-      switchMap(searchText => {
-        if (searchText) {
-          let result = this._typeaheadService.getContacts(searchText, 'cand_last_name');
-          if (this.transactionType === 'IE_MULTI') {
-            result = result.map(contacts => contacts.filter(element => element.cand_office === 'P'))
-          }
-          return result;
-        } else {
-          return Observable.of([]);
-        }
-      })
-    );
-
-  /**
-   * Search for Candidate when first name input value changes.
-   */
-  searchCandFirstName = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(500),
-      distinctUntilChanged(),
-      switchMap(searchText => {
-        if (searchText) {
-          let result = this._typeaheadService.getContacts(searchText, 'cand_first_name');
-          if (this.transactionType === 'IE_MULTI') {
-            result = result.map(contacts => contacts.filter(element => element.cand_office === 'P'))
-          }
-          return result;
-        } else {
-          return Observable.of([]);
-        }
-      })
-    );
+  override searchCandFirstName = (text$: Observable<string>) => of([]);
+  // NG-UPGRADE-ISSUE
+    // text$.pipe(
+    //   debounceTime(500),
+    //   distinctUntilChanged(),
+    //   switchMap((searchText) => {
+    //     if (searchText) {
+    //       let result = this._typeaheadService.getContacts(searchText, 'cand_first_name');
+    //       if (this.transactionType === 'IE_MULTI') {
+    //         result = result.map((contacts) => contacts.filter((element: any) => element.cand_office === 'P'));
+    //       }
+    //       return result;
+    //     } else {
+    //       return Observable.of([]);
+    //     }
+    //   })
+    // );
 
   /**
    * Search for Committee Payees when Committee ID input value changes.
    */
-  searchPayeeCommitteeId = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(500),
-    distinctUntilChanged(),
-    switchMap(searchText => {
-      const searchTextUpper = searchText.toUpperCase();
+  searchPayeeCommitteeId = (text$: Observable<string>) => of([]);
+  // NG-UPGRADE-ISSUE
+    // text$.pipe(
+    //   debounceTime(500),
+    //   distinctUntilChanged(),
+    //   switchMap((searchText) => {
+    //     const searchTextUpper = searchText.toUpperCase();
 
-      if (
-        searchTextUpper === 'C' ||
-        searchTextUpper === 'C0' ||
-        searchTextUpper === 'C00' ||
-        searchTextUpper === 'C000'
-      ) {
-        return Observable.of([]);
-      }
+    //     if (
+    //       searchTextUpper === 'C' ||
+    //       searchTextUpper === 'C0' ||
+    //       searchTextUpper === 'C00' ||
+    //       searchTextUpper === 'C000'
+    //     ) {
+    //       return of([]);
+    //     }
 
-      if (searchText) {
-        let result = this._typeaheadService.getContacts(searchText, 'payee_cmte_id');
-          if (this.transactionType === 'IE_MULTI') {
-            result = result.map(contacts => contacts.filter(element => element.cand_office === 'P'))
-          }
-          return result;
-      } else {
-        return Observable.of([]);
-      }
-    })
-  );
+    //     if (searchText) {
+    //       let result = this._typeaheadService.getContacts(searchText, 'payee_cmte_id');
+    //       if (this.transactionType === 'IE_MULTI') {
+    //         result = result.map((contacts) => contacts.filter((element: any) => element.cand_office === 'P'));
+    //       }
+    //       return result;
+    //     } else {
+    //       return of([]);
+    //     }
+    //   })
+    // );
 
   formatterPayeeCommitteeId = (x: { payee_cmte_id: string }) => {
     if (typeof x !== 'string') {
@@ -837,7 +979,7 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
     }
   };
 
-    /**
+  /**
    * Format a Candidate Entity to display in the Payee Committee ID type ahead.
    *
    * @param result formatted item in the typeahead list
@@ -864,10 +1006,9 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
       ${officeState}, ${officeDistrict}`;
   }
 
-  public toggleAggregation(): void {
+  public override toggleAggregation(): void {
     this.isAggregate = !this.isAggregate;
 
     this.updateYTDAmount();
-
   }
 }

@@ -1,7 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
-import { Injectable , ChangeDetectionStrategy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, identity } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import { UtilService } from '../../../shared/utils/util.service';
@@ -11,7 +11,7 @@ import { TransactionModel } from '../../transactions/model/transaction.model';
 import { DecimalPipe } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class IndividualReceiptService {
   private readonly _memoCodeValue: string = 'X';
@@ -20,7 +20,7 @@ export class IndividualReceiptService {
     private _http: HttpClient,
     private _cookieService: CookieService,
     private _utilService: UtilService,
-    private _decimalPipe: DecimalPipe, 
+    private _decimalPipe: DecimalPipe,
     private _activatedRoute: ActivatedRoute
   ) {
     //console.log();
@@ -45,8 +45,9 @@ export class IndividualReceiptService {
     params = params.append('transaction_type', transactionType);
 
     // H4/H6 require report ID for determining H1/H2 exists
-    if (transactionType === 'ALLOC_EXP_DEBT' || transactionType === 'ALLOC_FEA_DISB_DEBT'
-      ||
+    if (
+      transactionType === 'ALLOC_EXP_DEBT' ||
+      transactionType === 'ALLOC_FEA_DISB_DEBT' ||
       transactionType === 'ALLOC_EXP' ||
       transactionType === 'ALLOC_EXP_CC_PAY' ||
       transactionType === 'ALLOC_EXP_CC_PAY_MEMO' ||
@@ -54,8 +55,7 @@ export class IndividualReceiptService {
       transactionType === 'ALLOC_EXP_STAF_REIM_MEMO' ||
       transactionType === 'ALLOC_EXP_PMT_TO_PROL' ||
       transactionType === 'ALLOC_EXP_PMT_TO_PROL_MEMO' ||
-      transactionType === 'ALLOC_EXP_VOID'
-      ||
+      transactionType === 'ALLOC_EXP_VOID' ||
       transactionType === 'ALLOC_FEA_DISB' ||
       transactionType === 'ALLOC_FEA_CC_PAY' ||
       transactionType === 'ALLOC_FEA_CC_PAY_MEMO' ||
@@ -71,7 +71,7 @@ export class IndividualReceiptService {
 
     return this._http.get(url, {
       headers: httpOptions,
-      params
+      params,
     });
   }
 
@@ -87,7 +87,7 @@ export class IndividualReceiptService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(url, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
 
@@ -97,18 +97,18 @@ export class IndividualReceiptService {
    * @param      {string}           formType  The form type
    * @param      {ScheduleActions}  scheduleAction  The type of action to save (add, edit)
    */
-  public saveSchedule(formType: string, scheduleAction: ScheduleActions, reportId: string = null): Observable<any> {
+  public saveSchedule(formType: string, scheduleAction: ScheduleActions, reportId: string = ''): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     let url: string = '/sa/schedA';
-    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
 
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');
     }
 
-    const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`));
-    const receipt: any = JSON.parse(localStorage.getItem(`form_${formType}_receipt`));
+    const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`) ?? '');
+    const receipt: any = JSON.parse(localStorage.getItem(`form_${formType}_receipt`) ?? '');
     const formData: FormData = new FormData();
 
     let httpOptions = new HttpHeaders();
@@ -127,8 +127,8 @@ export class IndividualReceiptService {
       formData.append('report_id', reportType.reportId);
     } else if (reportType && reportType.hasOwnProperty('reportid')) {
       formData.append('report_id', reportType.reportid);
-    } else if(reportId && reportId !== "0" && reportId !== "undefined"){
-      formData.append('report_id',reportId);
+    } else if (reportId && reportId !== '0' && reportId !== 'undefined') {
+      formData.append('report_id', reportId);
     }
 
     //console.log();
@@ -150,10 +150,10 @@ export class IndividualReceiptService {
     if (scheduleAction === ScheduleActions.add || scheduleAction === ScheduleActions.addSubTransaction) {
       return this._http
         .post(`${environment.apiUrl}${url}`, formData, {
-          headers: httpOptions
+          headers: httpOptions,
         })
         .pipe(
-          map(res => {
+          map((res) => {
             if (res) {
               return res;
             }
@@ -163,10 +163,10 @@ export class IndividualReceiptService {
     } else if (scheduleAction === ScheduleActions.edit) {
       return this._http
         .put(`${environment.apiUrl}${url}`, formData, {
-          headers: httpOptions
+          headers: httpOptions,
         })
         .pipe(
-          map(res => {
+          map((res) => {
             if (res) {
               return res;
             }
@@ -176,6 +176,7 @@ export class IndividualReceiptService {
     } else {
       //console.log('unexpected ScheduleActions received - ' + scheduleAction);
     }
+    return of(null);
   }
 
   /**
@@ -189,15 +190,15 @@ export class IndividualReceiptService {
   public putScheduleA(formType: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url: string = '/sa/schedA';
-    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
 
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');
     }
 
-    const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`));
-    const receipt: any = JSON.parse(localStorage.getItem(`form_${formType}_receipt`));
+    const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`) ?? '');
+    const receipt: any = JSON.parse(localStorage.getItem(`form_${formType}_receipt`) ?? '');
 
     let httpOptions = new HttpHeaders();
     const formData: FormData = new FormData();
@@ -268,10 +269,10 @@ export class IndividualReceiptService {
 
     return this._http
       .put(`${environment.apiUrl}${url}`, formData, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res) => {
           if (res) {
             return res;
           }
@@ -295,7 +296,7 @@ export class IndividualReceiptService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     let params = new HttpParams();
-    if(reportId && reportId !== 'undefined' && reportId !== 'null' && reportId !== '0' && reportId !== ''){
+    if (reportId && reportId !== 'undefined' && reportId !== 'null' && reportId !== '0' && reportId !== '') {
       params = params.append('report_id', reportId);
     }
     if (transactionId) {
@@ -304,7 +305,7 @@ export class IndividualReceiptService {
 
     return this._http.get(url, {
       headers: httpOptions,
-      params: params
+      params: params,
     });
   }
 
@@ -325,8 +326,8 @@ export class IndividualReceiptService {
     return this._http.get(url, {
       headers: httpOptions,
       params: {
-        report_id: receipt.report_id
-      }
+        report_id: receipt.report_id,
+      },
     });
   }
 
@@ -364,7 +365,7 @@ export class IndividualReceiptService {
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
   }
 
@@ -397,7 +398,7 @@ export class IndividualReceiptService {
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
     // let rando = Math.floor(Math.random() * 10000);
     // rando += 0.99;
@@ -413,7 +414,7 @@ export class IndividualReceiptService {
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
-    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
+    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
     // params.append('cmte_id', committeeDetails.committeeid);
     // params.append('activity_event_type', activityEvent);
     params = params.append('calendar_year', new Date().getFullYear().toString());
@@ -424,12 +425,19 @@ export class IndividualReceiptService {
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
   }
 
-  public getFedNonFedPercentage(amount: string, activityEvent: string, activityEventName: string,
-    transactionType: string, reportId: string, transactionId: string, scheduleHBackRefTransactionId?: string): Observable<any> {
+  public getFedNonFedPercentage(
+    amount: string,
+    activityEvent: string,
+    activityEventName: string,
+    transactionType: string,
+    reportId: string,
+    transactionId: string,
+    scheduleHBackRefTransactionId?: string
+  ): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url = '/sh1/get_fed_nonfed_share';
     let httpOptions = new HttpHeaders();
@@ -438,7 +446,7 @@ export class IndividualReceiptService {
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
-    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
+    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
     if (committeeDetails) {
       if (committeeDetails.cmte_type_category) {
         params = params.append('cmte_type_category', committeeDetails.cmte_type_category);
@@ -474,7 +482,7 @@ export class IndividualReceiptService {
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
   }
 
@@ -482,18 +490,21 @@ export class IndividualReceiptService {
    * Obtain the Report ID from local storage.
    */
   public getReportIdFromStorage(formType: string) {
-
     //If the reportId is in current URL queryParams, get it directly from there first
-    if(this._activatedRoute.snapshot && this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams.reportId){
-      return this._activatedRoute.snapshot.queryParams.reportId;
+    if (
+      this._activatedRoute.snapshot &&
+      this._activatedRoute.snapshot.queryParams &&
+      this._activatedRoute.snapshot.queryParams['reportId']
+    ) {
+      return this._activatedRoute.snapshot.queryParams['reportId'];
     }
 
     let reportId = '0';
-    let form3XReportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+    let form3XReportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
     const reportIdFromLocalStorage = localStorage.getItem('reportId');
 
     if (form3XReportType === null || typeof form3XReportType === 'undefined') {
-      form3XReportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`));
+      form3XReportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');
     }
 
     //console.log('viewTransactions form3XReportType', form3XReportType);
@@ -550,21 +561,20 @@ export class IndividualReceiptService {
     selectedEntityAggregate = selectedEntityAggregate ? selectedEntityAggregate : 0;
 
     if (scheduleAction === ScheduleActions.add || scheduleAction === ScheduleActions.addSubTransaction) {
-      aggregate = this._determineAggregateHelper(selectedEntityAggregate, amount,  isAggregate);
-      return this._decimalPipe.transform(aggregate, '.2-2');
+      aggregate = this._determineAggregateHelper(selectedEntityAggregate, amount, isAggregate);
+      return this._decimalPipe.transform(aggregate, '.2-2') ?? '';
     } else if (scheduleAction === ScheduleActions.edit) {
       if (!transactionToEdit) {
-        return this._decimalPipe.transform(aggregate, '.2-2');
+        return this._decimalPipe.transform(aggregate, '.2-2') ?? '';
       }
       // If nothing has changed, show the original.
       const origDate = transactionToEdit.date ? transactionToEdit.date.toString() : null;
       if (transactionDate === origDate) {
-          if (amount === transactionToEdit.amount) {
-              if (isAggregate === this._utilService.aggregateIndToBool (transactionToEdit.aggregation_ind)) {
-                aggregate = transactionToEdit.aggregate;
-                return this._decimalPipe.transform(aggregate, '.2-2');
-              }
-
+        if (amount === transactionToEdit.amount) {
+          if (isAggregate === this._utilService.aggregateIndToBool(transactionToEdit.aggregation_ind)) {
+            aggregate = transactionToEdit.aggregate;
+            return this._decimalPipe.transform(aggregate, '.2-2') ?? '';
+          }
         }
       }
       if (selectedEntity) {
@@ -574,7 +584,7 @@ export class IndividualReceiptService {
             if (transactionDate !== origDate) {
               origAmt = 0;
             }
-            if (this._utilService.aggregateIndToBool (transactionToEdit.aggregation_ind) === false && isAggregate) {
+            if (this._utilService.aggregateIndToBool(transactionToEdit.aggregation_ind) === false && isAggregate) {
               origAmt = 0;
             }
             if (!isAggregate) {
@@ -590,26 +600,22 @@ export class IndividualReceiptService {
             // don't back out the saved amount from aggregate
             // apply new if memo not checked.
 
-            aggregate = this._determineAggregateHelper(selectedEntityAggregate, amount,  isAggregate);
-            return this._decimalPipe.transform(aggregate, '.2-2');
+            aggregate = this._determineAggregateHelper(selectedEntityAggregate, amount, isAggregate);
+            return this._decimalPipe.transform(aggregate, '.2-2') ?? '';
           }
         }
       } else {
         // edit for entity not selected, same as add no entity aggregate to include
-        aggregate = this._determineAggregateHelper(selectedEntityAggregate, amount,  isAggregate);
-        return this._decimalPipe.transform(aggregate, '.2-2');
+        aggregate = this._determineAggregateHelper(selectedEntityAggregate, amount, isAggregate);
+        return this._decimalPipe.transform(aggregate, '.2-2') ?? '';
       }
     } else {
       // some other action
     }
-    return this._decimalPipe.transform(aggregate, '.2-2');
+    return this._decimalPipe.transform(aggregate, '.2-2') ?? '';
   }
 
-  private _determineAggregateHelper(
-    selectedEntityAggregate: number,
-    amount: number,
-    isAggregate: boolean
-  ): number {
+  private _determineAggregateHelper(selectedEntityAggregate: number, amount: number, isAggregate: boolean): number {
     if (isAggregate) {
       return amount + selectedEntityAggregate;
     } else {
@@ -617,12 +623,11 @@ export class IndividualReceiptService {
     }
   }
 
-  public getReportIdByTransactionDate(transactionDate: string) : Observable<any>{
+  public getReportIdByTransactionDate(transactionDate: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url: string = '/sa/get_report_id_from_date';
     let httpOptions = new HttpHeaders();
     let params = new HttpParams();
-
 
     params = params.append('transaction_date', transactionDate);
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -630,16 +635,15 @@ export class IndividualReceiptService {
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
   }
 
-  public getChildMaxAmt(transactionId: string, childTransactionId: string = null): Observable<any> {
+  public getChildMaxAmt(transactionId: string, childTransactionId: string = ''): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url = '/core/get_child_max_transaction_amount';
     let httpOptions = new HttpHeaders();
     let params = new HttpParams();
-
 
     params = params.append('transactionId', transactionId);
     if (childTransactionId) {

@@ -4,19 +4,13 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { SessionService } from './session.service';
 
 describe('SessionService', () => {
-
   let cookieService: CookieService;
   let sessionService: SessionService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [
-        SessionService,
-        CookieService
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [SessionService, CookieService],
     });
   });
 

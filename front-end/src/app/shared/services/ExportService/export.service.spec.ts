@@ -5,7 +5,7 @@ import { ExportService } from './export.service';
 describe('ExportService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ExportService]
+      providers: [ExportService],
     });
   });
 

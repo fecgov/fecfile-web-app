@@ -11,14 +11,8 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [
-        AuthService,
-        SessionService,
-        CookieService
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [AuthService, SessionService, CookieService],
     });
   });
 
@@ -54,5 +48,5 @@ describe('AuthService', () => {
     expect(authService.isSignedIn()).toBeFalsy();
   });
 
-  it('')
+  it('');
 });

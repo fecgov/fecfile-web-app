@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { UtilService } from '../../util.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ContributionDateValidator {
   constructor(private _utilService: UtilService) {}
@@ -35,7 +35,7 @@ export class ContributionDateValidator {
         }
       }
 
-      return null;
+      return {};
     };
   }
 }

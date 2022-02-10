@@ -6,11 +6,11 @@ import { CookieService } from 'ngx-cookie-service';
 import { form99, form3XReport, form99PrintPreviewResponse } from '../../interfaces/FormsService/FormsService';
 import { reportModel } from '../../../reports/model/report.model';
 import { environment } from '../../../../environments/environment';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
-import { ReportFilterModel } from 'src/app/reports/model/report-filter.model';
-import { FilterPipe, FilterTypeEnum } from 'src/app/shared/pipes/filter/filter.pipe';
+import { OrderByPipe } from '../../../shared/pipes/order-by/order-by.pipe';
+import { ReportFilterModel } from '../../../reports/model/report-filter.model';
+import { FilterPipe, FilterTypeEnum } from '../../../shared/pipes/filter/filter.pipe';
 import { DatePipe } from '@angular/common';
-import { ZipCodePipe } from 'src/app/shared/pipes/zip-code/zip-code.pipe';
+import { ZipCodePipe } from '../../../shared/pipes/zip-code/zip-code.pipe';
 // import { RequestOptions } from '@angular/http';
 
 /*export interface GetReportsResponse {
@@ -18,13 +18,13 @@ import { ZipCodePipe } from 'src/app/shared/pipes/zip-code/zip-code.pipe';
 }*/
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FormsService {
   private _orderByPipe: OrderByPipe;
   private _filterPipe: FilterPipe;
-  private _zipCodePipe: ZipCodePipe;
-  private _datePipe: DatePipe;
+  private _zipCodePipe!: ZipCodePipe;
+  private _datePipe!: DatePipe;
   private _stopCanDeactivate: boolean = false;
 
   constructor(private _http: HttpClient, private _cookieService: CookieService) {
@@ -65,7 +65,7 @@ export class FormsService {
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
   }
 
@@ -84,7 +84,7 @@ export class FormsService {
     let data: any = {};
 
     if (form_type === '99') {
-      let form99_details: form99 = JSON.parse(localStorage.getItem('form_99_details'));
+      let form99_details: form99 = JSON.parse(localStorage.getItem('form_99_details') ?? '');
 
       url = '/f99/validate_f99';
 
@@ -100,10 +100,10 @@ export class FormsService {
 
     return this._http
       .post<form99>(`${environment.apiUrl}${url}`, data, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res) => {
           if (res) {
             return true;
           }
@@ -130,7 +130,7 @@ export class FormsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     if (form_type === '99') {
-      let form99_details: form99 = JSON.parse(localStorage.getItem(`form_${form_type}_details`));
+      let form99_details: form99 = JSON.parse(localStorage.getItem(`form_${form_type}_details`) ?? '');
 
       if (file && file.name) {
         fileuploaded = true;
@@ -159,7 +159,12 @@ export class FormsService {
         formData.append('is_submitted', 'False');
         formData.append('filename', form99_details.filename);
         formData.append('form_type', 'F99');
-        if (form99_details.id === '' || form99_details.id === '' || form99_details.id === null || form99_details.id === undefined) {
+        if (
+          form99_details.id === '' ||
+          form99_details.id === '' ||
+          form99_details.id === null ||
+          form99_details.id === undefined
+        ) {
           /*data['id']="0";*/
           formData.append('id', '0');
         } else {
@@ -215,14 +220,14 @@ export class FormsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, data, {
-        headers: httpOptions
+        headers: httpOptions,
       })
 
       .pipe(
-        map(res => {
+        map((res) => {
           if (res) {
             localStorage.setItem('form_99_details_res', JSON.stringify(res));
-            let form99_details_res: form99 = JSON.parse(localStorage.getItem(`form_99_details_res`));
+            let form99_details_res: form99 = JSON.parse(localStorage.getItem(`form_99_details_res`) ?? '');
             id = form99_details_res.id.toString();
 
             org_filename = form99_details_res.filename;
@@ -272,7 +277,7 @@ export class FormsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     if (form_type === '99') {
-      let form99_details: form99 = JSON.parse(localStorage.getItem(`form_${form_type}_details`));
+      let form99_details: form99 = JSON.parse(localStorage.getItem(`form_${form_type}_details`) ?? '');
       formData.append('report_id', form99_details.id);
       if (file && file.name) {
         fileuploaded = true;
@@ -344,7 +349,12 @@ export class FormsService {
         formData.append('is_submitted', 'False');
         /*formData.append('filename', form99_details.filename);*/
         formData.append('form_type', 'F99');
-        if (form99_details.id === '' || form99_details.id === '' || form99_details.id === null || form99_details.id === undefined) {
+        if (
+          form99_details.id === '' ||
+          form99_details.id === '' ||
+          form99_details.id === null ||
+          form99_details.id === undefined
+        ) {
           /*data['id']="0";*/
           formData.append('id', '0');
         } else {
@@ -359,14 +369,14 @@ export class FormsService {
 
     return this._http
       .put(`${environment.apiUrl}${url}`, data, {
-        headers: httpOptions
+        headers: httpOptions,
       })
 
       .pipe(
-        map(res => {
+        map((res) => {
           if (res) {
             localStorage.setItem('form_99_details_res', JSON.stringify(res));
-            let form99_details_res: form99 = JSON.parse(localStorage.getItem(`form_99_details_res`));
+            let form99_details_res: form99 = JSON.parse(localStorage.getItem(`form_99_details_res`) ?? '');
             id = form99_details_res.id.toString();
 
             org_filename = form99_details_res.filename;
@@ -406,7 +416,7 @@ export class FormsService {
    *
    * @return     {Observable}  The result of submitting a form.
    */
-  public submitForm(formObj: any, form_type): Observable<any> {
+  public submitForm(formObj: any, form_type: any): Observable<any> {
     let token: string = JSON.parse(this._cookieService.get('user'));
     let data: any = {};
     let httpOptions = new HttpHeaders();
@@ -416,7 +426,7 @@ export class FormsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     if (form_type === '99') {
-      let form99_details: form99 = JSON.parse(localStorage.getItem('form_99_details'));
+      let form99_details: form99 = JSON.parse(localStorage.getItem('form_99_details') ?? '');
       //let formData: FormData = new FormData();
       data = form99_details;
       data['form_type'] = 'F99';
@@ -425,19 +435,15 @@ export class FormsService {
       data['amend_ind'] = 'N';
       //url = '/f99/submit_comm_info';
       url = '/core/submit_report';
-      
-
-      
 
       console.log('F99 Data : ', data);
-
     }
     return this._http
       .put(`${environment.apiUrl}${url}`, data, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res) => {
           if (res) {
             localStorage.removeItem('form_99_details');
             localStorage.removeItem('form_99_details_res');
@@ -448,7 +454,7 @@ export class FormsService {
       );
   }
 
-  public Signee_SaveForm(formObj: any, form_type): Observable<any> {
+  public Signee_SaveForm(formObj: any, form_type: any): Observable<any> {
     let token: string = JSON.parse(this._cookieService.get('user'));
     let data: any = {};
     let httpOptions = new HttpHeaders();
@@ -461,7 +467,7 @@ export class FormsService {
       if (formObj && Object.entries(formObj).length !== 0) {
         form99_details = formObj;
       } else {
-        form99_details = JSON.parse(localStorage.getItem('form_99_details'));
+        form99_details = JSON.parse(localStorage.getItem('form_99_details') ?? '');
       }
 
       delete form99_details.file;
@@ -475,10 +481,10 @@ export class FormsService {
     }
     return this._http
       .post(`${environment.apiUrl}${url}`, data, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res) => {
           if (res) {
             return res;
           }
@@ -511,7 +517,7 @@ export class FormsService {
     console.log('httpOptions', httpOptions);
 
     if (form_type === '99') {
-      let form99_details: form99 = JSON.parse(localStorage.getItem(`form_${form_type}_details`));
+      let form99_details: form99 = JSON.parse(localStorage.getItem(`form_${form_type}_details`) ?? '');
 
       if (file && file.name) {
         fileuploaded = true;
@@ -600,16 +606,16 @@ export class FormsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, data, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res) => {
           if (res) {
             localStorage.setItem('form99PrintPreviewResponse', JSON.stringify(res));
             let form99PrintPreviewResponse: form99PrintPreviewResponse = JSON.parse(
-              localStorage.getItem(`form99PrintPreviewResponse`)
+              localStorage.getItem(`form99PrintPreviewResponse`) ?? ''
             );
-            printpriview_fileurl = form99PrintPreviewResponse.results.pdf_url;
+            printpriview_fileurl = form99PrintPreviewResponse.results?.pdf_url ?? '';
 
             localStorage.setItem('form_99_details.printpriview_fileurl', printpriview_fileurl);
 
@@ -622,7 +628,7 @@ export class FormsService {
         })
       );
   }
-  public PreviewForm_Preview_sign_Screen(formObj: any, form_type): Observable<any> {
+  public PreviewForm_Preview_sign_Screen(formObj: any, form_type: any): Observable<any> {
     let token: string = JSON.parse(this._cookieService.get('user'));
     let data: any = {};
     let httpOptions = new HttpHeaders();
@@ -637,7 +643,7 @@ export class FormsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     if (form_type === '99') {
-      let form99_details: form99 = JSON.parse(localStorage.getItem('form_99_details'));
+      let form99_details: form99 = JSON.parse(localStorage.getItem('form_99_details') ?? '');
 
       delete form99_details.file;
       url = '/f99/update_print_f99';
@@ -652,16 +658,16 @@ export class FormsService {
     }
     return this._http
       .post(`${environment.apiUrl}${url}`, data, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res) => {
           if (res) {
             localStorage.setItem('form99PrintPreviewResponse', JSON.stringify(res));
             let form99PrintPreviewResponse: form99PrintPreviewResponse = JSON.parse(
-              localStorage.getItem(`form99PrintPreviewResponse`)
+              localStorage.getItem(`form99PrintPreviewResponse`) ?? ''
             );
-            printpriview_fileurl = form99PrintPreviewResponse.results.pdf_url;
+            printpriview_fileurl = form99PrintPreviewResponse.results?.pdf_url ?? '';
 
             localStorage.setItem('form_99_details.printpriview_fileurl', printpriview_fileurl);
 
@@ -675,7 +681,7 @@ export class FormsService {
       );
   }
 
-  public get_report_status(form_type, report_id): Observable<any> {
+  public get_report_status(form_type: any, report_id: any): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     let httpOptions = new HttpHeaders();
     // let params = new FormData(JSON.parse(localStorage.getItem('form_99_details')));
@@ -684,30 +690,31 @@ export class FormsService {
     const formType = 'F' + form_type;
 
     if (formType === 'F3X') {
-      let formF3X_ReportInfo: form3XReport = JSON.parse(localStorage.getItem(`form_${form_type}_ReportInfo`));
-      reportId = formF3X_ReportInfo.reportId;
+      let formF3X_ReportInfo: form3XReport = JSON.parse(localStorage.getItem(`form_${form_type}_ReportInfo`) ?? '');
+      reportId = formF3X_ReportInfo.reportId ?? '';
     }
 
-    params.append('report_id', reportId);
-    params.append('form_type', formType);
+    params.append('report_id', reportId ?? '');
+    params.append('form_type', formType ?? '');
 
     const url = '/core/get_report_status?form_type=' + formType + '&report_id=' + reportId;
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
-    return this._http.get(`${environment.apiUrl}${url}`, {
-      headers: httpOptions
-    })
-    .pipe(
-      map(res => {
-        if (res) {
-          this._stopCanDeactivate = res['fec_status'] === 'Accepted' ? false : true;
-        } else {
-          this._stopCanDeactivate = false;
-        }
+    return this._http
+      .get(`${environment.apiUrl}${url}`, {
+        headers: httpOptions,
       })
-    );
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            this._stopCanDeactivate = res['fec_status'] === 'Accepted' ? false : true;
+          } else {
+            this._stopCanDeactivate = false;
+          }
+        })
+      );
   }
 
   public checkCanDeactivate() {
@@ -725,12 +732,12 @@ export class FormsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(`${environment.apiUrl}${url}`, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
 
   public formHasUnsavedData(formType: string): boolean {
-    let formSaved: any = JSON.parse(localStorage.getItem(`form_${formType}_saved`));
+    let formSaved: any = JSON.parse(localStorage.getItem(`form_${formType}_saved`) ?? '');
     if (formSaved && formSaved.hasOwnProperty('saved')) {
       if (formSaved !== null) {
         let formStatus: boolean = formSaved.saved;
@@ -745,9 +752,9 @@ export class FormsService {
 
   public HasUnsavedData(screenType: string): boolean {
     if (screenType != null) {
-      const screenSaved: any = JSON.parse(localStorage.getItem(`${screenType}saved`));
-        if (screenSaved !== null) {
-          if (screenSaved.hasOwnProperty('saved')) {
+      const screenSaved: any = JSON.parse(localStorage.getItem(`${screenType}saved`) ?? '');
+      if (screenSaved !== null) {
+        if (screenSaved.hasOwnProperty('saved')) {
           const screenStatus: boolean = screenSaved.saved;
 
           if (!screenStatus) {
@@ -771,25 +778,25 @@ export class FormsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
     console.log('${environment.apiUrl}${url}', `${environment.apiUrl}${url}`);
 
-    let formF3X_ReportInfo: form3XReport = JSON.parse(localStorage.getItem(`form_${form_type}_ReportInfo`));
+    let formF3X_ReportInfo: form3XReport = JSON.parse(localStorage.getItem(`form_${form_type}_ReportInfo`) ?? '');
 
     console.log(' saveReport formF3X_ReportInfo ', formF3X_ReportInfo);
 
-    formData.append('report_id', formF3X_ReportInfo.reportId);
-    formData.append('form_type', `F${formF3X_ReportInfo.formType}`);
+    formData.append('report_id', formF3X_ReportInfo.reportId ?? '');
+    formData.append('form_type', `F${formF3X_ReportInfo.formType}` ?? '');
     if (formF3X_ReportInfo.amend_Indicator === null || formF3X_ReportInfo.amend_Indicator === '') {
-      formData.append('amend_ind', 'N');
+      formData.append('amend_ind', 'N' ?? '');
     } else {
-      formData.append('amend_ind', formF3X_ReportInfo.amend_Indicator);
+      formData.append('amend_ind', formF3X_ReportInfo.amend_Indicator ?? '');
     }
 
-    formData.append('report_type', formF3X_ReportInfo.reportType);
-    formData.append('election_code', formF3X_ReportInfo.electionCode);
-    formData.append('date_of_election', formF3X_ReportInfo.electionDate);
-    formData.append('state_of_election', formF3X_ReportInfo.stateOfElection);
-    formData.append('cvg_start_dt', formF3X_ReportInfo.cvgStartDate);
-    formData.append('cvg_end_dt', formF3X_ReportInfo.cvgEndDate);
-    formData.append('coh_bop', formF3X_ReportInfo.coh_bop);
+    formData.append('report_type', formF3X_ReportInfo.reportType ?? '');
+    formData.append('election_code', formF3X_ReportInfo.electionCode ?? '');
+    formData.append('date_of_election', formF3X_ReportInfo.electionDate ?? '');
+    formData.append('state_of_election', formF3X_ReportInfo.stateOfElection ?? '');
+    formData.append('cvg_start_dt', formF3X_ReportInfo.cvgStartDate ?? '');
+    formData.append('cvg_end_dt', formF3X_ReportInfo.cvgEndDate ?? '');
+    formData.append('coh_bop', formF3X_ReportInfo.coh_bop ?? '');
 
     if (access_type === 'Saved') {
       formData.append('status', 'Saved');
@@ -801,14 +808,14 @@ export class FormsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, formData, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res) => {
           if (res) {
             localStorage.setItem('`form_${form_type}_ReportInfo_Res', JSON.stringify(res));
             let form3XReportInfoRes: form3XReport = JSON.parse(
-              localStorage.getItem(`form_${form_type}_ReportInfo_Res`)
+              localStorage.getItem(`form_${form_type}_ReportInfo_Res`) ?? ''
             );
             return res;
           }

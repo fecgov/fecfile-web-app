@@ -5,7 +5,7 @@ import { TokenInterceptorService } from './token-interceptor-service.service';
 describe('TokenInterceptorServiceService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TokenInterceptorService]
+      providers: [TokenInterceptorService],
     });
   });
 

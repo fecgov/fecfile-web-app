@@ -6,12 +6,13 @@ describe('IndividualReceiptComponent', () => {
   let component: IndividualReceiptComponent;
   let fixture: ComponentFixture<IndividualReceiptComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ IndividualReceiptComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [IndividualReceiptComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(IndividualReceiptComponent);
