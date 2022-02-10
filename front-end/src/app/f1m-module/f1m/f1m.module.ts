@@ -9,20 +9,16 @@ import { F1mAffiliationComponent } from './../f1m-affiliation/f1m-affiliation/f1
 import { F1mRoutingModule } from './f1m-routing.module';
 import { F1mComponent } from './f1m.component';
 
-
 @NgModule({
-  imports: [
-    SharedModule,
-    F1mRoutingModule,
-  ],
+  imports: [SharedModule, F1mRoutingModule],
   declarations: [
     F1mComponent,
     F1mTypeComponent,
     F1mAffiliationComponent,
     F1mPreviewComponent,
     F1mQualificationComponent,
-    F1mCandidatesTableComponent
-  ], 
-  providers: [TitleCasePipe]
+    F1mCandidatesTableComponent,
+  ],
+  providers: [TitleCasePipe],
 })
-export class F1mModule { }
+export class F1mModule {}

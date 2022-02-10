@@ -6,12 +6,13 @@ describe('CashOnHandComponent', () => {
   let component: CashOnHandComponent;
   let fixture: ComponentFixture<CashOnHandComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ CashOnHandComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [CashOnHandComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CashOnHandComponent);

@@ -8,12 +8,12 @@
     margin: 0 auto 5px auto;
     width: 99%;
   }
-  header {    
+  header {
     .header-container {
       display: block;
       width: 100%;
       border-bottom: 1px solid $bombay;
-      padding-bottom: .75em;
+      padding-bottom: 0.75em;
       margin-bottom: 1em;
       .header__text {
         display: block;
@@ -27,14 +27,14 @@
         @include media(mediumDesktop) {
           float: left;
           width: 40%;
-        }         
+        }
         @include media(largeDesktop) {
           float: left;
           width: 40%;
-        }         
+        }
       }
       .header__btns {
-        float: right;    
+        float: right;
         .btn-print-preview {
           @extend .btn-secondary-gray;
           margin-right: 5px;
@@ -46,9 +46,9 @@
           padding-top: 10px;
         }
       }
-      @include clearfix();	
+      @include clearfix();
+    }
   }
-}
 
   .form__type {
     float: left;
@@ -60,7 +60,7 @@
       margin-left: auto;
       margin-right: auto;
       z-index: 0;
-      margin-top: .75em;
+      margin-top: 0.75em;
       .type-item {
         background-color: $white;
         color: $black;
@@ -72,7 +72,7 @@
         width: 99%;
         border-bottom: 1px solid $iron;
         border-top: 1px solid $iron;
-        padding-left: .75em;
+        padding-left: 0.75em;
         &:nth-child(even) {
           background-color: $seaShell !important;
         }
@@ -83,12 +83,12 @@
           font-size: 1em;
           height: 50px;
           padding-top: 10px;
-        }         
+        }
         @include media(largeDesktop) {
           font-size: 1em;
           height: 50px;
           padding-top: 10px;
-        }         
+        }
         .type-item__box {
           display: inline-block;
           width: auto;
@@ -113,17 +113,17 @@
             top: 45px;
             left: 5px;
             z-index: 5;
-            transition: border .25s linear;
-            -webkit-transition: border .25s linear;
+            transition: border 0.25s linear;
+            -webkit-transition: border 0.25s linear;
             @include media(tablet) {
               left: 20px;
             }
             @include media(mediumDesktop) {
               left: 20px;
-            }         
+            }
             @include media(largeDesktop) {
               left: 20px;
-            }             
+            }
             &:before {
               display: block;
               position: absolute;
@@ -138,8 +138,9 @@
               -webkit-transition: background 0.25s linear;
             }
             &:checked {
-              border: 5px solid #0DFF92;
-              background: #0DFF92;
+              border: 5px solid #0dff92;
+              background: #0dff92;
+              transition: all;
             }
           }
           .type-text {
@@ -153,6 +154,7 @@
             width: 190px;
             z-index: 0;
             -webkit-transition: all 0.25s linear;
+            transition: all 0.25s linear;
             @include media(tablet) {
               padding-left: 10px;
               width: auto;
@@ -160,11 +162,11 @@
             @include media(mediumDesktop) {
               padding-left: 10px;
               width: auto;
-            }         
+            }
             @include media(largeDesktop) {
               padding-left: 10px;
               width: auto;
-            }             
+            }
           }
         } // .type-item__box
         .type__info {
@@ -192,19 +194,7 @@
             @include media(largeDesktop) {
               // left: 310px !important;
               left: auto !important;
-            }  */   
-            .arrow {
-              /* left: 218px;
-              @include media(tablet) {
-                left: 0;
-              }
-              @include media(mediumDesktop) {
-                left: 0;
-              }         
-              @include media(largeDesktop) {
-                left: 0;
-              }   */             
-            }          
+            }  */
             .tooltip-inner {
               max-width: 300px;
               text-align: left;
@@ -213,10 +203,10 @@
               }
               @include media(mediumDesktop) {
                 max-width: 500px;
-              }         
+              }
               @include media(largeDesktop) {
                 max-width: 600px;
-              }               
+              }
             }
           }
         }
@@ -228,10 +218,10 @@
       width: 100%;
       @include clearfix();
     }
-      .no-buff {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  } // .form__type
+    .no-buff {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    } // .form__type
   }
   .type-item:hover {
     cursor: pointer !important;
@@ -239,7 +229,7 @@
   .type-text:hover {
     cursor: pointer !important;
   }
-  input[type="radio"]:hover {
+  input[type='radio']:hover {
     cursor: pointer !important;
   }
 } // .form__type-container

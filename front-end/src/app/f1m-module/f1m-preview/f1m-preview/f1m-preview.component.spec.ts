@@ -6,12 +6,13 @@ describe('F1mPreviewComponent', () => {
   let component: F1mPreviewComponent;
   let fixture: ComponentFixture<F1mPreviewComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ F1mPreviewComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [F1mPreviewComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(F1mPreviewComponent);

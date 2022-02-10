@@ -2,15 +2,15 @@ import { ReportsService } from './../../reports/service/report.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SignAndSubmitComponent } from './../../shared/partials/sign-and-submit/sign-and-submit.component';
 import { ScheduleActions } from './../../forms/form-3x/individual-receipt/schedule-actions.enum';
-import { MessageService } from 'src/app/shared/services/MessageService/message.service';
+import { MessageService } from '../../shared/services/MessageService/message.service';
 import { F1mQualificationComponent } from './../f1m-qualification/f1m-qualification/f1m-qualification.component';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { F1mAffiliationComponent } from './../f1m-affiliation/f1m-affiliation/f1m-affiliation.component';
 import { F1mService } from './f1m-services/f1m.service';
 import { DialogService } from '../../shared/services/DialogService/dialog.service';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from '../../shared/partials/confirm-modal/confirm-modal.component';
 import { TitleCasePipe } from '@angular/common';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-f1m',
@@ -19,118 +19,130 @@ import { Subject } from 'rxjs';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class F1mComponent implements OnInit, OnDestroy {
-
-
-  @ViewChild(F1mAffiliationComponent) affiliationComp : F1mAffiliationComponent;
-  @ViewChild(F1mQualificationComponent) qualificationComp : F1mQualificationComponent;
-  @ViewChild(SignAndSubmitComponent) signAndSubmitComp : SignAndSubmitComponent;
+  @ViewChild(F1mAffiliationComponent) affiliationComp!: F1mAffiliationComponent;
+  @ViewChild(F1mQualificationComponent) qualificationComp!: F1mQualificationComponent;
+  @ViewChild(SignAndSubmitComponent) signAndSubmitComp!: SignAndSubmitComponent;
 
   public currentStep: string = 'step_1';
   public step: string = 'step_1';
   public type: any;
-  public partyType : string = '';
+  public partyType: string = '';
   public scheduleAction = ScheduleActions.add;
-  public signAndSubmitData : any = null;
-  public filingId : string = '######';
+  public signAndSubmitData: any = null;
+  public filingId: string = '######';
 
   public editMode = false;
-  public reportId = "";
+  public reportId = '';
   public step2data: any;
   public candidateNumber = 1;
   public treasurerData: any = {};
   public affiliationData: any = {};
-  public emailsOnFile:any = []; 
+  public emailsOnFile: any = [];
 
   private onDestroy$ = new Subject();
 
-  public qualificationData : any = {
-    type:'qualification',
-    candidates: []
+  public qualificationData: any = {
+    type: 'qualification',
+    candidates: [],
   };
   committeeType: any;
 
   constructor(
     private _cd: ChangeDetectorRef,
     private _f1mService: F1mService,
-    private _dialogService: DialogService, 
-    private _messageService:MessageService, 
-    private _activatedRoute: ActivatedRoute, 
+    private _dialogService: DialogService,
+    private _messageService: MessageService,
+    private _activatedRoute: ActivatedRoute,
     private _router: Router,
     private _reportsService: ReportsService,
-    public titlecasePipe:TitleCasePipe,
-    ) { 
-      this._messageService.getMessage().takeUntil(this.onDestroy$).subscribe(message =>{
-        if(message && message.action === 'refreshScreen' && message.qualificationData){
+    public titlecasePipe: TitleCasePipe
+  ) {
+    this._messageService
+      .getMessage()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((message: any) => {
+        if (message && message.action === 'refreshScreen' && message.qualificationData) {
           this.qualificationData = message.qualificationData;
           this.refreshAllComponents();
-        }
-        else if(message && message.action === 'showStep5' && message.data){
+        } else if (message && message.action === 'showStep5' && message.data) {
           this.filingId = message.data.fecFilingId;
           this.step = 'step_5';
           this.refreshScreen();
         }
       });
-    }
+  }
 
   public ngOnInit() {
     this.getPartyType();
-    if(this._activatedRoute.snapshot.queryParams.edit){
-      this._reportsService.getReportInfo('F1M', this._activatedRoute.snapshot.queryParams.reportId)
-      .subscribe((res: any) => {
-        this.editMode = true;
-        this.type = res.establishmentType === 'A' ? 'affiliation' : 'qualification';
-        this.committeeType = res.committee_type;
-        this.step = this._activatedRoute.snapshot.queryParams.edit ? this._activatedRoute.snapshot.queryParams.step : 'step_2';
-        this.scheduleAction = ScheduleActions.edit;
-        this.reportId = res.reportId;
-        this.refreshScreen();
-        if(this.type === 'affiliation'){
-          this.affiliationData = res;
-          this.populateAffiliationData(res);
-        }
-        else if(this.type === 'qualification'){
-          this.qualificationData = res;
-          this.populateQualificationData(res);
-        }
-        this.populateSignAndSubmitData(res);
-        
-        if(this._activatedRoute.snapshot.queryParams.viewOnly && this._activatedRoute.snapshot.queryParams.viewOnly === 'true'){
-          this.scheduleAction = ScheduleActions.view;
-          this.updateQueryParams();
-          this.setAffiliationInfo(res);
-          this.setQualificationInfo(res);
-          this.setTreasurerAndEmails(res);
-          this._messageService.sendMessage({action:'disableFields'});
-        }
-        this.refreshScreen();
+    if (this._activatedRoute.snapshot.queryParams['edit']) {
+      this._reportsService
+        .getReportInfo('F1M', this._activatedRoute.snapshot.queryParams['reportId'])
+        .subscribe((res: any) => {
+          this.editMode = true;
+          this.type = res.establishmentType === 'A' ? 'affiliation' : 'qualification';
+          this.committeeType = res.committee_type;
+          this.step = this._activatedRoute.snapshot.queryParams['edit']
+            ? this._activatedRoute.snapshot.queryParams['step']
+            : 'step_2';
+          this.scheduleAction = ScheduleActions.edit;
+          this.reportId = res.reportId;
+          this.refreshScreen();
+          if (this.type === 'affiliation') {
+            this.affiliationData = res;
+            this.populateAffiliationData(res);
+          } else if (this.type === 'qualification') {
+            this.qualificationData = res;
+            this.populateQualificationData(res);
+          }
+          this.populateSignAndSubmitData(res);
 
+          if (
+            this._activatedRoute.snapshot.queryParams['viewOnly'] &&
+            this._activatedRoute.snapshot.queryParams['viewOnly'] === 'true'
+          ) {
+            this.scheduleAction = ScheduleActions.view;
+            this.updateQueryParams();
+            this.setAffiliationInfo(res);
+            this.setQualificationInfo(res);
+            this.setTreasurerAndEmails(res);
+            this._messageService.sendMessage({ action: 'disableFields' });
+          }
+          this.refreshScreen();
 
-        if(this._activatedRoute.snapshot.queryParams.step && this._activatedRoute.snapshot.queryParams.step === 'step_4'){
-          this.validateForm();
-        }
-
-      })
+          if (
+            this._activatedRoute.snapshot.queryParams['step'] &&
+            this._activatedRoute.snapshot.queryParams['step'] === 'step_4'
+          ) {
+            this.validateForm();
+          }
+        });
     }
-    this._messageService.sendMessage({action:'updateHeaderInfo', data: {formType: 'F1M'}});
+    this._messageService.sendMessage({ action: 'updateHeaderInfo', data: { formType: 'F1M' } });
   }
-  
 
-
-  private populateQualificationData(data:any) {
+  private populateQualificationData(data: any) {
     this.qualificationComp.qualificationData.candidates = data.candidates;
-    this.qualificationComp.form.patchValue({candidate_number:(data.candidates.length + 1).toString()},{onlySelf:true});
-    this.qualificationComp.formPart2.patchValue({registration_date: data.registration_date}, {onlySelf:true});
-    this.qualificationComp.formPart2.patchValue({fifty_first_contributor_date: data.fifty_first_contributor_date}, {onlySelf:true});
-    this.qualificationComp.formPart2.patchValue({requirements_met_date: data.requirements_met_date}, {onlySelf:true});
+    this.qualificationComp.form.patchValue(
+      { candidate_number: (data.candidates.length + 1).toString() },
+      { onlySelf: true }
+    );
+    this.qualificationComp.formPart2.patchValue({ registration_date: data.registration_date }, { onlySelf: true });
+    this.qualificationComp.formPart2.patchValue(
+      { fifty_first_contributor_date: data.fifty_first_contributor_date },
+      { onlySelf: true }
+    );
+    this.qualificationComp.formPart2.patchValue(
+      { requirements_met_date: data.requirements_met_date },
+      { onlySelf: true }
+    );
     this.refreshQualificationChildComponent();
     this.refreshScreen();
-    
   }
 
-  private populateAffiliationData(data:any) {
-    this.affiliationComp.form.patchValue({affiliation_date: data.affiliation_date},{onlySelf:true});
-    this.affiliationComp.form.patchValue({committee_id: data.committee_id},{onlySelf:true});
-    this.affiliationComp.form.patchValue({committee_name: data.committee_name},{onlySelf:true});
+  private populateAffiliationData(data: any) {
+    this.affiliationComp.form.patchValue({ affiliation_date: data.affiliation_date }, { onlySelf: true });
+    this.affiliationComp.form.patchValue({ committee_id: data.committee_id }, { onlySelf: true });
+    this.affiliationComp.form.patchValue({ committee_name: data.committee_name }, { onlySelf: true });
     this.refreshAffiliationChildComponent();
     this.refreshScreen();
   }
@@ -143,28 +155,27 @@ export class F1mComponent implements OnInit, OnDestroy {
       confirmAdditionalEmail1: res.additional_email_1,
       additionalEmail2: res.additional_email_2,
       confirmAdditionalEmail2: res.additional_email_2,
-    }
+    };
     this.refreshScreen();
     this.signAndSubmitComp.populateForm();
   }
 
-  
   ngOnDestroy(): void {
     this._messageService.clearMessage();
     this.onDestroy$.next(true);
-    this._messageService.sendMessage({action:'updateHeaderInfo', data:{formType:null}});
+    this._messageService.sendMessage({ action: 'updateHeaderInfo', data: { formType: null } });
   }
 
   public getPartyType() {
-    if(window.localStorage.committee_details){
-      const committeeData = JSON.parse(window.localStorage.committee_details);
-      if(committeeData){
+    if (window.localStorage['committee_details']) {
+      const committeeData = JSON.parse(window.localStorage['committee_details']);
+      if (committeeData) {
         this.partyType = committeeData.cmte_type_category;
       }
     }
   }
 
-  public changeStep($event) {
+  public changeStep($event: any) {
     if ($event) {
       if ($event.step) {
         this.step = $event.step;
@@ -172,7 +183,7 @@ export class F1mComponent implements OnInit, OnDestroy {
       if ($event.type) {
         this.type = $event.type;
       }
-      if($event.committeeType){
+      if ($event.committeeType) {
         this.committeeType = $event.committeeType;
       }
     }
@@ -183,20 +194,19 @@ export class F1mComponent implements OnInit, OnDestroy {
     this._cd.detectChanges();
   }
 
-  public skip(){
-    if(!this.reportId){
-      this._f1mService.saveForm(null,this.scheduleAction, 'saveQualification').subscribe(res =>{
+  public skip() {
+    if (!this.reportId) {
+      this._f1mService.saveForm(null, this.scheduleAction, 'saveQualification').subscribe((res: any) => {
         this.reportId = res.reportId;
         this.updateQueryParams();
         this.continueToPart2();
       });
-    }
-    else{
-        this.continueToPart2();
+    } else {
+      this.continueToPart2();
     }
   }
 
-/*   public showSaveAndContinueButton(){
+  /*   public showSaveAndContinueButton(){
     if(this.type === 'qualification'){
       if(this.partyType === 'PTY'){
         if(this.step === 'step_2' && this.qualificationData && this.qualificationData.candidates.length === 5){
@@ -213,82 +223,83 @@ export class F1mComponent implements OnInit, OnDestroy {
     return this.step === 'step_2';
   } */
 
-  public showSaveAndContinueButton(){
-    if(this.scheduleAction === ScheduleActions.view){
+  public showSaveAndContinueButton() {
+    if (this.scheduleAction === ScheduleActions.view) {
       return false;
     }
-    if(this.step === 'step_2'){
-      if(this.type === 'qualification'){
-        if(this.partyType === 'PTY'){
-          if(this.qualificationComp && !this.qualificationComp.showPart2){
-            return this.qualificationData && this.qualificationData.candidates && this.qualificationData.candidates.length === 5;
+    if (this.step === 'step_2') {
+      if (this.type === 'qualification') {
+        if (this.partyType === 'PTY') {
+          if (this.qualificationComp && !this.qualificationComp.showPart2) {
+            return (
+              this.qualificationData &&
+              this.qualificationData.candidates &&
+              this.qualificationData.candidates.length === 5
+            );
           }
-            return true;
-        }
-          return this.qualificationData && this.qualificationData.candidates && this.qualificationData.candidates.length === 5;
-      }
-        return true;
-    }
-      return false;
-  }
-
-  public showPreviousButton(){
-    if(this.step === 'step_1' || this.step === 'step_5'){
-      return false;
-    }
-    else if(this.step === 'step_2'){
-      if(this.type === 'qualification'){
-        //check query params to see if a form of this type has already been created and a report id generate
-        //if so, then return false
-        // if(this._activatedRoute.snapshot.queryParams.reportId){
-        //   return false;
-        // }
-        
-        if(this.qualificationComp && this.qualificationComp.showPart2){
           return true;
         }
-        else if(this.qualificationComp  && !this.qualificationComp.showPart2){
+        return (
+          this.qualificationData && this.qualificationData.candidates && this.qualificationData.candidates.length === 5
+        );
+      }
+      return true;
+    }
+    return false;
+  }
+
+  public showPreviousButton() {
+    if (this.step === 'step_1' || this.step === 'step_5') {
+      return false;
+    } else if (this.step === 'step_2') {
+      if (this.type === 'qualification') {
+        //check query params to see if a form of this type has already been created and a report id generate
+        //if so, then return false
+        // if(this._activatedRoute.snapshot.queryParams['reportId']){
+        //   return false;
+        // }
+
+        if (this.qualificationComp && this.qualificationComp.showPart2) {
+          return true;
+        } else if (this.qualificationComp && !this.qualificationComp.showPart2) {
           return !this.editMode;
         }
         return true;
-      }
-      else if(this.type === 'affiliation'){
+      } else if (this.type === 'affiliation') {
         //check query params to see if a form of this type has already been created and a report id generate
         //if so, then return false
-        if(this._activatedRoute.snapshot.queryParams.reportId){
+        if (this._activatedRoute.snapshot.queryParams['reportId']) {
           return false;
         }
         return true;
       }
-        return !this.editMode;
-      }
+      return !this.editMode;
+    }
     return true;
   }
 
-  public saveAndContinue(action:any) {
-    if(this.type === 'affiliation'){
+  public saveAndContinue(action: any) {
+    if (this.type === 'affiliation') {
       this.saveAffiliationData();
-    }
-    else if(this.type === 'qualification'){
-      if(!this.qualificationComp.showPart2){
+    } else if (this.type === 'qualification') {
+      if (!this.qualificationComp.showPart2) {
         this.saveCurrentCandidate(action);
-      }
-      else{
+      } else {
         this.saveDates();
       }
     }
   }
-  
+
   private saveAffiliationData() {
     if (this.affiliationComp.form.valid) {
       this.step2data = this.affiliationComp.form.value;
       this.step2data.committeeType = this.committeeType;
-      let tempScheduleAction : ScheduleActions = this.scheduleAction;
+      let tempScheduleAction: ScheduleActions = this.scheduleAction;
       if (this.reportId) {
         this.step2data.reportId = this.reportId;
         tempScheduleAction = ScheduleActions.edit;
       }
-      this._f1mService.saveForm(this.step2data, tempScheduleAction, 'saveAffiliation').subscribe(res => {
+      this._f1mService.saveForm(this.step2data, tempScheduleAction, 'saveAffiliation').subscribe((res: any) => {
         this.reportId = res.reportId;
         this.updateQueryParams();
         this.setAffiliationInfo(res);
@@ -298,43 +309,48 @@ export class F1mComponent implements OnInit, OnDestroy {
     }
   }
 
-  public showSkipButton(){
-    return (this.step === 'step_2' && this.type === 'qualification' && this.qualificationComp && !this.qualificationComp.showPart2 && this.partyType === 'PTY') && this.scheduleAction !== 'view';
+  public showSkipButton() {
+    return (
+      this.step === 'step_2' &&
+      this.type === 'qualification' &&
+      this.qualificationComp &&
+      !this.qualificationComp.showPart2 &&
+      this.partyType === 'PTY' &&
+      this.scheduleAction !== 'view'
+    );
   }
 
   private saveDates() {
-    if(this.qualificationComp.formPart2.valid){
+    if (this.qualificationComp.formPart2.valid) {
       this.step2data = this.qualificationComp.formPart2.getRawValue(); //.getRawValue() is used instead of .value to include disabled fields too
       this.step2data.committeeType = this.committeeType;
       this.step2data.reportId = this.reportId;
-      this._f1mService.saveForm(this.step2data, this.scheduleAction, 'saveDates').subscribe(res => {
+      this._f1mService.saveForm(this.step2data, this.scheduleAction, 'saveDates').subscribe((res: any) => {
         this.reportId = res.reportId;
         this.setQualificationInfo(res);
         this.setTreasurerAndEmails(res);
         this.next();
       });
-    }
-    else{
+    } else {
       this.qualificationComp.formPart2.markAsDirty();
     }
   }
 
-  private saveCurrentCandidate(action:any) {
-    
+  private saveCurrentCandidate(action: any) {
     if (this.qualificationData.candidates.length < 5 || (action && action.action === 'update')) {
-      if(this.qualificationComp.form.valid){
+      if (this.qualificationComp.form.valid) {
         this.step2data = this.qualificationComp.form.value;
         this.step2data.committeeType = this.committeeType;
         if (this.reportId) {
           this.step2data.reportId = this.reportId;
         }
-        if(action && action.action  === 'create'){
+        if (action && action.action === 'create') {
           this.step2data.candidate_number = this.qualificationComp.getNextCandidateNumber().toString();
-        }else{
+        } else {
           this.step2data.candidate_number = this.step2data.candidate_number.toString();
         }
         let saveCandScheduleAction = action.action === 'update' ? ScheduleActions.edit : ScheduleActions.add;
-        this._f1mService.saveForm(this.step2data, saveCandScheduleAction, 'saveCandidate').subscribe(res => {
+        this._f1mService.saveForm(this.step2data, saveCandScheduleAction, 'saveCandidate').subscribe((res: any) => {
           this.qualificationData.candidates = res.candidates;
           this.reportId = res.reportId;
           this.updateQueryParams();
@@ -342,21 +358,22 @@ export class F1mComponent implements OnInit, OnDestroy {
           this.refreshQualificationChildComponent();
           this.refreshScreen();
         });
+      } else {
+        this.qualificationComp.form.markAsDirty();
       }
-      else {
-        this.qualificationComp.form.markAsDirty()
-      }
-    }
-    else {
+    } else {
       this._messageService.sendMessage({ formType: 'f1m-qualification', action: 'showPart2' });
       this.refreshScreen();
     }
   }
 
   updateQueryParams() {
-    this._router.navigate([],{relativeTo:this._activatedRoute, queryParams: {reportId: this.reportId}, queryParamsHandling:'merge'});
+    this._router.navigate([], {
+      relativeTo: this._activatedRoute,
+      queryParams: { reportId: this.reportId },
+      queryParamsHandling: 'merge',
+    });
   }
-
 
   private setTreasurerAndEmails(res: any) {
     this.setTreasurerInfo(res);
@@ -378,9 +395,9 @@ export class F1mComponent implements OnInit, OnDestroy {
     this.affiliationComp.cd.detectChanges();
   }
 
-   private refreshSignAndSubmitChildComponent() {
+  private refreshSignAndSubmitChildComponent() {
     this.signAndSubmitComp._cd.detectChanges();
-  } 
+  }
 
   private setAffiliationInfo(res: any) {
     this.affiliationData.affiliation_date = res.affiliation_date;
@@ -388,7 +405,7 @@ export class F1mComponent implements OnInit, OnDestroy {
     this.affiliationData.committee_name = res.committee_name;
   }
 
-  private setQualificationInfo(res:any){
+  private setQualificationInfo(res: any) {
     this.qualificationData.registration_date = res.registration_date;
     this.qualificationData.fifty_first_contributor_date = res.fifty_first_contributor_date;
     this.qualificationData.requirements_met_date = res.requirements_met_date;
@@ -402,8 +419,8 @@ export class F1mComponent implements OnInit, OnDestroy {
     this.treasurerData.treasurer_suffix = res.treasurer_suffix;
   }
 
-  public continueToPart2(){
-    this._messageService.sendMessage({formType:'f1m-qualification', action:'showPart2'});
+  public continueToPart2() {
+    this._messageService.sendMessage({ formType: 'f1m-qualification', action: 'showPart2' });
     this.refreshScreen();
   }
 
@@ -441,7 +458,7 @@ export class F1mComponent implements OnInit, OnDestroy {
     }
   } */
 
-  public submit(){
+  public submit() {
     // if(this.signAndSubmitComp.form.valid){
     /* if(true){
       const modalRef = this.modalService.open(NgbdModalContent);
@@ -453,7 +470,7 @@ export class F1mComponent implements OnInit, OnDestroy {
     this.signAndSubmitComp.openModal();
   }
 
-  public next(){
+  public next() {
     switch (this.step) {
       case 'step_1':
         this.step = 'step_2';
@@ -473,7 +490,7 @@ export class F1mComponent implements OnInit, OnDestroy {
     this.refreshScreen();
   }
 
-  public previous(){
+  public previous() {
     switch (this.step) {
       case 'step_5':
         this.step = 'step_4';
@@ -483,7 +500,7 @@ export class F1mComponent implements OnInit, OnDestroy {
         break;
       case 'step_3':
         this.step = 'step_2';
-        if(this.type === 'qualification'){
+        if (this.type === 'qualification') {
           this.refreshScreen();
           this.refreshQualificationChildComponent();
           this.qualificationComp.showPart2 = true;
@@ -491,11 +508,10 @@ export class F1mComponent implements OnInit, OnDestroy {
         }
         break;
       case 'step_2':
-        if(this.type === 'qualification' && this.qualificationComp && this.qualificationComp.showPart2){
+        if (this.type === 'qualification' && this.qualificationComp && this.qualificationComp.showPart2) {
           this.qualificationComp.showPart2 = false;
           this.refreshQualificationChildComponent();
-        } 
-        else{
+        } else {
           this.step = 'step_1';
         }
         break;
@@ -505,69 +521,72 @@ export class F1mComponent implements OnInit, OnDestroy {
     this.refreshScreen();
   }
 
-  private validateForm(){
-    if(this.type === 'affiliation'){
+  private validateForm() {
+    if (this.type === 'affiliation') {
       this.validateAffiliationForm();
-    }
-    else if(this.type === 'qualification'){
+    } else if (this.type === 'qualification') {
       this.validateQualificationForm();
     }
     this.refreshAllComponents();
   }
 
-
   private validateAffiliationForm() {
-    if(!this.affiliationComp.form.valid){
-      this._router.navigate([],{relativeTo:this._activatedRoute, queryParams: 
-        {
-          step: 'step_2', 
-          reportId:this._activatedRoute.snapshot.queryParams.reportId,
-          edit:this._activatedRoute.snapshot.queryParams.edit
-      }});
-    }
-  }
-  
-  private validateQualificationForm() {
-    if(this.partyType !== 'PTY' && this.qualificationComp.qualificationData.candidates.length < 5){
-      this.qualificationComp.showPart2 = false;
-      this.step='step_2';
-      this._router.navigate([],{relativeTo:this._activatedRoute, queryParams: 
-        {
-          step: this.step, 
-          reportId:this._activatedRoute.snapshot.queryParams.reportId,
-          edit:this._activatedRoute.snapshot.queryParams.edit
-      }});
-      
-    }
-    else if(!this.qualificationComp.formPart2.valid){
-      this.qualificationComp.showPart2 = true;
-      this.step='step_2';
-      this._router.navigate([],{relativeTo:this._activatedRoute, queryParams: 
-        {
-          step: this.step, 
-          reportId:this._activatedRoute.snapshot.queryParams.reportId,
-          edit:this._activatedRoute.snapshot.queryParams.edit
-      }});
-    }
-    else if(this.qualificationComp.formPart2.valid){
-      this.step = "step_4";
-      this._router.navigate([],{relativeTo:this._activatedRoute, queryParams: 
-        {
-          step: this.step, 
-          reportId:this._activatedRoute.snapshot.queryParams.reportId,
-          edit:this._activatedRoute.snapshot.queryParams.edit
-      }});
+    if (!this.affiliationComp.form.valid) {
+      this._router.navigate([], {
+        relativeTo: this._activatedRoute,
+        queryParams: {
+          step: 'step_2',
+          reportId: this._activatedRoute.snapshot.queryParams['reportId'],
+          edit: this._activatedRoute.snapshot.queryParams['edit'],
+        },
+      });
     }
   }
 
-  refreshAllComponents(){
-    if(this.affiliationComp){
+  private validateQualificationForm() {
+    if (this.partyType !== 'PTY' && this.qualificationComp.qualificationData.candidates.length < 5) {
+      this.qualificationComp.showPart2 = false;
+      this.step = 'step_2';
+      this._router.navigate([], {
+        relativeTo: this._activatedRoute,
+        queryParams: {
+          step: this.step,
+          reportId: this._activatedRoute.snapshot.queryParams['reportId'],
+          edit: this._activatedRoute.snapshot.queryParams['edit'],
+        },
+      });
+    } else if (!this.qualificationComp.formPart2.valid) {
+      this.qualificationComp.showPart2 = true;
+      this.step = 'step_2';
+      this._router.navigate([], {
+        relativeTo: this._activatedRoute,
+        queryParams: {
+          step: this.step,
+          reportId: this._activatedRoute.snapshot.queryParams['reportId'],
+          edit: this._activatedRoute.snapshot.queryParams['edit'],
+        },
+      });
+    } else if (this.qualificationComp.formPart2.valid) {
+      this.step = 'step_4';
+      this._router.navigate([], {
+        relativeTo: this._activatedRoute,
+        queryParams: {
+          step: this.step,
+          reportId: this._activatedRoute.snapshot.queryParams['reportId'],
+          edit: this._activatedRoute.snapshot.queryParams['edit'],
+        },
+      });
+    }
+  }
+
+  refreshAllComponents() {
+    if (this.affiliationComp) {
       this.refreshAffiliationChildComponent();
     }
-    if(this.qualificationComp){
+    if (this.qualificationComp) {
       this.refreshQualificationChildComponent();
     }
-    if(this.signAndSubmitComp){
+    if (this.signAndSubmitComp) {
       this.refreshSignAndSubmitChildComponent();
     }
     this.refreshScreen();

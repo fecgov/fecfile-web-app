@@ -5,19 +5,18 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
   selector: 'app-f1m-type',
   templateUrl: './f1m-type.component.html',
   styleUrls: ['./f1m-type.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class F1mTypeComponent implements OnInit {
-
   @Output() changeStep: EventEmitter<any> = new EventEmitter<any>();
 
-  form: FormGroup;
+  form!: FormGroup;
 
-  constructor(private _fb : FormBuilder) { }
+  constructor(private _fb: FormBuilder) {}
 
   get committeeType() {
     if (this.form && this.form.get('committeeType')) {
-      return this.form.get('committeeType').value;
+      return this.form.get('committeeType')?.value ?? null;
     }
     return null;
   }
@@ -26,17 +25,15 @@ export class F1mTypeComponent implements OnInit {
     this.initForm();
   }
 
-  public next(type:string){
-    if(type){
-      this.changeStep.emit({step:'step_2', type, committeeType: this.committeeType});
+  public next(type: string) {
+    if (type) {
+      this.changeStep.emit({ step: 'step_2', type, committeeType: this.committeeType });
     }
   }
 
-
-  public initForm(){
+  public initForm() {
     this.form = this._fb.group({
-      committeeType: ['', Validators.required]
+      committeeType: ['', Validators.required],
     });
   }
-
 }
