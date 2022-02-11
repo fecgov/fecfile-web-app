@@ -22,25 +22,25 @@ import { UploadCompleteMessageComponent } from './upload-complete-message/upload
 })
 export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
   @Input()
-  public uploadFile: UploadFileModel;
+  public uploadFile!: UploadFileModel;
 
   @Input()
-  public forceChangeDetection: Date;
+  public forceChangeDetection!: Date;
 
   @Output()
   public resultsEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public progressPercent: number;
-  public uploadingText: string;
-  public hasDupeFile: boolean;
+  public progressPercent!: number;
+  public uploadingText!: string;
+  public hasDupeFile!: boolean;
   public duplicateFileList: Array<any>;
-  public startUpload: boolean;
-  public showSpinner: boolean;
+  public startUpload!: boolean;
+  public showSpinner!: boolean;
 
   private onDestroy$: Subject<any>;
   private uploadProcessing$: Subject<any>;
-  // private checkSum: string;
-  private committeeId: string;
+  // private checkSum!: string;
+  private committeeId!: string;
 
   constructor(
     private _dialogService: DialogService,

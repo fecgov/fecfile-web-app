@@ -9,12 +9,12 @@ export class ProgressBarComponent implements OnInit, OnChanges {
 
 
   @Input()
-  public progress: any;
+  public progress!: any;
 
   @Input()
   public progressArray: Array<number>;
 
-  public percent: number;
+  public percent!: number;
 
   constructor() { }
 

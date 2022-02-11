@@ -20,15 +20,15 @@ import { ImportContactsService } from '../../import-contacts-module/import-conta
 })
 export class ImportFecFileComponent implements OnInit, OnDestroy {
   @ViewChild('errorsModal')
-  public errorsModal: ModalDirective;
+  public errorsModal!: ModalDirective;
 
   @ViewChild('noErrorslModal')
-  public noErrorslModal: ModalDirective;
+  public noErrorslModal!: ModalDirective;
 
   public contactErrors: Array<any>;
-  public fileName: string;
+  public fileName!: string;
   public steps: Array<any>;
-  public currentStep: ImportContactsStepsEnum;
+  public currentStep!: ImportContactsStepsEnum;
   public readonly start = ImportContactsStepsEnum.start;
   public readonly step1Upload = ImportContactsStepsEnum.step1Upload;
   public readonly step2Review = ImportContactsStepsEnum.step2Review;
@@ -36,15 +36,15 @@ export class ImportFecFileComponent implements OnInit, OnDestroy {
   public readonly step4ImportDone = ImportContactsStepsEnum.step4ImportDone;
   public userContactFields: Array<string>;
   public duplicateContacts: Array<any>;
-  public forceChangeDetectionUpload: Date;
-  public duplicateFile: any;
-  public importDoneAction: string;
-  public isShowInfo: boolean;
+  public forceChangeDetectionUpload!: Date;
+  public duplicateFile!: any;
+  public importDoneAction!: string;
+  public isShowInfo!: boolean;
 
-  private unsavedData: boolean;
+  private unsavedData!: boolean;
   private onDestroy$ = new Subject();
-  private validationErrorsExist: boolean;
-  private duplicatesExist: boolean;
+  private validationErrorsExist!: boolean;
+  private duplicatesExist!: boolean;
   successResponse: any;
 
   constructor(
@@ -58,7 +58,7 @@ export class ImportFecFileComponent implements OnInit, OnDestroy {
   ) {
     _timeoutMessageService
       .getTimeoutMessage()
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe(message => {
         // There may be a race condition between the receipt of this message
         // and the timeout navigatingto login.  Id true, the canDeacivate method here

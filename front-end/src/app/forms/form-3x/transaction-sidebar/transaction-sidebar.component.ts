@@ -37,19 +37,19 @@ export class TransactionSidebarComponent implements OnInit {
   @Input() step: string = '';
   @Input() formType:string = '';
 
-  public editMode: boolean;
-  public isFiled: boolean;
+  public editMode!: boolean;
+  public isFiled!: boolean;
   public itemSelected: string = '';
   public typeaheadValue: string = '';
   public receiptsTotal: number = 0.0;
-  public frmOption: FormGroup;
+  public frmOption!: FormGroup;
   public transactionType: string = null;
   public transactionTypeText: string = null;
   public cashOnHandTotal: number = 0.0;
   public disbursementsTotal: number = 0.0;
   public loansanddebtsTotal: number = 0.0;
   public othersTotal: number = 0.0;
-  public reportId: number;
+  public reportId!: number;
   public allTransactions: boolean = false;
 
   private _formType: string = '';
@@ -60,7 +60,7 @@ export class TransactionSidebarComponent implements OnInit {
   transactionTypeFailed: boolean;
   tranasctionCategoryVal: string;
 
-  public cashOnHand: CashOnHandModel;
+  public cashOnHand!: CashOnHandModel;
 
   private onDestroy$ = new Subject();
   routesSubscription: Subscription;
@@ -82,7 +82,7 @@ export class TransactionSidebarComponent implements OnInit {
     this._config.placement = 'right';
     this._config.triggers = 'click';
 
-    this.routesSubscription = _activatedRoute.queryParams.takeUntil(this.onDestroy$).subscribe(p => {
+    this.routesSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe(p => {
       if (p.transactionCategory) {
         this.itemSelected = p.transactionCategory;
       }
@@ -101,18 +101,18 @@ export class TransactionSidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this._formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
     // edit mode is set based on the action performed on the report
     // Edit mode does not say if its filed or saved
     // on ViewReport isFiled is passed in query params from report details component
-    if (typeof this._activatedRoute.snapshot.queryParams.isFiled !== 'undefined' && typeof this._activatedRoute.snapshot.queryParams.isFiled !== undefined) {
-      this.isFiled = this._activatedRoute.snapshot.queryParams.isFiled === 'true' ? true : false;
+    if (typeof this._activatedRoute.snapshot.queryParams['isFiled'] !== 'undefined' && typeof this._activatedRoute.snapshot.queryParams['isFiled'] !== undefined) {
+      this.isFiled = this._activatedRoute.snapshot.queryParams['isFiled'] === 'true' ? true : false;
     } else {
       this.isFiled = !this.editMode;
     }
-    this.reportId = this._activatedRoute.snapshot.queryParams.reportId ? this._activatedRoute.snapshot.queryParams.reportId : 0;
+    this.reportId = this._activatedRoute.snapshot.queryParams['reportId'] ? this._activatedRoute.snapshot.queryParams['reportId'] : 0;
     if(this._formType !== '24'){
-      this._transactionTypeService.getTransactionCategories("F"+this._formType).takeUntil(this.onDestroy$).subscribe(res => {
+      this._transactionTypeService.getTransactionCategories("F"+this._formType).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
         if (res) {
             this.transactionCategories = res.data.transactionCategories;
             this.cashOnHand = res.data.cashOnHand;
@@ -149,7 +149,7 @@ export class TransactionSidebarComponent implements OnInit {
   }
 
   ngDoCheck(): void {
-    this._messageService.getMessage().takeUntil(this.onDestroy$).subscribe(res => {
+    this._messageService.getMessage().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
       if (res) {
         if (res.hasOwnProperty('formType')) {
           if (typeof res.formType === 'string') {
@@ -338,8 +338,8 @@ export class TransactionSidebarComponent implements OnInit {
           localStorage.getItem('Reports_Edit_Screen') === 'Yes'
         ) {
           let queryParamsMap: any = { step: 'step_2', transactionCategory: transactionCategoryValue };
-          if (this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams.reportId) {
-            queryParamsMap.reportId = this._activatedRoute.snapshot.queryParams.reportId;
+          if (this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams['reportId']) {
+            queryParamsMap.reportId = this._activatedRoute.snapshot.queryParams['reportId'];
           }
   
           this.canDeactivate().then(result => {
@@ -391,7 +391,7 @@ export class TransactionSidebarComponent implements OnInit {
       if (result === true) {
         localStorage.removeItem(`form_${this._formType}_saved`);
         // go to different tab
-        let transactionCategory = this._activatedRoute.snapshot.queryParams.transactionCategory;
+        let transactionCategory = this._activatedRoute.snapshot.queryParams['transactionCategory'];
 
         if (!transactionCategory) {
           if (localStorage.getItem('form_3X_temp_transaction_type') !== null) {
@@ -415,7 +415,7 @@ export class TransactionSidebarComponent implements OnInit {
         const mappedTransCategory = this._utilService.getMappedTransactionCategory(transactionCategory);
         this._transactionMessageService.sendLoadDefaultTabMessage({
           step: 'transactions',
-          reportId: this._activatedRoute.snapshot.queryParams.amendmentReportId ? this._activatedRoute.snapshot.queryParams.amendmentReportId: this.reportId,
+          reportId: this._activatedRoute.snapshot.queryParams['amendmentReportId'] ? this._activatedRoute.snapshot.queryParams['amendmentReportId']: this.reportId,
           edit: this.editMode,
           transactionCategory: mappedTransCategory
         });

@@ -25,7 +25,7 @@ export class F1mComponent implements OnInit, OnDestroy {
 
   public currentStep: string = 'step_1';
   public step: string = 'step_1';
-  public type: any;
+  public type!: any;
   public partyType: string = '';
   public scheduleAction = ScheduleActions.add;
   public signAndSubmitData: any = null;
@@ -33,7 +33,7 @@ export class F1mComponent implements OnInit, OnDestroy {
 
   public editMode = false;
   public reportId = '';
-  public step2data: any;
+  public step2data!: any;
   public candidateNumber = 1;
   public treasurerData: any = {};
   public affiliationData: any = {};

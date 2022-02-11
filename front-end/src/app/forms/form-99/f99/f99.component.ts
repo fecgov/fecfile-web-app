@@ -16,12 +16,12 @@ import { MessageService } from '../../../shared/services/MessageService/message.
 export class F99Component implements OnInit , OnDestroy{
   
   
-  @Input() status: any;
+  @Input() status!: any;
 
-  public frm: any;
-  public direction: string;
+  public frm!: any;
+  public direction!: string;
   public editMode: boolean = true;
-  public reportId: number;
+  public reportId!: number;
   public step: string = 'step_1';
   public currentStep: string = 'step_1';
   public previousStep: string = '';
@@ -55,8 +55,8 @@ export class F99Component implements OnInit , OnDestroy{
 
     this._formType = this._activatedRoute.snapshot.paramMap.get('form_id');
 
-    this.step = this._activatedRoute.snapshot.queryParams.step;
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit ? this._activatedRoute.snapshot.queryParams.edit : true;
+    this.step = this._activatedRoute.snapshot.queryParams['step'];
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] ? this._activatedRoute.snapshot.queryParams['edit'] : true;
 
     if(this._committeeDetails) {
       if(this._committeeDetails.committeeid) {
@@ -88,7 +88,7 @@ export class F99Component implements OnInit , OnDestroy{
     }
 
 
-    this.routerEventsSubscription = this._router.events.takeUntil(this.onDestroy$).subscribe(val => {
+    this.routerEventsSubscription = this._router.events.pipe(takeUntil(this.onDestroy$)).subscribe(val => {
         if(val) {
           if(val instanceof NavigationEnd) {
             if(val.url.indexOf('/forms/form/99') === -1) {
@@ -96,10 +96,10 @@ export class F99Component implements OnInit , OnDestroy{
               localStorage.removeItem(`form_${this._formType}_saved`);
             }
           } else {
-            if (this._activatedRoute.snapshot.queryParams.step !== this.currentStep) {
-              this.currentStep = this._activatedRoute.snapshot.queryParams.step;
-              this.step = this._activatedRoute.snapshot.queryParams.step;
-              this.reportId = this._activatedRoute.snapshot.queryParams.reportId;
+            if (this._activatedRoute.snapshot.queryParams['step'] !== this.currentStep) {
+              this.currentStep = this._activatedRoute.snapshot.queryParams['step'];
+              this.step = this._activatedRoute.snapshot.queryParams['step'];
+              this.reportId = this._activatedRoute.snapshot.queryParams['reportId'];
             }
             window.scrollTo(0, 0);
           }
@@ -107,7 +107,7 @@ export class F99Component implements OnInit , OnDestroy{
       });
 
     this._messageService
-      .getMessage().takeUntil(this.onDestroy$)
+      .getMessage().pipe(takeUntil(this.onDestroy$))
       .subscribe(res => {
         if(res.validateMessage) {
         } else if (res.form_submitted) {
@@ -129,9 +129,9 @@ export class F99Component implements OnInit , OnDestroy{
 
 
   ngDoCheck(): void {
-    if(this.currentStep !== this._activatedRoute.snapshot.queryParams.step) {
-      this.currentStep = this._activatedRoute.snapshot.queryParams.step;
-      this.step = this._activatedRoute.snapshot.queryParams.step;
+    if(this.currentStep !== this._activatedRoute.snapshot.queryParams['step']) {
+      this.currentStep = this._activatedRoute.snapshot.queryParams['step'];
+      this.step = this._activatedRoute.snapshot.queryParams['step'];
     }
 
     if(this._form_submitted) {

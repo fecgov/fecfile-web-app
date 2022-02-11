@@ -11,15 +11,15 @@ import { DuplicateContactsService } from '../clean-contacts/duplicate-contacts/s
 })
 export class ImportDoneContactsComponent implements OnInit {
   @Input()
-  public fileName: string;
+  public fileName!: string;
 
   @Input()
-  public action: string;
+  public action!: string;
 
   @Output()
   public saveStatusEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public done: boolean;
+  public done!: boolean;
 
   constructor(private _router: Router, private _duplicateContactsService: DuplicateContactsService) {}
 

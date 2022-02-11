@@ -22,14 +22,14 @@ import { validateAmount } from '../../shared/utils/forms/validation/amount.valid
   encapsulation: ViewEncapsulation.None
 })
 export class SchedC1Component implements OnInit, OnChanges {
-  @Input() formType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() forceChangeDetection: Date;
-  @Input() transactionDetail: any;
+  @Input() formType!: string;
+  @Input() scheduleAction!: ScheduleActions;
+  @Input() forceChangeDetection!: Date;
+  @Input() transactionDetail!: any;
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
 
-  public c1Form: FormGroup;
-  public sectionType: string;
+  public c1Form!: FormGroup;
+  public sectionType!: string;
   public states: any[];
   public readonly initialSection = Sections.initialSection;
   public readonly sectionA = Sections.sectionA;
@@ -45,10 +45,10 @@ export class SchedC1Component implements OnInit, OnChanges {
   public fileNameToDisplay: string = null;
   // TODO check requirements for each amount field.
   public _contributionAmountMax = 14;
-  public existingData: any;
+  public existingData!: any;
   public fieldLoanAmount = { name: 'loan_amount' };
   public c1EditMode = false;
-  public currentC1Data: any;
+  public currentC1Data!: any;
 
   private _reportId;
   public editScheduleAction;

@@ -38,23 +38,23 @@ import {AuthService} from '../../shared/services/AuthService/auth.service';
   providers: [NgbTooltipConfig, CurrencyPipe, DecimalPipe]
 })
 export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() formType: string;
-  @Input() mainTransactionTypeText: string;
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() forceChangeDetection: Date;
-  @Input() parentTransactionModel: any;
-  @Input() transactionData: any;
-  @Input() transactionDataForChild: any;
+  @Input() formType!: string;
+  @Input() mainTransactionTypeText!: string;
+  @Input() transactionTypeText!: string;
+  @Input() transactionType!: string;
+  @Input() scheduleAction!: ScheduleActions;
+  @Input() forceChangeDetection!: Date;
+  @Input() parentTransactionModel!: any;
+  @Input() transactionData!: any;
+  @Input() transactionDataForChild!: any;
 
   @Output() status: EventEmitter<any>;
 
-  public showPart2: boolean;
+  public showPart2!: boolean;
 
   protected staticFormFields = schedFstaticFormFields;
 
-  private isDesignatedFiler: boolean;
+  private isDesignatedFiler!: boolean;
   private noValidationRequired = [];
   private validateDesignatedFiler = [];
   constructor(

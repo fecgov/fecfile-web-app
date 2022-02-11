@@ -32,7 +32,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
   contactData: any;
   isAccountLocked!: boolean;
   private _subscription!: Subscription;
-  private response: any;
+  private response!: any;
   constructor(
     private router: Router,
     private _fb: FormBuilder,

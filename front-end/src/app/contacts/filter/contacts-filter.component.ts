@@ -116,12 +116,12 @@ export class ContactsFilterComponent implements OnInit, OnDestroy {
   /**
    * Subscription for removing selected filters.
    */
-  private removeFilterSubscription: Subscription;
+  private removeFilterSubscription!: Subscription;
 
   /**
    * Subscription for switch filters for ActiveView of the traansaction table.
    */
-  private switchFilterViewSubscription: Subscription;
+  private switchFilterViewSubscription!: Subscription;
 
   // TODO put in a contacts constants ts file for multi component use.
   private readonly filtersLSK = 'contacts.filters';

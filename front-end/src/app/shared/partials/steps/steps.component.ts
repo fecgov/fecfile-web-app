@@ -7,8 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class StepsComponent implements OnInit {
 
-  @Input() steps: any;
-  @Input() current_step: any;
+  @Input() steps!: any;
+  @Input() current_step!: any;
 
   constructor() { }
 

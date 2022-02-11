@@ -25,11 +25,11 @@ export class FormsComponent implements OnInit, OnDestroy {
   private onDestroy$ = new Subject();
   
   private _openModal: any = null;
-  private _step: string;
-  private _editMode: boolean;
+  private _step!: string;
+  private _editMode!: boolean;
   private queryParamsSubscription:Subscription;
   private paramsSubscription:Subscription;
-  public jumpToTransaction: any;
+  public jumpToTransaction!: any;
   returnToGlobalAllTransaction: boolean;
 
   constructor(
@@ -42,7 +42,7 @@ export class FormsComponent implements OnInit, OnDestroy {
     private _messageService:MessageService
   ) {
 
-    this.queryParamsSubscription = _activeRoute.queryParams.takeUntil(this.onDestroy$).subscribe(p => {
+    this.queryParamsSubscription = _activeRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe(p => {
       if (p.step) {
         this._step = p.step;
       }

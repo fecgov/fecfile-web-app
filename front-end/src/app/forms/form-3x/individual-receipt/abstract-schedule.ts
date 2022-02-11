@@ -54,10 +54,10 @@ export enum SaveActions {
 @Directive()
 export abstract class AbstractSchedule implements OnInit, OnDestroy, OnChanges {
   @Output() parentDataEmitter: EventEmitter<any> = new EventEmitter<any>();
-  @Input() transactionData: any;
-  @Input() transactionDataForChild: any;
-  @Input() populateHiddenFieldsMessageObj: any;
-  @Input() populateFieldsMessageObj: any;
+  @Input() transactionData!: any;
+  @Input() transactionDataForChild!: any;
+  @Input() populateHiddenFieldsMessageObj!: any;
+  @Input() populateFieldsMessageObj!: any;
   @Input() returnToGlobalAllTransaction!: boolean;
 
   mainTransactionTypeText = '';
@@ -86,9 +86,9 @@ export abstract class AbstractSchedule implements OnInit, OnDestroy, OnChanges {
   public entityTypes: any = [];
   public activityEventTypes: any = [];
   public activityEventNames: any = null;
-  public subTransactionInfo: any;
+  public subTransactionInfo!: any;
   public multipleSubTransactionInfo: any[] = [];
-  public selectedEntityType: any;
+  public selectedEntityType!: any;
   public subTransactions!: any[];
   public subTransactionsTableType!: string;
   public formType = '';
@@ -98,7 +98,7 @@ export abstract class AbstractSchedule implements OnInit, OnDestroy, OnChanges {
   public memoDropdownSize = '';
   public totalAmountReadOnly!: boolean;
   public returnToDebtSummary = false;
-  public returnToDebtSummaryInfo: any;
+  public returnToDebtSummaryInfo!: any;
   public viewScheduleAction: ScheduleActions = ScheduleActions.view;
   public reattributionTransactionId!: string;
   public redesignationTransactionId!: string;
@@ -142,29 +142,29 @@ export abstract class AbstractSchedule implements OnInit, OnDestroy, OnChanges {
   public _contributionAmount = '';
   private _contributionAmountChlid = '';
   private readonly _memoCodeValue: string = 'X';
-  private _selectedEntity: any;
-  private _selectedEntityChild: any;
-  private _selectedCandidate: any;
-  private _selectedCandidateChild: any;
-  private _selectedChangeWarn: any;
-  private _selectedChangeWarnChild: any;
-  private _selectedCandidateChangeWarn: any;
-  private _selectedCandidateChangeWarnChild: any;
+  private _selectedEntity!: any;
+  private _selectedEntityChild!: any;
+  private _selectedCandidate!: any;
+  private _selectedCandidateChild!: any;
+  private _selectedChangeWarn!: any;
+  private _selectedChangeWarnChild!: any;
+  private _selectedCandidateChangeWarn!: any;
+  private _selectedCandidateChangeWarnChild!: any;
   private _isShowWarn!: boolean;
   private _contributionAmountMax!: number;
   protected _transactionToEdit!: TransactionModel | null;
   private readonly _childFieldNamePrefix = 'child*';
   private _readOnlyMemoCode!: boolean;
   private _readOnlyMemoCodeChild!: boolean;
-  private _entityTypeDefault: any;
+  private _entityTypeDefault!: any;
   private _employerOccupationRequired!: boolean;
   private _prePopulateFieldArray!: Array<any>;
-  private _committeeDetails: any;
+  private _committeeDetails!: any;
   private _cmteTypeCategory!: string;
   private _completedCloning: boolean = false;
   private _outstandingDebtBalance!: number | null;
   private _scheduleHBackRefTransactionId!: string;
-  private reattrbutionTransaction: any;
+  private reattrbutionTransaction!: any;
   private readonly childNeededWarnText =
     'Please note that this transaction usually includes memo transactions that support the' +
     ' parent transaction. You can add the memo transactions at a later date.';
@@ -212,7 +212,7 @@ export abstract class AbstractSchedule implements OnInit, OnDestroy, OnChanges {
 
   public priviousTransactionType = '';
   public currentTransactionType = '';
-  public candOfficeStatesByTransactionType: any;
+  public candOfficeStatesByTransactionType!: any;
   schedATransactionsWithMemoAmountRestrictions: string[] = ['PARTN_MEMO'];
   schedBTransactionsWithMemoAmountRestrictions: string[] = [
     'OPEXP_CC_PAY_MEMO',
@@ -430,7 +430,7 @@ export abstract class AbstractSchedule implements OnInit, OnDestroy, OnChanges {
         }
       });
 
-    _activatedRoute.queryParams.pipe(takeUntil(this.onDestroy$)).subscribe((p) => {
+    _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe((p) => {
       this._transactionCategory = p['transactionCategory'];
       this._cloned = p['cloned'] || p['cloned'] === 'true' ? true : false;
     });

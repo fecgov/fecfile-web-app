@@ -37,15 +37,15 @@ export class EndorserComponent implements OnInit, OnDestroy {
   @Input() formOptionsVisible: boolean = false;
   @Input() transactionTypeText = '';
   @Input() transactionType = '';
-  @Input() transactionDetail: any;
-  @Input() scheduleAction: ScheduleActions;
+  @Input() transactionDetail!: any;
+  @Input() scheduleAction!: ScheduleActions;
 
   public checkBoxVal: boolean = false;
-  public endorserForm: FormGroup;
+  public endorserForm!: FormGroup;
   public formFields: any = [];
   public formVisible: boolean = false;
   public hiddenFields: any = [];
-  public testForm: FormGroup;
+  public testForm!: FormGroup;
   public titles: any = [];
   public states: any = [];
   public individualFormFields: any = [];
@@ -58,10 +58,10 @@ export class EndorserComponent implements OnInit, OnDestroy {
   public officeSought: any = [];
   public officeState: any = [];
 
-  private _selectedEntity: any;
-  private _contributionAmountMax: number;
+  private _selectedEntity!: any;
+  private _contributionAmountMax!: number;
   private readonly _childFieldNamePrefix = 'child*';
-  private _selectedChangeWarn: any;
+  private _selectedChangeWarn!: any;
 
   constructor(
     private _fb: FormBuilder,
@@ -532,7 +532,7 @@ export class EndorserComponent implements OnInit, OnDestroy {
     let endorserObj = this._prepareDataForApiCall();
 
 
-    this._loanservice.saveSched_C2(this.scheduleAction, endorserObj, hiddenFieldsObj,this._activatedRoute.snapshot.queryParams.reportId).subscribe(res => {
+    this._loanservice.saveSched_C2(this.scheduleAction, endorserObj, hiddenFieldsObj,this._activatedRoute.snapshot.queryParams['reportId']).subscribe(res => {
       if (!addmore) {
         this.goToEndorserSummary();
       }

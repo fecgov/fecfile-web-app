@@ -46,22 +46,22 @@ const transactionCategoryOptions = [];
 })
 export class TransactionsTableComponent implements OnInit, OnDestroy {
   @ViewChild('columnOptionsModal')
-  public columnOptionsModal: ModalDirective;
+  public columnOptionsModal!: ModalDirective;
 
   @Input()
-  public formType: string;
+  public formType!: string;
 
   @Input()
-  public reportId: string;
+  public reportId!: string;
 
   @Input()
-  public transactionId: string;
+  public transactionId!: string;
 
   @Input()
-  public routeData: any;
+  public routeData!: any;
 
   @Input()
-  public tableType: string;
+  public tableType!: string;
 
 
   public showReceiptsTab: boolean = true;
@@ -70,8 +70,8 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   public showOthersTab: boolean = true;
 
   public transactionsModel: Array<TransactionModel>;
-  public totalAmount: number;
-  public totalSemiAnnualAmount: number;
+  public totalAmount!: number;
+  public totalSemiAnnualAmount!: number;
   public transactionsView = ActiveView.transactions;
   public recycleBinView = ActiveView.recycleBin;
   public bulkActionDisabled = true;
@@ -80,7 +80,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   public pageReceivedReports: boolean = false;
   public transactionCategories: any = [];
   public transactionCategory: string = '';
-  public committeeDetails: any;
+  public committeeDetails!: any;
   public editMode: boolean = false;
 
   // ngx-pagination config
@@ -89,12 +89,12 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
   public gotoPage: number = 1;
 
-  private filters: TransactionFilterModel;
+  private filters!: TransactionFilterModel;
   // private keywords = [];
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
@@ -124,31 +124,31 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   /**
    * Identifies the column currently sorted by name.
    */
-  private currentSortedColumnName: string;
+  private currentSortedColumnName!: string;
 
   /**
    * Subscription for messages sent from the parent component to show the PIN Column
    * options.
    */
-  private showPinColumnsSubscription: Subscription;
+  private showPinColumnsSubscription!: Subscription;
 
   /**
    * Subscription for running the keyword and filter search
    * to the transactions obtained from the server.
    */
-  private keywordFilterSearchSubscription: Subscription;
+  private keywordFilterSearchSubscription!: Subscription;
 
-  private loadTransactionsSubscription: Subscription;
+  private loadTransactionsSubscription!: Subscription;
 
   private columnOptionCount = 0;
   private maxColumnOption = 7;
   public readonly maxColumnOptionReadOnly = 7;
-  private allTransactionsSelected: boolean;
-  private clonedTransaction: any;
-  private _previousUrl: any;
+  private allTransactionsSelected!: boolean;
+  private clonedTransaction!: any;
+  private _previousUrl!: any;
   public apiError: boolean = false;
 
-  private _datePipe: DatePipe;
+  private _datePipe!: DatePipe;
 
   private _filterToTransactionTypeMap: any =
     [
@@ -200,10 +200,10 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   routerSubscription: Subscription;
 
   selectedFromMultiplePages: Array <TransactionModel> = [];
-  public receiptsLabel: string;
-  public disbursementsLabel: string;
-  public loansLabel: string;
-  public othersLabel: string;
+  public receiptsLabel!: string;
+  public disbursementsLabel!: string;
+  public loansLabel!: string;
+  public othersLabel!: string;
   showAmountColumn: boolean;
   showAggregateAmountColumn: boolean;
   showItemizationColumn: boolean;
@@ -265,7 +265,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
       });
 
     this.loadDefaultReceiptsTabSubscription = this._transactionsMessageService.getLoadDefaultTabMessage()
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe(p => {
         this.transactionCategory = p.transactionCategory;
         this.reportId = p.reportId;
@@ -277,8 +277,8 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
           allTransactions: p.allTransactions
         };
 
-        if(this._activatedRoute.snapshot.queryParams.amendmentReportId){
-          queryParams.amendmentReportId = this._activatedRoute.snapshot.queryParams.amendmentReportId;
+        if(this._activatedRoute.snapshot.queryParams['amendmentReportId']){
+          queryParams['amendmentReportId'] = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
         }
         this._router.navigate([`/forms/form/${this.formType}`], {
         queryParams: queryParams  
@@ -293,7 +293,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
       });
 
 
-    this.routerSubscription = _activatedRoute.queryParams.takeUntil(this.onDestroy$)
+    this.routerSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$))
     .distinctUntilChanged().subscribe(p => {
       this.transactionCategory = p.transactionCategory;
       if (p.allTransactions === true || p.allTransactions === 'true') {
@@ -379,7 +379,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
 
 
   private applyEntityFilterIfApplicable() {
-    if(this._activatedRoute.snapshot.queryParams.entityFilter){
+    if(this._activatedRoute.snapshot.queryParams['entityFilter']){
       // this._messageService.sendMessage({})
       this._messageService.sendMessage({action:'filterAllTransactionsByEntity'});
     }
@@ -693,15 +693,15 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     //clear all filters first
     // this._transactionsMessageService.sendClearAllFiltersMessage({});
     const queryParams: any = {
-      step: this._activatedRoute.snapshot.queryParams.step,
-      reportId: this._activatedRoute.snapshot.queryParams.reportId,
-      edit: this._activatedRoute.snapshot.queryParams.edit,
+      step: this._activatedRoute.snapshot.queryParams['step'],
+      reportId: this._activatedRoute.snapshot.queryParams['reportId'],
+      edit: this._activatedRoute.snapshot.queryParams['edit'],
       transactionCategory: transactionCategory,
       allTransactions: this._allTransactions
     };
 
-    if(this._activatedRoute.snapshot.queryParams.amendmentReportId){
-      queryParams.amendmentReportId = this._activatedRoute.snapshot.queryParams.amendmentReportId;
+    if(this._activatedRoute.snapshot.queryParams['amendmentReportId']){
+      queryParams['amendmentReportId'] = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
     }
     this._router.navigate([`/forms/form/${this.formType}`], {
       queryParams: queryParams

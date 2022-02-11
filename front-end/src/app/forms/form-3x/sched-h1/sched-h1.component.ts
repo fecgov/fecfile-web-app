@@ -22,8 +22,8 @@ import { DecimalPipe } from '@angular/common';
 
 
 export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
-  @Input() forceChangeDetection: Date;
-  @Input() transactionData: any;
+  @Input() forceChangeDetection!: Date;
+  @Input() transactionData!: any;
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('f') form: NgForm;
 
@@ -96,7 +96,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
         }
       );
 
-    this.reportId = this._activatedRoute.snapshot.queryParams.reportId;
+    this.reportId = this._activatedRoute.snapshot.queryParams['reportId'];
   }
 
 
@@ -131,7 +131,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
       this.onDestroy$.next(true);
     }
     if (this.form) {
-      this.form.valueChanges.takeUntil(this.onDestroy$)
+      this.form.valueChanges.pipe(takeUntil(this.onDestroy$))
         .subscribe(val => {
           if (this.form.dirty) {
             localStorage.setItem(`form_${this.formType}_saved`, JSON.stringify({ saved: false }));
@@ -420,7 +420,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
   }
 
   public changeH1Disable() {
-    if (this._activatedRoute.snapshot.queryParams.step === 'step_2') {
+    if (this._activatedRoute.snapshot.queryParams['step'] === 'step_2') {
       this.h1Disabled = this.getH1Disable;
       this.h1PacADDisabled = this.getH1PacADDisable;
       this.h1PacGVDisabled = this.getH1PacGVDisable;

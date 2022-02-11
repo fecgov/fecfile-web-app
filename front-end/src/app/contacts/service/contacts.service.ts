@@ -40,10 +40,10 @@ export class ContactsService {
   // only for mock data - end
 
   // May only be needed for mocking server
-  private _orderByPipe: OrderByPipe;
-  private _filterPipe: FilterPipe;
-  private _zipCodePipe: ZipCodePipe;
-  private _datePipe: DatePipe;
+  private _orderByPipe!: OrderByPipe;
+  private _filterPipe!: FilterPipe;
+  private _zipCodePipe!: ZipCodePipe;
+  private _datePipe!: DatePipe;
   private _propertyNameConverterMap: Map<string, string> = new Map([['zip', 'zip_code']]);
 
   //data container for sharing entityList info for all transactions table.

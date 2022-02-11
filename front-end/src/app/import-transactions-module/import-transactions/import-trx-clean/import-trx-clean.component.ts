@@ -14,7 +14,7 @@ import { ImportTransactionsService } from '../service/import-transactions.servic
 })
 export class ImportTrxCleanComponent implements OnInit, OnDestroy {
   @Input()
-  public uploadFile: UploadFileModel;
+  public uploadFile!: UploadFileModel;
 
   @Output()
   public resultsEmitter: EventEmitter<any> = new EventEmitter<any>();
@@ -29,9 +29,9 @@ export class ImportTrxCleanComponent implements OnInit, OnDestroy {
   public maxItemsPerPage = 1000000; // set to 4 once server side supports pagination.
   public directionLinks = false;
   public autoHide = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages = 0;
-  public allDupesSelected: boolean;
+  public allDupesSelected!: boolean;
 
   private contactsSubject: BehaviorSubject<Array<any>>;
   private onDestroy$ = new Subject();
@@ -74,7 +74,7 @@ export class ImportTrxCleanComponent implements OnInit, OnDestroy {
   public checkDuplicates(page: number) {
     this.config.currentPage = page;
 
-    // // this._importContactsService.checkDuplicates(page).takeUntil(this.contactsSubject).subscribe((res: any) => {
+    // // this._importContactsService.checkDuplicates(page).pipe(takeUntil(this.contactsSubject).subscribe((res: any)) => {
     // this._duplicateContactsService.getDuplicates_mock(page).subscribe((res: any) => {
     //   this.contactsSubject.next(res.duplicates);
     //   // this.contactsSubject.next(this.duplicates);

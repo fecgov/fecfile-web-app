@@ -15,7 +15,7 @@ import { SessionService } from '../../shared/services/SessionService/session.ser
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  public frm: FormGroup;
+  public frm!: FormGroup;
   public isBusy: boolean = false;
   public hasFailed: boolean = false;
   public committeeIdInputError: boolean = false;
@@ -23,10 +23,10 @@ export class LoginComponent implements OnInit {
   public loginEmailInputError: boolean = false;
   public appTitle: string | null = null;
   public loggedOut: any = '';
-  private _subscription: Subscription;
+  private _subscription!: Subscription;
   public titleF!: string;
   public titleR!: string;
-  public show: boolean;
+  public show!: boolean;
 
   constructor(
     private _fb: FormBuilder,

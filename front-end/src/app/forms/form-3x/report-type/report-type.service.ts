@@ -27,7 +27,7 @@ export class ReportTypeService {
   ) {
     this._datePipe = new DatePipe('en-US');
   }
-  private _datePipe: DatePipe;
+  private _datePipe!: DatePipe;
   /**
    * Gets the report types.
    *

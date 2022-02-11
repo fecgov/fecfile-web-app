@@ -23,19 +23,19 @@ import { GetTransactionsResponse, TransactionsService } from '../service/transac
 })
 export class SubTransactionsTableComponent implements OnInit, OnChanges {
   @Input()
-  public formType: string;
+  public formType!: string;
 
   @Input()
-  public subTransactionsTableType: string;
+  public subTransactionsTableType!: string;
 
   @Input()
   public subTransactions: any[];
 
   @Input()
-  public returnToDebtSummary: boolean;
+  public returnToDebtSummary!: boolean;
 
   @Input()
-  public returnToDebtSummaryInfo: any;
+  public returnToDebtSummaryInfo!: any;
 
   public transactionsModel: Array<TransactionModel>;
 

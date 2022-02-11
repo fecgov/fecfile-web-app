@@ -29,8 +29,8 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
   @Input() formOptionsVisible: boolean = false;
   @Input() transactionCategories: any = [];
 
-  public editMode: boolean;
-  public frmOption: FormGroup;
+  public editMode!: boolean;
+  public frmOption!: FormGroup;
   public frmSubmitted: boolean = false;
   public showForm: boolean = false;
   public searchField: any = {};
@@ -44,7 +44,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
 
   private _formType: string = '';
   private _mainTransactionCategory: any = [];
-  private _mainTransactionTypeText: string;
+  private _mainTransactionTypeText!: string;
   private _transactionCategory: string = '';
   private _transactionCategories: any = [];
 
@@ -66,21 +66,21 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
     this._config.placement = 'right';
     this._config.triggers = 'click';
 
-    this.routeSubscription = _activatedRoute.queryParams.takeUntil(this.onDestroy$).subscribe(p => {
+    this.routeSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe(p => {
 	
       const setTargetVal = { value: null, placeholder: null, text: null, category:null };
       this.frmOption = this._fb.group({
         secondaryOption: ['', Validators.required]
       });
-      if (this._activatedRoute.snapshot.queryParams.transactionSubCategory) {
-        setTargetVal.value = this._activatedRoute.snapshot.queryParams.transactionSubCategory;
-        setTargetVal.placeholder = this._activatedRoute.snapshot.queryParams.transactionSubCategoryText;
-        setTargetVal.text = this._activatedRoute.snapshot.queryParams.transactionSubCategoryText;
-        setTargetVal.category = this._activatedRoute.snapshot.queryParams.transactionCategory;
-        if(this._activatedRoute.snapshot.queryParams.transactionCategoryText){
-          this._mainTransactionTypeText = this._activatedRoute.snapshot.queryParams.transactionCategoryText;
+      if (this._activatedRoute.snapshot.queryParams['transactionSubCategory']) {
+        setTargetVal.value = this._activatedRoute.snapshot.queryParams['transactionSubCategory'];
+        setTargetVal.placeholder = this._activatedRoute.snapshot.queryParams['transactionSubCategoryText'];
+        setTargetVal.text = this._activatedRoute.snapshot.queryParams['transactionSubCategoryText'];
+        setTargetVal.category = this._activatedRoute.snapshot.queryParams['transactionCategory'];
+        if(this._activatedRoute.snapshot.queryParams['transactionCategoryText']){
+          this._mainTransactionTypeText = this._activatedRoute.snapshot.queryParams['transactionCategoryText'];
         }
-        this._toggle(this._activatedRoute.snapshot.queryParams.transactionSubCategoryType);
+        this._toggle(this._activatedRoute.snapshot.queryParams['transactionSubCategoryType']);
         this.updateTypeSelected(setTargetVal);
         this.childOptionsListClick(setTargetVal.value);
         this.doValidateOption();
@@ -88,7 +88,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
       this._transactionCategory = p.transactionCategory ? p.transactionCategory : '';
     });
 
-    this._messageService.getMessage().takeUntil(this.onDestroy$).subscribe(msg => {
+    this._messageService.getMessage().pipe(takeUntil(this.onDestroy$)).subscribe(msg => {
       if(msg && msg.action === 'goDirectlyToSpecificTransaction' && msg.transaction){
         this.updateTypeSelected(msg.transaction);
       }
@@ -97,7 +97,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
 
     this.frmOption = this._fb.group({
       secondaryOption: ['', Validators.required]

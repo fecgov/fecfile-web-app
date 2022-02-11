@@ -12,7 +12,7 @@ export class ExportDirective {
   public appExport: any[];
 
   @Input()
-  public fileName: string;
+  public fileName!: string;
 
   @HostListener('click', ['$event']) onClick($event: any) {
     // console.log('clicked: ' + $event);

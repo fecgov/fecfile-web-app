@@ -5,8 +5,8 @@
  */
 export class ValidationErrorModel {
 
-  public message: string;
-  public isError: boolean;
+  public message!: string;
+  public isError!: boolean;
 
   public constructor( message: string, isError: boolean) {
     this.message = message;

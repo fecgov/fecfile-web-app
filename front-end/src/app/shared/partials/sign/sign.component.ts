@@ -23,18 +23,18 @@ export class SignComponent implements OnInit, OnDestroy {
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
 
   public committee_details: any = {};
-  public editMode: boolean;
+  public editMode!: boolean;
   public formType: string = '';
   public typeSelected: string = '';
   public signFailed: boolean = false;
   public frmSaved: boolean = false;
-  public frmSignee: FormGroup;
+  public frmSignee!: FormGroup;
   public date_stamp: Date = new Date();
   public hideText: boolean = false;
   public showValidateBar: boolean = false;
   private _printPriviewPdfFileLink: string = '';
 
-  private _subscription: Subscription;
+  private _subscription!: Subscription;
   private _additional_email_1: string = '';
   private _additional_email_2: string = '';
   private _confirm_email_1: string = '';
@@ -67,7 +67,7 @@ export class SignComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _reportTypeService: ReportTypeService
   ) {
-    this.queryParamsSubscription  = _activatedRoute.queryParams.subscribe(p => {
+    this.queryParamsSubscription  = _activatedRoute.queryParams['subscribe'](p => {
       if (p.refresh) {
         this._setRefresh = true;
         this.ngOnInit();
@@ -77,9 +77,9 @@ export class SignComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
     this.committee_details = JSON.parse(localStorage.getItem('committee_details'));
-    //this.fec_id = this._activatedRoute.snapshot.queryParams.fec_id;
+    //this.fec_id = this._activatedRoute.snapshot.queryParams['fec_id'];
 
     if (this.formType === '3X') {
       this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));

@@ -28,7 +28,7 @@ import { F1mService } from './../../f1m/f1m-services/f1m.service';
 })
 export class F1mQualificationComponent implements OnInit, OnDestroy {
   @Input() candidateNumber!: number;
-  @Input() qualificationData: any;
+  @Input() qualificationData!: any;
   @Input() reportId!: string;
   @Input() scheduleAction!: ScheduleActions;
   @Output() addCandidateEvent: EventEmitter<any> = new EventEmitter();
@@ -38,9 +38,9 @@ export class F1mQualificationComponent implements OnInit, OnDestroy {
   public form!: FormGroup;
   public formPart2!: FormGroup;
   public formFields: any = [];
-  public subTransactionTableType: any;
-  public subTransactions: any;
-  public subTransactionInfo: any;
+  public subTransactionTableType!: any;
+  public subTransactions!: any;
+  public subTransactionInfo!: any;
   public width = '23px';
   public tooltipPlaceholder = 'Placeholder text';
   public showPart2: boolean = false;

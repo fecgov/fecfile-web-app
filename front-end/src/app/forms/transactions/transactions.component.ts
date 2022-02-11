@@ -45,7 +45,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   public formType = '';
   public reportId = '0';
-  public routeData: any;
+  public routeData!: any;
   public previousReportId = '0';
   public view: ActiveView = ActiveView.transactions;
   public transactionsView = ActiveView.transactions;
@@ -63,8 +63,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public currentStep: string = 'step_1';
   public step: string = '';
   public steps: any = {};
-  public frm: any;
-  public direction: string;
+  public frm!: any;
+  public direction!: string;
   public previousStep: string = '';
   public parentTransactionCategories: any = [];
   public reportsLoading: boolean = true;
@@ -88,34 +88,34 @@ export class TransactionsComponent implements OnInit, OnDestroy {
    * Subscription for applying filters to the transactions obtained from
    * the server.
    */
-  private applyFiltersSubscription: Subscription;
+  private applyFiltersSubscription!: Subscription;
 
   /**
    * Subscription for showing the TransactionsEditComponent.
    */
-  private editTransactionSubscription: Subscription;
+  private editTransactionSubscription!: Subscription;
 
   /**
    * Subscription for transactions to return to Debt Summary
    */
-  private editDebtSummaryTransactionSubscription: Subscription;
+  private editDebtSummaryTransactionSubscription!: Subscription;
   
-  private removeFiltersSubscription: Subscription;
+  private removeFiltersSubscription!: Subscription;
 
   /**
    * Subscription for showing all Transactions.
    */
-  private showTransactionsSubscription: Subscription;
+  private showTransactionsSubscription!: Subscription;
 
-  public transactionToEdit: TransactionModel;
+  public transactionToEdit!: TransactionModel;
 
   private filters: TransactionFilterModel = new TransactionFilterModel();
   private readonly filtersLSK = 'transactions.filters';
   removeTagsSubscription: any;
 
-  private viewTransactionSubscription: Subscription;
-  private getReattributeTransactionSubscription: Subscription;
-  private getRedesignateTransactionSubscription: Subscription;
+  private viewTransactionSubscription!: Subscription;
+  private getReattributeTransactionSubscription!: Subscription;
+  private getRedesignateTransactionSubscription!: Subscription;
   activatedRouteSubscription: Subscription;
   getMessageSubscription: Subscription;
 
@@ -189,7 +189,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         this.showTransactions();
       });
 
-      this.activatedRouteSubscription = _activatedRoute.queryParams.subscribe(p => {
+      this.activatedRouteSubscription = _activatedRoute.queryParams['subscribe'](p => {
         this.transactionCategory = this._utilService.convertTransactionCategoryByForm(p.transactionCategory,this.formType);
         
       });
@@ -220,7 +220,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
    */
   public ngOnInit(): void {
     this.showEditTransaction = false;
-    if(this._activatedRoute.snapshot.queryParams.searchTransactions){
+    if(this._activatedRoute.snapshot.queryParams['searchTransactions']){
       this.searchInputClass = 'searchHighlight';
     }
     else{
@@ -230,7 +230,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.reportId = this._activatedRoute.snapshot.paramMap.get('report_id');
     const reportIdRoute = this._activatedRoute.snapshot.paramMap.get('report_id');
     this._step = this._activatedRoute.snapshot.paramMap.get('step');
-    this.allTransactions = this._activatedRoute.snapshot.queryParams.allTransactions;
+    this.allTransactions = this._activatedRoute.snapshot.queryParams['allTransactions'];
 
     //console.log('TransactionsComponent this._step', this._step);
     this.routeData = { accessedByRoute: true, formType: this.formType, reportId: reportIdRoute };
@@ -270,7 +270,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   public ngDoCheck(): void {
-    this.reportId = this._activatedRoute.snapshot.queryParams.reportId;
+    this.reportId = this._activatedRoute.snapshot.queryParams['reportId'];
     if (!this.reportId) {
       return;
     }

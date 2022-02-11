@@ -102,7 +102,7 @@ export class IndividualReceiptComponent extends AbstractSchedule implements OnIn
       _authService
     );
 
-    this.queryParamsSubscription = _activatedRoute.queryParams.pipe(takeUntil(this._onDestroy$)).subscribe((p) => {
+    this.queryParamsSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this._onDestroy$)).subscribe((p) => {
       this.cloned = p['cloned'] ? true : false;
     });
   }

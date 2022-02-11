@@ -68,12 +68,12 @@ export class AddNewContactComponent implements OnInit, OnDestroy {
   public addScheduleAction: ContactActions = ContactActions.add;
   public isEditViewActive!: boolean;
 
-  private _selectedEntity: any;
+  private _selectedEntity!: any;
   private _contributionAmountMax!: number;
   private _entityType: string = 'IND';
   private readonly _childFieldNamePrefix = 'child*';
   private _contactToEdit: ContactModel | null = null;
-  private _selectedChangeWarn: any;
+  private _selectedChangeWarn!: any;
   private onDestroy$ = new Subject();
 
   constructor(

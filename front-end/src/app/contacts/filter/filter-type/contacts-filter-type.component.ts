@@ -10,7 +10,7 @@ import { Component, Input, OnInit, ElementRef } from '@angular/core';
 })
 export class ContactsFilterTypeComponent implements OnInit {
   @Input()
-  public categoryType: any;
+  public categoryType!: any;
 
   public constructor(public elRef: ElementRef) {}
 

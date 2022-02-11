@@ -31,10 +31,10 @@ import { DialogService } from 'src/app/shared/services/DialogService/dialog.serv
 })
 export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('selectFileInput')
-  public selectFileInput: ElementRef;
+  public selectFileInput!: ElementRef;
 
   @Input()
-  public forceChangeDetection: Date;
+  public forceChangeDetection!: Date;
 
   @Input()
   public screenType :string = 'contacts';
@@ -47,20 +47,20 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
 
   public userContacts: Array<any>;
   // public userContactFields: Array<string>;
-  public showUpload: boolean;
-  public progressPercent: number;
-  public processingPercent: number;
-  public hideProcessingProgress: boolean;
-  public showSpinner: boolean;
-  public uploadingText: string;
-  public processingText: string;
-  public duplicateFile: any;
+  public showUpload!: boolean;
+  public progressPercent!: number;
+  public processingPercent!: number;
+  public hideProcessingProgress!: boolean;
+  public showSpinner!: boolean;
+  public uploadingText!: string;
+  public processingText!: string;
+  public duplicateFile!: any;
 
   public extensionType = 'CSV';
   private onDestroy$: Subject<any>;
   private uploadProcessing$: Subject<any>;
-  private checkSum: string;
-  private committeeId: string;
+  private checkSum!: string;
+  private committeeId!: string;
 
   constructor(
     private csvConverterService: CsvConverterService,
@@ -386,7 +386,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   private _uploadCsv(file: File) {
     this.uploadContactsService
       .uploadFile(file, this.checkSum, this.committeeId)
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((data: any) => {
         // read the header record from the uploaded file
         // this.uploadContactsService.readCsvFileHeader(file).subscribe((headerFields: Array<string>) => {
@@ -412,7 +412,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   private _uploadDcf(file: File) {
     this.uploadContactsService
       .uploadFile(file, this.checkSum, this.committeeId)
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((data: any) => {
         if (data === false) {
           console.log('false');
@@ -447,7 +447,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   private _uploadJson(file: File) {
     this.uploadContactsService
       .uploadFile(file, this.checkSum, this.committeeId)
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((data: any) => {
         // read the header record from the uploaded file
         // this.uploadContactsService.readJsonFilePropertyNames(file).subscribe((headerFields: Array<string>) => {
@@ -490,10 +490,10 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
     // this.hideProcessingProgress = false;
     // const progressPoller = interval(500);
     // this.uploadProcessing$ = new Subject();
-    // progressPoller.takeUntil(this.uploadProcessing$);
+    // progressPoller.pipe(takeUntil(this.uploadProcessing$));
     // this.processingPercent = 0;
     // progressPoller.subscribe(val => {
-    //   this.uploadContactsService.checkUploadProcessing().takeUntil(this.uploadProcessing$).subscribe(res => {
+    //   this.uploadContactsService.checkUploadProcessing().pipe(takeUntil(this.uploadProcessing$)).subscribe(res => {
     //     this.processingPercent += res;
     //     if (this.processingPercent > 99) {
     //       this.uploadProcessing$.next();
@@ -511,7 +511,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   public getProgress() {
     this.uploadContactsService
       .getProgressPercent()
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((percent: number) => {
         this.progressPercent = percent;
         if (this.progressPercent >= 100) {

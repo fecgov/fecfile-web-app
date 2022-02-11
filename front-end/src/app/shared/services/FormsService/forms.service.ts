@@ -21,8 +21,8 @@ import { ZipCodePipe } from '../../../shared/pipes/zip-code/zip-code.pipe';
   providedIn: 'root',
 })
 export class FormsService {
-  private _orderByPipe: OrderByPipe;
-  private _filterPipe: FilterPipe;
+  private _orderByPipe!: OrderByPipe;
+  private _filterPipe!: FilterPipe;
   private _zipCodePipe!: ZipCodePipe;
   private _datePipe!: DatePipe;
   private _stopCanDeactivate: boolean = false;

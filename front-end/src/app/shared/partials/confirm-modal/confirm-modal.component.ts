@@ -23,10 +23,10 @@ export enum ModalHeaderClassEnum {
 export class ConfirmModalComponent implements OnInit {
 
   @Input()
-  public modalTitle: string;
+  public modalTitle!: string;
 
   @Input()
-  public message: string;
+  public message!: string;
 
   @Input()
   public isShowCancel = true;
@@ -35,10 +35,10 @@ export class ConfirmModalComponent implements OnInit {
   public isShowOK = true;
   
   @Input()
-  public headerClass: string;
+  public headerClass!: string;
 
   @Input()
-  public cancelTitle: string;
+  public cancelTitle!: string;
 
   public isShownewReport;
   public isShowReportExist;

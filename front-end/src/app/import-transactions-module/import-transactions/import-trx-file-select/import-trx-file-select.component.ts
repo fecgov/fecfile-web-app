@@ -33,12 +33,12 @@ import { ImportFileStatusEnum } from '../import-file-status.enum';
 })
 export class ImportTrxFileSelectComponent implements OnInit {
   @ViewChild('selectFileInput')
-  public selectFileInput: ElementRef;
+  public selectFileInput!: ElementRef;
 
   @Output()
   public queueEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public formType: string;
+  public formType!: string;
   public readonly f3xForm = 'F3X';
   public readonly f3lForm = 'F3L';
 

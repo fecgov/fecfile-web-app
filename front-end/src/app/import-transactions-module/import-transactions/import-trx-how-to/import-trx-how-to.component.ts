@@ -13,7 +13,7 @@ export class ImportTrxHowToComponent implements OnInit {
   public returnEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   public steps: Array<any>;
-  public currentStep: ImportTransactionsStepsEnum;
+  public currentStep!: ImportTransactionsStepsEnum;
   public readonly start = ImportTransactionsStepsEnum.start;
   public readonly step1Select = ImportTransactionsStepsEnum.step1Select;
   public readonly step2Review = ImportTransactionsStepsEnum.step2Review;

@@ -43,42 +43,42 @@ import { PaginationInstance } from 'ngx-pagination';
   ] */
 })
 export class SchedH2Component extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() scheduleType: string;
-  @Input() transactionData: any;
+  @Input() transactionTypeText!: string;
+  @Input() transactionType!: string;
+  @Input() scheduleAction!: ScheduleActions;
+  @Input() scheduleType!: string;
+  @Input() transactionData!: any;
 
   @Output() status: EventEmitter<any>;
 
-  public formType: string;
-  public showPart2: boolean;
+  public formType!: string;
+  public showPart2!: boolean;
   public loaded = false;
-  public schedH2: FormGroup;
+  public schedH2!: FormGroup;
 
-  public h2Subscription: Subscription;
-  public h2Sum: any;
-  public saveHRes: any;
+  public h2Subscription!: Subscription;
+  public h2Sum!: any;
+  public saveHRes!: any;
 
-  // public tableConfig: any;
+  // public tableConfig!: any;
   public receiptDateErr = false;
 
-  public cvgStartDate: any;
-  public cvgEndDate: any;
+  public cvgStartDate!: any;
+  public cvgEndDate!: any;
 
   public isSubmit = false;
 
-  public transaction_id: string;
+  public transaction_id!: string;
 
   public cloned = false;
   populateFormForEdit: Subscription;
 
-  public fedRatio: number;
-  public nonfedRatio: number;
+  public fedRatio!: number;
+  public nonfedRatio!: number;
   private _H2onDestroy$ = new Subject();
 
-  public restoreSubscription: Subscription;
-  public trashSubscription: Subscription;
+  public restoreSubscription!: Subscription;
+  public trashSubscription!: Subscription;
 
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
@@ -86,7 +86,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public pageNumbers: number[] = [];
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
@@ -166,7 +166,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
     this._tranMessageService
       .getEditTransactionMessage()
-      .takeUntil(this._H2onDestroy$)
+      .pipe(takeUntil(this._H2onDestroy$))
       .subscribe((trx: TransactionModel) => {
         //console.log(trx.transactionTypeIdentifier + 'tranc iden');
         if (trx.transactionTypeIdentifier === 'ALLOC_H2_RATIO') {
@@ -176,7 +176,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
     this._schedHMessageServiceService
       .getpopulateHFormForEditMessage()
-      .takeUntil(this._H2onDestroy$)
+      .pipe(takeUntil(this._H2onDestroy$))
       .subscribe(p => {
         if (p.scheduleType === 'Schedule H2') {
           let res = this._schedHService.getSchedule(p.transactionDetail.transactionModel).subscribe(res => {
@@ -298,7 +298,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   private _prepareForUnsavedH2Changes(): void {
-    this.schedH2.valueChanges.takeUntil(this._H2onDestroy$).subscribe(val => {
+    this.schedH2.valueChanges.pipe(takeUntil(this._H2onDestroy$)).subscribe(val => {
       if (this.schedH2.dirty) {
         localStorage.setItem(`form_${this.formType}_saved`, JSON.stringify({ saved: false }));
       }

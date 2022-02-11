@@ -26,14 +26,14 @@ import { MessageService } from '../../../shared/services/MessageService/message.
   encapsulation: ViewEncapsulation.None,
 })
 export class F3xComponent implements OnInit, OnDestroy {
-  @Input() jumpToTransaction: any;
+  @Input() jumpToTransaction!: any;
 
   public loadingData = false;
   public currentStep: string = 'step_1';
   public editMode: boolean = true;
   public step: string = '';
   public steps: any = {};
-  public frm: any;
+  public frm!: any;
   public direction!: string;
   public previousStep: string = '';
   public parentTransactionCategories: any = [];
@@ -57,7 +57,7 @@ export class F3xComponent implements OnInit, OnDestroy {
   public transactionTypeSchedFCore = '';
   public transactionTypeTextDebtSummary = '';
   public transactionTypeDebtSummary = '';
-  public transactionDetailSchedC: any;
+  public transactionDetailSchedC!: any;
   public scheduleType: string | null = null;
   public isShowFilters = false;
   public formType: string = '';
@@ -74,10 +74,10 @@ export class F3xComponent implements OnInit, OnDestroy {
 
   private _step: string = '';
   private _cloned: boolean = false;
-  private _reportId: any;
+  private _reportId!: any;
   public loanPaymentScheduleAction!: ScheduleActions;
   private showPart2!: boolean;
-  public transactionCategoriesMainData: any;
+  public transactionCategoriesMainData!: any;
 
   private onDestroy$ = new Subject();
   transactionData: any;
@@ -110,7 +110,7 @@ export class F3xComponent implements OnInit, OnDestroy {
     this._config.placement = 'right';
     this._config.triggers = 'click';
 
-    this.queryParamsSubscription = _activatedRoute.queryParams.subscribe((p) => {
+    this.queryParamsSubscription = _activatedRoute.queryParams['subscribe']((p) => {
       this.transactionCategory = p['transactionCategory'];
       if (p['edit'] === 'true' || p['edit'] === true) {
         this.editMode = true;

@@ -17,8 +17,8 @@ export class SubmitComponent implements OnInit, OnDestroy {
   public form_type: string = '';
   @Input() public FEC_Id: string = '#####';
 
-  private _reportId: number;
-  private _subscription: Subscription;
+  private _reportId!: number;
+  private _subscription!: Subscription;
   public checkStatus: boolean = true;
   messageSubscription: Subscription;
   routerSubscription: Subscription;
@@ -34,7 +34,7 @@ export class SubmitComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form_type = this._activatedRoute.snapshot.paramMap.get('form_id');
      if (this._router.url.indexOf('step_6') > -1) {
-      this.FEC_Id = this._activatedRoute.snapshot.queryParams.fec_id;
+      this.FEC_Id = this._activatedRoute.snapshot.queryParams['fec_id'];
       // this._checkReportStatus();
     }
     //console.log('form submitted ...', this.form_type);

@@ -40,7 +40,7 @@ export class NotificationheaderComponent implements OnInit {
       toolTip: "Import Transactions - Here you will find transaction documents that have been imported into the system."
     }
   ];
-  private activeRoutesSubscription: Subscription;
+  private activeRoutesSubscription!: Subscription;
 
   constructor(
     private _notificationsService: NotificationsService,

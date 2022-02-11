@@ -18,18 +18,18 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ImportTrxUploadComponent implements OnInit, OnDestroy {
   @Input()
-  public uploadFile: UploadFileModel;
+  public uploadFile!: UploadFileModel;
 
   @Output()
   public resultsEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public progressPercent: number;
-  public uploadingText: string;
+  public progressPercent!: number;
+  public uploadingText!: string;
 
   private onDestroy$: Subject<any>;
   private uploadProcessing$: Subject<any>;
-  private checkSum: string;
-  private committeeId: string;
+  private checkSum!: string;
+  private committeeId!: string;
 
   constructor(
     private _uploadTrxService: UploadTrxService,
@@ -106,7 +106,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
   //     this.uploadingText = 'Uploading...';
   //     this._uploadTrxService
   //       .uploadFile(file, this.checkSum, this.committeeId)
-  //       .takeUntil(this.onDestroy$)
+  //       .pipe(takeUntil(this.onDestroy$))
   //       .subscribe((data: any) => {
   //         if (data === false) {
   //           return;
@@ -129,7 +129,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
     this.uploadingText = 'Uploading...';
     this._uploadTrxService
     .uploadFile(this.uploadFile, this.committeeId)
-    .takeUntil(this.onDestroy$)
+    .pipe(takeUntil(this.onDestroy$))
     .subscribe((data: any) => {
       if (data === false) {
         return;
@@ -159,7 +159,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
 
     //   this._uploadTrxService
     //   .uploadFile(this.uploadFile, this.committeeId)
-    //   .takeUntil(this.onDestroy$)
+    //   .pipe(takeUntil(this.onDestroy$))
     //   .subscribe((data: any) => {
     //     if (data === false) {
     //       return;
@@ -209,10 +209,10 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
     // this.hideProcessingProgress = false;
     // const progressPoller = interval(500);
     // this.uploadProcessing$ = new Subject();
-    // progressPoller.takeUntil(this.uploadProcessing$);
+    // progressPoller.pipe(takeUntil(this.uploadProcessing$));
     // this.processingPercent = 0;
     // progressPoller.subscribe(val => {
-    //   this.uploadContactsService.checkUploadProcessing().takeUntil(this.uploadProcessing$).subscribe(res => {
+    //   this.uploadContactsService.checkUploadProcessing().pipe(takeUntil(this.uploadProcessing$)).subscribe(res => {
     //     this.processingPercent += res;
     //     if (this.processingPercent > 99) {
     //       this.uploadProcessing$.next();
@@ -230,7 +230,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
   public getProgress() {
     this._uploadTrxService
       .getProgressPercent()
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((percent: number) => {
         this.progressPercent = percent;
         if (this.progressPercent >= 100) {

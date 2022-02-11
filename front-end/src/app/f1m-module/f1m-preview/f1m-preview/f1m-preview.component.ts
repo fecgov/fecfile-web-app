@@ -10,15 +10,15 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class F1mPreviewComponent implements OnInit {
   @Input() reportId!: string;
-  @Input() affiliationData: any;
-  @Input() qualificationData: any;
-  @Input() treasurerData: any;
+  @Input() affiliationData!: any;
+  @Input() qualificationData!: any;
+  @Input() treasurerData!: any;
   @Input() type!: string;
   @Input() step!: string;
 
   public tooltipPlaceholder = 'Placeholder text';
 
-  public reportInfo: any;
+  public reportInfo!: any;
 
   constructor(private _f1mService: F1mService, private _reportTypeService: ReportTypeService) {}
 

@@ -27,7 +27,7 @@ window.Usersnap = window.Usersnap || {};
 })
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('content') content: any;
-  @Input() formType: string;
+  @Input() formType!: string;
 
   public menuActive: boolean = false;
   routerSubscription: Subscription;

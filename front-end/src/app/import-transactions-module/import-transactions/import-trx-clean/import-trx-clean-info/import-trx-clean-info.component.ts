@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ImportTrxCleanInfoComponent implements OnInit {
 
-  public showAdditionalInfo: boolean;
+  public showAdditionalInfo!: boolean;
 
   constructor() { }
 

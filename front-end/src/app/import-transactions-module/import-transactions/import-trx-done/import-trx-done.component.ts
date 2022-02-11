@@ -15,10 +15,10 @@ import { UploadContactsService } from 'src/app/import-contacts-module/import-con
 })
 export class ImportTrxDoneComponent implements OnInit, OnDestroy {
   @Input()
-  public uploadFile: UploadFileModel;
+  public uploadFile!: UploadFileModel;
 
   @Input()
-  public action: string;
+  public action!: string;
 
   @Input()
   public fileQueue: Array<UploadFileModel>;
@@ -26,16 +26,16 @@ export class ImportTrxDoneComponent implements OnInit, OnDestroy {
   @Output()
   public proceedEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public hasFailure: boolean;
-  public allFilesDone: boolean;
-  public allFailed: boolean;
+  public hasFailure!: boolean;
+  public allFilesDone!: boolean;
+  public allFailed!: boolean;
   public readonly completeStatus = ImportFileStatusEnum.complete;
   public readonly importingStatus = ImportFileStatusEnum.importing;
-  public progressPercent: number;
+  public progressPercent!: number;
 
-  private progressSubscription: Subscription;
-  private committeeId: string;
-  private currentFileDone: boolean;
+  private progressSubscription!: Subscription;
+  private committeeId!: string;
+  private currentFileDone!: boolean;
 
   constructor(
     private _router: Router,

@@ -45,19 +45,19 @@ export enum loanSumarysActions {
 export class EndorserSummaryComponent implements OnInit , OnDestroy {
 
   @ViewChild('columnOptionsModal')
-  public columnOptionsModal: ModalDirective;
+  public columnOptionsModal!: ModalDirective;
 
   @Input()
-  public formType: string;
+  public formType!: string;
 
   @Input()
-  public reportId: string;
+  public reportId!: string;
 
   @Input()
-  public tableType: string;
+  public tableType!: string;
 
   @Input()
-  public transactionDetail: any;
+  public transactionDetail!: any;
 
 
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
@@ -65,7 +65,7 @@ export class EndorserSummaryComponent implements OnInit , OnDestroy {
   //TODO-ZS -- change "any" to endorserModel when using actual data
   public endorserModel: Array<any>;
 
-  public totalAmount: number;
+  public totalAmount!: number;
   public endorserView = ActiveView.endorserSummary
   public recycleBinView = ActiveView.recycleBin;
   public bulkActionDisabled = true;
@@ -75,10 +75,10 @@ export class EndorserSummaryComponent implements OnInit , OnDestroy {
   public maxItemsPerPage = 100;
   public directionLinks = false;
   public autoHide = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages = 0;
 
-  //private filters: ContactFilterModel;
+  //private filters!: ContactFilterModel;
   // private keywords = [];
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
@@ -114,12 +114,12 @@ export class EndorserSummaryComponent implements OnInit , OnDestroy {
   /**
 	 * Identifies the column currently sorted by name.
 	 */
-  private currentSortedColumnName: string;
+  private currentSortedColumnName!: string;
 
 
   private columnOptionCount = 0;
   private maxColumnOption = 5;
-  public allEndorserSelected: boolean;
+  public allEndorserSelected!: boolean;
   public currentPageNumber: number = 1;
 
   constructor(

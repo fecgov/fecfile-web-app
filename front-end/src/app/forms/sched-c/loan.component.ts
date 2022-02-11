@@ -34,24 +34,24 @@ export enum ActiveView {
 // TODO a lot of the methods here were copied from AbsractSchedule and need to be deleted if not used.
 export class LoanComponent implements OnInit, OnDestroy, OnChanges {
 
-  @Input() formType: string;
+  @Input() formType!: string;
   @Input() scheduleAction: ScheduleActions = ScheduleActions.add;
-  @Input() transactionDetail: any;
-  @Input() forceChangeDetection: Date;
+  @Input() transactionDetail!: any;
+  @Input() forceChangeDetection!: Date;
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
 
   /**
    * Subscription for pre-populating the form for view or edit.
    */
 
-  private _clearFormSubscription: Subscription;
+  private _clearFormSubscription!: Subscription;
 
   public checkBoxVal = false;
-  public frmLoan: FormGroup;
+  public frmLoan!: FormGroup;
   public formFields: any = [];
   public formVisible = false;
   public hiddenFields: any = [];
-  public testForm: FormGroup;
+  public testForm!: FormGroup;
   public titles: any = [];
   public states: any = [];
   public individualFormFields: any = [];
@@ -71,20 +71,20 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
 
   public entityType = 'IND';
 
-  private _selectedEntity: any;
+  private _selectedEntity!: any;
   private _contributionAmountMax = 12;
   private readonly _childFieldNamePrefix = 'child*';
-  private _selectedChangeWarn: any;
-  private _transactionId: string;
-  private _transactionTypeIdentifier: string;
-  private _transactionCategory: string;
-  private cvgStartDate: string;
-  private cvgEndDate: string;
-  private currentLoanData: any; 0
-  private _selectedEntityId: any;
+  private _selectedChangeWarn!: any;
+  private _transactionId!: string;
+  private _transactionTypeIdentifier!: string;
+  private _transactionCategory!: string;
+  private cvgStartDate!: string;
+  private cvgEndDate!: string;
+  private currentLoanData!: any; 0
+  private _selectedEntityId!: any;
   private typeChangeEventOccured = false;
   _routeListener: Subscription;
-  private c1ExistsFlag: any;
+  private c1ExistsFlag!: any;
   reportId: any;
   formView: boolean = false;
   routesSubscription: Subscription;
@@ -106,7 +106,7 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
   ) {
     this._config.placement = 'right';
     this._config.triggers = 'click';
-    this.routesSubscription = _activatedRoute.queryParams.subscribe(p => {
+    this.routesSubscription = _activatedRoute.queryParams['subscribe'](p => {
       this.formView = p.formView ? p.formView === 'true' : false;
     });
     this._clearFormSubscription = this._f3xMessageService.getInitFormMessage().subscribe(message => {
@@ -115,7 +115,7 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
         this.setupForm();
       }
     });
-    this.reportId = this._activatedRoute.snapshot.queryParams.reportId;
+    this.reportId = this._activatedRoute.snapshot.queryParams['reportId'];
   }
 
   ngOnInit(): void {
@@ -1397,12 +1397,12 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
 
     let queryParams : any = {
       step: 'transactions', 
-      reportId: this._activatedRoute.snapshot.queryParams.amendmentReportId ? this._activatedRoute.snapshot.queryParams.amendmentReportId : reportId, 
+      reportId: this._activatedRoute.snapshot.queryParams['amendmentReportId'] ? this._activatedRoute.snapshot.queryParams['amendmentReportId'] : reportId, 
       edit: true,
       transactionCategory: this._transactionCategory
     };
-    if(this._activatedRoute.snapshot.queryParams.amendmentReportId){
-      queryParams.amendmentReportId = this._activatedRoute.snapshot.queryParams.amendmentReportId;
+    if(this._activatedRoute.snapshot.queryParams['amendmentReportId']){
+      queryParams['amendmentReportId'] = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
     }
     this._router.navigate([`/forms/form/${this.formType}`], {
       queryParams: queryParams

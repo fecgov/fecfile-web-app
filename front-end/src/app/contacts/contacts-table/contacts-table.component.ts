@@ -111,13 +111,13 @@ export class ContactsTableComponent implements OnInit, OnDestroy {
    * Subscription for messags sent from the parent component to show the PIN Column
    * options.
    */
-  private showPinColumnsSubscription: Subscription;
+  private showPinColumnsSubscription!: Subscription;
 
   /**
    * Subscription for running the keyword and filter search
    * to the contacts obtained from the server.
    */
-  private keywordFilterSearchSubscription: Subscription;
+  private keywordFilterSearchSubscription!: Subscription;
 
   private columnOptionCount = 0;
   public maxColumnOption = 5;

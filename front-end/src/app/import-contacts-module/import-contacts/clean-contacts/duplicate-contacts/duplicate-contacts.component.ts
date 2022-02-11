@@ -27,7 +27,7 @@ import { DuplicateContactsService } from './service/duplicate-contacts.service';
 })
 export class DuplicateContactsComponent implements OnInit, OnDestroy {
   @Input()
-  public fileName: string;
+  public fileName!: string;
 
   @Output()
   public dupeProceedEmitter: EventEmitter<any> = new EventEmitter<any>();
@@ -45,9 +45,9 @@ export class DuplicateContactsComponent implements OnInit, OnDestroy {
   public maxItemsPerPage = 2;
   public directionLinks = false;
   public autoHide = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages = 0;
-  public showAdditionalInfo: boolean;
+  public showAdditionalInfo!: boolean;
 
   /**
    * All fields and their values from the user's contact from the file and
@@ -64,10 +64,10 @@ export class DuplicateContactsComponent implements OnInit, OnDestroy {
     currentPage: this.mergePage
   };
 
-  public userContactHeader: any;
+  public userContactHeader!: any;
   public dupeContactHeader: Array<any>;
   public totalDuplicates = 0;
-  public allDupesSelected: boolean;
+  public allDupesSelected!: boolean;
 
   private contactsSubject: BehaviorSubject<Array<any>>;
   private onDestroy$ = new Subject();

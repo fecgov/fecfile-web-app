@@ -13,7 +13,7 @@ import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./f1m-candidates-table.component.scss'],
 })
 export class F1mCandidatesTableComponent implements OnInit {
-  @Input() candidatesData: any;
+  @Input() candidatesData!: any;
   @Input() step!: string;
   @Input() scheduleAction!: ScheduleActions;
   @Input() reportId!: string;

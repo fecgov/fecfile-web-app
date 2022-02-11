@@ -8,7 +8,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 export class ReviewUploadComponent implements OnInit {
 
   @Input()
-  public duplicateFile: any;
+  public duplicateFile!: any;
 
   @Output()
   public reviewEmitter: EventEmitter<any> = new EventEmitter<any>();

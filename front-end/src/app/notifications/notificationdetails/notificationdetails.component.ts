@@ -15,20 +15,20 @@ import { TabConfiguration } from '../notification';
 })
 export class NotificationdetailsComponent implements OnInit, OnDestroy {
   @ViewChild('notificationModal')
-  public notificationModal: ModalDirective;
+  public notificationModal!: ModalDirective;
 
   @ViewChild('notificationContentContainer')
-  public notificationContentContainer: ElementRef;
+  public notificationContentContainer!: ElementRef;
   
   @Input()
-  public tabConfig: TabConfiguration;
+  public tabConfig!: TabConfiguration;
 
   // data model
   public notifications: Map<string, string>[] = [];
   public keys: Array<{name: string, header: string}> = [];
 
   // sorting
-  private currentSortedColumnName: string;
+  private currentSortedColumnName!: string;
   private sortableColumns: SortableColumnModel[] = [];
 
   // ngx-pagination config
@@ -37,15 +37,15 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
 
   // View detail
-  public notificationContent: string;
-  public notificationContentType: string;
+  public notificationContent!: string;
+  public notificationContentType!: string;
 
   constructor(
     private _notificationsService: NotificationsService,

@@ -89,7 +89,7 @@ import { TransactionsFilterTypeComponent } from './filter-type/transactions-filt
 })
 export class TransactionsFilterComponent implements OnInit, OnDestroy {
   @Input()
-  public formType: string;
+  public formType!: string;
 
   @Input()
   public title = '';
@@ -97,21 +97,21 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   @ViewChildren('categoryElements')
   private categoryElements: QueryList<TransactionsFilterTypeComponent>;
 
-  public isHideTypeFilter: boolean;
-  public isHideDateFilter: boolean;
-  public isHideDeletedDateFilter: boolean;
-  public isHideReportTypeFilter: boolean;
-  public isHideAmountFilter: boolean;
-  public isHideSemiAnnualAmountFilter: boolean;
-  public isHideAggregateAmountFilter: boolean;
-  public isHideStateFilter: boolean;
-  public isHideMemoFilter: boolean;
-  public isHideItemizationFilter: boolean;
-  public isHideElectionCode: boolean;
-  public isHideElectionYear: boolean;
-  public isHideloanClosingBalanceFilter: boolean;
-  public isHideScheduleFilter: boolean;
-  public isHideDebtBeginningBalanceFilter: boolean;
+  public isHideTypeFilter!: boolean;
+  public isHideDateFilter!: boolean;
+  public isHideDeletedDateFilter!: boolean;
+  public isHideReportTypeFilter!: boolean;
+  public isHideAmountFilter!: boolean;
+  public isHideSemiAnnualAmountFilter!: boolean;
+  public isHideAggregateAmountFilter!: boolean;
+  public isHideStateFilter!: boolean;
+  public isHideMemoFilter!: boolean;
+  public isHideItemizationFilter!: boolean;
+  public isHideElectionCode!: boolean;
+  public isHideElectionYear!: boolean;
+  public isHideloanClosingBalanceFilter!: boolean;
+  public isHideScheduleFilter!: boolean;
+  public isHideDebtBeginningBalanceFilter!: boolean;
   public transactionCategories: any = [];
   public states: any = [];
   public reportTpes: any = [];
@@ -123,36 +123,36 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   ];
   
   public filterCategoriesText = '';
-  public filterAmountMin: number;
-  public filterAmountMax: number;
-  public filterSemiAnnualAmountMin: number;
-  public filterSemiAnnualAmountMax: number;
-  public filterLoanAmountMin: number;
-  public filterLoanAmountMax: number;
-  public filterAggregateAmountMin: number;
-  public filterAggregateAmountMax: number;
-  public filterLoanClosingBalanceMin: number;
-  public filterLoanClosingBalanceMax: number;
-  public filterDebtBeginningBalanceMin: number;
-  public filterDebtBeginningBalanceMax: number;
+  public filterAmountMin!: number;
+  public filterAmountMax!: number;
+  public filterSemiAnnualAmountMin!: number;
+  public filterSemiAnnualAmountMax!: number;
+  public filterLoanAmountMin!: number;
+  public filterLoanAmountMax!: number;
+  public filterAggregateAmountMin!: number;
+  public filterAggregateAmountMax!: number;
+  public filterLoanClosingBalanceMin!: number;
+  public filterLoanClosingBalanceMax!: number;
+  public filterDebtBeginningBalanceMin!: number;
+  public filterDebtBeginningBalanceMax!: number;
   public filterDateFrom: Date = null;
   public filterDateTo: Date = null;
   public filterDeletedDateFrom: Date = null;
   public filterDeletedDateTo: Date = null;
   public filterMemoCode = false;
   public filterElectionCode = false;
-  public filterElectionYearFrom: string;
-  public filterElectionYearTo: string;
-  public filterSchedule: string;
+  public filterElectionYearFrom!: string;
+  public filterElectionYearTo!: string;
+  public filterSchedule!: string;
 
-  public dateFilterValidation: ValidationErrorModel;
-  public deletedDateFilterValidation: ValidationErrorModel;
-  public amountFilterValidation: ValidationErrorModel;
-  public semiAnnualAmountFilterValidation: ValidationErrorModel;
-  public aggregateAmountFilterValidation: ValidationErrorModel;
-  public yearFilterValidation: ValidationErrorModel;
-  public loanClosingBalanceFilterValidation: ValidationErrorModel;
-  public debtBeginningBalanceFilterValidation: ValidationErrorModel;
+  public dateFilterValidation!: ValidationErrorModel;
+  public deletedDateFilterValidation!: ValidationErrorModel;
+  public amountFilterValidation!: ValidationErrorModel;
+  public semiAnnualAmountFilterValidation!: ValidationErrorModel;
+  public aggregateAmountFilterValidation!: ValidationErrorModel;
+  public yearFilterValidation!: ValidationErrorModel;
+  public loanClosingBalanceFilterValidation!: ValidationErrorModel;
+  public debtBeginningBalanceFilterValidation!: ValidationErrorModel;
   public transactionCategory: string = '';
   public editMode: boolean = false;
   
@@ -161,14 +161,14 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   /**
    * Subscription for removing selected filters.
    */
-  private removeFilterSubscription: Subscription;
+  private removeFilterSubscription!: Subscription;
 
   /**
    * Subscription for switch filters for ActiveView of the traansaction table.
    */
-  private switchFilterViewSubscription: Subscription;
+  private switchFilterViewSubscription!: Subscription;
   
-  private clearAllFiltersSubscription: Subscription;
+  private clearAllFiltersSubscription!: Subscription;
 
   // TODO put in a transactions constants ts file for multi component use.
   private readonly filtersLSK = 'transactions.filters';
@@ -178,23 +178,23 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   queryParamSubscription: Subscription;
   
   //Filters flags based on formType and transactionCategory
-  public showAmountFilter: boolean;
-  public showPeriodAmountFilter: boolean;
-  public showAggregateAmountFilter: boolean;
-  public showItemizationFilter: boolean;
-  public showTypeFilter: boolean;
-  public showReportTypeFilter: boolean;
-  public showDateFilter: boolean;
-  public showLoanAmountFilter: boolean;
-  public showBalanceAtCloseFilter: boolean;
-  public showBeginningBalanceFilter: boolean;
-  public showAggregateFilter: boolean;
-  public showMemoCodeFilter: boolean;
-  public showStateFilter: boolean;
-  public showElectionCodeFilter: boolean;
-  public showElectionYearFilter: boolean;
-  public showScheduleFilter: boolean;
-  public showSemiAnnualAmountFilter: boolean;
+  public showAmountFilter!: boolean;
+  public showPeriodAmountFilter!: boolean;
+  public showAggregateAmountFilter!: boolean;
+  public showItemizationFilter!: boolean;
+  public showTypeFilter!: boolean;
+  public showReportTypeFilter!: boolean;
+  public showDateFilter!: boolean;
+  public showLoanAmountFilter!: boolean;
+  public showBalanceAtCloseFilter!: boolean;
+  public showBeginningBalanceFilter!: boolean;
+  public showAggregateFilter!: boolean;
+  public showMemoCodeFilter!: boolean;
+  public showStateFilter!: boolean;
+  public showElectionCodeFilter!: boolean;
+  public showElectionYearFilter!: boolean;
+  public showScheduleFilter!: boolean;
+  public showSemiAnnualAmountFilter!: boolean;
   public entityFilter: string[] = [];
 
   constructor(
@@ -208,7 +208,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   ) {
     this._transactionsMessageService
       .getRemoveFilterMessage()
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((message: any) => {
         if (message) {
           if (message.removeAll) {
@@ -221,7 +221,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
 
     this._transactionsMessageService
       .getSwitchFilterViewMessage()
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((message: ActiveView) => {
         switch (message) {
           case ActiveView.transactions:
@@ -238,14 +238,14 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
 
     this._transactionsMessageService
     .getClearAllFiltersMessage()
-    .takeUntil(this.onDestroy$)
+    .pipe(takeUntil(this.onDestroy$))
     .subscribe(message => {
       this.clearAndApplyFilters();
     }); 
     
     this._messageService
     .getMessage()
-    .takeUntil(this.onDestroy$)
+    .pipe(takeUntil(this.onDestroy$))
     .subscribe(message => {
       if(message && message.action === 'filterAllTransactionsByEntity'){
         // this.entityFilter = message.entityId;
@@ -257,7 +257,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
       }
     }); 
 
-    this.queryParamSubscription = _activatedRoute.queryParams.takeUntil(this.onDestroy$).subscribe(p => {
+    this.queryParamSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe(p => {
       this.transactionCategory = p.transactionCategory;
       if (p.edit === 'true' || p.edit === true) {
         this.editMode = true;
@@ -315,7 +315,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
       this.getCategoryTypes();
       this.getStates();
       this.getItemizations();
-      if(this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams.allTransactions === 'true'){
+      if(this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams['allTransactions'] === 'true'){
         this.getReportTypes();
       }
     }

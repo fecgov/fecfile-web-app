@@ -11,24 +11,24 @@ import { ImportFileStatusEnum } from './import-file-status.enum';
   styleUrls: ['./import-transactions.component.scss']
 })
 export class ImportTransactionsComponent implements OnInit {
-  public isShowInfo: boolean;
+  public isShowInfo!: boolean;
   public steps: Array<any>;
-  public currentStep: ImportTransactionsStepsEnum;
+  public currentStep!: ImportTransactionsStepsEnum;
   public readonly start = ImportTransactionsStepsEnum.start;
   public readonly step1Select = ImportTransactionsStepsEnum.step1Select;
   // public readonly step1Upload = ImportTransactionsStepsEnum.step1Upload;
   public readonly step2Review = ImportTransactionsStepsEnum.step2Review;
   public readonly step3Clean = ImportTransactionsStepsEnum.step3Clean;
   public readonly step4ImportDone = ImportTransactionsStepsEnum.step4ImportDone;
-  // public fileSelectStep1: boolean;
-  public sidebarVisibleClass: string;
+  // public fileSelectStep1!: boolean;
+  public sidebarVisibleClass!: string;
   public rightSideClassArray: Array<string>;
   public fileQueue: Array<UploadFileModel>;
-  public currentFile: UploadFileModel;
-  public forceSidebarChangeDetection: Date;
-  public forceReviewChangeDetection: Date;
-  public openSidebar: boolean;
-  public cleanImportAction: string;
+  public currentFile!: UploadFileModel;
+  public forceSidebarChangeDetection!: Date;
+  public forceReviewChangeDetection!: Date;
+  public openSidebar!: boolean;
+  public cleanImportAction!: string;
 
   constructor() {}
 

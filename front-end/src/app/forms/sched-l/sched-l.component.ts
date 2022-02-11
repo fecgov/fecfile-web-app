@@ -56,32 +56,32 @@ import {AuthService} from '../../shared/services/AuthService/auth.service';
   ] */
 })
 export class SchedLComponent extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() mainTransactionTypeText: string;
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() scheduleType: string;
+  @Input() mainTransactionTypeText!: string;
+  @Input() transactionTypeText!: string;
+  @Input() transactionType!: string;
+  @Input() scheduleAction!: ScheduleActions;
+  @Input() scheduleType!: string;
   @Output() status: EventEmitter<any>;
-  @Input() public tableType: string;
+  @Input() public tableType!: string;
   public transactionsView = ActiveView.transactions;
 
-  public formType: string;
-  public showPart2: boolean;
+  public formType!: string;
+  public showPart2!: boolean;
   public loaded = false;
-  public schedL: FormGroup;
+  public schedL!: FormGroup;
 
 
-  public lSubscription: Subscription;
-  public lSum: any;
-  public saveLRes: any;
+  public lSubscription!: Subscription;
+  public lSum!: any;
+  public saveLRes!: any;
 
   public showSelectType = true;
 
   public schedLsModel: Array<SchedLModel>;
-  private clonedTransaction: any;
+  private clonedTransaction!: any;
   public bulkActionDisabled = true;
   public bulkActionCounter = 0;
-  private allTransactionsSelected: boolean;
+  private allTransactionsSelected!: boolean;
 
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
@@ -89,7 +89,7 @@ export class SchedLComponent extends AbstractSchedule implements OnInit, OnDestr
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
   private firstItemOnPage = 0;

@@ -11,7 +11,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef, 
   export class ReportsFilterTypeComponent implements OnInit{
 
     @Input()
-    public categoryType: any;
+    public categoryType!: any;
 
     public constructor(public elRef: ElementRef) { }
 

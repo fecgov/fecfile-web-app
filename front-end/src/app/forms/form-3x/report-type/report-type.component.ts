@@ -36,7 +36,7 @@ import { ReportFilterModel } from 'app/reports/model/report-filter.model';
 export class ReportTypeComponent implements OnInit, OnDestroy {
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
   @Input() committeeReportTypes: any = [];
-  @Input() formType: any;
+  @Input() formType!: any;
   @Input() selectedReportInfo: any = null;
 
   public editMode!: boolean;
@@ -52,7 +52,7 @@ export class ReportTypeComponent implements OnInit, OnDestroy {
   public reportType: string = '';
   public tooltipPosition = 'right';
   public tooltipLeft = 'auto';
-  public customFormValidation: any;
+  public customFormValidation!: any;
   public reportsLoading!: boolean;
 
   private _committeeDetails: any = null;
@@ -74,7 +74,7 @@ export class ReportTypeComponent implements OnInit, OnDestroy {
   public showSemiAnnualDates!: boolean;
   public currentSemiAnnualDates!: any[];
   public coverageDatesMissing: boolean = false;
-  private selectedSemiAnnualDateObj: any;
+  private selectedSemiAnnualDateObj!: any;
   public stateMissing: boolean = false;
   public electionDateMissing: boolean = false;
   public showErrors: boolean = false;

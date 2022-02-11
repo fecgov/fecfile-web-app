@@ -9,7 +9,7 @@ import { ErrorFieldModel } from '../../../model/error-field.model';
 export class ErrorContactsFieldComponent implements OnInit {
 
   @Input()
-  public field: ErrorFieldModel;
+  public field!: ErrorFieldModel;
 
   constructor() { }
 

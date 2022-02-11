@@ -48,31 +48,31 @@ import { PaginationInstance } from 'ngx-pagination';
   ] */
 })
 export class SchedH6Component extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() mainTransactionTypeText: string;
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() scheduleType: string;
+  @Input() mainTransactionTypeText!: string;
+  @Input() transactionTypeText!: string;
+  @Input() transactionType!: string;
+  @Input() scheduleAction!: ScheduleActions;
+  @Input() scheduleType!: string;
   @Output() status: EventEmitter<any>;
 
-  public formType: string;  
-  public showPart2: boolean;
+  public formType!: string;  
+  public showPart2!: boolean;
   public loaded = false;
-  public schedH6: FormGroup;
+  public schedH6!: FormGroup;
    
-  public h6Subscription: Subscription;
-  public h6Sum: any;
-  public saveHRes: any;
+  public h6Subscription!: Subscription;
+  public h6Sum!: any;
+  public saveHRes!: any;
 
   public showSelectType = true;
 
   public schedH6sModel: Array<SchedH6Model>;
   public schedH6sModelL: Array<SchedH6Model>;
 
-  private clonedTransaction: any;
+  private clonedTransaction!: any;
 
-  public restoreSubscription: Subscription;
-  public trashSubscription: Subscription;
+  public restoreSubscription!: Subscription;
+  public trashSubscription!: Subscription;
 
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
@@ -80,7 +80,7 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
   private firstItemOnPage = 0;

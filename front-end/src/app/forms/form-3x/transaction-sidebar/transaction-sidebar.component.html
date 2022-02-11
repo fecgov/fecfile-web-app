@@ -114,7 +114,7 @@
             class="btn btn-secondary"
             [disabled]="isFiled"
             [routerLink]="['/signandSubmit', _formType]"
-            [queryParams]="{ edit: editMode, reportId: _activatedRoute.snapshot.queryParams.reportId }"
+            [queryParams]="{ edit: editMode, reportId: _activatedRoute.snapshot.queryParams['reportId'] }"
           >
             Sign &amp; Submit
           </button>

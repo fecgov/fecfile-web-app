@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ImportFecfileSuccessComponent implements OnInit {
 
-  @Input() successMessage: any;
+  @Input() successMessage!: any;
 
   constructor() { }
 

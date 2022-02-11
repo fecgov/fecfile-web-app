@@ -41,7 +41,7 @@ export class UploadContactsService {
   public progressPercent: number = 0;
   public progressPercentSubject = new BehaviorSubject<number>(this.progressPercent);
 
-  private bucket: S3;
+  private bucket!: S3;
   private readonly bucketName = 'fecfile-filing-frontend';
 
   /**

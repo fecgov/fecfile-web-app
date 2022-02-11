@@ -50,61 +50,61 @@ import { PaginationInstance } from 'ngx-pagination';
   ] */
 })
 export class SchedH3Component extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() scheduleType: string;
-  @Input() transactionData: any;
+  @Input() transactionTypeText!: string;
+  @Input() transactionType!: string;
+  @Input() scheduleAction!: ScheduleActions;
+  @Input() scheduleType!: string;
+  @Input() transactionData!: any;
   @Output() status: EventEmitter<any>;
 
-  public formType: string;
-  public showPart2: boolean;
+  public formType!: string;
+  public showPart2!: boolean;
   public loaded = false;
 
-  public schedH3: FormGroup;
-  public categories: any;
-  public identifiers: any;
-  public totalName: any;
+  public schedH3!: FormGroup;
+  public categories!: any;
+  public identifiers!: any;
+  public totalName!: any;
   public showIdentiferSelect = false;
   public showIdentifer = false;
-  public h3Sum: any;
-  public h3SumP: any;
+  public h3Sum!: any;
+  public h3SumP!: any;
   public h3Entries = [];
-  public h3Ratios: any;
+  public h3Ratios!: any;
   public showAggregateAmount = false;
 
-  public h3Subscription: Subscription;
-  public saveHRes: any;
+  public h3Subscription!: Subscription;
+  public saveHRes!: any;
 
-  //public h3EntryTableConfig: any;
+  //public h3EntryTableConfig!: any;
 
   public receiptDateErr = false;
 
-  public cvgStartDate: any;
-  public cvgEndDate: any;
+  public cvgStartDate!: any;
+  public cvgEndDate!: any;
 
   public isSubmit = false;
 
   public transferredAmountErr = false;
 
-  public transaction_id: string;
-  public h3EntrieEdit: any;
-  public back_ref_transaction_id: string;
+  public transaction_id!: string;
+  public h3EntrieEdit!: any;
+  public back_ref_transaction_id!: string;
   populateFormForEdit: Subscription;
 
   public transferred_amount_edit = 0;
   public total_amount_edit = 0;
   public aggregate_amount_edit = 0;
-  public activity_event_name_edit: string;
+  public activity_event_name_edit!: string;
 
   public saveAndAddDisabled = false;
 
   private _h3OnDestroy$ = new Subject();
 
-  public getH1H2ExistSubscription: Subscription;
+  public getH1H2ExistSubscription!: Subscription;
 
-  public restoreSubscription: Subscription;
-  public trashSubscription: Subscription;
+  public restoreSubscription!: Subscription;
+  public trashSubscription!: Subscription;
 
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
@@ -112,7 +112,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public pageNumbers: number[] = [];
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
@@ -238,7 +238,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     };
     this.config = paginateConfig;
 
-    this._schedHMessageServiceService.getpopulateHFormForEditMessage().takeUntil(this._h3OnDestroy$)
+    this._schedHMessageServiceService.getpopulateHFormForEditMessage().pipe(takeUntil(this._h3OnDestroy$))
       .subscribe(p => {
         if (p.scheduleType === 'Schedule H3') {
           let res = this._schedHService.getSchedule(p.transactionDetail.transactionModel).subscribe(res => {
@@ -386,7 +386,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   private _prepareForUnsavedH3Changes(): void {
-    this.schedH3.valueChanges.takeUntil(this._h3OnDestroy$).subscribe(val => {
+    this.schedH3.valueChanges.pipe(takeUntil(this._h3OnDestroy$)).subscribe(val => {
       if (this.schedH3.dirty) {
         localStorage.setItem(`form_${this.formType}_saved`, JSON.stringify({ saved: false }));
       }
@@ -1285,7 +1285,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     const report_id = this._individualReceiptService.getReportIdFromStorage(this.formType);
 
     this._schedH3Service.getH1H2ExistStatus(report_id, category)
-      .takeUntil(this._h3OnDestroy$)
+      .pipe(takeUntil(this._h3OnDestroy$))
       .subscribe(res => {
         if (res) {
           if (res.count === 0) {

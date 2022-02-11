@@ -23,9 +23,9 @@ export class TypeComponent implements OnInit, OnDestroy {
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('mswCollapse') mswCollapse;
 
-  public frmType: FormGroup;
-  public editMode: boolean;
-  public reportId: number;
+  public frmType!: FormGroup;
+  public editMode!: boolean;
+  public reportId!: number;
   public typeSelected: string = '';
   public isValidType: boolean = false;
   public typeFailed: boolean = false;
@@ -34,7 +34,7 @@ export class TypeComponent implements OnInit, OnDestroy {
   public tooltipLeft: string = 'auto';
 
   private committee_details: any = {};
-  private _form99Details: form99;
+  private _form99Details!: form99;
   private _newForm: boolean = false;
   private _previousUrl: string = null;
   private _setRefresh: boolean = false;
@@ -49,7 +49,7 @@ export class TypeComponent implements OnInit, OnDestroy {
     private _dialogService: DialogService
   ) {
     this._messageService.clearMessage();
-    this.queryParamsSubscription = _activatedRoute.queryParams.subscribe(p => {
+    this.queryParamsSubscription = _activatedRoute.queryParams['subscribe'](p => {
       if (p.refresh) {
         this._setRefresh = true;
         this.ngOnInit();
@@ -66,7 +66,7 @@ export class TypeComponent implements OnInit, OnDestroy {
     this.committee_details = JSON.parse(localStorage.getItem('committee_details'));
     //console.log(" type this._form99Details =", this._form99Details)
     this.screenWidth = window.innerWidth;
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
 
     //console.log(" Type this.editMode = ", this.editMode);
     //console.log(" Type this._form99Details = ", this._form99Details);

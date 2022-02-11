@@ -15,16 +15,16 @@ export class ImportTrxSidebarComponent implements OnInit, OnChanges {
   public fileQueue: Array<UploadFileModel>;
 
   @Input()
-  public currentFile: UploadFileModel;
+  public currentFile!: UploadFileModel;
 
   @Input()
-  public currentStep: ImportTransactionsStepsEnum;
+  public currentStep!: ImportTransactionsStepsEnum;
 
   @Input()
-  public forceChangeDetection: Date;
+  public forceChangeDetection!: Date;
 
   @Input()
-  public open: boolean;
+  public open!: boolean;
 
   @Output()
   public toggleEmitter: EventEmitter<any> = new EventEmitter<any>();
@@ -37,7 +37,7 @@ export class ImportTrxSidebarComponent implements OnInit, OnChanges {
 
   public iconClass = 'bars-icon';
   public sidebarVisibleClass = 'sidebar-hidden';
-  public headerTitle: string;
+  public headerTitle!: string;
   public readonly step1Select = ImportTransactionsStepsEnum.step1Select;
   public readonly step4ImportDone = ImportTransactionsStepsEnum.step4ImportDone;
   public readonly completeStatus = ImportFileStatusEnum.complete;

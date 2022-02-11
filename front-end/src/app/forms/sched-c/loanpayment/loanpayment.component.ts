@@ -24,7 +24,7 @@ import { DecimalPipe } from '@angular/common';
 })
 export class LoanpaymentComponent implements OnInit, OnDestroy {
 
-  @Input() transactionDetail: any;
+  @Input() transactionDetail!: any;
   @Input() scheduleAction: ScheduleActions ;
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
 
@@ -40,7 +40,7 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
 
   private _loanTransactionId;
 
-  private _clearFormSubscription: Subscription;
+  private _clearFormSubscription!: Subscription;
   editMode: any;
 
 
@@ -320,8 +320,8 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
       } else if (reportType && reportType.hasOwnProperty('reportid')) {
         formData.append('report_id', reportType.reportid);
       } else if(this._activatedRoute && this._activatedRoute.snapshot && 
-        this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams.reportId){
-          formData.append('report_id', this._activatedRoute.snapshot.queryParams.reportId);
+        this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams['reportId']){
+          formData.append('report_id', this._activatedRoute.snapshot.queryParams['reportId']);
         }
 
       formData.append('cmte_id', committeeDetails.committeeid);
@@ -428,18 +428,18 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
   }
 
   private goToTransactionsTable() {
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit
-      ? this._activatedRoute.snapshot.queryParams.edit
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit']
+      ? this._activatedRoute.snapshot.queryParams['edit']
       : true;
 
     const queryParams :any = {
       step: 'transactions',
-      reportId: this._activatedRoute.snapshot.queryParams.amendmentReportId ? this._activatedRoute.snapshot.queryParams.amendmentReportId : this._reportTypeService.getReportIdFromStorage('3X').toString(),
+      reportId: this._activatedRoute.snapshot.queryParams['amendmentReportId'] ? this._activatedRoute.snapshot.queryParams['amendmentReportId'] : this._reportTypeService.getReportIdFromStorage('3X').toString(),
       edit: this.editMode,
       transactionCategory: 'disbursements'
     };
-    if (this._activatedRoute.snapshot.queryParams.amendmentReportId) {
-      queryParams.amendmentReportId = this._activatedRoute.snapshot.queryParams.amendmentReportId;
+    if (this._activatedRoute.snapshot.queryParams['amendmentReportId']) {
+      queryParams['amendmentReportId'] = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
     }
     this._router.navigate([`/forms/form/3X`], {
       queryParams: queryParams

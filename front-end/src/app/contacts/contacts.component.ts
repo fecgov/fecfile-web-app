@@ -52,7 +52,7 @@ export enum FilterTypes {
 export class ContactsComponent implements OnInit, OnDestroy {
   @Output() sidebarSwitch: EventEmitter<any> = new EventEmitter<any>();
   @Output() showContact: EventEmitter<any> = new EventEmitter<any>();
-  @Input() status: any;
+  @Input() status!: any;
 
   public formType = '';
   public reportId = '0';
@@ -71,17 +71,17 @@ export class ContactsComponent implements OnInit, OnDestroy {
    * Subscription for applying filters to the contacts obtained from
    * the server.
    */
-  private applyFiltersSubscription: Subscription;
+  private applyFiltersSubscription!: Subscription;
 
   /**
    * Subscription for showing the ContactsEditComponent.
    */
-  private editContactSubscription: Subscription;
+  private editContactSubscription!: Subscription;
 
   /**
    * Subscription for showing all Contacts.
    */
-  private showContactSubscription: Subscription;
+  private showContactSubscription!: Subscription;
 
   public transactionToEdit!: ContactModel;
 

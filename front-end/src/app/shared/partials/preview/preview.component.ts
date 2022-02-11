@@ -24,7 +24,7 @@ export class PreviewComponent implements OnInit , OnDestroy{
   public typeSelected: string = '';
   public formType: string = '';
   public date_stamp: Date = new Date();
-  public formDetails: form99;
+  public formDetails!: form99;
   public showValidateBar: boolean = false;
   public fileName: string = '';
   public fileurl: string = '';
@@ -32,8 +32,8 @@ export class PreviewComponent implements OnInit , OnDestroy{
   public orgFileUrl: string = '';
   public printpriview_filename: string = '';
   public printpriview_fileurl: string = '';
-  public editMode: boolean;
-  private _subscription: Subscription;
+  public editMode!: boolean;
+  private _subscription!: Subscription;
   private _step: string = '';
   private _printPriviewPdfFileLink: string = '';
   private _formDetails: any = {};
@@ -48,14 +48,14 @@ export class PreviewComponent implements OnInit , OnDestroy{
     private _formsService: FormsService,
     private _dialogService: DialogService
   ) {
-    this.queryParamsSubscription = _activatedRoute.queryParams.subscribe(p => {
+    this.queryParamsSubscription = _activatedRoute.queryParams['subscribe'](p => {
       if (p.refresh === 'true' || p.refresh === true) {
         this._setRefresh = true;
         this.ngOnInit();
       }
     });
 
-    this._messageService.getMessage().takeUntil(this.onDestroy$).subscribe(msg => {
+    this._messageService.getMessage().pipe(takeUntil(this.onDestroy$)).subscribe(msg => {
       if(msg && msg.action === 'print' && msg.formType === 'F99'){
         this.printPreview();
       }
@@ -64,8 +64,8 @@ export class PreviewComponent implements OnInit , OnDestroy{
 
   ngOnInit(): void {
     this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
-    this._messageService.getMessage().takeUntil(this.onDestroy$).subscribe(res => {
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
+    this._messageService.getMessage().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
       //console.log('Preview screen this.formDetails ', this.formDetails);
       this.committeeDetails = JSON.parse(localStorage.getItem('committee_details'));
 

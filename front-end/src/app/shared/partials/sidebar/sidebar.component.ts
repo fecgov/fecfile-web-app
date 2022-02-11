@@ -62,7 +62,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
     this._formService
       .get_filed_form_types()
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe(res => (this.committee_forms = <Icommittee_forms[]>res));
 
     this.routerSubscription = this._router.events.subscribe(val => {

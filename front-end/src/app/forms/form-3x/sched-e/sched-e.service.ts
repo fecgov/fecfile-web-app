@@ -11,7 +11,7 @@ import { DatePipe } from '@angular/common';
   providedIn: 'root',
 })
 export class SchedEService {
-  private _datePipe: DatePipe;
+  private _datePipe!: DatePipe;
 
   constructor(private _http: HttpClient, private _cookieService: CookieService) {
     this._datePipe = new DatePipe('en-US');

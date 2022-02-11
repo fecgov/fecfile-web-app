@@ -23,8 +23,8 @@ export class CleanContactsComponent implements OnInit, OnDestroy {
   private showErrorsSubject: BehaviorSubject<boolean>;
   private onDestroy$ = new Subject();
 
-  public showProgress: boolean;
-  public progressPercent: number;
+  public showProgress!: boolean;
+  public progressPercent!: number;
 
   constructor(
     private _importContactsService: ImportContactsService
@@ -55,7 +55,7 @@ export class CleanContactsComponent implements OnInit, OnDestroy {
     const page = 1;
     let showErrs = false;
     this.showDuplicatesSubject.next(true);
-    // this._importContactsService.validateContacts(page).takeUntil(this.onDestroy$).subscribe((res: any) => {
+    // this._importContactsService.validateContacts(page).pipe(takeUntil(this.onDestroy$).subscribe((res: any)) => {
     //   if (res.validation_errors) {
     //     if (res.validation_errors.length > 0) {
     //       showErrs = true;
@@ -63,7 +63,7 @@ export class CleanContactsComponent implements OnInit, OnDestroy {
     //     }
     //   }
     //   if (showErrs === false) {
-    //     this._importContactsService.checkDuplicates(page).takeUntil(this.onDestroy$).subscribe((res2: any) => {
+    //     this._importContactsService.checkDuplicates(page).pipe(takeUntil(this.onDestroy$).subscribe((res2: any)) => {
     //       if (res2.duplicates) {
     //         if (res2.duplicates.length > 0) {
     //           this.showDuplicatesSubject.next(true);

@@ -53,38 +53,38 @@ import { PaginationInstance } from 'ngx-pagination';
   ] */
 })
 export class SchedH5Component extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() scheduleType: string;
-  @Input() transactionData: any;
+  @Input() transactionTypeText!: string;
+  @Input() transactionType!: string;
+  @Input() scheduleAction!: ScheduleActions;
+  @Input() scheduleType!: string;
+  @Input() transactionData!: any;
   @Output() status: EventEmitter<any>;
 
-  public formType: string;
-  public showPart2: boolean;
+  public formType!: string;
+  public showPart2!: boolean;
   public loaded = true; //false;
 
-  public schedH5: FormGroup;
-  public categories: any;
-  public identifiers: any;
-  public totalName: any;
+  public schedH5!: FormGroup;
+  public categories!: any;
+  public identifiers!: any;
+  public totalName!: any;
   public showIdentiferSelect = false;
   public showIdentifer = false;
-  public h5Sum: any;
-  public h5SumP: any;
-  public saveHRes: any;
-  public h5Subscription: Subscription;
+  public h5Sum!: any;
+  public h5SumP!: any;
+  public saveHRes!: any;
+  public h5Subscription!: Subscription;
 
 
   public h5Entries = [];
-  public h5Ratios: any;
+  public h5Ratios!: any;
 
-  public levinAccountsies: any;
+  public levinAccountsies!: any;
 
   public receiptDateErr = false;
 
-  public cvgStartDate: any;
-  public cvgEndDate: any;
+  public cvgStartDate!: any;
+  public cvgEndDate!: any;
 
   public isSubmit = false;
 
@@ -92,19 +92,19 @@ export class SchedH5Component extends AbstractSchedule implements OnInit, OnDest
 
   public isSaveAndAdd = false;
 
-  public transaction_id: string;
-  public h5EntrieEdit: any;
-  public back_ref_transaction_id: string;
+  public transaction_id!: string;
+  public h5EntrieEdit!: any;
+  public back_ref_transaction_id!: string;
 
   public transferred_amount_edit = 0;
   public total_amount_edit = 0;
-  public populateFormForEdit: Subscription;
+  public populateFormForEdit!: Subscription;
 
   public saveAndAddDisabled = false;
-  public getH1H2ExistSubscription: Subscription;
+  public getH1H2ExistSubscription!: Subscription;
 
-  public restoreSubscription: Subscription;
-  public trashSubscription: Subscription;
+  public restoreSubscription!: Subscription;
+  public trashSubscription!: Subscription;
 
   private _h5OnDestroy$ = new Subject();
 
@@ -114,7 +114,7 @@ export class SchedH5Component extends AbstractSchedule implements OnInit, OnDest
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
   private firstItemOnPage = 0;
@@ -543,7 +543,7 @@ export class SchedH5Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   private _prepareForUnsavedH5Changes(): void {
-    this.schedH5.valueChanges.takeUntil(this._h5OnDestroy$).subscribe(val => {
+    this.schedH5.valueChanges.pipe(takeUntil(this._h5OnDestroy$)).subscribe(val => {
       if (this.schedH5.dirty) {
         localStorage.setItem(`form_${this.formType}_saved`, JSON.stringify({ saved: false }));
       }

@@ -53,7 +53,7 @@ export class ReportsComponent implements OnInit , OnDestroy{
     }
 
     this._reportService.getReports()
-    .takeUntil(this.onDestroy$)
+    .pipe(takeUntil(this.onDestroy$))
       .subscribe(res => this.reports = <IReport[]> res);
     //console.log(this.reports)
   }

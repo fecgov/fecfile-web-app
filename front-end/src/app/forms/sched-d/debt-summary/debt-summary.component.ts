@@ -45,19 +45,19 @@ export enum DebtSumarysActions {
 })
 export class DebtSummaryComponent implements OnInit, OnChanges {
   @Input()
-  public forceChangeDetection: Date;
+  public forceChangeDetection!: Date;
 
   @Input()
-  public transactionType: string;
+  public transactionType!: string;
 
   @Input()
-  public transactionTypeText: string;
+  public transactionTypeText!: string;
 
   @Output()
   public status: EventEmitter<any> = new EventEmitter<any>();
 
   public debtModel: Array<DebtSummaryModel>;
-  public totalAmount: number;
+  public totalAmount!: number;
   public bulkActionDisabled = true;
   public bulkActionCounter = 0;
   public formType = '3X';
@@ -68,13 +68,13 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
   public paginationControlsMaxSize: number = 10; 
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
 
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
-  public allDebtSelected: boolean;
+  public allDebtSelected!: boolean;
 
   /**
    * Array of columns to be made sortable.
@@ -84,7 +84,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
   /**
    * Identifies the column currently sorted by name.
    */
-  private currentSortedColumnName: string;
+  private currentSortedColumnName!: string;
 
   /**
    * Component constructor with service dependency service injections.

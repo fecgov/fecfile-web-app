@@ -35,9 +35,9 @@ import { ScheduleActions } from './../../individual-receipt/schedule-actions.enu
   encapsulation: ViewEncapsulation.None,
 })
 export class SchedEComponent extends IndividualReceiptComponent implements OnInit {
-  // @Input() transactionData: any;
-  // @Input() transactionDataForChild: any;
-  @Input() parentTransactionModel: any;
+  // @Input() transactionData!: any;
+  // @Input() transactionDataForChild!: any;
+  @Input() parentTransactionModel!: any;
 
   public addByDissemination: boolean = false;
 
@@ -45,7 +45,7 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
   public coverageStartDate = '';
   public coverageEndDate = '';
   private _currentAggregate: any = null;
-  private _reportId: any;
+  private _reportId!: any;
   public displayCandStateField = false;
   private _minStateSelectionForMultistate = 6;
 

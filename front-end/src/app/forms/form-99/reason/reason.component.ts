@@ -37,9 +37,9 @@ export class ReasonComponent implements OnInit , OnDestroy{
   @ViewChild('htmlEditor') htmlEditor: ElementRef;
   @ViewChild('fileInput') fileInput: ElementRef;
 
-  public editMode: boolean;
-  public reportId: number;
-  public frmReason: FormGroup;
+  public editMode!: boolean;
+  public reportId!: number;
+  public frmReason!: FormGroup;
   public reasonType: string = null;
   public reasonFailed: boolean = false;
   public reasonHasInvalidHTML: boolean = false;
@@ -89,7 +89,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
     private _dormSanitizer: DomSanitizer
   ) {
     this._messageService.clearMessage();
-    this.queryParamsSub = _activatedRoute.queryParams.subscribe(p => {
+    this.queryParamsSub = _activatedRoute.queryParams['subscribe'](p => {
       if (p.refresh === true || p.refresh === 'true') {
         this._setRefresh = true;
         this.ngOnInit();
@@ -102,7 +102,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
 
   ngOnInit(): void {
     this._formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
     this._form99Details = JSON.parse(localStorage.getItem(`form_${this._formType}_details`));
     this.committee_details = JSON.parse(localStorage.getItem('committee_details'));
 

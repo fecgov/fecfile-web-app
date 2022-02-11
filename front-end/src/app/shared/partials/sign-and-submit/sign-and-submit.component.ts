@@ -45,15 +45,15 @@ import { TypeaheadService } from './../typeahead/typeahead.service';
 export class SignAndSubmitComponent implements OnInit, OnDestroy {
   @ViewChild('content') content: any;
 
-  @Input() formTitle: string;
-  @Input() emailsOnFile: any;
-  @Input() reportId: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() formData: any;
-  @Input() treasurerData: any;
-  @Input() formType: any;
+  @Input() formTitle!: string;
+  @Input() emailsOnFile!: any;
+  @Input() reportId!: string;
+  @Input() scheduleAction!: ScheduleActions;
+  @Input() formData!: any;
+  @Input() treasurerData!: any;
+  @Input() formType!: any;
 
-  public loggedInUserRole: Roles;
+  public loggedInUserRole!: Roles;
 
   public formMetaData: any = {};
   public treasurerToolTipText: string = '';
@@ -64,13 +64,13 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
   public today: Date = new Date();
 
   public showFooter: boolean = false;
-  public form: FormGroup;
+  public form!: FormGroup;
 
   public submissionDateToolTipText: string = 'Placeholder text';
   public tooltipPlaceholder: string = 'Placeholder text';
   private onDestroy$ = new Subject();
   public saveSuccessful = false;
-  public editMode: boolean;
+  public editMode!: boolean;
 
   public username: string = '';
   accordionExpanded: boolean = false;
@@ -107,7 +107,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
 
     this._messageService
       .getMessage()
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((message) => {
         if (message && message.action === 'disableFields') {
           if (this.form) {
@@ -146,7 +146,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
 
     //if @Inputs are null, they will be present in the route data, so get them from there.
     this.initForm();
@@ -177,7 +177,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
       this.getEmailsOnFileFromLocalStorage();
     }
     if (!this.reportId) {
-      this.reportId = this._activatedRoute.snapshot.queryParams.reportId;
+      this.reportId = this._activatedRoute.snapshot.queryParams['reportId'];
     }
     if (!this.scheduleAction) {
       this.scheduleAction = ScheduleActions.add;

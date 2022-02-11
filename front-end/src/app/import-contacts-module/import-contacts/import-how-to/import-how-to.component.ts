@@ -13,7 +13,7 @@ export class ImportHowToComponent implements OnInit {
   public returnEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   public steps: Array<any>;
-  public currentStep: ImportContactsStepsEnum;
+  public currentStep!: ImportContactsStepsEnum;
   public readonly start = ImportContactsStepsEnum.start;
   public readonly step1Upload = ImportContactsStepsEnum.step1Upload;
   public readonly step3Clean = ImportContactsStepsEnum.step3Clean;

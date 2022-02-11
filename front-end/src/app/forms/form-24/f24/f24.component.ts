@@ -23,15 +23,15 @@ import { MessageService } from '../../../shared/services/MessageService/message.
 export class F24Component implements OnInit {
 
 
-  @Input() jumpToTransaction: any;
+  @Input() jumpToTransaction!: any;
 
   private currentStep: string = 'step_1';
   private editMode: boolean = true;
   public step: string = '';
-  @Input() transactionData: any;
+  @Input() transactionData!: any;
   private steps: any = {};
-  private frm: any;
-  private direction: string;
+  private frm!: any;
+  private direction!: string;
   private previousStep: string = '';
   private parentTransactionCategories: any = [];
   public reportsLoading: boolean = true;
@@ -55,35 +55,35 @@ export class F24Component implements OnInit {
   private transactionTypeSchedFCore = '';
   private transactionTypeTextDebtSummary = '';
   private transactionTypeDebtSummary = '';
-  private transactionDetailSchedC: any;
-  private unused: any;
+  private transactionDetailSchedC!: any;
+  private unused!: any;
   private isShowFilters = false;
   public formType: string = '';
-  @Input() scheduleAction: ScheduleActions;
-  private scheduleCAction: ScheduleActions;
-  private scheduleFAction: ScheduleActions;
-  private scheduleFCoreAction: ScheduleActions;
-  private forceChangeDetectionC1: Date;
-  private forceChangeDetectionFDebtPayment: Date;
-  private forceChangeDetectionDebtSummary: Date;
-  private forceChangeDetectionH1: Date;
+  @Input() scheduleAction!: ScheduleActions;
+  private scheduleCAction!: ScheduleActions;
+  private scheduleFAction!: ScheduleActions;
+  private scheduleFCoreAction!: ScheduleActions;
+  private forceChangeDetectionC1!: Date;
+  private forceChangeDetectionFDebtPayment!: Date;
+  private forceChangeDetectionDebtSummary!: Date;
+  private forceChangeDetectionH1!: Date;
   public scheduleType: string = '';
 
   public allTransactions: boolean = false;
 
   private _step: string = '';
   private _cloned: boolean = false;
-  private _reportId: any;
-  private loanPaymentScheduleAction: ScheduleActions;
+  private _reportId!: any;
+  private loanPaymentScheduleAction!: ScheduleActions;
 
   private onDestroy$ = new Subject();
-  @Input() transactionDataForChild: any;
-  @Input() parentTransactionModel: any;
-  private populateHiddenFieldsMessageObj: any;
-  private populateFieldsMessageObj: any;
-  private queryParamsSubscription: Subscription;
-  private routerEventsSubscription: Subscription;
-  private returnToGlobalAllTransaction: boolean;
+  @Input() transactionDataForChild!: any;
+  @Input() parentTransactionModel!: any;
+  private populateHiddenFieldsMessageObj!: any;
+  private populateFieldsMessageObj!: any;
+  private queryParamsSubscription!: Subscription;
+  private routerEventsSubscription!: Subscription;
+  private returnToGlobalAllTransaction!: boolean;
 
   constructor(
     private _reportTypeService: ReportTypeService,
@@ -103,7 +103,7 @@ export class F24Component implements OnInit {
     this._config.placement = 'right';
     this._config.triggers = 'click';
 
-    this.queryParamsSubscription = _activatedRoute.queryParams.takeUntil(this.onDestroy$).subscribe(p => {
+    this.queryParamsSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe(p => {
       this.transactionCategory = p.transactionCategory;
       if (p.edit === 'true' || p.edit === true) {
         this.editMode = true;
@@ -128,7 +128,7 @@ export class F24Component implements OnInit {
       }
     });
 
-    this._f3xMessageService.getParentModelMessage().takeUntil(this.onDestroy$).subscribe(message => {
+    this._f3xMessageService.getParentModelMessage().pipe(takeUntil(this.onDestroy$)).subscribe(message => {
       this.parentTransactionModel = message;
     });
   }
@@ -137,9 +137,9 @@ export class F24Component implements OnInit {
     this.scheduleAction = ScheduleActions.add;
     this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
 
-    this.step = this._activatedRoute.snapshot.queryParams.step;
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit
-      ? this._activatedRoute.snapshot.queryParams.edit
+    this.step = this._activatedRoute.snapshot.queryParams['step'];
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit']
+      ? this._activatedRoute.snapshot.queryParams['edit']
       : true;
 
     this.reportTypes = [
@@ -219,7 +219,7 @@ export class F24Component implements OnInit {
     this.transactionCategories = this.transactionCategories.transactionCategories;
 
     localStorage.setItem('Receipts_Entry_Screen', 'Yes');
-    this.routerEventsSubscription = this._router.events.takeUntil(this.onDestroy$).subscribe(val => {
+    this.routerEventsSubscription = this._router.events.pipe(takeUntil(this.onDestroy$)).subscribe(val => {
       if (val) {
         if (val instanceof NavigationEnd) {
           if (
@@ -245,9 +245,9 @@ export class F24Component implements OnInit {
             window.localStorage.removeItem(`form_${this.formType}_saved`);
           }
         } else {
-          if (this._activatedRoute.snapshot.queryParams.step !== this.currentStep) {
-            this.currentStep = this._activatedRoute.snapshot.queryParams.step;
-            this.step = this._activatedRoute.snapshot.queryParams.step;
+          if (this._activatedRoute.snapshot.queryParams['step'] !== this.currentStep) {
+            this.currentStep = this._activatedRoute.snapshot.queryParams['step'];
+            this.step = this._activatedRoute.snapshot.queryParams['step'];
           }
           window.scrollTo(0, 0);
         }
@@ -379,8 +379,8 @@ export class F24Component implements OnInit {
     let reportId = '';
     if (transactionModel && transactionModel.reportId && transactionModel.reportId !== '0' && transactionModel.reportId !== 'undefined') {
       reportId = transactionModel.reportId.toString();
-    } else if (this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams.reportId) {
-      reportId = this._activatedRoute.snapshot.queryParams.reportId;
+    } else if (this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams['reportId']) {
+      reportId = this._activatedRoute.snapshot.queryParams['reportId'];
     }
 
     if (this.frm && this.direction) {
@@ -396,10 +396,10 @@ export class F24Component implements OnInit {
         queryParamsObj.reportId = reportId;
       }
 
-      if(this._activatedRoute.snapshot.queryParams.amendmentReportId){
-        queryParamsObj.amendmentReportId = this._activatedRoute.snapshot.queryParams.amendmentReportId;
+      if(this._activatedRoute.snapshot.queryParams['amendmentReportId']){
+        queryParamsObj.amendmentReportId = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
         if(this._step === 'transactions'){
-          queryParamsObj.reportId = this._activatedRoute.snapshot.queryParams.amendmentReportId;
+          queryParamsObj.reportId = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
         }
       }
 

@@ -34,16 +34,16 @@ import { SchedHMessageServiceService } from './../sched-h-service/sched-h-messag
 })
 export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
   // export class SchedFCoreComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() formType: string;
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
+  @Input() formType!: string;
+  @Input() transactionTypeText!: string;
+  @Input() transactionType!: string;
+  @Input() scheduleAction!: ScheduleActions;
   @Output() status: EventEmitter<any>;
 
-  public cloned: boolean;
+  public cloned!: boolean;
   protected staticFormFields = schedFstaticFormFields;
 
-  private isDesignatedFiler: boolean;
+  private isDesignatedFiler!: boolean;
   private subordinateFields = [];
   private designatedFields = [];
   readonly optional  = '(Optional)'
@@ -98,7 +98,7 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
       _schedHMessageServiceService,
        _authService,
     );
-    this.routesSubscription = _activatedRoute.queryParams.subscribe(p => {
+    this.routesSubscription = _activatedRoute.queryParams['subscribe'](p => {
       this.cloned = p.cloned ? true : false;
       if (p.showPart2) {
         this.showPart2 = p.showPart2;

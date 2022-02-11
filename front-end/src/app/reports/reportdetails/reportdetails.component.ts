@@ -39,34 +39,34 @@ import { ReportsMessageService } from '../service/reports-message.service';
 })
 export class ReportdetailsComponent implements OnInit, OnDestroy {
   @ViewChild('columnOptionsModal')
-  public columnOptionsModal: ModalDirective;
+  public columnOptionsModal!: ModalDirective;
 
   /*@ViewChild('trashModal')
-  public trashModal: TrashConfirmComponent;*/
+  public trashModal!: TrashConfirmComponent;*/
 
   @Input()
-  public view: string;
+  public view!: string;
 
   @Input()
-  public tableview: string;
+  public tableview!: string;
 
   @Input()
-  public formType: string;
+  public formType!: string;
 
   @Input()
-  public tableType: string;
+  public tableType!: string;
 
   @Input()
-  public existingReportId: number;
+  public existingReportId!: number;
 
   // @ViewChild('modalBody')
   // public modalBody;
 
-  public filters: ReportFilterModel;
+  public filters!: ReportFilterModel;
 
   public reportsModel: Array<reportModel>;
   //public filterReportsModel: Array<reportModel>;
-  //public totalAmount: number;
+  //public totalAmount!: number;
   public reportsView = ActiveView.reports;
   public recycleBinView = ActiveView.recycleBin;
   public bulkActionDisabled = true;
@@ -74,7 +74,7 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
   public statusDescriptions = [];
   public getAmendmentIndicatorsDescriptions = [];
   public getReportTypesDescriptions = [];
-  //public existingReportId: string;
+  //public existingReportId!: string;
 
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
@@ -82,7 +82,7 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
 
@@ -114,23 +114,23 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
   /**
    * Identifies the column currently sorted by name.
    */
-  private currentSortedColumnName: string;
+  private currentSortedColumnName!: string;
 
   /**
    * Subscription for messags sent from the parent component to show the PIN Column
    * options.
    */
-  private showPinColumnsSubscription: Subscription;
+  private showPinColumnsSubscription!: Subscription;
 
   /**
    * Subscription for running the keyword and filter search
    * to the reports obtained from the server.
    */
-  private keywordFilterSearchSubscription: Subscription;
+  private keywordFilterSearchSubscription!: Subscription;
 
   private columnOptionCount = 0;
   private readonly maxColumnOption = 5;
-  private allReportsSelected: boolean;
+  private allReportsSelected!: boolean;
 
   constructor(
     private _reportsService: ReportsService,
@@ -855,7 +855,7 @@ public printReport(report: reportModel): void{
 
         let queryParams: any = { step: 'step_4', edit:true, reportId: report.report_id};
         if (report.amend_ind.startsWith('A')) {
-          queryParams.amendmentReportId = report.report_id;
+          queryParams['amendmentReportId'] = report.report_id;
         }
         const formType =
           report.form_type && report.form_type.length > 2 ? report.form_type.substring(1, 3) : report.form_type;
@@ -1029,7 +1029,7 @@ public printReport(report: reportModel): void{
         // this._router.navigate([`/forms/reports/3X/${report.report_id}`], { queryParams: { step: 'step_4' } });
         let queryParams: any = { step: 'transactions', reportId: report.report_id, edit: true, transactionCategory: 'receipts', isFiled: false };
         if (report.amend_ind.startsWith('A')) {
-          queryParams.amendmentReportId = report.report_id;
+          queryParams['amendmentReportId'] = report.report_id;
         }
         const formType =
           report.form_type && report.form_type.length > 2 ? report.form_type.substring(1, 3) : report.form_type;
@@ -1056,7 +1056,7 @@ public printReport(report: reportModel): void{
           report.form_type && report.form_type.length > 2 ? report.form_type.substring(1, 3) : report.form_type;
           let queryParams: any = { step: 'transactions', reportId: report.report_id, edit: true, transactionCategory: 'disbursements', isFiled: false };
           if (report.amend_ind.startsWith('A')) {
-            queryParams.amendmentReportId = report.report_id;
+            queryParams['amendmentReportId'] = report.report_id;
           }
           this._router.navigate([`/forms/form/${formType}`], {
             queryParams : queryParams

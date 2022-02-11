@@ -21,7 +21,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
   @HostBinding('@.disabled')
   public animationsDisabled = true;
 
-  @Input() status: any;
+  @Input() status!: any;
 
   public committeeName: string | null = null;
   public committeeId: string | null = null;
@@ -49,7 +49,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
   public semiAnnualEndDate: string | null = '';
   private _step: string | null = null;
 
-  private _datePipe: DatePipe;
+  private _datePipe!: DatePipe;
   private onDestroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(

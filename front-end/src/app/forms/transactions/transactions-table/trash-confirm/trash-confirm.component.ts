@@ -10,19 +10,19 @@ import { TransactionModel } from '../../model/transaction.model';
 export class TrashConfirmComponent1 implements OnInit {
 
   @Input()
-  public modalTitle: string;
+  public modalTitle!: string;
 
   @Input()
-  public message: string;
+  public message!: string;
 
   @Input()
   public isShowCancel = true;
 
   @Input()
-  public headerClass: string;
+  public headerClass!: string;
 
   @ViewChild('modalParent')
-  public modalParent: ConfirmModalComponent;
+  public modalParent!: ConfirmModalComponent;
 
   public transactions: Array<TransactionModel>;
 

@@ -49,7 +49,7 @@ public viewMode = '';
  * Subscription for applying filters to the reports obtained from
  * the server.
  */
-private applyFiltersSubscription: Subscription;
+private applyFiltersSubscription!: Subscription;
 
 private filters: ReportFilterModel = new ReportFilterModel();
 private readonly filtersLSK = 'reports.filters';

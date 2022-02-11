@@ -73,10 +73,10 @@ import { ActiveView } from '../reportheader/reportheader.component';
 export class ReportsidebarComponent implements OnInit {
 
   @Input()
-  public formType: string;
+  public formType!: string;
 
   @Input()
-  public view: ActiveView;
+  public view!: ActiveView;
 
   @Input()
   public title = '';
@@ -84,26 +84,26 @@ export class ReportsidebarComponent implements OnInit {
   @ViewChildren('categoryElements')
   private categoryElements: QueryList<ReportsFilterTypeComponent>; 
 
-  public isHideTypeFilter: boolean;
-  public isHideCvgDateFilter: boolean;
-  public isHideFiledDateFilter: boolean;
-  public isHideDeletedDateFilter: boolean;
+  public isHideTypeFilter!: boolean;
+  public isHideCvgDateFilter!: boolean;
+  public isHideFiledDateFilter!: boolean;
+  public isHideDeletedDateFilter!: boolean;
   public filterCvgDateFrom: Date = null;
   public filterCvgDateTo: Date = null;
   public filterFiledDateFrom: Date = null;
   public filterFiledDateTo: Date = null;
-  public dateFilterValidation: ValidationErrorModel;
-  public filedDateFilterValidation: ValidationErrorModel;
-  public deletedDateFilterValidation: ValidationErrorModel;
+  public dateFilterValidation!: ValidationErrorModel;
+  public filedDateFilterValidation!: ValidationErrorModel;
+  public deletedDateFilterValidation!: ValidationErrorModel;
   public filterDeletedDateFrom: Date = null;
   public filterDeletedDateTo: Date = null;
 
-  public cvgDateFilterValidation: ValidationErrorModel;
-  public amountFilterValidation: ValidationErrorModel;
-  public isHideFormFilter: boolean;
-  public isHideReportFilter: boolean;
-  public isHideStatusFilter: boolean;
-  public isHideAmendmentIndicatorFilter: boolean;
+  public cvgDateFilterValidation!: ValidationErrorModel;
+  public amountFilterValidation!: ValidationErrorModel;
+  public isHideFormFilter!: boolean;
+  public isHideReportFilter!: boolean;
+  public isHideStatusFilter!: boolean;
+  public isHideAmendmentIndicatorFilter!: boolean;
   public forms: any = [];
   public reports: any = [];
   public amendmentindicators: any = [];
