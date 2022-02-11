@@ -29,7 +29,7 @@ import { AuthService } from '../../services/AuthService/auth.service';
 export class SidebarComponent implements OnInit, OnDestroy {
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
 
-  public formType: string = null;
+  public formType: string = '';
   public iconClass: string = 'close-icon';
   public sidebarVisibleClass: string = 'sidebar-visible';
   public screenWidth: number = 0;
@@ -44,9 +44,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private _toggleNavClicked: boolean = false;
 
   private onDestroy$ = new Subject();
-  routerSubscription: Subscription;
-  childRouteSubscription: Subscription;
-  routerEventsSubscription: Subscription;
+  routerSubscription!: Subscription;
+  childRouteSubscription!: Subscription;
+  routerEventsSubscription!: Subscription;
 
   constructor(
     private _router: Router,
@@ -114,7 +114,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
     if (!this._toggleNavClicked) {
       if (route.indexOf('/forms/form/') === 0 && this.sidebarVisibleClass !== 'sidebar-hidden') {
-        let formSelected: string = null;
+        let formSelected: string = '';
 
         this.childRouteSubscription = this._activatedRoute.children[0].params.subscribe(param => {
           formSelected = param['form_id'];

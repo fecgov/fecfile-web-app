@@ -379,11 +379,11 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
         ConfirmModalComponent,
         'Caution!'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._transactionService
             .trashOrRestoreTransactions('3X', 'trash', payment.report_id, [payment])
-            .subscribe(res => {
+            .subscribe((res: any) => {
               this.getPage(this.config.currentPage);
               this._dialogService.confirm(
                 'Transaction has been successfully deleted. ' + payment.transaction_id,
@@ -631,9 +631,9 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
         ConfirmModalComponent,
         'Caution!'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
-          this._LoanService.deleteLoan(loan).subscribe(res => {
+          this._LoanService.deleteLoan(loan).subscribe((res: any) => {
             this.getPage(this.config.currentPage);
             this._dialogService.confirm(
               'Transaction has been successfully deleted. ' + loan.transaction_id,
@@ -669,7 +669,7 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
 
     this._dialogService
       .confirm('You are about to delete these transactions.   ' + trxIds, ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._transactionService
             .trashOrRestoreTransactions(this.formType, 'trash', this.reportId, selectedTransactions)

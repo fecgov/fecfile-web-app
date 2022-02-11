@@ -29,28 +29,28 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
 
   public formType = '';
   private scheduleAction: ScheduleActions = ScheduleActions.add;
-  populateFormForEdit: Subscription;
-  transaction_id: any;
+  populateFormForEdit!: Subscription;
+  transaction_id!: any;
 
-  getH1Subscription: Subscription;
+  getH1Subscription!: Subscription;
   getH1Disable = false;
   h1Disabled = false;
-  removedH1Subscription: Subscription;
+  removedH1Subscription!: Subscription;
 
-  getH1PacSubscription: Subscription;
+  getH1PacSubscription!: Subscription;
   getH1PacADDisable = false;
   h1PacADDisabled = false;
   getH1PacGVDisable = false;
   h1PacGVDisabled = false;
   getH1PacPCDisable = false;
   h1PacPCDisabled = false;
-  removedH1PacSubscription: Subscription;
+  removedH1PacSubscription!: Subscription;
 
   pacSaveDisable = true;
   partySaveDisable = true;
 
   private onDestroy$ = new Subject();
-  reportId: any;
+  reportId!: any;
 
   adSelected = false;
   gvSelected = false;
@@ -73,7 +73,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
         p => {
           const isViewMode = p.action === 'view' ? true : false;
           if (p.scheduleType === 'Schedule H1') {
-            let res = this._schedHService.getSchedule(p.transactionDetail.transactionModel).subscribe(res => {
+            let res = this._schedHService.getSchedule(p.transactionDetail.transactionModel).subscribe((res: any) => {
               if (res && res.length === 1) {
                 this.editH1(res[0], isViewMode);
               }
@@ -146,7 +146,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
 
     let ispac = false;
     if (localStorage.getItem('committee_details') !== null) {
-      let cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      let cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       if (cmteDetails.cmte_type_category === 'PAC') {
         ispac = true;
       }
@@ -170,9 +170,9 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
     
     h1_obj['report_id'] = '0'
 
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
     }
     if(this.reportId){
       h1_obj['report_id'] = this.reportId;
@@ -409,7 +409,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
       params,
       headers: httpOptions
     })
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           //console.log('Get H1 res: ', res);
           return res;
@@ -531,7 +531,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
       params,
       headers: httpOptions
     })
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           //console.log('Get H1 Pac res: ', res);
           return res;

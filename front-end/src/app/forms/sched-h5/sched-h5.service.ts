@@ -51,7 +51,7 @@ export class SchedH5Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           return res;
       }));
   }
@@ -75,7 +75,7 @@ export class SchedH5Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           return res;
         }));
   }
@@ -107,7 +107,7 @@ export class SchedH5Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           return res;
         }
@@ -131,7 +131,7 @@ export class SchedH5Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           return res;
         }
@@ -199,7 +199,7 @@ export class SchedH5Service {
     params = params.append('activity_event_type', activity_event_type);
     params = params.append('calendar_year', new Date().getFullYear().toString());
 
-    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
+    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
     if (committeeDetails) {
       if (committeeDetails.cmte_type_category) {
         params = params.append('cmte_type_category', committeeDetails.cmte_type_category);
@@ -214,7 +214,7 @@ export class SchedH5Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('Validate H1 H2 exist res: ', res);
             return res;

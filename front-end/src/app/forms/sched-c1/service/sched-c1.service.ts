@@ -52,7 +52,7 @@ export class SchedC1Service {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               //console.log(' saveLoan called res...!', res);
               return res;
@@ -66,7 +66,7 @@ export class SchedC1Service {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               return res;
             }

@@ -4,28 +4,28 @@
  * should be consolidated in the future.
  */
 export class ImportContactModel {
-  id: string;
-  committeeId: string;
-  type: string;
-  name: string;
-  lastName: string;
-  firstName: string;
-  middleName: string;
-  suffix: string;
-  prefix: string;
-  street: string;
-  street2: string;
-  city: string;
-  state: string;
-  zip: string;
-  employer: string;
-  occupation: string;
-  candidateId: string;
-  officeSought: string;
-  officeState: string;
-  district: string;
-  multiCandidateCmteStatus: string;
-  selected: boolean;
+  id!: string;
+  committeeId!: string;
+  type!: string;
+  name!: string;
+  lastName!: string;
+  firstName!: string;
+  middleName!: string;
+  suffix!: string;
+  prefix!: string;
+  street!: string;
+  street2!: string;
+  city!: string;
+  state!: string;
+  zip!: string;
+  employer!: string;
+  occupation!: string;
+  candidateId!: string;
+  officeSought!: string;
+  officeState!: string;
+  district!: string;
+  multiCandidateCmteStatus!: string;
+  selected!: boolean;
 
   constructor(contact: any) {
     this.id = contact.id ? contact.id : '';

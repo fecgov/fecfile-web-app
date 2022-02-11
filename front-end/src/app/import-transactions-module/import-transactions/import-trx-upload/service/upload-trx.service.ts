@@ -235,7 +235,7 @@ export class UploadTrxService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }

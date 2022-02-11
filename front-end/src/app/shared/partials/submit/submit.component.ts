@@ -20,8 +20,8 @@ export class SubmitComponent implements OnInit, OnDestroy {
   private _reportId!: number;
   private _subscription!: Subscription;
   public checkStatus: boolean = true;
-  messageSubscription: Subscription;
-  routerSubscription: Subscription;
+  messageSubscription!: Subscription;
+  routerSubscription!: Subscription;
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
@@ -39,7 +39,7 @@ export class SubmitComponent implements OnInit, OnDestroy {
     }
     //console.log('form submitted ...', this.form_type);
 
-    this.messageSubscription = this._messageService.getMessage().subscribe(res => {
+    this.messageSubscription = this._messageService.getMessage().subscribe((res: any) => {
       this._reportId = res.id;
       //console.log('SubmitComponent res =', res);
       if (res.form_submitted) {

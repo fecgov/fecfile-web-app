@@ -83,11 +83,11 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
   private currentLoanData!: any; 0
   private _selectedEntityId!: any;
   private typeChangeEventOccured = false;
-  _routeListener: Subscription;
+  _routeListener!: Subscription;
   private c1ExistsFlag!: any;
-  reportId: any;
+  reportId!: any;
   formView: boolean = false;
-  routesSubscription: Subscription;
+  routesSubscription!: Subscription;
   dueDateType: string = 'date';
   constructor(
     private _loansService: LoanService,
@@ -168,7 +168,7 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
 
   private _setEntityTypeDefault() {
     if (this.frmLoan.get('entity_type')) {
-      const entityTypeVal = this.frmLoan.get('entity_type').value;
+      const entityTypeVal = this.frmLoan.get('entity_type')?.value;
       if (!entityTypeVal) {
         this.frmLoan.patchValue({ entity_type: this.entityType }, { onlySelf: true });
       }
@@ -200,7 +200,7 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
 
     //date validator is only applicable for "add" and not for edit. Also field is being disabled for edit. 
     if (fieldName === 'loan_incurred_date') {
-      const formType = JSON.parse(localStorage.getItem('form_3X_report_type'));
+      const formType = JSON.parse(localStorage.getItem('form_3X_report_type') ?? '');
       if(formType){
         this.cvgStartDate = formType.cvgStartDate;
         this.cvgEndDate = formType.cvgEndDate;
@@ -793,7 +793,7 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
 
 
   private getFormFields(): void {
-    this._loansService.get_sched_c_loan_dynamic_forms_fields().subscribe(res => {
+    this._loansService.get_sched_c_loan_dynamic_forms_fields().subscribe((res: any) => {
       // TODO Temporarily hijacking the API response with JSON until ready.
       // res = schedCDynamicFormResponse;
 
@@ -893,7 +893,7 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public saveLoan(): void {
-    const entityType = this.frmLoan.get('entity_type').value;
+    const entityType = this.frmLoan.get('entity_type')?.value;
     if (entityType === 'IND') {
       this.doValidateLoan('loanSummary');
     } else if (entityType === 'ORG') {
@@ -1057,14 +1057,14 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
         LoanObj.entity_id = this._selectedEntity.entity_id;
       }
       // LoanObj.entity_type = this.entityType;
-      LoanObj['is_loan_secured'] = this.frmLoan.get('secured').value;
+      LoanObj['is_loan_secured'] = this.frmLoan.get('secured')?.value;
       //console.log('LoanObj =', JSON.stringify(LoanObj));
 
       localStorage.setItem('LoanObj', JSON.stringify(LoanObj));
       
       this._loansService
         .saveSched_C(this.scheduleAction, this._transactionTypeIdentifier, LoanObj.entity_type, this.reportId)
-        .subscribe(res => {
+        .subscribe((res: any) => {
           if (res) {
 
             this.updateThirdNavAmounts(res);
@@ -1146,7 +1146,7 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
     if (col.name === 'election_other_description') {
       let showOtherDesc = false;
       if (this.frmLoan.contains('election_code')) {
-        if (this.frmLoan.get('election_code').value === 'O') {
+        if (this.frmLoan.get('election_code')?.value === 'O') {
           showOtherDesc = true;
         }
       }
@@ -1250,7 +1250,7 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private setInputType(loanData: any, element: any) {
-    let value :string = null;
+    let value :string = '';
     let temp = null;
     if(loanData && loanData.loan_due_date){
       value = loanData.loan_due_date;

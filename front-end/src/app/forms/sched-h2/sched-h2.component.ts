@@ -71,7 +71,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   public transaction_id!: string;
 
   public cloned = false;
-  populateFormForEdit: Subscription;
+  populateFormForEdit!: Subscription;
 
   public fedRatio!: number;
   public nonfedRatio!: number;
@@ -179,7 +179,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
       .pipe(takeUntil(this._H2onDestroy$))
       .subscribe(p => {
         if (p.scheduleType === 'Schedule H2') {
-          let res = this._schedHService.getSchedule(p.transactionDetail.transactionModel).subscribe(res => {
+          let res = this._schedHService.getSchedule(p.transactionDetail.transactionModel).subscribe((res: any) => {
             if (res && res.length === 1) {
               this.editH2(res[0]);
             }
@@ -249,7 +249,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
     this.status.emit({
       otherSchedHTransactionType: this.transactionType
     });
-    if (!this.schedH2.get('ratio_code').value) {
+    if (!this.schedH2.get('ratio_code')?.value) {
       this.schedH2.patchValue({ ratio_code: 'n' }, { onlySelf: true });
     }
   }
@@ -267,9 +267,9 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
   public getReportId(): string {
     let report_id;
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
     }
 
     if (reportType) {
@@ -320,8 +320,8 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
   public doValidate(printAfterSave = false) {
     if (this.schedH2.status === 'VALID') {
-      //this.schedH2.patchValue({ fundraising: this.schedH2.get('select_activity_function').value === 'f' ? true : false }, { onlySelf: true });
-      //this.schedH2.patchValue({ direct_cand_support: this.schedH2.get('select_activity_function').value === 'd' ? true : false }, { onlySelf: true });
+      //this.schedH2.patchValue({ fundraising: this.schedH2.get('select_activity_function')?.value === 'f' ? true : false }, { onlySelf: true });
+      //this.schedH2.patchValue({ direct_cand_support: this.schedH2.get('select_activity_function')?.value === 'd' ? true : false }, { onlySelf: true });
 
       const formObj = this.schedH2.getRawValue();
 
@@ -329,11 +329,11 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
       formObj['report_id'] = this._individualReceiptService.getReportIdFromStorage(this.formType);
       formObj['transaction_type_identifier'] = 'ALLOC_H2_RATIO';
 
-      formObj['fundraising'] = this.schedH2.get('select_activity_function').value === 'f' ? true : false;
-      formObj['direct_cand_support'] = this.schedH2.get('select_activity_function').value === 'd' ? true : false;
+      formObj['fundraising'] = this.schedH2.get('select_activity_function')?.value === 'f' ? true : false;
+      formObj['direct_cand_support'] = this.schedH2.get('select_activity_function')?.value === 'd' ? true : false;
 
-      formObj['federal_percent'] = (this.schedH2.get('federal_percent').value / 100).toFixed(2);
-      formObj['non_federal_percent'] = (this.schedH2.get('non_federal_percent').value / 100).toFixed(2);
+      formObj['federal_percent'] = (this.schedH2.get('federal_percent')?.value / 100).toFixed(2);
+      formObj['non_federal_percent'] = (this.schedH2.get('non_federal_percent')?.value / 100).toFixed(2);
 
       if (this.scheduleAction === ScheduleActions.edit) {
         formObj['transaction_id'] = this.transaction_id;
@@ -344,7 +344,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
       this.isSubmit = true;
 
       //if(this.schedH2.status === 'VALID') {
-      //&& (this.schedH2.get('federal_percent').value + this.schedH2.get('non_federal_percent').value) === 100) {
+      //&& (this.schedH2.get('federal_percent')?.value + this.schedH2.get('non_federal_percent')?.value) === 100) {
 
       this.saveH2Ratio(serializedForm, this.scheduleAction, printAfterSave);
 
@@ -375,7 +375,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
         this.config.itemsPerPage,
         'default',
         false
-      ).subscribe(res => {
+      ).subscribe((res: any) => {
         const pagedResponse = this._utilService.pageResponse(res, this.config);
         this.h2Sum = pagedResponse.items;
         this.pageNumbers = pagedResponse.pageNumbers;
@@ -383,7 +383,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public saveH2Ratio(ratio: any, scheduleAction, printAfterSave = false) {
-    this._schedH2Service.saveH2Ratio(ratio, scheduleAction).subscribe(res => {
+    this._schedH2Service.saveH2Ratio(ratio, scheduleAction).subscribe((res: any) => {
       if (res) {
         this.saveHRes = res;
         this.transaction_id = res.transaction_id;
@@ -426,12 +426,12 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
       } else {
         //this.isSubmit = true;
         if (
-          (this.schedH2.get('activity_event_name').value === '' ||
-            this.schedH2.get('activity_event_name').value === null) &&
-          this.schedH2.get('select_activity_function').value === null &&
-          this.schedH2.get('federal_percent').value === null &&
-          this.schedH2.get('non_federal_percent').value === null &&
-          this.schedH2.get('receipt_date').value === null
+          (this.schedH2.get('activity_event_name')?.value === '' ||
+            this.schedH2.get('activity_event_name')?.value === null) &&
+          this.schedH2.get('select_activity_function')?.value === null &&
+          this.schedH2.get('federal_percent')?.value === null &&
+          this.schedH2.get('non_federal_percent')?.value === null &&
+          this.schedH2.get('receipt_date')?.value === null
         ) {
           this.transactionType = 'ALLOC_H2_SUM';
           this.getH2Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
@@ -442,7 +442,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
               ConfirmModalComponent,
               'Caution!'
             )
-            .then(res => {
+            .then((res: any) => {
               if (res === 'okay') {
                 this.schedH2.reset();
                 this.transactionType = 'ALLOC_H2_SUM';
@@ -468,7 +468,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public receiptDateChanged(receiptDate: string) {
-    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type'));
+    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type') ?? '');
     this.cvgStartDate = formInfo.cvgStartDate;
     this.cvgEndDate = formInfo.cvgEndDate;
 
@@ -641,7 +641,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
         ConfirmModalComponent,
         'Caution!'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._tranService
             .trashOrRestoreTransactions(this.formType, 'trash', trx.report_id, [trx])
@@ -663,15 +663,15 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
   public setRatioCodeWithValueChange(ratio: number) {
     if (
-      this.schedH2.get('ratio_code').value === 's' &&
-      (this.schedH2.get('federal_percent').value !== this.fedRatio ||
-        this.schedH2.get('non_federal_percent').value !== this.nonfedRatio)
+      this.schedH2.get('ratio_code')?.value === 's' &&
+      (this.schedH2.get('federal_percent')?.value !== this.fedRatio ||
+        this.schedH2.get('non_federal_percent')?.value !== this.nonfedRatio)
     ) {
       this.schedH2.patchValue({ ratio_code: 'r' }, { onlySelf: true });
     } else if (
-      this.schedH2.get('ratio_code').value === 'r' &&
-      Number(this.schedH2.get('federal_percent').value) === this.fedRatio &&
-      Number(this.schedH2.get('non_federal_percent').value) === this.nonfedRatio
+      this.schedH2.get('ratio_code')?.value === 'r' &&
+      Number(this.schedH2.get('federal_percent')?.value) === this.fedRatio &&
+      Number(this.schedH2.get('non_federal_percent')?.value) === this.nonfedRatio
     ) {
       this.schedH2.patchValue({ ratio_code: 's' }, { onlySelf: true });
     }

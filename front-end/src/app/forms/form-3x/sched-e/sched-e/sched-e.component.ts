@@ -60,8 +60,8 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
   private multistateMemoTextDelimiter = ' - ';
 
   private _schedEonDestroy$ = new Subject();
-  _originalExpenditureAggregate: any;
-  _originalExpenditureAmount: any;
+  _originalExpenditureAggregate!: any;
+  _originalExpenditureAmount!: any;
 
   constructor(
     _http: HttpClient,

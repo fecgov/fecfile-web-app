@@ -52,7 +52,7 @@ export class IndividualReceiptComponent extends AbstractSchedule implements OnIn
 
   public override formType!: string;
   public cloned!: boolean;
-  queryParamsSubscription: Subscription;
+  queryParamsSubscription!: Subscription;
   constructor(
     _http: HttpClient,
     _fb: FormBuilder,

@@ -85,7 +85,7 @@ private activeRoutesSubscription :Subscription;
         .subscribe( params => {
           this.existingReportId = params.reportId;
        });
-    this.existingReportId = localStorage.getItem('Existing_Report_id');
+    this.existingReportId = localStorage.getItem('Existing_Report_id') ?? '';
     if (this.existingReportId !== "") {
           localStorage.removeItem('Existing_Report_id');
           localStorage.removeItem('orm_99_details.org_fileurl');

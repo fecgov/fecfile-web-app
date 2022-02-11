@@ -136,7 +136,7 @@ export class AddNewContactComponent implements OnInit, OnDestroy {
   public ngDoCheck(): void {
     if (this.frmContact.dirty) {
       if (this.frmContact.valid) {
-        const jsonString: string | null = localStorage.getItem('contactsaved');
+        const jsonString: string | null = localStorage.getItem('contactsaved') ?? '';
         if (jsonString) {
           const isSaved = JSON.parse(jsonString);
           if (isSaved && isSaved.saved) {
@@ -297,7 +297,7 @@ export class AddNewContactComponent implements OnInit, OnDestroy {
    * Gets the transaction type.
    */
   private _getTransactionType(): void {
-    /*  const transactionType: any = JSON.parse(localStorage.getItem(`form_${this._formType}_transaction_type`));
+    /*  const transactionType: any = JSON.parse(localStorage.getItem(`form_${this._formType}_transaction_type`) ?? '');
 
     if (typeof transactionType === 'object') {
       if (transactionType !== null) {
@@ -355,7 +355,7 @@ export class AddNewContactComponent implements OnInit, OnDestroy {
       `Changes to ${fieldLabel} can't be edited when a Contributor is` +
       ` selected from the dropdwon.  Go to the Contacts page to edit a Contributor.`;
 
-    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', false).then(res => {});
+    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', false).then((res: any) => {});
   }*/
 
   /**
@@ -363,7 +363,7 @@ export class AddNewContactComponent implements OnInit, OnDestroy {
    *
    * @param      {Object}  e      The event object.
    */
-  /*public memoCodeChange(e): void {
+  /*public memoCodeChange(e: any): void {
     const { checked } = e.target;
 
     if (checked) {
@@ -446,7 +446,7 @@ export class AddNewContactComponent implements OnInit, OnDestroy {
     }
 
     //const message = `Please note that if you update contact information it will be updated in the Contacts file.`;
-    //this._dialogService.confirm(message, ConfirmModalComponent, 'Warning!', false).then(res => {});
+    //this._dialogService.confirm(message, ConfirmModalComponent, 'Warning!', false).then((res: any) => {});
 
     this._selectedChangeWarn[name] = name;
   }
@@ -1235,7 +1235,7 @@ export class AddNewContactComponent implements OnInit, OnDestroy {
     }
   }
 
-  /*public selectTypeChange(e): void {
+  /*public selectTypeChange(e: any): void {
     this._entityType = e.target.value;
     this.loadDynamiceFormFields();
     //console.log('selectTypeChange this._entityType = ', this._entityType);

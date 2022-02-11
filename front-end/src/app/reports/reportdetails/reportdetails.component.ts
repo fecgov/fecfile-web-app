@@ -385,13 +385,13 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
   }
 
   public getFilterNames() {
-    this._reportsService.getStatuss().subscribe(res => {
+    this._reportsService.getStatuss().subscribe((res: any) => {
       this.statusDescriptions = res.data;
     });
-    this._reportsService.getAmendmentIndicators().subscribe(res => {
+    this._reportsService.getAmendmentIndicators().subscribe((res: any) => {
       this.getAmendmentIndicatorsDescriptions = res.data;
     });
-    this._reportsService.getReportTypes().subscribe(res => {
+    this._reportsService.getReportTypes().subscribe((res: any) => {
       this.getReportTypesDescriptions = res;
     });
   }
@@ -802,7 +802,7 @@ public printReport(report: reportModel): void{
         this._formsService.PreviewForm_Preview_sign_Screen({}, this.formType).subscribe(
           res => {
             if (res) {
-              window.open(localStorage.getItem('form_99_details.printpriview_fileurl'), '_blank');
+              window.open(localStorage.getItem('form_99_details.printpriview_fileurl') ?? '', '_blank');
             }
           },
           error => {
@@ -906,7 +906,7 @@ public printReport(report: reportModel): void{
       .confirm('You are about to delete these reports ',
         TrashConfirmComponent,
         'Caution!', null, null, dataMap)
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           let i = 1;
           for (const rep of selectedReports) {
@@ -1076,7 +1076,7 @@ public printReport(report: reportModel): void{
       .confirm('You are about to trash report ' + rep.reportId + '.',
         ConfirmModalComponent,
         'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._reportsService.trashReport(rep)
             .subscribe((res: GetReportsResponse) => {
@@ -1100,7 +1100,7 @@ public printReport(report: reportModel): void{
   public restoreReport(rep: reportModel): void {
     this._dialogService
       .confirm('You are about to restore report ' + rep.report_id + '.', ConfirmModalComponent, 'Warning!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._reportsService.trashOrRestoreReports('restore', [rep]).subscribe((res: GetReportsResponse) => {
             this.getRecyclingPage(this.config.currentPage);
@@ -1143,7 +1143,7 @@ public printReport(report: reportModel): void{
       .confirm(beforeMessage,
         ConfirmModalComponent,
         'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._reportsService.deleteRecycleBinReport(selectedReports)
             .subscribe((res: GetReportsResponse) => {
@@ -1502,7 +1502,7 @@ public printReport(report: reportModel): void{
 
     this._dialogService
       .confirm('You are about to delete these reports.   ' + repIds, ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._reportsService
             .trashOrRestoreReports('trash', selectedReports)
@@ -1533,7 +1533,7 @@ public printReport(report: reportModel): void{
   public trashReport(rep: reportModel): void {
     this._dialogService
       .confirm('You are about to delete this report ' + rep.report_id + '.', ConfirmModalComponent, 'Warning!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._reportsService.trashOrRestoreReports('trash', [rep]).subscribe((res: GetReportsResponse) => {
             //console.log("trashReport res =", res);
@@ -1567,7 +1567,7 @@ public printReport(report: reportModel): void{
   public restorereport(rep: reportModel): void {
     this._dialogService
       .confirm('You are about to restore report ' + rep.report_id + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           // this._reportsService.restorereport(rep)
           //   .subscribe((res: GetReportsResponse) => {
@@ -1604,7 +1604,7 @@ public printReport(report: reportModel): void{
       beforeMessage = 'Are you sure you want to permanently delete these Reports?   ' + repIds;
     }
 
-    this._dialogService.confirm(beforeMessage, ConfirmModalComponent, 'Caution!').then(res => {
+    this._dialogService.confirm(beforeMessage, ConfirmModalComponent, 'Caution!').then((res: any) => {
       if (res === 'okay') {
         this._reportsService.deleteRecycleBinReport(selectedReports).subscribe((res: GetReportsResponse) => {
           this.getRecyclingPage(this.config.currentPage);
@@ -1701,7 +1701,7 @@ public printReport(report: reportModel): void{
           }
         });
       }
-    }).catch((e) => {
+    }).catch((e: any) => {
       // clicked other than save
     });
   }

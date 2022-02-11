@@ -51,7 +51,7 @@ export class UploadContactsService {
 
     // let committeeId = null;
     // if (localStorage.getItem('committee_details') !== null) {
-    //   const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+    //   const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
     //   committeeId = cmteDetails.committeeid;
     // }
 
@@ -131,7 +131,7 @@ export class UploadContactsService {
   //         headers: httpOptions
   //       })
   //       .pipe(
-  //         map(res => {
+  //         map((res: any) => {
   //           if (res) {
   //             return res;
   //           }
@@ -144,7 +144,7 @@ export class UploadContactsService {
   //         headers: httpOptions
   //       })
   //       .pipe(
-  //         map(res => {
+  //         map((res: any) => {
   //           if (res) {
   //             return res;
   //           }
@@ -174,7 +174,7 @@ export class UploadContactsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -400,7 +400,7 @@ export class UploadContactsService {
         params
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             res = 25;
             return res;

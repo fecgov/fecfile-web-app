@@ -45,7 +45,7 @@ export class F1mComponent implements OnInit, OnDestroy {
     type: 'qualification',
     candidates: [],
   };
-  committeeType: any;
+  committeeType!: any;
 
   constructor(
     private _cd: ChangeDetectorRef,
@@ -440,7 +440,7 @@ export class F1mComponent implements OnInit, OnDestroy {
         null,
         'Cancel'
       )
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             let saveObj = this.signAndSubmitComp.form.value;
             saveObj.reportId = this.reportId ;

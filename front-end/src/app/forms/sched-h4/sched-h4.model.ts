@@ -1,21 +1,21 @@
 export class SchedH4Model {
-    cmte_id: string;
-    report_id: number;
-    transaction_type_identifier: string;
-    transaction_id: string;
-    back_ref_transaction_id: string;
-    activity_event_identifier: string;
-    activity_event_type: string;
+    cmte_id!: string;
+    report_id!: number;
+    transaction_type_identifier!: string;
+    transaction_id!: string;
+    back_ref_transaction_id!: string;
+    activity_event_identifier!: string;
+    activity_event_type!: string;
     expenditure_date:string;
-    fed_share_amount: number;
-    non_fed_share_amount: number;
-    memo_code: string;
-    first_name: string;
-    last_name: string;
-    entity_name: string;
-    entity_type: string;
-    arrow_dir: string;
-    aggregation_ind: string;
+    fed_share_amount!: number;
+    non_fed_share_amount!: number;
+    memo_code!: string;
+    first_name!: string;
+    last_name!: string;
+    entity_name!: string;
+    entity_type!: string;
+    arrow_dir!: string;
+    aggregation_ind!: string;
     child: SchedH4Model[] = [];
     constructor(schedH4: any) {
         this.cmte_id = schedH4.cmte_id ? schedH4.cmte_id : '';

@@ -291,11 +291,11 @@
                 />
                 <div class="error-text" *ngIf="
                   (frmIndividualReceipt.touched || frmIndividualReceipt.dirty) &&
-                  frmIndividualReceipt.get('subordinate_cmte_zip').invalid
+                  frmIndividualReceipt.get('subordinate_cmte_zip')?.invalid
                 ">
-                  <ng-container *ngIf="frmIndividualReceipt.get('subordinate_cmte_zip').errors">
+                  <ng-container *ngIf="frmIndividualReceipt.get('subordinate_cmte_zip')?.errors">
                     <div class="text-error text-left"
-                      *ngIf="frmIndividualReceipt.get('subordinate_cmte_zip').errors?.nonAlphaNumeric">
+                      *ngIf="frmIndividualReceipt.get('subordinate_cmte_zip')?.errors?.nonAlphaNumeric">
                       Alphanumeric characters only.
                     </div>
                   </ng-container>

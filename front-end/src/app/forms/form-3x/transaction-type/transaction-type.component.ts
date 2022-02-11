@@ -25,7 +25,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
   @ViewChild('acc') accordion: NgbAccordion;
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectedOptions: any = {};
-  @Input() transactionCategory: string = null;
+  @Input() transactionCategory: string = '';
   @Input() formOptionsVisible: boolean = false;
   @Input() transactionCategories: any = [];
 
@@ -35,12 +35,12 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
   public showForm: boolean = false;
   public searchField: any = {};
   public secondaryOptions: any = [];
-  public transactionType: string = null;
-  public transactionTypeText: string = null;
+  public transactionType: string = '';
+  public transactionTypeText: string = '';
   public transactionTypeFailed: boolean = false;
   public transactionCategorySelected: boolean = false;
   public tranasctionCategoryVal: string = '';
-  public scheduleType: string = null;
+  public scheduleType: string = '';
 
   private _formType: string = '';
   private _mainTransactionCategory: any = [];
@@ -49,7 +49,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
   private _transactionCategories: any = [];
 
   private onDestroy$ = new Subject();
-  routeSubscription: Subscription;
+  routeSubscription!: Subscription;
 
   constructor(
     private _fb: FormBuilder,
@@ -125,7 +125,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
       this.transactionCategory &&
       localStorage.getItem(`form_${this._formType}_temp_transaction_type`) !== null
     ) {
-      const transactionObj: any = JSON.parse(localStorage.getItem(`form_${this._formType}_temp_transaction_type`));
+      const transactionObj: any = JSON.parse(localStorage.getItem(`form_${this._formType}_temp_transaction_type`) ?? '');
 
       if (transactionObj.mainTransactionTypeText !== this.transactionCategory) {
         this._setSecondaryTransactionCategories();
@@ -149,7 +149,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
 
     if (this.frmOption.valid) {
       if (localStorage.getItem(`form_${this._formType}_temp_transaction_type`) !== null) {
-        const transObj: any = JSON.parse(localStorage.getItem(`form_${this._formType}_temp_transaction_type`));
+        const transObj: any = JSON.parse(localStorage.getItem(`form_${this._formType}_temp_transaction_type`) ?? '');
 
         window.localStorage.setItem(`form_${this._formType}_transaction_type`, JSON.stringify(transObj));
 
@@ -349,7 +349,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
           null,
           'Return to Reports'
         )
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             this.ngOnInit();
           } else if (res === 'cancel') {

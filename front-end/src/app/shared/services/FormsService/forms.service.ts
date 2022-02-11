@@ -684,9 +684,9 @@ export class FormsService {
   public get_report_status(form_type: any, report_id: any): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     let httpOptions = new HttpHeaders();
-    // let params = new FormData(JSON.parse(localStorage.getItem('form_99_details')));
+    // let params = new FormData(JSON.parse(localStorage.getItem('form_99_details') ?? ''));
     let params = new FormData();
-    let reportId = localStorage.getItem('form_99_details.id');
+    let reportId = localStorage.getItem('form_99_details.id') ?? '';
     const formType = 'F' + form_type;
 
     if (formType === 'F3X') {

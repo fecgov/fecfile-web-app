@@ -11,8 +11,8 @@ import { DebtSummaryModel } from '../model/debt-summary.model';
 
 export interface GetDebtsResponse {
   items: DebtSummaryModel[];
-  totalCount: number;
-  totalPages: number;
+  totalCount!: number;
+  totalPages!: number;
 }
 
 /**
@@ -71,7 +71,7 @@ export class DebtSummaryService {
         params
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return {
               items: this.mapFromServerFields(res.items),
@@ -111,7 +111,7 @@ export class DebtSummaryService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             //console.log('get_outstanding_loans API res: ', res);
 

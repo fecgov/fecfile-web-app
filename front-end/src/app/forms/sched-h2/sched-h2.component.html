@@ -100,7 +100,7 @@
                     : ''
                 "
               />
-              <div class="text-error text-left" *ngIf="schedH2.get('activity_event_name').errors?.maxlength">
+              <div class="text-error text-left" *ngIf="schedH2.get('activity_event_name')?.errors?.maxlength">
                 Only 90 characters allowed.
               </div>
             </div>
@@ -229,7 +229,7 @@
             </div>
             <div
               class="text-error text-left"
-              *ngIf="schedH2.get('federal_percent').errors?.min || schedH2.get('federal_percent').errors?.max"
+              *ngIf="schedH2.get('federal_percent')?.errors?.min || schedH2.get('federal_percent')?.errors?.max"
             >
               Only 0 - 100 allowed.
             </div>
@@ -263,7 +263,7 @@
             </div>
             <div
               class="text-error text-left"
-              *ngIf="schedH2.get('non_federal_percent').errors?.min || schedH2.get('non_federal_percent').errors?.max"
+              *ngIf="schedH2.get('non_federal_percent')?.errors?.min || schedH2.get('non_federal_percent')?.errors?.max"
             >
               Only 0 - 100 allowed.
             </div>

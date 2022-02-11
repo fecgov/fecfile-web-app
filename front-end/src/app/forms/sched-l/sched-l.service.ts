@@ -49,7 +49,7 @@ export class SchedLService {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           return {
             items: res.items,
@@ -83,7 +83,7 @@ export class SchedLService {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('SL Summary res: ', res);
             return res;
@@ -107,7 +107,7 @@ export class SchedLService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }

@@ -37,7 +37,7 @@ export class F99Component implements OnInit , OnDestroy{
   private _form_submitted: boolean = false;
 
   private onDestroy$ = new Subject();
-  routerEventsSubscription: Subscription;
+  routerEventsSubscription!: Subscription;
   
 
   constructor(
@@ -50,7 +50,7 @@ export class F99Component implements OnInit , OnDestroy{
   ) { }
 
   ngOnInit(): void {
-    this._committeeDetails = JSON.parse(localStorage.getItem('committee_details'));
+    this._committeeDetails = JSON.parse(localStorage.getItem('committee_details') ?? '');
     this.committee_details = this._committeeDetails;
 
     this._formType = this._activatedRoute.snapshot.paramMap.get('form_id');
@@ -108,7 +108,7 @@ export class F99Component implements OnInit , OnDestroy{
 
     this._messageService
       .getMessage().pipe(takeUntil(this.onDestroy$))
-      .subscribe(res => {
+      .subscribe((res: any) => {
         if(res.validateMessage) {
         } else if (res.form_submitted) {
           this._form_submitted = true;
@@ -201,7 +201,7 @@ export class F99Component implements OnInit , OnDestroy{
    *
    * @param      {Object}  e       The event object.
    */
-  public onNotify(e): void {
+  public onNotify(e: any): void {
     this.frm = e.form;
 
     this.direction = e.direction;

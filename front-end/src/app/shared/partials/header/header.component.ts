@@ -30,9 +30,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   @Input() formType!: string;
 
   public menuActive: boolean = false;
-  routerSubscription: Subscription;
-  notificationsCount: number;
-  modalRef: any;
+  routerSubscription!: Subscription;
+  notificationsCount!: number;
+  modalRef!: any;
 
   constructor(
     private _messageService: MessageService,
@@ -108,9 +108,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
    */
   public async canDeactivate(): Promise<boolean> {
     if (this._formService.formHasUnsavedData(this.formType)) {
-      let result: boolean = null;
-      result = await this._dialogService.confirm('', ConfirmModalComponent).then(res => {
-        let val: boolean = null;
+      let result: boolean = false;
+      result = await this._dialogService.confirm('', ConfirmModalComponent).then((res: any) => {
+        let val: boolean = false;
 
         if (res === 'okay') {
           val = true;
@@ -143,7 +143,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     modalRef.result.then(result => {
       console.log('saved');
       console.log(result);
-      // this._transactionsService.mirrorIEtoF24({reportId: result, transactionId: trx.transactionId}).subscribe(res => {
+      // this._transactionsService.mirrorIEtoF24({reportId: result, transactionId: trx.transactionId}).subscribe((res: any) => {
       //   if(res){
       //     this.getTransactionsPage(this.config.currentPage);
       //     this._dialogService.confirm('Transaction has been successfully added to selected F24 report. ', ConfirmModalComponent, 'Success!', false, ModalHeaderClassEnum.successHeader);

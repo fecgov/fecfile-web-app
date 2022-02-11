@@ -51,7 +51,7 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
     this.committeeId = null;
     if (localStorage.getItem('committee_details') !== null) {
-      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       this.committeeId = cmteDetails.committeeid;
     }
     this._startReview();
@@ -140,7 +140,7 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
       //     'Please check your file and ensure formatting is correct.';
       //   this._dialogService
       //     .confirm(message, ConfirmModalComponent, 'Import Failed!', false, ModalHeaderClassEnum.errorHeader)
-      //     .then(res => {
+      //     .then((res: any) => {
       //       this.resultsEmitter.emit({
       //         resultType: 'validation-error',
       //         uploadFile: this.uploadFile
@@ -234,7 +234,7 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
           'Please check your file and ensure formatting is correct.';
         this._dialogService
           .confirm(message, ConfirmModalComponent, 'Import Failed!', false, ModalHeaderClassEnum.errorHeader)
-          .then(res => {
+          .then((res: any) => {
             this.resultsEmitter.emit({
               resultType: 'validation-error',
               uploadFile: this.uploadFile
@@ -263,8 +263,8 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
    * @param scheduleType code for the schedule
    */
   private _formatScheduleName(scheduleType: string): string {
-    let scheduleName: string = null;
-    let schedCode: string = null;
+    let scheduleName: string = '';
+    let schedCode: string = '';
     if (scheduleType) {
       if (scheduleType.length > 1) {
         schedCode = scheduleType.substring(0, 2);

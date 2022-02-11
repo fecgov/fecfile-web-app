@@ -13,12 +13,12 @@ import { map } from 'rxjs/operators';
 
 export interface GetContactsResponse {
   contacts: ContactModel[];
-  totalAmount: number;
-  totalcontactsCount: number;
-  totalPages: number;
+  totalAmount!: number;
+  totalcontactsCount!: number;
+  totalPages!: number;
 
   // remove after API is renamed.
-  itemsPerPage: number;
+  itemsPerPage!: number;
   'total pages': number;
 }
 
@@ -684,7 +684,7 @@ export class ContactsService {
     return this._http.put(`${environment.apiUrl}${url}`, request, {
       headers: httpOptions,
     });
-    // .pipe(map(res => {
+    // .pipe(map((res: any) => {
     //     if (res) {
     //       //console.log('Trash Restore response: ', res);
     //       return res;
@@ -724,14 +724,14 @@ export class ContactsService {
   public saveContact(scheduleAction: ContactActions): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url: string = '/core/contacts';
-    /*const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+    /*const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
 
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');
     }*/
 
-    //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`));
+    //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`) ?? '');
     const contactString: string | null = localStorage.getItem(`contactObj`);
     const formData: FormData = new FormData();
     let httpOptions = new HttpHeaders();

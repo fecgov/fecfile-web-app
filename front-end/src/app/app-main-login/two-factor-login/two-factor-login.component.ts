@@ -10,7 +10,7 @@ import { TwoFactorHelperService } from '../service/two-factor-helper/two-factor-
   styleUrls: ['./two-factor-login.component.scss'],
 })
 export class TwoFactorLoginComponent implements OnInit {
-  twoFactInfo: FormGroup;
+  twoFactInfo!: FormGroup;
 
   constructor(
     private router: Router,

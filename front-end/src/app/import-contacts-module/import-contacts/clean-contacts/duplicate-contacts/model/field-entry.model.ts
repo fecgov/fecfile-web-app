@@ -1,8 +1,8 @@
 export class FieldEntryModel {
-  value: string;
-  selected: boolean;
-  disabled: boolean;
-  originallyEmpty: boolean;
+  value!: string;
+  selected!: boolean;
+  disabled!: boolean;
+  originallyEmpty!: boolean;
 
   public constructor() {
     this.value = null;

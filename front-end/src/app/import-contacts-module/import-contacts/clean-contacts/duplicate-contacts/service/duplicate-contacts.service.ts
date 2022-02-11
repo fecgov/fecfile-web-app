@@ -35,7 +35,7 @@ export class DuplicateContactsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -64,7 +64,7 @@ export class DuplicateContactsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -93,7 +93,7 @@ export class DuplicateContactsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -138,7 +138,7 @@ export class DuplicateContactsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -166,7 +166,7 @@ export class DuplicateContactsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -189,7 +189,7 @@ export class DuplicateContactsService {
           params
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               return res;
             }

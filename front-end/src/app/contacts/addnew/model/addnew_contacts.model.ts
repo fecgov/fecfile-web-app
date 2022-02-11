@@ -1,24 +1,24 @@
 export class AddNewContactModel {
-  type: string;
-  id: string;
-  name: string;
-  lastName: string;
-  firstName: string;
-  middleName: string;
-  suffix: string;
-  prefix: string;
-  street: string;
-  street2: string;
-  city: string;
-  state: string;
-  zip: string;
-  phoneNumber: string;
-  employer: string;
-  occupation: string;
-  officeSought: string;
-  officeState: string;
-  district: string;
-  selected: boolean;
+  type!: string;
+  id!: string;
+  name!: string;
+  lastName!: string;
+  firstName!: string;
+  middleName!: string;
+  suffix!: string;
+  prefix!: string;
+  street!: string;
+  street2!: string;
+  city!: string;
+  state!: string;
+  zip!: string;
+  phoneNumber!: string;
+  employer!: string;
+  occupation!: string;
+  officeSought!: string;
+  officeState!: string;
+  district!: string;
+  selected!: boolean;
 
   constructor(contact: any) {
     this.type = contact.type ? contact.type : '';

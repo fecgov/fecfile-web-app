@@ -18,15 +18,15 @@ export class DashboardComponent implements OnInit {
   public showSideBar: boolean = true;
   public showLegalDisclaimer: boolean = false;
   public!: string;
-  modalRef: any;
+  modalRef!: any;
 
   upcomingReportsList: any = null;
   upcomingReportsListError = false;
   upcomingReportsListEmpty = false;
-  recentlySavedReports: any;
+  recentlySavedReports!: any;
   recentlySavedReportsError = false;
   recentlySavedReportsEmpty = false;
-  recentlySubmittedReports: any;
+  recentlySubmittedReports!: any;
   recentlySubmittedReportsError = false;
   recentlySubmittedReportsEmpty = false;
   cmte_id!: string;
@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
     if (localStorage.getItem('form3XReportInfo.showDashBoard') === 'Y') {
       this._formService.removeFormDashBoard('3X');
     }
-    const committeeDetails: any = localStorage.getItem('committee_details');
+    const committeeDetails: any = localStorage.getItem('committee_details') ?? '';
     if (committeeDetails) {
       this.cmte_id = JSON.parse(committeeDetails).committeeid;
     }

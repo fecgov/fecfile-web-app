@@ -175,7 +175,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   private cachedFilters: TransactionFilterModel = new TransactionFilterModel();
   private msEdge = true;
   private view = ActiveView.transactions;
-  queryParamSubscription: Subscription;
+  queryParamSubscription!: Subscription;
   
   //Filters flags based on formType and transactionCategory
   public showAmountFilter!: boolean;
@@ -887,7 +887,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
    * filter options on Type.
    */
   private getCategoryTypes() {
-    this._transactionTypeService.getTransactionTypes(this.formType).subscribe(res => {
+    this._transactionTypeService.getTransactionTypes(this.formType).subscribe((res: any) => {
       let categoriesExist = false;
       let categoriesGroupArray = [];
         if (res) {
@@ -919,7 +919,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
    * Get US State Codes and Values.
    */
   private getStates() {
-    this._contactsService.getContactsDynamicFormFields().subscribe(res => {
+    this._contactsService.getContactsDynamicFormFields().subscribe((res: any) => {
       let statesExist = false;
       if (res.data) {
         if (res.data.states) {
@@ -949,7 +949,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   }
 
   getReportTypes() {
-    this._reportsService.getReportTypes().subscribe(res => {
+    this._reportsService.getReportTypes().subscribe((res: any) => {
       let reportsExist = false;
       if (res) {
         reportsExist = true;
@@ -978,7 +978,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
 
   private getItemizations() {
     // TODO using this service to get Itemizations until available in another API.
-    this._transactionsService.getItemizations().subscribe(res => {
+    this._transactionsService.getItemizations().subscribe((res: any) => {
       let itemizationExist = false;
       if (res.data) {
         //console.log('res.data', res.data);

@@ -196,32 +196,32 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   //there is no unsubscribe() for activateRoute but while cycling between 'Transactions' and 'Recycling Bin' views
   //subscriptions are piling up, causing a single api call to be made n+1 times. 
   private onDestroy$ = new Subject();
-  loadDefaultReceiptsTabSubscription: Subscription;
-  routerSubscription: Subscription;
+  loadDefaultReceiptsTabSubscription!: Subscription;
+  routerSubscription!: Subscription;
 
   selectedFromMultiplePages: Array <TransactionModel> = [];
   public receiptsLabel!: string;
   public disbursementsLabel!: string;
   public loansLabel!: string;
   public othersLabel!: string;
-  showAmountColumn: boolean;
-  showAggregateAmountColumn: boolean;
-  showItemizationColumn: boolean;
-  showTypeColumn: boolean;
-  showReportTypeColumn: boolean;
-  showDateColumn: boolean;
-  showAggregateColumn: boolean;
-  showMemoCodeColumn: boolean;
-  showStateColumn: boolean;
-  showElectionCodeColumn: boolean;
-  showElectionYearColumn: boolean;
-  showLoanAmountColumn: boolean;
-  showBalanceAtCloseColumn: boolean;
-  showBeginningBalanceColumn: boolean;
-  showScheduleColumn: boolean;
-  showSemiAnnualAmountColumn: boolean;
-  showTransactionIdColumn: boolean;
-  showEmployerColumn: boolean;
+  showAmountColumn!: boolean;
+  showAggregateAmountColumn!: boolean;
+  showItemizationColumn!: boolean;
+  showTypeColumn!: boolean;
+  showReportTypeColumn!: boolean;
+  showDateColumn!: boolean;
+  showAggregateColumn!: boolean;
+  showMemoCodeColumn!: boolean;
+  showStateColumn!: boolean;
+  showElectionCodeColumn!: boolean;
+  showElectionYearColumn!: boolean;
+  showLoanAmountColumn!: boolean;
+  showBalanceAtCloseColumn!: boolean;
+  showBeginningBalanceColumn!: boolean;
+  showScheduleColumn!: boolean;
+  showSemiAnnualAmountColumn!: boolean;
+  showTransactionIdColumn!: boolean;
+  showEmployerColumn!: boolean;
 
   constructor(
     private _transactionsService: TransactionsService,
@@ -316,7 +316,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * Initialize the component.
    */
   public ngOnInit(): void {
-    this.committeeDetails = JSON.parse(localStorage.getItem('committee_details'));
+    this.committeeDetails = JSON.parse(localStorage.getItem('committee_details') ?? '');
     this.pageReceivedTransactions = false;
     this.pageReceivedReports = false;
 
@@ -340,7 +340,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     }
 
 
-    this._transactionTypeService.getTransactionCategories("F"+this.formType).subscribe(res => {
+    this._transactionTypeService.getTransactionCategories("F"+this.formType).subscribe((res: any) => {
       if (res) {
         this.transactionCategories = res.data.transactionCategories;
       }
@@ -412,7 +412,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   }
 
   linkToF24(trx:any) {
-    this._reportsService.getAllF24Reports().subscribe(res => {
+    this._reportsService.getAllF24Reports().subscribe((res: any) => {
       res.map((report:any) =>{
         report.displayText = `${report.reportType} Hour Report - (Last Updated: ${this._datePipe.transform(report.lastUpdatedDate, 'short', 'GMT')})`;
         if(report.status === 'SUBMITTED'){
@@ -425,7 +425,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     const modalRef = this.modalService.open(F24LinkModalComponent);
     modalRef.componentInstance.f24List = res; 
     modalRef.result.then(result => {
-      this._transactionsService.mirrorIEtoF24({reportId: result, transactionId: trx.transactionId}).subscribe(res => {
+      this._transactionsService.mirrorIEtoF24({reportId: result, transactionId: trx.transactionId}).subscribe((res: any) => {
         if(res){
           this.getTransactionsPage(this.config.currentPage);
           this._dialogService.confirm('Transaction has been successfully added to selected F24 report. ', ConfirmModalComponent, 'Success!', false, ModalHeaderClassEnum.successHeader);
@@ -499,7 +499,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
 
   getSubTransactions(transactionId, apiCall) {
     // const reportId = this._getReportIdFromStorage();
-    this._receiptService.getDataSchedule(this.reportId, transactionId, apiCall).subscribe(res => {
+    this._receiptService.getDataSchedule(this.reportId, transactionId, apiCall).subscribe((res: any) => {
       if (Array.isArray(res)) {
         for (const trx of res) {
           if (trx.hasOwnProperty('transaction_id')) {
@@ -1128,7 +1128,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
 
       this._dialogService
         .confirm('You are about to delete these transactions.   ' + trxIds, ConfirmModalComponent, 'Caution!')
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             this._transactionsService
               .trashOrRestoreTransactions(this.formType, 'trash', this.reportId, selectedTransactions)
@@ -1207,7 +1207,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     }
     this._dialogService
         .confirm(dialogMsg,ConfirmModalComponent, 'Warning!', true,ModalHeaderClassEnum.warningHeader,null,'Cancel')
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             //make sure modifying is permitted based on mirrorReportId !== Filed/Submitted
             if(mirrorFormType === 'F3X'){
@@ -1217,7 +1217,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
                 if(res && res[0] && res[0].reportstatus === 'Submitted'){
                   this._dialogService
                   .confirm('This transaction cannot be modified since the mirrored transaction in Form F3X is already filed. You will have to amend that report', ConfirmModalComponent, 'Error!', false)
-                  .then(res => {
+                  .then((res: any) => {
                     if (res === 'okay') {
                     }
                   });
@@ -1308,7 +1308,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   public trashTransaction(trx: TransactionModel): void {
     this._dialogService
       .confirm('You are about to delete this transaction ' + trx.transactionId + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           if(trx.mirrorReportId){
               this.warnUserIfMirrorTransaction(trx,'trash');
@@ -1325,7 +1325,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
           if (trx.child && trx.child.length > 0) {
             this._dialogService
               .confirm('WARNING: There are child transactions associated with this transaction. This action will delete all child transactions as well. Are you sure you want to continue? ', ConfirmModalComponent, 'Caution!')
-              .then(res => {
+              .then((res: any) => {
                 this.trashOrRestoreAfterConfirmation(res, trx);
               })
           }
@@ -1379,7 +1379,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   public restoreTransaction(trx: TransactionModel): void {
     this._dialogService
       .confirm('You are about to restore transaction ' + trx.transactionId + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           // this._transactionsService.restoreTransaction(trx)
           //   .subscribe((res: GetTransactionsResponse) => {
@@ -1430,7 +1430,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
       beforeMessage = 'Are you sure you want to permanently delete these transactions?   ' + trxIds;
     }
 
-    this._dialogService.confirm(beforeMessage, ConfirmModalComponent, 'Caution!').then(res => {
+    this._dialogService.confirm(beforeMessage, ConfirmModalComponent, 'Caution!').then((res: any) => {
       if (res === 'okay') {
         this._transactionsService
           .deleteRecycleBinTransaction(selectedTransactions)
@@ -1493,7 +1493,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
         null,
         'Return to Reports'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
         } else if (res === 'cancel') {
           this._router.navigate(['/reports']);
@@ -1511,7 +1511,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
           false,
           ModalHeaderClassEnum.warningHeader,
         )
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
           } 
         });
@@ -1974,7 +1974,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
         ' Print Preview';
     this._dialogService
         .confirm(WARN_MESSAGE , ConfirmModalComponent, 'Warning!', false)
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
           }
         });
@@ -1984,7 +1984,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     const WARN_MESSAGE = 'Print functionality is not available for transactions from multiple reports. Please select all transacitons from the same report. ';
     this._dialogService
         .confirm(WARN_MESSAGE , ConfirmModalComponent, 'Error!', false)
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
           }
         });
@@ -2027,7 +2027,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
 
   private forceItemizationToggle(trx: TransactionModel): void {
 
-    this._reportTypeService.forceItemizationToggle(trx).subscribe(res => {
+    this._reportTypeService.forceItemizationToggle(trx).subscribe((res: any) => {
       // on response reload the transaction table to get latest data
       this.apiError = false;
       this.getTransactionsPage(this.config.currentPage);

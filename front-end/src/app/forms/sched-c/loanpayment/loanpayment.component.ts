@@ -30,18 +30,18 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
 
   tooltipPlaceholder: string = 'Language to be provided by RAD';
   selectedEntity = 'IND';
-  cvgStartDate: string;
-  cvgEndDate: string;
+  cvgStartDate!: string;
+  cvgEndDate!: string;
   states: any = [];
   entityTypes: any = [{ code: 'IND', description: 'Individual' }, { code: 'ORG', description: 'Organization' }];
-  outstandingLoanBalance: number;
+  outstandingLoanBalance!: number;
   public _contributionAmountMax = 12;
   public filterexpenditure_date;
 
   private _loanTransactionId;
 
   private _clearFormSubscription!: Subscription;
-  editMode: any;
+  editMode!: any;
 
 
   constructor(private _cookieService: CookieService,
@@ -87,7 +87,7 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
   }
 
   isIndividual() {
-    if (this.form.control.get('entity_type').value === 'IND') {
+    if (this.form.control.get('entity_type')?.value === 'IND') {
       return true;
     }
     return false;
@@ -112,7 +112,7 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
     }
 
 
-    this._loanService.getDataSchedule(reportId, this._loanTransactionId).subscribe(res => {
+    this._loanService.getDataSchedule(reportId, this._loanTransactionId).subscribe((res: any) => {
       res = res[0];
       this.selectedEntity = res.entity_type;
 
@@ -172,7 +172,7 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
   }
 
   private getStates() {
-    this._loanService.getStates().subscribe(res => {
+    this._loanService.getStates().subscribe((res: any) => {
       this.states = res;
     });
   }
@@ -184,7 +184,7 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
   }
 
   private setupValidators() {
-    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type'));
+    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type') ?? '');
     this.cvgStartDate = formInfo.cvgStartDate;
     this.cvgEndDate = formInfo.cvgEndDate;
     this.form.controls['expenditure_date'].setValidators([
@@ -223,7 +223,7 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
 
   expenditureDateChanged(expenditureDate: string) {
 
-    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type'));
+    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type') ?? '');
     let cvgStartDate = formInfo.cvgStartDate;
     let cvgEndDate = formInfo.cvgEndDate;
 
@@ -304,11 +304,11 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
 
       const token: string = JSON.parse(this._cookieService.get('user'));
       let url: string = '/sb/schedB';
-      const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
-      let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+      const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
+      let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
 
       if (reportType === null || typeof reportType === 'undefined') {
-        reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`));
+        reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');
       }
 
       const formData: FormData = new FormData();

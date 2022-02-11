@@ -233,9 +233,9 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
   public getReportId(): string {
 
     let report_id;
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
     }
 
     if(reportType) {
@@ -270,7 +270,7 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
         this.config.itemsPerPage,
         'default',
         false
-      ).subscribe(res => {
+      ).subscribe((res: any) => {
         const pagedResponse = this._utilService.pageResponse(res, this.config);
         this.schedH4sModel = this.mapFromServerFields(pagedResponse.items);
         this.pageNumbers = pagedResponse.pageNumbers;
@@ -463,7 +463,7 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
       const msg = "There are child transactions associated with this transaction. This action will delete all child transactions as well. Are you sure you want to continue?";
       this._dlService
         .confirm(msg, ConfirmModalComponent, 'Warning!')
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             this.transhAction(trx);
           } else if (res === 'cancel') {
@@ -477,7 +477,7 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
   private transhAction(trx: any): void {
     this._dlService
       .confirm('You are about to delete this transaction ' + trx.transaction_id + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._tranService
             .trashOrRestoreTransactions(this.formType, 'trash', trx.report_id, [trx])

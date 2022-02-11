@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   @HostBinding('@.disabled')
   public animationsDisabled = true;
 
-  routerEventsSubscription: any;
+  routerEventsSubscription!: any;
 
   timeStart = false;
   seconds = 780;
@@ -28,10 +28,10 @@ export class AppComponent implements OnInit, OnDestroy {
   clientX = 0;
   clientY = 0;
   private timeIsUp: boolean = false;
-  timerSubscription: any;
-  idlePingSubscription: any;
-  timeoutSubscription: any;
-  routerEventsSubscriptionOnNgDoCheck: any;
+  timerSubscription!: any;
+  idlePingSubscription!: any;
+  timeoutSubscription!: any;
+  routerEventsSubscriptionOnNgDoCheck!: any;
 
   constructor(
     private userIdle: UserIdleService,
@@ -79,11 +79,11 @@ export class AppComponent implements OnInit, OnDestroy {
               });
           }
         });
-        this.idlePingSubscription = this.userIdle.ping$.subscribe(res => {
+        this.idlePingSubscription = this.userIdle.ping$.subscribe((res: any) => {
         });
 
         // Start watch when time is up.
-        this.timeoutSubscription = this.userIdle.onTimeout().subscribe(res => {
+        this.timeoutSubscription = this.userIdle.onTimeout().subscribe((res: any) => {
           this.timeIsUp = true;
           this._dialogService.checkIfModalOpen();
           this._sessionService.destroy();
@@ -197,9 +197,9 @@ export class AppComponent implements OnInit, OnDestroy {
    */
   public async canDeactivate(): Promise<boolean> {
     if (this._formService.formHasUnsavedData('3X')) {
-      let result: boolean = null;
-      result = await this._dialogService.confirm('', ConfirmModalComponent).then(res => {
-        let val: boolean = null;
+      let result: boolean = false;
+      result = await this._dialogService.confirm('', ConfirmModalComponent).then((res: any) => {
+        let val: boolean = false;
 
         if (res === 'okay') {
           val = true;

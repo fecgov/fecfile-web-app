@@ -16,13 +16,13 @@ import { TransactionModel } from '../model/transaction.model';
 
 export interface GetTransactionsResponse {
   transactions: TransactionModel[];
-  totalAmount: number;
-  totalSemiAnnualAmount: number;
-  totalTransactionCount: number;
-  totalPages: number;
+  totalAmount!: number;
+  totalSemiAnnualAmount!: number;
+  totalTransactionCount!: number;
+  totalPages!: number;
 
   // remove after API is renamed.
-  itemsPerPage: number;
+  itemsPerPage!: number;
   'total pages': number;
 }
 
@@ -197,7 +197,7 @@ export class TransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             //console.log('Transaction Table res: ', res);
 
@@ -288,7 +288,7 @@ export class TransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             //console.log('Transaction Recycle Bin Table res: ', res);
 
@@ -813,7 +813,7 @@ export class TransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           return false;
         })
       );
@@ -924,7 +924,7 @@ export class TransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             //console.log('Trash Restore response: ', res);
             // refresh the left summary menu
@@ -957,7 +957,7 @@ export class TransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }

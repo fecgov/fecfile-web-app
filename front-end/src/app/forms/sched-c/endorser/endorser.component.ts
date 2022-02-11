@@ -413,7 +413,7 @@ export class EndorserComponent implements OnInit, OnDestroy {
 
 
   private getFormFields(): void {
-    this._endorserService.get_sched_c_endorser_dynamic_forms_fields().subscribe(res => {
+    this._endorserService.get_sched_c_endorser_dynamic_forms_fields().subscribe((res: any) => {
       if (res) {
         //console.log('getFormFields res =', res);
         if (res.hasOwnProperty('data')) {
@@ -532,7 +532,7 @@ export class EndorserComponent implements OnInit, OnDestroy {
     let endorserObj = this._prepareDataForApiCall();
 
 
-    this._loanservice.saveSched_C2(this.scheduleAction, endorserObj, hiddenFieldsObj,this._activatedRoute.snapshot.queryParams['reportId']).subscribe(res => {
+    this._loanservice.saveSched_C2(this.scheduleAction, endorserObj, hiddenFieldsObj,this._activatedRoute.snapshot.queryParams['reportId']).subscribe((res: any) => {
       if (!addmore) {
         this.goToEndorserSummary();
       }

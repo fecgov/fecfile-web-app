@@ -1,20 +1,20 @@
 export class EndorserModel {
-    entity_type: string;
-    id: string;
-    name: string;
-    entity_name: string;
-    lastName: string;
-    firstName: string;
-    middleName: string;
-    suffix: string;
-    prefix: string;
-    street1: string;
-    street2: string;
-    city: string;
-    state: string;
-    zip: string;
-    employer: string;
-    occupation: string;
+    entity_type!: string;
+    id!: string;
+    name!: string;
+    entity_name!: string;
+    lastName!: string;
+    firstName!: string;
+    middleName!: string;
+    suffix!: string;
+    prefix!: string;
+    street1!: string;
+    street2!: string;
+    city!: string;
+    state!: string;
+    zip!: string;
+    employer!: string;
+    occupation!: string;
     contribution_amount:string;
 
     constructor(contact: any) {

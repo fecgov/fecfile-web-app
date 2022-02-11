@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
     { code: 'V', desc: 'Voice' },
     { code: 'T', desc: 'Text' },
   ];
-  registerToken: any;
+  registerToken!: any;
 
   constructor(
     private router: Router,

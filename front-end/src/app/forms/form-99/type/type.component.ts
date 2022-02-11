@@ -36,10 +36,10 @@ export class TypeComponent implements OnInit, OnDestroy {
   private committee_details: any = {};
   private _form99Details!: form99;
   private _newForm: boolean = false;
-  private _previousUrl: string = null;
+  private _previousUrl: string = '';
   private _setRefresh: boolean = false;
-  queryParamsSubscription: Subscription;
-  routerEventsSubscription: Subscription;
+  queryParamsSubscription!: Subscription;
+  routerEventsSubscription!: Subscription;
 
   constructor(
     private _fb: FormBuilder,
@@ -50,7 +50,7 @@ export class TypeComponent implements OnInit, OnDestroy {
   ) {
     this._messageService.clearMessage();
     this.queryParamsSubscription = _activatedRoute.queryParams['subscribe'](p => {
-      if (p.refresh) {
+      if (p['refresh']) {
         this._setRefresh = true;
         this.ngOnInit();
       }
@@ -62,8 +62,8 @@ export class TypeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._form99Details = null;
-    this._form99Details = JSON.parse(localStorage.getItem('form_99_details'));
-    this.committee_details = JSON.parse(localStorage.getItem('committee_details'));
+    this._form99Details = JSON.parse(localStorage.getItem('form_99_details') ?? '');
+    this.committee_details = JSON.parse(localStorage.getItem('committee_details') ?? '');
     //console.log(" type this._form99Details =", this._form99Details)
     this.screenWidth = window.innerWidth;
     this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
@@ -88,7 +88,7 @@ export class TypeComponent implements OnInit, OnDestroy {
         if(e instanceof NavigationEnd) {
           this._previousUrl = e.url;
           if(this._previousUrl === '/forms/form/99?step=step_5') {
-            this._form99Details = JSON.parse(localStorage.getItem('form_99_details'));
+            this._form99Details = JSON.parse(localStorage.getItem('form_99_details') ?? '');
 
             this.typeSelected = '';
 
@@ -104,7 +104,7 @@ export class TypeComponent implements OnInit, OnDestroy {
   }
 
  /*ngAfterViewChecked(): void {
-  this._form99Details = JSON.parse(localStorage.getItem('form_99_details'));
+  this._form99Details = JSON.parse(localStorage.getItem('form_99_details') ?? '');
   //console.log(" ngAfterViewChecked type this._form99Details =", this._form99Details)
   this.screenWidth = window.innerWidth;
 
@@ -178,7 +178,7 @@ export class TypeComponent implements OnInit, OnDestroy {
    *
    * @param      {<type>}  val     The value
    */
-  public updateTypeSelected(e): void {
+  public updateTypeSelected(e: any): void {
     if (this.editMode) {
       //if(e.target.checked) {
       this.typeSelected = e.target.value;
@@ -195,7 +195,7 @@ export class TypeComponent implements OnInit, OnDestroy {
           'Warning',
           true, false, true
           )
-        .then(res => {
+        .then((res: any) => {
           if (res === 'cancel' ||
           res === ModalDismissReasons.BACKDROP_CLICK ||
           res === ModalDismissReasons.ESC) {
@@ -226,12 +226,12 @@ export class TypeComponent implements OnInit, OnDestroy {
     // get the selected F99 option, instead of defaulting
     let reasonType = this.typeSelected;
     if(!reasonType) {
-      reasonType = this.frmType.get('reasonTypeRadio').value;
+      reasonType = this.frmType.get('reasonTypeRadio')?.value;
     }
     if (reasonType) {
         this.typeFailed = false;
         this.isValidType = true;
-        this._form99Details = JSON.parse(localStorage.getItem('form_99_details'));
+        this._form99Details = JSON.parse(localStorage.getItem('form_99_details') ?? '');
 
         this._form99Details.reason = reasonType;
 

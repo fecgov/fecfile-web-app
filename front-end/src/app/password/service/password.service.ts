@@ -23,7 +23,7 @@ export class PasswordService {
     return this._http
         .post(`${environment.apiUrl}${url}`, data)
         .pipe(
-            map(res => {
+            map((res: any) => {
               if (res) {
                 return res;
               }
@@ -48,7 +48,7 @@ export class PasswordService {
                 headers: httpOptions
             })
             .pipe(
-                map(res => {
+                map((res: any) => {
                     if (res) {
                         return res;
                     }
@@ -72,7 +72,7 @@ export class PasswordService {
                 headers: httpOptions
             })
             .pipe(
-                map(res => {
+                map((res: any) => {
                     if (res) {
                         return res;
                     }

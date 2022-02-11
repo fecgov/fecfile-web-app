@@ -42,7 +42,7 @@ export class NotificationsService {
       {
         headers: httpOptions
       }
-    ).pipe(map(res => {
+    ).pipe(map((res: any) => {
       return res.items;
     }));
   }
@@ -75,7 +75,7 @@ export class NotificationsService {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           let records: Array<Map<string, string>> = [];
           for (let record of res.items) {
@@ -119,7 +119,7 @@ export class NotificationsService {
       {
         headers: httpOptions,  params: httpParams
       }
-    ).pipe(map(res => {
+    ).pipe(map((res: any) => {
       return res;
     }));
   }

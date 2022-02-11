@@ -15,12 +15,12 @@ import { ScheduleActions } from '../../../form-3x/individual-receipt/schedule-ac
 
 export interface GetEndorsersResponse {
   contacts: EndorserModel[];
-  totalAmount: number;
-  totalcontactsCount: number;
-  totalPages: number;
+  totalAmount!: number;
+  totalcontactsCount!: number;
+  totalPages!: number;
 
   // remove after API is renamed.
-  itemsPerPage: number;
+  itemsPerPage!: number;
   'total pages': number;
 }
 
@@ -112,7 +112,7 @@ export class EndorserService {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('Contact Table res: ', res);
 
@@ -162,7 +162,7 @@ export class EndorserService {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('Contact Recycle Bin Table res: ', res);
 
@@ -490,7 +490,7 @@ export class EndorserService {
         headers: httpOptions
       }
     )
-    .pipe(map(res => {
+    .pipe(map((res: any) => {
         if (res) {
           //console.log('Trash Restore response: ', res);
           return res;
@@ -531,15 +531,15 @@ export class EndorserService {
   public saveContact(scheduleAction: ScheduleActions): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url: string = '/core/contacts';
-    /*const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+    /*const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
 
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');
     }*/
 
-    //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`));
-    const contact: any = JSON.parse(localStorage.getItem(`contactObj`));
+    //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`) ?? '');
+    const contact: any = JSON.parse(localStorage.getItem(`contactObj`) ?? '');
     const formData: FormData = new FormData();
     let httpOptions = new HttpHeaders();
 
@@ -559,7 +559,7 @@ export class EndorserService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               //console.log(" saveContact called res...!", res);
               return res;
@@ -573,7 +573,7 @@ export class EndorserService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               return res;
             }
@@ -621,7 +621,7 @@ export class EndorserService {
       .post(`${environment.apiUrl}${url}`, request, {
         headers: httpOptions
       })
-     .map(res => {
+     .map((res: any) => {
           return false;
         });
   }

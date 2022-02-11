@@ -89,7 +89,7 @@ export class ContactsComponent implements OnInit, OnDestroy {
   private readonly filtersLSK = 'contacts.filters';
   private onDestroy$ = new Subject();
   private keywordGroup: any = [];
-  messageServiceSubscription: Subscription;
+  messageServiceSubscription!: Subscription;
   constructor(
     private _activatedRoute: ActivatedRoute,
     private _contactsMessageService: ContactsMessageService,

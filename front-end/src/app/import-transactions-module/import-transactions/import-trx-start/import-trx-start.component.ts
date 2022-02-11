@@ -112,14 +112,14 @@ export class ImportTrxStartComponent implements OnInit {
     const fileName = fileMetaData.fileName;
     const type = fileMetaData.type;
 
-    this._uploadContactsService.getObject(dir + fileName).subscribe(res => {
+    this._uploadContactsService.getObject(dir + fileName).subscribe((res: any) => {
       const blob: Blob = new Blob([res.Body], { type: type });
       FileSaver.saveAs(blob, fileName);
     });
   }
 
   public foo_Util_get_csv_file(fileName: string) {
-    this._uploadContactsService.getObject('transactions/' + fileName).subscribe(res => {
+    this._uploadContactsService.getObject('transactions/' + fileName).subscribe((res: any) => {
       const type = 'text/plain;charset=utf-8';
       const blob: Blob = new Blob([res.Body], { type: type });
       FileSaver.saveAs(blob, 'sample_import_transactions.csv');

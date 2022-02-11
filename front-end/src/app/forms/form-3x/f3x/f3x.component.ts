@@ -80,15 +80,15 @@ export class F3xComponent implements OnInit, OnDestroy {
   public transactionCategoriesMainData!: any;
 
   private onDestroy$ = new Subject();
-  transactionData: any;
-  transactionDataForChild: any;
-  parentTransactionModel: any;
-  populateHiddenFieldsMessageObj: any;
-  populateFieldsMessageObj: any;
-  queryParamsSubscription: Subscription;
+  transactionData!: any;
+  transactionDataForChild!: any;
+  parentTransactionModel!: any;
+  populateHiddenFieldsMessageObj!: any;
+  populateFieldsMessageObj!: any;
+  queryParamsSubscription!: Subscription;
   routerEventsSubscription!: Subscription;
   returnToGlobalAllTransaction!: boolean;
-  currentReportData: any;
+  currentReportData!: any;
   reportsArray!: any[];
 
   constructor(

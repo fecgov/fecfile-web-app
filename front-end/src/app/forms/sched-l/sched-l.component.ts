@@ -224,9 +224,9 @@ export class SchedLComponent extends AbstractSchedule implements OnInit, OnDestr
   public getReportId(): string {
 
     let report_id;
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
     }
 
     if(reportType) {
@@ -262,7 +262,7 @@ export class SchedLComponent extends AbstractSchedule implements OnInit, OnDestr
         this.config.itemsPerPage,
         'default',
         false
-      ).subscribe(res => {
+      ).subscribe((res: any) => {
         const pagedResponse = this._utilService.pageResponse(res, this.config);
         this.schedLsModel = this.mapFromServerFields(pagedResponse.items);
         this.pageNumbers = pagedResponse.pageNumbers;
@@ -271,13 +271,13 @@ export class SchedLComponent extends AbstractSchedule implements OnInit, OnDestr
   }
 
   public getSummary(reportId: string, levinAccountId: string) {
-    this.lSubscription = this._schedLService.getSummary(reportId, levinAccountId).subscribe(res => {
+    this.lSubscription = this._schedLService.getSummary(reportId, levinAccountId).subscribe((res: any) => {
         if (res) {
           this.lSum = [];
           this.lSum =  res;
         }
       });
-    this._individualReceiptService.getLevinAccounts().subscribe(res => {
+    this._individualReceiptService.getLevinAccounts().subscribe((res: any) => {
         if (res) {
           this.levinAccounts = res;
         }
@@ -428,7 +428,7 @@ export class SchedLComponent extends AbstractSchedule implements OnInit, OnDestr
 
     this._dlService
       .confirm('You are about to delete this transaction ' + trx.transaction_id + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._tranService
             .trashOrRestoreTransactions(this.formType, 'trash', trx.report_id, [trx])

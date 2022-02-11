@@ -164,7 +164,7 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
   public trashTransaction(trx: TransactionModel): void {
     this._dialogService
       .confirm('You are about to delete this transaction ' + trx.transactionId + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           const reportId = this._receiptService.getReportIdFromStorage(this.formType);
           this._transactionsService
@@ -196,7 +196,7 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
 
   private _getSubTransactions(reportId: string, transactionId: string, apiCall: string): void {
     this.transactionsModel = [];
-    this._receiptService.getDataSchedule(reportId, transactionId, apiCall).subscribe(res => {
+    this._receiptService.getDataSchedule(reportId, transactionId, apiCall).subscribe((res: any) => {
       if (Array.isArray(res)) {
         for (const trx of res) {
           if (trx.hasOwnProperty('transaction_id')) {

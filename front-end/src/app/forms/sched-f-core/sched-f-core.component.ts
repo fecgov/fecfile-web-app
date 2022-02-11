@@ -47,8 +47,8 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
   private subordinateFields = [];
   private designatedFields = [];
   readonly optional  = '(Optional)'
-  routesSubscription: Subscription;
-  initFormSubscription: Subscription;
+  routesSubscription!: Subscription;
+  initFormSubscription!: Subscription;
 
   constructor(
     _http: HttpClient,
@@ -217,10 +217,10 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
 
   private _setDesignatedValidators() {
      if ( this.frmIndividualReceipt.contains('coordinated_exp_ind') &&
-         this.frmIndividualReceipt.get('coordinated_exp_ind').value === 'Y' ) {
+         this.frmIndividualReceipt.get('coordinated_exp_ind')?.value === 'Y' ) {
        this.onFilerChange('Y');
      } else if ( this.frmIndividualReceipt.contains('coordinated_exp_ind') &&
-         this.frmIndividualReceipt.get('coordinated_exp_ind').value === 'N') {
+         this.frmIndividualReceipt.get('coordinated_exp_ind')?.value === 'N') {
        this.onFilerChange('N');
      } else {
        this.onFilerChange(null);

@@ -133,7 +133,7 @@ export class ImportTrxFileSelectComponent implements OnInit {
           'Warning!',
           false
         )
-        .then(res => {});
+        .then((res: any) => {});
       return false;
     }
     for (const file of files) {
@@ -164,7 +164,7 @@ export class ImportTrxFileSelectComponent implements OnInit {
         'Warning!',
         false
       )
-      .then(res => {});
+      .then((res: any) => {});
   }
 
   private _getFileExtention(fileName: string): string {
@@ -265,7 +265,7 @@ export class ImportTrxFileSelectComponent implements OnInit {
       };
       fileReader.readAsText(file);
     });
-    prom.then(res => {
+    prom.then((res: any) => {
       return res;
     });
   }

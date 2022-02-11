@@ -38,7 +38,7 @@ export class PreviewComponent implements OnInit , OnDestroy{
   private _printPriviewPdfFileLink: string = '';
   private _formDetails: any = {};
   private _setRefresh: boolean = false;
-  queryParamsSubscription: Subscription;
+  queryParamsSubscription!: Subscription;
   private onDestroy$ = new Subject();
 
   constructor(
@@ -49,7 +49,7 @@ export class PreviewComponent implements OnInit , OnDestroy{
     private _dialogService: DialogService
   ) {
     this.queryParamsSubscription = _activatedRoute.queryParams['subscribe'](p => {
-      if (p.refresh === 'true' || p.refresh === true) {
+      if (p['refresh'] === 'true' || p['refresh'] === true) {
         this._setRefresh = true;
         this.ngOnInit();
       }
@@ -65,13 +65,13 @@ export class PreviewComponent implements OnInit , OnDestroy{
   ngOnInit(): void {
     this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
     this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
-    this._messageService.getMessage().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    this._messageService.getMessage().pipe(takeUntil(this.onDestroy$)).subscribe((res: any) => {
       //console.log('Preview screen this.formDetails ', this.formDetails);
-      this.committeeDetails = JSON.parse(localStorage.getItem('committee_details'));
+      this.committeeDetails = JSON.parse(localStorage.getItem('committee_details') ?? '');
 
       // if (this.editMode) {
       this._step = res.step;
-      this.formDetails = JSON.parse(localStorage.getItem('form_99_details'));
+      this.formDetails = JSON.parse(localStorage.getItem('form_99_details') ?? '');
       // } else if (!this.editMode) {
       //   this._step = res.step;
       //   this.formDetails = res.data;
@@ -83,11 +83,11 @@ export class PreviewComponent implements OnInit , OnDestroy{
             if (this.formDetails.hasOwnProperty('filename')) {
               this.fileName = this.formDetails.filename;
             } else if (localStorage.getItem('orm_99_details.org_filename')) {
-              this.fileName = localStorage.getItem('orm_99_details.org_filename');
+              this.fileName = localStorage.getItem('orm_99_details.org_filename') ?? '';
             } else {
               this.fileName = '';
             }
-            const fileFromLocalStorage = localStorage.getItem('orm_99_details.org_fileurl');
+            const fileFromLocalStorage = localStorage.getItem('orm_99_details.org_fileurl') ?? '';
             if (this.formDetails.hasOwnProperty('org_fileurl')) {
               this.orgFileUrl = this.formDetails.org_fileurl;
             } else if (
@@ -131,7 +131,7 @@ export class PreviewComponent implements OnInit , OnDestroy{
 
     if (!this.formDetails) {
       if (localStorage.getItem(`form_${this.formType}_details`) !== null) {
-        this.formDetails = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
+        this.formDetails = JSON.parse(localStorage.getItem(`form_${this.formType}_details`) ?? '');
 
         if (this.formType === '99') {
           if (!this.typeSelected) {
@@ -149,10 +149,10 @@ export class PreviewComponent implements OnInit , OnDestroy{
    */
   public async canDeactivate(): Promise<boolean> {
     if (this.hasUnsavedData()) {
-      let result: boolean = null;
+      let result: boolean = false;
 
-      result = await this._dialogService.confirm('', ConfirmModalComponent).then(res => {
-        let val: boolean = null;
+      result = await this._dialogService.confirm('', ConfirmModalComponent).then((res: any) => {
+        let val: boolean = false;
 
         if (res === 'okay') {
           val = true;
@@ -176,7 +176,7 @@ export class PreviewComponent implements OnInit , OnDestroy{
    * @return     {boolean}  True if has unsaved data, False otherwise.
    */
   public hasUnsavedData(): boolean {
-    let formSaved: any = JSON.parse(localStorage.getItem(`form_${this.formType}_saved`));
+    let formSaved: any = JSON.parse(localStorage.getItem(`form_${this.formType}_saved`) ?? '');
 
     if (formSaved !== null) {
       let formStatus: boolean = formSaved.saved;
@@ -245,7 +245,7 @@ export class PreviewComponent implements OnInit , OnDestroy{
         false,
         true
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'cancel' || res === ModalDismissReasons.BACKDROP_CLICK || res === ModalDismissReasons.ESC) {
           this._dialogService.checkIfModalOpen();
         } else if (res === 'NewReport') {
@@ -311,7 +311,7 @@ export class PreviewComponent implements OnInit , OnDestroy{
     );
   }
   public printPreview(): void {
-    this._formDetails = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
+    this._formDetails = JSON.parse(localStorage.getItem(`form_${this.formType}_details`) ?? '');
 
     //console.log('Accessing PreviewComponent printPriview ...');
     localStorage.setItem(`form_${this.formType}_details`, JSON.stringify(this._formDetails));
@@ -320,7 +320,7 @@ export class PreviewComponent implements OnInit , OnDestroy{
       res => {
         if (res) {
           //console.log('Accessing PreviewComponent printPriview res ...', res);
-          window.open(localStorage.getItem('form_99_details.printpriview_fileurl'), '_blank');
+          window.open(localStorage.getItem('form_99_details.printpriview_fileurl') ?? '', '_blank');
         }
       },
       error => {

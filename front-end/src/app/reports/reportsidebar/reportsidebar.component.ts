@@ -434,7 +434,7 @@ export class ReportsidebarComponent implements OnInit {
     // TODO using this service to get forms until available in another API.
     this._reportsService
       .getFormTypes()
-        .subscribe(res => {
+        .subscribe((res: any) => {
           let formsExist = false;
           if (res) {
 
@@ -464,7 +464,7 @@ export class ReportsidebarComponent implements OnInit {
     // TODO using this service to get reports until available in another API.
     this._reportsService
       .getReportTypes()
-        .subscribe(res => {
+        .subscribe((res: any) => {
           let reportsExist = false;
           if (res) {
              reportsExist = true;
@@ -493,7 +493,7 @@ export class ReportsidebarComponent implements OnInit {
     // TODO using this service to get reports until available in another API.
     this._reportsService
       .getStatuss()
-        .subscribe(res => {
+        .subscribe((res: any) => {
           let StatussExist = false;
           if (res.data) {
 
@@ -524,7 +524,7 @@ export class ReportsidebarComponent implements OnInit {
     // TODO using this service to get reports until available in another API.
     this._reportsService
       .getAmendmentIndicators()
-        .subscribe(res => {
+        .subscribe((res: any) => {
           let amendmentindicatorsExist = false;
           if (res.data) {
               amendmentindicatorsExist = true;

@@ -45,7 +45,7 @@ export class SchedH4Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         // if (res) {
           return {
             //items: this.mapFromServerFields(res.items),
@@ -77,7 +77,7 @@ export class SchedH4Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('Save H4Ratio res: ', res);
             return res;

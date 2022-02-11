@@ -44,7 +44,7 @@ export class ImportTransactionsService {
 
     // let committeeId = null;
     // if (localStorage.getItem('committee_details') !== null) {
-    //   const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+    //   const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
     //   committeeId = cmteDetails.committeeid;
     // }
 
@@ -60,7 +60,7 @@ export class ImportTransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -92,7 +92,7 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
@@ -111,7 +111,7 @@ export class ImportTransactionsService {
 
     let committeeId = null;
     if (localStorage.getItem('committee_details') !== null) {
-      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       committeeId = cmteDetails.committeeid;
     }
 
@@ -132,7 +132,7 @@ export class ImportTransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -157,7 +157,7 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
@@ -187,7 +187,7 @@ export class ImportTransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -201,7 +201,7 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
@@ -235,7 +235,7 @@ export class ImportTransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -269,7 +269,7 @@ export class ImportTransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -299,7 +299,7 @@ export class ImportTransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -329,7 +329,7 @@ export class ImportTransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -358,7 +358,7 @@ export class ImportTransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -400,7 +400,7 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
@@ -445,7 +445,7 @@ export class ImportTransactionsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -474,7 +474,7 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
@@ -503,7 +503,7 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }

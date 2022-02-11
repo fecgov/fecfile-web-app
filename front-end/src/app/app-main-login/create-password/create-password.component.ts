@@ -26,8 +26,8 @@ export class CreatePasswordComponent implements OnInit {
   form!: FormGroup;
   passwordAccordionExpanded: boolean = false;
   cmteDetailsAccordionExpanded: boolean = false;
-  userEmail: any;
-  cmteDetails: any;
+  userEmail!: any;
+  cmteDetails!: any;
   private _subscription!: Subscription;
   private landingFrom!: string;
   successMessage = 'Password has been reset successfully. Proceed to Login.';

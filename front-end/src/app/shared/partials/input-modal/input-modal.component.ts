@@ -15,7 +15,7 @@ export class InputModalComponent implements OnInit {
 
   titleText = 'Add Memo';
   saveAction = SaveDialogAction.saveNone ;
-  inputContent: string;
+  inputContent!: string;
   viewOnlyFlag: boolean = false;
   constructor(
       config: NgbModalConfig,

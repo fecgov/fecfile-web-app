@@ -43,8 +43,8 @@ export class TransactionSidebarComponent implements OnInit {
   public typeaheadValue: string = '';
   public receiptsTotal: number = 0.0;
   public frmOption!: FormGroup;
-  public transactionType: string = null;
-  public transactionTypeText: string = null;
+  public transactionType: string = '';
+  public transactionTypeText: string = '';
   public cashOnHandTotal: number = 0.0;
   public disbursementsTotal: number = 0.0;
   public loansanddebtsTotal: number = 0.0;
@@ -54,16 +54,16 @@ export class TransactionSidebarComponent implements OnInit {
 
   private _formType: string = '';
   public transactionCategory: string = '';
-  _mainTransactionCategory: any;
-  secondaryOptions: any;
-  transactionCategorySelected: boolean;
-  transactionTypeFailed: boolean;
-  tranasctionCategoryVal: string;
+  _mainTransactionCategory!: any;
+  secondaryOptions!: any;
+  transactionCategorySelected!: boolean;
+  transactionTypeFailed!: boolean;
+  tranasctionCategoryVal!: string;
 
   public cashOnHand!: CashOnHandModel;
 
   private onDestroy$ = new Subject();
-  routesSubscription: Subscription;
+  routesSubscription!: Subscription;
 
   constructor(
     private _config: NgbTooltipConfig,
@@ -112,7 +112,7 @@ export class TransactionSidebarComponent implements OnInit {
     }
     this.reportId = this._activatedRoute.snapshot.queryParams['reportId'] ? this._activatedRoute.snapshot.queryParams['reportId'] : 0;
     if(this._formType !== '24'){
-      this._transactionTypeService.getTransactionCategories("F"+this._formType).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+      this._transactionTypeService.getTransactionCategories("F"+this._formType).pipe(takeUntil(this.onDestroy$)).subscribe((res: any) => {
         if (res) {
             this.transactionCategories = res.data.transactionCategories;
             this.cashOnHand = res.data.cashOnHand;
@@ -149,7 +149,7 @@ export class TransactionSidebarComponent implements OnInit {
   }
 
   ngDoCheck(): void {
-    this._messageService.getMessage().pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+    this._messageService.getMessage().pipe(takeUntil(this.onDestroy$)).subscribe((res: any) => {
       if (res) {
         if (res.hasOwnProperty('formType')) {
           if (typeof res.formType === 'string') {
@@ -224,7 +224,7 @@ export class TransactionSidebarComponent implements OnInit {
           this.transactionCategory &&
           localStorage.getItem(`form_${this._formType}_temp_transaction_type`) !== null
         ) {
-          const transactionObj: any = JSON.parse(localStorage.getItem(`form_${this._formType}_temp_transaction_type`));
+          const transactionObj: any = JSON.parse(localStorage.getItem(`form_${this._formType}_temp_transaction_type`) ?? '');
 
           if (transactionObj.mainTransactionTypeText !== this.transactionCategory) {
             this._setSecondaryTransactionCategories();
@@ -234,7 +234,7 @@ export class TransactionSidebarComponent implements OnInit {
     });
 
     if (this.receiptsTotal === 0 && localStorage.getItem(`form_${this._formType}_totals`) !== null) {
-      const totals: any = JSON.parse(localStorage.getItem(`form_${this._formType}_totals`));
+      const totals: any = JSON.parse(localStorage.getItem(`form_${this._formType}_totals`) ?? '');
 
       if (totals.hasOwnProperty('receipts')) {
         if (typeof totals.receipts === 'number') {
@@ -363,7 +363,7 @@ export class TransactionSidebarComponent implements OnInit {
           null,
           'Return to Reports'
         )
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             this.ngOnInit();
           } else if (res === 'cancel') {
@@ -395,12 +395,12 @@ export class TransactionSidebarComponent implements OnInit {
 
         if (!transactionCategory) {
           if (localStorage.getItem('form_3X_temp_transaction_type') !== null) {
-            const form3xTransactionType = JSON.parse(localStorage.getItem('form_3X_temp_transaction_type'));
+            const form3xTransactionType = JSON.parse(localStorage.getItem('form_3X_temp_transaction_type') ?? '');
             if (form3xTransactionType !== null) {
               transactionCategory = form3xTransactionType.mainTransactionTypeValue;
             }
           } else if (localStorage.getItem('form_3X_transaction_type') !== null) {
-            const form3xTransactionType = JSON.parse(localStorage.getItem('form_3X_transaction_type'));
+            const form3xTransactionType = JSON.parse(localStorage.getItem('form_3X_transaction_type') ?? '');
             if (form3xTransactionType !== null) {
               transactionCategory = form3xTransactionType.mainTransactionTypeValue;
             }
@@ -423,7 +423,7 @@ export class TransactionSidebarComponent implements OnInit {
     });
   }
 
-  public selectedTypeAheadValue(e): void {
+  public selectedTypeAheadValue(e: any): void {
     if (this.editMode && e) {
       for (
         let transactionCategorieIndex = 0;
@@ -497,7 +497,7 @@ export class TransactionSidebarComponent implements OnInit {
           null,
           'Return to Reports'
         )
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             this.ngOnInit();
           } else if (res === 'cancel') {
@@ -524,7 +524,7 @@ export class TransactionSidebarComponent implements OnInit {
     this._router.navigate([`/signandSubmit/${this._formType}`], { queryParams: { edit: this.editMode } });
   }
 
-  public updateTypeSelected(e): void {
+  public updateTypeSelected(e: any): void {
     if (this.editMode) {
       const val: string = e.target.value;
 
@@ -545,7 +545,7 @@ export class TransactionSidebarComponent implements OnInit {
           null,
           'Return to Reports'
         )
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             this.ngOnInit();
           } else if (res === 'cancel') {
@@ -562,9 +562,9 @@ export class TransactionSidebarComponent implements OnInit {
    */
   public async canDeactivate(): Promise<boolean> {
     if (this._formsService.formHasUnsavedData(this._formType)) {
-      let result: boolean = null;
-      result = await this._dialogService.confirm('', ConfirmModalComponent).then(res => {
-        let val: boolean = null;
+      let result: boolean = false;
+      result = await this._dialogService.confirm('', ConfirmModalComponent).then((res: any) => {
+        let val: boolean = false;
 
         if (res === 'okay') {
           val = true;

@@ -16,12 +16,12 @@ import { LoanModel } from '../model/loan.model';
 
 export interface GetLoanResponse {
   loans: LoanModel[];
-  totalAmount: number;
-  totalloansCount: number;
-  totalPages: number;
+  totalAmount!: number;
+  totalloansCount!: number;
+  totalPages!: number;
 
   // remove after API is renamed.
-  itemsPerPage: number;
+  itemsPerPage!: number;
   'total pages': number;
 }
 
@@ -124,7 +124,7 @@ export class LoanService {
           params
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           // this.addUIFileds(res);
           // this.mockApplyFilters(res);
@@ -159,7 +159,7 @@ export class LoanService {
         headers: httpOptions
       }
     )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           //console.log('get_outstanding_loans API res: ', res);
 
@@ -187,7 +187,7 @@ export class LoanService {
         headers: httpOptions
       }
     )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           return res;
         }
@@ -227,7 +227,7 @@ export class LoanService {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           return res;
         }
@@ -688,7 +688,7 @@ export class LoanService {
          headers: httpOptions
        }
      )
-     .pipe(map(res => {
+     .pipe(map((res: any) => {
          if (res) {
            //console.log('Trash Restore response: ', res);
            return res;
@@ -758,7 +758,7 @@ export class LoanService {
     if(!reportId){
       reportId = this._reportTypeService.getReportIdFromStorage('3X').toString();
     }
-    const loan: any = JSON.parse(localStorage.getItem('LoanObj'));
+    const loan: any = JSON.parse(localStorage.getItem('LoanObj') ?? '');
     const loanByCommFromIndObj: any = {
       api_call: '/sc/schedC',
       line_number: 13,
@@ -789,14 +789,14 @@ export class LoanService {
       transaction_type_identifier: 'LOANS_OWED_TO_CMTE'
     };
 
-    /*const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+    /*const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
 
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');
     }*/
 
-    //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`));
+    //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`) ?? '');
     const formData: FormData = new FormData();
     let httpOptions = new HttpHeaders();
     let loanhiddenFields: any;
@@ -843,7 +843,7 @@ export class LoanService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               //console.log(" saveLoan called res...!", res);
               return res;
@@ -857,7 +857,7 @@ export class LoanService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               return res;
             }
@@ -947,7 +947,7 @@ export class LoanService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               //console.log(" saveLoan called res...!", res);
               return res;
@@ -961,7 +961,7 @@ export class LoanService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               return res;
             }

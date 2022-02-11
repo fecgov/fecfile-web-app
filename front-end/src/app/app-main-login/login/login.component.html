@@ -31,13 +31,13 @@
             formControlName="emailId"
             (keyup)="updateStatus()"
             [ngClass]="{
-              '': (!frm.get('emailId').invalid && frm.get('emailId').touched) || !loginEmailInputError,
-              'login-input-error': (frm.get('emailId').invalid && frm.get('emailId').touched) || loginEmailInputError
+              '': (!frm.get('emailId')?.invalid && frm.get('emailId')?.touched) || !loginEmailInputError,
+              'login-input-error': (frm.get('emailId')?.invalid && frm.get('emailId')?.touched) || loginEmailInputError
             }"
           />
-          <div class="error" *ngIf="(frm.get('emailId').invalid && frm.get('emailId').touched) || loginEmailInputError">
-            <div class="error__email-id" *ngIf="frm.get('emailId').hasError('required')">Please enter Email ID.</div>
-            <div class="error__email-id" *ngIf="frm.get('emailId').hasError('email')">Invalid Email Format.</div>
+          <div class="error" *ngIf="(frm.get('emailId')?.invalid && frm.get('emailId')?.touched) || loginEmailInputError">
+            <div class="error__email-id" *ngIf="frm.get('emailId')?.hasError('required')">Please enter Email ID.</div>
+            <div class="error__email-id" *ngIf="frm.get('emailId')?.hasError('email')">Invalid Email Format.</div>
           </div>
         </div>
       </div>
@@ -56,16 +56,16 @@
             formControlName="commiteeId"
             (keyup)="updateStatus()"
             [ngClass]="{
-              '': (!frm.get('commiteeId').invalid && frm.get('commiteeId').touched) || !committeeIdInputError,
+              '': (!frm.get('commiteeId')?.invalid && frm.get('commiteeId')?.touched) || !committeeIdInputError,
               'login-input-error':
-                (frm.get('commiteeId').invalid && frm.get('commiteeId').touched) || committeeIdInputError
+                (frm.get('commiteeId')?.invalid && frm.get('commiteeId')?.touched) || committeeIdInputError
             }"
           />
           <div
             class="error"
-            *ngIf="(frm.get('commiteeId').invalid && frm.get('commiteeId').touched) || committeeIdInputError"
+            *ngIf="(frm.get('commiteeId')?.invalid && frm.get('commiteeId')?.touched) || committeeIdInputError"
           >
-            <div class="error__committee-id" *ngIf="frm.get('commiteeId').hasError('required')">
+            <div class="error__committee-id" *ngIf="frm.get('commiteeId')?.hasError('required')">
               Please enter Committee ID.
             </div>
           </div>
@@ -86,17 +86,17 @@
             formControlName="loginPassword"
             (keyup)="updateStatus()"
             [ngClass]="{
-              '': (!frm.get('loginPassword').invalid && frm.get('loginPassword').touched) || !passwordInputError,
+              '': (!frm.get('loginPassword')?.invalid && frm.get('loginPassword')?.touched) || !passwordInputError,
               'login-input-error':
-                (frm.get('loginPassword').invalid && frm.get('loginPassword').touched) || passwordInputError
+                (frm.get('loginPassword')?.invalid && frm.get('loginPassword')?.touched) || passwordInputError
             }"
           />
 
           <div
             class="error"
-            *ngIf="(frm.get('loginPassword').invalid && frm.get('loginPassword').touched) || passwordInputError"
+            *ngIf="(frm.get('loginPassword')?.invalid && frm.get('loginPassword')?.touched) || passwordInputError"
           >
-            <div class="error__password-error" *ngIf="frm.get('loginPassword').hasError('required')">
+            <div class="error__password-error" *ngIf="frm.get('loginPassword')?.hasError('required')">
               Please enter your password.
             </div>
           </div>

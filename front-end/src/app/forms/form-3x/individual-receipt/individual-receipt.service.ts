@@ -501,7 +501,7 @@ export class IndividualReceiptService {
 
     let reportId = '0';
     let form3XReportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
-    const reportIdFromLocalStorage = localStorage.getItem('reportId');
+    const reportIdFromLocalStorage = localStorage.getItem('reportId') ?? '';
 
     if (form3XReportType === null || typeof form3XReportType === 'undefined') {
       form3XReportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');

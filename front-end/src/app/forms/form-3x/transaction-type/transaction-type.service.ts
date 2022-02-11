@@ -37,7 +37,7 @@ export class TransactionTypeService {
 
     let cmteTypeCategory = '';
     if (localStorage.getItem('committee_details') !== null) {
-      const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
+      const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
       if (committeeDetails.cmte_type_category !== null) {
         cmteTypeCategory = committeeDetails.cmte_type_category;
       }

@@ -46,7 +46,7 @@ export class ImportTrxDoneComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.committeeId = null;
     if (localStorage.getItem('committee_details') !== null) {
-      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       this.committeeId = cmteDetails.committeeid;
     }
     this.progressPercent = 0;
@@ -166,8 +166,8 @@ export class ImportTrxDoneComponent implements OnInit, OnDestroy {
   }
 
   private _downloadErrorFile(errorFile: UploadFileModel) {
-    // this._uploadContactsService.getObject(`transactions/${this.committeeId}/error_files/${fileName}`).subscribe(res => {
-    this._uploadContactsService.getObject(errorFile.errorFileName).subscribe(res => {
+    // this._uploadContactsService.getObject(`transactions/${this.committeeId}/error_files/${fileName}`).subscribe((res: any) => {
+    this._uploadContactsService.getObject(errorFile.errorFileName).subscribe((res: any) => {
       const type = 'text/csv;charset=utf-8';
       const blob: Blob = new Blob([res.Body], { type: type });
 

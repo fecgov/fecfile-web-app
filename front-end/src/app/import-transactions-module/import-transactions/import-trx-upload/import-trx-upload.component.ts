@@ -41,7 +41,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
     // this.uploadFile.status = ImportFileStatusEnum.uploading;
     this.committeeId = null;
     if (localStorage.getItem('committee_details') !== null) {
-      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       this.committeeId = cmteDetails.committeeid;
     }
     this.progressPercent = 0;
@@ -97,7 +97,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
   //     //           'Warning!',
   //     //           false
   //     //         )
-  //     //         .then(res => {});
+  //     //         .then((res: any) => {});
   //     //     }
   //     //   }
   //     // });
@@ -212,7 +212,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
     // progressPoller.pipe(takeUntil(this.uploadProcessing$));
     // this.processingPercent = 0;
     // progressPoller.subscribe(val => {
-    //   this.uploadContactsService.checkUploadProcessing().pipe(takeUntil(this.uploadProcessing$)).subscribe(res => {
+    //   this.uploadContactsService.checkUploadProcessing().pipe(takeUntil(this.uploadProcessing$)).subscribe((res: any) => {
     //     this.processingPercent += res;
     //     if (this.processingPercent > 99) {
     //       this.uploadProcessing$.next();

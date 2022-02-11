@@ -460,7 +460,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
         ConfirmModalComponent,
         'Caution!'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._debtSummaryService.deleteDebt(debt).subscribe((res2: any) => {
             this.getDebtSummaries(this.config.currentPage);
@@ -491,7 +491,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
         ConfirmModalComponent,
         'Caution!'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._transactionsService
             .trashOrRestoreTransactions('3X', 'trash', payment.reportId, [trx])
@@ -533,7 +533,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
 
     this._dialogService
       .confirm('You are about to delete these transactions.   ' + trxIds, ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._transactionsService
             .trashOrRestoreTransactions(this.formType, 'trash', reportId, selectedTransactions)

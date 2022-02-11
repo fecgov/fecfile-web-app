@@ -10,7 +10,7 @@ import {MessageService} from '../../shared/services/MessageService/message.servi
   styleUrls: ['./reset-selector.component.scss']
 })
 export class ResetSelectorComponent implements OnInit {
-  frmUserInfo: FormGroup;
+  frmUserInfo!: FormGroup;
 
   constructor(
       private router: Router,
@@ -33,14 +33,14 @@ export class ResetSelectorComponent implements OnInit {
   }
 
   clearForm() {
-    this.frmUserInfo.get('resetOption').reset();
+    this.frmUserInfo.get('resetOption')?.reset();
     this.frmUserInfo.markAsPristine();
   }
 
   submit() {
       this.frmUserInfo.markAsTouched();
      if (this.frmUserInfo.valid) {
-       const option = this.frmUserInfo.get('resetOption').value;
+       const option = this.frmUserInfo.get('resetOption')?.value;
        const callFrom = 'reset';
        this.twoFactorHelper.requestCode(option, callFrom).subscribe(response => {
          if (response && response['is_allowed'] === true) {

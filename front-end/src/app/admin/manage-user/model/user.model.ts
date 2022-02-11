@@ -1,12 +1,12 @@
 export class UserModel {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-  status: string;
-  id: number;
-  contact: string;
-  isActive: boolean;
+  firstName!: string;
+  lastName!: string;
+  email!: string;
+  role!: string;
+  status!: string;
+  id!: number;
+  contact!: string;
+  isActive!: boolean;
 
   constructor(user: any) {
     this.firstName = user.first_name ? user.first_name : '';

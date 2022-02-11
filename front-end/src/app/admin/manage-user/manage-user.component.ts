@@ -32,7 +32,7 @@ export const roleDesc = {
   providers: [SortService, NgbTooltipConfig],
 })
 export class ManageUserComponent implements OnInit {
-  frmAddUser: FormGroup;
+  frmAddUser!: FormGroup;
   users: Array<UserModel> = [];
   isEdit: boolean = false;
   currentEditUser: UserModel | null = null;

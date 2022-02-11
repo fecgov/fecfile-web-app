@@ -47,7 +47,7 @@ export class SchedH6Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           return {
             items: this.mapFromServerFields(res.items),

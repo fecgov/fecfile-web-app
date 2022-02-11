@@ -154,7 +154,7 @@ export class ContactsTableComponent implements OnInit, OnDestroy {
     this._messageService.getMessage().subscribe((data) => {
       if (data) {
         if (data.messageFrom === 'contactDetails' && data.message === 'updateContact' && data.contact) {
-          this.contactsModel.forEach((e) => {
+          this.contactsModel.forEach((e: any) => {
             if (e.id === data.contact.entity_id) {
               const index = this.contactsModel.indexOf(e);
               const updatedContact = this._contactsService.convertRowToModelPut(data.contact);
@@ -303,7 +303,7 @@ export class ContactsTableComponent implements OnInit, OnDestroy {
         const contactsModelL = this._contactsService.mapFromServerFields(res.contacts);
         this.contactsModel = contactsModelL || [];
 
-        this.contactsModel.forEach((e) => {
+        this.contactsModel.forEach((e: any) => {
           if (this.allContactsSelected) {
             e.selected = true;
           } else {
@@ -1230,7 +1230,7 @@ export class ContactsTableComponent implements OnInit, OnDestroy {
         } else if (res === 'decline') {
         }
       })
-      .catch((e) => {
+      .catch((e: any) => {
         // do nothing stay on the same page
       });
   }

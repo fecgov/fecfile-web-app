@@ -515,7 +515,7 @@ export abstract class AbstractSchedule implements OnInit, OnDestroy, OnChanges {
     this.returnToDebtSummary = false;
     this._outstandingDebtBalance = null;
 
-    const detailsItem = localStorage.getItem('committee_details');
+    const detailsItem = localStorage.getItem('committee_details') ?? '';
     if (detailsItem) {
       this._committeeDetails = JSON.parse(detailsItem);
       if (this._committeeDetails.cmte_type_category !== null) {

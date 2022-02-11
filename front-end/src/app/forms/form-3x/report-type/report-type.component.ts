@@ -80,7 +80,7 @@ export class ReportTypeComponent implements OnInit, OnDestroy {
   public showErrors: boolean = false;
   public semiAnnualStartDate!: string;
   public semiAnnualEndDate!: string;
-  savedMessage: any;
+  savedMessage!: any;
 
   constructor(
     private _fb: FormBuilder,

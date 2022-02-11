@@ -42,7 +42,7 @@ export class SchedC1Component implements OnInit, OnChanges {
   public readonly sectionH = Sections.sectionH;
   public readonly sectionI = Sections.sectionI;
   public file: any = null;
-  public fileNameToDisplay: string = null;
+  public fileNameToDisplay: string = '';
   // TODO check requirements for each amount field.
   public _contributionAmountMax = 14;
   public existingData!: any;
@@ -73,7 +73,7 @@ export class SchedC1Component implements OnInit, OnChanges {
 
   private _getExistingLoanData() {
     const reportId: string = this._reportTypeService.getReportIdFromStorage('3X').toString();
-    this._loanService.getDataSchedule(reportId, this.transactionDetail.transactionId).subscribe(res => {
+    this._loanService.getDataSchedule(reportId, this.transactionDetail.transactionId).subscribe((res: any) => {
       res = res[0];
 
       this._reportId = res.report_id;
@@ -527,7 +527,7 @@ export class SchedC1Component implements OnInit, OnChanges {
   }
 
   private _getStates() {
-    this._contactsService.getStates().subscribe(res => {
+    this._contactsService.getStates().subscribe((res: any) => {
       this.states = res;
     });
   }
@@ -599,7 +599,7 @@ export class SchedC1Component implements OnInit, OnChanges {
       if (this.c1Form.valid) {
       const formData = {};
       this._prepareFormDataForApi(formData);
-      this._schedC1Service.saveScheduleC1(this.formType, this.c1EditMode ? ScheduleActions.edit:ScheduleActions.add, formData).subscribe(res => {
+      this._schedC1Service.saveScheduleC1(this.formType, this.c1EditMode ? ScheduleActions.edit:ScheduleActions.add, formData).subscribe((res: any) => {
         this._goToLoanSummary();
       });
       } else {

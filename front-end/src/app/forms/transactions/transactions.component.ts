@@ -111,13 +111,13 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   private filters: TransactionFilterModel = new TransactionFilterModel();
   private readonly filtersLSK = 'transactions.filters';
-  removeTagsSubscription: any;
+  removeTagsSubscription!: any;
 
   private viewTransactionSubscription!: Subscription;
   private getReattributeTransactionSubscription!: Subscription;
   private getRedesignateTransactionSubscription!: Subscription;
-  activatedRouteSubscription: Subscription;
-  getMessageSubscription: Subscription;
+  activatedRouteSubscription!: Subscription;
+  getMessageSubscription!: Subscription;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -239,7 +239,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
     localStorage.removeItem(`form_${this.formType}_view_transaction_screen`);
 
-    this._transactionTypeService.getTransactionCategories("F"+this.formType).subscribe(res => {
+    this._transactionTypeService.getTransactionCategories("F"+this.formType).subscribe((res: any) => {
       if (res) {
         this.transactionCategories = res.data.transactionCategories;
 
@@ -1051,7 +1051,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
     this._dialogService
         .confirm(dialogMsg,ConfirmModalComponent, 'Warning!', true,ModalHeaderClassEnum.warningHeader,null,'Cancel')
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             //make sure modifying is permitted based on mirrorReportId !== Filed/Submitted
             if(mirrorFormType === 'F3X'){
@@ -1061,7 +1061,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
                 if(res && res[0] && res[0].reportstatus === 'Submitted'){
                   this._dialogService
                   .confirm('This transaction cannot be modified since the mirrored transaction in Form 3X is already filed. You will have to amend that report', ConfirmModalComponent, 'Error!', false)
-                  .then(res => {
+                  .then((res: any) => {
                     if (res === 'okay') {
                     }
                   });

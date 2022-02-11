@@ -300,7 +300,7 @@ export class ImportContactsComponent implements OnInit, OnDestroy {
   }
 
   private confirmProceedWithrrors(message: string) {
-    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', false).then(res => {
+    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', false).then((res: any) => {
       if (res === 'okay') {
         // this.unsavedData = false;
         this.showNextStep();
@@ -343,12 +343,12 @@ export class ImportContactsComponent implements OnInit, OnDestroy {
     // return true;
 
     if (this.unsavedData) {
-      let result: boolean = null;
+      let result: boolean = false;
       // result = await this._dialogService.confirm('If you leave this page the importing process ' +
       //   'will be cancelled and no data will be added. ' +
       //   'Click Cancel to cancel the import or Continue if you want the import process to finish.',
-      //   ConfirmModalComponent).then(res => {
-      //   let val: boolean = null;
+      //   ConfirmModalComponent).then((res: any) => {
+      //   let val: boolean = false;
 
       //   if (res === 'okay') {
       //     val = true;
@@ -360,7 +360,7 @@ export class ImportContactsComponent implements OnInit, OnDestroy {
       // });
 
       const modalRef = this._modalService.open(CancelImportConfirmComponent);
-      result = await modalRef.result.then(res => {
+      result = await modalRef.result.then((res: any) => {
         if (res === 'continue') {
           return false;
         } else if ('cancel') {

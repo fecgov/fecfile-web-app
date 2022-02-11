@@ -275,7 +275,7 @@ export interface f3xTransactionTypes {
     delete_ind: string,
     create_date: string,
     last_update_date: string
-    selected: string;
+    selected!: string;
    }
   
    export interface form3xReportTypeDetails {

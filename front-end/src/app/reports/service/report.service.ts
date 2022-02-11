@@ -15,7 +15,7 @@ import { reportModel } from '../model/report.model';
 
 export interface GetReportsResponse {
   reports: reportModel[];
-  totalreportsCount: number;
+  totalreportsCount!: number;
 }
 @Injectable({
   providedIn: 'root'
@@ -154,7 +154,7 @@ export class ReportsService {
       headers: httpOptions,
       params
     })
-    .pipe(map(res => {
+    .pipe(map((res: any) => {
       if (res) {
         this.mockApplyFilters(res, filter);
         const reportsModelL = this.mapFromServerFields(res.reports);
@@ -215,7 +215,7 @@ export class ReportsService {
       headers: httpOptions,
       params
     })
-    .pipe(map(res => {
+    .pipe(map((res: any) => {
       if (res) {
         this.mockApplyFilters(res, filter);
         const reportsModelL = this.mapFromServerFields(res.reports);
@@ -662,7 +662,7 @@ export class ReportsService {
       .put(`${environment.apiUrl}${url}`, request, {
         headers: httpOptions
       })
-      .map(res => {
+      .map((res: any) => {
         if (res) {
           //console.log('Report Trash Restore response: ', res);
           return res;
@@ -691,7 +691,7 @@ export class ReportsService {
       .post(`${environment.apiUrl}${url}`, request, {
         headers: httpOptions
       })
-      .map(res => {
+      .map((res: any) => {
         return false;
       });
   }
@@ -711,7 +711,7 @@ export class ReportsService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             //console.log('amend res: ', res);
             return res;
@@ -736,7 +736,7 @@ export class ReportsService {
       .put(`${environment.apiUrl}${url}`, formData, {
         headers: httpOptions
       })
-      .map(res => {
+      .map((res: any) => {
         if (res) {
           // //console.log('Ypdate Report Date response: ', res);
           return res;
@@ -777,7 +777,7 @@ export class ReportsService {
           headers: httpOptions
         })
         .pipe(
-            map(res => {
+            map((res: any) => {
               if (res) {
                 return res;
               }

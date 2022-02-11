@@ -23,13 +23,13 @@ import {
 export class ConfirmTwoFactorComponent implements OnInit {
   public readonly ACCOUNT_LOCKED_MSG =
     'Account is locked. Please try again after 15 mins or call IT support to unlock account.';
-  twoFactInfo: FormGroup;
+  twoFactInfo!: FormGroup;
   option!: string;
 
   resendOption!: string;
   isValid = true;
   entryPoint!: string;
-  contactData: any;
+  contactData!: any;
   isAccountLocked!: boolean;
   private _subscription!: Subscription;
   private response!: any;
@@ -172,7 +172,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
           });
         }
       })
-      .catch((e) => {
+      .catch((e: any) => {
         // do nothing stay on the same page
       });
   }

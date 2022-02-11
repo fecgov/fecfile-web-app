@@ -30,7 +30,7 @@ export class FormsComponent implements OnInit, OnDestroy {
   private queryParamsSubscription:Subscription;
   private paramsSubscription:Subscription;
   public jumpToTransaction!: any;
-  returnToGlobalAllTransaction: boolean;
+  returnToGlobalAllTransaction!: boolean;
 
   constructor(
     private _activeRoute: ActivatedRoute,
@@ -73,10 +73,10 @@ export class FormsComponent implements OnInit, OnDestroy {
    */
   public async canDeactivate(): Promise<boolean> {
     if (this._formsService.formHasUnsavedData(this.formType) && this._editMode) {
-      let result: boolean = null;
+      let result: boolean = false;
       //console.log(' form not saved...');
-      result = await this._dialogService.confirm('', ConfirmModalComponent).then(res => {
-        let val: boolean = null;
+      result = await this._dialogService.confirm('', ConfirmModalComponent).then((res: any) => {
+        let val: boolean = false;
 
         if (res === 'okay') {
           val = true;
@@ -89,7 +89,7 @@ export class FormsComponent implements OnInit, OnDestroy {
 
       return result;
     } else if (this._formsService.checkCanDeactivate()) {
-      let result: boolean = null;
+      let result: boolean = false;
       //console.log(' form not saved...');
       result = await this._dialogService
       .confirm(
@@ -100,8 +100,8 @@ export class FormsComponent implements OnInit, OnDestroy {
         ModalHeaderClassEnum.warningHeader,
         null,
         'Leave page'
-      ).then(res => {
-        let val: boolean = null;
+      ).then((res: any) => {
+        let val: boolean = false;
 
         if (res === 'okay') {
           val = false;

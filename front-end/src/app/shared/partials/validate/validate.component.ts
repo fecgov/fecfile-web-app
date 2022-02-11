@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./validate.component.scss']
 })
 export class ValidateComponent implements OnInit, OnDestroy {
-  messageSubscription: Subscription;
+  messageSubscription!: Subscription;
 
   public validateResults: any = {};
   public showValidateBar: boolean = false;
@@ -22,7 +22,7 @@ export class ValidateComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.messageSubscription = this._messageService
       .getMessage()
-      .subscribe(res => {
+      .subscribe((res: any) => {
         if(typeof res.validateMessage === 'object') {
           if(res.validateMessage.showValidateBar) {
             this.showValidateResults = true;

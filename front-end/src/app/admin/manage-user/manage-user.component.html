@@ -93,7 +93,7 @@
                     </div>
                 </div>
             </div>
-            <span *ngIf="frmAddUser.get('role').valid">
+            <span *ngIf="frmAddUser.get('role')?.valid">
                 {{getSelectedRole()}}
             </span>
             <table class="user-input table table-borderless">

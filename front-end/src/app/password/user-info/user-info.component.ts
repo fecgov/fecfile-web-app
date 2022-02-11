@@ -10,7 +10,7 @@ import {AuthService} from '../../shared/services/AuthService/auth.service';
   styleUrls: ['./user-info.component.scss']
 })
 export class UserInfoComponent implements OnInit {
-    frmUserInfo: FormGroup;
+    frmUserInfo!: FormGroup;
 
   constructor(
       private router: Router,
@@ -39,10 +39,10 @@ export class UserInfoComponent implements OnInit {
 
   resetNextPage() {
     if (this.frmUserInfo.valid) {
-      const committeeId = this.frmUserInfo.get('committeeID').value;
-      const email = this.frmUserInfo.get('email').value;
+      const committeeId = this.frmUserInfo.get('committeeID')?.value;
+      const email = this.frmUserInfo.get('email')?.value;
 
-      this.passwordSrv.authenticate(committeeId, email).subscribe(res => {
+      this.passwordSrv.authenticate(committeeId, email).subscribe((res: any) => {
         if (res) {
           if (res['is_allowed'] && res['is_allowed'] === true) {
             if (res['token']) {

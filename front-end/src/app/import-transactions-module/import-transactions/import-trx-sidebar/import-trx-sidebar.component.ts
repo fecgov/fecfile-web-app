@@ -72,7 +72,7 @@ export class ImportTrxSidebarComponent implements OnInit, OnChanges {
     // TODO emit to parent a message to cancel import on this file.
     // It will call API for cancel.
     const message = 'Import for this file will be canceled. ' + 'Are you sure you would like to continue?';
-    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', true).then(res => {
+    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', true).then((res: any) => {
       if (res === 'okay') {
         // this._closeSideBar();
         this.proceedCancelEmitter.emit({
@@ -88,7 +88,7 @@ export class ImportTrxSidebarComponent implements OnInit, OnChanges {
     const message =
       'This action will cancel all remaining Imports that have not been completed. ' +
       'Are you sure you would like to continue?';
-    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', true).then(res => {
+    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', true).then((res: any) => {
       if (res === 'okay') {
         this._closeSideBar();
         this.proceedCancelEmitter.emit({ cancelType: 'cancel-all' });

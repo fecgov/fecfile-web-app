@@ -38,7 +38,7 @@ export class SchedHServiceService {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             return res;
           }

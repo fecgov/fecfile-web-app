@@ -42,7 +42,7 @@ export class SchedH3Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('H3 ActivityOrEventIdentifiers res: ', res);
             return res;
@@ -72,7 +72,7 @@ export class SchedH3Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('H3 Totdal Amount res: ', res);
             return res;
@@ -112,7 +112,7 @@ export class SchedH3Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           return {
             //items: this.mapFromServerFields(res.items),
@@ -148,7 +148,7 @@ export class SchedH3Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('H3 Breakdown res: ', res);
             return res;
@@ -183,7 +183,7 @@ export class SchedH3Service {
             headers: httpOptions
           }
         )
-        .pipe(map(res => {
+        .pipe(map((res: any) => {
             if (res) {
               //console.log('Save H3Ratio res: ', res);
               return res;
@@ -199,7 +199,7 @@ export class SchedH3Service {
             headers: httpOptions
           }
         )
-        .pipe(map(res => {
+        .pipe(map((res: any) => {
             if (res) {
               //console.log('Edit H3Ratio res: ', res);
               return res;
@@ -243,7 +243,7 @@ export class SchedH3Service {
             headers: httpOptions
           }
         )
-        // .pipe(map(res => {
+        // .pipe(map((res: any) => {
         //       return this.getSummary(reportId, page, itemsPerPage, sortColumnName, descending).pipe(map(res =>
         //         {
         //             return  res;
@@ -258,7 +258,7 @@ export class SchedH3Service {
             headers: httpOptions
           }
         )
-        // .pipe(map(res => {
+        // .pipe(map((res: any) => {
         //       return this.getSummary(reportId, page, itemsPerPage, sortColumnName, descending).pipe(map(res =>
         //         {
         //            return  res;
@@ -291,7 +291,7 @@ export class SchedH3Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('H3 Aggregate Amount res: ', res);
             return res;
@@ -315,7 +315,7 @@ export class SchedH3Service {
     params = params.append('activity_event_type', activity_event_type);
     params = params.append('calendar_year', new Date().getFullYear().toString());
 
-    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
+    const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
     if (committeeDetails) {
       if (committeeDetails.cmte_type_category) {
         params = params.append('cmte_type_category', committeeDetails.cmte_type_category);
@@ -330,7 +330,7 @@ export class SchedH3Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('Validate H1 H2 exist res: ', res);
             return res;
@@ -360,7 +360,7 @@ export class SchedH3Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('H3 account name res: ', res);
             return res;

@@ -74,7 +74,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnInit() {
     this.committeeId = null;
     if (localStorage.getItem('committee_details') !== null) {
-      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       this.committeeId = cmteDetails.committeeid;
     }
 
@@ -153,7 +153,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
 
   // private _createFileCheckSum(file: File) {
   //   const fileReader = new FileReader();
-  //   fileReader.onload = (e) => {
+  //   fileReader.onload = (e: any) => {
   //     const fileData = fileReader.result;
   //     const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(fileData));
   //     const md5 = hash.toString(CryptoJS.enc.Hex);
@@ -233,7 +233,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
             .confirm('You can only import CSV files. If your file is a ' +
               'different type, please convert your data file to a CSV.',
               ConfirmModalComponent, 'Warning!', false)
-            .then(res => {
+            .then((res: any) => {
               // if (res === 'okay' || res === 'cancel') {
               // }
             });
@@ -252,14 +252,14 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
             .confirm('You can only import DCF files. If your file is a ' +
               'different type, please convert your data file to a DCF.',
               ConfirmModalComponent, 'Warning!', false)
-            .then(res => {
+            .then((res: any) => {
             });
           }
     }
     
 
     // const fileReader = new FileReader();
-    // fileReader.onload = (e) => {
+    // fileReader.onload = (e: any) => {
     //   const fileData = fileReader.result;
     //   const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(fileData));
     //   const md5 = hash.toString(CryptoJS.enc.Hex);
@@ -493,7 +493,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
     // progressPoller.pipe(takeUntil(this.uploadProcessing$));
     // this.processingPercent = 0;
     // progressPoller.subscribe(val => {
-    //   this.uploadContactsService.checkUploadProcessing().pipe(takeUntil(this.uploadProcessing$)).subscribe(res => {
+    //   this.uploadContactsService.checkUploadProcessing().pipe(takeUntil(this.uploadProcessing$)).subscribe((res: any) => {
     //     this.processingPercent += res;
     //     if (this.processingPercent > 99) {
     //       this.uploadProcessing$.next();

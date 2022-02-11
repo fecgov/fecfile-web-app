@@ -523,7 +523,7 @@ export class EndorserSummaryComponent implements OnInit , OnDestroy {
  
      this._dialogService
        .confirm('You are about to delete these Endorser.   ' + conIds, ConfirmModalComponent, 'Warning!')
-       .then(res => {
+       .then((res: any) => {
          if (res === 'okay') {
            this._EndorserService
              .trashOrRestoreEndorser('trash', selectedEndorser)
@@ -898,9 +898,9 @@ export class EndorserSummaryComponent implements OnInit , OnDestroy {
   public trashEndorser(endorser: any): void {
     this._dialogService
       .confirm('You are about to delete this transaction ' + endorser.transaction_id + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
-          this._LoanService.deleteEndorser(endorser).subscribe(res => {
+          this._LoanService.deleteEndorser(endorser).subscribe((res: any) => {
             this.getPage(this.config.currentPage);
             this._dialogService.confirm(
               'Transaction has been successfully deleted. ' + endorser.transaction_id,

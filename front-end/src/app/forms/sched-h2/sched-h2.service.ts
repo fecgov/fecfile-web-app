@@ -50,7 +50,7 @@ export class SchedH2Service {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           return {
             //items: this.mapFromServerFields(res.items),
@@ -92,7 +92,7 @@ export class SchedH2Service {
             headers: httpOptions
           }
         )
-        .pipe(map(res => {
+        .pipe(map((res: any) => {
             if (res) {
               //console.log('Save H2Ratio res: ', res);
               return res;
@@ -108,7 +108,7 @@ export class SchedH2Service {
             headers: httpOptions
           }
         )
-        .pipe(map(res => {
+        .pipe(map((res: any) => {
             if (res) {
               //console.log('Edit H2Ratio res: ', res);
               return res;
