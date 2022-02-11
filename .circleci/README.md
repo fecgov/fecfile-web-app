@@ -1,17 +1,4 @@
 # CircleCI Configuration
-## Environment Variables
-When configuring CircleCI, you will need to set environment varaialbes the database
-configuration as follows:
-```
-FECFILE_DB_HOST=localhost 
-FECFILE_DB_USERNAME=postgres 
-FECFILE_DB_PASSWORD=postgres 
-FECFILE_DB_NAME=postgres 
-FECFILE_FEC_WEBSITE_API_KEY=
-```
-Notes:
-* There is no default FECFILE_FEC_WEBSITE_API_KEY, you must obtain and set this yourself
-* The FECFILE_DB_HOST value here is different than what you need for your local docker-compose configuration.
 
 # Using CircleCI local CLI 
 
@@ -37,18 +24,20 @@ This can save a lot of time when trying to debug an issue in CI.
 circleci local execute --job JOB_NAME
 ```
 
-## Necessary Environment Variables
-The Django backend expects to find the database login info in the environment.  
-To run in the local CircleCI for the django unit tests (for example), use the following:
-
-```
-circleci local execute -e FECFILE_DB_HOST=localhost \
-         -e FECFILE_DB_USERNAME=postgres \
-         -e FECFILE_DB_PASSWORD=postgres \
-         -e FECFILE_DB_NAME=postgres \
-         --job unit-test-django
-```
-
 ## CircleCI configuration
 To get CircleCI to run tests, you have to configure the
 project in the Circle web applicaiton https://app.circleci.com/
+
+CircleCI will attempt to deploy commits made to specific branches:
+* branch __develop__ -> cloud.gov dev space
+* branch __release__* (any branch starting with release) -> cloud.gov staging space
+* branch __prod__ -> cloud.gov prod space
+
+Authentication must be configured in a set of evironment variables:
+* $FEC_CF_USERNAME_DEV
+* $FEC_CF_PASSWORD_DEV
+* $FEC_CF_USERNAME_STAGE
+* $FEC_CF_PASSWORD_STAGE
+* $FEC_CF_USERNAME_PROD
+* $FEC_CF_PASSWORD_PROD
+  

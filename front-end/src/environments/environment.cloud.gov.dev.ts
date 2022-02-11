@@ -5,7 +5,7 @@
 export const environment = {
     production: false,
     name: 'development',
-    apiUrl: 'https://localhost/api/v1',
+    apiUrl: 'https://fecfile-web-api-dev.app.cloud.gov/api/v1',
     appTitle: 'FECfile',
     validateSuccess: 'All required fields have passed validation.',
     awsRegion: 'us-east-1',

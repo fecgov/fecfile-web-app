@@ -1,11 +1,11 @@
 // This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --configuration=cloud.gov.dev` replaces `environment.ts` with `environment.cloud.gov.dev.ts`.
+// `ng build --configuration=cloud.gov.stage` replaces `environment.ts` with `environment.cloud.gov.stage.ts`.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
     production: false,
-    name: 'development',
-    apiUrl: 'https://localhost/api/v1',
+    name: 'stage',
+    apiUrl: 'https://fecfile-web-api-stage.app.cloud.gov/api/v1',
     appTitle: 'FECfile',
     validateSuccess: 'All required fields have passed validation.',
     awsRegion: 'us-east-1',
