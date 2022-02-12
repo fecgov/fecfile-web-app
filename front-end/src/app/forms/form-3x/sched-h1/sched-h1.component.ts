@@ -3,8 +3,8 @@ import { SchedHMessageServiceService } from './../../sched-h-service/sched-h-mes
 import { ScheduleActions } from './../individual-receipt/schedule-actions.enum';
 import { NgForm } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter, ViewChild, Input, OnChanges, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { Observable, Subscription, Subject } from 'rxjs';
-import 'rxjs/add/observable/of';
+import { Observable, Subscription, Subject, of } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -25,7 +25,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
   @Input() forceChangeDetection!: Date;
   @Input() transactionData!: any;
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
-  @ViewChild('f') form: NgForm;
+  @ViewChild('f') form!: NgForm;
 
   public formType = '';
   private scheduleAction: ScheduleActions = ScheduleActions.add;
@@ -103,7 +103,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
   ngOnInit() {
     // localStorage.setItem('cmte_type_category', 'PAC')
     ////console.log(localStorage.getItem('cmte_type_category'));
-    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
+    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
     this.checkH1Disabled();
     this.checkH1PacDisabled();
     if (this.transactionData) {
@@ -131,7 +131,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
       this.onDestroy$.next(true);
     }
     if (this.form) {
-      this.form.valueChanges.pipe(takeUntil(this.onDestroy$))
+      this.form.valueChanges?.pipe(takeUntil(this.onDestroy$))
         .subscribe(val => {
           if (this.form.dirty) {
             localStorage.setItem(`form_${this.formType}_saved`, JSON.stringify({ saved: false }));
@@ -166,7 +166,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
     httpOptions = httpOptions.append('Content-Type', 'application/json');
 
     const formData: FormData = new FormData();
-    let h1_obj = { "transaction_type_identifier": "ALLOC_H1" };
+    let h1_obj: any = { "transaction_type_identifier": "ALLOC_H1" };
     
     h1_obj['report_id'] = '0'
 
@@ -312,7 +312,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
     this._prepareForUnsavedChanges();
   }
 
-  public handleFedShareFieldKeyup(e, f: NgForm) {
+  public handleFedShareFieldKeyup(e: any, f: NgForm) {
     if (e.target.value <= 100) {
       f.controls.nonfederal_share.setValue(100 - e.target.value);
     } else {
