@@ -25,12 +25,7 @@ describe('AppRoutingModule', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes(AppRoutes),
-        FormsModule,
-        ReactiveFormsModule,
-        HttpClientTestingModule
-      ],
+      imports: [RouterTestingModule.withRoutes(AppRoutes), FormsModule, ReactiveFormsModule, HttpClientTestingModule],
       declarations: [
         AppComponent,
         LoginComponent,
@@ -41,14 +36,11 @@ describe('AppRoutingModule', () => {
         ToolsComponent,
         ReportsComponent,
         ContributorsComponent,
-        FormsComponent
+        FormsComponent,
       ],
       providers: [CookieService],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ],
-    })
-    .compileComponents();
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
 
     router = TestBed.get(Router);
     location = TestBed.get(Location);

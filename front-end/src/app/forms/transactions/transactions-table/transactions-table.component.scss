@@ -1,9 +1,8 @@
 @import '../../../shared/scss/global';
 
 .transactions__table-container {
-
   .transactions__page-item-range {
-    padding: .5em .1em 0 0 ;
+    padding: 0.5em 0.1em 0 0;
   }
 
   .transactions__table {
@@ -19,12 +18,12 @@
 
   .transactions__table-pagination-container {
     padding: 1em;
-  }  
+  }
 
   /** hide the dropdown caret **/
   .dropdown-toggle:after {
     border: none;
-  }  
+  }
 
   #transactions__dropdown-action > button > i {
     padding-right: 3px;
@@ -35,13 +34,13 @@
   }
 
   .transactions__bulk_action_btn[disabled] {
-    background:#6c757d;
+    background: #6c757d;
     border-color: #6c757d;
   }
 
   .dropdown-menu {
     min-width: 6em;
-  }  
+  }
 
   .transactions__item-range {
     font-size: 13px;
@@ -58,7 +57,7 @@
   }
 
   .transactions__total-amount-tip {
-    color: #112E51;
+    color: #112e51;
     padding-left: 3px;
     float: right;
   }
@@ -92,23 +91,23 @@
   //   margin: 1.5em 0;
   // }
 
-
   /* style ngx-pagination - start */
   /* override some styling where use of !important is made. */
 
-  .ngx-pagination .current{
+  .ngx-pagination .current {
     padding: 0.1875rem 0.625rem;
-    background: #9B9B9B !important;;
+    background: #9b9b9b !important;
     color: #fefefe;
     cursor: default;
   }
 
-  .ngx-pagination a, .ngx-pagination button {
-    color: #9B9B9B !important;;
+  .ngx-pagination a,
+  .ngx-pagination button {
+    color: #9b9b9b !important;
     display: block;
     padding: 0.1875rem 0.625rem;
     border-radius: 0;
-  }	
+  }
 
   .ngx-pagination {
     margin-bottom: 0;
@@ -116,15 +115,14 @@
 
   /* style ngx-pagination - end */
 
-  ng-select { 
-    .ng-dropdown-panel { 
+  ng-select {
+    .ng-dropdown-panel {
       width: auto;
-      min-width: 100%; 
-    } 
+      min-width: 100%;
+    }
   }
 
   .column-options-modal {
-
     #transactions__pin-modal-header {
       background-color: $crusta;
     }
@@ -133,26 +131,27 @@
       width: 6em;
     }
 
-    .row{
+    .row {
       height: 3em;
     }
 
-    input[type="checkbox" i]:disabled, .disabled-column-option{
+    input[type='checkbox' i]:disabled,
+    .disabled-column-option {
       color: #cccccc;
-    } 
+    }
 
-    input[type=checkbox] {
+    input[type='checkbox'] {
       transform: scale(1.5);
     }
   }
 
-  .parent:hover{
+  .parent:hover {
     cursor: pointer !important;
   }
 
   .child-bg {
     padding-left: 3rem;
-    background-color: #D9EDF6!important;
+    background-color: #d9edf6 !important;
     font-style: italic;
   }
 
@@ -161,9 +160,9 @@
     display: inline-block;
     width: 5px;
     height: 5px;
-    margin-top:  0.4rem;
-    border-top: 0.2rem solid #112E51;
-    border-right: 0.2rem solid #112E51;
+    margin-top: 0.4rem;
+    border-top: 0.2rem solid #112e51;
+    border-right: 0.2rem solid #112e51;
     margin-right: 1rem;
   }
   .arrow-top {

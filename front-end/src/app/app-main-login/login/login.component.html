@@ -35,7 +35,10 @@
               'login-input-error': (frm.get('emailId')?.invalid && frm.get('emailId')?.touched) || loginEmailInputError
             }"
           />
-          <div class="error" *ngIf="(frm.get('emailId')?.invalid && frm.get('emailId')?.touched) || loginEmailInputError">
+          <div
+            class="error"
+            *ngIf="(frm.get('emailId')?.invalid && frm.get('emailId')?.touched) || loginEmailInputError"
+          >
             <div class="error__email-id" *ngIf="frm.get('emailId')?.hasError('required')">Please enter Email ID.</div>
             <div class="error__email-id" *ngIf="frm.get('emailId')?.hasError('email')">Invalid Email Format.</div>
           </div>

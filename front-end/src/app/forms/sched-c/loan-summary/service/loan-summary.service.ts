@@ -1,25 +1,25 @@
 import { Injectable , ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import 'rxjs/add/observable/of';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../../../environments/environment';
 import { LoanModel } from '../../model/loan.model';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
-import { FilterPipe, FilterTypeEnum } from 'src/app/shared/pipes/filter/filter.pipe';
+import { OrderByPipe } from '../../../../shared/pipes/order-by/order-by.pipe';
+import { FilterPipe, FilterTypeEnum } from '../../../../shared/pipes/filter/filter.pipe';
 //import { ContactFilterModel } from '../model/contacts-filter.model';
 import { DatePipe } from '@angular/common';
-import { ZipCodePipe } from 'src/app/shared/pipes/zip-code/zip-code.pipe';
+import { ZipCodePipe } from '../../../../shared/pipes/zip-code/zip-code.pipe';
 import { map } from 'rxjs/operators';
 
 export interface GetLoanSumaryResponse {
   loan: LoanModel[];
-  totalAmount!: number;
-  totalcontactsCount!: number;
-  totalPages!: number;
+  totalAmount: number;
+  totalcontactsCount: number;
+  totalPages: number;
 
   // remove after API is renamed.
-  itemsPerPage!: number;
+  itemsPerPage: number;
   'total pages': number;
 }
 
@@ -59,7 +59,7 @@ export class LoanSummarysService {
     for (let i = 0; i < 13; i++) {
       const t1: any = this.createMockTrx();
       t1.transaction_id = this.mockContactIdRecycle + i;
-      this.mockRestoreTrxArray.push(t1);
+      // this.mockRestoreTrxArray.push(t1);
     }
 
     this._orderByPipe = new OrderByPipe();
@@ -331,7 +331,7 @@ export class LoanSummarysService {
   public mockApplyRestoredContact(response: any) {
     for (const cnt of this.mockRecycleBinArray) {
       response.contacts.push(cnt);
-      response.totalAmount += cnt.transaction_amount;
+      // response.totalAmount += cnt.transaction_amount;
       response.totalContactCount++;
     }
   }
@@ -592,8 +592,8 @@ export class LoanSummarysService {
             return false;
           })
         );
-    } else {
     }
+    return of(null);
   }
 
   public getContactsDynamicFormFields(): Observable<any> {

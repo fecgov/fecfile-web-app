@@ -34,7 +34,6 @@ export class ApiService implements HttpInterceptor {
     private _dialogService: DialogService
   ) {}
 
-
   /**
    * Logs a user into the API.
    *

@@ -274,18 +274,30 @@ export class ManageUserComponent implements OnInit {
     }
     this.users.sort((a: UserModel, b: UserModel) => {
       if (sortDirection === 'desc') {
-        if (String(a[sortColumn as keyof UserModel]).toLowerCase() < String(b[sortColumn as keyof UserModel]).toLowerCase()) {
+        if (
+          String(a[sortColumn as keyof UserModel]).toLowerCase() <
+          String(b[sortColumn as keyof UserModel]).toLowerCase()
+        ) {
           return -1;
         }
-        if (String(a[sortColumn as keyof UserModel]).toLowerCase() > String(b[sortColumn as keyof UserModel]).toLowerCase()) {
+        if (
+          String(a[sortColumn as keyof UserModel]).toLowerCase() >
+          String(b[sortColumn as keyof UserModel]).toLowerCase()
+        ) {
           return 1;
         }
         return 0;
       } else {
-        if (String(a[sortColumn as keyof UserModel]).toLowerCase() > String(b[sortColumn as keyof UserModel]).toLowerCase()) {
+        if (
+          String(a[sortColumn as keyof UserModel]).toLowerCase() >
+          String(b[sortColumn as keyof UserModel]).toLowerCase()
+        ) {
           return -1;
         }
-        if (String(a[sortColumn as keyof UserModel]).toLowerCase() < String(b[sortColumn as keyof UserModel]).toLowerCase()) {
+        if (
+          String(a[sortColumn as keyof UserModel]).toLowerCase() <
+          String(b[sortColumn as keyof UserModel]).toLowerCase()
+        ) {
           return 1;
         }
         return 0;

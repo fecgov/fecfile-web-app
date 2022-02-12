@@ -5,7 +5,7 @@ import { ImportContactsService } from './import-contacts.service';
 describe('ImportContactsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ImportContactsService]
+      providers: [ImportContactsService],
     });
   });
 

@@ -5,7 +5,7 @@ import { IndividualReceiptService } from './individual-receipt.service';
 describe('IndividualReceiptService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [IndividualReceiptService]
+      providers: [IndividualReceiptService],
     });
   });
 

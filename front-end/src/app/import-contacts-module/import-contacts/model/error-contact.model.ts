@@ -23,5 +23,5 @@ export class ErrorContactModel {
   district!: ErrorFieldModel;
   multiCandidateCmteStatus!: ErrorFieldModel;
 
-  constructor() { }
+  constructor() {}
 }

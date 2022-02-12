@@ -3,13 +3,12 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-import-trx-clean-info',
   templateUrl: './import-trx-clean-info.component.html',
-  styleUrls: ['./import-trx-clean-info.component.scss']
+  styleUrls: ['./import-trx-clean-info.component.scss'],
 })
 export class ImportTrxCleanInfoComponent implements OnInit {
-
   public showAdditionalInfo!: boolean;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.showAdditionalInfo = true;
@@ -18,5 +17,4 @@ export class ImportTrxCleanInfoComponent implements OnInit {
   public toggleAdditionalInfo() {
     this.showAdditionalInfo = !this.showAdditionalInfo;
   }
-
 }

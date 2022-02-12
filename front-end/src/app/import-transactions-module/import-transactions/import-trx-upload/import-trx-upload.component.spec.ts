@@ -6,12 +6,13 @@ describe('ImportTrxUploadComponent', () => {
   let component: ImportTrxUploadComponent;
   let fixture: ComponentFixture<ImportTrxUploadComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ImportTrxUploadComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ImportTrxUploadComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ImportTrxUploadComponent);

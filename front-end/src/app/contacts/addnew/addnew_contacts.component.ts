@@ -1,13 +1,5 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbTooltipConfig, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
@@ -142,8 +134,7 @@ export class AddNewContactComponent implements OnInit, OnDestroy {
           if (isSaved && isSaved.saved) {
             this.frmContact.markAsUntouched();
             this.frmContact.markAsPristine();
-          }
-          else {
+          } else {
             this.frmContact.markAsDirty();
             this.frmContact.markAsTouched();
           }

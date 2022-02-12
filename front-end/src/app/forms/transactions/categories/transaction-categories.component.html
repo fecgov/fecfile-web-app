@@ -3,7 +3,7 @@
     <h3 class="text-center">{{ title }}</h3>
   </header>
   <section>
-    <ul class="form-sidebar__links" >
+    <ul class="form-sidebar__links">
       <li
         [ngClass]="itemSelected === categoryType?.value ? 'form-sidebar-item selected' : 'form-sidebar-item'"
         *ngFor="let categoryType of transactionCategories"
@@ -11,23 +11,16 @@
         <div class="float-left form-sidebar-item__text">
           {{ categoryType?.text }}
         </div>
-        <div class="float-right amount form-sidebar-item__value">
-          $0
-        </div>
+        <div class="float-right amount form-sidebar-item__value">$0</div>
       </li>
     </ul>
   </section>
   <footer>
-    <div
-      class="form-sidebar__item"
-      *ngIf="cashOnHand?.showCashOnHand"
-    >
+    <div class="form-sidebar__item" *ngIf="cashOnHand?.showCashOnHand">
       <div class="form-sidebar-item__text">
         {{ cashOnHand.text }}
       </div>
-      <div class="form-sidebar-item__value">
-        $0
-      </div>
+      <div class="form-sidebar-item__value">$0</div>
     </div>
     <div class="form-sidebar__btns">
       <div class="btn-row">
@@ -40,12 +33,7 @@
         </a>
       </div>
       <div class="btn-row">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          [routerLink]="['/signandSubmit', '3X']"
-
-        >
+        <button type="button" class="btn btn-secondary" [routerLink]="['/signandSubmit', '3X']">
           Sign &amp; Submit
         </button>
       </div>

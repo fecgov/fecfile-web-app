@@ -211,6 +211,7 @@ form {
           -webkit-transform: scale(1.9); /* Safari and Chrome */
           -o-transform: scale(1.9); /* Opera */
           margin: 10px;
+          transform: scale(1.9);
         }
         .forms__big_radio {
           -webkit-transform: scale(2.9);
@@ -219,6 +220,7 @@ form {
           -webkit-transform: scale(2.9); /* Safari and Chrome */
           -o-transform: scale(2.9); /* Opera */
           margin: 23px;
+          transform: scale(1.9);
         }
         label {
           font-family: sans-serif;

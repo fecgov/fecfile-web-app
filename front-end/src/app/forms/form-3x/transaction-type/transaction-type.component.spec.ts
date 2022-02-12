@@ -6,12 +6,13 @@ describe('TransactionTypeComponent', () => {
   let component: TransactionTypeComponent;
   let fixture: ComponentFixture<TransactionTypeComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TransactionTypeComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [TransactionTypeComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionTypeComponent);

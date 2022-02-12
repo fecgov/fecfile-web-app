@@ -1,26 +1,25 @@
 import { Injectable , ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
+import { Observable, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../../../environments/environment';
 import { EndorserModel } from '../model/endorser.model';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
-import { FilterPipe, FilterTypeEnum } from 'src/app/shared/pipes/filter/filter.pipe';
+import { OrderByPipe } from '../../../../shared/pipes/order-by/order-by.pipe';
+import { FilterPipe, FilterTypeEnum } from '../../../../shared/pipes/filter/filter.pipe';
 //import { ContactFilterModel } from '../model/contacts-filter.model';
 import { DatePipe } from '@angular/common';
-import { ZipCodePipe } from 'src/app/shared/pipes/zip-code/zip-code.pipe';
+import { ZipCodePipe } from '../../../../shared/pipes/zip-code/zip-code.pipe';
 import { map } from 'rxjs/operators';
 import { ScheduleActions } from '../../../form-3x/individual-receipt/schedule-actions.enum';
 
 export interface GetEndorsersResponse {
   contacts: EndorserModel[];
-  totalAmount!: number;
-  totalcontactsCount!: number;
-  totalPages!: number;
+  totalAmount: number;
+  totalcontactsCount: number;
+  totalPages: number;
 
   // remove after API is renamed.
-  itemsPerPage!: number;
+  itemsPerPage: number;
   'total pages': number;
 }
 
@@ -60,7 +59,7 @@ export class EndorserService {
     for (let i = 0; i < 13; i++) {
       const t1: any = this.createMockTrx();
       t1.transaction_id = this.mockContactIdRecycle + i;
-      this.mockRestoreTrxArray.push(t1);
+      // this.mockRestoreTrxArray.push(t1);
     }
 
     this._orderByPipe = new OrderByPipe();
@@ -318,7 +317,7 @@ export class EndorserService {
   public mockApplyRestoredContact(response: any) {
     for (const cnt of this.mockRecycleBinArray) {
       response.contacts.push(cnt);
-      response.totalAmount += cnt.transaction_amount;
+      // response.totalAmount += cnt.transaction_amount;
       response.totalContactCount++;
     }
   }
@@ -580,8 +579,8 @@ export class EndorserService {
             return false;
           })
         );
-    } else {
     }
+    return of(null);
   }
 
   public get_sched_c_endorser_dynamic_forms_fields(): Observable<any> {
@@ -621,9 +620,9 @@ export class EndorserService {
       .post(`${environment.apiUrl}${url}`, request, {
         headers: httpOptions
       })
-     .map((res: any) => {
+     .pipe(map((res: any) => {
           return false;
-        });
+        }));
   }
 
 }

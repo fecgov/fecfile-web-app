@@ -6,12 +6,13 @@ describe('ToolsImportNamesComponent', () => {
   let component: ToolsImportNamesComponent;
   let fixture: ComponentFixture<ToolsImportNamesComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ToolsImportNamesComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ToolsImportNamesComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ToolsImportNamesComponent);

@@ -6,12 +6,13 @@ describe('ImportTrxSidebarComponent', () => {
   let component: ImportTrxSidebarComponent;
   let fixture: ComponentFixture<ImportTrxSidebarComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ImportTrxSidebarComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ImportTrxSidebarComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ImportTrxSidebarComponent);

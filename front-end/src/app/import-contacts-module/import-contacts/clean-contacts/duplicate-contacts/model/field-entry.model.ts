@@ -5,7 +5,7 @@ export class FieldEntryModel {
   originallyEmpty!: boolean;
 
   public constructor() {
-    this.value = null;
+    this.value = '';
     this.selected = false;
     this.disabled = false;
     this.originallyEmpty = false;

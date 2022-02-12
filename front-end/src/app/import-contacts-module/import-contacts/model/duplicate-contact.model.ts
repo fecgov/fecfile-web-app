@@ -1,7 +1,6 @@
 import { ImportContactModel } from './import-contact.model';
 
 export class DuplicateContactModel extends ImportContactModel {
-
   potentialDupes: Array<DuplicateContactModel>;
   seq!: number;
 

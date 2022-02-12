@@ -6,12 +6,13 @@ describe('CleanContactsComponent', () => {
   let component: CleanContactsComponent;
   let fixture: ComponentFixture<CleanContactsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ CleanContactsComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [CleanContactsComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CleanContactsComponent);

@@ -6,23 +6,23 @@ import { duplicatesResponse } from './contacts-data';
 @Component({
   selector: 'app-import-how-to',
   templateUrl: './import-how-to.component.html',
-  styleUrls: ['./import-how-to.component.scss']
+  styleUrls: ['./import-how-to.component.scss'],
 })
 export class ImportHowToComponent implements OnInit {
   @Output()
   public returnEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public steps: Array<any>;
+  public steps!: Array<any>;
   public currentStep!: ImportContactsStepsEnum;
   public readonly start = ImportContactsStepsEnum.start;
   public readonly step1Upload = ImportContactsStepsEnum.step1Upload;
   public readonly step3Clean = ImportContactsStepsEnum.step3Clean;
   public readonly step4ImportDone = ImportContactsStepsEnum.step4ImportDone;
-  public contacts: Array<any>;
+  public contacts!: Array<any>;
   public config: PaginationInstance = {
     id: 'how_to__table-pagination',
     itemsPerPage: 4,
-    currentPage: 1
+    currentPage: 1,
   };
 
   constructor() {}
@@ -31,7 +31,7 @@ export class ImportHowToComponent implements OnInit {
     this.steps = [
       { text: 'Upload', step: this.step1Upload },
       { text: 'Clean', step: this.step3Clean },
-      { text: 'Import', step: this.step4ImportDone }
+      { text: 'Import', step: this.step4ImportDone },
     ];
     this.currentStep = this.step1Upload;
     this.contacts = duplicatesResponse.contacts;

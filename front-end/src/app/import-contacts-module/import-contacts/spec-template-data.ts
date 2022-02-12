@@ -1,4 +1,3 @@
-
 /**
  * Use if spec and template XLS download is created as a Workbook in the front end.
  * This may be replaces by API downloading a fully formatted Excel file as a Blob
@@ -11,7 +10,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-9',
     'REQUIRED FIELDS': 'Required',
     'SAMPLE DATA': 'C98765431',
-    'VALUE REFERENCE': 'Committee ID of the Committee Importing Contacts'
+    'VALUE REFERENCE': 'Committee ID of the Committee Importing Contacts',
   },
   {
     'COL SEQ': 'B',
@@ -19,7 +18,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-3',
     'REQUIRED FIELDS': 'Required',
     'SAMPLE DATA': 'IND',
-    'VALUE REFERENCE': 'Individual - IND'
+    'VALUE REFERENCE': 'Individual - IND',
   },
   {
     'COL SEQ': 'C',
@@ -27,7 +26,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-200',
     'REQUIRED FIELDS': 'Required if ORG',
     'SAMPLE DATA': 'John Smith & Co.',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'D',
@@ -35,7 +34,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-30',
     'REQUIRED FIELDS': 'Required if IND',
     'SAMPLE DATA': 'Smith',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'E',
@@ -43,7 +42,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-20',
     'REQUIRED FIELDS': 'Required if IND',
     'SAMPLE DATA': 'John',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'F',
@@ -51,7 +50,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-20',
     'REQUIRED FIELDS': 'Optional',
     'SAMPLE DATA': 'W',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'G',
@@ -59,7 +58,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-10',
     'REQUIRED FIELDS': 'Optional',
     'SAMPLE DATA': 'Dr',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'H',
@@ -67,7 +66,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-10',
     'REQUIRED FIELDS': 'Optional',
     'SAMPLE DATA': 'Jr',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'I',
@@ -75,7 +74,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-34',
     'REQUIRED FIELDS': 'Required',
     'SAMPLE DATA': '123 Main Street',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'J',
@@ -83,7 +82,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-34',
     'REQUIRED FIELDS': 'Required',
     'SAMPLE DATA': '',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'K',
@@ -91,7 +90,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-30',
     'REQUIRED FIELDS': 'Required',
     'SAMPLE DATA': 'Any town',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'L',
@@ -99,7 +98,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-2',
     'REQUIRED FIELDS': 'Required',
     'SAMPLE DATA': 'WA',
-    'VALUE REFERENCE': 'AK,AL,...ZZ'
+    'VALUE REFERENCE': 'AK,AL,...ZZ',
   },
   {
     'COL SEQ': 'M',
@@ -107,7 +106,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-9',
     'REQUIRED FIELDS': 'Required',
     'SAMPLE DATA': '981110123',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'N',
@@ -115,7 +114,7 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-38',
     'REQUIRED FIELDS': 'Optional',
     'SAMPLE DATA': '',
-    'VALUE REFERENCE': ''
+    'VALUE REFERENCE': '',
   },
   {
     'COL SEQ': 'O',
@@ -123,8 +122,8 @@ export const importContactsSpec: any = [
     'TYPE OF CHARACTERS': 'A/N-38',
     'REQUIRED FIELDS': 'Optional',
     'SAMPLE DATA': '',
-    'VALUE REFERENCE': ''
-  }
+    'VALUE REFERENCE': '',
+  },
 ];
 
 export const importContactsTemplate = [
@@ -143,6 +142,6 @@ export const importContactsTemplate = [
     STATE: '',
     ZIP: '',
     EMPLOYER: '',
-    OCCUPATION: ''
-  }
+    OCCUPATION: '',
+  },
 ];

@@ -6,12 +6,13 @@ describe('UploadCompleteMessageComponent', () => {
   let component: UploadCompleteMessageComponent;
   let fixture: ComponentFixture<UploadCompleteMessageComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ UploadCompleteMessageComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [UploadCompleteMessageComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UploadCompleteMessageComponent);

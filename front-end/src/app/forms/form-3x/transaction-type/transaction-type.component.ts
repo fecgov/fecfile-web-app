@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbAccordion, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Subscription } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
+import { takeUntil } from 'rxjs/operators';
+import { ConfirmModalComponent, ModalHeaderClassEnum } from '../../../shared/partials/confirm-modal/confirm-modal.component';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
 import { ReportTypeService } from '../../../forms/form-3x/report-type/report-type.service';
 import { FormsService } from '../../../shared/services/FormsService/forms.service';
 import { MessageService } from '../../../shared/services/MessageService/message.service';
@@ -22,7 +22,7 @@ import { TransactionTypeService } from './transaction-type.service';
 })
 export class TransactionTypeComponent implements OnInit, OnDestroy {
 
-  @ViewChild('acc') accordion: NgbAccordion;
+  @ViewChild('acc') accordion!: NgbAccordion;
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectedOptions: any = {};
   @Input() transactionCategory: string = '';
@@ -85,7 +85,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
         this.childOptionsListClick(setTargetVal.value);
         this.doValidateOption();
       }
-      this._transactionCategory = p.transactionCategory ? p.transactionCategory : '';
+      this._transactionCategory = p['transactionCategory'] ? p['transactionCategory'] : '';
     });
 
     this._messageService.getMessage().pipe(takeUntil(this.onDestroy$)).subscribe(msg => {
@@ -96,7 +96,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._formType = this._activatedRoute.snapshot.paramMap.get('form_id');
+    this._formType = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
     this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
 
     this.frmOption = this._fb.group({
@@ -133,7 +133,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _toggle(sec_option) {
+  private _toggle(sec_option: any) {
     setTimeout(() => {
       if (this.accordion) {
         this.accordion.toggle(sec_option), 0;
@@ -254,7 +254,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
    *
    * @param      {Object}  e            The event object.
    */
-  // public updateTypeSelected(e, selectedOption: any): void {
+  // public updateTypeSelected(e: any, selectedOption: any): void {
   //   const val: string = e.target.value;
   //   this.transactionType = val;
   //   this.transactionTypeText = e.target.placeholder;
@@ -281,7 +281,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
    * Sets the secondary transaction categories.
    */
   private _setSecondaryTransactionCategories(): void {
-    this._mainTransactionCategory = this.transactionCategories.filter(el => el.value === this.transactionCategory);
+    this._mainTransactionCategory = this.transactionCategories.filter((el: any) => el.value === this.transactionCategory);
     if(this._mainTransactionCategory && this._mainTransactionCategory.length > 0){
       const mainTransactionTypeText: string = this._mainTransactionCategory[0].text;
       const mainTransactionTypeValue: string = this._mainTransactionCategory[0].value;
@@ -328,7 +328,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
   /*
     This function is called while selecting a list from transaction screen
   */
-  public childOptionsListClick(id): void {
+  public childOptionsListClick(id: any): void {
     if (this.editMode) {
       //console.log('transaction type selected: ', id);
       if (document.getElementById(id) != null) {
@@ -346,7 +346,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
           'Warning',
           true,
           ModalHeaderClassEnum.warningHeader,
-          null,
+          new Map(),
           'Return to Reports'
         )
         .then((res: any) => {

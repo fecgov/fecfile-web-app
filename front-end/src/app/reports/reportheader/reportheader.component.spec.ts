@@ -6,12 +6,13 @@ describe('ReportheaderComponent', () => {
   let component: ReportheaderComponent;
   let fixture: ComponentFixture<ReportheaderComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ReportheaderComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ReportheaderComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ReportheaderComponent);

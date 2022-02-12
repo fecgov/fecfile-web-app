@@ -42,10 +42,10 @@ export class TransactionModel {
   loanPaymentAmt!: any;
   loanPaymentToDate!: any;
   isReattribution = false;
-  reattribution_id:string;
+  reattribution_id: string;
   isreattributable = false;
   isRedesignation = false;
-  redesignation_id:string;
+  redesignation_id: string;
   isredesignatable = false;
   reportType!: any;
   activityEventType!: any;
@@ -57,9 +57,9 @@ export class TransactionModel {
   reportId!: any;
   scrollDebtPaymentButtonIntoView!: boolean;
   iseditable!: boolean;
-  isTrashable:boolean;
-  disbursementDate:Date;
-  disseminationDate:Date;
+  isTrashable!: boolean;
+  disbursementDate: Date;
+  disseminationDate: Date;
   candLastName!: string;
   candFirstName!: string;
   candMiddleName!: string;
@@ -67,12 +67,12 @@ export class TransactionModel {
   candSuffix!: string;
   candFECId!: string;
   benificiaryCandId!: string;
-  candOffice:string;
-  candOfficeState:string;
-  candOfficeDistrict:string;
-  candElectionCode:string;
-  candElectionYear:string;
-  candSupportOpposeFlag:string;
+  candOffice: string;
+  candOfficeState: string;
+  candOfficeDistrict: string;
+  candElectionCode: string;
+  candElectionYear: string;
+  candSupportOpposeFlag: string;
   candElectionOtherDesc!: string;
   originalAmount!: any;
 
@@ -90,9 +90,8 @@ export class TransactionModel {
 
   aggregation_ind!: string;
   forceitemizable!: boolean;
-  mirrorReportId:string;
-  mirrorTransactionId:string;
-
+  mirrorReportId: string;
+  mirrorTransactionId: string;
 
   constructor(transaction: any) {
     this.type = transaction.type ? transaction.type : '';
@@ -146,7 +145,9 @@ export class TransactionModel {
     this.nonfedShareAmount = transaction.nonfedShareAmount || '';
     this.levinShare = transaction.levinShare || '';
     this.purpose = transaction.purpose || '';
-    this.scrollDebtPaymentButtonIntoView = transaction.scrollDebtPaymentButtonIntoView ? transaction.scrollDebtPaymentButtonIntoView : false;
+    this.scrollDebtPaymentButtonIntoView = transaction.scrollDebtPaymentButtonIntoView
+      ? transaction.scrollDebtPaymentButtonIntoView
+      : false;
     this.reportId = transaction.reportId || '';
     this.candLastName = transaction.candLastName || '';
     this.candFirstName = transaction.candFirstName || '';
@@ -164,14 +165,13 @@ export class TransactionModel {
     this.candSupportOpposeFlag = transaction.candSupportOpposeFlag || '';
     this.isReattribution = transaction.isReattribution || false;
     this.isreattributable = transaction.isreattributable || false;
-    this.reattribution_id = transaction.reattribution_id  || '';
-    this.isredesignatable = transaction.isredesignatable ||false;
+    this.reattribution_id = transaction.reattribution_id || '';
+    this.isredesignatable = transaction.isredesignatable || false;
     this.isRedesignation = transaction.isRedesignation || false;
-    this.redesignation_id = transaction.redesignation_id  || '';
+    this.redesignation_id = transaction.redesignation_id || '';
     this.originalAmount = transaction.originalAmount || '';
-    this.aggregation_ind = transaction.aggregation_ind  || '';
+    this.aggregation_ind = transaction.aggregation_ind || '';
     this.forceitemizable = transaction.forceitemizable || false;
     this.formType = transaction.formType || '';
-
   }
 }

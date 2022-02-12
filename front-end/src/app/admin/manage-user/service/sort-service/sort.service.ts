@@ -15,6 +15,6 @@ export class SortService {
 }
 
 export interface ColumnSortedEvent {
-  sortColumn!: string;
-  sortDirection!: string;
+  sortColumn: string;
+  sortDirection: string;
 }

@@ -6,12 +6,13 @@ describe('ErrorContactsFieldComponent', () => {
   let component: ErrorContactsFieldComponent;
   let fixture: ComponentFixture<ErrorContactsFieldComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ErrorContactsFieldComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ErrorContactsFieldComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ErrorContactsFieldComponent);

@@ -6,12 +6,13 @@ describe('EndorserSummaryComponent', () => {
   let component: EndorserSummaryComponent;
   let fixture: ComponentFixture<EndorserSummaryComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ EndorserSummaryComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [EndorserSummaryComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EndorserSummaryComponent);

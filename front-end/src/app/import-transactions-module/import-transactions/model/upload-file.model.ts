@@ -7,7 +7,7 @@ export class UploadFileModel {
   formType!: string;
   scheduleType!: string;
   checkSum!: string;
-  contacts: Array<any>;
+  contacts: Array<any> = [];
 
   /**
    * The zero-based index number indicating the position of the file in the queue.

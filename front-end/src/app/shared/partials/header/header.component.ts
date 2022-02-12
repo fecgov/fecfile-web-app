@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { Component, ViewEncapsulation, OnInit, OnDestroy, Input, OnChanges, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -8,13 +8,15 @@ import { AuthService } from '../../services/AuthService/auth.service';
 import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { FormsService } from '../../services/FormsService/forms.service';
 import { DialogService } from '../../services/DialogService/dialog.service';
-import { NotificationsService } from 'src/app/notifications/notifications.service';
+import { NotificationsService } from '../../../notifications/notifications.service';
 import { CashOnHandComponent } from '../../../forms/form-3x/cash-on-hand/cash-on-hand.component';
-import { ContactsService } from 'src/app/contacts/service/contacts.service';
+import { ContactsService } from '../../../contacts/service/contacts.service';
 import { ExportService } from '../../services/ExportService/export.service';
 
 declare global {
-  interface Window { Usersnap: any; }
+  interface Window {
+    Usersnap: any;
+  }
 }
 
 window.Usersnap = window.Usersnap || {};
@@ -23,7 +25,7 @@ window.Usersnap = window.Usersnap || {};
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('content') content: any;
@@ -47,7 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.routerSubscription = this._router.events.subscribe(val => {
+    this.routerSubscription = this._router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         if (val.url.indexOf('/logout') === 0) {
           let arr: any = [];
@@ -62,7 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
           this._messageService.sendMessage({
             loggedOut: true,
-            msg: `You have successfully logged out of the ${environment.appTitle} application.`
+            msg: `You have successfully logged out of the ${environment.appTitle} application.`,
           });
 
           this._authService.doSignOut();
@@ -71,7 +73,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     // Get notification count
-    this._notificationsService.getTotalCount().subscribe(response => {
+    this._notificationsService.getTotalCount().subscribe((response) => {
       this.notificationsCount = response.notification_count;
     });
   }
@@ -92,7 +94,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   ngOnDestroy(): void {
     this.routerSubscription.unsubscribe();
   }
-  
+
   public toggleMenu(): void {
     if (this.menuActive) {
       this.menuActive = false;
@@ -128,19 +130,19 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public viewAllTransactions(): void {
-    this.canDeactivate().then(result => {
+    this.canDeactivate().then((result) => {
       if (result === true) {
         localStorage.removeItem(`form_${this.formType}_saved`);
         this._router.navigate([`/forms/form/global`], {
-          queryParams: { step: 'transactions', transactionCategory: 'receipts', allTransactions: true }
+          queryParams: { step: 'transactions', transactionCategory: 'receipts', allTransactions: true },
         });
       }
     });
   }
 
-  openCOHModal(){
+  openCOHModal() {
     const modalRef = this.modalService.open(CashOnHandComponent);
-    modalRef.result.then(result => {
+    modalRef.result.then((result) => {
       console.log('saved');
       console.log(result);
       // this._transactionsService.mirrorIEtoF24({reportId: result, transactionId: trx.transactionId}).subscribe((res: any) => {
@@ -148,30 +150,37 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       //     this.getTransactionsPage(this.config.currentPage);
       //     this._dialogService.confirm('Transaction has been successfully added to selected F24 report. ', ConfirmModalComponent, 'Success!', false, ModalHeaderClassEnum.successHeader);
       //   }
-      });
+    });
     // console.log("reportID; " + result);
     // console.log("transactionId : " + trx.transactionId);
     // this.open(this.content);
   }
 
-  public open(content) {
+  public open(content: any) {
     this.modalRef = this.modalService.open(content, { size: 'lg', centered: true, windowClass: 'custom-class' });
   }
 
-  goToContacts(){
-    this._router.navigate(['/contacts']).then(success => {
-      this._messageService.sendMessage({'screen':'contacts', 'action':'highlight-searchbar'});
+  goToContacts() {
+    this._router.navigate(['/contacts']).then((success) => {
+      this._messageService.sendMessage({ screen: 'contacts', action: 'highlight-searchbar' });
     });
   }
 
-  goToTransactions(){
-    this._router.navigate([`/forms/form/global`], {
-      queryParams: { step: 'transactions', transactionCategory: 'receipts', allTransactions: true, searchTransactions:true }
-    }).then(success => {
-      if(success){
-        this._messageService.sendMessage({'screen':'transactions', 'action':'highlight-searchbar'});
-      }
-    });
+  goToTransactions() {
+    this._router
+      .navigate([`/forms/form/global`], {
+        queryParams: {
+          step: 'transactions',
+          transactionCategory: 'receipts',
+          allTransactions: true,
+          searchTransactions: true,
+        },
+      })
+      .then((success) => {
+        if (success) {
+          this._messageService.sendMessage({ screen: 'transactions', action: 'highlight-searchbar' });
+        }
+      });
     // this.canDeactivate().then(result => {
     //   if (result === true) {
     //     localStorage.removeItem(`form_${this.formType}_saved`);
@@ -184,7 +193,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     // });
   }
 
-  openUsersnap(){
+  openUsersnap() {
     window.Usersnap.open();
   }
 
@@ -193,18 +202,17 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
    */
   public exportAllContacts(): void {
     const allContacts = true;
-    this._contactsService.getExportContactsData([],
-      allContacts).subscribe((res: any) => {
-        for (const contact of res.contacts) {
-          // TODO have the API omit these fields.
-          delete contact.cand_election_year;
-          // delete contact.cand_office;
-          // delete contact.cand_office_district;
-          // delete contact.cand_office_state;
-          delete contact.ref_cand_cmte_id;
-          delete contact.last_update_date;
-        }
-        this._exportService.exportCsv(res.contacts, 'export_contacts');
-      });
+    this._contactsService.getExportContactsData([], allContacts).subscribe((res: any) => {
+      for (const contact of res.contacts) {
+        // TODO have the API omit these fields.
+        delete contact.cand_election_year;
+        // delete contact.cand_office;
+        // delete contact.cand_office_district;
+        // delete contact.cand_office_state;
+        delete contact.ref_cand_cmte_id;
+        delete contact.last_update_date;
+      }
+      this._exportService.exportCsv(res.contacts, 'export_contacts');
+    });
   }
 }

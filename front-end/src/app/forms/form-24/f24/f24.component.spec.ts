@@ -6,12 +6,13 @@ describe('F24Component', () => {
   let component: F24Component;
   let fixture: ComponentFixture<F24Component>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ F24Component ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [F24Component],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(F24Component);

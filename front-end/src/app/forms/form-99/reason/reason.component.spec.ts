@@ -10,22 +10,16 @@ describe('ReasonComponent', () => {
   let component: ReasonComponent;
   let fixture: ComponentFixture<ReasonComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
-      declarations: [ ReasonComponent ],
-      providers: [CookieService],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule, RouterTestingModule],
+        declarations: [ReasonComponent],
+        providers: [CookieService],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ReasonComponent);

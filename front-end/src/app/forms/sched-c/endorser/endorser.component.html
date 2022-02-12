@@ -11,7 +11,7 @@
   <ngb-highlight [result]="formatTypeaheadCandidateId(r)" [term]="t"></ngb-highlight>
 </ng-template>
 <ng-template #rtCommitteeName let-r="result" let-t="term">
-    <ngb-highlight [result]="formatTypeaheadCommitteeName(r)" [term]="t"></ngb-highlight>
+  <ngb-highlight [result]="formatTypeaheadCommitteeName(r)" [term]="t"></ngb-highlight>
 </ng-template>
 <ng-template #rtCandidate let-r="result" let-t="term">
   <ngb-highlight [result]="formatTypeaheadCandidate(r)" [term]="t"></ngb-highlight>
@@ -22,41 +22,42 @@
     <header>
       <div class="header-content">
         <!--<div class="float-left">-->
-          <h2>
-              Form 3X / Loans / Schedule-C Endorser
-          </h2>
-          <br />
+        <h2>Form 3X / Loans / Schedule-C Endorser</h2>
+        <br />
         <!--</div>-->
-       </div>
+      </div>
 
       <div class="grid-row">
         <div class="grid-row__col grid-row__col--12">
           <div class="forms__btn-container">
-          <br />
-          <br />
+            <br />
+            <br />
           </div>
         </div>
       </div>
     </header>
     <section>
-       <ng-container *ngFor="let hiddenField of hiddenFields">
+      <ng-container *ngFor="let hiddenField of hiddenFields">
         <input type="hidden" [name]="hiddenField?.name" [value]="hiddenField?.value" />
       </ng-container>
       <ng-container *ngFor="let row of formFields; let i = index">
-      <div class="row" *ngIf="row.cols">
+        <div class="row" *ngIf="row.cols">
           <ng-container *ngIf="row.cols | isArray">
             <div [class]="row.colClassName" *ngFor="let col of row.cols">
               <div class="form-group">
                 <label [for]="col?.name">
                   {{ col?.text }}
-                  <button type="button" class="btn btn-info" ngbTooltip="{{ col?.infoText }}"
-                    tooltipClass="form-tooltip" *ngIf="col?.infoIcon">
+                  <button
+                    type="button"
+                    class="btn btn-info"
+                    ngbTooltip="{{ col?.infoText }}"
+                    tooltipClass="form-tooltip"
+                    *ngIf="col?.infoIcon"
+                  >
                     <i class="info-icon" aria-hidden="true"></i>
                     <span class="sr-only">Click here for more information</span>
-                </button>
-                  <ng-container *ngIf="!col?.validation?.required">
-                    (Optional)
-                  </ng-container>
+                  </button>
+                  <ng-container *ngIf="!col?.validation?.required"> (Optional) </ng-container>
                 </label>
                 <ng-container *ngIf="col?.type === 'text' || col?.type === 'date'">
                   <div [ngClass]="{ 'input-group': col?.inputGroup }">
@@ -69,22 +70,21 @@
                     </ng-container>
                     <!-- [attr.readonly]="isReadOnly(col?.name, col.type)" -->
                     <input
-                      *ngIf="col?.name !== 'first_name' 
-                          && col?.name !== 'last_name'
-                          && col?.name !== 'entity_name'"
+                      *ngIf="col?.name !== 'first_name' && col?.name !== 'last_name' && col?.name !== 'entity_name'"
                       class="form-control"
                       [style.width]="col?.width"
                       [style.height]="col?.height"
                       [attr.type]="col?.type"
-                      [attr.name]="col?.name"                      
+                      [attr.name]="col?.name"
                       [attr.readonly]="col?.name === 'contribution_aggregate' && col.type === 'text' ? true : null"
                       [attr.value]="col?.value"
-                      [maxlength]="col?.name === 'contribution_amount' ? col?.validation?.max + 5: col?.validation?.max"
+                      [maxlength]="
+                        col?.name === 'contribution_amount' ? col?.validation?.max + 5 : col?.validation?.max
+                      "
                       [formControlName]="col?.name"
                       (blur)="col?.name === 'contribution_amount' ? contributionAmountChange($event) : null"
                       [ngClass]="
-                        endorserForm.get(col?.name)?.invalid &&
-                        (endorserForm.touched || endorserForm.dirty)
+                        endorserForm.get(col?.name)?.invalid && (endorserForm.touched || endorserForm.dirty)
                           ? 'input-field-error'
                           : ''
                       "
@@ -100,14 +100,13 @@
                       [maxlength]="col?.validation?.max"
                       [formControlName]="col?.name"
                       [ngClass]="
-                        endorserForm.get(col?.name)?.invalid &&
-                        (endorserForm.touched || endorserForm.dirty)
+                        endorserForm.get(col?.name)?.invalid && (endorserForm.touched || endorserForm.dirty)
                           ? 'input-field-error'
                           : ''
                       "
                       id="typeahead-template-last-name"
                       [ngbTypeahead]="searchLastName"
-                      [focusFirst]=false
+                      [focusFirst]="false"
                       [resultTemplate]="rt"
                       [inputFormatter]="formatterLastName"
                       (selectItem)="handleSelectedItem($event)"
@@ -123,50 +122,44 @@
                       [maxlength]="col?.validation?.max"
                       [formControlName]="col?.name"
                       [ngClass]="
-                        endorserForm.get(col?.name)?.invalid &&
-                        (endorserForm.touched || endorserForm.dirty)
+                        endorserForm.get(col?.name)?.invalid && (endorserForm.touched || endorserForm.dirty)
                           ? 'input-field-error'
                           : ''
                       "
                       id="typeahead-template-first-name"
                       [ngbTypeahead]="searchFirstName"
-                      [focusFirst]=false
+                      [focusFirst]="false"
                       [resultTemplate]="rt"
                       [inputFormatter]="formatterFirstName"
                       (selectItem)="handleSelectedItem($event)"
                     />
 
                     <input
-                    *ngIf="col?.name === 'entity_name'"
-                    class="form-control"
-                    [style.width]="col?.width"
-                    [style.height]="col?.height"
-                    [attr.type]="col?.type"
-                    [attr.name]="col?.name"
-                    [attr.value]="col?.value"
-                    [maxlength]="col?.validation?.max"
-                    [formControlName]="col?.name"
-                    [ngClass]="
-                      endorserForm.get(col?.name)?.invalid &&
-                      (endorserForm.touched || endorserForm.dirty)
-                        ? 'input-field-error'
-                        : ''
-                    "
-                    id="typeahead-template-entity-name"
-                    [ngbTypeahead]="searchOrg"
-                    [focusFirst]=false
-                    [resultTemplate]="rtOrg"
-                    [inputFormatter]="formatterOrgName"
-                    (selectItem)="handleSelectedOrgItem($event)"
-                  />
-
+                      *ngIf="col?.name === 'entity_name'"
+                      class="form-control"
+                      [style.width]="col?.width"
+                      [style.height]="col?.height"
+                      [attr.type]="col?.type"
+                      [attr.name]="col?.name"
+                      [attr.value]="col?.value"
+                      [maxlength]="col?.validation?.max"
+                      [formControlName]="col?.name"
+                      [ngClass]="
+                        endorserForm.get(col?.name)?.invalid && (endorserForm.touched || endorserForm.dirty)
+                          ? 'input-field-error'
+                          : ''
+                      "
+                      id="typeahead-template-entity-name"
+                      [ngbTypeahead]="searchOrg"
+                      [focusFirst]="false"
+                      [resultTemplate]="rtOrg"
+                      [inputFormatter]="formatterOrgName"
+                      (selectItem)="handleSelectedOrgItem($event)"
+                    />
                   </div>
                   <div
                     class="error-text"
-                    *ngIf="
-                      (endorserForm.touched || endorserForm.dirty) &&
-                      endorserForm.get(col?.name).invalid
-                    "
+                    *ngIf="(endorserForm.touched || endorserForm.dirty) && endorserForm.get(col?.name).invalid"
                   >
                     <ng-container *ngIf="endorserForm.get(col?.name).errors?.maxlength">
                       <div
@@ -176,27 +169,19 @@
                           endorserForm.get(col?.name).errors.maxlength?.actualLength
                         "
                       >
-                        Only {{ endorserForm.get(col?.name).errors.maxlength?.requiredLength }} characters
-                        allowed.
+                        Only {{ endorserForm.get(col?.name).errors.maxlength?.requiredLength }} characters allowed.
                       </div>
                     </ng-container>
                     <ng-container *ngIf="endorserForm.get(col?.name).errors">
-                      <div
-                        class="text-error text-left"
-                        *ngIf="endorserForm.get(col?.name).errors?.nonAlphaNumeric"
-                      >
+                      <div class="text-error text-left" *ngIf="endorserForm.get(col?.name).errors?.nonAlphaNumeric">
                         Alphanumeric characters only.
                       </div>
                     </ng-container>
                     <ng-container *ngIf="endorserForm.get(col?.name).errors">
-                      <div
-                        class="text-error text-left"
-                        *ngIf="endorserForm.get(col?.name).errors?.nonFloatingPoint"
-                      >
+                      <div class="text-error text-left" *ngIf="endorserForm.get(col?.name).errors?.nonFloatingPoint">
                         Only numerical values are allowed.
                       </div>
                     </ng-container>
-     
                   </div>
                 </ng-container>
                 <ng-container *ngIf="col?.type === 'checkbox'">
@@ -211,8 +196,7 @@
                     [formControlName]="col?.name"
                     (change)="col?.name === 'memo_code' ? memoCodeChange($event) : null"
                     [ngClass]="
-                      endorserForm.get(col?.name)?.invalid &&
-                      (endorserForm.touched || endorserForm.dirty)
+                      endorserForm.get(col?.name)?.invalid && (endorserForm.touched || endorserForm.dirty)
                         ? 'input-field-error'
                         : ''
                     "
@@ -229,33 +213,33 @@
                   ></textarea>
                 </ng-container>
 
-                <ng-container *ngIf="col?.type === 'select' && 
-                    (isFieldName(col?.name, 'state') ||
-                    isFieldName(col?.name, 'cand_office_state'))">
-                    <ng-select #stateSelect 
-                      [items]="states" 
-                      (change)="handleStateChange($event, col)"
-                      class="state-select" 
-                      [formControlName]="col?.name" 
-                      bindValue="code" 
-                      bindLabel="code" 
-                      [selectOnTab]="true"
-                      [ngClass]="
-                          endorserForm.get(col?.name)?.invalid &&
-                          (endorserForm.touched || endorserForm.dirty)
-                            ? 'forms__select-error'
-                            : ''
-                        ">
-                      <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
-                        <span>{{ item.code + ' - ' + item.name }}</span>
-                      </ng-template>
-                    </ng-select>
-               </ng-container>
-
-
-                
-
-             </div>
+                <ng-container
+                  *ngIf="
+                    col?.type === 'select' &&
+                    (isFieldName(col?.name, 'state') || isFieldName(col?.name, 'cand_office_state'))
+                  "
+                >
+                  <ng-select
+                    #stateSelect
+                    [items]="states"
+                    (change)="handleStateChange($event, col)"
+                    class="state-select"
+                    [formControlName]="col?.name"
+                    bindValue="code"
+                    bindLabel="code"
+                    [selectOnTab]="true"
+                    [ngClass]="
+                      endorserForm.get(col?.name)?.invalid && (endorserForm.touched || endorserForm.dirty)
+                        ? 'forms__select-error'
+                        : ''
+                    "
+                  >
+                    <ng-template ng-option-tmp let-item="item" let-search="searchTerm" let-index="index">
+                      <span>{{ item.code + ' - ' + item.name }}</span>
+                    </ng-template>
+                  </ng-select>
+                </ng-container>
+              </div>
             </div>
             <!-- ./col -->
           </ng-container>
@@ -268,12 +252,11 @@
             </div>
           </div>
         </ng-container>
-      </ng-container>  
+      </ng-container>
     </section>
 
     <footer>
       <footer>
-
         <div class="grid-row">
           <div class="grid-row__col grid-row__col--12">
             <div class="forms__btn-container">
@@ -284,20 +267,21 @@
         <div class="grid-row">
           <div class="grid-row__col grid-row__col--12">
             <div class="forms__btn-container">
-              <button class="btn btn-previous btn-left" type="button" (click)="cancelStep()">
-                Cancel
-              </button>
-<!--               <button class="btn btn-secondary btn-right" type="button"  (click)="goToEndorserSummary()">
+              <button class="btn btn-previous btn-left" type="button" (click)="cancelStep()">Cancel</button>
+              <!--               <button class="btn btn-secondary btn-right" type="button"  (click)="goToEndorserSummary()">
                 Endorser Summary
               </button> -->
-              <button class="btn btn-secondary btn-right" type="button"  (click)="saveEndorser(false)">
-                Save
-              </button>
-              <button *ngIf="scheduleAction !== 'edit'" class="btn btn-secondary btn-right" type="button" (click)=saveEndorser(true)>
+              <button class="btn btn-secondary btn-right" type="button" (click)="saveEndorser(false)">Save</button>
+              <button
+                *ngIf="scheduleAction !== 'edit'"
+                class="btn btn-secondary btn-right"
+                type="button"
+                (click)="saveEndorser(true)"
+              >
                 Add Endorsers
               </button>
             </div>
-          </div>          
+          </div>
         </div>
         <div class="grid-row">
           <div class="grid-row__col grid-row__col--12">
@@ -308,7 +292,5 @@
         </div>
       </footer>
     </footer>
-
-
   </form>
 </div>

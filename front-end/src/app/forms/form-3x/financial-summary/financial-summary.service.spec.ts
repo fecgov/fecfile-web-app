@@ -5,7 +5,7 @@ import { FinancialSummaryService } from './financial-summary.service';
 describe('FinancialSummaryService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [FinancialSummaryService]
+      providers: [FinancialSummaryService],
     });
   });
 

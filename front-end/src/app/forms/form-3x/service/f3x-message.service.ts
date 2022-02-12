@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
-
+import { Subject } from 'rxjs';
 
 /**
  * A message service for sending and receiving messages of any type
  * between F3X components.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class F3xMessageService {
-
   private populateFormSubject = new Subject<any>();
   private clearFormSubject = new Subject<any>();
   private loadFormFieldsSubject = new Subject<any>();
@@ -19,7 +17,6 @@ export class F3xMessageService {
   private populateHiddenFieldsSubject = new Subject<any>();
   private clearFormFieldsForRedesignationSubject = new Subject<any>();
   private populateFieldsSubject = new Subject<any>();
-
 
   /**
    * Used by the F3X parent component to inform the child component
@@ -31,14 +28,12 @@ export class F3xMessageService {
     this.populateFormSubject.next(message);
   }
 
-
   /**
    * Clear the Populate Form message.
    */
   public clearPopulateFormMessage() {
-    this.populateFormSubject.next();
+    this.populateFormSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Populate Form message.
@@ -57,14 +52,12 @@ export class F3xMessageService {
     this.populateFieldsSubject.next(message);
   }
 
-
   /**
    * Clear the Populate Form message.
    */
   public clearPopulateFieldsMessage() {
-    this.populateFieldsSubject.next();
+    this.populateFieldsSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Populate Form message.
@@ -73,7 +66,7 @@ export class F3xMessageService {
     return this.populateFieldsSubject.asObservable();
   }
 
-   /**
+  /**
    * Used by the F3X parent component to inform the child component
    * to pre-populate the form's hidden fields with the given data.
    *
@@ -83,14 +76,12 @@ export class F3xMessageService {
     this.populateHiddenFieldsSubject.next(message);
   }
 
-
   /**
    * Clear the Populate form's hidden fields.
    */
   public clearPopulateHiddenFieldsMessage() {
-    this.populateHiddenFieldsSubject.next();
+    this.populateHiddenFieldsSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Populate form's hidden fields.
@@ -109,14 +100,12 @@ export class F3xMessageService {
     this.clearFormSubject.next(message);
   }
 
-
   /**
    * Clear the Init Form Form message.
    */
   public clearInitFormMessage() {
-    this.clearFormSubject.next();
+    this.clearFormSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Init Form message.
@@ -134,14 +123,12 @@ export class F3xMessageService {
     this.loadFormFieldsSubject.next(message);
   }
 
-
   /**
    * Clear the Load Form Fields message.
    */
   public clearLoadFormFieldsMessage() {
-    this.loadFormFieldsSubject.next();
+    this.loadFormFieldsSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Load Form Fields message.
@@ -160,14 +147,12 @@ export class F3xMessageService {
     this.storeParentModelSubject.next(message);
   }
 
-
   /**
    * Clear the parent model message.
    */
   public clearParentModelMessage() {
-    this.storeParentModelSubject.next();
+    this.storeParentModelSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the store parent model message.
@@ -180,14 +165,12 @@ export class F3xMessageService {
     this.clearFormFieldsForRedesignationSubject.next(message);
   }
 
-
   /**
    * Clear the Populate Form message.
    */
   public clearClearFormValuesForRedesignationMessage() {
-    this.clearFormFieldsForRedesignationSubject.next();
+    this.clearFormFieldsForRedesignationSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Populate Form message.
@@ -195,5 +178,4 @@ export class F3xMessageService {
   public getClearFormValuesForRedesignationMessage(): Observable<any> {
     return this.clearFormFieldsForRedesignationSubject.asObservable();
   }
-
 }

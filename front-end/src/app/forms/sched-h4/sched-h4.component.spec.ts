@@ -6,12 +6,13 @@ describe('SchedH4Component', () => {
   let component: SchedH4Component;
   let fixture: ComponentFixture<SchedH4Component>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SchedH4Component ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SchedH4Component],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SchedH4Component);

@@ -5,7 +5,7 @@ import { TransactionTypeService } from './transaction-type.service';
 describe('TransactionTypeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TransactionTypeService]
+      providers: [TransactionTypeService],
     });
   });
 

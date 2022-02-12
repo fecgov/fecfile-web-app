@@ -4,20 +4,18 @@ import { CanDeactivateGuardService } from '../shared/services/CanDeactivateGuard
 import { CanActivateGuard } from '../shared/utils/can-activate/can-activate.guard';
 import { ImportFecFileComponent } from './import-fecfile/import-fecfile.component';
 
-
-
 const routes: Routes = [
   {
     path: '',
     component: ImportFecFileComponent,
     pathMatch: 'full',
     canActivate: [CanActivateGuard],
-    canDeactivate: [CanDeactivateGuardService]
-  }
+    canDeactivate: [CanDeactivateGuardService],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ImportFecFileRoutingModule { }
+export class ImportFecFileRoutingModule {}

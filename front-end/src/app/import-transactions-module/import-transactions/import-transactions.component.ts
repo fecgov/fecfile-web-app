@@ -8,11 +8,11 @@ import { ImportFileStatusEnum } from './import-file-status.enum';
 @Component({
   selector: 'app-import-transactions',
   templateUrl: './import-transactions.component.html',
-  styleUrls: ['./import-transactions.component.scss']
+  styleUrls: ['./import-transactions.component.scss'],
 })
 export class ImportTransactionsComponent implements OnInit {
   public isShowInfo!: boolean;
-  public steps: Array<any>;
+  public steps!: Array<any>;
   public currentStep!: ImportTransactionsStepsEnum;
   public readonly start = ImportTransactionsStepsEnum.start;
   public readonly step1Select = ImportTransactionsStepsEnum.step1Select;
@@ -22,8 +22,8 @@ export class ImportTransactionsComponent implements OnInit {
   public readonly step4ImportDone = ImportTransactionsStepsEnum.step4ImportDone;
   // public fileSelectStep1!: boolean;
   public sidebarVisibleClass!: string;
-  public rightSideClassArray: Array<string>;
-  public fileQueue: Array<UploadFileModel>;
+  public rightSideClassArray!: Array<string>;
+  public fileQueue!: Array<UploadFileModel>;
   public currentFile!: UploadFileModel;
   public forceSidebarChangeDetection!: Date;
   public forceReviewChangeDetection!: Date;
@@ -43,7 +43,7 @@ export class ImportTransactionsComponent implements OnInit {
       { text: 'Upload', step: this.step1Select },
       { text: 'Review', step: this.step2Review },
       { text: 'Clean', step: this.step3Clean },
-      { text: 'Import', step: this.step4ImportDone }
+      { text: 'Import', step: this.step4ImportDone },
     ];
     this.fileQueue = [];
     this.currentStep = this.start;

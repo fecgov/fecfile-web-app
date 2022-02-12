@@ -20,12 +20,7 @@ import { ReportTypeComponent } from '../forms/form-3x/report-type/report-type.co
 import { SpinnerComponent } from './partials/spinner/spinner.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    NgbModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, NgbModule, FormsModule, ReactiveFormsModule],
   declarations: [
     StepsComponent,
     ReportTypeSidebarComponent,
@@ -36,7 +31,7 @@ import { SpinnerComponent } from './partials/spinner/spinner.component';
     ValidateComponent,
     PhonePipe,
     InputModalComponent,
-    SpinnerComponent
+    SpinnerComponent,
   ],
   exports: [
     CommonModule,
@@ -53,17 +48,9 @@ import { SpinnerComponent } from './partials/spinner/spinner.component';
     SubmitComponent,
     ReportTypeComponent,
     InputModalComponent,
-    SpinnerComponent
+    SpinnerComponent,
   ],
-  providers: [
-    DecimalPipe,
-    DatePipe,
-    UtilService,
-    OrderByPipe,
-    PhonePipe,
-    CurrencyPipe,
-    ExportDirective
-  ],
-  entryComponents: [InputModalComponent]
+  providers: [DecimalPipe, DatePipe, UtilService, OrderByPipe, PhonePipe, CurrencyPipe, ExportDirective],
+  entryComponents: [InputModalComponent],
 })
-export class SharedModule { }
+export class SharedModule {}

@@ -258,7 +258,7 @@ export class ContactsTableComponent implements OnInit, OnDestroy {
   public getContactsPage(page: number): void {
     this.config.currentPage = page;
 
-    let sortedCol: SortableColumnModel = this._tableService.getColumnByName(
+    let sortedCol: SortableColumnModel | undefined = this._tableService.getColumnByName(
       this.currentSortedColumnName,
       this.sortableColumns
     );
@@ -330,7 +330,7 @@ export class ContactsTableComponent implements OnInit, OnDestroy {
   public getRecyclingPage(page: number): void {
     this.config.currentPage = page;
 
-    let sortedCol: SortableColumnModel = this._tableService.getColumnByName(
+    let sortedCol: SortableColumnModel | undefined = this._tableService.getColumnByName(
       this.currentSortedColumnName,
       this.sortableColumns
     );
@@ -1016,7 +1016,10 @@ export class ContactsTableComponent implements OnInit, OnDestroy {
     if (sortableColumnsJson) {
       const ctnCols: SortableColumnModel[] = JSON.parse(sortableColumnsJson);
       for (const col of ctnCols) {
-        this._tableService.getColumnByName(col.colName, this.sortableColumns).visible = col.visible;
+        const tsCol = this._tableService.getColumnByName(col.colName, this.sortableColumns);
+        if (tsCol) {
+          tsCol.visible = col.visible;
+        }
       }
     }
   }

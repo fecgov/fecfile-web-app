@@ -8,7 +8,7 @@
   min-height: $mainContentHeight;
   position: relative;
   width: 100%;
-  
+
   .forms-container__main {
     display: flex;
     padding-left: 0;
@@ -35,7 +35,6 @@
           padding: 0;
         }
       }
-      
     }
     @include clearfix();
   }
@@ -96,10 +95,6 @@
       min-height: 100vh;
       width: 78%;
     }
-    section {
-      .form-content {
-      }
-    }
     footer {
       div {
         margin-top: 15px;
@@ -107,4 +102,3 @@
     }
   } // .form__container
 }
-

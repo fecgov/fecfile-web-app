@@ -5,7 +5,7 @@ import { UploadTrxService } from './upload-trx.service';
 describe('UploadTrxService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [UploadTrxService]
+      providers: [UploadTrxService],
     });
   });
 

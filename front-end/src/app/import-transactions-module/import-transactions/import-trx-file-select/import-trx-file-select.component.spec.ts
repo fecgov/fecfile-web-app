@@ -6,12 +6,13 @@ describe('ImportTrxFileSelectComponent', () => {
   let component: ImportTrxFileSelectComponent;
   let fixture: ComponentFixture<ImportTrxFileSelectComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ImportTrxFileSelectComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ImportTrxFileSelectComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ImportTrxFileSelectComponent);

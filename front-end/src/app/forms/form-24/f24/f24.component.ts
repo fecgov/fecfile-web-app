@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { FormsService } from '../../../shared/services/FormsService/forms.service';
 import { AbstractScheduleParentEnum } from '../../form-3x/individual-receipt/abstract-schedule-parent.enum';
 import { ScheduleActions } from '../../form-3x/individual-receipt/schedule-actions.enum';
@@ -18,11 +19,9 @@ import { MessageService } from '../../../shared/services/MessageService/message.
 @Component({
   selector: 'app-f24',
   templateUrl: './f24.component.html',
-  styleUrls: ['./f24.component.scss']
+  styleUrls: ['./f24.component.scss'],
 })
 export class F24Component implements OnInit {
-
-
   @Input() jumpToTransaction!: any;
 
   private currentStep: string = 'step_1';
@@ -103,39 +102,42 @@ export class F24Component implements OnInit {
     this._config.placement = 'right';
     this._config.triggers = 'click';
 
-    this.queryParamsSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe(p => {
-      this.transactionCategory = p.transactionCategory;
-      if (p.edit === 'true' || p.edit === true) {
+    this.queryParamsSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe((p) => {
+      this.transactionCategory = p['transactionCategory'];
+      if (p['edit'] === 'true' || p['edit'] === true) {
         this.editMode = true;
       }
-      if (p.reportId && p.reportId !== '0') {
-        this._reportId = p.reportId;
+      if (p['reportId'] && p['reportId'] !== '0') {
+        this._reportId = p['reportId'];
       }
-      if (p.allTransactions === true || p.allTransactions === 'true') {
+      if (p['allTransactions'] === true || p['allTransactions'] === 'true') {
         this.allTransactions = true;
       } else {
         this.allTransactions = false;
       }
       // No unsaved changes needed from transactions.
-      if (p.step === 'transactions') {
+      if (p['step'] === 'transactions') {
         localStorage.removeItem(`form_${this.formType}_saved`);
       }
 
       //also clear the schedule type so the current component gets destroyed if leaving the form route
-      if (p.step !== 'step_3') {
+      if (p['step'] !== 'step_3') {
         // this.scheduleType = null;
-        this.transactionType = null;
+        this.transactionType = '';
       }
     });
 
-    this._f3xMessageService.getParentModelMessage().pipe(takeUntil(this.onDestroy$)).subscribe(message => {
-      this.parentTransactionModel = message;
-    });
+    this._f3xMessageService
+      .getParentModelMessage()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((message) => {
+        this.parentTransactionModel = message;
+      });
   }
 
   ngOnInit(): void {
     this.scheduleAction = ScheduleActions.add;
-    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
+    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
 
     this.step = this._activatedRoute.snapshot.queryParams['step'];
     this.editMode = this._activatedRoute.snapshot.queryParams['edit']
@@ -143,83 +145,82 @@ export class F24Component implements OnInit {
       : true;
 
     this.reportTypes = [
-        {
-          "report_type": 24,
-          "report_type_desciption": "24 Hour",
-          "report_type_info": "24 Hour Report"
-        },
-        {
-          "report_type": 48,
-          "report_type_desciption": "48 Hour",
-          "report_type_info": "48 Hour Report"
-        }
-      ]
-    ;
+      {
+        report_type: 24,
+        report_type_desciption: '24 Hour',
+        report_type_info: '24 Hour Report',
+      },
+      {
+        report_type: 48,
+        report_type_desciption: '48 Hour',
+        report_type_info: '48 Hour Report',
+      },
+    ];
 
     this.transactionCategories = {
-        "transactionCategories": [
-          {
-            "text": "Independent Expenditures",
-            "value": "disbursements",
-            "options": [
-              {
-                "text": "Contributions/Expenditures to Registered Filers",
-                "name": "contributions-expenditures-to-registered-filers",
-                "value": "contributions-expenditures-to-registered-filers",
-                "infoIcon": "TRUE",
-                "info": "Language will be provided by RAD",
-                "options": [
-                  {
-                    "type": "radio",
-                    "text": "Independent Expenditure",
-                    "name": "contributions-expenditures-to-registered-filers",
-                    "value": "IE",
-                    "infoIcon": "TRUE",
-                    "info": "Language will be provided by RAD",
-                    "scheduleType": "sched_e"
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        "cashOnHand": {
-          "text": "Cash on Hand",
-          "value": "cash-on-hand",
-          "showCashOnHand": "true"
+      transactionCategories: [
+        {
+          text: 'Independent Expenditures',
+          value: 'disbursements',
+          options: [
+            {
+              text: 'Contributions/Expenditures to Registered Filers',
+              name: 'contributions-expenditures-to-registered-filers',
+              value: 'contributions-expenditures-to-registered-filers',
+              infoIcon: 'TRUE',
+              info: 'Language will be provided by RAD',
+              options: [
+                {
+                  type: 'radio',
+                  text: 'Independent Expenditure',
+                  name: 'contributions-expenditures-to-registered-filers',
+                  value: 'IE',
+                  infoIcon: 'TRUE',
+                  info: 'Language will be provided by RAD',
+                  scheduleType: 'sched_e',
+                },
+              ],
+            },
+          ],
         },
-        "steps": [
-          {
-            "text": "Type",
-            "step": "step_1"
-          },
-          {
-            "text": "Form",
-            "step": "step_2"
-          },
-          {
-            "text": "Preview",
-            "step": "step_3"
-          },
-          {
-            "text": "Sign",
-            "step": "step_4"
-          },
-          {
-            "text": "Submit",
-            "step": "step_5"
-          }
-        ],
-        "transactionSearchField": {
-          "text": "transaction-search",
-          "type": "text",
-          "placeholder": "Search for transaction"
-        }
+      ],
+      cashOnHand: {
+        text: 'Cash on Hand',
+        value: 'cash-on-hand',
+        showCashOnHand: 'true',
+      },
+      steps: [
+        {
+          text: 'Type',
+          step: 'step_1',
+        },
+        {
+          text: 'Form',
+          step: 'step_2',
+        },
+        {
+          text: 'Preview',
+          step: 'step_3',
+        },
+        {
+          text: 'Sign',
+          step: 'step_4',
+        },
+        {
+          text: 'Submit',
+          step: 'step_5',
+        },
+      ],
+      transactionSearchField: {
+        text: 'transaction-search',
+        type: 'text',
+        placeholder: 'Search for transaction',
+      },
     };
     this.transactionCategories = this.transactionCategories.transactionCategories;
 
     localStorage.setItem('Receipts_Entry_Screen', 'Yes');
-    this.routerEventsSubscription = this._router.events.pipe(takeUntil(this.onDestroy$)).subscribe(val => {
+    this.routerEventsSubscription = this._router.events.pipe(takeUntil(this.onDestroy$)).subscribe((val) => {
       if (val) {
         if (val instanceof NavigationEnd) {
           if (
@@ -229,11 +230,11 @@ export class F24Component implements OnInit {
             if (localStorage.getItem(`form_${this.formType}_report_type`) !== null) {
               localStorage.setItem(
                 `form_${this.formType}_saved_backup`,
-                localStorage.getItem(`form_${this.formType}_saved`)
+                localStorage.getItem(`form_${this.formType}_saved`) ?? ''
               );
               localStorage.setItem(
                 `form_${this.formType}_report_type_backup`,
-                localStorage.getItem(`form_${this.formType}_report_type`)
+                localStorage.getItem(`form_${this.formType}_report_type`) ?? ''
               );
               // //console.log(`form_${this._formType}_report_type_backup` + 'copied ');
               // //console.log(new Date().toISOString());
@@ -252,27 +253,26 @@ export class F24Component implements OnInit {
           window.scrollTo(0, 0);
         }
       }
-      
     });
 
-    //jumpToTransaction is used to pass transaction info from the "Global" All Transactions component 
+    //jumpToTransaction is used to pass transaction info from the "Global" All Transactions component
     //to "Report specific" All Transaction component. Idea is to first load the "Report specific" All Transaction component
-    //from "Global" and then if a transaction is passed, then invoke onNotify with that data. 
-    if(this.jumpToTransaction){
+    //from "Global" and then if a transaction is passed, then invoke onNotify with that data.
+    if (this.jumpToTransaction) {
       this.returnToGlobalAllTransaction = true;
       this.onNotify(this.jumpToTransaction);
     }
-    this._messageService.sendMessage({action:'updateHeaderInfo', data: {formType: 'F24'}});
+    this._messageService.sendMessage({ action: 'updateHeaderInfo', data: { formType: 'F24' } });
   }
 
   ngOnDestroy(): void {
     this.onDestroy$.next(true);
     this.queryParamsSubscription.unsubscribe();
     this.routerEventsSubscription.unsubscribe();
-    this._messageService.sendMessage({action:'updateHeaderInfo', data: {formType: null}});
+    this._messageService.sendMessage({ action: 'updateHeaderInfo', data: { formType: null } });
   }
 
-   /**
+  /**
    * Get's message from child components to change the sidebar
    * in the view.
    */
@@ -288,8 +288,8 @@ export class F24Component implements OnInit {
        */
       if (e.hasOwnProperty('form')) {
         if (typeof e.form === 'object') {
-          let transactionModel : any = null;
-          if(e.transactionDetail && e.transactionDetail.transactionModel){
+          let transactionModel: any = null;
+          if (e.transactionDetail && e.transactionDetail.transactionModel) {
             transactionModel = e.transactionDetail && e.transactionDetail.transactionModel;
           }
 
@@ -300,16 +300,13 @@ export class F24Component implements OnInit {
           this.currentStep = e.step;
           this.transactionCategory = e.transactionCategory;
 
+          this.handleIfStep3(e, transactionModel);
 
-
-          this.handleIfStep3(e,transactionModel);
-
-          if(transactionModel){
+          if (transactionModel) {
             this.canContinue(transactionModel);
-          }else{
-            this.canContinue();  
+          } else {
+            this.canContinue();
           }
-
         } else if (typeof e.form === 'string') {
           if (e.form === this.formType) {
             if (e.hasOwnProperty('transactionCategory')) {
@@ -327,16 +324,15 @@ export class F24Component implements OnInit {
             this._step = e.step;
           }
         }
-      } 
+      }
     }
   }
-
 
   private handleIfStep3(e: any, transactionModel: any = null) {
     if (this.currentStep === 'step_3') {
       this.mainTransactionTypeText = 'Disbursements';
 
-      if(transactionModel){
+      if (transactionModel) {
         this.transactionType = e.transactionDetail.transactionModel.transactionTypeIdentifier || '';
         this.transactionTypeText = e.transactionDetail.transactionModel.type || '';
       }
@@ -344,21 +340,19 @@ export class F24Component implements OnInit {
       this.setCloneFlag(e);
       this.setScheduleAction(e);
       this.scheduleType = 'sched_e';
-      
+
       if (this.scheduleAction === ScheduleActions.edit || this.scheduleAction === ScheduleActions.view) {
         this._populateFormForEditOrView(e, AbstractScheduleParentEnum.schedEComponent);
-        if(transactionModel){
+        if (transactionModel) {
           this.transactionType = e.transactionDetail.transactionModel.transactionTypeIdentifier || '';
           this.transactionTypeText = e.transactionDetail.transactionModel.type || '';
         }
-      }
-      else {
+      } else {
         this.transactionTypeText = e.transactionTypeText ? e.transactionTypeText : '';
         this.transactionType = e.transactionType ? e.transactionType : '';
       }
     }
   }
-
 
   private setScheduleAction(e: any) {
     if (e.action && e.action in ScheduleActions) {
@@ -368,37 +362,43 @@ export class F24Component implements OnInit {
       this.scheduleAction = ScheduleActions.add;
     }
 
-    //this is a workaround since for some reason, f24 component is not sending the scheduleAction to schedE component during ngOnChange trigger 
-    this._messageService.sendMessage({action:'forceUpdateSchedEScheduleAction', scheduleAction: this.scheduleAction});
+    //this is a workaround since for some reason, f24 component is not sending the scheduleAction to schedE component during ngOnChange trigger
+    this._messageService.sendMessage({
+      action: 'forceUpdateSchedEScheduleAction',
+      scheduleAction: this.scheduleAction,
+    });
   }
 
-   /**
+  /**
    * Determines ability to continue.
    */
   private canContinue(transactionModel: any = null): void {
     let reportId = '';
-    if (transactionModel && transactionModel.reportId && transactionModel.reportId !== '0' && transactionModel.reportId !== 'undefined') {
+    if (
+      transactionModel &&
+      transactionModel.reportId &&
+      transactionModel.reportId !== '0' &&
+      transactionModel.reportId !== 'undefined'
+    ) {
       reportId = transactionModel.reportId.toString();
     } else if (this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams['reportId']) {
       reportId = this._activatedRoute.snapshot.queryParams['reportId'];
     }
 
     if (this.frm && this.direction) {
-
       let queryParamsObj: any = {
         step: this.step,
         edit: this.editMode,
-        transactionCategory: this.transactionCategory
+        transactionCategory: this.transactionCategory,
       };
-      
 
       if (reportId) {
         queryParamsObj.reportId = reportId;
       }
 
-      if(this._activatedRoute.snapshot.queryParams['amendmentReportId']){
+      if (this._activatedRoute.snapshot.queryParams['amendmentReportId']) {
         queryParamsObj.amendmentReportId = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
-        if(this._step === 'transactions'){
+        if (this._step === 'transactions') {
           queryParamsObj.reportId = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
         }
       }
@@ -408,14 +408,13 @@ export class F24Component implements OnInit {
           if (this._cloned) {
             queryParamsObj.cloned = this._cloned;
           }
-          this.navigateToStep(queryParamsObj); 
-        } 
+          this.navigateToStep(queryParamsObj);
+        }
       } else if (this.direction === 'previous') {
-        this.navigateToStep(queryParamsObj);         
+        this.navigateToStep(queryParamsObj);
       }
     }
   }
-
 
   private navigateToStep(queryParamsObj: any) {
     this.step = this._step;
@@ -428,18 +427,15 @@ export class F24Component implements OnInit {
     const emitObject: any = {
       key: 'fullForm',
       abstractScheduleComponent: schedule,
-      transactionModel: e.transactionDetail
+      transactionModel: e.transactionDetail,
     };
     this.transactionData = emitObject;
   }
 
   private setCloneFlag(e: any) {
-    if (e.transactionDetail &&
-      e.transactionDetail.transactionModel &&
-      e.transactionDetail.transactionModel.cloned) {
+    if (e.transactionDetail && e.transactionDetail.transactionModel && e.transactionDetail.transactionModel.cloned) {
       this._cloned = true;
-    }
-    else {
+    } else {
       this._cloned = false;
     }
   }

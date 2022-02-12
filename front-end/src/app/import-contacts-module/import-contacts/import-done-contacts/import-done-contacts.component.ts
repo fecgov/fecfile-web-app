@@ -6,7 +6,7 @@ import { DuplicateContactsService } from '../clean-contacts/duplicate-contacts/s
 @Component({
   selector: 'app-import-done-contacts',
   templateUrl: './import-done-contacts.component.html',
-  styleUrls: ['./import-done-contacts.component.scss']
+  styleUrls: ['./import-done-contacts.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImportDoneContactsComponent implements OnInit {

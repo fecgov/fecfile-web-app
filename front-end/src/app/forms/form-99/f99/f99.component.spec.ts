@@ -10,23 +10,16 @@ describe('F99Component', () => {
   let component: F99Component;
   let fixture: ComponentFixture<F99Component>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule
-      ],
-      declarations: [ F99Component ],
-      providers: [
-        CookieService,
-        FormBuilder
-      ],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [RouterTestingModule, HttpClientTestingModule],
+        declarations: [F99Component],
+        providers: [CookieService, FormBuilder],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(F99Component);

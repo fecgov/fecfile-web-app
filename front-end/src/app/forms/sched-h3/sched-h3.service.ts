@@ -1,7 +1,6 @@
-import { Injectable , ChangeDetectionStrategy } from '@angular/core';
+import { Injectable, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
+import { Observable, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../environments/environment';
 import { map } from 'rxjs/operators';
@@ -9,22 +8,18 @@ import { Subscription } from 'rxjs';
 
 export enum SchedHActions {
   add = 'add',
-  edit = 'edit'
+  edit = 'edit',
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SchedH3Service {
-
-  constructor(
-    private _http: HttpClient,
-    private _cookieService: CookieService,
-  ) { }
+  constructor(private _http: HttpClient, private _cookieService: CookieService) {}
 
   public getActivityOrEventIdentifiers(activity_event_type: string, reportId: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh2/get_h2_type_events';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -33,28 +28,26 @@ export class SchedH3Service {
     let params = new HttpParams();
     params = params.append('activity_event_type', activity_event_type);
     params = params.append('report_id', reportId);
-    
+
     return this._http
-      .get(
-        `${environment.apiUrl}${url}`,      
-        {
-          params,
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
+      .get(`${environment.apiUrl}${url}`, {
+        params,
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
           if (res) {
             //console.log('H3 ActivityOrEventIdentifiers res: ', res);
             return res;
           }
           return false;
-      })
+        })
       );
   }
 
   public getTotalAmount(activity_event_type: string, reportId: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh3/get_h3_total_amount';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -63,35 +56,32 @@ export class SchedH3Service {
     let params = new HttpParams();
     params = params.append('activity_event_type', activity_event_type);
     params = params.append('report_id', reportId);
-    
+
     return this._http
-      .get(
-        `${environment.apiUrl}${url}`,      
-        {
-          params,
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
+      .get(`${environment.apiUrl}${url}`, {
+        params,
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
           if (res) {
             //console.log('H3 Totdal Amount res: ', res);
             return res;
           }
           return false;
-      })
+        })
       );
-
   }
 
   public getSummary(
-      reportId: string,
-      page: number,
-      itemsPerPage: number,
-      sortColumnName: string,
-      descending: boolean
-    ): Observable<any> {
+    reportId: string,
+    page: number,
+    itemsPerPage: number,
+    sortColumnName: string,
+    descending: boolean
+  ): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh3/get_h3_summary';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -103,35 +93,33 @@ export class SchedH3Service {
     params = params.append('itemsPerPage', itemsPerPage.toString());
     params = params.append('sortColumnName', sortColumnName);
     params = params.append('descending', `${descending}`);
-    
+
     return this._http
-      .get<{items: any[], totalItems: number}>(
-        `${environment.apiUrl}${url}`,      
-        {
-          params,
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
-        if (res) {
-          return {
-            //items: this.mapFromServerFields(res.items),
-            items: res.items,
-            totalItems: res.totalItems
-          };
-        } else {
-          return {
-            items: null,
-            totalItems: 0
-          };
-        }
+      .get<{ items: any[]; totalItems: number }>(`${environment.apiUrl}${url}`, {
+        params,
+        headers: httpOptions,
       })
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            return {
+              //items: this.mapFromServerFields(res.items),
+              items: res.items,
+              totalItems: res.totalItems,
+            };
+          } else {
+            return {
+              items: null,
+              totalItems: 0,
+            };
+          }
+        })
       );
   }
 
   public getBreakDown(reportId: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh3/get_sched_h3_breakdown';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -139,28 +127,26 @@ export class SchedH3Service {
 
     let params = new HttpParams();
     params = params.append('report_id', reportId);
-    
+
     return this._http
-      .get(
-        `${environment.apiUrl}${url}`,      
-        {
-          params,
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
+      .get(`${environment.apiUrl}${url}`, {
+        params,
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
           if (res) {
             //console.log('H3 Breakdown res: ', res);
             return res;
           }
           return false;
-      })
+        })
       );
   }
 
-  public saveH3Ratio(ratio: any,  scheduleAction: SchedHActions): Observable<any> {
+  public saveH3Ratio(ratio: any, scheduleAction: SchedHActions): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh3/schedH3';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -177,50 +163,45 @@ export class SchedH3Service {
 
     if (scheduleAction === SchedHActions.add) {
       return this._http
-        .post(
-          `${environment.apiUrl}${url}`, ratio,
-          {
-            headers: httpOptions
-          }
-        )
-        .pipe(map((res: any) => {
+        .post(`${environment.apiUrl}${url}`, ratio, {
+          headers: httpOptions,
+        })
+        .pipe(
+          map((res: any) => {
             if (res) {
               //console.log('Save H3Ratio res: ', res);
               return res;
             }
             return false;
-        })
-      );
-    }else if(scheduleAction === SchedHActions.edit) {
-      return this._http
-        .put(
-          `${environment.apiUrl}${url}`, ratio,
-          {
-            headers: httpOptions
-          }
-        )
-        .pipe(map((res: any) => {
-            if (res) {
-              //console.log('Edit H3Ratio res: ', res);
-              return res;
-            }
-            return false;
-        })
-      );
+          })
+        );
     }
+    return this._http
+      .put(`${environment.apiUrl}${url}`, ratio, {
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            //console.log('Edit H3Ratio res: ', res);
+            return res;
+          }
+          return false;
+        })
+      );
   }
 
   public saveAndGetSummary(
-      ratio: any, 
-      reportId: string, 
-      scheduleAction: SchedHActions,
-      page: number,
-      itemsPerPage: number,
-      sortColumnName: string,
-      descending: boolean
-    ): Observable<any> {
+    ratio: any,
+    reportId: string,
+    scheduleAction: SchedHActions,
+    page: number,
+    itemsPerPage: number,
+    sortColumnName: string,
+    descending: boolean
+  ): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh3/schedH3';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -236,43 +217,32 @@ export class SchedH3Service {
     }
 
     if (scheduleAction === SchedHActions.add) {
-      return this._http
-        .post(
-          `${environment.apiUrl}${url}`, ratio,
-          {
-            headers: httpOptions
-          }
-        )
-        // .pipe(map((res: any) => {
-        //       return this.getSummary(reportId, page, itemsPerPage, sortColumnName, descending).pipe(map(res =>
-        //         {
-        //             return  res;
-        //         }));
-        // })
-        // );
-      }else if(scheduleAction === SchedHActions.edit) {
-        return this._http
-        .put(
-          `${environment.apiUrl}${url}`, ratio,
-          {
-            headers: httpOptions
-          }
-        )
-        // .pipe(map((res: any) => {
-        //       return this.getSummary(reportId, page, itemsPerPage, sortColumnName, descending).pipe(map(res =>
-        //         {
-        //            return  res;
-        //         }));
-        // })
-        // );
-      }
-
-
+      return this._http.post(`${environment.apiUrl}${url}`, ratio, {
+        headers: httpOptions,
+      });
+      // .pipe(map((res: any) => {
+      //       return this.getSummary(reportId, page, itemsPerPage, sortColumnName, descending).pipe(map(res =>
+      //         {
+      //             return  res;
+      //         }));
+      // })
+      // );
+    }
+    return this._http.put(`${environment.apiUrl}${url}`, ratio, {
+      headers: httpOptions,
+    });
+    // .pipe(map((res: any) => {
+    //       return this.getSummary(reportId, page, itemsPerPage, sortColumnName, descending).pipe(map(res =>
+    //         {
+    //            return  res;
+    //         }));
+    // })
+    // );
   }
 
   public getH3AggregateAmount(activity_event_name: string, reportId: string, parentId: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh3/get_h3_aggregate_amount';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -284,27 +254,24 @@ export class SchedH3Service {
     params = params.append('parent_id', parentId);
 
     return this._http
-      .get(
-        `${environment.apiUrl}${url}`,
-        {
-          params,
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
+      .get(`${environment.apiUrl}${url}`, {
+        params,
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
           if (res) {
             //console.log('H3 Aggregate Amount res: ', res);
             return res;
           }
           return false;
-      })
+        })
       );
-
   }
 
   public getH1H2ExistStatus(report_id: string, activity_event_type: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh1/validate_h1_h2_exist';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -323,27 +290,24 @@ export class SchedH3Service {
     }
 
     return this._http
-      .get(
-        `${environment.apiUrl}${url}`,
-        {
-          params,
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
+      .get(`${environment.apiUrl}${url}`, {
+        params,
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
           if (res) {
             //console.log('Validate H1 H2 exist res: ', res);
             return res;
           }
           return false;
-      })
+        })
       );
-
   }
 
   public getH3AccountNames(report_id: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh3/get_h3_account_names';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -353,22 +317,18 @@ export class SchedH3Service {
     params = params.append('report_id', report_id);
 
     return this._http
-      .get(
-        `${environment.apiUrl}${url}`,
-        {
-          params,
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
+      .get(`${environment.apiUrl}${url}`, {
+        params,
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
           if (res) {
             //console.log('H3 account name res: ', res);
             return res;
           }
           return false;
-      })
+        })
       );
-
   }
-    
 }

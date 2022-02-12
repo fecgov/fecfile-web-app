@@ -13,12 +13,12 @@ import { map } from 'rxjs/operators';
 
 export interface GetContactsResponse {
   contacts: ContactModel[];
-  totalAmount!: number;
-  totalcontactsCount!: number;
-  totalPages!: number;
+  totalAmount: number;
+  totalcontactsCount: number;
+  totalPages: number;
 
   // remove after API is renamed.
-  itemsPerPage!: number;
+  itemsPerPage: number;
   'total pages': number;
 }
 
@@ -744,19 +744,19 @@ export class ContactsService {
         if (value !== null) {
           if (typeof value === 'string') {
             formData.append(key, value);
-  
+
             if (key === 'office_Sought') {
               formData.append('candOffice', value.toString());
             }
-  
+
             if (key === 'Office_State') {
               formData.append('candOfficeState', value.toString());
             }
-  
+
             if (key === 'candidate_id') {
               formData.append('candCmteId', value.toString());
             }
-  
+
             if (key === 'Prefix') {
               formData.append('prefix', value.toString());
             }
@@ -837,9 +837,11 @@ export class ContactsService {
       .post(`${environment.apiUrl}${url}`, request, {
         headers: httpOptions,
       })
-      .pipe(map((res) => {
-        return false;
-      }));
+      .pipe(
+        map((res) => {
+          return false;
+        })
+      );
   }
 
   public getContactDetails(entityId: string): Observable<any> {

@@ -6,12 +6,13 @@ describe('F24LinkModalComponent', () => {
   let component: F24LinkModalComponent;
   let fixture: ComponentFixture<F24LinkModalComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ F24LinkModalComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [F24LinkModalComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(F24LinkModalComponent);

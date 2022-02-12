@@ -6,12 +6,13 @@ describe('ImportFecfileSuccessComponent', () => {
   let component: ImportFecfileSuccessComponent;
   let fixture: ComponentFixture<ImportFecfileSuccessComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ImportFecfileSuccessComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ImportFecfileSuccessComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ImportFecfileSuccessComponent);

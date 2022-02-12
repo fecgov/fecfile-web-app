@@ -1,6 +1,9 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
+import {
+  ConfirmModalComponent,
+  ModalHeaderClassEnum,
+} from '../../../shared/partials/confirm-modal/confirm-modal.component';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
 import { IndividualReceiptService } from '../../form-3x/individual-receipt/individual-receipt.service';
 import { TransactionModel } from '../model/transaction.model';
 import { TransactionsMessageService } from '../service/transactions-message.service';
@@ -29,7 +32,7 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
   public subTransactionsTableType!: string;
 
   @Input()
-  public subTransactions: any[];
+  public subTransactions: any[] = [];
 
   @Input()
   public returnToDebtSummary!: boolean;
@@ -37,7 +40,7 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
   @Input()
   public returnToDebtSummaryInfo!: any;
 
-  public transactionsModel: Array<TransactionModel>;
+  public transactionsModel!: Array<TransactionModel>;
 
   public constructor(
     private _transactionsMessageService: TransactionsMessageService,
@@ -230,7 +233,7 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
     if (this.returnToDebtSummary) {
       const debtSummary = {
         returnToDebtSummary: this.returnToDebtSummary,
-        returnToDebtSummaryInfo: this.returnToDebtSummaryInfo
+        returnToDebtSummaryInfo: this.returnToDebtSummaryInfo,
       };
       this._transactionsMessageService.sendEditDebtSummaryTransactionMessage({ trx: trx, debtSummary: debtSummary });
     } else {
@@ -256,6 +259,7 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
         }
       }
     }
+    return '';
   }
 
   private isSchedF(trx: TransactionModel) {

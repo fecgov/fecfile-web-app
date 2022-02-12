@@ -1,12 +1,6 @@
 import { MessageService } from '../../../shared/services/MessageService/message.service';
 import { ScheduleActions } from '../../../forms/form-3x/individual-receipt/schedule-actions.enum';
-import {
-  Component,
-  OnInit,
-  Input,
-  ChangeDetectorRef,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Subject, of } from 'rxjs';

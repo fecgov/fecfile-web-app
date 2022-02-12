@@ -2,8 +2,7 @@ import { Injectable , ChangeDetectionStrategy } from '@angular/core';
 import { ScheduleActions } from '../../form-3x/individual-receipt/schedule-actions.enum';
 import { ReportTypeService } from '../../form-3x/report-type/report-type.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
+import { Observable, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../../environments/environment';
 import { map } from 'rxjs/operators';
@@ -40,9 +39,10 @@ export class SchedC1Service {
       if (value) {
         if (typeof value === 'string') {
           formData.append(key, value);
-        } else if (value.hasOwnProperty('filename')) {
-          // TODO add the BLOB
         }
+        // else if (value.hasOwnProperty('filename')) {
+        //   // TODO add the BLOB
+        // }
       }
     }
 
@@ -73,7 +73,7 @@ export class SchedC1Service {
             return false;
           })
         );
-    } else {
     }
+    return of(null);
   }
 }

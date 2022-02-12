@@ -6,12 +6,13 @@ describe('DuplicateContactsComponent', () => {
   let component: DuplicateContactsComponent;
   let fixture: ComponentFixture<DuplicateContactsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ DuplicateContactsComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [DuplicateContactsComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DuplicateContactsComponent);

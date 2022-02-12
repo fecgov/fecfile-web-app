@@ -6,12 +6,13 @@ describe('ReportsidebarComponent', () => {
   let component: ReportsidebarComponent;
   let fixture: ComponentFixture<ReportsidebarComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ReportsidebarComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ReportsidebarComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ReportsidebarComponent);

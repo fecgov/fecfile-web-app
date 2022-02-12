@@ -5,7 +5,7 @@ import { UploadContactsService } from './upload-contacts.service';
 describe('UploadContactsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [UploadContactsService]
+      providers: [UploadContactsService],
     });
   });
 

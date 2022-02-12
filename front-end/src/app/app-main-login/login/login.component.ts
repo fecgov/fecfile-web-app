@@ -119,7 +119,7 @@ export class LoginComponent implements OnInit {
         //console.log('error: ', error);
         this.isBusy = false;
         this.hasFailed = true;
-      }
+      },
     });
   }
 

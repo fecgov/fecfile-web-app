@@ -38,6 +38,6 @@ import { ImportFecfileSuccessComponent } from './import-fecfile/import-fecfile-s
     // ImportHowToComponent,
     // CancelImportConfirmComponent
   ],
-  entryComponents: [CancelImportConfirmComponent]
+  entryComponents: [CancelImportConfirmComponent],
 })
-export class ImportFecFile1Module { }
+export class ImportFecFile1Module {}

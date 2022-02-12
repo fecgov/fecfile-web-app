@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Observable, Subject } from 'rxjs';
 
 /**
  * A message service for sending and receiving messages of any type
  * between schedH components.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SchedHMessageServiceService {
- 
   private populateHFormForEdit = new Subject<any>();
 
-
-   /**
+  /**
    * A publisher uses this method to send a message to subscribers
    * indicating the form needs to be populated
    *
@@ -28,7 +25,7 @@ export class SchedHMessageServiceService {
    * Clear the filters message.
    */
   public clearpopulateHFormForEditMessage() {
-    this.populateHFormForEdit.next();
+    this.populateHFormForEdit.next(null);
   }
 
   /**

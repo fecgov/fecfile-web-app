@@ -2,13 +2,13 @@
 //@import 'src/app/shared/scss/global';
 @import '../../shared/scss/global';
 .forms__wizard {
-    display: table;
-    table-layout: fixed;
-    min-height: $mainContentHeight;
-    margin: 0;
-    padding: 0;
-    width: 100%;
- .form__sidebar {
+  display: table;
+  table-layout: fixed;
+  min-height: $mainContentHeight;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  .form__sidebar {
     background-color: $bombay;
     flex-grow: 1;
     display: none;
@@ -75,7 +75,7 @@
         padding-top: 10px;
       }
     }
-    
+
     section {
       .form-content {
         .options-list {
@@ -95,16 +95,15 @@
       }
     }
     footer {
-        margin-top: 15px;
+      margin-top: 15px;
     }
   } // .form__container
   ::ng-deep a {
-     color:#007dc3;
+    color: #007dc3;
   }
 
-
   ::ng-deep a:hover {
-    color:#0169a4;
+    color: #0169a4;
   }
 
   .notifications__btn-search-filter {
@@ -133,11 +132,10 @@
     min-height: 48px;
   }
 
-
   ::ng-deep .nav-pills a.nav-link.active,
   ::ng-deep .nav-pills .show > a.nav-link {
     color: #fff;
-    background-color:$blueZodiac;
+    background-color: $blueZodiac;
   }
 }
 
@@ -169,7 +167,7 @@
     @include media(largeDesktop) {
       display: table-cell;
       width: 20%;
-    }           
+    }
   }
 
   .notifications__container {
@@ -191,7 +189,7 @@
         display: block;
         margin: 0 auto;
         width: 96%;
-        padding: .75em 0 .25em 0;
+        padding: 0.75em 0 0.25em 0;
         @include clearfix();
         .btn-options {
           color: $shuttleGray;
@@ -350,12 +348,16 @@
       }
     }
   }
-  }
+}
 
-  .dropdown-toggle {
-    &:after {
-      display:none;
-    }
+.dropdown-toggle {
+  &:after {
+    display: none;
   }
+}
 
-  .space { margin:0; padding:0; height:15px; } // height as desired
+.space {
+  margin: 0;
+  padding: 0;
+  height: 15px;
+} // height as desired

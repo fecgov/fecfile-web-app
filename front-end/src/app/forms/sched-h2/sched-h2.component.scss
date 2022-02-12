@@ -33,7 +33,7 @@
           }
         }
         .dropdown-toggle::after {
-          display:none;
+          display: none;
         }
         #sched-h2__dropdown-action > button > i {
           padding-right: 3px;
@@ -112,6 +112,7 @@
             -webkit-transform: scale(1.9); /* Safari and Chrome */
             -o-transform: scale(1.9); /* Opera */
             margin: 10px;
+            transform: scale(1.9);
           }
           .forms__big_radio {
             -webkit-transform: scale(2.9);
@@ -120,6 +121,7 @@
             -webkit-transform: scale(2.9); /* Safari and Chrome */
             -o-transform: scale(2.9); /* Opera */
             margin: 23px;
+            transform: scale(2.9);
           }
           label {
             font-family: sans-serif;
@@ -224,15 +226,16 @@
     font-weight: bold;
   }
 
-  .ngx-pagination .current{
+  .ngx-pagination .current {
     padding: 0.1875rem 0.625rem;
-    background: #9B9B9B !important;;
+    background: #9b9b9b !important;
     color: #fefefe;
     cursor: default;
   }
 
-  .ngx-pagination a, .ngx-pagination button {
-    color: #9B9B9B !important;;
+  .ngx-pagination a,
+  .ngx-pagination button {
+    color: #9b9b9b !important;
     display: block;
     padding: 0.1875rem 0.625rem;
     border-radius: 0;
@@ -242,18 +245,18 @@
     margin-bottom: 0;
   }
 
-  ng-select { 
-    .ng-dropdown-panel { 
+  ng-select {
+    .ng-dropdown-panel {
       width: auto;
-      min-width: 100%; 
-    } 
+      min-width: 100%;
+    }
   }
 
   /** hide the dropdown caret **/
   .dropdown-toggle:after {
     border: none;
   }
- 
+
   .bulk_action {
     text-align: left;
   }
@@ -265,7 +268,7 @@
   .radio_gray {
     color: #808080;
   }
-/*
+  /*
 .dropdown-menu {
   min-width: 0px !important;
   &.show {
@@ -291,5 +294,5 @@
       display:none;
     }
   }
-*/  
+*/
 }

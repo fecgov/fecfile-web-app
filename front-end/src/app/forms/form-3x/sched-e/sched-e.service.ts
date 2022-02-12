@@ -68,7 +68,10 @@ export class SchedEService {
         );
       }
       if (formData.disbursement_date) {
-        params = params.append('disbursement_date', this._datePipe.transform(formData.disbursement_date, 'MM/dd/yyyy') ?? '');
+        params = params.append(
+          'disbursement_date',
+          this._datePipe.transform(formData.disbursement_date, 'MM/dd/yyyy') ?? ''
+        );
       }
 
       params = params.append('form_type', `F${formType}`);

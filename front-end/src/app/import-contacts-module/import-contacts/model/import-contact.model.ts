@@ -1,4 +1,3 @@
-
 /**
  * TODO There are redundent models for import contacts and add contacts.  These
  * should be consolidated in the future.
@@ -48,8 +47,7 @@ export class ImportContactModel {
     this.officeSought = contact.officeSought ? contact.officeSought : '';
     this.officeState = contact.officeState ? contact.officeState : '';
     this.district = contact.district ? contact.district : '';
-    this.multiCandidateCmteStatus = contact.multiCandidateCmteStatus ?
-      contact.multiCandidateCmteStatus : '';
+    this.multiCandidateCmteStatus = contact.multiCandidateCmteStatus ? contact.multiCandidateCmteStatus : '';
     this.selected = contact.selected;
   }
 }

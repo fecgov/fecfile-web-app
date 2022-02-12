@@ -1,32 +1,42 @@
-import { Component, OnInit, OnDestroy, OnChanges, Output, EventEmitter, Input, SimpleChanges , ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  OnChanges,
+  Output,
+  EventEmitter,
+  Input,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { IndividualReceiptComponent } from '../form-3x/individual-receipt/individual-receipt.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FormsService } from 'src/app/shared/services/FormsService/forms.service';
+import { FormsService } from '../../shared/services/FormsService/forms.service';
 import { IndividualReceiptService } from '../form-3x/individual-receipt/individual-receipt.service';
-import { ContactsService } from 'src/app/contacts/service/contacts.service';
+import { ContactsService } from '../../contacts/service/contacts.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTooltipConfig, NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
-import { UtilService } from 'src/app/shared/utils/util.service';
+import { UtilService } from '../../shared/utils/util.service';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { ReportTypeService } from '../form-3x/report-type/report-type.service';
-import { TypeaheadService } from 'src/app/shared/partials/typeahead/typeahead.service';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
+import { TypeaheadService } from '../../shared/partials/typeahead/typeahead.service';
+import { DialogService } from '../../shared/services/DialogService/dialog.service';
 import { F3xMessageService } from '../form-3x/service/f3x-message.service';
 import { TransactionsMessageService } from '../transactions/service/transactions-message.service';
-import { ContributionDateValidator } from 'src/app/shared/utils/forms/validation/contribution-date.validator';
+import { ContributionDateValidator } from '../../shared/utils/forms/validation/contribution-date.validator';
 import { TransactionsService } from '../transactions/service/transactions.service';
 import { HttpClient } from '@angular/common/http';
-import { MessageService } from 'src/app/shared/services/MessageService/message.service';
+import { MessageService } from '../../shared/services/MessageService/message.service';
 import { ScheduleActions } from '../form-3x/individual-receipt/schedule-actions.enum';
 import { AbstractSchedule } from '../form-3x/individual-receipt/abstract-schedule';
-import { ReportsService } from 'src/app/reports/service/report.service';
+import { ReportsService } from '../../reports/service/report.service';
 import { TransactionModel } from '../transactions/model/transaction.model';
 import { AbstractScheduleParentEnum } from '../form-3x/individual-receipt/abstract-schedule-parent.enum';
 import { schedFstaticFormFields } from './static-form-fields.json';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { SchedHMessageServiceService } from '../sched-h-service/sched-h-message-service.service';
-import {AuthService} from '../../shared/services/AuthService/auth.service';
+import { AuthService } from '../../shared/services/AuthService/auth.service';
 
 /**
  * Schedule F is a sub-transaction of Schedule D.
@@ -35,28 +45,28 @@ import {AuthService} from '../../shared/services/AuthService/auth.service';
   selector: 'app-sched-f',
   templateUrl: './sched-f.component.html',
   styleUrls: ['./sched-f.component.scss'],
-  providers: [NgbTooltipConfig, CurrencyPipe, DecimalPipe]
+  providers: [NgbTooltipConfig, CurrencyPipe, DecimalPipe],
 })
 export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() formType!: string;
-  @Input() mainTransactionTypeText!: string;
-  @Input() transactionTypeText!: string;
-  @Input() transactionType!: string;
-  @Input() scheduleAction!: ScheduleActions;
+  @Input() override formType!: string;
+  @Input() override mainTransactionTypeText!: string;
+  @Input() override transactionTypeText!: string;
+  @Input() override transactionType!: string;
+  @Input() override scheduleAction!: ScheduleActions;
   @Input() forceChangeDetection!: Date;
   @Input() parentTransactionModel!: any;
-  @Input() transactionData!: any;
-  @Input() transactionDataForChild!: any;
+  @Input() override transactionData!: any;
+  @Input() override transactionDataForChild!: any;
 
-  @Output() status: EventEmitter<any>;
+  @Output() override status!: EventEmitter<any>;
 
-  public showPart2!: boolean;
+  public override showPart2!: boolean;
 
-  protected staticFormFields = schedFstaticFormFields;
+  protected override staticFormFields = schedFstaticFormFields;
 
   private isDesignatedFiler!: boolean;
-  private noValidationRequired = [];
-  private validateDesignatedFiler = [];
+  private noValidationRequired: any[] = [];
+  private validateDesignatedFiler: any[] = [];
   constructor(
     _http: HttpClient,
     _fb: FormBuilder,
@@ -79,7 +89,7 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
     _transactionsService: TransactionsService,
     _reportsService: ReportsService,
     _schedHMessageServce: SchedHMessageServiceService,
-    _authService: AuthService,
+    _authService: AuthService
   ) {
     super(
       _http,
@@ -103,11 +113,11 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
       _transactionsService,
       _reportsService,
       _schedHMessageServce,
-      _authService,
+      _authService
     );
   }
 
-  public ngOnInit() {
+  public override ngOnInit() {
     this.formFieldsPrePopulated = true;
     this.abstractScheduleComponent = AbstractScheduleParentEnum.schedFComponent;
     this.transactionType = 'COEXP_PARTY_DEBT';
@@ -127,16 +137,16 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
     this.showPart2 = false;
     this._setTransactionDetail();
     this.loaded = false;
-    super.ngOnChanges(null);
+    super.ngOnChanges(<SimpleChanges>{});
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges) {
     this.showPart2 = false;
     this._setTransactionDetail();
-    super.ngOnChanges(null);
+    super.ngOnChanges(<SimpleChanges>{});
   }
 
-  public ngOnDestroy(): void {
+  public override ngOnDestroy(): void {
     this.noValidationRequired = [];
     this.validateDesignatedFiler = [];
     super.ngOnDestroy();
@@ -196,9 +206,9 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
    */
   private _checkFormFieldIsValid(fieldName: string): boolean {
     if (this.frmIndividualReceipt.contains(fieldName)) {
-      return this.frmIndividualReceipt.get(fieldName).valid;
+      return this.frmIndividualReceipt.get(fieldName)?.valid ?? false;
     }
-    // return true;
+    return false;
   }
 
   private _setTransactionDetail() {
@@ -211,7 +221,7 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
       subTransactionTypeDescription: 'Coordinated Party Expenditure (SF)',
       api_call: '/sd/schedD',
       isParent: false,
-      isEarmark: false
+      isEarmark: false,
     };
 
     if (this.scheduleAction === ScheduleActions.addSubTransaction) {
@@ -228,7 +238,7 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
    * the showPart2 for true.  If showPart2, determine which fields
    * to be shown based on the entity type selected.
    */
-  public isToggleShow(col: any) {
+  public override isToggleShow(col: any) {
     if (col.staticField) {
       return false;
     } else {
@@ -249,7 +259,7 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
   private _patchSubordinateFormFields(fieldNames: any[], entity: any) {
     if (fieldNames) {
       for (const field of fieldNames) {
-        const patch = {};
+        const patch: any = {};
         patch[field.formName] = entity[field.entityFieldName];
         this.frmIndividualReceipt.patchValue(patch, { onlySelf: true });
       }
@@ -287,7 +297,7 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
    * Cancel the payment and return to the start or first part.
    */
   public cancelSFPayment() {
-    this.canDeactivate().then(result => {
+    this.canDeactivate().then((result) => {
       if (result === true) {
         localStorage.removeItem(`form_${this.formType}_saved`);
         // this.showPart2 = false;
@@ -304,7 +314,7 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
     text$.pipe(
       debounceTime(500),
       distinctUntilChanged(),
-      switchMap(searchText => {
+      switchMap((searchText) => {
         const searchTextUpper = searchText.toUpperCase();
 
         if (
@@ -313,13 +323,13 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
           searchTextUpper === 'C00' ||
           searchTextUpper === 'C000'
         ) {
-          return Observable.of([]);
+          return of([]);
         }
 
         if (searchText) {
           return this._typeaheadService.getContacts(searchText, 'payee_cmte_id');
         } else {
-          return Observable.of([]);
+          return of([]);
         }
       })
     );
@@ -359,7 +369,7 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
       ${officeState}, ${officeDistrict}`;
   }
 
-  public onFilerChange(change): void {
+  public onFilerChange(change: any): void {
     //console.log('change %s', change);
     if (change === 'Y') {
       this.isDesignatedFiler = true;

@@ -3,9 +3,7 @@
     <header>
       <div class="header-container">
         <h1>
-          <ng-container *ngIf="!typeSelected">
-            Form 99
-          </ng-container>
+          <ng-container *ngIf="!typeSelected"> Form 99 </ng-container>
           <ng-container *ngIf="typeSelected"> Form 99 / {{ typeSelected }} </ng-container>
           <span class="header__btns">
             <button
@@ -31,9 +29,7 @@
         </div>
         <div class="grid-row" *ngIf="frmReason.invalid && (frmReason.dirty || frmReason.touched) && reasonFailed">
           <div class="grid-row__col grid-row__col--12">
-            <div class="text-error text-center">
-              Enter text for the reason selected.
-            </div>
+            <div class="text-error text-center">Enter text for the reason selected.</div>
           </div>
         </div>
         <div
@@ -41,9 +37,7 @@
           *ngIf="frmReason.invalid && (frmReason.dirty || frmReason.touched) && reasonHasInvalidHTML"
         >
           <div class="grid-row__col grid-row__col--12">
-            <div class="text-error text-center">
-              Invalid markup has been entered for reason.
-            </div>
+            <div class="text-error text-center">Invalid markup has been entered for reason.</div>
           </div>
         </div>
         <div class="grid-row info-row">
@@ -92,17 +86,13 @@
         </div>
         <div class="grid-row">
           <div class="grid-row__col grid-row__col--12" *ngIf="PdfUploaded">
-            <div class="text-success text-center" *ngIf="PdfUploaded">
-              File has been successfully attached.
-            </div>
+            <div class="text-success text-center" *ngIf="PdfUploaded">File has been successfully attached.</div>
           </div>
         </div>
 
         <div class="grid-row">
           <div class="grid-row__col grid-row__col--12" *ngIf="PdfDeleted">
-            <div class="text-success text-center" *ngIf="PdfDeleted">
-              File has been successfully deleted.
-            </div>
+            <div class="text-success text-center" *ngIf="PdfDeleted">File has been successfully deleted.</div>
           </div>
         </div>
         <div class="grid-row">
@@ -118,9 +108,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="undo-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Undo
-                  </span>
+                  <span class="sr-only"> Undo </span>
                 </button>
                 <button
                   type="button"
@@ -131,9 +119,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="redo-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Redo
-                  </span>
+                  <span class="sr-only"> Redo </span>
                 </button>
                 <button
                   type="button"
@@ -144,9 +130,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="bold-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Bold
-                  </span>
+                  <span class="sr-only"> Bold </span>
                 </button>
                 <button
                   type="button"
@@ -157,9 +141,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="underline-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Underline
-                  </span>
+                  <span class="sr-only"> Underline </span>
                 </button>
                 <button
                   type="button"
@@ -170,9 +152,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="italic-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Italic
-                  </span>
+                  <span class="sr-only"> Italic </span>
                 </button>
                 <button
                   type="button"
@@ -183,9 +163,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="align-left-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Align Left
-                  </span>
+                  <span class="sr-only"> Align Left </span>
                 </button>
                 <button
                   type="button"
@@ -196,9 +174,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="align-center-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Align Center
-                  </span>
+                  <span class="sr-only"> Align Center </span>
                 </button>
                 <button
                   type="button"
@@ -209,9 +185,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="align-right-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Align Right
-                  </span>
+                  <span class="sr-only"> Align Right </span>
                 </button>
                 <button
                   type="button"
@@ -222,9 +196,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="justify-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Justify
-                  </span>
+                  <span class="sr-only"> Justify </span>
                 </button>
                 <button
                   type="button"
@@ -235,9 +207,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="ul-list-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Unordered List
-                  </span>
+                  <span class="sr-only"> Unordered List </span>
                 </button>
                 <button
                   type="button"
@@ -248,9 +218,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="ol-list-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Ordered List
-                  </span>
+                  <span class="sr-only"> Ordered List </span>
                 </button>
                 <button
                   type="button"
@@ -261,9 +229,7 @@
                   [disabled]="!editMode"
                 >
                   <i class="outdent-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Decrease Indent
-                  </span>
+                  <span class="sr-only"> Decrease Indent </span>
                 </button>
                 <button
                   type="button"
@@ -274,14 +240,20 @@
                   [disabled]="!editMode"
                 >
                   <i class="indent-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Increase Indent
-                  </span>
+                  <span class="sr-only"> Increase Indent </span>
                 </button>
               </div>
-              <div class="editor full-width-textarea" [contentEditable]="this.editMode" placeholder="Enter text here..."
-                  role="textarea" (input)="editorChange($event)" (focus)="checkIfEditMode()" (paste)="removeHTML($event)" [innerHTML]="editingTextArea ? textAreaTextContent : null" #htmlEditor>
-              </div>
+              <div
+                class="editor full-width-textarea"
+                [contentEditable]="this.editMode"
+                placeholder="Enter text here..."
+                role="textarea"
+                (input)="editorChange($event)"
+                (focus)="checkIfEditMode()"
+                (paste)="removeHTML($event)"
+                [innerHTML]="editingTextArea ? textAreaTextContent : null"
+                #htmlEditor
+              ></div>
             </div>
           </div>
         </div>
@@ -332,11 +304,17 @@
                 <span class="sr-only">Click here for more information</span>
               </button>
             </label>
-            <div class="file-upload-container border-bottom" *ngIf="file === null && fileNameToDisplay === null && editMode">
+            <div
+              class="file-upload-container border-bottom"
+              *ngIf="file === null && fileNameToDisplay === null && editMode"
+            >
               <input #fileInput type="file" name="file" accept="application/pdf" (change)="setFile($event)" />
             </div>
-            <div class="file-upload-container border-bottom" *ngIf="file === null && fileNameToDisplay === null && !editMode">
-              <input type="button" (click)="checkIfEditMode()" value="Choose file"/> No file chosen
+            <div
+              class="file-upload-container border-bottom"
+              *ngIf="file === null && fileNameToDisplay === null && !editMode"
+            >
+              <input type="button" (click)="checkIfEditMode()" value="Choose file" /> No file chosen
             </div>
             <div class="file-attached-container" *ngIf="file !== null || fileNameToDisplay !== null">
               <div class="grid-row">
@@ -345,12 +323,12 @@
                     {{ file && file.name ? file.name : fileNameToDisplay }}
                     <!--<button type="button" class="btn btn-link" (click)="open(deletePDF)">-->
                     <button type="button" class="btn btn-link" (click)="deletePDFFile()" [disabled]="!this.editMode">
-                    <span vertical-align="top" class="close-icon"></span>
+                      <span vertical-align="top" class="close-icon"></span>
                     </button>
                   </h5>
                 </div>
 
-               <!--<ng-template #deletePDF let-d="dismiss">
+                <!--<ng-template #deletePDF let-d="dismiss">
                   <div class="modal-header">
                     <h2 class="modal-title">
                       Delete PDF file
@@ -364,8 +342,7 @@
 
                     <button type="button" class="btn btn-secondary-gray" (click)="d('Cancel click')">Cancel</button> &nbsp;
                   </div>
-                </ng-template>--> 
-
+                </ng-template>-->
               </div>
             </div>
           </div>
@@ -378,15 +355,9 @@
       <div class="grid-row">
         <div class="grid-row__col grid-row__col--12">
           <div class="forms__btn-container">
-            <button class="btn btn-previous btn-left" type="button" (click)="previousStep()">
-              Previous
-            </button>
-            <button *ngIf="editMode" class="btn btn-primary btn-right" type="submit">
-              Save & Continue
-            </button>
-            <button *ngIf="!editMode" class="btn btn-primary btn-right" type="submit">
-              Next
-            </button>
+            <button class="btn btn-previous btn-left" type="button" (click)="previousStep()">Previous</button>
+            <button *ngIf="editMode" class="btn btn-primary btn-right" type="submit">Save & Continue</button>
+            <button *ngIf="!editMode" class="btn btn-primary btn-right" type="submit">Next</button>
           </div>
         </div>
       </div>

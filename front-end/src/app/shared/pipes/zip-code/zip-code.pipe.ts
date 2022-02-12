@@ -1,10 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'zipCode'
+  name: 'zipCode',
 })
 export class ZipCodePipe implements PipeTransform {
-
   /**
    * Formats a zip code.
    *
@@ -21,5 +20,4 @@ export class ZipCodePipe implements PipeTransform {
       return zipCode;
     }
   }
-
 }

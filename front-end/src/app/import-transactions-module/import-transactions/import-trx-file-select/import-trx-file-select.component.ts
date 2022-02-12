@@ -8,17 +8,17 @@ import {
   OnDestroy,
   Input,
   SimpleChanges,
-  OnChanges
+  OnChanges,
 } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { timer, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { UtilService } from 'src/app/shared/utils/util.service';
-import CryptoJS from 'crypto-js';
+import { UtilService } from '../../../shared/utils/util.service';
+import * as CryptoJS from 'crypto-js';
 import { S3 } from 'aws-sdk/clients/all';
 import { ModalDirective } from 'ngx-bootstrap/modal/ngx-bootstrap-modal';
-import { ConfirmModalComponent } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
+import { ConfirmModalComponent } from '../../../shared/partials/confirm-modal/confirm-modal.component';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
 import { UploadFileModel } from '../model/upload-file.model';
 import { ImportFileStatusEnum } from '../import-file-status.enum';
 
@@ -29,7 +29,7 @@ import { ImportFileStatusEnum } from '../import-file-status.enum';
 @Component({
   selector: 'app-import-trx-file-select',
   templateUrl: './import-trx-file-select.component.html',
-  styleUrls: ['./import-trx-file-select.component.scss']
+  styleUrls: ['./import-trx-file-select.component.scss'],
 })
 export class ImportTrxFileSelectComponent implements OnInit {
   @ViewChild('selectFileInput')
@@ -42,7 +42,7 @@ export class ImportTrxFileSelectComponent implements OnInit {
   public readonly f3xForm = 'F3X';
   public readonly f3lForm = 'F3L';
 
-  private fileQueue: Array<UploadFileModel>;
+  private fileQueue!: Array<UploadFileModel>;
 
   constructor(private _dialogService: DialogService) {}
 
@@ -113,7 +113,7 @@ export class ImportTrxFileSelectComponent implements OnInit {
     this.selectFileInput.nativeElement.click();
   }
 
-  public onClick(event) {
+  public onClick(event: any) {
     event.target.value = '';
   }
 
@@ -168,11 +168,11 @@ export class ImportTrxFileSelectComponent implements OnInit {
   }
 
   private _getFileExtention(fileName: string): string {
-    let fileExtention = '';
+    let fileExtention: string = '';
     if (!fileName.includes('.')) {
       return fileExtention;
     }
-    fileExtention = fileName.split('.').pop();
+    fileExtention = fileName.split('.').pop() ?? '';
     return fileExtention;
   }
 
@@ -216,13 +216,13 @@ export class ImportTrxFileSelectComponent implements OnInit {
    *
    * @param fileEntry the FileSystemFileEntry object to convert.
    */
-  private _parseFileEntry(fileEntry): Promise<File> {
+  private _parseFileEntry(fileEntry: any): Promise<File> {
     return new Promise((resolve, reject) => {
       fileEntry.file(
         (file: File) => {
           resolve(file);
         },
-        err => {
+        (err: any) => {
           reject(err);
         }
       );
@@ -234,10 +234,10 @@ export class ImportTrxFileSelectComponent implements OnInit {
    *
    * @param event the dragenter event
    */
-  public dragEnter(event) {
+  public dragEnter(event: any) {
     // indicates valid drop data
     // false allows drop
-    return Array.prototype.every.call(event.dataTransfer.items, item => item.kind !== 'file');
+    return Array.prototype.every.call(event.dataTransfer.items, (item) => item.kind !== 'file');
   }
 
   /**
@@ -246,18 +246,18 @@ export class ImportTrxFileSelectComponent implements OnInit {
    *
    * @param event the dragover event
    */
-  public dragOver(event) {
+  public dragOver(event: any) {
     // indicates valid drop data
     // false allows drop
-    return Array.prototype.every.call(event.dataTransfer.items, item => item.kind !== 'file');
+    return Array.prototype.every.call(event.dataTransfer.items, (item) => item.kind !== 'file');
   }
 
   private _createFileCheckSum(file: File) {
-    const prom = new Promise(resolve => {
+    const prom = new Promise((resolve) => {
       const fileReader = new FileReader();
-      fileReader.onload = e => {
+      fileReader.onload = (e) => {
         const fileData = fileReader.result;
-        const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(fileData));
+        const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(String(fileData)));
         const md5 = hash.toString(CryptoJS.enc.Hex);
         const output = 'MD5 (' + file.name + ') = ' + md5;
         console.log(output);

@@ -5,7 +5,7 @@ import { PasswordService } from './password.service';
 describe('PasswordService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [PasswordService]
+      providers: [PasswordService],
     });
   });
 

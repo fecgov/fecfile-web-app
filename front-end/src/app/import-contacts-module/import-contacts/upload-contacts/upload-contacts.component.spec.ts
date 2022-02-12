@@ -6,12 +6,13 @@ describe('UploadContactsComponent', () => {
   let component: UploadContactsComponent;
   let fixture: ComponentFixture<UploadContactsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ UploadContactsComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [UploadContactsComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UploadContactsComponent);

@@ -6,12 +6,13 @@ describe('ImportTransactionsComponent', () => {
   let component: ImportTransactionsComponent;
   let fixture: ComponentFixture<ImportTransactionsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ImportTransactionsComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ImportTransactionsComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ImportTransactionsComponent);

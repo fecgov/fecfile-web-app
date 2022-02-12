@@ -1,13 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChildren,
-  QueryList,
-  OnDestroy,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { style, animate, transition, trigger, state } from '@angular/animations';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ContactsMessageService } from '../service/contacts-message.service';

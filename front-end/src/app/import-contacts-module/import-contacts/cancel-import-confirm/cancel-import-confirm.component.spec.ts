@@ -6,12 +6,13 @@ describe('CancelImportConfirmComponent', () => {
   let component: CancelImportConfirmComponent;
   let fixture: ComponentFixture<CancelImportConfirmComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ CancelImportConfirmComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [CancelImportConfirmComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CancelImportConfirmComponent);

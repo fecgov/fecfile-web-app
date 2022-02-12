@@ -10,10 +10,9 @@ import { MessageService } from '../../services/MessageService/message.service';
   selector: 'app-submit',
   templateUrl: './submit.component.html',
   styleUrls: ['./submit.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class SubmitComponent implements OnInit, OnDestroy {
-  
   public form_type: string = '';
   @Input() public FEC_Id: string = '#####';
 
@@ -28,12 +27,12 @@ export class SubmitComponent implements OnInit, OnDestroy {
     private _messageService: MessageService,
     private _reportTypeService: ReportTypeService,
     private _dialogService: DialogService,
-    private _formsService: FormsService,
+    private _formsService: FormsService
   ) {}
 
   ngOnInit() {
-    this.form_type = this._activatedRoute.snapshot.paramMap.get('form_id');
-     if (this._router.url.indexOf('step_6') > -1) {
+    this.form_type = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
+    if (this._router.url.indexOf('step_6') > -1) {
       this.FEC_Id = this._activatedRoute.snapshot.queryParams['fec_id'];
       // this._checkReportStatus();
     }
@@ -65,12 +64,13 @@ export class SubmitComponent implements OnInit, OnDestroy {
             error => {
               //console.log('error: ', error);
             }
-          );*/ /*  */
+          );*/
+          /*  */
         }
       }
     });
 
-    this.routerSubscription = this._router.events.subscribe(val => {
+    this.routerSubscription = this._router.events.subscribe((val) => {
       if (val) {
         if (val instanceof NavigationEnd) {
           //console.log('val.url = ', val.url);
@@ -78,8 +78,8 @@ export class SubmitComponent implements OnInit, OnDestroy {
             this._messageService.sendMessage({
               validateMessage: {
                 validate: {},
-                showValidateBar: false
-              }
+                showValidateBar: false,
+              },
             });
           }
         }
@@ -87,12 +87,12 @@ export class SubmitComponent implements OnInit, OnDestroy {
     });
 
     const source = interval(10000);
-    this._subscription = source.subscribe(val => this._checkReportStatus());
+    this._subscription = source.subscribe((val) => this._checkReportStatus());
   }
 
   public goToDashboard(): void {
     //if (!this.checkStatus) {
-      this._router.navigateByUrl('dashboard');
+    this._router.navigateByUrl('dashboard');
     //} else {
     //}
   }

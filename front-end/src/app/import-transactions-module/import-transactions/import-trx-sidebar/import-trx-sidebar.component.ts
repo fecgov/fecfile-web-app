@@ -2,17 +2,17 @@ import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChange
 import { ImportTransactionsStepsEnum } from '../import-transactions-steps.enum';
 import { UploadFileModel } from '../model/upload-file.model';
 import { ImportFileStatusEnum } from '../import-file-status.enum';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import { ConfirmModalComponent } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
+import { ConfirmModalComponent } from '../../../shared/partials/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-import-trx-sidebar',
   templateUrl: './import-trx-sidebar.component.html',
-  styleUrls: ['./import-trx-sidebar.component.scss']
+  styleUrls: ['./import-trx-sidebar.component.scss'],
 })
 export class ImportTrxSidebarComponent implements OnInit, OnChanges {
   @Input()
-  public fileQueue: Array<UploadFileModel>;
+  public fileQueue!: Array<UploadFileModel>;
 
   @Input()
   public currentFile!: UploadFileModel;
@@ -51,8 +51,8 @@ export class ImportTrxSidebarComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.open !== undefined) {
-      if (changes.open.currentValue === true) {
+    if (changes['open'] !== undefined) {
+      if (changes['open'].currentValue === true) {
         this._openSideBar();
       } else {
         this._closeSideBar();
@@ -77,7 +77,7 @@ export class ImportTrxSidebarComponent implements OnInit, OnChanges {
         // this._closeSideBar();
         this.proceedCancelEmitter.emit({
           cancelType: 'cancel-file',
-          file: file
+          file: file,
         });
       }
     });
@@ -105,12 +105,12 @@ export class ImportTrxSidebarComponent implements OnInit, OnChanges {
    */
   private _closeSideBar(): void {
     this.open = false;
-    this.headerTitle = null;
+    this.headerTitle = '';
     this.iconClass = 'bars-icon';
     this.sidebarVisibleClass = 'sidebar-hidden';
     this.toggleEmitter.emit({
       showSidebar: false,
-      sidebarVisibleClass: this.sidebarVisibleClass
+      sidebarVisibleClass: this.sidebarVisibleClass,
     });
   }
 
@@ -124,7 +124,7 @@ export class ImportTrxSidebarComponent implements OnInit, OnChanges {
     this.sidebarVisibleClass = 'sidebar-visible';
     this.toggleEmitter.emit({
       showSidebar: true,
-      sidebarVisibleClass: this.sidebarVisibleClass
+      sidebarVisibleClass: this.sidebarVisibleClass,
     });
   }
 

@@ -13,14 +13,7 @@ import { CreatePasswordComponent } from './create-password/create-password.compo
 import { PersonalKeyComponent } from './personal-key/personal-key.component';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    CommonModule,
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule,
-  ],
+  imports: [SharedModule, CommonModule, BrowserModule, FormsModule, ReactiveFormsModule, RouterModule],
   declarations: [
     LoginComponent,
     TwoFactorLoginComponent,

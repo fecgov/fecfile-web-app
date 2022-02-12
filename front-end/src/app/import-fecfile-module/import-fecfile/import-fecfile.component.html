@@ -35,8 +35,8 @@
           </ul>
           <h3 class="import_contacts__heading">Importing Files</h3>
           <div class="import_contacts__import-directions">
-            1. At the top right of the screen, select "Tools" and then "Import FECFile". You will then be taken to the Import FECFile page 
-            (this page).
+            1. At the top right of the screen, select "Tools" and then "Import FECFile". You will then be taken to the
+            Import FECFile page (this page).
             <br /><br />
             2. Click "Begin Upload" to navigate to the Upload Page.
             <br /><br />
@@ -53,7 +53,7 @@
             complete the user can navigate to the Notifications Modal (Top Menu/Notifications) to view the Import and
             others via the link provided.
           </div>
-<!--           <h3 class="import_contacts__heading">How to enter data into the DCF templates</h3>
+          <!--           <h3 class="import_contacts__heading">How to enter data into the DCF templates</h3>
           <div>
             When entering data into a DCF template, ensure the fields within the template match with what you are
             planning to import. DCF files will not always save information within the DCF format, so you may need to
@@ -83,16 +83,15 @@
             </ul>
           </div> -->
         </div>
-         <app-upload-contacts
+        <app-upload-contacts
           *ngIf="currentStep === step1Upload"
           [forceChangeDetection]="forceChangeDetectionUpload"
-          [screenType]="'fecfile'" 
+          [screenType]="'fecfile'"
           (uploadResultEmitter)="noErrorsAcknowleged($event)"
           (saveStatusEmitter)="receiveSavedStatus($event)"
         >
         </app-upload-contacts>
         <app-import-fecfile-success *ngIf="currentStep === step4ImportDone" [successMessage]="successResponse">
-
         </app-import-fecfile-success>
       </div>
     </section>

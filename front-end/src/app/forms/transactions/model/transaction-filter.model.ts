@@ -4,10 +4,10 @@
 export class TransactionFilterModel {
   show!: boolean;
   formType!: string;
-  filterStates: string[];
-  filterReportTypes: string[];
+  filterStates: string[] = [];
+  filterReportTypes: string[] = [];
   filterCategoriesText!: string;
-  filterCategories: string[];
+  filterCategories: string[] = [];
   filterAmountMin!: number;
   filterAmountMax!: number;
   filterSemiAnnualAmountMin!: number;
@@ -19,11 +19,11 @@ export class TransactionFilterModel {
   filterDeletedDateFrom!: Date;
   filterDeletedDateTo!: Date;
   filterMemoCode!: boolean;
-  filterItemizations: string[];
+  filterItemizations: string[] = [];
   keywords: string[] = [];
   filterElectionYearFrom!: string;
   filterElectionYearTo!: string;
-  filterElectionCodes: string[];
+  filterElectionCodes: string[] = [];
   filterLoanAmountMin!: number;
   filterLoanAmountMax!: number;
   filterLoanClosingBalanceMin!: any;

@@ -6,12 +6,13 @@ describe('IndividualReceiptComponent', () => {
   let component: EndorserComponent;
   let fixture: ComponentFixture<EndorserComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ EndorserComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [EndorserComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(EndorserComponent);

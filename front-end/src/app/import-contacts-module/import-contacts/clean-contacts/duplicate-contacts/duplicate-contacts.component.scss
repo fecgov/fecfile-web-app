@@ -20,7 +20,7 @@
       }
       .hard_left {
         position: absolute;
-        left: 0; 
+        left: 0;
         width: 2%;
       }
       .indent_right {
@@ -39,42 +39,43 @@
         width: 11em;
       }
       #contacts__dropdown-action {
-        margin-left: 3.5em
+        margin-left: 3.5em;
       }
     }
   }
 
   .clean_contacts__heading {
-      padding: .5em 0;
+    padding: 0.5em 0;
   }
 
   .clean_contacts__table-pagination-container {
     padding: 1em;
-  } 
+  }
 
   /* style ngx-pagination - start */
   /* override some styling where use of !important is made. */
 
-  .ngx-pagination .current{
+  .ngx-pagination .current {
     padding: 0.1875rem 0.625rem;
-    background: #9B9B9B !important;;
+    background: #9b9b9b !important;
     color: #fefefe;
     cursor: default;
   }
 
-  .ngx-pagination a, .ngx-pagination button {
-    color: #9B9B9B !important;;
+  .ngx-pagination a,
+  .ngx-pagination button {
+    color: #9b9b9b !important;
     display: block;
     padding: 0.1875rem 0.625rem;
     border-radius: 0;
-  }	
+  }
 
   /* style ngx-pagination - end */
 
   .clean_contacts__button {
     width: 11em;
     height: 3em;
-    margin: 1.2em .25em;
+    margin: 1.2em 0.25em;
   }
 
   .clean_contacts__canel-button {
@@ -83,7 +84,7 @@
   }
 
   #clean_contacts__merge-all-button[disabled] {
-    background:#6c757d;
+    background: #6c757d;
     border-color: #6c757d;
   }
 
@@ -104,11 +105,14 @@
 }
 
 .modal {
-  .modal-lg, .modal-xl {
+  .modal-lg,
+  .modal-xl {
     max-width: 95%;
   }
-  #clean_contacts__pin-modal-header_1, #clean_contacts__pin-modal-header_2,
-  #clean_contacts__pin-modal-header_3, #clean_contacts__pin-modal-header_4 {
+  #clean_contacts__pin-modal-header_1,
+  #clean_contacts__pin-modal-header_2,
+  #clean_contacts__pin-modal-header_3,
+  #clean_contacts__pin-modal-header_4 {
     background-color: $primaryBlue;
     color: $white;
     span {

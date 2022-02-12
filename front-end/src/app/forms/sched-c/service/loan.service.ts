@@ -3,12 +3,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FilterPipe } from 'src/app/shared/pipes/filter/filter.pipe';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
-import { ZipCodePipe } from 'src/app/shared/pipes/zip-code/zip-code.pipe';
+import { FilterPipe } from '../../../shared/pipes/filter/filter.pipe';
+import { OrderByPipe } from '../../../shared/pipes/order-by/order-by.pipe';
+import { ZipCodePipe } from '../../../shared/pipes/zip-code/zip-code.pipe';
 import { environment } from '../../../../environments/environment';
 import { ReportTypeService } from '../../../forms/form-3x/report-type/report-type.service';
 import { ScheduleActions } from '../../form-3x/individual-receipt/schedule-actions.enum';
@@ -16,12 +15,12 @@ import { LoanModel } from '../model/loan.model';
 
 export interface GetLoanResponse {
   loans: LoanModel[];
-  totalAmount!: number;
-  totalloansCount!: number;
-  totalPages!: number;
+  totalAmount: number;
+  totalloansCount: number;
+  totalPages: number;
 
   // remove after API is renamed.
-  itemsPerPage!: number;
+  itemsPerPage: number;
   'total pages': number;
 }
 
@@ -65,7 +64,7 @@ export class LoanService {
     for (let i = 0; i < 13; i++) {
       const t1: any = this.createMockTrx();
       t1.transaction_id = this.mockContactIdRecycle + i;
-      this.mockRestoreTrxArray.push(t1);
+      // this.mockRestoreTrxArray.push(t1);
     }
 
     this._orderByPipe = new OrderByPipe();
@@ -507,7 +506,7 @@ export class LoanService {
   public mockApplyRestoredContact(response: any) {
     for (const cnt of this.mockRecycleBinArray) {
       response.contacts.push(cnt);
-      response.totalAmount += cnt.transaction_amount;
+      // response.totalAmount += cnt.transaction_amount;
       response.totalContactCount++;
     }
   }
@@ -752,7 +751,7 @@ export class LoanService {
   * @param      {string}           formType  The form type
   * @param      {ScheduleActions}  scheduleAction  The type of action to save (add, edit)
   */
-  public saveSched_C(scheduleAction: ScheduleActions, transactionTypeIdentifier: string, subType: string, reportId :string= null): Observable<any> {
+  public saveSched_C(scheduleAction: ScheduleActions, transactionTypeIdentifier: string, subType: string, reportId :string= ''): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url: string = '/sc/schedC';
     if(!reportId){
@@ -864,8 +863,8 @@ export class LoanService {
             return false;
           })
         );
-    } else {
     }
+    return of(null);
   }
 
   public get_sched_c_loan_dynamic_forms_fields(): Observable<any> {
@@ -890,7 +889,7 @@ export class LoanService {
    * @param      {string}           formType  The form type
    * @param      {ScheduleActions}  scheduleAction  The type of action to save (add, edit)
    */
-  public saveSched_C2(scheduleAction: ScheduleActions, endorserForm: any, hiddenFields: any, reportId:string = null): Observable<any> {
+  public saveSched_C2(scheduleAction: ScheduleActions, endorserForm: any, hiddenFields: any, reportId:string = ''): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url: string = '/sc/schedC2';
     if(!reportId){
@@ -968,13 +967,13 @@ export class LoanService {
             return false;
           })
         );
-    } else {
     }
+    return of(null);
   }
 
   c1Exists(currentLoanData: any): any {
     if (currentLoanData && currentLoanData.child && Array.isArray(currentLoanData.child)) {
-      let c1 = currentLoanData.child.filter(e => e.transaction_type_identifier === 'SC1');
+      let c1 = currentLoanData.child.filter((e: any) => e.transaction_type_identifier === 'SC1');
       if (c1.length > 0) {
         return true;
       }

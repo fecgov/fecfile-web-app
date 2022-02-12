@@ -205,14 +205,8 @@ export class F3xComponent implements OnInit, OnDestroy {
             const savedItem = localStorage.getItem(`form_${this.formType}_saved`);
             const reportTypeItem = localStorage.getItem(`form_${this.formType}_report_type`);
             if (savedItem && reportTypeItem) {
-              localStorage.setItem(
-                `form_${this.formType}_saved_backup`,
-                savedItem
-              );
-              localStorage.setItem(
-                `form_${this.formType}_report_type_backup`,
-                reportTypeItem
-              );
+              localStorage.setItem(`form_${this.formType}_saved_backup`, savedItem);
+              localStorage.setItem(`form_${this.formType}_report_type_backup`, reportTypeItem);
             }
 
             window.localStorage.removeItem(`form_${this.formType}_report_type`);
@@ -285,11 +279,7 @@ export class F3xComponent implements OnInit, OnDestroy {
    */
   private _setReports(): void {
     const detailsItem = localStorage.getItem(`form_${this.formType}_details`) ?? '';
-    if (
-      detailsItem &&
-      typeof JSON.parse(detailsItem) !== 'undefined' ||
-      JSON.parse(detailsItem) !== null
-    ) {
+    if ((detailsItem && typeof JSON.parse(detailsItem) !== 'undefined') || JSON.parse(detailsItem) !== null) {
       const form3XDetailsInstance = JSON.parse(detailsItem);
 
       if (typeof form3XDetailsInstance === 'object' && form3XDetailsInstance !== null) {

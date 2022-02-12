@@ -1,4 +1,4 @@
-import { Injectable , ChangeDetectionStrategy } from '@angular/core';
+import { Injectable, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/observable/of';
@@ -9,26 +9,22 @@ import { Subscription } from 'rxjs';
 
 export enum SchedHActions {
   add = 'add',
-  edit = 'edit'
+  edit = 'edit',
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SchedH5Service {
-
-  constructor(
-    private _http: HttpClient,
-    private _cookieService: CookieService,
-  ) { }
+  constructor(private _http: HttpClient, private _cookieService: CookieService) {}
 
   public getSummary(
-      reportId: string,
-      page: number,
-      itemsPerPage: number,
-      sortColumnName: string,
-      descending: boolean
-    ): Observable<any> {
+    reportId: string,
+    page: number,
+    itemsPerPage: number,
+    sortColumnName: string,
+    descending: boolean
+  ): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     let httpOptions = new HttpHeaders();
     const url = '/sh5/get_h5_summary';
@@ -44,16 +40,15 @@ export class SchedH5Service {
     params = params.append('descending', `${descending}`);
 
     return this._http
-      .get(
-        `${environment.apiUrl}${url}`,
-        {
-          params,
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
+      .get(`${environment.apiUrl}${url}`, {
+        params,
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
           return res;
-      }));
+        })
+      );
   }
 
   public getBreakDown(reportId: string): Observable<any> {
@@ -68,20 +63,16 @@ export class SchedH5Service {
     params = params.append('report_id', reportId);
 
     return this._http
-      .get(
-        `${environment.apiUrl}${url}`,
-        {
-          params,
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
+      .get(`${environment.apiUrl}${url}`, {
+        params,
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
           return res;
-        }));
+        })
+      );
   }
-
-
-
 
   public saveH5(h5: any): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
@@ -101,18 +92,16 @@ export class SchedH5Service {
     }
 
     return this._http
-      .post(
-        `${environment.apiUrl}${url}`, h5,
-        {
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
-        if (res) {
-          return res;
-        }
-        return false;
+      .post(`${environment.apiUrl}${url}`, h5, {
+        headers: httpOptions,
       })
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            return res;
+          }
+          return false;
+        })
       );
   }
 
@@ -125,32 +114,30 @@ export class SchedH5Service {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http
-      .get(
-        `${environment.apiUrl}${url}`,
-        {         
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
-        if (res) {
-          return res;
-        }
-        return false;
+      .get(`${environment.apiUrl}${url}`, {
+        headers: httpOptions,
       })
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            return res;
+          }
+          return false;
+        })
       );
   }
 
   public saveAndGetSummary(
-      ratio: any, 
-      reportId: string, 
-      scheduleAction: SchedHActions,
-      page: number,
-      itemsPerPage: number,
-      sortColumnName: string,
-      descending: boolean
-    ): Observable<any> {
+    ratio: any,
+    reportId: string,
+    scheduleAction: SchedHActions,
+    page: number,
+    itemsPerPage: number,
+    sortColumnName: string,
+    descending: boolean
+  ): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh5/schedH5';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -166,29 +153,19 @@ export class SchedH5Service {
     }
 
     if (scheduleAction === SchedHActions.add) {
-      return this._http
-        .post(
-          `${environment.apiUrl}${url}`, ratio,
-          {
-            headers: httpOptions
-          }
-        );
-      }
-      else if(scheduleAction === SchedHActions.edit) {
-        return this._http
-        .put(
-          `${environment.apiUrl}${url}`, ratio,
-          {
-            headers: httpOptions
-          }
-        );
-      }
+      return this._http.post(`${environment.apiUrl}${url}`, ratio, {
+        headers: httpOptions,
+      });
+    }
 
+    return this._http.put(`${environment.apiUrl}${url}`, ratio, {
+      headers: httpOptions,
+    });
   }
 
   public getH1H2ExistStatus(report_id: string, activity_event_type: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
     const url = '/sh1/validate_h1_h2_exist';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
@@ -207,22 +184,18 @@ export class SchedH5Service {
     }
 
     return this._http
-      .get(
-        `${environment.apiUrl}${url}`,
-        {
-          params,
-          headers: httpOptions
-        }
-      )
-      .pipe(map((res: any) => {
+      .get(`${environment.apiUrl}${url}`, {
+        params,
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
           if (res) {
             //console.log('Validate H1 H2 exist res: ', res);
             return res;
           }
           return false;
-      })
+        })
       );
-
   }
-
 }

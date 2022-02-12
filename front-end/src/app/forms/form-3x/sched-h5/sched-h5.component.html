@@ -3,12 +3,10 @@
 </p> -->
 <!-- Transfers of Levin Funds Received for Allocated Federal Election Activity -->
 <div class="h5-levin-transfer-container">
-  <header class="header-content">
-
-  </header>
+  <header class="header-content"></header>
 
   <section>
-    <div class="levin-transfer-container" *ngIf=false>
+    <div class="levin-transfer-container" *ngIf="false">
       <form [formGroup]="frmOption" #f="ngForm" (ngSubmit)="submit(f)">
         <div class="float-left">
           <ng-container>
@@ -38,13 +36,11 @@
         <div class="form-gropup">
           <label for="selectCategories">Select Categories</label>
           <select naModel name="selectCategories" id="selectCategories">
-            <option *ngFor="let category of transferCategories" [value]="category.id">{{category.name}}</option>
+            <option *ngFor="let category of transferCategories" [value]="category.id">{{ category.name }}</option>
           </select>
         </div>
 
-
         <button class="btn bnt-primary" [disabled]="!f.valid">Add Another Entry</button>
-
       </form>
     </div>
   </section>
@@ -52,9 +48,7 @@
     <div class="grid-row">
       <div class="grid-row__col grid-row__col--12">
         <div class="forms__btn-container">
-          <button id="cancel" class="btn btn-previous btn-right" type="button">
-            cancel
-          </button>
+          <button id="cancel" class="btn btn-previous btn-right" type="button">cancel</button>
           <button id="summary" class="btn btn-previous btn-right" type="button" (click)="load_summary()">
             summary
           </button>
@@ -68,20 +62,16 @@
 <!-- header:Transfers from Levin Funds for Allocated Federal Election Activity -->
 
 <div class="h5-levin-transfer-summary">
-  <header class="header-content">
-
-  </header>
+  <header class="header-content"></header>
 
   <section>
-    <div class="levin-transfer-container" *ngIf=false>
+    <div class="levin-transfer-container" *ngIf="false">
       <form [formGroup]="frmOption" #f="ngForm" (ngSubmit)="submit(f)">
         <div class="float-left">
           <ng-container>
             <h1>Transfers from Levin Funds for Allocated Federal Election Activity</h1>
           </ng-container>
         </div>
-
-
 
         <div class="text">
           <label>
@@ -106,13 +96,11 @@
         <div class="form-gropup">
           <label for="selectCategories">Select Categories</label>
           <select naModel name="selectCategories" id="selectCategories">
-            <option *ngFor="let category of transferCategories" [value]="category.id">{{category.name}}</option>
+            <option *ngFor="let category of transferCategories" [value]="category.id">{{ category.name }}</option>
           </select>
         </div>
 
-
         <button class="btn bnt-primary" [disabled]="!f.valid">Add Another Entry</button>
-
       </form>
     </div>
   </section>
@@ -120,9 +108,7 @@
     <div class="grid-row">
       <div class="grid-row__col grid-row__col--12">
         <div class="forms__btn-container">
-          <button id="cancel" class="btn btn-previous btn-right" type="button">
-            cancel
-          </button>
+          <button id="cancel" class="btn btn-previous btn-right" type="button">cancel</button>
           <button id="summary" class="btn btn-previous btn-right" type="button" (click)="load_summary()">
             summary
           </button>
@@ -131,7 +117,6 @@
     </div>
   </footer>
 </div>
-
 
 <!-- transfer breakdown page -->
 <!-- Total For Breakdown of Transfers Received - Levin Funds -->

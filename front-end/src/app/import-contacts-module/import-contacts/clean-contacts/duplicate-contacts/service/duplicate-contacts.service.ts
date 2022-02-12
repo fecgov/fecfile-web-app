@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../../../environments/environment';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { DuplicateContactModel } from '../../../model/duplicate-contact.model';
 import { ImportContactModel } from '../../../model/import-contact.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DuplicateContactsService {
   constructor(private _http: HttpClient, private _cookieService: CookieService) {}
@@ -32,7 +32,7 @@ export class DuplicateContactsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
         map((res: any) => {
@@ -61,7 +61,7 @@ export class DuplicateContactsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
         map((res: any) => {
@@ -90,7 +90,7 @@ export class DuplicateContactsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
         map((res: any) => {
@@ -135,7 +135,7 @@ export class DuplicateContactsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
         map((res: any) => {
@@ -163,7 +163,7 @@ export class DuplicateContactsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
         map((res: any) => {
@@ -186,7 +186,7 @@ export class DuplicateContactsService {
       return this._http
         .get('assets/mock-data/import-contacts/duplicates_even.json', {
           headers: httpOptions,
-          params
+          params,
         })
         .pipe(
           map((res: any) => {
@@ -201,7 +201,7 @@ export class DuplicateContactsService {
       return this._http
         .get('assets/mock-data/import-contacts/duplicates.2.json', {
           headers: httpOptions,
-          params
+          params,
         })
         .pipe(
           map((res: any) => {
@@ -223,7 +223,7 @@ export class DuplicateContactsService {
   public mapAllDupesFromServerFields(serverData: any): Array<DuplicateContactModel> {
     const modelArray: Array<DuplicateContactModel> = [];
     if (!serverData || !Array.isArray(serverData)) {
-      return null;
+      return [];
     }
     for (const row of serverData) {
       const model = new DuplicateContactModel(this._mapDupeFromServerFields(row));
@@ -243,7 +243,7 @@ export class DuplicateContactsService {
 
   private _mapDupeFromServerFields(row: any): ImportContactModel {
     if (!row) {
-      return null;
+      return new ImportContactModel({});
     }
     const model = new ImportContactModel({});
     model.id = row.contact_id;

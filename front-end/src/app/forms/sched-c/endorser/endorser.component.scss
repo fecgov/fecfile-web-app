@@ -22,9 +22,6 @@
         margin-left: 10px;
         display: block;
         width: 60%;
-        h1 {
-          //font-family: sans-serif;
-        }
         @include clearfix();
         .btn-options {
           color: $shuttleGray;

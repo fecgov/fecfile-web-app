@@ -250,6 +250,7 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
         }
       }
     }
+    return '';
   }
 
   private isSchedF(trx: TransactionModel) {

@@ -6,12 +6,13 @@ describe('ImportTrxDoneComponent', () => {
   let component: ImportTrxDoneComponent;
   let fixture: ComponentFixture<ImportTrxDoneComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ImportTrxDoneComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ImportTrxDoneComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ImportTrxDoneComponent);

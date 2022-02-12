@@ -817,7 +817,7 @@ export class ReportTypeComponent implements OnInit, OnDestroy {
       if (this._activatedRoute.snapshot.queryParams['edit'] !== 'true') {
         if (this.committeeReportTypes.length >= 1) {
           if (!this.reportTypeSelected) {
-            const currentReport: any = this.committeeReportTypes.filter((el) => {
+            const currentReport: any = this.committeeReportTypes.filter((el: any) => {
               if (el.hasOwnProperty('default_disp_ind')) {
                 if (typeof el.default_disp_ind === 'string') {
                   if (el.default_disp_ind === 'Y') {

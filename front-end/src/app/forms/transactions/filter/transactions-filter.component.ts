@@ -1,15 +1,15 @@
-import { MessageService } from 'src/app/shared/services/MessageService/message.service';
+import { MessageService } from '../../../shared/services/MessageService/message.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-import { Subscription } from 'rxjs/Subscription';
-import { ReportsService } from 'src/app/reports/service/report.service';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
+import { takeUntil } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { ReportsService } from '../../../reports/service/report.service';
+import { OrderByPipe } from '../../../shared/pipes/order-by/order-by.pipe';
 import { TransactionTypeService } from '../../form-3x/transaction-type/transaction-type.service';
-import { FilterTypes } from "../enums/filterTypes.enum";
+import { FilterTypes } from '../enums/filterTypes.enum';
 import { TransactionFilterModel } from '../model/transaction-filter.model';
 import { ValidationErrorModel } from '../model/validation-error.model';
 import { TransactionsMessageService } from '../service/transactions-message.service';
@@ -26,13 +26,13 @@ import { TransactionsFilterTypeComponent } from './filter-type/transactions-filt
   templateUrl: './transactions-filter.component.html',
   styleUrls: ['./transactions-filter.component.scss'],
   providers: [NgbTooltipConfig, OrderByPipe],
-   animations: [
+  animations: [
     trigger('openClose', [
       state(
         'open',
         style({
           'max-height': '500px', // Set high to handle multiple scenarios.
-          backgroundColor: 'white'
+          backgroundColor: 'white',
         })
       ),
       state(
@@ -41,11 +41,11 @@ import { TransactionsFilterTypeComponent } from './filter-type/transactions-filt
           'max-height': '0',
           overflow: 'hidden',
           display: 'none',
-          backgroundColor: '#AEB0B5'
+          backgroundColor: '#AEB0B5',
         })
       ),
       transition('open => closed', [animate('.25s ease')]),
-      transition('closed => open', [animate('.5s ease')])
+      transition('closed => open', [animate('.5s ease')]),
     ]),
     trigger('openCloseScroll', [
       state(
@@ -53,7 +53,7 @@ import { TransactionsFilterTypeComponent } from './filter-type/transactions-filt
         style({
           'max-height': '500px', // Set high to handle multiple scenarios.
           backgroundColor: 'white',
-          'overflow-y': 'scroll'
+          'overflow-y': 'scroll',
         })
       ),
       state(
@@ -62,7 +62,7 @@ import { TransactionsFilterTypeComponent } from './filter-type/transactions-filt
           'max-height': '0',
           overflow: 'hidden',
           display: 'none',
-          backgroundColor: '#AEB0B5'
+          backgroundColor: '#AEB0B5',
         })
       ),
       state(
@@ -70,7 +70,7 @@ import { TransactionsFilterTypeComponent } from './filter-type/transactions-filt
         style({
           'max-height': '500px',
           backgroundColor: 'white',
-          'overflow-y': 'scroll'
+          'overflow-y': 'scroll',
         })
       ),
       state(
@@ -79,13 +79,13 @@ import { TransactionsFilterTypeComponent } from './filter-type/transactions-filt
           'max-height': '0',
           overflow: 'hidden',
           display: 'none',
-          backgroundColor: '#AEB0B5'
+          backgroundColor: '#AEB0B5',
         })
       ),
       transition('open => closed', [animate('.25s ease')]),
-      transition('closed => open', [animate('.5s ease')])
-    ])
-  ] 
+      transition('closed => open', [animate('.5s ease')]),
+    ]),
+  ],
 })
 export class TransactionsFilterComponent implements OnInit, OnDestroy {
   @Input()
@@ -95,7 +95,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   public title = '';
 
   @ViewChildren('categoryElements')
-  private categoryElements: QueryList<TransactionsFilterTypeComponent>;
+  private categoryElements!: QueryList<TransactionsFilterTypeComponent>;
 
   public isHideTypeFilter!: boolean;
   public isHideDateFilter!: boolean;
@@ -119,9 +119,9 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   public electionCodes: any = [
     { option: 'primary', selected: false },
     { option: 'general', selected: false },
-    { option: 'other', selected: false }
+    { option: 'other', selected: false },
   ];
-  
+
   public filterCategoriesText = '';
   public filterAmountMin!: number;
   public filterAmountMax!: number;
@@ -135,10 +135,10 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   public filterLoanClosingBalanceMax!: number;
   public filterDebtBeginningBalanceMin!: number;
   public filterDebtBeginningBalanceMax!: number;
-  public filterDateFrom: Date = null;
-  public filterDateTo: Date = null;
-  public filterDeletedDateFrom: Date = null;
-  public filterDeletedDateTo: Date = null;
+  public filterDateFrom: Date = new Date();
+  public filterDateTo: Date = new Date();
+  public filterDeletedDateFrom: Date = new Date();
+  public filterDeletedDateTo: Date = new Date();
   public filterMemoCode = false;
   public filterElectionCode = false;
   public filterElectionYearFrom!: string;
@@ -155,7 +155,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   public debtBeginningBalanceFilterValidation!: ValidationErrorModel;
   public transactionCategory: string = '';
   public editMode: boolean = false;
-  
+
   private onDestroy$ = new Subject();
 
   /**
@@ -167,7 +167,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
    * Subscription for switch filters for ActiveView of the traansaction table.
    */
   private switchFilterViewSubscription!: Subscription;
-  
+
   private clearAllFiltersSubscription!: Subscription;
 
   // TODO put in a transactions constants ts file for multi component use.
@@ -176,7 +176,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   private msEdge = true;
   private view = ActiveView.transactions;
   queryParamSubscription!: Subscription;
-  
+
   //Filters flags based on formType and transactionCategory
   public showAmountFilter!: boolean;
   public showPeriodAmountFilter!: boolean;
@@ -202,8 +202,8 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
     private _transactionsMessageService: TransactionsMessageService,
     private _transactionTypeService: TransactionTypeService,
     public _activatedRoute: ActivatedRoute,
-    private _contactsService:ContactsService, 
-    private _reportsService: ReportsService, 
+    private _contactsService: ContactsService,
+    private _reportsService: ReportsService,
     private _messageService: MessageService
   ) {
     this._transactionsMessageService
@@ -232,38 +232,38 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
             break;
           default:
             this.view = ActiveView.transactions;
-            //console.log('unexpected ActiveView received: ' + message);
+          //console.log('unexpected ActiveView received: ' + message);
         }
       });
 
     this._transactionsMessageService
-    .getClearAllFiltersMessage()
-    .pipe(takeUntil(this.onDestroy$))
-    .subscribe(message => {
-      this.clearAndApplyFilters();
-    }); 
-    
-    this._messageService
-    .getMessage()
-    .pipe(takeUntil(this.onDestroy$))
-    .subscribe(message => {
-      if(message && message.action === 'filterAllTransactionsByEntity'){
-        // this.entityFilter = message.entityId;
-        let entityList = this._contactsService.entityListToFilterBy;
-        entityList.forEach(element => {
-          this.entityFilter.push(element.id);
-        });
-        this.applyFilters(false);
-      }
-    }); 
+      .getClearAllFiltersMessage()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((message) => {
+        this.clearAndApplyFilters();
+      });
 
-    this.queryParamSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe(p => {
-      this.transactionCategory = p.transactionCategory;
-      if (p.edit === 'true' || p.edit === true) {
+    this._messageService
+      .getMessage()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((message) => {
+        if (message && message.action === 'filterAllTransactionsByEntity') {
+          // this.entityFilter = message.entityId;
+          let entityList = this._contactsService.entityListToFilterBy;
+          entityList.forEach((element: any) => {
+            this.entityFilter.push(element.id);
+          });
+          this.applyFilters(false);
+        }
+      });
+
+    this.queryParamSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe((p) => {
+      this.transactionCategory = p['transactionCategory'];
+      if (p['edit'] === 'true' || p['edit'] === true) {
         this.editMode = true;
       }
-      if (p.transactionCategory) {
-        this.transactionCategory = p.transactionCategory;
+      if (p['transactionCategory']) {
+        this.transactionCategory = p['transactionCategory'];
         this._initializeFilters();
       }
     });
@@ -275,22 +275,22 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.msEdge = this.isEdge();
 
-    this.filterDateFrom = null;
-    this.filterDateTo = null;
-    this.filterDeletedDateFrom = null;
-    this.filterDeletedDateTo = null;
-    this.filterAmountMin = null;
-    this.filterAmountMax = null;
-    this.filterSemiAnnualAmountMin = null;
-    this.filterSemiAnnualAmountMax = null;
-    this.filterLoanAmountMin = null;
-    this.filterLoanAmountMax = null;
-    this.filterAggregateAmountMin = null;
-    this.filterAggregateAmountMax = null;
-    this.filterLoanClosingBalanceMin = null;
-    this.filterLoanClosingBalanceMax = null;
-    this.filterDebtBeginningBalanceMin = null;
-    this.filterDebtBeginningBalanceMax = null;
+    this.filterDateFrom = new Date();
+    this.filterDateTo = new Date();
+    this.filterDeletedDateFrom = new Date();
+    this.filterDeletedDateTo = new Date();
+    this.filterAmountMin = 0;
+    this.filterAmountMax = 0;
+    this.filterSemiAnnualAmountMin = 0;
+    this.filterSemiAnnualAmountMax = 0;
+    this.filterLoanAmountMin = 0;
+    this.filterLoanAmountMax = 0;
+    this.filterAggregateAmountMin = 0;
+    this.filterAggregateAmountMax = 0;
+    this.filterLoanClosingBalanceMin = 0;
+    this.filterLoanClosingBalanceMax = 0;
+    this.filterDebtBeginningBalanceMin = 0;
+    this.filterDebtBeginningBalanceMax = 0;
 
     this.isHideTypeFilter = true;
     this.isHideDateFilter = true;
@@ -315,56 +315,51 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
       this.getCategoryTypes();
       this.getStates();
       this.getItemizations();
-      if(this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams['allTransactions'] === 'true'){
+      if (
+        this._activatedRoute.snapshot.queryParams &&
+        this._activatedRoute.snapshot.queryParams['allTransactions'] === 'true'
+      ) {
         this.getReportTypes();
       }
     }
   }
- 
-  private _initializeFilters(){
-    if(!this.formType){
-      this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
+
+  private _initializeFilters() {
+    if (!this.formType) {
+      this.formType = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
     }
-    if(this.formType.endsWith('3X') || this.formType.endsWith('24')){
-      if(this.transactionCategory === 'receipts'){
+    if (this.formType.endsWith('3X') || this.formType.endsWith('24')) {
+      if (this.transactionCategory === 'receipts') {
         this._hideAllFilters();
         this.showF3xReceiptsFilters();
-      }
-      else if(this.transactionCategory === 'disbursements'){
+      } else if (this.transactionCategory === 'disbursements') {
         this._hideAllFilters();
         this.showF3xDisbursementsFilters();
-      }
-      else if(this.transactionCategory === 'loans-and-debts'){
+      } else if (this.transactionCategory === 'loans-and-debts') {
         this._hideAllFilters();
         this.showLoansAndDebtsFilters();
-      }
-      else if(this.transactionCategory === 'other'){
+      } else if (this.transactionCategory === 'other') {
         this._hideAllFilters();
         this.showOthersFilters();
       }
-    }
-    else if(this.formType.endsWith('3L')){
-      if(this.transactionCategory === 'receipts' || this.transactionCategory === 'disbursements'){
+    } else if (this.formType.endsWith('3L')) {
+      if (this.transactionCategory === 'receipts' || this.transactionCategory === 'disbursements') {
         this._hideAllFilters();
         this.showF3lReceiptsOrDisbursementsFilters();
       }
-    }
-    else if(this.formType.endsWith('global')){
-      if(this.transactionCategory === 'receipts'){
+    } else if (this.formType.endsWith('global')) {
+      if (this.transactionCategory === 'receipts') {
         this._hideAllFilters();
         this.showF3xReceiptsFilters();
         this.showF3lReceiptsOrDisbursementsFilters();
-      }
-      else if(this.transactionCategory === 'disbursements'){
+      } else if (this.transactionCategory === 'disbursements') {
         this._hideAllFilters();
         this.showF3xDisbursementsFilters();
         this.showF3lReceiptsOrDisbursementsFilters();
-      }
-      else if(this.transactionCategory === 'loans-and-debts'){
+      } else if (this.transactionCategory === 'loans-and-debts') {
         this._hideAllFilters();
         this.showLoansAndDebtsFilters();
-      }
-      else if(this.transactionCategory === 'other'){
+      } else if (this.transactionCategory === 'other') {
         this._hideAllFilters();
         this.showOthersFilters();
       }
@@ -421,7 +416,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
     this.showStateFilter = true;
   }
 
-  private _hideAllFilters(){
+  private _hideAllFilters() {
     this.showAmountFilter = false;
     this.showPeriodAmountFilter = false;
     this.showAggregateAmountFilter = false;
@@ -439,7 +434,6 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
     this.showElectionYearFilter = false;
     this.showSemiAnnualAmountFilter = false;
   }
- 
 
   /**
    * A method to run when component is destroyed.
@@ -526,7 +520,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
     this.isHideMemoFilter = !this.isHideMemoFilter;
   }
 
-   /**
+  /**
    * Toggle visibility of the Schedule filter
    */
   public toggleScheduleFilterItem() {
@@ -590,11 +584,8 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const typeMatches: Array<TransactionsFilterTypeComponent> = this.categoryElements.filter(el => {
-      return el.categoryType.text
-        .toString()
-        .toLowerCase()
-        .includes(this.filterCategoriesText.toLowerCase());
+    const typeMatches: Array<TransactionsFilterTypeComponent> = this.categoryElements.filter((el) => {
+      return el.categoryType.text.toString().toLowerCase().includes(this.filterCategoriesText.toLowerCase());
     });
 
     if (typeMatches.length > 0) {
@@ -661,7 +652,6 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
     }
     filters.filterReportTypes = filterReportTypes;
 
-
     // type/category
     const filterCategories = [];
     // if (this.filterCategoriesText.length > 0) {
@@ -705,7 +695,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
     if (this.filterSemiAnnualAmountMin !== null) {
       modified = true;
     }
-    if (this.filterSemiAnnualAmountMax !== null){
+    if (this.filterSemiAnnualAmountMax !== null) {
       modified = true;
     }
     if (this.filterAmountMax !== null) {
@@ -823,32 +813,32 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
       s.selected = false;
     }
 
-    this.filterAmountMin = null;
-    this.filterAmountMax = null;
-    this.filterSemiAnnualAmountMin = null;
-    this.filterSemiAnnualAmountMax = null;
-    this.filterAggregateAmountMin = null;
-    this.filterAggregateAmountMax = null;
-    this.filterLoanAmountMin = null;
-    this.filterLoanAmountMax = null;
-    this.filterLoanClosingBalanceMin = null;
-    this.filterLoanClosingBalanceMax = null;
-    this.filterDebtBeginningBalanceMin = null;
-    this.filterDebtBeginningBalanceMax = null;
+    this.filterAmountMin = 0;
+    this.filterAmountMax = 0;
+    this.filterSemiAnnualAmountMin = 0;
+    this.filterSemiAnnualAmountMax = 0;
+    this.filterAggregateAmountMin = 0;
+    this.filterAggregateAmountMax = 0;
+    this.filterLoanAmountMin = 0;
+    this.filterLoanAmountMax = 0;
+    this.filterLoanClosingBalanceMin = 0;
+    this.filterLoanClosingBalanceMax = 0;
+    this.filterDebtBeginningBalanceMin = 0;
+    this.filterDebtBeginningBalanceMax = 0;
 
-    this.filterDateFrom = null;
-    this.filterDateTo = null;
-    this.filterDeletedDateFrom = null;
-    this.filterDeletedDateTo = null;
+    this.filterDateFrom = new Date();
+    this.filterDateTo = new Date();
+    this.filterDeletedDateFrom = new Date();
+    this.filterDeletedDateTo = new Date();
     this.filterMemoCode = false;
 
-    this.filterElectionCode = null;
+    this.filterElectionCode = false;
     for (const s of this.electionCodes) {
       s.selected = false;
     }
-    this.filterElectionYearFrom = null;
-    this.filterElectionYearTo = null;
-    this.filterSchedule = null;
+    this.filterElectionYearFrom = '';
+    this.filterElectionYearTo = '';
+    this.filterSchedule = '';
   }
 
   /**
@@ -889,24 +879,22 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
   private getCategoryTypes() {
     this._transactionTypeService.getTransactionTypes(this.formType).subscribe((res: any) => {
       let categoriesExist = false;
-      let categoriesGroupArray = [];
-        if (res) {
-          categoriesExist = true;
+      let categoriesGroupArray: any[] = [];
+      if (res) {
+        categoriesExist = true;
 
-          const receiptsArr = res.filter(obj => obj.categoryType === 'Receipts');
-          const disbursementsArr = res.filter(obj => obj.categoryType === 'Disbursements');
-          const loansAndDebtsArr = res.filter(obj => obj.categoryType === 'Loans and Debts');
-          const otherArr = res.filter(obj => obj.categoryType === 'Other');
+        const receiptsArr = res.filter((obj: any) => obj.categoryType === 'Receipts');
+        const disbursementsArr = res.filter((obj: any) => obj.categoryType === 'Disbursements');
+        const loansAndDebtsArr = res.filter((obj: any) => obj.categoryType === 'Loans and Debts');
+        const otherArr = res.filter((obj: any) => obj.categoryType === 'Other');
 
-          categoriesGroupArray = [
-            {text:'Receipts', options: receiptsArr},
-            {text:'Disbursements', options: disbursementsArr},
-            {text:'Loans and Debts', options: loansAndDebtsArr},
-            {text:'Other', options: otherArr},
-          ];
-
-
-        }
+        categoriesGroupArray = [
+          { text: 'Receipts', options: receiptsArr },
+          { text: 'Disbursements', options: disbursementsArr },
+          { text: 'Loans and Debts', options: loansAndDebtsArr },
+          { text: 'Other', options: otherArr },
+        ];
+      }
       if (categoriesExist) {
         this.transactionCategories = categoriesGroupArray;
       } else {
@@ -953,20 +941,20 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
       let reportsExist = false;
       if (res) {
         reportsExist = true;
-          for (const r of res) {
-            // check for states selected in the filter cache
-            // TODO scroll to first check item
-            if (this.cachedFilters) {
-              if (this.cachedFilters.filterReportTypes) {
-                if (this.cachedFilters.filterReportTypes.includes(r.rpt_type)) {
-                  r.selected = true;
-                  this.isHideReportTypeFilter = false;
-                } else {
-                  r.selected = false;
-                }
+        for (const r of res) {
+          // check for states selected in the filter cache
+          // TODO scroll to first check item
+          if (this.cachedFilters) {
+            if (this.cachedFilters.filterReportTypes) {
+              if (this.cachedFilters.filterReportTypes.includes(r.rpt_type)) {
+                r.selected = true;
+                this.isHideReportTypeFilter = false;
+              } else {
+                r.selected = false;
               }
             }
           }
+        }
       }
       if (reportsExist) {
         this.reportTpes = res;
@@ -1038,11 +1026,15 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
 
         this.filterLoanClosingBalanceMin = this.cachedFilters.filterLoanClosingBalanceMin;
         this.filterLoanClosingBalanceMax = this.cachedFilters.filterLoanClosingBalanceMax;
-        this.isHideloanClosingBalanceFilter = !(this.filterLoanClosingBalanceMin > 0 && this.filterLoanClosingBalanceMax > 0);
+        this.isHideloanClosingBalanceFilter = !(
+          this.filterLoanClosingBalanceMin > 0 && this.filterLoanClosingBalanceMax > 0
+        );
 
         this.filterDebtBeginningBalanceMin = this.cachedFilters.filterDebtBeginningBalanceMin;
         this.filterDebtBeginningBalanceMax = this.cachedFilters.filterDebtBeginningBalanceMax;
-        this.isHideDebtBeginningBalanceFilter = !(this.filterDebtBeginningBalanceMin > 0 && this.filterDebtBeginningBalanceMax > 0);
+        this.isHideDebtBeginningBalanceFilter = !(
+          this.filterDebtBeginningBalanceMin > 0 && this.filterDebtBeginningBalanceMax > 0
+        );
 
         this.filterDateFrom = this.cachedFilters.filterDateFrom;
         this.filterDateTo = this.cachedFilters.filterDateTo;
@@ -1069,14 +1061,14 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
    * Initialize validation errors to their defaults.
    */
   private initValidationErrors() {
-    this.dateFilterValidation = new ValidationErrorModel(null, false);
-    this.deletedDateFilterValidation = new ValidationErrorModel(null, false);
-    this.amountFilterValidation = new ValidationErrorModel(null, false);
-    this.semiAnnualAmountFilterValidation = new ValidationErrorModel(null, false);
-    this.aggregateAmountFilterValidation = new ValidationErrorModel(null, false);
-    this.yearFilterValidation = new ValidationErrorModel(null, false);
-    this.loanClosingBalanceFilterValidation = new ValidationErrorModel(null, false);
-    this.debtBeginningBalanceFilterValidation = new ValidationErrorModel(null, false);
+    this.dateFilterValidation = new ValidationErrorModel('', false);
+    this.deletedDateFilterValidation = new ValidationErrorModel('', false);
+    this.amountFilterValidation = new ValidationErrorModel('', false);
+    this.semiAnnualAmountFilterValidation = new ValidationErrorModel('', false);
+    this.aggregateAmountFilterValidation = new ValidationErrorModel('', false);
+    this.yearFilterValidation = new ValidationErrorModel('', false);
+    this.loanClosingBalanceFilterValidation = new ValidationErrorModel('', false);
+    this.debtBeginningBalanceFilterValidation = new ValidationErrorModel('', false);
   }
 
   /**
@@ -1150,7 +1142,6 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
       return false;
     }
 
-
     if (this.filterSemiAnnualAmountMin > this.filterSemiAnnualAmountMax) {
       this.semiAnnualAmountFilterValidation.isError = true;
       this.semiAnnualAmountFilterValidation.message = 'Maximum is less than Minimum';
@@ -1221,7 +1212,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
       this.isHideloanClosingBalanceFilter = false;
       return false;
     }
-    
+
     if (this.filterDebtBeginningBalanceMin !== null && this.filterDebtBeginningBalanceMax === null) {
       this.debtBeginningBalanceFilterValidation.isError = true;
       this.debtBeginningBalanceFilterValidation.message = 'Maximum Amount is required';
@@ -1273,7 +1264,8 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
     if (
       this.filterElectionYearTo !== null &&
       this.filterElectionYearFrom !== null &&
-      (this.filterElectionYearTo !== undefined && this.filterElectionYearFrom !== undefined) &&
+      this.filterElectionYearTo !== undefined &&
+      this.filterElectionYearFrom !== undefined &&
       (!/^\d{4}$/.test(this.filterElectionYearFrom) || !/^\d{4}$/.test(this.filterElectionYearTo))
     ) {
       this.yearFilterValidation.isError = true;
@@ -1281,14 +1273,18 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
       this.isHideElectionYear = false;
       return false;
     }
-    if (this.filterElectionYearTo !== null && this.filterElectionYearFrom !== null &&
-      this.filterElectionYearTo !== undefined && this.filterElectionYearFrom !== undefined) {
+    if (
+      this.filterElectionYearTo !== null &&
+      this.filterElectionYearFrom !== null &&
+      this.filterElectionYearTo !== undefined &&
+      this.filterElectionYearFrom !== undefined
+    ) {
       this.filterElectionYearFrom = this.filterElectionYearFrom.toString();
       this.filterElectionYearTo = this.filterElectionYearTo.toString();
     }
     if (this.filterElectionYearTo === '' && this.filterElectionYearFrom === '') {
-      this.filterElectionYearFrom = null;
-      this.filterElectionYearTo = null;
+      this.filterElectionYearFrom = '';
+      this.filterElectionYearTo = '';
     }
 
     return true;
@@ -1316,7 +1312,7 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
                 reportType.selected = false;
               }
             }
-            break;  
+            break;
           case FilterTypes.category:
             for (const categoryGroup of this.transactionCategories) {
               for (const categoryType of categoryGroup.options) {
@@ -1327,37 +1323,37 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
             }
             break;
           case FilterTypes.date:
-            this.filterDateFrom = null;
-            this.filterDateTo = null;
+            this.filterDateFrom = new Date();
+            this.filterDateTo = new Date();
             break;
           case FilterTypes.deletedDate:
-            this.filterDeletedDateFrom = null;
-            this.filterDeletedDateTo = null;
+            this.filterDeletedDateFrom = new Date();
+            this.filterDeletedDateTo = new Date();
             break;
           case FilterTypes.amount:
-            this.filterAmountMin = null;
-            this.filterAmountMax = null;
+            this.filterAmountMin = 0;
+            this.filterAmountMax = 0;
             break;
           case FilterTypes.semiAnnualAmount:
-            this.filterAmountMin = null;
-            this.filterAmountMax = null;
+            this.filterAmountMin = 0;
+            this.filterAmountMax = 0;
             break;
           case FilterTypes.aggregateAmount:
-            this.filterAggregateAmountMin = null;
-            this.filterAggregateAmountMax = null;
+            this.filterAggregateAmountMin = 0;
+            this.filterAggregateAmountMax = 0;
             break;
           case FilterTypes.loanAmount:
-            this.filterLoanAmountMin = null;
-            this.filterLoanAmountMax = null;
+            this.filterLoanAmountMin = 0;
+            this.filterLoanAmountMax = 0;
             break;
           case FilterTypes.loanClosingBalance:
-            this.filterLoanClosingBalanceMin = null;
-            this.filterLoanClosingBalanceMax = null;
+            this.filterLoanClosingBalanceMin = 0;
+            this.filterLoanClosingBalanceMax = 0;
             break;
           case FilterTypes.debtBeginningBalance:
-          this.filterDebtBeginningBalanceMin = null;
-          this.filterDebtBeginningBalanceMax = null;
-          break;
+            this.filterDebtBeginningBalanceMin = 0;
+            this.filterDebtBeginningBalanceMax = 0;
+            break;
           case FilterTypes.memoCode:
             this.filterMemoCode = false;
             break;
@@ -1376,14 +1372,14 @@ export class TransactionsFilterComponent implements OnInit, OnDestroy {
             }
             break;
           case FilterTypes.electionYear:
-            this.filterElectionYearFrom = null;
-            this.filterElectionYearTo = null;
+            this.filterElectionYearFrom = '';
+            this.filterElectionYearTo = '';
             break;
           case FilterTypes.schedule:
-            this.filterSchedule = null;
+            this.filterSchedule = '';
             break;
           default:
-            //console.log('unexpected key for remove filter = ' + message.key);
+          //console.log('unexpected key for remove filter = ' + message.key);
         }
       }
     }

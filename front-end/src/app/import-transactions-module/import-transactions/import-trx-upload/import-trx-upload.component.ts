@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { S3 } from 'aws-sdk/clients/all';
-import { ConfirmModalComponent } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from '../../../shared/partials/confirm-modal/confirm-modal.component';
 import { timer, Subject, throwError } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UploadTrxService } from '../import-trx-upload/service/upload-trx.service';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import CryptoJS from 'crypto-js';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
+import * as CryptoJS from 'crypto-js';
 import { UploadFileModel } from '../model/upload-file.model';
 import { ImportFileStatusEnum } from '../import-file-status.enum';
 import { ImportTransactionsService } from '../service/import-transactions.service';
@@ -14,7 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-import-trx-upload',
   templateUrl: './import-trx-upload.component.html',
-  styleUrls: ['./import-trx-upload.component.scss']
+  styleUrls: ['./import-trx-upload.component.scss'],
 })
 export class ImportTrxUploadComponent implements OnInit, OnDestroy {
   @Input()
@@ -26,8 +26,8 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
   public progressPercent!: number;
   public uploadingText!: string;
 
-  private onDestroy$: Subject<any>;
-  private uploadProcessing$: Subject<any>;
+  private onDestroy$!: Subject<any>;
+  private uploadProcessing$!: Subject<any>;
   private checkSum!: string;
   private committeeId!: string;
 
@@ -39,7 +39,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.uploadFile.status = ImportFileStatusEnum.uploading;
-    this.committeeId = null;
+    this.committeeId = '';
     if (localStorage.getItem('committee_details') !== null) {
       const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       this.committeeId = cmteDetails.committeeid;
@@ -51,9 +51,9 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.onDestroy$.next();
+    this.onDestroy$.next(null);
     if (this.uploadProcessing$) {
-      this.uploadProcessing$.next();
+      this.uploadProcessing$.next(null);
     }
   }
 
@@ -128,14 +128,14 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
     this.progressPercent = 0;
     this.uploadingText = 'Uploading...';
     this._uploadTrxService
-    .uploadFile(this.uploadFile, this.committeeId)
-    .pipe(takeUntil(this.onDestroy$))
-    .subscribe((data: any) => {
-      if (data === false) {
-        return;
-      }
-      this._checkForProcessingProgress();
-    });
+      .uploadFile(this.uploadFile, this.committeeId)
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((data: any) => {
+        if (data === false) {
+          return;
+        }
+        this._checkForProcessingProgress();
+      });
 
     // // read the first record to get sched type
     // const fileReader = new FileReader();
@@ -184,7 +184,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
       if (timerSubscription) {
         timerSubscription.unsubscribe();
       }
-      timerSubject.next();
+      timerSubject.next(null);
       timerSubject.complete();
 
       // // TODO get Schedule Type from file on S3 and rename file to include it for API
@@ -202,7 +202,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
 
       this.resultsEmitter.emit({
         resultType: 'success',
-        uploadFile: this.uploadFile
+        uploadFile: this.uploadFile,
       });
     });
 
@@ -215,7 +215,7 @@ export class ImportTrxUploadComponent implements OnInit, OnDestroy {
     //   this.uploadContactsService.checkUploadProcessing().pipe(takeUntil(this.uploadProcessing$)).subscribe((res: any) => {
     //     this.processingPercent += res;
     //     if (this.processingPercent > 99) {
-    //       this.uploadProcessing$.next();
+    //       this.uploadProcessing$.next(null);
     //       this.uploadProcessing$.complete();
     //       // Using setTimeout to avoid another subject but should use RxJs (try delay or interval)
     //       // The purpose here is to allow the user to see the 100% completion before switching view.

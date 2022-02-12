@@ -531,7 +531,9 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
 
     if (this.scheduleAction === ScheduleActions.edit) {
       let newAggregate = null;
-      const originalAggregationInd = this._utilService.aggregateIndToBool(this._transactionToEdit?.aggregation_ind ?? '');
+      const originalAggregationInd = this._utilService.aggregateIndToBool(
+        this._transactionToEdit?.aggregation_ind ?? ''
+      );
       if (this._transactionToEdit) {
         if (originalAggregationInd === this.isAggregate) {
           // the aggregation indicator is same since initial load
@@ -605,8 +607,8 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
             },
             { onlySelf: true }
           );
-        }
-        });
+        },
+      });
     }
   }
 
@@ -902,74 +904,74 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
    */
   override searchCandLastName = (text$: Observable<string>) => of([]);
   // NG-UPGRADE-ISSUE
-    // text$.pipe(
-    //   debounceTime(500),
-    //   distinctUntilChanged(),
-    //   switchMap((searchText) => {
-    //     if (searchText) {
-    //       let result = this._typeaheadService.getContacts(searchText, 'cand_last_name');
-    //       if (this.transactionType === 'IE_MULTI') {
-    //         result = result.map((contacts: any) => contacts.filter((element: any) => element.cand_office === 'P'));
-    //       }
-    //       return result;
-    //     } else {
-    //       return of([]);
-    //     }
-    //   })
-    // );
+  // text$.pipe(
+  //   debounceTime(500),
+  //   distinctUntilChanged(),
+  //   switchMap((searchText) => {
+  //     if (searchText) {
+  //       let result = this._typeaheadService.getContacts(searchText, 'cand_last_name');
+  //       if (this.transactionType === 'IE_MULTI') {
+  //         result = result.map((contacts: any) => contacts.filter((element: any) => element.cand_office === 'P'));
+  //       }
+  //       return result;
+  //     } else {
+  //       return of([]);
+  //     }
+  //   })
+  // );
 
   /**
    * Search for Candidate when first name input value changes.
    */
   override searchCandFirstName = (text$: Observable<string>) => of([]);
   // NG-UPGRADE-ISSUE
-    // text$.pipe(
-    //   debounceTime(500),
-    //   distinctUntilChanged(),
-    //   switchMap((searchText) => {
-    //     if (searchText) {
-    //       let result = this._typeaheadService.getContacts(searchText, 'cand_first_name');
-    //       if (this.transactionType === 'IE_MULTI') {
-    //         result = result.map((contacts) => contacts.filter((element: any) => element.cand_office === 'P'));
-    //       }
-    //       return result;
-    //     } else {
-    //       return Observable.of([]);
-    //     }
-    //   })
-    // );
+  // text$.pipe(
+  //   debounceTime(500),
+  //   distinctUntilChanged(),
+  //   switchMap((searchText) => {
+  //     if (searchText) {
+  //       let result = this._typeaheadService.getContacts(searchText, 'cand_first_name');
+  //       if (this.transactionType === 'IE_MULTI') {
+  //         result = result.map((contacts) => contacts.filter((element: any) => element.cand_office === 'P'));
+  //       }
+  //       return result;
+  //     } else {
+  //       return of([]);
+  //     }
+  //   })
+  // );
 
   /**
    * Search for Committee Payees when Committee ID input value changes.
    */
   searchPayeeCommitteeId = (text$: Observable<string>) => of([]);
   // NG-UPGRADE-ISSUE
-    // text$.pipe(
-    //   debounceTime(500),
-    //   distinctUntilChanged(),
-    //   switchMap((searchText) => {
-    //     const searchTextUpper = searchText.toUpperCase();
+  // text$.pipe(
+  //   debounceTime(500),
+  //   distinctUntilChanged(),
+  //   switchMap((searchText) => {
+  //     const searchTextUpper = searchText.toUpperCase();
 
-    //     if (
-    //       searchTextUpper === 'C' ||
-    //       searchTextUpper === 'C0' ||
-    //       searchTextUpper === 'C00' ||
-    //       searchTextUpper === 'C000'
-    //     ) {
-    //       return of([]);
-    //     }
+  //     if (
+  //       searchTextUpper === 'C' ||
+  //       searchTextUpper === 'C0' ||
+  //       searchTextUpper === 'C00' ||
+  //       searchTextUpper === 'C000'
+  //     ) {
+  //       return of([]);
+  //     }
 
-    //     if (searchText) {
-    //       let result = this._typeaheadService.getContacts(searchText, 'payee_cmte_id');
-    //       if (this.transactionType === 'IE_MULTI') {
-    //         result = result.map((contacts) => contacts.filter((element: any) => element.cand_office === 'P'));
-    //       }
-    //       return result;
-    //     } else {
-    //       return of([]);
-    //     }
-    //   })
-    // );
+  //     if (searchText) {
+  //       let result = this._typeaheadService.getContacts(searchText, 'payee_cmte_id');
+  //       if (this.transactionType === 'IE_MULTI') {
+  //         result = result.map((contacts) => contacts.filter((element: any) => element.cand_office === 'P'));
+  //       }
+  //       return result;
+  //     } else {
+  //       return of([]);
+  //     }
+  //   })
+  // );
 
   formatterPayeeCommitteeId = (x: { payee_cmte_id: string }) => {
     if (typeof x !== 'string') {

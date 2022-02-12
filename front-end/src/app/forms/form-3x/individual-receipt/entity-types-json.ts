@@ -3,14 +3,14 @@ export const entityTypes = [
     entityType: 'IND',
     entityTypeDescription: 'Individual',
     group: 'ind-group',
-    selected: false
+    selected: false,
   },
   {
     entityType: 'ORG',
     entityTypeDescription: 'Organization',
     group: 'org-group',
-    selected: true
-  }
+    selected: true,
+  },
 ];
 
 export const committeeEventTypes = {
@@ -22,21 +22,21 @@ export const committeeEventTypes = {
           eventType: 'AD',
           eventTypeDescription: 'Administrative',
           scheduleType: 'sched_h1',
-          activityEventTypes: null
+          activityEventTypes: null,
         },
         {
           eventType: 'GV',
           eventTypeDescription: 'Generic Voter Drive',
           scheduleType: 'sched_h1',
-          activityEventTypes: null
+          activityEventTypes: null,
         },
         {
           eventType: 'PC',
           eventTypeDescription: 'Public Communications Referring Only to Party (made by PAC)',
           scheduleType: 'sched_h1',
-          activityEventTypes: null
-        }
-      ]
+          activityEventTypes: null,
+        },
+      ],
     },
     {
       committeeTypeCategory: 'PTY',
@@ -45,19 +45,19 @@ export const committeeEventTypes = {
           eventType: 'AD',
           eventTypeDescription: 'Administrative',
           scheduleType: 'sched_h1',
-          activityEventTypes: null
+          activityEventTypes: null,
         },
         {
           eventType: 'GV',
           eventTypeDescription: 'Generic Voter Drive',
           scheduleType: 'sched_h1',
-          activityEventTypes: null
+          activityEventTypes: null,
         },
         {
           eventType: 'EA',
           eventTypeDescription: 'Exempt Activities',
           scheduleType: 'sched_h1',
-          activityEventTypes: null
+          activityEventTypes: null,
         },
         {
           eventType: 'DF',
@@ -66,13 +66,13 @@ export const committeeEventTypes = {
           activityEventTypes: [
             {
               activityEventType: '??',
-              activityEventDescription: "Chicago Men's Club Rotary"
+              activityEventDescription: "Chicago Men's Club Rotary",
             },
             {
               activityEventType: '??',
-              activityEventDescription: 'Nassau Rally'
-            }
-          ]
+              activityEventDescription: 'Nassau Rally',
+            },
+          ],
         },
         {
           eventType: 'DC',
@@ -81,15 +81,15 @@ export const committeeEventTypes = {
           activityEventTypes: [
             {
               activityEventType: '??',
-              activityEventDescription: "Chicago Men's Club Rotary"
+              activityEventDescription: "Chicago Men's Club Rotary",
             },
             {
               activityEventType: '??',
-              activityEventDescription: 'Nassau Rally'
-            }
-          ]
-        }
-      ]
-    }
-  ]
+              activityEventDescription: 'Nassau Rally',
+            },
+          ],
+        },
+      ],
+    },
+  ],
 };

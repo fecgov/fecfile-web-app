@@ -6,12 +6,13 @@ describe('ToolsCreateBackupComponent', () => {
   let component: ToolsCreateBackupComponent;
   let fixture: ComponentFixture<ToolsCreateBackupComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ToolsCreateBackupComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ToolsCreateBackupComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ToolsCreateBackupComponent);

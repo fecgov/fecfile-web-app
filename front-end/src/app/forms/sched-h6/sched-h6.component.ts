@@ -1,19 +1,32 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
-import { ContactsService } from 'src/app/contacts/service/contacts.service';
-import { ReportsService } from 'src/app/reports/service/report.service';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { TypeaheadService } from 'src/app/shared/partials/typeahead/typeahead.service';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import { FormsService } from 'src/app/shared/services/FormsService/forms.service';
-import { MessageService } from 'src/app/shared/services/MessageService/message.service';
-import { ContributionDateValidator } from 'src/app/shared/utils/forms/validation/contribution-date.validator';
-import { UtilService } from 'src/app/shared/utils/util.service';
+import { ContactsService } from '../../contacts/service/contacts.service';
+import { ReportsService } from '../../reports/service/report.service';
+import {
+  ConfirmModalComponent,
+  ModalHeaderClassEnum,
+} from '../../shared/partials/confirm-modal/confirm-modal.component';
+import { TypeaheadService } from '../../shared/partials/typeahead/typeahead.service';
+import { DialogService } from '../../shared/services/DialogService/dialog.service';
+import { FormsService } from '../../shared/services/FormsService/forms.service';
+import { MessageService } from '../../shared/services/MessageService/message.service';
+import { ContributionDateValidator } from '../../shared/utils/forms/validation/contribution-date.validator';
+import { UtilService } from '../../shared/utils/util.service';
 import { AbstractSchedule } from '../form-3x/individual-receipt/abstract-schedule';
 import { IndividualReceiptService } from '../form-3x/individual-receipt/individual-receipt.service';
 import { ScheduleActions } from '../form-3x/individual-receipt/schedule-actions.enum';
@@ -25,9 +38,8 @@ import { GetTransactionsResponse, TransactionsService } from '../transactions/se
 import { SchedHMessageServiceService } from './../sched-h-service/sched-h-message-service.service';
 import { SchedH6Model } from './sched-h6.model';
 import { SchedH6Service } from './sched-h6.service';
-import {AuthService} from '../../shared/services/AuthService/auth.service';
+import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { PaginationInstance } from 'ngx-pagination';
-
 
 @Component({
   selector: 'app-sched-h6',
@@ -48,26 +60,26 @@ import { PaginationInstance } from 'ngx-pagination';
   ] */
 })
 export class SchedH6Component extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() mainTransactionTypeText!: string;
-  @Input() transactionTypeText!: string;
-  @Input() transactionType!: string;
-  @Input() scheduleAction!: ScheduleActions;
-  @Input() scheduleType!: string;
-  @Output() status: EventEmitter<any>;
+  @Input() override mainTransactionTypeText!: string;
+  @Input() override transactionTypeText!: string;
+  @Input() override transactionType!: string;
+  @Input() override scheduleAction!: ScheduleActions;
+  @Input() override scheduleType!: string;
+  @Output() override status!: EventEmitter<any>;
 
-  public formType!: string;  
-  public showPart2!: boolean;
-  public loaded = false;
+  public override formType!: string;
+  public override showPart2!: boolean;
+  public override loaded = false;
   public schedH6!: FormGroup;
-   
+
   public h6Subscription!: Subscription;
   public h6Sum!: any;
   public saveHRes!: any;
 
   public showSelectType = true;
 
-  public schedH6sModel: Array<SchedH6Model>;
-  public schedH6sModelL: Array<SchedH6Model>;
+  public schedH6sModel!: Array<SchedH6Model>;
+  public schedH6sModelL!: Array<SchedH6Model>;
 
   private clonedTransaction!: any;
 
@@ -115,9 +127,9 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
     private _rt: Router,
     private _dlService: DialogService,
     _schedHMessageServiceService: SchedHMessageServiceService,
-    _authService: AuthService,
-    ) {
-     super(
+    _authService: AuthService
+  ) {
+    super(
       _http,
       _fb,
       _formService,
@@ -139,7 +151,7 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
       _transactionsService,
       _reportsService,
       _schedHMessageServiceService,
-      _authService,
+      _authService
     );
     _schedH6Service;
     _individualReceiptService;
@@ -151,34 +163,24 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
     const paginateConfig: PaginationInstance = {
       id: 'forms__sched-h6-table-pagination',
       itemsPerPage: this.maxItemsPerPage,
-      currentPage: 1
+      currentPage: 1,
     };
     this.config = paginateConfig;
 
-    this.restoreSubscription = this._tranMessageService
-        .getRestoreTransactionsMessage()
-        .subscribe(
-          message => {
-            if(message.scheduleType === 'Schedule H6') {
-              this.getH6Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
-            }
-          }
-        )
+    this.restoreSubscription = this._tranMessageService.getRestoreTransactionsMessage().subscribe((message) => {
+      if (message.scheduleType === 'Schedule H6') {
+        this.getH6Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
+      }
+    });
 
-    this.trashSubscription = this._tranMessageService
-        .getRemoveHTransactionsMessage()
-        .subscribe(
-          message => {
-            if(message.scheduleType === 'Schedule H6') {
-              this.getH6Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
-            }
-          }
-        )
+    this.trashSubscription = this._tranMessageService.getRemoveHTransactionsMessage().subscribe((message) => {
+      if (message.scheduleType === 'Schedule H6') {
+        this.getH6Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
+      }
+    });
   }
 
-
-  public ngOnInit() {
-    
+  public override ngOnInit() {
     // temp code - waiting until dynamic forms completes and loads the formGroup
     // before rendering the static fields, otherwise validation error styling
     // is not working (input-error-field class).  If dynamic forms deliver,
@@ -187,88 +189,81 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
       this.loaded = true;
     }, 2000);
 
-    this.formType = this._actRoute.snapshot.paramMap.get('form_id');    
- 
+    this.formType = this._actRoute.snapshot.paramMap.get('form_id') ?? '';
+
     this.setSchedH6();
     this.getPage(this.config.currentPage);
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges) {
     // OnChanges() can be triggered before OnInit().  Ensure formType is set.
     this.formType = '3X';
 
-    if(this.transactionType === 'ALLOC_H6_SUM') {
+    if (this.transactionType === 'ALLOC_H6_SUM') {
       this.getH6Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
     }
   }
 
   ngDoCheck() {
     this.status.emit({
-      otherSchedHTransactionType: this.transactionType
+      otherSchedHTransactionType: this.transactionType,
     });
   }
 
-  public ngOnDestroy(): void {
+  public override ngOnDestroy(): void {
     this.restoreSubscription.unsubscribe();
     this.trashSubscription.unsubscribe();
     super.ngOnDestroy();
   }
 
   setDefaultValues() {
-    this.schedH6.patchValue({ratio_code:'n'}, { onlySelf: true });
+    this.schedH6.patchValue({ ratio_code: 'n' }, { onlySelf: true });
   }
 
   public getReportId(): string {
-
     let report_id;
     let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
     if (reportType === null || typeof reportType === 'undefined') {
       reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
     }
 
-    if(reportType) {
+    if (reportType) {
       if (reportType.hasOwnProperty('reportId')) {
-        report_id = reportType.reportId;      
-      } else if (reportType.hasOwnProperty('reportid')) {      
+        report_id = reportType.reportId;
+      } else if (reportType.hasOwnProperty('reportid')) {
         report_id = reportType.reportid;
       }
     }
-   
-    return report_id ? report_id : '0';
 
+    return report_id ? report_id : '0';
   }
 
   public setSchedH6() {
-    this.schedH6 = new FormGroup({     
-      type: new FormControl('', Validators.required)      
+    this.schedH6 = new FormGroup({
+      type: new FormControl('', Validators.required),
     });
   }
 
-  public selectTypeChange(e) {    
+  public selectTypeChange(e: any) {
     this.transactionType = e.currentTarget.value;
   }
- 
+
   public getH6Sum(reportId: string, page: number = 1) {
     this.config.currentPage = page;
     this.schedH6sModel = [];
-    
-    this.h6Subscription = this._schedH6Service.getSummary(
-        reportId,
-        page,
-        this.config.itemsPerPage,
-        'default',
-        false
-      ).subscribe(res =>
-      {           
+
+    this.h6Subscription = this._schedH6Service
+      .getSummary(reportId, page, this.config.itemsPerPage, 'default', false)
+      .subscribe((res) => {
         const pagedResponse = this._utilService.pageResponse(res, this.config);
         this.schedH6sModel = pagedResponse.items;
         this.schedH6sModelL = pagedResponse.items;
 
         this.setArrow(this.schedH6sModel);
-        this.pageNumbers = pagedResponse.pageNumbers;    
-      });        
+        this.pageNumbers = pagedResponse.pageNumbers;
+      });
   }
- 
+
   public returnToSum(): void {
     this.transactionType = 'ALLOC_H6_SUM';
     this.getH6Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
@@ -276,59 +271,58 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
 
   public returnToAdd(): void {
     this.showSelectType = true;
-    this.transactionType = "ALLOC_H6_TYPES"
+    this.transactionType = 'ALLOC_H6_TYPES';
     //this.transactionType = 'ALLOC_EXP_DEBT'; //'ALLOC_H6_RATIO';
   }
 
-  public previousStep(): void {
-    
+  public override previousStep(): void {
     this.schedH6.reset();
 
     this.status.emit({
       form: {},
       direction: 'previous',
-      step: 'step_2'
+      step: 'step_2',
     });
   }
 
   public clickArrow(item: SchedH6Model) {
-    if(item.arrow_dir === 'down') {
-      let indexRep = this.schedH6sModel.indexOf(item);
-      this.schedH6sModel[indexRep].child = [];
-      if (indexRep > -1) {
-        let tmp: Array<SchedH6Model> = this.schedH6sModelL.filter(obj => obj.back_ref_transaction_id === item.transaction_id);
-        for(let entry of tmp) {
-          entry.arrow_dir = 'show';
-          //this.schedH6sModel.splice(indexRep + 1, 0, entry);
-          this.schedH6sModel[indexRep].child.push(entry);
-          //indexRep++;
-        }
-        this.config.totalItems = this.schedH6sModel.length;
-      }
-
-      this.schedH6sModel.find(function(obj) { return obj.transaction_id === item.transaction_id}).arrow_dir = 'up';
-      
-    }else if(item.arrow_dir === 'up') {
-      //this.schedH6sModel = this.schedH6sModel.filter(obj => obj.memo_code !== 'X');
-      //this.schedH6sModel = this.schedH6sModel.filter(obj => obj.back_ref_transaction_id !== item.transaction_id);
-      //this.tableConfig.totalItems = this.schedH6sModel.length;
-
-      let indexRep = this.schedH6sModel.indexOf(item);
-      this.schedH6sModel[indexRep].child = [];
-
-
-      this.schedH6sModel.find(function(obj) { return obj.transaction_id === item.transaction_id}).arrow_dir = 'down';
-    }
-   
+    // if (item.arrow_dir === 'down') {
+    //   let indexRep = this.schedH6sModel.indexOf(item);
+    //   this.schedH6sModel[indexRep].child = [];
+    //   if (indexRep > -1) {
+    //     let tmp: Array<SchedH6Model> = this.schedH6sModelL.filter(
+    //       (obj) => obj.back_ref_transaction_id === item.transaction_id
+    //     );
+    //     for (let entry of tmp) {
+    //       entry.arrow_dir = 'show';
+    //       //this.schedH6sModel.splice(indexRep + 1, 0, entry);
+    //       this.schedH6sModel[indexRep].child.push(entry);
+    //       //indexRep++;
+    //     }
+    //     this.config.totalItems = this.schedH6sModel.length;
+    //   }
+    //   this.schedH6sModel.find(function (obj) {
+    //     return obj.transaction_id === item.transaction_id;
+    //   }).arrow_dir = 'up';
+    // } else if (item.arrow_dir === 'up') {
+    //   //this.schedH6sModel = this.schedH6sModel.filter(obj => obj.memo_code !== 'X');
+    //   //this.schedH6sModel = this.schedH6sModel.filter(obj => obj.back_ref_transaction_id !== item.transaction_id);
+    //   //this.tableConfig.totalItems = this.schedH6sModel.length;
+    //   let indexRep = this.schedH6sModel.indexOf(item);
+    //   this.schedH6sModel[indexRep].child = [];
+    //   this.schedH6sModel.find(function (obj) {
+    //     return obj.transaction_id === item.transaction_id;
+    //   }).arrow_dir = 'down';
+    // }
   }
 
   public setArrow(items: SchedH6Model[]) {
-    if(items) {
-      for(const item of items) {        
+    if (items) {
+      for (const item of items) {
         /* if(item.memo_code !== 'X' && this.schedH6sModel.find(function(obj) { return obj.back_ref_transaction_id === item.transaction_id})) {
             item.arrow_dir = 'down';           
         }         */
-        if(item.child && item.child.length > 0){
+        if (item.child && item.child.length > 0) {
           item.arrow_dir = 'down';
         }
       }
@@ -349,47 +343,53 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public cloneTransaction(trx: any): void {
-    this._tranService
-      .cloneTransaction(trx.transaction_id)
-      .subscribe((cloneTransactionResponse: TransactionModel) => {
-        if (cloneTransactionResponse[0] && cloneTransactionResponse[0].hasOwnProperty('transaction_id')) {
-          //this.getTransactionsPage(this.config.currentPage);
-          this.clonedTransaction = cloneTransactionResponse[0];
+    this._tranService.cloneTransaction(trx.transaction_id).subscribe((cloneTransactionResponse: TransactionModel) => {
+      if (cloneTransactionResponse && cloneTransactionResponse.hasOwnProperty('transaction_id')) {
+        //this.getTransactionsPage(this.config.currentPage);
+        this.clonedTransaction = cloneTransactionResponse;
 
-          this.clonedTransaction.reportId = cloneTransactionResponse[0].report_id;
+        this.clonedTransaction.reportId = cloneTransactionResponse.reportId;
 
-          this.editTransaction(cloneTransactionResponse[0]);
+        this.editTransaction(cloneTransactionResponse);
 
-          this._rt.navigate([`/forms/form/3X`], {
-            queryParams: { step: 'step_3', reportId: trx.reportId, edit: true, cloned: true, transactionCategory: 'other'}
-          });
-        }
-      });
+        this._rt.navigate([`/forms/form/3X`], {
+          queryParams: {
+            step: 'step_3',
+            reportId: trx.reportId,
+            edit: true,
+            cloned: true,
+            transactionCategory: 'other',
+          },
+        });
+      }
+    });
   }
 
   public trashTransaction(trx: any): void {
-
     trx.report_id = this._individualReceiptService.getReportIdFromStorage(this.formType);
     trx.transactionId = trx.transaction_id;
 
-    if(this.hasChildTransaction(trx)) {
-      const msg = "There are child transactions associated with this transaction. This action will delete all child transactions as well. Are you sure you want to continue?";
-      this._dlService
-        .confirm(msg, ConfirmModalComponent, 'Warning!')
-        .then((res: any) => {
-          if (res === 'okay') {
-            this.transhAction(trx);
-          } else if (res === 'cancel') {
-          }
-        });
-    }else {
+    if (this.hasChildTransaction(trx)) {
+      const msg =
+        'There are child transactions associated with this transaction. This action will delete all child transactions as well. Are you sure you want to continue?';
+      this._dlService.confirm(msg, ConfirmModalComponent, 'Warning!').then((res: any) => {
+        if (res === 'okay') {
+          this.transhAction(trx);
+        } else if (res === 'cancel') {
+        }
+      });
+    } else {
       this.transhAction(trx);
     }
   }
 
   private transhAction(trx: any): void {
     this._dlService
-      .confirm('You are about to delete this transaction ' + trx.transaction_id + '.', ConfirmModalComponent, 'Caution!')
+      .confirm(
+        'You are about to delete this transaction ' + trx.transaction_id + '.',
+        ConfirmModalComponent,
+        'Caution!'
+      )
       .then((res: any) => {
         if (res === 'okay') {
           this._tranService
@@ -407,11 +407,11 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
             });
         } else if (res === 'cancel') {
         }
-      })
+      });
   }
 
   public hasChildTransaction(item: any): boolean {
-    if(this.schedH6sModelL.filter(obj => obj.back_ref_transaction_id === item.transaction_id).length !== 0) {
+    if (this.schedH6sModelL.filter((obj) => obj.back_ref_transaction_id === item.transaction_id).length !== 0) {
       return true;
     }
     return false;
@@ -420,7 +420,7 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
   public printTransaction(trx: any): void {
     this._reportTypeService.printPreview('transaction_table_screen', '3X', trx.transaction_id);
   }
-  
+
   /**
    * The records for a given page.
    *
@@ -449,7 +449,7 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
   public onGotoPageChange(page: number): void {
     this.config.currentPage = page;
     this.getPage(this.config.currentPage);
-  }  
+  }
 
   /**
    * Determine if pagination should be shown.
@@ -458,31 +458,32 @@ export class SchedH6Component extends AbstractSchedule implements OnInit, OnDest
     if (!this.autoHide) {
       return true;
     }
-    if (this.config.totalItems > this.config.itemsPerPage) {
+    if (this.config.totalItems ?? 0 > this.config.itemsPerPage) {
       return true;
     }
     // otherwise, no show.
     return false;
-  }  
+  }
 
   /**
    * Determine the item range shown by the server-side pagination.
    */
   public determineItemRange(): string {
     let range: {
-      firstItemOnPage: number, lastItemOnPage: number, itemRange: string
+      firstItemOnPage: number;
+      lastItemOnPage: number;
+      itemRange: string;
     } = this._utilService.determineItemRange(this.config, this.schedH6sModel);
 
     this.firstItemOnPage = range.firstItemOnPage;
     this.lastItemOnPage = range.lastItemOnPage;
     return range.itemRange;
-  }  
-  
+  }
+
   public showPageSizes(): boolean {
-    if (this.config && this.config.totalItems && this.config.totalItems > 0){
+    if (this.config && this.config.totalItems && this.config.totalItems > 0) {
       return true;
     }
     return false;
   }
 }
-

@@ -6,12 +6,13 @@ describe('ImportContactsComponent', () => {
   let component: ImportContactsComponent;
   let fixture: ComponentFixture<ImportContactsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ImportContactsComponent]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ImportContactsComponent],
+      }).compileComponents();
     })
-      .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ImportContactsComponent);

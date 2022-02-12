@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import {
   Component,
   EventEmitter,
@@ -8,7 +8,7 @@ import {
   Output,
   ViewEncapsulation,
   OnDestroy,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
@@ -17,6 +17,7 @@ import { FormsService } from '../../services/FormsService/forms.service';
 import { MessageService } from '../../services/MessageService/message.service';
 import { Icommittee_forms } from '../../interfaces/FormsService/FormsService';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../services/AuthService/auth.service';
 
 @Component({
@@ -24,7 +25,7 @@ import { AuthService } from '../../services/AuthService/auth.service';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [NgbTooltipConfig]
+  providers: [NgbTooltipConfig],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
@@ -37,9 +38,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
   public tooltipLeft: string = 'auto';
   public otherFormsHidden: boolean = true;
   public myFormsHidden: boolean = false;
-  public committee_forms: Icommittee_forms[];
-  public committee_myforms: Icommittee_forms[];
-  public committee_otherforms: Icommittee_forms[];
+  public committee_forms: Icommittee_forms[] = [];
+  public committee_myforms: Icommittee_forms[] = [];
+  public committee_otherforms: Icommittee_forms[] = [];
 
   private _toggleNavClicked: boolean = false;
 
@@ -63,9 +64,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this._formService
       .get_filed_form_types()
       .pipe(takeUntil(this.onDestroy$))
-      .subscribe(res => (this.committee_forms = <Icommittee_forms[]>res));
+      .subscribe((res) => (this.committee_forms = <Icommittee_forms[]>res));
 
-    this.routerSubscription = this._router.events.subscribe(val => {
+    this.routerSubscription = this._router.events.subscribe((val) => {
       if (val) {
         if (val instanceof NavigationEnd) {
           if (
@@ -80,7 +81,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           ) {
             this._closeNavBar();
           } else if (val.url.indexOf('/dashboard') === 0 || val.url.indexOf('/forms/form/') === -1) {
-            this.formType = null;
+            this.formType = '';
             this._openNavBar();
           }
         }
@@ -116,7 +117,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       if (route.indexOf('/forms/form/') === 0 && this.sidebarVisibleClass !== 'sidebar-hidden') {
         let formSelected: string = '';
 
-        this.childRouteSubscription = this._activatedRoute.children[0].params.subscribe(param => {
+        this.childRouteSubscription = this._activatedRoute.children[0].params.subscribe((param) => {
           formSelected = param['form_id'];
           this.formSelected(formSelected);
         });
@@ -137,7 +138,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
    * @param      {Object}  event   The event
    */
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize(event: any) {
     this.screenWidth = event.target.innerWidth;
 
     if (this.screenWidth < 768) {
@@ -158,7 +159,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (this._authService.isReadOnly()) {
       return;
     }
-    this.routerEventsSubscription = this._router.events.subscribe(val => {
+    this.routerEventsSubscription = this._router.events.subscribe((val) => {
       if (val instanceof NavigationEnd) {
         if (val.url.indexOf(form) >= 1) {
           if (form !== '3X') {
@@ -223,7 +224,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarVisibleClass = 'sidebar-hidden';
 
     this.status.emit({
-      showSidebar: false
+      showSidebar: false,
     });
   }
 
@@ -236,7 +237,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sidebarVisibleClass = 'sidebar-visible';
 
     this.status.emit({
-      showSidebar: true
+      showSidebar: true,
     });
   }
 }

@@ -6,12 +6,13 @@ describe('ToolsExportNamesComponent', () => {
   let component: ToolsExportNamesComponent;
   let fixture: ComponentFixture<ToolsExportNamesComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ToolsExportNamesComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ToolsExportNamesComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ToolsExportNamesComponent);

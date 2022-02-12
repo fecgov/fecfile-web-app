@@ -6,12 +6,13 @@ describe('FormsschedFCoreComponent', () => {
   let component: SchedFCoreComponent;
   let fixture: ComponentFixture<SchedFCoreComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SchedFCoreComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SchedFCoreComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SchedFCoreComponent);

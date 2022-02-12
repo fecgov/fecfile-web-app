@@ -3,23 +3,20 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 @Component({
   selector: 'app-progress-bar',
   templateUrl: './progress-bar.component.html',
-  styleUrls: ['./progress-bar.component.scss']
+  styleUrls: ['./progress-bar.component.scss'],
 })
 export class ProgressBarComponent implements OnInit, OnChanges {
-
-
   @Input()
   public progress!: any;
 
   @Input()
-  public progressArray: Array<number>;
+  public progressArray!: Array<number>;
 
   public percent!: number;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges): void {
     let percent = 0;
@@ -31,5 +28,4 @@ export class ProgressBarComponent implements OnInit, OnChanges {
     this.percent = percent;
     // console.log('percent=' + this.progressArray);
   }
-
 }

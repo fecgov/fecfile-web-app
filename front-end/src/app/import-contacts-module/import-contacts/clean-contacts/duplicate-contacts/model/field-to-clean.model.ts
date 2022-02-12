@@ -7,6 +7,6 @@ export class FieldToCleanModel {
   name!: string;
   displayName!: string;
   userField!: FieldEntryModel;
-  dupeFields: Array<FieldEntryModel>;
+  dupeFields: Array<FieldEntryModel> = [];
   finalField!: string;
 }

@@ -27,8 +27,8 @@ import { ImportTrxCleanInfoComponent } from './import-transactions/import-trx-cl
     ImportTrxCleanComponent,
     UploadCompleteMessageComponent,
     ImportTrxFileSelectComponent,
-    ImportTrxCleanInfoComponent
+    ImportTrxCleanInfoComponent,
   ],
-  entryComponents: [UploadCompleteMessageComponent]
+  entryComponents: [UploadCompleteMessageComponent],
 })
 export class ImportTransactionsModule {}

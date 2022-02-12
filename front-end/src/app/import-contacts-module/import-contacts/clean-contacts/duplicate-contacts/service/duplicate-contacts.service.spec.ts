@@ -5,7 +5,7 @@ import { DuplicateContactsService } from './duplicate-contacts.service';
 describe('DuplicateContactsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DuplicateContactsService]
+      providers: [DuplicateContactsService],
     });
   });
 

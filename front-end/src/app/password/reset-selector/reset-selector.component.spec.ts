@@ -6,12 +6,13 @@ describe('ResetSelectorComponent', () => {
   let component: ResetSelectorComponent;
   let fixture: ComponentFixture<ResetSelectorComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ResetSelectorComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ResetSelectorComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ResetSelectorComponent);

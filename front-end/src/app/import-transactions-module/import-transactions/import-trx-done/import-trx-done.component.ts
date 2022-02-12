@@ -6,12 +6,12 @@ import { Router } from '@angular/router';
 import { timer, Observable, Subscription } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import * as FileSaver from 'file-saver';
-import { UploadContactsService } from 'src/app/import-contacts-module/import-contacts/upload-contacts/service/upload-contacts.service';
+import { UploadContactsService } from '../../../import-contacts-module/import-contacts/upload-contacts/service/upload-contacts.service';
 
 @Component({
   selector: 'app-import-trx-done',
   templateUrl: './import-trx-done.component.html',
-  styleUrls: ['./import-trx-done.component.scss']
+  styleUrls: ['./import-trx-done.component.scss'],
 })
 export class ImportTrxDoneComponent implements OnInit, OnDestroy {
   @Input()
@@ -21,7 +21,7 @@ export class ImportTrxDoneComponent implements OnInit, OnDestroy {
   public action!: string;
 
   @Input()
-  public fileQueue: Array<UploadFileModel>;
+  public fileQueue!: Array<UploadFileModel>;
 
   @Output()
   public proceedEmitter: EventEmitter<any> = new EventEmitter<any>();
@@ -44,7 +44,7 @@ export class ImportTrxDoneComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.committeeId = null;
+    this.committeeId = '';
     if (localStorage.getItem('committee_details') !== null) {
       const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       this.committeeId = cmteDetails.committeeid;

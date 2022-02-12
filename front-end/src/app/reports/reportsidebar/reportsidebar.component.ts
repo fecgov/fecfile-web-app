@@ -1,15 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef, ViewChildren, QueryList, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  ElementRef,
+  ViewChildren,
+  QueryList,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { style, animate, transition, trigger, state } from '@angular/animations';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ReportsMessageService } from '../service/reports-message.service';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
+import { OrderByPipe } from '../../shared/pipes/order-by/order-by.pipe';
 import { filter, race } from 'rxjs/operators';
 import { ReportFilterModel } from '../model/report-filter.model';
 import { ValidationErrorModel } from '../model/validation-error.model';
 import { ReportsService } from '../service/report.service';
 import { ReportsFilterTypeComponent } from './filter-type/reports-filter-type.component';
 import { ActiveView } from '../reportheader/reportheader.component';
-
 
 /**
  * A component for filtering Reports located in the sidebar.
@@ -21,57 +31,66 @@ import { ActiveView } from '../reportheader/reportheader.component';
   providers: [NgbTooltipConfig, OrderByPipe],
   animations: [
     trigger('openClose', [
-      state('open', style({
-        'max-height': '500px', // Set high to handle multiple scenarios.
-        backgroundColor: 'white',
-      })),
-      state('closed', style({
-        'max-height': '0',
-        overflow: 'hidden',
-        display: 'none',
-        backgroundColor: '#AEB0B5'
-      })),
-      transition('open => closed', [
-        animate('.25s ease')
-      ]),
-      transition('closed => open', [
-        animate('.5s ease')
-      ]),
+      state(
+        'open',
+        style({
+          'max-height': '500px', // Set high to handle multiple scenarios.
+          backgroundColor: 'white',
+        })
+      ),
+      state(
+        'closed',
+        style({
+          'max-height': '0',
+          overflow: 'hidden',
+          display: 'none',
+          backgroundColor: '#AEB0B5',
+        })
+      ),
+      transition('open => closed', [animate('.25s ease')]),
+      transition('closed => open', [animate('.5s ease')]),
     ]),
     trigger('openCloseScroll', [
-      state('open', style({
-        'max-height': '500px', // Set high to handle multiple scenarios.
-        backgroundColor: 'white',
-        'overflow-y': 'scroll'
-      })),
-      state('closed', style({
-        'max-height': '0',
-        overflow: 'hidden',
-        display: 'none',
-        backgroundColor: '#AEB0B5'
-      })),
-      state('openNoAnimate', style({
-        'max-height': '500px',
-        backgroundColor: 'white',
-        'overflow-y': 'scroll'
-      })),
-      state('closedNoAnimate', style({
-        'max-height': '0',
-        overflow: 'hidden',
-        display: 'none',
-        backgroundColor: '#AEB0B5'
-      })),
-      transition('open => closed', [
-        animate('.25s ease')
-      ]),
-      transition('closed => open', [
-        animate('.5s ease')
-      ]),
+      state(
+        'open',
+        style({
+          'max-height': '500px', // Set high to handle multiple scenarios.
+          backgroundColor: 'white',
+          'overflow-y': 'scroll',
+        })
+      ),
+      state(
+        'closed',
+        style({
+          'max-height': '0',
+          overflow: 'hidden',
+          display: 'none',
+          backgroundColor: '#AEB0B5',
+        })
+      ),
+      state(
+        'openNoAnimate',
+        style({
+          'max-height': '500px',
+          backgroundColor: 'white',
+          'overflow-y': 'scroll',
+        })
+      ),
+      state(
+        'closedNoAnimate',
+        style({
+          'max-height': '0',
+          overflow: 'hidden',
+          display: 'none',
+          backgroundColor: '#AEB0B5',
+        })
+      ),
+      transition('open => closed', [animate('.25s ease')]),
+      transition('closed => open', [animate('.5s ease')]),
     ]),
-  ]
+  ],
 })
 export class ReportsidebarComponent implements OnInit {
-
   @Input()
   public formType!: string;
 
@@ -82,21 +101,21 @@ export class ReportsidebarComponent implements OnInit {
   public title = '';
 
   @ViewChildren('categoryElements')
-  private categoryElements: QueryList<ReportsFilterTypeComponent>; 
+  private categoryElements!: QueryList<ReportsFilterTypeComponent>;
 
   public isHideTypeFilter!: boolean;
   public isHideCvgDateFilter!: boolean;
   public isHideFiledDateFilter!: boolean;
   public isHideDeletedDateFilter!: boolean;
-  public filterCvgDateFrom: Date = null;
-  public filterCvgDateTo: Date = null;
-  public filterFiledDateFrom: Date = null;
-  public filterFiledDateTo: Date = null;
+  public filterCvgDateFrom: Date = new Date();
+  public filterCvgDateTo: Date = new Date();
+  public filterFiledDateFrom: Date = new Date();
+  public filterFiledDateTo: Date = new Date();
   public dateFilterValidation!: ValidationErrorModel;
   public filedDateFilterValidation!: ValidationErrorModel;
   public deletedDateFilterValidation!: ValidationErrorModel;
-  public filterDeletedDateFrom: Date = null;
-  public filterDeletedDateTo: Date = null;
+  public filterDeletedDateFrom: Date = new Date();
+  public filterDeletedDateTo: Date = new Date();
 
   public cvgDateFilterValidation!: ValidationErrorModel;
   public amountFilterValidation!: ValidationErrorModel;
@@ -109,34 +128,29 @@ export class ReportsidebarComponent implements OnInit {
   public amendmentindicators: any = [];
   public statuss: any = [];
   public filterForms: string[] = [];
-  public filterReports:  string[] = [];
-  public filterStatuss:  string[] = [];
-  public filterAmendmentIndicators:  string[] = [];
+  public filterReports: string[] = [];
+  public filterStatuss: string[] = [];
+  public filterAmendmentIndicators: string[] = [];
 
   // TODO put in a transactions constants ts file for multi component use.
   private readonly filtersLSK = 'reports.filters';
   private cachedFilters: ReportFilterModel = new ReportFilterModel();
   private msEdge = true;
-  private reportsView = ActiveView.reports
+  private reportsView = ActiveView.reports;
   private recycleBinView = ActiveView.recycleBin;
 
-  constructor(
-    private _reportsService: ReportsService,
-    private _reportsMessageService: ReportsMessageService
-  ) {}
-
+  constructor(private _reportsService: ReportsService, private _reportsMessageService: ReportsMessageService) {}
 
   /**
    * Initialize the component.
    */
   public ngOnInit(): void {
-
     this.msEdge = this.isEdge();
 
-    this.filterCvgDateFrom = null;
-    this.filterCvgDateTo = null;
-    this.filterFiledDateFrom = null;
-    this.filterFiledDateTo = null;
+    this.filterCvgDateFrom = new Date();
+    this.filterCvgDateTo = new Date();
+    this.filterFiledDateFrom = new Date();
+    this.filterFiledDateTo = new Date();
     this.isHideTypeFilter = true;
     this.isHideCvgDateFilter = true;
     this.isHideFiledDateFilter = true;
@@ -148,8 +162,8 @@ export class ReportsidebarComponent implements OnInit {
     this.filterReports = [];
     this.filterStatuss = [];
     this.filterAmendmentIndicators = [];
-    this.filterDeletedDateTo = null;
-    this.filterDeletedDateFrom = null;
+    this.filterDeletedDateTo = new Date();
+    this.filterDeletedDateFrom = new Date();
     this.isHideDeletedDateFilter = true;
 
     this.initValidationErrors();
@@ -161,7 +175,6 @@ export class ReportsidebarComponent implements OnInit {
     this.getAmendmentIndicators();
   }
 
-
   /**
    * Toggle visibility of the Type filter
    */
@@ -169,14 +182,12 @@ export class ReportsidebarComponent implements OnInit {
     this.isHideTypeFilter = !this.isHideTypeFilter;
   }
 
-
   /**
    * Toggle visibility of the Date filter
    */
   public toggleDateFilterItem() {
     this.isHideCvgDateFilter = !this.isHideCvgDateFilter;
   }
-
 
   /**
    * Toggle visibility of the Deleted Date filter
@@ -200,7 +211,7 @@ export class ReportsidebarComponent implements OnInit {
   public toggleStatusFilterItem() {
     this.isHideStatusFilter = !this.isHideStatusFilter;
   }
-  
+
   public toggleAmendmentIndicatorFilterItem() {
     this.isHideAmendmentIndicatorFilter = !this.isHideAmendmentIndicatorFilter;
   }
@@ -215,9 +226,8 @@ export class ReportsidebarComponent implements OnInit {
     return isHidden ? 'up-arrow-icon' : 'down-arrow-icon';
   }
 
-
   /**
-   * Determine the state for scrolling.  The category tye wasn't displaying 
+   * Determine the state for scrolling.  The category tye wasn't displaying
    * properly in edge with animation.  If edge, don't apply the state with animation.
    */
   public determineScrollState(isHide: boolean) {
@@ -228,13 +238,11 @@ export class ReportsidebarComponent implements OnInit {
     }
   }
 
-
   /**
    * Scroll to the Category Type in the list that contains the
    * value from the category search input.
    */
   public scrollToType(): void {
-
     this.clearHighlightedTypes();
 
     /*if (this.filterCategoriesText === undefined ||
@@ -263,7 +271,6 @@ export class ReportsidebarComponent implements OnInit {
     }*/
   }
 
-
   /**
    * Determine if the browser is MS Edge.
    *
@@ -280,16 +287,12 @@ export class ReportsidebarComponent implements OnInit {
     return false;
   }
 
-
   /**
    * Send filter values to the table transactions component.
    * Set the filters.show to true indicating the filters have been altered.
    */
   public applyFilters() {
-
-
     if (!this.validateFilters()) {
-
       return;
     }
 
@@ -307,7 +310,6 @@ export class ReportsidebarComponent implements OnInit {
     }
     filters.filterForms = filterForms;
 
-      
     // Report Type
     const filterReports = [];
     for (const r of this.reports) {
@@ -317,7 +319,6 @@ export class ReportsidebarComponent implements OnInit {
       }
     }
     filters.filterReports = filterReports;
-    
 
     // Amendment Indicator
     const filterAmendmentIndicators = [];
@@ -327,17 +328,17 @@ export class ReportsidebarComponent implements OnInit {
         modified = true;
       }
     }
-    filters.filterAmendmentIndicators = filterAmendmentIndicators
-    
+    filters.filterAmendmentIndicators = filterAmendmentIndicators;
+
     // Filed Status
     const filterStatuss = [];
     for (const s of this.statuss) {
       if (s.selected) {
-        filterStatuss.push(s.status_cd/*  */);
+        filterStatuss.push(s.status_cd /*  */);
         modified = true;
       }
     }
-    filters.filterStatuss =filterStatuss;
+    filters.filterStatuss = filterStatuss;
 
     filters.filterCvgDateFrom = this.filterCvgDateFrom;
     filters.filterCvgDateTo = this.filterCvgDateTo;
@@ -347,7 +348,6 @@ export class ReportsidebarComponent implements OnInit {
     if (this.filterCvgDateTo !== null) {
       modified = true;
     }
-
 
     filters.filterFiledDateFrom = this.filterFiledDateFrom;
     filters.filterFiledDateTo = this.filterFiledDateTo;
@@ -372,12 +372,10 @@ export class ReportsidebarComponent implements OnInit {
     this._reportsMessageService.sendApplyFiltersMessage(filters);
   }
 
-
   /**
    * Clear all filter values.
    */
   public clearFilters() {
-
     this.initValidationErrors();
 
     // clear the scroll to input
@@ -395,20 +393,19 @@ export class ReportsidebarComponent implements OnInit {
     for (const a of this.amendmentindicators) {
       a.selected = false;
     }
-    
-    this.filterCvgDateFrom = null;
-    this.filterCvgDateTo = null;
-    this.filterFiledDateFrom = null;
-    this.filterFiledDateTo = null;
+
+    this.filterCvgDateFrom = new Date();
+    this.filterCvgDateTo = new Date();
+    this.filterFiledDateFrom = new Date();
+    this.filterFiledDateTo = new Date();
     this.filterForms = [];
     this.filterReports = [];
     this.filterStatuss = [];
     this.filterAmendmentIndicators = [];
-    this.filterDeletedDateFrom = null;
-    this.filterDeletedDateTo = null;
+    this.filterDeletedDateFrom = new Date();
+    this.filterDeletedDateTo = new Date();
     this.applyFilters();
   }
-
 
   /**
    * Check if the view to show is Recycle Bin.
@@ -416,7 +413,6 @@ export class ReportsidebarComponent implements OnInit {
   public isRecycleBinViewActive() {
     return this.view === this.recycleBinView ? true : false;
   }
-
 
   /**
    * Clear any hightlighted types as result of the scroll to input.
@@ -427,130 +423,113 @@ export class ReportsidebarComponent implements OnInit {
     }
   }
 
-
-
   private getForms() {
- 
     // TODO using this service to get forms until available in another API.
-    this._reportsService
-      .getFormTypes()
-        .subscribe((res: any) => {
-          let formsExist = false;
-          if (res) {
-
-             formsExist = true;
-              for (const s of res) {
-                // check for forms selected in the filter cache
-                // TODO scroll to first check item
-                if (this.cachedFilters.filterForms) {
-                  if (this.cachedFilters.filterForms.includes(s.code)) {
-                    s.selected = true;
-                    this.isHideFormFilter = false;
-                  } else {
-                    s.selected = false;
-                  }
-              }
+    this._reportsService.getFormTypes().subscribe((res: any) => {
+      let formsExist = false;
+      if (res) {
+        formsExist = true;
+        for (const s of res) {
+          // check for forms selected in the filter cache
+          // TODO scroll to first check item
+          if (this.cachedFilters.filterForms) {
+            if (this.cachedFilters.filterForms.includes(s.code)) {
+              s.selected = true;
+              this.isHideFormFilter = false;
+            } else {
+              s.selected = false;
             }
           }
-          if (formsExist) {
-            this.forms = res;
-          } else {
-            this.forms = [];
-          }
-        });
+        }
+      }
+      if (formsExist) {
+        this.forms = res;
+      } else {
+        this.forms = [];
+      }
+    });
   }
 
   private getReports() {
     // TODO using this service to get reports until available in another API.
-    this._reportsService
-      .getReportTypes()
-        .subscribe((res: any) => {
-          let reportsExist = false;
-          if (res) {
-             reportsExist = true;
-              for (const s of res) {
-                // check for reports selected in the filter cache
-                // TODO scroll to first check item
-                if (this.cachedFilters.filterReports) {
-                  if (this.cachedFilters.filterReports.includes(s.code)) {
-                    s.selected = true;
-                    this.isHideReportFilter = false;
-                  } else {
-                    s.selected = false;
-                  }
-                }
+    this._reportsService.getReportTypes().subscribe((res: any) => {
+      let reportsExist = false;
+      if (res) {
+        reportsExist = true;
+        for (const s of res) {
+          // check for reports selected in the filter cache
+          // TODO scroll to first check item
+          if (this.cachedFilters.filterReports) {
+            if (this.cachedFilters.filterReports.includes(s.code)) {
+              s.selected = true;
+              this.isHideReportFilter = false;
+            } else {
+              s.selected = false;
             }
           }
-          if (reportsExist) {
-            this.reports = res;
-          } else {
-            this.reports = [];
-          }
-        });
+        }
+      }
+      if (reportsExist) {
+        this.reports = res;
+      } else {
+        this.reports = [];
+      }
+    });
   }
- 
+
   private getStatuss() {
     // TODO using this service to get reports until available in another API.
-    this._reportsService
-      .getStatuss()
-        .subscribe((res: any) => {
-          let StatussExist = false;
-          if (res.data) {
-
-            StatussExist = true;
-              for (const s of res.data) {
-                // check for reports selected in the filter cache
-                // TODO scroll to first check item
-                if (this.cachedFilters.filterStatuss) {
-                  if (this.cachedFilters.filterStatuss.includes(s.code)) {
-                    s.selected = true;
-                    this.isHideStatusFilter = false;
-                  } else {
-                    s.selected = false;
-                 }
-              }
+    this._reportsService.getStatuss().subscribe((res: any) => {
+      let StatussExist = false;
+      if (res.data) {
+        StatussExist = true;
+        for (const s of res.data) {
+          // check for reports selected in the filter cache
+          // TODO scroll to first check item
+          if (this.cachedFilters.filterStatuss) {
+            if (this.cachedFilters.filterStatuss.includes(s.code)) {
+              s.selected = true;
+              this.isHideStatusFilter = false;
+            } else {
+              s.selected = false;
             }
           }
-          if (StatussExist) {
-            this.statuss = res.data;
-           } else {
-            this.statuss = [];
-          }
-        });
+        }
+      }
+      if (StatussExist) {
+        this.statuss = res.data;
+      } else {
+        this.statuss = [];
+      }
+    });
   }
 
   private getAmendmentIndicators() {
-
     // TODO using this service to get reports until available in another API.
-    this._reportsService
-      .getAmendmentIndicators()
-        .subscribe((res: any) => {
-          let amendmentindicatorsExist = false;
-          if (res.data) {
-              amendmentindicatorsExist = true;
-              for (const s of res.data) {
-                // check for reports selected in the filter cache
-                // TODO scroll to first check item
-                if (this.cachedFilters.filterAmendmentIndicators) {
-                  if (this.cachedFilters.filterAmendmentIndicators.includes(s.code)) {
-                    s.selected = true;
-                    this.isHideAmendmentIndicatorFilter = false;
-                  } else {
-                    s.selected = false;
-                  }
-                }
+    this._reportsService.getAmendmentIndicators().subscribe((res: any) => {
+      let amendmentindicatorsExist = false;
+      if (res.data) {
+        amendmentindicatorsExist = true;
+        for (const s of res.data) {
+          // check for reports selected in the filter cache
+          // TODO scroll to first check item
+          if (this.cachedFilters.filterAmendmentIndicators) {
+            if (this.cachedFilters.filterAmendmentIndicators.includes(s.code)) {
+              s.selected = true;
+              this.isHideAmendmentIndicatorFilter = false;
+            } else {
+              s.selected = false;
             }
           }
-          if (amendmentindicatorsExist) {
-            this.amendmentindicators = res.data;
-
-          } else {
-            this.amendmentindicators = [];
-  
-          }
-        });
+        }
+      }
+      if (amendmentindicatorsExist) {
+        this.amendmentindicators = res.data;
+      } else {
+        this.amendmentindicators = [];
+      }
+    });
   }
-
 
   /**
    * Get the filters from the cache.
@@ -558,26 +537,24 @@ export class ReportsidebarComponent implements OnInit {
   private applyFiltersCache() {
     const filtersJson: string | null = localStorage.getItem(this.filtersLSK);
 
-
     if (filtersJson != null) {
       this.cachedFilters = JSON.parse(filtersJson);
       if (this.cachedFilters) {
-   
         this.filterCvgDateFrom = this.cachedFilters.filterCvgDateFrom;
         this.filterCvgDateTo = this.cachedFilters.filterCvgDateTo;
-        this.isHideCvgDateFilter = (this.filterCvgDateFrom && this.filterCvgDateTo) ? false : true;
+        this.isHideCvgDateFilter = this.filterCvgDateFrom && this.filterCvgDateTo ? false : true;
 
         this.filterFiledDateFrom = this.cachedFilters.filterFiledDateFrom;
         this.filterFiledDateTo = this.cachedFilters.filterFiledDateTo;
-        this.isHideFiledDateFilter = (this.filterFiledDateFrom && this.filterFiledDateTo) ? false : true;
+        this.isHideFiledDateFilter = this.filterFiledDateFrom && this.filterFiledDateTo ? false : true;
 
         this.filterDeletedDateFrom = this.cachedFilters.filterDeletedDateFrom;
         this.filterDeletedDateTo = this.cachedFilters.filterDeletedDateTo;
-        this.isHideDeletedDateFilter = (this.filterDeletedDateFrom && this.filterDeletedDateTo) ? false : true;
+        this.isHideDeletedDateFilter = this.filterDeletedDateFrom && this.filterDeletedDateTo ? false : true;
 
         // Note state and type apply filters are handled after server call to get values.
         this.filterForms = this.cachedFilters.filterForms;
-        this.filterReports =this.cachedFilters.filterReports;
+        this.filterReports = this.cachedFilters.filterReports;
         this.filterStatuss = this.cachedFilters.filterStatuss;
         this.filterAmendmentIndicators = this.cachedFilters.filterAmendmentIndicators;
 
@@ -585,7 +562,6 @@ export class ReportsidebarComponent implements OnInit {
         this.filterReport =this.cachedFilters.filterReport;
         this.filterStatus = this.cachedFilters.filterStatus;
         this.filterAmendmentIndicator = this.cachedFilters.filterAmendmentIndicator;*/
-
       }
     } else {
       // Just in case cache has an unexpected issue, use default.
@@ -593,18 +569,16 @@ export class ReportsidebarComponent implements OnInit {
     }
   }
 
-
   /**
    * Initialize validation errors to their defaults.
    */
   private initValidationErrors() {
-    this.dateFilterValidation = new ValidationErrorModel(null, false);
-    this.filedDateFilterValidation = new ValidationErrorModel(null, false);
-    this.cvgDateFilterValidation = new ValidationErrorModel(null, false);
-    this.deletedDateFilterValidation = new ValidationErrorModel(null, false);
-    //this.amountFilterValidation = new ValidationErrorModel(null, false);
+    this.dateFilterValidation = new ValidationErrorModel('', false);
+    this.filedDateFilterValidation = new ValidationErrorModel('', false);
+    this.cvgDateFilterValidation = new ValidationErrorModel('', false);
+    this.deletedDateFilterValidation = new ValidationErrorModel('', false);
+    //this.amountFilterValidation = new ValidationErrorModel('', false);
   }
-
 
   /**
    * Some browsers (Chrome) set date to "" when click x to delete input.
@@ -614,7 +588,6 @@ export class ReportsidebarComponent implements OnInit {
     return date === '' ? null : date;
   }
 
-
   /**
    * Validate the filter settings.  Set the the validation error model
    * to true with a message if invalid.
@@ -622,7 +595,6 @@ export class ReportsidebarComponent implements OnInit {
    * @returns true if valid.
    */
   private validateFilters(): boolean {
-
     this.filterCvgDateTo = this.handleDateAsSpaces(this.filterCvgDateTo);
     this.filterCvgDateFrom = this.handleDateAsSpaces(this.filterCvgDateFrom);
     this.filterFiledDateTo = this.handleDateAsSpaces(this.filterFiledDateTo);
@@ -631,7 +603,7 @@ export class ReportsidebarComponent implements OnInit {
     this.filterDeletedDateFrom = this.handleDateAsSpaces(this.filterDeletedDateFrom);
 
     this.initValidationErrors();
-    if (this.filterCvgDateFrom !== null && (this.filterCvgDateTo === null)) {
+    if (this.filterCvgDateFrom !== null && this.filterCvgDateTo === null) {
       this.dateFilterValidation.isError = true;
       this.dateFilterValidation.message = 'To Date is required';
       this.isHideCvgDateFilter = false;
@@ -687,7 +659,6 @@ export class ReportsidebarComponent implements OnInit {
       this.isHideDeletedDateFilter = false;
       return false;
     }
-     return true;
+    return true;
   }
-
 }

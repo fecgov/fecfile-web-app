@@ -9,19 +9,14 @@ describe('TypeComponent', () => {
   let component: TypeComponent;
   let fixture: ComponentFixture<TypeComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        FormsModule,
-        RouterTestingModule,
-        CollapseModule,
-        ReactiveFormsModule
-      ],
-      declarations: [ TypeComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientTestingModule, FormsModule, RouterTestingModule, CollapseModule, ReactiveFormsModule],
+        declarations: [TypeComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TypeComponent);

@@ -1,16 +1,16 @@
 export class ContactToCleanModel {
   name!: string;
   displayName!: string;
-  existingEntry: {
+  existingEntry!: {
     value: string,
     selected: boolean,
     disabled: boolean
   };
-  newEntry: {
+  newEntry!: {
     value: string,
     selected: boolean,
     disabled: boolean,
-    originallyEmpty!: boolean;
+    originallyEmpty: boolean;
   };
   finalEntry!: string;
 }

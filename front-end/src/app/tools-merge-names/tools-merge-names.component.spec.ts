@@ -6,12 +6,13 @@ describe('ToolsMergeNamesComponent', () => {
   let component: ToolsMergeNamesComponent;
   let fixture: ComponentFixture<ToolsMergeNamesComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ToolsMergeNamesComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ToolsMergeNamesComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ToolsMergeNamesComponent);
