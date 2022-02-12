@@ -304,7 +304,7 @@ export class F1mComponent implements OnInit, OnDestroy {
         this.updateQueryParams();
         this.setAffiliationInfo(res);
         this.setTreasurerAndEmails(res);
-        this.next(null);
+        this.next();
       });
     }
   }
@@ -329,7 +329,7 @@ export class F1mComponent implements OnInit, OnDestroy {
         this.reportId = res.reportId;
         this.setQualificationInfo(res);
         this.setTreasurerAndEmails(res);
-        this.next(null);
+        this.next();
       });
     } else {
       this.qualificationComp.formPart2.markAsDirty();
@@ -425,7 +425,7 @@ export class F1mComponent implements OnInit, OnDestroy {
   }
 
   public signAndSubmit() {
-    this.next(null);
+    this.next();
   }
 
   /* public submit(){

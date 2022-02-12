@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
 import { map, share } from 'rxjs/operators';
 import { FilterPipe, FilterTypeEnum } from '../../../shared/pipes/filter/filter.pipe';
 import { OrderByPipe } from '../../../shared/pipes/order-by/order-by.pipe';

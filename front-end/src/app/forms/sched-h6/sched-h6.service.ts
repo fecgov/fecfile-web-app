@@ -1,7 +1,6 @@
 import { Injectable, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../environments/environment';
 import { map } from 'rxjs/operators';

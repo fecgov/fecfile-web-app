@@ -2,11 +2,9 @@ import { Injectable, ChangeDetectionStrategy } from '@angular/core';
 // import {Http, Response} from '@angular/http';
 import { IReport } from './report';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
 import { environment } from '../../environments/environment';
 import { ConditionalExpr } from '@angular/compiler';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable()
