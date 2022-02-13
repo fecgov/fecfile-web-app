@@ -61,8 +61,8 @@
               <div
                 class="text-error text-left"
                 *ngIf="
-                  form.controls?.affiliation_date?.errors &&
-                  form.controls?.affiliation_date?.errors['contributionDateInvalid']
+                  form.controls['affiliation_date'].errors &&
+                  form.controls['affiliation_date'].errors['contributionDateInvalid']
                 "
               >
                 Placeholder error.

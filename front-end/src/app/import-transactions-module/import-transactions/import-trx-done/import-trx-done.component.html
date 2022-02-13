@@ -3,13 +3,13 @@
     *ngIf="!allFilesDone && (uploadFile.status === importingStatus || uploadFile.status === completeStatus)"
     class="import-done-progress-container"
   >
-    <p>{{ uploadingText }}</p>
+    <p></p>
     <ngb-progressbar
       type="dark"
       textType="white"
-      animated="true"
+      [animated]="true"
       [value]="progressPercent"
-      showValue="true"
+      [showValue]="true"
       height="2rem"
     >
     </ngb-progressbar>

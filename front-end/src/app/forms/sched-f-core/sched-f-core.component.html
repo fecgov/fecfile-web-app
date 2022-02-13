@@ -293,7 +293,7 @@
                 <ng-container *ngIf="frmIndividualReceipt.get('subordinate_cmte_zip')?.errors">
                   <div
                     class="text-error text-left"
-                    *ngIf="frmIndividualReceipt.get('subordinate_cmte_zip')?.errors?.nonAlphaNumeric"
+                    *ngIf="frmIndividualReceipt.get('subordinate_cmte_zip')?.errors"
                   >
                     Alphanumeric characters only.
                   </div>
@@ -633,55 +633,54 @@
                       class="error-text"
                       *ngIf="
                         (frmIndividualReceipt.touched || frmIndividualReceipt.dirty) &&
-                        frmIndividualReceipt.get(col?.name).invalid
+                        frmIndividualReceipt.get(col?.name)?.invalid
                       "
                     >
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors?.maxlength">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
                           *ngIf="
-                            frmIndividualReceipt.get(col?.name).errors.maxlength?.requiredLength <
-                            frmIndividualReceipt.get(col?.name).errors.maxlength?.actualLength
+                            frmIndividualReceipt.get(col?.name)?.errors
                           "
                         >
-                          Only {{ frmIndividualReceipt.get(col?.name).errors.maxlength?.requiredLength }} characters
+                          Only ### characters
                           allowed.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.nonValidAmount"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           Please enter a valid amount.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
-                        <div class="text-error text-left" *ngIf="frmIndividualReceipt.get(col?.name).errors?.max">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
+                        <div class="text-error text-left" *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                           Entered amount exceeds maximum allowable amount of
                           {{ this._maxChildAmount | currency: 'USD':'symbol-narrow':'1.2-2' }}$
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.nonAlphaNumeric"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           Alphanumeric characters only.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.nonFloatingPoint"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           Only numerical values are allowed.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.contributionDateInvalid"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           The date entered falls outside of the report coverage period. Transactions for this report
                           should fall within {{ cvgStartDate }} and {{ cvgEndDate }} (Coverage Dates of Report). If you
@@ -799,7 +798,7 @@
                       bindValue="entityType"
                       bindLabel="entityTypeDescription"
                       [selectOnTab]="true"
-                      [readonly]="isSelectFieldReadOnly(col)"
+                      [readonly]="isSelectFieldReadOnly(col) ?? false"
                       [ngClass]="
                         frmIndividualReceipt.get(col?.name)?.invalid &&
                         (frmIndividualReceipt.touched || frmIndividualReceipt.dirty)
@@ -864,7 +863,7 @@
                       bindValue="levin_account_id"
                       bindLabel="levin_account_name"
                       [selectOnTab]="true"
-                      [readonly]="isSelectFieldReadOnly(col)"
+                      [readonly]="isSelectFieldReadOnly(col) ?? false"
                       [ngClass]="
                         frmIndividualReceipt.get(col?.name)?.invalid &&
                         (frmIndividualReceipt.touched || frmIndividualReceipt.dirty)

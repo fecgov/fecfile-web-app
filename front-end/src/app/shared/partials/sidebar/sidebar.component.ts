@@ -54,7 +54,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private _activatedRoute: ActivatedRoute,
     private _formService: FormsService,
     private _config: NgbTooltipConfig,
-    private _authService: AuthService,
+    public _authService: AuthService,
     private _messageService: MessageService
   ) {}
 

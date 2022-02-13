@@ -1486,7 +1486,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
    *
    * @param colName the column name of the column to sort
    */
-  public changeSortDirection(colName: string, table: string): void {
+  public override changeSortDirection(colName: string, table: string): void {
     let dataset = null;
 
     this.currentSortedColumnName = this._tableService.changeSortDirection(colName, this.sortableColumns);

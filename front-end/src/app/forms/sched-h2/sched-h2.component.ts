@@ -770,4 +770,6 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
     }
     return false;
   }
+
+  public selectActivityFunctionChange($event: any) {}
 }

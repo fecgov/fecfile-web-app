@@ -24,8 +24,8 @@ import { MessageService } from '../../../shared/services/MessageService/message.
 export class F24Component implements OnInit {
   @Input() jumpToTransaction!: any;
 
-  private currentStep: string = 'step_1';
-  private editMode: boolean = true;
+  public currentStep: string = 'step_1';
+  public editMode: boolean = true;
   public step: string = '';
   @Input() transactionData!: any;
   private steps: any = {};
@@ -39,13 +39,13 @@ export class F24Component implements OnInit {
   private reportTypeIndicator: any = {};
   public reportType: any = null;
   public selectedReportType: any = {};
-  private selectedReport: any = null;
-  private regularReports: boolean = false;
-  private specialReports: boolean = false;
+  public selectedReport: any = null;
+  public regularReports: boolean = false;
+  public specialReports: boolean = false;
   public selectedReportInfo: any = {};
   public transactionCategories: any = [];
   public transactionCategory: string = '';
-  private transactionTypeText = '';
+  public transactionTypeText = '';
   @Input() mainTransactionTypeText = '';
   @Input() transactionType = '';
   private transactionTypeTextSchedF = '';
@@ -56,7 +56,7 @@ export class F24Component implements OnInit {
   private transactionTypeDebtSummary = '';
   private transactionDetailSchedC!: any;
   private unused!: any;
-  private isShowFilters = false;
+  public isShowFilters = false;
   public formType: string = '';
   @Input() scheduleAction!: ScheduleActions;
   private scheduleCAction!: ScheduleActions;
@@ -82,7 +82,7 @@ export class F24Component implements OnInit {
   private populateFieldsMessageObj!: any;
   private queryParamsSubscription!: Subscription;
   private routerEventsSubscription!: Subscription;
-  private returnToGlobalAllTransaction!: boolean;
+  public returnToGlobalAllTransaction!: boolean;
 
   constructor(
     private _reportTypeService: ReportTypeService,

@@ -54,9 +54,9 @@
     <ngb-progressbar
       type="dark"
       textType="white"
-      animated="true"
+      [animated]="true"
       [value]="progressPercent"
-      showValue="true"
+      [showValue]="true"
       height="2rem"
     >
     </ngb-progressbar>
@@ -76,7 +76,7 @@
   process the file in API -->
   <!-- <div [hidden]="hideProcessingProgress" class="upload_contacts__progress_container">
     <div>File Processing Progress</div>
-    <ngb-progressbar type="dark" textType="white" animated="true" [value]="processingPercent" showValue="true"
+    <ngb-progressbar type="dark" textType="white" [animated]="true" [value]="processingPercent" [showValue]="true"
       height="2rem">
     </ngb-progressbar>
   </div> -->

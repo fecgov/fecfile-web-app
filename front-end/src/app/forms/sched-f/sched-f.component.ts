@@ -64,7 +64,7 @@ export class SchedFComponent extends AbstractSchedule implements OnInit, OnDestr
 
   protected override staticFormFields = schedFstaticFormFields;
 
-  private isDesignatedFiler!: boolean;
+  public isDesignatedFiler!: boolean;
   private noValidationRequired: any[] = [];
   private validateDesignatedFiler: any[] = [];
   constructor(

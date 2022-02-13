@@ -36,8 +36,8 @@ import { FinancialSummaryComponent } from './forms/form-3x/financial-summary/fin
 import { IndividualReceiptComponent } from './forms/form-3x/individual-receipt/individual-receipt.component';
 import { SchedEComponent } from './forms/form-3x/sched-e/sched-e/sched-e.component';
 import { SchedH1Component } from './forms/form-3x/sched-h1/sched-h1.component';
-import { SchedH5Component_TOBEDELETED } from './forms/form-3x/sched-h5/sched-h5.component';
-import { SchedH6Component_TOBEDELETED } from './forms/form-3x/sched-h6/sched-h6.component';
+// import { SchedH5Component_TOBEDELETED } from './forms/form-3x/sched-h5/sched-h5.component';
+// import { SchedH6Component_TOBEDELETED } from './forms/form-3x/sched-h6/sched-h6.component';
 import { TransactionSidebarComponent } from './forms/form-3x/transaction-sidebar/transaction-sidebar.component';
 import { TransactionTypeComponent } from './forms/form-3x/transaction-type/transaction-type.component';
 import { F99Component } from './forms/form-99/f99/f99.component';
@@ -54,7 +54,7 @@ import { SchedC1Component } from './forms/sched-c1/sched-c1.component';
 import { DebtSummaryComponent } from './forms/sched-d/debt-summary/debt-summary.component';
 import { SchedFCoreComponent } from './forms/sched-f-core/sched-f-core.component';
 import { SchedFComponent } from './forms/sched-f/sched-f.component';
-import { SchedH1Component_TOBEDELETED } from './forms/sched-h1/sched-h1.component';
+// import { SchedH1Component_TOBEDELETED } from './forms/sched-h1/sched-h1.component';
 import { SchedH2Component } from './forms/sched-h2/sched-h2.component';
 import { SchedH3Component } from './forms/sched-h3/sched-h3.component';
 import { SchedH4Component } from './forms/sched-h4/sched-h4.component';
@@ -188,9 +188,9 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     DebtSummaryComponent,
     SchedLComponent,
     ContactsFilterTypeComponent,
-    SchedH5Component_TOBEDELETED,
-    SchedH6Component_TOBEDELETED,
-    SchedH1Component_TOBEDELETED,
+    // SchedH5Component_TOBEDELETED,
+    // SchedH6Component_TOBEDELETED,
+    // SchedH1Component_TOBEDELETED,
     SchedEComponent,
     SchedFCoreComponent,
     HelpComponent,

@@ -100,7 +100,7 @@
                     : ''
                 "
               />
-              <div class="text-error text-left" *ngIf="schedH2.get('activity_event_name')?.errors?.maxlength">
+              <div class="text-error text-left" *ngIf="schedH2.get('activity_event_name')?.errors">
                 Only 90 characters allowed.
               </div>
             </div>
@@ -124,7 +124,6 @@
                   class="form-control"
                   type="date"
                   formControlName="receipt_date"
-                  (change)="receiptDateChanged($event.target.value)"
                 />
               </div>
               <div class="text-error text-left" *ngIf="receiptDateErr">
@@ -230,7 +229,7 @@
             </div>
             <div
               class="text-error text-left"
-              *ngIf="schedH2.get('federal_percent')?.errors?.min || schedH2.get('federal_percent')?.errors?.max"
+              *ngIf="schedH2.get('federal_percent')?.errors"
             >
               Only 0 - 100 allowed.
             </div>
@@ -262,7 +261,7 @@
             </div>
             <div
               class="text-error text-left"
-              *ngIf="schedH2.get('non_federal_percent')?.errors?.min || schedH2.get('non_federal_percent')?.errors?.max"
+              *ngIf="schedH2.get('non_federal_percent')?.errors"
             >
               Only 0 - 100 allowed.
             </div>
@@ -420,7 +419,7 @@
           <div *ngIf="showPagination()" class="d-flex justify-content-center sched-h2__table-pagination-container">
             <div class="my-auto">
               <pagination-controls
-                [id]="config.id"
+                [id]="config.id ?? ''"
                 (pageChange)="getPage($event)"
                 [maxSize]="paginationControlsMaxSize"
               >

@@ -265,4 +265,6 @@ export class SubTransactionsTableComponent implements OnInit, OnChanges {
     }
     return false;
   }
+
+  public changeSortDirection(field: string) {}
 }

@@ -31,7 +31,6 @@
         [hidden]="isShowFilters"
         *ngIf="!allTransactions"
         [formType]="formType"
-        [transactionCategoriesMainData]="transactionCategoriesMainData"
       >
       </transaction-sidebar>
       <app-transactions-filter [hidden]="!allTransactions && !isShowFilters" title="Filters" [formType]="formType">

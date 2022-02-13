@@ -115,7 +115,7 @@ export abstract class AbstractSchedule implements OnInit, OnDestroy, OnChanges {
   protected _rollbackAfterUnsuccessfulSave = false;
   protected _prePopulateFromSchedHData: any;
   protected _prePopulateFromSchedPARTNData: any;
-  protected _maxChildAmount: string | null = null;
+  public _maxChildAmount: string | null = null;
   public displayMonthlyQuarterlyThresholdWarning: boolean = false;
   public displaySemiAnnualThresholdWarning: boolean = false;
   /**
@@ -6338,4 +6338,12 @@ export abstract class AbstractSchedule implements OnInit, OnDestroy, OnChanges {
       }
     }
   }
+
+  public changeSortDirection(colName: any, table: string = '') {}
+
+  public checkForMultiChecked(event: any) {}
+
+  public col: any = {
+    infoText: ''
+  };
 }

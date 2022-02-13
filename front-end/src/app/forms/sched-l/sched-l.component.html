@@ -432,7 +432,7 @@
                 </td>
               </tr>
               <tr
-                [ngbCollapse]="trx.child.length > 0 ? !trx.toggleChild : ''"
+                [ngbCollapse]="trx.child.length > 0 ? !trx.toggleChild : false"
                 *ngFor="let trxChild of trx.child"
                 class="child-bg"
               >
@@ -524,8 +524,8 @@
       <section *ngIf="lSum && transactionType === 'L_SUM'">
         <div class="financial-summary-content">
           <div class="row">
-            <div class="tab-container" [ngSwitch]="viewMode">
-              <div id="tab1" *ngSwitchDefault>
+            <div class="tab-container">
+              <div id="tab1">
                 <!--<ng-container>-->
                 <table class="summary_table_text">
                   <tbody class="summary_text">
@@ -843,7 +843,7 @@
         <hr />
         <div *ngIf="showPagination()" class="d-flex justify-content-center sched-l__table-pagination-container">
           <div class="my-auto">
-            <pagination-controls [id]="config.id" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
+            <pagination-controls [id]="config.id ?? ''" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
             </pagination-controls>
           </div>
           <div *ngIf="pageNumbers.length > 1" class="d-flex ml-1">

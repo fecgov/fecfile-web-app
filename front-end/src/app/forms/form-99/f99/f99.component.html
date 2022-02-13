@@ -52,13 +52,13 @@
         ></app-sign> -->
         <app-sign-and-submit
           [formTitle]="'Form 99 / Miscellaneous Reports to the FEC'"
-          [reportId]="reportId"
+          reportId="reportId"
           [formType]="'99'"
         >
         </app-sign-and-submit>
       </div>
       <div [hidden]="step !== 'step_5'">
-        <app-submit [FEC_Id]="fec_id" [comittee_details]="comittee_details"></app-submit>
+        <app-submit [FEC_Id]="fec_id" [comittee_details]="committee_details"></app-submit>
       </div>
     </div>
   </div>

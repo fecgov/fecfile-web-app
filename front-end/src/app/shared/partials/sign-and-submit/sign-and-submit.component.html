@@ -134,15 +134,15 @@
                 </div>
                 <div
                   class="text-error text-left"
-                  *ngIf="form?.controls?.additionalEmail1?.errors && form?.controls?.additionalEmail1?.errors['email']"
+                  *ngIf="form.controls['additionalEmail1'].errors && form.controls['additionalEmail1'].errors['email']"
                 >
                   Must be a valid email address
                 </div>
                 <div
                   class="text-error text-left"
                   *ngIf="
-                    form?.controls?.confirmAdditionalEmail1?.errors &&
-                    form?.controls?.confirmAdditionalEmail1?.errors['mustMatch']
+                    form.controls['confirmAdditionalEmail1'].errors &&
+                    form.controls['confirmAdditionalEmail1'].errors['mustMatch']
                   "
                 >
                   Emails in both fields must match
@@ -175,8 +175,8 @@
                 <div
                   class="text-error text-left"
                   *ngIf="
-                    form?.controls?.confirmAdditionalEmail1?.errors &&
-                    form?.controls?.confirmAdditionalEmail1?.errors['email']
+                    form.controls['confirmAdditionalEmail1'].errors &&
+                    form.controls['confirmAdditionalEmail1'].errors['email']
                   "
                 >
                   Must be a valid email address
@@ -184,8 +184,8 @@
                 <div
                   class="text-error text-left"
                   *ngIf="
-                    form?.controls?.confirmAdditionalEmail1?.errors &&
-                    form?.controls?.confirmAdditionalEmail1?.errors['mustMatch']
+                    form.controls['confirmAdditionalEmail1'].errors &&
+                    form.controls['confirmAdditionalEmail1'].errors['mustMatch']
                   "
                 >
                   Emails in both fields must match
@@ -219,15 +219,15 @@
                 </div>
                 <div
                   class="text-error text-left"
-                  *ngIf="form?.controls?.additionalEmail2?.errors && form?.controls?.additionalEmail2?.errors['email']"
+                  *ngIf="form.controls['additionalEmail2'].errors && form.controls['additionalEmail2'].errors['email']"
                 >
                   Must be a valid email address
                 </div>
                 <div
                   class="text-error text-left"
                   *ngIf="
-                    form?.controls?.confirmAdditionalEmail2?.errors &&
-                    form?.controls?.confirmAdditionalEmail2?.errors['mustMatch']
+                    form.controls['confirmAdditionalEmail2'].errors &&
+                    form.controls['confirmAdditionalEmail2'].errors['mustMatch']
                   "
                 >
                   Emails in both fields must match
@@ -260,8 +260,8 @@
                 <div
                   class="text-error text-left"
                   *ngIf="
-                    form?.controls?.confirmAdditionalEmail2?.errors &&
-                    form?.controls?.confirmAdditionalEmail2?.errors['email']
+                    form.controls['confirmAdditionalEmail2'].errors &&
+                    form.controls['confirmAdditionalEmail2'].errors['email']
                   "
                 >
                   Must be a valid email address
@@ -269,8 +269,8 @@
                 <div
                   class="text-error text-left"
                   *ngIf="
-                    form?.controls?.confirmAdditionalEmail2?.errors &&
-                    form?.controls?.confirmAdditionalEmail2?.errors['mustMatch']
+                    form.controls['confirmAdditionalEmail2'].errors &&
+                    form.controls['confirmAdditionalEmail2'].errors['mustMatch']
                   "
                 >
                   Emails in both fields must match

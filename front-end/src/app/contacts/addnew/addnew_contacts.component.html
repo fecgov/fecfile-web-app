@@ -166,26 +166,26 @@
                   </div>
                   <div
                     class="error-text"
-                    *ngIf="(frmContact.touched || frmContact.dirty) && frmContact.get(col?.name).invalid"
+                    *ngIf="(frmContact.touched || frmContact.dirty) && frmContact.get(col?.name)?.invalid"
                   >
-                    <ng-container *ngIf="frmContact.get(col?.name).errors?.maxlength">
+                    <ng-container *ngIf="frmContact.get(col?.name)?.errors">
                       <div
                         class="text-error text-left"
                         *ngIf="
-                          frmContact.get(col?.name).errors.maxlength?.requiredLength <
-                          frmContact.get(col?.name).errors.maxlength?.actualLength
+                          frmContact.get(col?.name)?.errors.maxlength?.requiredLength <
+                          frmContact.get(col?.name)?.errors.maxlength?.actualLength
                         "
                       >
-                        Only {{ frmContact.get(col?.name).errors.maxlength?.requiredLength }} characters allowed.
+                        Only {{ frmContact.get(col?.name)?.errors.maxlength?.requiredLength }} characters allowed.
                       </div>
                     </ng-container>
-                    <ng-container *ngIf="frmContact.get(col?.name).errors">
-                      <div class="text-error text-left" *ngIf="frmContact.get(col?.name).errors?.nonAlphaNumeric">
+                    <ng-container *ngIf="frmContact.get(col?.name)?.errors">
+                      <div class="text-error text-left" *ngIf="frmContact.get(col?.name)?.errors">
                         Alphanumeric characters only.
                       </div>
                     </ng-container>
-                    <ng-container *ngIf="frmContact.get(col?.name).errors">
-                      <div class="text-error text-left" *ngIf="frmContact.get(col?.name).errors?.nonFloatingPoint">
+                    <ng-container *ngIf="frmContact.get(col?.name)?.errors">
+                      <div class="text-error text-left" *ngIf="frmContact.get(col?.name)?.errors">
                         Only numerical values are allowed.
                       </div>
                     </ng-container>

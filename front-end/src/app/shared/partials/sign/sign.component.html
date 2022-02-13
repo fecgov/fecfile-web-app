@@ -25,7 +25,7 @@
             <div class="text-error text-center" *ngIf="signFailed">You must certify this form.</div>
           </div>
         </div>
-        <div class="grid-row" *ngIf="frmSignee.controls.signee.valid && frmSaved">
+        <div class="grid-row" *ngIf="frmSignee.controls['signee'].valid && frmSaved">
           <div class="grid-row__col grid-row__col--12" [hidden]="hideText">
             <div class="text-info text-center">Form {{ formType }} has been successfully saved.</div>
           </div>
@@ -123,7 +123,7 @@
               </ng-container>
               &nbsp;&nbsp;
               <div *ngIf="frmSignee.invalid && (frmSignee.dirty || frmSignee.touched)">
-                <div class="text-error" *ngIf="frmSignee.controls.additional_email_1.errors?.email">
+                <div class="text-error" [hidden]="!frmSignee.controls['additional_email_1'].errors">
                   &nbsp;Additional email 1 must <br />&nbsp;be valid email address.
                 </div>
               </div>
@@ -146,7 +146,7 @@
                 />
               </ng-container>
               <div *ngIf="frmSignee.invalid && (frmSignee.dirty || frmSignee.touched)">
-                <div class="text-error" *ngIf="frmSignee.controls.confirm_email_1.errors?.email">
+                <div class="text-error" [hidden]="!frmSignee.controls['confirm_email_1'].errors">
                   &nbsp;Confirm email 1 must<br />
                   be valid email address.
                 </div>
@@ -161,7 +161,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirm additional email 1.
               </div>
               <div class="text-success" *ngIf="!additionalEmail1Invalid && showAdditionalEmail1Warn">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ this.confirm_email_1 }}<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ confirm_email_1 }}<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has been successfully added.
               </div>
             </div>
@@ -187,7 +187,7 @@
                 />
               </ng-container>
               <div *ngIf="frmSignee.invalid && (frmSignee.dirty || frmSignee.touched)">
-                <div class="text-error" *ngIf="frmSignee.controls.additional_email_2.errors?.email">
+                <div class="text-error" [hidden]="!frmSignee.controls['additional_email_2'].errors">
                   &nbsp;Additional email 2 must <br />&nbsp;&nbsp;be valid email address.
                 </div>
               </div>
@@ -210,7 +210,7 @@
                 />
               </ng-container>
               <div *ngIf="frmSignee.invalid && (frmSignee.dirty || frmSignee.touched)">
-                <div class="text-error" *ngIf="frmSignee.controls.confirm_email_2.errors?.email">
+                <div class="text-error" [hidden]="!frmSignee.controls['confirm_email_2'].errors">
                   &nbsp;Confirm email 2 must <br />be valid email address.
                 </div>
               </div>
@@ -225,7 +225,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirm additional email 2.
               </div>
               <div class="text-success" *ngIf="!additionalEmail2Invalid && showAdditionalEmail2Warn">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ this.confirm_email_2 }}<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ confirm_email_2 }}<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has been successfully added.
               </div>
             </div>

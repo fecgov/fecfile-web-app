@@ -491,7 +491,7 @@ export class SchedLComponent extends AbstractSchedule implements OnInit, OnDestr
    *
    * @param the event payload from the click
    */
-  public checkForMultiChecked(e: any): void {
+  public override checkForMultiChecked(e: any): void {
     if (e.target.checked) {
       this.bulkActionCounter++;
     } else {

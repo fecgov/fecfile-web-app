@@ -31,7 +31,7 @@
                   draggable="false"
                   [routerLink]="['/forms/form/', committee_form.form_type_mini]"
                   [queryParams]="{ step: 'step_1' }"
-                  (click)="formSelected(committee_form.form_type_mini)"
+                  (click)="formSelected(committee_form.form_type_mini ?? '')"
                 >
                   {{ committee_form.form_description }}
                   <br />
@@ -57,7 +57,7 @@
                       tabindex="{{ _authService.isReadOnly() ? -1 : 0 }}"
                       [routerLink]="['/forms/form/', committee_form.form_type_mini]"
                       [queryParams]="{ step: 'step_1' }"
-                      (click)="formSelected(committee_form.form_type_mini)"
+                      (click)="formSelected(committee_form.form_type_mini ?? '')"
                     >
                       {{ committee_form.form_type }}
                     </a>
@@ -117,7 +117,7 @@
                     tabindex="{{ _authService.isReadOnly() ? -1 : 0 }}"
                     [routerLink]="['/forms/form/', committee_form.form_type_mini]"
                     [queryParams]="{ step: 'step_1' }"
-                    (click)="formSelected(committee_form.form_type_mini)"
+                    (click)="formSelected(committee_form.form_type_mini ?? '')"
                   >
                     {{ committee_form.form_description }}
                   </a>
@@ -135,7 +135,7 @@
                       tabindex="{{ _authService.isReadOnly() ? -1 : 0 }}"
                       [routerLink]="['/forms/form/', committee_form.form_type_mini]"
                       [queryParams]="{ step: 'step_1' }"
-                      (click)="formSelected(committee_form.form_type_mini)"
+                      (click)="formSelected(committee_form.form_type_mini ?? '')"
                     >
                       {{ committee_form.form_type }}
                     </a>

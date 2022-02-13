@@ -46,7 +46,6 @@
                 #acc="ngbAccordion"
                 [closeOthers]="true"
                 class="secondary-options"
-                (pannelChange)="beforeChange($event)"
               >
                 <ngb-panel
                   id="{{ option.value }}"
@@ -122,7 +121,7 @@
                               id="option_{{ childOption.value }}"
                               placeholder="{{ childOption.text }}"
                               type="radio"
-                              [name]="secondaryOption"
+                              [name]="secondaryOptions"
                               [value]="childOption.value"
                               (click)="updateTypeSelected(childOption)"
                             />

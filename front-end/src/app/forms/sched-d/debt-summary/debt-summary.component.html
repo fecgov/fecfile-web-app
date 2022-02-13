@@ -102,14 +102,14 @@
             </div>
           </td>
         </tr>
-        <ng-container *ngIf="debt?.child?.length > 0">
-          <tr [ngbCollapse]="debt?.child?.length > 0 ? !debt.toggleChild : ''" class="payment-bg">
+        <ng-container *ngIf="debt?.child?.length ?? 0 > 0">
+          <tr [ngbCollapse]="debt?.child?.length ?? 0 > 0 ? !debt.toggleChild : false" class="payment-bg">
             <th style="padding-left: 70px" colspan="2">Type</th>
             <th colspan="2">Payment Date</th>
             <th colspan="3">Payment Amount</th>
           </tr>
           <tr
-            [ngbCollapse]="debt?.child?.length > 0 ? !debt.toggleChild : ''"
+            [ngbCollapse]="debt?.child?.length ?? 0 > 0 ? !debt.toggleChild : false"
             *ngFor="let payment of debt.child"
             class="payment-bg"
           >
@@ -139,7 +139,7 @@
   <hr />
   <div *ngIf="showPagination()" class="d-flex justify-content-center debtSumamry__table-pagination-container">
     <div class="my-auto">
-      <pagination-controls [id]="config.id" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
+      <pagination-controls [id]="config.id ?? ''" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
       </pagination-controls>
     </div>
     <div *ngIf="pageNumbers.length > 1" class="d-flex ml-1">

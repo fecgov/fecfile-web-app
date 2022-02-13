@@ -332,14 +332,13 @@
               id="expenditure_date"
               aria-label="Filter From Deleted Date"
               aria-describedby="filter-from-deleted-date"
-              (change)="expenditureDateChanged($event.target.value)"
               required
             />
           </div>
           <div
             class="text-error text-left"
             *ngIf="
-              f.controls?.expenditure_date?.errors && f.controls?.expenditure_date?.errors['contributionDateInvalid']
+              f.controls['expenditure_date']?.errors && f.controls['expenditure_date']?.errors
             "
           >
             The date entered falls outside of the report coverage period. Transactions for this report should fall
@@ -389,13 +388,13 @@
           </div>
           <div
             class="text-error text-left"
-            *ngIf="f.controls?.expenditure_amount?.errors && f.controls?.expenditure_amount?.errors['nonValidAmount']"
+            *ngIf="f.controls['expenditure_amount']?.errors && f.controls['expenditure_amount']?.errors"
           >
             Please enter a valid amount.
           </div>
           <div
             class="text-error text-left"
-            *ngIf="f.controls?.expenditure_amount?.errors && f.controls?.expenditure_amount?.errors['amountExceeded']"
+            *ngIf="f.controls['expenditure_amount']?.errors && f.controls['expenditure_amount']?.errors"
           >
             Expenditure amount exceeds outstanding loan amount
           </div>

@@ -19,6 +19,7 @@ export class SchedH6Model {
   arrow_dir!: string;
   aggregation_ind!: string;
   child: SchedH6Model[] = [];
+  toggleChild: boolean = false;
   constructor(schedH6: any) {
     this.cmte_id = schedH6.cmte_id ? schedH6.cmte_id : '';
     this.report_id = schedH6.report_id ? schedH6.report_id : '';

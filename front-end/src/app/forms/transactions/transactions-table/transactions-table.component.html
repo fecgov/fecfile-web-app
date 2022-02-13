@@ -215,7 +215,7 @@
                     <i class="file-export-icon"></i> Export
                   </button>
                   <button
-                    *ngIf="checkIfTrashable() && !_authService.isReadOnly()"
+                    *ngIf="!_authService.isReadOnly()"
                     class="dropdown-item"
                     (click)="trashAllSelected()"
                   >
@@ -278,7 +278,7 @@
             <td *ngIf="isColumnVisible('transactionId')">{{ trx.transactionId }}</td>
             <td
               [ngClass]="trx.child ? 'parent' : ''"
-              (click)="trx.child ? (trx.toggleChild = !trx.toggleChild) : ''"
+              (click)="trx.child ? (trx.toggleChild = !trx.toggleChild) : false"
               *ngIf="isColumnVisible('name')"
             >
               {{ trx.name }}
@@ -412,7 +412,7 @@
               </div>
             </td>
           </tr>
-          <tr [ngbCollapse]="trx.child ? !trx.toggleChild : ''" *ngFor="let trxChild of trx.child" class="child-bg">
+          <tr [ngbCollapse]="trx.child ? !trx.toggleChild : false" *ngFor="let trxChild of trx.child" class="child-bg">
             <td style="padding-left: 1.5rem">
               <input
                 [(ngModel)]="trxChild.selected"
@@ -744,7 +744,7 @@
                     <i class="file-export-icon"></i> Export
                   </button>
                   <button
-                    *ngIf="checkIfTrashable() && !_authService.isReadOnly()"
+                    *ngIf="!_authService.isReadOnly()"
                     class="dropdown-item"
                     (click)="trashAllSelected()"
                   >
@@ -805,7 +805,7 @@
             </td>
             <td
               [ngClass]="trx.child ? 'parent' : ''"
-              (click)="trx.child ? (trx.toggleChild = !trx.toggleChild) : ''"
+              (click)="trx.child ? (trx.toggleChild = !trx.toggleChild) : false"
               *ngIf="isColumnVisible('name')"
             >
               {{ trx.name }}
@@ -947,7 +947,7 @@
               </div>
             </td>
           </tr>
-          <tr [ngbCollapse]="trx.child ? !trx.toggleChild : ''" *ngFor="let trxChild of trx.child" class="child-bg">
+          <tr [ngbCollapse]="trx.child ? !trx.toggleChild : false" *ngFor="let trxChild of trx.child" class="child-bg">
             <td style="padding-left: 1.5rem">
               <input
                 [(ngModel)]="trxChild.selected"
@@ -1276,7 +1276,7 @@
                     <i class="file-export-icon"></i> Export
                   </button>
                   <button
-                    *ngIf="checkIfTrashable() && !_authService.isReadOnly()"
+                    *ngIf="!_authService.isReadOnly()"
                     class="dropdown-item"
                     (click)="trashAllSelected()"
                   >
@@ -1472,7 +1472,7 @@
               (trx?.transactionTypeIdentifier === 'LOANS_OWED_BY_CMTE' ||
                 trx?.transactionTypeIdentifier === 'LOANS_OWED_TO_CMTE')
                 ? !trx.toggleChild
-                : ''
+                : false
             "
             class="child-bg"
           >
@@ -1500,7 +1500,7 @@
               (trx?.transactionTypeIdentifier === 'LOANS_OWED_BY_CMTE' ||
                 trx?.transactionTypeIdentifier === 'LOANS_OWED_TO_CMTE')
                 ? !trx.toggleChild
-                : ''
+                : false
             "
             class="child-bg"
           >
@@ -1633,7 +1633,7 @@
                     <i class="file-export-icon"></i> Export
                   </button>
                   <button
-                    *ngIf="checkIfTrashable() && !_authService.isReadOnly()"
+                    *ngIf="!_authService.isReadOnly()"
                     class="dropdown-item"
                     (click)="trashAllSelected()"
                   >
@@ -1697,7 +1697,7 @@
             </td>
             <td
               [ngClass]="trx.child ? 'parent' : ''"
-              (click)="trx.child ? (trx.toggleChild = !trx.toggleChild) : ''"
+              (click)="trx.child ? (trx.toggleChild = !trx.toggleChild) : false"
               *ngIf="isColumnVisible('name')"
             >
               {{ trx.name }}
@@ -1723,7 +1723,7 @@
             <td *ngIf="isColumnVisible('state')">{{ trx.state }}</td>
             <td *ngIf="isColumnVisible('zip')">{{ trx.zip | zipCode }}</td>
             <td *ngIf="isColumnVisible('memoText')">{{ trx.memoText }}</td>
-            <td *ngIf="isColumnVisible('eventId')">{{ trx.eventId }}</td>
+            <td *ngIf="isColumnVisible('eventId')">{{ trx.activityEventIdentifier }}</td>
             <td>
               <div *ngIf="isRecycleBinViewActive()">
                 <span
@@ -1826,7 +1826,7 @@
               </div>
             </td>
           </tr>
-          <tr [ngbCollapse]="trx.child ? !trx.toggleChild : ''" *ngFor="let trxChild of trx.child" class="child-bg">
+          <tr [ngbCollapse]="trx.child ? !trx.toggleChild : false" *ngFor="let trxChild of trx.child" class="child-bg">
             <td style="padding-left: 1.5rem">
               <input
                 [(ngModel)]="trxChild.selected"
@@ -1853,7 +1853,7 @@
             <td *ngIf="isColumnVisible('state')">{{ trxChild.state }}</td>
             <td *ngIf="isColumnVisible('zip')">{{ trxChild.zip | zipCode }}</td>
             <td *ngIf="isColumnVisible('memoText')">{{ trxChild.memoText }}</td>
-            <td *ngIf="isColumnVisible('eventId')">{{ trxChild.eventId }}</td>
+            <td *ngIf="isColumnVisible('eventId')">{{ trxChild.activityEventIdentifier }}</td>
             <td>
               <div *ngIf="isRecycleBinViewActive()">
                 <span
@@ -1865,7 +1865,7 @@
                 >
                   <button
                     class="btn btn-sm btn-primary"
-                    [disabled]="!trxChild.isEditable || _authService.isReadOnly()"
+                    [disabled]="!trxChild.iseditable || _authService.isReadOnly()"
                     (click)="restoreTransaction(trxChild)"
                   >
                     <i class="undo-icon"></i>
@@ -1983,7 +1983,7 @@
     <hr />
     <div *ngIf="showPagination()" class="d-flex justify-content-center transactions__table-pagination-container">
       <div class="my-auto">
-        <pagination-controls [id]="config.id" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
+        <pagination-controls [id]="config.id ?? ''" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
         </pagination-controls>
       </div>
       <div *ngIf="pageNumbers.length > 1" class="d-flex ml-1">
@@ -2007,7 +2007,7 @@
 
   <div
     bsModal
-    #columnOptionsModal="bs-modal"
+    #columnOptionsModal
     class="modal fade column-options-modal"
     tabindex="-1"
     role="dialog"

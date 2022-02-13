@@ -308,7 +308,7 @@
                 </tr>
                 <!-- <tr [ngStyle]="{'background-color': '#D9EDF6'}" *ngFor="let itemChild of item.child;"> -->
                 <tr
-                  [ngbCollapse]="item.child.length > 0 ? !item.toggleChild : ''"
+                  [ngbCollapse]="item.child.length > 0 ? !item.toggleChild : false"
                   *ngFor="let itemChild of item.child"
                   class="child-bg"
                 >
@@ -383,7 +383,7 @@
           <div *ngIf="showPagination()" class="d-flex justify-content-center sched-h4__table-pagination-container">
             <div class="my-auto">
               <pagination-controls
-                [id]="config.id"
+                [id]="config.id ?? ''"
                 (pageChange)="getPage($event)"
                 [maxSize]="paginationControlsMaxSize"
               >

@@ -43,7 +43,7 @@
             </div>
           </td>
           <td *ngIf="tabConfig.showOptionView">
-            <button type="button" class="btn btn-sm btn-light" (click)="showNotificationModal(notification.get('id'))">
+            <button type="button" class="btn btn-sm btn-light">
               <i class="fas fa-eye"></i> View
             </button>
           </td>
@@ -53,7 +53,7 @@
   </table>
   <div *ngIf="showPagination()" class="d-flex justify-content-center notifications__table-pagination-container">
     <div class="my-auto">
-      <pagination-controls [id]="config.id" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
+      <pagination-controls [id]="config.id ?? ''" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
       </pagination-controls>
     </div>
     <div *ngIf="pageNumbers.length > 1" class="d-flex ml-1">
@@ -77,7 +77,7 @@
   </div>
   <div
     bsModal
-    #notificationModal="bs-modal"
+    #notificationModal
     class="modal fade column-options-modal"
     tabindex="-1"
     role="dialog"

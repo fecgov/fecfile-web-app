@@ -1,17 +1,17 @@
 <ng-template #rt let-r="result" let-t="term">
-  <ngb-highlight [result]="formatTypeaheadItem(r)" [term]="t"></ngb-highlight>
+  <ngb-highlight [term]="t"></ngb-highlight>
 </ng-template>
 <ng-template #rtOrg let-r="result" let-t="term">
-  <ngb-highlight [result]="formatTypeaheadOrgItem(r)" [term]="t"></ngb-highlight>
+  <ngb-highlight [term]="t"></ngb-highlight>
 </ng-template>
 <ng-template #rtCommitteeId let-r="result" let-t="term">
-  <ngb-highlight [result]="formatTypeaheadCommitteeId(r)" [term]="t"></ngb-highlight>
+  <ngb-highlight [term]="t"></ngb-highlight>
 </ng-template>
 <ng-template #rtCandidateId let-r="result" let-t="term">
   <ngb-highlight [result]="formatTypeaheadCandidateId(r)" [term]="t"></ngb-highlight>
 </ng-template>
 <ng-template #rtCommitteeName let-r="result" let-t="term">
-  <ngb-highlight [result]="formatTypeaheadCommitteeName(r)" [term]="t"></ngb-highlight>
+  <ngb-highlight [term]="t"></ngb-highlight>
 </ng-template>
 <ng-template #rtCandidate let-r="result" let-t="term">
   <ngb-highlight [result]="formatTypeaheadCandidate(r)" [term]="t"></ngb-highlight>
@@ -382,8 +382,8 @@
               <div
                 class="text-error text-left"
                 *ngIf="
-                  form?.controls?.contribution_date?.errors &&
-                  form?.controls?.contribution_date?.errors['contributionDateInvalid']
+                  form.controls['contribution_date'].errors &&
+                  form.controls['contribution_date'].errors['contributionDateInvalid']
                 "
               >
                 Placeholder error.
@@ -489,8 +489,8 @@
               <div
                 class="text-error text-left"
                 *ngIf="
-                  formPart2?.controls?.registration_date?.errors &&
-                  formPart2?.controls?.registration_date?.errors['registration_date']
+                  formPart2.controls['registration_date'].errors &&
+                  formPart2.controls['registration_date'].errors['registration_date']
                 "
               >
                 Placeholder error.
@@ -536,8 +536,8 @@
               <div
                 class="text-error text-left"
                 *ngIf="
-                  formPart2?.controls?.fifty_first_contributor_date?.errors &&
-                  formPart2?.controls?.fifty_first_contributor_date?.errors['fifty_first_contributor_date']
+                  formPart2.controls['fifty_first_contributor_date'].errors &&
+                  formPart2.controls['fifty_first_contributor_date'].errors['fifty_first_contributor_date']
                 "
               >
                 Placeholder error.
@@ -582,8 +582,8 @@
               <div
                 class="text-error text-left"
                 *ngIf="
-                  formPart2?.controls?.requirements_met_date?.errors &&
-                  formPart2?.controls?.requirements_met_date?.errors['requirements_met_date']
+                  formPart2.controls['requirements_met_date'].errors &&
+                  formPart2.controls['requirements_met_date'].errors['requirements_met_date']
                 "
               >
                 Placeholder error.

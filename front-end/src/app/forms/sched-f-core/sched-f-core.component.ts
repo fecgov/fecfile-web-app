@@ -43,9 +43,9 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
   public cloned!: boolean;
   protected override staticFormFields = schedFstaticFormFields;
 
-  private isDesignatedFiler!: boolean;
-  private subordinateFields: any[] = [];
-  private designatedFields: any[] = [];
+  public isDesignatedFiler!: boolean;
+  public subordinateFields: any[] = [];
+  public designatedFields: any[] = [];
   readonly optional = '(Optional)';
   routesSubscription!: Subscription;
   initFormSubscription!: Subscription;
@@ -208,14 +208,14 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
    * Returns true if the field is valid.
    * @param fieldName name of control to check for validity
    */
-  private _checkFormFieldIsValid(fieldName: string): boolean {
+  public _checkFormFieldIsValid(fieldName: string): boolean {
     if (this.frmIndividualReceipt.contains(fieldName)) {
       return this.frmIndividualReceipt.get(fieldName)?.valid ?? false;
     }
     return false;
   }
 
-  private _setDesignatedValidators() {
+  public _setDesignatedValidators() {
     if (
       this.frmIndividualReceipt.contains('coordinated_exp_ind') &&
       this.frmIndividualReceipt.get('coordinated_exp_ind')?.value === 'Y'
@@ -230,7 +230,7 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
       this.onFilerChange(null);
     }
   }
-  private _setTransactionDetail() {
+  public _setTransactionDetail() {
     if (this.scheduleAction === ScheduleActions.addSubTransaction) {
       this.clearFormValues();
     } else if (this.scheduleAction === ScheduleActions.edit) {
@@ -263,7 +263,7 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
     }
   }
 
-  private _patchSubordinateFormFields(fieldNames: any[], entity: any) {
+  public _patchSubordinateFormFields(fieldNames: any[], entity: any) {
     if (fieldNames) {
       for (const field of fieldNames) {
         const patch: any = {};
@@ -426,7 +426,7 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
     }
   }
 
-  private removeValidation(filedName: any) {
+  public removeValidation(filedName: any) {
     this.frmIndividualReceipt.controls[filedName].setValidators([]);
     this.frmIndividualReceipt.controls[filedName].updateValueAndValidity();
   }
@@ -448,7 +448,7 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
     }
   }
 
-  private resetForm() {
+  public resetForm() {
     if (Object.keys(this.frmIndividualReceipt.controls).length !== 0) {
       this.disableFields(this.subordinateFields, false);
       this.disableFields(this.designatedFields, false);
@@ -457,7 +457,7 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
     super.clearFormValues();
   }
 
-  private toggleInputFields() {
+  public toggleInputFields() {
     // If yes or no radio button is valid do not alternate fields
     if (this._checkFormFieldIsValid('coordinated_exp_ind')) {
       return;
@@ -480,7 +480,7 @@ export class SchedFCoreComponent extends AbstractSchedule implements OnInit, OnD
     }
   }
 
-  private isFieldsEmpty(designatedFields: any[]) {
+  public isFieldsEmpty(designatedFields: any[]) {
     for (const fieldName of designatedFields) {
       if (
         this.frmIndividualReceipt.get(fieldName) &&

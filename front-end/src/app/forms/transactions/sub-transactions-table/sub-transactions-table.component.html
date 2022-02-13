@@ -2,16 +2,16 @@
   <h2>Memos</h2>
 </div>
 <table
-  *ngIf="transactionsModel?.length > 0"
+  *ngIf="transactionsModel?.length ?? 0 > 0"
   class="table table-striped table-hover table__sortable transactions__table"
 >
   <thead>
     <tr>
-      <th (click)="changeSortDirection('activity_event_name')" *ngIf="subTransactionsTableType === 'sched_d'">
+      <th *ngIf="subTransactionsTableType === 'sched_d'">
         Transaction Type
         <i class="fa fa-sort" aria-hidden="false"></i>
       </th>
-      <th (click)="changeSortDirection('activity_event_name')" *ngIf="isH4OrH6() !== 'H6'">
+      <th *ngIf="isH4OrH6() !== 'H6'">
         {{ subTransactionsTableType === 'sched_d' ? 'Payee Name' : 'Name/Organization' }}
         <i class="fa fa-sort" aria-hidden="false"></i>
       </th>

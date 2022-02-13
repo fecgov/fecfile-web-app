@@ -10,7 +10,7 @@
               type="button"
               class="btn btn-validate"
               (click)="printPreview()"
-              [disabled]="frmReason.controls.reasonText.errors?.requiredLength || !validFile"
+              [disabled]="frmReason.controls['reasonText'].errors || !validFile"
             >
               Print Preview
             </button>
@@ -264,7 +264,7 @@
               characters
             </div>
             <div class="error-text" *ngIf="frmReason.invalid && (frmReason.dirty || frmReason.touched)">
-              <div class="text-error text-center" *ngIf="frmReason.controls.reasonText.errors?.requiredLength">
+              <div class="text-error text-center" *ngIf="frmReason.controls['reasonText'].errors">
                 You can only enter up to 20,000 characters.
               </div>
             </div>

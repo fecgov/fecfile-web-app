@@ -547,4 +547,9 @@ export class EndorserComponent implements OnInit, OnDestroy {
     };
     this.status.emit(loanRepaymentEmitObj);
   }
+
+  public memoCodeChange(event: any) {}
+  public handleSelectedOrgItem(event: any) {}
+  public memoCode: boolean = false;
+  public formatterOrgName: string = '';
 }

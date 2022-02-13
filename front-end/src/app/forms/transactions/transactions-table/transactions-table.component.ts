@@ -27,7 +27,7 @@ import { TransactionModel } from '../model/transaction.model';
 import { TransactionsMessageService } from '../service/transactions-message.service';
 import { GetTransactionsResponse, TransactionsService } from '../service/transactions.service';
 import { ActiveView } from '../transactions.component';
-import { F24LinkModalComponent } from './f24-link-modal/f24-link-modal.component';
+// import { F24LinkModalComponent } from './f24-link-modal/f24-link-modal.component';
 
 const transactionCategoryOptions = [];
 
@@ -95,63 +95,63 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   public pageNumbers: number[] = [];
   public gotoPage: number = 1;
 
-  private filters!: TransactionFilterModel;
-  // private keywords = [];
-  private firstItemOnPage = 0;
-  private lastItemOnPage = 0;
-  private _form99Details: any = {};
+  public filters!: TransactionFilterModel;
+  // public keywords = [];
+  public firstItemOnPage = 0;
+  public lastItemOnPage = 0;
+  public _form99Details: any = {};
   public _allTransactions: boolean = false;
 
   // Local Storage Keys
-  private readonly transactionSortableColumnsLSK = 'transactions.trx.sortableColumn';
-  private readonly recycleSortableColumnsLSK = 'transactions.recycle.sortableColumn';
-  private readonly transactionCurrentSortedColLSK = 'transactions.trx.currentSortedColumn';
-  private readonly recycleCurrentSortedColLSK = 'transactions.recycle.currentSortedColumn';
-  private readonly transactionPageLSK = 'transactions.trx.page';
-  private readonly recyclePageLSK = 'transactions.recycle.page';
-  private readonly filtersLSK = 'transactions.filters';
+  public readonly transactionSortableColumnsLSK = 'transactions.trx.sortableColumn';
+  public readonly recycleSortableColumnsLSK = 'transactions.recycle.sortableColumn';
+  public readonly transactionCurrentSortedColLSK = 'transactions.trx.currentSortedColumn';
+  public readonly recycleCurrentSortedColLSK = 'transactions.recycle.currentSortedColumn';
+  public readonly transactionPageLSK = 'transactions.trx.page';
+  public readonly recyclePageLSK = 'transactions.recycle.page';
+  public readonly filtersLSK = 'transactions.filters';
 
   /**.
    * Array of columns to be made sortable.
    */
-  private sortableColumns: SortableColumnModel[] = [];
+  public sortableColumns: SortableColumnModel[] = [];
 
   /**
    * A clone of the sortableColumns for reverting user
    * column options on a Cancel.
    */
-  private cloneSortableColumns: SortableColumnModel[] = [];
+  public cloneSortableColumns: SortableColumnModel[] = [];
 
   /**
    * Identifies the column currently sorted by name.
    */
-  private currentSortedColumnName!: string;
+  public currentSortedColumnName!: string;
 
   /**
    * Subscription for messages sent from the parent component to show the PIN Column
    * options.
    */
-  private showPinColumnsSubscription!: Subscription;
+  public showPinColumnsSubscription!: Subscription;
 
   /**
    * Subscription for running the keyword and filter search
    * to the transactions obtained from the server.
    */
-  private keywordFilterSearchSubscription!: Subscription;
+  public keywordFilterSearchSubscription!: Subscription;
 
-  private loadTransactionsSubscription!: Subscription;
+  public loadTransactionsSubscription!: Subscription;
 
-  private columnOptionCount = 0;
-  private maxColumnOption = 7;
+  public columnOptionCount = 0;
+  public maxColumnOption = 7;
   public readonly maxColumnOptionReadOnly = 7;
-  private allTransactionsSelected!: boolean;
-  private clonedTransaction!: any;
-  private _previousUrl!: any;
+  public allTransactionsSelected!: boolean;
+  public clonedTransaction!: any;
+  public _previousUrl!: any;
   public apiError: boolean = false;
 
-  private _datePipe!: DatePipe;
+  public _datePipe!: DatePipe;
 
-  private _filterToTransactionTypeMap: any = [
+  public _filterToTransactionTypeMap: any = [
     { filterName: 'filterCategoriesText', options: ['receipts', 'disbursements', 'loans-and-debts', 'other'] },
     { filterName: 'filterAmountMin', options: ['receipts', 'disbursements', 'other'] },
     { filterName: 'filterAmountMax', options: ['receipts', 'disbursements', 'other'] },
@@ -173,7 +173,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     { filterName: 'states', options: ['receipts', 'disbursements', 'loans-and-debts', 'other'] },
   ];
 
-  private _filterToTypeMap: any = [
+  public _filterToTypeMap: any = [
     { filterName: 'filterAmountMin', filterType: FilterTypes.amount },
     { filterName: 'filterAmountMax', filterType: FilterTypes.amount },
     { filterName: 'filterLoanAmountMin', filterType: FilterTypes.loanAmount },
@@ -195,7 +195,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   //this dummy subject is used only to let the activatedRoute subscription know to stop upon ngOnDestroy.
   //there is no unsubscribe() for activateRoute but while cycling between 'Transactions' and 'Recycling Bin' views
   //subscriptions are piling up, causing a single api call to be made n+1 times.
-  private onDestroy$ = new Subject();
+  public onDestroy$ = new Subject();
   loadDefaultReceiptsTabSubscription!: Subscription;
   routerSubscription!: Subscription;
 
@@ -224,20 +224,20 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   showEmployerColumn!: boolean;
 
   constructor(
-    private _transactionsService: TransactionsService,
-    private _transactionsMessageService: TransactionsMessageService,
-    private _tableService: TableService,
-    private _utilService: UtilService,
-    private _dialogService: DialogService,
-    private _reportTypeService: ReportTypeService,
-    private _router: Router,
-    private _activatedRoute: ActivatedRoute,
-    private _receiptService: IndividualReceiptService,
-    private _transactionTypeService: TransactionTypeService,
-    private _authService: AuthService,
-    private _reportsService: ReportsService,
-    private modalService: NgbModal,
-    private _messageService: MessageService
+    public _transactionsService: TransactionsService,
+    public _transactionsMessageService: TransactionsMessageService,
+    public _tableService: TableService,
+    public _utilService: UtilService,
+    public _dialogService: DialogService,
+    public _reportTypeService: ReportTypeService,
+    public _router: Router,
+    public _activatedRoute: ActivatedRoute,
+    public _receiptService: IndividualReceiptService,
+    public _transactionTypeService: TransactionTypeService,
+    public _authService: AuthService,
+    public _reportsService: ReportsService,
+    public modalService: NgbModal,
+    public _messageService: MessageService
   ) {
     this._datePipe = new DatePipe('en-US');
     const paginateConfig: PaginationInstance = {
@@ -376,7 +376,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     this.showTabLabels();
   }
 
-  private applyEntityFilterIfApplicable() {
+  public applyEntityFilterIfApplicable() {
     if (this._activatedRoute.snapshot.queryParams['entityFilter']) {
       // this._messageService.sendMessage({})
       this._messageService.sendMessage({ action: 'filterAllTransactionsByEntity' });
@@ -420,26 +420,26 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
           report.disabled = false;
         }
       });
-      const modalRef = this.modalService.open(F24LinkModalComponent);
-      modalRef.componentInstance.f24List = res;
-      modalRef.result.then((result) => {
-        this._transactionsService
-          .mirrorIEtoF24({ reportId: result, transactionId: trx.transactionId })
-          .subscribe((res: any) => {
-            if (res) {
-              this.getTransactionsPage(this.config.currentPage);
-              this._dialogService.confirm(
-                'Transaction has been successfully added to selected F24 report. ',
-                ConfirmModalComponent,
-                'Success!',
-                false,
-                ModalHeaderClassEnum.successHeader
-              );
-            }
-          });
+      // const modalRef = this.modalService.open(F24LinkModalComponent);
+      // modalRef.componentInstance.f24List = res;
+      // modalRef.result.then((result) => {
+      //   this._transactionsService
+      //     .mirrorIEtoF24({ reportId: result, transactionId: trx.transactionId })
+      //     .subscribe((res: any) => {
+      //       if (res) {
+      //         this.getTransactionsPage(this.config.currentPage);
+      //         this._dialogService.confirm(
+      //           'Transaction has been successfully added to selected F24 report. ',
+      //           ConfirmModalComponent,
+      //           'Success!',
+      //           false,
+      //           ModalHeaderClassEnum.successHeader
+      //         );
+      //       }
+      //     });
         // console.log("reportID; " + result);
         // console.log("transactionId : " + trx.transactionId);
-      });
+      // });
     });
   }
 
@@ -662,7 +662,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * Any unapplicable filters that may not apply for current tab / view are removed
    * @param categoryType
    */
-  private removeUnapplicableFilters(categoryType: string) {
+  public removeUnapplicableFilters(categoryType: string) {
     let actualFilters: TransactionFilterModel = this._utilService.deepClone(this.filters);
 
     // if (actualFilters) {
@@ -891,7 +891,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * @param colName the name of the column to make shown
    * @param checked is true if the columns should be shown
    */
-  private setColumnChecked(colName: string, checked: boolean) {
+  public setColumnChecked(colName: string, checked: boolean) {
     const sortableCol = this.getSortableColumn(colName);
     if (sortableCol) {
       sortableCol.checked = checked;
@@ -947,7 +947,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   /**
    * Disable the unchecked column options if the max is met.
    */
-  private applyDisabledColumnOptions() {
+  public applyDisabledColumnOptions() {
     if (this.columnOptionCount > this.maxColumnOption - 1) {
       for (const col of this.sortableColumns) {
         col.disabled = !col.checked;
@@ -1197,7 +1197,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  private cloneTransactionAfterCheck(trx: TransactionModel) {
+  public cloneTransactionAfterCheck(trx: TransactionModel) {
     let mirrorFlag = false;
     if (trx.mirrorReportId) {
       mirrorFlag = true;
@@ -1343,7 +1343,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
       });
   }
 
-  private trashOrRestoreAfterCheck(trx: TransactionModel) {
+  public trashOrRestoreAfterCheck(trx: TransactionModel) {
     if (trx.child && trx.child.length > 0) {
       this._dialogService
         .confirm(
@@ -1361,7 +1361,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   // });
   // }
 
-  private trashOrRestoreAfterConfirmation(res: any, trx: TransactionModel) {
+  public trashOrRestoreAfterConfirmation(res: any, trx: TransactionModel) {
     if (res === 'okay') {
       this._transactionsService
         .trashOrRestoreTransactions(this.formType, 'trash', this.reportId, [trx])
@@ -1498,7 +1498,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _setF99Details(): void {
+  public _setF99Details(): void {
     if (this.committeeDetails) {
       if (this.committeeDetails.committeeid) {
         this._form99Details = this.committeeDetails;
@@ -1721,7 +1721,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   /**
    * Get cached values from session.
    */
-  private getCachedValues() {
+  public getCachedValues() {
     /* this.applyFiltersCache();
     switch (this.tableType) {
       case this.transactionsView:
@@ -1744,7 +1744,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * Columns selected in the PIN dialog from the transactions view
    * need to be applied to the Recycling Bin table.
    */
-  private applyColumnsSelected() {
+  public applyColumnsSelected() {
     const key = this.transactionSortableColumnsLSK;
     const sortableColumnsJson: string | null = localStorage.getItem(key);
     if (localStorage.getItem(key) != null) {
@@ -1761,7 +1761,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   /**
    * Apply the filters from the cache.
    */
-  private applyFiltersCache() {
+  public applyFiltersCache() {
     const filtersJson: string | null = localStorage.getItem(this.filtersLSK);
     if (filtersJson != null) {
       this.filters = JSON.parse(filtersJson);
@@ -1775,7 +1775,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * Get the column and their settings from the cache and apply it to the component.
    * @param key the key to the value in the local storage cache
    */
-  private applyColCache(key: string) {
+  public applyColCache(key: string) {
     const sortableColumnsJson: string | null = localStorage.getItem(key);
     if (localStorage.getItem(key) != null) {
       this.sortableColumns = JSON.parse(sortableColumnsJson ?? '');
@@ -1789,7 +1789,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * Get the current sorted column from the cache and apply it to the component.
    * @param key the key to the value in the local storage cache
    */
-  private applyCurrentSortedColCache(key: string) {
+  public applyCurrentSortedColCache(key: string) {
     const currentSortedColumnJson: string | null = localStorage.getItem(key);
     let currentSortedColumnL: SortableColumnModel | null = null;
     if (currentSortedColumnJson) {
@@ -1810,7 +1810,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * Get the current page from the cache and apply it to the component.
    * @param key the key to the value in the local storage cache
    */
-  private applyCurrentPageCache(key: string) {
+  public applyCurrentPageCache(key: string) {
     const currentPageCache: string = localStorage.getItem(key) ?? '';
     if (currentPageCache) {
       if (this._utilService.isNumber(currentPageCache)) {
@@ -1827,7 +1827,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * Retrieve the cahce values from local storage and set the
    * component's class variables.
    */
-  private setCachedValues() {
+  public setCachedValues() {
     /* switch (this.tableType) {
       case this.transactionsView:
         this.setCacheValuesforView(
@@ -1855,7 +1855,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * @param sortedColKey currently sorted column key for the cache
    * @param pageKey current page key from the cache
    */
-  private setCacheValuesforView(columnsKey: string, sortedColKey: string, pageKey: string) {
+  public setCacheValuesforView(columnsKey: string, sortedColKey: string, pageKey: string) {
     // shared between trx and recycle tables
     localStorage.setItem(columnsKey, JSON.stringify(this.sortableColumns));
 
@@ -1874,7 +1874,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   /**
    * Set the Table Columns model.
    */
-  private setSortableColumns(): void {
+  public setSortableColumns(): void {
     let defaultSortColumns: any[] = [];
     let otherSortColumns: any[] = [];
     if (!this.formType) {
@@ -1975,12 +1975,12 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
   /**
    * Set the UI to show the default column sorted in the default direction.
    */
-  private setSortDefault(): void {
+  public setSortDefault(): void {
     // When default, the backend will sort by name and transaction date
     this.currentSortedColumnName = 'default';
   }
 
-  private calculateNumberOfPages(): void {
+  public calculateNumberOfPages(): void {
     if (this.config.currentPage > 0 && this.config.itemsPerPage > 0) {
       if (this.transactionsModel && this.transactionsModel.length > 0) {
         this.numberOfPages = this.transactionsModel.length / this.config.itemsPerPage;
@@ -2011,7 +2011,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     this.editTransaction(trx);
   }
 
-  private showUnItemizedWarn() {
+  public showUnItemizedWarn() {
     const WARN_MESSAGE =
       'Unitemized Transactions will not be included in your report. Therefore, the transactions are not available for' +
       ' Print Preview';
@@ -2021,7 +2021,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  private showMultipleReportsWarn() {
+  public showMultipleReportsWarn() {
     const WARN_MESSAGE =
       'Print functionality is not available for transactions from multiple reports. Please select all transacitons from the same report. ';
     this._dialogService.confirm(WARN_MESSAGE, ConfirmModalComponent, 'Error!', false).then((res: any) => {
@@ -2030,7 +2030,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     });
   }
 
-  private isPrintable(trx: any) {
+  public isPrintable(trx: any) {
     if (trx.itemized && trx.itemized === 'U') {
       return false;
     } else {
@@ -2038,7 +2038,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  private isIKOUT(trx: any) {
+  public isIKOUT(trx: any) {
     if (
       trx.transactionTypeIdentifier === 'IK_OUT' ||
       trx.transactionTypeIdentifier === 'PARTY_IK_OUT' ||
@@ -2055,7 +2055,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  private isForceItemizable(trx: TransactionModel): boolean {
+  public isForceItemizable(trx: TransactionModel): boolean {
     if (!this.editMode && !this._allTransactions) {
       return false;
     }
@@ -2069,7 +2069,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     }
   }
 
-  private forceItemizationToggle(trx: TransactionModel): void {
+  public forceItemizationToggle(trx: TransactionModel): void {
     this._reportTypeService.forceItemizationToggle(trx).subscribe(
       (res: any) => {
         // on response reload the transaction table to get latest data
@@ -2083,10 +2083,10 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     );
   }
 
-  private getItemizationInd(trx: TransactionModel): string {
+  public getItemizationInd(trx: TransactionModel): string {
     return this.getCurrentItemizationStatus(trx) ? ' Unitemize' : ' Itemize';
   }
-  private getCurrentItemizationStatus(trx: TransactionModel): boolean {
+  public getCurrentItemizationStatus(trx: TransactionModel): boolean {
     if (trx && trx.itemized) {
       if (trx.itemized === 'U' || trx.itemized === 'FU') {
         return false;
@@ -2099,7 +2099,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  private setSelectedForMultiplyPages() {
+  public setSelectedForMultiplyPages() {
     for (
       let transactionModelIndex = 0;
       transactionModelIndex < this.transactionsModel.length;
@@ -2118,7 +2118,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
     this.bulkActionDisabled = this.selectedFromMultiplePages.length > 1 ? false : true;
   }
 
-  private selectedForMultiplyPages() {
+  public selectedForMultiplyPages() {
     for (
       let transactionModelIndex = 0;
       transactionModelIndex < this.transactionsModel.length;
@@ -2147,7 +2147,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * @param trx
    * @return {boolean} true disabled trx action else false
    */
-  private isDisabled(trx: TransactionModel): boolean {
+  public isDisabled(trx: TransactionModel): boolean {
     if (trx && trx.reportstatus) {
       return !trx.iseditable;
     } else {
@@ -2160,7 +2160,7 @@ export class TransactionsTableComponent implements OnInit, OnDestroy {
    * @param trx
    * @return {boolean} true disabled trx action else false
    */
-  private isLoanDisabled(trx: TransactionModel): boolean {
+  public isLoanDisabled(trx: TransactionModel): boolean {
     if (trx && trx.reportstatus) {
       return !trx.isTrashable;
     } else {

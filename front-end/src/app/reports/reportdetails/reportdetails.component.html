@@ -60,21 +60,21 @@
                 <button class="btn reports__tag_btn reports__btn-search-filter">
                   {{ filters.filterCvgDateFrom | date: 'MM/dd/yyyy' }} -
                   {{ filters.filterCvgDateTo | date: 'MM/dd/yyyy' }}
-                  <i class="fas fa-window-close reports__close-tag" (click)="removeTag('filterCvgDate')"></i>
+                  <i class="fas fa-window-close reports__close-tag"></i>
                 </button>
               </div>
               <div *ngIf="filters.filterFiledDateFrom && filters.filterFiledDateTo">
                 <button class="btn reports__tag_btn reports__btn-search-filter">
                   {{ filters.filterFiledDateFrom | date: 'MM/dd/yyyy' }} -
                   {{ filters.filterFiledDateTo | date: 'MM/dd/yyyy' }}
-                  <i class="fas fa-window-close reports__close-tag" (click)="removeTag('filterFiledDate')"></i>
+                  <i class="fas fa-window-close reports__close-tag"></i>
                 </button>
               </div>
               <div *ngIf="filters.filterDeletedDateFrom && filters.filterDeletedDateTo">
                 <button class="btn reports__tag_btn reports__btn-search-filter">
                   {{ filters.filterDeletedDateFrom | date: 'MM/dd/yyyy' }} -
                   {{ filters.filterDeletedDateTo | date: 'MM/dd/yyyy' }}
-                  <i class="fas fa-window-close reports__close-tag" (click)="removeTag('filterDeletedDate')"></i>
+                  <i class="fas fa-window-close reports__close-tag"></i>
                 </button>
               </div>
             </div>
@@ -637,7 +637,7 @@
   </table>
   <div *ngIf="showPagination()" class="d-flex justify-content-center reports__table-pagination-container">
     <div class="my-auto">
-      <pagination-controls [id]="config.id" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
+      <pagination-controls [id]="config.id ?? ''" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
       </pagination-controls>
     </div>
     <div *ngIf="pageNumbers.length > 1" class="d-flex ml-1">
@@ -661,7 +661,7 @@
 
   <div
     bsModal
-    #columnOptionsModal="bs-modal"
+    columnOptionsModal
     class="modal fade column-options-modal"
     tabindex="-1"
     role="dialog"

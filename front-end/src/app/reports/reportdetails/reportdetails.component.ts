@@ -140,7 +140,7 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _reportTypeService: ReportTypeService,
     private _formsService: FormsService,
-    private authService: AuthService,
+    public authService: AuthService,
     private inputDialogService: InputDialogService
   ) {
     this.showPinColumnsSubscription = this._reportsMessageService.getShowPinColumnMessage().subscribe((message) => {

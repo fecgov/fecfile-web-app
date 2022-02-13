@@ -124,7 +124,6 @@
                     [attr.name]="'receipt_date'"
                     [style.width]="'50%'"
                     [style.height]="'30px'"
-                    (change)="receiptDateChanged($event.target.value)"
                     [ngClass]="
                       schedH3.get('receipt_date')?.invalid && (schedH3.touched || schedH3.dirty) && isSubmit
                         ? 'input-field-error'
@@ -581,7 +580,7 @@
         <hr />
         <div *ngIf="showPagination()" class="d-flex justify-content-center sched-h3__table-pagination-container">
           <div class="my-auto">
-            <pagination-controls [id]="config.id" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
+            <pagination-controls [id]="config.id ?? ''" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
             </pagination-controls>
           </div>
           <div *ngIf="pageNumbers.length > 1" class="d-flex ml-1">

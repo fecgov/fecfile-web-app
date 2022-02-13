@@ -49,7 +49,7 @@
       <div class="space"></div>
       <div class="tab-container" [ngSwitch]="viewMode" *ngFor="let item of viewTabs; let i = index">
         <div id="tab-{{ item.id }}" *ngSwitchCase="'tab-' + item.id">
-          <app-notificationdetails (status)="onNotify($event)" [tabConfig]="item"> </app-notificationdetails>
+          <app-notificationdetails [tabConfig]="item"> </app-notificationdetails>
         </div>
       </div>
     </div>

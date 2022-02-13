@@ -127,7 +127,7 @@ export class ReportheaderComponent implements OnInit {
     }
   }
 
-  private recycleReports(): void {
+  public recycleReports(): void {
     this.view = ActiveView.recycleBin;
   }
 

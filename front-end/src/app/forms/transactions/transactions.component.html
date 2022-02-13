@@ -45,7 +45,7 @@
                 class="btn btn-primary btn-right"
                 type="submit"
                 (click)="showCategories()"
-                [hidden]="allTransactions === 'true'"
+                [hidden]="allTransactions"
               >
                 Return to Transaction Categories
               </button>
@@ -97,7 +97,7 @@
                 class="btn btn-primary btn-left transactions__trx-btn"
                 type="button"
                 (click)="showFilters()"
-                [hidden]="allTransactions === 'true'"
+                [hidden]="allTransactions"
               >
                 <i class="filter-icon"></i>
                 Filter

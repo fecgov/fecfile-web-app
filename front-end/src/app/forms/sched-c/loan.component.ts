@@ -87,8 +87,8 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
   private _transactionId!: string;
   private _transactionTypeIdentifier!: string;
   private _transactionCategory!: string;
-  private cvgStartDate!: string;
-  private cvgEndDate!: string;
+  public cvgStartDate!: string;
+  public cvgEndDate!: string;
   private currentLoanData!: any;
   private _selectedEntityId!: any;
   private typeChangeEventOccured = false;
@@ -1390,4 +1390,7 @@ export class LoanComponent implements OnInit, OnDestroy, OnChanges {
       queryParams: queryParams,
     });
   }
+
+  public memoCodeChange(event: any) {}
+  public memoCode: boolean = true;
 }

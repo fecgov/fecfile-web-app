@@ -80,7 +80,6 @@
                         [attr.value]="col?.value"
                         [maxlength]="col?.name === 'loan_amount_original' ? null : col?.validation?.max"
                         [formControlName]="col?.name"
-                        (blur)="col?.name === 'loan_amount_original' ? contributionAmountChange($event) : null"
                         [ngClass]="
                           frmLoan.get(col?.name)?.invalid && (frmLoan.touched || frmLoan.dirty)
                             ? 'input-field-error'
@@ -175,36 +174,34 @@
                     </div>
                     <div
                       class="error-text"
-                      *ngIf="(frmLoan.touched || frmLoan.dirty) && frmLoan.get(col?.name).invalid"
+                      *ngIf="(frmLoan.touched || frmLoan.dirty) && frmLoan.get(col?.name)?.invalid"
                     >
-                      <ng-container *ngIf="frmLoan.get(col?.name).errors?.maxlength">
+                      <ng-container *ngIf="frmLoan.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="
-                            frmLoan.get(col?.name).errors.maxlength?.requiredLength <
-                            frmLoan.get(col?.name).errors.maxlength?.actualLength
-                          "
+  
+
                         >
-                          Only {{ frmLoan.get(col?.name).errors.maxlength?.requiredLength }} characters allowed.
+                          Only ### characters allowed.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmLoan.get(col?.name)?.errors['nonValidAmount']">
+                      <ng-container *ngIf="frmLoan.get(col?.name)?.errors">
                         <div class="text-error text-left">Please enter a valid amount.</div>
                       </ng-container>
-                      <ng-container *ngIf="frmLoan.get(col?.name).errors">
-                        <div class="text-error text-left" *ngIf="frmLoan.get(col?.name).errors?.nonAlphaNumeric">
+                      <ng-container *ngIf="frmLoan.get(col?.name)?.errors">
+                        <div class="text-error text-left" *ngIf="frmLoan.get(col?.name)?.errors">
                           Alphanumeric characters only.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmLoan.get(col?.name).errors">
-                        <div class="text-error text-left" *ngIf="frmLoan.get(col?.name).errors?.nonFloatingPoint">
+                      <ng-container *ngIf="frmLoan.get(col?.name)?.errors">
+                        <div class="text-error text-left" *ngIf="frmLoan.get(col?.name)?.errors">
                           Only numerical values are allowed.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmLoan.get(col?.name).errors">
+                      <ng-container *ngIf="frmLoan.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmLoan.get(col?.name).errors['contributionDateInvalid']"
+                          *ngIf="frmLoan.get(col?.name)?.errors"
                         >
                           The date entered falls outside of the report coverage period. Transactions for this report
                           should fall within {{ cvgStartDate }} and {{ cvgEndDate }} (Coverage Dates of Report). If you

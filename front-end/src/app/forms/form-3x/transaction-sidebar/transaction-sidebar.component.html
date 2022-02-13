@@ -17,9 +17,6 @@
             aria-label="Search by type"
             [(ngModel)]="itemSelected"
             [ngbTypeahead]="searchByType"
-            [resultTemplate]="rt"
-            [inputFormatter]="formatter"
-            (focus)="focus$.next($event.target.value)"
             placement="right"
           />
         </div>

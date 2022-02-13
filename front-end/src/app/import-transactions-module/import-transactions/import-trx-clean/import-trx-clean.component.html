@@ -90,9 +90,9 @@
   <hr />
   <ng-container *ngIf="contacts.length > 0">
     <!-- <div *ngIf="showPagination()" id ="trx-clean-paginate" class="d-flex justify-content-center clean_contacts__table-pagination-container">
-      <pagination-controls [id]="config.id" (pageChange)="changePageClientSide($event)"> </pagination-controls>
+      <pagination-controls [id]="config.id ?? ''" (pageChange)="changePageClientSide($event)"> </pagination-controls>
     </div> -->
-    <!-- <pagination-controls [id]="config.id" (pageChange)="checkDuplicates($event)"> </pagination-controls> -->
+    <!-- <pagination-controls [id]="config.id ?? ''" (pageChange)="checkDuplicates($event)"> </pagination-controls> -->
     <div class="row">
       <div class="col col-md-5">
         <button

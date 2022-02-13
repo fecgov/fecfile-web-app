@@ -515,55 +515,55 @@
                       class="error-text"
                       *ngIf="
                         (frmIndividualReceipt.touched || frmIndividualReceipt.dirty) &&
-                        frmIndividualReceipt.get(col?.name).invalid
+                        frmIndividualReceipt.get(col?.name)?.invalid
                       "
                     >
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors?.maxlength">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
                           *ngIf="
-                            frmIndividualReceipt.get(col?.name).errors.maxlength?.requiredLength <
-                            frmIndividualReceipt.get(col?.name).errors.maxlength?.actualLength
+                            frmIndividualReceipt.get(col?.name)?.errors.maxlength?.requiredLength <
+                            frmIndividualReceipt.get(col?.name)?.errors.maxlength?.actualLength
                           "
                         >
-                          Only {{ frmIndividualReceipt.get(col?.name).errors.maxlength?.requiredLength }} characters
+                          Only {{ frmIndividualReceipt.get(col?.name)?.errors.maxlength?.requiredLength }} characters
                           allowed.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.nonValidAmount"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           Please enter a valid amount.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.nonAlphaNumeric"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           Alphanumeric characters only.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
-                        <div class="text-error text-left" *ngIf="frmIndividualReceipt.get(col?.name).errors?.max">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
+                        <div class="text-error text-left" *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                           Entered amount exceeds maximum allowable amount of
                           {{ this._maxChildAmount | currency: 'USD':'symbol-narrow':'1.2-2' }}$
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.nonFloatingPoint"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           Only numerical values are allowed.
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.contributionDateInvalid"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           The date entered falls outside of the report coverage period. Transactions for this report
                           should fall within {{ coverageStartDate }} and {{ coverageEndDate }} (Coverage Dates of
@@ -573,10 +573,10 @@
                               coverage period only. -->
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.reportFiled"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           The report corresponding to this date is already filed. You must amend the report first.
                           <!-- Entered date is outside of the report coverage period. Please enter transactions for this
@@ -584,30 +584,30 @@
                         </div>
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.reportNotFound"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           The report corresponding to this date is not found.
                           <!-- Entered date is outside of the report coverage period. Please enter transactions for this
                               coverage period only. -->
                         </div>
-                        <div class="text-error text-left" *ngIf="frmIndividualReceipt.get(col?.name).errors?.dateEmpty">
+                        <div class="text-error text-left" *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                           This date cannot be empty if adding IE by dissemination date.
                           <!-- Entered date is outside of the report coverage period. Please enter transactions for this
                               coverage period only. -->
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt.get(col?.name).errors?.amountExceeded"
+                          *ngIf="frmIndividualReceipt.get(col?.name)?.errors"
                         >
                           Expenditure amount exceeds outstanding debt amount
                         </div>
                       </ng-container>
-                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
+                      <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="frmIndividualReceipt?.get(col?.name)?.errors?.minStates"
+                          *ngIf="frmIndividualReceipt?.get(col?.name)?.errors"
                         >
                           You must select at least 6 states
                           <!-- Entered date is outside of the report coverage period. Please enter transactions for this
@@ -717,11 +717,11 @@
                     class="error-text"
                     *ngIf="
                       (frmIndividualReceipt.touched || frmIndividualReceipt.dirty) &&
-                      frmIndividualReceipt.get(col?.name).invalid
+                      frmIndividualReceipt.get(col?.name)?.invalid
                     "
                   >
-                    <ng-container *ngIf="frmIndividualReceipt.get(col?.name).errors">
-                      <div class="text-error text-left" *ngIf="frmIndividualReceipt?.get(col?.name)?.errors?.minStates">
+                    <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
+                      <div class="text-error text-left" *ngIf="frmIndividualReceipt?.get(col?.name)?.errors">
                         You must select at least 6 states
                         <!-- Entered date is outside of the report coverage period. Please enter transactions for this
                               coverage period only. -->

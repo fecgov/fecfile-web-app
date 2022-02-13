@@ -52,7 +52,7 @@ export class TransactionSidebarComponent implements OnInit {
   public reportId!: number;
   public allTransactions: boolean = false;
 
-  private _formType: string = '';
+  public _formType: string = '';
   public transactionCategory: string = '';
   _mainTransactionCategory!: any;
   secondaryOptions!: any;
@@ -76,7 +76,7 @@ export class TransactionSidebarComponent implements OnInit {
     private _dialogService: DialogService,
     private _typeaheadService: TypeaheadService,
     private _transactionMessageService: TransactionsMessageService,
-    private _authService: AuthService,
+    public _authService: AuthService,
     private _utilService: UtilService
   ) {
     this._config.placement = 'right';
