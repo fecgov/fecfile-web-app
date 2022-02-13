@@ -280,7 +280,6 @@
                           isFieldName(col?.name, 'beneficiary_cand_id') ? searchCandidateId : searchCommitteeId
                         "
                         [focusFirst]="false"
-                        [resultTemplate]="isFieldName(col?.name, 'beneficiary_cand_id') ? rtCandidateId : rtCommitteeId"
                         [inputFormatter]="
                           isFieldName(col?.name, 'beneficiary_cand_id') ? formatterCandidateId : formatterCommitteeId
                         "
@@ -339,12 +338,8 @@
                       <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="
-                            frmIndividualReceipt.get(col?.name)?.errors.maxlength?.requiredLength <
-                            frmIndividualReceipt.get(col?.name)?.errors.maxlength?.actualLength
-                          "
                         >
-                          Only {{ frmIndividualReceipt.get(col?.name)?.errors.maxlength?.requiredLength }} characters
+                          Only ### characters
                           allowed.
                         </div>
                       </ng-container>
@@ -384,7 +379,7 @@
                       bindValue="code"
                       bindLabel="code"
                       [selectOnTab]="true"
-                      [attr.readonly]="isSelectFieldReadOnly(col)"
+                      [attr.readonly]="isSelectFieldReadOnly(col) ?? false"
                       [ngClass]="
                         frmIndividualReceipt.get(col?.name)?.invalid &&
                         (frmIndividualReceipt.touched || frmIndividualReceipt.dirty)
@@ -407,7 +402,7 @@
                       bindValue="entityType"
                       bindLabel="entityTypeDescription"
                       [selectOnTab]="true"
-                      [readonly]="isSelectFieldReadOnly(col)"
+                      [readonly]="isSelectFieldReadOnly(col) ?? false"
                       [ngClass]="
                         frmIndividualReceipt.get(col?.name)?.invalid &&
                         (frmIndividualReceipt.touched || frmIndividualReceipt.dirty)

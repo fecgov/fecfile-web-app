@@ -43,7 +43,6 @@
   <div
     class="form__container"
     [ngClass]="{
-      'show-alerts': showValidateBar === true,
       'hide-alerts': step === 'step_6'
     }"
   >
@@ -75,11 +74,9 @@
       </div>
       <div class="form__step" *ngIf="step === 'step_1'">
         <form-report-type
-          [formRadioOptionsVisible]="formRadioOptionsVisible"
           (status)="onNotify($event)"
           [reportType]="reportType"
           [reportsLoading]="reportsLoading"
-          [coverageDateNotSelected]="coverageDateNotSelected"
           [committeeReportTypes]="reportTypes"
           [selectedReportInfo]="selectedReportInfo"
           [formType]="formType"
@@ -108,7 +105,7 @@
             [parentTransactionModel]="parentTransactionModel"
             [mainTransactionTypeText]="mainTransactionTypeText"
             [transactionTypeText]="transactionTypeText"
-            [transactionType]="transactionType"
+            [transactionType]="transactionType ?? ''"
             [scheduleAction]="scheduleAction"
             [scheduleType]="scheduleType"
             [returnToGlobalAllTransaction]="returnToGlobalAllTransaction"
@@ -127,7 +124,7 @@
             "
             [mainTransactionTypeText]="mainTransactionTypeText"
             [transactionTypeText]="transactionTypeText"
-            [transactionType]="transactionType"
+            [transactionType]="transactionType ?? ''"
             [scheduleAction]="scheduleAction"
             [scheduleType]="scheduleType"
             [transactionData]="transactionData"
@@ -242,7 +239,7 @@
           *ngIf="scheduleType === 'sched_h2'"
           [transactionData]="transactionData"
           [transactionTypeText]="transactionTypeText"
-          [transactionType]="transactionType"
+          [transactionType]="transactionType ?? ''"
           [scheduleAction]="scheduleAction"
           [scheduleType]="scheduleType"
           (status)="onNotify($event)"
@@ -252,7 +249,7 @@
           *ngIf="scheduleType === 'sched_h3'"
           [transactionData]="transactionData"
           [transactionTypeText]="transactionTypeText"
-          [transactionType]="transactionType"
+          [transactionType]="transactionType ?? ''"
           [scheduleAction]="scheduleAction"
           [scheduleType]="scheduleType"
           (status)="onNotify($event)"
@@ -262,7 +259,7 @@
           *ngIf="scheduleType === 'sched_h5'"
           [transactionData]="transactionData"
           [transactionTypeText]="transactionTypeText"
-          [transactionType]="transactionType"
+          [transactionType]="transactionType ?? ''"
           [scheduleAction]="scheduleAction"
           [scheduleType]="scheduleType"
           (status)="onNotify($event)"
@@ -274,7 +271,7 @@
           [transactionTypeText]="transactionTypeText"
           [transactionType]="transactionType"
           [scheduleAction]="scheduleAction"
-          [scheduleType]="scheduleType"
+          [scheduleType]="scheduleType ?? ''"
           (status)="onNotify($event)"
         >
         </app-sched-h4>
@@ -284,7 +281,7 @@
           [transactionTypeText]="transactionTypeText"
           [transactionType]="transactionType"
           [scheduleAction]="scheduleAction"
-          [scheduleType]="scheduleType"
+          [scheduleType]="scheduleType ?? ''"
           (status)="onNotify($event)"
         >
         </app-sched-h6>
@@ -300,7 +297,7 @@
           [transactionTypeText]="transactionTypeText"
           [transactionType]="transactionType"
           [scheduleAction]="scheduleAction"
-          [scheduleType]="scheduleType"
+          [scheduleType]="scheduleType ?? ''"
           (status)="onNotify($event)"
         >
         </app-sched-l>

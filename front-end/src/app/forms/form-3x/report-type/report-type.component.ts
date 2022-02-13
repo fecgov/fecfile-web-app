@@ -290,7 +290,7 @@ export class ReportTypeComponent implements OnInit, OnDestroy {
    * @param      {Object}  e   The event object.
    */
   public updateTypeSelected(
-    e: { target: { checked: any; getAttribute: { (arg0: string): string; (arg0: string): string } } },
+    e: any,
     reportType: any
   ): void {
     if (reportType) {

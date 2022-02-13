@@ -29,7 +29,7 @@
     </form>
     <br />
     <hr />
-    <ngb-accordion #acc1="ngbAccordion" closeOthers="true" (panelChange)="toggleAccordion($event, acc1)">
+    <ngb-accordion #acc1="ngbAccordion" [closeOthers]="true" (panelChange)="toggleAccordion($event, acc1)">
       <ngb-panel>
         <ng-template ngbPanelTitle>
           <span

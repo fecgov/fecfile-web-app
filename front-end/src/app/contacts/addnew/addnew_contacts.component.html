@@ -88,7 +88,7 @@
                         col?.name === 'contribution_amount' ? col?.validation?.max + 5 : col?.validation?.max
                       "
                       [formControlName]="col?.name"
-                      (blur)="col?.name === 'contribution_amount' ? contributionAmountChange($event) : null"
+                      (blur)="col?.name === 'contribution_amount' ? contributionAmountKeyup($event) : null"
                       [ngClass]="
                         frmContact.get(col?.name)?.invalid && (frmContact.touched || frmContact.dirty)
                           ? 'input-field-error'
@@ -171,12 +171,8 @@
                     <ng-container *ngIf="frmContact.get(col?.name)?.errors">
                       <div
                         class="text-error text-left"
-                        *ngIf="
-                          frmContact.get(col?.name)?.errors.maxlength?.requiredLength <
-                          frmContact.get(col?.name)?.errors.maxlength?.actualLength
-                        "
                       >
-                        Only {{ frmContact.get(col?.name)?.errors.maxlength?.requiredLength }} characters allowed.
+                        Only ### characters allowed.
                       </div>
                     </ng-container>
                     <ng-container *ngIf="frmContact.get(col?.name)?.errors">

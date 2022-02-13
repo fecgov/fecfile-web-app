@@ -37,6 +37,7 @@ export class ManageUserComponent implements OnInit {
   isEdit: boolean = false;
   currentEditUser: UserModel | null = null;
   accounts: IAccount | null = null;
+  _roleDesc: any = roleDesc;
 
   constructor(
     private logger: NGXLogger,

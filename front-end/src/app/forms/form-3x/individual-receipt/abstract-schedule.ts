@@ -135,7 +135,7 @@ export abstract class AbstractSchedule implements OnInit, OnDestroy, OnChanges {
   private _transaction: any = {};
   private _transactionType: string | null = null;
   private _transactionTypePrevious: string | null = null;
-  protected _transactionCategory = '';
+  public _transactionCategory = '';
   private _formSubmitted = false;
   private _contributionAggregateValue = 0.0;
   private _contributionAggregateValueChild = 0.0;

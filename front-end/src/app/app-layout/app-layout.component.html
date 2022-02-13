@@ -31,7 +31,7 @@
         <!-- <button type="button" class="btn btn-dark">Dark</button>
         <button type="button" class="btn btn-outline-secondary">Primary</button> -->
 
-        <app-header style="display: block; width: 100%" [formType]="formType"></app-header>
+        <app-header style="display: block; width: 100%" [formType]="formType ?? ''"></app-header>
       </div>
     </nav>
   </div>
@@ -52,7 +52,7 @@
         <div
           class="float-right"
           [hidden]="
-            _activatedRoute?.snapshot?.queryParams?.allTransactions === 'true' ||
+            showAllTransactions ||
             _router?.url?.indexOf('/forms/form') === -1
           "
         >

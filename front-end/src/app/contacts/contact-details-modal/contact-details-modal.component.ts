@@ -3,6 +3,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ContactModel } from '../model/contacts.model';
 import { MessageService } from '../../shared/services/MessageService/message.service';
 import { ContactsService } from '../service/contacts.service';
+import { ContactActions } from '../service/contacts.service';
 
 @Component({
   selector: 'app-contact-details-modal',
@@ -14,6 +15,7 @@ export class ContactDetailsModalComponent implements OnInit {
   showResponse: boolean = false;
   responseMessage: string = '';
   notesValue: string = '';
+  contactActions = ContactActions;
   constructor(
     private activeModal: NgbActiveModal,
     private _messageService: MessageService,

@@ -499,12 +499,8 @@
                       <ng-container *ngIf="frmIndividualReceipt.get(col?.name)?.errors">
                         <div
                           class="text-error text-left"
-                          *ngIf="
-                            frmIndividualReceipt.get(col?.name)?.errors.maxlength?.requiredLength <
-                            frmIndividualReceipt.get(col?.name)?.errors.maxlength?.actualLength
-                          "
                         >
-                          Only {{ frmIndividualReceipt.get(col?.name)?.errors.maxlength?.requiredLength }} characters
+                          Only #### characters
                           allowed.
                         </div>
                       </ng-container>
@@ -690,7 +686,7 @@
                       bindValue="entityType"
                       bindLabel="entityTypeDescription"
                       [selectOnTab]="true"
-                      [readonly]="isSelectFieldReadOnly(col)"
+                      [readonly]="isSelectFieldReadOnly(col) ?? false"
                       [ngClass]="
                         frmIndividualReceipt.get(col?.name)?.invalid &&
                         (frmIndividualReceipt.touched || frmIndividualReceipt.dirty)
@@ -710,7 +706,7 @@
                       bindValue="eventType"
                       bindLabel="eventTypeDescription"
                       [selectOnTab]="true"
-                      [readonly]="isSelectFieldReadOnly(col)"
+                      [readonly]="isSelectFieldReadOnly(col) ?? false"
                       [ngClass]="
                         frmIndividualReceipt.get(col?.name)?.invalid &&
                         (frmIndividualReceipt.touched || frmIndividualReceipt.dirty)
@@ -738,7 +734,7 @@
                       bindValue="activityEventDescription"
                       bindLabel="activityEventDescription"
                       [selectOnTab]="true"
-                      [readonly]="isSelectFieldReadOnly(col)"
+                      [readonly]="isSelectFieldReadOnly(col) ?? false"
                       [ngClass]="
                         frmIndividualReceipt.get(col?.name)?.invalid &&
                         (frmIndividualReceipt.touched || frmIndividualReceipt.dirty)
@@ -757,7 +753,7 @@
                       bindValue="levin_account_id"
                       bindLabel="levin_account_name"
                       [selectOnTab]="true"
-                      [readonly]="isSelectFieldReadOnly(col)"
+                      [readonly]="isSelectFieldReadOnly(col) ?? false"
                       [ngClass]="
                         frmIndividualReceipt.get(col?.name)?.invalid &&
                         (frmIndividualReceipt.touched || frmIndividualReceipt.dirty)
@@ -817,7 +813,7 @@
           *ngIf="
             subTransactionInfo?.isParent &&
             multipleSubTransactionInfo &&
-            multipleSubTransactionInfo?.length > 0 &&
+            multipleSubTransactionInfo?.length ?? 0 > 0 &&
             transactionType === 'DEBT_BY_VENDOR'
           "
           class="btn btn-primary btn-left"

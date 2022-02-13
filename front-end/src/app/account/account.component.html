@@ -4,7 +4,7 @@
       <div class="header__text">
         <h1>Account</h1>
         <p>
-          Logged in as <b>{{ _authService.getUserRole() }} </b>
+          Logged in as <b>{{ authService.getUserRole() }} </b>
         </p>
       </div>
     </div>
@@ -74,7 +74,7 @@
           </p>
         </div>
       </div>
-      <div *ngIf="!_authService.isReadOnly()" class="grid-row-btn">
+      <div *ngIf="!authService.isReadOnly()" class="grid-row-btn">
         <div class="grid-col-1">
           <p></p>
           <button type="button" (click)="goToForms1()"><i class="fas fa-edit"></i>Edit</button>
@@ -181,7 +181,7 @@
         </div>
       </div>
 
-      <div *ngIf="!_authService.isReadOnly()" class="grid-row-btn">
+      <div *ngIf="!authService.isReadOnly()" class="grid-row-btn">
         <div class="grid-col-1">
           <button type="button" (click)="goToForms1()"><i class="fas fa-edit"></i>Edit</button>
         </div>
@@ -246,7 +246,7 @@
         </div>
       </div>
 
-      <div *ngIf="!_authService.isReadOnly()" class="grid-row-btn">
+      <div *ngIf="!authService.isReadOnly()" class="grid-row-btn">
         <div class="grid-col-1">
           <button type="button" (click)="goToForms1()"><i class="fas fa-edit"></i>Edit</button>
         </div>
@@ -269,65 +269,65 @@
               {{ accounts?.candidatePrefix }}
             </p>
           </div>
-          <div class="grid-col" *ngIf="accounts?.candidateFirstName != ''">
+          <!-- <div class="grid-col" *ngIf="accounts?.candidateFirstName != ''">
             <p>
               <b>Candidate First Name</b>
             </p>
             <p>
               {{ accounts?.candidateFirstName }}
             </p>
-          </div>
-          <div class="grid-col" *ngIf="accounts?.candidateLastName != ''">
+          </div> -->
+          <!-- <div class="grid-col" *ngIf="accounts?.candidateLastName != ''">
             <p>
               <b>Candidate Last Name</b>
             </p>
             <p>
               {{ accounts?.candidateLastName }}
             </p>
-          </div>
-          <div class="grid-col" *ngIf="accounts?.candidateSuffix != ''">
+          </div> -->
+          <!-- <div class="grid-col" *ngIf="accounts?.candidateSuffix != ''">
             <p>
               <b>Candidate Suffix</b>
             </p>
             <p>
               {{ accounts?.candidateSuffix }}
             </p>
-          </div>
-          <div class="grid-col" *ngIf="accounts?.partyAffiliation != ''">
+          </div> -->
+          <!-- <div class="grid-col" *ngIf="accounts?.partyAffiliation != ''">
             <p>
               <b>Party Affiliation</b>
             </p>
             <p>
               {{ accounts?.partyAffiliation }}
             </p>
-          </div>
-          <div class="grid-col" *ngIf="accounts?.officeSought != ''">
+          </div> -->
+          <!-- <div class="grid-col" *ngIf="accounts?.officeSought != ''">
             <p>
               <b>Office Sought</b>
             </p>
             <p>
               {{ accounts?.officeSought }}
             </p>
-          </div>
-          <div class="grid-col" *ngIf="accounts?.officeSought != ''">
+          </div> -->
+          <!-- <div class="grid-col" *ngIf="accounts?.officeSought != ''">
             <p>
               <b>State</b>
             </p>
             <p>
               {{ accounts?.candidateState }}
             </p>
-          </div>
-          <div class="grid-col" *ngIf="accounts?.officeSought != ''">
+          </div> -->
+          <!-- <div class="grid-col" *ngIf="accounts?.officeSought != ''">
             <p>
               <b>District</b>
             </p>
             <p>
               {{ accounts?.candidateDistrict }}
             </p>
-          </div>
+          </div> -->
         </div>
 
-        <div *ngIf="!_authService.isReadOnly()" class="grid-row-btn">
+        <div *ngIf="!authService.isReadOnly()" class="grid-row-btn">
           <div class="grid-col-1">
             <button type="button" (click)="goToForms1()"><i class="fas fa-edit"></i>Edit</button>
           </div>
@@ -347,12 +347,12 @@
     <!-- adding the levin acct section here -->
     <h3>Committee Levin Accounts</h3>
     <form action="">
-      <label *ngIf="!_authService.isReadOnly()" for="levin_acct_name">
+      <label *ngIf="!authService.isReadOnly()" for="levin_acct_name">
         <ng-container *ngIf="levinAction === 'add'"> Add New </ng-container>
         <ng-container *ngIf="levinAction === 'edit'"> Edit </ng-container>
         Levin Account:
       </label>
-      <div *ngIf="!_authService.isReadOnly()" class="input-group">
+      <div *ngIf="!authService.isReadOnly()" class="input-group">
         <!-- <div class="form-group"> -->
 
         <input

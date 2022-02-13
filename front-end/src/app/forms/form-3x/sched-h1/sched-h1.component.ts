@@ -36,7 +36,7 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
   @ViewChild('f') form!: NgForm;
 
   public formType = '';
-  private scheduleAction: ScheduleActions = ScheduleActions.add;
+  public scheduleAction: ScheduleActions = ScheduleActions.add;
   populateFormForEdit!: Subscription;
   transaction_id!: any;
 
@@ -63,6 +63,10 @@ export class SchedH1Component implements OnInit, OnChanges, OnDestroy {
   adSelected = false;
   gvSelected = false;
   pcSelected = false;
+
+  col: any = {
+    infoText: ''
+  }
 
   constructor(
     private _http: HttpClient,

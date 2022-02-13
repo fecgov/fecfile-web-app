@@ -1442,4 +1442,7 @@ export class AddNewContactComponent implements OnInit, OnDestroy {
   saveContactDetails() {
     this.doValidateContact('contactDetails');
   }
+
+  public memoCode: boolean = false;
+  public memoCodeChange(event: any) {}
 }

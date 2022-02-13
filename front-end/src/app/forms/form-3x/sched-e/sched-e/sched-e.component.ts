@@ -63,6 +63,9 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
   _originalExpenditureAggregate!: any;
   _originalExpenditureAmount!: any;
 
+  createEarMarkTrx: boolean = false;
+  editEarMarkTrx: boolean = false;
+
   constructor(
     _http: HttpClient,
     _fb: FormBuilder,
@@ -520,7 +523,7 @@ export class SchedEComponent extends IndividualReceiptComponent implements OnIni
     this.updateYTDAmount();
   }
 
-  private updateYTDAmount() {
+  public updateYTDAmount() {
     // console.log('YTD is being recalculated ...');
     let currentExpenditureAmount = this._convertAmountToNumber(
       this.frmIndividualReceipt.controls['expenditure_amount'].value

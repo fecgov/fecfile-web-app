@@ -6,7 +6,7 @@
     <header *ngIf="!isEditViewActive()">
       <div class="header-content">
         <div class="float-left">
-          <h1 *ngIf="!isEditViewActive(); else editHeading">
+          <h1 *ngIf="!isEditViewActive()">
             Contacts
             <span *ngIf="isRecycleBinViewActive()">
               / Recycling Bin
@@ -312,9 +312,8 @@
         *ngIf="isEditViewActive() && !_authService.isReadOnly()"
         [formOptionsVisible]="false"
         [selectedOptions]="null"
-        [transactionTypeText]=""
-        [transactionType]=""
-        [scheduleAction]="view"
+        [transactionTypeText]="''"
+        [transactionType]="''"
         [transactionToEdit]="transactionToEdit"
         (status)="onNotify($event)"
       >

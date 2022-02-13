@@ -129,7 +129,7 @@ export class ContactsTableComponent implements OnInit, OnDestroy {
     private _tableService: TableService,
     private _utilService: UtilService,
     private _dialogService: DialogService,
-    private _authService: AuthService,
+    public _authService: AuthService,
     private _router: Router,
     private _messageService: MessageService,
     private contactModal: InputDialogService,

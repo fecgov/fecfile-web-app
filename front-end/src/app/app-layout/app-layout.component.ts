@@ -52,6 +52,8 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
   private _datePipe!: DatePipe;
   private onDestroy$: Subject<boolean> = new Subject<boolean>();
 
+  public showAllTransactions: boolean = false;
+
   constructor(
     private _apiService: ApiService,
     private _sessionService: SessionService,
@@ -68,6 +70,8 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     let route: string = this._router.url;
+
+    this.showAllTransactions = this._activatedRoute?.snapshot?.queryParams['allTransactions'] ? true : false;
 
     this._apiService
       .getCommiteeDetails()
