@@ -36,7 +36,6 @@
     "aws-sdk": "*",
     "bootstrap": "*",
     "classlist.js": "*",
-    "core-js": "*",
     "crypto-js": "*",
     "dotenv": "*",
     "es5-shim": "*",
@@ -58,6 +57,7 @@
     "rxjs": "~7.5.0",
     "rxjs-compat": "*",
     "tslib": "^2.3.0",
+    "util": "^0.12.4",
     "web-animations-js": "*",
     "xlsx": "*",
     "zone.js": "~0.11.4"
