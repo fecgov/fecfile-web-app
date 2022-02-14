@@ -16,7 +16,8 @@
     "test": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test",
     "e2e": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e",
     "json-server": "nodemon ./server/server.js",
-    "lint": "sh ./build-scripts/lint.sh"
+    "lint": "sh ./build-scripts/lint.sh",
+    "license-report": "./node_modules/.bin/license-checker"
   },
   "private": true,
   "dependencies": {
@@ -87,6 +88,7 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "license-checker": "^25.0.1",
     "nodemon": "^1.18.4",
     "protractor": "~7.0.0",
     "ts-node": "~5.0.1",
