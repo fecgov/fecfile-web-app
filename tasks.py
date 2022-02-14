@@ -24,18 +24,6 @@ def _detect_space(repo, branch=None):
     return space
 
 
-def _detect_prod(repo, branch):
-    """Deploy to production if master is checked out and tagged."""
-    if branch != "main":
-        return False
-    try:
-        # Equivalent to `git describe --tags --exact-match`
-        repo.git().describe("--tags", "--exact-match")
-        return True
-    except git.exc.GitCommandError:
-        return False
-
-
 def _resolve_rule(repo, branch):
     """Get space associated with first matching rule."""
     for space, rule in DEPLOY_RULES:
@@ -64,10 +52,9 @@ def _detect_branch(repo):
 
 
 DEPLOY_RULES = (
-    ("prod", _detect_prod),
+    ("prod", lambda _, branch: branch == "main"),
     ("stage", lambda _, branch: branch.startswith("release")),
     ("dev", lambda _, branch: branch == "develop"),
-    ("dev", lambda _, branch: branch == "feature/40-deploy-to-cloud.gov"),
 )
 
 def _build_angular_app(ctx,space):
