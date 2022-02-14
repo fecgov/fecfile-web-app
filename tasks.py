@@ -54,7 +54,7 @@ def _detect_branch(repo):
 DEPLOY_RULES = (
     ("prod", lambda _, branch: branch == "main"),
     ("stage", lambda _, branch: branch.startswith("release")),
-    ("dev", lambda _, branch: branch == "develop"),
+    ("dev", lambda _, branch: branch == "feature/116-production-errors"),
 )
 
 def _build_angular_app(ctx,space):
@@ -132,25 +132,25 @@ def _print_help_text():
     help_text = """
     Usage:
     invoke deploy [--space SPACE] [--branch BRANCH] [--login LOGIN] [--help] [--nobuild]
-    
+
     --space SPACE    If provided, the SPACE space in cloud.gov will be targeted for deployment.
                      Either --space or --branch must be provided
                      Allowed values are dev, stage, and prod.
-                     
-                     
+
+
     --branch BRANCH  Name of the branch to use for deployment. Will auto-detect
                      the git branch in the current directory by default
                      Either --space or --branch must be provided
-                     
-    --login          If this flag is set, deploy with attempt to login to a 
+
+    --login          If this flag is set, deploy with attempt to login to a
                      service account specified in the environemnt variables
                      $FEC_CF_USERNAME_[SPACE] and $FEC_CF_PASSWORD_[SPACE]
-                     
+
     --help           If set, display help/usage text and exit
-    
+
     --nobuild        If set, skip the Angular applicaiton build process. Useful
                      for debugging, but should not be used in most cases.
-                    
+
     """
     print(help_text)
 
