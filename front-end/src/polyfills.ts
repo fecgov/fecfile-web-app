@@ -60,4 +60,4 @@
 // For AWS issue
 // https://github.com/aws/aws-sdk-js/issues/1944
 // https://github.com/aws-amplify/amplify-js/issues/678
-// (window as any).global = window;
+(window as any).global = window;
