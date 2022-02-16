@@ -150,31 +150,35 @@ export class ConfirmTwoFactorComponent implements OnInit {
    * @private
    */
   private askConsent() {
-    const modalRef = this.modalService.open(ConsentModalComponent, { size: 'lg', centered: true });
-    modalRef.result
-      .then((res) => {
-        let navUrl = '';
-        if (res === 'agree') {
-          if (this.response.token) {
-            this._authService.doSignIn(this.response.token);
-          }
-          navUrl = '/dashboard';
-        } else if (res === 'decline') {
-          this._authService.doSignOut();
-          navUrl = '[/login]';
-        }
-        if (this.entryPoint === 'reset' && res === 'agree') {
-          this._messageService.sendMessage({ action: 'resetPassword', entryPoint: 'reset' });
-          this.router.navigate(['/createPassword'], { queryParamsHandling: 'merge' });
-        } else {
-          this.router.navigate([navUrl]).then((r) => {
-            // do nothing
-          });
-        }
-      })
-      .catch((e: any) => {
-        // do nothing stay on the same page
-      });
+    this._authService.doSignIn(this.response.token);
+    this.router.navigate(['/dashboard']).then((r) => {
+      // do nothing
+    });
+    // const modalRef = this.modalService.open(ConsentModalComponent, { size: 'lg', centered: true });
+    // modalRef.result
+    //   .then((res) => {
+    //     let navUrl = '';
+    //     if (res === 'agree') {
+    //       if (this.response.token) {
+    //         this._authService.doSignIn(this.response.token);
+    //       }
+    //       navUrl = '/dashboard';
+    //     } else if (res === 'decline') {
+    //       this._authService.doSignOut();
+    //       navUrl = '[/login]';
+    //     }
+    //     if (this.entryPoint === 'reset' && res === 'agree') {
+    //       this._messageService.sendMessage({ action: 'resetPassword', entryPoint: 'reset' });
+    //       this.router.navigate(['/createPassword'], { queryParamsHandling: 'merge' });
+    //     } else {
+    //       this.router.navigate([navUrl]).then((r) => {
+    //         // do nothing
+    //       });
+    //     }
+    //   })
+    //   .catch((e: any) => {
+    //     // do nothing stay on the same page
+    //   });
   }
   resend() {
     if (this.resendOption) {
