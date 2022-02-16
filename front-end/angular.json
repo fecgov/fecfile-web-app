@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "fec-eFiling": {
+    "fecfile-web": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -24,11 +24,12 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
-            "outputPath": "dist/fec-eFilling",
+            "outputPath": "dist/fecfile-web",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -44,8 +45,14 @@
             "cloud.gov.prod": {
               "budgets": [
                 {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "10mb"
+                },
+                {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "200kb",
+                  "maximumError": "400kb"
                 }
               ],
               "fileReplacements": [
@@ -54,20 +61,19 @@
                   "with": "src/environments/environment.cloud.gov.prod.ts"
                 }
               ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "outputHashing": "all"
             },
             "cloud.gov.stage": {
               "budgets": [
                 {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "200kb",
+                  "maximumError": "400kb"
                 }
               ],
               "fileReplacements": [
@@ -75,13 +81,20 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.cloud.gov.stage.ts"
                 }
-              ]
+              ],
+              "outputHashing": "all"
             },
             "cloud.gov.dev": {
               "budgets": [
                 {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "200kb",
+                  "maximumError": "400kb"
                 }
               ],
               "fileReplacements": [
@@ -89,21 +102,23 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.cloud.gov.dev.ts"
                 }
-              ]
+              ],
+              "outputHashing": "all",
+              "sourceMap": true
             },
             "local": {
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.local.ts"
                 }
-              ]
+              ],
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             },
             "development": {
               "buildOptimizer": false,
@@ -114,30 +129,27 @@
               "namedChunks": true
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "local"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "fec-eFilling:build"
+            "browserTarget": "fecfile-web:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "fec-eFilling:build:production"
-            },
             "local": {
-              "browserTarget": "fec-eFilling:build:local"
+              "browserTarget": "fecfile-web:build:local"
             },
             "development": {
-              "browserTarget": "fec-eFiling:build:development"
+              "browserTarget": "fecfile-web:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "local"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fec-eFilling:build"
+            "browserTarget": "fecfile-web:build"
           }
         },
         "test": {
@@ -170,36 +182,9 @@
           }
         }
       }
-    },
-    "fec-eFilling-e2e": {
-      "root": "e2e/",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "fec-eFilling:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "fec-eFilling:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
     }
   },
-  "defaultProject": "fec-eFilling",
+  "defaultProject": "fecfile-web",
   "schematics": {
     "@schematics/angular:component": {
       "style": "scss"

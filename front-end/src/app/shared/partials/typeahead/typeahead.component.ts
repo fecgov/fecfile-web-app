@@ -14,7 +14,7 @@ import { TypeaheadService } from './typeahead.service';
   styles: [
     `
       .form-control {
-        width!: 300px;
+        width: 300px;
       }
     `,
   ],
