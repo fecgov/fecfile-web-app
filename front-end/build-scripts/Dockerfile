@@ -1,5 +1,6 @@
 # base image
-FROM node:16 as builder
+FROM node:14 as builder
+ARG SNYK_AUTH_TOKEN
 
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app

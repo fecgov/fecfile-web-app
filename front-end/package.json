@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start-docker": "snyk protect && node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve --port 80 --host 0.0.0.0 --configuration=local",
+    "start-docker": "npm install && snyk protect && node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve --port 80 --host 0.0.0.0 --configuration=local",
     "local": "ng serve --configuration=local",
     "local_memory": "node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng serve --configuration=local",
     "local_aot": "ng serve --configuration=local --aot",

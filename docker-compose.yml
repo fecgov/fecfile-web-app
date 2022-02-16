@@ -12,7 +12,6 @@ services:
     container_name: fecfile-web
     restart: always
     volumes:
-#      - ./django-frontend:/opt/nxg_fec
       - ./front-end:/usr/src/app
     ports:
       - 8081:80

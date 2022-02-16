@@ -14,7 +14,7 @@ jobs:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
-      - image: cimg/node:16.14-browsers
+      - image: cimg/node:14.18-browsers
     resource_class: large
     steps:
       - checkout
@@ -80,7 +80,7 @@ jobs:
   # missing failed unit tests.
   backup-unit-test:
     docker:
-      - image: cimg/node:16.14-browsers
+      - image: cimg/node:14.18-browsers
     steps:
       - checkout
       - browser-tools/install-chrome
@@ -96,7 +96,7 @@ jobs:
 
   e2e-test:
     docker:
-      - image: cimg/node:16.14-browsers
+      - image: cimg/node:14.18-browsers
     steps:
       - checkout
       - browser-tools/install-chrome
@@ -114,7 +114,7 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/node:16.14-browsers
+      - image: cimg/node:14.18-browsers
     resource_class: large
     steps:
       - checkout
