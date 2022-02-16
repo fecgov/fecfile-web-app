@@ -8,7 +8,7 @@ import {ActivatedRoute} from "@angular/router";
 import {RouterTestingModule} from "@angular/router/testing";
 import {AppConfigService} from "../../../../app-config.service";
 
-describe('FormEntryComponent', () => {
+xdescribe('FormEntryComponent', () => {
   let component: FormEntryComponent;
   let fixture: ComponentFixture<FormEntryComponent>;
 
@@ -28,7 +28,7 @@ describe('FormEntryComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -5,7 +5,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ReportTypeComponent } from './report-type.component';
 
-describe('ReportTypeComponent', () => {
+xdescribe('ReportTypeComponent', () => {
   let component: ReportTypeComponent;
   let fixture: ComponentFixture<ReportTypeComponent>;
 
@@ -24,7 +24,7 @@ describe('ReportTypeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

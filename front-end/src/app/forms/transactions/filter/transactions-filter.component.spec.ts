@@ -1,7 +1,7 @@
 // import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 // import { TransactionsFilterSidbarComponent } from './transactions-filter-sidebar.component';
 
-// describe('TransactionsFilterSidbarComponent', () => {
+// xdescribe('TransactionsFilterSidbarComponent', () => {
 //   let component: TransactionsFilterSidbarComponent;
 //   let fixture: ComponentFixture<TransactionsFilterSidbarComponent>;
 
@@ -19,7 +19,7 @@
 //     fixture.detectChanges();
 //   });
 
-//   it('should create', () => {
+//   xit('should create', () => {
 //     expect(component).toBeTruthy();
 //   });
 // });

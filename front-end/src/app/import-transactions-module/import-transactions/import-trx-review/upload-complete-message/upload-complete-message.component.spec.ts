@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { UploadCompleteMessageComponent } from './upload-complete-message.component';
 
-describe('UploadCompleteMessageComponent', () => {
+xdescribe('UploadCompleteMessageComponent', () => {
   let component: UploadCompleteMessageComponent;
   let fixture: ComponentFixture<UploadCompleteMessageComponent>;
 
@@ -20,7 +20,7 @@ describe('UploadCompleteMessageComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

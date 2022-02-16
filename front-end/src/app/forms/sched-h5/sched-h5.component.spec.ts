@@ -2,7 +2,7 @@
 
 // import { SchedH3Component } from './sched-h3.component';
 
-// describe('SchedH3Component', () => {
+// xdescribe('SchedH3Component', () => {
 //   let component: SchedH3Component;
 //   let fixture: ComponentFixture<SchedH3Component>;
 
@@ -20,7 +20,7 @@
 //     fixture.detectChanges();
 //   });
 
-//   it('should create', () => {
+//   xit('should create', () => {
 //     expect(component).toBeTruthy();
 //   });
 // });

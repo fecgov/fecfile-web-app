@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SignAndSubmitComponent } from './sign-and-submit.component';
 
-describe('SignAndSubmitComponent', () => {
+xdescribe('SignAndSubmitComponent', () => {
   let component: SignAndSubmitComponent;
   let fixture: ComponentFixture<SignAndSubmitComponent>;
 
@@ -20,7 +20,7 @@ describe('SignAndSubmitComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

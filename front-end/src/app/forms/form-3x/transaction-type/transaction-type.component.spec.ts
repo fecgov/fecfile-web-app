@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TransactionTypeComponent } from './transaction-type.component';
 
-describe('TransactionTypeComponent', () => {
+xdescribe('TransactionTypeComponent', () => {
   let component: TransactionTypeComponent;
   let fixture: ComponentFixture<TransactionTypeComponent>;
 
@@ -20,7 +20,7 @@ describe('TransactionTypeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

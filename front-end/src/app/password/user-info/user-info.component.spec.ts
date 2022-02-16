@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { UserInfoComponent } from './user-info.component';
 
-describe('UserInfoComponent', () => {
+xdescribe('UserInfoComponent', () => {
   let component: UserInfoComponent;
   let fixture: ComponentFixture<UserInfoComponent>;
 
@@ -20,7 +20,7 @@ describe('UserInfoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

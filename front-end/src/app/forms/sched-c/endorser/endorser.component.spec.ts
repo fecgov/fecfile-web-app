@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { EndorserComponent } from '../endorser/endorser.component';
 
-describe('IndividualReceiptComponent', () => {
+xdescribe('IndividualReceiptComponent', () => {
   let component: EndorserComponent;
   let fixture: ComponentFixture<EndorserComponent>;
 
@@ -20,7 +20,7 @@ describe('IndividualReceiptComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

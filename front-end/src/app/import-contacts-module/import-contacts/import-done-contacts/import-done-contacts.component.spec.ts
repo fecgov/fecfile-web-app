@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ImportDoneContactsComponent } from './import-done-contacts.component';
 
-describe('ImportDoneContactsComponent', () => {
+xdescribe('ImportDoneContactsComponent', () => {
   let component: ImportDoneContactsComponent;
   let fixture: ComponentFixture<ImportDoneContactsComponent>;
 
@@ -20,7 +20,7 @@ describe('ImportDoneContactsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

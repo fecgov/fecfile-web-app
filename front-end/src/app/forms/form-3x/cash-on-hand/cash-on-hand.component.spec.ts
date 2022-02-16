@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CashOnHandComponent } from './cash-on-hand.component';
 
-describe('CashOnHandComponent', () => {
+xdescribe('CashOnHandComponent', () => {
   let component: CashOnHandComponent;
   let fixture: ComponentFixture<CashOnHandComponent>;
 
@@ -20,7 +20,7 @@ describe('CashOnHandComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

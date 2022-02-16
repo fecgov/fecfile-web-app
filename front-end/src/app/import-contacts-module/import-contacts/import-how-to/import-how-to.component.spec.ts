@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ImportHowToComponent } from './import-how-to.component';
 
-describe('ImportHowToComponent', () => {
+xdescribe('ImportHowToComponent', () => {
   let component: ImportHowToComponent;
   let fixture: ComponentFixture<ImportHowToComponent>;
 
@@ -20,7 +20,7 @@ describe('ImportHowToComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

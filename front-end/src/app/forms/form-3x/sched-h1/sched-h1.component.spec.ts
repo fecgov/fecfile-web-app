@@ -7,7 +7,7 @@ import {ActivatedRoute} from "@angular/router";
 import {DecimalPipe} from "@angular/common";
 
 
-describe('SchedH1Component', () => {
+xdescribe('SchedH1Component', () => {
   let component: SchedH1Component;
   let fixture: ComponentFixture<SchedH1Component>;
 
@@ -32,7 +32,7 @@ describe('SchedH1Component', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
 
   });

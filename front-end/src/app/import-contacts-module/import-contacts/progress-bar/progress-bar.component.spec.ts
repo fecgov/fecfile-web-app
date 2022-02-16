@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ProgressBarComponent } from './progress-bar.component';
 
-describe('ProgressBarComponent', () => {
+xdescribe('ProgressBarComponent', () => {
   let component: ProgressBarComponent;
   let fixture: ComponentFixture<ProgressBarComponent>;
 
@@ -20,7 +20,7 @@ describe('ProgressBarComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

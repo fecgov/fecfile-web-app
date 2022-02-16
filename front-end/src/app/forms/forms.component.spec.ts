@@ -5,7 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormsComponent } from './forms.component';
 
-describe('FormsComponent', () => {
+xdescribe('FormsComponent', () => {
   let component: FormsComponent;
   let fixture: ComponentFixture<FormsComponent>;
 
@@ -26,7 +26,7 @@ describe('FormsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

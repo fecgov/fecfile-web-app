@@ -5,7 +5,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TypeComponent } from './type.component';
 
-describe('TypeComponent', () => {
+xdescribe('TypeComponent', () => {
   let component: TypeComponent;
   let fixture: ComponentFixture<TypeComponent>;
 
@@ -24,7 +24,7 @@ describe('TypeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

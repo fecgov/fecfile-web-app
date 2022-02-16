@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ImportTrxCleanComponent } from './import-trx-clean.component';
 
-describe('ImportTrxCleanComponent', () => {
+xdescribe('ImportTrxCleanComponent', () => {
   let component: ImportTrxCleanComponent;
   let fixture: ComponentFixture<ImportTrxCleanComponent>;
 
@@ -20,7 +20,7 @@ describe('ImportTrxCleanComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

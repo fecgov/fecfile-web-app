@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { F99Component } from './f99.component';
 
-describe('F99Component', () => {
+xdescribe('F99Component', () => {
   let component: F99Component;
   let fixture: ComponentFixture<F99Component>;
 
@@ -27,7 +27,7 @@ describe('F99Component', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

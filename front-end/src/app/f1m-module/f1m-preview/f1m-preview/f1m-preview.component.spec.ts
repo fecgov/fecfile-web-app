@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { F1mPreviewComponent } from './f1m-preview.component';
 
-describe('F1mPreviewComponent', () => {
+xdescribe('F1mPreviewComponent', () => {
   let component: F1mPreviewComponent;
   let fixture: ComponentFixture<F1mPreviewComponent>;
 
@@ -20,7 +20,7 @@ describe('F1mPreviewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

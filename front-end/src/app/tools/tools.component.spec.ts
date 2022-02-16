@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ToolsComponent } from './tools.component';
 
-describe('ToolsComponent', () => {
+xdescribe('ToolsComponent', () => {
   let component: ToolsComponent;
   let fixture: ComponentFixture<ToolsComponent>;
 
@@ -20,7 +20,7 @@ describe('ToolsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });
