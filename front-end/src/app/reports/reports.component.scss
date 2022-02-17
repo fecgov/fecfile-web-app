@@ -47,17 +47,18 @@
     color: #f7f7f7;
 }*/
 
-.datatable{
+.datatable {
   border-collapse: collapse;
   width: 100%;
- }
-
- .datatable th, td{
-  /*text-align: left;*/
-  padding:8px;
 }
 
-.datatable tr:nth-chile(even){
+.datatable th,
+td {
+  /*text-align: left;*/
+  padding: 8px;
+}
+
+.datatable tr:nth-chile(even) {
   background-color: #dfe3ee;
 }
 
@@ -75,4 +76,6 @@ td {
   padding: 8px;
 }
 
-tr:nth-child(even) {background-color: #f2f2f2;}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}

@@ -1,7 +1,7 @@
-@import "src/app/shared/scss/global";
+@import '../../shared/scss/global';
 
 .manage-users-container {
-  background: url("../../../assets/img/fec-logo-5opac.png") no-repeat center;
+  background: url('../../../assets/img/fec-logo-5opac.png') no-repeat center;
   background-size: 60%;
   font-family: $mainFontFamily;
   .manage-users {
@@ -11,7 +11,8 @@
       background-color: #f1f1f1;
       border-collapse: collapse;
 
-      td ,th {
+      td,
+      th {
         border: 2px solid #797979;
         text-align: center;
       }
@@ -21,7 +22,8 @@
     }
   }
   .committee-info {
-    h4, h3 {
+    h4,
+    h3 {
       display: inline;
     }
 
@@ -34,10 +36,7 @@
         outline: 0;
         border-width: 0 0 2px;
       }
-
-
     }
-
 
     //.add-user {
     //  .user-input {
@@ -79,63 +78,54 @@
     label {
       margin-right: 10px;
     }
-
   }
 
   .add-user {
-
     padding-left: 10px;
 
     .radio {
       padding-left: 10px;
     }
-  .user-data {
-
-    .role-desc {
-      width: 40%;
-    ul {
-      border-bottom: 10px;
-      padding-bottom: 20px;
-    }
-    li {
-      padding-top: 5px;
-      padding-left: 25px;
-    }
-    }
-    .basic-info {
-
-      width: 60%;
-
-      .label-info {
-        width: 30%;
-      }
-      .user-text {
-        width: 60%;
-
-        .input-field-error{
-          border: 1px solid red;
+    .user-data {
+      .role-desc {
+        width: 40%;
+        ul {
+          border-bottom: 10px;
+          padding-bottom: 20px;
+        }
+        li {
+          padding-top: 5px;
+          padding-left: 25px;
         }
       }
+      .basic-info {
+        width: 60%;
 
-      input {
-        outline: 0;
-        border: none;
-        height: 12px;
-        font-size: 12pt;
-        border-bottom: 1px solid #164F85;
-        width: 100%;
-        height: 100%;
-      }
+        .label-info {
+          width: 30%;
+        }
+        .user-text {
+          width: 60%;
 
-      input:focus {
-        border-color: green
+          .input-field-error {
+            border: 1px solid red;
+          }
+        }
+
+        input {
+          outline: 0;
+          border: none;
+          height: 12px;
+          font-size: 12pt;
+          border-bottom: 1px solid #164f85;
+          width: 100%;
+          height: 100%;
+        }
+
+        input:focus {
+          border-color: green;
+        }
       }
     }
   }
 }
-
-
-
-}
-
-

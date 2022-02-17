@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'orderBy'
+  name: 'orderBy',
 })
 export class OrderByPipe implements PipeTransform {
   /**
@@ -12,7 +12,7 @@ export class OrderByPipe implements PipeTransform {
    */
   transform(records: Array<any>, args?: any): any {
     if (Array.isArray(records)) {
-      return records.sort(function(a, b) {
+      return records.sort(function (a, b) {
         //first two conditions are added to also sort "null" values
 
         if (!a[args.property] && a[args.property] !== 0) {

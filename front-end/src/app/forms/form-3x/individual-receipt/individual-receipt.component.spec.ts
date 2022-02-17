@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { IndividualReceiptComponent } from './individual-receipt.component';
 
-describe('IndividualReceiptComponent', () => {
+xdescribe('IndividualReceiptComponent', () => {
   let component: IndividualReceiptComponent;
   let fixture: ComponentFixture<IndividualReceiptComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ IndividualReceiptComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [IndividualReceiptComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(IndividualReceiptComponent);
@@ -19,7 +20,7 @@ describe('IndividualReceiptComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

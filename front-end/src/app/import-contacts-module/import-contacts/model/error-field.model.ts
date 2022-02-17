@@ -1,6 +1,6 @@
 export class ErrorFieldModel {
-    name: string;
-    value: string;
-    isError: boolean;
-    errorMessage: string;
+  name!: string;
+  value!: string;
+  isError!: boolean;
+  errorMessage!: string;
 }

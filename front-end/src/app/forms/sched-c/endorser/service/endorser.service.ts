@@ -1,15 +1,14 @@
 import { Injectable , ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
+import { Observable, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../../../environments/environment';
 import { EndorserModel } from '../model/endorser.model';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
-import { FilterPipe, FilterTypeEnum } from 'src/app/shared/pipes/filter/filter.pipe';
+import { OrderByPipe } from '../../../../shared/pipes/order-by/order-by.pipe';
+import { FilterPipe, FilterTypeEnum } from '../../../../shared/pipes/filter/filter.pipe';
 //import { ContactFilterModel } from '../model/contacts-filter.model';
 import { DatePipe } from '@angular/common';
-import { ZipCodePipe } from 'src/app/shared/pipes/zip-code/zip-code.pipe';
+import { ZipCodePipe } from '../../../../shared/pipes/zip-code/zip-code.pipe';
 import { map } from 'rxjs/operators';
 import { ScheduleActions } from '../../../form-3x/individual-receipt/schedule-actions.enum';
 
@@ -43,10 +42,10 @@ export class EndorserService {
   // only for mock data - end
 
   // May only be needed for mocking server
-  private _orderByPipe: OrderByPipe;
-  private _filterPipe: FilterPipe;
-  private _zipCodePipe: ZipCodePipe;
-  private _datePipe: DatePipe;
+  private _orderByPipe!: OrderByPipe;
+  private _filterPipe!: FilterPipe;
+  private _zipCodePipe!: ZipCodePipe;
+  private _datePipe!: DatePipe;
   private _propertyNameConverterMap: Map<string, string> = new Map([
     ['zip', 'zip_code'],
   ]);
@@ -60,7 +59,7 @@ export class EndorserService {
     for (let i = 0; i < 13; i++) {
       const t1: any = this.createMockTrx();
       t1.transaction_id = this.mockContactIdRecycle + i;
-      this.mockRestoreTrxArray.push(t1);
+      // this.mockRestoreTrxArray.push(t1);
     }
 
     this._orderByPipe = new OrderByPipe();
@@ -112,7 +111,7 @@ export class EndorserService {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('Contact Table res: ', res);
 
@@ -162,7 +161,7 @@ export class EndorserService {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
           if (res) {
             //console.log('Contact Recycle Bin Table res: ', res);
 
@@ -318,7 +317,7 @@ export class EndorserService {
   public mockApplyRestoredContact(response: any) {
     for (const cnt of this.mockRecycleBinArray) {
       response.contacts.push(cnt);
-      response.totalAmount += cnt.transaction_amount;
+      // response.totalAmount += cnt.transaction_amount;
       response.totalContactCount++;
     }
   }
@@ -490,7 +489,7 @@ export class EndorserService {
         headers: httpOptions
       }
     )
-    .pipe(map(res => {
+    .pipe(map((res: any) => {
         if (res) {
           //console.log('Trash Restore response: ', res);
           return res;
@@ -531,15 +530,15 @@ export class EndorserService {
   public saveContact(scheduleAction: ScheduleActions): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url: string = '/core/contacts';
-    /*const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+    /*const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
 
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');
     }*/
 
-    //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`));
-    const contact: any = JSON.parse(localStorage.getItem(`contactObj`));
+    //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`) ?? '');
+    const contact: any = JSON.parse(localStorage.getItem(`contactObj`) ?? '');
     const formData: FormData = new FormData();
     let httpOptions = new HttpHeaders();
 
@@ -559,7 +558,7 @@ export class EndorserService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               //console.log(" saveContact called res...!", res);
               return res;
@@ -573,15 +572,15 @@ export class EndorserService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               return res;
             }
             return false;
           })
         );
-    } else {
     }
+    return of(null);
   }
 
   public get_sched_c_endorser_dynamic_forms_fields(): Observable<any> {
@@ -621,9 +620,9 @@ export class EndorserService {
       .post(`${environment.apiUrl}${url}`, request, {
         headers: httpOptions
       })
-     .map(res => {
+     .pipe(map((res: any) => {
           return false;
-        });
+        }));
   }
 
 }

@@ -1,11 +1,11 @@
 import { Injectable , ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
+import { OrderByPipe } from '../../../../shared/pipes/order-by/order-by.pipe';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { ReportTypeService } from 'src/app/forms/form-3x/report-type/report-type.service';
+import { environment } from '../../../../../environments/environment';
+import { ReportTypeService } from '../../../../forms/form-3x/report-type/report-type.service';
 import { DatePipe } from '@angular/common';
 import { DebtSummaryModel } from '../model/debt-summary.model';
 
@@ -71,7 +71,7 @@ export class DebtSummaryService {
         params
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return {
               items: this.mapFromServerFields(res.items),
@@ -79,7 +79,7 @@ export class DebtSummaryService {
             };
           } else {
             return {
-              items: null,
+              items: [],
               totalItems: 0
             };
           }
@@ -111,7 +111,7 @@ export class DebtSummaryService {
         headers: httpOptions
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             //console.log('get_outstanding_loans API res: ', res);
 
@@ -142,7 +142,7 @@ export class DebtSummaryService {
    */
   public mapFromServerFields(serverData: any): DebtSummaryModel[] {
     if (!serverData || !Array.isArray(serverData)) {
-      return;
+      return [];
     }
     const modelArray = [];
     for (const row of serverData) {
@@ -175,7 +175,7 @@ export class DebtSummaryService {
    */
   private _mapChildFromServerFields(serverData: any): DebtSummaryModel[] {
     if (!serverData || !Array.isArray(serverData)) {
-      return;
+      return [];
     }
     const modelArray = [];
     for (const row of serverData) {

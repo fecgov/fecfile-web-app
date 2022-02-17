@@ -1,4 +1,3 @@
-import { FormsComponent } from './../../forms/forms.component';
 import { F1mComponent } from './f1m.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -11,12 +10,12 @@ const routes: Routes = [
     component: F1mComponent,
     pathMatch: 'full',
     canActivate: [CanActivateGuard],
-    canDeactivate: [CanDeactivateGuardService]
-  }
+    canDeactivate: [CanDeactivateGuardService],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class F1mRoutingModule { }
+export class F1mRoutingModule {}

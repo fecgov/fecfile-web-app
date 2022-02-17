@@ -10,12 +10,12 @@ import { Component, OnInit, Input, ViewEncapsulation, ChangeDetectionStrategy } 
 export class ConfigureContactsComponent implements OnInit {
 
   @Input()
-  public userContactFields: Array<string>;
+  public userContactFields!: Array<string>;
 
-  public appContactFields: Array<any>;
-  public appContactFieldsUnmapped: Array<any>;
+  public appContactFields!: Array<any>;
+  public appContactFieldsUnmapped!: Array<any>;
 
-  private userToAppFieldMap: Map<string, string>;
+  private userToAppFieldMap: Map<string, string> = new Map();
 
   constructor() { }
 
@@ -40,12 +40,12 @@ export class ConfigureContactsComponent implements OnInit {
     this.appContactFieldsUnmapped = this.appContactFields;
     this.userToAppFieldMap = new Map();
     for (const appField of this.appContactFields) {
-      this.userToAppFieldMap.set(appField.name, null);
+      this.userToAppFieldMap.set(appField.name, '');
     }
   }
 
   public handleSelect(selectedAppField: any, index: number, userField: string) {
-    const fields = [];
+    const fields: any[] = [];
 
     if (selectedAppField) {
       // User has assigned a value
@@ -55,7 +55,7 @@ export class ConfigureContactsComponent implements OnInit {
       // Find the selectedAppField using the userField and set it to null.
       this.userToAppFieldMap.forEach((value, key) => {
         if (value === userField) {
-          this.userToAppFieldMap.set(key, null);
+          this.userToAppFieldMap.set(key, '');
         }
       });
     }

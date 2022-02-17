@@ -1,54 +1,55 @@
 import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
 import { ImportContactsStepsEnum } from './import-contacts-setps.enum';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import { ConfirmModalComponent } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { TimeoutMessageService } from 'src/app/shared/services/TimeoutMessageService/timeout-message-service.service';
+import { DialogService } from '../../shared/services/DialogService/dialog.service';
+import { ConfirmModalComponent } from '../../shared/partials/confirm-modal/confirm-modal.component';
+import { TimeoutMessageService } from '../../shared/services/TimeoutMessageService/timeout-message-service.service';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { ImportContactsService } from './service/import-contacts.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ErrorContactsComponent } from './clean-contacts/error-contacts/error-contacts.component';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DuplicateContactsService } from './clean-contacts/duplicate-contacts/service/duplicate-contacts.service';
-import { ExportService } from 'src/app/shared/services/ExportService/export.service';
+import { ExportService } from '../../shared/services/ExportService/export.service';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { importContactsSpec, importContactsTemplate } from './spec-template-data';
-import { ConsentModalComponent } from 'src/app/app-main-login/consent-modal/consent-modal.component';
+import { ConsentModalComponent } from '../../app-main-login/consent-modal/consent-modal.component';
 import { CancelImportConfirmComponent } from './cancel-import-confirm/cancel-import-confirm.component';
 
 @Component({
   selector: 'app-import-contacts',
   templateUrl: './import-contacts.component.html',
-  styleUrls: ['./import-contacts.component.scss']
+  styleUrls: ['./import-contacts.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImportContactsComponent implements OnInit, OnDestroy {
   @ViewChild('errorsModal')
-  public errorsModal: ModalDirective;
+  public errorsModal!: ModalDirective;
 
   @ViewChild('noErrorslModal')
-  public noErrorslModal: ModalDirective;
+  public noErrorslModal!: ModalDirective;
 
-  public contactErrors: Array<any>;
-  public fileName: string;
-  public steps: Array<any>;
-  public currentStep: ImportContactsStepsEnum;
+  public contactErrors!: Array<any>;
+  public fileName!: string;
+  public steps!: Array<any>;
+  public currentStep!: ImportContactsStepsEnum;
   public readonly start = ImportContactsStepsEnum.start;
   public readonly step1Upload = ImportContactsStepsEnum.step1Upload;
   public readonly step2Review = ImportContactsStepsEnum.step2Review;
   public readonly step3Clean = ImportContactsStepsEnum.step3Clean;
   public readonly step4ImportDone = ImportContactsStepsEnum.step4ImportDone;
-  public userContactFields: Array<string>;
-  public duplicateContacts: Array<any>;
-  public forceChangeDetectionUpload: Date;
-  public duplicateFile: any;
-  public importDoneAction: string;
-  public isShowInfo: boolean;
+  public userContactFields!: Array<string>;
+  public duplicateContacts!: Array<any>;
+  public forceChangeDetectionUpload!: Date;
+  public duplicateFile!: any;
+  public importDoneAction!: string;
+  public isShowInfo!: boolean;
 
-  private unsavedData: boolean;
+  private unsavedData!: boolean;
   private onDestroy$ = new Subject();
-  private validationErrorsExist: boolean;
-  private duplicatesExist: boolean;
+  private validationErrorsExist!: boolean;
+  private duplicatesExist!: boolean;
 
   constructor(
     private _dialogService: DialogService,
@@ -61,8 +62,8 @@ export class ImportContactsComponent implements OnInit, OnDestroy {
   ) {
     _timeoutMessageService
       .getTimeoutMessage()
-      .takeUntil(this.onDestroy$)
-      .subscribe(message => {
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((message) => {
         // There may be a race condition between the receipt of this message
         // and the timeout navigatingto login.  Id true, the canDeacivate method here
         // may need to check browser cache for timeout property.
@@ -75,7 +76,7 @@ export class ImportContactsComponent implements OnInit, OnDestroy {
       { text: 'Upload', step: this.step1Upload },
       // { text: 'Review', step: this.step2Review },
       { text: 'Clean', step: this.step3Clean },
-      { text: 'Import', step: this.step4ImportDone }
+      { text: 'Import', step: this.step4ImportDone },
     ];
     this.currentStep = this.start;
     // removing warning until fix is made for not showing it when the system navigates
@@ -89,7 +90,7 @@ export class ImportContactsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.onDestroy$.next();
+    this.onDestroy$.next(null);
   }
 
   public showInfo(): void {
@@ -300,7 +301,7 @@ export class ImportContactsComponent implements OnInit, OnDestroy {
   }
 
   private confirmProceedWithrrors(message: string) {
-    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', false).then(res => {
+    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', false).then((res: any) => {
       if (res === 'okay') {
         // this.unsavedData = false;
         this.showNextStep();
@@ -343,12 +344,12 @@ export class ImportContactsComponent implements OnInit, OnDestroy {
     // return true;
 
     if (this.unsavedData) {
-      let result: boolean = null;
+      let result: boolean = false;
       // result = await this._dialogService.confirm('If you leave this page the importing process ' +
       //   'will be cancelled and no data will be added. ' +
       //   'Click Cancel to cancel the import or Continue if you want the import process to finish.',
-      //   ConfirmModalComponent).then(res => {
-      //   let val: boolean = null;
+      //   ConfirmModalComponent).then((res: any) => {
+      //   let val: boolean = false;
 
       //   if (res === 'okay') {
       //     val = true;
@@ -360,7 +361,7 @@ export class ImportContactsComponent implements OnInit, OnDestroy {
       // });
 
       const modalRef = this._modalService.open(CancelImportConfirmComponent);
-      result = await modalRef.result.then(res => {
+      result = await modalRef.result.then((res: any) => {
         if (res === 'continue') {
           return false;
         } else if ('cancel') {
@@ -369,6 +370,7 @@ export class ImportContactsComponent implements OnInit, OnDestroy {
           // canDeactivate is true to let user nav to new location
           return true;
         }
+        return false;
       });
 
       return result;

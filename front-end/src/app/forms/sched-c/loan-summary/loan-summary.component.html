@@ -79,17 +79,17 @@
           </td>
           <!-- <td  *ngIf="isColumnVisible('name')">{{ln.entity_type === 'IND' ? ln.last_name + ', ' + ln.first_name : ln.entity_nm}}</td> -->
           <td  [ngClass]=" (showRow(ln,'SC1') || showRow(ln,'SC2')) ? 'parent': ''"
-            (click)="ln.entity_type === 'ORG' ? ln.toggleChild = !ln.toggleChild : ''" *ngIf="isColumnVisible('name')">
+            (click)="ln.entity_type === 'ORG' ? ln.toggleChild = !ln.toggleChild : false" *ngIf="isColumnVisible('name')">
             {{ln.entity_type === 'ORG' ? ln.entity_name :  getIndName(ln)}}
             <div *ngIf="ln.entity_type === 'ORG'" class="align_right arrow"
               [ngClass]="ln.toggleChild ? 'arrow-top' : 'arrow-bottom'"></div>
           </td>
           <td  *ngIf="isColumnVisible('loan_amount_original')">
             {{ln.loan_amount_original | currency:'USD':'symbol-narrow':'1.2-2'}}</td>
-          <td  *ngIf="isColumnVisible('loan_payment_to_date')" [ngClass]="(ln?.payments?.length > 0) ? 'parent': ''"
-          (click)="ln?.payments?.length > 0 ? ln.togglePayments = !ln.togglePayments : ''">
+          <td  *ngIf="isColumnVisible('loan_payment_to_date')" [ngClass]="(ln?.payments?.length ?? 0 > 0) ? 'parent': ''"
+          (click)="ln?.payments?.length ?? 0 > 0 ? ln.togglePayments = !ln.togglePayments : ''">
             {{ln.loan_payment_to_date | currency:'USD':'symbol-narrow':'1.2-2'}}
-            <div *ngIf="ln?.payments?.length > 0" class="align_right arrow"
+            <div *ngIf="ln?.payments?.length ?? 0 > 0" class="align_right arrow"
               [ngClass]="ln.togglePayments ? 'arrow-top' : 'arrow-bottom'"></div>
           </td>
           <td  *ngIf="isColumnVisible('loan_balance')">
@@ -119,7 +119,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="ln.entity_type === 'ORG' && showRow(ln,'SC1')" [ngbCollapse]="ln.entity_type === 'ORG' ? !ln.toggleChild: ''"
+        <tr *ngIf="ln.entity_type === 'ORG' && showRow(ln,'SC1')" [ngbCollapse]="ln.entity_type === 'ORG' ? !ln.toggleChild: false"
           class="child-bg">
           <td style="padding-left: 70px;" colspan="6">Schedule C1</td>
           <td>
@@ -138,7 +138,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="ln.entity_type === 'ORG' &&  showRow(ln,'SC2')" [ngbCollapse]="ln.entity_type === 'ORG' ? !ln.toggleChild: ''"
+        <tr *ngIf="ln.entity_type === 'ORG' &&  showRow(ln,'SC2')" [ngbCollapse]="ln.entity_type === 'ORG' ? !ln.toggleChild: false"
           class="child-bg">
           <td style="padding-left: 70px;" colspan="6">Endorsers</td>
           <td>
@@ -158,13 +158,13 @@
           </td>
         </tr>
 
-        <ng-container *ngIf="ln?.payments?.length > 0">
-          <tr [ngbCollapse]="ln?.payments?.length > 0 ? !ln.togglePayments: ''" class="payment-bg">
+        <ng-container *ngIf="ln?.payments?.length ?? 0 > 0">
+          <tr [ngbCollapse]="ln?.payments?.length ?? 0 > 0 ? !ln.togglePayments: false" class="payment-bg">
             <th style="padding-left: 70px;" colspan="2">Type</th>
             <th colspan = "2">Payment Date</th>
             <th colspan="3">Payment Amount</th>
           </tr>
-          <tr [ngbCollapse]="ln?.payments?.length > 0 ? !ln.togglePayments: ''" 
+          <tr [ngbCollapse]="ln?.payments?.length ?? 0 > 0 ? !ln.togglePayments: false" 
             *ngFor="let payment of ln.payments;" class="payment-bg">
             <td style="padding-left: 70px;" colspan="2">Loan Payment</td>
             <td  colspan="2">{{payment.expenditure_date | date: 'MM/dd/yyyy'}}</td>
@@ -195,10 +195,10 @@
   <hr />
   <div *ngIf="showPagination()" class="d-flex justify-content-center loanSumamry__table-pagination-container">
     <div class="my-auto">
-      <pagination-controls [id]="config.id" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
+      <pagination-controls [id]="config.id ?? ''" (pageChange)="getPage($event)" [maxSize]="paginationControlsMaxSize">
       </pagination-controls>
     </div>
-    <div *ngIf="pageNumbers.length > 1" class="d-flex ml-1">
+    <div *ngIf="pageNumbers.length ?? 0 > 1" class="d-flex ml-1">
       <div class="mr-1 my-auto text-muted">Go to page:</div>
       <ng-select #pageNumber [items]="pageNumbers" [clearable]="false" [hideSelected]="true"
         (change)="onGotoPageChange($event)" [(ngModel)]="config.currentPage" [ngModelOptions]="{standalone: true}"

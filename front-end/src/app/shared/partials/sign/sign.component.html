@@ -7,9 +7,7 @@
           <h1 class="text-left" *ngIf="typeSelected">Form {{ formType }} / {{ typeSelected }}</h1>
         </div>
         <div class="header__btns">
-          <button type="button" class="btn btn-validate" (click)="printPreview()">
-            Print Preview
-          </button>
+          <button type="button" class="btn btn-validate" (click)="printPreview()">Print Preview</button>
         </div>
       </div>
     </header>
@@ -22,14 +20,12 @@
             </div>
           </div>
         </div>
-        <div class="grid-row" *ngIf="frmSignee.invalid || (frmSignee.dirty || frmSignee.touched)">
+        <div class="grid-row" *ngIf="frmSignee.invalid || frmSignee.dirty || frmSignee.touched">
           <div class="grid-row__col grid-row__col--12">
-            <div class="text-error text-center" *ngIf="signFailed">
-              You must certify this form.
-            </div>
+            <div class="text-error text-center" *ngIf="signFailed">You must certify this form.</div>
           </div>
         </div>
-        <div class="grid-row" *ngIf="frmSignee.controls.signee.valid && frmSaved">
+        <div class="grid-row" *ngIf="frmSignee.controls['signee'].valid && frmSaved">
           <div class="grid-row__col grid-row__col--12" [hidden]="hideText">
             <div class="text-info text-center">Form {{ formType }} has been successfully saved.</div>
           </div>
@@ -127,7 +123,7 @@
               </ng-container>
               &nbsp;&nbsp;
               <div *ngIf="frmSignee.invalid && (frmSignee.dirty || frmSignee.touched)">
-                <div class="text-error" *ngIf="frmSignee.controls.additional_email_1.errors?.email">
+                <div class="text-error" [hidden]="!frmSignee.controls['additional_email_1'].errors">
                   &nbsp;Additional email 1 must <br />&nbsp;be valid email address.
                 </div>
               </div>
@@ -150,7 +146,7 @@
                 />
               </ng-container>
               <div *ngIf="frmSignee.invalid && (frmSignee.dirty || frmSignee.touched)">
-                <div class="text-error" *ngIf="frmSignee.controls.confirm_email_1.errors?.email">
+                <div class="text-error" [hidden]="!frmSignee.controls['confirm_email_1'].errors">
                   &nbsp;Confirm email 1 must<br />
                   be valid email address.
                 </div>
@@ -165,16 +161,14 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirm additional email 1.
               </div>
               <div class="text-success" *ngIf="!additionalEmail1Invalid && showAdditionalEmail1Warn">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ this.confirm_email_1 }}<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ confirm_email_1 }}<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has been successfully added.
               </div>
             </div>
           </div>
 
           <div class="grid-row">
-            <div class="grid-row__col grid-row__col--4">
-              &nbsp;&nbsp;&nbsp;&nbsp;
-            </div>
+            <div class="grid-row__col grid-row__col--4">&nbsp;&nbsp;&nbsp;&nbsp;</div>
 
             <div class="grid-row__col grid-row__col--3">
               <br />
@@ -193,7 +187,7 @@
                 />
               </ng-container>
               <div *ngIf="frmSignee.invalid && (frmSignee.dirty || frmSignee.touched)">
-                <div class="text-error" *ngIf="frmSignee.controls.additional_email_2.errors?.email">
+                <div class="text-error" [hidden]="!frmSignee.controls['additional_email_2'].errors">
                   &nbsp;Additional email 2 must <br />&nbsp;&nbsp;be valid email address.
                 </div>
               </div>
@@ -216,7 +210,7 @@
                 />
               </ng-container>
               <div *ngIf="frmSignee.invalid && (frmSignee.dirty || frmSignee.touched)">
-                <div class="text-error" *ngIf="frmSignee.controls.confirm_email_2.errors?.email">
+                <div class="text-error" [hidden]="!frmSignee.controls['confirm_email_2'].errors">
                   &nbsp;Confirm email 2 must <br />be valid email address.
                 </div>
               </div>
@@ -231,7 +225,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Confirm additional email 2.
               </div>
               <div class="text-success" *ngIf="!additionalEmail2Invalid && showAdditionalEmail2Warn">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ this.confirm_email_2 }}<br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ confirm_email_2 }}<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;has been successfully added.
               </div>
             </div>
@@ -247,9 +241,7 @@
         <div class="grid-row__col grid-row__col--12 border-bottom">
           <br />
           <br />
-          <button type="button" class="btn btn-secondary btn-right" (click)="saveForm()">
-            Save
-          </button>
+          <button type="button" class="btn btn-secondary btn-right" (click)="saveForm()">Save</button>
         </div>
       </div>
       <div class="grid-row">
@@ -273,14 +265,16 @@
       </div>
       <div class="grid-row border-top space-bottom">
         <div class="grid-row__col grid-row__col--6">
-          <button type="button" class="btn btn-previous btn-left" (click)="(this.getDirtyEmail()) ? cancelStepWithWarning() : goToPreviousStep() ">
+          <button
+            type="button"
+            class="btn btn-previous btn-left"
+            (click)="this.getDirtyEmail() ? cancelStepWithWarning() : goToPreviousStep()"
+          >
             Previous
           </button>
         </div>
         <div class="grid-row__col grid-row__col--6">
-          <button type="submit" class="btn btn-submit btn-right">
-            Submit
-          </button>
+          <button type="submit" class="btn btn-submit btn-right">Submit</button>
         </div>
       </div>
     </footer>

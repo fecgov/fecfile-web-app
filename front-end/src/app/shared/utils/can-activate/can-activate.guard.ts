@@ -5,37 +5,32 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class CanActivateGuard implements CanActivate {
-
-  constructor(
-    private auth: AuthService,
-    private router: Router
-  ) {}
+  constructor(private auth: AuthService, private router: Router) {}
 
   public canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-
     const isSignedIn = this.auth.isSignedIn();
     let amIAllowed: boolean = false;
     if (isSignedIn) {
       // array from router data
-      const whoIsAllowed = route.data.role;
+      const whoIsAllowed = route.data['role'];
       // array from auth service
       const whoAmI = this.auth.getUserRole();
 
       if (whoIsAllowed) {
-          for (const role of whoIsAllowed) {
-            if (whoAmI === role) {
-              amIAllowed = true;
-            }
+        for (const role of whoIsAllowed) {
+          if (whoAmI === role) {
+            amIAllowed = true;
           }
-          // TODO: check where to as per requirement?
-          if (!amIAllowed) {
-            // unauthorized
-            this.router.navigate(['dashboard']);
-          }
-          return amIAllowed;
+        }
+        // TODO: check where to as per requirement?
+        if (!amIAllowed) {
+          // unauthorized
+          this.router.navigate(['dashboard']);
+        }
+        return amIAllowed;
       } else {
         return true;
       }
@@ -43,9 +38,5 @@ export class CanActivateGuard implements CanActivate {
       this.router.navigate(['']);
       return false;
     }
-
-
-
   }
-
 }

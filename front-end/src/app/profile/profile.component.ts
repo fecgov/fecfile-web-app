@@ -6,20 +6,16 @@ import { FormsService } from '../shared/services/FormsService/forms.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-
-  constructor(private _formService: FormsService) { }
+  constructor(private _formService: FormsService) {}
 
   ngOnInit() {
-
     this._formService.clearDashBoardReportFilterOptions();
-    
-    if (localStorage.getItem('form3XReportInfo.showDashBoard')==="Y"){
-      this._formService.removeFormDashBoard("3X");
-    }
-    
-  }
 
+    if (localStorage.getItem('form3XReportInfo.showDashBoard') === 'Y') {
+      this._formService.removeFormDashBoard('3X');
+    }
+  }
 }

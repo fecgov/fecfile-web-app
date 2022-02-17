@@ -3,20 +3,15 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from './api.service';
 
-describe('ApiService', () => {
+xdescribe('ApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [
-        ApiService,
-        CookieService
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [ApiService, CookieService],
     });
   });
 
-  it('should be created', inject([ApiService], (service: ApiService) => {
+  xit('should be created', inject([ApiService], (service: ApiService) => {
     expect(service).toBeTruthy();
   }));
 });

@@ -4,20 +4,18 @@ import { CanActivateGuard } from '../shared/utils/can-activate/can-activate.guar
 import { CanDeactivateGuardService } from '../shared/services/CanDeactivateGuard/can-deactivate-guard.service';
 import { ImportTransactionsComponent } from './import-transactions/import-transactions.component';
 
-
-
 const routes: Routes = [
   {
     path: '',
     component: ImportTransactionsComponent,
     pathMatch: 'full',
     canActivate: [CanActivateGuard],
-    canDeactivate: [CanDeactivateGuardService]
-  }
+    canDeactivate: [CanDeactivateGuardService],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class ImportTransactionsRoutingModule { }
+export class ImportTransactionsRoutingModule {}

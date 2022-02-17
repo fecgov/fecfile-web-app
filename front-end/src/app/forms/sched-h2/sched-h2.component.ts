@@ -1,19 +1,33 @@
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Subscription } from 'rxjs';
-import { ContactsService } from 'src/app/contacts/service/contacts.service';
-import { ReportsService } from 'src/app/reports/service/report.service';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { TypeaheadService } from 'src/app/shared/partials/typeahead/typeahead.service';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import { FormsService } from 'src/app/shared/services/FormsService/forms.service';
-import { MessageService } from 'src/app/shared/services/MessageService/message.service';
-import { ContributionDateValidator } from 'src/app/shared/utils/forms/validation/contribution-date.validator';
-import { UtilService } from 'src/app/shared/utils/util.service';
+import { takeUntil } from 'rxjs/operators';
+import { ContactsService } from '../../contacts/service/contacts.service';
+import { ReportsService } from '../../reports/service/report.service';
+import {
+  ConfirmModalComponent,
+  ModalHeaderClassEnum,
+} from '../../shared/partials/confirm-modal/confirm-modal.component';
+import { TypeaheadService } from '../../shared/partials/typeahead/typeahead.service';
+import { DialogService } from '../../shared/services/DialogService/dialog.service';
+import { FormsService } from '../../shared/services/FormsService/forms.service';
+import { MessageService } from '../../shared/services/MessageService/message.service';
+import { ContributionDateValidator } from '../../shared/utils/forms/validation/contribution-date.validator';
+import { UtilService } from '../../shared/utils/util.service';
 import { AbstractSchedule } from '../form-3x/individual-receipt/abstract-schedule';
 import { AbstractScheduleParentEnum } from '../form-3x/individual-receipt/abstract-schedule-parent.enum';
 import { IndividualReceiptService } from '../form-3x/individual-receipt/individual-receipt.service';
@@ -26,7 +40,7 @@ import { TransactionModel } from '../transactions/model/transaction.model';
 import { TransactionsMessageService } from '../transactions/service/transactions-message.service';
 import { GetTransactionsResponse, TransactionsService } from '../transactions/service/transactions.service';
 import { SchedH2Service } from './sched-h2.service';
-import {AuthService} from '../../shared/services/AuthService/auth.service';
+import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { PaginationInstance } from 'ngx-pagination';
 
 @Component({
@@ -43,42 +57,42 @@ import { PaginationInstance } from 'ngx-pagination';
   ] */
 })
 export class SchedH2Component extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() scheduleType: string;
-  @Input() transactionData: any;
+  @Input() override transactionTypeText!: string;
+  @Input() override transactionType!: string;
+  @Input() override scheduleAction!: ScheduleActions;
+  @Input() override scheduleType!: string;
+  @Input() override transactionData!: any;
 
-  @Output() status: EventEmitter<any>;
+  @Output() override status!: EventEmitter<any>;
 
-  public formType: string;
-  public showPart2: boolean;
-  public loaded = false;
-  public schedH2: FormGroup;
+  public override formType!: string;
+  public override showPart2!: boolean;
+  public override loaded = false;
+  public schedH2!: FormGroup;
 
-  public h2Subscription: Subscription;
-  public h2Sum: any;
-  public saveHRes: any;
+  public h2Subscription!: Subscription;
+  public h2Sum!: any;
+  public saveHRes!: any;
 
-  // public tableConfig: any;
+  // public tableConfig!: any;
   public receiptDateErr = false;
 
-  public cvgStartDate: any;
-  public cvgEndDate: any;
+  public override cvgStartDate!: any;
+  public override cvgEndDate!: any;
 
   public isSubmit = false;
 
-  public transaction_id: string;
+  public transaction_id!: string;
 
   public cloned = false;
-  populateFormForEdit: Subscription;
+  populateFormForEdit!: Subscription;
 
-  public fedRatio: number;
-  public nonfedRatio: number;
+  public fedRatio!: number;
+  public nonfedRatio!: number;
   private _H2onDestroy$ = new Subject();
 
-  public restoreSubscription: Subscription;
-  public trashSubscription: Subscription;
+  public restoreSubscription!: Subscription;
+  public trashSubscription!: Subscription;
 
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
@@ -86,7 +100,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public pageNumbers: number[] = [];
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
@@ -123,7 +137,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
     private _schedHService: SchedHServiceService,
     private _tranService: TransactionsService,
     private _dlService: DialogService,
-    _authService: AuthService,
+    _authService: AuthService
   ) {
     super(
       _http,
@@ -147,7 +161,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
       _transactionsService,
       _reportsService,
       _schedHMessageServiceService,
-      _authService,
+      _authService
     );
     _schedH2Service;
     _individualReceiptService;
@@ -160,13 +174,13 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
     const paginateConfig: PaginationInstance = {
       id: 'forms__sched-h2-table-pagination',
       itemsPerPage: this.maxItemsPerPage,
-      currentPage: 1
+      currentPage: 1,
     };
     this.config = paginateConfig;
 
     this._tranMessageService
       .getEditTransactionMessage()
-      .takeUntil(this._H2onDestroy$)
+      .pipe(takeUntil(this._H2onDestroy$))
       .subscribe((trx: TransactionModel) => {
         //console.log(trx.transactionTypeIdentifier + 'tranc iden');
         if (trx.transactionTypeIdentifier === 'ALLOC_H2_RATIO') {
@@ -176,10 +190,10 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
     this._schedHMessageServiceService
       .getpopulateHFormForEditMessage()
-      .takeUntil(this._H2onDestroy$)
-      .subscribe(p => {
+      .pipe(takeUntil(this._H2onDestroy$))
+      .subscribe((p) => {
         if (p.scheduleType === 'Schedule H2') {
-          let res = this._schedHService.getSchedule(p.transactionDetail.transactionModel).subscribe(res => {
+          let res = this._schedHService.getSchedule(p.transactionDetail.transactionModel).subscribe((res: any) => {
             if (res && res.length === 1) {
               this.editH2(res[0]);
             }
@@ -187,20 +201,20 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
         }
       });
 
-    this.restoreSubscription = this._tranMessageService.getRestoreTransactionsMessage().subscribe(message => {
+    this.restoreSubscription = this._tranMessageService.getRestoreTransactionsMessage().subscribe((message) => {
       if (message.scheduleType === 'Schedule H2') {
         this.getH2Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
       }
     });
 
-    this.trashSubscription = this._tranMessageService.getRemoveHTransactionsMessage().subscribe(message => {
+    this.trashSubscription = this._tranMessageService.getRemoveHTransactionsMessage().subscribe((message) => {
       if (message.scheduleType === 'Schedule H2') {
         this.getH2Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
       }
     });
   }
 
-  public ngOnInit() {
+  public override ngOnInit() {
     this.abstractScheduleComponent = AbstractScheduleParentEnum.schedH2Component;
     // temp code - waiting until dynamic forms completes and loads the formGroup
     // before rendering the static fields, otherwise validation error styling
@@ -223,11 +237,11 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
     this.setDefaultValues();
 
-    this.formType = this._actRoute.snapshot.paramMap.get('form_id');
+    this.formType = this._actRoute.snapshot.paramMap.get('form_id') ?? '';
 
-    this.schedH2.patchValue({ select_activity_function: ''}, { onlySelf: true });
+    this.schedH2.patchValue({ select_activity_function: '' }, { onlySelf: true });
     this.sendPopulateMessageIfApplicable();
-   
+
     this.getPage(this.config.currentPage);
   }
 
@@ -235,7 +249,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   //   this.tableConfig.currentPage = event;
   // }
 
-  public ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges) {
     // OnChanges() can be triggered before OnInit().  Ensure formType is set.
     this.formType = '3X';
 
@@ -247,14 +261,14 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   ngDoCheck() {
     //TODO -- memory consumption, need to contain in an if statement or not do it in ngDoCheck
     this.status.emit({
-      otherSchedHTransactionType: this.transactionType
+      otherSchedHTransactionType: this.transactionType,
     });
-    if (!this.schedH2.get('ratio_code').value) {
+    if (!this.schedH2.get('ratio_code')?.value) {
       this.schedH2.patchValue({ ratio_code: 'n' }, { onlySelf: true });
     }
   }
 
-  public ngOnDestroy(): void {
+  public override ngOnDestroy(): void {
     this._H2onDestroy$.next(true);
     this.restoreSubscription.unsubscribe();
     this.trashSubscription.unsubscribe();
@@ -267,9 +281,9 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
   public getReportId(): string {
     let report_id;
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
     }
 
     if (reportType) {
@@ -292,20 +306,20 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
       //direct_cand_support: new FormControl('', Validators.required),
       ratio_code: new FormControl(''),
       federal_percent: new FormControl('', [Validators.min(0), Validators.max(100), Validators.required]),
-      non_federal_percent: new FormControl('', [Validators.min(0), Validators.max(100), Validators.required])
+      non_federal_percent: new FormControl('', [Validators.min(0), Validators.max(100), Validators.required]),
     });
     this._prepareForUnsavedH2Changes();
   }
 
   private _prepareForUnsavedH2Changes(): void {
-    this.schedH2.valueChanges.takeUntil(this._H2onDestroy$).subscribe(val => {
+    this.schedH2.valueChanges.pipe(takeUntil(this._H2onDestroy$)).subscribe((val) => {
       if (this.schedH2.dirty) {
         localStorage.setItem(`form_${this.formType}_saved`, JSON.stringify({ saved: false }));
       }
     });
   }
 
-  public clearFormValues() {
+  public override clearFormValues() {
     this.schedH2.reset();
     if (this.scheduleAction === ScheduleActions.edit) {
       this.scheduleAction = ScheduleActions.add;
@@ -320,8 +334,8 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
   public doValidate(printAfterSave = false) {
     if (this.schedH2.status === 'VALID') {
-      //this.schedH2.patchValue({ fundraising: this.schedH2.get('select_activity_function').value === 'f' ? true : false }, { onlySelf: true });
-      //this.schedH2.patchValue({ direct_cand_support: this.schedH2.get('select_activity_function').value === 'd' ? true : false }, { onlySelf: true });
+      //this.schedH2.patchValue({ fundraising: this.schedH2.get('select_activity_function')?.value === 'f' ? true : false }, { onlySelf: true });
+      //this.schedH2.patchValue({ direct_cand_support: this.schedH2.get('select_activity_function')?.value === 'd' ? true : false }, { onlySelf: true });
 
       const formObj = this.schedH2.getRawValue();
 
@@ -329,11 +343,11 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
       formObj['report_id'] = this._individualReceiptService.getReportIdFromStorage(this.formType);
       formObj['transaction_type_identifier'] = 'ALLOC_H2_RATIO';
 
-      formObj['fundraising'] = this.schedH2.get('select_activity_function').value === 'f' ? true : false;
-      formObj['direct_cand_support'] = this.schedH2.get('select_activity_function').value === 'd' ? true : false;
+      formObj['fundraising'] = this.schedH2.get('select_activity_function')?.value === 'f' ? true : false;
+      formObj['direct_cand_support'] = this.schedH2.get('select_activity_function')?.value === 'd' ? true : false;
 
-      formObj['federal_percent'] = (this.schedH2.get('federal_percent').value / 100).toFixed(2);
-      formObj['non_federal_percent'] = (this.schedH2.get('non_federal_percent').value / 100).toFixed(2);
+      formObj['federal_percent'] = (this.schedH2.get('federal_percent')?.value / 100).toFixed(2);
+      formObj['non_federal_percent'] = (this.schedH2.get('non_federal_percent')?.value / 100).toFixed(2);
 
       if (this.scheduleAction === ScheduleActions.edit) {
         formObj['transaction_id'] = this.transaction_id;
@@ -344,17 +358,17 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
       this.isSubmit = true;
 
       //if(this.schedH2.status === 'VALID') {
-      //&& (this.schedH2.get('federal_percent').value + this.schedH2.get('non_federal_percent').value) === 100) {
+      //&& (this.schedH2.get('federal_percent')?.value + this.schedH2.get('non_federal_percent')?.value) === 100) {
 
       this.saveH2Ratio(serializedForm, this.scheduleAction, printAfterSave);
 
       //only reset form if save is happening NOT because of a print action
-      if(!printAfterSave){
+      if (!printAfterSave) {
         this.schedH2.reset();
       }
-      //if save is happening because of a print action, then change schedule action to edit for next 'save' action, 
-      //since form will not be reset and user can click 'Save' again. 
-      else{
+      //if save is happening because of a print action, then change schedule action to edit for next 'save' action,
+      //since form will not be reset and user can click 'Save' again.
+      else {
         this.scheduleAction = ScheduleActions.edit;
       }
       this.isSubmit = false;
@@ -368,37 +382,37 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
   public getH2Sum(reportId: string, page: number = 1) {
     this.config.currentPage = page;
-    
-    this.h2Subscription = this._schedH2Service.getSummary(
-        reportId,
-        page,
-        this.config.itemsPerPage,
-        'default',
-        false
-      ).subscribe(res => {
+
+    this.h2Subscription = this._schedH2Service
+      .getSummary(reportId, page, this.config.itemsPerPage, 'default', false)
+      .subscribe((res: any) => {
         const pagedResponse = this._utilService.pageResponse(res, this.config);
         this.h2Sum = pagedResponse.items;
         this.pageNumbers = pagedResponse.pageNumbers;
-    });
+      });
   }
 
-  public saveH2Ratio(ratio: any, scheduleAction, printAfterSave = false) {
-    this._schedH2Service.saveH2Ratio(ratio, scheduleAction).subscribe(res => {
-      if (res) {
-        this.saveHRes = res;
-        this.transaction_id = res.transaction_id;
-        if(printAfterSave){
-          this._reportTypeService.printPreview('transaction_table_screen', '3X', res.transaction_id);
+  public saveH2Ratio(ratio: any, scheduleAction: any, printAfterSave = false) {
+    this._schedH2Service.saveH2Ratio(ratio, scheduleAction).subscribe(
+      (res: any) => {
+        if (res) {
+          this.saveHRes = res;
+          this.transaction_id = res.transaction_id;
+          if (printAfterSave) {
+            this._reportTypeService.printPreview('transaction_table_screen', '3X', res.transaction_id);
+          }
         }
-      }
-    }, error => {
-      this._dialogService.confirm(
+      },
+      (error) => {
+        this._dialogService.confirm(
           error.error,
           ConfirmModalComponent,
           'Error !!!',
           false,
-          ModalHeaderClassEnum.errorHeader);
-    });
+          ModalHeaderClassEnum.errorHeader
+        );
+      }
+    );
   }
 
   public returnToSum(): void {
@@ -426,12 +440,12 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
       } else {
         //this.isSubmit = true;
         if (
-          (this.schedH2.get('activity_event_name').value === '' ||
-            this.schedH2.get('activity_event_name').value === null) &&
-          this.schedH2.get('select_activity_function').value === null &&
-          this.schedH2.get('federal_percent').value === null &&
-          this.schedH2.get('non_federal_percent').value === null &&
-          this.schedH2.get('receipt_date').value === null
+          (this.schedH2.get('activity_event_name')?.value === '' ||
+            this.schedH2.get('activity_event_name')?.value === null) &&
+          this.schedH2.get('select_activity_function')?.value === null &&
+          this.schedH2.get('federal_percent')?.value === null &&
+          this.schedH2.get('non_federal_percent')?.value === null &&
+          this.schedH2.get('receipt_date')?.value === null
         ) {
           this.transactionType = 'ALLOC_H2_SUM';
           this.getH2Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
@@ -442,7 +456,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
               ConfirmModalComponent,
               'Caution!'
             )
-            .then(res => {
+            .then((res: any) => {
               if (res === 'okay') {
                 this.schedH2.reset();
                 this.transactionType = 'ALLOC_H2_SUM';
@@ -468,7 +482,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public receiptDateChanged(receiptDate: string) {
-    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type'));
+    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type') ?? '');
     this.cvgStartDate = formInfo.cvgStartDate;
     this.cvgEndDate = formInfo.cvgEndDate;
 
@@ -486,7 +500,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
     }
   }
 
-  public handleFedPercentFieldKeyup(e) {
+  public handleFedPercentFieldKeyup(e: any) {
     if (e.target.value <= 100) {
       this.schedH2.patchValue(
         { non_federal_percent: this._decPipe.transform(Number(100 - e.target.value), '.2-2') },
@@ -497,7 +511,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
     }
   }
 
-  public handleNonFedPercentFieldKeyup(e) {
+  public handleNonFedPercentFieldKeyup(e: any) {
     if (e.target.value <= 100) {
       this.schedH2.patchValue(
         { federal_percent: this._decPipe.transform(Number(100 - e.target.value), '.2-2') },
@@ -508,7 +522,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
     }
   }
 
-  public handleOnFedBlurEvent(e) {
+  public handleOnFedBlurEvent(e: any) {
     if (e.target.value <= 100) {
       this.schedH2.patchValue(
         { non_federal_percent: this._decPipe.transform(Number(100 - e.target.value), '.2-2') },
@@ -524,7 +538,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
     this.setRatioCodeWithValueChange(e.target.value);
   }
 
-  public handleOnNonFedBlurEvent(e) {
+  public handleOnNonFedBlurEvent(e: any) {
     if (e.target.value <= 100) {
       this.schedH2.patchValue(
         { federal_percent: this._decPipe.transform(Number(100 - e.target.value), '.2-2') },
@@ -590,7 +604,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public cancelReturnToSum(): void {
-    this.canDeactivate().then(result => {
+    this.canDeactivate().then((result) => {
       if (result === true) {
         localStorage.removeItem(`form_${this.formType}_saved`);
         if (this.scheduleAction === ScheduleActions.edit) {
@@ -641,7 +655,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
         ConfirmModalComponent,
         'Caution!'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._tranService
             .trashOrRestoreTransactions(this.formType, 'trash', trx.report_id, [trx])
@@ -663,31 +677,30 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
 
   public setRatioCodeWithValueChange(ratio: number) {
     if (
-      this.schedH2.get('ratio_code').value === 's' &&
-      (this.schedH2.get('federal_percent').value !== this.fedRatio ||
-        this.schedH2.get('non_federal_percent').value !== this.nonfedRatio)
+      this.schedH2.get('ratio_code')?.value === 's' &&
+      (this.schedH2.get('federal_percent')?.value !== this.fedRatio ||
+        this.schedH2.get('non_federal_percent')?.value !== this.nonfedRatio)
     ) {
       this.schedH2.patchValue({ ratio_code: 'r' }, { onlySelf: true });
     } else if (
-      this.schedH2.get('ratio_code').value === 'r' &&
-      Number(this.schedH2.get('federal_percent').value) === this.fedRatio &&
-      Number(this.schedH2.get('non_federal_percent').value) === this.nonfedRatio
+      this.schedH2.get('ratio_code')?.value === 'r' &&
+      Number(this.schedH2.get('federal_percent')?.value) === this.fedRatio &&
+      Number(this.schedH2.get('non_federal_percent')?.value) === this.nonfedRatio
     ) {
       this.schedH2.patchValue({ ratio_code: 's' }, { onlySelf: true });
     }
   }
 
   /**
-   * 
+   *
    * @param trx - individual transaction
-   * If trx is present with a valid transactionId, print that transaction, 
+   * If trx is present with a valid transactionId, print that transaction,
    * Otherwise save the current transaction first and then print it by passing saveAfterPrint = true
    */
   public printTransaction(trx: any = null): void {
-    if(trx && trx.transaction_id){
+    if (trx && trx.transaction_id) {
       this._reportTypeService.printPreview('transaction_table_screen', '3X', trx.transaction_id);
-    }
-    else{
+    } else {
       this.saveAndAddMore(true);
     }
   }
@@ -720,7 +733,7 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
   public onGotoPageChange(page: number): void {
     this.config.currentPage = page;
     this.getPage(this.config.currentPage);
-  }  
+  }
 
   /**
    * Determine if pagination should be shown.
@@ -729,30 +742,34 @@ export class SchedH2Component extends AbstractSchedule implements OnInit, OnDest
     if (!this.autoHide) {
       return true;
     }
-    if (this.config.totalItems > this.config.itemsPerPage) {
+    if (this.config.totalItems ?? 0 > this.config.itemsPerPage) {
       return true;
     }
     // otherwise, no show.
     return false;
-  }  
+  }
 
   /**
    * Determine the item range shown by the server-side pagination.
    */
   public determineItemRange(): string {
     let range: {
-      firstItemOnPage: number, lastItemOnPage: number, itemRange: string
+      firstItemOnPage: number;
+      lastItemOnPage: number;
+      itemRange: string;
     } = this._utilService.determineItemRange(this.config, this.h2Sum);
 
     this.firstItemOnPage = range.firstItemOnPage;
     this.lastItemOnPage = range.lastItemOnPage;
     return range.itemRange;
   }
-  
+
   public showPageSizes(): boolean {
-    if (this.config && this.config.totalItems && this.config.totalItems > 0){
+    if (this.config && this.config.totalItems && this.config.totalItems > 0) {
       return true;
     }
     return false;
   }
+
+  public selectActivityFunctionChange($event: any) {}
 }

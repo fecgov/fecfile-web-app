@@ -8,13 +8,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
  * This service is the preferred choice going forward.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TimeoutMessageService {
-
   private _subject: BehaviorSubject<any> = new BehaviorSubject<any>('');
 
-  constructor() { }
+  constructor() {}
 
   /**
    * Sends the message to a component.

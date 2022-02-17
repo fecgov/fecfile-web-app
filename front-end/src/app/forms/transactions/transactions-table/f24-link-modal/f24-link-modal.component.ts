@@ -5,23 +5,19 @@ import { ReportsService } from './../../../../reports/service/report.service';
 @Component({
   selector: 'app-f24-link-modal',
   templateUrl: './f24-link-modal.component.html',
-  styleUrls: ['./f24-link-modal.component.scss']
+  styleUrls: ['./f24-link-modal.component.scss'],
 })
 export class F24LinkModalComponent implements OnInit {
-
   @Input()
-  public f24List;
+  public f24List!: any;
 
-  public selectedReportId;
+  public selectedReportId!: string;
 
-  constructor(private _reportsService: ReportsService, 
-    public activeModal: NgbActiveModal) {
-   }
+  constructor(private _reportsService: ReportsService, public activeModal: NgbActiveModal) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  handleF24Select($event:any) {
+  handleF24Select($event: any) {
     this.selectedReportId = $event.reportId;
   }
 
@@ -32,5 +28,4 @@ export class F24LinkModalComponent implements OnInit {
   save() {
     this.activeModal.close(this.selectedReportId);
   }
-
 }

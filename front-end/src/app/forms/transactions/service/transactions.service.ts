@@ -3,11 +3,10 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
 import { map, share } from 'rxjs/operators';
-import { FilterPipe, FilterTypeEnum } from 'src/app/shared/pipes/filter/filter.pipe';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
-import { ZipCodePipe } from 'src/app/shared/pipes/zip-code/zip-code.pipe';
+import { FilterPipe, FilterTypeEnum } from '../../../shared/pipes/filter/filter.pipe';
+import { OrderByPipe } from '../../../shared/pipes/order-by/order-by.pipe';
+import { ZipCodePipe } from '../../../shared/pipes/zip-code/zip-code.pipe';
 import { environment } from '../../../../environments/environment';
 import { MessageService } from '../../../shared/services/MessageService/message.service';
 import { IndividualReceiptService } from '../../form-3x/individual-receipt/individual-receipt.service';
@@ -27,87 +26,87 @@ export interface GetTransactionsResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TransactionsService {
   // only for mock data
-  private mockRestoreTrxArray = [];
-  private mockTrxArray = [];
-  private mockRecycleBinArray = [];
+  private mockRestoreTrxArray: any[] = [];
+  private mockTrxArray: any[] = [];
+  private mockRecycleBinArray: any[] = [];
   private mockTransactionId = 'TID12345';
   private mockTransactionIdRecycle = 'TIDRECY';
   // only for mock data - end
 
   // May only be needed for mocking server
-  private _orderByPipe: OrderByPipe;
-  private _filterPipe: FilterPipe;
-  private _zipCodePipe: ZipCodePipe;
-  private _datePipe: DatePipe;
+  private _orderByPipe!: OrderByPipe;
+  private _filterPipe!: FilterPipe;
+  private _zipCodePipe!: ZipCodePipe;
+  private _datePipe!: DatePipe;
   private _propertyNameConverterMap: Map<string, string> = new Map([['zip', 'zip_code']]);
 
-  private _filterToColMapping =
-    [
-      {
-        "filterName": "filterAmountMin",
-        "relatedCol": "amount"
-      },
-      {
-        "filterName": "filterAmountMax",
-        "relatedCol": "amount"
-      },
-      {
-        "filterName": "filterLoanAmountMin",
-        "relatedCol": "loanAmount"
-      },
-      {
-        "filterName": "filterLoanAmountMax",
-        "relatedCol": "loanAmount"
-      },
-      {
-        "filterName": "filterAggregateAmountMin",
-        "relatedCol": "aggregate"
-      },
-      {
-        "filterName": "filterAggregateAmountMax",
-        "relatedCol": "aggregate"
-      },
-      {
-        "filterName": "filterLoanClosingBalanceMin",
-        "relatedCol": "loanClosingBalance"
-      },
-      {
-        "filterName": "filterLoanClosingBalanceMax",
-        "relatedCol": "loanClosingBalance"
-      },
-      {
-        "filterName": "filterDateFrom",
-        "relatedCol": "date"
-      },
-      {
-        "filterName": "filterDateTo",
-        "relatedCol": "date"
-      }, {
-        "filterName": "filterDeletedDateFrom",
-        "relatedCol": "deletedDate"
-      },
-      {
-        "filterName": "filterDeletedDateTo",
-        "relatedCol": "deletedDate"
-      },
-      {
-        "filterName": "filterMemoCode",
-        "relatedCol": "deletedDate"
-      },
-      {
-        "filterName": "filterElectionCode",
-        "relatedCol": "memoCode"
-      }
-    ]
+  private _filterToColMapping = [
+    {
+      filterName: 'filterAmountMin',
+      relatedCol: 'amount',
+    },
+    {
+      filterName: 'filterAmountMax',
+      relatedCol: 'amount',
+    },
+    {
+      filterName: 'filterLoanAmountMin',
+      relatedCol: 'loanAmount',
+    },
+    {
+      filterName: 'filterLoanAmountMax',
+      relatedCol: 'loanAmount',
+    },
+    {
+      filterName: 'filterAggregateAmountMin',
+      relatedCol: 'aggregate',
+    },
+    {
+      filterName: 'filterAggregateAmountMax',
+      relatedCol: 'aggregate',
+    },
+    {
+      filterName: 'filterLoanClosingBalanceMin',
+      relatedCol: 'loanClosingBalance',
+    },
+    {
+      filterName: 'filterLoanClosingBalanceMax',
+      relatedCol: 'loanClosingBalance',
+    },
+    {
+      filterName: 'filterDateFrom',
+      relatedCol: 'date',
+    },
+    {
+      filterName: 'filterDateTo',
+      relatedCol: 'date',
+    },
+    {
+      filterName: 'filterDeletedDateFrom',
+      relatedCol: 'deletedDate',
+    },
+    {
+      filterName: 'filterDeletedDateTo',
+      relatedCol: 'deletedDate',
+    },
+    {
+      filterName: 'filterMemoCode',
+      relatedCol: 'deletedDate',
+    },
+    {
+      filterName: 'filterElectionCode',
+      relatedCol: 'memoCode',
+    },
+  ];
 
   constructor(
     private _http: HttpClient,
     private _cookieService: CookieService,
-    private _receiptService: IndividualReceiptService, 
+    private _receiptService: IndividualReceiptService,
     private _messageService: MessageService
   ) {
     // mock out the recycle trx
@@ -194,10 +193,10 @@ export class TransactionsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             //console.log('Transaction Table res: ', res);
 
@@ -285,10 +284,10 @@ export class TransactionsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             //console.log('Transaction Recycle Bin Table res: ', res);
 
@@ -326,19 +325,18 @@ export class TransactionsService {
     return modelArray;
   }
 
-
-  public removeFilters(appliedFilters:any, currentSortableColumns: any, transactionSpecificColumns:any): any[]{
+  public removeFilters(appliedFilters: any, currentSortableColumns: any, transactionSpecificColumns: any): any[] {
     let filteredList = [];
-    for (let filter in appliedFilters){
+    for (let filter in appliedFilters) {
       //get associatedColumn for any non-null filters
-      if(typeof filter === "string" && filter.startsWith('filter')){
-        let colObj = this._filterToColMapping.find(element => element.filterName === filter);
+      if (typeof filter === 'string' && filter.startsWith('filter')) {
+        let colObj = this._filterToColMapping.find((element) => element.filterName === filter);
         let relatedCol = '';
-        if(colObj){
-          colObj = colObj[0];
+        if (colObj) {
+          // colObj = colObj[0];
           relatedCol = colObj.relatedCol;
-          let matchingResults = transactionSpecificColumns.find(element => element.colName === relatedCol);
-          if(matchingResults && matchingResults.length > 0){
+          let matchingResults = transactionSpecificColumns.find((element: any) => element.colName === relatedCol);
+          if (matchingResults && matchingResults.length > 0) {
             filteredList.push(filter);
           }
         }
@@ -346,7 +344,6 @@ export class TransactionsService {
     }
     return filteredList;
   }
-
 
   /**
    * Map Sched server fields to a TransactionModel.
@@ -406,7 +403,7 @@ export class TransactionsService {
     model.designatingCmteName = row.designating_cmte_name;
     model.subordinateCmteId = row.subordinate_cmte_id;
     model.subordinateCmteName = row.subordinate_cmte_name;
-    model.subordinateCmteStreet_1 = row. subordinate_cmte_street_1;
+    model.subordinateCmteStreet_1 = row.subordinate_cmte_street_1;
     model.subordinateCmteStreet_2 = row.subordinate_cmte_street_2;
     model.subordinateCmteCity = row.subordinate_cmte_city;
     model.subordinateCmteState = row.subordinate_cmte_state;
@@ -633,7 +630,7 @@ export class TransactionsService {
           'itemized',
           'election_code',
           'election_year',
-          ''
+          '',
         ];
 
         for (let keyword of filters.keywords) {
@@ -656,7 +653,7 @@ export class TransactionsService {
       if (filters.filterStates.length > 0) {
         isFilter = true;
         const fields = ['state'];
-        let filteredStateArray = [];
+        let filteredStateArray: any = [];
         for (const state of filters.filterStates) {
           const filtered = this._filterPipe.transform(response.transactions, fields, state);
           filteredStateArray = filteredStateArray.concat(filtered);
@@ -669,7 +666,7 @@ export class TransactionsService {
       if (filters.filterCategories.length > 0) {
         isFilter = true;
         const fields = ['transaction_type_desc'];
-        let filteredCategoryArray = [];
+        let filteredCategoryArray: any[] = [];
         for (const category of filters.filterCategories) {
           const filtered = this._filterPipe.transform(response.transactions, fields, category);
           filteredCategoryArray = filteredCategoryArray.concat(filtered);
@@ -744,7 +741,7 @@ export class TransactionsService {
       if (filters.filterItemizations.length > 0) {
         isFilter = true;
         const fields = ['itemized'];
-        let filteredItemizationArray = [];
+        let filteredItemizationArray: any[] = [];
         for (const itemization of filters.filterItemizations) {
           const filtered = this._filterPipe.transform(response.transactions, fields, itemization);
           filteredItemizationArray = filteredItemizationArray.concat(filtered);
@@ -803,17 +800,17 @@ export class TransactionsService {
     const actions = [];
     for (const trx of transactions) {
       actions.push({
-        transaction_id: trx.transactionId
+        transaction_id: trx.transactionId,
       });
     }
     request.actions = actions;
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           return false;
         })
       );
@@ -838,7 +835,7 @@ export class TransactionsService {
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
   }
 
@@ -876,7 +873,7 @@ export class TransactionsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(`${environment.apiUrl}${url}`, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
 
@@ -904,13 +901,13 @@ export class TransactionsService {
     const request: any = {};
     const actions = [];
     for (const trx of transactions) {
-      let transactionObj :any = {
+      let transactionObj: any = {
         action: action,
-        report_id: trx.reportId && trx.reportId !== 'undefined'? trx.reportId :reportId, 
-        transaction_id: trx.transactionId
+        report_id: trx.reportId && trx.reportId !== 'undefined' ? trx.reportId : reportId,
+        transaction_id: trx.transactionId,
       };
 
-      if(trx.mirrorReportId){
+      if (trx.mirrorReportId) {
         transactionObj.mirror_report_id = trx.mirrorReportId;
         transactionObj.mirror_transaction_id = trx.mirrorTransactionId;
       }
@@ -921,17 +918,17 @@ export class TransactionsService {
 
     return this._http
       .put(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             //console.log('Trash Restore response: ', res);
             // refresh the left summary menu
-            this._receiptService.getSchedule(formType, { report_id: reportId }).subscribe(resp => {
+            this._receiptService.getSchedule(formType, { report_id: reportId }).subscribe((resp) => {
               const message: any = {
                 formType: formType,
-                totals: resp
+                totals: resp,
               };
               this._messageService.sendMessage(message);
             });
@@ -943,8 +940,7 @@ export class TransactionsService {
       );
   }
 
-   public cloneTransaction(transactionId: string, mirrorFlag: boolean = false, mirrorReportId: string = null) {
-
+  public cloneTransaction(transactionId: string, mirrorFlag: boolean = false, mirrorReportId: string = '') {
     const token: string = JSON.parse(this._cookieService.get('user'));
     let httpOptions = new HttpHeaders();
     const url = '/core/clone_a_transaction';
@@ -953,11 +949,15 @@ export class TransactionsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http
-    .post(`${environment.apiUrl}${url}`, { transaction_id: transactionId,mirror_transaction:mirrorFlag, mirror_report_id: mirrorReportId }, {
-        headers: httpOptions
-      })
+      .post(
+        `${environment.apiUrl}${url}`,
+        { transaction_id: transactionId, mirror_transaction: mirrorFlag, mirror_report_id: mirrorReportId },
+        {
+          headers: httpOptions,
+        }
+      )
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -970,19 +970,17 @@ export class TransactionsService {
     const token: string = JSON.parse(this._cookieService.get('user'));
     let httpOptions = new HttpHeaders();
     const url = '/se/mirror_to_F24';
-    
+
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
-  
+
     const formData: FormData = new FormData();
     formData.append('reportId', request.reportId);
     formData.append('transactionId', request.transactionId);
-  
-    return this._http
-      .post(`${environment.apiUrl}${url}`, formData, {
-        headers: httpOptions
-      })
+
+    return this._http.post(`${environment.apiUrl}${url}`, formData, {
+      headers: httpOptions,
+    });
   }
-  
 }
 
 function mapDatabaseRowToModel(model: TransactionModel, row: any) {
@@ -1037,5 +1035,4 @@ function mapDatabaseRowToModel(model: TransactionModel, row: any) {
   model.mirrorReportId = row.mirror_report_id;
   model.mirrorTransactionId = row.mirror_transaction_id;
   model.semiAnnualAmount = row.semi_annual_refund_bundled_amount;
-
 }

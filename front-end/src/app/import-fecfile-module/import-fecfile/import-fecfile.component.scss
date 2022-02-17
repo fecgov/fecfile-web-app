@@ -8,13 +8,12 @@
   padding: 0;
   width: 100%;
   .import_contacts__container {
-
     header {
       .header-content {
         display: block;
         margin: 2px auto;
         width: 98%;
-        padding: .75em 0 .25em 0;
+        padding: 0.75em 0 0.25em 0;
         @include clearfix();
         .btn-options {
           color: $shuttleGray;
@@ -32,7 +31,7 @@
         }
         .import_contacts__header-2 {
           font-size: 1.5em;
-          padding-left: .5em;
+          padding-left: 0.5em;
         }
       }
       .header-content-sep {
@@ -40,7 +39,7 @@
         width: 98%;
       }
       .import_contacts__info {
-        padding-top: .5em;
+        padding-top: 0.5em;
         padding-left: 2em;
       }
     }
@@ -51,7 +50,7 @@
       .import_contacts__body {
         margin: 2px auto;
         width: 98%;
-        padding: .75em 0 4em 0;
+        padding: 0.75em 0 4em 0;
         .import_contacts__heading {
           padding: 40px 0 20px 0;
         }
@@ -92,7 +91,6 @@
         @include clearfix();
       }
     }
- 
   }
 }
 .error__contacts-modal {
@@ -102,7 +100,8 @@
   #error-contacts__modal-header {
     color: black;
   }
-  #error-contacts__modal-header_1, #error-contacts__modal-header_2 {
+  #error-contacts__modal-header_1,
+  #error-contacts__modal-header_2 {
     background-color: $primaryBlue;
     color: $white;
     span {
@@ -110,18 +109,14 @@
     }
   }
   .error-contacts__body-title {
-    padding: .75em 0 
+    padding: 0.75em 0;
   }
   .error-contacts__list {
     max-height: 500px;
     overflow: auto;
   }
   .error-contacts__error {
-    list-style-type: none; 
+    list-style-type: none;
     padding-top: 8px;
   }
 }
-
-
-
-

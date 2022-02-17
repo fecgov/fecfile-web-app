@@ -1,19 +1,32 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
-import { ContactsService } from 'src/app/contacts/service/contacts.service';
-import { ReportsService } from 'src/app/reports/service/report.service';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { TypeaheadService } from 'src/app/shared/partials/typeahead/typeahead.service';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import { FormsService } from 'src/app/shared/services/FormsService/forms.service';
-import { MessageService } from 'src/app/shared/services/MessageService/message.service';
-import { ContributionDateValidator } from 'src/app/shared/utils/forms/validation/contribution-date.validator';
-import { UtilService } from 'src/app/shared/utils/util.service';
+import { ContactsService } from '../../contacts/service/contacts.service';
+import { ReportsService } from '../../reports/service/report.service';
+import {
+  ConfirmModalComponent,
+  ModalHeaderClassEnum,
+} from '../../shared/partials/confirm-modal/confirm-modal.component';
+import { TypeaheadService } from '../../shared/partials/typeahead/typeahead.service';
+import { DialogService } from '../../shared/services/DialogService/dialog.service';
+import { FormsService } from '../../shared/services/FormsService/forms.service';
+import { MessageService } from '../../shared/services/MessageService/message.service';
+import { ContributionDateValidator } from '../../shared/utils/forms/validation/contribution-date.validator';
+import { UtilService } from '../../shared/utils/util.service';
 import { AbstractSchedule } from '../form-3x/individual-receipt/abstract-schedule';
 import { AbstractScheduleParentEnum } from '../form-3x/individual-receipt/abstract-schedule-parent.enum';
 import { IndividualReceiptService } from '../form-3x/individual-receipt/individual-receipt.service';
@@ -26,7 +39,7 @@ import { GetTransactionsResponse, TransactionsService } from '../transactions/se
 import { SchedHMessageServiceService } from './../sched-h-service/sched-h-message-service.service';
 import { SchedH4Model } from './sched-h4.model';
 import { SchedH4Service } from './sched-h4.service';
-import {AuthService} from '../../shared/services/AuthService/auth.service';
+import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { PaginationInstance } from 'ngx-pagination';
 
 @Component({
@@ -48,31 +61,31 @@ import { PaginationInstance } from 'ngx-pagination';
   ] */
 })
 export class SchedH4Component extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() mainTransactionTypeText: string;
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() scheduleType: string;
-  @Output() status: EventEmitter<any>;
+  @Input() override mainTransactionTypeText!: string;
+  @Input() override transactionTypeText!: string;
+  @Input() override transactionType!: string;
+  @Input() override scheduleAction!: ScheduleActions;
+  @Input() override scheduleType!: string;
+  @Output() override status!: EventEmitter<any>;
 
-  public formType: string;  
-  public showPart2: boolean;
-  public loaded = false;
-  public schedH4: FormGroup;
-   
-  public h4Subscription: Subscription;
-  public h4Sum: any;
-  public saveHRes: any;
+  public override formType!: string;
+  public override showPart2!: boolean;
+  public override loaded = false;
+  public schedH4!: FormGroup;
+
+  public h4Subscription!: Subscription;
+  public h4Sum!: any;
+  public saveHRes!: any;
 
   public showSelectType = true;
 
-  public schedH4sModel: Array<SchedH4Model>;
-  public schedH4sModelL: Array<SchedH4Model>;
+  public schedH4sModel: Array<SchedH4Model> = [];
+  public schedH4sModelL: Array<SchedH4Model> = [];
 
-  private clonedTransaction: any;
+  private clonedTransaction!: any;
 
-  public restoreSubscription: Subscription;
-  public trashSubscription: Subscription;
+  public restoreSubscription!: Subscription;
+  public trashSubscription!: Subscription;
 
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
@@ -80,12 +93,12 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
-  
+
   constructor(
     _http: HttpClient,
     _fb: FormBuilder,
@@ -115,9 +128,9 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
     private _rt: Router,
     private _dlService: DialogService,
     _schedHMessageServiceService: SchedHMessageServiceService,
-    _authService: AuthService,
+    _authService: AuthService
   ) {
-     super(
+    super(
       _http,
       _fb,
       _formService,
@@ -139,7 +152,7 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
       _transactionsService,
       _reportsService,
       _schedHMessageServiceService,
-       _authService,
+      _authService
     );
     _schedH4Service;
     _individualReceiptService;
@@ -151,33 +164,24 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
     const paginateConfig: PaginationInstance = {
       id: 'forms__sched-h4-table-pagination',
       itemsPerPage: this.maxItemsPerPage,
-      currentPage: 1
+      currentPage: 1,
     };
     this.config = paginateConfig;
 
-    this.restoreSubscription = this._tranMessageService
-        .getRestoreTransactionsMessage()
-        .subscribe(
-          message => {
-            if(message.scheduleType === 'Schedule H4') {
-              this.getH4Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
-            }
-          }
-        )
+    this.restoreSubscription = this._tranMessageService.getRestoreTransactionsMessage().subscribe((message) => {
+      if (message.scheduleType === 'Schedule H4') {
+        this.getH4Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
+      }
+    });
 
-    this.trashSubscription = this._tranMessageService
-        .getRemoveHTransactionsMessage()
-        .subscribe(
-          message => {
-            if(message.scheduleType === 'Schedule H4') {
-              this.getH4Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
-            }
-          }
-        )
+    this.trashSubscription = this._tranMessageService.getRemoveHTransactionsMessage().subscribe((message) => {
+      if (message.scheduleType === 'Schedule H4') {
+        this.getH4Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
+      }
+    });
   }
 
-
-  public ngOnInit() {
+  public override ngOnInit() {
     this.abstractScheduleComponent = AbstractScheduleParentEnum.schedH4Component;
     // temp code - waiting until dynamic forms completes and loads the formGroup
     // before rendering the static fields, otherwise validation error styling
@@ -187,9 +191,9 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
       this.loaded = true;
     }, 2000);
 
-    this.formType = this._actRoute.snapshot.paramMap.get('form_id');
+    this.formType = this._actRoute.snapshot.paramMap.get('form_id') ?? '';
     //this.getH4Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
-    
+
     //this.setSchedH4();
 
     //this.setDefaultValues();
@@ -205,79 +209,73 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
     this.getPage(this.config.currentPage);
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges) {
     // OnChanges() can be triggered before OnInit().  Ensure formType is set.
     this.formType = '3X';
 
-    if(this.transactionType === 'ALLOC_H4_SUM') {
+    if (this.transactionType === 'ALLOC_H4_SUM') {
       this.getH4Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
     }
   }
 
   ngDoCheck() {
     this.status.emit({
-      otherSchedHTransactionType: this.transactionType
+      otherSchedHTransactionType: this.transactionType,
     });
   }
 
-  public ngOnDestroy(): void {
+  public override ngOnDestroy(): void {
     this.restoreSubscription.unsubscribe();
     this.trashSubscription.unsubscribe();
     super.ngOnDestroy();
   }
 
   setDefaultValues() {
-    this.schedH4.patchValue({ratio_code:'n'}, { onlySelf: true });
+    this.schedH4.patchValue({ ratio_code: 'n' }, { onlySelf: true });
   }
 
   public getReportId(): string {
-
     let report_id;
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
     }
 
-    if(reportType) {
+    if (reportType) {
       if (reportType.hasOwnProperty('reportId')) {
-        report_id = reportType.reportId;      
-      } else if (reportType.hasOwnProperty('reportid')) {      
+        report_id = reportType.reportId;
+      } else if (reportType.hasOwnProperty('reportid')) {
         report_id = reportType.reportid;
       }
     }
-   
-    return report_id ? report_id : '0';
 
+    return report_id ? report_id : '0';
   }
 
   public setSchedH4() {
-    this.schedH4 = new FormGroup({     
-      type: new FormControl('', Validators.required)      
+    this.schedH4 = new FormGroup({
+      type: new FormControl('', Validators.required),
     });
   }
 
-  public selectTypeChange(e) {    
-    this.transactionType = e.currentTarget.value;   
+  public selectTypeChange(e: any) {
+    this.transactionType = e.currentTarget.value;
   }
- 
+
   public getH4Sum(reportId: string, page: number = 1) {
     this.config.currentPage = page;
     this.schedH4sModel = [];
 
-    this.h4Subscription = this._schedH4Service.getSummary(
-        reportId,
-        page,
-        this.config.itemsPerPage,
-        'default',
-        false
-      ).subscribe(res => {
+    this.h4Subscription = this._schedH4Service
+      .getSummary(reportId, page, this.config.itemsPerPage, 'default', false)
+      .subscribe((res: any) => {
         const pagedResponse = this._utilService.pageResponse(res, this.config);
         this.schedH4sModel = this.mapFromServerFields(pagedResponse.items);
         this.pageNumbers = pagedResponse.pageNumbers;
         this.setArrow(this.schedH4sModel);
-    });
+      });
   }
- 
+
   public returnToSum(): void {
     this.transactionType = 'ALLOC_H4_SUM';
     this.getH4Sum(this._individualReceiptService.getReportIdFromStorage(this.formType));
@@ -285,60 +283,67 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
 
   public returnToAdd(): void {
     this.showSelectType = true;
-    this.transactionType = "ALLOC_H4_TYPES"
+    this.transactionType = 'ALLOC_H4_TYPES';
 
     //this.transactionType = 'ALLOC_EXP_DEBT'; //'ALLOC_H4_RATIO';
   }
 
-  public previousStep(): void {
-    
+  public override previousStep(): void {
     this.schedH4.reset();
 
     this.status.emit({
       form: {},
       direction: 'previous',
-      step: 'step_2'
+      step: 'step_2',
     });
   }
 
   public clickArrow(item: SchedH4Model) {
-    if(item.arrow_dir === 'down') {
-      let indexRep = this.schedH4sModel.indexOf(item);
-      this.schedH4sModel[indexRep].child = [];
-      if (indexRep > -1) {
-        let tmp: Array<SchedH4Model> = this.schedH4sModelL.filter(obj => obj.back_ref_transaction_id === item.transaction_id);
-        for(let entry of tmp) {
-          entry.arrow_dir = 'show';
-          //this.schedH4sModel.splice(indexRep + 1, 0, entry);
-          this.schedH4sModel[indexRep].child.push(entry);
-          //indexRep++;
-        }
-        //this.tableConfig.totalItems = this.schedH4sModel.length;
-      }
-      this.schedH4sModel.find(function(obj) { return obj.transaction_id === item.transaction_id}).arrow_dir = 'up';
-      
-    }else if(item.arrow_dir === 'up') {
-      //this.schedH4sModel = this.schedH4sModel.filter(obj => obj.memo_code !== 'X');
-      //this.schedH4sModel = this.schedH4sModel.filter(obj => obj.back_ref_transaction_id !== item.transaction_id);
-      //this.tableConfig.totalItems = this.schedH4sModel.length;
+    // if (item.arrow_dir === 'down') {
+    //   let indexRep = this.schedH4sModel.indexOf(item);
+    //   this.schedH4sModel[indexRep].child = [];
+    //   if (indexRep > -1) {
+    //     let tmp: Array<SchedH4Model> = this.schedH4sModelL.filter(
+    //       (obj) => obj.back_ref_transaction_id === item.transaction_id
+    //     );
+    //     for (let entry of tmp) {
+    //       entry.arrow_dir = 'show';
+    //       //this.schedH4sModel.splice(indexRep + 1, 0, entry);
+    //       this.schedH4sModel[indexRep].child.push(entry);
+    //       //indexRep++;
+    //     }
+    //     //this.tableConfig.totalItems = this.schedH4sModel.length;
+    //   }
+    //   this.schedH4sModel.find(function (obj) {
+    //     return obj.transaction_id === item.transaction_id;
+    //   }).arrow_dir = 'up';
+    // } else if (item.arrow_dir === 'up') {
+    //   //this.schedH4sModel = this.schedH4sModel.filter(obj => obj.memo_code !== 'X');
+    //   //this.schedH4sModel = this.schedH4sModel.filter(obj => obj.back_ref_transaction_id !== item.transaction_id);
+    //   //this.tableConfig.totalItems = this.schedH4sModel.length;
 
-      let indexRep = this.schedH4sModel.indexOf(item);
-      this.schedH4sModel[indexRep].child = [];
+    //   let indexRep = this.schedH4sModel.indexOf(item);
+    //   this.schedH4sModel[indexRep].child = [];
 
-      this.schedH4sModel.find(function(obj) { return obj.transaction_id === item.transaction_id}).arrow_dir = 'down';      
-    }
-   
+    //   this.schedH4sModel.find(function (obj) {
+    //     return obj.transaction_id === item.transaction_id;
+    //   }).arrow_dir = 'down';
+    // }
   }
 
   public setArrow(items: SchedH4Model[]) {
-    if(items) {
-      for(const item of items) {        
-        if(item.memo_code !== 'X' && this.schedH4sModel.find(function(obj) { return obj.back_ref_transaction_id === item.transaction_id})) {
-            item.arrow_dir = 'down';           
-        }        
+    if (items) {
+      for (const item of items) {
+        if (
+          item.memo_code !== 'X' &&
+          this.schedH4sModel.find(function (obj) {
+            return obj.back_ref_transaction_id === item.transaction_id;
+          })
+        ) {
+          item.arrow_dir = 'down';
+        }
       }
     }
-
   }
 
   // public mapFromServerFields(serverData: any) {
@@ -399,22 +404,22 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public mapDatabaseRowToModel(model: SchedH4Model, row: any) {
-      model.cmte_id = row.cmte_id;
-      model.report_id = row.report_id;
-      model.transaction_type_identifier = row.transaction_type_identifier;
-      model.transaction_id = row.transaction_id;
-      model.back_ref_transaction_id = row.back_ref_transaction_id;
-      model.activity_event_identifier = row.activity_event_identifier;
-      model.activity_event_type = row.activity_event_type;
-      model.expenditure_date = row.expenditure_date;
-      model.fed_share_amount = row.fed_share_amount;
-      model.non_fed_share_amount = row.non_fed_share_amount;
-      model.memo_code = row.memo_code;
-      model.first_name = row.first_name;
-      model.last_name = row.last_name;
-      model.entity_name = row.entity_name;
-      model.entity_type = row.entity_type;
-      model.aggregation_ind = row.aggregation_ind;
+    model.cmte_id = row.cmte_id;
+    model.report_id = row.report_id;
+    model.transaction_type_identifier = row.transaction_type_identifier;
+    model.transaction_id = row.transaction_id;
+    model.back_ref_transaction_id = row.back_ref_transaction_id;
+    model.activity_event_identifier = row.activity_event_identifier;
+    model.activity_event_type = row.activity_event_type;
+    model.expenditure_date = row.expenditure_date;
+    model.fed_share_amount = row.fed_share_amount;
+    model.non_fed_share_amount = row.non_fed_share_amount;
+    model.memo_code = row.memo_code;
+    model.first_name = row.first_name;
+    model.last_name = row.last_name;
+    model.entity_name = row.entity_name;
+    model.entity_type = row.entity_type;
+    model.aggregation_ind = row.aggregation_ind;
   }
 
   public editTransaction(trx: any): void {
@@ -431,53 +436,58 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public cloneTransaction(trx: any): void {
-
     trx.reportId = this._individualReceiptService.getReportIdFromStorage(this.formType);
     trx.report_id = trx.reportId;
     trx.transactionId = trx.transaction_id;
 
-    this._tranService
-      .cloneTransaction(trx.transaction_id)
-      .subscribe((cloneTransactionResponse: TransactionModel) => {
-        if (cloneTransactionResponse[0] && cloneTransactionResponse[0].hasOwnProperty('transaction_id')) {
-          //this.getTransactionsPage(this.config.currentPage);
-          this.clonedTransaction = cloneTransactionResponse[0];
+    this._tranService.cloneTransaction(trx.transaction_id).subscribe((cloneTransactionResponse: TransactionModel) => {
+      if (cloneTransactionResponse && cloneTransactionResponse.hasOwnProperty('transaction_id')) {
+        //this.getTransactionsPage(this.config.currentPage);
+        this.clonedTransaction = cloneTransactionResponse;
 
-          this.clonedTransaction.reportId = cloneTransactionResponse[0].report_id;
+        this.clonedTransaction.reportId = cloneTransactionResponse.reportId;
 
-          this.editTransaction(this.clonedTransaction);
+        this.editTransaction(this.clonedTransaction);
 
-          this._rt.navigate([`/forms/form/3X`], {
-            queryParams: { step: 'step_3', reportId: trx.reportId, edit: true, cloned: true, transactionCategory: 'other'}
-          });
-        }
-      });
+        this._rt.navigate([`/forms/form/3X`], {
+          queryParams: {
+            step: 'step_3',
+            reportId: trx.reportId,
+            edit: true,
+            cloned: true,
+            transactionCategory: 'other',
+          },
+        });
+      }
+    });
   }
 
   public trashTransaction(trx: any): void {
-
     trx.report_id = this._individualReceiptService.getReportIdFromStorage(this.formType);
     trx.transactionId = trx.transaction_id;
 
-    if(this.hasChildTransaction(trx)) {
-      const msg = "There are child transactions associated with this transaction. This action will delete all child transactions as well. Are you sure you want to continue?";
-      this._dlService
-        .confirm(msg, ConfirmModalComponent, 'Warning!')
-        .then(res => {
-          if (res === 'okay') {
-            this.transhAction(trx);
-          } else if (res === 'cancel') {
-          }
-        });
-    }else {
+    if (this.hasChildTransaction(trx)) {
+      const msg =
+        'There are child transactions associated with this transaction. This action will delete all child transactions as well. Are you sure you want to continue?';
+      this._dlService.confirm(msg, ConfirmModalComponent, 'Warning!').then((res: any) => {
+        if (res === 'okay') {
+          this.transhAction(trx);
+        } else if (res === 'cancel') {
+        }
+      });
+    } else {
       this.transhAction(trx);
     }
   }
 
   private transhAction(trx: any): void {
     this._dlService
-      .confirm('You are about to delete this transaction ' + trx.transaction_id + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .confirm(
+        'You are about to delete this transaction ' + trx.transaction_id + '.',
+        ConfirmModalComponent,
+        'Caution!'
+      )
+      .then((res: any) => {
         if (res === 'okay') {
           this._tranService
             .trashOrRestoreTransactions(this.formType, 'trash', trx.report_id, [trx])
@@ -494,11 +504,11 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
             });
         } else if (res === 'cancel') {
         }
-      })
+      });
   }
 
   public hasChildTransaction(item: any): boolean {
-    if(this.schedH4sModelL.filter(obj => obj.back_ref_transaction_id === item.transaction_id).length !== 0) {
+    if (this.schedH4sModelL.filter((obj) => obj.back_ref_transaction_id === item.transaction_id).length !== 0) {
       return true;
     }
     return false;
@@ -536,7 +546,7 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
   public onGotoPageChange(page: number): void {
     this.config.currentPage = page;
     this.getPage(this.config.currentPage);
-  }  
+  }
 
   /**
    * Determine if pagination should be shown.
@@ -545,31 +555,32 @@ export class SchedH4Component extends AbstractSchedule implements OnInit, OnDest
     if (!this.autoHide) {
       return true;
     }
-    if (this.config.totalItems > this.config.itemsPerPage) {
+    if (this.config.totalItems ?? 0 > this.config.itemsPerPage) {
       return true;
     }
     // otherwise, no show.
     return false;
-  }  
+  }
 
   /**
    * Determine the item range shown by the server-side pagination.
    */
   public determineItemRange(): string {
     let range: {
-      firstItemOnPage: number, lastItemOnPage: number, itemRange: string
+      firstItemOnPage: number;
+      lastItemOnPage: number;
+      itemRange: string;
     } = this._utilService.determineItemRange(this.config, this.schedH4sModel);
 
     this.firstItemOnPage = range.firstItemOnPage;
     this.lastItemOnPage = range.lastItemOnPage;
     return range.itemRange;
   }
-  
+
   public showPageSizes(): boolean {
-    if (this.config && this.config.totalItems && this.config.totalItems > 0){
+    if (this.config && this.config.totalItems && this.config.totalItems > 0) {
       return true;
     }
     return false;
   }
 }
-

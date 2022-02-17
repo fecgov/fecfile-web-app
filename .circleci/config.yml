@@ -36,7 +36,7 @@ jobs:
 
       - run:
           name: run unit tests
-          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --code-coverage --watch=false || echo "Unit tests failed"
+          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --code-coverage --watch=false
           working_directory: ~/project/front-end/
 
       # Sonar cloud setup and scanning
@@ -203,7 +203,7 @@ workflows:
   test:
     jobs:
       - test
-      - backup-unit-test
+      # - backup-unit-test
       - deploy
 #      - e2e-test
       - dependendency-check

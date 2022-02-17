@@ -1,4 +1,3 @@
-import { PasswordStrengthMeterModule } from 'angular-password-strength-meter';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,19 +13,17 @@ import { CreatePasswordComponent } from './create-password/create-password.compo
 import { PersonalKeyComponent } from './personal-key/personal-key.component';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    CommonModule,
-    PasswordStrengthMeterModule,
-    BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule
+  imports: [SharedModule, CommonModule, BrowserModule, FormsModule, ReactiveFormsModule, RouterModule],
+  declarations: [
+    LoginComponent,
+    TwoFactorLoginComponent,
+    ConfirmTwoFactorComponent,
+    ConsentModalComponent,
+    RegisterComponent,
+    CreatePasswordComponent,
+    PersonalKeyComponent,
   ],
-  declarations: [LoginComponent, TwoFactorLoginComponent, ConfirmTwoFactorComponent, ConsentModalComponent, RegisterComponent, CreatePasswordComponent, PersonalKeyComponent],
-  exports: [
-      LoginComponent, TwoFactorLoginComponent, RegisterComponent
-  ],
-  entryComponents: [LoginComponent, ConsentModalComponent]
+  exports: [LoginComponent, TwoFactorLoginComponent, RegisterComponent],
+  entryComponents: [LoginComponent, ConsentModalComponent],
 })
-export class AppMainLoginModule { }
+export class AppMainLoginModule {}

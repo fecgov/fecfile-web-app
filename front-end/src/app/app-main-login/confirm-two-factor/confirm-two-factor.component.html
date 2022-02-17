@@ -9,40 +9,41 @@
           <img class="fec-title" src="assets/img/FECtitleNew.png" draggable="false" alt="FECTitle" />
         </div>
         <div class="title-front-main">Electronic Filing Sign in</div>
-        <div class="title-front-sub">
-          Provide Security Code
-        </div>
-        <br><br><hr>
+        <div class="title-front-sub">Provide Security Code</div>
+        <br /><br />
+        <hr />
       </header>
 
       <div class="form-group">
-        <p>
-          We sent a code to the {{option}} on file.
-          Enter the Security Code from that message here.
-        </p>
+        <p>We sent a code to the {{ option }} on file. Enter the Security Code from that message here.</p>
         <div class="user-info">
           <div class="container">
             <label>Enter Your Security Code</label>
             <div class="input-group">
-              <input type="text" class="form-control"
-                     aria-label="Text input security code"
-                     formControlName="securityCode"
-                    >
+              <input
+                type="text"
+                class="form-control"
+                aria-label="Text input security code"
+                formControlName="securityCode"
+              />
             </div>
             <div class="text-error" *ngIf="!twoFactInfo.valid && twoFactInfo.touched">
               <span>Please enter the security code received</span>
             </div>
-            <div class="text-error" *ngIf="!twoFactInfo.valid && twoFactInfo?.controls['securityCode']?.errors?.pattern">
+            <!-- <div
+              class="text-error"
+              *ngIf="!twoFactInfo.valid && twoFactInfo?.controls['securityCode']?.errors ?? false"
+            >
               <span>Security code must be numeric</span>
-            </div>
+            </div> -->
             <div class="text-error" *ngIf="!isValid && twoFactInfo.touched">
               <span>Invalid Security Code</span>
             </div>
             <div class="text-error" *ngIf="isAccountLocked && twoFactInfo.touched">
-              <span>{{ACCOUNT_LOCKED_MSG}}</span>
+              <span>{{ ACCOUNT_LOCKED_MSG }}</span>
             </div>
-            <br>
-            <br>
+            <br />
+            <br />
           </div>
           <div class="container">
             <label>Didn't receive a code?</label>
@@ -56,7 +57,7 @@
         </div>
 
         <div class="user-info-actions">
-          <button class="action__btn next" (click)="next()"> Next</button>
+          <button class="action__btn next" (click)="next()">Next</button>
         </div>
       </div>
     </form>

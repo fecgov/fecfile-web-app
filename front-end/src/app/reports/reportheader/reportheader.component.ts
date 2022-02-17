@@ -1,17 +1,27 @@
-import { Component, EventEmitter, ElementRef, HostListener, OnInit, Input, Output, ViewChild, ViewEncapsulation , ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  ElementRef,
+  HostListener,
+  OnInit,
+  Input,
+  Output,
+  ViewChild,
+  ViewEncapsulation,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ReportdetailsComponent } from '../reportdetails/reportdetails.component';
 import { FormsService } from '../../shared/services/FormsService/forms.service';
 import { ActivatedRoute } from '@angular/router';
 import { ReportsMessageService } from '../service/reports-message.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ReportFilterModel } from '../model/report-filter.model';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 export enum ActiveView {
-  reports = "reports",
-  recycleBin = "recycleBin"
+  reports = 'reports',
+  recycleBin = 'recycleBin',
 }
-
 
 //@Output() status: EventEmitter<any> = new EventEmitter<any>();
 @Component({
@@ -31,75 +41,67 @@ export enum ActiveView {
     ])
   ] */
 })
-
 export class ReportheaderComponent implements OnInit {
+  public currentYear: number = 0;
+  public reportsView = ActiveView.reports;
+  public showSideBar: boolean = false;
+  public existingReportId: string = '';
+  public view: string = ActiveView.reports;
+  public recycleBinView = ActiveView.recycleBin;
+  public isShowFilters = false;
+  public searchText = '';
+  public searchTextArray: any[] = [];
+  public viewMode = '';
 
-public currentYear:number =0;
-public reportsView = ActiveView.reports;
-public showSideBar: boolean = false;
-public existingReportId: string = "";
-public view: string = ActiveView.reports;
-public recycleBinView = ActiveView.recycleBin;
-public isShowFilters = false;
-public searchText = '';
-public searchTextArray = [];
-public viewMode = '';
+  /**
+   * Subscription for applying filters to the reports obtained from
+   * the server.
+   */
+  private applyFiltersSubscription!: Subscription;
 
-/**
- * Subscription for applying filters to the reports obtained from
- * the server.
- */
-private applyFiltersSubscription: Subscription;
-
-private filters: ReportFilterModel = new ReportFilterModel();
-private readonly filtersLSK = 'reports.filters';
-private activeRoutesSubscription :Subscription;
+  private filters: ReportFilterModel = new ReportFilterModel();
+  private readonly filtersLSK = 'reports.filters';
+  private activeRoutesSubscription!: Subscription;
 
   constructor(
     private _formService: FormsService,
     private _activeRoute: ActivatedRoute,
-    private _reportsMessageService: ReportsMessageService,
-  ) {   this.applyFiltersSubscription = this._reportsMessageService.getApplyFiltersMessage()
-    .subscribe(
-      (filters: ReportFilterModel) => {
+    private _reportsMessageService: ReportsMessageService
+  ) {
+    this.applyFiltersSubscription = this._reportsMessageService
+      .getApplyFiltersMessage()
+      .subscribe((filters: ReportFilterModel) => {
         this.filters = filters;
         this.doSearch();
-      }
-    );
-   }
+      });
+  }
 
   ngOnInit() {
-
     var dateObj = new Date();
     this.currentYear = dateObj.getUTCFullYear();
     this.clearSearch();
     this.viewMode = 'tab1';
-    
-    if (localStorage.getItem('form3XReportInfo.showDashBoard')==="Y"){
-      this._formService.removeFormDashBoard("3X");
-      
+
+    if (localStorage.getItem('form3XReportInfo.showDashBoard') === 'Y') {
+      this._formService.removeFormDashBoard('3X');
     }
 
-    this.activeRoutesSubscription = this._activeRoute
-        .params
-        .subscribe( params => {
-          this.existingReportId = params.reportId;
-       });
-    this.existingReportId = localStorage.getItem('Existing_Report_id');
-    if (this.existingReportId !== "") {
-          localStorage.removeItem('Existing_Report_id');
-          localStorage.removeItem('orm_99_details.org_fileurl');
-          localStorage.removeItem('form99PrintPreviewResponse');
-          localStorage.setItem(`form_3X_saved`, JSON.stringify(false));
-        }
-      
+    this.activeRoutesSubscription = this._activeRoute.params.subscribe((params) => {
+      this.existingReportId = params['reportId'];
+    });
+    this.existingReportId = localStorage.getItem('Existing_Report_id') ?? '';
+    if (this.existingReportId !== '') {
+      localStorage.removeItem('Existing_Report_id');
+      localStorage.removeItem('orm_99_details.org_fileurl');
+      localStorage.removeItem('form99PrintPreviewResponse');
+      localStorage.setItem(`form_3X_saved`, JSON.stringify(false));
+    }
 
     //this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
 
     // If the filter was open on the last visit in the user session, open it.
     const filtersJson: string | null = localStorage.getItem(this.filtersLSK);
 
- 
     let filters: ReportFilterModel;
     if (filtersJson != null) {
       filters = JSON.parse(filtersJson);
@@ -115,20 +117,17 @@ private activeRoutesSubscription :Subscription;
     if (filters.show === true) {
       this.showFilters();
     }
-
   }
- 
-  public showFilter() : void {
 
-    if (this.showSideBar){
-        this.showSideBar=false;
-    } else
-    {
-      this.showSideBar=true;
+  public showFilter(): void {
+    if (this.showSideBar) {
+      this.showSideBar = false;
+    } else {
+      this.showSideBar = true;
     }
   }
 
-  private recycleReports() : void {
+  public recycleReports(): void {
     this.view = ActiveView.recycleBin;
   }
 
@@ -143,7 +142,6 @@ private activeRoutesSubscription :Subscription;
     this.applyFiltersSubscription.unsubscribe();
     this.activeRoutesSubscription.unsubscribe();
   }
-
 
   /**
    * Search reports.
@@ -160,11 +158,9 @@ private activeRoutesSubscription :Subscription;
       this.searchText = '';
     }
     //this.showFilter(); mahendra
-    this.showSideBar=true;
+    this.showSideBar = true;
     this.doSearch();
-  
   }
-
 
   /**
    * Clear the search filters
@@ -175,17 +171,15 @@ private activeRoutesSubscription :Subscription;
     this.doSearch();
   }
 
-
   /**
    * Remove the search text from the array.
-   * 
+   *
    * @param index index in the array
    */
   public removeSearchText(index: number) {
     this.searchTextArray.splice(index, 1);
     this.doSearch();
   }
-
 
   /**
    * Show the table of reports in the recycle bin for the user.
@@ -194,7 +188,6 @@ private activeRoutesSubscription :Subscription;
     this.view = ActiveView.recycleBin;
   }
 
-
   /**
    * Show the table of form reports.
    */
@@ -202,16 +195,13 @@ private activeRoutesSubscription :Subscription;
     this.view = ActiveView.reports;
   }
 
-
   /**
    * Show the option to select/deselect columns in the table.
    */
   public showPinColumns() {
-
     this.showreports();
     this._reportsMessageService.sendShowPinColumnMessage('show the Pin Col');
   }
-
 
   /**
    * Import reports from an external file.
@@ -220,14 +210,12 @@ private activeRoutesSubscription :Subscription;
     alert('Import reports is not yet supported');
   }
 
-
   /**
    * Show filter options for reports.
    */
   public showFilters() {
     this.isShowFilters = true;
   }
-
 
   /**
    * Show the categories and hide the filters.
@@ -236,7 +224,6 @@ private activeRoutesSubscription :Subscription;
     this.isShowFilters = false;
   }
 
-
   /**
    * Check if the view to show is reports.
    */
@@ -244,14 +231,12 @@ private activeRoutesSubscription :Subscription;
     return this.view === this.reportsView ? true : false;
   }
 
-
   /**
    * Check if the view to show is Recycle Bin.
    */
   public isRecycleBinViewActive() {
     return this.view === this.recycleBinView ? true : false;
   }
-
 
   /**
    * Send a message to the subscriber to run the search.

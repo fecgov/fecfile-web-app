@@ -9,35 +9,38 @@ import {
   OnDestroy,
   Input,
   SimpleChanges,
-  OnChanges
+  OnChanges,
 } from '@angular/core';
 import { CsvConverterService } from '../service/csv-converter.service';
 import * as XLSX from 'xlsx';
 import { timer, Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UploadContactsService } from './service/upload-contacts.service';
-import { UtilService } from 'src/app/shared/utils/util.service';
-import CryptoJS from 'crypto-js';
+import { UtilService } from '../../../shared/utils/util.service';
+import * as CryptoJS from 'crypto-js';
 import { S3 } from 'aws-sdk/clients/all';
 import { ModalDirective } from 'ngx-bootstrap/modal/ngx-bootstrap-modal';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
+import {
+  ConfirmModalComponent,
+  ModalHeaderClassEnum,
+} from '../../../shared/partials/confirm-modal/confirm-modal.component';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
 
 @Component({
   selector: 'app-upload-contacts',
   templateUrl: './upload-contacts.component.html',
-  styleUrls: ['./upload-contacts.component.scss']
+  styleUrls: ['./upload-contacts.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('selectFileInput')
-  public selectFileInput: ElementRef;
+  public selectFileInput!: ElementRef;
 
   @Input()
-  public forceChangeDetection: Date;
+  public forceChangeDetection!: Date;
 
   @Input()
-  public screenType :string = 'contacts';
+  public screenType: string = 'contacts';
 
   @Output()
   public uploadResultEmitter: EventEmitter<any> = new EventEmitter<any>();
@@ -45,36 +48,35 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   @Output()
   public saveStatusEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public userContacts: Array<any>;
-  // public userContactFields: Array<string>;
-  public showUpload: boolean;
-  public progressPercent: number;
-  public processingPercent: number;
-  public hideProcessingProgress: boolean;
-  public showSpinner: boolean;
-  public uploadingText: string;
-  public processingText: string;
-  public duplicateFile: any;
+  public userContacts!: Array<any>;
+  // public userContactFields!: Array<string>;
+  public showUpload!: boolean;
+  public progressPercent!: number;
+  public processingPercent!: number;
+  public hideProcessingProgress!: boolean;
+  public showSpinner!: boolean;
+  public uploadingText!: string;
+  public processingText!: string;
+  public duplicateFile!: any;
 
   public extensionType = 'CSV';
-  private onDestroy$: Subject<any>;
-  private uploadProcessing$: Subject<any>;
-  private checkSum: string;
-  private committeeId: string;
+  private onDestroy$!: Subject<any>;
+  private uploadProcessing$!: Subject<any>;
+  private checkSum!: string;
+  private committeeId!: string;
 
   constructor(
     private csvConverterService: CsvConverterService,
     private uploadContactsService: UploadContactsService,
     private utilService: UtilService,
-    private _dialogService: DialogService, 
+    private _dialogService: DialogService,
     private _uploadTrxService: UploadTrxService
-
   ) {}
 
   public ngOnInit() {
-    this.committeeId = null;
+    this.committeeId = '';
     if (localStorage.getItem('committee_details') !== null) {
-      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       this.committeeId = cmteDetails.committeeid;
     }
 
@@ -89,15 +91,15 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getFileExtensionsInfo() {
-    if(this.screenType === 'fecfile'){
+    if (this.screenType === 'fecfile') {
       this.extensionType = 'DCF';
     }
   }
 
   public ngOnDestroy() {
-    this.onDestroy$.next();
+    this.onDestroy$.next(null);
     if (this.uploadProcessing$) {
-      this.uploadProcessing$.next();
+      this.uploadProcessing$.next(null);
     }
   }
 
@@ -133,7 +135,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
    */
   private scanFiles(entry: any) {
     if (entry.isFile) {
-      const promise = this.parseFileEntry(entry).then(file => {
+      const promise = this.parseFileEntry(entry).then((file) => {
         // this.progressPercent = 0;
         // this.showUpload = false;
         // this.uploadingText = 'Uploading...';
@@ -147,13 +149,13 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
     if (!fileName.includes('.')) {
       return fileExtention;
     }
-    fileExtention = fileName.split('.').pop();
+    fileExtention = fileName.split('.')?.pop() ?? '';
     return fileExtention;
   }
 
   // private _createFileCheckSum(file: File) {
   //   const fileReader = new FileReader();
-  //   fileReader.onload = (e) => {
+  //   fileReader.onload = (e: any) => {
   //     const fileData = fileReader.result;
   //     const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(fileData));
   //     const md5 = hash.toString(CryptoJS.enc.Hex);
@@ -170,8 +172,8 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
    * @returns true if the file is a duplicate.
    */
   private _isDuplicateFile(data: S3.Types.ListObjectsV2Output): boolean {
-    for (const bucketFile of data.Contents) {
-      this.uploadContactsService.getHeadObject(bucketFile.Key).subscribe((headObj: S3.Types.HeadObjectOutput) => {
+    for (const bucketFile of data.Contents ?? []) {
+      this.uploadContactsService.getHeadObject(bucketFile.Key ?? '').subscribe((headObj: S3.Types.HeadObjectOutput) => {
         if (!headObj.Metadata) {
           return false;
         }
@@ -182,7 +184,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
           this.duplicateFile = {
             checkSum: this.checkSum,
             fileName: bucketFile.Key,
-            fileDate: bucketFile.LastModified
+            fileDate: bucketFile.LastModified,
           };
           return true;
         }
@@ -209,7 +211,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
     this.saveStatusEmitter.emit(false);
 
     const fileExtention = this.getFileExtention(file.name);
-    if(this.screenType === 'contacts'){
+    if (this.screenType === 'contacts') {
       switch (fileExtention) {
         // case 'json':
         //   // this._handleJsonImport_DEPRECATED(file);
@@ -230,18 +232,21 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
         //   break;
         default:
           this._dialogService
-            .confirm('You can only import CSV files. If your file is a ' +
-              'different type, please convert your data file to a CSV.',
-              ConfirmModalComponent, 'Warning!', false)
-            .then(res => {
+            .confirm(
+              'You can only import CSV files. If your file is a ' +
+                'different type, please convert your data file to a CSV.',
+              ConfirmModalComponent,
+              'Warning!',
+              false
+            )
+            .then((res: any) => {
               // if (res === 'okay' || res === 'cancel') {
               // }
             });
       }
-    }
-    else if(this.screenType === 'fecfile'){
+    } else if (this.screenType === 'fecfile') {
       switch (fileExtention.toLowerCase()) {
-      case 'dcf':
+        case 'dcf':
           this.progressPercent = 0;
           this.showUpload = false;
           this.uploadingText = 'Uploading...';
@@ -249,17 +254,19 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
           break;
         default:
           this._dialogService
-            .confirm('You can only import DCF files. If your file is a ' +
-              'different type, please convert your data file to a DCF.',
-              ConfirmModalComponent, 'Warning!', false)
-            .then(res => {
-            });
-          }
+            .confirm(
+              'You can only import DCF files. If your file is a ' +
+                'different type, please convert your data file to a DCF.',
+              ConfirmModalComponent,
+              'Warning!',
+              false
+            )
+            .then((res: any) => {});
+      }
     }
-    
 
     // const fileReader = new FileReader();
-    // fileReader.onload = (e) => {
+    // fileReader.onload = (e: any) => {
     //   const fileData = fileReader.result;
     //   const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(fileData));
     //   const md5 = hash.toString(CryptoJS.enc.Hex);
@@ -301,9 +308,9 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
 
   private _handleJsonImport_DEPRECATED(file: File) {
     const fileReader = new FileReader();
-    fileReader.onload = e => {
+    fileReader.onload = (e) => {
       const json = fileReader.result;
-      this.userContacts = JSON.parse(json.toString());
+      this.userContacts = JSON.parse(json?.toString() ?? '');
       // this.prepareUserContactFields();
     };
     fileReader.readAsText(file);
@@ -311,8 +318,8 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
 
   private _handleCsvImport_DEPRECATED(file: File) {
     const fileReader = new FileReader();
-    fileReader.onload = e => {
-      const csvText: string | ArrayBuffer = fileReader.result;
+    fileReader.onload = (e) => {
+      const csvText: string | ArrayBuffer | null = fileReader.result;
       if (typeof csvText === 'string') {
         const json = this.csvConverterService.convertCsvToJson(csvText);
         this.userContacts = JSON.parse(json.toString());
@@ -324,7 +331,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
 
   private _handleXlsImport_DEPRECATED(file: File) {
     const fileReader = new FileReader();
-    fileReader.onload = e => {
+    fileReader.onload = (e) => {
       /* read workbook */
       const bstr = fileReader.result;
       const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
@@ -367,7 +374,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
     this.selectFileInput.nativeElement.click();
   }
 
-  public onClick(event) {
+  public onClick(event: any) {
     event.target.value = '';
   }
 
@@ -386,7 +393,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   private _uploadCsv(file: File) {
     this.uploadContactsService
       .uploadFile(file, this.checkSum, this.committeeId)
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((data: any) => {
         // read the header record from the uploaded file
         // this.uploadContactsService.readCsvFileHeader(file).subscribe((headerFields: Array<string>) => {
@@ -412,7 +419,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   private _uploadDcf(file: File) {
     this.uploadContactsService
       .uploadFile(file, this.checkSum, this.committeeId)
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((data: any) => {
         if (data === false) {
           console.log('false');
@@ -427,7 +434,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
           //         "file_name": "satheesh.dcf",
           //         "submission_date_time": "12/23/2020 12:25PM",
           //         "message": ""
-          //       }}, 
+          //       }},
           //       {
           //         "success": false,
           //         "data" : {
@@ -437,7 +444,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
           //         "message": "Error in processing transaction"
           //         }
           //     }])
-              // .subscribe((res:any) => {
+          // .subscribe((res:any) => {
           this.showSpinner = false;
           this.emitUploadResults(res);
         });
@@ -447,7 +454,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   private _uploadJson(file: File) {
     this.uploadContactsService
       .uploadFile(file, this.checkSum, this.committeeId)
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((data: any) => {
         // read the header record from the uploaded file
         // this.uploadContactsService.readJsonFilePropertyNames(file).subscribe((headerFields: Array<string>) => {
@@ -483,20 +490,20 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
       if (timerSubscription) {
         timerSubscription.unsubscribe();
       }
-      timerSubject.next();
+      timerSubject.next(null);
       timerSubject.complete();
     });
 
     // this.hideProcessingProgress = false;
     // const progressPoller = interval(500);
     // this.uploadProcessing$ = new Subject();
-    // progressPoller.takeUntil(this.uploadProcessing$);
+    // progressPoller.pipe(takeUntil(this.uploadProcessing$));
     // this.processingPercent = 0;
     // progressPoller.subscribe(val => {
-    //   this.uploadContactsService.checkUploadProcessing().takeUntil(this.uploadProcessing$).subscribe(res => {
+    //   this.uploadContactsService.checkUploadProcessing().pipe(takeUntil(this.uploadProcessing$)).subscribe((res: any) => {
     //     this.processingPercent += res;
     //     if (this.processingPercent > 99) {
-    //       this.uploadProcessing$.next();
+    //       this.uploadProcessing$.next(null);
     //       this.uploadProcessing$.complete();
     //       // Using setTimeout to avoid another subject but should use RxJs (try delay or interval)
     //       // The purpose here is to allow the user to see the 100% completion before switching view.
@@ -511,7 +518,7 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
   public getProgress() {
     this.uploadContactsService
       .getProgressPercent()
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((percent: number) => {
         this.progressPercent = percent;
         if (this.progressPercent >= 100) {
@@ -543,13 +550,13 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
     return false;
   }
 
-  private parseFileEntry(fileEntry): Promise<File> {
+  private parseFileEntry(fileEntry: any): Promise<File> {
     return new Promise((resolve, reject) => {
       fileEntry.file(
-        file => {
+        (file: any) => {
           resolve(file);
         },
-        err => {
+        (err: any) => {
           reject(err);
         }
       );
@@ -561,10 +568,10 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
    *
    * @param event the dragenter event
    */
-  public dragEnter(event) {
+  public dragEnter(event: any) {
     // indicates valid drop data
     // false allows drop
-    return Array.prototype.every.call(event.dataTransfer.items, item => item.kind !== 'file');
+    return Array.prototype.every.call(event.dataTransfer.items, (item) => item.kind !== 'file');
   }
 
   /**
@@ -573,10 +580,10 @@ export class UploadContactsComponent implements OnInit, OnDestroy, OnChanges {
    *
    * @param event the dragover event
    */
-  public dragOver(event) {
+  public dragOver(event: any) {
     // indicates valid drop data
     // false allows drop
-    return Array.prototype.every.call(event.dataTransfer.items, item => item.kind !== 'file');
+    return Array.prototype.every.call(event.dataTransfer.items, (item) => item.kind !== 'file');
   }
 
   // /**

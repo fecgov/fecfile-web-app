@@ -24,7 +24,7 @@
     @include media(largeDesktop) {
       display: table-cell;
       width: 20%;
-    }           
+    }
   }
 
   .contacts__container {
@@ -42,7 +42,7 @@
         display: block;
         margin: 2px auto;
         width: 98%;
-        padding: .75em 0 .25em 0;
+        padding: 0.75em 0 0.25em 0;
         @include clearfix();
         .btn-options {
           color: $shuttleGray;
@@ -95,11 +95,10 @@
           // margin: 2px 20px 0px 0px;
         }
         .contacts__close-tag {
-          padding-right: .25em;
+          padding-right: 0.25em;
         }
       }
     }
-
 
     .contacts__btn-search-filter {
       margin: 3px;
@@ -123,18 +122,10 @@
       width: 27%;
       float: right;
       margin-right: 5px;
-      .search-icon {
-        
-      }
     }
 
     .contacts__trx-applied-filter-row {
       min-height: 48px;
     }
-
   }
 }
-
-
-
-

@@ -5,11 +5,11 @@ import { Observable, BehaviorSubject, interval, throwError, of } from 'rxjs';
 import { ImportContactModel } from '../model/import-contact.model';
 import { DuplicateContactModel } from '../model/duplicate-contact.model';
 import { ErrorContactModel } from '../model/error-contact.model';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
 import { ErrorFieldModel } from '../model/error-field.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ImportContactsService {
   constructor(private _http: HttpClient) {}
@@ -38,7 +38,7 @@ export class ImportContactsService {
     return this._http
       .get('assets/mock-data/import-contacts/validation_errors.json', {
         headers: httpOptions,
-        params
+        params,
       })
       .pipe(
         map((res: any) => {
@@ -54,7 +54,7 @@ export class ImportContactsService {
   private _mapAllErrorsFromServerFields(serverData: any): Array<ErrorContactModel> {
     const modelArray: Array<ErrorContactModel> = [];
     if (!serverData || !Array.isArray(serverData)) {
-      return null;
+      return [];
     }
     for (const row of serverData) {
       const model = this._mapErrorFromServerFields(row);
@@ -65,7 +65,7 @@ export class ImportContactsService {
 
   private _mapErrorFromServerFields(row: any): ErrorContactModel {
     if (!row) {
-      return null;
+      return new ErrorContactModel();
     }
     const model = new ErrorContactModel();
     model.id = this._mapErrorField(row.contact_id);

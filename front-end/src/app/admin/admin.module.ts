@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ManageUserComponent } from './manage-user/manage-user.component';
-import {ReactiveFormsModule} from '@angular/forms';
-import {SortableColumnComponent} from './manage-user/sortable-column/sortable-column.componenet';
-import {SortableTableDirective} from './manage-user/sortable-table/sortable-table.directive';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SortableColumnComponent } from './manage-user/sortable-column/sortable-column.componenet';
+import { SortableTableDirective } from './manage-user/sortable-table/sortable-table.directive';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule],
   declarations: [ManageUserComponent, SortableColumnComponent, SortableTableDirective],
-  exports: [ManageUserComponent, ]
+  exports: [ManageUserComponent],
 })
-export class AdminModule { }
+export class AdminModule {}

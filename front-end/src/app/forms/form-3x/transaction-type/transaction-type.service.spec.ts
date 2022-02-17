@@ -2,14 +2,14 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { TransactionTypeService } from './transaction-type.service';
 
-describe('TransactionTypeService', () => {
+xdescribe('TransactionTypeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TransactionTypeService]
+      providers: [TransactionTypeService],
     });
   });
 
-  it('should be created', inject([TransactionTypeService], (service: TransactionTypeService) => {
+  xit('should be created', inject([TransactionTypeService], (service: TransactionTypeService) => {
     expect(service).toBeTruthy();
   }));
 });

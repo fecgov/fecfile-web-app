@@ -8,5 +8,5 @@ export enum ImportFileStatusEnum {
   failed = 'Failed',
   clean = 'Clean',
   importing = 'Importing',
-  complete = 'Complete'
+  complete = 'Complete',
 }
