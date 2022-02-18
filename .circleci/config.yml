@@ -39,6 +39,10 @@ jobs:
           command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --code-coverage --watch=false
           working_directory: ~/project/front-end/
 
+      - store_artifacts:
+          path: ~/project/front-end/coverage/front-end/lcov-report/
+          destination: coverage-report
+
       # Sonar cloud setup and scanning
       - run:
           name: Create sonar-scanner cache directory if it does not exist
@@ -71,7 +75,8 @@ jobs:
             SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
       - save_cache:
           key: v1-sonarcloud-scanner-4.6.2.2472
-          paths: /tmp/cache/scanner
+          paths:
+            - /tmp/cache/scanner
 
 
   # The unit-tests in the "test" job above are setup so they don't stop the job - there is an || echo "..." after the
