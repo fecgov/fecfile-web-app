@@ -78,27 +78,6 @@ jobs:
           paths:
             - /tmp/cache/scanner
 
-
-  # The unit-tests in the "test" job above are setup so they don't stop the job - there is an || echo "..." after the
-  # execution. Once we have unit tests working, we can remove that "|| echo"  and allow the test job to fail
-  # and remove this independent job.  Until then, I am keeping this job here to prevent the possibility of
-  # missing failed unit tests.
-  backup-unit-test:
-    docker:
-      - image: cimg/node:14.18-browsers
-    steps:
-      - checkout
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-      #install-packages documentation: https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
-      - node/install-packages:
-          override-ci-command: npm install
-          app-dir: ~/project/front-end/
-      - run:
-          name: run unit tests
-          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng test --watch=false
-          working_directory: ~/project/front-end/
-
   e2e-test:
     docker:
       - image: cimg/node:14.18-browsers
@@ -208,9 +187,10 @@ workflows:
   test:
     jobs:
       - test
-      # - backup-unit-test
-      - deploy
-#      - e2e-test
       - dependendency-check
+      - deploy
+          requires:
+            - test
+            - dependendency-check
 
 
