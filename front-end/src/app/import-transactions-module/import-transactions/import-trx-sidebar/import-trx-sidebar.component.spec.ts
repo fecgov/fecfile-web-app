@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ImportTrxSidebarComponent } from './import-trx-sidebar.component';
 
-describe('ImportTrxSidebarComponent', () => {
+xdescribe('ImportTrxSidebarComponent', () => {
   let component: ImportTrxSidebarComponent;
   let fixture: ComponentFixture<ImportTrxSidebarComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ImportTrxSidebarComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ImportTrxSidebarComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ImportTrxSidebarComponent);
@@ -19,7 +20,7 @@ describe('ImportTrxSidebarComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

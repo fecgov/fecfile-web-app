@@ -5,24 +5,20 @@ import { CookieService } from 'ngx-cookie-service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormsComponent } from './forms.component';
 
-describe('FormsComponent', () => {
+xdescribe('FormsComponent', () => {
   let component: FormsComponent;
   let fixture: ComponentFixture<FormsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule
-      ],
-      declarations: [ FormsComponent ],
-      providers: [CookieService],
-      schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-      ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        imports: [RouterTestingModule, HttpClientTestingModule],
+        declarations: [FormsComponent],
+        providers: [CookieService],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormsComponent);
@@ -30,7 +26,7 @@ describe('FormsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

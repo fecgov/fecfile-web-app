@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ImportTrxHowToComponent } from './import-trx-how-to.component';
 
-describe('ImportTrxHowToComponent', () => {
+xdescribe('ImportTrxHowToComponent', () => {
   let component: ImportTrxHowToComponent;
   let fixture: ComponentFixture<ImportTrxHowToComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ImportTrxHowToComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ImportTrxHowToComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ImportTrxHowToComponent);
@@ -19,7 +20,7 @@ describe('ImportTrxHowToComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

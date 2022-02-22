@@ -38,7 +38,7 @@ export const AppRoutes: Routes = [
   {
     path: '',
     component: LoginComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   { path: 'register', component: RegisterComponent, pathMatch: 'full' },
   { path: 'enterSecCode', component: ConfirmTwoFactorComponent, pathMatch: 'full' },
@@ -64,9 +64,9 @@ export const AppRoutes: Routes = [
             component: ReportdetailsComponent,
             pathMatch: 'full',
             canActivate: [CanActivateGuard],
-            canDeactivate: [CanDeactivateGuardService]
-          } /*  */
-        ]
+            canDeactivate: [CanDeactivateGuardService],
+          } /*  */,
+        ],
       },
       { path: 'account', component: AccountComponent, pathMatch: 'full', canActivate: [CanActivateGuard] },
       {
@@ -75,8 +75,8 @@ export const AppRoutes: Routes = [
         pathMatch: 'full',
         canActivate: [CanActivateGuard],
         data: {
-          role: [Roles.CommitteeAdmin, Roles.Admin, Roles.Editor]
-        }
+          role: [Roles.CommitteeAdmin, Roles.Admin, Roles.Editor],
+        },
       },
       {
         path: 'tools_import_names',
@@ -84,14 +84,14 @@ export const AppRoutes: Routes = [
         pathMatch: 'full',
         canActivate: [CanActivateGuard],
         data: {
-          role: [Roles.CommitteeAdmin, Roles.Admin, Roles.Editor]
-        }
+          role: [Roles.CommitteeAdmin, Roles.Admin, Roles.Editor],
+        },
       },
       {
         path: 'tools_export_names',
         component: ToolsExportNamesComponent,
         pathMatch: 'full',
-        canActivate: [CanActivateGuard]
+        canActivate: [CanActivateGuard],
       },
       {
         path: 'tools_merge_names',
@@ -99,42 +99,44 @@ export const AppRoutes: Routes = [
         pathMatch: 'full',
         canActivate: [CanActivateGuard],
         data: {
-          role: [Roles.CommitteeAdmin, Roles.Admin, Roles.Editor]
-        }
+          role: [Roles.CommitteeAdmin, Roles.Admin, Roles.Editor],
+        },
       },
       {
         path: 'tools_create_backup',
         component: ToolsCreateBackupComponent,
         pathMatch: 'full',
-        canActivate: [CanActivateGuard]
+        canActivate: [CanActivateGuard],
       },
       { path: 'users', component: UsersComponent, pathMatch: 'full', canActivate: [CanActivateGuard] },
       { path: 'settings', component: SettingsComponent, pathMatch: 'full', canActivate: [CanActivateGuard] },
       { path: 'contacts', component: ContactsComponent, pathMatch: 'full', canActivate: [CanActivateGuard] },
       {
         path: 'forms/form/1M',
-        loadChildren: () => import('src/app/f1m-module/f1m/f1m.module').then(m => m.F1mModule)
+        loadChildren: () => import('./f1m-module/f1m/f1m.module').then((m) => m.F1mModule),
       },
       {
         path: 'import-contacts',
-        loadChildren: () => import('src/app/import-contacts-module/import-contacts.module').then(m => m.ImportContactsModule),
+        loadChildren: () =>
+          import('./import-contacts-module/import-contacts.module').then((m) => m.ImportContactsModule),
         data: {
-          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin, Roles.Editor]
-        }
+          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin, Roles.Editor],
+        },
       },
       {
         path: 'import-fecfile',
-        loadChildren: () => import('src/app/import-fecfile-module/import-fecfile.module').then(m => m.ImportFecFile1Module),
+        loadChildren: () => import('./import-fecfile-module/import-fecfile.module').then((m) => m.ImportFecFile1Module),
         data: {
-          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin, Roles.Editor, Roles.Reviewer]
-        }
+          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin, Roles.Editor, Roles.Reviewer],
+        },
       },
       {
         path: 'import-transactions',
-        loadChildren: () => import('src/app/import-transactions-module/import-transactions.module').then(m => m.ImportTransactionsModule),
+        loadChildren: () =>
+          import('./import-transactions-module/import-transactions.module').then((m) => m.ImportTransactionsModule),
         data: {
-          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin, Roles.Editor]
-        }
+          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin, Roles.Editor],
+        },
       },
       {
         path: 'addContact',
@@ -143,8 +145,8 @@ export const AppRoutes: Routes = [
         canActivate: [CanActivateGuard],
         canDeactivate: [CanDeactivateGuardService],
         data: {
-          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin, Roles.Editor]
-        }
+          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin, Roles.Editor],
+        },
       },
       {
         path: 'forms/form/:form_id',
@@ -159,9 +161,9 @@ export const AppRoutes: Routes = [
             component: FormsComponent,
             pathMatch: 'full',
             canActivate: [CanActivateGuard],
-            canDeactivate: [CanDeactivateGuardService]
-          }
-        ]
+            canDeactivate: [CanDeactivateGuardService],
+          },
+        ],
       },
 
       {
@@ -171,8 +173,8 @@ export const AppRoutes: Routes = [
         canActivate: [CanActivateGuard],
         canDeactivate: [CanDeactivateGuardService],
         data: {
-          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin]
-        }
+          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin],
+        },
       },
       {
         path: 'submitform/:form_id',
@@ -180,8 +182,8 @@ export const AppRoutes: Routes = [
         pathMatch: 'full',
         canActivate: [CanActivateGuard],
         data: {
-          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin]
-        }
+          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin],
+        },
       },
       {
         path: 'forms/form/edit/:form_id/:report_id',
@@ -190,8 +192,8 @@ export const AppRoutes: Routes = [
         canActivate: [CanActivateGuard],
         canDeactivate: [CanDeactivateGuardService],
         data: {
-          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin]
-        }
+          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin, Roles.Admin],
+        },
       },
       { path: 'help', component: HelpComponent, pathMatch: 'full', canActivate: [CanActivateGuard] },
       { path: 'notifications', redirectTo: 'notifications/', pathMatch: 'full' },
@@ -206,9 +208,9 @@ export const AppRoutes: Routes = [
             component: NotificationdetailsComponent,
             pathMatch: 'full',
             canActivate: [CanActivateGuard],
-            canDeactivate: [CanDeactivateGuardService]
-          }
-        ]
+            canDeactivate: [CanDeactivateGuardService],
+          },
+        ],
       },
       {
         path: 'manage_users',
@@ -217,17 +219,17 @@ export const AppRoutes: Routes = [
         canActivate: [CanActivateGuard],
         canDeactivate: [CanDeactivateGuardService],
         data: {
-          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin]
-        }
-      }
-    ]
+          role: [Roles.CommitteeAdmin, Roles.BackupCommitteeAdmin],
+        },
+      },
+    ],
   },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];
 
 export const routing = RouterModule.forRoot(AppRoutes, {
-    useHash: true,
-    enableTracing: false,
-    onSameUrlNavigation: 'reload',
-    relativeLinkResolution: 'legacy'
+  useHash: true,
+  enableTracing: false,
+  onSameUrlNavigation: 'reload',
+  relativeLinkResolution: 'legacy',
 });

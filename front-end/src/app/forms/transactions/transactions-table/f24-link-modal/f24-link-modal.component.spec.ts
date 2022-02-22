@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { F24LinkModalComponent } from './f24-link-modal.component';
 
-describe('F24LinkModalComponent', () => {
+xdescribe('F24LinkModalComponent', () => {
   let component: F24LinkModalComponent;
   let fixture: ComponentFixture<F24LinkModalComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ F24LinkModalComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [F24LinkModalComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(F24LinkModalComponent);
@@ -19,7 +20,7 @@ describe('F24LinkModalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

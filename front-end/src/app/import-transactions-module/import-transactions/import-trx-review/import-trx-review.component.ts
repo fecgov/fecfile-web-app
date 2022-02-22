@@ -2,13 +2,13 @@ import { Component, OnInit, Input, OnDestroy, Output, EventEmitter, OnChanges, S
 import { S3 } from 'aws-sdk/clients/all';
 import {
   ConfirmModalComponent,
-  ModalHeaderClassEnum
-} from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
+  ModalHeaderClassEnum,
+} from '../../../shared/partials/confirm-modal/confirm-modal.component';
 import { timer, Subject, throwError } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UploadTrxService } from '../import-trx-upload/service/upload-trx.service';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import CryptoJS from 'crypto-js';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
+import * as CryptoJS from 'crypto-js';
 import { UploadFileModel } from '../model/upload-file.model';
 import { ImportFileStatusEnum } from '../import-file-status.enum';
 import { ImportTransactionsService } from '../service/import-transactions.service';
@@ -18,29 +18,29 @@ import { UploadCompleteMessageComponent } from './upload-complete-message/upload
 @Component({
   selector: 'app-import-trx-review',
   templateUrl: './import-trx-review.component.html',
-  styleUrls: ['./import-trx-review.component.scss']
+  styleUrls: ['./import-trx-review.component.scss'],
 })
 export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
   @Input()
-  public uploadFile: UploadFileModel;
+  public uploadFile!: UploadFileModel;
 
   @Input()
-  public forceChangeDetection: Date;
+  public forceChangeDetection!: Date;
 
   @Output()
   public resultsEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public progressPercent: number;
-  public uploadingText: string;
-  public hasDupeFile: boolean;
-  public duplicateFileList: Array<any>;
-  public startUpload: boolean;
-  public showSpinner: boolean;
+  public progressPercent!: number;
+  public uploadingText!: string;
+  public hasDupeFile!: boolean;
+  public duplicateFileList!: Array<any>;
+  public startUpload!: boolean;
+  public showSpinner!: boolean;
 
-  private onDestroy$: Subject<any>;
-  private uploadProcessing$: Subject<any>;
-  // private checkSum: string;
-  private committeeId: string;
+  private onDestroy$!: Subject<any>;
+  private uploadProcessing$!: Subject<any>;
+  // private checkSum!: string;
+  private committeeId!: string;
 
   constructor(
     private _dialogService: DialogService,
@@ -49,9 +49,9 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
   ) {}
 
   ngOnInit() {
-    this.committeeId = null;
+    this.committeeId = '';
     if (localStorage.getItem('committee_details') !== null) {
-      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       this.committeeId = cmteDetails.committeeid;
     }
     this._startReview();
@@ -68,10 +68,10 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes.forceChangeDetection !== undefined) {
+    if (changes['forceChangeDetection'] !== undefined) {
       if (
-        changes.forceChangeDetection.currentValue !== changes.forceChangeDetection.previousValue &&
-        changes.forceChangeDetection.firstChange === false
+        changes['forceChangeDetection'].currentValue !== changes['forceChangeDetection'].previousValue &&
+        changes['forceChangeDetection'].firstChange === false
       ) {
         this.ngOnInit();
       }
@@ -92,7 +92,7 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
   public cancelImport() {
     this.resultsEmitter.emit({
       resultType: 'cancel-file',
-      file: this.uploadFile
+      file: this.uploadFile,
     });
   }
 
@@ -103,11 +103,11 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
       // TODO call API to gen md5 checksum and check for duplicates
     } else {
       const fileReader = new FileReader();
-      fileReader.onload = e => {
+      fileReader.onload = (e) => {
         // tested with 1 GB ~.01s
         console.log('start MD5 = ' + new Date());
         const fileData = fileReader.result;
-        const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(fileData));
+        const hash = CryptoJS.MD5(CryptoJS.enc.Latin1.parse(String(fileData)));
         const md5 = hash.toString(CryptoJS.enc.Hex);
         this.uploadFile.checkSum = md5;
         console.log('end MD5 = ' + new Date());
@@ -140,7 +140,7 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
       //     'Please check your file and ensure formatting is correct.';
       //   this._dialogService
       //     .confirm(message, ConfirmModalComponent, 'Import Failed!', false, ModalHeaderClassEnum.errorHeader)
-      //     .then(res => {
+      //     .then((res: any) => {
       //       this.resultsEmitter.emit({
       //         resultType: 'validation-error',
       //         uploadFile: this.uploadFile
@@ -168,9 +168,9 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
   private _readFileForScheduleType() {
     // read the first record to get sched type
     const fileReader = new FileReader();
-    fileReader.onload = e => {
+    fileReader.onload = (e) => {
       const chunkData = fileReader.result;
-      const lines = chunkData.toString().split('\n', 2);
+      const lines = chunkData?.toString().split('\n', 2);
       if (!lines) {
         console.error(new Error('no data in first 2 lines'));
         return;
@@ -234,10 +234,10 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
           'Please check your file and ensure formatting is correct.';
         this._dialogService
           .confirm(message, ConfirmModalComponent, 'Import Failed!', false, ModalHeaderClassEnum.errorHeader)
-          .then(res => {
+          .then((res: any) => {
             this.resultsEmitter.emit({
               resultType: 'validation-error',
-              uploadFile: this.uploadFile
+              uploadFile: this.uploadFile,
             });
           });
       } else {
@@ -245,7 +245,7 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
           if (resp === 'continue') {
             this.resultsEmitter.emit({
               resultType: 'success',
-              uploadFile: this.uploadFile
+              uploadFile: this.uploadFile,
             });
             // this._importTransactionsService.generateContactCsv(this.uploadFile).subscribe((res: any) => {
             //   this._importTransactionsService.processContactCsv(this.uploadFile).subscribe((res: any) => {
@@ -263,8 +263,8 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
    * @param scheduleType code for the schedule
    */
   private _formatScheduleName(scheduleType: string): string {
-    let scheduleName: string = null;
-    let schedCode: string = null;
+    let scheduleName: string = '';
+    let schedCode: string = '';
     if (scheduleType) {
       if (scheduleType.length > 1) {
         schedCode = scheduleType.substring(0, 2);
@@ -272,7 +272,7 @@ export class ImportTrxReviewComponent implements OnInit, OnDestroy, OnChanges {
     }
     if (!schedCode) {
       throwError('invalid schedule name of ' + scheduleType);
-      return;
+      return '';
     }
     // SA - ScheduleA
     // SB - ScheduleB

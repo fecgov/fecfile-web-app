@@ -13,19 +13,16 @@
       padding-bottom: 15px;
 
       input[type='text'],
-          input[type='date'],
-          input[type='number']
-          input[type='email']
-           {
-            &.form-control {
-              height: 30px;
-              padding-left: 5px;
-              padding-right: 5px;
-              padding-top: 1px;
-              padding-bottom: 1px;
-            }
-            
-          }
+      input[type='date'],
+      input[type='number'] input[type='email'] {
+        &.form-control {
+          height: 30px;
+          padding-left: 5px;
+          padding-right: 5px;
+          padding-top: 1px;
+          padding-bottom: 1px;
+        }
+      }
     }
 
     input[type='email'] {
@@ -33,14 +30,13 @@
     }
   }
 
-
   header {
     .header-container {
       display: block;
       width: 100%;
       border-bottom: 1px solid $bombay;
-      padding-bottom: .50em;
-      padding-top: .50em;
+      padding-bottom: 0.5em;
+      padding-top: 0.5em;
       margin-bottom: 1em;
       .header__text {
         display: block;
@@ -54,11 +50,11 @@
         @include media(mediumDesktop) {
           float: left;
           width: 40%;
-        }         
+        }
         @include media(largeDesktop) {
           float: left;
           width: 40%;
-        }         
+        }
       }
       .header__btns {
         float: right;
@@ -66,7 +62,7 @@
           display: block;
           float: right;
           padding-top: 0;
-        }         
+        }
         .btn-print-preview {
           @extend .btn-secondary-gray;
           margin-right: 5px;
@@ -94,10 +90,10 @@
           }
           @include media(mediumDesktop) {
             display: none;
-          }         
+          }
           @include media(largeDesktop) {
             display: none;
-          }           
+          }
         }
         background-color: $bombay;
         display: none;
@@ -109,15 +105,15 @@
           display: none;
           height: 80px;
           margin-top: 10px;
-          width: 100%;        
+          width: 100%;
         }
         @include media(mediumDesktop) {
           display: none;
-        }         
+        }
         @include media(largeDesktop) {
           display: none;
-        }         
-      }      
+        }
+      }
       form {
         .form1-link {
           color: $dodgerBlue;
@@ -137,8 +133,6 @@
           .error {
             margin-top: 5px;
           }
-        }
-        footer {
         }
       }
       .tooltip-inner {

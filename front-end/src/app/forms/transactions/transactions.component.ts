@@ -1,12 +1,12 @@
-import { UtilService } from 'src/app/shared/utils/util.service';
+import { UtilService } from '../../shared/utils/util.service';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
-import { ReportsService } from 'src/app/reports/service/report.service';
-import { ModalHeaderClassEnum } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import { MessageService } from 'src/app/shared/services/MessageService/message.service';
+import { Subscription } from 'rxjs';
+import { ReportsService } from '../../reports/service/report.service';
+import { ModalHeaderClassEnum } from '../../shared/partials/confirm-modal/confirm-modal.component';
+import { DialogService } from '../../shared/services/DialogService/dialog.service';
+import { MessageService } from '../../shared/services/MessageService/message.service';
 import { ReportTypeService } from '../../forms/form-3x/report-type/report-type.service';
 import { TransactionTypeService } from '../../forms/form-3x/transaction-type/transaction-type.service';
 import { ConfirmModalComponent } from '../../shared/partials/confirm-modal/confirm-modal.component';
@@ -21,7 +21,7 @@ import { TransactionsMessageService } from './service/transactions-message.servi
 export enum ActiveView {
   transactions = 'transactions',
   recycleBin = 'recycleBin',
-  edit = 'edit'
+  edit = 'edit',
 }
 
 /**
@@ -45,7 +45,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   public formType = '';
   public reportId = '0';
-  public routeData: any;
+  public routeData!: any;
   public previousReportId = '0';
   public view: ActiveView = ActiveView.transactions;
   public transactionsView = ActiveView.transactions;
@@ -53,22 +53,22 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public editView = ActiveView.edit;
   public isShowFilters = false;
   public searchText = '';
-  public searchTextArray = [];
-  public tagArray: any = [];
-  public transactionCategories: any = [];
+  public searchTextArray: any[] = [];
+  public tagArray: any[] = [];
+  public transactionCategories: any[] = [];
   public showEditTransaction = false;
 
-  public searchInputClass:string = '';
+  public searchInputClass: string = '';
 
   public currentStep: string = 'step_1';
   public step: string = '';
   public steps: any = {};
-  public frm: any;
-  public direction: string;
+  public frm!: any;
+  public direction!: string;
   public previousStep: string = '';
-  public parentTransactionCategories: any = [];
+  public parentTransactionCategories: any[] = [];
   public reportsLoading: boolean = true;
-  public reportTypes: any = [];
+  public reportTypes: any[] = [];
   public reportTypeIndicator: any = {};
   public reportType: any = null;
   public selectedReportType: any = {};
@@ -88,36 +88,36 @@ export class TransactionsComponent implements OnInit, OnDestroy {
    * Subscription for applying filters to the transactions obtained from
    * the server.
    */
-  private applyFiltersSubscription: Subscription;
+  private applyFiltersSubscription!: Subscription;
 
   /**
    * Subscription for showing the TransactionsEditComponent.
    */
-  private editTransactionSubscription: Subscription;
+  private editTransactionSubscription!: Subscription;
 
   /**
    * Subscription for transactions to return to Debt Summary
    */
-  private editDebtSummaryTransactionSubscription: Subscription;
-  
-  private removeFiltersSubscription: Subscription;
+  private editDebtSummaryTransactionSubscription!: Subscription;
+
+  private removeFiltersSubscription!: Subscription;
 
   /**
    * Subscription for showing all Transactions.
    */
-  private showTransactionsSubscription: Subscription;
+  private showTransactionsSubscription!: Subscription;
 
-  public transactionToEdit: TransactionModel;
+  public transactionToEdit!: TransactionModel;
 
   private filters: TransactionFilterModel = new TransactionFilterModel();
   private readonly filtersLSK = 'transactions.filters';
-  removeTagsSubscription: any;
+  removeTagsSubscription!: any;
 
-  private viewTransactionSubscription: Subscription;
-  private getReattributeTransactionSubscription: Subscription;
-  private getRedesignateTransactionSubscription: Subscription;
-  activatedRouteSubscription: Subscription;
-  getMessageSubscription: Subscription;
+  private viewTransactionSubscription!: Subscription;
+  private getReattributeTransactionSubscription!: Subscription;
+  private getRedesignateTransactionSubscription!: Subscription;
+  activatedRouteSubscription!: Subscription;
+  getMessageSubscription!: Subscription;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -130,11 +130,10 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     private _receiptService: IndividualReceiptService,
     private _messageService: MessageService,
     private _dialogService: DialogService,
-    private _reportsService: ReportsService, 
+    private _reportsService: ReportsService,
     private _utilService: UtilService
   ) {
-
-    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
+    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
     this.applyFiltersSubscription = this._transactionsMessageService
       .getApplyFiltersMessage()
       .subscribe((message: any) => {
@@ -147,10 +146,9 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.removeTagsSubscription = this._transactionsMessageService.getRemoveTagMessage()
-      .subscribe((message: any) => {
-        this.removeTagArrayItem(message.type);
-      });
+    this.removeTagsSubscription = this._transactionsMessageService.getRemoveTagMessage().subscribe((message: any) => {
+      this.removeTagArrayItem(message.type);
+    });
 
     this.editTransactionSubscription = this._transactionsMessageService
       .getEditTransactionMessage()
@@ -161,20 +159,20 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       });
 
     this.getReattributeTransactionSubscription = this._transactionsMessageService
-    .getReattributeTransactionMessage()
-    .subscribe((trx: TransactionModel) => {
-      this.transactionToEdit = trx;
-      //console.log(trx.transactionTypeIdentifier + 'identifier for edit');
-      this.showReattribute();
-    });
+      .getReattributeTransactionMessage()
+      .subscribe((trx: TransactionModel) => {
+        this.transactionToEdit = trx;
+        //console.log(trx.transactionTypeIdentifier + 'identifier for edit');
+        this.showReattribute();
+      });
 
     this.getRedesignateTransactionSubscription = this._transactionsMessageService
-    .getRedesignateTransactionMessage()
-    .subscribe((trx: TransactionModel) => {
-      this.transactionToEdit = trx;
-      //console.log(trx.transactionTypeIdentifier + 'identifier for edit');
-      this.showRedesignate();
-    });
+      .getRedesignateTransactionMessage()
+      .subscribe((trx: TransactionModel) => {
+        this.transactionToEdit = trx;
+        //console.log(trx.transactionTypeIdentifier + 'identifier for edit');
+        this.showRedesignate();
+      });
 
     this.editDebtSummaryTransactionSubscription = this._transactionsMessageService
       .getEditDebtSummaryTransactionMessage()
@@ -185,14 +183,16 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
     this.showTransactionsSubscription = this._transactionsMessageService
       .getShowTransactionsMessage()
-      .subscribe(message => {
+      .subscribe((message) => {
         this.showTransactions();
       });
 
-      this.activatedRouteSubscription = _activatedRoute.queryParams.subscribe(p => {
-        this.transactionCategory = this._utilService.convertTransactionCategoryByForm(p.transactionCategory,this.formType);
-        
-      });
+    this.activatedRouteSubscription = _activatedRoute.queryParams['subscribe']((p) => {
+      this.transactionCategory = this._utilService.convertTransactionCategoryByForm(
+        p['transactionCategory'],
+        this.formType
+      );
+    });
 
     this.viewTransactionSubscription = this._transactionsMessageService
       .getViewTransactionMessage()
@@ -201,13 +201,12 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         this.showView();
       });
 
-    this.getMessageSubscription = this._messageService.getMessage().subscribe(message => {
-        if(message && message.action === 'clearGlobalAllTransactionsFlag'){
-          this.allTransactions = false;
-        }
-        
-      }); 
-    }
+    this.getMessageSubscription = this._messageService.getMessage().subscribe((message) => {
+      if (message && message.action === 'clearGlobalAllTransactionsFlag') {
+        this.allTransactions = false;
+      }
+    });
+  }
 
   private removeFilterAndTag(message: any) {
     if (message.filterName === 'deletedDate') {
@@ -220,17 +219,16 @@ export class TransactionsComponent implements OnInit, OnDestroy {
    */
   public ngOnInit(): void {
     this.showEditTransaction = false;
-    if(this._activatedRoute.snapshot.queryParams.searchTransactions){
+    if (this._activatedRoute.snapshot.queryParams['searchTransactions']) {
       this.searchInputClass = 'searchHighlight';
-    }
-    else{
+    } else {
       this.searchInputClass = '';
     }
     // this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    this.reportId = this._activatedRoute.snapshot.paramMap.get('report_id');
+    this.reportId = this._activatedRoute.snapshot.paramMap.get('report_id') ?? '';
     const reportIdRoute = this._activatedRoute.snapshot.paramMap.get('report_id');
-    this._step = this._activatedRoute.snapshot.paramMap.get('step');
-    this.allTransactions = this._activatedRoute.snapshot.queryParams.allTransactions;
+    this._step = this._activatedRoute.snapshot.paramMap.get('step') ?? '';
+    this.allTransactions = this._activatedRoute.snapshot.queryParams['allTransactions'];
 
     //console.log('TransactionsComponent this._step', this._step);
     this.routeData = { accessedByRoute: true, formType: this.formType, reportId: reportIdRoute };
@@ -239,7 +237,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
     localStorage.removeItem(`form_${this.formType}_view_transaction_screen`);
 
-    this._transactionTypeService.getTransactionCategories("F"+this.formType).subscribe(res => {
+    this._transactionTypeService.getTransactionCategories('F' + this.formType).subscribe((res: any) => {
       if (res) {
         this.transactionCategories = res.data.transactionCategories;
 
@@ -266,11 +264,10 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     if (filters.show === true) {
       this.showFilters();
     }
-
   }
 
   public ngDoCheck(): void {
-    this.reportId = this._activatedRoute.snapshot.queryParams.reportId;
+    this.reportId = this._activatedRoute.snapshot.queryParams['reportId'];
     if (!this.reportId) {
       return;
     }
@@ -281,10 +278,10 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       return;
     }
     this.previousReportId = this.reportId;
-    this._receiptService.getSchedule(this._formType, { report_id: this.reportId }).subscribe(resp => {
+    this._receiptService.getSchedule(this._formType, { report_id: this.reportId }).subscribe((resp) => {
       const message: any = {
         formType: this.formType,
-        totals: resp
+        totals: resp,
       };
 
       this._messageService.sendMessage(message);
@@ -312,7 +309,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
 
   public goToPreviousStep(): void {
     this._router.navigate([`/forms/form/${this.formType}`], {
-      queryParams: { step: 'step_3' }
+      queryParams: { step: 'step_3' },
     });
   }
 
@@ -355,7 +352,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       const dateGroup = [];
       dateGroup.push({
         filterDateFrom: filters.filterDateFrom,
-        filterDateTo: filters.filterDateTo
+        filterDateTo: filters.filterDateTo,
       });
       // is tag showing? Then modify it is the curr position
       let dateTag = false;
@@ -375,7 +372,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       const dateGroup = [];
       dateGroup.push({
         filterDeletedDateFrom: filters.filterDeletedDateFrom,
-        filterDeletedDateTo: filters.filterDeletedDateTo
+        filterDeletedDateTo: filters.filterDeletedDateTo,
       });
       // is tag showing? Then modify it is the curr position
       let deletedDateTag = false;
@@ -395,7 +392,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       const amountGroup = [];
       amountGroup.push({
         filterAmountMin: filters.filterAmountMin,
-        filterAmountMax: filters.filterAmountMax
+        filterAmountMax: filters.filterAmountMax,
       });
       let amtTag = false;
       for (const tag of this.tagArray) {
@@ -410,11 +407,14 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     }
 
     // Aggregate Amount
-    if (this._isNotNullorUndefined(filters.filterAggregateAmountMin) && this._isNotNullorUndefined(filters.filterAggregateAmountMax)) {
+    if (
+      this._isNotNullorUndefined(filters.filterAggregateAmountMin) &&
+      this._isNotNullorUndefined(filters.filterAggregateAmountMax)
+    ) {
       const amountGroup = [];
       amountGroup.push({
         filterAggregateAmountMin: filters.filterAggregateAmountMin,
-        filterAggregateAmountMax: filters.filterAggregateAmountMax
+        filterAggregateAmountMax: filters.filterAggregateAmountMax,
       });
       let amtTag = false;
       for (const tag of this.tagArray) {
@@ -429,11 +429,14 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     }
 
     // Loan Amount
-    if (this._isNotNullorUndefined(filters.filterLoanAmountMin) && this._isNotNullorUndefined(filters.filterLoanAmountMax)) {
+    if (
+      this._isNotNullorUndefined(filters.filterLoanAmountMin) &&
+      this._isNotNullorUndefined(filters.filterLoanAmountMax)
+    ) {
       const amountGroup = [];
       amountGroup.push({
         filterLoanAmountMin: filters.filterLoanAmountMin,
-        filterLoanAmountMax: filters.filterLoanAmountMax
+        filterLoanAmountMax: filters.filterLoanAmountMax,
       });
       let amtTag = false;
       for (const tag of this.tagArray) {
@@ -448,11 +451,14 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     }
 
     // Closing loan balance
-    if (this._isNotNullorUndefined(filters.filterLoanClosingBalanceMin) && this._isNotNullorUndefined(filters.filterLoanClosingBalanceMax)) {
+    if (
+      this._isNotNullorUndefined(filters.filterLoanClosingBalanceMin) &&
+      this._isNotNullorUndefined(filters.filterLoanClosingBalanceMax)
+    ) {
       const amountGroup = [];
       amountGroup.push({
         filterLoanClosingBalanceMin: filters.filterLoanClosingBalanceMin,
-        filterLoanClosingBalanceMax: filters.filterLoanClosingBalanceMax
+        filterLoanClosingBalanceMax: filters.filterLoanClosingBalanceMax,
       });
       let amtTag = false;
       for (const tag of this.tagArray) {
@@ -577,7 +583,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       const filterYearGroup = [];
       filterYearGroup.push({
         filterElectionYearFrom: filters.filterElectionYearFrom,
-        filterElectionYearTo: filters.filterElectionYearTo
+        filterElectionYearTo: filters.filterElectionYearTo,
       });
       let filterYearTag = false;
       for (const tag of this.tagArray) {
@@ -617,7 +623,6 @@ export class TransactionsComponent implements OnInit, OnDestroy {
    * Search transactions.
    */
   public search() {
-
     this.searchInputClass = '';
     // Don't allow more than 12 filters
     if (this.searchTextArray.length > 12) {
@@ -691,36 +696,36 @@ export class TransactionsComponent implements OnInit, OnDestroy {
    * Remove the Date filter tag and inform the filter component to clear it.
    */
   public removeDateFilter() {
-    this.filters.filterDateFrom = null;
-    this.filters.filterDateTo = null;
-    this.removeFilter('date', null);
+    this.filters.filterDateFrom = new Date();
+    this.filters.filterDateTo = new Date();
+    this.removeFilter('date', '');
   }
 
   /**
    * Remove the Date filter tag and inform the filter component to clear it.
    */
   public removeDeletedDateFilter() {
-    this.filters.filterDeletedDateFrom = null;
-    this.filters.filterDeletedDateTo = null;
-    this.removeFilter('deletedDate', null);
+    this.filters.filterDeletedDateFrom = new Date();
+    this.filters.filterDeletedDateTo = new Date();
+    this.removeFilter('deletedDate', '');
   }
 
   /**
    * Remove the Amount filter tag and inform the filter component to clear it.
    */
   public removeAmountFilter() {
-    this.filters.filterAmountMin = null;
-    this.filters.filterAmountMax = null;
-    this.removeFilter(FilterTypes.amount, null);
+    this.filters.filterAmountMin = 0;
+    this.filters.filterAmountMax = 0;
+    this.removeFilter(FilterTypes.amount, '');
   }
 
   /**
    * Remove the Aggregate Amount filter tag and inform the filter component to clear it.
    */
   public removeAggregateAmountFilter() {
-    this.filters.filterAggregateAmountMin = null;
-    this.filters.filterAggregateAmountMax = null;
-    this.removeFilter(FilterTypes.aggregateAmount, null);
+    this.filters.filterAggregateAmountMin = 0;
+    this.filters.filterAggregateAmountMax = 0;
+    this.removeFilter(FilterTypes.aggregateAmount, '');
   }
 
   /**
@@ -729,21 +734,21 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   public removeLoanClosingBalanceFilter() {
     this.filters.filterLoanClosingBalanceMin = null;
     this.filters.filterLoanClosingBalanceMax = null;
-    this.removeFilter(FilterTypes.loanClosingBalance, null);
+    this.removeFilter(FilterTypes.loanClosingBalance, '');
   }
 
   /**
    * Remove the Loan Amount filter tag and inform the filter component to clear it.
    */
   public removeLoanAmountFilter() {
-    this.filters.filterLoanAmountMin = null;
-    this.filters.filterLoanAmountMax = null;
-    this.removeFilter(FilterTypes.loanAmount, null);
+    this.filters.filterLoanAmountMin = 0;
+    this.filters.filterLoanAmountMax = 0;
+    this.removeFilter(FilterTypes.loanAmount, '');
   }
 
   public removeMemoFilter() {
     this.filters.filterMemoCode = false;
-    this.removeFilter(FilterTypes.memoCode, null);
+    this.removeFilter(FilterTypes.memoCode, '');
   }
 
   /**
@@ -766,17 +771,17 @@ export class TransactionsComponent implements OnInit, OnDestroy {
    * Remove the election year filter tag and inform the filter component to clear it.
    */
   public removeElectionYearFilter() {
-    this.filters.filterElectionYearFrom = null;
-    this.filters.filterElectionYearTo = null;
-    this.removeFilter(FilterTypes.electionYear, null);
+    this.filters.filterElectionYearFrom = '';
+    this.filters.filterElectionYearTo = '';
+    this.removeFilter(FilterTypes.electionYear, '');
   }
 
   /**
    * Remove the schedule filter tag and inform the filter component to clear it.
    */
   public removeScheduleFilter() {
-    this.filters.filterSchedule = null;
-    this.removeFilter(FilterTypes.schedule, null);
+    this.filters.filterSchedule = '';
+    this.removeFilter(FilterTypes.schedule, '');
   }
 
   /**
@@ -813,9 +818,9 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         this.removeTagArrayItem(type);
         break;
       case FilterTypes.deletedDate:
-          this.removeDeletedDateFilter();
-          this.removeTagArrayItem(type);
-          break;
+        this.removeDeletedDateFilter();
+        this.removeTagArrayItem(type);
+        break;
       case FilterTypes.amount:
         this.removeAmountFilter();
         this.removeTagArrayItem(type);
@@ -857,7 +862,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         this.removeTagArrayItem(type);
         break;
       default:
-        //console.log('unexpected type received for remove tag');
+      //console.log('unexpected type received for remove tag');
     }
   }
 
@@ -962,8 +967,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       transactionCategory: this.transactionCategory,
       scheduleType: this.transactionToEdit.scheduleType,
       transactionDetail: {
-        transactionModel: this.transactionToEdit
-      }
+        transactionModel: this.transactionToEdit,
+      },
     };
     if (debtSummary) {
       if (debtSummary.returnToDebtSummary) {
@@ -976,7 +981,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     this.showCategories();
   }
 
-    /**
+  /**
    * Show redesignate for a single transaction.
    */
   public showRedesignate(debtSummary?: any) {
@@ -993,8 +998,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       transactionCategory: this.transactionCategory,
       scheduleType: this.transactionToEdit.scheduleType,
       transactionDetail: {
-        transactionModel: this.transactionToEdit
-      }
+        transactionModel: this.transactionToEdit,
+      },
     };
     this.showTransaction.emit(emitObj);
     this.showCategories();
@@ -1015,9 +1020,9 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       transactionCategory: this.transactionCategory,
       scheduleType: this.transactionToEdit.scheduleType,
       transactionDetail: {
-        transactionModel: this.transactionToEdit
+        transactionModel: this.transactionToEdit,
       },
-      formType: this.transactionToEdit.formType
+      formType: this.transactionToEdit.formType,
     };
     if (debtSummary) {
       if (debtSummary.returnToDebtSummary) {
@@ -1026,11 +1031,10 @@ export class TransactionsComponent implements OnInit, OnDestroy {
         emitObj.mainTransactionTypeText = 'Loans and Debts';
       }
     }
-    if(this.transactionToEdit.mirrorReportId && !this.transactionToEdit.cloned){ //cloned check is done because the modal is already shown for clone before this point.
-      this.handleMirrorTransactionIfApplicable(this.transactionToEdit,emitObj);
-    }
-    else{
-
+    if (this.transactionToEdit.mirrorReportId && !this.transactionToEdit.cloned) {
+      //cloned check is done because the modal is already shown for clone before this point.
+      this.handleMirrorTransactionIfApplicable(this.transactionToEdit, emitObj);
+    } else {
       this.showTransaction.emit(emitObj);
 
       this.showCategories();
@@ -1040,46 +1044,55 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   handleMirrorTransactionIfApplicable(transactionToEdit: TransactionModel, emitObj: any) {
     let dialogMsg = '';
     let mirrorFormType = '';
-    if(transactionToEdit.formType === 'F3X'){
+    if (transactionToEdit.formType === 'F3X') {
       dialogMsg = `Please note that this change will not automatcally reflect in the F24 report. You will have to make this change separately in F24.`;
       mirrorFormType = 'F24';
-    }
-    else if(transactionToEdit.formType === 'F24'){
+    } else if (transactionToEdit.formType === 'F24') {
       dialogMsg = `Please note that if you update this transaction it will be updated in Form F3X. Please acknowledge this change by clicking the OK button.`;
       mirrorFormType = 'F3X';
     }
 
     this._dialogService
-        .confirm(dialogMsg,ConfirmModalComponent, 'Warning!', true,ModalHeaderClassEnum.warningHeader,null,'Cancel')
-        .then(res => {
-          if (res === 'okay') {
-            //make sure modifying is permitted based on mirrorReportId !== Filed/Submitted
-            if(mirrorFormType === 'F3X'){
-              this._reportsService
+      .confirm(
+        dialogMsg,
+        ConfirmModalComponent,
+        'Warning!',
+        true,
+        ModalHeaderClassEnum.warningHeader,
+        new Map(),
+        'Cancel'
+      )
+      .then((res: any) => {
+        if (res === 'okay') {
+          //make sure modifying is permitted based on mirrorReportId !== Filed/Submitted
+          if (mirrorFormType === 'F3X') {
+            this._reportsService
               .getReportInfo(mirrorFormType, transactionToEdit.mirrorReportId)
               .subscribe((res: any) => {
-                if(res && res[0] && res[0].reportstatus === 'Submitted'){
+                if (res && res[0] && res[0].reportstatus === 'Submitted') {
                   this._dialogService
-                  .confirm('This transaction cannot be modified since the mirrored transaction in Form 3X is already filed. You will have to amend that report', ConfirmModalComponent, 'Error!', false)
-                  .then(res => {
-                    if (res === 'okay') {
-                    }
-                  });
-                }
-                else{
+                    .confirm(
+                      'This transaction cannot be modified since the mirrored transaction in Form 3X is already filed. You will have to amend that report',
+                      ConfirmModalComponent,
+                      'Error!',
+                      false
+                    )
+                    .then((res: any) => {
+                      if (res === 'okay') {
+                      }
+                    });
+                } else {
                   this.showTransaction.emit(emitObj);
                   this.showCategories();
                 }
               });
-            }
-            else{
-              this.showTransaction.emit(emitObj);
-              this.showCategories();
-            }
-            
-          } else if (res === 'cancel') {
+          } else {
+            this.showTransaction.emit(emitObj);
+            this.showCategories();
           }
-        });
+        } else if (res === 'cancel') {
+        }
+      });
   }
 
   /**
@@ -1149,14 +1162,13 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Returns true if a valid number, and if not a number returns true if not null or undefined. 
-   * @param input 
+   * Returns true if a valid number, and if not a number returns true if not null or undefined.
+   * @param input
    */
-  private _isNotNullorUndefined(input: any){
-    if(typeof input === "number"){
+  private _isNotNullorUndefined(input: any) {
+    if (typeof input === 'number') {
       return true;
-    }
-    else{
+    } else {
       return input !== null && input !== undefined;
     }
   }
@@ -1173,8 +1185,8 @@ export class TransactionsComponent implements OnInit, OnDestroy {
       transactionCategory: this.transactionCategory,
       scheduleType: this.transactionToEdit.scheduleType,
       transactionDetail: {
-        transactionModel: this.transactionToEdit
-      }
+        transactionModel: this.transactionToEdit,
+      },
     };
 
     this.showTransaction.emit(emitObj);

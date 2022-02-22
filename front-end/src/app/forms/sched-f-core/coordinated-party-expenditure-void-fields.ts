@@ -19,7 +19,7 @@ export class CoordinatedPartyExpenditureVoidFields {
               text: 'Entity Type',
               infoIcon: true,
               infoText:
-                  'CAN Candidate \\n\n           CCM Candidate Committee  \\n\n            COM Committee \\n\n            IND Individual (a person) \\n\n            ORG Organization (not a committee and not a person) \\n\n            PAC Political Action Committee\\n\n            PTY Party Organization',
+                'CAN Candidate \\n\n           CCM Candidate Committee  \\n\n            COM Committee \\n\n            IND Individual (a person) \\n\n            ORG Organization (not a committee and not a person) \\n\n            PAC Political Action Committee\\n\n            PTY Party Organization',
               name: 'entity_type',
               type: 'select',
               value: 'IND',
@@ -29,10 +29,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 3,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -60,8 +60,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 200,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -83,8 +83,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 30,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -106,8 +106,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 20,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -129,10 +129,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: false,
                 max: 20,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -160,8 +160,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: false,
                 max: 10,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -183,10 +183,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: false,
                 max: 10,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -214,8 +214,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 34,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -237,10 +237,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: false,
                 max: 34,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -268,8 +268,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 30,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -291,8 +291,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 2,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -314,10 +314,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 10,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -345,10 +345,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: null,
-                date: true
-              }
-            }
-          ]
+                date: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -376,8 +376,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 12,
-                dollarAmountNegative: true
-              }
+                dollarAmountNegative: true,
+              },
             },
             {
               preText: null,
@@ -399,8 +399,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 12,
-                dollarAmount: true
-              }
+                dollarAmount: true,
+              },
             },
             {
               preText: null,
@@ -422,10 +422,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: false,
                 max: 1,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -453,8 +453,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 100,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -476,10 +476,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: false,
                 max: 100,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -507,17 +507,17 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: false,
                 max: 9,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: true,
           childFormTitle: 'Candidate Information:',
           colClassName: 'col col-md-12 fieldset childForm',
           seperator: false,
-          cols: null
+          cols: null,
         },
         {
           childForm: false,
@@ -545,8 +545,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 30,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -568,8 +568,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 20,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -591,10 +591,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: false,
                 max: 20,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -622,8 +622,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: false,
                 max: 10,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -645,10 +645,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: false,
                 max: 10,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -676,10 +676,10 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 9,
-                alphaNumeric: true
-              }
-            }
-          ]
+                alphaNumeric: true,
+              },
+            },
+          ],
         },
         {
           childForm: false,
@@ -707,8 +707,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 38,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -730,8 +730,8 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 38,
-                alphaNumeric: true
-              }
+                alphaNumeric: true,
+              },
             },
             {
               preText: null,
@@ -753,299 +753,299 @@ export class CoordinatedPartyExpenditureVoidFields {
               validation: {
                 required: true,
                 max: 2,
-                alphaNumeric: true
-              }
-            }
-          ]
-        }
+                alphaNumeric: true,
+              },
+            },
+          ],
+        },
       ],
       hiddenFields: [
         {
           type: 'hidden',
           name: 'api_call',
-          value: '/sf/schedF'
+          value: '/sf/schedF',
         },
         {
           type: 'hidden',
           name: 'beneficiary_cand_entity_id',
-          value: null
+          value: null,
         },
         {
           type: 'hidden',
           name: 'line_number',
-          value: '24'
+          value: '24',
         },
         {
           type: 'hidden',
           name: 'transaction_id',
-          value: null
+          value: null,
         },
         {
           type: 'hidden',
           name: 'back_ref_transaction_id',
-          value: null
+          value: null,
         },
         {
           type: 'hidden',
           name: 'back_ref_sched_name',
-          value: null
+          value: null,
         },
         {
           type: 'hidden',
           name: 'transaction_type',
-          value: '24E'
+          value: '24E',
         },
         {
           type: 'hidden',
           name: 'transaction_type_identifier',
-          value: 'COEXP_PARTY_VOID'
-        }
+          value: 'COEXP_PARTY_VOID',
+        },
       ],
       states: [
         {
           name: 'Alabama',
-          code: 'AL'
+          code: 'AL',
         },
         {
           name: 'Alaska',
-          code: 'AK'
+          code: 'AK',
         },
         {
           name: 'Arizona',
-          code: 'AZ'
+          code: 'AZ',
         },
         {
           name: 'Arkansas',
-          code: 'AR'
+          code: 'AR',
         },
         {
           name: 'California',
-          code: 'CA'
+          code: 'CA',
         },
         {
           name: 'Colorado',
-          code: 'CO'
+          code: 'CO',
         },
         {
           name: 'Connecticut',
-          code: 'CT'
+          code: 'CT',
         },
         {
           name: 'Delaware',
-          code: 'DE'
+          code: 'DE',
         },
         {
           name: 'District Of Columbia',
-          code: 'DC'
+          code: 'DC',
         },
         {
           name: 'Florida',
-          code: 'FL'
+          code: 'FL',
         },
         {
           name: 'Georgia',
-          code: 'GA'
+          code: 'GA',
         },
         {
           name: 'Guam',
-          code: 'GU'
+          code: 'GU',
         },
         {
           name: 'Hawaii',
-          code: 'HI'
+          code: 'HI',
         },
         {
           name: 'Idaho',
-          code: 'ID'
+          code: 'ID',
         },
         {
           name: 'Illinois',
-          code: 'IL'
+          code: 'IL',
         },
         {
           name: 'Indiana',
-          code: 'IN'
+          code: 'IN',
         },
         {
           name: 'Iowa',
-          code: 'IA'
+          code: 'IA',
         },
         {
           name: 'Kansas',
-          code: 'KS'
+          code: 'KS',
         },
         {
           name: 'Kentucky',
-          code: 'KY'
+          code: 'KY',
         },
         {
           name: 'Louisiana',
-          code: 'LA'
+          code: 'LA',
         },
         {
           name: 'Maine',
-          code: 'ME'
+          code: 'ME',
         },
         {
           name: 'Maryland',
-          code: 'MD'
+          code: 'MD',
         },
         {
           name: 'Massachusetts',
-          code: 'MA'
+          code: 'MA',
         },
         {
           name: 'Michigan',
-          code: 'MI'
+          code: 'MI',
         },
         {
           name: 'Minnesota',
-          code: 'MN'
+          code: 'MN',
         },
         {
           name: 'Mississippi',
-          code: 'MS'
+          code: 'MS',
         },
         {
           name: 'Missouri',
-          code: 'MO'
+          code: 'MO',
         },
         {
           name: 'Montana',
-          code: 'MT'
+          code: 'MT',
         },
         {
           name: 'Nebraska',
-          code: 'NE'
+          code: 'NE',
         },
         {
           name: 'Nevada',
-          code: 'NV'
+          code: 'NV',
         },
         {
           name: 'New Hampshire',
-          code: 'NH'
+          code: 'NH',
         },
         {
           name: 'New Jersey',
-          code: 'NJ'
+          code: 'NJ',
         },
         {
           name: 'New Mexico',
-          code: 'NM'
+          code: 'NM',
         },
         {
           name: 'New York',
-          code: 'NY'
+          code: 'NY',
         },
         {
           name: 'North Carolina',
-          code: 'NC'
+          code: 'NC',
         },
         {
           name: 'North Dakota',
-          code: 'ND'
+          code: 'ND',
         },
         {
           name: 'Ohio',
-          code: 'OH'
+          code: 'OH',
         },
         {
           name: 'Oklahoma',
-          code: 'OK'
+          code: 'OK',
         },
         {
           name: 'Oregon',
-          code: 'OR'
+          code: 'OR',
         },
         {
           name: 'Pennsylvania',
-          code: 'PA'
+          code: 'PA',
         },
         {
           name: 'Puerto Rico',
-          code: 'PR'
+          code: 'PR',
         },
         {
           name: 'Rhode Island',
-          code: 'RI'
+          code: 'RI',
         },
         {
           name: 'South Carolina',
-          code: 'SC'
+          code: 'SC',
         },
         {
           name: 'South Dakota',
-          code: 'SD'
+          code: 'SD',
         },
         {
           name: 'Tennessee',
-          code: 'TN'
+          code: 'TN',
         },
         {
           name: 'Texas',
-          code: 'TX'
+          code: 'TX',
         },
         {
           name: 'Utah',
-          code: 'UT'
+          code: 'UT',
         },
         {
           name: 'Vermont',
-          code: 'VT'
+          code: 'VT',
         },
         {
           name: 'Virginia',
-          code: 'VA'
+          code: 'VA',
         },
         {
           name: 'U.S. Virgin Islands',
-          code: 'VI'
+          code: 'VI',
         },
         {
           name: 'Washington',
-          code: 'WA'
+          code: 'WA',
         },
         {
           name: 'West Virginia',
-          code: 'WV'
+          code: 'WV',
         },
         {
           name: 'Wisconsin',
-          code: 'WI'
+          code: 'WI',
         },
         {
           name: 'Wyoming',
-          code: 'WY'
+          code: 'WY',
         },
         {
           name: 'Foreign Countries',
-          code: 'ZZ'
+          code: 'ZZ',
         },
         {
           name: 'American Samoa',
-          code: 'AS'
+          code: 'AS',
         },
         {
           name: 'Northern Mariana Islands',
-          code: 'MP'
+          code: 'MP',
         },
         {
           name: 'United States',
-          code: 'US'
+          code: 'US',
         },
         {
           name: 'Armed Forces Americas',
-          code: 'AA'
+          code: 'AA',
         },
         {
           name: 'Armed Forces Europe',
-          code: 'AE'
+          code: 'AE',
         },
         {
           name: 'Armed Forces Pacific',
-          code: 'AP'
-        }
+          code: 'AP',
+        },
       ],
       titles: null,
       entityTypes: [
@@ -1053,48 +1053,48 @@ export class CoordinatedPartyExpenditureVoidFields {
           entityType: 'ORG',
           entityTypeDescription: 'Organization',
           group: 'org-group',
-          selected: true
+          selected: true,
         },
         {
           entityType: 'IND',
           entityTypeDescription: 'Individual',
           group: 'ind-group',
-          selected: false
+          selected: false,
         },
       ],
       electionTypes: [
         {
           electionType: 'P',
-          electionTypeDescription: 'Primary'
+          electionTypeDescription: 'Primary',
         },
         {
           electionType: 'G',
-          electionTypeDescription: 'General'
+          electionTypeDescription: 'General',
         },
         {
           electionType: 'R',
-          electionTypeDescription: 'Runoff'
+          electionTypeDescription: 'Runoff',
         },
         {
           electionType: 'S',
-          electionTypeDescription: 'Special General'
+          electionTypeDescription: 'Special General',
         },
         {
           electionType: 'SP',
-          electionTypeDescription: 'Special Primary'
+          electionTypeDescription: 'Special Primary',
         },
         {
           electionType: 'SR',
-          electionTypeDescription: 'Special Runoff'
+          electionTypeDescription: 'Special Runoff',
         },
         {
           electionType: 'C',
-          electionTypeDescription: 'Convention'
+          electionTypeDescription: 'Convention',
         },
         {
           electionType: 'O',
-          electionTypeDescription: 'Other'
-        }
+          electionTypeDescription: 'Other',
+        },
       ],
       committeeTypeEvents: [
         {
@@ -1104,33 +1104,33 @@ export class CoordinatedPartyExpenditureVoidFields {
               eventType: 'PC',
               eventTypeDescription: 'Public Communications Referring Only to Party (made by PAC)',
               scheduleType: 'sched_h1',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'AD',
               eventTypeDescription: 'Administrative',
               scheduleType: 'sched_h1',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'GV',
               eventTypeDescription: 'Generic Voter Drive',
               scheduleType: 'sched_h1',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'DC',
               eventTypeDescription: 'Direct Candidate Support',
               scheduleType: 'sched_h2',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'DF',
               eventTypeDescription: 'Direct Fundraising',
               scheduleType: 'sched_h2',
-              activityEventTypes: null
-            }
-          ]
+              activityEventTypes: null,
+            },
+          ],
         },
         {
           committeeTypeCategory: 'PTY',
@@ -1139,33 +1139,33 @@ export class CoordinatedPartyExpenditureVoidFields {
               eventType: 'EA',
               eventTypeDescription: 'Exempt Activities',
               scheduleType: 'sched_h1',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'AD',
               eventTypeDescription: 'Administrative',
               scheduleType: 'sched_h1',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'GV',
               eventTypeDescription: 'Generic Voter Drive',
               scheduleType: 'sched_h1',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'DC',
               eventTypeDescription: 'Direct Candidate Support',
               scheduleType: 'sched_h2',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'DF',
               eventTypeDescription: 'Direct Fundraising',
               scheduleType: 'sched_h2',
-              activityEventTypes: null
-            }
-          ]
+              activityEventTypes: null,
+            },
+          ],
         },
         {
           committeeTypeCategory: 'H6',
@@ -1174,31 +1174,31 @@ export class CoordinatedPartyExpenditureVoidFields {
               eventType: 'VR',
               eventTypeDescription: 'Voter Registration',
               scheduleType: 'sched_h6',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'GO',
               eventTypeDescription: 'GOTV',
               scheduleType: 'sched_h6',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'VI',
               eventTypeDescription: 'Voter ID',
               scheduleType: 'sched_h6',
-              activityEventTypes: null
+              activityEventTypes: null,
             },
             {
               eventType: 'GC',
               eventTypeDescription: 'Generic Campaign',
               scheduleType: 'sched_h6',
-              activityEventTypes: null
-            }
-          ]
-        }
+              activityEventTypes: null,
+            },
+          ],
+        },
       ],
       subTransactions: null,
-      jfMemoTypes: null
-    }
+      jfMemoTypes: null,
+    },
   };
 }

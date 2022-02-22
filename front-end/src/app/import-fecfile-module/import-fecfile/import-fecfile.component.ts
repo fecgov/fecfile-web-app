@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as FileSaver from 'file-saver';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
-import { ConfirmModalComponent } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import { ExportService } from 'src/app/shared/services/ExportService/export.service';
-import { TimeoutMessageService } from 'src/app/shared/services/TimeoutMessageService/timeout-message-service.service';
+import { takeUntil } from 'rxjs/operators';
+import { ConfirmModalComponent } from '../../shared/partials/confirm-modal/confirm-modal.component';
+import { DialogService } from '../../shared/services/DialogService/dialog.service';
+import { ExportService } from '../../shared/services/ExportService/export.service';
+import { TimeoutMessageService } from '../../shared/services/TimeoutMessageService/timeout-message-service.service';
 import { CancelImportConfirmComponent } from '../../import-contacts-module/import-contacts/cancel-import-confirm/cancel-import-confirm.component';
 import { DuplicateContactsService } from '../../import-contacts-module/import-contacts/clean-contacts/duplicate-contacts/service/duplicate-contacts.service';
 import { ImportContactsStepsEnum } from '../../import-contacts-module/import-contacts/import-contacts-setps.enum';
@@ -15,37 +16,37 @@ import { ImportContactsService } from '../../import-contacts-module/import-conta
 @Component({
   selector: 'app-import-fecfile',
   templateUrl: './import-fecfile.component.html',
-  styleUrls: ['./import-fecfile.component.scss']
+  styleUrls: ['./import-fecfile.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImportFecFileComponent implements OnInit, OnDestroy {
   @ViewChild('errorsModal')
-  public errorsModal: ModalDirective;
+  public errorsModal!: ModalDirective;
 
   @ViewChild('noErrorslModal')
-  public noErrorslModal: ModalDirective;
+  public noErrorslModal!: ModalDirective;
 
-  public contactErrors: Array<any>;
-  public fileName: string;
-  public steps: Array<any>;
-  public currentStep: ImportContactsStepsEnum;
+  public contactErrors!: Array<any>;
+  public fileName!: string;
+  public steps!: Array<any>;
+  public currentStep!: ImportContactsStepsEnum;
   public readonly start = ImportContactsStepsEnum.start;
   public readonly step1Upload = ImportContactsStepsEnum.step1Upload;
   public readonly step2Review = ImportContactsStepsEnum.step2Review;
   public readonly step3Clean = ImportContactsStepsEnum.step3Clean;
   public readonly step4ImportDone = ImportContactsStepsEnum.step4ImportDone;
-  public userContactFields: Array<string>;
-  public duplicateContacts: Array<any>;
-  public forceChangeDetectionUpload: Date;
-  public duplicateFile: any;
-  public importDoneAction: string;
-  public isShowInfo: boolean;
+  public userContactFields!: Array<string>;
+  public duplicateContacts!: Array<any>;
+  public forceChangeDetectionUpload!: Date;
+  public duplicateFile!: any;
+  public importDoneAction!: string;
+  public isShowInfo!: boolean;
 
-  private unsavedData: boolean;
+  private unsavedData!: boolean;
   private onDestroy$ = new Subject();
-  private validationErrorsExist: boolean;
-  private duplicatesExist: boolean;
-  successResponse: any;
+  private validationErrorsExist!: boolean;
+  private duplicatesExist!: boolean;
+  successResponse!: any;
 
   constructor(
     private _dialogService: DialogService,
@@ -58,8 +59,8 @@ export class ImportFecFileComponent implements OnInit, OnDestroy {
   ) {
     _timeoutMessageService
       .getTimeoutMessage()
-      .takeUntil(this.onDestroy$)
-      .subscribe(message => {
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((message) => {
         // There may be a race condition between the receipt of this message
         // and the timeout navigatingto login.  Id true, the canDeacivate method here
         // may need to check browser cache for timeout property.
@@ -72,7 +73,7 @@ export class ImportFecFileComponent implements OnInit, OnDestroy {
       { text: 'Upload', step: this.step1Upload },
       // { text: 'Review', step: this.step2Review },
       { text: 'Clean', step: this.step3Clean },
-      { text: 'Import', step: this.step4ImportDone }
+      { text: 'Import', step: this.step4ImportDone },
     ];
     this.currentStep = this.start;
     // removing warning until fix is made for not showing it when the system navigates
@@ -86,7 +87,7 @@ export class ImportFecFileComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.onDestroy$.next();
+    this.onDestroy$.next(null);
   }
 
   public showInfo(): void {
@@ -176,9 +177,9 @@ export class ImportFecFileComponent implements OnInit, OnDestroy {
     this.currentStep = this.start;
   }
 
-  public noErrorsAcknowleged(res:any) {
+  public noErrorsAcknowleged(res: any) {
     this.successResponse = res;
-    if(this.noErrorslModal) {
+    if (this.noErrorslModal) {
       this.noErrorslModal.hide();
     }
     this.showNextStep();
@@ -294,7 +295,7 @@ export class ImportFecFileComponent implements OnInit, OnDestroy {
   }
 
   private confirmProceedWithrrors(message: string) {
-    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', false).then(res => {
+    this._dialogService.confirm(message, ConfirmModalComponent, 'Caution!', false).then((res: any) => {
       if (res === 'okay') {
         // this.unsavedData = false;
         this.showNextStep();
@@ -337,12 +338,12 @@ export class ImportFecFileComponent implements OnInit, OnDestroy {
     // return true;
 
     if (this.unsavedData) {
-      let result: boolean = null;
+      let result: boolean = false;
       // result = await this._dialogService.confirm('If you leave this page the importing process ' +
       //   'will be cancelled and no data will be added. ' +
       //   'Click Cancel to cancel the import or Continue if you want the import process to finish.',
-      //   ConfirmModalComponent).then(res => {
-      //   let val: boolean = null;
+      //   ConfirmModalComponent).then((res: any) => {
+      //   let val: boolean = false;
 
       //   if (res === 'okay') {
       //     val = true;
@@ -354,7 +355,7 @@ export class ImportFecFileComponent implements OnInit, OnDestroy {
       // });
 
       const modalRef = this._modalService.open(CancelImportConfirmComponent);
-      result = await modalRef.result.then(res => {
+      result = await modalRef.result.then((res: any) => {
         if (res === 'continue') {
           return false;
         } else if ('cancel') {
@@ -363,6 +364,7 @@ export class ImportFecFileComponent implements OnInit, OnDestroy {
           // canDeactivate is true to let user nav to new location
           return true;
         }
+        return false;
       });
 
       return result;

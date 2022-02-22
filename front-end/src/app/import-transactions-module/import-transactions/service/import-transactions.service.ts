@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { map, concatMap, switchMap, retry, share } from 'rxjs/operators';
-import { Observable, timer, interval } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Observable, timer, interval, of } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { UploadFileModel } from '../model/upload-file.model';
 import { UploadTrxService } from '../import-trx-upload/service/upload-trx.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ImportTransactionsService {
   private readonly bucketName = 'fecfile-filing-frontend';
@@ -44,7 +44,7 @@ export class ImportTransactionsService {
 
     // let committeeId = null;
     // if (localStorage.getItem('committee_details') !== null) {
-    //   const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+    //   const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
     //   committeeId = cmteDetails.committeeid;
     // }
 
@@ -57,10 +57,10 @@ export class ImportTransactionsService {
     // if (fileName === 'no-mock.csv') {
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -92,7 +92,7 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
@@ -111,7 +111,7 @@ export class ImportTransactionsService {
 
     let committeeId = null;
     if (localStorage.getItem('committee_details') !== null) {
-      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       committeeId = cmteDetails.committeeid;
     }
 
@@ -129,10 +129,10 @@ export class ImportTransactionsService {
     // if (uploadFile.fileName === 'no-mock.csv') {
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -157,7 +157,7 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
@@ -184,10 +184,10 @@ export class ImportTransactionsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -201,7 +201,7 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
@@ -209,7 +209,6 @@ export class ImportTransactionsService {
     //     })
     //   );
   }
-
 
   /**
    * Create a CSV file on S3 for contacts in the transaction file to be processed.
@@ -232,10 +231,10 @@ export class ImportTransactionsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -266,10 +265,10 @@ export class ImportTransactionsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -296,17 +295,17 @@ export class ImportTransactionsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
           return false;
         })
       );
-    // return Observable.of(true);
+    // return of(true);
   }
 
   /**
@@ -326,10 +325,10 @@ export class ImportTransactionsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -355,10 +354,10 @@ export class ImportTransactionsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
@@ -400,7 +399,7 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
@@ -442,17 +441,17 @@ export class ImportTransactionsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }
           return false;
         })
       );
-    // return Observable.of(true);
+    // return of(true);
   }
 
   /**
@@ -474,14 +473,14 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
     //       return false;
     //     })
     //   );
-    return Observable.of(true);
+    return of(true);
   }
 
   /**
@@ -503,14 +502,14 @@ export class ImportTransactionsService {
     //     headers: httpOptions
     //   })
     //   .pipe(
-    //     map(res => {
+    //     map((res: any) => {
     //       if (res) {
     //         return res;
     //       }
     //       return false;
     //     })
     //   );
-    return Observable.of(true);
+    return of(true);
   }
 
   public pollForProgress_bitcoin() {
@@ -518,15 +517,15 @@ export class ImportTransactionsService {
   }
 
   public pollForProgress(): Observable<number> {
-    // return Observable.of(10);
-    const mockUrl = 'assets/mock-data/import-transactions/progress.json';
-    return timer(0, 1000).pipe(
-      switchMap(() =>
-        this._http.get<any>(mockUrl).map(response => {
-          return response;
-        })
-      )
-    );
+    return of(10);
+    // const mockUrl = 'assets/mock-data/import-transactions/progress.json';
+    // return timer(0, 1000).pipe(
+    //   switchMap((_: any) =>
+    //     this._http.get<any>(mockUrl).map((response) => {
+    //       return response;
+    //     })
+    //   )
+    // );
     // , retry(), share();
   }
 

@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { F1mQualificationComponent } from './f1m-qualification.component';
 
-describe('F1mQualificationComponent', () => {
+xdescribe('F1mQualificationComponent', () => {
   let component: F1mQualificationComponent;
   let fixture: ComponentFixture<F1mQualificationComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ F1mQualificationComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [F1mQualificationComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(F1mQualificationComponent);
@@ -19,7 +20,7 @@ describe('F1mQualificationComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

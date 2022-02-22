@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { ActiveView } from '../loan.component';
-
 
 /**
  * A message service for sending and receiving messages of any type
  * between transaction components.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoanMessageService {
-
   private subject = new Subject<any>();
   private applyFiltersSubject = new Subject<any>();
   private doKeywordFilterSearchSubject = new Subject<any>();
@@ -23,7 +21,7 @@ export class LoanMessageService {
   private populateFormSubject = new Subject<any>();
   private loadFormFieldsSubject = new Subject<any>();
   private loanSummaryRefreshSubject = new Subject<any>();
-  
+
   /**
    * A publisher uses this method to send a message to subscribers
    * indicating the Pin Column options are to be shown.
@@ -34,14 +32,12 @@ export class LoanMessageService {
     this.subject.next(message);
   }
 
-
   /**
    * Clear the Pin Column message
    */
   public clearShowPinColumnMessage() {
-    this.subject.next();
+    this.subject.next(null);
   }
-
 
   /**
    * A method for subscribers of the show PIN Column message.
@@ -50,25 +46,22 @@ export class LoanMessageService {
     return this.subject.asObservable();
   }
 
-
   /**
    * A publisher uses this method to send a message to subscribers
    * indicating the filters are to be applies to the contacts.
-   * 
+   *
    * @param message
    */
   public sendApplyFiltersMessage(message: any) {
     this.applyFiltersSubject.next(message);
   }
 
-
   /**
    * Clear the filters message.
    */
   public clearApplyFiltersMessage() {
-    this.applyFiltersSubject.next();
+    this.applyFiltersSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Apply Filters message.
@@ -77,25 +70,22 @@ export class LoanMessageService {
     return this.applyFiltersSubject.asObservable();
   }
 
-
   /**
    * A publisher uses this method to send a message to subscribers
    * to run the Keyword + Filter search
-   * 
+   *
    * @param message
    */
   public sendDoKeywordFilterSearchMessage(message: any) {
     this.doKeywordFilterSearchSubject.next(message);
   }
 
-
   /**
    * Clear the "do keyword + filters" message.
    */
   public clearDoKeywordFilterSearchMessage() {
-    this.doKeywordFilterSearchSubject.next();
+    this.doKeywordFilterSearchSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Keyword + Filter search message.
@@ -104,39 +94,36 @@ export class LoanMessageService {
     return this.doKeywordFilterSearchSubject.asObservable();
   }
 
-
   public sendMessage(message: any) {
     this.subject.next(message);
   }
 
   public clearMessage() {
-    this.subject.next();
+    this.subject.next(null);
   }
 
   public getMessage(): Observable<any> {
     return this.subject.asObservable();
   }
 
-
   public sendEditContactMessage(message: any) {
     this.editContactSubject.next(message);
   }
 
   public clearEditContactMessage() {
-    this.editContactSubject.next();
+    this.editContactSubject.next(null);
   }
 
   public getEditContactMessage(): Observable<any> {
     return this.editContactSubject.asObservable();
   }
 
-
   public sendShowLoanMessage(message: any) {
     this.showLoanSubject.next(message);
   }
 
   public clearShowLoanMessage() {
-    this.showLoanSubject.next();
+    this.showLoanSubject.next(null);
   }
 
   public getShowLoanMessage(): Observable<any> {
@@ -153,14 +140,12 @@ export class LoanMessageService {
     this.removeFilterSubject.next(message);
   }
 
-
   /**
    * Clear the Remove Filter message.
    */
   public clearRemoveFilterMessage() {
-    this.removeFilterSubject.next();
+    this.removeFilterSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Remove Filter message.
@@ -168,7 +153,6 @@ export class LoanMessageService {
   public getRemoveFilterMessage(): Observable<any> {
     return this.removeFilterSubject.asObservable();
   }
-
 
   /**
    * A publisher uses this method to send a message to the Loan Filter
@@ -180,14 +164,12 @@ export class LoanMessageService {
     this.switchFilterViewSubject.next(message);
   }
 
-
   /**
    * Clear the Switch Filter View message.
    */
   public clearSwitchFilterViewMessage() {
-    this.switchFilterViewSubject.next();
+    this.switchFilterViewSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Switch Filter View message.
@@ -212,7 +194,7 @@ export class LoanMessageService {
   }
 
   public clearLoanSummaryRefreshMessage() {
-    this.loanSummaryRefreshSubject.next();
+    this.loanSummaryRefreshSubject.next(null);
   }
 
   public getLoanSummaryRefreshMessage(): Observable<any> {

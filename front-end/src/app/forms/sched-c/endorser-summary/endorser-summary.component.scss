@@ -3,7 +3,7 @@
 .endorserSummary__table-container {
   padding-right: 15px;
   .endorserSummary__page-item-range {
-    padding: .5em .1em 0 0 ;
+    padding: 0.5em 0.1em 0 0;
   }
 
   .endorserSummary__table {
@@ -19,12 +19,12 @@
 
   .endorserSummary__table-pagination-container {
     padding: 1em;
-  }  
+  }
 
   /** hide the dropdown caret **/
   .dropdown-toggle:after {
     border: none;
-  }  
+  }
 
   #endorserSummary__dropdown-action > button > i {
     padding-right: 3px;
@@ -35,13 +35,13 @@
   }
 
   .endorserSummary__bulk_action_btn[disabled] {
-    background:#6c757d;
+    background: #6c757d;
     border-color: #6c757d;
   }
 
   .dropdown-menu {
     min-width: 6em;
-  }  
+  }
 
   .endorserSummary__item-range {
     font-size: 13px;
@@ -58,7 +58,7 @@
   }
 
   .endorserSummary__total-amount-tip {
-    color: #112E51;
+    color: #112e51;
     padding-left: 3px;
     float: right;
   }
@@ -86,29 +86,27 @@
   //   margin: 1.5em 0;
   // }
 
-
   /* style ngx-pagination - start */
   /* override some styling where use of !important is made. */
 
-  .ngx-pagination .current{
+  .ngx-pagination .current {
     padding: 0.1875rem 0.625rem;
-    background: #9B9B9B !important;;
+    background: #9b9b9b !important;
     color: #fefefe;
     cursor: default;
   }
 
-  .ngx-pagination a, .ngx-pagination button {
-    color: #9B9B9B !important;;
+  .ngx-pagination a,
+  .ngx-pagination button {
+    color: #9b9b9b !important;
     display: block;
     padding: 0.1875rem 0.625rem;
     border-radius: 0;
-  }	
+  }
 
   /* style ngx-pagination - end */
 
-
   .column-options-modal {
-
     #endorserSummary__pin-modal-header {
       background-color: $crusta;
     }
@@ -117,15 +115,16 @@
       width: 6em;
     }
 
-    .row{
+    .row {
       height: 3em;
     }
 
-    input[type="checkbox" i]:disabled, .disabled-column-option{
+    input[type='checkbox' i]:disabled,
+    .disabled-column-option {
       color: #cccccc;
-    } 
+    }
 
-    input[type=checkbox] {
+    input[type='checkbox'] {
       transform: scale(1.5);
     }
   }

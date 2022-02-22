@@ -2,17 +2,15 @@ import { Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } fro
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PaginationInstance } from 'ngx-pagination';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import {
   ConfirmModalComponent,
-  ModalHeaderClassEnum
-} from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
+  ModalHeaderClassEnum,
+} from '../../shared/partials/confirm-modal/confirm-modal.component';
+import { DialogService } from '../../shared/services/DialogService/dialog.service';
 import { ReportTypeService } from '../../forms/form-3x/report-type/report-type.service';
 import { GetReportsResponse } from '../../reports/service/report.service';
-import {
-  form3xReportTypeDetails, form99
-} from '../../shared/interfaces/FormsService/FormsService';
+import { form3xReportTypeDetails, form99 } from '../../shared/interfaces/FormsService/FormsService';
 import { SaveDialogAction } from '../../shared/partials/input-modal/input-modal.component';
 import { InputDialogService } from '../../shared/service/InputDialogService/input-dialog.service';
 import { AuthService } from '../../shared/services/AuthService/auth.service';
@@ -39,42 +37,42 @@ import { ReportsMessageService } from '../service/reports-message.service';
 })
 export class ReportdetailsComponent implements OnInit, OnDestroy {
   @ViewChild('columnOptionsModal')
-  public columnOptionsModal: ModalDirective;
+  public columnOptionsModal!: ModalDirective;
 
   /*@ViewChild('trashModal')
-  public trashModal: TrashConfirmComponent;*/
+  public trashModal!: TrashConfirmComponent;*/
 
   @Input()
-  public view: string;
+  public view!: string;
 
   @Input()
-  public tableview: string;
+  public tableview!: string;
 
   @Input()
-  public formType: string;
+  public formType!: string;
 
   @Input()
-  public tableType: string;
+  public tableType!: string;
 
   @Input()
-  public existingReportId: number;
+  public existingReportId!: number;
 
   // @ViewChild('modalBody')
   // public modalBody;
 
-  public filters: ReportFilterModel;
+  public filters!: ReportFilterModel;
 
-  public reportsModel: Array<reportModel>;
-  //public filterReportsModel: Array<reportModel>;
-  //public totalAmount: number;
+  public reportsModel!: Array<reportModel>;
+  //public filterReportsModel!: Array<reportModel>;
+  //public totalAmount!: number;
   public reportsView = ActiveView.reports;
   public recycleBinView = ActiveView.recycleBin;
   public bulkActionDisabled = true;
   public bulkActionCounter = 0;
-  public statusDescriptions = [];
-  public getAmendmentIndicatorsDescriptions = [];
-  public getReportTypesDescriptions = [];
-  //public existingReportId: string;
+  public statusDescriptions: any[] = [];
+  public getAmendmentIndicatorsDescriptions: any[] = [];
+  public getReportTypesDescriptions: any[] = [];
+  //public existingReportId!: string;
 
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
@@ -82,7 +80,7 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
 
@@ -114,23 +112,23 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
   /**
    * Identifies the column currently sorted by name.
    */
-  private currentSortedColumnName: string;
+  private currentSortedColumnName!: string;
 
   /**
    * Subscription for messags sent from the parent component to show the PIN Column
    * options.
    */
-  private showPinColumnsSubscription: Subscription;
+  private showPinColumnsSubscription!: Subscription;
 
   /**
    * Subscription for running the keyword and filter search
    * to the reports obtained from the server.
    */
-  private keywordFilterSearchSubscription: Subscription;
+  private keywordFilterSearchSubscription!: Subscription;
 
   private columnOptionCount = 0;
   private readonly maxColumnOption = 5;
-  private allReportsSelected: boolean;
+  private allReportsSelected!: boolean;
 
   constructor(
     private _reportsService: ReportsService,
@@ -142,10 +140,10 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _reportTypeService: ReportTypeService,
     private _formsService: FormsService,
-    private authService: AuthService,
-    private inputDialogService: InputDialogService,
+    public authService: AuthService,
+    private inputDialogService: InputDialogService
   ) {
-    this.showPinColumnsSubscription = this._reportsMessageService.getShowPinColumnMessage().subscribe(message => {
+    this.showPinColumnsSubscription = this._reportsMessageService.getShowPinColumnMessage().subscribe((message) => {
       this.showPinColumns();
     });
 
@@ -169,7 +167,7 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
     const paginateConfig: PaginationInstance = {
       id: 'forms__rep-table-pagination',
       itemsPerPage: this.maxItemsPerPage,
-      currentPage: 1
+      currentPage: 1,
     };
     this.config = paginateConfig;
 
@@ -298,7 +296,7 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
   public getReportsPage(page: number): void {
     this.config.currentPage = page;
 
-    const sortedCol: SortableColumnModel = this._tableService.getColumnByName(
+    const sortedCol: SortableColumnModel | undefined = this._tableService.getColumnByName(
       this.currentSortedColumnName,
       this.sortableColumns
     );
@@ -309,7 +307,7 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
         page,
         this.config.itemsPerPage,
         this.currentSortedColumnName,
-        sortedCol.descending,
+        sortedCol?.descending ?? false,
         this.filters,
         this.existingReportId
       )
@@ -333,7 +331,7 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
         // this.config.totalItems = res.totalreportsCount ? res.totalreportsCount : 0;
         // this.numberOfPages =
         //   res.totalreportsCount > this.maxItemsPerPage ? Math.round(this.config.totalItems / this.maxItemsPerPage) : 1;
-        
+
         // this.pageNumbers = Array.from(new Array(this.numberOfPages), (x,i) => i+1).sort((a, b) => b - a);
         // this.allReportsSelected = false;
 
@@ -346,7 +344,7 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
   public getRecyclingPage(page: number): void {
     this.config.currentPage = page;
 
-    const sortedCol: SortableColumnModel = this._tableService.getColumnByName(
+    const sortedCol: SortableColumnModel | undefined = this._tableService.getColumnByName(
       this.currentSortedColumnName,
       this.sortableColumns
     );
@@ -357,12 +355,12 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
         page,
         this.config.itemsPerPage,
         this.currentSortedColumnName,
-        sortedCol.descending,
+        sortedCol?.descending ?? false,
         this.filters,
         this.existingReportId
       )
 
-      .subscribe((res: GetReportsResponse) => {
+      .subscribe((res: any) => {
         this.reportsModel = [];
         this._reportsService.mockApplyFilters(res, this.filters);
         const reportsModelL = this._reportsService.mapFromServerFields(res.reports);
@@ -372,26 +370,28 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
         this.reportsModel = this._reportsService.sortReports(
           reportsModelL,
           this.currentSortedColumnName,
-          sortedCol.descending
+          sortedCol?.descending ?? false
         );
 
         this.config.totalItems = res.totalreportsCount ? res.totalreportsCount : 0;
         this.numberOfPages =
-          res.totalreportsCount > this.maxItemsPerPage ? Math.round(this.config.totalItems / this.maxItemsPerPage) : 1;
+          res.totalreportsCount > this.maxItemsPerPage
+            ? Math.round(this.config.totalItems ?? 0 / this.maxItemsPerPage)
+            : 1;
 
-        this.pageNumbers = Array.from(new Array(this.numberOfPages), (x,i) => i+1).sort((a, b) => b - a);
+        this.pageNumbers = Array.from(new Array(this.numberOfPages), (x, i) => i + 1).sort((a, b) => b - a);
         this.allReportsSelected = false;
       });
   }
 
   public getFilterNames() {
-    this._reportsService.getStatuss().subscribe(res => {
+    this._reportsService.getStatuss().subscribe((res: any) => {
       this.statusDescriptions = res.data;
     });
-    this._reportsService.getAmendmentIndicators().subscribe(res => {
+    this._reportsService.getAmendmentIndicators().subscribe((res: any) => {
       this.getAmendmentIndicatorsDescriptions = res.data;
     });
-    this._reportsService.getReportTypes().subscribe(res => {
+    this._reportsService.getReportTypes().subscribe((res: any) => {
       this.getReportTypesDescriptions = res;
     });
   }
@@ -415,68 +415,62 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
       }
     }
   }
-  
+
   public amendArrow(report: reportModel) {
-    report.amend_max === 'up' ? this.reportsModel.find(function(obj) { return obj.report_id === report.report_id}).amend_max = 'down'
-      : this.reportsModel.find(function(obj) { return obj.report_id === report.report_id}).amend_max = 'up';
-
-    if (report.amend_max === 'down') {
-      report.children = [];
-      return;
-    } 
-
-    const sortedCol: SortableColumnModel = this._tableService.getColumnByName(
-      this.currentSortedColumnName,
-      this.sortableColumns
-    );
-
-    this._reportsService
-      .getChildReports(
-        this.view,
-        this.config.currentPage,
-        this.config.itemsPerPage,
-        this.currentSortedColumnName,
-        sortedCol.descending,
-        this.filters,
-        this.existingReportId,
-        report.report_id
-      )
-      .subscribe((res: any) => { 
-        report.children = res.items;
-      });
-
+    // report.amend_max === 'up'
+    //   ? (this.reportsModel.find(function (obj) {
+    //       return obj.report_id === report.report_id;
+    //     }).amend_max = 'down')
+    //   : (this.reportsModel.find(function (obj) {
+    //       return obj.report_id === report.report_id;
+    //     }).amend_max = 'up');
+    // if (report.amend_max === 'down') {
+    //   report.children = [];
+    //   return;
+    // }
+    // const sortedCol: SortableColumnModel = this._tableService.getColumnByName(
+    //   this.currentSortedColumnName,
+    //   this.sortableColumns
+    // );
+    // this._reportsService
+    //   .getChildReports(
+    //     this.view,
+    //     this.config.currentPage,
+    //     this.config.itemsPerPage,
+    //     this.currentSortedColumnName,
+    //     sortedCol.descending,
+    //     this.filters,
+    //     this.existingReportId,
+    //     report.report_id
+    //   )
+    //   .subscribe((res: any) => {
+    //     report.children = res.items;
+    //   });
     // let pre = report;
     // pre = this.reportsModel.find(function(obj) { return obj.report_id === pre.previous_report_id});
-
     // if(pre && report.amend_max === 'up') {
     //   this.reportsModel = this.reportsModel.filter(function(item) {
     //     return item !== pre
     //   })
-
     //   let indexReport = this.reportsModel.indexOf(report);
     //   if (indexReport > -1) {
     //     this.reportsModel.splice(indexReport + 1, 0, pre);
     //   }
     // }
-
     // while(pre) {
     //   let rop = pre;
-
     //   pre.amend_show = !pre.amend_show;
     //   pre = this.reportsModel.find(function(obj) { return obj.report_id === pre.previous_report_id});
-
     //   if(pre && report.amend_max === 'up') {
     //     this.reportsModel = this.reportsModel.filter(function(item) {
     //       return item !== pre
     //     })
-
     //     let indexRep = this.reportsModel.indexOf(rop);
     //     if (indexRep > -1) {
     //       this.reportsModel.splice(indexRep + 1, 0, pre);
     //     }
     //   }
     // }
-    
   }
 
   public displayReportTypes(reportType: any) {
@@ -512,21 +506,21 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
         this.getReportsPage(1);
         break;
       case 'filterCvgDate':
-        this.filters.filterCvgDateFrom = null;
-        this.filters.filterCvgDateTo = null;
+        this.filters.filterCvgDateFrom = new Date();
+        this.filters.filterCvgDateTo = new Date();
         this.getReportsPage(1);
         break;
       case 'filterFiledDate':
-        this.filters.filterFiledDateFrom = null;
-        this.filters.filterFiledDateTo = null;
+        this.filters.filterFiledDateFrom = new Date();
+        this.filters.filterFiledDateTo = new Date();
         this.getReportsPage(1);
+        break;
       case 'filterDeletedDate':
-        this.filters.filterDeletedDateFrom = null;
-        this.filters.filterDeletedDateTo = null;
-        this.getReportsPage(1);  
+        this.filters.filterDeletedDateFrom = new Date();
+        this.filters.filterDeletedDateTo = new Date();
+        this.getReportsPage(1);
         break;
       default:
-
     }
   }
 
@@ -749,7 +743,7 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
     if (!this.autoHide) {
       return true;
     }
-    if (this.config.totalItems > this.config.itemsPerPage) {
+    if (this.config.totalItems ?? 0 > this.config.itemsPerPage) {
       return true;
     }
     // otherwise, no show.
@@ -783,29 +777,29 @@ export class ReportdetailsComponent implements OnInit, OnDestroy {
   public linkAllSelected(): void {
     alert('Link multiple report requirements have not been finalized');
   }
-  
+
   public printPreview(): void {
     this._reportTypeService.printPreview('transaction_table_screen', '3X');
   }
 
-public printReport(report: reportModel): void{
+  public printReport(report: reportModel): void {
     if (report.form_type === 'F99') {
       this._reportsService.getReportInfo(report.form_type, report.report_id).subscribe((res: form99) => {
         //console.log('getReportInfo res =', res);
         localStorage.setItem('form_99_details', JSON.stringify(res));
         let formSavedObj: any = {
-          saved: true
+          saved: true,
         };
         localStorage.setItem('form_99_saved', JSON.stringify(formSavedObj));
       });
       setTimeout(() => {
         this._formsService.PreviewForm_Preview_sign_Screen({}, this.formType).subscribe(
-          res => {
+          (res) => {
             if (res) {
-              window.open(localStorage.getItem('form_99_details.printpriview_fileurl'), '_blank');
+              window.open(localStorage.getItem('form_99_details.printpriview_fileurl') ?? '', '_blank');
             }
           },
-          error => {
+          (error) => {
             //console.log('error: ', error);
           }
         );
@@ -815,8 +809,8 @@ public printReport(report: reportModel): void{
         .getReportInfo(report.form_type, report.report_id)
         .subscribe((res: form3xReportTypeDetails) => {
           //console.log('getReportInfo res =', res);
-          localStorage.setItem(`form_${report.form_type.substr(1)}_details`, JSON.stringify(res[0]));
-          localStorage.setItem(`form_${report.form_type.substr(1)}_report_type`, JSON.stringify(res[0]));
+          localStorage.setItem(`form_${report.form_type.substr(1)}_details`, JSON.stringify(res));
+          localStorage.setItem(`form_${report.form_type.substr(1)}_report_type`, JSON.stringify(res));
 
           //return false;
         });
@@ -825,67 +819,63 @@ public printReport(report: reportModel): void{
 
         const formType =
           report.form_type && report.form_type.length > 2 ? report.form_type.substring(1, 3) : report.form_type;
-          this._reportTypeService.printPreview('dashboard_report_screen', report.form_type.substr(1));
+        this._reportTypeService.printPreview('dashboard_report_screen', report.form_type.substr(1));
       }, 1500);
     }
   }
 
-  public uploadReport(report: reportModel): void{
+  public uploadReport(report: reportModel): void {
     if (report.form_type === 'F99') {
       this._reportsService.getReportInfo(report.form_type, report.report_id).subscribe((res: form99) => {
         //console.log('getReportInfo res =', res);
         localStorage.setItem('form_99_details', JSON.stringify(res));
         let formSavedObj: any = {
-          saved: true
+          saved: true,
         };
         localStorage.setItem('form_99_saved', JSON.stringify(formSavedObj));
       });
       setTimeout(() => {
-        this._router.navigate(['/forms/form/99'],{ queryParams: { step: 'step_4', edit:true, reportId: report.report_id} });
+        this._router.navigate(['/forms/form/99'], {
+          queryParams: { step: 'step_4', edit: true, reportId: report.report_id },
+        });
       }, 1500);
     } else if (report.form_type === 'F3X' || report.form_type === 'F24' || report.form_type === 'F3L') {
       this._reportsService
         .getReportInfo(report.form_type, report.report_id)
         .subscribe((res: form3xReportTypeDetails) => {
-          localStorage.setItem(`form_${report.form_type.substr(1)}_details`, JSON.stringify(res[0]));
-          localStorage.setItem(`form_${report.form_type.substr(1)}_report_type`, JSON.stringify(res[0]));
+          localStorage.setItem(`form_${report.form_type.substr(1)}_details`, JSON.stringify(res));
+          localStorage.setItem(`form_${report.form_type.substr(1)}_report_type`, JSON.stringify(res));
         });
 
       setTimeout(() => {
-
-        let queryParams: any = { step: 'step_4', edit:true, reportId: report.report_id};
+        let queryParams: any = { step: 'step_4', edit: true, reportId: report.report_id };
         if (report.amend_ind.startsWith('A')) {
-          queryParams.amendmentReportId = report.report_id;
+          queryParams['amendmentReportId'] = report.report_id;
         }
         const formType =
           report.form_type && report.form_type.length > 2 ? report.form_type.substring(1, 3) : report.form_type;
-          this._router.navigate([`/signandSubmit/${report.form_type.substr(1)}`], { queryParams: queryParams });
-
+        this._router.navigate([`/signandSubmit/${report.form_type.substr(1)}`], { queryParams: queryParams });
       }, 1500);
-    } else if(report.form_type === 'F1M'){
+    } else if (report.form_type === 'F1M') {
       const formType = '1M';
-        this._router.navigate([`/forms/form/${formType}`], {
-          queryParams: { step: 'step_4', edit: true, reportId: report.report_id}
-        });
+      this._router.navigate([`/forms/form/${formType}`], {
+        queryParams: { step: 'step_4', edit: true, reportId: report.report_id },
+      });
     }
-    
   }
 
-  public downloadReport(report: reportModel): void{
-    
-    const imageNumber="201804139108073637"; // Todo in the production get the imagenumber from reports table
-    const url=`https://www.fec.gov/data/filings/?data_type=processed&committee_id=${report.cmte_id}&beginning_image_number=${imageNumber}`;
+  public downloadReport(report: reportModel): void {
+    const imageNumber = '201804139108073637'; // Todo in the production get the imagenumber from reports table
+    const url = `https://www.fec.gov/data/filings/?data_type=processed&committee_id=${report.cmte_id}&beginning_image_number=${imageNumber}`;
     //console.log("downloadReport url = ", url);
     window.open(url, '_blank');
-
   }
   public viewFiledReport(report: reportModel): void {
     // TODO: replace with details from report
-    const fecId = '1437593' ; // = report.fec_id
+    const fecId = '1437593'; // = report.fec_id
     const comteId = 'C00447565'; // = report.cmte_id
     const url = 'https://docquery.fec.gov/cgi-bin/forms/' + comteId + '/' + fecId + '/';
     window.open(url, '_blank');
-
   }
 
   /**
@@ -906,7 +896,7 @@ public printReport(report: reportModel): void{
       .confirm('You are about to delete these reports ',
         TrashConfirmComponent,
         'Caution!', null, null, dataMap)
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           let i = 1;
           for (const rep of selectedReports) {
@@ -964,8 +954,8 @@ public printReport(report: reportModel): void{
       this._reportsService
         .getReportInfo(report.form_type, report.report_id)
         .subscribe((res: form3xReportTypeDetails) => {
-          localStorage.setItem(`form_${report.form_type.substr(1)}_details`, JSON.stringify(res[0]));
-          localStorage.setItem(`form_${report.form_type.substr(1)}_report_type`, JSON.stringify(res[0]));
+          localStorage.setItem(`form_${report.form_type.substr(1)}_details`, JSON.stringify(res));
+          localStorage.setItem(`form_${report.form_type.substr(1)}_report_type`, JSON.stringify(res));
 
           //return false;
         });
@@ -974,27 +964,31 @@ public printReport(report: reportModel): void{
         const isFiled = report.status.toUpperCase() === 'FILED';
         const formType =
           report.form_type && report.form_type.length > 2 ? report.form_type.substring(1, 3) : report.form_type;
-          if (formType === '3X' || formType === '3L') {
-            this._router.navigate([`/forms/form/${formType}`], {
-              queryParams: { step: 'financial_summary', reportId: report.report_id, edit: false, isFiled: isFiled }
-            });
-          } else if(formType === '24'){
-            this._router.navigate([`/forms/form/${formType}`], {
-              queryParams: { step: 'transactions', reportId: report.report_id, edit: false, isFiled: isFiled, transactionCategory: 'disbursements' }
-            });
-          }
-          else if(formType === 'F99') {
-            this._router.navigate([`/forms/form/${formType}`], {
-              queryParams: { step: 'step_1', reportId: report.report_id, edit: false, isFiled: isFiled }
-            });
-          }
+        if (formType === '3X' || formType === '3L') {
+          this._router.navigate([`/forms/form/${formType}`], {
+            queryParams: { step: 'financial_summary', reportId: report.report_id, edit: false, isFiled: isFiled },
+          });
+        } else if (formType === '24') {
+          this._router.navigate([`/forms/form/${formType}`], {
+            queryParams: {
+              step: 'transactions',
+              reportId: report.report_id,
+              edit: false,
+              isFiled: isFiled,
+              transactionCategory: 'disbursements',
+            },
+          });
+        } else if (formType === 'F99') {
+          this._router.navigate([`/forms/form/${formType}`], {
+            queryParams: { step: 'step_1', reportId: report.report_id, edit: false, isFiled: isFiled },
+          });
+        }
       }, 1500);
-    }
-    else if(report.form_type === 'F1M'){
+    } else if (report.form_type === 'F1M') {
       const formType = '1M';
-        this._router.navigate([`/forms/form/${formType}`], {
-          queryParams: { step: 'step_2', edit: false, viewOnly:true, reportId: report.report_id}
-        });
+      this._router.navigate([`/forms/form/${formType}`], {
+        queryParams: { step: 'step_2', edit: false, viewOnly: true, reportId: report.report_id },
+      });
     }
   }
 
@@ -1020,47 +1014,57 @@ public printReport(report: reportModel): void{
         .getReportInfo(report.form_type, report.report_id)
         .subscribe((res: form3xReportTypeDetails) => {
           //console.log('getReportInfo res =', res);
-          localStorage.setItem(`form_${report.form_type.substring(1, 3)}_details`, JSON.stringify(res[0]));
-          localStorage.setItem(`form_${report.form_type.substring(1, 3)}_report_type`, JSON.stringify(res[0]));
+          localStorage.setItem(`form_${report.form_type.substring(1, 3)}_details`, JSON.stringify(res));
+          localStorage.setItem(`form_${report.form_type.substring(1, 3)}_report_type`, JSON.stringify(res));
 
           //return false;
         });
       setTimeout(() => {
         // this._router.navigate([`/forms/reports/3X/${report.report_id}`], { queryParams: { step: 'step_4' } });
-        let queryParams: any = { step: 'transactions', reportId: report.report_id, edit: true, transactionCategory: 'receipts', isFiled: false };
+        let queryParams: any = {
+          step: 'transactions',
+          reportId: report.report_id,
+          edit: true,
+          transactionCategory: 'receipts',
+          isFiled: false,
+        };
         if (report.amend_ind.startsWith('A')) {
-          queryParams.amendmentReportId = report.report_id;
+          queryParams['amendmentReportId'] = report.report_id;
         }
         const formType =
           report.form_type && report.form_type.length > 2 ? report.form_type.substring(1, 3) : report.form_type;
         this._router.navigate([`/forms/form/${formType}`], {
-          queryParams: queryParams
+          queryParams: queryParams,
         });
       }, 1500);
-    }
-    else if(report.form_type === 'F1M'){
+    } else if (report.form_type === 'F1M') {
       const formType = '1M';
-        this._router.navigate([`/forms/form/${formType}`], {
-          queryParams: { step: 'step_2', edit: true, reportId: report.report_id}
-        });
-    }
-    else if (report.form_type === 'F24') {
+      this._router.navigate([`/forms/form/${formType}`], {
+        queryParams: { step: 'step_2', edit: true, reportId: report.report_id },
+      });
+    } else if (report.form_type === 'F24') {
       this._reportsService
         .getReportInfo(report.form_type, report.report_id)
         .subscribe((res: form3xReportTypeDetails) => {
-          localStorage.setItem('form_24_details', JSON.stringify(res[0]));
-          localStorage.setItem(`form_24_report_type`, JSON.stringify(res[0]));
+          localStorage.setItem('form_24_details', JSON.stringify(res));
+          localStorage.setItem(`form_24_report_type`, JSON.stringify(res));
         });
       setTimeout(() => {
         const formType =
           report.form_type && report.form_type.length > 2 ? report.form_type.substring(1, 3) : report.form_type;
-          let queryParams: any = { step: 'transactions', reportId: report.report_id, edit: true, transactionCategory: 'disbursements', isFiled: false };
-          if (report.amend_ind.startsWith('A')) {
-            queryParams.amendmentReportId = report.report_id;
-          }
-          this._router.navigate([`/forms/form/${formType}`], {
-            queryParams : queryParams
-          });
+        let queryParams: any = {
+          step: 'transactions',
+          reportId: report.report_id,
+          edit: true,
+          transactionCategory: 'disbursements',
+          isFiled: false,
+        };
+        if (report.amend_ind.startsWith('A')) {
+          queryParams['amendmentReportId'] = report.report_id;
+        }
+        this._router.navigate([`/forms/form/${formType}`], {
+          queryParams: queryParams,
+        });
       }, 1500);
     }
   }
@@ -1076,7 +1080,7 @@ public printReport(report: reportModel): void{
       .confirm('You are about to trash report ' + rep.reportId + '.',
         ConfirmModalComponent,
         'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._reportsService.trashReport(rep)
             .subscribe((res: GetReportsResponse) => {
@@ -1100,7 +1104,7 @@ public printReport(report: reportModel): void{
   public restoreReport(rep: reportModel): void {
     this._dialogService
       .confirm('You are about to restore report ' + rep.report_id + '.', ConfirmModalComponent, 'Warning!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._reportsService.trashOrRestoreReports('restore', [rep]).subscribe((res: GetReportsResponse) => {
             this.getRecyclingPage(this.config.currentPage);
@@ -1143,7 +1147,7 @@ public printReport(report: reportModel): void{
       .confirm(beforeMessage,
         ConfirmModalComponent,
         'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._reportsService.deleteRecycleBinReport(selectedReports)
             .subscribe((res: GetReportsResponse) => {
@@ -1182,7 +1186,7 @@ public printReport(report: reportModel): void{
 
       if (this.config.currentPage === this.numberOfPages) {
         // end = this.contactsModel.length;
-        end = this.config.totalItems;
+        end = this.config.totalItems ?? 0;
         start = (this.config.currentPage - 1) * this.config.itemsPerPage + 1;
       } else {
         end = this.config.currentPage * this.config.itemsPerPage;
@@ -1195,15 +1199,15 @@ public printReport(report: reportModel): void{
     }
 
     this.firstItemOnPage = start;
-    if (end > this.config.totalItems) {
-      end = this.config.totalItems;
+    if (end > (this.config?.totalItems ?? 0)) {
+      end = this.config.totalItems ?? 0;
     }
     this.lastItemOnPage = end;
     return start + ' - ' + end;
   }
-        
+
   public showPageSizes(): boolean {
-    if (this.config && this.config.totalItems && this.config.totalItems > 0){
+    if (this.config && this.config.totalItems && this.config.totalItems > 0) {
       return true;
     }
     return false;
@@ -1316,9 +1320,12 @@ public printReport(report: reportModel): void{
     const key = this.reportSortableColumnsLSK;
     const sortableColumnsJson: string | null = localStorage.getItem(key);
     if (localStorage.getItem(key) != null) {
-      const repCols: SortableColumnModel[] = JSON.parse(sortableColumnsJson);
+      const repCols: SortableColumnModel[] = JSON.parse(sortableColumnsJson ?? '');
       for (const col of repCols) {
-        this._tableService.getColumnByName(col.colName, this.sortableColumns).visible = col.visible;
+        const vis: any = this._tableService.getColumnByName(col.colName, this.sortableColumns);
+        if (vis) {
+          vis.visible = col.visible;
+        }
       }
     }
   }
@@ -1332,7 +1339,7 @@ public printReport(report: reportModel): void{
       this.filters = JSON.parse(filtersJson);
     } else {
       // Just in case cache has an unexpected issue, use default.
-      this.filters = null;
+      // this.filters = null;
     }
   }
 
@@ -1344,7 +1351,7 @@ public printReport(report: reportModel): void{
   private applyColCache(key: string) {
     const sortableColumnsJson: string | null = localStorage.getItem(key);
     if (localStorage.getItem(key) != null) {
-      this.sortableColumns = JSON.parse(sortableColumnsJson);
+      this.sortableColumns = JSON.parse(sortableColumnsJson ?? '');
     } else {
       // Just in case cache has an unexpected issue, use default.
       this.setSortableColumns();
@@ -1357,15 +1364,15 @@ public printReport(report: reportModel): void{
    */
   private applyCurrentSortedColCache(key: string) {
     const currentSortedColumnJson: string | null = localStorage.getItem(key);
-    let currentSortedColumnL: SortableColumnModel = null;
+    let currentSortedColumnL: SortableColumnModel | null = null;
     if (currentSortedColumnJson) {
       currentSortedColumnL = JSON.parse(currentSortedColumnJson);
 
       // sort by the column direction previously set
       this.currentSortedColumnName = this._tableService.setSortDirection(
-        currentSortedColumnL.colName,
+        currentSortedColumnL?.colName ?? '',
         this.sortableColumns,
-        currentSortedColumnL.descending
+        currentSortedColumnL?.descending ?? false
       );
     } else {
       this.setSortDefault();
@@ -1377,7 +1384,7 @@ public printReport(report: reportModel): void{
    * @param key the key to the value in the local storage cache
    */
   private applyCurrentPageCache(key: string) {
-    const currentPageCache: string = localStorage.getItem(key);
+    const currentPageCache: string | null = localStorage.getItem(key);
     if (this._utilService.isNumber(currentPageCache)) {
       this.config.currentPage = this._utilService.toInteger(currentPageCache);
     } else {
@@ -1502,29 +1509,27 @@ public printReport(report: reportModel): void{
 
     this._dialogService
       .confirm('You are about to delete these reports.   ' + repIds, ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
-          this._reportsService
-            .trashOrRestoreReports('trash', selectedReports)
-            .subscribe((res: GetReportsResponse) => {
-              this.getReportsPage(this.config.currentPage);
+          this._reportsService.trashOrRestoreReports('trash', selectedReports).subscribe((res: GetReportsResponse) => {
+            this.getReportsPage(this.config.currentPage);
 
-              let afterMessage = '';
-              if (selectedReports.length === 1) {
-                afterMessage = `report ${selectedReports[0].report_id}
+            let afterMessage = '';
+            if (selectedReports.length === 1) {
+              afterMessage = `report ${selectedReports[0].report_id}
                   has been successfully deleted and sent to the recycle bin.`;
-              } else {
-                afterMessage = 'reports have been successfully deleted and sent to the recycle bin.   ' + repIds;
-              }
+            } else {
+              afterMessage = 'reports have been successfully deleted and sent to the recycle bin.   ' + repIds;
+            }
 
-              this._dialogService.confirm(
-                afterMessage,
-                ConfirmModalComponent,
-                'Success!',
-                false,
-                ModalHeaderClassEnum.successHeader
-              );
-            });
+            this._dialogService.confirm(
+              afterMessage,
+              ConfirmModalComponent,
+              'Success!',
+              false,
+              ModalHeaderClassEnum.successHeader
+            );
+          });
         } else if (res === 'cancel') {
         }
       });
@@ -1533,9 +1538,9 @@ public printReport(report: reportModel): void{
   public trashReport(rep: reportModel): void {
     this._dialogService
       .confirm('You are about to delete this report ' + rep.report_id + '.', ConfirmModalComponent, 'Warning!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
-          this._reportsService.trashOrRestoreReports('trash', [rep]).subscribe((res: GetReportsResponse) => {
+          this._reportsService.trashOrRestoreReports('trash', [rep]).subscribe((res: any) => {
             //console.log("trashReport res =", res);
             if (res['result'] === 'success') {
               this.getReportsPage(this.config.currentPage);
@@ -1546,8 +1551,7 @@ public printReport(report: reportModel): void{
                 false,
                 ModalHeaderClassEnum.successHeader
               );
-            } else
-            {
+            } else {
               this.getReportsPage(this.config.currentPage);
               this._dialogService.confirm(
                 'Report has not been successfully deleted and sent to the recycle bin. ' + rep.report_id,
@@ -1558,7 +1562,6 @@ public printReport(report: reportModel): void{
               );
             }
           });
-          
         } else if (res === 'cancel') {
         }
       });
@@ -1567,7 +1570,7 @@ public printReport(report: reportModel): void{
   public restorereport(rep: reportModel): void {
     this._dialogService
       .confirm('You are about to restore report ' + rep.report_id + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           // this._reportsService.restorereport(rep)
           //   .subscribe((res: GetReportsResponse) => {
@@ -1604,7 +1607,7 @@ public printReport(report: reportModel): void{
       beforeMessage = 'Are you sure you want to permanently delete these Reports?   ' + repIds;
     }
 
-    this._dialogService.confirm(beforeMessage, ConfirmModalComponent, 'Caution!').then(res => {
+    this._dialogService.confirm(beforeMessage, ConfirmModalComponent, 'Caution!').then((res: any) => {
       if (res === 'okay') {
         this._reportsService.deleteRecycleBinReport(selectedReports).subscribe((res: GetReportsResponse) => {
           this.getRecyclingPage(this.config.currentPage);
@@ -1629,49 +1632,56 @@ public printReport(report: reportModel): void{
   }
 
   public amendReport(report: reportModel): void {
-    const msg = 'Amending this report will automatically amend any subsequent reports that have already been filed with the FEC.  Please note that you may need to file the subsequent amendments if the financial activity has changed.';
-    this._dialogService.confirm(msg,ConfirmModalComponent, 'Warning!', true, ModalHeaderClassEnum.warningHeader).then(res=> {
-      if(res === 'okay'){
-        this._reportsService.amendReport(report).subscribe(res =>
-          {        
+    const msg =
+      'Amending this report will automatically amend any subsequent reports that have already been filed with the FEC.  Please note that you may need to file the subsequent amendments if the financial activity has changed.';
+    this._dialogService
+      .confirm(msg, ConfirmModalComponent, 'Warning!', true, ModalHeaderClassEnum.warningHeader)
+      .then((res) => {
+        if (res === 'okay') {
+          this._reportsService.amendReport(report).subscribe((res) => {
             report = res;
-          
+
             if (report.form_type === 'F3X' || report.form_type === 'F24' || report.form_type === 'F3L') {
-            this._reportsService
-              .getReportInfo(report.form_type, report.report_id)
-              .subscribe((res: form3xReportTypeDetails) => {
-                localStorage.setItem(`form_${report.form_type.substr(1)}_details`, JSON.stringify(res[0]));
-                localStorage.setItem(`form_${report.form_type.substr(1)}_report_type`, JSON.stringify(res[0]));
-    
-              });
-            setTimeout(() => {
-              let transCategory = 'receipts';
-              if(report.form_type === 'F24'){
-                transCategory = 'disbursements';
-              }
-              const formType =
-                report.form_type && report.form_type.length > 2 ? report.form_type.substring(1, 3) : report.form_type;
-              this._router.navigate([`/forms/form/${formType}`], {
-                queryParams: { step: 'transactions', reportId: report.report_id, edit: true, transactionCategory: transCategory, amendmentReportId: report.report_id }
-              });
+              this._reportsService
+                .getReportInfo(report.form_type, report.report_id)
+                .subscribe((res: form3xReportTypeDetails) => {
+                  localStorage.setItem(`form_${report.form_type.substr(1)}_details`, JSON.stringify(res));
+                  localStorage.setItem(`form_${report.form_type.substr(1)}_report_type`, JSON.stringify(res));
+                });
+              setTimeout(() => {
+                let transCategory = 'receipts';
+                if (report.form_type === 'F24') {
+                  transCategory = 'disbursements';
+                }
+                const formType =
+                  report.form_type && report.form_type.length > 2 ? report.form_type.substring(1, 3) : report.form_type;
+                this._router.navigate([`/forms/form/${formType}`], {
+                  queryParams: {
+                    step: 'transactions',
+                    reportId: report.report_id,
+                    edit: true,
+                    transactionCategory: transCategory,
+                    amendmentReportId: report.report_id,
+                  },
+                });
               }, 1500);
-            }    
-            else if (report.form_type === 'F1M') {
+            } else if (report.form_type === 'F1M') {
               const formType = '1M';
               this._router.navigate([`/forms/form/${formType}`], {
-                queryParams: { step: 'step_2', reportId: report.report_id, edit:true}
+                queryParams: { step: 'step_2', reportId: report.report_id, edit: true },
               });
-            }      
-          }
-        )    
-      }
-    })
+            }
+          });
+        }
+      });
   }
   public isUpload() {
-    if (this.authService.isAdmin() ||
-        this.authService.isCommitteeAdmin() ||
-        this.authService.isBackupCommitteeAdmin()) {
-        return true;
+    if (
+      this.authService.isAdmin() ||
+      this.authService.isCommitteeAdmin() ||
+      this.authService.isBackupCommitteeAdmin()
+    ) {
+      return true;
     }
     return false;
   }
@@ -1680,29 +1690,32 @@ public printReport(report: reportModel): void{
    *
    * @param report
    */
-  addMemo(report: reportModel, viewOnly : boolean = false) {
+  addMemo(report: reportModel, viewOnly: boolean = false) {
     const memoText = report.memo_text ? report.memo_text : '';
     const title = memoText ? 'Edit Memo' : 'Add Memo';
     const dialogData = {
       content: memoText,
       saveAction: SaveDialogAction.saveReportMemo,
       title: title,
-      viewOnly
+      viewOnly,
     };
-    this.inputDialogService.openFormModal(dialogData).then((res) => {
-      if (res.saveAction === SaveDialogAction.saveReportMemo) {
-        const updateData = {
-          report_id: report.report_id,
-          memo_text: res.content
-        };
-        this._reportsService.updateMemo(updateData).subscribe(updateRes => {
-          if (updateRes) {
-            this.getReportsPage(this.config.currentPage);
-          }
-        });
-      }
-    }).catch((e) => {
-      // clicked other than save
-    });
+    this.inputDialogService
+      .openFormModal(dialogData)
+      .then((res) => {
+        if (res.saveAction === SaveDialogAction.saveReportMemo) {
+          const updateData = {
+            report_id: report.report_id,
+            memo_text: res.content,
+          };
+          this._reportsService.updateMemo(updateData).subscribe((updateRes) => {
+            if (updateRes) {
+              this.getReportsPage(this.config.currentPage);
+            }
+          });
+        }
+      })
+      .catch((e: any) => {
+        // clicked other than save
+      });
   }
 }

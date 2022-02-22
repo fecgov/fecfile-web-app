@@ -2,17 +2,14 @@
   <header>
     <h3 class="text-center">Select Election Year Type</h3>
     <hr />
-    
   </header>
-  <div class="sidebar-body pb-1" style="padding: 0 1.25em;">
+  <div class="sidebar-body pb-1" style="padding: 0 1.25em">
     <div class="sidebar-item">
       <label for="electionYearType">
         Election Year Type
         <button type="button" class="btn-info" ngbTooltip="Language will be provided by RAD">
           <i class="info-icon" aria-hidden="true"></i>
-          <span class="sr-only">
-            Click for more information
-          </span>
+          <span class="sr-only"> Click for more information </span>
         </button>
       </label>
       <select class="form-control" (change)="selectElectionYearTypeChange($event)">
@@ -21,7 +18,7 @@
       </select>
     </div>
   </div>
-  <hr>
+  <hr />
 </div>
 
 <div class="report-type-sidebar">
@@ -30,27 +27,26 @@
     <hr />
   </header>
 
-
-
   <section>
     <form class="sidebar-form-content" [formGroup]="frmReportSidebar">
-      <div class="sidebar-body" style="padding: 0 1.25em;">
+      <div class="sidebar-body" style="padding: 0 1.25em">
         <ng-container *ngIf="specialReports === true">
           <div class="sidebar-item">
             <label for="State">
               State*
               <button type="button" class="btn-info" ngbTooltip="Language will be provided by RAD">
                 <i class="info-icon" aria-hidden="true"></i>
-                <span class="sr-only">
-                  Click for more information
-                </span>
+                <span class="sr-only"> Click for more information </span>
               </button>
             </label>
-            <select formControlName = "state" id="state" name="state" class="form-control" (change)="selectStateChange($event)">
-              <option
-                *ngFor="let state of electionStates"
-                [value]="state.state"
-              >
+            <select
+              formControlName="state"
+              id="state"
+              name="state"
+              class="form-control"
+              (change)="selectStateChange($event)"
+            >
+              <option *ngFor="let state of electionStates" [value]="state.state">
                 {{ state.state_description }}
               </option>
             </select>
@@ -87,41 +83,37 @@
             </select>
           </div> -->
           <div class="sidebar-item" *ngIf="formType === '3L' || formType === '3X'">
-              <label for="electionDate">
-                Election Date*
-                <button type="button" class="btn-info" ngbTooltip="Language will be provided by RAD">
-                  <i class="info-icon" aria-hidden="true"></i>
-                  <span class="sr-only">
-                    Click for more information
-                  </span>
-                </button>
-              </label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="election_date">
-                    <i class="calendar-icon" aria-hidden="true"></i>
-                  </span>
-                </div>
-                <input
-                  formControlName = "election_date"
-                  type="date"
-                  name="txtElectionDate"
-                  class="form-control"
-                  id="electionDate"
-                  [value]="electionDate"
-                  (change)="selectElectionDateChange($event)"
-                />
+            <label for="electionDate">
+              Election Date*
+              <button type="button" class="btn-info" ngbTooltip="Language will be provided by RAD">
+                <i class="info-icon" aria-hidden="true"></i>
+                <span class="sr-only"> Click for more information </span>
+              </button>
+            </label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="election_date">
+                  <i class="calendar-icon" aria-hidden="true"></i>
+                </span>
               </div>
+              <input
+                formControlName="election_date"
+                type="date"
+                name="txtElectionDate"
+                class="form-control"
+                id="electionDate"
+                [value]="electionDate"
+                (change)="selectElectionDateChange($event)"
+              />
             </div>
+          </div>
         </ng-container>
         <div class="sidebar-item">
           <label for="dateFrom"
             >Date From*
             <button type="button" class="btn-info" ngbTooltip="Language will be provided by RAD">
               <i class="info-icon" aria-hidden="true"></i>
-              <span class="sr-only">
-                Click for more information
-              </span>
+              <span class="sr-only"> Click for more information </span>
             </button>
           </label>
           <div class="input-group">
@@ -131,14 +123,12 @@
               </span>
             </div>
             <input
-              formControlName = "fromDate"
+              formControlName="fromDate"
               type="date"
               name="txtFromDate"
               class="form-control"
               id="fromDate"
               [value]="fromDate"
-              (change)="fromDateChange($event.target.value)"
-              
             />
           </div>
         </div>
@@ -147,9 +137,7 @@
             Date To*
             <button type="button" class="btn-info" ngbTooltip="Language will be provided by RAD">
               <i class="info-icon" aria-hidden="true"></i>
-              <span class="sr-only">
-                Click for more information
-              </span>
+              <span class="sr-only"> Click for more information </span>
             </button>
           </label>
           <div class="input-group">
@@ -159,35 +147,50 @@
               </span>
             </div>
             <input
-              formControlName = "toDate"
+              formControlName="toDate"
               type="date"
               name="txtToDate"
               class="form-control"
               id="toDate"
               [value]="toDate"
-              (change)="toDateChange($event.target.value)"
             />
           </div>
         </div>
-        <ng-container *ngIf="selectedReport && (selectedReport['semi-annual_dates'] || selectedReport['semi-annual_dates_optional'])">
+        <ng-container
+          *ngIf="
+            selectedReport && (selectedReport['semi-annual_dates'] || selectedReport['semi-annual_dates_optional'])
+          "
+        >
           <div class="sidebar-item py-3">
             <label for="dateTo">
               Semi-annual Dates<span *ngIf="!selectedReport['semi-annual_dates_optional']">*</span>
               <button type="button" class="btn-info" ngbTooltip="Language will be provided by RAD">
                 <i class="info-icon" aria-hidden="true"></i>
-                <span class="sr-only">
-                  Click for more information
-                </span>
+                <span class="sr-only"> Click for more information </span>
               </button>
             </label>
             <div class="input-group">
               <div class="py-2">
-                <input formControlName="semiAnnualDatesOption"  id="firstHalf" type="radio" value="0" (change)="semiAnnualDateChange($event)"> 
-                {{selectedReport['semi-annual_dates'][0].start_date | date : 'MM/dd/yyyy'}} - {{selectedReport['semi-annual_dates'][0].end_date | date : 'MM/dd/yyyy'}}
+                <input
+                  formControlName="semiAnnualDatesOption"
+                  id="firstHalf"
+                  type="radio"
+                  value="0"
+                  (change)="semiAnnualDateChange($event)"
+                />
+                {{ selectedReport['semi-annual_dates'][0].start_date | date: 'MM/dd/yyyy' }} -
+                {{ selectedReport['semi-annual_dates'][0].end_date | date: 'MM/dd/yyyy' }}
               </div>
               <div class="py-2">
-                <input formControlName="semiAnnualDatesOption"  id="secondHalf" type="radio" value="1" (change)="semiAnnualDateChange($event)">
-                {{selectedReport['semi-annual_dates'][1].start_date | date : 'MM/dd/yyyy'}} - {{selectedReport['semi-annual_dates'][1].end_date | date : 'MM/dd/yyyy'}}
+                <input
+                  formControlName="semiAnnualDatesOption"
+                  id="secondHalf"
+                  type="radio"
+                  value="1"
+                  (change)="semiAnnualDateChange($event)"
+                />
+                {{ selectedReport['semi-annual_dates'][1].start_date | date: 'MM/dd/yyyy' }} -
+                {{ selectedReport['semi-annual_dates'][1].end_date | date: 'MM/dd/yyyy' }}
               </div>
             </div>
           </div>

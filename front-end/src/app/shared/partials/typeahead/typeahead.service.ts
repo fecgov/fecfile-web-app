@@ -1,12 +1,11 @@
-import { Injectable , ChangeDetectionStrategy } from '@angular/core';
+import { Injectable, ChangeDetectionStrategy } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
+import { Observable, of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TypeaheadService {
   constructor(private _http: HttpClient, private _cookieService: CookieService) {}
@@ -23,7 +22,12 @@ export class TypeaheadService {
    *  Possible fields are 'entity_name', 'first_name', 'last_name'.
    *
    */
-  public getContacts(searchString: string, fieldName: string, expand?: boolean, global_search?: string): Observable<any> {
+  public getContacts(
+    searchString: string,
+    fieldName: string,
+    expand?: boolean,
+    global_search?: string
+  ): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url = '/core/autolookup_search_contacts';
     let httpOptions = new HttpHeaders();
@@ -33,7 +37,7 @@ export class TypeaheadService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     if (!searchString) {
-      return;
+      return of(null);
     }
 
     if (
@@ -61,20 +65,20 @@ export class TypeaheadService {
       } else {
         //console.log(`invalid field name for ${url}`);
       }
-      return Observable.of([]);
+      return of([]);
     }
 
-    if(expand) {
+    if (expand) {
       params = params.append('expand', 'true');
     }
 
-    if(global_search) {
+    if (global_search) {
       params = params.append('global_search', global_search);
     }
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
   }
 
@@ -88,14 +92,14 @@ export class TypeaheadService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     if (!cmteId) {
-      return;
-    }else {
+      return of(null);
+    } else {
       params = params.append('cmte_id', cmteId);
     }
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
   }
 }

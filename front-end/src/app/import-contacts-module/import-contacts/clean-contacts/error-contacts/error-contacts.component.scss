@@ -17,7 +17,7 @@
       }
       .hard_left {
         position: absolute;
-        left: 0; 
+        left: 0;
         width: 2%;
         .action_button {
           margin: -4px;
@@ -30,29 +30,30 @@
   }
 
   .error_contacts__heading {
-      padding: .5em 0;
+    padding: 0.5em 0;
   }
 
   .error_contacts__table-pagination-container {
     padding: 1em;
-  } 
+  }
 
   /* style ngx-pagination - start */
   /* override some styling where use of !important is made. */
 
-  .ngx-pagination .current{
+  .ngx-pagination .current {
     padding: 0.1875rem 0.625rem;
-    background: #9B9B9B !important;;
+    background: #9b9b9b !important;
     color: #fefefe;
     cursor: default;
   }
 
-  .ngx-pagination a, .ngx-pagination button {
-    color: #9B9B9B !important;;
+  .ngx-pagination a,
+  .ngx-pagination button {
+    color: #9b9b9b !important;
     display: block;
     padding: 0.1875rem 0.625rem;
     border-radius: 0;
-  }	
+  }
 
   /* style ngx-pagination - end */
 
@@ -72,7 +73,8 @@
 }
 
 .modal {
-  .modal-lg, .modal-xl {
+  .modal-lg,
+  .modal-xl {
     max-width: 95%;
   }
   #error_contacts__pin-modal-header {
@@ -83,4 +85,3 @@
     }
   }
 }
-

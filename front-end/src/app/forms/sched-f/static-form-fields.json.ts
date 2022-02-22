@@ -10,8 +10,8 @@ export const schedFstaticFormFields = [
         name: 'coordinated_exp_ind',
         value: null,
         validation: {
-          required: true
-        }
+          required: true,
+        },
       },
       {
         staticField: true,
@@ -34,8 +34,8 @@ export const schedFstaticFormFields = [
         validation: {
           required: true,
           max: 9,
-          alphaNumeric: true
-        }
+          alphaNumeric: true,
+        },
       },
       {
         staticField: true,
@@ -58,8 +58,8 @@ export const schedFstaticFormFields = [
         validation: {
           required: true,
           max: 200,
-          alphaNumeric: true
-        }
+          alphaNumeric: true,
+        },
       },
       {
         staticField: true,
@@ -68,8 +68,8 @@ export const schedFstaticFormFields = [
         validation: {
           required: true,
           max: 9,
-          alphaNumeric: true
-        }
+          alphaNumeric: true,
+        },
       },
       {
         staticField: true,
@@ -78,8 +78,8 @@ export const schedFstaticFormFields = [
         validation: {
           required: true,
           max: 200,
-          alphaNumeric: true
-        }
+          alphaNumeric: true,
+        },
       },
       {
         staticField: true,
@@ -88,8 +88,8 @@ export const schedFstaticFormFields = [
         validation: {
           required: true,
           max: 34,
-          alphaNumeric: true
-        }
+          alphaNumeric: true,
+        },
       },
       {
         staticField: true,
@@ -98,8 +98,8 @@ export const schedFstaticFormFields = [
         validation: {
           required: false,
           max: 34,
-          alphaNumeric: true
-        }
+          alphaNumeric: true,
+        },
       },
       {
         staticField: true,
@@ -108,8 +108,8 @@ export const schedFstaticFormFields = [
         validation: {
           required: true,
           max: 30,
-          alphaNumeric: true
-        }
+          alphaNumeric: true,
+        },
       },
       {
         staticField: true,
@@ -119,8 +119,8 @@ export const schedFstaticFormFields = [
         validation: {
           required: true,
           max: 2,
-          alphaNumeric: true
-        }
+          alphaNumeric: true,
+        },
       },
       {
         staticField: true,
@@ -129,9 +129,9 @@ export const schedFstaticFormFields = [
         validation: {
           required: true,
           max: 10,
-          alphaNumeric: true
-        }
-      }
-    ]
-  }
+          alphaNumeric: true,
+        },
+      },
+    ],
+  },
 ];

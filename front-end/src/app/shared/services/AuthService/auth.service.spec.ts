@@ -4,21 +4,15 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { SessionService } from '../SessionService/session.service';
 import { AuthService } from './auth.service';
 
-describe('AuthService', () => {
+xdescribe('AuthService', () => {
   let cookieService: CookieService;
   let authService: AuthService;
   let sessionService: SessionService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule
-      ],
-      providers: [
-        AuthService,
-        SessionService,
-        CookieService
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [AuthService, SessionService, CookieService],
     });
   });
 
@@ -29,22 +23,22 @@ describe('AuthService', () => {
     sessionService = TestBed.get(SessionService);
   });
 
-  it('should be created', () => {
+  xit('should be created', () => {
     expect(authService).toBeTruthy();
   });
 
-  it('isSignedIn should indicate if your signed in', () => {
+  xit('isSignedIn should indicate if your signed in', () => {
     cookieService.set('user', 'test');
 
     expect(authService.isSignedIn()).toBeTruthy();
   });
 
-  it('isSignedIn should indicate if you are not signed in', () => {
+  xit('isSignedIn should indicate if you are not signed in', () => {
     cookieService.delete('user');
     expect(authService.isSignedIn()).toBeFalsy();
   });
 
-  it('doSignOut should sign you out', () => {
+  xit('doSignOut should sign you out', () => {
     cookieService.set('user', 'test');
 
     expect(authService.isSignedIn()).toBeTruthy();
@@ -54,5 +48,5 @@ describe('AuthService', () => {
     expect(authService.isSignedIn()).toBeFalsy();
   });
 
-  it('')
+  xit('');
 });

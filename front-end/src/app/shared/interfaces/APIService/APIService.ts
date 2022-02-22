@@ -2,23 +2,22 @@
  * Posts interface
  */
 export interface Posts {
-  body?: string,
-  id?: number,
-  title?: string,
-  userid?: number
+  body?: string;
+  id?: number;
+  title?: string;
+  userid?: number;
 }
 
 /**
  * Post interface
  */
- export interface Post {
-  body?: string,
-  id?: number,
-  title?: string,
-  userid?: number
- }
+export interface Post {
+  body?: string;
+  id?: number;
+  title?: string;
+  userid?: number;
+}
 
- export interface Auth {
-   token?: string
- }
-
+export interface Auth {
+  token?: string;
+}

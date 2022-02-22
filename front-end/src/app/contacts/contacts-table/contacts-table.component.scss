@@ -3,7 +3,7 @@
 .contacts__table-container {
   padding-right: 5px;
   .contacts__page-item-range {
-    padding: .5em .1em 0 0 ;
+    padding: 0.5em 0.1em 0 0;
   }
 
   .contacts__table {
@@ -22,12 +22,12 @@
 
   .contacts__table-pagination-container {
     padding: 1em;
-  }  
+  }
 
   /** hide the dropdown caret **/
   .dropdown-toggle:after {
     border: none;
-  }  
+  }
 
   #contacts__dropdown-action > button > i {
     padding-right: 3px;
@@ -38,13 +38,13 @@
   }
 
   .contacts__bulk_action_btn[disabled] {
-    background:#6c757d;
+    background: #6c757d;
     border-color: #6c757d;
   }
 
   .dropdown-menu {
     min-width: 6em;
-  }  
+  }
 
   .contacts__item-range {
     font-size: 13px;
@@ -61,7 +61,7 @@
   }
 
   .contacts__total-amount-tip {
-    color: #112E51;
+    color: #112e51;
     padding-left: 3px;
     float: right;
   }
@@ -89,23 +89,23 @@
   //   margin: 1.5em 0;
   // }
 
-
   /* style ngx-pagination - start */
   /* override some styling where use of !important is made. */
 
-  .ngx-pagination .current{
+  .ngx-pagination .current {
     padding: 0.1875rem 0.625rem;
-    background: #9B9B9B !important;;
+    background: #9b9b9b !important;
     color: #fefefe;
     cursor: default;
   }
 
-  .ngx-pagination a, .ngx-pagination button {
-    color: #9B9B9B !important;;
+  .ngx-pagination a,
+  .ngx-pagination button {
+    color: #9b9b9b !important;
     display: block;
     padding: 0.1875rem 0.625rem;
     border-radius: 0;
-  }	
+  }
 
   .ngx-pagination {
     margin-bottom: 0;
@@ -113,15 +113,14 @@
 
   /* style ngx-pagination - end */
 
-  ng-select { 
-    .ng-dropdown-panel { 
+  ng-select {
+    .ng-dropdown-panel {
       width: auto;
-      min-width: 100%; 
-    } 
+      min-width: 100%;
+    }
   }
 
   .column-options-modal {
-
     #contacts__pin-modal-header {
       background-color: $crusta;
     }
@@ -130,55 +129,60 @@
       width: 6em;
     }
 
-    .row{
+    .row {
       height: 3em;
     }
 
-    input[type="checkbox" i]:disabled, .disabled-column-option{
+    input[type='checkbox' i]:disabled,
+    .disabled-column-option {
       color: #cccccc;
-    } 
+    }
 
-    input[type=checkbox] {
+    input[type='checkbox'] {
       transform: scale(1.5);
     }
   }
   .inner_table {
-    background: #D7D7D7;
-    table.log_table{
+    background: #d7d7d7;
+    table.log_table {
       border-spacing: 0px;
       background-color: white !important;
       color: black !important;
-      tbody, thead {
+      tbody,
+      thead {
         display: block;
       }
-      tbody{
+      tbody {
         height: 150px;
         overflow-y: auto;
         overflow-x: hidden;
         width: inherit;
-        tr td.text-red{
+        tr td.text-red {
           color: red !important;
         }
-      };
-      .tr,.th, .td{
+      }
+      .tr,
+      .th,
+      .td {
         border-collapse: collapse;
         background-color: white;
       }
-      table, th,td {
+      table,
+      th,
+      td {
         border-collapse: collapse;
         border: 1px solid black;
-
       }
     }
   }
-.contact_link{
-  a{
-    color: #0062cc;
+  .contact_link {
+    a {
+      color: #0062cc;
 
-  a:hover{
-    color: #0000FF;
+      a:hover {
+        color: #0000ff;
+      }
+      cursor: pointer;
+    }
   }
-    cursor: pointer;
-  }
-}
 }

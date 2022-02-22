@@ -99,6 +99,7 @@
             -moz-transform: scale(1.9); /* FF */
             -webkit-transform: scale(1.9); /* Safari and Chrome */
             -o-transform: scale(1.9); /* Opera */
+            transform: scale(1.9);
             margin: 10px;
           }
           label {

@@ -11,5 +11,5 @@ export enum Sections {
   sectionF = 'section_f',
   sectionG = 'section_g',
   sectionH = 'section_h',
-  sectionI = 'section_i'
+  sectionI = 'section_i',
 }

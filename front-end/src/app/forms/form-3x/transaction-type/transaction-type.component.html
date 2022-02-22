@@ -28,9 +28,7 @@
       <div class="content">
         <ng-container *ngIf="!transactionCategorySelected && frmSubmitted">
           <div class="grid-row">
-            <div class="grid-row__col grid-row__col--12 text-center text-error">
-              Please select a transaction type.
-            </div>
+            <div class="grid-row__col grid-row__col--12 text-center text-error">Please select a transaction type.</div>
           </div>
         </ng-container>
         <ng-container *ngIf="transactionCategorySelected">
@@ -48,7 +46,6 @@
                 #acc="ngbAccordion"
                 [closeOthers]="true"
                 class="secondary-options"
-                (pannelChange)="beforeChange($event)"
               >
                 <ngb-panel
                   id="{{ option.value }}"
@@ -68,12 +65,10 @@
                               class="btn-info"
                               ngbTooltip=" {{ option?.info }}"
                               container="body"
-                              (click)="$event.stopPropagation();$event.preventDefault();"
+                              (click)="$event.stopPropagation(); $event.preventDefault()"
                             >
                               <i class="info-icon" aria-hidden="true"></i>
-                              <span class="sr-only">
-                                Click for more information
-                              </span>
+                              <span class="sr-only"> Click for more information </span>
                             </button>
                           </ng-container>
                         </div>
@@ -103,7 +98,7 @@
                             [value]="childOption.value"
                             (click)="updateTypeSelected($event, childOption)"
                           /> -->
-                          <!-- <ul class="child-options">
+                    <!-- <ul class="child-options">
                       <li class="child-options__item" *ngFor="let childOption of option.options">
                         <label for="option_{{ childOption.value }}" class="child-options-label">
                           <input
@@ -116,13 +111,17 @@
                           /> -->
                     <ul class="child-options">
                       <ng-container *ngFor="let childOption of option.options">
-                        <li class="child-options__item" >
-                          <label for="option_{{ childOption.value }}" class="child-options-label" (click)="updateTypeSelected(childOption)">
+                        <li class="child-options__item">
+                          <label
+                            for="option_{{ childOption.value }}"
+                            class="child-options-label"
+                            (click)="updateTypeSelected(childOption)"
+                          >
                             <input
                               id="option_{{ childOption.value }}"
                               placeholder="{{ childOption.text }}"
                               type="radio"
-                              [name]="secondaryOption"
+                              [name]="secondaryOptions"
                               [value]="childOption.value"
                               (click)="updateTypeSelected(childOption)"
                             />
@@ -137,9 +136,7 @@
                               container="body"
                             >
                               <i class="info-icon" aria-hidden="true"></i>
-                              <span class="sr-only">
-                                Click for more information
-                              </span>
+                              <span class="sr-only"> Click for more information </span>
                             </button>
                           </ng-container>
                         </li>

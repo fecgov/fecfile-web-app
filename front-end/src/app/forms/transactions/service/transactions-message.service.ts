@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { ActiveView } from '../transactions.component';
 
 /**
@@ -8,10 +8,9 @@ import { ActiveView } from '../transactions.component';
  * between transaction components.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TransactionsMessageService {
- 
   private subject = new Subject<any>();
   private applyFiltersSubject = new Subject<any>();
   private doKeywordFilterSearchSubject = new Subject<any>();
@@ -45,7 +44,7 @@ export class TransactionsMessageService {
    * Clear the Pin Column message
    */
   public clearShowPinColumnMessage() {
-    this.subject.next();
+    this.subject.next(null);
   }
 
   /**
@@ -69,7 +68,7 @@ export class TransactionsMessageService {
    * Clear the filters message.
    */
   public clearApplyFiltersMessage() {
-    this.applyFiltersSubject.next();
+    this.applyFiltersSubject.next(null);
   }
 
   /**
@@ -79,7 +78,6 @@ export class TransactionsMessageService {
     return this.applyFiltersSubject.asObservable();
   }
 
-
   /**
    * A method for subscribers of Remove Tag message
    */
@@ -87,14 +85,13 @@ export class TransactionsMessageService {
     return this.removeTagSubject.asObservable();
   }
 
-  public clearRemoveTagMessage(){
-    this.removeTagSubject.next();
+  public clearRemoveTagMessage() {
+    this.removeTagSubject.next(null);
   }
 
-  public sendRemoveTagMessage(message:any){
+  public sendRemoveTagMessage(message: any) {
     this.removeTagSubject.next(message);
   }
-
 
   /**
    * A method for subscribers of loading default tab
@@ -103,26 +100,26 @@ export class TransactionsMessageService {
     return this.clearAllFiltersSubject.asObservable();
   }
 
-  public clearClearAllFiltersMessage(){
-    this.clearAllFiltersSubject.next();
+  public clearClearAllFiltersMessage() {
+    this.clearAllFiltersSubject.next(null);
   }
 
-  public sendClearAllFiltersMessage(message:any){
+  public sendClearAllFiltersMessage(message: any) {
     this.clearAllFiltersSubject.next(message);
   }
 
- /**
-   * Method to clear All filters and tags. 
+  /**
+   * Method to clear All filters and tags.
    */
   public getLoadDefaultTabMessage(): Observable<any> {
     return this.loadDefaultTab.asObservable();
   }
 
-  public clearLoadDefaultTabMessage(){
-    this.loadDefaultTab.next();
+  public clearLoadDefaultTabMessage() {
+    this.loadDefaultTab.next(null);
   }
 
-  public sendLoadDefaultTabMessage(message:any){
+  public sendLoadDefaultTabMessage(message: any) {
     this.loadDefaultTab.next(message);
   }
 
@@ -140,7 +137,7 @@ export class TransactionsMessageService {
    * Clear the "do keyword + filters" message.
    */
   public clearDoKeywordFilterSearchMessage() {
-    this.doKeywordFilterSearchSubject.next();
+    this.doKeywordFilterSearchSubject.next(null);
   }
 
   /**
@@ -155,7 +152,7 @@ export class TransactionsMessageService {
   }
 
   public clearMessage() {
-    this.subject.next();
+    this.subject.next(null);
   }
 
   public getMessage(): Observable<any> {
@@ -167,7 +164,7 @@ export class TransactionsMessageService {
   }
 
   public clearEditTransactionMessage() {
-    this.editTransactionSubject.next();
+    this.editTransactionSubject.next(null);
   }
 
   public getEditTransactionMessage(): Observable<any> {
@@ -179,32 +176,31 @@ export class TransactionsMessageService {
   }
 
   public clearReattributeTransactionMessage() {
-    this.reattributeTransactionSubject.next();
+    this.reattributeTransactionSubject.next(null);
   }
 
   public getReattributeTransactionMessage(): Observable<any> {
     return this.reattributeTransactionSubject.asObservable();
   }
-  
+
   public sendRedesignateTransactionMessage(message: any) {
     this.redesignateTransactionSubject.next(message);
   }
 
   public clearRedesignateTransactionMessage() {
-    this.redesignateTransactionSubject.next();
+    this.redesignateTransactionSubject.next(null);
   }
 
   public getRedesignateTransactionMessage(): Observable<any> {
     return this.redesignateTransactionSubject.asObservable();
   }
-  
 
   public sendEditDebtSummaryTransactionMessage(message: any) {
     this.editDebtSummaryTransactionSubject.next(message);
   }
 
   public clearEditDebtSummaryTransactionMessage() {
-    this.editDebtSummaryTransactionSubject.next();
+    this.editDebtSummaryTransactionSubject.next(null);
   }
 
   public getEditDebtSummaryTransactionMessage(): Observable<any> {
@@ -216,7 +212,7 @@ export class TransactionsMessageService {
   }
 
   public clearShowTransactionsMessage() {
-    this.showTransactionsSubject.next();
+    this.showTransactionsSubject.next(null);
   }
 
   public getShowTransactionsMessage(): Observable<any> {
@@ -237,7 +233,7 @@ export class TransactionsMessageService {
    * Clear the Remove Filter message.
    */
   public clearRemoveFilterMessage() {
-    this.removeFilterSubject.next();
+    this.removeFilterSubject.next(null);
   }
 
   /**
@@ -261,7 +257,7 @@ export class TransactionsMessageService {
    * Clear the Switch Filter View message.
    */
   public clearSwitchFilterViewMessage() {
-    this.switchFilterViewSubject.next();
+    this.switchFilterViewSubject.next(null);
   }
 
   /**
@@ -271,14 +267,12 @@ export class TransactionsMessageService {
     return this.switchFilterViewSubject.asObservable();
   }
 
-
-
   public sendLoadTransactionsMessage(message: any) {
     this.loadTransactionsSubject.next(message);
   }
 
   public clearLoadTransactionsMessage() {
-    this.loadTransactionsSubject.next();
+    this.loadTransactionsSubject.next(null);
   }
 
   public getLoadTransactionsMessage(): Observable<any> {
@@ -290,7 +284,7 @@ export class TransactionsMessageService {
   }
 
   public clearRemoveH1TransactionsMessage() {
-    this.removeH1TransactionsSubject.next();
+    this.removeH1TransactionsSubject.next(null);
   }
 
   public getRemoveH1TransactionsMessage(): Observable<any> {
@@ -302,7 +296,7 @@ export class TransactionsMessageService {
   }
 
   public clearViewTransactionMessage() {
-    this.viewTransactionSubject.next();
+    this.viewTransactionSubject.next(null);
   }
 
   public getViewTransactionMessage(): Observable<any> {
@@ -314,7 +308,7 @@ export class TransactionsMessageService {
   }
 
   public clearRestoreTransactionsMessage() {
-    this.restoreTransactionsSubject.next();
+    this.restoreTransactionsSubject.next(null);
   }
 
   public getRestoreTransactionsMessage(): Observable<any> {
@@ -326,11 +320,10 @@ export class TransactionsMessageService {
   }
 
   public clearRemoveHTransactionsMessage() {
-    this.removeHTransactionsSubject.next();
+    this.removeHTransactionsSubject.next(null);
   }
 
   public getRemoveHTransactionsMessage(): Observable<any> {
     return this.removeHTransactionsSubject.asObservable();
   }
-
 }

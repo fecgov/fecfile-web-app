@@ -1,36 +1,35 @@
 import { AuthService } from './../../shared/services/AuthService/auth.service';
 import { ManageUserService } from './../../admin/manage-user/service/manage-user-service/manage-user.service';
-import { MessageService } from 'src/app/shared/services/MessageService/message.service';
-import { transition } from '@angular/animations';
+import { MessageService } from '../../shared/services/MessageService/message.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class RegisterComponent implements OnInit {
+  form!: FormGroup;
+  public phoneOptions: any[] = [
+    { code: 'V', desc: 'Voice' },
+    { code: 'T', desc: 'Text' },
+  ];
+  registerToken!: any;
 
-  form: FormGroup;
-  public phoneOptions: any[] = [{code:'V', desc:'Voice'},
-                          {code:'T', desc:'Text'}]
-  registerToken: any;
-
-  constructor(private router: Router,
-    private _fb: FormBuilder, 
-    private _messageService: MessageService, 
-    private _manageUserService: ManageUserService, 
+  constructor(
+    private router: Router,
+    private _fb: FormBuilder,
+    private _messageService: MessageService,
+    private _manageUserService: ManageUserService,
     private _authService: AuthService,
-    private _activateRoute: ActivatedRoute) { }
-
-
+    private _activateRoute: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.registerToken = this._activateRoute.snapshot.queryParams.register_token;
+    this.registerToken = this._activateRoute.snapshot.queryParams['register_token'];
     this.initForm();
   }
 
@@ -39,76 +38,75 @@ export class RegisterComponent implements OnInit {
       emailOrPhoneOption: new FormControl(null, [Validators.required]),
       email: new FormControl({ value: null, disabled: true }, [Validators.email, Validators.maxLength(100)]),
       voiceOrTextOption: new FormControl({ value: 'V', disabled: true }, []),
-      phoneNumber: new FormControl({ value: null, disabled: true }, [])
+      phoneNumber: new FormControl({ value: null, disabled: true }, []),
     });
   }
 
   submit() {
-    //submit();
-    let formData : any = {};
+    let formData: any = {};
     formData.register_token = this.registerToken;
-    if(this.form.value.emailOrPhoneOption === 'email'){
+    if (this.form.value.emailOrPhoneOption === 'email') {
       formData.id = 'EMAIL';
       formData.email = this.form.value.email;
-    }
-    else if(this.form.value.emailOrPhoneOption === 'phone'){
-      if(this.form.value.voiceOrTextOption === 'V'){
+    } else if (this.form.value.emailOrPhoneOption === 'phone') {
+      if (this.form.value.voiceOrTextOption === 'V') {
         formData.id = 'CALL';
-      }
-      else if(this.form.value.voiceOrTextOption === 'T'){
+      } else if (this.form.value.voiceOrTextOption === 'T') {
         formData.id = 'TEXT';
       }
       formData.contact = this.form.value.phoneNumber;
     }
 
-    this._manageUserService.authenticateUserWithRegToken(formData)
-    .subscribe(message => {
-      if(message){
-        if(message.is_allowed){
+    this._manageUserService.authenticateUserWithRegToken(formData).subscribe((message) => {
+      if (message) {
+        if (message.is_allowed) {
           this._authService.doSignIn(message.token);
           let option = '';
-          if(this.form.value.emailOrPhoneOption === 'email'){
+          if (this.form.value.emailOrPhoneOption === 'email') {
             option = 'EMAIL';
-          }
-          else if(this.form.value.emailOrPhoneOption === 'phone'){
-            if(this.form.value.voiceOrTextOption === 'V'){
+          } else if (this.form.value.emailOrPhoneOption === 'phone') {
+            if (this.form.value.voiceOrTextOption === 'V') {
               option = 'CALL';
-            }
-            else if(this.form.value.voiceOrTextOption === 'T'){
+            } else if (this.form.value.voiceOrTextOption === 'T') {
               option = 'TEXT';
             }
           }
-          this.router.navigate(['enterSecCode'], {queryParams: {register_token: this.registerToken}}).then(resp => {
-            this._messageService.sendMessage({action:'sendSecurityCode', selectedOption:option, data:this.form.value, entryPoint:'registration'});
-          });
+          this.router
+            .navigate(['enterSecCode'], { queryParams: { register_token: this.registerToken } })
+            .then((resp) => {
+              this._messageService.sendMessage({
+                action: 'sendSecurityCode',
+                selectedOption: option,
+                data: this.form.value,
+                entryPoint: 'registration',
+              });
+            });
         }
       }
-    })    
+    });
   }
 
-  radioOptionChanged(event:any){
-    if(event.target.value === 'email'){
+  radioOptionChanged(event: any) {
+    if (event.target.value === 'email') {
       this.form.controls['voiceOrTextOption'].disable();
       this.form.controls['phoneNumber'].disable();
       this.form.controls['email'].enable();
-    }
-    else if(event.target.value === 'phone'){
+    } else if (event.target.value === 'phone') {
       this.form.controls['voiceOrTextOption'].enable();
       this.form.controls['phoneNumber'].enable();
       this.form.controls['email'].disable();
-    }
-    else{
+    } else {
       this.form.controls['voiceOrTextOption'].disable();
       this.form.controls['phoneNumber'].disable();
       this.form.controls['email'].disable();
     }
   }
 
-  public back(){
+  public back() {
     this.router.navigate(['']);
   }
 
-  public clear(){
+  public clear() {
     this.form.controls['voiceOrTextOption'].enable();
     this.form.controls['phoneNumber'].enable();
     this.form.controls['email'].enable();
@@ -118,8 +116,5 @@ export class RegisterComponent implements OnInit {
     this.form.controls['voiceOrTextOption'].disable();
     this.form.controls['phoneNumber'].disable();
     this.form.controls['email'].disable();
-
   }
-
-
 }

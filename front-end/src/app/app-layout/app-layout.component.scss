@@ -1,4 +1,4 @@
- @import '../shared/scss/global';
+@import '../shared/scss/global';
 
 .app-container {
   background-color: white;
@@ -10,7 +10,7 @@
   &.active {
     padding-left: 0;
     @include media(tablet) {
-      padding-left: 0
+      padding-left: 0;
     }
     @include media(mediumDesktop) {
       padding-left: 220px;
@@ -51,7 +51,7 @@
   &.dashboard.active {
     padding-left: 0;
     @include media(tablet) {
-      padding-left: 0
+      padding-left: 0;
     }
     @include media(mediumDesktop) {
       padding-left: 240px;
@@ -86,7 +86,7 @@
       }
     }
   }
- .app__top {
+  .app__top {
     background-color: $dustyGray;
     font-family: $mainFontFamily;
     height: $topNavHeight;
@@ -99,9 +99,9 @@
       background-color: $navBarGray;
       height: $topNavHeight;
       font-family: 'Lato', 'sans-serif';
-    font-size: 1rem;
-    font-weight: 400;
-    color: #212121;
+      font-size: 1rem;
+      font-weight: 400;
+      color: #212121;
       margin: 0 !important;
       padding: 0 !important;
       .navbar-toggler {
@@ -129,9 +129,9 @@
           }
           @include media(largeDesktop) {
             width: 250px;
-            padding-bottom:2%;
+            padding-bottom: 2%;
           }
-          
+
           // padding-bottom:2%;
         }
       } // .app__top-logo
@@ -202,7 +202,7 @@
       z-index: 0;
       .app__committee-info {
         background-color: white;
-        margin-bottom:1%;
+        margin-bottom: 1%;
         height: 150px;
         padding-left: 60px;
         padding-right: 60px;
@@ -228,12 +228,10 @@
           position: relative;
         }
         .committee-id {
-          
           font-family: $mainFontFamily;
           margin-right: 25px;
         }
         .committee-name {
-          
           font-family: $mainFontFamily;
         }
         .btn-edit {
@@ -257,11 +255,11 @@
     }
   } // main
   .app__footer {
-    background-color:$alto;
+    background-color: $alto;
     color: $black;
     height: $footerMobileHeight;
     margin-top: 5px;
-    padding-top:1%;
+    padding-top: 1%;
     // overflow-y: hidden;
     padding-left: 80px;
     @include media(tablet) {
@@ -277,7 +275,7 @@
       padding-left: 70px;
     }
     .contact-info {
-      float:left;
+      float: left;
       width: $footerContactInfoWidth;
       .contact-info__item {
         font-size: 1.21269rem;
@@ -294,19 +292,19 @@
           display: inline-block;
           padding-right: 100px;
         }
-        
+
         padding-left: 10px;
         &:last-child {
           padding-right: 0;
         }
-        address{
+        address {
           font-style: normal;
-          font-weight:normal;
-          a{
+          font-weight: normal;
+          a {
             border-bottom: 1px dotted black;
-            color: black
+            color: black;
           }
-          a:hover{
+          a:hover {
             border-bottom: 1px dotted $pelorous;
             text-decoration: none;
             color: $pictonBlue;
@@ -333,19 +331,19 @@
       padding-right: 20px;
       width: $footerLegalDisclaimerWidth;
       font-style: normal;
-      font-weight:normal;
-          .btn-link {
-            padding:0;
-            margin:0;
-            border-bottom: 1px dotted black;
-            // color: $pictonBlue;
-            &:hover,
-            &:active,
-            &:visited {
-              //color: $pictonBlue;
-              text-decoration: none;
-              border-bottom: 1px dotted $pictonBlue;
-              color: $pictonBlue;
+      font-weight: normal;
+      .btn-link {
+        padding: 0;
+        margin: 0;
+        border-bottom: 1px dotted black;
+        // color: $pictonBlue;
+        &:hover,
+        &:active,
+        &:visited {
+          //color: $pictonBlue;
+          text-decoration: none;
+          border-bottom: 1px dotted $pictonBlue;
+          color: $pictonBlue;
         }
       }
     }

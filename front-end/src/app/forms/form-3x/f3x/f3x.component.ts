@@ -1,11 +1,11 @@
-import { ReportsService } from 'src/app/reports/service/report.service';
+import { ReportsService } from '../../../reports/service/report.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Subscription } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
+import { takeUntil } from 'rxjs/operators';
 import { FormsService } from '../../../shared/services/FormsService/forms.service';
 import { SchedHMessageServiceService } from '../../sched-h-service/sched-h-message-service.service';
 import { SchedHServiceService } from '../../sched-h-service/sched-h-service.service';
@@ -23,19 +23,18 @@ import { MessageService } from '../../../shared/services/MessageService/message.
   templateUrl: './f3x.component.html',
   styleUrls: ['./f3x.component.scss'],
   providers: [NgbTooltipConfig],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class F3xComponent implements OnInit, OnDestroy {
-
-  @Input() jumpToTransaction: any;
+  @Input() jumpToTransaction!: any;
 
   public loadingData = false;
   public currentStep: string = 'step_1';
   public editMode: boolean = true;
   public step: string = '';
   public steps: any = {};
-  public frm: any;
-  public direction: string;
+  public frm!: any;
+  public direction!: string;
   public previousStep: string = '';
   public parentTransactionCategories: any = [];
   public reportsLoading: boolean = true;
@@ -51,46 +50,46 @@ export class F3xComponent implements OnInit, OnDestroy {
   public transactionCategory: string = '';
   public transactionTypeText = '';
   public mainTransactionTypeText = '';
-  public transactionType = '';
+  public transactionType: string | null = null;
   public transactionTypeTextSchedF = '';
   public transactionTypeSchedF = '';
   public transactionTypeTextSchedFCore = '';
   public transactionTypeSchedFCore = '';
   public transactionTypeTextDebtSummary = '';
   public transactionTypeDebtSummary = '';
-  public transactionDetailSchedC: any;
-  public scheduleType = '';
+  public transactionDetailSchedC!: any;
+  public scheduleType: string | null = null;
   public isShowFilters = false;
   public formType: string = '';
-  public scheduleAction: ScheduleActions;
-  public scheduleCAction: ScheduleActions;
-  public scheduleFAction: ScheduleActions;
-  public scheduleFCoreAction: ScheduleActions;
-  public forceChangeDetectionC1: Date;
-  public forceChangeDetectionFDebtPayment: Date;
-  public forceChangeDetectionDebtSummary: Date;
-  public forceChangeDetectionH1: Date;
+  public scheduleAction!: ScheduleActions;
+  public scheduleCAction!: ScheduleActions;
+  public scheduleFAction!: ScheduleActions;
+  public scheduleFCoreAction!: ScheduleActions;
+  public forceChangeDetectionC1!: Date;
+  public forceChangeDetectionFDebtPayment!: Date;
+  public forceChangeDetectionDebtSummary!: Date;
+  public forceChangeDetectionH1!: Date;
   public formView: boolean = false;
   public allTransactions: boolean = false;
 
   private _step: string = '';
   private _cloned: boolean = false;
-  private _reportId: any;
-  public loanPaymentScheduleAction: ScheduleActions;
-  private showPart2: boolean;
-  public transactionCategoriesMainData: any;
+  private _reportId!: any;
+  public loanPaymentScheduleAction!: ScheduleActions;
+  private showPart2!: boolean;
+  public transactionCategoriesMainData!: any;
 
   private onDestroy$ = new Subject();
-  transactionData: any;
-  transactionDataForChild: any;
-  parentTransactionModel: any;
-  populateHiddenFieldsMessageObj: any;
-  populateFieldsMessageObj: any;
-  queryParamsSubscription: Subscription;
-  routerEventsSubscription: Subscription;
-  returnToGlobalAllTransaction: boolean;
-  currentReportData: any;
-  reportsArray: any[];
+  transactionData!: any;
+  transactionDataForChild!: any;
+  parentTransactionModel!: any;
+  populateHiddenFieldsMessageObj!: any;
+  populateFieldsMessageObj!: any;
+  queryParamsSubscription!: Subscription;
+  routerEventsSubscription!: Subscription;
+  returnToGlobalAllTransaction!: boolean;
+  currentReportData!: any;
+  reportsArray!: any[];
 
   constructor(
     private _reportTypeService: ReportTypeService,
@@ -106,51 +105,57 @@ export class F3xComponent implements OnInit, OnDestroy {
     private _schedHMessageServce: SchedHMessageServiceService,
     private _schedHService: SchedHServiceService,
     private _messageService: MessageService,
-    public reportsService:ReportsService
+    public reportsService: ReportsService
   ) {
     this._config.placement = 'right';
     this._config.triggers = 'click';
 
-    this.queryParamsSubscription = _activatedRoute.queryParams.subscribe(p => {
-      this.transactionCategory = p.transactionCategory;
-      if (p.edit === 'true' || p.edit === true) {
+    this.queryParamsSubscription = _activatedRoute.queryParams['subscribe']((p) => {
+      this.transactionCategory = p['transactionCategory'];
+      if (p['edit'] === 'true' || p['edit'] === true) {
         this.editMode = true;
       }
-      if (p.reportId && p.reportId !== '0') {
-        this._reportId = p.reportId;
+      if (p['reportId'] && p['reportId'] !== '0') {
+        this._reportId = p['reportId'];
       }
-      if (p.allTransactions === true || p.allTransactions === 'true') {
+      if (p['allTransactions'] === true || p['allTransactions'] === 'true') {
         this.allTransactions = true;
       } else {
         this.allTransactions = false;
       }
       // No unsaved changes needed from transactions.
-      if (p.step === 'transactions') {
+      if (p['step'] === 'transactions') {
         localStorage.removeItem(`form_${this.formType}_saved`);
       }
 
       //also clear the schedule type so the current component gets destroyed if leaving the form route
-      if (p.step !== 'step_3') {
+      if (p['step'] !== 'step_3') {
         this.scheduleType = null;
         this.transactionType = null;
       }
     });
 
-    this._f3xMessageService.getParentModelMessage().takeUntil(this.onDestroy$).subscribe(message => {
-      this.parentTransactionModel = message;
-    });
+    this._f3xMessageService
+      .getParentModelMessage()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((message) => {
+        this.parentTransactionModel = message;
+      });
 
-    this._messageService.getMessage().takeUntil(this.onDestroy$).subscribe(message => {
-      if(message && message.action === 'destroy' && message.formType === '3X'){
-        this.ngOnDestroy();
-      }
-    });
+    this._messageService
+      .getMessage()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((message) => {
+        if (message && message.action === 'destroy' && message.formType === '3X') {
+          this.ngOnDestroy();
+        }
+      });
   }
 
-  electionYearTypeChanged(event:any){
-    if(event && event.option && event.option.target.value && this.reportsArray){
-      let currentReportType: any = this.reportsArray.filter(obj => obj.type === event.option.target.value);
-      if(currentReportType && currentReportType.length > 0){
+  electionYearTypeChanged(event: any) {
+    if (event && event.option && event.option.target.value && this.reportsArray) {
+      let currentReportType: any = this.reportsArray.filter((obj) => obj.type === event.option.target.value);
+      if (currentReportType && currentReportType.length > 0) {
         this.reportTypes = currentReportType[0].report_type;
         this.reportsLoading = false;
         this._setReports();
@@ -160,19 +165,19 @@ export class F3xComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.scheduleAction = ScheduleActions.add;
-    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
+    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
 
-    this.step = this._activatedRoute.snapshot.queryParams.step;
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit
-      ? this._activatedRoute.snapshot.queryParams.edit
+    this.step = this._activatedRoute.snapshot.queryParams['step'];
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit']
+      ? this._activatedRoute.snapshot.queryParams['edit']
       : true;
 
-    this._reportTypeService.getReportTypes(this.formType).subscribe(res => {
+    this._reportTypeService.getReportTypes(this.formType).subscribe((res) => {
       // this._reportTypeService.getAllReportTypes(this.formType).subscribe((res : any)=> {
       if (Array.isArray(res)) {
         this.reportsArray = res;
-        let currentReportType : any = res.filter(obj => obj.selected);
-        if(currentReportType && currentReportType.length > 0){
+        let currentReportType: any = res.filter((obj) => obj.selected);
+        if (currentReportType && currentReportType.length > 0) {
           currentReportType = currentReportType[0];
           this.reportTypes = currentReportType.report_type;
 
@@ -183,31 +188,25 @@ export class F3xComponent implements OnInit, OnDestroy {
       }
     });
 
-    this._transactionTypeService.getTransactionCategories("F"+this.formType).subscribe(res => {
+    this._transactionTypeService.getTransactionCategories('F' + this.formType).subscribe((res) => {
       if (res) {
         this.transactionCategoriesMainData = res;
         this.transactionCategories = res.data.transactionCategories;
       }
     });
     localStorage.setItem('Receipts_Entry_Screen', 'Yes');
-    this.routerEventsSubscription = this._router.events.takeUntil(this.onDestroy$).subscribe(val => {
+    this.routerEventsSubscription = this._router.events.pipe(takeUntil(this.onDestroy$)).subscribe((val) => {
       if (val) {
         if (val instanceof NavigationEnd) {
           if (
             val.url.indexOf(`/forms/form/${this.formType}`) === -1 &&
             val.url.indexOf(`/forms/transactions/${this.formType}`) === -1
           ) {
-            if (localStorage.getItem(`form_${this.formType}_report_type`) !== null) {
-              localStorage.setItem(
-                `form_${this.formType}_saved_backup`,
-                localStorage.getItem(`form_${this.formType}_saved`)
-              );
-              localStorage.setItem(
-                `form_${this.formType}_report_type_backup`,
-                localStorage.getItem(`form_${this.formType}_report_type`)
-              );
-              // //console.log(`form_${this._formType}_report_type_backup` + 'copied ');
-              // //console.log(new Date().toISOString());
+            const savedItem = localStorage.getItem(`form_${this.formType}_saved`);
+            const reportTypeItem = localStorage.getItem(`form_${this.formType}_report_type`);
+            if (savedItem && reportTypeItem) {
+              localStorage.setItem(`form_${this.formType}_saved_backup`, savedItem);
+              localStorage.setItem(`form_${this.formType}_report_type_backup`, reportTypeItem);
             }
 
             window.localStorage.removeItem(`form_${this.formType}_report_type`);
@@ -216,58 +215,62 @@ export class F3xComponent implements OnInit, OnDestroy {
             window.localStorage.removeItem(`form_${this.formType}_saved`);
           }
         } else {
-          if (this._activatedRoute.snapshot.queryParams.step !== this.currentStep) {
-            this.currentStep = this._activatedRoute.snapshot.queryParams.step;
-            this.step = this._activatedRoute.snapshot.queryParams.step;
+          if (this._activatedRoute.snapshot.queryParams['step'] !== this.currentStep) {
+            this.currentStep = this._activatedRoute.snapshot.queryParams['step'];
+            this.step = this._activatedRoute.snapshot.queryParams['step'];
           }
           window.scrollTo(0, 0);
         }
       }
     });
 
-    //jumpToTransaction is used to pass transaction info from the "Global" All Transactions component 
+    //jumpToTransaction is used to pass transaction info from the "Global" All Transactions component
     //to "Report specific" All Transaction component. Idea is to first load the "Report specific" All Transaction component
-    //from "Global" and then if a transaction is passed, then invoke onNotify with that data. 
-    if(this.jumpToTransaction){
+    //from "Global" and then if a transaction is passed, then invoke onNotify with that data.
+    if (this.jumpToTransaction) {
       this.returnToGlobalAllTransaction = true;
       this.onNotify(this.jumpToTransaction);
     }
 
     this.getCurrentReportInfoIfApplicable();
-    
   }
 
   getCurrentReportInfoIfApplicable() {
-    if(this._activatedRoute.snapshot.queryParams.reportId && this._activatedRoute.snapshot.queryParams.reportId !== undefined){
-      this.reportsService.getReportInfo(this.formType,this._activatedRoute.snapshot.queryParams.reportId).subscribe(data=>{
-        if(data){
-          this.currentReportData = data;
-          this._messageService.sendMessage({
-            action: 'updateCurrentReportHeaderData',
-            data: data[0]
-          });
-        }
-      });
+    if (
+      this._activatedRoute.snapshot.queryParams['reportId'] &&
+      this._activatedRoute.snapshot.queryParams['reportId'] !== undefined
+    ) {
+      this.reportsService
+        .getReportInfo(this.formType, this._activatedRoute.snapshot.queryParams['reportId'])
+        .subscribe((data) => {
+          if (data) {
+            this.currentReportData = data;
+            this._messageService.sendMessage({
+              action: 'updateCurrentReportHeaderData',
+              data: data[0],
+            });
+          }
+        });
     }
   }
 
   ngOnDestroy(): void {
     this.onDestroy$.next(true);
-    if(this.queryParamsSubscription){
+    if (this.queryParamsSubscription) {
       this.queryParamsSubscription.unsubscribe();
     }
-    if(this.routerEventsSubscription){
+    if (this.routerEventsSubscription) {
       this.routerEventsSubscription.unsubscribe();
     }
     this._messageService.clearUpdateReportTypeMessageToReportType();
     this._messageService.clearUpdateReportTypeMessageToReportTypeSidebar();
-    this._messageService.sendMessage({action:'updateHeaderInfo', data: {formType: null}});
+    this._messageService.sendMessage({ action: 'updateHeaderInfo', data: { formType: null } });
   }
 
   ngDoCheck(): void {
-    if (this._activatedRoute.snapshot.queryParams.step !== this.currentStep) {
-      this.currentStep = this._activatedRoute.snapshot.queryParams.step;
-      this.step = this._activatedRoute.snapshot.queryParams.step;
+    if (this._activatedRoute.snapshot.queryParams['step'] !== this.currentStep) {
+      this.currentStep = this._activatedRoute.snapshot.queryParams['step'];
+      this.step = this._activatedRoute.snapshot.queryParams['step'];
     }
   }
 
@@ -275,11 +278,9 @@ export class F3xComponent implements OnInit, OnDestroy {
    * Sets the reports.
    */
   private _setReports(): void {
-    if (
-      typeof JSON.parse(localStorage.getItem(`form_${this.formType}_details`)) !== 'undefined' ||
-      JSON.parse(localStorage.getItem(`form_${this.formType}_details`)) !== null
-    ) {
-      const form3XDetailsInstance = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
+    const detailsItem = localStorage.getItem(`form_${this.formType}_details`) ?? '';
+    if ((detailsItem && typeof JSON.parse(detailsItem) !== 'undefined') || JSON.parse(detailsItem) !== null) {
+      const form3XDetailsInstance = JSON.parse(detailsItem);
 
       if (typeof form3XDetailsInstance === 'object' && form3XDetailsInstance !== null) {
         if (form3XDetailsInstance.hasOwnProperty('regularspecialreportind')) {
@@ -308,7 +309,7 @@ export class F3xComponent implements OnInit, OnDestroy {
       }
     } else if (typeof this.reportType === 'undefined' || this.reportType === null) {
       if (typeof this.reportTypes !== 'undefined' && this.reportTypes !== null) {
-        this.selectedReportType = this.reportTypes.find(x => x.default_disp_ind === 'Y');
+        this.selectedReportType = this.reportTypes.find((x: any) => x.default_disp_ind === 'Y');
         if (typeof this.selectedReportType === 'object') {
           if (typeof this.selectedReportType.regular_special_report_ind === 'string') {
             this.reportTypeIndicator = this.selectedReportType.regular_special_report_ind;
@@ -316,7 +317,7 @@ export class F3xComponent implements OnInit, OnDestroy {
         } else {
           if (Array.isArray(this.reportTypes)) {
             this.reportType = this.reportTypes[0].report_type;
-            this.selectedReportType = this.reportTypes.find(x => x.report_type === this.reportType);
+            this.selectedReportType = this.reportTypes.find((x) => x.report_type === this.reportType);
             if (typeof this.selectedReportType === 'object') {
               this.reportTypeIndicator = this.selectedReportType.regular_special_report_ind;
             }
@@ -338,7 +339,7 @@ export class F3xComponent implements OnInit, OnDestroy {
   }
 
   private _setCoverageDates(reportType: string): void {
-    this.selectedReport = this.reportTypes.find(e => {
+    this.selectedReport = this.reportTypes.find((e: any) => {
       return e.report_type === reportType;
     });
 
@@ -366,8 +367,8 @@ export class F3xComponent implements OnInit, OnDestroy {
     //console.log('showfilters is ' + this.isShowFilters);
   }
 
-  public setParentTransactionalData(e:any){
-    if(e){
+  public setParentTransactionalData(e: any) {
+    if (e) {
       this.parentTransactionModel = e;
     }
   }
@@ -424,7 +425,7 @@ export class F3xComponent implements OnInit, OnDestroy {
             if (e.showPart2 === false || e.showPart2 === 'false') {
               this.showPart2 = false;
             } else {
-              this.showPart2 = null;
+              this.showPart2 = false;
             }
 
             this.extractScheduleType(e);
@@ -475,7 +476,7 @@ export class F3xComponent implements OnInit, OnDestroy {
               // Sched C uses change detection for populating form for edit.
               // Have API add scheduleType to transactions table - using apiCall until then
 
-              this.transactionCategories.filter(el => {
+              this.transactionCategories.filter((el: any) => {
                 if (el.value === this.transactionCategory) {
                   mainTransactionTypeText = el.text;
                 }
@@ -545,14 +546,14 @@ export class F3xComponent implements OnInit, OnDestroy {
                 this.transactionDetailSchedC = e.transactionDetail.transactionModel;
                 this.formView = true;
               } else {
-              // assuming e.scheduleType is set already
-              const scheduleComponentIdentifier = this.extractScheduleCompIdentifier(apiCall, e.scheduleType);
+                // assuming e.scheduleType is set already
+                const scheduleComponentIdentifier = this.extractScheduleCompIdentifier(apiCall, e.scheduleType);
 
-              this._populateFormForView(e, scheduleComponentIdentifier);
-              const transactionModel: TransactionModel = e.transactionDetail.transactionModel;
-              transactionTypeText = transactionModel.type;
-              transactionType = transactionModel.transactionTypeIdentifier;
-            }
+                this._populateFormForView(e, scheduleComponentIdentifier);
+                const transactionModel: TransactionModel = e.transactionDetail.transactionModel;
+                transactionTypeText = transactionModel.type;
+                transactionType = transactionModel.transactionTypeIdentifier;
+              }
             } else {
               transactionTypeText = e.transactionTypeText ? e.transactionTypeText : '';
               transactionType = e.transactionType ? e.transactionType : '';
@@ -572,7 +573,7 @@ export class F3xComponent implements OnInit, OnDestroy {
                 if (e.hasOwnProperty('prePopulateFieldArray') && Array.isArray(e.prePopulateFieldArray)) {
                   this._f3xMessageService.sendPopulateFormMessage({
                     key: 'field',
-                    fieldArray: e.prePopulateFieldArray
+                    fieldArray: e.prePopulateFieldArray,
                   });
                 } else if (e.hasOwnProperty('prePopulateFromSchedD')) {
                   const component =
@@ -582,7 +583,7 @@ export class F3xComponent implements OnInit, OnDestroy {
                   const emitObject: any = {
                     key: 'prePopulateFromSchedD',
                     abstractScheduleComponent: component,
-                    prePopulateFromSchedD: e.prePopulateFromSchedD
+                    prePopulateFromSchedD: e.prePopulateFromSchedD,
                   };
                   if (
                     (e.prePopulateFromSchedD.transaction_type_identifier === 'DEBT_TO_VENDOR' ||
@@ -598,19 +599,19 @@ export class F3xComponent implements OnInit, OnDestroy {
                   this._f3xMessageService.sendPopulateFormMessage({
                     key: 'prePopulateFromSchedL',
                     abstractScheduleComponent: AbstractScheduleParentEnum.schedMainComponent,
-                    prePopulateFromSchedL: e.prePopulateFromSchedL
+                    prePopulateFromSchedL: e.prePopulateFromSchedL,
                   });
                 } else if (e.hasOwnProperty('prePopulateFromSchedH')) {
                   this._f3xMessageService.sendPopulateFormMessage({
                     key: 'prePopulateFromSchedH',
                     abstractScheduleComponent: AbstractScheduleParentEnum.schedMainComponent,
-                    prePopulateFromSchedH: e.prePopulateFromSchedH
+                    prePopulateFromSchedH: e.prePopulateFromSchedH,
                   });
                 } else if (e.hasOwnProperty('prePopulateFromSchedPARTN')) {
                   this._f3xMessageService.sendPopulateFormMessage({
                     key: 'prePopulateFromSchedPARTN',
                     abstractScheduleComponent: AbstractScheduleParentEnum.schedMainComponent,
-                    prePopulateFromSchedPARTN: e.prePopulateFromSchedPARTN
+                    prePopulateFromSchedPARTN: e.prePopulateFromSchedPARTN,
                   });
                 }
               }
@@ -619,7 +620,7 @@ export class F3xComponent implements OnInit, OnDestroy {
               transactionTypeText,
               transactionType,
               mainTransactionTypeText,
-              this.scheduleType
+              this.scheduleType ?? ''
             );
           }
 
@@ -734,8 +735,8 @@ export class F3xComponent implements OnInit, OnDestroy {
       e.transactionTypeText = transactionModel.type;
       e.transactionType = transactionModel.transactionTypeIdentifier;
 
-      let reattributionId: string = null;
-      let redesignationId: string = null;
+      let reattributionId: string | null = null;
+      let redesignationId: string | null = null;
       let maxAmount = transactionModel.amount;
       if (this.scheduleAction === ScheduleActions.edit) {
         maxAmount = transactionModel.originalAmount;
@@ -752,11 +753,14 @@ export class F3xComponent implements OnInit, OnDestroy {
             abstractScheduleComponent: AbstractScheduleParentEnum.schedMainComponent,
             reattributionTransactionId: reattributionId,
             maxAmount: maxAmount,
-            reattributionTransaction: transactionModel
+            reattributionTransaction: transactionModel,
           };
           this._f3xMessageService.sendPopulateHiddenFieldsMessage(hiddenFieldsEmitObj);
           const fieldArray = [{ name: 'purpose_description', value: transactionModel.purposeDescription }];
-          const populateFieldsMessageObj = { abstractScheduleComponent: AbstractScheduleParentEnum.schedMainComponent, fieldArray };
+          const populateFieldsMessageObj = {
+            abstractScheduleComponent: AbstractScheduleParentEnum.schedMainComponent,
+            fieldArray,
+          };
           this._f3xMessageService.sendPopulateFieldsMessage(populateFieldsMessageObj);
           this.populateHiddenFieldsMessageObj = hiddenFieldsEmitObj;
           this.populateFieldsMessageObj = populateFieldsMessageObj;
@@ -769,18 +773,16 @@ export class F3xComponent implements OnInit, OnDestroy {
           const hiddenFieldsEmitObj = {
             abstractScheduleComponent: AbstractScheduleParentEnum.schedMainComponent,
             redesignationTransactionId: redesignationId,
-            maxAmount: maxAmount
+            maxAmount: maxAmount,
           };
           this._f3xMessageService.sendPopulateHiddenFieldsMessage(hiddenFieldsEmitObj);
           this.populateHiddenFieldsMessageObj = hiddenFieldsEmitObj;
         }
-      }
-      else {
+      } else {
         this.populateHiddenFieldsMessageObj = null;
         this.populateFieldsMessageObj = null;
       }
-    }
-    else {
+    } else {
       this.populateHiddenFieldsMessageObj = null;
       this.populateFieldsMessageObj = null;
     }
@@ -878,7 +880,7 @@ export class F3xComponent implements OnInit, OnDestroy {
     const emitObject: any = {
       key: 'fullForm',
       abstractScheduleComponent: schedule,
-      transactionModel: e.transactionDetail
+      transactionModel: e.transactionDetail,
     };
     // Checking by transaction_type_identifier as a saftey precaution.
     if (
@@ -899,17 +901,19 @@ export class F3xComponent implements OnInit, OnDestroy {
     }
     this._f3xMessageService.sendPopulateFormMessage(emitObject);
 
-
     this.storeTransactionDataForPopulatingForm(emitObject);
   }
 
   private storeTransactionDataForPopulatingForm(emitObject: any) {
     //there are some transactions/schedules that have their own method and object structure for populating data (i.e. H2),
-    //and in those cases, the object it is already set up, so dont overwrite it. 
+    //and in those cases, the object it is already set up, so dont overwrite it.
     if (this.scheduleType === 'sched_f') {
       this.transactionDataForChild = emitObject;
-    }
-    else if (this.scheduleType !== 'sched_h2' && this.scheduleType !== 'sched_h3' && this.scheduleType !== 'sched_h5') {
+    } else if (
+      this.scheduleType !== 'sched_h2' &&
+      this.scheduleType !== 'sched_h3' &&
+      this.scheduleType !== 'sched_h5'
+    ) {
       this.transactionData = emitObject;
     }
   }
@@ -995,7 +999,7 @@ export class F3xComponent implements OnInit, OnDestroy {
   private _handleScheduleH(transaction: any): boolean {
     let transactionDetail = transaction.transactionDetail;
     let finish = false;
-    const scheduleAction = transaction.action  === 'view' ? ScheduleActions.view : ScheduleActions.edit;
+    const scheduleAction = transaction.action === 'view' ? ScheduleActions.view : ScheduleActions.edit;
     if (this.scheduleType === 'Schedule H1') {
       this.transactionType = transactionDetail.transactionModel.transactionTypeIdentifier;
       this.scheduleAction = scheduleAction;
@@ -1096,7 +1100,7 @@ export class F3xComponent implements OnInit, OnDestroy {
             const emitObject: any = {
               key: 'prePopulateFromSchedD',
               abstractScheduleComponent: AbstractScheduleParentEnum.schedFComponent,
-              prePopulateFromSchedD: e.prePopulateFromSchedD
+              prePopulateFromSchedD: e.prePopulateFromSchedD,
             };
             if (
               (e.prePopulateFromSchedD.transaction_type_identifier === 'DEBT_TO_VENDOR' ||
@@ -1169,8 +1173,8 @@ export class F3xComponent implements OnInit, OnDestroy {
       transactionModel.reportId !== 'undefined'
     ) {
       reportId = transactionModel.reportId.toString();
-    } else if (this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams.reportId) {
-      reportId = this._activatedRoute.snapshot.queryParams.reportId;
+    } else if (this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams['reportId']) {
+      reportId = this._activatedRoute.snapshot.queryParams['reportId'];
     }
     //if not present, only then fall back on localStorage
     //TODO-local storage is being used throughout the application to retain state and it should be changed as this can cause inconsistencies.
@@ -1180,7 +1184,7 @@ export class F3xComponent implements OnInit, OnDestroy {
       localStorage.getItem('reportId') !== '0' &&
       localStorage.getItem('reportId') !== 'undefined'
     ) {
-      reportId = localStorage.getItem('reportId');
+      reportId = localStorage.getItem('reportId') ?? '';
     }
 
     if (this.frm && this.direction) {
@@ -1191,17 +1195,17 @@ export class F3xComponent implements OnInit, OnDestroy {
       const queryParamsObj: any = {
         step: this.step,
         edit: this.editMode,
-        transactionCategory: this.transactionCategory
+        transactionCategory: this.transactionCategory,
       };
 
       if (reportId) {
         queryParamsObj.reportId = reportId;
       }
-      
-      if (this._activatedRoute.snapshot.queryParams.amendmentReportId) {
-        queryParamsObj.amendmentReportId = this._activatedRoute.snapshot.queryParams.amendmentReportId;
-        if(this._step === 'transactions'){
-          queryParamsObj.reportId = this._activatedRoute.snapshot.queryParams.amendmentReportId;
+
+      if (this._activatedRoute.snapshot.queryParams['amendmentReportId']) {
+        queryParamsObj.amendmentReportId = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
+        if (this._step === 'transactions') {
+          queryParamsObj.reportId = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
         }
       }
 
@@ -1214,11 +1218,11 @@ export class F3xComponent implements OnInit, OnDestroy {
           if (this._cloned) {
             queryParamsObj.cloned = this._cloned;
             this._router.navigate([`/forms/form/${this.formType}`], {
-              queryParams: queryParamsObj
+              queryParams: queryParamsObj,
             });
           } else {
             this._router.navigate([`/forms/form/${this.formType}`], {
-              queryParams: queryParamsObj
+              queryParams: queryParamsObj,
             });
           }
         } else if (this.frm === 'preview') {
@@ -1226,7 +1230,7 @@ export class F3xComponent implements OnInit, OnDestroy {
           queryParamsObj.step = this.step;
 
           this._router.navigate([`/forms/form/${this.formType}`], {
-            queryParams: queryParamsObj
+            queryParams: queryParamsObj,
           });
         }
       } else if (this.direction === 'previous') {
@@ -1234,7 +1238,7 @@ export class F3xComponent implements OnInit, OnDestroy {
         queryParamsObj.step = this.step;
 
         this._router.navigate([`/forms/form/${this.formType}`], {
-          queryParams: queryParamsObj
+          queryParams: queryParamsObj,
         });
       }
     }
@@ -1245,7 +1249,7 @@ export class F3xComponent implements OnInit, OnDestroy {
     const emitObject: any = {
       key: 'fullForm',
       abstractScheduleComponent: schedule,
-      transactionModel: e.transactionDetail
+      transactionModel: e.transactionDetail,
     };
 
     this._f3xMessageService.sendPopulateFormMessage(emitObject);
@@ -1253,10 +1257,10 @@ export class F3xComponent implements OnInit, OnDestroy {
   }
 
   private _findMainTransactionTypeText(transactionType: string): string {
-    this.transactionCategories.forEach(cat => {
-      cat.options.forEach(subCat => {
+    this.transactionCategories.forEach((cat: any) => {
+      cat.options.forEach((subCat: any) => {
         // subCat.forEach(type)
-        subCat.options.forEach(type => {
+        subCat.options.forEach((type: any) => {
           if (type.value === transactionType) {
             return cat.text;
           }
@@ -1268,14 +1272,14 @@ export class F3xComponent implements OnInit, OnDestroy {
 
   private extractScheduleCompIdentifier(apiCall: string, scheduleType: string) {
     let schCompIdentifier;
-    if ( apiCall === '/se/schedE') {
-      schCompIdentifier =   AbstractScheduleParentEnum.schedEComponent;
-    } else  if (apiCall === '/sf/schedF') {
-        if (scheduleType === 'sched_f_core') {
-          schCompIdentifier =  AbstractScheduleParentEnum.schedFCoreComponent;
-        } else {
-          schCompIdentifier = AbstractScheduleParentEnum.schedFComponent;
-        }
+    if (apiCall === '/se/schedE') {
+      schCompIdentifier = AbstractScheduleParentEnum.schedEComponent;
+    } else if (apiCall === '/sf/schedF') {
+      if (scheduleType === 'sched_f_core') {
+        schCompIdentifier = AbstractScheduleParentEnum.schedFCoreComponent;
+      } else {
+        schCompIdentifier = AbstractScheduleParentEnum.schedFComponent;
+      }
     } else {
       schCompIdentifier = AbstractScheduleParentEnum.schedMainComponent;
     }

@@ -6,20 +6,20 @@ import { DuplicateContactsService } from '../clean-contacts/duplicate-contacts/s
 @Component({
   selector: 'app-import-done-contacts',
   templateUrl: './import-done-contacts.component.html',
-  styleUrls: ['./import-done-contacts.component.scss']
+  styleUrls: ['./import-done-contacts.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ImportDoneContactsComponent implements OnInit {
   @Input()
-  public fileName: string;
+  public fileName!: string;
 
   @Input()
-  public action: string;
+  public action!: string;
 
   @Output()
   public saveStatusEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public done: boolean;
+  public done!: boolean;
 
   constructor(private _router: Router, private _duplicateContactsService: DuplicateContactsService) {}
 

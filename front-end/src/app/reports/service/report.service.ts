@@ -3,12 +3,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable, of } from 'rxjs';
-import 'rxjs/add/observable/of';
 import { map } from 'rxjs/operators';
-import { FilterPipe } from 'src/app/shared/pipes/filter/filter.pipe';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
-import { ZipCodePipe } from 'src/app/shared/pipes/zip-code/zip-code.pipe';
-import { environment } from 'src/environments/environment';
+import { FilterPipe } from '../../shared/pipes/filter/filter.pipe';
+import { OrderByPipe } from '../../shared/pipes/order-by/order-by.pipe';
+import { ZipCodePipe } from '../../shared/pipes/zip-code/zip-code.pipe';
+import { environment } from '../../../environments/environment';
 import { ReportFilterModel } from '../model/report-filter.model';
 //import { ReportModel } from '../model/report.model';
 import { reportModel } from '../model/report.model';
@@ -18,7 +17,7 @@ export interface GetReportsResponse {
   totalreportsCount: number;
 }
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReportsService {
   // only for mock data
@@ -39,10 +38,10 @@ export class ReportsService {
   // only for mock data - end
 
   // May only be needed for mocking server
-  private _orderByPipe: OrderByPipe;
-  private _filterPipe: FilterPipe;
-  private _zipCodePipe: ZipCodePipe;
-  private _datePipe: DatePipe;
+  private _orderByPipe!: OrderByPipe;
+  private _filterPipe!: FilterPipe;
+  private _zipCodePipe!: ZipCodePipe;
+  private _datePipe!: DatePipe;
 
   constructor(private _http: HttpClient, private _cookieService: CookieService) {
     this._orderByPipe = new OrderByPipe();
@@ -63,7 +62,7 @@ export class ReportsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(`${environment.apiUrl}${url}`, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
 
@@ -79,7 +78,7 @@ export class ReportsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(`${environment.apiUrl}${url}`, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
   public getStatuss(): Observable<any> {
@@ -94,11 +93,11 @@ export class ReportsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(`${environment.apiUrl}${url}`, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
 
-  public getAllF24Reports() : Observable<any>{
+  public getAllF24Reports(): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     let httpOptions = new HttpHeaders();
     let url = '';
@@ -109,7 +108,7 @@ export class ReportsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(`${environment.apiUrl}${url}`, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
 
@@ -125,7 +124,7 @@ export class ReportsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http.get(`${environment.apiUrl}${url}`, {
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
 
@@ -150,42 +149,40 @@ export class ReportsService {
     params = params.append('view', view);
     params = params.append('reportId', reportId.toString());
 
-    return this._http.get<GetReportsResponse>(`${environment.apiUrl}${url}`, {
-      headers: httpOptions,
-      params
-    })
-    .pipe(map(res => {
-      if (res) {
-        this.mockApplyFilters(res, filter);
-        const reportsModelL = this.mapFromServerFields(res.reports);
-        let reports: reportModel[] = this.sortReports(
-          reportsModelL,
-          sortColumnName,
-          descending
-        );
-        this.setAmendmentIndicator(reports);
-        this.setAmendmentShow(reports);
-        reports = reports.filter(report => {
-          if (!report.superceded_report_id) {
-            return true;
-          }
-          return false;
-        })
-        const totalItems = reports.length;
-        const items = reports.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+    return this._http
+      .get<GetReportsResponse>(`${environment.apiUrl}${url}`, {
+        headers: httpOptions,
+        params,
+      })
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            this.mockApplyFilters(res, filter);
+            const reportsModelL = this.mapFromServerFields(res.reports);
+            let reports: reportModel[] = this.sortReports(reportsModelL, sortColumnName, descending);
+            this.setAmendmentIndicator(reports);
+            this.setAmendmentShow(reports);
+            reports = reports.filter((report) => {
+              if (!report.superceded_report_id) {
+                return true;
+              }
+              return false;
+            });
+            const totalItems = reports.length;
+            const items = reports.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
-        return {
-          items: items,
-          totalItems: totalItems
-        };
-      } else {
-        return {
-          items: null,
-          totalItems: 0
-        };
-      }
-    })
-    );
+            return {
+              items: items,
+              totalItems: totalItems,
+            };
+          } else {
+            return {
+              items: null,
+              totalItems: 0,
+            };
+          }
+        })
+      );
   }
 
   public getChildReports(
@@ -211,34 +208,32 @@ export class ReportsService {
     params = params.append('reportId', reportId.toString());
     params = params.append('parentId', parentReportId.toString());
 
-    return this._http.get<GetReportsResponse>(`${environment.apiUrl}${url}`, {
-      headers: httpOptions,
-      params
-    })
-    .pipe(map(res => {
-      if (res) {
-        this.mockApplyFilters(res, filter);
-        const reportsModelL = this.mapFromServerFields(res.reports);
-        let reports: reportModel[] = this.sortReports(
-          reportsModelL,
-          sortColumnName,
-          descending
-        );
-        this.setAmendmentIndicator(reports);
-        this.setAmendmentShow(reports);
+    return this._http
+      .get<GetReportsResponse>(`${environment.apiUrl}${url}`, {
+        headers: httpOptions,
+        params,
+      })
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            this.mockApplyFilters(res, filter);
+            const reportsModelL = this.mapFromServerFields(res.reports);
+            let reports: reportModel[] = this.sortReports(reportsModelL, sortColumnName, descending);
+            this.setAmendmentIndicator(reports);
+            this.setAmendmentShow(reports);
 
-        return {
-          items: reports,
-          totalItems: reports.length
-        };
-      } else {
-        return {
-          items: null,
-          totalItems: 0
-        };
-      }
-    })
-    );
+            return {
+              items: reports,
+              totalItems: reports.length,
+            };
+          } else {
+            return {
+              items: null,
+              totalItems: 0,
+            };
+          }
+        })
+      );
   }
 
   public getReports(
@@ -264,10 +259,10 @@ export class ReportsService {
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
   }
-  
+
   public getTrashedReports(
     view: string,
     page: number,
@@ -291,7 +286,7 @@ export class ReportsService {
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       headers: httpOptions,
-      params
+      params,
     });
   }
 
@@ -345,47 +340,52 @@ export class ReportsService {
   }
 
   public setAmendmentIndicator(reports: reportModel[]) {
-    if(reports) {
-      for(const report of reports) {        
-        if(report.form_type !== 'F99') {
-          if(report.amend_ind === 'N' && reports.find(function(obj) { return obj.previous_report_id === report.report_id})) {
-          //&& this.reportsModel.filter(rp => rp.previous_report_id == report.report_id)) {
-            report.amend_ind = 'Original';           
-          }else if(report.amend_ind === 'A') {        
-            report.amend_ind = report.amend_ind.concat(report.amend_number.toString());            
+    if (reports) {
+      for (const report of reports) {
+        if (report.form_type !== 'F99') {
+          if (
+            report.amend_ind === 'N' &&
+            reports.find(function (obj) {
+              return obj.previous_report_id === report.report_id;
+            })
+          ) {
+            //&& this.reportsModel.filter(rp => rp.previous_report_id == report.report_id)) {
+            report.amend_ind = 'Original';
+          } else if (report.amend_ind === 'A') {
+            report.amend_ind = report.amend_ind.concat(report.amend_number.toString());
           }
-        }        
+        }
       }
     }
   }
 
   public setAmendmentShow(reports: reportModel[]) {
-
     let reportId = 0;
     let next: reportModel;
     let max: reportModel;
-    
-    if(reports) {
-      for(const report of reports) {
-        report.amend_max = (report.child_records_count > 0 ? 'down' : '');
 
-        if(report.amend_ind === 'Original') {
-          report.amend_show = false;
-          
-          next = reports.find(function(obj) { return obj.previous_report_id === report.report_id});
-          next.amend_show = false;
+    if (reports) {
+      for (const report of reports) {
+        report.amend_max = report.child_records_count > 0 ? 'down' : '';
 
-          while(next) {
-            next.amend_show = false;
-            max = next;
-            next = reports.find(function(obj) { return obj.previous_report_id === next.report_id});
-          }
- 
-          max.amend_show = true;
-          max.amend_max = 'down'; //'up';
-        }
+        // if(report.amend_ind === 'Original') {
+        //   report.amend_show = false;
+
+        //   next = reports.find(function(obj) { return obj.previous_report_id === report.report_id});
+        //   next.amend_show = false;
+
+        //   while(next) {
+        //     next.amend_show = false;
+        //     max = next;
+        //     next = reports.find(function(obj) { return obj.previous_report_id === next.report_id});
+        //   }
+
+        //   max.amend_show = true;
+        //   max.amend_max = 'down'; //'up';
+        // }
       }
-    }  }
+    }
+  }
 
   /**
    * Some data from the server is formatted for display in the UI.  Users will search
@@ -420,7 +420,7 @@ export class ReportsService {
       if (filters.filterForms.length > 0) {
         isFilter = true;
         const fields = ['form_type'];
-        let filteredformArray = [];
+        let filteredformArray: any[] = [];
         for (const form of filters.filterForms) {
           const filtered = this._filterPipe.transform(response.reports, fields, form);
           filteredformArray = filteredformArray.concat(filtered);
@@ -433,7 +433,7 @@ export class ReportsService {
       if (filters.filterReports.length > 0) {
         isFilter = true;
         const fields = ['report_type'];
-        let filteredreportArray = [];
+        let filteredreportArray: any[] = [];
         for (const report of filters.filterReports) {
           const filtered = this._filterPipe.transform(response.reports, fields, report);
           filteredreportArray = filteredreportArray.concat(filtered);
@@ -446,7 +446,7 @@ export class ReportsService {
       if (filters.filterStatuss.length > 0) {
         isFilter = true;
         const fields = ['status'];
-        let filteredStatusArray = [];
+        let filteredStatusArray: any[] = [];
         for (const status of filters.filterStatuss) {
           const filtered = this._filterPipe.transform(response.reports, fields, status);
           filteredStatusArray = filteredStatusArray.concat(filtered);
@@ -459,7 +459,7 @@ export class ReportsService {
       if (filters.filterAmendmentIndicators.length > 0) {
         isFilter = true;
         const fields = ['amend_ind'];
-        let filteredAmendmentArray = [];
+        let filteredAmendmentArray: any[] = [];
         for (const AmendmentIndicator of filters.filterAmendmentIndicators) {
           const filtered = this._filterPipe.transform(response.reports, fields, AmendmentIndicator);
           filteredAmendmentArray = filteredAmendmentArray.concat(filtered);
@@ -510,11 +510,11 @@ export class ReportsService {
             //this fix is done till services send data in EST format
             let d = this.convertUtcToLocalDate(rep.filed_date);
             let repDate = this._datePipe.transform(d, 'Mddyyyy');
-            if (repDate >= filedFromDate && repDate <= filedToDate) {
-              isFilter = true;
-            } else {
-              isFilter = false;
-            }
+            // if (repDate >= filedFromDate && repDate <= filedToDate) {
+            //   isFilter = true;
+            // } else {
+            //   isFilter = false;
+            // }
           }
         } else if (rep.status === 'Saved') {
           if (rep.last_update_date) {
@@ -522,11 +522,11 @@ export class ReportsService {
             //this fix is done till services send data in EST format
             let d = this.convertUtcToLocalDate(rep.last_update_date);
             let repDate = this._datePipe.transform(d, 'Mddyyyy');
-            if (repDate >= filedFromDate && repDate <= filedToDate) {
-              isFilter = true;
-            } else {
-              isFilter = false;
-            }
+            // if (repDate >= filedFromDate && repDate <= filedToDate) {
+            //   isFilter = true;
+            // } else {
+            //   isFilter = false;
+            // }
           }
         }
 
@@ -589,19 +589,25 @@ export class ReportsService {
     let httpOptions = new HttpHeaders();
     let params = new HttpParams();
     let url: string = '';
-    
+
     params = params.append('reportid', report_id);
 
     if (form_type === 'F99' || form_type === '99') {
       url = '/f99/get_f99_report_info';
-    } else if (form_type === 'F3X' || form_type === '3X' || form_type === 'F24' || form_type === '24' || form_type === '3L' || form_type === 'F3L') {
+    } else if (
+      form_type === 'F3X' ||
+      form_type === '3X' ||
+      form_type === 'F24' ||
+      form_type === '24' ||
+      form_type === '3L' ||
+      form_type === 'F3L'
+    ) {
       url = '/core/get_report_info';
-    } else if(form_type === 'F1M'){
-      url = '/f1M/form1M'
+    } else if (form_type === 'F1M') {
+      url = '/f1M/form1M';
       params = params.delete('reportid');
-      params=params.append('reportId', report_id);
+      params = params.append('reportId', report_id);
     }
-
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
@@ -611,15 +617,16 @@ export class ReportsService {
     if (form_type === 'F99' || form_type === '99') {
       return this._http.get(`${environment.apiUrl}${url}`, {
         headers: httpOptions,
-        params
+        params,
       });
-    } else {
-      return this._http
-        .get(`${environment.apiUrl}${url}`, {
-          headers: httpOptions,
-          params
-        })
-        .map((res: any[]) => {
+    }
+    return this._http
+      .get(`${environment.apiUrl}${url}`, {
+        headers: httpOptions,
+        params,
+      })
+      .pipe(
+        map((res: any) => {
           // report_type in local storage is set in the report-type component.
           // The field names and format must be in sync when report_type object is set in local
           // storage by the report-detail. Any transformations should be done here.
@@ -637,8 +644,8 @@ export class ReportsService {
             }
           }
           return res;
-        });
-    }
+        })
+      );
   }
   public trashOrRestoreReports(action: string, reports: Array<reportModel>) {
     const token: string = JSON.parse(this._cookieService.get('user'));
@@ -653,22 +660,24 @@ export class ReportsService {
     for (const rpt of reports) {
       actions.push({
         action: action,
-        id: rpt.report_id
+        id: rpt.report_id,
       });
     }
     request.actions = actions;
 
     return this._http
       .put(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
-      .map(res => {
-        if (res) {
-          //console.log('Report Trash Restore response: ', res);
-          return res;
-        }
-        return false;
-      });
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            //console.log('Report Trash Restore response: ', res);
+            return res;
+          }
+          return false;
+        })
+      );
   }
   public deleteRecycleBinReport(reports: Array<reportModel>): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
@@ -682,25 +691,27 @@ export class ReportsService {
     const actions = [];
     for (const rep of reports) {
       actions.push({
-        id: rep.report_id
+        id: rep.report_id,
       });
     }
     request.actions = actions;
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
-      .map(res => {
-        return false;
-      });
+      .pipe(
+        map((res: any) => {
+          return false;
+        })
+      );
   }
 
   public amendReport(report: reportModel): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     let httpOptions = new HttpHeaders();
     const url = '/core/create_amended_reports';
-    
+
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     const formData: FormData = new FormData();
@@ -708,10 +719,10 @@ export class ReportsService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, formData, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             //console.log('amend res: ', res);
             return res;
@@ -734,15 +745,17 @@ export class ReportsService {
 
     return this._http
       .put(`${environment.apiUrl}${url}`, formData, {
-        headers: httpOptions
+        headers: httpOptions,
       })
-      .map(res => {
-        if (res) {
-          // //console.log('Ypdate Report Date response: ', res);
-          return res;
-        }
-        return false;
-      });
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            // //console.log('Ypdate Report Date response: ', res);
+            return res;
+          }
+          return false;
+        })
+      );
   }
 
   public getCoverageDates(reportId: string): Observable<any> {
@@ -753,19 +766,15 @@ export class ReportsService {
 
     params = params.append('report_id', reportId);
 
-    return this._http
-      .get(
-        `${environment.apiUrl}${url}`,
-        {
-          params,
-          headers: httpOptions
-        }
-      );
+    return this._http.get(`${environment.apiUrl}${url}`, {
+      params,
+      headers: httpOptions,
+    });
   }
 
   public updateMemo(data: any): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
 
     const url = '/core/reports_memo_text';
 
@@ -773,105 +782,98 @@ export class ReportsService {
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
     return this._http
-        .put(`${environment.apiUrl}${url}`, data, {
-          headers: httpOptions
+      .put(`${environment.apiUrl}${url}`, data, {
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res: any) => {
+          if (res) {
+            return res;
+          }
+          return false;
         })
-        .pipe(
-            map(res => {
-              if (res) {
-                return res;
-              }
-              return false;
-            })
-        );
+      );
   }
 
-
-  public getCurrentCashOnHand(): Observable<any>{
+  public getCurrentCashOnHand(): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
 
     const url = '/core/cashOnHand';
     let params = new HttpParams();
 
-    params = params.append('year', (new Date()).getFullYear().toString());
+    params = params.append('year', new Date().getFullYear().toString());
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
-    return this._http
-        .get(`${environment.apiUrl}${url}`, {
-          headers: httpOptions,
-          params
-        });
+    return this._http.get(`${environment.apiUrl}${url}`, {
+      headers: httpOptions,
+      params,
+    });
 
     // return of({amount:'40000', year:'2020'});
   }
-  
-  public updateCashOnHand(data: any): Observable<any>{
+
+  public updateCashOnHand(data: any): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
 
     const url = '/core/cashOnHand';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
-    if(data && data.amount){
+    if (data && data.amount) {
       data.amount = data.amount.replace(/,/g, ``);
     }
 
     // return of({data});
 
-    return this._http
-        .put(`${environment.apiUrl}${url}`, data, {
-          headers: httpOptions
-        });
+    return this._http.put(`${environment.apiUrl}${url}`, data, {
+      headers: httpOptions,
+    });
   }
 
-  getUpcomingReports() : Observable<any>{
+  getUpcomingReports(): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
 
     const url = '/core/upcoming_reports';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
-    return this._http
-        .get(`${environment.apiUrl}${url}`, {
-          headers: httpOptions,
-        });
+    return this._http.get(`${environment.apiUrl}${url}`, {
+      headers: httpOptions,
+    });
   }
 
-  getRecentlySavedReports() : Observable<any>{
+  getRecentlySavedReports(): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
 
     const url = '/core/recent_saved_reports';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
-    return this._http
-        .get(`${environment.apiUrl}${url}`, {
-          headers: httpOptions,
-        });
+    return this._http.get(`${environment.apiUrl}${url}`, {
+      headers: httpOptions,
+    });
   }
 
   getRecentlySubmittedReports() {
     const token: string = JSON.parse(this._cookieService.get('user'));
-    let httpOptions =  new HttpHeaders();
+    let httpOptions = new HttpHeaders();
 
     const url = '/core/recent_submitted_reports';
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
-    return this._http
-        .get(`${environment.apiUrl}${url}`, {
-          headers: httpOptions,
-        });
+    return this._http.get(`${environment.apiUrl}${url}`, {
+      headers: httpOptions,
+    });
   }
-  
 }

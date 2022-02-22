@@ -1,24 +1,24 @@
 export class DebtSummaryModel {
-  apiCall: string;
-  scheduleType: string;
-  transactionId: string;
-  backRefTransactionId: string;
-  transactionTypeIdentifier: string;
-  transactionTypeDescription: string;
-  reportId: string;
-  selected: boolean;
-  toggleChild: boolean;
+  apiCall!: string;
+  scheduleType!: string;
+  transactionId!: string;
+  backRefTransactionId!: string;
+  transactionTypeIdentifier!: string;
+  transactionTypeDescription!: string;
+  reportId!: string;
+  selected!: boolean;
+  toggleChild!: boolean;
   child: DebtSummaryModel[] = [];
-  entityType: string;
-  name: string;
-  paymentDate: Date;
-  beginningBalance: any;
-  incurredAmt: any;
-  paymentAmt: any;
-  closingBalance: any;
-  memoCode: string;
-  aggregate: number;
-  entityId: string;
+  entityType!: string;
+  name!: string;
+  paymentDate!: Date;
+  beginningBalance!: any;
+  incurredAmt!: any;
+  paymentAmt!: any;
+  closingBalance!: any;
+  memoCode!: string;
+  aggregate!: number;
+  entityId!: string;
 
   constructor(debtSummary: any) {
     this.apiCall = debtSummary.apiCall ? debtSummary.apiCall : '';

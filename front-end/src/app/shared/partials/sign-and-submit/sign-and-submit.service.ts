@@ -7,13 +7,13 @@ import { ScheduleActions } from 'src/app/forms/form-3x/individual-receipt/schedu
 export class SignAndSubmitService {
 
 
-  private _formTitle: string;
-  private _emailsOnFile: any;
-  private _reportId: string; 
-  private _scheduleAction: ScheduleActions;
-  private _formData: any;
-  private _treasurerData: any;
-  private _formType: any;
+  private _formTitle!: string;
+  private _emailsOnFile!: any;
+  private _reportId!: string; 
+  private _scheduleAction!: ScheduleActions;
+  private _formData!: any;
+  private _treasurerData!: any;
+  private _formType!: any;
   
   public get formTitle(): string {
     return this._formTitle;

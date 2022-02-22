@@ -4,17 +4,17 @@ import { ImportFileStatusEnum } from '../import-file-status.enum';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { PaginationInstance } from 'ngx-pagination';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UtilService } from 'src/app/shared/utils/util.service';
+import { UtilService } from '../../../shared/utils/util.service';
 import { ImportTransactionsService } from '../service/import-transactions.service';
 
 @Component({
   selector: 'app-import-trx-clean',
   templateUrl: './import-trx-clean.component.html',
-  styleUrls: ['./import-trx-clean.component.scss']
+  styleUrls: ['./import-trx-clean.component.scss'],
 })
 export class ImportTrxCleanComponent implements OnInit, OnDestroy {
   @Input()
-  public uploadFile: UploadFileModel;
+  public uploadFile!: UploadFileModel;
 
   @Output()
   public resultsEmitter: EventEmitter<any> = new EventEmitter<any>();
@@ -22,18 +22,18 @@ export class ImportTrxCleanComponent implements OnInit, OnDestroy {
   @Output()
   public saveStatusEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public contacts: Array<any>;
-  public contacts$: Observable<Array<any>>;
+  public contacts!: Array<any>;
+  public contacts$!: Observable<Array<any>>;
 
   // ngx-pagination config for the duplicates table of contacts
   public maxItemsPerPage = 1000000; // set to 4 once server side supports pagination.
   public directionLinks = false;
   public autoHide = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages = 0;
-  public allDupesSelected: boolean;
+  public allDupesSelected!: boolean;
 
-  private contactsSubject: BehaviorSubject<Array<any>>;
+  private contactsSubject!: BehaviorSubject<Array<any>>;
   private onDestroy$ = new Subject();
 
   constructor(
@@ -49,7 +49,7 @@ export class ImportTrxCleanComponent implements OnInit, OnDestroy {
     const config: PaginationInstance = {
       id: 'trx_clean_contacts_pgn',
       itemsPerPage: this.maxItemsPerPage,
-      currentPage: 1
+      currentPage: 1,
     };
     this.config = config;
 
@@ -74,7 +74,7 @@ export class ImportTrxCleanComponent implements OnInit, OnDestroy {
   public checkDuplicates(page: number) {
     this.config.currentPage = page;
 
-    // // this._importContactsService.checkDuplicates(page).takeUntil(this.contactsSubject).subscribe((res: any) => {
+    // // this._importContactsService.checkDuplicates(page).pipe(takeUntil(this.contactsSubject).subscribe((res: any)) => {
     // this._duplicateContactsService.getDuplicates_mock(page).subscribe((res: any) => {
     //   this.contactsSubject.next(res.duplicates);
     //   // this.contactsSubject.next(this.duplicates);
@@ -116,7 +116,7 @@ export class ImportTrxCleanComponent implements OnInit, OnDestroy {
    * Determine if pagination should be shown.
    */
   public showPagination(): boolean {
-    if (this.config.totalItems > this.config.itemsPerPage) {
+    if (this.config.totalItems ?? 0 > this.config.itemsPerPage) {
       return true;
     }
     // otherwise, no show.
@@ -126,7 +126,7 @@ export class ImportTrxCleanComponent implements OnInit, OnDestroy {
   public proceed() {
     this.resultsEmitter.emit({
       resultType: 'proceed',
-      uploadFile: this.uploadFile
+      uploadFile: this.uploadFile,
     });
   }
 
@@ -165,7 +165,7 @@ export class ImportTrxCleanComponent implements OnInit, OnDestroy {
     modal.close('close it');
     this.resultsEmitter.emit({
       resultType: 'ignore_dupe_save',
-      file: this.uploadFile
+      file: this.uploadFile,
     });
     this.saveStatusEmitter.emit(true);
   }
@@ -193,7 +193,7 @@ export class ImportTrxCleanComponent implements OnInit, OnDestroy {
 
     this.resultsEmitter.emit({
       resultType: 'merge_dupe_save',
-      file: this.uploadFile
+      file: this.uploadFile,
     });
     this.saveStatusEmitter.emit(true);
   }
@@ -214,7 +214,7 @@ export class ImportTrxCleanComponent implements OnInit, OnDestroy {
     modal.close('close it');
     this.resultsEmitter.emit({
       resultType: 'cancel-file',
-      file: this.uploadFile
+      file: this.uploadFile,
     });
     this._importTransactionsService.cancelImport(this.uploadFile.fileName).subscribe((res: any) => {});
 

@@ -20,7 +20,7 @@
       display: block;
       width: 100%;
       border-bottom: 1px solid $bombay;
-      padding-bottom: .75em;
+      padding-bottom: 0.75em;
       margin-bottom: 1em;
       .header__text {
         float: none;
@@ -106,8 +106,6 @@
       .html-editor {
         position: relative;
         width: 100%;
-        .toolbar {
-        }
         .editor {
           border: 1px solid black;
           box-shadow: 0 0.1rem 0.4rem black;
@@ -140,8 +138,8 @@
         }
         .editor.full-width-textarea {
           width: 100%;
-          width: -moz-available;          /* WebKit-based browsers will ignore this. */
-          width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+          width: -moz-available; /* WebKit-based browsers will ignore this. */
+          width: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
         }
         @include clearfix();
       }

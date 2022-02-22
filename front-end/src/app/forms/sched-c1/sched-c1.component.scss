@@ -1,13 +1,13 @@
 @import '../../shared/scss/global';
 
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-input[type=number] {
-    -moz-appearance:textfield;
+input[type='number'] {
+  -moz-appearance: textfield;
 }
 
 .sched-c1-container {
@@ -72,7 +72,7 @@ input[type=number] {
     section {
       .section_b_label {
         float: left;
-        padding-top: .4em;
+        padding-top: 0.4em;
       }
       .c1_verbiage_lg {
         font-size: 20px;
@@ -96,6 +96,7 @@ input[type=number] {
           -webkit-transform: scale(1.9);
           -o-transform: scale(1.9);
           margin: 10px;
+          transform: scale(1.9);
         }
       }
       .section_i_checkbox_verbiage {
@@ -135,12 +136,12 @@ input[type=number] {
           }
           textarea {
             &.form-control {
-              resize:none;
+              resize: none;
               // overflow: scroll;
               width: 400px;
             }
           }
-          .ng-select.forms__select ::ng-deep .ng-select-container  {            
+          .ng-select.forms__select ::ng-deep .ng-select-container {
             height: 45px;
           }
           .ng-select.disable-arrow .ng-arrow-wrapper .ng-arrow {
@@ -153,6 +154,7 @@ input[type=number] {
             -webkit-transform: scale(1.9); /* Safari and Chrome */
             -o-transform: scale(1.9); /* Opera */
             margin: 10px;
+            transform: scale(1.9);
           }
           .forms__big_radio {
             -webkit-transform: scale(2.9);
@@ -161,6 +163,7 @@ input[type=number] {
             -webkit-transform: scale(2.9); /* Safari and Chrome */
             -o-transform: scale(2.9); /* Opera */
             margin: 23px;
+            transform: scale(2.9);
           }
           label {
             font-family: sans-serif;

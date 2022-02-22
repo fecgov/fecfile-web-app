@@ -1,27 +1,19 @@
 import { DatePipe } from '@angular/common';
-import {
-  ChangeDetectorRef, Component,
-  Input,
-  OnDestroy,
-  OnInit,
-
-
-
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  NgbModal, NgbModalConfig,
-
-  NgbPanelChangeEvent, NgbTooltipConfig,
-  NgbTypeaheadSelectItemEvent
+  NgbModal,
+  NgbModalConfig,
+  NgbPanelChangeEvent,
+  NgbTooltipConfig,
+  NgbTypeaheadSelectItemEvent,
 } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { ScheduleActions } from 'src/app/forms/form-3x/individual-receipt/schedule-actions.enum';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
+import { ScheduleActions } from '../../../forms/form-3x/individual-receipt/schedule-actions.enum';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
 import { ReportsService } from '../../../reports/service/report.service';
 import { Roles } from '../../enums/Roles';
 import { PhonePipe } from '../../pipes/phone-number/phone-number.pipe';
@@ -45,15 +37,15 @@ import { TypeaheadService } from './../typeahead/typeahead.service';
 export class SignAndSubmitComponent implements OnInit, OnDestroy {
   @ViewChild('content') content: any;
 
-  @Input() formTitle: string;
-  @Input() emailsOnFile: any;
-  @Input() reportId: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() formData: any;
-  @Input() treasurerData: any;
-  @Input() formType: any;
+  @Input() formTitle!: string;
+  @Input() emailsOnFile!: any;
+  @Input() reportId!: string;
+  @Input() scheduleAction!: ScheduleActions;
+  @Input() formData!: any;
+  @Input() treasurerData!: any;
+  @Input() formType!: any;
 
-  public loggedInUserRole: Roles;
+  public loggedInUserRole!: Roles;
 
   public formMetaData: any = {};
   public treasurerToolTipText: string = '';
@@ -64,21 +56,21 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
   public today: Date = new Date();
 
   public showFooter: boolean = false;
-  public form: FormGroup;
+  public form!: FormGroup;
 
   public submissionDateToolTipText: string = 'Placeholder text';
   public tooltipPlaceholder: string = 'Placeholder text';
   private onDestroy$ = new Subject();
   public saveSuccessful = false;
-  public editMode: boolean;
+  public editMode!: boolean;
 
   public username: string = '';
   accordionExpanded: boolean = false;
-  modalRef: any;
+  modalRef!: any;
   public submitterInfo: any = {};
 
   private phonePipe: PhonePipe = new PhonePipe();
-  committeeDetailsFromLocalStorage: any;
+  committeeDetailsFromLocalStorage!: any;
 
   constructor(
     public _config: NgbTooltipConfig,
@@ -107,7 +99,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
 
     this._messageService
       .getMessage()
-      .takeUntil(this.onDestroy$)
+      .pipe(takeUntil(this.onDestroy$))
       .subscribe((message) => {
         if (message && message.action === 'disableFields') {
           if (this.form) {
@@ -146,7 +138,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
 
     //if @Inputs are null, they will be present in the route data, so get them from there.
     this.initForm();
@@ -156,7 +148,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
     // }
 
     if (localStorage.getItem('committee_details')) {
-      this.username = JSON.parse(localStorage.getItem('committee_details')).committeeid;
+      this.username = JSON.parse(localStorage.getItem('committee_details') ?? '').committeeid;
       this._cd.detectChanges();
     }
     this.populateFormMetadata();
@@ -171,13 +163,13 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
     }
 
     if (!this.formTitle) {
-      this.getTitleAndFormTypeByRouteParam(this._activatedRoute.snapshot.paramMap.get('form_id'));
+      this.getTitleAndFormTypeByRouteParam(this._activatedRoute.snapshot.paramMap.get('form_id') ?? '');
     }
     if (!this.emailsOnFile || (this.emailsOnFile && this.emailsOnFile.length === 0)) {
       this.getEmailsOnFileFromLocalStorage();
     }
     if (!this.reportId) {
-      this.reportId = this._activatedRoute.snapshot.queryParams.reportId;
+      this.reportId = this._activatedRoute.snapshot.queryParams['reportId'];
     }
     if (!this.scheduleAction) {
       this.scheduleAction = ScheduleActions.add;
@@ -197,7 +189,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
 
   getReportInfo(): Observable<any> {
     if (localStorage.getItem(`form_${this.formType}_report_type`)) {
-      return of(JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`)));
+      return of(JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? ''));
     } else {
       return this.getReportInfoFromApi(this.formType);
     }
@@ -209,7 +201,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
 
   getEmailsOnFileFromLocalStorage() {
     if (localStorage.getItem('committee_details')) {
-      this.committeeDetailsFromLocalStorage = JSON.parse(localStorage.getItem('committee_details'));
+      this.committeeDetailsFromLocalStorage = JSON.parse(localStorage.getItem('committee_details') ?? '');
       this.emailsOnFile = [];
       if (this.committeeDetailsFromLocalStorage.email_on_file) {
         this.emailsOnFile.push(this.committeeDetailsFromLocalStorage.email_on_file);
@@ -226,7 +218,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
       case '24':
       case '3L':
         if (localStorage.getItem(`form_${formType}_report_type`)) {
-          const reportObj: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+          const reportObj: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
           this.formTitle = `Form ${formType} / ${reportObj.reporttype} (${reportObj.reporttypedescription})  `;
         }
         if (!this.formType) {
@@ -235,7 +227,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
         break;
       case '99':
         if (localStorage.getItem('form_99_details')) {
-          // const reportObj: any = JSON.parse(localStorage.getItem('form_99_details'));
+          // const reportObj: any = JSON.parse(localStorage.getItem('form_99_details') ?? '');
           this.formTitle = 'Form 99 / Miscellaneous Reports to the FEC';
         }
         if (!this.formType) {
@@ -297,7 +289,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
 
   public populateFormMetadata() {
     if (localStorage.getItem('committee_details') !== null) {
-      this.formMetaData = JSON.parse(localStorage.getItem('committee_details'));
+      this.formMetaData = JSON.parse(localStorage.getItem('committee_details') ?? '');
       if (this.formMetaData && this.formMetaData.email_on_file) {
         // this.emailsOnFile.push(this.formMetaData.email_on_file);
       }
@@ -389,8 +381,8 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
     if (this.isFormValidForUpdating()) {
       this.scheduleAction = ScheduleActions.add;
       const saveObj: any = {};
-      saveObj.additionalEmail1 = this.additionalEmail1.value;
-      saveObj.additionalEmail2 = this.additionalEmail2.value;
+      saveObj.additionalEmail1 = this.additionalEmail1?.value;
+      saveObj.additionalEmail2 = this.additionalEmail2?.value;
       saveObj.reportId = this.reportId;
       saveObj.formType = this.formType;
       this.saveEmails(saveObj);
@@ -414,7 +406,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
       });
     } else {
       this._reportTypeService.saveAdditionalEmails(saveObj, this.scheduleAction).subscribe((res) => {
-        // of({saveObj}).subscribe(res => {
+        // of({saveObj}).subscribe((res: any) => {
         this.additionalEmailsArray = [];
         if (saveObj.additionalEmail1) {
           this.additionalEmailsArray.push(saveObj.additionalEmail1);
@@ -442,12 +434,12 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
     this.saveEmails(saveObj);
 
     //also remove from form
-    if (this.additionalEmail1.value === email) {
+    if (this.additionalEmail1?.value === email) {
       this.additionalEmail1.patchValue(null);
-      this.confirmAdditionalEmail1.patchValue(null);
-    } else if (this.additionalEmail2.value === email) {
+      this.confirmAdditionalEmail1?.patchValue(null);
+    } else if (this.additionalEmail2?.value === email) {
       this.additionalEmail2.patchValue(null);
-      this.confirmAdditionalEmail2.patchValue(null);
+      this.confirmAdditionalEmail2?.patchValue(null);
     }
   }
 
@@ -472,7 +464,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
         if (searchText) {
           return this._typeaheadService.getContacts(searchText, 'last_name');
         } else {
-          return Observable.of([]);
+          return of([]);
         }
       })
     );
@@ -501,7 +493,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
     return `${lastName}, ${firstName}, ${middleName}, ${prefix}, ${suffix}`;
   }
 
-  public open(content) {
+  public open(content: any) {
     this.modalRef = this.modalService.open(content, { size: 'lg', centered: true, windowClass: 'custom-class' });
   }
 
@@ -514,7 +506,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
     }
   }
 
-  public toggleAccordion($event: NgbPanelChangeEvent, acc) {
+  public toggleAccordion($event: NgbPanelChangeEvent, acc: any) {
     if (acc.isExpanded($event.panelId)) {
       this.accordionExpanded = true;
     } else {
@@ -566,60 +558,77 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
           }
         );
       } else if (this.formType === '3X' || this.formType === '24' || this.formType === '3L') {
-        this._reportTypeService.signandSaveSubmitReport(this.formType, 'Submitted', `${this.submitterInfo.last_name}, ${this.submitterInfo.first_name}`, this.form.value, this.emailsOnFile).subscribe(res => {
-            if (res) {
-              const frmSaved: any = {
-                saved: true,
-              };
+        this._reportTypeService
+          .signandSaveSubmitReport(
+            this.formType,
+            'Submitted',
+            `${this.submitterInfo.last_name}, ${this.submitterInfo.first_name}`,
+            this.form.value,
+            this.emailsOnFile
+          )
+          .subscribe(
+            (res: any) => {
+              if (res) {
+                const frmSaved: any = {
+                  saved: true,
+                };
 
-              localStorage.setItem(`form_${this.formType}_saved`, JSON.stringify(frmSaved));
+                localStorage.setItem(`form_${this.formType}_saved`, JSON.stringify(frmSaved));
 
-              this._router.navigate([`/forms/form/${this.formType}`], {
-                queryParams: {
-                  step: 'step_6',
-                  edit: this.editMode,
-                  fec_id: res.fec_id,
-                },
-              });
+                this._router.navigate([`/forms/form/${this.formType}`], {
+                  queryParams: {
+                    step: 'step_6',
+                    edit: this.editMode,
+                    fec_id: res.fec_id,
+                  },
+                });
 
-              this._messageService.sendMessage({
-                form_submitted: true,
-              });
-            } else {
-              this._router.navigate([`/forms/form/${this.formType}`], {
-                queryParams: {
-                  step: 'step_6',
-                  edit: this.editMode,
-                },
-              });
-              this._messageService.sendMessage({
-                form_submitted: false,
-              });
-            }
-          },
-          (error) => {
-            let content = '';
-            let errorsList : string = '';
-
-            if(error){
-              error = error.error.error;
-              if(error.result && error.result[0]){
-                content = `${error.result[0].message}`;
-              }
-              if(error.errors && error.errors.length > 0){
-                error.errors.forEach(element => {
-                  errorsList = `${errorsList}${element.errorMessage}\n`;
+                this._messageService.sendMessage({
+                  form_submitted: true,
+                });
+              } else {
+                this._router.navigate([`/forms/form/${this.formType}`], {
+                  queryParams: {
+                    step: 'step_6',
+                    edit: this.editMode,
+                  },
+                });
+                this._messageService.sendMessage({
+                  form_submitted: false,
                 });
               }
-              content = content +":\n\n" +errorsList;
+            },
+            (error) => {
+              let content = '';
+              let errorsList: string = '';
+
+              if (error) {
+                error = error.error.error;
+                if (error.result && error.result[0]) {
+                  content = `${error.result[0].message}`;
+                }
+                if (error.errors && error.errors.length > 0) {
+                  error.errors.forEach((element: any) => {
+                    errorsList = `${errorsList}${element.errorMessage}\n`;
+                  });
+                }
+                content = content + ':\n\n' + errorsList;
+              }
+              this._dialogService
+                .confirm(
+                  content,
+                  ConfirmModalComponent,
+                  'Error',
+                  false,
+                  ModalHeaderClassEnum.errorHeader,
+                  new Map(),
+                  'OK'
+                )
+                .then((res: any) => {
+                  console.log(res);
+                });
             }
-            this._dialogService.confirm(content, ConfirmModalComponent, 'Error', false, 
-            ModalHeaderClassEnum.errorHeader, null, 'OK')
-            .then(res => {
-              console.log(res);
-            });
-          }
-        );
+          );
       }
     } else {
       if (this.formType === '3X' || this.formType === '24' || this.formType === '3L') {
@@ -630,7 +639,7 @@ export class SignAndSubmitComponent implements OnInit, OnDestroy {
             'Warning',
             true,
             ModalHeaderClassEnum.warningHeader,
-            null,
+            new Map(),
             'Return to Reports'
           )
           .then((res) => {

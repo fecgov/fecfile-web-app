@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SchedFCoreComponent } from './sched-f-core.component';
 
-describe('FormsschedFCoreComponent', () => {
+xdescribe('FormsschedFCoreComponent', () => {
   let component: SchedFCoreComponent;
   let fixture: ComponentFixture<SchedFCoreComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SchedFCoreComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [SchedFCoreComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SchedFCoreComponent);
@@ -19,7 +20,7 @@ describe('FormsschedFCoreComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,21 +1,37 @@
-import { TableService } from 'src/app/shared/services/TableService/table.service';
+import { TableService } from '../../shared/services/TableService/table.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewEncapsulation , ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewEncapsulation,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { Subject, Subscription, Observable } from 'rxjs';
-import { ContactsService } from 'src/app/contacts/service/contacts.service';
-import { ReportsService } from 'src/app/reports/service/report.service';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { TypeaheadService } from 'src/app/shared/partials/typeahead/typeahead.service';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import { FormsService } from 'src/app/shared/services/FormsService/forms.service';
-import { MessageService } from 'src/app/shared/services/MessageService/message.service';
-import { ContributionDateValidator } from 'src/app/shared/utils/forms/validation/contribution-date.validator';
-import { UtilService } from 'src/app/shared/utils/util.service';
+import { Subject, Subscription, Observable, of } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ContactsService } from '../../contacts/service/contacts.service';
+import { ReportsService } from '../../reports/service/report.service';
+import {
+  ConfirmModalComponent,
+  ModalHeaderClassEnum,
+} from '../../shared/partials/confirm-modal/confirm-modal.component';
+import { TypeaheadService } from '../../shared/partials/typeahead/typeahead.service';
+import { DialogService } from '../../shared/services/DialogService/dialog.service';
+import { FormsService } from '../../shared/services/FormsService/forms.service';
+import { MessageService } from '../../shared/services/MessageService/message.service';
+import { ContributionDateValidator } from '../../shared/utils/forms/validation/contribution-date.validator';
+import { UtilService } from '../../shared/utils/util.service';
 import { AbstractSchedule } from '../form-3x/individual-receipt/abstract-schedule';
 import { AbstractScheduleParentEnum } from '../form-3x/individual-receipt/abstract-schedule-parent.enum';
 import { IndividualReceiptService } from '../form-3x/individual-receipt/individual-receipt.service';
@@ -28,7 +44,7 @@ import { TransactionsMessageService } from '../transactions/service/transactions
 import { GetTransactionsResponse, TransactionsService } from '../transactions/service/transactions.service';
 import { SchedH3Service } from './sched-h3.service';
 import { debounceTime, distinctUntilChanged, switchMap, delay, pairwise } from 'rxjs/operators';
-import {AuthService} from '../../shared/services/AuthService/auth.service';
+import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { PaginationInstance } from 'ngx-pagination';
 
 @Component({
@@ -50,61 +66,61 @@ import { PaginationInstance } from 'ngx-pagination';
   ] */
 })
 export class SchedH3Component extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Input() scheduleType: string;
-  @Input() transactionData: any;
-  @Output() status: EventEmitter<any>;
+  @Input() override transactionTypeText!: string;
+  @Input() override transactionType!: string;
+  @Input() override scheduleAction!: ScheduleActions;
+  @Input() override scheduleType!: string;
+  @Input() override transactionData!: any;
+  @Output() override status!: EventEmitter<any>;
 
-  public formType: string;
-  public showPart2: boolean;
-  public loaded = false;
+  public override formType!: string;
+  public override showPart2!: boolean;
+  public override loaded = false;
 
-  public schedH3: FormGroup;
-  public categories: any;
-  public identifiers: any;
-  public totalName: any;
+  public schedH3!: FormGroup;
+  public categories!: any;
+  public identifiers!: any;
+  public totalName!: any;
   public showIdentiferSelect = false;
   public showIdentifer = false;
-  public h3Sum: any;
-  public h3SumP: any;
-  public h3Entries = [];
-  public h3Ratios: any;
+  public h3Sum!: any;
+  public h3SumP!: any;
+  public h3Entries: any[] = [];
+  public h3Ratios!: any;
   public showAggregateAmount = false;
 
-  public h3Subscription: Subscription;
-  public saveHRes: any;
+  public h3Subscription!: Subscription;
+  public saveHRes!: any;
 
-  //public h3EntryTableConfig: any;
+  //public h3EntryTableConfig!: any;
 
   public receiptDateErr = false;
 
-  public cvgStartDate: any;
-  public cvgEndDate: any;
+  public override cvgStartDate!: any;
+  public override cvgEndDate!: any;
 
   public isSubmit = false;
 
   public transferredAmountErr = false;
 
-  public transaction_id: string;
-  public h3EntrieEdit: any;
-  public back_ref_transaction_id: string;
-  populateFormForEdit: Subscription;
+  public transaction_id!: string;
+  public h3EntrieEdit!: any;
+  public back_ref_transaction_id!: string;
+  populateFormForEdit!: Subscription;
 
   public transferred_amount_edit = 0;
   public total_amount_edit = 0;
   public aggregate_amount_edit = 0;
-  public activity_event_name_edit: string;
+  public activity_event_name_edit!: string;
 
   public saveAndAddDisabled = false;
 
   private _h3OnDestroy$ = new Subject();
 
-  public getH1H2ExistSubscription: Subscription;
+  public getH1H2ExistSubscription!: Subscription;
 
-  public restoreSubscription: Subscription;
-  public trashSubscription: Subscription;
+  public restoreSubscription!: Subscription;
+  public trashSubscription!: Subscription;
 
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
@@ -112,56 +128,56 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public pageNumbers: number[] = [];
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
   public sortableColumns: any = [
     {
-      "colName": "account_name",
-      "descending": false,
-      "visible": true,
-      "checked": true,
-      "disabled": false
+      colName: 'account_name',
+      descending: false,
+      visible: true,
+      checked: true,
+      disabled: false,
     },
     {
-      "colName": "activity_event_type",
-      "descending": false,
-      "visible": true,
-      "checked": true,
-      "disabled": false
+      colName: 'activity_event_type',
+      descending: false,
+      visible: true,
+      checked: true,
+      disabled: false,
     },
     {
-      "colName": "activity_event_name",
-      "descending": false,
-      "visible": true,
-      "checked": true,
-      "disabled": false
+      colName: 'activity_event_name',
+      descending: false,
+      visible: true,
+      checked: true,
+      disabled: false,
     },
     {
-      "colName": "receipt_date",
-      "descending": false,
-      "visible": true,
-      "checked": true,
-      "disabled": false
+      colName: 'receipt_date',
+      descending: false,
+      visible: true,
+      checked: true,
+      disabled: false,
     },
     {
-      "colName": "transferred_amount",
-      "descending": true,
-      "visible": true,
-      "checked": true,
-      "disabled": false
+      colName: 'transferred_amount',
+      descending: true,
+      visible: true,
+      checked: true,
+      disabled: false,
     },
     {
-      "colName": "aggregate_amount",
-      "descending": false,
-      "visible": true,
-      "checked": true,
-      "disabled": false
+      colName: 'aggregate_amount',
+      descending: false,
+      visible: true,
+      checked: true,
+      disabled: false,
     },
   ];
-  currentSortedColumnName: any;
-  
+  currentSortedColumnName!: any;
+
   constructor(
     _http: HttpClient,
     _fb: FormBuilder,
@@ -220,7 +236,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
       _transactionsService,
       _reportsService,
       _schedHMessageServiceService,
-      _authService,
+      _authService
     );
     _schedH3Service;
     _individualReceiptService;
@@ -234,14 +250,16 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     const paginateConfig: PaginationInstance = {
       id: 'forms__sched-h3-table-pagination',
       itemsPerPage: this.maxItemsPerPage,
-      currentPage: 1
+      currentPage: 1,
     };
     this.config = paginateConfig;
 
-    this._schedHMessageServiceService.getpopulateHFormForEditMessage().takeUntil(this._h3OnDestroy$)
-      .subscribe(p => {
+    this._schedHMessageServiceService
+      .getpopulateHFormForEditMessage()
+      .pipe(takeUntil(this._h3OnDestroy$))
+      .subscribe((p) => {
         if (p.scheduleType === 'Schedule H3') {
-          let res = this._schedHService.getSchedule(p.transactionDetail.transactionModel).subscribe(res => {
+          let res = this._schedHService.getSchedule(p.transactionDetail.transactionModel).subscribe((res: any) => {
             if (res && res.length === 1) {
               this.editH3(res[0]);
             }
@@ -249,28 +267,20 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
         }
       });
 
-    this.restoreSubscription = this._tranMessageService
-      .getRestoreTransactionsMessage()
-      .subscribe(
-        message => {
-          if (message.scheduleType === 'Schedule H3') {
-            this.setH3Sum(this.config.currentPage);
-          }
-        }
-      )
+    this.restoreSubscription = this._tranMessageService.getRestoreTransactionsMessage().subscribe((message) => {
+      if (message.scheduleType === 'Schedule H3') {
+        this.setH3Sum(this.config.currentPage);
+      }
+    });
 
-    this.trashSubscription = this._tranMessageService
-      .getRemoveHTransactionsMessage()
-      .subscribe(
-        message => {
-          if (message.scheduleType === 'Schedule H3') {
-            this.setH3Sum(this.config.currentPage);
-          }
-        }
-      )
+    this.trashSubscription = this._tranMessageService.getRemoveHTransactionsMessage().subscribe((message) => {
+      if (message.scheduleType === 'Schedule H3') {
+        this.setH3Sum(this.config.currentPage);
+      }
+    });
   }
 
-  public ngOnInit() {
+  public override ngOnInit() {
     this.abstractScheduleComponent = AbstractScheduleParentEnum.schedH3Component;
     this.formType = '3X';
     this.formFieldsPrePopulated = true;
@@ -279,7 +289,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     this.showPart2 = false;
     //this.transactionType = 'OPEXP'; // 'INDV_REC';
     //this.transactionTypeText = 'Coordinated Party Expenditure Debt to Vendor';
-    super.ngOnChanges(null);
+    super.ngOnChanges(<SimpleChanges>{});
     //console.log();
 
     // temp code - waiting until dynamic forms completes and loads the formGroup
@@ -297,18 +307,18 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     //this.setH3Sum();
     //this.setH3SumP();
 
-    this.formType = this._actRoute.snapshot.paramMap.get('form_id');
+    this.formType = this._actRoute.snapshot.paramMap.get('form_id') ?? '';
 
     this.h3Ratios = {};
     this.h3Ratios['child'] = [];
 
-    this.schedH3.patchValue({ category: ''}, { onlySelf: true });
+    this.schedH3.patchValue({ category: '' }, { onlySelf: true });
     this.sendPopulateMessageIfApplicable();
 
     this.getPage(this.config.currentPage);
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
+  public override ngOnChanges(changes: SimpleChanges) {
     // OnChanges() can be triggered before OnInit().  Ensure formType is set.
     this.formType = '3X';
     this.showPart2 = false;
@@ -329,11 +339,11 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   ngDoCheck() {
     //TODO -- memory check
     this.status.emit({
-      otherSchedHTransactionType: this.transactionType
+      otherSchedHTransactionType: this.transactionType,
     });
   }
 
-  public ngOnDestroy(): void {
+  public override ngOnDestroy(): void {
     this._h3OnDestroy$.next(true);
     this.restoreSubscription.unsubscribe();
     this.trashSubscription.unsubscribe();
@@ -346,16 +356,16 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
    */
   private _checkFormFieldIsValid(fieldName: string): boolean {
     if (this.frmIndividualReceipt.contains(fieldName)) {
-      return this.frmIndividualReceipt.get(fieldName).valid;
+      return this.frmIndividualReceipt.get(fieldName)?.valid ?? false;
     }
+    return false;
   }
 
   public getReportId(): string {
-
     let report_id;
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
     }
 
     if (reportType) {
@@ -367,11 +377,9 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     }
 
     return report_id ? report_id : '0';
-
   }
 
   public setH3(page: number) {
-
     this.schedH3 = new FormGroup({
       account_name: new FormControl('', [Validators.maxLength(40), Validators.required]),
       receipt_date: new FormControl('', Validators.required),
@@ -380,13 +388,13 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
       activity_event_name: new FormControl('', Validators.required),
       transferred_amount: new FormControl('', Validators.required),
       aggregate_amount: new FormControl(''),
-      memo_text: new FormControl('')
+      memo_text: new FormControl(''),
     });
     this._prepareForUnsavedH3Changes();
   }
 
   private _prepareForUnsavedH3Changes(): void {
-    this.schedH3.valueChanges.takeUntil(this._h3OnDestroy$).subscribe(val => {
+    this.schedH3.valueChanges.pipe(takeUntil(this._h3OnDestroy$)).subscribe((val) => {
       if (this.schedH3.dirty) {
         localStorage.setItem(`form_${this.formType}_saved`, JSON.stringify({ saved: false }));
       }
@@ -394,45 +402,42 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public setCategory() {
-
     this.categories = [
       {
-        "id": "AD",
-        "name": "Administrative"
+        id: 'AD',
+        name: 'Administrative',
       },
       {
-        "id": "GV",
-        "name": "Generic Voter Drive"
+        id: 'GV',
+        name: 'Generic Voter Drive',
       },
       {
-        "id": "EA",
-        "name": "Exempt Activities"
+        id: 'EA',
+        name: 'Exempt Activities',
       },
       {
-        "id": "DF",
-        "name": "Direct Fundraising"
+        id: 'DF',
+        name: 'Direct Fundraising',
       },
       {
-        "id": "DC",
-        "name": "Direct Candidate Support"
+        id: 'DC',
+        name: 'Direct Candidate Support',
       },
       {
-        "id": "PC",
-        "name": "Public Communications Referring Only to Party(Made by PAC)"
-      }
-    ]
+        id: 'PC',
+        name: 'Public Communications Referring Only to Party(Made by PAC)',
+      },
+    ];
 
     if (this.isPac()) {
-      this.categories = this.categories.filter(obj => obj.id !== 'EA');
+      this.categories = this.categories.filter((obj: any) => obj.id !== 'EA');
     }
-
   }
 
   isPac() {
-
     let ispac = false;
     if (localStorage.getItem('committee_details') !== null) {
-      let cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      let cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       if (cmteDetails.cmte_type_category === 'PAC') {
         ispac = true;
       }
@@ -442,40 +447,37 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public setActivityOrEventIdentifier(category: string) {
-
     const reportId = this._individualReceiptService.getReportIdFromStorage(this.formType);
 
     this.identifiers = [];
-    this.h3Subscription =
-      this._schedH3Service.getActivityOrEventIdentifiers(category, reportId)
-        .subscribe(res => {
-          if (res) {
-            this.identifiers = res;
-          }
+    this.h3Subscription = this._schedH3Service
+      .getActivityOrEventIdentifiers(category, reportId)
+      .subscribe((res: any) => {
+        if (res) {
+          this.identifiers = res;
         }
-        );
-
+      });
   }
 
   public getTotalAmount() {
-
     //this.schedH3.patchValue({total_tmount_of_transfer: 0}, { onlySelf: true });
     const reportId = this._individualReceiptService.getReportIdFromStorage(this.formType);
-    this.h3Subscription =
-      this._schedH3Service.getTotalAmount(this.schedH3.get('activity_event_name').value, reportId)
-        .subscribe(res => {
-          if (res) {
-            //this.schedH3.patchValue({aggregate_amount: res.aggregate_amount}, { onlySelf: true });
-            this.schedH3.patchValue({ aggregate_amount: this._decPipe.transform(res.aggregate_amount, '.2-2') }, { onlySelf: true });
-          }
+    this.h3Subscription = this._schedH3Service
+      .getTotalAmount(this.schedH3.get('activity_event_name')?.value, reportId)
+      .subscribe((res: any) => {
+        if (res) {
+          //this.schedH3.patchValue({aggregate_amount: res.aggregate_amount}, { onlySelf: true });
+          this.schedH3.patchValue(
+            { aggregate_amount: this._decPipe.transform(res.aggregate_amount, '.2-2') },
+            { onlySelf: true }
+          );
         }
-        );
+      });
 
     return;
   }
 
   public returnToSum(): void {
-
     if (this.h3Ratios.child.length > 0) {
       this.addEntries();
     }
@@ -490,7 +492,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     //this.schedH3.patchValue({ transferred_amount: 0}, { onlySelf: true });
 
     this.schedH3 = this._formBuilder.group({
-      category: ['']
+      category: [''],
     });
 
     this.h3Entries = [];
@@ -506,7 +508,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public cancelReturnToSum(): void {
-    this.canDeactivate().then(result => {
+    this.canDeactivate().then((result) => {
       if (result === true) {
         localStorage.removeItem(`form_${this.formType}_saved`);
         this.returnToSum();
@@ -529,27 +531,26 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     this.transactionType = '';
   }
 
-  public selectCategoryChange(e) {
-
-    if (!this.schedH3.get('category').value) {
+  public selectCategoryChange(e: any) {
+    if (!this.schedH3.get('category')?.value) {
       this.showIdentifer = false;
     } else {
       this.showIdentifer = true;
     }
 
-    if (this.schedH3.get('category').value === 'AD') {
+    if (this.schedH3.get('category')?.value === 'AD') {
       this.totalName = 'Administrative';
       this.showIdentiferSelect = false;
       this.showAggregateAmount = false;
-    } else if (this.schedH3.get('category').value === 'GV') {
+    } else if (this.schedH3.get('category')?.value === 'GV') {
       this.totalName = 'Generic Voter Drive';
       this.showIdentiferSelect = false;
       this.showAggregateAmount = false;
-    } else if (this.schedH3.get('category').value === 'EA') {
+    } else if (this.schedH3.get('category')?.value === 'EA') {
       this.totalName = 'Exempt Activities';
-      this.showIdentiferSelect = false
+      this.showIdentiferSelect = false;
       this.showAggregateAmount = false;
-    } else if (this.schedH3.get('category').value === 'DF') {
+    } else if (this.schedH3.get('category')?.value === 'DF') {
       this.totalName = 'Activity or Event Identifier';
       this.setActivityOrEventIdentifier('fundraising');
       this.showIdentiferSelect = true;
@@ -557,8 +558,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
 
       this.schedH3.patchValue({ activity_event_name: '' }, { onlySelf: true });
       this.schedH3.patchValue({ aggregate_amount: '' }, { onlySelf: true });
-
-    } else if (this.schedH3.get('category').value === 'DC') {
+    } else if (this.schedH3.get('category')?.value === 'DC') {
       this.totalName = 'Activity or Event Identifier';
       this.setActivityOrEventIdentifier('direct_cand_support');
       this.showIdentiferSelect = true;
@@ -566,8 +566,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
 
       this.schedH3.patchValue({ activity_event_name: '' }, { onlySelf: true });
       this.schedH3.patchValue({ aggregate_amount: '' }, { onlySelf: true });
-
-    } else if (this.schedH3.get('category').value === 'PC') {
+    } else if (this.schedH3.get('category')?.value === 'PC') {
       this.totalName = 'Public Communications';
       this.showIdentiferSelect = false;
       this.showAggregateAmount = false;
@@ -578,19 +577,17 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     this.changeTotalAndAggrAmount();
 
     if (e.target.value !== '') {
-      this._noH1H2Popup(e.target.value)
+      this._noH1H2Popup(e.target.value);
     }
-
   }
 
-  public selectActivityOrEventChange(e) {
-
+  public selectActivityOrEventChange(e: any) {
     this.schedH3.patchValue({ transferred_amount: '' }, { onlySelf: true });
     const reportId = this._individualReceiptService.getReportIdFromStorage(this.formType);
-    //this._schedH3Service.getTotalAmount(this.schedH3.get('category').value, reportId);
+    //this._schedH3Service.getTotalAmount(this.schedH3.get('category')?.value, reportId);
 
     /*
-    const activity_event_name = this.schedH3.get('activity_event_name').value;
+    const activity_event_name = this.schedH3.get('activity_event_name')?.value;
 
     if(activity_event_name) {
       this.h3Subscription = this._schedH3Service.getTotalAmount(activity_event_name, reportId).subscribe(res =>
@@ -610,23 +607,27 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     if (this.scheduleAction === ScheduleActions.add) {
       this.getAggregateAmount();
     } else if (this.scheduleAction === ScheduleActions.edit) {
-
       this.changeTotalAndAggrAmount();
 
       const reportId = this._individualReceiptService.getReportIdFromStorage(this.formType);
 
-      const activity_event_name = this.schedH3.get('activity_event_name').value;
+      const activity_event_name = this.schedH3.get('activity_event_name')?.value;
 
       if (activity_event_name) {
-        this.h3Subscription = this._schedH3Service.getH3AggregateAmount(activity_event_name, reportId, this.back_ref_transaction_id).subscribe(res => {
-          if (res) {
-            if (res.aggregate_amount) {
-              this.schedH3.patchValue({ aggregate_amount: this._decPipe.transform(res.aggregate_amount, '.2-2') }, { onlySelf: true });
-            } else {
-              this.schedH3.patchValue({ aggregate_amount: this._decPipe.transform(0, '.2-2') }, { onlySelf: true });
+        this.h3Subscription = this._schedH3Service
+          .getH3AggregateAmount(activity_event_name, reportId, this.back_ref_transaction_id)
+          .subscribe((res: any) => {
+            if (res) {
+              if (res.aggregate_amount) {
+                this.schedH3.patchValue(
+                  { aggregate_amount: this._decPipe.transform(res.aggregate_amount, '.2-2') },
+                  { onlySelf: true }
+                );
+              } else {
+                this.schedH3.patchValue({ aggregate_amount: this._decPipe.transform(0, '.2-2') }, { onlySelf: true });
+              }
             }
-          }
-        });
+          });
       }
     }
   }
@@ -638,76 +639,84 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     const reportId = this._individualReceiptService.getReportIdFromStorage(this.formType);
 
     //this.h3Subscription = this._schedH3Service.getSummary(this.getReportId()).subscribe(res =>
-    this.h3Subscription = this._schedH3Service.getSummary(
-      reportId,
-      page,
-      this.config.itemsPerPage,
-      'default',
-      false
-    ).subscribe(res => {
-      const pagedResponse = this._utilService.pageResponse(res, this.config);
-      this.h3Sum = pagedResponse.items;
-      this.pageNumbers = pagedResponse.pageNumbers;
-    });
+    this.h3Subscription = this._schedH3Service
+      .getSummary(reportId, page, this.config.itemsPerPage, 'default', false)
+      .subscribe((res: any) => {
+        const pagedResponse = this._utilService.pageResponse(res, this.config);
+        this.h3Sum = pagedResponse.items;
+        this.pageNumbers = pagedResponse.pageNumbers;
+      });
   }
 
   public setH3SumP() {
     const reportId = this._individualReceiptService.getReportIdFromStorage(this.formType);
 
-    this.h3Subscription = this._schedH3Service.getBreakDown(reportId).subscribe(res => {
+    this.h3Subscription = this._schedH3Service.getBreakDown(reportId).subscribe((res: any) => {
       if (res) {
         this.h3SumP = [];
 
-        const amountAD = res.find(obj => obj.activity_event_type === 'AD') ?
-          res.find(obj => obj.activity_event_type === 'AD').sum : 0;
+        const amountAD = res.find((obj: any) => obj.activity_event_type === 'AD')
+          ? res.find((obj: any) => obj.activity_event_type === 'AD').sum
+          : 0;
 
-        const amountGV = res.find(obj => obj.activity_event_type === 'GV') ?
-          res.find(obj => obj.activity_event_type === 'GV').sum : 0;
+        const amountGV = res.find((obj: any) => obj.activity_event_type === 'GV')
+          ? res.find((obj: any) => obj.activity_event_type === 'GV').sum
+          : 0;
 
-        const amountEA = res.find(obj => obj.activity_event_type === 'EA') ?
-          res.find(obj => obj.activity_event_type === 'EA').sum : 0;
+        const amountEA = res.find((obj: any) => obj.activity_event_type === 'EA')
+          ? res.find((obj: any) => obj.activity_event_type === 'EA').sum
+          : 0;
 
-        const amountDF = res.find(obj => obj.activity_event_type === 'DF') ?
-          res.find(obj => obj.activity_event_type === 'DF').sum : 0;
+        const amountDF = res.find((obj: any) => obj.activity_event_type === 'DF')
+          ? res.find((obj: any) => obj.activity_event_type === 'DF').sum
+          : 0;
 
-        const amountDC = res.find(obj => obj.activity_event_type === 'DC') ?
-          res.find(obj => obj.activity_event_type === 'DC').sum : 0;
+        const amountDC = res.find((obj: any) => obj.activity_event_type === 'DC')
+          ? res.find((obj: any) => obj.activity_event_type === 'DC').sum
+          : 0;
 
-        const amountPC = res.find(obj => obj.activity_event_type === 'PC') ?
-          res.find(obj => obj.activity_event_type === 'PC').sum : 0;
+        const amountPC = res.find((obj: any) => obj.activity_event_type === 'PC')
+          ? res.find((obj: any) => obj.activity_event_type === 'PC').sum
+          : 0;
 
-        const amountTotal = res.find(obj => obj.activity_event_type === 'total') ?
-          res.find(obj => obj.activity_event_type === 'total').sum : 0;
+        const amountTotal = res.find((obj: any) => obj.activity_event_type === 'total')
+          ? res.find((obj: any) => obj.activity_event_type === 'total').sum
+          : 0;
 
         this.h3SumP.push(
           {
-            'category': 'Administrative',
-            'amount': amountAD
-          }, {
-            'category': 'Generic Voter Drive',
-            'amount': amountGV
-          }, {
-            'category': 'Exempt Activities',
-            'amount': amountEA
-          }, {
-            'category': 'Direct Fundraising',
-            'amount': amountDF
-          }, {
-            'category': 'Direct Candidate Support',
-            'amount': amountDC
-          }, {
-            'category': 'Public Communications Referring Only to Party (PAC)',
-            'amount': amountPC
-          }, {
-            'category': 'Total Amount Transferred',
-            'amount': amountTotal
+            category: 'Administrative',
+            amount: amountAD,
+          },
+          {
+            category: 'Generic Voter Drive',
+            amount: amountGV,
+          },
+          {
+            category: 'Exempt Activities',
+            amount: amountEA,
+          },
+          {
+            category: 'Direct Fundraising',
+            amount: amountDF,
+          },
+          {
+            category: 'Direct Candidate Support',
+            amount: amountDC,
+          },
+          {
+            category: 'Public Communications Referring Only to Party (PAC)',
+            amount: amountPC,
+          },
+          {
+            category: 'Total Amount Transferred',
+            amount: amountTotal,
           }
         );
 
         //this.h3SumP =  res;
       }
     });
-
   }
 
   public saveAndAddMore(): void {
@@ -717,7 +726,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   public doValidate() {
     this.isSubmit = true;
 
-    const activity_event_type = this.schedH3.get('category').value;
+    const activity_event_type = this.schedH3.get('category')?.value;
 
     if (activity_event_type !== 'DC' && activity_event_type !== 'DF') {
       this.schedH3.controls['activity_event_name'].clearValidators();
@@ -728,16 +737,19 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     }
 
     if (this.schedH3.status === 'VALID') {
-      if (this.isNumber(this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount').value))) {
+      if (this.isNumber(this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value))) {
         this.transferredAmountErr = false;
-        this.schedH3.patchValue({ transferred_amount: this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount').value) }, { onlySelf: true });
+        this.schedH3.patchValue(
+          { transferred_amount: this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value) },
+          { onlySelf: true }
+        );
         this.schedH3.controls['transferred_amount'].setErrors(null);
       } else {
-        this.transferredAmountErr = true
-        this.schedH3.controls['transferred_amount'].setErrors({ 'incorrect': true });
+        this.transferredAmountErr = true;
+        this.schedH3.controls['transferred_amount'].setErrors({ incorrect: true });
       }
 
-      //this.schedH3.patchValue({transferred_amount: this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount').value)}, { onlySelf: true });
+      //this.schedH3.patchValue({transferred_amount: this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value)}, { onlySelf: true });
       //this.h3Ratios = {};
 
       const reportId = this._individualReceiptService.getReportIdFromStorage(this.formType);
@@ -745,32 +757,33 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
       this.h3Ratios['report_id'] = reportId;
       this.h3Ratios.transaction_type_identifier = 'TRAN_FROM_NON_FED_ACC';
 
-      //this.h3Ratios.total_amount_transferred = this.schedH3.get('total_amount_transferred').value;
+      //this.h3Ratios.total_amount_transferred = this.schedH3.get('total_amount_transferred')?.value;
 
       const formObj = this.schedH3.getRawValue();
 
       let accountName = '';
-      if (typeof this.schedH3.get('account_name').value === 'object') {
-        accountName = this.schedH3.get('account_name').value.account_name;
+      if (typeof this.schedH3.get('account_name')?.value === 'object') {
+        accountName = this.schedH3.get('account_name')?.value.account_name;
       } else {
-        accountName = this.schedH3.get('account_name').value;
+        accountName = this.schedH3.get('account_name')?.value;
       }
 
       formObj.account_name = accountName;
 
-      const receipt_date = this.schedH3.get('receipt_date').value;
+      const receipt_date = this.schedH3.get('receipt_date')?.value;
 
-      //const total_amount_transferred = Number(this.schedH3.get('total_amount_transferred').value) 
-      //  + Number(this.schedH3.get('transferred_amount').value);
-      //const total_amount_transferred = +this.schedH3.get('total_amount_transferred').value 
-      //  + (+this.schedH3.get('transferred_amount').value);
-      const total_amount_transferred = this.convertFormattedAmountToDecimal(this.schedH3.get('total_amount_transferred').value) +
-        this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount').value)
+      //const total_amount_transferred = Number(this.schedH3.get('total_amount_transferred')?.value)
+      //  + Number(this.schedH3.get('transferred_amount')?.value);
+      //const total_amount_transferred = +this.schedH3.get('total_amount_transferred')?.value
+      //  + (+this.schedH3.get('transferred_amount')?.value);
+      const total_amount_transferred =
+        this.convertFormattedAmountToDecimal(this.schedH3.get('total_amount_transferred')?.value) +
+        this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value);
       this.h3Ratios.total_amount_transferred = total_amount_transferred;
 
       formObj['report_id'] = reportId; //this.getReportId();
       formObj['transaction_type_identifier'] = 'TRAN_FROM_NON_FED_ACC';
-      formObj['activity_event_type'] = this.schedH3.get('category').value;
+      formObj['activity_event_type'] = this.schedH3.get('category')?.value;
 
       formObj['transaction_id'] = this.transaction_id;
       formObj['back_ref_transaction_id'] = this.back_ref_transaction_id;
@@ -783,13 +796,13 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
 
       if (this.schedH3.status === 'VALID') {
         /*
-        this.schedH3.patchValue({transferred_amount: this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount').value)}, { onlySelf: true });
+        this.schedH3.patchValue({transferred_amount: this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value)}, { onlySelf: true });
 
         if(this.showAggregateAmount) {
-          //const aggregate_amount = Number(this.schedH3.get('aggregate_amount').value) + Number(this.schedH3.get('transferred_amount').value);
-          const aggregate_amount = +this.schedH3.get('aggregate_amount').value + (+this.schedH3.get('transferred_amount').value);
+          //const aggregate_amount = Number(this.schedH3.get('aggregate_amount')?.value) + Number(this.schedH3.get('transferred_amount')?.value);
+          const aggregate_amount = +this.schedH3.get('aggregate_amount')?.value + (+this.schedH3.get('transferred_amount')?.value);
 
-          //const aggregate_amount = this.convertFormattedAmountToDecimal(this.schedH3.get('aggregate_amount').value) + this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount').value);
+          //const aggregate_amount = this.convertFormattedAmountToDecimal(this.schedH3.get('aggregate_amount')?.value) + this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value);
           this.schedH3.patchValue({aggregate_amount: aggregate_amount}, { onlySelf: true });
         }else {
           this.schedH3.patchValue({aggregate_amount: 0.00}, { onlySelf: true });
@@ -800,9 +813,9 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
           //this.h3EntryTableConfig.totalItems = this.h3Entries.length;
           this.h3Ratios.child.push(formObj);
 
-          this.h3Ratios.child.filter(obj => obj.activity_event_name === formObj.activity_event_name)
-            .forEach(obj => obj.aggregate_amount = formObj.aggregate_amount);
-
+          this.h3Ratios.child
+            .filter((obj: any) => obj.activity_event_name === formObj.activity_event_name)
+            .forEach((obj: any) => (obj.aggregate_amount = formObj.aggregate_amount));
         } else {
           this.h3EntrieEdit = formObj;
         }
@@ -817,13 +830,16 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
         this.schedH3.patchValue({ receipt_date: receipt_date }, { onlySelf: true });
 
         //this.schedH3.patchValue({total_amount_transferred: total_amount_transferred}, { onlySelf: true });
-        this.schedH3.patchValue({ total_amount_transferred: this._decPipe.transform(total_amount_transferred, '.2-2') }, { onlySelf: true });
+        this.schedH3.patchValue(
+          { total_amount_transferred: this._decPipe.transform(total_amount_transferred, '.2-2') },
+          { onlySelf: true }
+        );
         /*
               if(this.showAggregateAmount) {
-                //const aggregate_amount = Number(this.schedH3.get('aggregate_amount').value) + Number(this.schedH3.get('transferred_amount').value);
-                const aggregate_amount = +this.schedH3.get('aggregate_amount').value + (+this.schedH3.get('transferred_amount').value);
+                //const aggregate_amount = Number(this.schedH3.get('aggregate_amount')?.value) + Number(this.schedH3.get('transferred_amount')?.value);
+                const aggregate_amount = +this.schedH3.get('aggregate_amount')?.value + (+this.schedH3.get('transferred_amount')?.value);
       
-                //const aggregate_amount = this.convertFormattedAmountToDecimal(this.schedH3.get('aggregate_amount').value) + this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount').value);
+                //const aggregate_amount = this.convertFormattedAmountToDecimal(this.schedH3.get('aggregate_amount')?.value) + this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value);
                 this.schedH3.patchValue({aggregate_amount: aggregate_amount}, { onlySelf: true });
               }else {
                 this.schedH3.patchValue({aggregate_amount: 0.00}, { onlySelf: true });
@@ -839,8 +855,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public saveH3Ratio(ratio: any, scheduleAction: any) {
-
-    this._schedH3Service.saveH3Ratio(ratio, scheduleAction).subscribe(res => {
+    this._schedH3Service.saveH3Ratio(ratio, scheduleAction).subscribe((res: any) => {
       if (res) {
         this.saveHRes = res;
         this.h3Entries = [];
@@ -855,28 +870,21 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
 
     const reportId = this._individualReceiptService.getReportIdFromStorage(this.formType);
 
-    this._schedH3Service.saveAndGetSummary(
-        ratio, 
-        reportId, 
-        scheduleAction,
-        page,
-        this.config.itemsPerPage,
-        'default',
-        false
-      ).subscribe(res => {
-
+    this._schedH3Service
+      .saveAndGetSummary(ratio, reportId, scheduleAction, page, this.config.itemsPerPage, 'default', false)
+      .subscribe((res: any) => {
         this.setH3Sum(this.config.currentPage);
         // this.h3Entries = [];
         // const pagedResponse = this._utilService.pageResponse(res, this.config);
         // this.h3Sum = pagedResponse.items;
         // this.pageNumbers = pagedResponse.pageNumbers;
 
-      // Update third navigation totals
-      const report = {
-        'report_id': reportId
-      };
-      this.updateThirdNavAmounts(report);
-    });
+        // Update third navigation totals
+        const report = {
+          report_id: reportId,
+        };
+        this.updateThirdNavAmounts(report);
+      });
   }
 
   public addEntries() {
@@ -897,78 +905,88 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
 
   public handleAmountKeyup(e: any) {
     let val = 0;
-    if (this.schedH3.get('transferred_amount').value) {
-      val = this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount').value);
+    if (this.schedH3.get('transferred_amount')?.value) {
+      val = this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value);
     }
 
     let aggregate_amount = 0;
-    if (this.schedH3.get('aggregate_amount').value) {
-      aggregate_amount = this.convertFormattedAmountToDecimal(this.schedH3.get('aggregate_amount').value);
+    if (this.schedH3.get('aggregate_amount')?.value) {
+      aggregate_amount = this.convertFormattedAmountToDecimal(this.schedH3.get('aggregate_amount')?.value);
     }
 
     if (this.scheduleAction === ScheduleActions.add && this.showAggregateAmount) {
-      this.schedH3.patchValue({ aggregate_amount: this._decPipe.transform(aggregate_amount + val, '.2-2') }, { onlySelf: true });
+      this.schedH3.patchValue(
+        { aggregate_amount: this._decPipe.transform(aggregate_amount + val, '.2-2') },
+        { onlySelf: true }
+      );
     }
 
     this.changeTotalAndAggrAmount();
   }
 
   public receiptDateChanged(receiptDate: string) {
-
-    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type'));
+    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type') ?? '');
     this.cvgStartDate = formInfo.cvgStartDate;
     this.cvgEndDate = formInfo.cvgEndDate;
 
     let startDate = new Date(this.cvgStartDate);
     startDate.setDate(startDate.getDate() - 1);
 
-    if ((!this._uService.compareDatesAfter((new Date(receiptDate)), new Date(this.cvgEndDate)) ||
-      this._uService.compareDatesAfter((new Date(receiptDate)), startDate))) {
+    if (
+      !this._uService.compareDatesAfter(new Date(receiptDate), new Date(this.cvgEndDate)) ||
+      this._uService.compareDatesAfter(new Date(receiptDate), startDate)
+    ) {
       this.receiptDateErr = true;
-      this.schedH3.controls['receipt_date'].setErrors({ 'incorrect': true });
+      this.schedH3.controls['receipt_date'].setErrors({ incorrect: true });
     } else {
       this.receiptDateErr = false;
     }
-
   }
 
-  public handleOnBlurEvent($event: any, col: any) {
+  public override handleOnBlurEvent($event: any, col: any) {
     const entry = $event.target.value.replace(/,/g, ``);
     if (this.isNumber(entry)) {
       this.transferredAmountErr = false;
       //this.schedH3.patchValue({transferred_amount: this._decPipe.transform(
       //    this.convertFormattedAmountToDecimal(entry), '.2-2')}, { onlySelf: true });
-      this.schedH3.patchValue({
-        transferred_amount: this._decPipe.transform(
-          this.convertFormattedAmountToDecimal(
-            this.schedH3.get('transferred_amount').value), '.2-2')
-      }, { onlySelf: true });
+      this.schedH3.patchValue(
+        {
+          transferred_amount: this._decPipe.transform(
+            this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value),
+            '.2-2'
+          ),
+        },
+        { onlySelf: true }
+      );
 
       let val = 0;
-      if (this.schedH3.get('transferred_amount').value) {
-        val = this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount').value);
+      if (this.schedH3.get('transferred_amount')?.value) {
+        val = this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value);
       }
 
       /*
       let aggregate_amount = 0;
-      if(this.schedH3.get('aggregate_amount').value){
-        aggregate_amount = this.convertFormattedAmountToDecimal(this.schedH3.get('aggregate_amount').value);
+      if(this.schedH3.get('aggregate_amount')?.value){
+        aggregate_amount = this.convertFormattedAmountToDecimal(this.schedH3.get('aggregate_amount')?.value);
       }
       */
 
-      const activity_event_name = this.schedH3.get('activity_event_name').value;
-      const activity_event_type = this.schedH3.get('category').value;
+      const activity_event_name = this.schedH3.get('activity_event_name')?.value;
+      const activity_event_type = this.schedH3.get('category')?.value;
 
       if (activity_event_name && (activity_event_type === 'DC' || activity_event_type === 'DF')) {
-
         let aggregate_amount = 0;
-        this.h3Entries.filter(obj => obj.activity_event_name === activity_event_name)
-          .forEach(obj => {
+        this.h3Entries
+          .filter((obj: any) => obj.activity_event_name === activity_event_name)
+          .forEach((obj: any) => {
             aggregate_amount += this.convertFormattedAmountToDecimal(obj.transferred_amount);
           });
 
         if (this.scheduleAction === ScheduleActions.add && this.showAggregateAmount) {
-          this.schedH3.patchValue({ aggregate_amount: this._decPipe.transform(aggregate_amount + val, '.2-2') }, { onlySelf: true });
+          this.schedH3.patchValue(
+            { aggregate_amount: this._decPipe.transform(aggregate_amount + val, '.2-2') },
+            { onlySelf: true }
+          );
         }
       } else {
         this.schedH3.patchValue({ aggregate_amount: 0 }, { onlySelf: true });
@@ -979,13 +997,13 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
       this.schedH3.controls['transferred_amount'].setErrors(null);
     } else {
       this.transferredAmountErr = true;
-      this.schedH3.controls['transferred_amount'].setErrors({ 'incorrect': true });
+      this.schedH3.controls['transferred_amount'].setErrors({ incorrect: true });
     }
   }
 
   private convertFormattedAmountToDecimal(formatedAmount: string): number {
     if (!formatedAmount) {
-      formatedAmount = '0'
+      formatedAmount = '0';
     }
     if (typeof formatedAmount === 'string') {
       // remove commas
@@ -997,23 +1015,23 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   private isNumber(value: string | number): boolean {
-    return ((value != null) && !isNaN(Number(value.toString())));
+    return value != null && !isNaN(Number(value.toString()));
   }
 
-  public clearFormValues() {
+  public override clearFormValues() {
     this.setH3(this.config.currentPage);
     this.h3Entries = [];
     this.h3Ratios = {};
     this.h3Ratios['child'] = [];
     this.transferredAmountErr = false;
     if (this.scheduleAction === ScheduleActions.edit) {
-      this.scheduleAction = ScheduleActions.add
+      this.scheduleAction = ScheduleActions.add;
     }
     this.showIdentiferSelect = false;
     this.showAggregateAmount = false;
   }
 
-  public editH3(item) {
+  public editH3(item: any) {
     this.returnToAdd();
     this.scheduleAction = ScheduleActions.edit;
 
@@ -1045,11 +1063,20 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
 
     this.schedH3.patchValue({ account_name: item.account_name }, { onlySelf: true });
     this.schedH3.patchValue({ receipt_date: item.receipt_date }, { onlySelf: true });
-    this.schedH3.patchValue({ total_amount_transferred: this._decPipe.transform(item.total_amount_transferred, '.2-2') }, { onlySelf: true });
+    this.schedH3.patchValue(
+      { total_amount_transferred: this._decPipe.transform(item.total_amount_transferred, '.2-2') },
+      { onlySelf: true }
+    );
     this.schedH3.patchValue({ category: item.activity_event_type }, { onlySelf: true });
     this.schedH3.patchValue({ activity_event_name: item.activity_event_name }, { onlySelf: true });
-    this.schedH3.patchValue({ transferred_amount: this._decPipe.transform(item.transferred_amount, '.2-2') }, { onlySelf: true });
-    this.schedH3.patchValue({ aggregate_amount: this._decPipe.transform(item.aggregate_amount, '.2-2') }, { onlySelf: true });
+    this.schedH3.patchValue(
+      { transferred_amount: this._decPipe.transform(item.transferred_amount, '.2-2') },
+      { onlySelf: true }
+    );
+    this.schedH3.patchValue(
+      { aggregate_amount: this._decPipe.transform(item.aggregate_amount, '.2-2') },
+      { onlySelf: true }
+    );
     this.schedH3.patchValue({ memo_text: item.memo_text ? item.memo_text : '' }, { onlySelf: true });
 
     this.transferred_amount_edit = item.transferred_amount;
@@ -1059,7 +1086,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public saveEdit() {
-    const activity_event_type = this.schedH3.get('category').value;
+    const activity_event_type = this.schedH3.get('category')?.value;
 
     if (activity_event_type !== 'DC' && activity_event_type !== 'DF') {
       this.schedH3.controls['activity_event_name'].clearValidators();
@@ -1073,7 +1100,6 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
       this.saveAndAddMore();
       this.addEntries();
       this.returnToSum();
-
     } else {
       this.schedH3.markAsDirty();
       this.schedH3.markAsTouched();
@@ -1082,7 +1108,6 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public editH3Sub(item: any) {
-
     this.showIdentifer = true;
 
     this.showIdentiferSelect = false;
@@ -1114,67 +1139,82 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     //this.schedH3.patchValue({ total_amount_transferred: this._decPipe.transform(item.total_amount_transferred, '.2-2')}, { onlySelf: true });
     this.schedH3.patchValue({ category: item.activity_event_type }, { onlySelf: true });
     this.schedH3.patchValue({ activity_event_name: item.activity_event_name }, { onlySelf: true });
-    this.schedH3.patchValue({ transferred_amount: this._decPipe.transform(item.transferred_amount, '.2-2') }, { onlySelf: true });
+    this.schedH3.patchValue(
+      { transferred_amount: this._decPipe.transform(item.transferred_amount, '.2-2') },
+      { onlySelf: true }
+    );
     //this.schedH3.patchValue({ aggregate_amount: this._decPipe.transform(
     //  this.convertFormattedAmountToDecimal(item.aggregate_amount), '.2-2')}, { onlySelf: true });
 
-    this.h3Entries = this.h3Entries.filter(obj => obj !== item);
-    this.h3Ratios.child = this.h3Ratios.child.filter(obj => obj !== item);
+    this.h3Entries = this.h3Entries.filter((obj: any) => obj !== item);
+    this.h3Ratios.child = this.h3Ratios.child.filter((obj: any) => obj !== item);
 
     //this.h3EntryTableConfig.totalItems = this.h3Entries.length;
 
     let sum = 0;
-    this.h3Entries.forEach(obj => {
+    this.h3Entries.forEach((obj: any) => {
       sum += this.convertFormattedAmountToDecimal(obj.transferred_amount);
-    })
+    });
 
-    this.schedH3.patchValue({
-      total_amount_transferred:
-        this._decPipe.transform(sum, '.2-2')
-    }, { onlySelf: true });
+    this.schedH3.patchValue(
+      {
+        total_amount_transferred: this._decPipe.transform(sum, '.2-2'),
+      },
+      { onlySelf: true }
+    );
 
     let aggregate_amount = 0;
-    this.h3Entries.filter(obj => obj.activity_event_name === item.activity_event_name)
-      .forEach(obj => {
+    this.h3Entries
+      .filter((obj: any) => obj.activity_event_name === item.activity_event_name)
+      .forEach((obj: any) => {
         aggregate_amount += this.convertFormattedAmountToDecimal(obj.transferred_amount);
       });
-    this.schedH3.patchValue({
-      aggregate_amount: this._decPipe.transform(aggregate_amount
-        + item.transferred_amount, '.2-2')
-    }, { onlySelf: true });
-    this.h3Ratios.child.filter(obj => obj.activity_event_name === item.activity_event_name)
-      .forEach(obj => obj.aggregate_amount = aggregate_amount);
-
+    this.schedH3.patchValue(
+      {
+        aggregate_amount: this._decPipe.transform(aggregate_amount + item.transferred_amount, '.2-2'),
+      },
+      { onlySelf: true }
+    );
+    this.h3Ratios.child
+      .filter((obj: any) => obj.activity_event_name === item.activity_event_name)
+      .forEach((obj: any) => (obj.aggregate_amount = aggregate_amount));
   }
 
   public changeTotalAndAggrAmount() {
-
     let val = 0;
-    if (this.schedH3.get('transferred_amount').value) {
-      val = this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount').value);
+    if (this.schedH3.get('transferred_amount')?.value) {
+      val = this.convertFormattedAmountToDecimal(this.schedH3.get('transferred_amount')?.value);
     }
 
     if (this.scheduleAction === ScheduleActions.edit) {
-      this.schedH3.patchValue({
-        total_amount_transferred: this._decPipe.transform(
-          this.total_amount_edit - this.transferred_amount_edit + val, '.2-2')
-      }, { onlySelf: true });
+      this.schedH3.patchValue(
+        {
+          total_amount_transferred: this._decPipe.transform(
+            this.total_amount_edit - this.transferred_amount_edit + val,
+            '.2-2'
+          ),
+        },
+        { onlySelf: true }
+      );
 
-      const activity_event_name = this.schedH3.get('activity_event_name').value;
-      const activity_event_type = this.schedH3.get('category').value;
+      const activity_event_name = this.schedH3.get('activity_event_name')?.value;
+      const activity_event_type = this.schedH3.get('category')?.value;
 
       if (activity_event_name && (activity_event_type === 'DC' || activity_event_type === 'DF')) {
         let sum = 0;
-        this.h3Entries.filter(obj => obj.activity_event_name === activity_event_name)
-          .forEach(obj => {
+        this.h3Entries
+          .filter((obj: any) => obj.activity_event_name === activity_event_name)
+          .forEach((obj: any) => {
             sum += this.convertFormattedAmountToDecimal(obj.transferred_amount);
           });
 
         if (this.showAggregateAmount && activity_event_name === this.activity_event_name_edit) {
-          this.schedH3.patchValue({
-            aggregate_amount: this._decPipe.transform(
-              sum + val, '.2-2')
-          }, { onlySelf: true });
+          this.schedH3.patchValue(
+            {
+              aggregate_amount: this._decPipe.transform(sum + val, '.2-2'),
+            },
+            { onlySelf: true }
+          );
         } else {
           this.schedH3.patchValue({ aggregate_amount: this._decPipe.transform(val, '.2-2') }, { onlySelf: true });
         }
@@ -1183,14 +1223,14 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public getAggregateAmount() {
-
     let sum = 0;
-    const activity_event_name = this.schedH3.get('activity_event_name').value;
-    const activity_event_type = this.schedH3.get('category').value;
+    const activity_event_name = this.schedH3.get('activity_event_name')?.value;
+    const activity_event_type = this.schedH3.get('category')?.value;
 
-    if (activity_event_name && activity_event_type === 'DC' || activity_event_type === 'DF') {
-      this.h3Entries.filter(obj => obj.activity_event_name === activity_event_name)
-        .forEach(obj => {
+    if ((activity_event_name && activity_event_type === 'DC') || activity_event_type === 'DF') {
+      this.h3Entries
+        .filter((obj: any) => obj.activity_event_name === activity_event_name)
+        .forEach((obj: any) => {
           sum += this.convertFormattedAmountToDecimal(obj.transferred_amount);
         });
 
@@ -1199,13 +1239,16 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   public trashTransaction(trx: any): void {
-
     trx.report_id = this._individualReceiptService.getReportIdFromStorage(this.formType);
     trx.transactionId = trx.transaction_id;
 
     this._dlService
-      .confirm('You are about to delete this transaction ' + trx.transaction_id + '.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .confirm(
+        'You are about to delete this transaction ' + trx.transaction_id + '.',
+        ConfirmModalComponent,
+        'Caution!'
+      )
+      .then((res: any) => {
         if (res === 'okay') {
           this._tranService
             .trashOrRestoreTransactions(this.formType, 'trash', trx.report_id, [trx])
@@ -1228,29 +1271,35 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   public trashSubTransaction(trx: any): void {
     this._dlService
       .confirm('You are about to delete this transaction.', ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
-          this.h3Entries = this.h3Entries.filter(obj => obj !== trx);
-          this.h3Ratios.child = this.h3Ratios.child.filter(obj => obj !== trx);
+          this.h3Entries = this.h3Entries.filter((obj: any) => obj !== trx);
+          this.h3Ratios.child = this.h3Ratios.child.filter((obj: any) => obj !== trx);
           //this.h3EntryTableConfig.totalItems = this.h3Entries.length;
 
           let sum = 0;
-          this.h3Entries.forEach(obj => {
+          this.h3Entries.forEach((obj: any) => {
             sum += this.convertFormattedAmountToDecimal(obj.transferred_amount);
-          })
+          });
 
-          this.schedH3.patchValue({
-            total_amount_transferred:
-              this._decPipe.transform(sum, '.2-2')
-          }, { onlySelf: true });
+          this.schedH3.patchValue(
+            {
+              total_amount_transferred: this._decPipe.transform(sum, '.2-2'),
+            },
+            { onlySelf: true }
+          );
 
           let agg = 0;
-          this.h3Entries.filter(obj => obj.activity_event_name === trx.activity_event_name).forEach(obj => {
-            agg += this.convertFormattedAmountToDecimal(obj.transferred_amount);
-          })
-          this.h3Entries.filter(obj => obj.activity_event_name === trx.activity_event_name).forEach(obj => {
-            obj.aggregate_amount = agg;
-          })
+          this.h3Entries
+            .filter((obj: any) => obj.activity_event_name === trx.activity_event_name)
+            .forEach((obj: any) => {
+              agg += this.convertFormattedAmountToDecimal(obj.transferred_amount);
+            });
+          this.h3Entries
+            .filter((obj: any) => obj.activity_event_name === trx.activity_event_name)
+            .forEach((obj: any) => {
+              obj.aggregate_amount = agg;
+            });
 
           this._dlService.confirm(
             'Transaction has been successfully deleted.',
@@ -1258,14 +1307,14 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
             'Success!',
             false,
             ModalHeaderClassEnum.successHeader
-          )
+          );
         } else if (res === 'cancel') {
         }
       });
   }
 
   public goSummary(): void {
-    this.canDeactivate().then(result => {
+    this.canDeactivate().then((result) => {
       if (result === true) {
         localStorage.removeItem(`form_${this.formType}_saved`);
         this.returnToSum();
@@ -1274,22 +1323,21 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   }
 
   private _noH1H2Popup(category: string) {
-
     let activityEventScheduleType = '';
     if (category === 'DC' || category === 'DF') {
-      activityEventScheduleType = 'sched_h2'
+      activityEventScheduleType = 'sched_h2';
     } else {
-      activityEventScheduleType = 'sched_h1'
+      activityEventScheduleType = 'sched_h1';
     }
 
     const report_id = this._individualReceiptService.getReportIdFromStorage(this.formType);
 
-    this._schedH3Service.getH1H2ExistStatus(report_id, category)
-      .takeUntil(this._h3OnDestroy$)
-      .subscribe(res => {
+    this._schedH3Service
+      .getH1H2ExistStatus(report_id, category)
+      .pipe(takeUntil(this._h3OnDestroy$))
+      .subscribe((res: any) => {
         if (res) {
           if (res.count === 0) {
-
             this.saveAndAddDisabled = true;
 
             const scheduleName = activityEventScheduleType === 'sched_h1' ? 'H1' : 'H2';
@@ -1298,7 +1346,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
             const message =
               `Please add Schedule ${scheduleName} before proceeding with adding the ` +
               `amount.  Schedule ${scheduleName} is required to correctly allocate the federal and non-federal portions of the transaction.`;
-            this._dlService.confirm(message, ConfirmModalComponent, 'Warning!', false).then(res => {
+            this._dlService.confirm(message, ConfirmModalComponent, 'Warning!', false).then((res: any) => {
               if (res === 'okay') {
                 const emitObj: any = {
                   form: this.frmIndividualReceipt,
@@ -1306,7 +1354,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
                   step: 'step_3',
                   previousStep: 'step_2',
                   scheduleType: scheduleType,
-                  action: ScheduleActions.add
+                  action: ScheduleActions.add,
                 };
                 if (scheduleType === 'sched_h2') {
                   emitObj.transactionType = 'ALLOC_H2_RATIO';
@@ -1320,19 +1368,20 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
             this.saveAndAddDisabled = false;
           }
         }
-      }
-      )
+      });
   }
 
   searchAccountName = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(500),
       distinctUntilChanged(),
-      switchMap(searchText => {
+      switchMap((searchText) => {
         if (searchText) {
-          return this._schedH3Service.getH3AccountNames(this._individualReceiptService.getReportIdFromStorage(this.formType))
+          return this._schedH3Service.getH3AccountNames(
+            this._individualReceiptService.getReportIdFromStorage(this.formType)
+          );
         } else {
-          return Observable.of([]);
+          return of([]);
         }
       })
     );
@@ -1349,7 +1398,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     this._reportTypeService.printPreview('transaction_table_screen', '3X', trx.transaction_id);
   }
 
-    /**
+  /**
    * The Transactions for a given page.
    *
    * @param page the page containing the transactions to get
@@ -1384,7 +1433,7 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
   public onGotoPageChange(page: number): void {
     this.config.currentPage = page;
     this.getPage(this.config.currentPage);
-  }  
+  }
 
   /**
    * Determine if pagination should be shown.
@@ -1393,18 +1442,18 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     if (!this.autoHide) {
       return true;
     }
-    if (this.config.totalItems > this.config.itemsPerPage) {
+    if (this.config.totalItems ?? 0 > this.config.itemsPerPage) {
       return true;
     }
     // otherwise, no show.
     return false;
-  }  
+  }
 
   /**
    * Determine the item range shown by the server-side pagination.
    */
   public determineItemRange(): string {
-    let items: any[];
+    let items: any[] = [];
     switch (this.transactionType) {
       case 'ALLOC_H3_SUM':
         items = this.h3Sum;
@@ -1415,36 +1464,37 @@ export class SchedH3Component extends AbstractSchedule implements OnInit, OnDest
     }
 
     let range: {
-      firstItemOnPage: number, lastItemOnPage: number, itemRange: string
+      firstItemOnPage: number;
+      lastItemOnPage: number;
+      itemRange: string;
     } = this._utilService.determineItemRange(this.config, items);
 
     this.firstItemOnPage = range.firstItemOnPage;
     this.lastItemOnPage = range.lastItemOnPage;
     return range.itemRange;
   }
-  
+
   public showPageSizes(): boolean {
-    if (this.config && this.config.totalItems && this.config.totalItems > 0){
+    if (this.config && this.config.totalItems && this.config.totalItems > 0) {
       return true;
     }
     return false;
   }
 
-   /**
-	 * Change the sort direction of the table column.
-	 *
-	 * @param colName the column name of the column to sort
-	 */
-  public changeSortDirection(colName: string,table:string): void {
+  /**
+   * Change the sort direction of the table column.
+   *
+   * @param colName the column name of the column to sort
+   */
+  public override changeSortDirection(colName: string, table: string): void {
     let dataset = null;
-    
+
     this.currentSortedColumnName = this._tableService.changeSortDirection(colName, this.sortableColumns);
     const direction = this._tableService.getBinarySortDirection(colName, this.sortableColumns);
 
-    if(table === 'summary'){
+    if (table === 'summary') {
       this.h3Sum = this._tableService.sort(this.h3Sum, this.currentSortedColumnName, direction);
-    }
-    else if(table === 'entry'){
+    } else if (table === 'entry') {
       this.h3Entries = this._tableService.sort(this.h3Entries, this.currentSortedColumnName, direction);
     }
   }
