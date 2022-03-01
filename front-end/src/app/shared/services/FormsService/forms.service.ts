@@ -751,8 +751,9 @@ export class FormsService {
   }
 
   public HasUnsavedData(screenType: string): boolean {
-    if (screenType != null) {
-      const screenSaved: any = JSON.parse(localStorage.getItem(`${screenType}saved`) ?? '');
+    const data: string | null = localStorage.getItem(`${screenType}saved`);
+    if (!!data && screenType != null) {
+      const screenSaved: any = JSON.parse(data);
       if (screenSaved !== null) {
         if (screenSaved.hasOwnProperty('saved')) {
           const screenStatus: boolean = screenSaved.saved;

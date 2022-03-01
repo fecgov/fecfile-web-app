@@ -299,7 +299,7 @@ export class ContactsTableComponent implements OnInit, OnDestroy {
         }
 
         this._contactsService.addUIFileds(res);
-        this._contactsService.mockApplyFilters(res, this.filters);
+        // this._contactsService.mockApplyFilters(res, this.filters);
         const contactsModelL = this._contactsService.mapFromServerFields(res.contacts);
         this.contactsModel = contactsModelL || [];
 
