@@ -1,39 +1,33 @@
 <div class="form__type-container">
   <div class="form__type">
-    <form
-      [formGroup]="frmType"
-      (ngSubmit)="doValidateType()"
-      (blur)="doValidateType()"
-    >
+    <form [formGroup]="frmType" (ngSubmit)="doValidateType()" (blur)="doValidateType()">
       <header>
         <div class="grid-row">
           <div class="grid-row__col grid-row__col--12">
             <h1 class="text-left">
-              <ng-container  *ngIf="!typeSelected">
-                Type
-              </ng-container>
-              <ng-containr *ngIf="typeSelected">
-                Form 99 / {{ typeSelected }}
-              </ng-containr>
+              <ng-container *ngIf="!typeSelected"> Type </ng-container>
+              <ng-containr *ngIf="typeSelected"> Form 99 / {{ typeSelected }} </ng-containr>
             </h1>
           </div>
         </div>
       </header>
       <section>
         <div class="content">
-          
-            <div class="grid-row__col grid-row__col--12">
-              <div class="text-error text-center"
-                *ngIf="(frmType.invalid && (frmType.dirty || frmType.touched)) || (typeFailed)">
-                Select a reason type.
-              </div>
+          <div class="grid-row__col grid-row__col--12">
+            <div
+              class="text-error text-center"
+              *ngIf="(frmType.invalid && (frmType.dirty || frmType.touched)) || typeFailed"
+            >
+              Select a reason type.
             </div>
-          
+          </div>
+
           <div class="grid-row">
             <div class="grid-row__col no-buff space-bottom">
               <ul class="type-list">
-                <li class="type-item"
-                  [ngClass]="{'selected': typeSelected === 'mst'}"
+                <li
+                  class="type-item"
+                  [ngClass]="{ selected: typeSelected === 'mst' }"
                   (click)="optionsListClick('mst-radio')"
                 >
                   <div class="type-item__box">
@@ -46,12 +40,7 @@
                         formControlName="reasonTypeRadio"
                         name="reasonTypeRadio"
                       />
-                      <label
-                        for="mst-radio"
-                        class="type-text"
-                      >
-                      Miscellaneous Text Submission to FEC (MST)
-                      </label>
+                      <label for="mst-radio" class="type-text"> Miscellaneous Text Submission to FEC (MST) </label>
                       <div class="type__info">
                         <button
                           type="button"
@@ -64,19 +53,20 @@
                           placement="{{ tooltipPosition }}"
                         >
                           <i class="info-icon" aria-hidden="true"></i>
-                          <span class="sr-only">
-                            Click for more information
-                          </span>
+                          <span class="sr-only"> Click for more information </span>
                         </button>
                         <ng-template #mstContent>
-                          A Miscellaneous Text Submission (Form 99) may be used for narrative responses that do not affect actual entries within a report (for example, when outlining the committee’s procedures for making “best efforts” to obtain contributor information.)
+                          A Miscellaneous Text Submission (Form 99) may be used for narrative responses that do not
+                          affect actual entries within a report (for example, when outlining the committee’s procedures
+                          for making “best efforts” to obtain contributor information.)
                         </ng-template>
                       </div>
                     </div>
                   </div>
                 </li>
-                <li class="type-item"
-                  [ngClass]="{'selected': typeSelected === 'msm'}"
+                <li
+                  class="type-item"
+                  [ngClass]="{ selected: typeSelected === 'msm' }"
                   (click)="optionsListClick('msm-radio')"
                 >
                   <div class="type-item__box">
@@ -89,12 +79,7 @@
                         formControlName="reasonTypeRadio"
                         name="reasonTypeRadio"
                       />
-                      <label
-                        for="msm-radio"
-                        class="type-text"
-                      >
-                        Filing Frequency Change Notice (MSM)
-                      </label>
+                      <label for="msm-radio" class="type-text"> Filing Frequency Change Notice (MSM) </label>
                       <div class="type__info">
                         <button
                           type="button"
@@ -107,19 +92,19 @@
                           placement="{{ tooltipPosition }}"
                         >
                           <i class="info-icon" aria-hidden="true"></i>
-                          <span class="sr-only">
-                            Click for more information
-                          </span>
+                          <span class="sr-only"> Click for more information </span>
                         </button>
                         <ng-template #msmContent>
-                          Notification to the FEC in writing where committees may change their filing schedule from quarterly to monthly (or vice versa) only once per calendar year.
+                          Notification to the FEC in writing where committees may change their filing schedule from
+                          quarterly to monthly (or vice versa) only once per calendar year.
                         </ng-template>
                       </div>
                     </div>
                   </div>
                 </li>
-                <li class="type-item"
-                  [ngClass]="typeSelected === 'msi'? 'selected' : ''"
+                <li
+                  class="type-item"
+                  [ngClass]="typeSelected === 'msi' ? 'selected' : ''"
                   (click)="optionsListClick('msi-radio')"
                 >
                   <div class="type-item__box">
@@ -132,11 +117,7 @@
                         formControlName="reasonTypeRadio"
                         name="reasonTypeRadio"
                       />
-                      <label
-                        for="msi-radio"
-                        class="type-text"
-                        (click)="updateTypeSelected($event)"
-                      >
+                      <label for="msi-radio" class="type-text" (click)="updateTypeSelected($event)">
                         Disavowal Response (MSI)
                       </label>
                       <div class="type__info">
@@ -151,19 +132,21 @@
                           placement="{{ tooltipPosition }}"
                         >
                           <i class="info-icon" aria-hidden="true"></i>
-                          <span class="sr-only">
-                            Click for more information
-                          </span>
+                          <span class="sr-only"> Click for more information </span>
                         </button>
                         <ng-template #msiContent>
-                          A letter to the FEC where a candidate disavows unauthorized campaign activity within 30 days after being notified by the agency that another person or group has received contributions or made expenditures of more than $5,000 on the individual’s behalf. 100.3(a)(3) and 102.13(a)(2).
+                          A letter to the FEC where a candidate disavows unauthorized campaign activity within 30 days
+                          after being notified by the agency that another person or group has received contributions or
+                          made expenditures of more than $5,000 on the individual’s behalf. 100.3(a)(3) and
+                          102.13(a)(2).
                         </ng-template>
                       </div>
                     </div>
                   </div>
                 </li>
-                <li class="type-item"
-                  [ngClass]="typeSelected === 'msw'? 'selected' : ''"
+                <li
+                  class="type-item"
+                  [ngClass]="typeSelected === 'msw' ? 'selected' : ''"
                   (click)="optionsListClick('msw-radio')"
                 >
                   <div class="type-item__box">
@@ -176,12 +159,7 @@
                         formControlName="reasonTypeRadio"
                         name="reasonTypeRadio"
                       />
-                      <label
-                        for="msw-radio"
-                        class="type-text"
-                      >
-                        C1 Loan Agreement (MSW)
-                      </label>
+                      <label for="msw-radio" class="type-text"> C1 Loan Agreement (MSW) </label>
                       <div class="type__info">
                         <button
                           type="button"
@@ -195,9 +173,7 @@
                           placement="{{ tooltipPosition }}"
                         >
                           <i class="info-icon" aria-hidden="true"></i>
-                          <span class="sr-only">
-                            Click for more information
-                          </span>
+                          <span class="sr-only"> Click for more information </span>
                         </button>
                         <ng-template #mswContent>
                           Loans and line of credit from lending institutions, including copies of loan agreements.
@@ -214,24 +190,15 @@
       <footer>
         <div class="grid-row">
           <div class="grid-row__col">
-              <div class="forms__btn-container">
-                <button
-                  class="btn btn-previous btn-left"
-                  type="button"
-                  (click)="cancel()"
-                >
-                  Cancel
-                </button>
-                <button
-                  class="btn btn-primary btn-right"
-                  type="submit"
-                >
-                  Next
-                </button>
-              </div>
+            <div class="forms__btn-container">
+              <button class="btn btn-previous btn-left" type="button" (click)="cancel()">Cancel</button>
+              <button class="btn btn-primary btn-right" type="submit">Next</button>
+            </div>
           </div>
         </div>
       </footer>
     </form>
-  </div> <!-- ./form__type -->
-</div> <!-- ./form__type-container -->
+  </div>
+  <!-- ./form__type -->
+</div>
+<!-- ./form__type-container -->

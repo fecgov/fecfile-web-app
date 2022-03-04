@@ -20,6 +20,6 @@ export function floatingPoint(): ValidatorFn {
       }
     }
 
-    return null;
+    return {};
   };
 }

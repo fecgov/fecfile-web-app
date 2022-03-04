@@ -18,7 +18,7 @@ export function validateAmount(): ValidatorFn {
         }
       }
     }
-    return null;
+    return {};
   };
 }
 
@@ -36,13 +36,13 @@ export function validateContributionAmount(maxAmount: number): ValidatorFn {
       } else if (typeof control.value === 'number') {
         amount = control.value;
       } else {
-        return null;
+        return {};
       }
 
       if (amount > maxAmount) {
         return { amountExceeded: true };
       }
     }
-    return null;
+    return {};
   };
 }

@@ -1,6 +1,16 @@
 import { ReportTypeService } from './../../form-3x/report-type/report-type.service';
 import { TransactionsService } from './../../transactions/service/transactions.service';
-import { Component, Input, OnInit, ViewEncapsulation, ViewChild, OnDestroy, Output, EventEmitter, SimpleChanges  } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewEncapsulation,
+  ViewChild,
+  OnDestroy,
+  Output,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
 import { PaginationInstance } from 'ngx-pagination';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LoanModel } from '../model/loan.model';
@@ -9,11 +19,11 @@ import { LoanService, GetLoanResponse } from '../../sched-c/service/loan.service
 import { TableService } from '../../../shared/services/TableService/table.service';
 import { UtilService } from '../../../shared/utils/util.service';
 import { LoanMessageService } from '../../sched-c/service/loan-message.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import {
   ConfirmModalComponent,
-  ModalHeaderClassEnum
-} from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
+  ModalHeaderClassEnum,
+} from '../../../shared/partials/confirm-modal/confirm-modal.component';
 import { DialogService } from '../../../shared/services/DialogService/dialog.service';
 import { CONTEXT_NAME } from '@angular/compiler/src/render3/view/util';
 import { ScheduleActions } from '../../form-3x/individual-receipt/schedule-actions.enum';
@@ -23,12 +33,12 @@ import { DatePipe } from '@angular/common';
 export enum ActiveView {
   loanSummary = 'loanSummary',
   recycleBin = 'recycleBin',
-  edit = 'edit'
+  edit = 'edit',
 }
 
 export enum loanSumarysActions {
   add = 'add',
-  edit = 'edit'
+  edit = 'edit',
 }
 
 @Component({
@@ -45,41 +55,40 @@ export enum loanSumarysActions {
 })
 export class LoanSummaryComponent implements OnInit, OnDestroy {
   @ViewChild('columnOptionsModal')
-  public columnOptionsModal: ModalDirective;
+  public columnOptionsModal!: ModalDirective;
 
   @Input()
-  public formType: string;
+  public formType!: string;
 
   @Input()
-  public reportId: string;
+  public reportId!: string;
 
   @Input()
-  public tableType: string;
+  public tableType!: string;
 
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
 
   //TODO-ZS -- change "any" to LoanModel when using actual data
-  public LoanModel: Array<LoanModel>;
+  public LoanModel!: Array<LoanModel>;
 
-  public totalAmount: number;
+  public totalAmount!: number;
   public LoanView = ActiveView.loanSummary;
   public recycleBinView = ActiveView.recycleBin;
   public bulkActionDisabled = true;
   public bulkActionCounter = 0;
 
-
-  private _datePipe: DatePipe;
+  private _datePipe!: DatePipe;
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
   public maxItemsPerPage: number = this.pageSizes[0];
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
 
-  //private filters: ContactFilterModel;
+  //private filters!: ContactFilterModel;
   // private keywords = [];
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
@@ -107,24 +116,24 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
   /**
    * Identifies the column currently sorted by name.
    */
-  private currentSortedColumnName: string;
+  private currentSortedColumnName!: string;
 
   /**
    * Subscription for messags sent from the parent component to show the PIN Column
    * options.
    */
-  private showPinColumnsSubscription: Subscription;
+  private showPinColumnsSubscription!: Subscription;
 
   /**
    * Subscription for running the keyword and filter search
    * to the Loan obtained from the server.
    */
-  private keywordFilterSearchSubscription: Subscription;
+  private keywordFilterSearchSubscription!: Subscription;
 
   private columnOptionCount = 0;
   private maxColumnOption = 5;
-  public allLoanSelected: boolean;
-  private _loanSummaryRefreshDataSubscription: Subscription;
+  public allLoanSelected!: boolean;
+  private _loanSummaryRefreshDataSubscription!: Subscription;
 
   constructor(
     private _LoanService: LoanService,
@@ -138,24 +147,24 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
     const paginateConfig: PaginationInstance = {
       id: 'forms__loan-summ-table-pagination',
       itemsPerPage: this.maxItemsPerPage,
-      currentPage: 1
+      currentPage: 1,
     };
     this.config = paginateConfig;
 
     this._datePipe = new DatePipe('en-US');
-    this.showPinColumnsSubscription = this._LoanMessageService.getShowPinColumnMessage().subscribe(message => {
+    this.showPinColumnsSubscription = this._LoanMessageService.getShowPinColumnMessage().subscribe((message) => {
       this.showPinColumns();
     });
 
     this.keywordFilterSearchSubscription = this._LoanMessageService
       .getDoKeywordFilterSearchMessage()
-      .subscribe(message => {
+      .subscribe((message) => {
         this.getPage(this.config.currentPage);
       });
 
     this._loanSummaryRefreshDataSubscription = this._LoanMessageService
       .getLoanSummaryRefreshMessage()
-      .subscribe(message => {
+      .subscribe((message) => {
         //this.loadPage(message);
       });
   }
@@ -171,7 +180,7 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
     if (!this.reportId || this.reportId === '0') {
       this.reportId = this._reportTypeService.getReportIdFromStorage(this.formType);
     }
-    
+
     this.loadPage();
   }
 
@@ -209,20 +218,17 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
     this._loanSummaryRefreshDataSubscription.unsubscribe();
   }
 
-  public convertToString(dueDate:string): string{
-    if (dueDate){
+  public convertToString(dueDate: string): string {
+    if (dueDate) {
       let temp = new Date(dueDate);
-      if (isNaN(temp.getTime())){
+      if (isNaN(temp.getTime())) {
         return dueDate;
+      } else {
+        return this._datePipe.transform(dueDate, 'MM/dd/yyyy') ?? '';
       }
-      else{
-        return this._datePipe.transform(dueDate, 'MM/dd/yyyy');
-      }
-    } 
-    else{
+    } else {
       return '';
     }
-
   }
 
   /**
@@ -273,40 +279,34 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
   public getLoanPage(page: number, message: any = null): void {
     this.config.currentPage = page;
 
-    let sortedCol: SortableColumnModel = this._tableService.getColumnByName(
-      this.currentSortedColumnName,
-      this.sortableColumns
-    );
+    // let sortedCol: SortableColumnModel = this._tableService.getColumnByName(
+    //   this.currentSortedColumnName,
+    //   this.sortableColumns
+    // );
 
-    if (!sortedCol) {
-      this.setSortDefault();
-      sortedCol = this._tableService.getColumnByName(this.currentSortedColumnName, this.sortableColumns);
-    }
+    // if (!sortedCol) {
+    //   this.setSortDefault();
+    //   sortedCol = this._tableService.getColumnByName(this.currentSortedColumnName, this.sortableColumns);
+    // }
 
-    if (sortedCol) {
-      if (sortedCol.descending === undefined || sortedCol.descending === null) {
-        sortedCol.descending = false;
-      }
-    } else {
-      sortedCol = new SortableColumnModel('', false, false, false, false);
-    }
+    // if (sortedCol) {
+    //   if (sortedCol.descending === undefined || sortedCol.descending === null) {
+    //     sortedCol.descending = false;
+    //   }
+    // } else {
+    //   sortedCol = new SortableColumnModel('', false, false, false, false);
+    // }
 
-    const serverSortColumnName = this._LoanService.mapToSingleServerName(this.currentSortedColumnName);
+    // const serverSortColumnName = this._LoanService.mapToSingleServerName(this.currentSortedColumnName);
 
-    this._LoanService
-      .getLoan(
-        message,
-        page,
-        this.config.itemsPerPage,
-        serverSortColumnName,
-        sortedCol.descending
-      )
-      .subscribe((response: any) => {
-        const pagedResponse = this._utilService.pageResponse(response, this.config);
-        this.LoanModel = pagedResponse.items;
-        this.pageNumbers = pagedResponse.pageNumbers;
-        this.allLoanSelected = false;
-      });
+    // this._LoanService
+    //   .getLoan(message, page, this.config.itemsPerPage, serverSortColumnName, sortedCol.descending)
+    //   .subscribe((response: any) => {
+    //     const pagedResponse = this._utilService.pageResponse(response, this.config);
+    //     this.LoanModel = pagedResponse.items;
+    //     this.pageNumbers = pagedResponse.pageNumbers;
+    //     this.allLoanSelected = false;
+    //   });
   }
 
   public goToC1(loan: any) {
@@ -320,9 +320,9 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
       action: c1Exists ? ScheduleActions.edit : ScheduleActions.add,
       transactionDetail: {
         transactionModel: {
-          transactionId: loan.transaction_id
-        }
-      }
+          transactionId: loan.transaction_id,
+        },
+      },
     };
     this.status.emit(c1EmitObj);
   }
@@ -338,10 +338,10 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
       transactionDetail: {
         transactionModel: {
           endorser: {
-            back_ref_transaction_id: loan.transaction_id
-          }
-        }
-      }
+            back_ref_transaction_id: loan.transaction_id,
+          },
+        },
+      },
     };
     this.status.emit(c1EmitObj);
   }
@@ -364,9 +364,9 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
           date: payment.expenditure_date,
           amount: payment.expenditure_amount,
           purposeDescription: payment.expenditure_purpose,
-          memoText: payment.memo_text
-        }
-      }
+          memoText: payment.memo_text,
+        },
+      },
     };
     this.status.emit(loanRepaymentEmitObj);
   }
@@ -379,11 +379,11 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
         ConfirmModalComponent,
         'Caution!'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._transactionService
             .trashOrRestoreTransactions('3X', 'trash', payment.report_id, [payment])
-            .subscribe(res => {
+            .subscribe((res: any) => {
               this.getPage(this.config.currentPage);
               this._dialogService.confirm(
                 'Transaction has been successfully deleted. ' + payment.transaction_id,
@@ -580,14 +580,14 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
     if (!this.autoHide) {
       return true;
     }
-    if (this.config.totalItems > this.config.itemsPerPage) {
+    if (this.config.totalItems ?? 0 > this.config.itemsPerPage) {
       return true;
     }
     // otherwise, no show.
     return false;
   }
 
-  public printLoan(loan) {
+  public printLoan(loan: any) {
     this._reportTypeService.printPreview('transaction_table_screen', '3X', loan.transaction_id);
   }
 
@@ -631,9 +631,9 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
         ConfirmModalComponent,
         'Caution!'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
-          this._LoanService.deleteLoan(loan).subscribe(res => {
+          this._LoanService.deleteLoan(loan).subscribe((res: any) => {
             this.getPage(this.config.currentPage);
             this._dialogService.confirm(
               'Transaction has been successfully deleted. ' + loan.transaction_id,
@@ -658,7 +658,7 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
       if (trx.selected) {
         selectedTransactions.push({
           transactionId: trx.transaction_id,
-          reportId: this.reportId
+          reportId: this.reportId,
         });
         trxIds += trx.transaction_id + ', ';
       }
@@ -669,7 +669,7 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
 
     this._dialogService
       .confirm('You are about to delete these transactions.   ' + trxIds, ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._transactionService
             .trashOrRestoreTransactions(this.formType, 'trash', this.reportId, selectedTransactions)
@@ -701,16 +701,18 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
    */
   public determineItemRange(): string {
     let range: {
-      firstItemOnPage: number, lastItemOnPage: number, itemRange: string
+      firstItemOnPage: number;
+      lastItemOnPage: number;
+      itemRange: string;
     } = this._utilService.determineItemRange(this.config, this.LoanModel);
 
     this.firstItemOnPage = range.firstItemOnPage;
     this.lastItemOnPage = range.lastItemOnPage;
     return range.itemRange;
   }
-    
+
   public showPageSizes(): boolean {
-    if (this.config && this.config.totalItems && this.config.totalItems > 0){
+    if (this.config && this.config.totalItems && this.config.totalItems > 0) {
       return true;
     }
     return false;
@@ -809,9 +811,12 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
     const key = this.loanSortableColumnsLSK;
     const sortableColumnsJson: string | null = localStorage.getItem(key);
     if (localStorage.getItem(key) != null) {
-      const ctnCols: SortableColumnModel[] = JSON.parse(sortableColumnsJson);
+      const ctnCols: SortableColumnModel[] = JSON.parse(sortableColumnsJson ?? '');
       for (const col of ctnCols) {
-        this._tableService.getColumnByName(col.colName, this.sortableColumns).visible = col.visible;
+        const vis: any = this._tableService.getColumnByName(col.colName, this.sortableColumns);
+        if (vis) {
+          vis.visible = col.visible;
+        }
       }
     }
   }
@@ -830,7 +835,7 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
   private applyColCache(key: string) {
     const sortableColumnsJson: string | null = localStorage.getItem(key);
     if (localStorage.getItem(key) != null) {
-      this.sortableColumns = JSON.parse(sortableColumnsJson);
+      this.sortableColumns = JSON.parse(sortableColumnsJson ?? '');
     } else {
       // Just in case cache has an unexpected issue, use default.
       this.setSortableColumns();
@@ -842,20 +847,20 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
    * @param key the key to the value in the local storage cache
    */
   private applyCurrentSortedColCache(key: string) {
-    const currentSortedColumnJson: string | null = localStorage.getItem(key);
-    let currentSortedColumnL: SortableColumnModel = null;
-    if (currentSortedColumnJson) {
-      currentSortedColumnL = JSON.parse(currentSortedColumnJson);
+    // const currentSortedColumnJson: string | null = localStorage.getItem(key);
+    // let currentSortedColumnL: SortableColumnModel = null;
+    // if (currentSortedColumnJson) {
+    //   currentSortedColumnL = JSON.parse(currentSortedColumnJson);
 
-      // sort by the column direction previously set
-      this.currentSortedColumnName = this._tableService.setSortDirection(
-        currentSortedColumnL.colName,
-        this.sortableColumns,
-        currentSortedColumnL.descending
-      );
-    } else {
-      this.setSortDefault();
-    }
+    //   // sort by the column direction previously set
+    //   this.currentSortedColumnName = this._tableService.setSortDirection(
+    //     currentSortedColumnL.colName,
+    //     this.sortableColumns,
+    //     currentSortedColumnL.descending
+    //   );
+    // } else {
+    //   this.setSortDefault();
+    // }
   }
 
   /**
@@ -863,7 +868,7 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
    * @param key the key to the value in the local storage cache
    */
   private applyCurrentPageCache(key: string) {
-    const currentPageCache: string = localStorage.getItem(key);
+    const currentPageCache: string = localStorage.getItem(key) ?? '';
     if (currentPageCache) {
       if (this._utilService.isNumber(currentPageCache)) {
         this.config.currentPage = this._utilService.toInteger(currentPageCache);
@@ -927,9 +932,9 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
       'loan_amount_original',
       'loan_payment_to_date',
       'loan_balance',
-      'loan_due_date'
+      'loan_due_date',
     ];
-    const otherSortColumns = [];
+    const otherSortColumns: any[] = [];
 
     this.sortableColumns = [];
     for (const field of defaultSortColumns) {
@@ -958,9 +963,9 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
       transactionDetail: {
         transactionModel: {
           transaction_id: loan.transaction_id,
-          entityId: loan.entity_id
-        }
-      }
+          entityId: loan.entity_id,
+        },
+      },
     };
     this.status.emit(loanRepaymentEmitObj);
   }
@@ -977,9 +982,9 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
         transactionModel: {
           transactionId: loan.transaction_id,
           entityId: loan.entity_id,
-          entryScreenScheduleType: 'sched_c_ls'
-        }
-      }
+          entryScreenScheduleType: 'sched_c_ls',
+        },
+      },
     };
     this.status.emit(loanRepaymentEmitObj);
   }
@@ -1008,20 +1013,24 @@ export class LoanSummaryComponent implements OnInit, OnDestroy {
   }
 
   public showRow(trx: any, sched: string): boolean {
-      let childArray;
-      if (trx && trx.entity_type === 'ORG' &&
-          (trx.transaction_type_identifier === 'LOANS_OWED_BY_CMTE' || trx.transaction_type_identifier === 'LOANS_OWED_TO_CMTE')) {
-        if (trx.child && trx.child.length > 0) {
-          childArray = trx.child.filter(element => {
-            return element.transaction_type_identifier === sched;
-          });
-          if (childArray.length > 0) {
-            return true;
-          }
+    let childArray;
+    if (
+      trx &&
+      trx.entity_type === 'ORG' &&
+      (trx.transaction_type_identifier === 'LOANS_OWED_BY_CMTE' ||
+        trx.transaction_type_identifier === 'LOANS_OWED_TO_CMTE')
+    ) {
+      if (trx.child && trx.child.length > 0) {
+        childArray = trx.child.filter((element: any) => {
+          return element.transaction_type_identifier === sched;
+        });
+        if (childArray.length > 0) {
+          return true;
         }
       }
-      return false;
     }
+    return false;
+  }
 
   /**
    *  Takes loan model and returns name

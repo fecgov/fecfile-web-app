@@ -49,7 +49,7 @@ export const duplicatesResponse: any = {
           cand_election_year: null,
           phone_number: null,
           last_update_date: '2020-10-26T13:59:31.287632',
-          user_selected_value: false
+          user_selected_value: false,
         },
         {
           cmte_id: 'C00515064',
@@ -75,7 +75,7 @@ export const duplicatesResponse: any = {
           cand_election_year: null,
           phone_number: null,
           last_update_date: '2020-10-26T13:59:31.287632',
-          user_selected_value: false
+          user_selected_value: false,
         },
         {
           cmte_id: 'C00515064',
@@ -101,10 +101,10 @@ export const duplicatesResponse: any = {
           cand_election_year: null,
           phone_number: null,
           last_update_date: '2020-10-26T13:59:31.287632',
-          user_selected_value: false
-        }
+          user_selected_value: false,
+        },
       ],
-      user_selected_option: ''
+      user_selected_option: '',
     },
     {
       entity_id: 220,
@@ -155,7 +155,7 @@ export const duplicatesResponse: any = {
           cand_election_year: null,
           phone_number: null,
           last_update_date: '2020-10-26T13:59:31.287632',
-          user_selected_value: false
+          user_selected_value: false,
         },
         {
           cmte_id: 'C00515064',
@@ -181,7 +181,7 @@ export const duplicatesResponse: any = {
           cand_election_year: null,
           phone_number: null,
           last_update_date: '2020-10-26T13:59:31.287632',
-          user_selected_value: false
+          user_selected_value: false,
         },
         {
           cmte_id: 'C00515064',
@@ -207,7 +207,7 @@ export const duplicatesResponse: any = {
           cand_election_year: null,
           phone_number: null,
           last_update_date: '2020-10-26T13:59:31.287632',
-          user_selected_value: false
+          user_selected_value: false,
         },
         {
           cmte_id: 'C00515064',
@@ -233,15 +233,15 @@ export const duplicatesResponse: any = {
           cand_election_year: null,
           phone_number: null,
           last_update_date: '2020-10-26T13:59:31.287632',
-          user_selected_value: false
-        }
+          user_selected_value: false,
+        },
       ],
-      user_selected_option: ''
-    }
+      user_selected_option: '',
+    },
   ],
   allDone: false,
   totalcontactsCount: 2,
   itemsPerPage: 4,
   pageNumber: 1,
-  totalPages: 1
+  totalPages: 1,
 };

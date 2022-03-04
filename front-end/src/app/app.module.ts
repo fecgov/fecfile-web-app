@@ -1,15 +1,14 @@
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-// Angular 8 migration
-// import { HttpModule } from '@angular/http';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ArchwizardModule } from 'angular-archwizard';
-import { AngularFileUploaderModule } from 'angular-file-uploader';
-import { UserIdleModule } from 'angular-user-idle';
+// import { AngularFileUploaderModule } from 'angular-file-uploader'; NG-UPGRADE-ISSUE
+// import { UserIdleModule } from 'angular-user-idle'; NG-UPGRADE-ISSUE
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CookieService } from 'ngx-cookie-service';
@@ -37,8 +36,8 @@ import { FinancialSummaryComponent } from './forms/form-3x/financial-summary/fin
 import { IndividualReceiptComponent } from './forms/form-3x/individual-receipt/individual-receipt.component';
 import { SchedEComponent } from './forms/form-3x/sched-e/sched-e/sched-e.component';
 import { SchedH1Component } from './forms/form-3x/sched-h1/sched-h1.component';
-import { SchedH5Component_TOBEDELETED } from './forms/form-3x/sched-h5/sched-h5.component';
-import { SchedH6Component_TOBEDELETED } from './forms/form-3x/sched-h6/sched-h6.component';
+// import { SchedH5Component_TOBEDELETED } from './forms/form-3x/sched-h5/sched-h5.component';
+// import { SchedH6Component_TOBEDELETED } from './forms/form-3x/sched-h6/sched-h6.component';
 import { TransactionSidebarComponent } from './forms/form-3x/transaction-sidebar/transaction-sidebar.component';
 import { TransactionTypeComponent } from './forms/form-3x/transaction-type/transaction-type.component';
 import { F99Component } from './forms/form-99/f99/f99.component';
@@ -55,7 +54,7 @@ import { SchedC1Component } from './forms/sched-c1/sched-c1.component';
 import { DebtSummaryComponent } from './forms/sched-d/debt-summary/debt-summary.component';
 import { SchedFCoreComponent } from './forms/sched-f-core/sched-f-core.component';
 import { SchedFComponent } from './forms/sched-f/sched-f.component';
-import { SchedH1Component_TOBEDELETED } from './forms/sched-h1/sched-h1.component';
+// import { SchedH1Component_TOBEDELETED } from './forms/sched-h1/sched-h1.component';
 import { SchedH2Component } from './forms/sched-h2/sched-h2.component';
 import { SchedH3Component } from './forms/sched-h3/sched-h3.component';
 import { SchedH4Component } from './forms/sched-h4/sched-h4.component';
@@ -106,10 +105,7 @@ import { ToolsComponent } from './tools/tools.component';
 import { UsersComponent } from './users/users.component';
 import { FormEntryComponent } from './forms/form-3l/f3l/form-entry/form-entry.component';
 
-import * as AWS from 'aws-sdk/global';
-import * as S3 from 'aws-sdk/clients/s3';
-
-import {PasswordModule} from './password/password.module';
+import { PasswordModule } from './password/password.module';
 import { ContactDetailsModalComponent } from './contacts/contact-details-modal/contact-details-modal.component';
 import { CashOnHandComponent } from './forms/form-3x/cash-on-hand/cash-on-hand.component';
 import { ApiService } from './shared/services/APIService/api.service';
@@ -144,7 +140,6 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     TypeComponent,
     ReasonComponent,
     PreviewComponent,
-    // ValidateComponent,
     SignComponent,
     TypeaheadComponent,
     AccountComponent,
@@ -159,8 +154,6 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     TransactionSidebarComponent,
     F3xComponent,
     TransactionTypeComponent,
-    // ReportTypeComponent,
-    // ReportTypeSidebarComponent,
     FinancialSummaryComponent,
     ZipCodePipe,
     FilterPipe,
@@ -173,7 +166,6 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     NotificationdetailsComponent,
     SafeHTMLPipe,
     OrderByPipe,
-    // PhonePipe,
     ReportsFilterTypeComponent,
     ContactsComponent,
     ContactsTableComponent,
@@ -196,9 +188,9 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     DebtSummaryComponent,
     SchedLComponent,
     ContactsFilterTypeComponent,
-    SchedH5Component_TOBEDELETED,
-    SchedH6Component_TOBEDELETED,
-    SchedH1Component_TOBEDELETED,
+    // SchedH5Component_TOBEDELETED,
+    // SchedH6Component_TOBEDELETED,
+    // SchedH1Component_TOBEDELETED,
     SchedEComponent,
     SchedFCoreComponent,
     HelpComponent,
@@ -207,33 +199,35 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     F24LinkModalComponent,
     FormEntryComponent,
     ContactDetailsModalComponent,
-    CashOnHandComponent
+    CashOnHandComponent,
   ],
-  entryComponents: [ConfirmModalComponent, F24LinkModalComponent, CashOnHandComponent, TrashConfirmComponent1, TrashConfirmComponent2, TrashConfirmComponent3, ContactDetailsModalComponent],
+  entryComponents: [
+    ConfirmModalComponent,
+    F24LinkModalComponent,
+    CashOnHandComponent,
+    TrashConfirmComponent1,
+    TrashConfirmComponent2,
+    TrashConfirmComponent3,
+    ContactDetailsModalComponent,
+  ],
   imports: [
+    LoggerModule.forRoot({ level: NgxLoggerLevel.TRACE }),
     PasswordModule,
     SharedModule,
     AdminModule,
-    
     AppMainLoginModule,
     BrowserModule,
-    // NgSelectModule,
-    // FormsModule,
-    // ReactiveFormsModule,
     HttpClientModule,
-    // HttpModule,
     NoopAnimationsModule,
     routing,
-    AngularFileUploaderModule,
+    // AngularFileUploaderModule, NG-UPGRADE-ISSUE
     ArchwizardModule,
     NgxEditorModule,
     TooltipModule.forRoot(),
     CollapseModule.forRoot(),
     AngularEditorModule,
-    // ModalModule.forRoot(),
-    // NgxPaginationModule,
     NgPipesModule,
-    UserIdleModule.forRoot({ idle: 780, timeout: 120, ping: 500000 })
+    // UserIdleModule.forRoot({ idle: 780, timeout: 120, ping: 500000 }), NG-UPGRADE-ISSUE
   ],
   providers: [
     CookieService,
@@ -246,7 +240,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
       multi: true,
-      deps: [AppConfigService]
+      deps: [AppConfigService],
     },
     DecimalPipe,
     DatePipe,
@@ -256,10 +250,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ApiService, multi: true },
   ],
-  exports:[
-    SubTransactionsTableComponent
-  ],
+  exports: [SubTransactionsTableComponent],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppModule { }
+export class AppModule {}

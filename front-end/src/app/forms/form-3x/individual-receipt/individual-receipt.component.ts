@@ -1,17 +1,16 @@
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges , ChangeDetectionStrategy } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { Subject } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-import { ContactsService } from 'src/app/contacts/service/contacts.service';
-import { ReportsService } from 'src/app/reports/service/report.service';
-import { TypeaheadService } from 'src/app/shared/partials/typeahead/typeahead.service';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import { ContributionDateValidator } from 'src/app/shared/utils/forms/validation/contribution-date.validator';
+import { ContactsService } from '../../../contacts/service/contacts.service';
+import { ReportsService } from '../../../reports/service/report.service';
+import { TypeaheadService } from '../../../shared/partials/typeahead/typeahead.service';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
+import { ContributionDateValidator } from '../../../shared/utils/forms/validation/contribution-date.validator';
 import { ReportTypeService } from '../../../forms/form-3x/report-type/report-type.service';
 import { FormsService } from '../../../shared/services/FormsService/forms.service';
 import { MessageService } from '../../../shared/services/MessageService/message.service';
@@ -24,7 +23,7 @@ import { AbstractScheduleParentEnum } from './abstract-schedule-parent.enum';
 import { IndividualReceiptService } from './individual-receipt.service';
 import { ScheduleActions } from './schedule-actions.enum';
 import { SchedHMessageServiceService } from '../../sched-h-service/sched-h-message-service.service';
-import {AuthService} from '../../../shared/services/AuthService/auth.service';
+import { AuthService } from '../../../shared/services/AuthService/auth.service';
 
 export enum SaveActions {
   saveOnly = 'saveOnly',
@@ -32,28 +31,28 @@ export enum SaveActions {
   saveForReturnToNewParent = 'saveForReturnToNewParent',
   saveForAddSub = 'saveForAddSub',
   saveForEditSub = 'saveForEditSub',
-  updateOnly = 'updateOnly'
+  updateOnly = 'updateOnly',
 }
 
 @Component({
   selector: 'f3x-individual-receipt',
   templateUrl: './individual-receipt.component.html',
   styleUrls: ['./individual-receipt.component.scss'],
-  providers: [NgbTooltipConfig, CurrencyPipe, DecimalPipe]
+  providers: [NgbTooltipConfig, CurrencyPipe, DecimalPipe],
   // encapsulation: ViewEncapsulation.None
 })
 export class IndividualReceiptComponent extends AbstractSchedule implements OnInit, OnDestroy, OnChanges {
-  @Input() mainTransactionTypeText: string;
-  @Input() transactionTypeText: string;
-  @Input() transactionType: string;
-  @Input() scheduleAction: ScheduleActions;
-  @Output() status: EventEmitter<any>;
+  // @Input() mainTransactionTypeText: string = '';
+  // @Input() transactionTypeText: string = '';
+  // @Input() transactionType: string = '';
+  // @Input() scheduleAction: ScheduleActions = new ScheduleActions({});
+  // @Output() status: EventEmitter<any> = new EventEmitter();
 
   private _onDestroy$ = new Subject();
 
-  public formType: string;
-  public cloned: boolean;
-  queryParamsSubscription: Subscription;
+  public override formType!: string;
+  public cloned!: boolean;
+  queryParamsSubscription!: Subscription;
   constructor(
     _http: HttpClient,
     _fb: FormBuilder,
@@ -75,8 +74,8 @@ export class IndividualReceiptComponent extends AbstractSchedule implements OnIn
     _contributionDateValidator: ContributionDateValidator,
     _transactionsService: TransactionsService,
     _reportsService: ReportsService,
-     _schedHMessageServce: SchedHMessageServiceService,
-    _authService: AuthService,
+    _schedHMessageServce: SchedHMessageServiceService,
+    _authService: AuthService
   ) {
     super(
       _http,
@@ -100,35 +99,35 @@ export class IndividualReceiptComponent extends AbstractSchedule implements OnIn
       _transactionsService,
       _reportsService,
       _schedHMessageServce,
-      _authService,
+      _authService
     );
 
-    this.queryParamsSubscription = _activatedRoute.queryParams.takeUntil(this._onDestroy$).subscribe(p => {
-      this.cloned = p.cloned ? true : false;
+    this.queryParamsSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this._onDestroy$)).subscribe((p) => {
+      this.cloned = p['cloned'] ? true : false;
     });
   }
 
-  public ngOnInit() {
-    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    this.abstractScheduleComponent = AbstractScheduleParentEnum.schedMainComponent;
-    localStorage.removeItem(`form_${this.formType}_saved`);
-    super.ngOnInit();
-  }
+  // public ngOnInit() {
+  //   this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
+  //   this.abstractScheduleComponent = AbstractScheduleParentEnum.schedMainComponent;
+  //   localStorage.removeItem(`form_${this.formType}_saved`);
+  //   super.ngOnInit();
+  // }
 
-  public ngOnChanges(changes: SimpleChanges) {
-    // OnChanges() can be triggered before OnInit().  Ensure formType is set.
-    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    if (this.mainTransactionTypeText === 'Loans and Debts') {
-      this.mainTransactionTypeText = 'Debts';
-    }
+  // public ngOnChanges(changes: SimpleChanges) {
+  //   // OnChanges() can be triggered before OnInit().  Ensure formType is set.
+  //   this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
+  //   if (this.mainTransactionTypeText === 'Loans and Debts') {
+  //     this.mainTransactionTypeText = 'Debts';
+  //   }
 
-    super.ngOnChanges(changes);
-  }
+  //   super.ngOnChanges(changes);
+  // }
 
-  public ngOnDestroy(): void {
-    localStorage.removeItem(`form_${this.formType}_saved`);
-    this._onDestroy$.next(true);
-    this.queryParamsSubscription.unsubscribe();
-    super.ngOnDestroy();
-  }
+  // public ngOnDestroy(): void {
+  //   localStorage.removeItem(`form_${this.formType}_saved`);
+  //   this._onDestroy$.next(true);
+  //   this.queryParamsSubscription.unsubscribe();
+  //   super.ngOnDestroy();
+  // } NG-UPGRADE-ISSUE
 }

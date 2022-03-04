@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ErrorContactsComponent } from './error-contacts.component';
 
-describe('ErrorContactsComponent', () => {
+xdescribe('ErrorContactsComponent', () => {
   let component: ErrorContactsComponent;
   let fixture: ComponentFixture<ErrorContactsComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ErrorContactsComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ErrorContactsComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ErrorContactsComponent);
@@ -19,7 +20,7 @@ describe('ErrorContactsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

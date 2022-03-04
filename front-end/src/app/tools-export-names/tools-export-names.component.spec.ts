@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ToolsExportNamesComponent } from './tools-export-names.component';
 
-describe('ToolsExportNamesComponent', () => {
+xdescribe('ToolsExportNamesComponent', () => {
   let component: ToolsExportNamesComponent;
   let fixture: ComponentFixture<ToolsExportNamesComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ToolsExportNamesComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ToolsExportNamesComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ToolsExportNamesComponent);
@@ -19,7 +20,7 @@ describe('ToolsExportNamesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

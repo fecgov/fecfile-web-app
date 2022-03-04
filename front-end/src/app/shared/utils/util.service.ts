@@ -3,10 +3,10 @@ import * as _ from 'lodash';
 import { PaginationInstance } from 'ngx-pagination';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UtilService {
-  constructor() { }
+  constructor() {}
 
   /**
    * Deep clone an object with lodash.  Useful when shallow cloning
@@ -49,7 +49,8 @@ export class UtilService {
     let arr: any = [];
 
     for (let i = 0; i < localStorage.length; i++) {
-      if (localStorage.key(i).substring(0, length) === val) {
+      const key: string | null = localStorage.key(i);
+      if (key && key.substring(0, length) === val) {
         arr.push(localStorage.key(i));
       }
     }
@@ -107,7 +108,7 @@ export class UtilService {
    */
   public compareDatesAfter(date1: Date, date2: Date): boolean {
     if (!date1 || !date2) {
-      return null;
+      return false;
     }
     if (date2.getTime() > date1.getTime()) {
       return true;
@@ -151,23 +152,22 @@ export class UtilService {
   }
 
   public addOrEditObjectValueInArray(array: any, type: string, name: string, value: string) {
-    let field = array.find(element => element.name === name);
+    let field = array.find((element: any) => element.name === name);
     if (field) {
       field.value = value.toString();
-    }
-    else {
+    } else {
       array.push({ type: type, name: name, value: value.toString() });
     }
   }
 
   /**
-	 * Determine if a String has a value.
-	 *
-	 * @param strg
-	 * @returns {Boolean} true if not an empty string, null or undefined otherwise false.
-	 */
+   * Determine if a String has a value.
+   *
+   * @param strg
+   * @returns {Boolean} true if not an empty string, null or undefined otherwise false.
+   */
   public isStringEmpty(strg: string) {
-    return (strg === null || strg === undefined || strg === '');
+    return strg === null || strg === undefined || strg === '';
   }
 
   public aggregateIndToBool(aggregate_ind: string): boolean {
@@ -178,10 +178,9 @@ export class UtilService {
     }
   }
 
-  public static PAGINATION_PAGE_SIZES: number[] = [10,20,30,40,50];
+  public static PAGINATION_PAGE_SIZES: number[] = [10, 20, 30, 40, 50];
 
-  public pageResponse(response: any, config: PaginationInstance)
-    : { items: any[], pageNumbers: number[] } {
+  public pageResponse(response: any, config: PaginationInstance): { items: any[]; pageNumbers: number[] } {
     let items: any[] = [];
     let pageNumbers: number[] = [];
 
@@ -194,9 +193,9 @@ export class UtilService {
         } else {
           items = response.items;
         }
-      } 
+      }
       let numberOfPages = 1;
-      if (config.totalItems > config.itemsPerPage) { 
+      if (config.totalItems && config.totalItems > config.itemsPerPage) {
         numberOfPages = Math.floor(config.totalItems / config.itemsPerPage);
         if (numberOfPages * config.itemsPerPage < config.totalItems) {
           numberOfPages++;
@@ -212,73 +211,73 @@ export class UtilService {
     }
     return {
       items: items,
-      pageNumbers: pageNumbers
+      pageNumbers: pageNumbers,
     };
   }
 
-  public determineItemRange(config: PaginationInstance, items: any[])
-    : {firstItemOnPage: number, lastItemOnPage: number, itemRange: string} {
+  public determineItemRange(
+    config: PaginationInstance,
+    items: any[]
+  ): { firstItemOnPage: number; lastItemOnPage: number; itemRange: string } {
     if (!items || items.length === 0) {
       return {
-        firstItemOnPage: 0, 
-        lastItemOnPage: 0, 
-        itemRange: '0'
-      }
+        firstItemOnPage: 0,
+        lastItemOnPage: 0,
+        itemRange: '0',
+      };
     }
 
     let start = 0;
-    let end = 0;
+    let end: number = 0;
     config.currentPage = this.isNumber(config.currentPage) ? config.currentPage : 1;
     if (config.currentPage > 0 && config.itemsPerPage > 0 && items.length > 0) {
       let numberOfPages = 1;
-      if (config.totalItems > config.itemsPerPage) { 
+      if (config.totalItems && config.totalItems > config.itemsPerPage) {
         numberOfPages = Math.floor(config.totalItems / config.itemsPerPage);
         if (numberOfPages * config.itemsPerPage < config.totalItems) {
           numberOfPages++;
         }
       }
       if (config.currentPage === numberOfPages) {
-        end = config.totalItems;
+        end = config.totalItems ?? 0;
         start = (config.currentPage - 1) * config.itemsPerPage + 1;
       } else {
         end = config.currentPage * config.itemsPerPage;
-        start = (end - config.itemsPerPage) + 1;
+        start = end - config.itemsPerPage + 1;
       }
     }
 
-    return { 
-      firstItemOnPage: start, 
-      lastItemOnPage: end, 
-      itemRange: start + ' - ' + end 
+    return {
+      firstItemOnPage: start,
+      lastItemOnPage: end,
+      itemRange: start + ' - ' + end,
     };
   }
 
-    /**
+  /**
    * For some forms, transaction categories are mapped differently (i.e. 'bundled-contributions' => 'receipts', 'refunds' => 'disbursements' for F3L etc.)
-   * This method remaps these transaction categories for the transactions table. 
-   * @param _transactionCategory 
+   * This method remaps these transaction categories for the transactions table.
+   * @param _transactionCategory
    */
   public getMappedTransactionCategory(_transactionCategory: string) {
-    if(_transactionCategory === 'bundled-contributions'){
+    if (_transactionCategory === 'bundled-contributions') {
       return 'receipts';
-    }
-    else if(_transactionCategory === 'refunds'){
+    } else if (_transactionCategory === 'refunds') {
       return 'disbursements';
     }
     return _transactionCategory;
   }
 
   /**
-   * converts transactionCategory based on formType, if different from F3X. 
-   * @param transactionCategory 
-   * @param formType 
+   * converts transactionCategory based on formType, if different from F3X.
+   * @param transactionCategory
+   * @param formType
    */
-  public convertTransactionCategoryByForm(transactionCategory: string, formType: string){
-    if(formType.endsWith('3L')){
-      if(transactionCategory === 'receipts'){
+  public convertTransactionCategoryByForm(transactionCategory: string, formType: string) {
+    if (formType.endsWith('3L')) {
+      if (transactionCategory === 'receipts') {
         return 'bundled-contributions';
-      }
-      else if(transactionCategory === 'disbursements'){
+      } else if (transactionCategory === 'disbursements') {
         return 'refunds';
       }
     }

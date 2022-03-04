@@ -1,20 +1,18 @@
-import { Injectable , ChangeDetectionStrategy } from '@angular/core';
+import { Injectable, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 /**
  * A message service for sending and receiving messages of any type
  * between transaction components.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReportsMessageService {
-
   private subject = new Subject<any>();
   private applyFiltersSubject = new Subject<any>();
   private doKeywordFilterSearchSubject = new Subject<any>();
-
 
   /**
    * A publisher uses this method to send a message to subscribers
@@ -26,14 +24,12 @@ export class ReportsMessageService {
     this.subject.next(message);
   }
 
-
   /**
    * Clear the Pin Column message
    */
   public clearShowPinColumnMessage() {
-    this.subject.next();
+    this.subject.next(null);
   }
-
 
   /**
    * A method for subscribers of the show PIN Column message.
@@ -42,11 +38,10 @@ export class ReportsMessageService {
     return this.subject.asObservable();
   }
 
-
   /**
    * A publisher uses this method to send a message to subscribers
    * indicating the filters are to be applies to the transactions.
-   * 
+   *
    * @param message
    */
   public sendApplyFiltersMessage(message: any) {
@@ -54,14 +49,12 @@ export class ReportsMessageService {
     this.applyFiltersSubject.next(message);
   }
 
-
   /**
    * Clear the filters message.
    */
   public clearApplyFiltersMessage() {
-    this.applyFiltersSubject.next();
+    this.applyFiltersSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Apply Filters message.
@@ -70,25 +63,22 @@ export class ReportsMessageService {
     return this.applyFiltersSubject.asObservable();
   }
 
-
   /**
    * A publisher uses this method to send a message to subscribers
    * to run the Keyword + Filter search
-   * 
+   *
    * @param message
    */
   public sendDoKeywordFilterSearchMessage(message: any) {
     this.doKeywordFilterSearchSubject.next(message);
   }
 
-
   /**
    * Clear the "do keyword + filters" message.
    */
   public clearDoKeywordFilterSearchMessage() {
-    this.doKeywordFilterSearchSubject.next();
+    this.doKeywordFilterSearchSubject.next(null);
   }
-
 
   /**
    * A method for subscribers of the Keyword + Filter search message.
@@ -105,7 +95,7 @@ export class ReportsMessageService {
   }
 
   public clearMessage() {
-    this.subject.next();
+    this.subject.next(null);
   }
 
   public getMessage(): Observable<any> {
@@ -117,7 +107,7 @@ export class ReportsMessageService {
   }
 
   public clearApplyFiltersMessage() {
-    this.applyFiltersSubject.next();
+    this.applyFiltersSubject.next(null);
   }
 
   public getApplyFiltersMessage(): Observable<any> {

@@ -16,19 +16,19 @@ import { TypeaheadService } from './typeahead.service';
       .form-control {
         width: 300px;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class TypeaheadComponent {
-  @Input() public fieldName: string;
-  @Input() public columnProperties: any;
+  @Input() public fieldName!: string;
+  @Input() public columnProperties!: any;
   @Output() selectedItem: EventEmitter<any> = new EventEmitter<any>();
 
-  public col:any;
+  public col: any;
   /**
    * TODO: Emit this data out to parent as output.
    */
-  public model: any;
+  public model!: any;
 
   /**
    *
@@ -47,7 +47,7 @@ export class TypeaheadComponent {
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      switchMap(searchText => {
+      switchMap((searchText) => {
         return this._typeaheadService.getContacts(searchText, this.fieldName);
       })
     );

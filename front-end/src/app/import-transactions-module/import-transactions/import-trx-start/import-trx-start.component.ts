@@ -1,12 +1,12 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ImportTransactionsService } from '../service/import-transactions.service';
 import * as FileSaver from 'file-saver';
-import { UploadContactsService } from 'src/app/import-contacts-module/import-contacts/upload-contacts/service/upload-contacts.service';
+import { UploadContactsService } from '../../../import-contacts-module/import-contacts/upload-contacts/service/upload-contacts.service';
 
 @Component({
   selector: 'app-import-trx-start',
   templateUrl: './import-trx-start.component.html',
-  styleUrls: ['./import-trx-start.component.scss']
+  styleUrls: ['./import-trx-start.component.scss'],
 })
 export class ImportTrxStartComponent implements OnInit {
   @Output()
@@ -48,7 +48,7 @@ export class ImportTrxStartComponent implements OnInit {
       'F3X - Schedule H5_Format Specs_Import Transactions_FINAL.xlsx',
       'F3X - Schedule H6_Format Specs_Import Transactions_FINAL.xlsx',
       'F3X - Schedule LA_Format Specs_Import Transactions_FINAL.xlsx',
-      'F3X - Schedule LB_Format Specs_Import Transactions_FINAL.xlsx'
+      'F3X - Schedule LB_Format Specs_Import Transactions_FINAL.xlsx',
     ];
     for (const file of files) {
       const fileMetaData: any = {};
@@ -112,14 +112,14 @@ export class ImportTrxStartComponent implements OnInit {
     const fileName = fileMetaData.fileName;
     const type = fileMetaData.type;
 
-    this._uploadContactsService.getObject(dir + fileName).subscribe(res => {
+    this._uploadContactsService.getObject(dir + fileName).subscribe((res: any) => {
       const blob: Blob = new Blob([res.Body], { type: type });
       FileSaver.saveAs(blob, fileName);
     });
   }
 
   public foo_Util_get_csv_file(fileName: string) {
-    this._uploadContactsService.getObject('transactions/' + fileName).subscribe(res => {
+    this._uploadContactsService.getObject('transactions/' + fileName).subscribe((res: any) => {
       const type = 'text/plain;charset=utf-8';
       const blob: Blob = new Blob([res.Body], { type: type });
       FileSaver.saveAs(blob, 'sample_import_transactions.csv');

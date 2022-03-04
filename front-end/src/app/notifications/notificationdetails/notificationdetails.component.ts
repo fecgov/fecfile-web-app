@@ -1,8 +1,17 @@
-import { Component, Input, OnInit, ViewEncapsulation, OnDestroy, ViewChild, ElementRef, Renderer2} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewEncapsulation,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  Renderer2,
+} from '@angular/core';
 import { PaginationInstance } from 'ngx-pagination';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { SortableColumnModel } from 'src/app/shared/services/TableService/sortable-column.model';
-import { TableService } from 'src/app/shared/services/TableService/table.service';
+import { SortableColumnModel } from '../../shared/services/TableService/sortable-column.model';
+import { TableService } from '../../shared/services/TableService/table.service';
 import { UtilService } from '../../shared/utils/util.service';
 import { NotificationsService } from '../notifications.service';
 import { TabConfiguration } from '../notification';
@@ -11,24 +20,24 @@ import { TabConfiguration } from '../notification';
   selector: 'app-notificationdetails',
   templateUrl: './notificationdetails.component.html',
   styleUrls: ['./notificationdetails.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class NotificationdetailsComponent implements OnInit, OnDestroy {
   @ViewChild('notificationModal')
-  public notificationModal: ModalDirective;
+  public notificationModal!: ModalDirective;
 
   @ViewChild('notificationContentContainer')
-  public notificationContentContainer: ElementRef;
-  
+  public notificationContentContainer!: ElementRef;
+
   @Input()
-  public tabConfig: TabConfiguration;
+  public tabConfig!: TabConfiguration;
 
   // data model
   public notifications: Map<string, string>[] = [];
-  public keys: Array<{name: string, header: string}> = [];
+  public keys: Array<{ name: string; header: string }> = [];
 
   // sorting
-  private currentSortedColumnName: string;
+  private currentSortedColumnName!: string;
   private sortableColumns: SortableColumnModel[] = [];
 
   // ngx-pagination config
@@ -37,23 +46,22 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
   public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
 
   // View detail
-  public notificationContent: string;
-  public notificationContentType: string;
+  public notificationContent!: string;
+  public notificationContentType!: string;
 
   constructor(
     private _notificationsService: NotificationsService,
     private _tableService: TableService,
     private _utilService: UtilService,
     private renderer: Renderer2
-  ) {
-  }
+  ) {}
 
   /**
    * Initialize the component.
@@ -62,7 +70,7 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
     const paginateConfig: PaginationInstance = {
       id: 'forms__notification-table-pagination',
       itemsPerPage: this.maxItemsPerPage,
-      currentPage: 1
+      currentPage: 1,
     };
     this.config = paginateConfig;
 
@@ -77,25 +85,23 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
   /**
    * A method to run when component is destroyed.
    */
-  public ngOnDestroy(): void {
-  }
+  public ngOnDestroy(): void {}
 
-    /**
-	 * Wrapper method for the table service to set the class for sort column styling.
-	 *
-	 * @param colName the column to apply the class
-	 * @returns string of classes for CSS styling sorted/unsorted classes
-	 */
+  /**
+   * Wrapper method for the table service to set the class for sort column styling.
+   *
+   * @param colName the column to apply the class
+   * @returns string of classes for CSS styling sorted/unsorted classes
+   */
   public getSortClass(colName: string): string {
     return this._tableService.getSortClass(colName, this.currentSortedColumnName, this.sortableColumns);
   }
 
-
   /**
-	 * Change the sort direction of the table column.
-	 *
-	 * @param colName the column name of the column to sort
-	 */
+   * Change the sort direction of the table column.
+   *
+   * @param colName the column name of the column to sort
+   */
   public changeSortDirection(colName: string): void {
     this.currentSortedColumnName = this._tableService.changeSortDirection(colName, this.sortableColumns);
 
@@ -147,8 +153,10 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
   public getNotificationsPage(page: number): void {
     this.config.currentPage = page;
 
-    let sortedCol: SortableColumnModel =
-      this._tableService.getColumnByName(this.currentSortedColumnName, this.sortableColumns);
+    let sortedCol: SortableColumnModel | undefined = this._tableService.getColumnByName(
+      this.currentSortedColumnName,
+      this.sortableColumns
+    );
 
     if (!sortedCol) {
       this.setSortDefault();
@@ -164,12 +172,7 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
     }
 
     this._notificationsService
-      .getNotifications(
-        this.tabConfig.name,
-        sortedCol,
-        page, 
-        this.config.itemsPerPage
-      )
+      .getNotifications(this.tabConfig.name, sortedCol, page, this.config.itemsPerPage)
       .subscribe((response: any) => {
         if (response) {
           this.keys = response.keys;
@@ -182,7 +185,7 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
                 descending: false,
                 visible: true,
                 checked: false,
-                disabled: false
+                disabled: false,
               };
               columns.push(column);
             }
@@ -203,7 +206,7 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
     if (!this.autoHide) {
       return true;
     }
-    if (this.config.totalItems > this.config.itemsPerPage) {
+    if (this.config.totalItems ?? 0 > this.config.itemsPerPage) {
       return true;
     }
     // otherwise, no show.
@@ -225,7 +228,7 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
 
     if (this.config.currentPage > 0 && this.config.itemsPerPage > 0 && this.notifications.length > 0) {
       if (this.config.currentPage === this.numberOfPages) {
-        end = this.config.totalItems;
+        end = this.config.totalItems ?? 0;
         start = (this.config.currentPage - 1) * this.config.itemsPerPage + 1;
       } else {
         end = this.config.currentPage * this.config.itemsPerPage;
@@ -234,8 +237,8 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
     }
 
     this.firstItemOnPage = start;
-    if (end > this.config.totalItems) {
-      end = this.config.totalItems;
+    if (this.config.totalItems && end > this.config.totalItems) {
+      end = this.config.totalItems ?? 0;
     }
     this.lastItemOnPage = end;
     return start + ' - ' + end;
@@ -249,11 +252,7 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
   }
 
   public showNotificationModal(id: number) {
-    this._notificationsService
-    .getNotification(
-      this.tabConfig.name, id
-    )
-    .subscribe((response: any) => {
+    this._notificationsService.getNotification(this.tabConfig.name, id).subscribe((response: any) => {
       // clear container
       const childElements = this.notificationContentContainer.nativeElement.childNodes;
       for (let child of childElements) {
@@ -273,7 +272,7 @@ export class NotificationdetailsComponent implements OnInit, OnDestroy {
         iframe.className = 'notifications_modal-body-frame';
         this.notificationContentContainer.nativeElement.appendChild(iframe);
       } else {
-        this.notificationContent = "Unsupported";
+        this.notificationContent = 'Unsupported';
       }
       this.notificationContentType = response.contentType;
 

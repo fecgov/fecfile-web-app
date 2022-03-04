@@ -6,36 +6,36 @@ import { Router } from '@angular/router';
 import { timer, Observable, Subscription } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 import * as FileSaver from 'file-saver';
-import { UploadContactsService } from 'src/app/import-contacts-module/import-contacts/upload-contacts/service/upload-contacts.service';
+import { UploadContactsService } from '../../../import-contacts-module/import-contacts/upload-contacts/service/upload-contacts.service';
 
 @Component({
   selector: 'app-import-trx-done',
   templateUrl: './import-trx-done.component.html',
-  styleUrls: ['./import-trx-done.component.scss']
+  styleUrls: ['./import-trx-done.component.scss'],
 })
 export class ImportTrxDoneComponent implements OnInit, OnDestroy {
   @Input()
-  public uploadFile: UploadFileModel;
+  public uploadFile!: UploadFileModel;
 
   @Input()
-  public action: string;
+  public action!: string;
 
   @Input()
-  public fileQueue: Array<UploadFileModel>;
+  public fileQueue!: Array<UploadFileModel>;
 
   @Output()
   public proceedEmitter: EventEmitter<any> = new EventEmitter<any>();
 
-  public hasFailure: boolean;
-  public allFilesDone: boolean;
-  public allFailed: boolean;
+  public hasFailure!: boolean;
+  public allFilesDone!: boolean;
+  public allFailed!: boolean;
   public readonly completeStatus = ImportFileStatusEnum.complete;
   public readonly importingStatus = ImportFileStatusEnum.importing;
-  public progressPercent: number;
+  public progressPercent!: number;
 
-  private progressSubscription: Subscription;
-  private committeeId: string;
-  private currentFileDone: boolean;
+  private progressSubscription!: Subscription;
+  private committeeId!: string;
+  private currentFileDone!: boolean;
 
   constructor(
     private _router: Router,
@@ -44,9 +44,9 @@ export class ImportTrxDoneComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.committeeId = null;
+    this.committeeId = '';
     if (localStorage.getItem('committee_details') !== null) {
-      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`));
+      const cmteDetails: any = JSON.parse(localStorage.getItem(`committee_details`) ?? '');
       this.committeeId = cmteDetails.committeeid;
     }
     this.progressPercent = 0;
@@ -166,8 +166,8 @@ export class ImportTrxDoneComponent implements OnInit, OnDestroy {
   }
 
   private _downloadErrorFile(errorFile: UploadFileModel) {
-    // this._uploadContactsService.getObject(`transactions/${this.committeeId}/error_files/${fileName}`).subscribe(res => {
-    this._uploadContactsService.getObject(errorFile.errorFileName).subscribe(res => {
+    // this._uploadContactsService.getObject(`transactions/${this.committeeId}/error_files/${fileName}`).subscribe((res: any) => {
+    this._uploadContactsService.getObject(errorFile.errorFileName).subscribe((res: any) => {
       const type = 'text/csv;charset=utf-8';
       const blob: Blob = new Blob([res.Body], { type: type });
 

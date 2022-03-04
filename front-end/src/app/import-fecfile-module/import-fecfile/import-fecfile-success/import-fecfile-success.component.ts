@@ -3,15 +3,12 @@ import { Component, Input, OnInit } from '@angular/core';
 @Component({
   selector: 'app-import-fecfile-success',
   templateUrl: './import-fecfile-success.component.html',
-  styleUrls: ['./import-fecfile-success.component.scss']
+  styleUrls: ['./import-fecfile-success.component.scss'],
 })
 export class ImportFecfileSuccessComponent implements OnInit {
+  @Input() successMessage!: any;
 
-  @Input() successMessage: any;
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

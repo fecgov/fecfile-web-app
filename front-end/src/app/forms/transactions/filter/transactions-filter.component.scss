@@ -33,7 +33,7 @@
     }
     .transactions__filter-sidebar-set {
       .card-body {
-          z-index: 1;
+        z-index: 1;
       }
       .transactions__filter-multi-input {
         padding-bottom: 3px;
@@ -41,16 +41,17 @@
       .transacions__filter-scroll-to-input {
         margin-bottom: 15px;
       }
-    }    
+    }
     .card-header {
       background-color: $bombay;
       cursor: pointer;
-      .up-arrow-icon:before, .down-arrow-icon:before{
+      .up-arrow-icon:before,
+      .down-arrow-icon:before {
         color: $white;
-      } 
+      }
     }
     .transactions__filter-type-list-body {
-      max-height: 150px !important; // override the amination 
+      max-height: 150px !important; // override the amination
       .transactions__filter-type-list {
         list-style-type: none;
         .transactions__filter-type-group {

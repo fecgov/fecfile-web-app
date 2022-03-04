@@ -6,20 +6,21 @@ import {
   EventEmitter,
   Input,
   SimpleChanges,
-  OnChanges
-, ChangeDetectionStrategy } from '@angular/core';
+  OnChanges,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { PaginationInstance } from 'ngx-pagination';
-import { TableService } from 'src/app/shared/services/TableService/table.service';
-import { UtilService } from 'src/app/shared/utils/util.service';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
-import { SortableColumnModel } from 'src/app/shared/services/TableService/sortable-column.model';
+import { TableService } from '../../../shared/services/TableService/table.service';
+import { UtilService } from '../../../shared/utils/util.service';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
+import { SortableColumnModel } from '../../../shared/services/TableService/sortable-column.model';
 import { DebtSummaryService, GetDebtsResponse } from './service/debt-summary.service';
 import { DebtSummaryModel } from './model/debt-summary.model';
 import {
   ConfirmModalComponent,
-  ModalHeaderClassEnum
-} from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
+  ModalHeaderClassEnum,
+} from '../../../shared/partials/confirm-modal/confirm-modal.component';
 import { TransactionsService, GetTransactionsResponse } from '../../transactions/service/transactions.service';
 import { ReportTypeService } from '../../form-3x/report-type/report-type.service';
 import { TransactionModel } from '../../transactions/model/transaction.model';
@@ -27,7 +28,7 @@ import { mockChildPayments } from './mock.json';
 
 export enum DebtSumarysActions {
   add = 'add',
-  edit = 'edit'
+  edit = 'edit',
 }
 
 @Component({
@@ -45,19 +46,19 @@ export enum DebtSumarysActions {
 })
 export class DebtSummaryComponent implements OnInit, OnChanges {
   @Input()
-  public forceChangeDetection: Date;
+  public forceChangeDetection!: Date;
 
   @Input()
-  public transactionType: string;
+  public transactionType!: string;
 
   @Input()
-  public transactionTypeText: string;
+  public transactionTypeText!: string;
 
   @Output()
   public status: EventEmitter<any> = new EventEmitter<any>();
 
-  public debtModel: Array<DebtSummaryModel>;
-  public totalAmount: number;
+  public debtModel!: Array<DebtSummaryModel>;
+  public totalAmount!: number;
   public bulkActionDisabled = true;
   public bulkActionCounter = 0;
   public formType = '3X';
@@ -65,16 +66,16 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
   // ngx-pagination config
   public pageSizes: number[] = UtilService.PAGINATION_PAGE_SIZES;
   public maxItemsPerPage: number = this.pageSizes[0];
-  public paginationControlsMaxSize: number = 10; 
+  public paginationControlsMaxSize: number = 10;
   public directionLinks: boolean = false;
   public autoHide: boolean = true;
-  public config: PaginationInstance;
+  public config!: PaginationInstance;
   public numberOfPages: number = 0;
   public pageNumbers: number[] = [];
 
   private firstItemOnPage = 0;
   private lastItemOnPage = 0;
-  public allDebtSelected: boolean;
+  public allDebtSelected!: boolean;
 
   /**
    * Array of columns to be made sortable.
@@ -84,7 +85,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
   /**
    * Identifies the column currently sorted by name.
    */
-  private currentSortedColumnName: string;
+  private currentSortedColumnName!: string;
 
   /**
    * Component constructor with service dependency service injections.
@@ -99,8 +100,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
     private _dialogService: DialogService,
     private _debtSummaryService: DebtSummaryService,
     private _transactionsService: TransactionsService
-  ) {
-  }
+  ) {}
 
   /**
    * Initialize the component.
@@ -109,7 +109,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
     const paginateConfig: PaginationInstance = {
       id: 'forms__debt-summ-table-pagination',
       itemsPerPage: this.maxItemsPerPage,
-      currentPage: 1
+      currentPage: 1,
     };
     this.config = paginateConfig;
 
@@ -124,13 +124,12 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
     this.getPage(this.config.currentPage);
   }
 
-    /**
-	 * The records for a given page.
-	 *
-	 * @param page the page containing the records to get
-	 */
+  /**
+   * The records for a given page.
+   *
+   * @param page the page containing the records to get
+   */
   public getPage(page: number): void {
-
     this.bulkActionCounter = 0;
     this.bulkActionDisabled = true;
 
@@ -159,34 +158,36 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
   }
 
   /**
-	 * Determine if pagination should be shown.
-	 */
+   * Determine if pagination should be shown.
+   */
   public showPagination(): boolean {
     if (!this.autoHide) {
       return true;
     }
-    if (this.config.totalItems > this.config.itemsPerPage) {
+    if (this.config.totalItems ?? 0 > this.config.itemsPerPage) {
       return true;
     }
     // otherwise, no show.
     return false;
-  }  
+  }
 
   /**
    * Determine the item range shown by the server-side pagination.
    */
   public determineItemRange(): string {
     let range: {
-      firstItemOnPage: number, lastItemOnPage: number, itemRange: string
+      firstItemOnPage: number;
+      lastItemOnPage: number;
+      itemRange: string;
     } = this._utilService.determineItemRange(this.config, this.debtModel);
 
     this.firstItemOnPage = range.firstItemOnPage;
     this.lastItemOnPage = range.lastItemOnPage;
     return range.itemRange;
   }
-      
+
   public showPageSizes(): boolean {
-    if (this.config && this.config.totalItems && this.config.totalItems > 0){
+    if (this.config && this.config.totalItems && this.config.totalItems > 0) {
       return true;
     }
     return false;
@@ -204,7 +205,6 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
     //   currentPage: 1
     // };
     // this.config = paginateConfig;
-
     //this.getDebtSummaries(1);
   }
 
@@ -212,45 +212,40 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
    * Get the Debt Summaries for the Report
    */
   public getDebtSummaries(page: number): void {
-    this.config.currentPage = page;
+    // this.config.currentPage = page;
 
-    this.debtModel = [];
-    this.bulkActionCounter = 0;
-    this.bulkActionDisabled = true;
+    // this.debtModel = [];
+    // this.bulkActionCounter = 0;
+    // this.bulkActionDisabled = true;
 
-    let sortedCol: SortableColumnModel = this._tableService.getColumnByName(
-      this.currentSortedColumnName,
-      this.sortableColumns
-    );
+    // let sortedCol: SortableColumnModel = this._tableService.getColumnByName(
+    //   this.currentSortedColumnName,
+    //   this.sortableColumns
+    // );
 
-    if (!sortedCol) {
-      this.setSortDefault();
-      sortedCol = this._tableService.getColumnByName(this.currentSortedColumnName, this.sortableColumns);
-    }
+    // if (!sortedCol) {
+    //   this.setSortDefault();
+    //   sortedCol = this._tableService.getColumnByName(this.currentSortedColumnName, this.sortableColumns);
+    // }
 
-    if (sortedCol) {
-      if (sortedCol.descending === undefined || sortedCol.descending === null) {
-        sortedCol.descending = false;
-      }
-    } else {
-      sortedCol = new SortableColumnModel('', false, false, false, false);
-    }
+    // if (sortedCol) {
+    //   if (sortedCol.descending === undefined || sortedCol.descending === null) {
+    //     sortedCol.descending = false;
+    //   }
+    // } else {
+    //   sortedCol = new SortableColumnModel('', false, false, false, false);
+    // }
 
-    const serverSortColumnName = this._debtSummaryService.
-      mapToSingleServerName(this.currentSortedColumnName);
+    // const serverSortColumnName = this._debtSummaryService.mapToSingleServerName(this.currentSortedColumnName);
 
-    this._debtSummaryService.getDebts(
-      this.transactionType,
-      page,
-      this.config.itemsPerPage,
-      serverSortColumnName,
-      sortedCol.descending
-    ).subscribe((response: any) => {
-      const pagedResponse = this._utilService.pageResponse(response, this.config);
-      this.debtModel = pagedResponse.items;
-      this.pageNumbers = pagedResponse.pageNumbers;
-      this.allDebtSelected = false;
-    });
+    // this._debtSummaryService
+    //   .getDebts(this.transactionType, page, this.config.itemsPerPage, serverSortColumnName, sortedCol.descending)
+    //   .subscribe((response: any) => {
+    //     const pagedResponse = this._utilService.pageResponse(response, this.config);
+    //     this.debtModel = pagedResponse.items;
+    //     this.pageNumbers = pagedResponse.pageNumbers;
+    //     this.allDebtSelected = false;
+    //   });
   }
 
   /**
@@ -345,9 +340,9 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
       'beginningBalance',
       'incurredAmt',
       'paymentAmt',
-      'closingBalance'
+      'closingBalance',
     ];
-    const otherSortColumns = [];
+    const otherSortColumns: any[] = [];
 
     this.sortableColumns = [];
     for (const field of defaultSortColumns) {
@@ -390,7 +385,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
       transactionId: debt.transactionId,
       type: debt.transactionTypeDescription,
       transactionTypeIdentifier: debt.transactionTypeIdentifier,
-      apiCall: '/sd/schedD' // should come from API
+      apiCall: '/sd/schedD', // should come from API
     };
     if (payment) {
       transactionModel.scrollDebtPaymentButtonIntoView = true;
@@ -407,11 +402,11 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
       returnToDebtSummary: true,
       returnToDebtSummaryInfo: {
         transactionType: this.transactionType,
-        transactionTypeText: this.transactionTypeText
+        transactionTypeText: this.transactionTypeText,
       },
       transactionDetail: {
-        transactionModel: transactionModel
-      }
+        transactionModel: transactionModel,
+      },
     });
   }
 
@@ -428,7 +423,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
       returnToDebtSummary: true,
       returnToDebtSummaryInfo: {
         transactionType: this.transactionType,
-        transactionTypeText: this.transactionTypeText
+        transactionTypeText: this.transactionTypeText,
       },
       transactionDetail: {
         transactionModel: {
@@ -440,9 +435,9 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
           amount: debtPayment.paymentAmt,
           memoCode: debtPayment.memoCode,
           aggregate: debtPayment.aggregate,
-          entityId: debtPayment.entityId
-        }
-      }
+          entityId: debtPayment.entityId,
+        },
+      },
     });
   }
 
@@ -460,7 +455,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
         ConfirmModalComponent,
         'Caution!'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._debtSummaryService.deleteDebt(debt).subscribe((res2: any) => {
             this.getDebtSummaries(this.config.currentPage);
@@ -491,7 +486,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
         ConfirmModalComponent,
         'Caution!'
       )
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._transactionsService
             .trashOrRestoreTransactions('3X', 'trash', payment.reportId, [trx])
@@ -515,14 +510,14 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
    */
   public trashAllSelected(): void {
     let trxIds = '';
-    let reportId = null;
+    let reportId: any = null;
     const selectedTransactions: Array<any> = [];
     for (const trx of this.debtModel) {
       if (trx.selected) {
         reportId = trx.reportId;
         selectedTransactions.push({
           transactionId: trx.transactionId,
-          reportId: trx.reportId
+          reportId: trx.reportId,
         });
         trxIds += trx.transactionId + ', ';
       }
@@ -533,7 +528,7 @@ export class DebtSummaryComponent implements OnInit, OnChanges {
 
     this._dialogService
       .confirm('You are about to delete these transactions.   ' + trxIds, ConfirmModalComponent, 'Caution!')
-      .then(res => {
+      .then((res: any) => {
         if (res === 'okay') {
           this._transactionsService
             .trashOrRestoreTransactions(this.formType, 'trash', reportId, selectedTransactions)

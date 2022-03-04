@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ToolsMergeNamesComponent } from './tools-merge-names.component';
 
-describe('ToolsMergeNamesComponent', () => {
+xdescribe('ToolsMergeNamesComponent', () => {
   let component: ToolsMergeNamesComponent;
   let fixture: ComponentFixture<ToolsMergeNamesComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ToolsMergeNamesComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ToolsMergeNamesComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ToolsMergeNamesComponent);
@@ -19,7 +20,7 @@ describe('ToolsMergeNamesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

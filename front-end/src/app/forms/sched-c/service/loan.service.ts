@@ -3,12 +3,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/of';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { FilterPipe } from 'src/app/shared/pipes/filter/filter.pipe';
-import { OrderByPipe } from 'src/app/shared/pipes/order-by/order-by.pipe';
-import { ZipCodePipe } from 'src/app/shared/pipes/zip-code/zip-code.pipe';
+import { FilterPipe } from '../../../shared/pipes/filter/filter.pipe';
+import { OrderByPipe } from '../../../shared/pipes/order-by/order-by.pipe';
+import { ZipCodePipe } from '../../../shared/pipes/zip-code/zip-code.pipe';
 import { environment } from '../../../../environments/environment';
 import { ReportTypeService } from '../../../forms/form-3x/report-type/report-type.service';
 import { ScheduleActions } from '../../form-3x/individual-receipt/schedule-actions.enum';
@@ -44,10 +43,10 @@ export class LoanService {
   // only for mock data - end
 
   // May only be needed for mocking server
-  private _orderByPipe: OrderByPipe;
-  private _filterPipe: FilterPipe;
-  private _zipCodePipe: ZipCodePipe;
-  private _datePipe: DatePipe;
+  private _orderByPipe!: OrderByPipe;
+  private _filterPipe!: FilterPipe;
+  private _zipCodePipe!: ZipCodePipe;
+  private _datePipe!: DatePipe;
   private _propertyNameConverterMap: Map<string, string> = new Map([
     ['zip', 'zip_code'],
   ]);
@@ -65,7 +64,7 @@ export class LoanService {
     for (let i = 0; i < 13; i++) {
       const t1: any = this.createMockTrx();
       t1.transaction_id = this.mockContactIdRecycle + i;
-      this.mockRestoreTrxArray.push(t1);
+      // this.mockRestoreTrxArray.push(t1);
     }
 
     this._orderByPipe = new OrderByPipe();
@@ -124,7 +123,7 @@ export class LoanService {
           params
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           // this.addUIFileds(res);
           // this.mockApplyFilters(res);
@@ -159,7 +158,7 @@ export class LoanService {
         headers: httpOptions
       }
     )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           //console.log('get_outstanding_loans API res: ', res);
 
@@ -187,7 +186,7 @@ export class LoanService {
         headers: httpOptions
       }
     )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           return res;
         }
@@ -227,7 +226,7 @@ export class LoanService {
           headers: httpOptions
         }
       )
-      .pipe(map(res => {
+      .pipe(map((res: any) => {
         if (res) {
           return res;
         }
@@ -507,7 +506,7 @@ export class LoanService {
   public mockApplyRestoredContact(response: any) {
     for (const cnt of this.mockRecycleBinArray) {
       response.contacts.push(cnt);
-      response.totalAmount += cnt.transaction_amount;
+      // response.totalAmount += cnt.transaction_amount;
       response.totalContactCount++;
     }
   }
@@ -688,7 +687,7 @@ export class LoanService {
          headers: httpOptions
        }
      )
-     .pipe(map(res => {
+     .pipe(map((res: any) => {
          if (res) {
            //console.log('Trash Restore response: ', res);
            return res;
@@ -752,13 +751,13 @@ export class LoanService {
   * @param      {string}           formType  The form type
   * @param      {ScheduleActions}  scheduleAction  The type of action to save (add, edit)
   */
-  public saveSched_C(scheduleAction: ScheduleActions, transactionTypeIdentifier: string, subType: string, reportId :string= null): Observable<any> {
+  public saveSched_C(scheduleAction: ScheduleActions, transactionTypeIdentifier: string, subType: string, reportId :string= ''): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url: string = '/sc/schedC';
     if(!reportId){
       reportId = this._reportTypeService.getReportIdFromStorage('3X').toString();
     }
-    const loan: any = JSON.parse(localStorage.getItem('LoanObj'));
+    const loan: any = JSON.parse(localStorage.getItem('LoanObj') ?? '');
     const loanByCommFromIndObj: any = {
       api_call: '/sc/schedC',
       line_number: 13,
@@ -789,14 +788,14 @@ export class LoanService {
       transaction_type_identifier: 'LOANS_OWED_TO_CMTE'
     };
 
-    /*const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
-    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+    /*const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
+    let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
 
     if (reportType === null || typeof reportType === 'undefined') {
-      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`));
+      reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');
     }*/
 
-    //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`));
+    //const transactionType: any = JSON.parse(localStorage.getItem(`form_${formType}_transaction_type`) ?? '');
     const formData: FormData = new FormData();
     let httpOptions = new HttpHeaders();
     let loanhiddenFields: any;
@@ -843,7 +842,7 @@ export class LoanService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               //console.log(" saveLoan called res...!", res);
               return res;
@@ -857,15 +856,15 @@ export class LoanService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               return res;
             }
             return false;
           })
         );
-    } else {
     }
+    return of(null);
   }
 
   public get_sched_c_loan_dynamic_forms_fields(): Observable<any> {
@@ -890,7 +889,7 @@ export class LoanService {
    * @param      {string}           formType  The form type
    * @param      {ScheduleActions}  scheduleAction  The type of action to save (add, edit)
    */
-  public saveSched_C2(scheduleAction: ScheduleActions, endorserForm: any, hiddenFields: any, reportId:string = null): Observable<any> {
+  public saveSched_C2(scheduleAction: ScheduleActions, endorserForm: any, hiddenFields: any, reportId:string = ''): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
     const url: string = '/sc/schedC2';
     if(!reportId){
@@ -947,7 +946,7 @@ export class LoanService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               //console.log(" saveLoan called res...!", res);
               return res;
@@ -961,20 +960,20 @@ export class LoanService {
           headers: httpOptions
         })
         .pipe(
-          map(res => {
+          map((res: any) => {
             if (res) {
               return res;
             }
             return false;
           })
         );
-    } else {
     }
+    return of(null);
   }
 
   c1Exists(currentLoanData: any): any {
     if (currentLoanData && currentLoanData.child && Array.isArray(currentLoanData.child)) {
-      let c1 = currentLoanData.child.filter(e => e.transaction_type_identifier === 'SC1');
+      let c1 = currentLoanData.child.filter((e: any) => e.transaction_type_identifier === 'SC1');
       if (c1.length > 0) {
         return true;
       }

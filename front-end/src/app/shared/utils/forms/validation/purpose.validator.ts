@@ -12,9 +12,9 @@ export function validatePurposeInKindRequired(fieldName: string, prefix: string)
     const purposeVal: string = control.value;
 
     if (!prefix) {
-      return null;
+      return {};
     }
-    const invalidObj = {};
+    const invalidObj: any = {};
     invalidObj[fieldName + 'Invalid'] = true;
 
     if (purposeVal) {
@@ -22,12 +22,13 @@ export function validatePurposeInKindRequired(fieldName: string, prefix: string)
       const prefixCompare = prefix.trim().toLowerCase();
       if (purposeValCompare === prefixCompare) {
         return invalidObj;
-      } if (!purposeValCompare.startsWith(prefixCompare)) {
+      }
+      if (!purposeValCompare.startsWith(prefixCompare)) {
         return invalidObj;
       }
     } else {
       return invalidObj;
     }
-    return null;
+    return {};
   };
 }

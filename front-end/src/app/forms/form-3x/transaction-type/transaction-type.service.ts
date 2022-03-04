@@ -7,11 +7,11 @@ import { environment } from '../../../../environments/environment';
 import {
   form3x_data,
   Icommittee_form3x_reporttype,
-  form3XReport
+  form3XReport,
 } from '../../../shared/interfaces/FormsService/FormsService';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TransactionTypeService {
   constructor(private _http: HttpClient, private _cookieService: CookieService) {}
@@ -31,13 +31,13 @@ export class TransactionTypeService {
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
-    if(!formType.endsWith('global')){
+    if (!formType.endsWith('global')) {
       params = params.append('form_type', formType);
     }
 
     let cmteTypeCategory = '';
     if (localStorage.getItem('committee_details') !== null) {
-      const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
+      const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
       if (committeeDetails.cmte_type_category !== null) {
         cmteTypeCategory = committeeDetails.cmte_type_category;
       }
@@ -46,13 +46,13 @@ export class TransactionTypeService {
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       params,
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
 
   /**
-   * Get all transaction types 
-   * @param formType 
+   * Get all transaction types
+   * @param formType
    */
   public getTransactionTypes(formType: string): Observable<any> {
     let token: string = JSON.parse(this._cookieService.get('user'));
@@ -65,16 +65,16 @@ export class TransactionTypeService {
     httpOptions = httpOptions.append('Content-Type', 'application/json');
     httpOptions = httpOptions.append('Authorization', 'JWT ' + token);
 
-/*     if(formType === 'global'){
+    /*     if(formType === 'global'){
       formType = '3X';
     } */
-    if(!formType.endsWith('global')){
+    if (!formType.endsWith('global')) {
       params = params.append('form_type', `F${formType}`);
     }
 
     return this._http.get(`${environment.apiUrl}${url}`, {
       params,
-      headers: httpOptions
+      headers: httpOptions,
     });
   }
 }

@@ -6,59 +6,57 @@
   min-height: 500px;
   position: relative;
   font-family: 'Roboto', 'sans-serif';
-    font-size: 1rem;
-    font-weight: 400;
-    color: #212121;
- 
- .search {
-  margin: auto;
-  width: 100%;
-  position: relative;
-  display: inline-block;
- }
- .search input {
-  @include make-text-input(175px, 1.5em, 1em, 1em);
-  margin: auto;
-  width: 90%;
-  height: 40px;
-  border: 1px solid #aaa;
-  border-radius: 5px;
-  box-shadow: 0 0 3px #ccc, 0 10px 15px #ebebeb inset;
- }
- .search input {
-   text-indent: 5px;
-   padding-right: 30px;
-   box-sizing: border-box;
- }
- .search .fa-search {
-   color: $shuttleGray;
-   position: absolute;
-   top: 12px;
-   right: 10%;
- }
- .btn-toolbar button{
-  margin: auto;
-  width: 44%;
-  position: relative;
-  display: inline-block;
-  
-}
-#scrollable-dropdown-menu ngb-typeahead-window {
-  max-height: 150px;
-  overflow-y: auto;
- }
- #sidebar_signBtn{
-  margin: auto;
-  width: 90%;
-  position: relative;
-  display: inline-block;
- }
+  font-size: 1rem;
+  font-weight: 400;
+  color: #212121;
 
+  .search {
+    margin: auto;
+    width: 100%;
+    position: relative;
+    display: inline-block;
+  }
+  .search input {
+    @include make-text-input(175px, 1.5em, 1em, 1em);
+    margin: auto;
+    width: 90%;
+    height: 40px;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    box-shadow: 0 0 3px #ccc, 0 10px 15px #ebebeb inset;
+  }
+  .search input {
+    text-indent: 5px;
+    padding-right: 30px;
+    box-sizing: border-box;
+  }
+  .search .fa-search {
+    color: $shuttleGray;
+    position: absolute;
+    top: 12px;
+    right: 10%;
+  }
+  .btn-toolbar button {
+    margin: auto;
+    width: 44%;
+    position: relative;
+    display: inline-block;
+  }
+  #scrollable-dropdown-menu ngb-typeahead-window {
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  #sidebar_signBtn {
+    margin: auto;
+    width: 90%;
+    position: relative;
+    display: inline-block;
+  }
 
   // }
-  
+
   section {
-    .form-sidebar-item:hover{
+    .form-sidebar-item:hover {
       cursor: pointer !important;
     }
     .form-sidebar__links {
@@ -73,7 +71,6 @@
         display: block;
         padding-bottom: 15px;
         padding-top: 15px;
-        vertical-align: middle;
         .amount {
           padding: 0.75em;
         }
@@ -105,7 +102,7 @@
   }
   footer {
     background-color: $mineShaft;
-    //bottom: 0; 
+    //bottom: 0;
     position: absolute;
     width: 100%;
     .form-sidebar__item {

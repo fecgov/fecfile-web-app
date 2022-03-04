@@ -28,12 +28,12 @@ export function validateAggregate(aggregate: any, required: boolean, fieldName: 
 
       if (!requireFieldVal) {
         if (aggregateNum > 200) {
-          const invalidObj = {};
+          const invalidObj: any = {};
           invalidObj[fieldName + 'Invalid'] = true;
           return invalidObj;
         }
       }
     }
-    return null;
+    return {};
   };
 }

@@ -1,9 +1,9 @@
 @import '../../scss/global';
 
 .session-timed-out.modal-backdrop {
-  background-color: #5B616B;
-  opacity: 1.0 !important;
-  background-image:url("../../../../assets/img/fec-logo-5opac.png");
+  background-color: #5b616b;
+  opacity: 1 !important;
+  background-image: url('../../../../assets/img/fec-logo-5opac.png');
   background-repeat: no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -23,12 +23,12 @@
       }
       @include media(mediumDesktop) {
         width: 100%;
-      }         
+      }
       @include media(largeDesktop) {
         width: 100%;
-      }       
+      }
       .modal-header {
-        // background-color: $crusta; 
+        // background-color: $crusta;
         color: $white;
         .btn-link {
           color: $white;
@@ -41,11 +41,11 @@
         }
       }
       .modal-title {
-        margin: 0!important;
+        margin: 0 !important;
       }
       .warning-header {
         background-color: $crusta;
-      }      
+      }
       .success-header {
         background-color: #99cc63;
       }
@@ -57,7 +57,7 @@
       }
       .info-header-dark {
         background-color: #112e51;
-      }            
+      }
       .modal-body {
         color: $black;
         white-space: pre-wrap;

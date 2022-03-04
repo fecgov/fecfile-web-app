@@ -1,4 +1,14 @@
-import { Component, EventEmitter, OnInit, Output, Input, ViewEncapsulation, SimpleChanges, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  Input,
+  ViewEncapsulation,
+  SimpleChanges,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -15,26 +25,25 @@ import { ReportTypeService } from '../../../forms/form-3x/report-type/report-typ
   selector: 'app-sign',
   templateUrl: './sign.component.html',
   styleUrls: ['./sign.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class SignComponent implements OnInit, OnDestroy {
-  
-  @Input() comittee_details;
+  @Input() comittee_details: any;
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
 
   public committee_details: any = {};
-  public editMode: boolean;
+  public editMode!: boolean;
   public formType: string = '';
   public typeSelected: string = '';
   public signFailed: boolean = false;
   public frmSaved: boolean = false;
-  public frmSignee: FormGroup;
+  public frmSignee!: FormGroup;
   public date_stamp: Date = new Date();
   public hideText: boolean = false;
   public showValidateBar: boolean = false;
   private _printPriviewPdfFileLink: string = '';
 
-  private _subscription: Subscription;
+  private _subscription!: Subscription;
   private _additional_email_1: string = '';
   private _additional_email_2: string = '';
   private _confirm_email_1: string = '';
@@ -55,8 +64,8 @@ export class SignComponent implements OnInit, OnDestroy {
   public confirm_email_1: string = '';
   public confirm_email_2: string = '';
   public fec_id = '';
-  queryParamsSubscription: Subscription;
-  messageSubscription: Subscription;
+  queryParamsSubscription!: Subscription;
+  messageSubscription!: Subscription;
 
   constructor(
     private _activatedRoute: ActivatedRoute,
@@ -67,8 +76,8 @@ export class SignComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _reportTypeService: ReportTypeService
   ) {
-    this.queryParamsSubscription  = _activatedRoute.queryParams.subscribe(p => {
-      if (p.refresh) {
+    this.queryParamsSubscription = _activatedRoute.queryParams['subscribe']((p) => {
+      if (p['refresh']) {
         this._setRefresh = true;
         this.ngOnInit();
       }
@@ -76,25 +85,25 @@ export class SignComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
-    this.committee_details = JSON.parse(localStorage.getItem('committee_details'));
-    //this.fec_id = this._activatedRoute.snapshot.queryParams.fec_id;
+    this.formType = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
+    this.committee_details = JSON.parse(localStorage.getItem('committee_details') ?? '');
+    //this.fec_id = this._activatedRoute.snapshot.queryParams['fec_id'];
 
     if (this.formType === '3X') {
-      this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+      this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
       if (this._form_details === null || typeof this._form_details === 'undefined') {
-        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
       }
     } else if (this.formType === '99') {
-      this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
+      this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`) ?? '');
     }
 
     //console.log('this._form_details = ', this._form_details);
 
     this._setForm();
 
-    this.messageSubscription = this._messageService.getMessage().subscribe(res => {
+    this.messageSubscription = this._messageService.getMessage().subscribe((res: any) => {
       if (res.message) {
         //console.log('res.message', res.message);
         if (res.message === 'New form99') {
@@ -108,23 +117,21 @@ export class SignComponent implements OnInit, OnDestroy {
     //console.log(changes);
   }
 
-
   ngOnDestroy(): void {
     this.queryParamsSubscription.unsubscribe();
     this.messageSubscription.unsubscribe();
   }
 
-
   ngDoCheck(): void {
     if (this.formType === '99') {
-      const form_99_details: any = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
+      const form_99_details: any = JSON.parse(localStorage.getItem(`form_${this.formType}_details`) ?? '');
       if (form_99_details) {
         this.typeSelected = form_99_details.reason;
       }
     } else if (this.formType === '3X') {
-      let form_3X_report_type: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+      let form_3X_report_type: any = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
       if (form_3X_report_type === null || typeof form_3X_report_type === 'undefined') {
-        form_3X_report_type = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+        form_3X_report_type = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
       }
 
       if (form_3X_report_type) {
@@ -144,10 +151,10 @@ export class SignComponent implements OnInit, OnDestroy {
    */
   public async canDeactivate(): Promise<boolean> {
     if (this.hasUnsavedData()) {
-      let result: boolean = null;
+      let result: boolean = false;
       //console.log('true');
-      result = await this._dialogService.confirm('', ConfirmModalComponent).then(res => {
-        let val: boolean = null;
+      result = await this._dialogService.confirm('', ConfirmModalComponent).then((res: any) => {
+        let val: boolean = false;
 
         if (res === 'okay') {
           val = true;
@@ -173,7 +180,7 @@ export class SignComponent implements OnInit, OnDestroy {
    */
   public hasUnsavedData(): boolean {
     if (this.formType === '99') {
-      let formSaved: any = JSON.parse(localStorage.getItem(`form_${this.formType}_saved`));
+      let formSaved: any = JSON.parse(localStorage.getItem(`form_${this.formType}_saved`) ?? '');
 
       if (formSaved !== null) {
         let formStatus: boolean = formSaved.saved;
@@ -185,7 +192,7 @@ export class SignComponent implements OnInit, OnDestroy {
 
       return false;
     } else if (this.formType === '3X') {
-      let formSaved: any = JSON.parse(localStorage.getItem(`form_${this.formType}_saved_backup`));
+      let formSaved: any = JSON.parse(localStorage.getItem(`form_${this.formType}_saved_backup`) ?? '');
 
       if (formSaved !== null) {
         let formStatus: boolean = formSaved.saved;
@@ -197,6 +204,7 @@ export class SignComponent implements OnInit, OnDestroy {
 
       return false;
     }
+    return false;
   }
 
   private _setForm(): void {
@@ -263,38 +271,38 @@ export class SignComponent implements OnInit, OnDestroy {
         this.frmSignee = this._fb.group({
           signee: [
             `${this.committee_details.treasurerfirstname} ${this.committee_details.treasurerlastname}`,
-            Validators.required
+            Validators.required,
           ],
           additional_email_1: [this._form_details.additional_email_1, Validators.email],
           additional_email_2: [this._form_details.additional_email_2, Validators.email],
           confirm_email_1: [this._form_details.confirm_email_1, Validators.email],
           confirm_email_2: [this._form_details.confirm_email_2, Validators.email],
-          agreement: [false, Validators.requiredTrue]
+          agreement: [false, Validators.requiredTrue],
         });
       } else if (this.formType === '3X') {
         if (this._form_details.hasOwnProperty('additionalEmail1')) {
           this.frmSignee = this._fb.group({
             signee: [
               `${this.committee_details.treasurerfirstname} ${this.committee_details.treasurerlastname}`,
-              Validators.required
+              Validators.required,
             ],
             additional_email_1: [this._form_details.additionalEmail1, Validators.email],
             additional_email_2: [this._form_details.additionalEmail2, Validators.email],
             confirm_email_1: [this._form_details.additionalEmail1, Validators.email],
             confirm_email_2: [this._form_details.additionalEmail2, Validators.email],
-            agreement: [false, Validators.requiredTrue]
+            agreement: [false, Validators.requiredTrue],
           });
         } else if (this._form_details.hasOwnProperty('additionalemail1')) {
           this.frmSignee = this._fb.group({
             signee: [
               `${this.committee_details.treasurerfirstname} ${this.committee_details.treasurerlastname}`,
-              Validators.required
+              Validators.required,
             ],
             additional_email_1: [this._form_details.additionalemail1, Validators.email],
             additional_email_2: [this._form_details.additionalemail2, Validators.email],
             confirm_email_1: [this._form_details.additionalemail1, Validators.email],
             confirm_email_2: [this._form_details.additionalemail2, Validators.email],
-            agreement: [false, Validators.requiredTrue]
+            agreement: [false, Validators.requiredTrue],
           });
         }
       }
@@ -302,13 +310,13 @@ export class SignComponent implements OnInit, OnDestroy {
       this.frmSignee = this._fb.group({
         signee: [
           `${this.committee_details.treasurerfirstname} ${this.committee_details.treasurerlastname}`,
-          Validators.required
+          Validators.required,
         ],
         additional_email_1: ['', Validators.email],
         additional_email_2: ['', Validators.email],
         confirm_email_1: ['', Validators.email],
         confirm_email_2: ['', Validators.email],
-        agreement: [false, Validators.requiredTrue]
+        agreement: [false, Validators.requiredTrue],
       });
     }
 
@@ -330,7 +338,7 @@ export class SignComponent implements OnInit, OnDestroy {
         this._form99Details.id = '';
 
         let formSavedObj: any = {
-          saved: false
+          saved: false,
         };
         localStorage.setItem(`form_99_details`, JSON.stringify(this._form99Details));
         localStorage.setItem(`form_99_saved`, JSON.stringify(formSavedObj));
@@ -345,22 +353,22 @@ export class SignComponent implements OnInit, OnDestroy {
   public validateForm(): void {
     this.showValidateBar = true;
     this._formsService.validateForm({}, this.formType).subscribe(
-      res => {
+      (res) => {
         if (res) {
           this._messageService.sendMessage({
             validateMessage: {
               validate: environment.validateSuccess,
-              showValidateBar: true
-            }
+              showValidateBar: true,
+            },
           });
         }
       },
-      error => {
+      (error) => {
         this._messageService.sendMessage({
           validateMessage: {
             validate: error.error,
-            showValidateBar: true
-          }
+            showValidateBar: true,
+          },
         });
       }
     );
@@ -375,46 +383,46 @@ export class SignComponent implements OnInit, OnDestroy {
       let formStatus: boolean = true;
 
       if (this.formType === '3X') {
-        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
 
         if (this._form_details === null || typeof this._form_details === 'undefined') {
-          this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+          this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
         }
 
-        const formSaved: boolean = JSON.parse(localStorage.getItem(`form_${this.formType}_saved_backup`));
+        const formSaved: boolean = JSON.parse(localStorage.getItem(`form_${this.formType}_saved_backup`) ?? '');
       }
       if (this.formType === '99') {
-        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
-        const formSaved: boolean = JSON.parse(localStorage.getItem(`form_${this.formType}_saved`));
+        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`) ?? '');
+        const formSaved: boolean = JSON.parse(localStorage.getItem(`form_${this.formType}_saved`) ?? '');
       }
 
       this.additionalEmail1Invalid = false;
       this.additionalEmail2Invalid = false;
 
       if (
-        this.frmSignee.controls.signee.valid &&
-        this.frmSignee.controls.additional_email_1.valid &&
-        this.frmSignee.controls.additional_email_2.valid
+        this.frmSignee.controls['signee'].valid &&
+        this.frmSignee.controls['additional_email_1'].valid &&
+        this.frmSignee.controls['additional_email_2'].valid
       ) {
         this.validateAdditionalEmails();
 
         if (!this.additionalEmail1Invalid && !this.additionalEmail2Invalid) {
           this.frmSaved = true;
           if (this.formType === '99') {
-            this._form_details.additional_email_1 = this.frmSignee.get('additional_email_1').value;
-            this._form_details.additional_email_2 = this.frmSignee.get('additional_email_2').value;
-            this._form_details.confirm_email_1 = this.frmSignee.get('confirm_email_1').value;
-            this._form_details.confirm_email_2 = this.frmSignee.get('confirm_email_2').value;
+            this._form_details.additional_email_1 = this.frmSignee.get('additional_email_1')?.value;
+            this._form_details.additional_email_2 = this.frmSignee.get('additional_email_2')?.value;
+            this._form_details.confirm_email_1 = this.frmSignee.get('confirm_email_1')?.value;
+            this._form_details.confirm_email_2 = this.frmSignee.get('confirm_email_2')?.value;
           } else if (this.formType === '3X') {
             if (this._form_details.hasOwnProperty('additionalEmail1')) {
-              this._form_details.additionalEmail1 = this.frmSignee.get('additional_email_1').value;
+              this._form_details.additionalEmail1 = this.frmSignee.get('additional_email_1')?.value;
             } else if (this._form_details.hasOwnProperty('additionalemail1')) {
-              this._form_details.additionalemail1 = this.frmSignee.get('additional_email_1').value;
+              this._form_details.additionalemail1 = this.frmSignee.get('additional_email_1')?.value;
             }
             if (this._form_details.hasOwnProperty('additionalEmail2')) {
-              this._form_details.additionalEmail2 = this.frmSignee.get('additional_email_2').value;
+              this._form_details.additionalEmail2 = this.frmSignee.get('additional_email_2')?.value;
             } else if (this._form_details.hasOwnProperty('additionalemail2')) {
-              this._form_details.additionalemail2 = this.frmSignee.get('additional_email_2').value;
+              this._form_details.additionalemail2 = this.frmSignee.get('additional_email_2')?.value;
             }
           }
 
@@ -426,36 +434,36 @@ export class SignComponent implements OnInit, OnDestroy {
 
           if (this.formType === '3X') {
             this._reportTypeService.signandSaveSubmitReport(this.formType, 'Saved').subscribe(
-              res => {
+              (res) => {
                 if (res) {
                   this.frmSaved = true;
 
                   let formSavedObj: any = {
-                    saved: this.frmSaved
+                    saved: this.frmSaved,
                   };
 
                   localStorage.setItem(`form_${this.formType}_saved_backup`, JSON.stringify(formSavedObj));
                 }
               },
-              error => {
+              (error) => {
                 //console.log('error: ', error);
               }
             );
           }
           if (this.formType === '99') {
             this._formsService.Signee_SaveForm({}, this.formType).subscribe(
-              res => {
+              (res) => {
                 if (res) {
                   this.frmSaved = true;
 
                   let formSavedObj: any = {
-                    saved: this.frmSaved
+                    saved: this.frmSaved,
                   };
 
                   localStorage.setItem(`form_${this.formType}_saved`, JSON.stringify(formSavedObj));
                 }
               },
-              error => {
+              (error) => {
                 //console.log('error: ', error);
               }
             );
@@ -474,7 +482,7 @@ export class SignComponent implements OnInit, OnDestroy {
             false,
             true
           )
-          .then(res => {
+          .then((res: any) => {
             if (res === 'okay') {
               this.ngOnInit();
             } else if (res === 'NewReport') {
@@ -492,10 +500,10 @@ export class SignComponent implements OnInit, OnDestroy {
             'Warning',
             true,
             ModalHeaderClassEnum.warningHeader,
-            null,
+            new Map(),
             'Return to Reports'
           )
-          .then(res => {
+          .then((res: any) => {
             if (res === 'okay') {
               this.ngOnInit();
             } else if (res === 'cancel') {
@@ -514,17 +522,17 @@ export class SignComponent implements OnInit, OnDestroy {
     if (this.editMode) {
       let doSubmitFormSaved: boolean = false;
       if (this.formType === '3X') {
-        let formSaved: any = JSON.parse(localStorage.getItem(`form_${this.formType}_saved_backup`));
-        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+        let formSaved: any = JSON.parse(localStorage.getItem(`form_${this.formType}_saved_backup`) ?? '');
+        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
 
         if (this._form_details === null || typeof this._form_details === 'undefined') {
-          this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+          this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
         }
 
         doSubmitFormSaved = formSaved;
       } else if (this.formType === '99') {
-        let formSaved: any = JSON.parse(localStorage.getItem(`form_${this.formType}_saved`));
-        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
+        let formSaved: any = JSON.parse(localStorage.getItem(`form_${this.formType}_saved`) ?? '');
+        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`) ?? '');
         doSubmitFormSaved = formSaved.form_saved;
       }
 
@@ -550,7 +558,7 @@ export class SignComponent implements OnInit, OnDestroy {
         }
 
         if (this.frmSignee.invalid) {
-          if (this.frmSignee.get('agreement').value) {
+          if (this.frmSignee.get('agreement')?.value) {
             this.signFailed = false;
           } else {
             this.signFailed = true;
@@ -561,9 +569,9 @@ export class SignComponent implements OnInit, OnDestroy {
           if (!doSubmitFormSaved) {
             if (this.formType === '99') {
               this._formsService.Signee_SaveForm({}, this.formType).subscribe(
-                saveResponse => {
+                (saveResponse) => {
                   if (saveResponse) {
-                    this._formsService.submitForm({}, this.formType).subscribe(res => {
+                    this._formsService.submitForm({}, this.formType).subscribe((res: any) => {
                       if (res) {
                         //console.log(' response = ', res);
                         this.status.emit({
@@ -571,46 +579,47 @@ export class SignComponent implements OnInit, OnDestroy {
                           direction: 'next',
                           step: 'step_5',
                           fec_id: res.fec_id,
-                          previousStep: this._step
+                          previousStep: this._step,
                         });
 
                         this._messageService.sendMessage({
-                          form_submitted: true
+                          form_submitted: true,
                         });
 
                         this._messageService.sendMessage({
                           validateMessage: {
                             validate: 'All required fields have passed validation.',
-                            showValidateBar: true
-                          }
+                            showValidateBar: true,
+                          },
                         });
                       }
                     });
                   }
                 },
-                error => {
+                (error) => {
                   //console.log('error: ', error);
                 }
               );
             } else if (this.formType === '3X') {
-              this._reportTypeService.signandSaveSubmitReport(this.formType, 'Submitted').subscribe(res => {
+              this._reportTypeService.signandSaveSubmitReport(this.formType, 'Submitted').subscribe((res: any) => {
                 if (res) {
                   const frmSaved: any = {
-                    saved: true
+                    saved: true,
                   };
 
                   localStorage.setItem('form_3X_saved', JSON.stringify(frmSaved));
 
-                  this._router.navigate(['/forms/form/3X'], { queryParams: { step: 'step_6', edit: this.editMode, 
-                                        fec_id: res.fec_id } });
+                  this._router.navigate(['/forms/form/3X'], {
+                    queryParams: { step: 'step_6', edit: this.editMode, fec_id: res.fec_id },
+                  });
 
                   this._messageService.sendMessage({
-                    form_submitted: true
+                    form_submitted: true,
                   });
                 } else {
                   this._router.navigate(['/forms/form/3X'], { queryParams: { step: 'step_6', edit: this.editMode } });
                   this._messageService.sendMessage({
-                    form_submitted: false
+                    form_submitted: false,
                   });
                 }
               });
@@ -620,11 +629,11 @@ export class SignComponent implements OnInit, OnDestroy {
             this._messageService.sendMessage({
               validateMessage: {
                 validate: '',
-                showValidateBar: false
-              }
+                showValidateBar: false,
+              },
             });
             if (this.formType === '99') {
-              this._formsService.submitForm({}, this.formType).subscribe(res => {
+              this._formsService.submitForm({}, this.formType).subscribe((res: any) => {
                 if (res) {
                   //console.log(' response = ', res);
                   this.status.emit({
@@ -632,17 +641,16 @@ export class SignComponent implements OnInit, OnDestroy {
                     direction: 'next',
                     step: 'step_5',
                     fec_id: res.fec_id,
-                    previousStep: this._step
+                    previousStep: this._step,
                   });
 
-
                   this._messageService.sendMessage({
-                    form_submitted: true
+                    form_submitted: true,
                   });
                 }
               });
             } else if (this.formType === '3X') {
-              this._reportTypeService.signandSaveSubmitReport(this.formType, 'Submitted').subscribe(res => {
+              this._reportTypeService.signandSaveSubmitReport(this.formType, 'Submitted').subscribe((res: any) => {
                 if (res) {
                   //console.log(' response = ', res);
                   this.fec_id = res.fec_id;
@@ -658,12 +666,13 @@ export class SignComponent implements OnInit, OnDestroy {
                           step: 'step_5',
                           previousStep: this._step
                         });*/
-                  this._router.navigate(['/forms/form/3X'], { queryParams: { step: 'step_6', edit: this.editMode,
-                  fec_id: res.fec_id } });
+                  this._router.navigate(['/forms/form/3X'], {
+                    queryParams: { step: 'step_6', edit: this.editMode, fec_id: res.fec_id },
+                  });
                   //this._router.navigate(['/submitform/3X']);
 
                   this._messageService.sendMessage({
-                    form_submitted: true
+                    form_submitted: true,
                   });
                 }
               });
@@ -680,10 +689,10 @@ export class SignComponent implements OnInit, OnDestroy {
             'Warning',
             true,
             ModalHeaderClassEnum.warningHeader,
-            null,
+            new Map(),
             'Return to Reports'
           )
-          .then(res => {
+          .then((res: any) => {
             if (res === 'okay') {
               this.ngOnInit();
             } else if (res === 'cancel') {
@@ -700,7 +709,7 @@ export class SignComponent implements OnInit, OnDestroy {
             false,
             true
           )
-          .then(res => {
+          .then((res: any) => {
             if (res === 'okay') {
               this.ngOnInit();
             } else if (res === 'NewReport') {
@@ -714,25 +723,25 @@ export class SignComponent implements OnInit, OnDestroy {
     }
   }
 
-  public changeAdditionalEmail(e): void {
+  public changeAdditionalEmail(e: any): void {
     this.frmSaved = false;
     this.clearWarnMsg();
   }
 
-  public updateAdditionalEmail(e): void {
+  public updateAdditionalEmail(e: any): void {
     this.frmSaved = false;
     this.clearWarnMsg();
     if (this.editMode) {
       if (e.target.value.length) {
         if (e.target.name === 'additional_email_1') {
           if (this.formType === '99') {
-            this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
+            this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`) ?? '');
             this._form_details.additional_email_1 = e.target.value;
           } else if (this.formType === '3X') {
-            this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+            this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
 
             if (this._form_details === null || typeof this._form_details === 'undefined') {
-              this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+              this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
             }
 
             if (this._form_details.hasOwnProperty('additionalEmail1')) {
@@ -752,25 +761,25 @@ export class SignComponent implements OnInit, OnDestroy {
             localStorage.setItem(
               `form_${this.formType}_saved`,
               JSON.stringify({
-                saved: false
+                saved: false,
               })
             );
           } else if (this.formType === '3X') {
             localStorage.setItem(
               `form_${this.formType}_saved_backup`,
               JSON.stringify({
-                saved: false
+                saved: false,
               })
             );
           }
         } else if (e.target.name === 'additional_email_2') {
           if (this.formType === '99') {
-            this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
+            this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`) ?? '');
             this._form_details.additional_email_2 = e.target.value;
           } else if (this.formType === '3X') {
-            this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+            this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
             if (this._form_details === null || typeof this._form_details === 'undefined') {
-              this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+              this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
             }
 
             if (this._form_details.hasOwnProperty('additionalEmail2')) {
@@ -790,14 +799,14 @@ export class SignComponent implements OnInit, OnDestroy {
             localStorage.setItem(
               `form_${this.formType}_saved`,
               JSON.stringify({
-                saved: false
+                saved: false,
               })
             );
           } else if (this.formType === '3X') {
             localStorage.setItem(
               `form_${this.formType}_saved_backup`,
               JSON.stringify({
-                saved: false
+                saved: false,
               })
             );
           }
@@ -807,14 +816,14 @@ export class SignComponent implements OnInit, OnDestroy {
           localStorage.setItem(
             `form_${this.formType}_saved`,
             JSON.stringify({
-              saved: true
+              saved: true,
             })
           );
         } else if (this.formType === '3X') {
           localStorage.setItem(
             `form_${this.formType}_saved_backup`,
             JSON.stringify({
-              saved: true
+              saved: true,
             })
           );
         }
@@ -827,10 +836,10 @@ export class SignComponent implements OnInit, OnDestroy {
           'Warning',
           true,
           ModalHeaderClassEnum.warningHeader,
-          null,
+          new Map(),
           'Return to Reports'
         )
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             this.ngOnInit();
           } else if (res === 'cancel') {
@@ -840,7 +849,7 @@ export class SignComponent implements OnInit, OnDestroy {
     }
   }
 
-  public updateValidation(e): void {
+  public updateValidation(e: any): void {
     if (this.editMode) {
       this.frmSaved = false;
       this.clearWarnMsg();
@@ -861,7 +870,7 @@ export class SignComponent implements OnInit, OnDestroy {
             false,
             true
           )
-          .then(res => {
+          .then((res: any) => {
             if (res === 'okay') {
               this.ngOnInit();
             } else if (res === 'NewReport') {
@@ -879,10 +888,10 @@ export class SignComponent implements OnInit, OnDestroy {
             'Warning',
             true,
             ModalHeaderClassEnum.warningHeader,
-            null,
+            new Map(),
             'Return to Reports'
           )
-          .then(res => {
+          .then((res: any) => {
             if (res === 'okay') {
               this.ngOnInit();
             } else if (res === 'cancel') {
@@ -894,7 +903,7 @@ export class SignComponent implements OnInit, OnDestroy {
     //console.log('this.signFailed: ', this.signFailed);
   }
 
-  public toggleToolTip(tooltip): void {
+  public toggleToolTip(tooltip: any): void {
     if (tooltip.isOpen()) {
       tooltip.close();
     } else {
@@ -909,7 +918,7 @@ export class SignComponent implements OnInit, OnDestroy {
   public goToPreviousStep(): void {
     if (this.formType === '99') {
       //console.log('im in previous');
-      this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
+      this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`) ?? '');
       this._form_details['additional_email_1'] = '';
       this._form_details['additional_email_2'] = '';
       localStorage.setItem(`form_99_details`, JSON.stringify(this._form_details));
@@ -920,30 +929,26 @@ export class SignComponent implements OnInit, OnDestroy {
         direction: 'previous',
         step: 'step_3',
         previousStep: this._step,
-        edit: this.editMode
+        edit: this.editMode,
       });
 
       this._messageService.sendMessage({
         validateMessage: {
           validate: '',
-          showValidateBar: false
-        }
+          showValidateBar: false,
+        },
       });
     } else if (this.formType === '3X') {
       this._router.navigate([`/forms/form/${this.formType}`], { queryParams: { step: 'step_2', edit: this.editMode } });
     }
   }
   public cancelStepWithWarning(): void {
-    this._dialogService.confirm(
-        '', ConfirmModalComponent, '', true)
-        .then(res => {
-          if (res === 'okay' ? true : false ) {
-            //console.log('im here value of res:' + res);
-            this.goToPreviousStep();
-          }
-        });
-
-
+    this._dialogService.confirm('', ConfirmModalComponent, '', true).then((res: any) => {
+      if (res === 'okay' ? true : false) {
+        //console.log('im here value of res:' + res);
+        this.goToPreviousStep();
+      }
+    });
   }
   public getDirtyEmail(): boolean {
     if (this._form_details) {
@@ -953,16 +958,15 @@ export class SignComponent implements OnInit, OnDestroy {
           return false;
         }
         //console.log(this._form_details.additional_email_1.length);
-        return  true;
+        return true;
       }
-
     }
     return false;
   }
   public printPreview(): void {
     if (this.formType === '99') {
-      this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`));
-      const fileFromLocalStorage = localStorage.getItem('form_99_details.org_fileurl');
+      this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_details`) ?? '');
+      const fileFromLocalStorage = localStorage.getItem('form_99_details.org_fileurl') ?? '';
       if (
         this._form_details &&
         ((this._form_details.file && Object.entries(this._form_details.file).length === 0) || !this._form_details.file)
@@ -970,46 +974,46 @@ export class SignComponent implements OnInit, OnDestroy {
         this._form_details.file = fileFromLocalStorage;
       }
     } else if (this.formType === '3X') {
-      this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`));
+      this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type_backup`) ?? '');
       if (this._form_details === null || typeof this._form_details === 'undefined') {
-        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`));
+        this._form_details = JSON.parse(localStorage.getItem(`form_${this.formType}_report_type`) ?? '');
       }
     }
 
     if (
-      this.frmSignee.controls.signee.valid &&
-      this.frmSignee.controls.additional_email_1.valid &&
-      this.frmSignee.controls.additional_email_2.valid
+      this.frmSignee.controls['signee'].valid &&
+      this.frmSignee.controls['additional_email_1'].valid &&
+      this.frmSignee.controls['additional_email_2'].valid
     ) {
       this.validateAdditionalEmails();
 
       if (!this.additionalEmail1Invalid && !this.additionalEmail2Invalid) {
         if (this.formType === '99') {
-          this._form_details.additional_email_1 = this.frmSignee.get('additional_email_1').value;
-          this._form_details.additional_email_2 = this.frmSignee.get('additional_email_2').value;
+          this._form_details.additional_email_1 = this.frmSignee.get('additional_email_1')?.value;
+          this._form_details.additional_email_2 = this.frmSignee.get('additional_email_2')?.value;
         } else if (this.formType === '3X') {
           if (this._form_details.hasOwnProperty('additionalEmail1')) {
-            this._form_details.additionalEmail1 = this.frmSignee.get('additional_email_1').value;
+            this._form_details.additionalEmail1 = this.frmSignee.get('additional_email_1')?.value;
           } else if (this._form_details.hasOwnProperty('additionalemail1')) {
-            this._form_details.additionalemail1 = this.frmSignee.get('additional_email_1').value;
+            this._form_details.additionalemail1 = this.frmSignee.get('additional_email_1')?.value;
           }
 
           if (this._form_details.hasOwnProperty('additionalEmail2')) {
-            this._form_details.additionalEmail2 = this.frmSignee.get('additional_email_2').value;
+            this._form_details.additionalEmail2 = this.frmSignee.get('additional_email_2')?.value;
           } else if (this._form_details.hasOwnProperty('additionalemail2')) {
-            this._form_details.additionalemail2 = this.frmSignee.get('additional_email_2').value;
+            this._form_details.additionalemail2 = this.frmSignee.get('additional_email_2')?.value;
           }
         }
 
         localStorage.setItem(`form_${this.formType}_details`, JSON.stringify(this._form_details));
         if (this.formType === '99') {
           this._formsService.PreviewForm_Preview_sign_Screen({}, this.formType).subscribe(
-            res => {
+            (res) => {
               if (res) {
-                window.open(localStorage.getItem('form_99_details.printpriview_fileurl'), '_blank');
+                window.open(localStorage.getItem('form_99_details.printpriview_fileurl') ?? '', '_blank');
               }
             },
-            error => {
+            (error) => {
               //console.log('error: ', error);
             }
           );
@@ -1020,12 +1024,12 @@ export class SignComponent implements OnInit, OnDestroy {
     } else {
       if (this.formType === '99') {
         this._formsService.PreviewForm_Preview_sign_Screen({}, this.formType).subscribe(
-          res => {
+          (res) => {
             if (res) {
-              window.open(localStorage.getItem('form_99_details.printpriview_fileurl'), '_blank');
+              window.open(localStorage.getItem('form_99_details.printpriview_fileurl') ?? '', '_blank');
             }
           },
-          error => {
+          (error) => {
             //console.log('error: ', error);
           }
         );
@@ -1046,32 +1050,32 @@ export class SignComponent implements OnInit, OnDestroy {
   public validateAdditionalEmails(): void {
     this.clearWarnMsg();
 
-    if (this.frmSignee.get('additional_email_1').value !== '') {
-      if (this.frmSignee.get('confirm_email_1').value === '') {
+    if (this.frmSignee.get('additional_email_1')?.value !== '') {
+      if (this.frmSignee.get('confirm_email_1')?.value === '') {
         this.additionalEmail1Invalid = true;
         this.showAdditionalEmail1Warn = true;
       } else {
-        if (this.frmSignee.get('additional_email_1').value !== this.frmSignee.get('confirm_email_1').value) {
+        if (this.frmSignee.get('additional_email_1')?.value !== this.frmSignee.get('confirm_email_1')?.value) {
           this.additionalEmail1Invalid = true;
           this.showAdditionalEmail1Warn = true;
         } else {
-          this.confirm_email_1 = this.frmSignee.get('confirm_email_1').value;
+          this.confirm_email_1 = this.frmSignee.get('confirm_email_1')?.value;
           this.additionalEmail1Invalid = false;
           this.showAdditionalEmail1Warn = true;
         }
       }
     }
 
-    if (this.frmSignee.get('additional_email_2').value !== '') {
-      if (this.frmSignee.get('confirm_email_2').value === '') {
+    if (this.frmSignee.get('additional_email_2')?.value !== '') {
+      if (this.frmSignee.get('confirm_email_2')?.value === '') {
         this.additionalEmail2Invalid = true;
         this.showAdditionalEmail2Warn = true;
       } else {
-        if (this.frmSignee.get('additional_email_2').value !== this.frmSignee.get('confirm_email_2').value) {
+        if (this.frmSignee.get('additional_email_2')?.value !== this.frmSignee.get('confirm_email_2')?.value) {
           this.additionalEmail2Invalid = true;
           this.showAdditionalEmail2Warn = true;
         } else {
-          this.confirm_email_2 = this.frmSignee.get('confirm_email_2').value;
+          this.confirm_email_2 = this.frmSignee.get('confirm_email_2')?.value;
           this.additionalEmail2Invalid = false;
           this.showAdditionalEmail2Warn = true;
         }

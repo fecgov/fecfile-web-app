@@ -6,7 +6,7 @@ export enum ModalHeaderClassEnum {
   infoHeaderDark = 'info-header-dark',
   warningHeader = 'warning-header',
   successHeader = 'success-header',
-  errorHeader = 'error-header'
+  errorHeader = 'error-header',
 }
 
 /**
@@ -18,46 +18,42 @@ export enum ModalHeaderClassEnum {
   selector: 'ngbd-modal-content',
   templateUrl: './confirm-modal.component.html',
   styleUrls: ['./confirm-modal.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class ConfirmModalComponent implements OnInit {
+  @Input()
+  public modalTitle!: string;
 
   @Input()
-  public modalTitle: string;
-
-  @Input()
-  public message: string;
+  public message!: string;
 
   @Input()
   public isShowCancel = true;
 
   @Input()
   public isShowOK = true;
-  
-  @Input()
-  public headerClass: string;
 
   @Input()
-  public cancelTitle: string;
+  public headerClass!: string;
 
-  public isShownewReport;
-  public isShowReportExist;
+  @Input()
+  public cancelTitle!: string;
+
+  public isShownewReport: any;
+  public isShowReportExist: any;
 
   private defaultTitle = 'Warning';
   private defaultMessage = 'You have unsaved changes! If you leave, your changes will be lost.';
   private defaultHeaderClass = ModalHeaderClassEnum.warningHeader;
-  
-  @HostListener("document:keydown", ["$event"])
+
+  @HostListener('document:keydown', ['$event'])
   handleKeyup(event: KeyboardEvent) {
-      if (event.keyCode === 8) {
-          event.preventDefault();
-      }
+    if (event.keyCode === 8) {
+      event.preventDefault();
+    }
   }
 
-  constructor(
-    private _modalService: NgbModal,
-    public activeModal: NgbActiveModal
-  ) { }
+  constructor(private _modalService: NgbModal, public activeModal: NgbActiveModal) {}
 
   ngOnInit(): void {
     if (!this.modalTitle) {
@@ -72,7 +68,6 @@ export class ConfirmModalComponent implements OnInit {
     if (!this.cancelTitle) {
       this.cancelTitle = 'Cancel';
     }
-
   }
 
   /**
@@ -81,17 +76,17 @@ export class ConfirmModalComponent implements OnInit {
   public determineHeaderClasses() {
     switch (this.headerClass) {
       case ModalHeaderClassEnum.successHeader:
-        return {'success-header': true};
+        return { 'success-header': true };
       case ModalHeaderClassEnum.infoHeader:
-        return {'info-header': true};
+        return { 'info-header': true };
       case ModalHeaderClassEnum.infoHeaderDark:
-        return {'info-header-dark': true};  
+        return { 'info-header-dark': true };
       case ModalHeaderClassEnum.warningHeader:
-        return {'warning-header': true};
+        return { 'warning-header': true };
       case ModalHeaderClassEnum.errorHeader:
-        return {'error-header': true};
+        return { 'error-header': true };
       default:
-        return {'warning-header': true};
+        return { 'warning-header': true };
     }
   }
 }

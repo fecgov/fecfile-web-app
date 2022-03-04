@@ -4,7 +4,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-cancel-import-confirm',
   templateUrl: './cancel-import-confirm.component.html',
-  styleUrls: ['./cancel-import-confirm.component.scss']
+  styleUrls: ['./cancel-import-confirm.component.scss'],
 })
 export class CancelImportConfirmComponent implements OnInit {
   constructor(public activeModal: NgbActiveModal) {}

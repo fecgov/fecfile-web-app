@@ -3,13 +3,13 @@
     *ngIf="!allFilesDone && (uploadFile.status === importingStatus || uploadFile.status === completeStatus)"
     class="import-done-progress-container"
   >
-    <p>{{ uploadingText }}</p>
+    <p></p>
     <ngb-progressbar
       type="dark"
       textType="white"
-      animated="true"
+      [animated]="true"
       [value]="progressPercent"
-      showValue="true"
+      [showValue]="true"
       height="2rem"
     >
     </ngb-progressbar>
@@ -24,9 +24,7 @@
       <div class="col text-center">
         <div *ngIf="!allFilesDone && uploadFile.status === completeStatus">
           <div class="complete-message">Your Import is now Complete!</div>
-          <button class="btn btn-secondary import-done-button" (click)="proceed()">
-            Proceed
-          </button>
+          <button class="btn btn-secondary import-done-button" (click)="proceed()">Proceed</button>
         </div>
         <div *ngIf="allFilesDone && !allFailed" class="import-done-notifications" (click)="goToNotifications()">
           Your Import is now Complete. Click here to View.

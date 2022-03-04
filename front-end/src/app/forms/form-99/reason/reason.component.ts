@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import {
   Component,
   EventEmitter,
@@ -8,9 +8,10 @@ import {
   Output,
   Renderer2,
   ViewEncapsulation,
-  ViewChild
-, ChangeDetectionStrategy, 
-OnDestroy} from '@angular/core';
+  ViewChild,
+  ChangeDetectionStrategy,
+  OnDestroy,
+} from '@angular/core';
 import { ControlValueAccessor, FormBuilder, FormGroup, FormControl, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -22,28 +23,29 @@ import { FormsService } from '../../../shared/services/FormsService/forms.servic
 import { MessageService } from '../../../shared/services/MessageService/message.service';
 import { DialogService } from '../../../shared/services/DialogService/dialog.service';
 import { htmlLength } from '../../../shared/utils/forms/validation/html-length.validator';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import {
+  ConfirmModalComponent,
+  ModalHeaderClassEnum,
+} from '../../../shared/partials/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'f99-reason',
   templateUrl: './reason.component.html',
   styleUrls: ['./reason.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
-export class ReasonComponent implements OnInit , OnDestroy{
-  
+export class ReasonComponent implements OnInit, OnDestroy {
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
-  @ViewChild('htmlEditor') htmlEditor: ElementRef;
-  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('htmlEditor') htmlEditor!: ElementRef;
+  @ViewChild('fileInput') fileInput!: ElementRef;
 
-  public editMode: boolean;
-  public reportId: number;
-  public frmReason: FormGroup;
-  public reasonType: string = null;
+  public editMode!: boolean;
+  public reportId!: number;
+  public frmReason!: FormGroup;
+  public reasonType: string = '';
   public reasonFailed: boolean = false;
   public reasonHasInvalidHTML: boolean = false;
-  public typeSelected: string = null;
+  public typeSelected: string = '';
   public lengthError: boolean = false;
   public isValidReason: boolean = false;
   public isFiled: boolean = false;
@@ -62,7 +64,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
   public editorMax: number = 20000;
   public textAreaTextContent: any = '';
   public editingTextArea: boolean = false;
-  public fileNameToDisplay: string = null;
+  public fileNameToDisplay: string = '';
   public showFileNameLengthError: boolean = false;
 
   private committee_details: any = {};
@@ -75,7 +77,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
   private _reasonInnerHTML: string = ''; // Shows the value and applys the HTML
   private _reasonTextContent: string = ''; // The plain text, no HTML from editor
   private _setRefresh: boolean = false;
-  queryParamsSub: Subscription;
+  queryParamsSub!: Subscription;
 
   constructor(
     private _fb: FormBuilder,
@@ -89,22 +91,22 @@ export class ReasonComponent implements OnInit , OnDestroy{
     private _dormSanitizer: DomSanitizer
   ) {
     this._messageService.clearMessage();
-    this.queryParamsSub = _activatedRoute.queryParams.subscribe(p => {
-      if (p.refresh === true || p.refresh === 'true') {
+    this.queryParamsSub = _activatedRoute.queryParams['subscribe']((p) => {
+      if (p['refresh'] === true || p['refresh'] === 'true') {
         this._setRefresh = true;
         this.ngOnInit();
       }
-      if (p.reportId) {
-        this.reportId = p.reportId;
+      if (p['reportId']) {
+        this.reportId = p['reportId'];
       }
     });
   }
 
   ngOnInit(): void {
-    this._formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
-    this._form99Details = JSON.parse(localStorage.getItem(`form_${this._formType}_details`));
-    this.committee_details = JSON.parse(localStorage.getItem('committee_details'));
+    this._formType = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
+    this._form99Details = JSON.parse(localStorage.getItem(`form_${this._formType}_details`) ?? '');
+    this.committee_details = JSON.parse(localStorage.getItem('committee_details') ?? '');
 
     if (this._form99Details) {
       if (!this._form99Details.id) {
@@ -117,7 +119,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
         }
         this.frmReason = this._fb.group({
           reasonText: [this._form99Details.text, [Validators.required, htmlLength(this.editorMax)]],
-          file: ['']
+          file: [''],
         });
         const unescapedText = this._form99Details.text;
         this.frmReason.controls['reasonText'].setValue(unescapedText);
@@ -128,22 +130,22 @@ export class ReasonComponent implements OnInit , OnDestroy{
         if (this._form99Details.filename) {
           this.fileNameToDisplay = this._form99Details.filename;
         } else if (localStorage.getItem('orm_99_details.org_filename')) {
-          this.fileNameToDisplay = localStorage.getItem('orm_99_details.org_filename');
+          this.fileNameToDisplay = localStorage.getItem('orm_99_details.org_filename') ?? '';
         }
       } else {
         this.editingTextArea = false;
         this.frmReason = this._fb.group({
           reasonText: ['', [Validators.required, htmlLength(this.editorMax)]],
-          file: ['']
+          file: [''],
         });
-        this.fileNameToDisplay = null;
+        this.fileNameToDisplay = '';
       }
     } else {
       this.frmReason = this._fb.group({
         reasonText: ['', [Validators.required, htmlLength(this.editorMax)]],
-        file: ['']
+        file: [''],
       });
-      this.fileNameToDisplay = null;
+      this.fileNameToDisplay = '';
     }
   }
 
@@ -155,24 +157,24 @@ export class ReasonComponent implements OnInit , OnDestroy{
     let form_99_details: any = {};
 
     if (localStorage.getItem('form_99_details') !== null) {
-      form_99_details = JSON.parse(localStorage.getItem('form_99_details'));
+      form_99_details = JSON.parse(localStorage.getItem('form_99_details') ?? '');
     }
 
     if (form_99_details) {
       this.typeSelected = form_99_details.reason;
     }
 
-    if (this.frmReason.get('reasonText').value.length >= 1) {
-      let text: string = this.frmReason.get('reasonText').value;
+    if (this.frmReason.get('reasonText')?.value.length >= 1) {
+      let text: string = this.frmReason.get('reasonText')?.value;
       this.characterCount = this._countCharacters(text);
-    } else if (this.frmReason.get('reasonText').value.length === 0) {
-      let text: string = this.frmReason.get('reasonText').value;
+    } else if (this.frmReason.get('reasonText')?.value.length === 0) {
+      let text: string = this.frmReason.get('reasonText')?.value;
       this.characterCount = this._countCharacters(text);
     }
   }
 
   public reasonTextEmpty(): boolean {
-    if (!this.frmReason.controls.reasonText.value.replace(/(\s)/g, '').length) {
+    if (!this.frmReason.controls['reasonText'].value.replace(/(\s)/g, '').length) {
       return true;
     }
     return false;
@@ -183,7 +185,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
    *
    * @param      {Object}  e       The event object.
    */
-  public editorChange(e): void {
+  public editorChange(e: any): void {
     if (this.editMode) {
       this._reasonTextContent = e.target.textContent;
 
@@ -216,8 +218,8 @@ export class ReasonComponent implements OnInit , OnDestroy{
             this._messageService.sendMessage({
               validateMessage: {
                 validate: {},
-                showValidateBar: false
-              }
+                showValidateBar: false,
+              },
             });
           } else {
             this.frmReason.controls['reasonText'].setValue('');
@@ -243,8 +245,8 @@ export class ReasonComponent implements OnInit , OnDestroy{
         this._messageService.sendMessage({
           validateMessage: {
             validate: {},
-            showValidateBar: false
-          }
+            showValidateBar: false,
+          },
         });
       }
     }
@@ -265,7 +267,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
         this._form99Details.id = '';
 
         let formSavedObj: any = {
-          saved: false
+          saved: false,
         };
         localStorage.setItem(`form_99_details`, JSON.stringify(this._form99Details));
         localStorage.setItem(`form_99_saved`, JSON.stringify(formSavedObj));
@@ -284,7 +286,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
           false,
           true
         )
-        .then(res => {
+        .then((res: any) => {
           if (res === 'cancel' || res === ModalDismissReasons.BACKDROP_CLICK || res === ModalDismissReasons.ESC) {
             // this.ngOnInit();
             this._dialogService.checkIfModalOpen();
@@ -295,7 +297,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
             this._setF99Details();
             setTimeout(() => {
               this._router.navigate(['/forms/form/99'], {
-                queryParams: { step: 'step_1', edit: this.editMode, refresh: true }
+                queryParams: { step: 'step_1', edit: this.editMode, refresh: true },
               });
             }, 500);
           }
@@ -381,7 +383,8 @@ export class ReasonComponent implements OnInit , OnDestroy{
     const hasHTMLTags: any = /((<(\/?|\!?)\w+>)|(<\w+.*?\w="(.*?)")>|(<\w*.*\/>))/gm;
 
     if (hasHTMLTags.test(text)) {
-      const htmlTagsWhiteList: any = /(<(\/?|\!?)(html|head|body|script|script.*?src="(.*?)"|iframe|iframe.*?src="(.*?)"|link|style|table|thead|tbody|th|tr|td|img|img.*?src="(.*?)"|fieldset|form|input|textarea|select|option|a|a.*?href="(.*?)"|progress|noscript|audio|video)(\s*\/*)>)/gm;
+      const htmlTagsWhiteList: any =
+        /(<(\/?|\!?)(html|head|body|script|script.*?src="(.*?)"|iframe|iframe.*?src="(.*?)"|link|style|table|thead|tbody|th|tr|td|img|img.*?src="(.*?)"|fieldset|form|input|textarea|select|option|a|a.*?href="(.*?)"|progress|noscript|audio|video)(\s*\/*)>)/gm;
 
       if (htmlTagsWhiteList.test(text)) {
         return true;
@@ -398,7 +401,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
    *
    * @param      {<type>}  tooltip  The tooltip
    */
-  public toggleToolTip(tooltip): void {
+  public toggleToolTip(tooltip: any): void {
     if (tooltip.isOpen()) {
       tooltip.close();
     } else {
@@ -422,26 +425,26 @@ export class ReasonComponent implements OnInit , OnDestroy{
     this._messageService.sendMessage({
       validateMessage: {
         validate: {},
-        showValidateBar: false
-      }
+        showValidateBar: false,
+      },
     });
 
     this.status.emit({
       form: {},
       direction: 'previous',
       step: 'step_1',
-      edit: this.editMode
+      edit: this.editMode,
     });
   }
 
-  public setFile(e): void {
+  public setFile(e: any): void {
     if (!this.editMode) {
       this.checkIfEditMode();
     } else if (e.target.files.length === 1 && this.editMode && e.target.files[0].name.length <= 100) {
       this.file = e.target.files[0];
       if (this.file.name.includes('.pdf')) {
         let fileNameObj: any = {
-          fileName: this.file.name
+          fileName: this.file.name,
         };
 
         if (this.file.size > 33554432) {
@@ -467,7 +470,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
     } else if (e.target.files[0].name.length > 100) {
       this.showFileNameLengthError = true;
       let fileNameObj: any = {
-        fileName: ''
+        fileName: '',
       };
       localStorage.setItem(`form_${this._formType}_file`, JSON.stringify(fileNameObj));
       this.validFile = false;
@@ -480,7 +483,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
       window.scrollTo(0, 0);
     } else {
       let fileNameObj: any = {
-        fileName: ''
+        fileName: '',
       };
       localStorage.setItem(`form_${this._formType}_file`, JSON.stringify(fileNameObj));
       this.notValidPdf = true;
@@ -505,12 +508,12 @@ export class ReasonComponent implements OnInit , OnDestroy{
           if (!this._checkUnsupportedHTML(this._reasonInnerText)) {
             if (!this._validateForSpaces(this._reasonInnerText)) {
               let formSaved: any = {
-                form_saved: this.formSaved
+                form_saved: this.formSaved,
               };
               this.reasonFailed = false;
               this.isValidReason = true;
 
-              this._form99Details = JSON.parse(localStorage.getItem(`form_${this._formType}_details`));
+              this._form99Details = JSON.parse(localStorage.getItem(`form_${this._formType}_details`) ?? '');
               this._form99Details.text = this._reasonInnerHTML;
 
               window.localStorage.setItem(`form_${this._formType}_details`, JSON.stringify(this._form99Details));
@@ -529,8 +532,8 @@ export class ReasonComponent implements OnInit , OnDestroy{
               this._messageService.sendMessage({
                 validateMessage: {
                   validate: '',
-                  showValidateBar: false
-                }
+                  showValidateBar: false,
+                },
               });
 
               this.status.emit({
@@ -539,12 +542,12 @@ export class ReasonComponent implements OnInit , OnDestroy{
                 step: 'step_3',
                 previousStep: 'step_2',
                 edit: this.editMode,
-                refresh: this._setRefresh
+                refresh: this._setRefresh,
               });
 
               this._messageService.sendMessage({
                 data: this._form99Details,
-                previousStep: 'step_3'
+                previousStep: 'step_3',
               });
             } else {
               this.reasonFailed = true;
@@ -572,7 +575,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
             direction: 'next',
             step: 'step_2',
             edit: this.editMode,
-            previousStep: ''
+            previousStep: '',
           });
 
           window.scrollTo(0, 0);
@@ -597,7 +600,7 @@ export class ReasonComponent implements OnInit , OnDestroy{
         step: 'step_3',
         previousStep: 'step_2',
         edit: this.editMode,
-        refresh: this._setRefresh
+        refresh: this._setRefresh,
       });
     }
   }
@@ -608,9 +611,9 @@ export class ReasonComponent implements OnInit , OnDestroy{
    */
   public saveForm() {
     if (this.frmReason.valid && this.editMode) {
-      if (this.frmReason.get('reasonText').value.length >= 1) {
-        let formSaved: boolean = JSON.parse(localStorage.getItem('form_99_saved'));
-        this._form99Details = JSON.parse(localStorage.getItem('form_99_details'));
+      if (this.frmReason.get('reasonText')?.value.length >= 1) {
+        let formSaved: boolean = JSON.parse(localStorage.getItem('form_99_saved') ?? '');
+        this._form99Details = JSON.parse(localStorage.getItem('form_99_details') ?? '');
 
         this._form99Details.text = this._reasonInnerHTML;
 
@@ -630,15 +633,22 @@ export class ReasonComponent implements OnInit , OnDestroy{
 
         this.showValidateBar = false;
 
-        if ((this.PdfUploaded && typeof this.file === 'object') ||
-        this.PdfDeleted ||
-        (!this._form99Details.id || this._form99Details.id === '')) {
+        if (
+          (this.PdfUploaded && typeof this.file === 'object') ||
+          this.PdfDeleted ||
+          !this._form99Details.id ||
+          this._form99Details.id === ''
+        ) {
           this._formsService.saveForm({}, this.file, this._formType).subscribe(
-            res => {
+            (res) => {
               if (res) {
                 this._form99Details.id = res.id;
-                this._router.navigate([],{relativeTo:this._activatedRoute, queryParams: {reportId: this._form99Details.id}, queryParamsHandling:'merge'});
-                this._messageService.sendMessage({action:'updateForm99ReportId', reportId: this._form99Details.id});
+                this._router.navigate([], {
+                  relativeTo: this._activatedRoute,
+                  queryParams: { reportId: this._form99Details.id },
+                  queryParamsHandling: 'merge',
+                });
+                this._messageService.sendMessage({ action: 'updateForm99ReportId', reportId: this._form99Details.id });
                 if (!res.file) {
                   localStorage.removeItem('orm_99_details.org_fileurl');
                 } else if (res.file && (Object.entries(res.file).length || res.file !== '')) {
@@ -651,18 +661,18 @@ export class ReasonComponent implements OnInit , OnDestroy{
                 this.formSaved = true;
 
                 let formSavedObj: any = {
-                  saved: this.formSaved
+                  saved: this.formSaved,
                 };
                 localStorage.setItem('form_99_saved', JSON.stringify(formSavedObj));
               }
             },
-            error => {
+            (error) => {
               //console.log('error: ', error);
             }
           );
         } else {
           this._formsService.Signee_SaveForm({}, this._formType).subscribe(
-            res => {
+            (res) => {
               if (res) {
                 this._form99Details.id = res.id;
 
@@ -673,12 +683,12 @@ export class ReasonComponent implements OnInit , OnDestroy{
                 this.formSaved = true;
 
                 let formSavedObj: any = {
-                  saved: this.formSaved
+                  saved: this.formSaved,
                 };
                 localStorage.setItem('form_99_saved', JSON.stringify(formSavedObj));
               }
             },
-            error => {
+            (error) => {
               //console.log('error: ', error);
             }
           );
@@ -691,9 +701,9 @@ export class ReasonComponent implements OnInit , OnDestroy{
    * Validates the entire form.
    */
   public validateForm(): void {
-    let type: string = localStorage.getItem('form99-type');
+    let type: string = localStorage.getItem('form99-type') ?? '';
 
-    this._form99Details = JSON.parse(localStorage.getItem('form_99_details'));
+    this._form99Details = JSON.parse(localStorage.getItem('form_99_details') ?? '');
 
     this._form99Details.text = this.frmReason.controls['reasonText'].value;
 
@@ -702,22 +712,22 @@ export class ReasonComponent implements OnInit , OnDestroy{
     this.showValidateBar = true;
 
     this._formsService.validateForm({}, this._formType).subscribe(
-      res => {
+      (res) => {
         if (res) {
           this._messageService.sendMessage({
             validateMessage: {
               validate: environment.validateSuccess,
-              showValidateBar: true
-            }
+              showValidateBar: true,
+            },
           });
         }
       },
-      error => {
+      (error) => {
         this._messageService.sendMessage({
           validateMessage: {
             validate: error.error,
-            showValidateBar: true
-          }
+            showValidateBar: true,
+          },
         });
       }
     );
@@ -725,9 +735,9 @@ export class ReasonComponent implements OnInit , OnDestroy{
 
   public printPreview() {
     if (this.frmReason.valid) {
-      if (this.frmReason.get('reasonText').value.length >= 1) {
-        let formSaved: boolean = JSON.parse(localStorage.getItem('form_99_saved'));
-        this._form99Details = JSON.parse(localStorage.getItem('form_99_details'));
+      if (this.frmReason.get('reasonText')?.value.length >= 1) {
+        let formSaved: boolean = JSON.parse(localStorage.getItem('form_99_saved') ?? '');
+        this._form99Details = JSON.parse(localStorage.getItem('form_99_details') ?? '');
 
         this._form99Details.text = this._reasonInnerHTML;
 
@@ -746,39 +756,39 @@ export class ReasonComponent implements OnInit , OnDestroy{
 
         if (this.file !== null) {
           this._formsService.PreviewForm_ReasonScreen({}, this.file, this._formType).subscribe(
-            res => {
+            (res) => {
               if (res) {
                 this._form99Details.id = res.id;
                 localStorage.setItem('form_99_details', JSON.stringify(this._form99Details));
                 // success
                 this.formSaved = true;
                 let formSavedObj: any = {
-                  saved: this.formSaved
+                  saved: this.formSaved,
                 };
                 localStorage.setItem('form_99_saved', JSON.stringify(formSavedObj));
-                window.open(localStorage.getItem('form_99_details.printpriview_fileurl'), '_blank');
+                window.open(localStorage.getItem('form_99_details.printpriview_fileurl') ?? '', '_blank');
               }
             },
-            error => {
+            (error) => {
               //console.log('error: ', error);
             }
           );
         } else {
           this._formsService.PreviewForm_Preview_sign_Screen({}, '99').subscribe(
-            res => {
+            (res) => {
               if (res) {
                 this._form99Details.id = res.id;
                 localStorage.setItem('form_99_details', JSON.stringify(this._form99Details));
                 // success
                 this.formSaved = true;
                 let formSavedObj: any = {
-                  saved: this.formSaved
+                  saved: this.formSaved,
                 };
                 localStorage.setItem('form_99_saved', JSON.stringify(formSavedObj));
-                window.open(localStorage.getItem('form_99_details.printpriview_fileurl'), '_blank');
+                window.open(localStorage.getItem('form_99_details.printpriview_fileurl') ?? '', '_blank');
               }
             },
-            error => {
+            (error) => {
               //console.log('error: ', error);
             }
           );
@@ -792,19 +802,19 @@ export class ReasonComponent implements OnInit , OnDestroy{
       this.notValidPdf = false;
 
       this._form99Details.filename = '';
-      this.fileNameToDisplay = null;
+      this.fileNameToDisplay = '';
       localStorage.removeItem('orm_99_details.org_filename');
       localStorage.setItem(`form_${this._formType}_details`, JSON.stringify(this._form99Details));
     }
     //this._modalService.close(modalId);
   }
 
-  public open(content): void {
+  public open(content: any): void {
     this._modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-      result => {
+      (result) => {
         this.closeResult = `Closed with: ${result}`;
       },
-      reason => {
+      (reason) => {
         this.closeResult = `Dismissed ${this._getDismissReason(reason)}`;
       }
     );
@@ -825,13 +835,14 @@ export class ReasonComponent implements OnInit , OnDestroy{
     } else {
       return `with: ${reason}`;
     }
+    return '';
   }
 
   public deletePDFFile() {
     this._dialogService
       .confirm('Do you want to delete uploaded pdf file?', ConfirmModalComponent, 'Delete PDF File', true)
       //.reportExist(alertStr, ConfirmModalComponent,'Report already exists' ,true,false,true)
-      .then(res => {
+      .then((res: any) => {
         if (res === 'cancel') {
           /*this.optionFailed = true;
        this.isValidType = false;
@@ -849,10 +860,12 @@ export class ReasonComponent implements OnInit , OnDestroy{
           this.notValidPdf = false;
           this.PdfUploaded = false;
           this._form99Details.filename = '';
-          this.fileNameToDisplay = null;
+          this.fileNameToDisplay = '';
           localStorage.removeItem('orm_99_details.org_filename');
           localStorage.setItem(`form_${this._formType}_details`, JSON.stringify(this._form99Details));
+          return 0;
         }
+        return 0;
       });
   }
 }

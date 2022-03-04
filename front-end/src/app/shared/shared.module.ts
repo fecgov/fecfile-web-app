@@ -12,7 +12,7 @@ import { SignAndSubmitComponent } from './partials/sign-and-submit/sign-and-subm
 import { SubTransactionsTableComponent } from './components/sub-transactions-table/sub-transactions-table.component';
 import { UtilService } from './utils/util.service';
 import { OrderByPipe } from 'ngx-pipes';
-import { ModalModule } from 'ngx-bootstrap';
+// import { ModalModule } from 'ngx-bootstrap';
 import { InputModalComponent } from './partials/input-modal/input-modal.component';
 import { ExportDirective } from './directives/export.directive';
 import { ReportTypeSidebarComponent } from '../forms/form-3x/report-type-sidebar/report-type-sidebar.component';
@@ -20,12 +20,7 @@ import { ReportTypeComponent } from '../forms/form-3x/report-type/report-type.co
 import { SpinnerComponent } from './partials/spinner/spinner.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    NgbModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, NgbModule, FormsModule, ReactiveFormsModule],
   declarations: [
     StepsComponent,
     ReportTypeSidebarComponent,
@@ -36,7 +31,7 @@ import { SpinnerComponent } from './partials/spinner/spinner.component';
     ValidateComponent,
     PhonePipe,
     InputModalComponent,
-    SpinnerComponent
+    SpinnerComponent,
   ],
   exports: [
     CommonModule,
@@ -45,7 +40,7 @@ import { SpinnerComponent } from './partials/spinner/spinner.component';
     FormsModule,
     ReactiveFormsModule,
     NgxPaginationModule,
-    ModalModule,
+    // ModalModule,
     StepsComponent,
     ReportTypeSidebarComponent,
     SignAndSubmitComponent,
@@ -53,17 +48,9 @@ import { SpinnerComponent } from './partials/spinner/spinner.component';
     SubmitComponent,
     ReportTypeComponent,
     InputModalComponent,
-    SpinnerComponent
+    SpinnerComponent,
   ],
-  providers: [
-    DecimalPipe,
-    DatePipe,
-    UtilService,
-    OrderByPipe,
-    PhonePipe,
-    CurrencyPipe,
-    ExportDirective
-  ],
-  entryComponents: [InputModalComponent]
+  providers: [DecimalPipe, DatePipe, UtilService, OrderByPipe, PhonePipe, CurrencyPipe, ExportDirective],
+  entryComponents: [InputModalComponent],
 })
-export class SharedModule { }
+export class SharedModule {}

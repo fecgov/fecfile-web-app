@@ -15,8 +15,6 @@
       @include clearfix();
     }
     .sidebar__nav {
-    
-    
       .sidebar__nav--header {
         position: relative;
         .sidebar-form-icon {
@@ -27,7 +25,6 @@
         }
         .header-text {
           width: 230px;
-          
         }
       }
       .sidebar__nav--links {
@@ -93,7 +90,7 @@
       cursor: pointer;
       float: right;
       text-decoration: none;
-      &:hover ,
+      &:hover,
       &:visited,
       &:active {
         color: $white;
@@ -107,7 +104,7 @@
     text-align: center;
   }
   .sidebar__nav {
-  	color: $white;
+    color: $white;
     text-align: left;
     .sidebar__nav--header {
       font-weight: bold;

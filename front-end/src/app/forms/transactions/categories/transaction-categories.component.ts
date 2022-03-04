@@ -44,7 +44,7 @@
 
 //     this._formService
 //       .getTransactionCategories(this._formType)
-//       .subscribe(res => {
+//       .subscribe((res: any) => {
 //         this.cashOnHand = res.data.cashOnHand;
 
 //         this.transactionCategories = res.data.transactionCategories;
@@ -75,7 +75,7 @@
 
 //   public selectedAdditionalOption(additionalItem): void {
 //     let additionalItemIndex: number = null;
-//     const transactionType: any = JSON.parse(localStorage.getItem(`form_${this._formType}_transactionType`));
+//     const transactionType: any = JSON.parse(localStorage.getItem(`form_${this._formType}_transactionType`) ?? '');
 
 //     this.additionalItemSelected = additionalItem.getAttribute('value');
 

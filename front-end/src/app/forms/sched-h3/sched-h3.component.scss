@@ -111,6 +111,7 @@
             -webkit-transform: scale(1.9); /* Safari and Chrome */
             -o-transform: scale(1.9); /* Opera */
             margin: 10px;
+            transform: scale(1.9);
           }
           .forms__big_radio {
             -webkit-transform: scale(2.9);
@@ -118,6 +119,7 @@
             -moz-transform: scale(2.9); /* FF */
             -webkit-transform: scale(2.9); /* Safari and Chrome */
             -o-transform: scale(2.9); /* Opera */
+            transform: scale(2.9);
             margin: 23px;
           }
           label {
@@ -218,41 +220,42 @@
     font-size: 29px; /* error fix during Angular 8 upgrade */
   }
 
-  .summary_text_amt{
+  .summary_text_amt {
     text-align: right;
-    padding-right: 100px ;
+    padding-right: 100px;
   }
 
-  .summary_text_amt_level_1{
-    background-color: #979A9A  !important;
+  .summary_text_amt_level_1 {
+    background-color: #979a9a !important;
     text-align: center;
     height: 35px !important;
     padding-top: 10px !important;
     vertical-align: middle !important;
     padding-right: 4px !important;
-    margin-top: 1px  !important;
+    margin-top: 1px !important;
     //margin-bottom: 1px  !important;
   }
 
-  .summary_text_level_3{
+  .summary_text_level_3 {
     //background-color: #E5E7E9  !important;
     padding-left: 100px !important;
     height: 35px !important;
     padding-top: 10px !important;
     vertical-align: middle !important;
-    margin-top: 1px  !important;
-   // margin-bottom: 1px  !important;
+    margin-top: 1px !important;
+    // margin-bottom: 1px  !important;
   }
 
-  .ngx-pagination .current{
+  .ngx-pagination .current {
     padding: 0.1875rem 0.625rem;
-    background: #9B9B9B !important;;
+    background: #9b9b9b !important;
     color: #fefefe;
     cursor: default;
   }
 
-  .ngx-pagination a, .ngx-pagination button {
-    color: #9B9B9B !important;;
+  .ngx-pagination a,
+  .ngx-pagination button {
+    color: #9b9b9b !important;
     display: block;
     padding: 0.1875rem 0.625rem;
     border-radius: 0;
@@ -262,11 +265,11 @@
     margin-bottom: 0;
   }
 
-  ng-select { 
-    .ng-dropdown-panel { 
+  ng-select {
+    .ng-dropdown-panel {
       width: auto;
-      min-width: 100%; 
-    } 
+      min-width: 100%;
+    }
   }
 
   .bulk_action {
@@ -288,22 +291,23 @@
 }
 
 /* previously included /deep/ before it was removed in Angular 8*/
-pagination-controls  .ngx-pagination .current{
+pagination-controls .ngx-pagination .current {
   padding: 0.1875rem 0.625rem;
-  background: #9B9B9B !important;;
+  background: #9b9b9b !important;
   color: #fefefe;
   cursor: default;
 }
 
 /* previously included /deep/ before it was removed in Angular 8*/
-pagination-controls .ngx-pagination a, .ngx-pagination button {
-  color: #9B9B9B !important;;
+pagination-controls .ngx-pagination a,
+.ngx-pagination button {
+  color: #9b9b9b !important;
   display: block;
   padding: 0.1875rem 0.625rem;
   border-radius: 0;
 }
 
-.saveMessage{
+.saveMessage {
   padding-left: 3%;
   padding-bottom: 2%;
   color: red;

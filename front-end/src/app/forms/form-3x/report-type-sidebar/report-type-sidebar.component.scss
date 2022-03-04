@@ -3,7 +3,7 @@
 .report-type-sidebar {
   position: relative;
   height: 500px;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
   // header {
   //   margin-bottom: 20px;
   // }
@@ -11,13 +11,13 @@
     .sidebar-form-content {
       margin-left: auto;
       margin-right: auto;
-      margin-bottom: .5em;
+      margin-bottom: 0.5em;
       text-align: center;
       input[type='date'] {
         &.form-control {
-        margin-left: auto;
-        margin-right: auto;
-        // width: 170px !important;
+          margin-left: auto;
+          margin-right: auto;
+          // width: 170px !important;
         }
       }
       label {

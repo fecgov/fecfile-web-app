@@ -1,31 +1,30 @@
-
 /**
  * TODO There are redundent models for import contacts and add contacts.  These
  * should be consolidated in the future.
  */
 export class ImportContactModel {
-  id: string;
-  committeeId: string;
-  type: string;
-  name: string;
-  lastName: string;
-  firstName: string;
-  middleName: string;
-  suffix: string;
-  prefix: string;
-  street: string;
-  street2: string;
-  city: string;
-  state: string;
-  zip: string;
-  employer: string;
-  occupation: string;
-  candidateId: string;
-  officeSought: string;
-  officeState: string;
-  district: string;
-  multiCandidateCmteStatus: string;
-  selected: boolean;
+  id!: string;
+  committeeId!: string;
+  type!: string;
+  name!: string;
+  lastName!: string;
+  firstName!: string;
+  middleName!: string;
+  suffix!: string;
+  prefix!: string;
+  street!: string;
+  street2!: string;
+  city!: string;
+  state!: string;
+  zip!: string;
+  employer!: string;
+  occupation!: string;
+  candidateId!: string;
+  officeSought!: string;
+  officeState!: string;
+  district!: string;
+  multiCandidateCmteStatus!: string;
+  selected!: boolean;
 
   constructor(contact: any) {
     this.id = contact.id ? contact.id : '';
@@ -48,8 +47,7 @@ export class ImportContactModel {
     this.officeSought = contact.officeSought ? contact.officeSought : '';
     this.officeState = contact.officeState ? contact.officeState : '';
     this.district = contact.district ? contact.district : '';
-    this.multiCandidateCmteStatus = contact.multiCandidateCmteStatus ?
-      contact.multiCandidateCmteStatus : '';
+    this.multiCandidateCmteStatus = contact.multiCandidateCmteStatus ? contact.multiCandidateCmteStatus : '';
     this.selected = contact.selected;
   }
 }

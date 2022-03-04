@@ -1,11 +1,20 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild, OnDestroy , ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { NgForm, Validators } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
-import { Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { validateAmount } from 'src/app/shared/utils/forms/validation/amount.validator';
+import { validateAmount } from '../../../shared/utils/forms/validation/amount.validator';
 import { environment } from '../../../../environments/environment';
 import { validateContributionAmount } from '../../../shared/utils/forms/validation/amount.validator';
 import { ContributionDateValidator } from '../../../shared/utils/forms/validation/contribution-date.validator';
@@ -20,31 +29,33 @@ import { DecimalPipe } from '@angular/common';
 @Component({
   selector: 'app-loanpayment',
   templateUrl: './loanpayment.component.html',
-  styleUrls: ['./loanpayment.component.scss']
+  styleUrls: ['./loanpayment.component.scss'],
 })
 export class LoanpaymentComponent implements OnInit, OnDestroy {
-
-  @Input() transactionDetail: any;
-  @Input() scheduleAction: ScheduleActions ;
+  @Input() transactionDetail!: any;
+  @Input() scheduleAction!: ScheduleActions;
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
 
   tooltipPlaceholder: string = 'Language to be provided by RAD';
   selectedEntity = 'IND';
-  cvgStartDate: string;
-  cvgEndDate: string;
+  cvgStartDate!: string;
+  cvgEndDate!: string;
   states: any = [];
-  entityTypes: any = [{ code: 'IND', description: 'Individual' }, { code: 'ORG', description: 'Organization' }];
-  outstandingLoanBalance: number;
+  entityTypes: any = [
+    { code: 'IND', description: 'Individual' },
+    { code: 'ORG', description: 'Organization' },
+  ];
+  outstandingLoanBalance!: number;
   public _contributionAmountMax = 12;
-  public filterexpenditure_date;
+  public filterexpenditure_date!: any;
 
-  private _loanTransactionId;
+  private _loanTransactionId!: any;
 
-  private _clearFormSubscription: Subscription;
-  editMode: any;
+  private _clearFormSubscription!: Subscription;
+  editMode!: any;
 
-
-  constructor(private _cookieService: CookieService,
+  constructor(
+    private _cookieService: CookieService,
     private _http: HttpClient,
     private utilService: UtilService,
     private _contributionDateValidator: ContributionDateValidator,
@@ -55,22 +66,17 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
     private _reportTypeService: ReportTypeService,
     private _f3xMessageService: F3xMessageService,
     private _activatedRoute: ActivatedRoute,
-    private _router: Router) {
-
-    this._clearFormSubscription = this._f3xMessageService.getInitFormMessage().subscribe(message => {
+    private _router: Router
+  ) {
+    this._clearFormSubscription = this._f3xMessageService.getInitFormMessage().subscribe((message) => {
       if (this.form) {
         this.form.reset();
         this.initializeForm();
       }
     });
-
   }
 
-
-
-  @ViewChild('f') form: NgForm;
-
-
+  @ViewChild('f') form!: NgForm;
 
   ngOnInit() {
     this.initializeForm();
@@ -82,67 +88,63 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
     this._clearFormSubscription.unsubscribe();
   }
 
-  ngOnChanges(){
+  ngOnChanges() {
     this.ngOnInit();
   }
 
   isIndividual() {
-    if (this.form.control.get('entity_type').value === 'IND') {
+    if (this.form.control.get('entity_type')?.value === 'IND') {
       return true;
     }
     return false;
   }
 
   private getLoanRepaymentData() {
-
-    this.scheduleAction ? this.scheduleAction : this.scheduleAction = ScheduleActions.add;
+    this.scheduleAction ? this.scheduleAction : (this.scheduleAction = ScheduleActions.add);
     const reportId: string = this._reportTypeService.getReportIdFromStorage('3X').toString();
 
-
-    if (this.transactionDetail && this.transactionDetail.transactionTypeIdentifier === "LOAN_REPAY_MADE") {
-      if(this.transactionDetail.backRefTransactionId){
+    if (this.transactionDetail && this.transactionDetail.transactionTypeIdentifier === 'LOAN_REPAY_MADE') {
+      if (this.transactionDetail.backRefTransactionId) {
         this._loanTransactionId = this.transactionDetail.backRefTransactionId;
-      }
-      else if(this.transactionDetail.back_ref_transaction_id){
+      } else if (this.transactionDetail.back_ref_transaction_id) {
         this._loanTransactionId = this.transactionDetail.back_ref_transaction_id;
       }
-    }
-    else {
+    } else {
       this._loanTransactionId = this.transactionDetail.transactionId;
     }
 
-
-    this._loanService.getDataSchedule(reportId, this._loanTransactionId).subscribe(res => {
+    this._loanService.getDataSchedule(reportId, this._loanTransactionId).subscribe((res: any) => {
       res = res[0];
       this.selectedEntity = res.entity_type;
 
-      this.form.control.patchValue({ 'entity_type': res.entity_type });
-      this.form.control.patchValue({ 'last_Name': res.last_name });
-      this.form.control.patchValue({ 'first_Name': res.first_name });
-      this.form.control.patchValue({ 'middle_Name': res.middle_name });
-      this.form.control.patchValue({ 'suffix': res.suffix });
-      this.form.control.patchValue({ 'prefix': res.prefix });
-      this.form.control.patchValue({ 'entity_Name': res.entity_name });
-      this.form.control.patchValue({ 'street_1': res.street_1 });
-      this.form.control.patchValue({ 'street_2': res.street_2 });
-      this.form.control.patchValue({ 'city': res.city });
-      this.form.control.patchValue({ 'zip': res.zip_code });
-      this.form.control.patchValue({ 'state': res.state });
-      this.form.control.patchValue({ 'entity_id': res.entity_id });
-      
-      if(this.scheduleAction !== ScheduleActions.edit){
+      this.form.control.patchValue({ entity_type: res.entity_type });
+      this.form.control.patchValue({ last_Name: res.last_name });
+      this.form.control.patchValue({ first_Name: res.first_name });
+      this.form.control.patchValue({ middle_Name: res.middle_name });
+      this.form.control.patchValue({ suffix: res.suffix });
+      this.form.control.patchValue({ prefix: res.prefix });
+      this.form.control.patchValue({ entity_Name: res.entity_name });
+      this.form.control.patchValue({ street_1: res.street_1 });
+      this.form.control.patchValue({ street_2: res.street_2 });
+      this.form.control.patchValue({ city: res.city });
+      this.form.control.patchValue({ zip: res.zip_code });
+      this.form.control.patchValue({ state: res.state });
+      this.form.control.patchValue({ entity_id: res.entity_id });
+
+      if (this.scheduleAction !== ScheduleActions.edit) {
         this.outstandingLoanBalance = Number(res.loan_balance);
-      }
-      else{
+      } else {
         //if editing a current payment, outstanding balance should add the current payment's amount to the total amount
         this.outstandingLoanBalance = Number(res.loan_balance) + Number(this.transactionDetail.amount);
       }
 
-      if(this.scheduleAction === ScheduleActions.edit){
-         this.form.control.patchValue({ 'expenditure_date': this.transactionDetail.date });
-         this.form.control.patchValue({ 'expenditure_amount': this._decimalPipe.transform(this.transactionDetail.amount, '.2-2')});
-         this.form.control.patchValue({ 'expenditure_purpose': this.transactionDetail.purposeDescription });
-         this.form.control.patchValue({ 'memo_text': this.transactionDetail.memoText });
+      if (this.scheduleAction === ScheduleActions.edit) {
+        this.form.control.patchValue({ expenditure_date: this.transactionDetail.date });
+        this.form.control.patchValue({
+          expenditure_amount: this._decimalPipe.transform(this.transactionDetail.amount, '.2-2'),
+        });
+        this.form.control.patchValue({ expenditure_purpose: this.transactionDetail.purposeDescription });
+        this.form.control.patchValue({ memo_text: this.transactionDetail.memoText });
       }
 
       //remove unnecessary form controls
@@ -150,9 +152,7 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
 
       //validators have to be set after getting current loan metadata to enfore max contribution amount
       this.setupValidators();
-
-    })
-
+    });
   }
 
   /**
@@ -172,7 +172,7 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
   }
 
   private getStates() {
-    this._loanService.getStates().subscribe(res => {
+    this._loanService.getStates().subscribe((res: any) => {
       this.states = res;
     });
   }
@@ -184,20 +184,23 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
   }
 
   private setupValidators() {
-    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type'));
+    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type') ?? '');
     this.cvgStartDate = formInfo.cvgStartDate;
     this.cvgEndDate = formInfo.cvgEndDate;
     this.form.controls['expenditure_date'].setValidators([
       this._contributionDateValidator.contributionDate(this.cvgStartDate, this.cvgEndDate),
-      Validators.required
+      Validators.required,
     ]);
     this.form.controls['expenditure_date'].updateValueAndValidity();
 
-    this.form.controls['expenditure_amount'].setValidators([validateAmount(), validateContributionAmount(this.outstandingLoanBalance)]);
+    this.form.controls['expenditure_amount'].setValidators([
+      validateAmount(),
+      validateContributionAmount(this.outstandingLoanBalance),
+    ]);
     this.form.controls['expenditure_amount'].updateValueAndValidity();
   }
 
-  handleTypeChange(event, form: any) {
+  handleTypeChange(event: any, form: any) {
     //console.log(event);
     form.entity = event.code;
     this.selectedEntity = event.code;
@@ -206,8 +209,7 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
   validateForm() {
     if (this.form.valid) {
       return true;
-    }
-    else {
+    } else {
       this.markFormControlsAsTouched();
       return false;
     }
@@ -215,25 +217,25 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
 
   markFormControlsAsTouched() {
     for (let inner in this.form.controls) {
-      this.form.control.get(inner).markAsDirty();
-      this.form.control.get(inner).markAsTouched();
-      this.form.control.get(inner).updateValueAndValidity();
+      this.form.control.get(inner)?.markAsDirty();
+      this.form.control.get(inner)?.markAsTouched();
+      this.form.control.get(inner)?.updateValueAndValidity();
     }
   }
 
   expenditureDateChanged(expenditureDate: string) {
-
-    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type'));
+    const formInfo = JSON.parse(localStorage.getItem('form_3X_report_type') ?? '');
     let cvgStartDate = formInfo.cvgStartDate;
     let cvgEndDate = formInfo.cvgEndDate;
 
-    if ((!this.utilService.compareDatesAfter((new Date(expenditureDate)), new Date(cvgEndDate)) ||
-      this.utilService.compareDatesAfter((new Date(expenditureDate)), new Date(cvgStartDate)))) {
+    if (
+      !this.utilService.compareDatesAfter(new Date(expenditureDate), new Date(cvgEndDate)) ||
+      this.utilService.compareDatesAfter(new Date(expenditureDate), new Date(cvgStartDate))
+    ) {
       //console.log('Date is invalid');
     } else {
       //console.log('date is valid');
     }
-
   }
 
   expenditureAmountChanged(amount: any) {
@@ -259,16 +261,16 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
       // this._contributionAmount = String(contributionAmountNum);
     }
 
-    const amountValue: string = this._decimalPipe.transform(contributionAmountNum, '.2-2');
-    const patch = {};
+    const amountValue: string = this._decimalPipe.transform(contributionAmountNum, '.2-2') ?? '';
+    const patch: any = {};
     patch[fieldName] = amountValue;
     this.form.control.patchValue(patch, { onlySelf: true });
   }
 
   /**
-  * Allow for negative sign and don't allow more than the max
-  * number of digits.
-  */
+   * Allow for negative sign and don't allow more than the max
+   * number of digits.
+   */
   private _transformAmount(amount: string, max: number): string {
     if (!amount) {
       return amount;
@@ -291,24 +293,20 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
 
   private removeCommas(amount: string): string {
     return amount.toString().replace(new RegExp(',', 'g'), '');
-
   }
 
   public saveLoanPayment(form: string) {
-
-
     if (this.validateForm()) {
-
       let formType: string = '3X';
       // scheduleAction = ScheduleActions.add;
 
       const token: string = JSON.parse(this._cookieService.get('user'));
       let url: string = '/sb/schedB';
-      const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details'));
-      let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`));
+      const committeeDetails: any = JSON.parse(localStorage.getItem('committee_details') ?? '');
+      let reportType: any = JSON.parse(localStorage.getItem(`form_${formType}_report_type`) ?? '');
 
       if (reportType === null || typeof reportType === 'undefined') {
-        reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`));
+        reportType = JSON.parse(localStorage.getItem(`form_${formType}_report_type_backup`) ?? '');
       }
 
       const formData: FormData = new FormData();
@@ -319,10 +317,14 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
         formData.append('report_id', reportType.reportId);
       } else if (reportType && reportType.hasOwnProperty('reportid')) {
         formData.append('report_id', reportType.reportid);
-      } else if(this._activatedRoute && this._activatedRoute.snapshot && 
-        this._activatedRoute.snapshot.queryParams && this._activatedRoute.snapshot.queryParams.reportId){
-          formData.append('report_id', this._activatedRoute.snapshot.queryParams.reportId);
-        }
+      } else if (
+        this._activatedRoute &&
+        this._activatedRoute.snapshot &&
+        this._activatedRoute.snapshot.queryParams &&
+        this._activatedRoute.snapshot.queryParams['reportId']
+      ) {
+        formData.append('report_id', this._activatedRoute.snapshot.queryParams['reportId']);
+      }
 
       formData.append('cmte_id', committeeDetails.committeeid);
       formData.append('transaction_type_identifier', 'LOAN_REPAY_MADE');
@@ -351,21 +353,20 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
       if (this.scheduleAction === ScheduleActions.add || this.scheduleAction === ScheduleActions.addSubTransaction) {
         return this._http
           .post(`${environment.apiUrl}${url}`, formData, {
-            headers: httpOptions
+            headers: httpOptions,
           })
-          .subscribe((res:any) => {
+          .subscribe((res: any) => {
             if (res) {
               //console.log('success!!!')
 
               //update sidebar
-              this._receiptService.getSchedule(formType, res).subscribe(resp => {
+              this._receiptService.getSchedule(formType, res).subscribe((resp) => {
                 const message: any = {
                   formType,
-                  totals: resp
+                  totals: resp,
                 };
                 this._messageService.sendMessage(message);
               });
-
 
               //navigate to Loan Summary here
               this._goToLoanSummary(res.report_id);
@@ -373,21 +374,20 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
             }
             //console.log('success but no response.. failure?')
             return false;
-          }
-          );
+          });
       } else if (this.scheduleAction === ScheduleActions.edit) {
         formData.set('transaction_id', this.transactionDetail.transactionId);
         return this._http
           .put(`${environment.apiUrl}${url}`, formData, {
-            headers: httpOptions
+            headers: httpOptions,
           })
-          .subscribe((res : any) => {
+          .subscribe((res: any) => {
             if (res) {
               //update sidebar
-              this._receiptService.getSchedule(formType, res).subscribe(resp => {
+              this._receiptService.getSchedule(formType, res).subscribe((resp) => {
                 const message: any = {
                   formType,
-                  totals: resp
+                  totals: resp,
                 };
                 this._messageService.sendMessage(message);
               });
@@ -398,21 +398,17 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
             }
             //console.log('success but no response.. failure?')
             return false;
-          }
-          );
-      } else {
-        //console.log('unexpected ScheduleActions received - ' + this.scheduleAction);
+          });
       }
+      return of(null);
     }
+    return of(null);
   }
 
   cancelLoanPayment() {
-    
-    
     if (this.transactionDetail.entryScreenScheduleType === 'transactions') {
       this.goToTransactionsTable();
-    }
-    else {
+    } else {
       this.status.emit({
         form: {},
         direction: 'previous',
@@ -420,33 +416,34 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
         action: ScheduleActions.edit,
         scheduleType: this.transactionDetail.entryScreenScheduleType,
         transactionDetail: {
-          transactionModel: this.transactionDetail
-        }
-
+          transactionModel: this.transactionDetail,
+        },
       });
     }
   }
 
   private goToTransactionsTable() {
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit
-      ? this._activatedRoute.snapshot.queryParams.edit
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit']
+      ? this._activatedRoute.snapshot.queryParams['edit']
       : true;
 
-    const queryParams :any = {
+    const queryParams: any = {
       step: 'transactions',
-      reportId: this._activatedRoute.snapshot.queryParams.amendmentReportId ? this._activatedRoute.snapshot.queryParams.amendmentReportId : this._reportTypeService.getReportIdFromStorage('3X').toString(),
+      reportId: this._activatedRoute.snapshot.queryParams['amendmentReportId']
+        ? this._activatedRoute.snapshot.queryParams['amendmentReportId']
+        : this._reportTypeService.getReportIdFromStorage('3X').toString(),
       edit: this.editMode,
-      transactionCategory: 'disbursements'
+      transactionCategory: 'disbursements',
     };
-    if (this._activatedRoute.snapshot.queryParams.amendmentReportId) {
-      queryParams.amendmentReportId = this._activatedRoute.snapshot.queryParams.amendmentReportId;
+    if (this._activatedRoute.snapshot.queryParams['amendmentReportId']) {
+      queryParams['amendmentReportId'] = this._activatedRoute.snapshot.queryParams['amendmentReportId'];
     }
     this._router.navigate([`/forms/form/3X`], {
-      queryParams: queryParams
+      queryParams: queryParams,
     });
   }
 
-  private _goToLoanSummary(reportId:string = null) {
+  private _goToLoanSummary(reportId: string = '') {
     let loanRepaymentEmitObj: any = {
       form: {},
       direction: 'next',
@@ -455,10 +452,9 @@ export class LoanpaymentComponent implements OnInit, OnDestroy {
       scheduleType: 'sched_c_ls',
     };
 
-    if(reportId && reportId !== 'undefined' && reportId !== '0'){
+    if (reportId && reportId !== 'undefined' && reportId !== '0') {
       loanRepaymentEmitObj.reportId = reportId;
     }
     this.status.emit(loanRepaymentEmitObj);
   }
-
 }

@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
-import {CookieService} from 'ngx-cookie-service';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
-import {map} from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TwoFactorHelperService {
-
-
-  constructor
-  ( private _cookieService: CookieService,
-                private _http: HttpClient ) { }
+  constructor(private _cookieService: CookieService, private _http: HttpClient) {}
 
   requestCode(requestOption: string, call_from: string) {
     const token: string = JSON.parse(this._cookieService.get('user'));
@@ -22,45 +18,45 @@ export class TwoFactorHelperService {
     console.log('Option ' + requestOption);
 
     httpOptions = httpOptions.append('Content-Type', 'application/json');
-    httpOptions = httpOptions.append('token' , token);
+    httpOptions = httpOptions.append('token', token);
 
-    const option: any = { id : requestOption.toUpperCase(), call_from: call_from };
+    const option: any = { id: requestOption.toUpperCase(), call_from: call_from };
 
     return this._http
-        .post(`${environment.apiUrl}${url}`, option, {
-          headers: httpOptions
+      .post(`${environment.apiUrl}${url}`, option, {
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res) => {
+          if (res) {
+            return res;
+          }
+          return false;
         })
-        .pipe(
-            map(res => {
-              if (res) {
-                return res;
-              }
-              return false;
-            })
-        );
+      );
   }
 
   validateCode(code: string) {
-      const token: string = JSON.parse(this._cookieService.get('user'));
-      let httpOptions = new HttpHeaders();
-      const url = '/user/login/verify';
+    const token: string = JSON.parse(this._cookieService.get('user'));
+    let httpOptions = new HttpHeaders();
+    const url = '/user/login/verify';
 
-      httpOptions = httpOptions.append('Content-Type', 'application/json');
-      httpOptions = httpOptions.append('token' , token);
+    httpOptions = httpOptions.append('Content-Type', 'application/json');
+    httpOptions = httpOptions.append('token', token);
 
-      const option: any = { code : code.toString() };
+    const option: any = { code: code.toString() };
 
-      return this._http
-          .post(`${environment.apiUrl}${url}`, option, {
-              headers: httpOptions
-          })
-          .pipe(
-              map(res => {
-                  if (res) {
-                      return res;
-                  }
-                  return false;
-              })
-          );
+    return this._http
+      .post(`${environment.apiUrl}${url}`, option, {
+        headers: httpOptions,
+      })
+      .pipe(
+        map((res) => {
+          if (res) {
+            return res;
+          }
+          return false;
+        })
+      );
   }
 }

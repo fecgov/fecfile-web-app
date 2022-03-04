@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbAccordion, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Subject, Subscription } from 'rxjs';
-import 'rxjs/add/operator/takeUntil';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from 'src/app/shared/partials/confirm-modal/confirm-modal.component';
-import { DialogService } from 'src/app/shared/services/DialogService/dialog.service';
+import { takeUntil } from 'rxjs/operators';
+import { ConfirmModalComponent, ModalHeaderClassEnum } from '../../../shared/partials/confirm-modal/confirm-modal.component';
+import { DialogService } from '../../../shared/services/DialogService/dialog.service';
 import { ReportTypeService } from '../../../forms/form-3x/report-type/report-type.service';
 import { FormsService } from '../../../shared/services/FormsService/forms.service';
 import { MessageService } from '../../../shared/services/MessageService/message.service';
@@ -22,34 +22,34 @@ import { TransactionTypeService } from './transaction-type.service';
 })
 export class TransactionTypeComponent implements OnInit, OnDestroy {
 
-  @ViewChild('acc') accordion: NgbAccordion;
+  @ViewChild('acc') accordion!: NgbAccordion;
   @Output() status: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectedOptions: any = {};
-  @Input() transactionCategory: string = null;
+  @Input() transactionCategory: string = '';
   @Input() formOptionsVisible: boolean = false;
   @Input() transactionCategories: any = [];
 
-  public editMode: boolean;
-  public frmOption: FormGroup;
+  public editMode!: boolean;
+  public frmOption!: FormGroup;
   public frmSubmitted: boolean = false;
   public showForm: boolean = false;
   public searchField: any = {};
   public secondaryOptions: any = [];
-  public transactionType: string = null;
-  public transactionTypeText: string = null;
+  public transactionType: string = '';
+  public transactionTypeText: string = '';
   public transactionTypeFailed: boolean = false;
   public transactionCategorySelected: boolean = false;
   public tranasctionCategoryVal: string = '';
-  public scheduleType: string = null;
+  public scheduleType: string = '';
 
   private _formType: string = '';
   private _mainTransactionCategory: any = [];
-  private _mainTransactionTypeText: string;
+  private _mainTransactionTypeText!: string;
   private _transactionCategory: string = '';
   private _transactionCategories: any = [];
 
   private onDestroy$ = new Subject();
-  routeSubscription: Subscription;
+  routeSubscription!: Subscription;
 
   constructor(
     private _fb: FormBuilder,
@@ -66,29 +66,29 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
     this._config.placement = 'right';
     this._config.triggers = 'click';
 
-    this.routeSubscription = _activatedRoute.queryParams.takeUntil(this.onDestroy$).subscribe(p => {
+    this.routeSubscription = _activatedRoute.queryParams['pipe'](takeUntil(this.onDestroy$)).subscribe(p => {
 	
       const setTargetVal = { value: null, placeholder: null, text: null, category:null };
       this.frmOption = this._fb.group({
         secondaryOption: ['', Validators.required]
       });
-      if (this._activatedRoute.snapshot.queryParams.transactionSubCategory) {
-        setTargetVal.value = this._activatedRoute.snapshot.queryParams.transactionSubCategory;
-        setTargetVal.placeholder = this._activatedRoute.snapshot.queryParams.transactionSubCategoryText;
-        setTargetVal.text = this._activatedRoute.snapshot.queryParams.transactionSubCategoryText;
-        setTargetVal.category = this._activatedRoute.snapshot.queryParams.transactionCategory;
-        if(this._activatedRoute.snapshot.queryParams.transactionCategoryText){
-          this._mainTransactionTypeText = this._activatedRoute.snapshot.queryParams.transactionCategoryText;
+      if (this._activatedRoute.snapshot.queryParams['transactionSubCategory']) {
+        setTargetVal.value = this._activatedRoute.snapshot.queryParams['transactionSubCategory'];
+        setTargetVal.placeholder = this._activatedRoute.snapshot.queryParams['transactionSubCategoryText'];
+        setTargetVal.text = this._activatedRoute.snapshot.queryParams['transactionSubCategoryText'];
+        setTargetVal.category = this._activatedRoute.snapshot.queryParams['transactionCategory'];
+        if(this._activatedRoute.snapshot.queryParams['transactionCategoryText']){
+          this._mainTransactionTypeText = this._activatedRoute.snapshot.queryParams['transactionCategoryText'];
         }
-        this._toggle(this._activatedRoute.snapshot.queryParams.transactionSubCategoryType);
+        this._toggle(this._activatedRoute.snapshot.queryParams['transactionSubCategoryType']);
         this.updateTypeSelected(setTargetVal);
         this.childOptionsListClick(setTargetVal.value);
         this.doValidateOption();
       }
-      this._transactionCategory = p.transactionCategory ? p.transactionCategory : '';
+      this._transactionCategory = p['transactionCategory'] ? p['transactionCategory'] : '';
     });
 
-    this._messageService.getMessage().takeUntil(this.onDestroy$).subscribe(msg => {
+    this._messageService.getMessage().pipe(takeUntil(this.onDestroy$)).subscribe(msg => {
       if(msg && msg.action === 'goDirectlyToSpecificTransaction' && msg.transaction){
         this.updateTypeSelected(msg.transaction);
       }
@@ -96,8 +96,8 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._formType = this._activatedRoute.snapshot.paramMap.get('form_id');
-    this.editMode = this._activatedRoute.snapshot.queryParams.edit === 'false' ? false : true;
+    this._formType = this._activatedRoute.snapshot.paramMap.get('form_id') ?? '';
+    this.editMode = this._activatedRoute.snapshot.queryParams['edit'] === 'false' ? false : true;
 
     this.frmOption = this._fb.group({
       secondaryOption: ['', Validators.required]
@@ -125,7 +125,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
       this.transactionCategory &&
       localStorage.getItem(`form_${this._formType}_temp_transaction_type`) !== null
     ) {
-      const transactionObj: any = JSON.parse(localStorage.getItem(`form_${this._formType}_temp_transaction_type`));
+      const transactionObj: any = JSON.parse(localStorage.getItem(`form_${this._formType}_temp_transaction_type`) ?? '');
 
       if (transactionObj.mainTransactionTypeText !== this.transactionCategory) {
         this._setSecondaryTransactionCategories();
@@ -133,7 +133,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _toggle(sec_option) {
+  private _toggle(sec_option: any) {
     setTimeout(() => {
       if (this.accordion) {
         this.accordion.toggle(sec_option), 0;
@@ -149,7 +149,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
 
     if (this.frmOption.valid) {
       if (localStorage.getItem(`form_${this._formType}_temp_transaction_type`) !== null) {
-        const transObj: any = JSON.parse(localStorage.getItem(`form_${this._formType}_temp_transaction_type`));
+        const transObj: any = JSON.parse(localStorage.getItem(`form_${this._formType}_temp_transaction_type`) ?? '');
 
         window.localStorage.setItem(`form_${this._formType}_transaction_type`, JSON.stringify(transObj));
 
@@ -254,7 +254,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
    *
    * @param      {Object}  e            The event object.
    */
-  // public updateTypeSelected(e, selectedOption: any): void {
+  // public updateTypeSelected(e: any, selectedOption: any): void {
   //   const val: string = e.target.value;
   //   this.transactionType = val;
   //   this.transactionTypeText = e.target.placeholder;
@@ -281,7 +281,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
    * Sets the secondary transaction categories.
    */
   private _setSecondaryTransactionCategories(): void {
-    this._mainTransactionCategory = this.transactionCategories.filter(el => el.value === this.transactionCategory);
+    this._mainTransactionCategory = this.transactionCategories.filter((el: any) => el.value === this.transactionCategory);
     if(this._mainTransactionCategory && this._mainTransactionCategory.length > 0){
       const mainTransactionTypeText: string = this._mainTransactionCategory[0].text;
       const mainTransactionTypeValue: string = this._mainTransactionCategory[0].value;
@@ -328,7 +328,7 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
   /*
     This function is called while selecting a list from transaction screen
   */
-  public childOptionsListClick(id): void {
+  public childOptionsListClick(id: any): void {
     if (this.editMode) {
       //console.log('transaction type selected: ', id);
       if (document.getElementById(id) != null) {
@@ -346,10 +346,10 @@ export class TransactionTypeComponent implements OnInit, OnDestroy {
           'Warning',
           true,
           ModalHeaderClassEnum.warningHeader,
-          null,
+          new Map(),
           'Return to Reports'
         )
-        .then(res => {
+        .then((res: any) => {
           if (res === 'okay') {
             this.ngOnInit();
           } else if (res === 'cancel') {

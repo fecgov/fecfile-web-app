@@ -22,12 +22,14 @@ Software necessary to run the application locally
 * [Docker Compose](https://docs.docker.com/compose/install/)
 
 ### Docker basic usage.
-When running docker-compose you will need to be in the root directory of the project. The reason for this is that docker-compose looks for docker-compose.yml to be in the same directory where it's run. You will also need at least 3GB of memory allocated for docker during the build. 
+When running docker-compose you will need to be in the root directory of the project. The reason for this is that docker-compose looks for docker-compose.yml to be in the same directory where it's run. You will also need at least 3GB of memory allocated for docker during the build.
+
+A Snyk authentication token is needed and should be set as the SNYK_AUTH_TOKEN environment varialbe.  This is needed so that the `snyk protect` command can be run to apply security patches to package dependencies.  You can setup a free account with [Snyk](https://app.snyk.io/) and obtain a token on the Snyk [Account Settings](https://app.snyk.io/account) page. 
 
 ### Run the front-end application
-`docker-compose up -d`
+`docker-compose up --build`
 ### Shut down the containers
-`docker-compose down`
+Ctrl-c in the terminal where you ran docker-compose up or `docker-compose down`
 ### see all running containers
 `docker ps`
 ### running commands in a running container
@@ -37,14 +39,17 @@ When running docker-compose you will need to be in the root directory of the pro
 # Deployment (FEC team only)
 
 ### Create a feature branch
-* Developer creates a feature branch and pushes to `origin`:
 
+Using git-flow extensions:
+    ```
+    git flow feature start feature_branch
+    ```
+
+Without the git-flow extensions:
     ```
     git checkout develop
     git pull
-    git checkout -b feature/my-feature develop
-    # Work happens here
-    git push --set-upstream origin feature/my-feature
+    git checkout -b feature/feature_branch develop
     ```
 
 * Developer creates a GitHub PR when ready to merge to `develop` branch
@@ -52,46 +57,51 @@ When running docker-compose you will need to be in the root directory of the pro
 * [auto] `develop` is deployed to `dev`
 
 ### Create a release branch
-* Developer creates a release branch and pushes to `origin`:
 
-    ```
-    git checkout develop
-    git pull
-    git checkout -b release/sprint-# develop
-    git push --set-upstream origin release/sprint-#
-    ```
+Using git-flow extensions:
+```
+git flow release start sprint-#
+```
+
+Without the git-flow extensions:
+```
+git checkout develop
+git pull
+git checkout -b release/sprint-# develop
+git push --set-upstream origin release/sprint-#
+```
 
 ### Create and deploy a hotfix
-* Developer makes sure their local main and develop branches are up to date:
 
-   ```
-   git checkout develop
-   git pull
-   git checkout main
-   git pull
-   ```
+Using git-flow extensions:
+```
+git flow hotfix start my-fix
+# Work happens here
+git flow hotfix finish my-fix
+```
+
+Without the git-flow extensions:
+```
+git checkout -b hotfix/my-fix main
+# Work happens here
+git push --set-upstream origin hotfix/my-fix
+```
 
 * Developer creates a hotfix branch, commits changes, and **makes a PR to the `main` and `develop` branches**:
-
-    ```
-    git checkout -b hotfix/my-fix main
-    # Work happens here
-    git push --set-upstream origin hotfix/my-fix
-    ```
-
 * Reviewer merges hotfix/my-fix branch into `develop` and `main`
 * [auto] `develop` is deployed to `dev`. Make sure the build passes before deploying to `main`.
 * Developer deploys hotfix/my-fix branch to main using **Deploying a release to production** instructions below
 
 ### Deploying a release to production
 * Developer creates a PR in GitHub to merge release/sprint-# branch into the `main` branch
-* Reviewer approves PR and merges into `main`
+* Reviewer approves PR and merges into `main` (At this point the code is automatically deployed)
 * Check CircleCI for passing pipeline tests
 * If tests pass, continue
+* (If commits were made to release/sprint-#) Developer creates a PR in GitHub to merge release/sprint-# branch into the `develop` branch
+* Reviewer approves PR and merges into `develop`
 * Delete release/sprint-# branch
 * In GitHub, go to `Code -> tags -> releases -> Draft a new release`
 * Publish a new release using tag sprint-#, be sure to Auto-generate release notes
-* Deploy `sprint-#` tag to production
 
 
 ## Additional developer notes

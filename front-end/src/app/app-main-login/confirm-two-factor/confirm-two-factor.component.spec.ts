@@ -2,16 +2,17 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ConfirmTwoFactorComponent } from './confirm-two-factor.component';
 
-describe('ConfirmTwoFactorComponent', () => {
+xdescribe('ConfirmTwoFactorComponent', () => {
   let component: ConfirmTwoFactorComponent;
   let fixture: ComponentFixture<ConfirmTwoFactorComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ConfirmTwoFactorComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [ConfirmTwoFactorComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ConfirmTwoFactorComponent);
@@ -19,7 +20,7 @@ describe('ConfirmTwoFactorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

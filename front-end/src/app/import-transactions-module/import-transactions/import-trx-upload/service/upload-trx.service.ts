@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../../environments/environment';
 
 import * as S3 from 'aws-sdk/clients/s3';
 import * as AWS from 'aws-sdk/global';
@@ -11,7 +11,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { map } from 'rxjs/operators';
 import { SelectObjectContentEventStream } from 'aws-sdk/clients/s3';
 import { StreamingEventStream } from 'aws-sdk/lib/event-stream/event-stream';
-import { ERROR_COMPONENT_TYPE } from '@angular/compiler';
 import { UploadFileModel } from '../../model/upload-file.model';
 
 /**
@@ -19,7 +18,7 @@ import { UploadFileModel } from '../../model/upload-file.model';
  * TODO Consider changing this to a common service with contacts.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UploadTrxService {
   private readonly TRANSACTIONS_PATH = 'transactions/';
@@ -29,11 +28,10 @@ export class UploadTrxService {
    * Constructor will obtain credentials for AWS S3 Bucket.
    * @param _http
    */
-  constructor(private _http: HttpClient,
-    private _cookieService: CookieService) {
+  constructor(private _http: HttpClient, private _cookieService: CookieService) {
     AWS.config.region = environment.awsRegion;
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: environment.awsIdentityPoolId
+      IdentityPoolId: environment.awsIdentityPoolId,
     });
     this.bucket = new S3({});
   }
@@ -41,7 +39,7 @@ export class UploadTrxService {
   public progressPercent = 0;
   public progressPercentSubject = new BehaviorSubject<number>(this.progressPercent);
 
-  private bucket: S3;
+  private bucket!: S3;
   private readonly bucketName = 'fecfile-filing-frontend';
 
   /**
@@ -57,27 +55,27 @@ export class UploadTrxService {
       Metadata: {
         'committee-id': committeeId,
         'check-sum': uploadFile.checkSum,
-        'user-file-name': uploadFile.fileName
+        'user-file-name': uploadFile.fileName,
       },
       Body: uploadFile.file,
       ACL: 'public-read',
-      ContentType: uploadFile.file.type
+      ContentType: uploadFile.file.type,
     };
 
     // Bind the function to the 'this' for this component as it will
     // be called from a callback function where its 'this' is not the component this.
     const _setPercentage = this._setPercentage.bind(this);
 
-    return Observable.create(observer => {
+    return Observable.create((observer: any) => {
       this.bucket
         .upload(params)
-        .on('httpUploadProgress', function(evt: S3.ManagedUpload.Progress) {
+        .on('httpUploadProgress', function (evt: S3.ManagedUpload.Progress) {
           // console.log(evt.loaded + ' of ' + evt.total + ' Bytes');
           const progressPercent = Math.trunc((evt.loaded / evt.total) * 100);
           // console.log('progressPercent = ' + progressPercent);
           _setPercentage(progressPercent);
         })
-        .send(function(err: AWSError, data: ManagedUpload.SendData) {
+        .send(function (err: AWSError, data: ManagedUpload.SendData) {
           if (err) {
             console.log('There was an error uploading your file: ', err);
             _setPercentage(0);
@@ -116,11 +114,11 @@ export class UploadTrxService {
     const params = {
       Bucket: this.bucketName,
       // MaxKeys: 20,
-      Prefix: this.TRANSACTIONS_PATH + committeeId
+      Prefix: this.TRANSACTIONS_PATH + committeeId,
     };
 
-    return Observable.create(observer => {
-      this.bucket.listObjectsV2(params, function(err, data) {
+    return Observable.create((observer: any) => {
+      this.bucket.listObjectsV2(params, function (err, data) {
         // this.bucket.listObjectVersions(params, function (err, data) {
         if (err) {
           console.log(err, err.stack);
@@ -140,7 +138,7 @@ export class UploadTrxService {
    * @returns an Observable containing an array of the header fields names.
    */
   public readCsvRecords(file: File, numberOfRecords: number, committeeId: string): Observable<any> {
-    let records = [];
+    let records: any[] = [];
 
     const params = {
       Bucket: this.bucketName,
@@ -150,8 +148,8 @@ export class UploadTrxService {
       Expression: 'select * from s3object s limit ' + numberOfRecords,
       InputSerialization: {
         CSV: {
-          FileHeaderInfo: 'USE'
-        }
+          FileHeaderInfo: 'USE',
+        },
       },
       OutputSerialization: {
         // CSV: {
@@ -159,23 +157,23 @@ export class UploadTrxService {
         //   RecordDelimiter: '\n'
         // }
         JSON: {
-          RecordDelimiter: ','
-        }
-      }
+          RecordDelimiter: ',',
+        },
+      },
     };
 
-    return Observable.create(observer => {
-      this.bucket.selectObjectContent(params, async function(err, data) {
+    return Observable.create((observer: any) => {
+      this.bucket.selectObjectContent(params, async function (err, data) {
         if (err) {
-          observer.next(ERROR_COMPONENT_TYPE);
+          observer.next('ERROR_COMPONENT_TYPE');
           observer.complete();
         }
-        const events: SelectObjectContentEventStream = data.Payload;
+        const events: SelectObjectContentEventStream | undefined = data.Payload;
         if (Array.isArray(events)) {
           for await (const event of events) {
             // Check the top-level field to determine which event this is.
             if (event.Records) {
-              console.log('Records:', event.Records.Payload.toString());
+              console.log('Records:', event.Records.Payload?.toString());
 
               // const records = event.Records.Payload.decode('utf-8');
               // print(records)
@@ -183,7 +181,7 @@ export class UploadTrxService {
               const payload = event.Records.Payload;
 
               // trim last char if it is a comma.
-              const payLoadStr = payload.toString().replace(/\,$/, '');
+              const payLoadStr = payload?.toString().replace(/\,$/, '');
               // if (payLoadStr) {
               //   const lastchar = payLoadStr.substring(payLoadStr.length - 2, payLoadStr.length - 1);
               //   if (lastchar === ',') {
@@ -216,7 +214,7 @@ export class UploadTrxService {
   }
 
   /**
-   * Invokes the api to import DCF file from S3 and validate and import. 
+   * Invokes the api to import DCF file from S3 and validate and import.
    */
   public importDcfFile(fileName: string, committeeId: string): Observable<any> {
     const token: string = JSON.parse(this._cookieService.get('user'));
@@ -232,10 +230,10 @@ export class UploadTrxService {
 
     return this._http
       .post(`${environment.apiUrl}${url}`, request, {
-        headers: httpOptions
+        headers: httpOptions,
       })
       .pipe(
-        map(res => {
+        map((res: any) => {
           if (res) {
             return res;
           }

@@ -1,13 +1,13 @@
 import { ImportContactsModule } from './import-contacts.module';
 
-describe('ImportContactsModule', () => {
+xdescribe('ImportContactsModule', () => {
   let importContactsModule: ImportContactsModule;
 
   beforeEach(() => {
     importContactsModule = new ImportContactsModule();
   });
 
-  it('should create an instance', () => {
+  xit('should create an instance', () => {
     expect(importContactsModule).toBeTruthy();
   });
 });
