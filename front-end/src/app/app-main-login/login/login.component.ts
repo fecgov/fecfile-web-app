@@ -1,7 +1,7 @@
-import { Component, OnInit, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MessageService } from '../../shared/services/MessageService/message.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -14,7 +14,7 @@ import { SessionService } from '../../shared/services/SessionService/session.ser
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   public frm!: FormGroup;
   public isBusy: boolean = false;
   public hasFailed: boolean = false;
@@ -30,16 +30,13 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private _fb: FormBuilder,
-    private _ngZone: NgZone,
     private _apiService: ApiService,
     private _authService: AuthService,
     private _router: Router,
-    private _route: ActivatedRoute,
-    private _cookieService: CookieService,
     private _messageService: MessageService,
     private _sessionService: SessionService
   ) {
-    this.frm = _fb.group({
+    this.frm = this._fb.group({
       commiteeId: ['', Validators.required],
       loginPassword: ['', Validators.required],
       emailId: ['', [Validators.required, Validators.email]],
@@ -116,7 +113,6 @@ export class LoginComponent implements OnInit {
         }
       },
       error: (error) => {
-        //console.log('error: ', error);
         this.isBusy = false;
         this.hasFailed = true;
       },

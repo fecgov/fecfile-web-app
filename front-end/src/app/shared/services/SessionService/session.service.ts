@@ -1,11 +1,9 @@
-import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, switchMap, filter, take, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { switchMap, filter, take, tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
-import { environment } from '../../../../environments/environment';
 import jwt_decode from 'jwt-decode';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { AppConfigService } from '../../../app-config.service';
 // import { tokenKey } from '@angular/core/src/view';
 

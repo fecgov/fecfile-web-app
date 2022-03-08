@@ -4,7 +4,6 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SessionService } from '../shared/services/SessionService/session.service';
 import { ApiService } from '../shared/services/APIService/api.service';
-import { FormsService } from '../shared/services/FormsService/forms.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,16 +33,15 @@ export class DashboardComponent implements OnInit {
   constructor(
     private _sessionService: SessionService,
     private _apiService: ApiService,
-    private _formService: FormsService,
     private modalService: NgbModal,
     private _authService: AuthService,
     private _reportService: ReportsService
   ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('form3XReportInfo.showDashBoard') === 'Y') {
-      this._formService.removeFormDashBoard('3X');
-    }
+    // if (localStorage.getItem('form3XReportInfo.showDashBoard') === 'Y') {
+    //   this._formService.removeFormDashBoard('3X');
+    // }
     const committeeDetails: any = localStorage.getItem('committee_details') ?? '';
     if (committeeDetails) {
       this.cmte_id = JSON.parse(committeeDetails).committeeid;

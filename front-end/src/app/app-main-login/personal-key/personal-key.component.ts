@@ -18,7 +18,7 @@ import { Subject } from 'rxjs';
   templateUrl: './personal-key.component.html',
   styleUrls: ['./personal-key.component.scss'],
 })
-export class PersonalKeyComponent implements OnInit, OnDestroy {
+export class PersonalKeyComponent implements OnDestroy {
   accordionExpanded!: boolean;
   confirmationMessage: string =
     'Did you save or print a copy of your Personal Key? You will be asked to enter your Personal Key in the event you are unable to log into the system.';
@@ -45,8 +45,6 @@ export class PersonalKeyComponent implements OnInit, OnDestroy {
         }
       });
   }
-
-  ngOnInit() {}
 
   public toggleAccordion($event: NgbPanelChangeEvent, acc: any) {
     if (acc.isExpanded($event.panelId)) {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -6,10 +6,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './consent-modal.component.html',
   styleUrls: ['./consent-modal.component.scss'],
 })
-export class ConsentModalComponent implements OnInit {
+export class ConsentModalComponent {
   constructor(private activeModal: NgbActiveModal) {}
-
-  ngOnInit() {}
 
   decline() {
     this.activeModal.close('decline');

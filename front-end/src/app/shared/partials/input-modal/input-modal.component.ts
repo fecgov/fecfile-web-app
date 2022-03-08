@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 
 export enum SaveDialogAction {
@@ -11,14 +11,12 @@ export enum SaveDialogAction {
   templateUrl: './input-modal.component.html',
   styleUrls: ['./input-modal.component.scss'],
 })
-export class InputModalComponent implements OnInit {
+export class InputModalComponent {
   titleText = 'Add Memo';
   saveAction = SaveDialogAction.saveNone;
   inputContent!: string;
   viewOnlyFlag: boolean = false;
   constructor(config: NgbModalConfig, private modalService: NgbModal, private activeModal: NgbActiveModal) {}
-
-  ngOnInit() {}
 
   closeModal() {
     const dismissalData = {

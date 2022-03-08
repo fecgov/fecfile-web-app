@@ -87,7 +87,7 @@
         </div>
       </div>
       <div class="grid-row">
-        <div class="grid-col" *ngIf="accounts?.treasurerfirstname != ''">
+        <div class="grid-col" *ngIf="accounts?.treasurerfirstname !== ''">
           <p>
             <b>Treasurer First Name</b>
           </p>
@@ -95,7 +95,7 @@
             {{ accounts?.treasurerfirstname }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.treasurermiddlename != ''">
+        <div class="grid-col" *ngIf="accounts?.treasurermiddlename !== ''">
           <p>
             <b>Treasurer Middle Name</b>
           </p>
@@ -103,7 +103,7 @@
             {{ accounts?.treasurermiddlename }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.treasurerlastname != ''">
+        <div class="grid-col" *ngIf="accounts?.treasurerlastname !== ''">
           <p>
             <b>Treasurer Last Name</b>
           </p>
@@ -113,7 +113,7 @@
         </div>
       </div>
       <div class="grid-row">
-        <div class="grid-col" *ngIf="accounts?.treasurerprefix != ''">
+        <div class="grid-col" *ngIf="accounts?.treasurerprefix !== ''">
           <p>
             <b>Treasurer Prefix</b>
           </p>
@@ -121,7 +121,7 @@
             {{ accounts?.treasurerprefix }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.treasurersuffix != ''">
+        <div class="grid-col" *ngIf="accounts?.treasurersuffix !== ''">
           <p>
             <b>Treasurer Sufix</b>
           </p>
@@ -131,13 +131,13 @@
         </div>
       </div>
       <div class="grid-row">
-        <div class="grid-col" *ngIf="accounts?.treasurerstreet1 != ''">
+        <div class="grid-col" *ngIf="accounts?.treasurerstreet1 !== ''">
           <p><b>Address Line 1</b></p>
           <p>
             {{ accounts?.treasurerstreet1 }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.treasurerstreet2 != ''">
+        <div class="grid-col" *ngIf="accounts?.treasurerstreet2 !== ''">
           <p><b>Address Line 2</b></p>
           <p>
             {{ accounts?.treasurerstreet2 }}
@@ -145,7 +145,7 @@
         </div>
       </div>
       <div class="grid-row">
-        <div class="grid-col" *ngIf="accounts?.treasurercity != ''">
+        <div class="grid-col" *ngIf="accounts?.treasurercity !== ''">
           <p>
             <b>City</b>
           </p>
@@ -153,7 +153,7 @@
             {{ accounts?.treasurercity }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.treasurerstate != ''">
+        <div class="grid-col" *ngIf="accounts?.treasurerstate !== ''">
           <p>
             <b>State</b>
           </p>
@@ -161,7 +161,7 @@
             {{ accounts?.treasurerstate }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.treasurerzipcode != ''">
+        <div class="grid-col" *ngIf="accounts?.treasurerzipcode !== ''">
           <p>
             <b>Zip Code</b>
           </p>
@@ -170,7 +170,7 @@
           </p>
         </div>
       </div>
-      <div class="grid-row" *ngIf="accounts?.email_on_file != ''">
+      <div class="grid-row" *ngIf="accounts?.email_on_file !== ''">
         <div class="grid-col">
           <p>
             <b>Email</b>
@@ -196,7 +196,7 @@
       </div>
 
       <div class="grid-row">
-        <div class="grid-col" *ngIf="accounts?.bankName != ''">
+        <div class="grid-col" *ngIf="accounts?.bankName !== ''">
           <p>
             <b>Bank Name</b>
           </p>
@@ -204,7 +204,7 @@
             {{ accounts?.bankName }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.bankAddress1 != ''">
+        <div class="grid-col" *ngIf="accounts?.bankAddress1 !== ''">
           <p>
             <b>Address Line 1</b>
           </p>
@@ -212,7 +212,7 @@
             {{ accounts?.bankAddress1 }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.bankAddress2 != ''">
+        <div class="grid-col" *ngIf="accounts?.bankAddress2 !== ''">
           <p>
             <b>Address Line 2</b>
           </p>
@@ -220,7 +220,7 @@
             {{ accounts?.bankAddress2 }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.bankCity != ''">
+        <div class="grid-col" *ngIf="accounts?.bankCity !== ''">
           <p>
             <b>City</b>
           </p>
@@ -228,7 +228,7 @@
             {{ accounts?.bankCity }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.bankState != ''">
+        <div class="grid-col" *ngIf="accounts?.bankState !== ''">
           <p>
             <b>State</b>
           </p>
@@ -236,7 +236,7 @@
             {{ accounts?.bankState }}
           </p>
         </div>
-        <div class="grid-col" *ngIf="accounts?.bankZip != ''">
+        <div class="grid-col" *ngIf="accounts?.bankZip !== ''">
           <p>
             <b>Zip Code</b>
           </p>
@@ -259,9 +259,9 @@
         </div>
       </div>
 
-      <div *ngIf="accounts?.candidatePrefix != ''">
+      <div *ngIf="accounts?.candidatePrefix !== ''">
         <div class="grid-row">
-          <div class="grid-col" *ngIf="accounts?.candidatePrefix != ''">
+          <div class="grid-col" *ngIf="accounts?.candidatePrefix !== ''">
             <p>
               <b>Candidate Prefix</b>
             </p>
@@ -269,7 +269,7 @@
               {{ accounts?.candidatePrefix }}
             </p>
           </div>
-          <!-- <div class="grid-col" *ngIf="accounts?.candidateFirstName != ''">
+          <!-- <div class="grid-col" *ngIf="accounts?.candidateFirstName !==''">
             <p>
               <b>Candidate First Name</b>
             </p>
@@ -277,7 +277,7 @@
               {{ accounts?.candidateFirstName }}
             </p>
           </div> -->
-          <!-- <div class="grid-col" *ngIf="accounts?.candidateLastName != ''">
+          <!-- <div class="grid-col" *ngIf="accounts?.candidateLastName !==''">
             <p>
               <b>Candidate Last Name</b>
             </p>
@@ -285,7 +285,7 @@
               {{ accounts?.candidateLastName }}
             </p>
           </div> -->
-          <!-- <div class="grid-col" *ngIf="accounts?.candidateSuffix != ''">
+          <!-- <div class="grid-col" *ngIf="accounts?.candidateSuffix !==''">
             <p>
               <b>Candidate Suffix</b>
             </p>
@@ -293,7 +293,7 @@
               {{ accounts?.candidateSuffix }}
             </p>
           </div> -->
-          <!-- <div class="grid-col" *ngIf="accounts?.partyAffiliation != ''">
+          <!-- <div class="grid-col" *ngIf="accounts?.partyAffiliation !==''">
             <p>
               <b>Party Affiliation</b>
             </p>
@@ -301,7 +301,7 @@
               {{ accounts?.partyAffiliation }}
             </p>
           </div> -->
-          <!-- <div class="grid-col" *ngIf="accounts?.officeSought != ''">
+          <!-- <div class="grid-col" *ngIf="accounts?.officeSought !==''">
             <p>
               <b>Office Sought</b>
             </p>
@@ -309,7 +309,7 @@
               {{ accounts?.officeSought }}
             </p>
           </div> -->
-          <!-- <div class="grid-col" *ngIf="accounts?.officeSought != ''">
+          <!-- <div class="grid-col" *ngIf="accounts?.officeSought !==''">
             <p>
               <b>State</b>
             </p>
@@ -317,7 +317,7 @@
               {{ accounts?.candidateState }}
             </p>
           </div> -->
-          <!-- <div class="grid-col" *ngIf="accounts?.officeSought != ''">
+          <!-- <div class="grid-col" *ngIf="accounts?.officeSought !==''">
             <p>
               <b>District</b>
             </p>

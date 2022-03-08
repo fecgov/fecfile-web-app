@@ -4,12 +4,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ConsentModalComponent } from '../consent-modal/consent-modal.component';
 import { MessageService } from '../../shared/services/MessageService/message.service';
 import { Subscription } from 'rxjs';
 import { TwoFactorHelperService } from '../service/two-factor-helper/two-factor-helper.service';
 import { AuthService } from '../../shared/services/AuthService/auth.service';
-import { PasswordService } from '../../password/service/password.service';
 import {
   ConfirmModalComponent,
   ModalHeaderClassEnum,
@@ -42,8 +40,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
     private _twoFactorService: TwoFactorHelperService,
     private _authService: AuthService,
     private _manageUserService: ManageUserService,
-    private _dialogService: DialogService,
-    private _passwordService: PasswordService
+    private _dialogService: DialogService
   ) {
     this.twoFactInfo = _fb.group({
       securityCode: ['', [Validators.required, Validators.pattern(new RegExp('^[0-9]+$'))]],
@@ -220,16 +217,16 @@ export class ConfirmTwoFactorComponent implements OnInit {
   }
 
   private handleResetPassword(code: string) {
-    this._passwordService.verify(code).subscribe((res: any) => {
-      if (res) {
-        if (res['is_allowed'] === true) {
-          this.isValid = true;
-          this.response = res;
-          this.askConsent();
-        } else {
-          this.isValid = false;
-        }
-      }
-    });
+    // this._passwordService.verify(code).subscribe((res: any) => {
+    //   if (res) {
+    //     if (res['is_allowed'] === true) {
+    //       this.isValid = true;
+    //       this.response = res;
+    //       this.askConsent();
+    //     } else {
+    //       this.isValid = false;
+    //     }
+    //   }
+    // });
   }
 }

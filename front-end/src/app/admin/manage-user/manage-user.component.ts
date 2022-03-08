@@ -222,7 +222,7 @@ export class ManageUserComponent implements OnInit {
   protected getFormValidationErrors() {
     Object.keys(this.frmAddUser.controls).forEach((key) => {
       const controlErrors: ValidationErrors | null = this.frmAddUser.get(key)?.errors ?? null;
-      if (controlErrors != null) {
+      if (controlErrors !== null) {
         Object.keys(controlErrors).forEach((keyError) => {
           console.error('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
         });

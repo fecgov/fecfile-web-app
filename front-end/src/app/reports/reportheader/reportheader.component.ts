@@ -1,20 +1,6 @@
-import {
-  Component,
-  EventEmitter,
-  ElementRef,
-  HostListener,
-  OnInit,
-  Input,
-  Output,
-  ViewChild,
-  ViewEncapsulation,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import { ReportdetailsComponent } from '../reportdetails/reportdetails.component';
-import { FormsService } from '../../shared/services/FormsService/forms.service';
+import { Component, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReportsMessageService } from '../service/reports-message.service';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { ReportFilterModel } from '../model/report-filter.model';
 import { Subscription } from 'rxjs';
 
@@ -41,7 +27,7 @@ export enum ActiveView {
     ])
   ] */
 })
-export class ReportheaderComponent implements OnInit {
+export class ReportheaderComponent implements OnInit, OnDestroy {
   public currentYear: number = 0;
   public reportsView = ActiveView.reports;
   public showSideBar: boolean = false;
@@ -63,11 +49,7 @@ export class ReportheaderComponent implements OnInit {
   private readonly filtersLSK = 'reports.filters';
   private activeRoutesSubscription!: Subscription;
 
-  constructor(
-    private _formService: FormsService,
-    private _activeRoute: ActivatedRoute,
-    private _reportsMessageService: ReportsMessageService
-  ) {
+  constructor(private _activeRoute: ActivatedRoute, private _reportsMessageService: ReportsMessageService) {
     this.applyFiltersSubscription = this._reportsMessageService
       .getApplyFiltersMessage()
       .subscribe((filters: ReportFilterModel) => {
@@ -82,9 +64,9 @@ export class ReportheaderComponent implements OnInit {
     this.clearSearch();
     this.viewMode = 'tab1';
 
-    if (localStorage.getItem('form3XReportInfo.showDashBoard') === 'Y') {
-      this._formService.removeFormDashBoard('3X');
-    }
+    // if (localStorage.getItem('form3XReportInfo.showDashBoard') === 'Y') {
+    //   this._formService.removeFormDashBoard('3X');
+    // }
 
     this.activeRoutesSubscription = this._activeRoute.params.subscribe((params) => {
       this.existingReportId = params['reportId'];
@@ -103,7 +85,7 @@ export class ReportheaderComponent implements OnInit {
     const filtersJson: string | null = localStorage.getItem(this.filtersLSK);
 
     let filters: ReportFilterModel;
-    if (filtersJson != null) {
+    if (filtersJson !== null) {
       filters = JSON.parse(filtersJson);
       if (filters.keywords) {
         if (filters.keywords.length > 0) {

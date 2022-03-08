@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from '../shared/services/APIService/api.service';
-import { FormsService } from '../shared/services/FormsService/forms.service';
 import { MessageService } from '../shared/services/MessageService/message.service';
 import { SessionService } from '../shared/services/SessionService/session.service';
 import { IReport } from './report';
@@ -27,8 +26,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
     private _reportService: ReportService,
     private _sessionService: SessionService,
     private _apiService: ApiService,
-    private _modalService: NgbModal,
-    private _formService: FormsService /*rivate _messageService: MessageService*/
+    private _modalService: NgbModal
   ) {}
 
   /*trackById(index:number, reports:IReport[]): string{
@@ -45,9 +43,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     //console.log("accessing service call...");
 
-    if (localStorage.getItem('form3XReportInfo.showDashBoard') === 'Y') {
-      this._formService.removeFormDashBoard('3X');
-    }
+    // if (localStorage.getItem('form3XReportInfo.showDashBoard') === 'Y') {
+    //   this._formService.removeFormDashBoard('3X');
+    // }
 
     this._reportService
       .getReports()

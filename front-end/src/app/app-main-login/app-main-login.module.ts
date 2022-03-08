@@ -9,7 +9,6 @@ import { ConsentModalComponent } from './consent-modal/consent-modal.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { TwoFactorLoginComponent } from './two-factor-login/two-factor-login.component';
-import { CreatePasswordComponent } from './create-password/create-password.component';
 import { PersonalKeyComponent } from './personal-key/personal-key.component';
 
 @NgModule({
@@ -20,7 +19,6 @@ import { PersonalKeyComponent } from './personal-key/personal-key.component';
     ConfirmTwoFactorComponent,
     ConsentModalComponent,
     RegisterComponent,
-    CreatePasswordComponent,
     PersonalKeyComponent,
   ],
   exports: [LoginComponent, TwoFactorLoginComponent, RegisterComponent],

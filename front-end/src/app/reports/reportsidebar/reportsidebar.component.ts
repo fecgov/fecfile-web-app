@@ -537,7 +537,7 @@ export class ReportsidebarComponent implements OnInit {
   private applyFiltersCache() {
     const filtersJson: string | null = localStorage.getItem(this.filtersLSK);
 
-    if (filtersJson != null) {
+    if (filtersJson !== null) {
       this.cachedFilters = JSON.parse(filtersJson);
       if (this.cachedFilters) {
         this.filterCvgDateFrom = this.cachedFilters.filterCvgDateFrom;
