@@ -8,7 +8,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { UtilService } from './utils/util.service';
 import { OrderByPipe } from 'ngx-pipes';
 import { InputModalComponent } from './partials/input-modal/input-modal.component';
-import { ExportDirective } from './directives/export.directive';
 import { SpinnerComponent } from './partials/spinner/spinner.component';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './partials/header/header.component';
@@ -26,7 +25,7 @@ import { HeaderComponent } from './partials/header/header.component';
     InputModalComponent,
     SpinnerComponent,
   ],
-  providers: [DecimalPipe, DatePipe, UtilService, OrderByPipe, PhonePipe, CurrencyPipe, ExportDirective],
+  providers: [DecimalPipe, DatePipe, UtilService, OrderByPipe, PhonePipe, CurrencyPipe],
   entryComponents: [InputModalComponent],
 })
 export class SharedModule {}

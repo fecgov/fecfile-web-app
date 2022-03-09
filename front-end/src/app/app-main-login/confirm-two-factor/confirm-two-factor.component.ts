@@ -1,17 +1,10 @@
-import { DialogService } from './../../shared/services/DialogService/dialog.service';
-import { ManageUserService } from './../../admin/manage-user/service/manage-user-service/manage-user.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MessageService } from '../../shared/services/MessageService/message.service';
 import { Subscription } from 'rxjs';
-import { TwoFactorHelperService } from '../service/two-factor-helper/two-factor-helper.service';
+import { TwoFactorHelperService } from '../two-factor-helper.service';
 import { AuthService } from '../../shared/services/AuthService/auth.service';
-import {
-  ConfirmModalComponent,
-  ModalHeaderClassEnum,
-} from '../../shared/partials/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-confirm-two-factor',
@@ -35,12 +28,9 @@ export class ConfirmTwoFactorComponent implements OnInit {
     private router: Router,
     private _fb: FormBuilder,
     private _activatedRoute: ActivatedRoute,
-    private modalService: NgbModal,
     private _messageService: MessageService,
     private _twoFactorService: TwoFactorHelperService,
-    private _authService: AuthService,
-    private _manageUserService: ManageUserService,
-    private _dialogService: DialogService
+    private _authService: AuthService
   ) {
     this.twoFactInfo = _fb.group({
       securityCode: ['', [Validators.required, Validators.pattern(new RegExp('^[0-9]+$'))]],
@@ -109,17 +99,6 @@ export class ConfirmTwoFactorComponent implements OnInit {
             return;
           }
         });
-      } else if (this.entryPoint === 'registration') {
-        this._manageUserService.verifyCode(this.twoFactInfo.value.securityCode).subscribe((resp: any) => {
-          if (resp && resp.is_allowed) {
-            this._authService.doSignIn(resp.token);
-            this.router.navigate(['/createPassword'], { queryParamsHandling: 'merge' });
-          } else if (resp && !resp.is_allowed) {
-            this.isValid = false;
-          }
-        });
-      } else if (this.entryPoint === 'reset') {
-        this.handleResetPassword(code);
       }
     }
   }
@@ -151,57 +130,6 @@ export class ConfirmTwoFactorComponent implements OnInit {
     this.router.navigate(['/dashboard']).then((r) => {
       // do nothing
     });
-    // const modalRef = this.modalService.open(ConsentModalComponent, { size: 'lg', centered: true });
-    // modalRef.result
-    //   .then((res) => {
-    //     let navUrl = '';
-    //     if (res === 'agree') {
-    //       if (this.response.token) {
-    //         this._authService.doSignIn(this.response.token);
-    //       }
-    //       navUrl = '/dashboard';
-    //     } else if (res === 'decline') {
-    //       this._authService.doSignOut();
-    //       navUrl = '[/login]';
-    //     }
-    //     if (this.entryPoint === 'reset' && res === 'agree') {
-    //       this._messageService.sendMessage({ action: 'resetPassword', entryPoint: 'reset' });
-    //       this.router.navigate(['/createPassword'], { queryParamsHandling: 'merge' });
-    //     } else {
-    //       this.router.navigate([navUrl]).then((r) => {
-    //         // do nothing
-    //       });
-    //     }
-    //   })
-    //   .catch((e: any) => {
-    //     // do nothing stay on the same page
-    //   });
-  }
-  resend() {
-    if (this.resendOption) {
-      this._twoFactorService.requestCode(this.resendOption, this.entryPoint).subscribe(
-        (successResp: any) => {
-          if (successResp && successResp.is_allowed) {
-            this._dialogService.confirm(
-              'Security code has been successfully resent',
-              ConfirmModalComponent,
-              'Code Resent',
-              false,
-              ModalHeaderClassEnum.successHeader
-            );
-          }
-        },
-        (errorResp: any) => {
-          this._dialogService.confirm(
-            'There was an issue resending the code. Please try again.',
-            ConfirmModalComponent,
-            'Error Occured',
-            false,
-            ModalHeaderClassEnum.errorHeader
-          );
-        }
-      );
-    }
   }
 
   public selectAnotherType() {
@@ -214,19 +142,5 @@ export class ConfirmTwoFactorComponent implements OnInit {
     } else if (this.entryPoint === 'reset') {
       this.router.navigate(['/reset-selector']);
     }
-  }
-
-  private handleResetPassword(code: string) {
-    // this._passwordService.verify(code).subscribe((res: any) => {
-    //   if (res) {
-    //     if (res['is_allowed'] === true) {
-    //       this.isValid = true;
-    //       this.response = res;
-    //       this.askConsent();
-    //     } else {
-    //       this.isValid = false;
-    //     }
-    //   }
-    // });
   }
 }

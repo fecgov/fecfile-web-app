@@ -1,10 +1,9 @@
-import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MessageService } from '../../shared/services/MessageService/message.service';
-import { CookieService } from 'ngx-cookie-service';
 import { ApiService } from '../../shared/services/APIService/api.service';
 import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { SessionService } from '../../shared/services/SessionService/session.service';

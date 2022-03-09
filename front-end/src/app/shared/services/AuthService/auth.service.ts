@@ -5,7 +5,6 @@ import { SessionService } from '../SessionService/session.service';
 import jwt_decode from 'jwt-decode';
 import { Roles } from '../../enums/Roles';
 import { ConfirmModalComponent, ModalHeaderClassEnum } from '../../partials/confirm-modal/confirm-modal.component';
-// import { ModalDismissReasons } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
 
 @Injectable({

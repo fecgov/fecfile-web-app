@@ -1,4 +1,3 @@
-import { ReportsService } from './../reports/service/report.service';
 import { AuthService } from './../shared/services/AuthService/auth.service';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -34,8 +33,7 @@ export class DashboardComponent implements OnInit {
     private _sessionService: SessionService,
     private _apiService: ApiService,
     private modalService: NgbModal,
-    private _authService: AuthService,
-    private _reportService: ReportsService
+    private _authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -56,69 +54,18 @@ export class DashboardComponent implements OnInit {
     //reset flags first
     this.recentlySubmittedReportsEmpty = false;
     this.recentlySubmittedReportsError = false;
-
-    this._reportService.getRecentlySubmittedReports().subscribe(
-      (res: any) => {
-        if (res) {
-          if (res.length > 0) {
-            this.recentlySubmittedReports = res;
-          } else {
-            this.recentlySubmittedReportsEmpty = true;
-          }
-        }
-      },
-      (error) => {
-        if (error) {
-          this.recentlySubmittedReportsError = true;
-        }
-      }
-    );
   }
 
   private _populateRecentlySavedReportsList() {
     //reset flags first
     this.recentlySavedReportsEmpty = false;
     this.recentlySavedReportsError = false;
-
-    this._reportService.getRecentlySavedReports().subscribe(
-      (res: any) => {
-        if (res) {
-          if (res.length > 0) {
-            this.recentlySavedReports = res;
-          } else {
-            this.recentlySavedReportsEmpty = true;
-          }
-        }
-      },
-      (error) => {
-        if (error) {
-          this.recentlySavedReportsError = true;
-        }
-      }
-    );
   }
 
   private _populateUpcomingReportsList() {
     //reset flags first
     this.upcomingReportsListEmpty = false;
     this.upcomingReportsListError = false;
-
-    this._reportService.getUpcomingReports().subscribe(
-      (res: any) => {
-        if (res) {
-          if (res.length > 0) {
-            this.upcomingReportsList = res;
-          } else {
-            this.upcomingReportsListEmpty = true;
-          }
-        }
-      },
-      (error) => {
-        if (error) {
-          this.upcomingReportsListError = true;
-        }
-      }
-    );
   }
 
   private _showFirstTimeCOHIfAppliable() {
@@ -127,11 +74,11 @@ export class DashboardComponent implements OnInit {
       this._authService.isBackupCommitteeAdmin() ||
       this._authService.isAdmin()
     ) {
-      this._apiService.getCashOnHandInfoStatus().subscribe((res) => {
-        if (res && res.showMessage) {
-          this.openModal();
-        }
-      });
+      // this._apiService.getCashOnHandInfoStatus().subscribe((res) => {
+      //   if (res && res.showMessage) {
+      //     this.openModal();
+      //   }
+      // });
     }
   }
 

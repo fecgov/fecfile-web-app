@@ -1,38 +1,31 @@
-import { SessionService } from './../SessionService/session.service';
-import { DialogService } from './../DialogService/dialog.service';
-import { CookieService } from 'ngx-cookie-service';
-import { AuthService } from './../AuthService/auth.service';
+import { SessionService } from '../services/SessionService/session.service';
+import { DialogService } from '../services/DialogService/dialog.service';
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse } from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
-import { map, catchError, tap, switchMap, filter, take } from 'rxjs/operators';
+import { catchError, switchMap, filter, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { ConfirmModalComponent } from '../../partials/confirm-modal/confirm-modal.component';
+import { ConfirmModalComponent } from '../partials/confirm-modal/confirm-modal.component';
 import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TokenInterceptorService implements HttpInterceptor {
+export class TokenInterceptor implements HttpInterceptor {
   public readonly REFESH_TOKEN_THRESHOLD_IN_MINUTES = 30;
   private isRefreshing: any = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(
-    private _cookieService: CookieService,
-    private _router: Router,
-    private _dialogService: DialogService,
-    private _sessionService: SessionService
-  ) {}
+  constructor(private router: Router, private dialogService: DialogService, private sessionService: SessionService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let newHeaders = req.headers;
-    const token = this._sessionService.getToken();
+    const token = this.sessionService.getToken();
     if (token) {
-      this._sessionService.isSessionAboutToExpire();
+      this.sessionService.isSessionAboutToExpire();
     }
 
-    if (this._sessionService.isSessionAboutToExpire()) {
+    if (this.sessionService.isSessionAboutToExpire()) {
       this.refreshToken(req, next);
     }
 
@@ -46,8 +39,8 @@ export class TokenInterceptorService implements HttpInterceptor {
 
   private showErrorMessageAndLogoutOn401(error: any) {
     if (error.status === 401) {
-      this._sessionService.destroy();
-      this._dialogService
+      this.sessionService.destroy();
+      this.dialogService
         .confirm('The session has expired.', ConfirmModalComponent, 'Session Expired', false)
         .then((response) => {
           if (
@@ -56,20 +49,20 @@ export class TokenInterceptorService implements HttpInterceptor {
             response === ModalDismissReasons.BACKDROP_CLICK ||
             response === ModalDismissReasons.ESC
           ) {
-            this._router.navigate(['']);
+            this.router.navigate(['']);
           }
         });
     }
   }
 
   public refreshToken(req: HttpRequest<any>, next: HttpHandler) {
-    const currentToken = this._sessionService.getToken();
+    const currentToken = this.sessionService.getToken();
     if (currentToken) {
       //check if token needs to be refreshed based on a time limit during this call
       if (!this.isRefreshing) {
         this.isRefreshing = true;
         this.refreshTokenSubject.next(null);
-        return this._sessionService
+        return this.sessionService
           .getRefreshTokenFromServer(currentToken)
           .pipe(
             switchMap((token: any) => {

@@ -4,8 +4,7 @@ import { switchMap, filter, take, tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
 import jwt_decode from 'jwt-decode';
 import { BehaviorSubject, of } from 'rxjs';
-import { AppConfigService } from '../../../app-config.service';
-// import { tokenKey } from '@angular/core/src/view';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -16,11 +15,7 @@ export class SessionService {
   private isRefreshing: any = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(
-    private _http: HttpClient,
-    private _cookieService: CookieService,
-    private _appConfigService: AppConfigService
-  ) {}
+  constructor(private _http: HttpClient, private _cookieService: CookieService) {}
 
   /**
    * Returns the session token if it exists in local storage.
@@ -111,17 +106,15 @@ export class SessionService {
   }
 
   public getRefreshTokenFromServer(currentToken: string) {
-    if (this._appConfigService.getConfig() && this._appConfigService.getConfig().apiUrl) {
-      return this._http
-        .post(`${this._appConfigService.getConfig().apiUrl}/token/refresh`, {
-          token: currentToken,
+    return this._http
+      .post(`${environment.apiUrl}/token/refresh`, {
+        token: currentToken,
+      })
+      .pipe(
+        tap((tokens: any) => {
+          this.setToken(tokens.token);
         })
-        .pipe(
-          tap((tokens: any) => {
-            this.setToken(tokens.token);
-          })
-        );
-    }
+      );
     return of({});
   }
 }

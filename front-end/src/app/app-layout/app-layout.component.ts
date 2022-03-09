@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, HostBinding, Input, OnDestroy, OnInit, ViewEncapsulation, DoCheck } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
@@ -8,7 +8,6 @@ import { AuthService } from '../shared/services/AuthService/auth.service';
 import { MessageService } from '../shared/services/MessageService/message.service';
 import { SessionService } from '../shared/services/SessionService/session.service';
 import { UtilService } from '../shared/utils/util.service';
-import { ReportsService } from './../reports/service/report.service';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -17,7 +16,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./app-layout.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class AppLayoutComponent implements OnInit, OnDestroy {
+export class AppLayoutComponent implements OnInit, OnDestroy, DoCheck {
   @HostBinding('@.disabled')
   public animationsDisabled = true;
 
@@ -62,8 +61,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     public _router: Router,
     private _modalService: NgbModal,
     public _activatedRoute: ActivatedRoute,
-    public _authService: AuthService,
-    public _reportService: ReportsService
+    public _authService: AuthService
   ) {
     this._datePipe = new DatePipe('en-US');
   }
@@ -86,16 +84,16 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
         }
       });
 
-    this._apiService
-      .getRadAnalyst()
-      .pipe(takeUntil(this.onDestroy$))
-      .subscribe((res) => {
-        if (res) {
-          if (Array.isArray(res.response)) {
-            this.radAnalystInfo = res.response[0];
-          }
-        }
-      });
+    // this._apiService
+    //   .getRadAnalyst()
+    //   .pipe(takeUntil(this.onDestroy$))
+    //   .subscribe((res) => {
+    //     if (res) {
+    //       if (Array.isArray(res.response)) {
+    //         this.radAnalystInfo = res.response[0];
+    //       }
+    //     }
+    //   });
 
     this._router.events.pipe(takeUntil(this.onDestroy$)).subscribe((val) => {
       if (val instanceof NavigationEnd) {
@@ -348,48 +346,5 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
 
   public editFrom(): void {
     let formType: string = this.extractFormType();
-    this._reportService
-      .getReportInfo(formType, this._activatedRoute.snapshot.queryParams['reportId'])
-      .subscribe((res) => {
-        let queryParamsMap: any = {
-          step: 'step_1',
-          edit: true,
-          reportId: this._activatedRoute.snapshot.queryParams['reportId'],
-        };
-
-        this._router
-          .navigate([`/forms/form/${formType}`], {
-            queryParams: queryParamsMap,
-          })
-          .then((success) => {
-            if (success) {
-              res = res[0];
-              const currentReportData = {
-                currentReportDescription: res.reporttypedescription,
-                currentStartDate: res.cvgStartDate ? this._datePipe.transform(res.cvgStartDate, 'yyyy-MM-dd') : null,
-                currentEndDate: res.cvgEndDate ? this._datePipe.transform(res.cvgEndDate, 'yyyy-MM-dd') : null,
-                currentDueDate: res.duedate,
-                currentReportType: res.reporttype,
-                currentElectionDate: res.election_date ? res.election_date : res.electiondate,
-                currentElectionState: res.election_state ? res.election_state : res.electionstate,
-                currentSemiAnnualStartDate: res.semi_annual_start_date,
-                currentSemiAnnualEndDate: res.semi_annual_end_date,
-              };
-
-              //messages are wrapped in the setTimeout method to allow the ReportTypeComponent, and
-              //ReportTypeSidebarComponent to be initialized (in the order).
-              setTimeout(() => {
-                // first send message to right component
-                this._messageService.sendUpdateReportTypeMessageToReportType({
-                  currentReportData,
-                });
-                //then send msg to left component
-                this._messageService.sendUpdateReportTypeMessageToReportTypeSidebar({
-                  currentReportData,
-                });
-              }, 0);
-            }
-          });
-      });
   }
 }
