@@ -1,8 +1,8 @@
-import { AuthService } from './../shared/services/AuthService/auth.service';
+import { AuthService } from '../shared/services/AuthService/auth.service';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { SessionService } from '../shared/services/SessionService/session.service';
-import { ApiService } from '../shared/services/APIService/api.service';
+import { ApiService } from '../shared/services/api.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -68,19 +68,7 @@ export class DashboardComponent implements OnInit {
     this.upcomingReportsListError = false;
   }
 
-  private _showFirstTimeCOHIfAppliable() {
-    if (
-      this._authService.isCommitteeAdmin() ||
-      this._authService.isBackupCommitteeAdmin() ||
-      this._authService.isAdmin()
-    ) {
-      // this._apiService.getCashOnHandInfoStatus().subscribe((res) => {
-      //   if (res && res.showMessage) {
-      //     this.openModal();
-      //   }
-      // });
-    }
-  }
+  private _showFirstTimeCOHIfAppliable() {}
 
   public openCOHInfoModal(content: any) {
     this.modalRef = this.modalService.open(content, { size: 'lg', centered: true, windowClass: 'custom-class' });

@@ -1,12 +1,9 @@
 import { SessionService } from '../services/SessionService/session.service';
-import { DialogService } from '../services/DialogService/dialog.service';
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
 import { catchError, switchMap, filter, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { ConfirmModalComponent } from '../partials/confirm-modal/confirm-modal.component';
-import { ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +13,7 @@ export class TokenInterceptor implements HttpInterceptor {
   private isRefreshing: any = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private router: Router, private dialogService: DialogService, private sessionService: SessionService) {}
+  constructor(private router: Router, private sessionService: SessionService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let newHeaders = req.headers;
@@ -40,18 +37,6 @@ export class TokenInterceptor implements HttpInterceptor {
   private showErrorMessageAndLogoutOn401(error: any) {
     if (error.status === 401) {
       this.sessionService.destroy();
-      this.dialogService
-        .confirm('The session has expired.', ConfirmModalComponent, 'Session Expired', false)
-        .then((response) => {
-          if (
-            response === 'okay' ||
-            response === 'cancel' ||
-            response === ModalDismissReasons.BACKDROP_CLICK ||
-            response === ModalDismissReasons.ESC
-          ) {
-            this.router.navigate(['']);
-          }
-        });
     }
   }
 

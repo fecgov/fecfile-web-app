@@ -1,10 +1,7 @@
-import { DialogService } from '../../../shared/services/DialogService/dialog.service';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { SessionService } from '../SessionService/session.service';
 import jwt_decode from 'jwt-decode';
-import { Roles } from '../../enums/Roles';
-import { ConfirmModalComponent, ModalHeaderClassEnum } from '../../partials/confirm-modal/confirm-modal.component';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -13,12 +10,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private data!: { committeeId: any; email: any };
 
-  constructor(
-    private _session: SessionService,
-    private _cookieService: CookieService,
-    private _dialogService: DialogService,
-    private _router: Router
-  ) {}
+  constructor(private _session: SessionService, private _cookieService: CookieService, private _router: Router) {}
 
   /**
    * Determines if signed in.
@@ -63,73 +55,9 @@ export class AuthService {
     this.destroySession();
   }
 
-  public isReadOnly(): boolean {
-    const sessionData = this._session.getSession();
-    if (sessionData) {
-      const decodedAccessToken: any = jwt_decode(sessionData);
-      if (decodedAccessToken.role === Roles.Reviewer) {
-        return true;
-      }
-      return false;
-    }
-    this.destroySession();
-    return false;
-  }
-
-  public isCommitteeAdmin(): boolean {
-    const sessionData = this._session.getSession();
-    if (sessionData) {
-      const decodedAccessToken: any = jwt_decode(sessionData);
-      if (decodedAccessToken.role === Roles.CommitteeAdmin) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    this.destroySession();
-    return false;
-  }
-  public isBackupCommitteeAdmin(): boolean {
-    const sessionData = this._session.getSession();
-    if (sessionData) {
-      const decodedAccessToken: any = jwt_decode(sessionData);
-      if (decodedAccessToken.role === Roles.BackupCommitteeAdmin) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    this.destroySession();
-    return false;
-  }
-
-  public isAdmin(): boolean {
-    const sessionData = this._session.getSession();
-    if (sessionData) {
-      const decodedAccessToken: any = jwt_decode(sessionData);
-      if (decodedAccessToken.role === Roles.Admin) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    this.destroySession();
-    return false;
-  }
-
   private destroySession() {
     this._session.destroy();
     this._router.navigate(['']);
-  }
-
-  public showPermissionDeniedMessage() {
-    this._dialogService.confirm(
-      'You do not have sufficient privileges to perform the requested action.',
-      ConfirmModalComponent,
-      'Error!',
-      false,
-      ModalHeaderClassEnum.errorHeader
-    );
   }
 
   public getCurrentUser() {

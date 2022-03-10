@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ApiService } from '../shared/services/APIService/api.service';
+import { CommitteeAccountsService } from 'app/shared/services/committee-accounts.service';
 
 @Component({
   selector: 'app-layout',
@@ -11,10 +11,10 @@ export class LayoutComponent implements OnInit {
   public committeeName: string | null = null;
   public committeeId: string | null = null;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private committeeAccountsService: CommitteeAccountsService) {}
 
   ngOnInit(): void {
-    this.apiService.getCommiteeDetails().subscribe((res) => {
+    this.committeeAccountsService.getDetails().subscribe((res: any) => {
       if (res) {
         localStorage.setItem('committee_details', JSON.stringify(res));
 

@@ -1,26 +1,16 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { CookieService } from 'ngx-cookie-service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { LayoutComponent } from './layout.component';
-import { HeaderComponent } from '../shared/partials/header/header.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-xdescribe('LayoutComponent', () => {
+import { LayoutComponent } from './layout.component';
+
+describe('LayoutComponent', () => {
   let component: LayoutComponent;
   let fixture: ComponentFixture<LayoutComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [RouterTestingModule, HttpClientTestingModule],
-        declarations: [LayoutComponent, HeaderComponent, SidebarComponent],
-        providers: [CookieService],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      }).compileComponents();
-    })
-  );
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [LayoutComponent],
+    }).compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LayoutComponent);
@@ -28,7 +18,7 @@ xdescribe('LayoutComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

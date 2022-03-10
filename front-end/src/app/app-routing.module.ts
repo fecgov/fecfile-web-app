@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './app-main-login/login/login.component';
-import { TwoFactorLoginComponent } from './app-main-login/two-factor-login/two-factor-login.component';
-import { ConfirmTwoFactorComponent } from './app-main-login/confirm-two-factor/confirm-two-factor.component';
+import { LoginComponent } from './login/login/login.component';
+import { TwoFactorLoginComponent } from './login/two-factor-login/two-factor-login.component';
+import { ConfirmTwoFactorComponent } from './login/confirm-two-factor/confirm-two-factor.component';
 import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
