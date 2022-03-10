@@ -52,7 +52,7 @@ export class LoginPage {
   fillInvalidCredentials() {
     let testCredentials = {
       committeeId: 'test',
-      password: 'test'
+      password: '',
     };
 
     element(by.css('.login-committee-id')).sendKeys(testCredentials.committeeId);
@@ -67,7 +67,7 @@ export class LoginPage {
     let testCredentials = {
       email: 'test@fec.gov',
       committeeId: 'C00601211',
-      password: 'test'
+      password: '',
     };
 
     element(by.css('.login-email-id')).sendKeys(testCredentials.email);
@@ -76,7 +76,7 @@ export class LoginPage {
   }
 
   getTwoFactorInstruction() {
-    return  element(by.xpath("//div[@class='title-front-sub']"));
+    return element(by.xpath("//div[@class='title-front-sub']"));
   }
 
   getTwoFactorEmailRadioButton() {
@@ -84,7 +84,7 @@ export class LoginPage {
   }
 
   getTwoFactorSubmitButton() {
-    return element(by.xpath("//button[contains(.,'Submit')]"))
+    return element(by.xpath("//button[contains(.,'Submit')]"));
   }
 
   getTwoFactorSecurityTextBox() {
@@ -96,6 +96,6 @@ export class LoginPage {
   }
 
   getUsageWarningContinutButton() {
-    return element(by.xpath("//button[contains(.,'Continue')]"))
+    return element(by.xpath("//button[contains(.,'Continue')]"));
   }
 }
