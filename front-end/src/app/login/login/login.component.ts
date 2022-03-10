@@ -25,13 +25,13 @@ export class LoginComponent implements OnInit {
   public show!: boolean;
 
   constructor(
-    private _fb: FormBuilder,
+    private fb: FormBuilder,
     private loginService: LoginService,
-    private _authService: AuthService,
-    private _router: Router,
-    private _sessionService: SessionService
+    private authService: AuthService,
+    private router: Router,
+    private sessionService: SessionService
   ) {
-    this.frm = this._fb.group({
+    this.frm = this.fb.group({
       commiteeId: ['', Validators.required],
       loginPassword: ['', Validators.required],
       emailId: ['', [Validators.required, Validators.email]],
@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._sessionService.destroy();
+    this.sessionService.destroy();
     localStorage.clear();
     this.appTitle = environment.appTitle;
     this.titleF = this.appTitle.substring(0, 3);
@@ -93,9 +93,9 @@ export class LoginComponent implements OnInit {
     this.loginService.signIn(email, committeeId, password).subscribe({
       next: (res: any) => {
         if (res.token) {
-          this._authService.doSignIn(res.token);
+          this.authService.doSignIn(res.token);
 
-          this._router.navigate(['twoFactLogin']);
+          this.router.navigate(['twoFactLogin']);
         }
       },
       error: (error: any) => {

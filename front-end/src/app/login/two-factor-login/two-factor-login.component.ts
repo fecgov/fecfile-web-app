@@ -10,8 +10,8 @@ import { Router } from '@angular/router';
 export class TwoFactorLoginComponent {
   twoFactInfo!: FormGroup;
 
-  constructor(private router: Router, private _fb: FormBuilder) {
-    this.twoFactInfo = _fb.group({
+  constructor(private router: Router, private fb: FormBuilder) {
+    this.twoFactInfo = fb.group({
       twoFactOption: ['', Validators.required],
     });
   }

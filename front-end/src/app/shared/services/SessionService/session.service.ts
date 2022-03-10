@@ -15,7 +15,7 @@ export class SessionService {
   private isRefreshing: any = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private _http: HttpClient, private _cookieService: CookieService) {}
+  constructor(private http: HttpClient, private cookieService: CookieService) {}
 
   /**
    * Returns the session token if it exists in local storage.
@@ -23,8 +23,8 @@ export class SessionService {
    * @return     {Object}  The session.
    */
   public getSession() {
-    if (this._cookieService.get('user')) {
-      return this._cookieService.get('user');
+    if (this.cookieService.get('user')) {
+      return this.cookieService.get('user');
     }
     return 0;
   }
@@ -35,13 +35,13 @@ export class SessionService {
    */
   public destroy(): void {
     this.accessToken = '';
-    this._cookieService.deleteAll();
+    this.cookieService.deleteAll();
 
     localStorage.clear();
   }
 
   getToken(): string {
-    const user = this._cookieService.get('user');
+    const user = this.cookieService.get('user');
     if (user) {
       return JSON.parse(user);
     }
@@ -49,7 +49,7 @@ export class SessionService {
   }
 
   setToken(token: string): void {
-    this._cookieService.set('user', JSON.stringify(token));
+    this.cookieService.set('user', JSON.stringify(token));
   }
 
   getTokenExpirationDate(token: string): Date {
@@ -106,7 +106,7 @@ export class SessionService {
   }
 
   public getRefreshTokenFromServer(currentToken: string) {
-    return this._http
+    return this.http
       .post(`${environment.apiUrl}/token/refresh`, {
         token: currentToken,
       })

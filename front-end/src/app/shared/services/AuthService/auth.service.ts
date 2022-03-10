@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private data!: { committeeId: any; email: any };
 
-  constructor(private _session: SessionService, private _cookieService: CookieService, private _router: Router) {}
+  constructor(private session: SessionService, private cookieService: CookieService, private router: Router) {}
 
   /**
    * Determines if signed in.
@@ -18,7 +18,7 @@ export class AuthService {
    * @return     {boolean}  True if signed in, False otherwise.
    */
   public isSignedIn(): boolean {
-    if (this._session.getSession()) {
+    if (this.session.getSession()) {
       return true;
     }
     return false;
@@ -29,7 +29,7 @@ export class AuthService {
    *
    */
   public doSignOut() {
-    this._session.destroy();
+    this.session.destroy();
   }
 
   /**
@@ -41,13 +41,13 @@ export class AuthService {
     if (!accessToken) {
       return;
     }
-    this._session.accessToken = accessToken;
+    this.session.accessToken = accessToken;
 
-    this._cookieService.set('user', JSON.stringify(accessToken));
+    this.cookieService.set('user', JSON.stringify(accessToken));
   }
 
   public getUserRole(): any {
-    const sessionData = this._session.getSession();
+    const sessionData = this.session.getSession();
     if (sessionData) {
       const decodedAccessToken: any = jwt_decode(sessionData);
       return decodedAccessToken.role;
@@ -56,12 +56,12 @@ export class AuthService {
   }
 
   private destroySession() {
-    this._session.destroy();
-    this._router.navigate(['']);
+    this.session.destroy();
+    this.router.navigate(['']);
   }
 
   public getCurrentUser() {
-    const sessionData = this._session.getSession();
+    const sessionData = this.session.getSession();
     if (sessionData) {
       const decodedAccessToken: any = jwt_decode(sessionData);
       return (this.data = { email: decodedAccessToken.email, committeeId: decodedAccessToken.committee_id });

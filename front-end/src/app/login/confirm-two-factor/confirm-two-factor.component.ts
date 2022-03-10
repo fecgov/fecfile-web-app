@@ -21,16 +21,16 @@ export class ConfirmTwoFactorComponent implements OnInit {
   entryPoint!: string;
   contactData!: any;
   isAccountLocked!: boolean;
-  private _subscription!: Subscription;
+  private subscription!: Subscription;
   private response!: any;
   constructor(
     private router: Router,
-    private _fb: FormBuilder,
-    private _activatedRoute: ActivatedRoute,
-    private _twoFactorService: TwoFactorHelperService,
-    private _authService: AuthService
+    private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private twoFactorService: TwoFactorHelperService,
+    private authService: AuthService
   ) {
-    this.twoFactInfo = _fb.group({
+    this.twoFactInfo = fb.group({
       securityCode: ['', [Validators.required, Validators.pattern(new RegExp('^[0-9]+$'))]],
     });
   }
@@ -39,7 +39,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
     this.isAccountLocked = false;
   }
   onDestroy() {
-    this._subscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   back() {
@@ -60,7 +60,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
     this.twoFactInfo.markAsTouched();
     if (this.twoFactInfo.valid) {
       const code = this.twoFactInfo.get('securityCode')?.value;
-      this._twoFactorService.validateCode(code).subscribe((res: any) => {
+      this.twoFactorService.validateCode(code).subscribe((res: any) => {
         if (res) {
           this.response = res;
           const isAllowed = res['is_allowed'];
@@ -90,7 +90,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
     if (response['msg'] === this.ACCOUNT_LOCKED_MSG) {
       this.isAccountLocked = true;
       setTimeout(() => {
-        this._authService.doSignOut();
+        this.authService.doSignOut();
         this.router.navigate(['/login']).then((r) => {
           // do nothing
         });
@@ -104,7 +104,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
    * @private
    */
   private askConsent() {
-    this._authService.doSignIn(this.response.token);
+    this.authService.doSignIn(this.response.token);
     this.router.navigate(['/dashboard']).then((r) => {
       // do nothing
     });
@@ -115,7 +115,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
       this.router.navigate(['/twoFactLogin']);
     } else if (this.entryPoint === 'registration') {
       this.router.navigate(['/register'], {
-        queryParams: { register_token: this._activatedRoute.snapshot.queryParams['register_token'] },
+        queryParams: { register_token: this.activatedRoute.snapshot.queryParams['register_token'] },
       });
     } else if (this.entryPoint === 'reset') {
       this.router.navigate(['/reset-selector']);
