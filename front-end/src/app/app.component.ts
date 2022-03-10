@@ -1,13 +1,5 @@
-import {
-  Component,
-  HostListener,
-  SimpleChanges,
-  OnDestroy,
-  OnInit,
-  HostBinding,
-  ChangeDetectionStrategy,
-} from '@angular/core';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { Component, HostBinding } from '@angular/core';
+import { Router } from '@angular/router';
 import { MessageService } from './shared/services/MessageService/message.service';
 import { DialogService } from './shared/services/DialogService/dialog.service';
 import { SessionService } from './shared/services/SessionService/session.service';

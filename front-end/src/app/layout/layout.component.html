@@ -1,50 +1,34 @@
-<div class="app-container">
-  <div class="app__top">
-    <nav class="navbar py-0 navbar-expand-lg">
-      <div class="navbar-brand app__top-logo">
-        <a href="http://www.fec.gov/" draggable="false" target="_blank">
-          <img src="assets/img/logo-transparent.png" draggable="false" />
-        </a>
-      </div>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="sr-only">Toggle navigation</span>
-        <span class="bars-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse app__top-nav" id="navbarSupportedContent">
-        <app-header></app-header>
-      </div>
-    </nav>
-  </div>
-  <div class="app__side-nav">
-    <app-sidebar></app-sidebar>
-  </div>
-
-  <main>
-    <div class="app__content-wrapper">
-      <div class="app__committee-info">
-        <div class="float-left">
-          <h1 class="committee-id">
-            {{ committeeId }}
-          </h1>
-          <h2 class="committee-name">
-            {{ committeeName }}
-          </h2>
-        </div>
-      </div>
-
-      <div class="app__content">
-        <router-outlet></router-outlet>
-      </div>
+<div class="app-container container">
+  <div class="app__top row">
+    <div class="col-12">
+      <app-header></app-header>
     </div>
-  </main>
+  </div>
+  <div class="row">
+    <div class="app__side-nav col-2">
+      <app-sidebar></app-sidebar>
+    </div>
+    <div class="col-10">
+      <main>
+        <div class="app__content-wrapper">
+          <div class="app__committee-info">
+            <div class="float-left">
+              <h1 class="committee-id">
+                {{ committeeId }}
+              </h1>
+              <h2 class="committee-name">
+                {{ committeeName }}
+              </h2>
+            </div>
+          </div>
+
+          <div class="app__content">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
 
   <footer>
     <div class="app__footer">

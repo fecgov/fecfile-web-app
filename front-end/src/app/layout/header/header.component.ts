@@ -1,25 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit {
   items: MenuItem[] = [];
+
   constructor() {}
 
   ngOnInit(): void {
     this.items = [
       {
         label: 'Dashboard',
+        routerLink: ['dashboard'],
       },
       {
         label: 'Reports',
       },
       {
         label: 'Contacts',
+        routerLink: ['contacts'],
       },
       {
         label: 'Tools',
@@ -48,7 +52,7 @@ export class HeaderComponent implements OnInit {
       },
       {
         label: 'Profile',
-        icon: 'pi pi-fw pi-calendar',
+        icon: 'pi pi-fw pi-user',
         items: [{ label: 'Account' }, { label: 'Add User' }, { label: 'Logout' }],
       },
     ];

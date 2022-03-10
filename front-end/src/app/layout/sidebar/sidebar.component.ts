@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -13,10 +12,6 @@ export class SidebarComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.items = [
-      { label: 'New', icon: 'pi pi-fw pi-plus' },
-      { label: 'Open', icon: 'pi pi-fw pi-download' },
-      { label: 'Undo', icon: 'pi pi-fw pi-refresh' },
-    ];
+    this.items = [{ label: 'My Forms' }, { label: 'Other Forms' }];
   }
 }
