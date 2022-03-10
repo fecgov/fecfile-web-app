@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MessageService {
-  private _subject: BehaviorSubject<any> = new BehaviorSubject<any>('');
-  private _populateChildComponentsubject: BehaviorSubject<any> = new BehaviorSubject<any>('');
-  private _rollbackChangesSubject: BehaviorSubject<any> = new BehaviorSubject<any>('');
-  private _updateReportTypeToReportType: BehaviorSubject<any> = new BehaviorSubject<any>('');
-  private _updateReportTypeToReportTypeSidebar: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  private subject: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  private populateChildComponentsubject: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  private rollbackChangesSubject: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  private updateReportTypeToReportType: BehaviorSubject<any> = new BehaviorSubject<any>('');
+  private updateReportTypeToReportTypeSidebar: BehaviorSubject<any> = new BehaviorSubject<any>('');
 
   constructor() {}
 
@@ -19,7 +19,7 @@ export class MessageService {
    * @param      {Any}  message  The message
    */
   public sendMessage(message: any) {
-    this._subject.next(message);
+    this.subject.next(message);
   }
 
   /**
@@ -27,7 +27,7 @@ export class MessageService {
    *
    */
   public clearMessage() {
-    this._subject.next('');
+    this.subject.next('');
   }
 
   /**
@@ -36,7 +36,7 @@ export class MessageService {
    * @return     {Observable}  The message.
    */
   public getMessage(): Observable<any> {
-    return this._subject.asObservable();
+    return this.subject.asObservable();
   }
 
   /**
@@ -45,7 +45,7 @@ export class MessageService {
    * @param      {Any}  message  The message
    */
   public sendPopulateChildComponentMessage(message: any) {
-    this._populateChildComponentsubject.next(message);
+    this.populateChildComponentsubject.next(message);
   }
 
   /**
@@ -53,7 +53,7 @@ export class MessageService {
    *
    */
   public clearPopulateChildComponentMessage() {
-    this._populateChildComponentsubject.next('');
+    this.populateChildComponentsubject.next('');
   }
 
   /**
@@ -62,7 +62,7 @@ export class MessageService {
    * @return     {Observable}  The message.
    */
   public getPopulateChildComponentMessage(): Observable<any> {
-    return this._populateChildComponentsubject.asObservable();
+    return this.populateChildComponentsubject.asObservable();
   }
 
   /**
@@ -71,7 +71,7 @@ export class MessageService {
    * @param      {Any}  message  The message
    */
   public sendRollbackChangesMessage(message: any) {
-    this._rollbackChangesSubject.next(message);
+    this.rollbackChangesSubject.next(message);
   }
 
   /**
@@ -79,7 +79,7 @@ export class MessageService {
    *
    */
   public clearRollbackChangesMessage() {
-    this._rollbackChangesSubject.next('');
+    this.rollbackChangesSubject.next('');
   }
 
   /**
@@ -88,7 +88,7 @@ export class MessageService {
    * @return     {Observable}  The message.
    */
   public getRollbackChangesMessage(): Observable<any> {
-    return this._rollbackChangesSubject.asObservable();
+    return this.rollbackChangesSubject.asObservable();
   }
 
   /**
@@ -97,7 +97,7 @@ export class MessageService {
    * @param      {Any}  message  The message
    */
   public sendUpdateReportTypeMessageToReportType(message: any) {
-    this._updateReportTypeToReportType.next(message);
+    this.updateReportTypeToReportType.next(message);
   }
 
   /**
@@ -106,7 +106,7 @@ export class MessageService {
    * @param      {Any}  message  The message
    */
   public sendUpdateReportTypeMessageToReportTypeSidebar(message: any) {
-    this._updateReportTypeToReportTypeSidebar.next(message);
+    this.updateReportTypeToReportTypeSidebar.next(message);
   }
 
   /**
@@ -114,7 +114,7 @@ export class MessageService {
    *
    */
   public clearUpdateReportTypeMessageToReportType() {
-    this._updateReportTypeToReportType.next('');
+    this.updateReportTypeToReportType.next('');
   }
 
   /**
@@ -122,7 +122,7 @@ export class MessageService {
    *
    */
   public clearUpdateReportTypeMessageToReportTypeSidebar() {
-    this._updateReportTypeToReportTypeSidebar.next('');
+    this.updateReportTypeToReportTypeSidebar.next('');
   }
 
   /**
@@ -131,7 +131,7 @@ export class MessageService {
    * @return     {Observable}  The message.
    */
   public getUpdateReportTypeMessageToReportType(): Observable<any> {
-    return this._updateReportTypeToReportType.asObservable();
+    return this.updateReportTypeToReportType.asObservable();
   }
 
   /**
@@ -140,6 +140,6 @@ export class MessageService {
    * @return     {Observable}  The message.
    */
   public getUpdateReportTypeMessageToReportTypeSidebar(): Observable<any> {
-    return this._updateReportTypeToReportTypeSidebar.asObservable();
+    return this.updateReportTypeToReportTypeSidebar.asObservable();
   }
 }

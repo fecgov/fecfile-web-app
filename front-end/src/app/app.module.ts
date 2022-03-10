@@ -1,9 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 
-import { AppLayoutComponent } from './app-layout/app-layout.component';
+import { MenubarModule } from 'primeng/menubar';
+import { MenuModule } from 'primeng/menu';
+import { SidebarModule } from 'primeng/sidebar';
+// import { TooltipModule } from 'primeng/tooltip';
+
+import { LayoutComponent } from './layout/layout.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { SidebarComponent } from './layout/sidebar/sidebar.component';
+
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -24,19 +30,24 @@ import { PhonePipe } from './shared/pipes/phone-number/phone-number.pipe';
 import { SafeHTMLPipe } from './shared/pipes/safeHTML/safe-html.pipe';
 import { ZipCodePipe } from './shared/pipes/zip-code/zip-code.pipe';
 import { DialogService } from './shared/services/DialogService/dialog.service';
-import { SharedModule } from './shared/shared.module';
 import { CanActivateGuard } from './shared/utils/can-activate/can-activate.guard';
 import { UtilService } from './shared/utils/util.service';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { LoginComponent } from './app-main-login/login/login.component';
 import { TwoFactorLoginComponent } from './app-main-login/two-factor-login/two-factor-login.component';
 import { ConfirmTwoFactorComponent } from './app-main-login/confirm-two-factor/confirm-two-factor.component';
+import { SharedModule } from './shared/shared.module';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AppLayoutComponent,
+    LayoutComponent,
+    HeaderComponent,
+    SidebarComponent,
     ConfirmModalComponent,
     ZipCodePipe,
     SafeHTMLPipe,
@@ -49,6 +60,10 @@ import { TokenInterceptor } from './shared/interceptors/token.interceptor';
   imports: [
     BrowserModule,
     AppRoutingModule,
+
+    MenubarModule,
+    MenuModule,
+    SidebarModule,
 
     FormsModule,
     ReactiveFormsModule,

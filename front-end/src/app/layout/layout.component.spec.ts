@@ -3,19 +3,19 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AppLayoutComponent } from './app-layout.component';
+import { LayoutComponent } from './layout.component';
 import { HeaderComponent } from '../shared/partials/header/header.component';
-import { SidebarComponent } from '../shared/partials/sidebar/sidebar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
-xdescribe('AppLayoutComponent', () => {
-  let component: AppLayoutComponent;
-  let fixture: ComponentFixture<AppLayoutComponent>;
+xdescribe('LayoutComponent', () => {
+  let component: LayoutComponent;
+  let fixture: ComponentFixture<LayoutComponent>;
 
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
         imports: [RouterTestingModule, HttpClientTestingModule],
-        declarations: [AppLayoutComponent, HeaderComponent, SidebarComponent],
+        declarations: [LayoutComponent, HeaderComponent, SidebarComponent],
         providers: [CookieService],
         schemas: [CUSTOM_ELEMENTS_SCHEMA],
       }).compileComponents();
@@ -23,7 +23,7 @@ xdescribe('AppLayoutComponent', () => {
   );
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AppLayoutComponent);
+    fixture = TestBed.createComponent(LayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

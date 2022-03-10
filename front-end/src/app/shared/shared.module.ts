@@ -8,13 +8,11 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { UtilService } from './utils/util.service';
 import { OrderByPipe } from 'ngx-pipes';
 import { InputModalComponent } from './partials/input-modal/input-modal.component';
-import { SpinnerComponent } from './partials/spinner/spinner.component';
 import { RouterModule } from '@angular/router';
-import { HeaderComponent } from './partials/header/header.component';
 
 @NgModule({
   imports: [CommonModule, NgbModule, FormsModule, ReactiveFormsModule, RouterModule],
-  declarations: [PhonePipe, InputModalComponent, SpinnerComponent, HeaderComponent],
+  declarations: [PhonePipe, InputModalComponent],
   exports: [
     CommonModule,
     NgbModule,
@@ -23,7 +21,6 @@ import { HeaderComponent } from './partials/header/header.component';
     ReactiveFormsModule,
     NgxPaginationModule,
     InputModalComponent,
-    SpinnerComponent,
   ],
   providers: [DecimalPipe, DatePipe, UtilService, OrderByPipe, PhonePipe, CurrencyPipe],
   entryComponents: [InputModalComponent],

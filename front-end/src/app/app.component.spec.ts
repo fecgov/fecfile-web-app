@@ -1,14 +1,13 @@
 import { Location } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './app-main-login/login/login.component';
-import { AppLayoutComponent } from './app-layout/app-layout.component';
+import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 xdescribe('AppRoutingModule', () => {
@@ -19,7 +18,7 @@ xdescribe('AppRoutingModule', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule],
-      declarations: [AppComponent, LoginComponent, AppLayoutComponent, DashboardComponent],
+      declarations: [AppComponent, LoginComponent, LayoutComponent, DashboardComponent],
       providers: [CookieService],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
