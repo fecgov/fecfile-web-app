@@ -38,7 +38,7 @@
               "node_modules/primeng/resources/themes/bootstrap4-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css"
             ],
-            "scripts": ["node_modules/crypto-js/crypto-js.js"]
+            "scripts": []
           },
           "configurations": {
             "cloud.gov.prod": {
