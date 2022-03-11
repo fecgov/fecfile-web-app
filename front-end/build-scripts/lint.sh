@@ -12,5 +12,5 @@ cd docker-build-tmp
 docker build -t fecfile-lint -f Dockerfile-lint .
 rm -rf docker-build-tmp
 echo run
-docker run --rm -v ${SCRIPT_DIR}/:/usr/src/app fecfile-lint sh -c 'cd /usr/src/app && eslint "src/**/*.ts" || echo BAD NEWS: LINT ERRORS FOUND'
+docker run --rm -v ${SCRIPT_DIR}/:/usr/src/app fecfile-lint sh -c 'cd /usr/src/app && eslint "src/**" || echo BAD NEWS: LINT ERRORS FOUND'
 
