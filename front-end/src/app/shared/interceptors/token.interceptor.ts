@@ -1,7 +1,7 @@
 import { SessionService } from '../services/SessionService/session.service';
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, switchMap, filter, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -28,7 +28,7 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error) => {
         this.showErrorMessageAndLogoutOn401(error);
-        throw 'Error refreshing token. Details: ' + error;
+        throw new Error('Error refreshing token.');
       })
     );
   }

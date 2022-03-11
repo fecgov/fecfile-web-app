@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
       },
       {
         label: 'Contacts',
-        routerLink: ['contacts'],
+        // routerLink: ['contacts'],
       },
       {
         label: 'Tools',

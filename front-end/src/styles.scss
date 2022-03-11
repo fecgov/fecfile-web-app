@@ -57,17 +57,17 @@ body {
 .table__sortable > thead > tr > .table__sortable_col:after {
   content: '\f0dc';
   color: #ddd;
-  font-family: 'Font Awesome 5 Free';
+  font-family: 'Font Awesome 5 Free', Sans-serif;
 }
 .table__sortable > thead > tr > .table__sortable_col.sort-false:after {
   content: '\f0de';
   color: #767676;
-  font-family: 'Font Awesome 5 Free';
+  font-family: 'Font Awesome 5 Free', Sans-serif;
 }
 .table__sortable > thead > tr > .table__sortable_col.sort-true:after {
   content: '\f0dd';
   color: #767676;
-  font-family: 'Font Awesome 5 Free';
+  font-family: 'Font Awesome 5 Free', Sans-serif;
 }
 
 /** table sort end **/
