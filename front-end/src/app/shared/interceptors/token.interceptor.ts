@@ -16,7 +16,6 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(private router: Router, private sessionService: SessionService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    let newHeaders = req.headers;
     const token = this.sessionService.getToken();
     if (token) {
       this.sessionService.isSessionAboutToExpire();
@@ -29,7 +28,7 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error) => {
         this.showErrorMessageAndLogoutOn401(error);
-        return throwError(error);
+        throw 'Error refreshing token. Details: ' + error;
       })
     );
   }

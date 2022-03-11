@@ -115,6 +115,5 @@ export class SessionService {
           this.setToken(tokens.token);
         })
       );
-    return of({});
   }
 }

@@ -31,7 +31,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
     private authService: AuthService
   ) {
     this.twoFactInfo = fb.group({
-      securityCode: ['', [Validators.required, Validators.pattern(new RegExp('^[0-9]+$'))]],
+      securityCode: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
     });
   }
 
@@ -75,7 +75,6 @@ export class ConfirmTwoFactorComponent implements OnInit {
           this.askConsent();
         } else {
           this.isValid = false;
-          return;
         }
       });
     }

@@ -9,8 +9,6 @@ import { MenuItem } from 'primeng/api';
 export class SidebarComponent implements OnInit {
   items: MenuItem[] = [];
 
-  constructor() {}
-
   ngOnInit(): void {
     this.items = [{ label: 'My Forms' }, { label: 'Other Forms' }];
   }

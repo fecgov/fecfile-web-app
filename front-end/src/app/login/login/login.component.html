@@ -104,10 +104,22 @@
         </div>
 
         <div *ngIf="!show" class="grid-row__col grid-row__col--1 text-left">
-          <img class="eye-logo" src="assets/img/eye-icon.svg" draggable="false" (click)="showPassword()" />
+          <img
+            class="eye-logo"
+            src="assets/img/eye-icon.svg"
+            draggable="false"
+            alt="eye icon"
+            (click)="showPassword()"
+          />
         </div>
         <div *ngIf="show" class="grid-row__col grid-row__col--1 text-left">
-          <img class="eye-logo" src="assets/img/eye-icon-red.svg" draggable="false" (click)="showPassword()" />
+          <img
+            class="eye-logo"
+            src="assets/img/eye-icon-red.svg"
+            draggable="false"
+            alt="red eye icon"
+            (click)="showPassword()"
+          />
         </div>
       </div>
 
@@ -131,6 +143,7 @@
             draggable="false"
             href="https://test-webforms.fec.gov/webforms/form1/index.htm"
             target="_blank"
+            rel="noopener"
           >
             Register
           </a>

@@ -26,8 +26,6 @@ export class TwoFactorLoginComponent {
   submit() {
     this.twoFactInfo.markAsTouched();
 
-    const option = this.twoFactInfo.get('twoFactOption')?.value;
-
     if (this.twoFactInfo.valid) {
       this.router.navigate(['/confirm-2f']).then((r) => {
         // handle it

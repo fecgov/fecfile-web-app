@@ -6,6 +6,4 @@ import { Component, ViewEncapsulation } from '@angular/core';
   styleUrls: ['./dashboard.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class DashboardComponent {
-  constructor() {}
-}
+export class DashboardComponent {}
