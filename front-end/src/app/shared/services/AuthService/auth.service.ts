@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { SessionService } from '../SessionService/session.service';
-import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -44,28 +43,5 @@ export class AuthService {
     this.session.accessToken = accessToken;
 
     this.cookieService.set('user', JSON.stringify(accessToken));
-  }
-
-  public getUserRole(): any {
-    const sessionData = this.session.getSession();
-    if (sessionData) {
-      const decodedAccessToken: any = jwt_decode(sessionData);
-      return decodedAccessToken.role;
-    }
-    this.destroySession();
-  }
-
-  private destroySession() {
-    this.session.destroy();
-    this.router.navigate(['']);
-  }
-
-  public getCurrentUser() {
-    const sessionData = this.session.getSession();
-    if (sessionData) {
-      const decodedAccessToken: any = jwt_decode(sessionData);
-      return (this.data = { email: decodedAccessToken.email, committeeId: decodedAccessToken.committee_id });
-    }
-    return {};
   }
 }

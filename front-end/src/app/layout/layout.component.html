@@ -14,10 +14,10 @@
           <div class="app__committee-info">
             <div class="float-left">
               <h1 class="committee-id">
-                {{ committeeId }}
+                {{ (committeeAccount$ | async)?.committeeid }}
               </h1>
               <h2 class="committee-name">
-                {{ committeeName }}
+                {{ (committeeAccount$ | async)?.committeename }}
               </h2>
             </div>
           </div>

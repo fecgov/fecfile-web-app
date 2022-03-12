@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
     this.appTitle = environment.appTitle;
     this.titleF = this.appTitle.substring(0, 3);
     this.titleR = this.appTitle.substring(3);
+    this.loginService.logOut();
   }
 
   public getLoggedOut() {
@@ -94,7 +95,6 @@ export class LoginComponent implements OnInit {
       next: (res: any) => {
         if (res.token) {
           this.authService.doSignIn(res.token);
-
           this.router.navigate(['twoFactLogin']);
         }
       },

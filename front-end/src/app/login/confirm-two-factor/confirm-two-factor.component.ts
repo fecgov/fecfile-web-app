@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TwoFactorHelperService } from '../two-factor-helper.service';
+import { LoginService } from 'app/shared/services/login.service';
 import { AuthService } from '../../shared/services/AuthService/auth.service';
 
 @Component({
@@ -27,7 +27,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private twoFactorService: TwoFactorHelperService,
+    private loginService: LoginService,
     private authService: AuthService
   ) {
     this.twoFactInfo = fb.group({
@@ -60,7 +60,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
     this.twoFactInfo.markAsTouched();
     if (this.twoFactInfo.valid) {
       const code = this.twoFactInfo.get('securityCode')?.value;
-      this.twoFactorService.validateCode(code).subscribe((res: any) => {
+      this.loginService.validateCode(code).subscribe((res: any) => {
         if (res) {
           this.response = res;
           const isAllowed = res['is_allowed'];

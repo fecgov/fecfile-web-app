@@ -3,19 +3,27 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { SessionService } from './SessionService/session.service';
+import { Store } from '@ngrx/store';
+import { selectUserLoginData } from 'app/store/login.selectors';
+import { UserLoginData } from '../models/user.model';
+import { spinnerOnAction, spinnerOffAction } from 'app/store/spinner.actions';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient, private sessionService: SessionService) {}
+  private token: string | null = null;
+
+  constructor(private http: HttpClient, private store: Store) {
+    this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
+      this.token = userLoginData.token;
+    });
+  }
 
   getHeaders() {
-    const token: string = this.sessionService.getToken();
     return {
       'Content-Type': 'application/json',
-      Authorization: `JWT ${token}`,
+      Authorization: `JWT ${this.token}`,
     };
   }
 
@@ -40,26 +48,22 @@ export class ApiService {
   }
 
   public spinnerGet<T>(endpoint: string): Observable<T> {
-    // Code to activate spinner here.
-
-    return this.get<T>(endpoint).pipe(tap((x) => console.log('Code to deactivate spinner here')));
+    this.store.dispatch(spinnerOnAction());
+    return this.get<T>(endpoint).pipe(tap((_) => this.store.dispatch(spinnerOffAction())));
   }
 
   public spinnerPost<T>(endpoint: string, payload: any): Observable<T> {
-    // Code to activate spinner here.
-
-    return this.post<T>(endpoint, payload).pipe(tap((x) => console.log('Code to deactivate spinner here')));
+    this.store.dispatch(spinnerOnAction());
+    return this.post<T>(endpoint, payload).pipe(tap((_) => this.store.dispatch(spinnerOffAction())));
   }
 
   public spinnerPut<T>(endpoint: string, payload: any): Observable<T> {
-    // Code to activate spinner here.
-
-    return this.put<T>(endpoint, payload).pipe(tap((x) => console.log('Code to deactivate spinner here')));
+    this.store.dispatch(spinnerOnAction());
+    return this.put<T>(endpoint, payload).pipe(tap((_) => this.store.dispatch(spinnerOffAction())));
   }
 
   public spinnerDelete<T>(endpoint: string): Observable<T> {
-    // Code to activate spinner here.
-
-    return this.delete<T>(endpoint).pipe(tap((x) => console.log('Code to deactivate spinner here')));
+    this.store.dispatch(spinnerOnAction());
+    return this.delete<T>(endpoint).pipe(tap((_) => this.store.dispatch(spinnerOffAction())));
   }
 }

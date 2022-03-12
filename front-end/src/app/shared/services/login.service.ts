@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { ApiService } from './api.service';
-import { AuthService } from './AuthService/auth.service';
+import { tap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
+import { SessionService } from './SessionService/session.service';
+import { environment } from 'environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { UserLoginData } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-  constructor(private apiService: ApiService, private authService: AuthService) {}
+  constructor(private store: Store, private sessionService: SessionService, private http: HttpClient) {}
 
   /**
    * Logs a user into the API.
@@ -21,20 +25,30 @@ export class LoginService {
   public signIn(email: string, cmteId: string, password: string): Observable<any> {
     // Django uses cmteId+email as unique username
     const username = cmteId + email;
-    return this.apiService
-      .post<any>(`/user/login/authenticate`, {
-        username,
-        password,
-      })
-      .pipe(
-        map((res) => {
-          // login successful if there's a jwt token in the response
-          if (res.token) {
-            this.authService.doSignIn(res.token);
-          }
 
-          return res;
-        })
-      );
+    return this.http.post<UserLoginData>(`${environment.apiUrl}/user/login/authenticate`, {
+      username,
+      password,
+    });
+  }
+
+  public validateCode(code: string) {
+    const payload: any = { code: code.toString() };
+    const token: string = this.sessionService.getToken();
+    const headers: any = {
+      'Content-Type': 'application/json',
+      token: token,
+    };
+    return this.http.post<UserLoginData>(`${environment.apiUrl}/user/login/verify`, payload, { headers: headers }).pipe(
+      tap((userLoginData: UserLoginData) => {
+        if (userLoginData.token) {
+          this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
+        }
+      })
+    );
+  }
+
+  public logOut() {
+    this.store.dispatch(userLoggedOutAction());
   }
 }
