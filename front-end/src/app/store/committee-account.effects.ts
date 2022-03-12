@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { map, mergeMap, catchError, tap } from 'rxjs/operators';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { CommitteeAccountsService } from 'app/shared/services/committee-accounts.service';
 
