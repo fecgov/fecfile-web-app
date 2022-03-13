@@ -7,7 +7,7 @@ import { CommitteeAccount, CommitteeTypeLabels } from 'app/shared/models/committ
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.scss'],
+  // styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent {
   public committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
