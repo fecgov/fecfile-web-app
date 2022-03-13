@@ -1,110 +1,39 @@
-<div class="app-container container">
-  <div class="app__top row">
-    <div class="col-12">
-      <app-header></app-header>
-    </div>
+<div class="grid">
+  <div class="col-12 bg-gray-700">
+    <app-header></app-header>
   </div>
-  <div class="row">
-    <div class="app__side-nav col-2">
-      <app-sidebar></app-sidebar>
-    </div>
-    <div class="col-10">
-      <main>
-        <div class="app__content-wrapper">
-          <div class="app__committee-info">
-            <div class="float-left">
-              <h1 class="committee-id">
-                {{ (committeeAccount$ | async)?.committeeid }}
-              </h1>
-              <h2 class="committee-name">
-                {{ (committeeAccount$ | async)?.committeename }}
-              </h2>
-            </div>
-          </div>
-
-          <div class="app__content">
-            <router-outlet></router-outlet>
-          </div>
-        </div>
-      </main>
-    </div>
+</div>
+<div class="grid">
+  <div class="col-fixed bg-blue-900">
+    <app-sidebar></app-sidebar>
   </div>
-
-  <footer>
-    <div class="app__footer">
-      <div class="contact-info">
-        <div class="contact-info__item">
-          <h6>
-            <label>Federal Election Commission</label>
-            <br />
-            <address>
-              1050 First Street NE, Washington DC, 20002
-              <br />
-              <a href="https://fec.gov" draggable="false" target="_blank" rel="noopener">fec.gov</a>
-            </address>
-          </h6>
-        </div>
-        <div class="contact-info__item">
-          <h6>
-            <label>Main Office</label>
-            <br />
-            <address>
-              Toll free: 1-800-424-9530
-              <br />
-              Local: (202)-694-1000
-            </address>
-          </h6>
-        </div>
-        <div class="contact-info__item">
-          <h6>
-            <label> RAD Analyst, </label>
-            <br />
-            <address>
-              <ng-container> (202)-694-1000 x</ng-container>
-              <br />
-              <ng-container>
-                <a
-                  href="https://www.fec.gov/help-candidates-and-committees/question-rad/"
-                  draggable="false"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  Find & contact your committee's analyst
-                </a>
-              </ng-container>
-            </address>
-          </h6>
-        </div>
-        <div class="contact-info__item">
-          <h6>
-            <label>Tech Support</label>
-            <br />
-            <address>
-              (202) 694-1307<br />
-              <a href="mailto:eFiletechsupport@fec.gov"> eFiletechsupport@fec.gov </a>
-            </address>
-          </h6>
-        </div>
+  <div class="col">
+    <div class="grid committee-banner">
+      <div class="col">
+        <h1>
+          {{ (committeeAccount$ | async)?.committeeid }}
+        </h1>
       </div>
-      <div class="legal-disclaimer">
-        <button type="button" class="btn btn-link">Legal Disclaimer</button>
-        <ng-template #legalDisclaimer let-d="dismiss">
-          <div class="modal-header">
-            <h4 class="modal-title">Legal Disclaimer</h4>
-          </div>
-          <div class="modal-body">
-            <p>
-              Please be advised that knowingly and willfully making any materially false, fictitious, or fraudulent
-              statement or representation to a federal government agency, including the Federal Election Commission, is
-              punishable under the provisions of 18 U.S.C. § 1001. The Commission may report apparent violations to the
-              appropriate law enforcement authorities. 52 U.S.C. § 30107(a)(9).
-            </p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-dark" (click)="d('Close click')">Close</button>
-          </div>
-        </ng-template>
+      <div class="col">
+        <h2>
+          {{ (committeeAccount$ | async)?.committeename }}
+        </h2>
+      </div>
+      <div class="col">
+        <h2>
+          {{ (committeeAccount$ | async)?.cmte_type | label: committeeTypeLabels }}
+        </h2>
       </div>
     </div>
-  </footer>
+    <div class="grid">
+      <div class="col-12">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <app-footer></app-footer>
+      </div>
+    </div>
+  </div>
 </div>

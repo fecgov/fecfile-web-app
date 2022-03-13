@@ -1,14 +1,16 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
+import { LoginService } from 'app/shared/services/login.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class HeaderComponent implements OnInit {
   items: MenuItem[] = [];
+
+  constructor(private loginService: LoginService) {}
 
   ngOnInit(): void {
     this.items = [
@@ -51,7 +53,11 @@ export class HeaderComponent implements OnInit {
       {
         label: 'Profile',
         icon: 'pi pi-fw pi-user',
-        items: [{ label: 'Account' }, { label: 'Add User' }, { label: 'Logout' }],
+        items: [
+          { label: 'Account' },
+          { label: 'Add User' },
+          { label: 'Logout', command: () => this.loginService.logOut() },
+        ],
       },
     ];
   }

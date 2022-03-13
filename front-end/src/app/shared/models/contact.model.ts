@@ -14,6 +14,13 @@ export type ContactType =
   | ContactTypes.INDIVIDUAL
   | ContactTypes.ORGANIZATION;
 
+export const ContactTypeLabels: string[][] = [
+  [ContactTypes.CANDIDATE, 'Candidate'],
+  [ContactTypes.COMMITTEE, 'Committee'],
+  [ContactTypes.INDIVIDUAL, 'Individual'],
+  [ContactTypes.ORGANIZATION, 'Organization'],
+];
+
 export enum CandidateOfficeTypes {
   HOUSE = 'house',
   PRESIDENTIAL = 'pres',
@@ -24,6 +31,12 @@ export type CandidateOfficeType =
   | CandidateOfficeTypes.HOUSE
   | CandidateOfficeTypes.PRESIDENTIAL
   | CandidateOfficeTypes.SENATE;
+
+export const CandidateOfficeTypeLabels = [
+  [CandidateOfficeTypes.HOUSE, 'House'],
+  [CandidateOfficeTypes.PRESIDENTIAL, 'Presidential'],
+  [CandidateOfficeTypes.SENATE, 'Senate'],
+];
 
 export class Contact extends BaseModel {
   id: number = 0;

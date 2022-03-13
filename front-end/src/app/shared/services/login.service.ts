@@ -7,12 +7,18 @@ import { SessionService } from './SessionService/session.service';
 import { environment } from 'environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { UserLoginData } from '../models/user.model';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-  constructor(private store: Store, private sessionService: SessionService, private http: HttpClient) {}
+  constructor(
+    private store: Store,
+    private sessionService: SessionService,
+    private http: HttpClient,
+    private apiService: ApiService
+  ) {}
 
   /**
    * Logs a user into the API.
@@ -26,7 +32,7 @@ export class LoginService {
     // Django uses cmteId+email as unique username
     const username = cmteId + email;
 
-    return this.http.post<UserLoginData>(`${environment.apiUrl}/user/login/authenticate`, {
+    return this.apiService.post<UserLoginData>('/user/login/authenticate', {
       username,
       password,
     });

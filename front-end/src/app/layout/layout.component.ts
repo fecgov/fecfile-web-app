@@ -1,19 +1,17 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../store/committee-account.selectors';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Observable } from 'rxjs';
+import { CommitteeAccount, CommitteeTypeLabels } from 'app/shared/models/committee-account.model';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class LayoutComponent {
   public committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
+  public committeeTypeLabels: string[][] = CommitteeTypeLabels;
 
-  constructor(private store: Store) {
-    this.store.select(selectCommitteeAccount).subscribe((x) => console.log);
-  }
+  constructor(private store: Store) {}
 }

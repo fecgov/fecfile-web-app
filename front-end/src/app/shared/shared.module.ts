@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
+import { LabelPipe } from './pipes/label.pipe';
 
 @NgModule({
   imports: [],
-  declarations: [],
-  exports: [],
+  declarations: [LabelPipe],
+  exports: [LabelPipe],
 })
 export class SharedModule {}
