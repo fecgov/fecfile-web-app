@@ -1,5 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
+import { LabelList } from '../utils/label.utils';
 
 export enum ContactTypes {
   CANDIDATE = 'cand',
@@ -14,7 +15,7 @@ export type ContactType =
   | ContactTypes.INDIVIDUAL
   | ContactTypes.ORGANIZATION;
 
-export const ContactTypeLabels: string[][] = [
+export const ContactTypeLabels: LabelList = [
   [ContactTypes.CANDIDATE, 'Candidate'],
   [ContactTypes.COMMITTEE, 'Committee'],
   [ContactTypes.INDIVIDUAL, 'Individual'],

@@ -1,5 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
+import { LabelList } from '../utils/label.utils';
 
 export enum CommitteeTypes {
   COMMUNICATION_COST = 'C',
@@ -38,7 +39,7 @@ export type CommitteeType =
   | CommitteeTypes.PARTY_QUALIFIED
   | CommitteeTypes.PARTY_NON_FEDERAL_ACCOUNTS;
 
-export const CommitteeTypeLabels: string[][] = [
+export const CommitteeTypeLabels: LabelList = [
   [CommitteeTypes.COMMUNICATION_COST, 'Communication Cost - Form 7'],
   [CommitteeTypes.DELEGATE, 'Delegate'],
   [CommitteeTypes.ELECTIONEERING_COMMUNICATIONS, 'Electioneering Communicatins - Form 9'],
@@ -86,7 +87,7 @@ export type CommitteeDesignation =
   | CommitteeDesignations.LOBBYIST_REGISTRANT_PAC
   | CommitteeDesignations.LEADERSHIP_PAC;
 
-export const CommitteeDesignationLabels: string[][] = [
+export const CommitteeDesignationLabels: LabelList = [
   [CommitteeDesignations.PRINCIPLE_CAMPAIGN_COMMITTEE, 'Principal Campaign Committee (PCC) - Form 1 line 5(a)'],
   [CommitteeDesignations.AUTHORIZED_COMMITTEE, 'Authorized Committee - Form 1 line 5(b)'],
   [CommitteeDesignations.JOINT_FUNDRAISER_COMMITTEE, 'Joint Fundraiser Committee - Form 1 line 5(g) or 5(h)'],
