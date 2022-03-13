@@ -8,7 +8,7 @@ import { LabelList } from 'app/shared/utils/label.utils';
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  // styleUrls: ['./layout.component.scss'],
+  styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent implements OnInit {
   public committeeAccount$: Observable<CommitteeAccount> | null = null;
