@@ -1,4 +1,0 @@
-{
-  "apiUrl": "set in environment.ts",
-  "dcfConverterApiUrl": "https://dev-efile-api.efdev.fec.gov/dcf_converter/v1"
-}

@@ -1,7 +1,11 @@
 {
   "root": true,
   "ignorePatterns": [
-    "projects/**/*"
+    "src/**/*.png",
+    "src/**/*.json",
+    "src/**/*.scss",
+    "src/**/*.woff",
+    "src/**/*.svg"
   ],
   "overrides": [
     {

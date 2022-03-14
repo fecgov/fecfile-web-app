@@ -1,13 +1,10 @@
-import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, switchMap, filter, take, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { switchMap, filter, take, tap } from 'rxjs/operators';
 import { CookieService } from 'ngx-cookie-service';
-import { environment } from '../../../../environments/environment';
 import jwt_decode from 'jwt-decode';
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { AppConfigService } from '../../../app-config.service';
-// import { tokenKey } from '@angular/core/src/view';
+import { BehaviorSubject, of } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -18,11 +15,7 @@ export class SessionService {
   private isRefreshing: any = false;
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(
-    private _http: HttpClient,
-    private _cookieService: CookieService,
-    private _appConfigService: AppConfigService
-  ) {}
+  constructor(private http: HttpClient, private cookieService: CookieService) {}
 
   /**
    * Returns the session token if it exists in local storage.
@@ -30,8 +23,8 @@ export class SessionService {
    * @return     {Object}  The session.
    */
   public getSession() {
-    if (this._cookieService.get('user')) {
-      return this._cookieService.get('user');
+    if (this.cookieService.get('user')) {
+      return this.cookieService.get('user');
     }
     return 0;
   }
@@ -42,13 +35,13 @@ export class SessionService {
    */
   public destroy(): void {
     this.accessToken = '';
-    this._cookieService.deleteAll();
+    this.cookieService.deleteAll();
 
     localStorage.clear();
   }
 
   getToken(): string {
-    const user = this._cookieService.get('user');
+    const user = this.cookieService.get('user');
     if (user) {
       return JSON.parse(user);
     }
@@ -56,7 +49,7 @@ export class SessionService {
   }
 
   setToken(token: string): void {
-    this._cookieService.set('user', JSON.stringify(token));
+    this.cookieService.set('user', JSON.stringify(token));
   }
 
   getTokenExpirationDate(token: string): Date {
@@ -113,17 +106,14 @@ export class SessionService {
   }
 
   public getRefreshTokenFromServer(currentToken: string) {
-    if (this._appConfigService.getConfig() && this._appConfigService.getConfig().apiUrl) {
-      return this._http
-        .post(`${this._appConfigService.getConfig().apiUrl}/token/refresh`, {
-          token: currentToken,
+    return this.http
+      .post(`${environment.apiUrl}/token/refresh`, {
+        token: currentToken,
+      })
+      .pipe(
+        tap((tokens: any) => {
+          this.setToken(tokens.token);
         })
-        .pipe(
-          tap((tokens: any) => {
-            this.setToken(tokens.token);
-          })
-        );
-    }
-    return of({});
+      );
   }
 }
