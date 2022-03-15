@@ -11,8 +11,8 @@ import { Contact } from '../models/contact.model';
 export class ContactService {
   constructor(private apiService: ApiService) {}
 
-  public getTableData(): Observable<ListRestResponse> {
-    return this.apiService.spinnerGet<ListRestResponse>('/contacts/').pipe(
+  public getTableData(pageNumber: number = 1): Observable<ListRestResponse> {
+    return this.apiService.spinnerGet<ListRestResponse>(`/contacts/?page=${pageNumber}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item: any) => Contact.fromJSON(item));
         return response;

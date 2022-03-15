@@ -35,9 +35,12 @@ export class ContactListComponent implements OnInit {
   public loadTableItems(event: LazyLoadEvent) {
     this.loading = true;
 
-    // const page: number = event.first / event.rows + 1;
+    // Calculate the record page number to retrieve from the API.
+    const first: number = !!event.first ? event.first : 0;
+    const rows: number = !!event.rows ? event.rows : 10;
+    const pageNumber: number = Math.floor(first / rows) + 1;
 
-    this.itemService.getTableData().subscribe((response: ListRestResponse) => {
+    this.itemService.getTableData(pageNumber).subscribe((response: ListRestResponse) => {
       this.items = response.results;
       this.totalItems = response.count;
       this.loading = false;
