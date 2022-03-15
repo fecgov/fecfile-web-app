@@ -3,10 +3,10 @@ import { BaseModel } from './base.model';
 import { LabelList } from '../utils/label.utils';
 
 export enum ContactTypes {
-  CANDIDATE = 'cand',
-  COMMITTEE = 'com',
-  INDIVIDUAL = 'ind',
-  ORGANIZATION = 'org',
+  CANDIDATE = 'CAN',
+  COMMITTEE = 'COM',
+  INDIVIDUAL = 'IND',
+  ORGANIZATION = 'ORG',
 }
 
 export type ContactType =
@@ -23,9 +23,9 @@ export const ContactTypeLabels: LabelList = [
 ];
 
 export enum CandidateOfficeTypes {
-  HOUSE = 'house',
-  PRESIDENTIAL = 'pres',
-  SENATE = 'senate',
+  HOUSE = 'H',
+  PRESIDENTIAL = 'P',
+  SENATE = 'S',
 }
 
 export type CandidateOfficeType =
@@ -65,7 +65,7 @@ export class Contact extends BaseModel {
 
   // created, updated, deleted ???
 
-  static getInstance(json: any): Contact {
+  static fromJSON(json: any): Contact {
     return plainToClass(Contact, json);
   }
 }

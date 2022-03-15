@@ -6,7 +6,7 @@ import { CommitteeAccount } from '../models/committee-account.model';
 @Injectable({
   providedIn: 'root',
 })
-export class CommitteeAccountsService {
+export class CommitteeAccountService {
   constructor(private apiService: ApiService) {}
 
   /**

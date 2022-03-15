@@ -16,14 +16,14 @@ export class HeaderComponent implements OnInit {
     this.items = [
       {
         label: 'Dashboard',
-        routerLink: ['dashboard'],
+        routerLink: ['/dashboard'],
       },
       {
         label: 'Reports',
       },
       {
         label: 'Contacts',
-        // routerLink: ['contacts'],
+        routerLink: ['/contacts'],
       },
       {
         label: 'Tools',
