@@ -8,7 +8,6 @@ const routes: Routes = [
     component: ContactListComponent,
     pathMatch: 'full',
   },
-  // { path: 'twoFactLogin', component: TwoFactorLoginComponent },
   { path: '**', redirectTo: '' },
 ];
 

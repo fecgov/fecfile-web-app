@@ -75,7 +75,8 @@
           <p-tableCheckbox [value]="item"></p-tableCheckbox>
         </td>
         <td>{{ item.name }}</td>
-        <td>{{ item.type | label: contactTypeLabels }}</td>
+        <!-- <td>{{ item.type | label: contactTypeLabels }}</td> -->
+        <td>{{ item.type }}</td>
         <td>{{ item.employer }}</td>
         <td>{{ item.occupation }}</td>
         <td>
@@ -99,43 +100,10 @@
   </p-table>
 </div>
 
-<p-dialog
-  [(visible)]="dialogVisible"
-  [style]="{ width: '450px' }"
-  header="Contact Details"
-  [modal]="true"
-  styleClass="p-fluid"
->
-  <ng-template pTemplate="content">
-    <div class="field">
-      <label for="name">Name</label>
-      <input type="text" pInputText id="name" [(ngModel)]="item.name" required autofocus />
-      <small class="p-error" *ngIf="formSubmitted && !item.name">Name is required.</small>
-    </div>
-    <div class="field">
-      <label for="type">Type</label>
-      <p-dropdown [(ngModel)]="item.type" inputId="inventoryStatus" [options]="['a', 'b', 'c']" placeholder="Select">
-        <ng-template let-option pTemplate="item">
-          <span>{{ option.label }}</span>
-        </ng-template>
-      </p-dropdown>
-    </div>
-    <div class="field">
-      <label for="name">Employer</label>
-      <input type="text" pInputText id="name" [(ngModel)]="item.employer" required autofocus />
-      <small class="p-error" *ngIf="formSubmitted && !item.name">Employer is required.</small>
-    </div>
-    <div class="field">
-      <label for="name">Occupation</label>
-      <input type="text" pInputText id="name" [(ngModel)]="item.occupation" required autofocus />
-      <small class="p-error" *ngIf="formSubmitted && !item.name">Occupation is required.</small>
-    </div>
-  </ng-template>
-
-  <ng-template pTemplate="footer">
-    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveItem()"></button>
-  </ng-template>
-</p-dialog>
+<app-contact-detail
+  [item]="this.item"
+  [(detailVisible)]="detailVisible"
+  (loadTableItems)="loadTableItems($event)"
+></app-contact-detail>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

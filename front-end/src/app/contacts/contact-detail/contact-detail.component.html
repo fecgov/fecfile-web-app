@@ -1,0 +1,271 @@
+<p-dialog
+  [(visible)]="detailVisible"
+  [style]="{ width: '90%' }"
+  header="Contact Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="grid">
+      <div class="col-12">
+        <h3>Contact</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="type">CONTACT TYPE</label>
+          <p-dropdown
+            inputId="type"
+            [(ngModel)]="item.type"
+            [options]="contactTypeOptions"
+            optionLabel="name"
+            optionValue="code"
+          ></p-dropdown>
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="candidate_id">CANDIDATE ID</label>
+          <input type="text" pInputText id="candidate_id" [(ngModel)]="item.candidate_id" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-4"></div>
+    </div>
+    <div class="grid">
+      <div class="col-4">
+        <div class="field">
+          <label for="committee_id">COMMITTEE ID</label>
+          <input type="text" pInputText id="committee_id" [(ngModel)]="item.committee_id" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-8">
+        <div class="field">
+          <label for="name">NAME</label>
+          <input type="text" pInputText id="name" [(ngModel)]="item.name" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-8">
+        <div class="field">
+          <label for="name">NAME</label>
+          <input type="text" pInputText id="name" [(ngModel)]="item.name" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-4"></div>
+    </div>
+    <div class="grid">
+      <div class="col-4">
+        <div class="field">
+          <label for="last_name">LAST NAME</label>
+          <input type="text" pInputText id="last_name" [(ngModel)]="item.last_name" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="first_name">FIRST NAME</label>
+          <input type="text" pInputText id="first_name" [(ngModel)]="item.first_name" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
+          <input type="text" pInputText id="middle_name" [(ngModel)]="item.middle_name" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-3">
+        <div class="field">
+          <label for="prefix">PREFIX (OPTIONAL)</label>
+          <input type="text" pInputText id="prefix" [(ngModel)]="item.prefix" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="suffix">SUFFIX (OPTIONAL)</label>
+          <input type="text" pInputText id="suffix" [(ngModel)]="item.suffix" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h3>Address</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="country">COUNTRY/REGION</label>
+          <p-dropdown
+            [(ngModel)]="item.country"
+            inputId="inventoryStatus"
+            [options]="['a', 'b', 'c']"
+            placeholder="Select"
+          >
+            <ng-template let-option pTemplate="item">
+              <span>{{ option.label }}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="street_1">ADDRESS</label>
+          <input type="text" pInputText id="street_1" [(ngModel)]="item.street_1" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="field">
+          <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+          <input type="text" pInputText id="street_2" [(ngModel)]="item.street_2" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="city">CITY</label>
+          <input type="text" pInputText id="city" [(ngModel)]="item.city" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="state">STATE/PROVINCE</label>
+          <p-dropdown
+            [(ngModel)]="item.state"
+            inputId="inventoryStatus"
+            [options]="['a', 'b', 'c']"
+            placeholder="Select"
+          >
+            <ng-template let-option pTemplate="item">
+              <span>{{ option.label }}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="zip">ZIP/POSTAL CODE</label>
+          <input type="text" pInputText id="zip" [(ngModel)]="item.zip" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="telephone">TELEPHONE (OPTIONAL)</label>
+          <input type="text" pInputText id="telephone" [(ngModel)]="item.telephone" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h3>Employer</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="employer">EMPLOYER</label>
+          <input type="text" pInputText id="employer" [(ngModel)]="item.employer" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="field">
+          <label for="occupation">OCCUPATION (OPTIONAL)</label>
+          <input type="text" pInputText id="occupation" [(ngModel)]="item.occupation" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h3>Office</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="candidate_office">OFFICE</label>
+          <p-dropdown
+            [(ngModel)]="item.candidate_office"
+            inputId="inventoryStatus"
+            [options]="['a', 'b', 'c']"
+            placeholder="Select"
+          >
+            <ng-template let-option pTemplate="item">
+              <span>{{ option.label }}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="candidate_state">STATE</label>
+          <p-dropdown
+            [(ngModel)]="item.candidate_state"
+            inputId="inventoryStatus"
+            [options]="['a', 'b', 'c']"
+            placeholder="Select"
+          >
+            <ng-template let-option pTemplate="item">
+              <span>{{ option.label }}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="candidate_district">DISTRICT (REQUIRED FOR HOUSE)</label>
+          <input type="text" pInputText id="zip" [(ngModel)]="item.candidate_district" required autofocus />
+          <small class="p-error" *ngIf="!item.name">Name is required.</small>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="closeDetail()"></button>
+    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveItem()"></button>
+  </ng-template>
+</p-dialog>

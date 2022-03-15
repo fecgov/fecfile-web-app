@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { TableListBaseComponent } from 'app/shared/components/table-list-base.component';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { ContactService } from '../../shared/services/contact.service';
 import { Contact, ContactTypeLabels } from '../../shared/models/contact.model';
@@ -11,22 +12,24 @@ import { LabelList } from 'app/shared/utils/label.utils';
   templateUrl: './contact-list.component.html',
   styleUrls: ['./contact-list.component.scss'],
 })
-export class ContactListComponent implements OnInit {
+export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
   item: Contact = new Contact();
   items: Contact[] = [];
   totalItems: number = 0;
+  pagerState: LazyLoadEvent | null = null;
   loading: boolean = false;
   selectAll: boolean = false;
   selectedItems: Contact[] = [];
-  formSubmitted: boolean = false;
-  dialogVisible: boolean = false;
+  detailVisible: boolean = false;
   contactTypeLabels: LabelList = ContactTypeLabels;
 
   constructor(
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
     private itemService: ContactService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.loading = true;
@@ -34,6 +37,23 @@ export class ContactListComponent implements OnInit {
 
   public loadTableItems(event: LazyLoadEvent) {
     this.loading = true;
+
+    // event is undefined when triggered from the detail page because
+    // the detail doesn't know what page we are on. We check the local
+    // pagerState variable to retrieve the page state.
+    if (event) {
+      this.pagerState = event;
+    } else {
+      event = !!this.pagerState
+        ? this.pagerState
+        : {
+            first: 0,
+            rows: 10,
+          };
+    }
+
+    // TODO: Calculate edge case of correct first value when a number of items
+    // have been deleted or the last item on a page
 
     // Calculate the record page number to retrieve from the API.
     const first: number = !!event.first ? event.first : 0;
@@ -68,33 +88,12 @@ export class ContactListComponent implements OnInit {
 
   public addItem() {
     this.item = new Contact();
-    this.formSubmitted = false;
-    this.dialogVisible = true;
+    this.detailVisible = true;
   }
 
   public editItem(item: Contact) {
     this.item = item;
-    this.dialogVisible = true;
-  }
-
-  public saveItem() {
-    this.formSubmitted = true;
-
-    if (!!this.item.name && this.item.name.trim()) {
-      if (this.item.id) {
-        this.items[this.findIndexById(this.item.id)] = this.item;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Updated', life: 3000 });
-      } else {
-        // this.item.id = this.createId();
-        // this.item.image = 'item-placeholder.svg';
-        this.items.push(this.item);
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Created', life: 3000 });
-      }
-
-      this.items = [...this.items];
-      this.dialogVisible = false;
-      this.item = new Contact();
-    }
+    this.detailVisible = true;
   }
 
   public deleteItem(item: Contact) {
@@ -103,9 +102,9 @@ export class ContactListComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.itemService.delete(item).subscribe((response: any) => {
-          console.log('foo', response);
+        this.itemService.delete(item).subscribe((response: null) => {
           this.items = this.items.filter((item: Contact) => item.id !== item.id);
+          // MJT - refresh table
           this.item = new Contact();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });
@@ -120,6 +119,7 @@ export class ContactListComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         // this.itemService.delete(item)
+        // MJT - refresh table
         this.items = this.items.filter((item: Contact) => !this.selectedItems.includes(item));
         this.selectedItems = [];
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
@@ -127,22 +127,17 @@ export class ContactListComponent implements OnInit {
     });
   }
 
-  public hideDialog() {
-    this.dialogVisible = false;
-    this.formSubmitted = false;
-  }
+  // private findIndexById(id: number): number {
+  //   let index = -1;
+  //   for (let i = 0; i < this.items.length; i++) {
+  //     if (this.items[i].id === id) {
+  //       index = i;
+  //       break;
+  //     }
+  //   }
 
-  private findIndexById(id: number): number {
-    let index = -1;
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-
-    return index;
-  }
+  //   return index;
+  // }
 
   // createId(): string {
   //   let id = '';

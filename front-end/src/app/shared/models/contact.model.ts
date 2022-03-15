@@ -3,10 +3,14 @@ import { BaseModel } from './base.model';
 import { LabelList } from '../utils/label.utils';
 
 export enum ContactTypes {
-  CANDIDATE = 'CAN',
-  COMMITTEE = 'COM',
-  INDIVIDUAL = 'IND',
-  ORGANIZATION = 'ORG',
+  // CANDIDATE = 'CAN',
+  // COMMITTEE = 'COM',
+  // INDIVIDUAL = 'IND',
+  // ORGANIZATION = 'ORG',
+  CANDIDATE = 'Candidate',
+  COMMITTEE = 'Committee',
+  INDIVIDUAL = 'Individual',
+  ORGANIZATION = 'Organization',
 }
 
 export type ContactType =
@@ -16,9 +20,9 @@ export type ContactType =
   | ContactTypes.ORGANIZATION;
 
 export const ContactTypeLabels: LabelList = [
+  [ContactTypes.INDIVIDUAL, 'Individual'],
   [ContactTypes.CANDIDATE, 'Candidate'],
   [ContactTypes.COMMITTEE, 'Committee'],
-  [ContactTypes.INDIVIDUAL, 'Individual'],
   [ContactTypes.ORGANIZATION, 'Organization'],
 ];
 
