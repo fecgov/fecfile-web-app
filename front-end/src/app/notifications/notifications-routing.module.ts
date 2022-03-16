@@ -7,4 +7,4 @@ const routes: Routes = [{ path: '**', redirectTo: '' }];
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ReportsRoutingModule {}
+export class NotificationsRoutingModule {}
