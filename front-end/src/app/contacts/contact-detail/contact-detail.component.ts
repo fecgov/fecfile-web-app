@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MessageService, LazyLoadEvent } from 'primeng/api';
-import { Contact } from '../../shared/models/contact.model';
+import { MessageService } from 'primeng/api';
+import { Contact, ContactTypeLabels, CandidateOfficeTypeLabels } from '../../shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { ContactTypeLabels } from '../../shared/models/contact.model';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-contact-detail',
@@ -17,11 +16,17 @@ export class ContactDetailComponent implements OnInit {
   @Output() loadTableItems: EventEmitter<any> = new EventEmitter<any>();
 
   contactTypeOptions: PrimeOptions = [];
+  candidateOfficeTypeOptions: PrimeOptions = [];
+  stateOptions: PrimeOptions = [];
+  countryOptions: PrimeOptions = [];
 
   constructor(private messageService: MessageService, private contactService: ContactService) {}
 
   ngOnInit(): void {
     this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+    this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
+    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+    this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
   }
 
   public saveItem() {

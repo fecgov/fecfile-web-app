@@ -117,15 +117,12 @@
         <div class="field">
           <label for="country">COUNTRY/REGION</label>
           <p-dropdown
+            inputId="country"
             [(ngModel)]="item.country"
-            inputId="inventoryStatus"
-            [options]="['a', 'b', 'c']"
-            placeholder="Select"
-          >
-            <ng-template let-option pTemplate="item">
-              <span>{{ option.label }}</span>
-            </ng-template>
-          </p-dropdown>
+            [options]="countryOptions"
+            optionLabel="name"
+            optionValue="code"
+          ></p-dropdown>
         </div>
       </div>
       <div class="col-6"></div>
@@ -158,15 +155,12 @@
         <div class="field">
           <label for="state">STATE/PROVINCE</label>
           <p-dropdown
+            inputId="state"
             [(ngModel)]="item.state"
-            inputId="inventoryStatus"
-            [options]="['a', 'b', 'c']"
-            placeholder="Select"
-          >
-            <ng-template let-option pTemplate="item">
-              <span>{{ option.label }}</span>
-            </ng-template>
-          </p-dropdown>
+            [options]="stateOptions"
+            optionLabel="name"
+            optionValue="code"
+          ></p-dropdown>
         </div>
       </div>
       <div class="col-3">
@@ -228,30 +222,24 @@
         <div class="field">
           <label for="candidate_office">OFFICE</label>
           <p-dropdown
+            inputId="candidate_office"
             [(ngModel)]="item.candidate_office"
-            inputId="inventoryStatus"
-            [options]="['a', 'b', 'c']"
-            placeholder="Select"
-          >
-            <ng-template let-option pTemplate="item">
-              <span>{{ option.label }}</span>
-            </ng-template>
-          </p-dropdown>
+            [options]="candidateOfficeTypeOptions"
+            optionLabel="name"
+            optionValue="code"
+          ></p-dropdown>
         </div>
       </div>
       <div class="col-3">
         <div class="field">
           <label for="candidate_state">STATE</label>
           <p-dropdown
+            inputId="candidate_state"
             [(ngModel)]="item.candidate_state"
-            inputId="inventoryStatus"
-            [options]="['a', 'b', 'c']"
-            placeholder="Select"
-          >
-            <ng-template let-option pTemplate="item">
-              <span>{{ option.label }}</span>
-            </ng-template>
-          </p-dropdown>
+            [options]="stateOptions"
+            optionLabel="name"
+            optionValue="code"
+          ></p-dropdown>
         </div>
       </div>
       <div class="col-3">
