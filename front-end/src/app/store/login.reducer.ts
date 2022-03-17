@@ -5,7 +5,7 @@ import { UserLoginData } from 'app/shared/models/user.model';
 export const initialState: UserLoginData = {
   committee_id: null,
   email: null,
-  is_allowed: false,
+  role: null,
   token: null,
 };
 

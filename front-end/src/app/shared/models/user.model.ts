@@ -1,10 +1,11 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
+import { RoleType } from './role.model';
 
 export type UserLoginData = {
   committee_id: string | null;
   email: string | null;
-  is_allowed: boolean;
+  role: RoleType | null;
   token: string | null;
 };
 

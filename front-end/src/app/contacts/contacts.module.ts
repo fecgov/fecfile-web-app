@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // PrimeNG
 import { TableModule } from 'primeng/table';
@@ -26,6 +27,7 @@ import { ContactDetailComponent } from './contact-detail/contact-detail.componen
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ContactsRoutingModule,
     TableModule,
     DropdownModule,
