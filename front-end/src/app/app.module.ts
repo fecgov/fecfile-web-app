@@ -40,7 +40,7 @@ import { LoginComponent } from './login/login/login.component';
 import { TwoFactorLoginComponent } from './login/two-factor-login/two-factor-login.component';
 import { ConfirmTwoFactorComponent } from './login/confirm-two-factor/confirm-two-factor.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { TokenInterceptor } from './shared/interceptors/token.interceptor';
+import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -92,7 +92,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     CookieService,
     ConfirmationService,
     MessageService,
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

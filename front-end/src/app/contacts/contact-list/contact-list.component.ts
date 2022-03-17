@@ -21,6 +21,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
   selectAll: boolean = false;
   selectedItems: Contact[] = [];
   detailVisible: boolean = false;
+  detailTitle: string = 'Add Contact';
   contactTypeLabels: LabelList = ContactTypeLabels;
 
   constructor(
@@ -51,9 +52,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
             rows: 10,
           };
     }
-
-    // TODO: Calculate edge case of correct first value when a number of items
-    // have been deleted or the last item on a page
 
     // Calculate the record page number to retrieve from the API.
     const first: number = !!event.first ? event.first : 0;
@@ -89,11 +87,13 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
   public addItem() {
     this.item = new Contact();
     this.detailVisible = true;
+    this.detailTitle = 'Add Contact';
   }
 
   public editItem(item: Contact) {
     this.item = item;
     this.detailVisible = true;
+    this.detailTitle = 'Edit Contact';
   }
 
   public deleteItem(item: Contact) {
@@ -126,25 +126,4 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
       },
     });
   }
-
-  // private findIndexById(id: number): number {
-  //   let index = -1;
-  //   for (let i = 0; i < this.items.length; i++) {
-  //     if (this.items[i].id === id) {
-  //       index = i;
-  //       break;
-  //     }
-  //   }
-
-  //   return index;
-  // }
-
-  // createId(): string {
-  //   let id = '';
-  //   var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  //   for (var i = 0; i < 5; i++) {
-  //     id += chars.charAt(Math.floor(Math.random() * chars.length));
-  //   }
-  //   return id;
-  // }
 }

@@ -23,7 +23,7 @@ export class ContactService implements TableListService<Contact> {
 
   public create(contact: Contact): Observable<any> {
     const payload: any = contact.toJson();
-    return this.apiService.post<any>(`/contacts/${contact.id}/`, payload);
+    return this.apiService.post<any>(`/contacts/`, payload);
   }
 
   public update(contact: Contact): Observable<any> {

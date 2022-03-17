@@ -3,14 +3,10 @@ import { BaseModel } from './base.model';
 import { LabelList } from '../utils/label.utils';
 
 export enum ContactTypes {
-  // CANDIDATE = 'CAN',
-  // COMMITTEE = 'COM',
-  // INDIVIDUAL = 'IND',
-  // ORGANIZATION = 'ORG',
-  CANDIDATE = 'Candidate',
-  COMMITTEE = 'Committee',
-  INDIVIDUAL = 'Individual',
-  ORGANIZATION = 'Organization',
+  CANDIDATE = 'CAN',
+  COMMITTEE = 'COM',
+  INDIVIDUAL = 'IND',
+  ORGANIZATION = 'ORG',
 }
 
 export type ContactType =
@@ -44,7 +40,7 @@ export const CandidateOfficeTypeLabels = [
 ];
 
 export class Contact extends BaseModel {
-  id: number = 0;
+  id: number | null = null;
   type: ContactType = ContactTypes.INDIVIDUAL;
   candidate_id: string | null = null;
   committee_id: string | null = null;
@@ -66,8 +62,6 @@ export class Contact extends BaseModel {
   candidate_district: string | null = null;
   telephone: string | null = null;
   country: string = '';
-
-  // created, updated, deleted ???
 
   static fromJSON(json: any): Contact {
     return plainToClass(Contact, json);

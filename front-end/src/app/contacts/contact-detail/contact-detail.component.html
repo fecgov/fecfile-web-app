@@ -1,9 +1,10 @@
 <p-dialog
   [(visible)]="detailVisible"
   [style]="{ width: '90%' }"
-  header="Contact Details"
+  [header]="detailTitle"
   [modal]="true"
   styleClass="p-fluid"
+  (onShow)="onOpenDetail()"
   (onHide)="closeDetail()"
 >
   <ng-template pTemplate="content">
@@ -321,7 +322,7 @@
         <div class="grid">
           <div class="col-6">
             <div class="field">
-              <label for="candidate_office">OFFICE</label>
+              <label for="candidate_office">CANDIDATE OFFICE</label>
               <p-dropdown
                 inputId="candidate_office"
                 formControlName="candidate_office"
@@ -333,7 +334,7 @@
           </div>
           <div class="col-3">
             <div class="field">
-              <label for="candidate_state">STATE</label>
+              <label for="candidate_state">CANDIDATE STATE</label>
               <p-dropdown
                 inputId="candidate_state"
                 formControlName="candidate_state"
@@ -345,8 +346,15 @@
           </div>
           <div class="col-3">
             <div class="field">
-              <label for="candidate_district">DISTRICT (REQUIRED FOR HOUSE)</label>
-              <input type="text" pInputText id="zip" formControlName="candidate_district" required autofocus />
+              <label for="candidate_district">CANDIDATE DISTRICT</label>
+              <input
+                type="text"
+                pInputText
+                id="candidate_district"
+                formControlName="candidate_district"
+                required
+                autofocus
+              />
               <app-error-messages
                 [form]="form"
                 fieldName="candidate_district"
