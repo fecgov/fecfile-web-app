@@ -16,8 +16,7 @@ import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { LoginEffects } from './store/login.effects';
 
 // PrimeNG
-import { ConfirmationService } from 'primeng/api';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuModule } from 'primeng/menu';
 import { PanelModule } from 'primeng/panel';

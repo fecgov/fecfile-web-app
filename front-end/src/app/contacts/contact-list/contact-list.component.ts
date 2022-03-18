@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfirmationService } from 'primeng/api';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base.component';
 
 import { ContactService } from '../../shared/services/contact.service';
@@ -10,7 +9,7 @@ import { LabelList } from 'app/shared/utils/label.utils';
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
-  styleUrls: ['./contact-list.component.scss'],
+  // styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
   override item: Contact = new Contact();

@@ -57,32 +57,32 @@ export class ApiService {
     // Read about the issue here: https://blog.angular-university.io/angular-debugging/
     return of(null).pipe(
       delay(0),
-      tap((_) => this.store.dispatch(spinnerOnAction())),
-      switchMap((_) => this.get<T>(endpoint).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
+      tap(() => this.store.dispatch(spinnerOnAction())),
+      switchMap(() => this.get<T>(endpoint).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
     );
   }
 
   public spinnerPost<T>(endpoint: string, payload: any): Observable<T> {
     return of(null).pipe(
       delay(0),
-      tap((_) => this.store.dispatch(spinnerOnAction())),
-      switchMap((_) => this.post<T>(endpoint, payload).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
+      tap(() => this.store.dispatch(spinnerOnAction())),
+      switchMap(() => this.post<T>(endpoint, payload).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
     );
   }
 
   public spinnerPut<T>(endpoint: string, payload: any): Observable<T> {
     return of(null).pipe(
       delay(0),
-      tap((_) => this.store.dispatch(spinnerOnAction())),
-      switchMap((_) => this.put<T>(endpoint, payload).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
+      tap(() => this.store.dispatch(spinnerOnAction())),
+      switchMap(() => this.put<T>(endpoint, payload).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
     );
   }
 
   public spinnerDelete<T>(endpoint: string): Observable<T> {
     return of(null).pipe(
       delay(0),
-      tap((_) => this.store.dispatch(spinnerOnAction())),
-      switchMap((_) => this.delete<T>(endpoint).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
+      tap(() => this.store.dispatch(spinnerOnAction())),
+      switchMap(() => this.delete<T>(endpoint).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
     );
   }
 }

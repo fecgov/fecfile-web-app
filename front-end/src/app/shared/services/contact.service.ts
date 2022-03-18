@@ -23,14 +23,14 @@ export class ContactService implements TableListService<Contact> {
 
   public create(contact: Contact): Observable<Contact> {
     const payload: any = contact.toJson();
-    return this.apiService.post<any>(`/contacts/`, payload).pipe(map((payload: any) => Contact.fromJSON(payload)));
+    return this.apiService.post<any>(`/contacts/`, payload).pipe(map((response: any) => Contact.fromJSON(response)));
   }
 
   public update(contact: Contact): Observable<Contact> {
     const payload: any = contact.toJson();
     return this.apiService
       .put<any>(`/contacts/${contact.id}/`, payload)
-      .pipe(map((payload: any) => Contact.fromJSON(payload)));
+      .pipe(map((response: any) => Contact.fromJSON(response)));
   }
 
   public delete(contact: Contact): Observable<null> {

@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, LazyLoadEvent } from 'primeng/api';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { TableListService } from '../services/table-list-service.interface';
 
