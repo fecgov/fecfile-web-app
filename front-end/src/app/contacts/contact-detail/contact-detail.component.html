@@ -329,6 +329,7 @@
                 [options]="candidateOfficeTypeOptions"
                 optionLabel="name"
                 optionValue="code"
+                appendTo="body"
               ></p-dropdown>
             </div>
           </div>
@@ -347,20 +348,17 @@
           <div class="col-3">
             <div class="field">
               <label for="candidate_district">CANDIDATE DISTRICT</label>
-              <input
-                type="text"
-                pInputText
-                id="candidate_district"
+              <p-dropdown
+                inputId="candidate_district"
                 formControlName="candidate_district"
-                required
-                autofocus
-              />
-              <app-error-messages
-                [form]="form"
-                fieldName="candidate_district"
-                [maxlength]="10"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+                [options]="[
+                  { name: '01', code: '01' },
+                  { name: '02', code: '02' }
+                ]"
+                optionLabel="name"
+                optionValue="code"
+                appendTo="body"
+              ></p-dropdown>
             </div>
           </div>
         </div>
@@ -369,15 +367,28 @@
   </ng-template>
 
   <ng-template pTemplate="footer">
-    <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="closeDetail()"></button>
-    <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveItem()"></button>
-    <button
-      pButton
-      pRipple
-      label="Save & Add More"
-      icon="pi pi-check"
-      class="p-button-text"
-      (click)="saveItem(false)"
-    ></button>
+    <div class="grid">
+      <div class="col-1">
+        <button
+          pButton
+          pRipple
+          label="Cancel"
+          icon="pi pi-times"
+          class="p-button-secondary"
+          (click)="closeDetail()"
+        ></button>
+      </div>
+      <div class="col-11">
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-primary" (click)="saveItem()"></button>
+        <button
+          pButton
+          pRipple
+          label="Save & Add More"
+          icon="pi pi-check"
+          class="p-button-info"
+          (click)="saveItem(false)"
+        ></button>
+      </div>
+    </div>
   </ng-template>
 </p-dialog>

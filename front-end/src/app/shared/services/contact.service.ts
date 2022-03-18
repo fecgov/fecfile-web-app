@@ -13,7 +13,7 @@ export class ContactService implements TableListService<Contact> {
   constructor(private apiService: ApiService) {}
 
   public getTableData(pageNumber: number = 1): Observable<ListRestResponse> {
-    return this.apiService.spinnerGet<ListRestResponse>(`/contacts/?page=${pageNumber}`).pipe(
+    return this.apiService.get<ListRestResponse>(`/contacts/?page=${pageNumber}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item: any) => Contact.fromJSON(item));
         return response;
@@ -21,14 +21,16 @@ export class ContactService implements TableListService<Contact> {
     );
   }
 
-  public create(contact: Contact): Observable<any> {
+  public create(contact: Contact): Observable<Contact> {
     const payload: any = contact.toJson();
-    return this.apiService.post<any>(`/contacts/`, payload);
+    return this.apiService.post<any>(`/contacts/`, payload).pipe(map((payload: any) => Contact.fromJSON(payload)));
   }
 
-  public update(contact: Contact): Observable<any> {
+  public update(contact: Contact): Observable<Contact> {
     const payload: any = contact.toJson();
-    return this.apiService.put<any>(`/contacts/${contact.id}/`, payload);
+    return this.apiService
+      .put<any>(`/contacts/${contact.id}/`, payload)
+      .pipe(map((payload: any) => Contact.fromJSON(payload)));
   }
 
   public delete(contact: Contact): Observable<null> {

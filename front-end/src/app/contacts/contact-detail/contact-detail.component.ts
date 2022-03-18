@@ -160,18 +160,7 @@ export class ContactDetailComponent implements OnInit {
         'employer',
         'occupation',
       ],
-      COM: [
-        'type',
-        'committee_id',
-        'last_name',
-        'country',
-        'street_1',
-        'street_2',
-        'city',
-        'state',
-        'zip',
-        'telephone',
-      ],
+      COM: ['type', 'committee_id', 'name', 'country', 'street_1', 'street_2', 'city', 'state', 'zip', 'telephone'],
     };
 
     return formFields[this.form?.get('type')?.value].reduce(
