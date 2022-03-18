@@ -62,8 +62,100 @@ export class Contact extends BaseModel {
   candidate_district: string | null = null;
   telephone: string | null = null;
   country: string = '';
+  created: string | null = null;
+  updated: string | null = null;
+  deleted: string | null = null;
 
   static fromJSON(json: any): Contact {
     return plainToClass(Contact, json);
+  }
+
+  static getFieldsByType(type: ContactType): string[] {
+    if (type === ContactTypes.INDIVIDUAL) {
+      return [
+        'type',
+        'last_name',
+        'first_name',
+        'middle_name',
+        'prefix',
+        'suffix',
+        'country',
+        'street_1',
+        'street_2',
+        'city',
+        'state',
+        'zip',
+        'telephone',
+        'employer',
+        'occupation',
+        'created',
+        'updated',
+        'deleted',
+      ];
+    }
+
+    if (type === ContactTypes.ORGANIZATION) {
+      return [
+        'type',
+        'name',
+        'country',
+        'street_1',
+        'street_2',
+        'city',
+        'state',
+        'zip',
+        'telephone',
+        'created',
+        'updated',
+        'deleted',
+      ];
+    }
+
+    if (type === ContactTypes.CANDIDATE) {
+      return [
+        'type',
+        'candidate_id',
+        'last_name',
+        'first_name',
+        'middle_name',
+        'prefix',
+        'suffix',
+        'country',
+        'street_1',
+        'street_2',
+        'city',
+        'state',
+        'zip',
+        'telephone',
+        'employer',
+        'occupation',
+        'candidate_office',
+        'candidate_state',
+        'candidate_district',
+        'created',
+        'updated',
+        'deleted',
+      ];
+    }
+
+    if (type === ContactTypes.COMMITTEE) {
+      return [
+        'type',
+        'committee_id',
+        'name',
+        'country',
+        'street_1',
+        'street_2',
+        'city',
+        'state',
+        'zip',
+        'telephone',
+        'created',
+        'updated',
+        'deleted',
+      ];
+    }
+
+    return [];
   }
 }

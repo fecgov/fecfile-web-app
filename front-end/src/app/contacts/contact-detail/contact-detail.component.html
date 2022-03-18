@@ -46,51 +46,37 @@
           <div class="col-4"></div>
         </div>
       </ng-container>
-      <ng-container *ngIf="form.value.type === ContactTypes.COMMITTEE">
+      <ng-container *ngIf="[ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(form.value.type)">
         <div class="grid">
-          <div class="col-4">
-            <div class="field">
-              <label for="committee_id">COMMITTEE ID</label>
-              <input type="text" pInputText id="committee_id" formControlName="committee_id" required autofocus />
-              <app-error-messages
-                [form]="form"
-                fieldName="committee_id"
-                [maxlength]="9"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+          <ng-container *ngIf="form.value.type === ContactTypes.COMMITTEE">
+            <div class="col-4">
+              <div class="field">
+                <label for="committee_id">COMMITTEE ID</label>
+                <input type="text" pInputText id="committee_id" formControlName="committee_id" required autofocus />
+                <app-error-messages
+                  [form]="form"
+                  fieldName="committee_id"
+                  [maxlength]="9"
+                  [formSubmitted]="formSubmitted"
+                ></app-error-messages>
+              </div>
             </div>
-          </div>
+          </ng-container>
           <div class="col-8">
             <div class="field">
               <label for="name">NAME</label>
-              <input type="text" pInputText id="name" formControlName="name" autofocus />
+              <input type="text" pInputText id="name" formControlName="name" required autofocus />
               <app-error-messages
                 [form]="form"
                 fieldName="name"
-                [required]="false"
                 [maxlength]="200"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
           </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="form.value.type === ContactTypes.ORGANIZATION">
-        <div class="grid">
-          <div class="col-8">
-            <div class="field">
-              <label for="name">NAME</label>
-              <input type="text" pInputText id="name" formControlName="name" autofocus />
-              <app-error-messages
-                [form]="form"
-                fieldName="name"
-                [required]="false"
-                [maxlength]="200"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-4"></div>
+          <ng-container *ngIf="form.value.type === ContactTypes.ORGANIZATION">
+            <div class="col-4"></div>
+          </ng-container>
         </div>
       </ng-container>
       <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(form.value.type)">

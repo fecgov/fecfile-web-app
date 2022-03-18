@@ -28,7 +28,7 @@ export class ContactDetailComponent implements OnInit {
     type: ['', [Validators.required]],
     candidate_id: ['', [Validators.required, Validators.maxLength(9)]],
     committee_id: ['', [Validators.required, Validators.maxLength(9)]],
-    name: ['', [Validators.maxLength(200)]],
+    name: ['', [Validators.required, Validators.maxLength(200)]],
     last_name: ['', [Validators.required, Validators.maxLength(30)]],
     first_name: ['', [Validators.required, Validators.maxLength(20)]],
     middle_name: ['', [Validators.maxLength(20)]],
@@ -44,7 +44,7 @@ export class ContactDetailComponent implements OnInit {
     candidate_office: ['', [Validators.required, Validators.maxLength(10)]],
     candidate_state: ['', [Validators.required, Validators.maxLength(10)]],
     candidate_district: ['', [Validators.required, Validators.maxLength(10)]],
-    telephone: ['', [Validators.maxLength(10)]],
+    telephone: ['', [Validators.pattern('[0-9]{10}')]],
     country: ['', [Validators.required]],
   });
 
@@ -60,6 +60,10 @@ export class ContactDetailComponent implements OnInit {
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
+    this.form?.get('type')?.valueChanges.subscribe((value: string) => {
+      // this.resetForm();
+    });
+
     this.form?.get('country')?.valueChanges.subscribe((value: string) => {
       if (value !== 'USA') {
         this.form.patchValue({
@@ -73,21 +77,34 @@ export class ContactDetailComponent implements OnInit {
   }
 
   onOpenDetail() {
+    this.resetForm();
     this.form.patchValue(this.contact);
   }
 
   public saveItem(closeDetail: boolean = true) {
     this.formSubmitted = true;
 
-    if (this.isInvalid(this.form)) {
+    if (this.isFormInvalid()) {
       return;
     }
 
-    const payload: Contact = Contact.fromJSON(this.form.value);
+    // Preprocess the form data to match contact type.
+    const formValues = { ...this.form.value };
+
+    // Null fields that are not part of this contact type.
+    const typeFields = Contact.getFieldsByType(formValues.type);
+    Object.entries(formValues).forEach(([key, value]) => {
+      if (!typeFields.includes(key)) {
+        formValues[key] = null;
+      }
+    });
+
+    const payload: Contact = Contact.fromJSON(formValues);
 
     if (this.contact.id) {
       payload.id = this.contact.id;
       this.contactService.update(payload).subscribe((result) => {
+        this.loadTableItems.emit();
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -97,6 +114,7 @@ export class ContactDetailComponent implements OnInit {
       });
     } else {
       this.contactService.create(payload).subscribe((result) => {
+        this.loadTableItems.emit();
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -105,7 +123,6 @@ export class ContactDetailComponent implements OnInit {
         });
       });
     }
-    this.loadTableItems.emit();
     if (closeDetail) {
       this.closeDetail();
     }
@@ -122,49 +139,10 @@ export class ContactDetailComponent implements OnInit {
     this.formSubmitted = false;
   }
 
-  private isInvalid(form: FormGroup): boolean {
-    const formFields: { [key: string]: string[] } = {
-      IND: [
-        'type',
-        'last_name',
-        'first_name',
-        'middle_name',
-        'prefix',
-        'suffix',
-        'country',
-        'street_1',
-        'street_2',
-        'city',
-        'state',
-        'zip',
-        'telephone',
-        'employer',
-        'occupation',
-      ],
-      ORG: ['type', 'name', 'country', 'street_1', 'street_2', 'city', 'state', 'zip', 'telephone'],
-      CAN: [
-        'type',
-        'candidate_id',
-        'last_name',
-        'first_name',
-        'middle_name',
-        'prefix',
-        'suffix',
-        'country',
-        'street_1',
-        'street_2',
-        'city',
-        'state',
-        'zip',
-        'telephone',
-        'employer',
-        'occupation',
-      ],
-      COM: ['type', 'committee_id', 'name', 'country', 'street_1', 'street_2', 'city', 'state', 'zip', 'telephone'],
-    };
-
-    return formFields[this.form?.get('type')?.value].reduce(
-      (isInvalid: boolean, fieldName: string) => !!isInvalid || !!form?.get(fieldName)?.invalid,
+  private isFormInvalid(): boolean {
+    const type: ContactTypes = this.form?.get('type')?.value;
+    return Contact.getFieldsByType(type).reduce(
+      (isInvalid: boolean, fieldName: string) => !!isInvalid || !!this.form?.get(fieldName)?.invalid,
       false
     );
   }
