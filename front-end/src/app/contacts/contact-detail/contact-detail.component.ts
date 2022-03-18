@@ -41,9 +41,9 @@ export class ContactDetailComponent implements OnInit {
     zip: ['', [Validators.required, Validators.maxLength(9)]],
     employer: ['', [Validators.maxLength(38)]],
     occupation: ['', [Validators.maxLength(38)]],
-    candidate_office: ['', [Validators.required, Validators.maxLength(10)]],
-    candidate_state: ['', [Validators.required, Validators.maxLength(10)]],
-    candidate_district: ['', [Validators.required, Validators.maxLength(10)]],
+    candidate_office: ['', [Validators.maxLength(10)]],
+    candidate_state: ['', [Validators.maxLength(10)]],
+    candidate_district: ['', [Validators.maxLength(10)]],
     telephone: ['', [Validators.pattern('[0-9]{10}')]],
     country: ['', [Validators.required]],
   });
@@ -59,10 +59,6 @@ export class ContactDetailComponent implements OnInit {
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-
-    this.form?.get('type')?.valueChanges.subscribe((value: string) => {
-      // this.resetForm();
-    });
 
     this.form?.get('country')?.valueChanges.subscribe((value: string) => {
       if (value !== 'USA') {
@@ -88,7 +84,6 @@ export class ContactDetailComponent implements OnInit {
       return;
     }
 
-    // Preprocess the form data to match contact type.
     const formValues = { ...this.form.value };
 
     // Null fields that are not part of this contact type.
@@ -98,6 +93,15 @@ export class ContactDetailComponent implements OnInit {
         formValues[key] = null;
       }
     });
+
+    // Temporary patch until ticket app#119 addresses the candidate dropdown inputs
+    // Problem is default select values not getting assigned to fields when untouched
+    // Problem may be that field names have "_" in them
+    if (formValues.type === ContactTypes.CANDIDATE) {
+      formValues.candidate_office = !!formValues.candidate_office ? formValues.candidate_office : 'H';
+      formValues.candidate_state = !!formValues.candidate_state ? formValues.candidate_state : 'AL';
+      formValues.candidate_district = !!formValues.candidate_district ? formValues.candidate_district : '01';
+    }
 
     const payload: Contact = Contact.fromJSON(formValues);
 
@@ -142,7 +146,7 @@ export class ContactDetailComponent implements OnInit {
   private isFormInvalid(): boolean {
     const type: ContactTypes = this.form?.get('type')?.value;
     return Contact.getFieldsByType(type).reduce(
-      (isInvalid: boolean, fieldName: string) => !!isInvalid || !!this.form?.get(fieldName)?.invalid,
+      (isInvalid: boolean, fieldName: string) => isInvalid || !!this.form?.get(fieldName)?.invalid,
       false
     );
   }

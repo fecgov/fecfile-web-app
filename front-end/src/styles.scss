@@ -22,3 +22,8 @@
 li {
   list-style-type: none;
 }
+
+.ng-submitted .p-inputtext.ng-invalid,
+.p-inputtext.ng-invalid.ng-touched {
+  border-color: #dc3545;
+}

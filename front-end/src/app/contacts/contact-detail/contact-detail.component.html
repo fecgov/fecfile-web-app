@@ -8,7 +8,7 @@
   (onHide)="closeDetail()"
 >
   <ng-template pTemplate="content">
-    <form id="form" [formGroup]="form">
+    <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
       <div class="grid">
         <div class="col-12">
           <h3>Contact</h3>
@@ -34,7 +34,7 @@
           <div class="col-6">
             <div class="field">
               <label for="candidate_id">CANDIDATE ID</label>
-              <input type="text" pInputText id="candidate_id" formControlName="candidate_id" required autofocus />
+              <input type="text" pInputText id="candidate_id" formControlName="candidate_id" required />
               <app-error-messages
                 [form]="form"
                 fieldName="candidate_id"
@@ -52,7 +52,7 @@
             <div class="col-4">
               <div class="field">
                 <label for="committee_id">COMMITTEE ID</label>
-                <input type="text" pInputText id="committee_id" formControlName="committee_id" required autofocus />
+                <input type="text" pInputText id="committee_id" formControlName="committee_id" required />
                 <app-error-messages
                   [form]="form"
                   fieldName="committee_id"
@@ -65,7 +65,7 @@
           <div class="col-8">
             <div class="field">
               <label for="name">NAME</label>
-              <input type="text" pInputText id="name" formControlName="name" required autofocus />
+              <input type="text" pInputText id="name" formControlName="name" required />
               <app-error-messages
                 [form]="form"
                 fieldName="name"
@@ -84,7 +84,7 @@
           <div class="col-4">
             <div class="field">
               <label for="last_name">LAST NAME</label>
-              <input type="text" pInputText id="last_name" formControlName="last_name" required autofocus />
+              <input type="text" pInputText id="last_name" formControlName="last_name" required />
               <app-error-messages
                 [form]="form"
                 fieldName="last_name"
@@ -96,7 +96,7 @@
           <div class="col-4">
             <div class="field">
               <label for="first_name">FIRST NAME</label>
-              <input type="text" pInputText id="first_name" formControlName="first_name" required autofocus />
+              <input type="text" pInputText id="first_name" formControlName="first_name" required />
               <app-error-messages
                 [form]="form"
                 fieldName="first_name"
@@ -108,7 +108,7 @@
           <div class="col-4">
             <div class="field">
               <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
-              <input type="text" pInputText id="middle_name" formControlName="middle_name" autofocus />
+              <input type="text" pInputText id="middle_name" formControlName="middle_name" />
               <app-error-messages
                 [form]="form"
                 fieldName="middle_name"
@@ -123,7 +123,7 @@
           <div class="col-3">
             <div class="field">
               <label for="prefix">PREFIX (OPTIONAL)</label>
-              <input type="text" pInputText id="prefix" formControlName="prefix" autofocus />
+              <input type="text" pInputText id="prefix" formControlName="prefix" />
               <app-error-messages
                 [form]="form"
                 fieldName="prefix"
@@ -136,7 +136,7 @@
           <div class="col-3">
             <div class="field">
               <label for="suffix">SUFFIX (OPTIONAL)</label>
-              <input type="text" pInputText id="suffix" formControlName="suffix" autofocus />
+              <input type="text" pInputText id="suffix" formControlName="suffix" />
               <app-error-messages
                 [form]="form"
                 fieldName="suffix"
@@ -178,7 +178,7 @@
         <div class="col-6">
           <div class="field">
             <label for="street_1">ADDRESS</label>
-            <input type="text" pInputText id="street_1" formControlName="street_1" required autofocus />
+            <input type="text" pInputText id="street_1" formControlName="street_1" required />
             <app-error-messages
               [form]="form"
               fieldName="street_1"
@@ -190,7 +190,7 @@
         <div class="col-6">
           <div class="field">
             <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-            <input type="text" pInputText id="street_2" formControlName="street_2" autofocus />
+            <input type="text" pInputText id="street_2" formControlName="street_2" />
             <app-error-messages
               [form]="form"
               fieldName="street_2"
@@ -205,7 +205,7 @@
         <div class="col-6">
           <div class="field">
             <label for="city">CITY</label>
-            <input type="text" pInputText id="city" formControlName="city" required autofocus />
+            <input type="text" pInputText id="city" formControlName="city" required />
             <app-error-messages
               [form]="form"
               fieldName="city"
@@ -229,7 +229,7 @@
         <div class="col-3">
           <div class="field">
             <label for="zip">ZIP/POSTAL CODE</label>
-            <input type="text" pInputText id="zip" formControlName="zip" required autofocus />
+            <input type="text" pInputText id="zip" formControlName="zip" required />
             <app-error-messages
               [form]="form"
               fieldName="zip"
@@ -243,7 +243,7 @@
         <div class="col-6">
           <div class="field">
             <label for="telephone">TELEPHONE (OPTIONAL)</label>
-            <input type="text" pInputText id="telephone" formControlName="telephone" autofocus />
+            <input type="text" pInputText id="telephone" formControlName="telephone" />
             <app-error-messages
               [form]="form"
               fieldName="telephone"
@@ -270,7 +270,7 @@
           <div class="col-6">
             <div class="field">
               <label for="employer">EMPLOYER (OPTIONAL)</label>
-              <input type="text" pInputText id="employer" formControlName="employer" autofocus />
+              <input type="text" pInputText id="employer" formControlName="employer" />
               <app-error-messages
                 [form]="form"
                 fieldName="employer"
@@ -282,7 +282,7 @@
           <div class="col-6">
             <div class="field">
               <label for="occupation">OCCUPATION (OPTIONAL)</label>
-              <input type="text" pInputText id="occupation" formControlName="occupation" autofocus />
+              <input type="text" pInputText id="occupation" formControlName="occupation" />
               <app-error-messages
                 [form]="form"
                 fieldName="occupation"
