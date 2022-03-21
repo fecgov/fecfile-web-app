@@ -9,4 +9,9 @@
   <small class="p-error" *ngIf="!!maxlength && form?.get(fieldName)?.hasError('maxlength')"
     >This field cannot contain more than {{ maxlength }} alphanumeric characters.</small
   >
+  <small
+    class="p-error"
+    *ngIf="!!maxlength && form?.get(fieldName)?.errors?.['pattern']?.requiredPattern?.startsWith('^[0-9]')"
+    >This field cannot contain more than {{ maxlength }} numeric characters.</small
+  >
 </ng-container>
