@@ -3,10 +3,10 @@ import { BaseModel } from './base.model';
 import { LabelList } from '../utils/label.utils';
 
 export enum ContactTypes {
-  CANDIDATE = 'cand',
-  COMMITTEE = 'com',
-  INDIVIDUAL = 'ind',
-  ORGANIZATION = 'org',
+  CANDIDATE = 'CAN',
+  COMMITTEE = 'COM',
+  INDIVIDUAL = 'IND',
+  ORGANIZATION = 'ORG',
 }
 
 export type ContactType =
@@ -16,16 +16,16 @@ export type ContactType =
   | ContactTypes.ORGANIZATION;
 
 export const ContactTypeLabels: LabelList = [
+  [ContactTypes.INDIVIDUAL, 'Individual'],
   [ContactTypes.CANDIDATE, 'Candidate'],
   [ContactTypes.COMMITTEE, 'Committee'],
-  [ContactTypes.INDIVIDUAL, 'Individual'],
   [ContactTypes.ORGANIZATION, 'Organization'],
 ];
 
 export enum CandidateOfficeTypes {
-  HOUSE = 'house',
-  PRESIDENTIAL = 'pres',
-  SENATE = 'senate',
+  HOUSE = 'H',
+  PRESIDENTIAL = 'P',
+  SENATE = 'S',
 }
 
 export type CandidateOfficeType =
@@ -40,7 +40,7 @@ export const CandidateOfficeTypeLabels = [
 ];
 
 export class Contact extends BaseModel {
-  id: number = 0;
+  id: number | null = null;
   type: ContactType = ContactTypes.INDIVIDUAL;
   candidate_id: string | null = null;
   committee_id: string | null = null;
@@ -62,10 +62,100 @@ export class Contact extends BaseModel {
   candidate_district: string | null = null;
   telephone: string | null = null;
   country: string = '';
+  created: string | null = null;
+  updated: string | null = null;
+  deleted: string | null = null;
 
-  // created, updated, deleted ???
-
-  static getInstance(json: any): Contact {
+  static fromJSON(json: any): Contact {
     return plainToClass(Contact, json);
+  }
+
+  static getFieldsByType(type: ContactType): string[] {
+    if (type === ContactTypes.INDIVIDUAL) {
+      return [
+        'type',
+        'last_name',
+        'first_name',
+        'middle_name',
+        'prefix',
+        'suffix',
+        'country',
+        'street_1',
+        'street_2',
+        'city',
+        'state',
+        'zip',
+        'telephone',
+        'employer',
+        'occupation',
+        'created',
+        'updated',
+        'deleted',
+      ];
+    }
+
+    if (type === ContactTypes.ORGANIZATION) {
+      return [
+        'type',
+        'name',
+        'country',
+        'street_1',
+        'street_2',
+        'city',
+        'state',
+        'zip',
+        'telephone',
+        'created',
+        'updated',
+        'deleted',
+      ];
+    }
+
+    if (type === ContactTypes.CANDIDATE) {
+      return [
+        'type',
+        'candidate_id',
+        'last_name',
+        'first_name',
+        'middle_name',
+        'prefix',
+        'suffix',
+        'country',
+        'street_1',
+        'street_2',
+        'city',
+        'state',
+        'zip',
+        'telephone',
+        'employer',
+        'occupation',
+        'candidate_office',
+        'candidate_state',
+        'candidate_district',
+        'created',
+        'updated',
+        'deleted',
+      ];
+    }
+
+    if (type === ContactTypes.COMMITTEE) {
+      return [
+        'type',
+        'committee_id',
+        'name',
+        'country',
+        'street_1',
+        'street_2',
+        'city',
+        'state',
+        'zip',
+        'telephone',
+        'created',
+        'updated',
+        'deleted',
+      ];
+    }
+
+    return [];
   }
 }

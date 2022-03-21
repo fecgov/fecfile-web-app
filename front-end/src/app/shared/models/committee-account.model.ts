@@ -127,7 +127,7 @@ export class CommitteeAccount extends BaseModel {
   website: string | null = null;
   zipcode: string | null = null;
 
-  static getInstance(json: any): CommitteeAccount {
+  static fromJSON(json: any): CommitteeAccount {
     return plainToClass(CommitteeAccount, json);
   }
 }

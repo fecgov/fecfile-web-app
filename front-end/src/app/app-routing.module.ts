@@ -19,7 +19,15 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      // { path: 'contacts', loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule) },
+      { path: 'reports', loadChildren: () => import('./reports/reports.module').then((m) => m.ReportsModule) },
+      { path: 'contacts', loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule) },
+      { path: 'tools', loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule) },
+      { path: 'help', loadChildren: () => import('./help/help.module').then((m) => m.HelpModule) },
+      {
+        path: 'notifications',
+        loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsModule),
+      },
+      { path: 'profile', loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule) },
     ],
   },
   { path: '**', redirectTo: '' },

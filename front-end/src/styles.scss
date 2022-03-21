@@ -14,6 +14,16 @@
   border-bottom: 1px black dotted;
 }
 
+.p-dialog .p-dialog-header,
+.p-dialog .p-dialog-footer {
+  background-color: #eee;
+}
+
 li {
   list-style-type: none;
+}
+
+.ng-submitted .p-inputtext.ng-invalid,
+.p-inputtext.ng-invalid.ng-touched {
+  border-color: #dc3545;
 }

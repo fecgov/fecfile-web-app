@@ -1,7 +1,7 @@
 import { instanceToPlain } from 'class-transformer';
 
 export abstract class BaseModel {
-  getJson(): any {
+  toJson(): any {
     return instanceToPlain(this);
   }
 }

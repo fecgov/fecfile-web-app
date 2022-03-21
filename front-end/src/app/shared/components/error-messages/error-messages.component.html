@@ -1,0 +1,12 @@
+<ng-container
+  *ngIf="
+    formSubmitted || (form?.get(fieldName)?.invalid && (form?.get(fieldName)?.dirty || form?.get(fieldName)?.touched))
+  "
+>
+  <small class="p-error" *ngIf="required && form?.get(fieldName)?.hasError('required')"
+    >This is a required field.</small
+  >
+  <small class="p-error" *ngIf="!!maxlength && form?.get(fieldName)?.hasError('maxlength')"
+    >This field cannot contain more than {{ maxlength }} alphanumeric characters.</small
+  >
+</ng-container>
