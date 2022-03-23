@@ -15,7 +15,7 @@ export abstract class TableListBaseComponent<T> {
   selectAll: boolean = false;
   selectedItems: T[] = [];
   detailVisible: boolean = false;
-  detailTitle: string = 'Add Item';
+  isNewContact: boolean = true;
   protected itemService!: TableListService<T>;
 
   constructor(protected messageService: MessageService, protected confirmationService: ConfirmationService) {}
@@ -77,13 +77,13 @@ export abstract class TableListBaseComponent<T> {
   public addItem() {
     this.item = this.getEmptyItem();
     this.detailVisible = true;
-    this.detailTitle = 'Add Item';
+    this.isNewContact = true;
   }
 
   public editItem(item: T) {
     this.item = item;
     this.detailVisible = true;
-    this.detailTitle = 'Edit Item';
+    this.isNewContact = false;
   }
 
   public deleteItem(item: T) {

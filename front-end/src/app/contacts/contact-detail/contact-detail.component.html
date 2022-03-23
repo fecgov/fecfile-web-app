@@ -22,6 +22,7 @@
               inputId="type"
               formControlName="type"
               [options]="contactTypeOptions"
+              [disabled]="!isNewContact"
               optionLabel="name"
               optionValue="code"
             ></p-dropdown>
