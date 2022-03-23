@@ -1,7 +1,7 @@
 <p-dialog
   [(visible)]="detailVisible"
   [style]="{ width: '90%' }"
-  [header]="detailTitle"
+  [header]="isNewContact ? 'Add Contact' : 'Edit Contact'"
   [modal]="true"
   styleClass="p-fluid"
   (onShow)="onOpenDetail()"

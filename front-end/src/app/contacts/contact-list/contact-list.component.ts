@@ -34,11 +34,11 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
 
   public override addItem() {
     super.addItem();
-    this.detailTitle = 'Add Contact';
+    this.isNewContact = true;
   }
 
   public override editItem(item: Contact) {
     super.editItem(item);
-    this.detailTitle = 'Edit Contact';
+    this.isNewContact = false;
   }
 }

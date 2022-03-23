@@ -13,7 +13,7 @@ import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'a
 export class ContactDetailComponent implements OnInit {
   @Input() contact: Contact = new Contact();
   @Input() detailVisible: boolean = false;
-  @Input() detailTitle: string = 'Add Contact';
+  @Input() isNewContact: boolean = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() loadTableItems: EventEmitter<any> = new EventEmitter<any>();
 
