@@ -1,0 +1,69 @@
+<footer>
+  <div class="grid">
+    <div class="col-1"></div>
+    <div class="col-2">
+      <label>Federal Election Commission</label>
+      <br />
+      <address>
+        1050 First Street NE, Washington DC, 20002
+        <br />
+        <a href="https://fec.gov" draggable="false" target="_blank" rel="noopener">fec.gov</a>
+      </address>
+    </div>
+    <div class="col-2">
+      <label>Main Office</label>
+      <br />
+      <address>
+        Toll free: 1-800-424-9530
+        <br />
+        Local: (202)-694-1000
+      </address>
+    </div>
+    <div class="col-2">
+      <label> RAD Analyst, </label>
+      <br />
+      <address>
+        <ng-container> (202)-694-1000 x</ng-container>
+        <br />
+        <ng-container>
+          <a
+            href="https://www.fec.gov/help-candidates-and-committees/question-rad/"
+            draggable="false"
+            target="_blank"
+            rel="noopener"
+          >
+            Find & contact your committee's analyst
+          </a>
+        </ng-container>
+      </address>
+    </div>
+    <div class="col-2">
+      <label>Tech Support</label>
+      <br />
+      <address>
+        (202) 694-1307<br />
+        <a href="mailto:eFiletechsupport@fec.gov"> eFiletechsupport@fec.gov </a>
+      </address>
+    </div>
+    <div class="col-2">
+      <button type="button" class="btn btn-link">Legal Disclaimer</button>
+      <ng-template #legalDisclaimer let-d="dismiss">
+        <div class="modal-header">
+          <h4 class="modal-title">Legal Disclaimer</h4>
+        </div>
+        <div class="modal-body">
+          <p>
+            Please be advised that knowingly and willfully making any materially false, fictitious, or fraudulent
+            statement or representation to a federal government agency, including the Federal Election Commission, is
+            punishable under the provisions of 18 U.S.C. § 1001. The Commission may report apparent violations to the
+            appropriate law enforcement authorities. 52 U.S.C. § 30107(a)(9).
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="d('Close click')">Close</button>
+        </div>
+      </ng-template>
+    </div>
+    <div class="col-1"></div>
+  </div>
+</footer>

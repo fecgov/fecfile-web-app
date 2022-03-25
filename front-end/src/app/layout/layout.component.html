@@ -1,0 +1,46 @@
+<div class="grid">
+  <div class="col-12 bg-gray-700">
+    <app-header></app-header>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-fixed bg-blue-900">
+    <app-sidebar></app-sidebar>
+  </div>
+  <div class="col">
+    <div class="grid committee-banner">
+      <div class="col">
+        <h1>
+          {{ (committeeAccount$ | async)?.committeeid }}
+        </h1>
+      </div>
+      <div class="col">
+        <h2>
+          {{ (committeeAccount$ | async)?.committeename }}
+        </h2>
+      </div>
+      <div class="col">
+        <h2>
+          {{ (committeeAccount$ | async)?.cmte_type | label: committeeTypeLabels }}
+        </h2>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <div *ngIf="progressBarVisible$ | async">
+          <p-progressBar mode="indeterminate"></p-progressBar>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <app-footer></app-footer>
+      </div>
+    </div>
+  </div>
+</div>
