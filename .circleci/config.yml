@@ -21,12 +21,12 @@ jobs:
           app-dir: ~/project/front-end/
 
       - run:
-          name: print the linter version
+          name: Print the linter version
           command: ./node_modules/.bin/eslint --version
           working_directory: ~/project/front-end/
 
       - run:
-          name: run linter
+          name: Run linter
           command: ./node_modules/.bin/eslint  "src/**/*.ts"
           working_directory: ~/project/front-end/
   test:
