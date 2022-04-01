@@ -48,7 +48,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
    */
   public displayName(item: Contact): string {
     if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(item.type)) {
-      return `${item.last_name}, ${item.first_name}`;
+      return `${item.first_name} ${item.last_name}`;
     } else {
       return item.name || '';
     }
