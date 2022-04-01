@@ -73,7 +73,7 @@
         <td>
           <p-tableCheckbox [value]="item"></p-tableCheckbox>
         </td>
-        <td>{{ item.name }}</td>
+        <td>{{ displayName(item) }}</td>
         <td>{{ item.type | label: contactTypeLabels }}</td>
         <td>{{ item.employer }}</td>
         <td>{{ item.occupation }}</td>
