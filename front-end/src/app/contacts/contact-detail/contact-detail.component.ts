@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { Contact, ContactTypes, ContactTypeLabels, CandidateOfficeTypeLabels } from '../../shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
+import { ValidateService } from 'app/shared/services/validate.service';
 
 @Component({
   selector: 'app-contact-detail',
@@ -50,6 +51,7 @@ export class ContactDetailComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private contactService: ContactService,
+    private validateService: ValidateService,
     private fb: FormBuilder
   ) {}
 
@@ -78,6 +80,8 @@ export class ContactDetailComponent implements OnInit {
 
   public saveItem(closeDetail: boolean = true) {
     this.formSubmitted = true;
+
+    this.validateService.validate();
 
     if (this.isFormInvalid()) {
       return;
