@@ -9,7 +9,7 @@ import { FecApiPaginatedResponse } from 'app/shared/models/fec-api.model';
   providedIn: 'root'
 })
 export class FecApiService {
-  private apiKey: string | null = "DEMO_KEY";
+  private apiKey: string | null = environment.fecApiKey;
 
   constructor(private http: HttpClient) { }
 
