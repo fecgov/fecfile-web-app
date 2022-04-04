@@ -8,6 +8,7 @@ export const environment = {
   apiUrl: 'https://localhost/api/v1',
   appTitle: 'FECfile',
   dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
+  fecApiCommitteeUrl: 'https://api.open.fec.gov/v1/committee',
 };
 
 /*
