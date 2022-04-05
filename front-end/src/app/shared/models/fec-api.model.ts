@@ -1,5 +1,3 @@
-import { plainToClass } from "class-transformer";
-import { BaseModel } from "./base.model";
 import { CommitteeAccount } from "./committee-account.model";
 
 export type FecApiPagination = {

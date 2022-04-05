@@ -22,13 +22,13 @@ export class ProfileComponent implements OnInit {
  * This sends the user to their F3X on fec.gov.
  */
   viewF3X(): void {
-
+    return;
   }
 
   /**
  * This sends the user to their F3X on fec.gov.
  */
   updateForm1(): void {
-    
+    return;
   }
 }
