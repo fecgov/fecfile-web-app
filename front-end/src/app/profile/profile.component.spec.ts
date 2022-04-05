@@ -8,7 +8,6 @@ describe('ProfileComponent', () => {
   let fixture: ComponentFixture<ProfileComponent>;
 
   beforeEach(async () => {
-    let userLoginData: any = {'committee_id':'C00601211'}
     let committeeAccount: any = {
       "affiliated_committee_name": "NONE",
       "candidate_ids": [],
@@ -72,7 +71,7 @@ describe('ProfileComponent', () => {
     };
     await TestBed.configureTestingModule({
       providers: [ provideMockStore({
-        initialState: {fecfile_online_userLoginData: userLoginData, fecfile_online_committeeAccount: committeeAccount},
+        initialState: {fecfile_online_committeeAccount: committeeAccount},
         selectors: [
           { selector: 'selectCommitteeAccount', value: committeeAccount }
         ]

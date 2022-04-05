@@ -30,6 +30,6 @@ export class FecApiService {
     }
     const headers = this.getHeaders();
     return this.http.get<FecApiPaginatedResponse>(`${environment.fecApiCommitteeUrl}/${committeeId}/?api_key=${this.apiKey}`, { headers: headers })
-    .pipe(map((response: FecApiPaginatedResponse) => response.results[0]));
+    .pipe(map((response: FecApiPaginatedResponse) => response.results[0] || undefined));
   }
 }
