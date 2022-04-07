@@ -2,35 +2,6 @@ import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { LabelList } from '../utils/label.utils';
 
-export enum CommitteeDesignations {
-  PRINCIPLE_CAMPAIGN_COMMITTEE = 'P',
-  AUTHORIZED_COMMITTEE = 'A',
-  JOINT_FUNDRAISER_COMMITTEE = 'J',
-  UNAUTHORIZED_COMMITTEE = 'U',
-  LOBBYIST_REGISTRANT_PAC = 'B',
-  LEADERSHIP_PAC = 'D',
-}
-
-export type CommitteeDesignation =
-  | CommitteeDesignations.PRINCIPLE_CAMPAIGN_COMMITTEE
-  | CommitteeDesignations.AUTHORIZED_COMMITTEE
-  | CommitteeDesignations.JOINT_FUNDRAISER_COMMITTEE
-  | CommitteeDesignations.UNAUTHORIZED_COMMITTEE
-  | CommitteeDesignations.LOBBYIST_REGISTRANT_PAC
-  | CommitteeDesignations.LEADERSHIP_PAC;
-
-export const CommitteeDesignationLabels: LabelList = [
-  [CommitteeDesignations.PRINCIPLE_CAMPAIGN_COMMITTEE, 'Principal Campaign Committee (PCC) - Form 1 line 5(a)'],
-  [CommitteeDesignations.AUTHORIZED_COMMITTEE, 'Authorized Committee - Form 1 line 5(b)'],
-  [CommitteeDesignations.JOINT_FUNDRAISER_COMMITTEE, 'Joint Fundraiser Committee - Form 1 line 5(g) or 5(h)'],
-  [CommitteeDesignations.UNAUTHORIZED_COMMITTEE, 'Unauthorized Committee'],
-  [
-    CommitteeDesignations.LOBBYIST_REGISTRANT_PAC,
-    'Lobbyist/Registrant PAC - Form 1 line 5(e) last box or 5(f) 2nd box',
-  ],
-  [CommitteeDesignations.LEADERSHIP_PAC, 'Leadership PAC - Form 1 line 5(f) 3rd box'],
-];
-
 
 export class CommitteeAccount extends BaseModel {
   custodian_city: string | null = null;
