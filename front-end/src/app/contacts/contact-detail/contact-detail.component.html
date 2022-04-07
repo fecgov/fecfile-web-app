@@ -224,7 +224,10 @@
               [options]="stateOptions"
               optionLabel="name"
               optionValue="code"
+              [autoDisplayFirst]="false"
+              appendTo="body"
             ></p-dropdown>
+            <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
         <div class="col-3">
