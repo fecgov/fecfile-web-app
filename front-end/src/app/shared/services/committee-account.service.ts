@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { concatMap, Observable } from 'rxjs';
+import { mergeMap, Observable } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiService } from './fec-api.service';
 import { Store } from '@ngrx/store';
@@ -17,11 +17,11 @@ export class CommitteeAccountService {
    * @return     {Observable}  The commitee details.
    */
   public getDetails(): Observable<CommitteeAccount> {
-      const userLoginData$ = this.store.select(selectUserLoginData);
-      return userLoginData$.pipe(
-        concatMap(userLoginData => {
-          return this.fecApiService.getDetails(userLoginData.committee_id);
-        })
-      );
+    const userLoginData$ = this.store.select(selectUserLoginData);
+    return userLoginData$.pipe(
+      mergeMap((userLoginData) => {
+        return this.fecApiService.getDetails(userLoginData.committee_id);
+      })
+    );
   }
 }
