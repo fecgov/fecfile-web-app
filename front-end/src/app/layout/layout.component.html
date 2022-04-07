@@ -11,17 +11,17 @@
     <div class="grid committee-banner">
       <div class="col">
         <h1>
-          {{ (committeeAccount$ | async)?.committeeid }}
+          {{ (committeeAccount$ | async)?.committee_id }}
         </h1>
       </div>
       <div class="col">
         <h2>
-          {{ (committeeAccount$ | async)?.committeename }}
+          {{ (committeeAccount$ | async)?.name }}
         </h2>
       </div>
       <div class="col">
         <h2>
-          {{ (committeeAccount$ | async)?.cmte_type | label: committeeTypeLabels }}
+          {{ (committeeAccount$ | async)?.committee_type_full }}
         </h2>
       </div>
     </div>

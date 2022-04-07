@@ -3,8 +3,7 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../store/committee-account.selectors';
 import { selectSpinnerStatus } from '../store/spinner.selectors';
-import { CommitteeAccount, CommitteeTypeLabels } from 'app/shared/models/committee-account.model';
-import { LabelList } from 'app/shared/utils/label.utils';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 
 @Component({
   selector: 'app-layout',
@@ -12,7 +11,6 @@ import { LabelList } from 'app/shared/utils/label.utils';
   styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent implements OnInit {
-  committeeTypeLabels: LabelList = CommitteeTypeLabels;
   committeeAccount$: Observable<CommitteeAccount> | null = null;
   progressBarVisible$: Observable<{ spinnerOn: boolean }> | null = null;
 
