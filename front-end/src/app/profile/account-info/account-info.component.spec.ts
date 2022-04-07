@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { AccountInfoComponent } from './account-info.component';
+import { plainToClass } from 'class-transformer';
 
 
 describe('AccountInfoComponent', () => {
@@ -8,7 +10,7 @@ describe('AccountInfoComponent', () => {
   let fixture: ComponentFixture<AccountInfoComponent>;
 
   beforeEach(async () => {
-    let committeeAccount: any = {
+    let committeeAccount: CommitteeAccount = plainToClass(CommitteeAccount, {
       "affiliated_committee_name": "NONE",
       "candidate_ids": [],
       "city": "FORT LAUDERDALE",
@@ -68,7 +70,7 @@ describe('AccountInfoComponent', () => {
       "treasurer_zip": "33310",
       "website": "WWW.UNITEDSTATESPOLITICALACTIONCOMMITTEESDIRECTORY.COM",
       "zip": "33310",
-    };
+    });
     await TestBed.configureTestingModule({
       providers: [ provideMockStore({
         initialState: {fecfile_online_committeeAccount: committeeAccount},
