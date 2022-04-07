@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { concatMap, Observable } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
-import { FecApiService } from './FecApiService/fec-api.service';
+import { FecApiService } from './fec-api.service';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from 'app/store/login.selectors';
 
