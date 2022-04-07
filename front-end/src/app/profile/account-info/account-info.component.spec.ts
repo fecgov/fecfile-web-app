@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { AccountInfoComponent } from './account-info.component';
 
-import { ProfileComponent } from './profile.component';
 
-describe('ProfileComponent', () => {
-  let component: ProfileComponent;
-  let fixture: ComponentFixture<ProfileComponent>;
+describe('AccountInfoComponent', () => {
+  let component: AccountInfoComponent;
+  let fixture: ComponentFixture<AccountInfoComponent>;
 
   beforeEach(async () => {
     let committeeAccount: any = {
@@ -76,13 +76,13 @@ describe('ProfileComponent', () => {
           { selector: 'selectCommitteeAccount', value: committeeAccount }
         ]
       }) ],
-      declarations: [ ProfileComponent ]
+      declarations: [ AccountInfoComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProfileComponent);
+    fixture = TestBed.createComponent(AccountInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

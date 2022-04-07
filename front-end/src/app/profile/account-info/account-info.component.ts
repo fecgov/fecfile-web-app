@@ -6,10 +6,10 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  templateUrl: './account-info.component.html',
+  styleUrls: ['./account-info.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class AccountInfoComponent implements OnInit {
   committeeAccount$: Observable<CommitteeAccount> | null = null;
 
   constructor(private store: Store) { }
