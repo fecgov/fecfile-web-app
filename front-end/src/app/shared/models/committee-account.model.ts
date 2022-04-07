@@ -1,6 +1,5 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
-import { LabelList } from '../utils/label.utils';
 
 
 export class CommitteeAccount extends BaseModel {
