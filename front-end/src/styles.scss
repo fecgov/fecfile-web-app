@@ -29,3 +29,7 @@ li {
 p-dropdown.ng-invalid.ng-touched div.p-dropdown {
   border-color: #dc3545;
 }
+
+label.disabled {
+  color: rgba(118, 118, 118, 0.3);
+}

@@ -1,7 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { Contact, ContactTypes, ContactTypeLabels, CandidateOfficeTypeLabels } from '../../shared/models/contact.model';
+import {
+  Contact,
+  ContactTypes,
+  ContactTypeLabels,
+  CandidateOfficeTypes,
+  CandidateOfficeTypeLabels,
+} from '../../shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 
@@ -12,9 +18,22 @@ import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'a
 export class ContactDetailComponent implements OnInit {
   @Input() contact: Contact = new Contact();
   @Input() detailVisible: boolean = false;
-  @Input() isNewContact: boolean = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() loadTableItems: EventEmitter<any> = new EventEmitter<any>();
+
+  private _isNewContact: boolean = false;
+  @Input() set isNewContact(value: boolean) {
+    this._isNewContact = value;
+    if (this._isNewContact) {
+      this.form.get('type')?.enable();
+    } else {
+      this.form.get('type')?.disable();
+    }
+  }
+
+  get isNewContact(): boolean {
+    return this._isNewContact;
+  }
 
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = [];
@@ -40,9 +59,9 @@ export class ContactDetailComponent implements OnInit {
     zip: ['', [Validators.required, Validators.maxLength(9)]],
     employer: ['', [Validators.maxLength(38)]],
     occupation: ['', [Validators.maxLength(38)]],
-    candidate_office: ['', [Validators.maxLength(10)]],
-    candidate_state: ['', [Validators.maxLength(10)]],
-    candidate_district: ['', [Validators.maxLength(10)]],
+    candidate_office: ['', [Validators.required, Validators.maxLength(10)]],
+    candidate_state: ['', [Validators.required, Validators.maxLength(10)]],
+    candidate_district: ['', [Validators.required, Validators.maxLength(10)]],
     telephone: ['', [Validators.pattern('[0-9]{10}')]],
     country: ['', [Validators.required]],
   });
@@ -79,9 +98,36 @@ export class ContactDetailComponent implements OnInit {
         this.form?.get('state')?.enable();
       }
     });
+
+    this.form?.get('candidate_office')?.valueChanges.subscribe((value: string) => {
+      if (value === CandidateOfficeTypes.PRESIDENTIAL) {
+        this.form.patchValue({
+          candidate_state: '',
+          candidate_district: '',
+        });
+        this.form?.get('candidate_state')?.disable();
+        this.form?.get('candidate_district')?.disable();
+      } else if (value === CandidateOfficeTypes.SENATE) {
+        this.form.patchValue({
+          candidate_district: '',
+        });
+        this.form?.get('candidate_state')?.enable();
+        this.form?.get('candidate_district')?.disable();
+      } else {
+        this.form?.get('candidate_state')?.enable();
+        this.form?.get('candidate_district')?.enable();
+      }
+    });
   }
 
-  onOpenDetail() {
+  /**
+   * Pass the CandidateOfficeTypes enum into the template
+   */
+  public get CandidateOfficeTypes() {
+    return CandidateOfficeTypes;
+  }
+
+  public onOpenDetail() {
     this.resetForm();
     this.form.patchValue(this.contact);
   }
@@ -95,27 +141,12 @@ export class ContactDetailComponent implements OnInit {
 
     const formValues = { ...this.form.value };
 
-    // Null fields that are not part of this contact type.
-    const typeFields = Contact.getFieldsByType(formValues.type);
-    Object.entries(formValues).forEach(([key, value]) => {
-      if (!typeFields.includes(key)) {
-        formValues[key] = null;
-      }
-    });
+    // Disabled form type input needs to be explicitly put into formValues.
+    formValues.type = this.form.get('type')?.value;
 
-    // Temporary patch until ticket app#119 addresses the candidate dropdown inputs
-    // Problem is default select values not getting assigned to fields when untouched
-    // Problem may be that field names have "_" in them
-    if (formValues.type === ContactTypes.CANDIDATE) {
-      formValues.candidate_office = !!formValues.candidate_office ? formValues.candidate_office : 'H';
-      formValues.candidate_state = !!formValues.candidate_state ? formValues.candidate_state : 'AL';
-      formValues.candidate_district = !!formValues.candidate_district ? formValues.candidate_district : '01';
-    }
+    const payload: Contact = Contact.fromJSON({ ...this.contact, ...formValues });
 
-    const payload: Contact = Contact.fromJSON(formValues);
-
-    if (this.contact.id) {
-      payload.id = this.contact.id;
+    if (payload.id) {
       this.contactService.update(payload).subscribe((result) => {
         this.loadTableItems.emit();
         this.messageService.add({
