@@ -27,7 +27,7 @@ jobs:
 
       - run:
           name: Run linter
-          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng lint --strict
+          command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
   test:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
