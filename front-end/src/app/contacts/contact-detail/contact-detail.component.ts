@@ -8,7 +8,6 @@ import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'a
 @Component({
   selector: 'app-contact-detail',
   templateUrl: './contact-detail.component.html',
-  // styleUrls: ['./contact-detail.component.scss'],
 })
 export class ContactDetailComponent implements OnInit {
   @Input() contact: Contact = new Contact();
@@ -59,6 +58,16 @@ export class ContactDetailComponent implements OnInit {
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
+
+    this.form?.get('type')?.valueChanges.subscribe((value: string) => {
+      if (value === ContactTypes.CANDIDATE) {
+        this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels).filter(
+          (option) => !['AA', 'AE', 'AP'].includes(option.code)
+        );
+      } else {
+        this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+      }
+    });
 
     this.form?.get('country')?.valueChanges.subscribe((value: string) => {
       if (value !== 'USA') {

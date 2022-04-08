@@ -3,13 +3,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base.component';
 
 import { ContactService } from '../../shared/services/contact.service';
-import { Contact, ContactTypeLabels } from '../../shared/models/contact.model';
+import { Contact, ContactTypes, ContactTypeLabels } from '../../shared/models/contact.model';
 import { LabelList } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
-  // styleUrls: ['./contact-list.component.scss'],
 })
 export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
   override item: Contact = new Contact();
@@ -40,5 +39,18 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
   public override editItem(item: Contact) {
     super.editItem(item);
     this.isNewContact = false;
+  }
+
+  /**
+   * Get the display name for the contact to show in the table column.
+   * @param item
+   * @returns {string} Returns the appropriate name of the contact for display in the table.
+   */
+  public displayName(item: Contact): string {
+    if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(item.type)) {
+      return `${item.first_name} ${item.last_name}`;
+    } else {
+      return item.name || '';
+    }
   }
 }
