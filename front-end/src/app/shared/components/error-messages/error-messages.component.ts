@@ -8,8 +8,8 @@ import { FormGroup } from '@angular/forms';
 })
 export class ErrorMessagesComponent {
   @Input() form: FormGroup | null = null;
-  @Input() fieldName: string = '';
-  @Input() required: boolean = true;
+  @Input() fieldName = '';
+  @Input() required = true;
   @Input() maxlength: number | null = null;
-  @Input() formSubmitted: boolean = false;
+  @Input() formSubmitted = false;
 }

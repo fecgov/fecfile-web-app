@@ -10,7 +10,7 @@ export type UserLoginData = {
 };
 
 export class User extends BaseModel {
-  id: number = 0;
+  id = 0;
 
   static getInstance(json: any): User {
     return plainToClass(User, json);

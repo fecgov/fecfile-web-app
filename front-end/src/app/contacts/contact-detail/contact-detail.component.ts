@@ -12,8 +12,8 @@ import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'a
 })
 export class ContactDetailComponent implements OnInit {
   @Input() contact: Contact = new Contact();
-  @Input() detailVisible: boolean = false;
-  @Input() isNewContact: boolean = false;
+  @Input() detailVisible = false;
+  @Input() isNewContact = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() loadTableItems: EventEmitter<any> = new EventEmitter<any>();
 
@@ -22,7 +22,7 @@ export class ContactDetailComponent implements OnInit {
   candidateOfficeTypeOptions: PrimeOptions = [];
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
-  formSubmitted: boolean = false;
+  formSubmitted = false;
 
   form: FormGroup = this.fb.group({
     type: ['', [Validators.required]],
@@ -77,7 +77,7 @@ export class ContactDetailComponent implements OnInit {
     this.form.patchValue(this.contact);
   }
 
-  public saveItem(closeDetail: boolean = true) {
+  public saveItem(closeDetail = true) {
     this.formSubmitted = true;
 
     if (this.isFormInvalid()) {

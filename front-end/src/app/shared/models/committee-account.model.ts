@@ -106,8 +106,8 @@ export class CommitteeAccount extends BaseModel {
   cmte_filing_freq: string | null = null;
   cmte_type: CommitteeType | null = null;
   cmte_type_category: string | null = null;
-  committeeid: string = '';
-  committeename: string = '';
+  committeeid = '';
+  committeename = '';
   created_at: string | null = null;
   email_on_file: string | null = null;
   email_on_file_1: string | null = null;

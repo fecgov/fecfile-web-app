@@ -63,9 +63,9 @@ export class SessionService {
   }
 
   isSessionAboutToExpire(): boolean {
-    let currentTime = new Date();
+    const currentTime = new Date();
     currentTime.setMinutes(currentTime.getMinutes() + this.REFESH_TOKEN_THRESHOLD_IN_MINUTES);
-    let minimumTimeToRefreshToken = new Date(currentTime.getTime());
+    const minimumTimeToRefreshToken = new Date(currentTime.getTime());
     if (this.getToken()) {
       const currentExpirationTime = this.getTokenExpirationDate(this.getToken());
       if (minimumTimeToRefreshToken > currentExpirationTime) {
