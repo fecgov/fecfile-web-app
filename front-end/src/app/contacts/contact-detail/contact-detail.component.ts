@@ -150,7 +150,9 @@ export class ContactDetailComponent implements OnInit {
 
     const formValues: Record<string, string | null> = {};
     Contact.getFieldsByType(this.form.get('type')?.value).forEach((field: string) => {
-      formValues[field] = this.form.get(field)?.value;
+      if (!!this.form.get(field)?.value) {
+        formValues[field] = this.form.get(field)?.value;
+      }
     });
 
     const payload: Contact = Contact.fromJSON({ ...this.contact, ...formValues });
