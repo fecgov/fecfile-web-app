@@ -18,6 +18,24 @@ export class LabelUtils {
     options = labelArrays.map((item: string[]) => ({ name: item[1], code: item[0] }));
     return options;
   }
+
+  public static getCongressionalDistrictLabels(state: string): LabelList {
+    const numberOfDistricts: number = CongressionalDistricts[state];
+    if (numberOfDistricts === 0) {
+      return [['00', '00']];
+    }
+
+    const labelList: LabelList = [];
+    for (let i = 1; i <= numberOfDistricts; i++) {
+      let district: string = String(i).padStart(2, '0');
+      labelList.push([district, district]);
+    }
+    return labelList;
+  }
+
+  public static getStateCodeLabelsWithoutMilitary(): LabelList {
+    return StatesCodeLabels.filter((list: string[]) => !['AA', 'AE', 'AP', 'ZZ'].includes(list[0]));
+  }
 }
 
 export const StatesCodeLabels: LabelList = [
@@ -88,3 +106,62 @@ export const CountryCodeLabels: LabelList = [
   ['CAN', 'Canada'],
   ['MEX', 'Mexico'],
 ];
+
+const CongressionalDistricts: Record<string, number> = {
+  AL: 7,
+  AK: 1,
+  AS: 0,
+  AZ: 9,
+  AR: 4,
+  CA: 52,
+  CO: 8,
+  CT: 8,
+  DE: 1,
+  DC: 0,
+  FL: 28,
+  GA: 14,
+  GU: 0,
+  HI: 2,
+  ID: 2,
+  IL: 17,
+  IN: 9,
+  IA: 4,
+  KS: 4,
+  KY: 6,
+  LA: 6,
+  ME: 2,
+  MD: 8,
+  MA: 9,
+  MI: 13,
+  MN: 8,
+  MS: 4,
+  MO: 8,
+  MT: 2,
+  NE: 3,
+  NV: 4,
+  NH: 2,
+  NJ: 12,
+  NM: 3,
+  NY: 26,
+  NC: 14,
+  ND: 1,
+  MP: 0,
+  OH: 15,
+  OK: 5,
+  OR: 6,
+  PA: 17,
+  PR: 0,
+  RI: 2,
+  SC: 7,
+  SD: 1,
+  TN: 9,
+  TX: 38,
+  VI: 0,
+  UT: 4,
+  VT: 1,
+  VA: 11,
+  WA: 10,
+  WV: 2,
+  WI: 8,
+  WY: 1,
+};

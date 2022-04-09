@@ -40,6 +40,8 @@ export class ContactDetailComponent implements OnInit {
   candidateOfficeTypeOptions: PrimeOptions = [];
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
+  candidateStateOptions: PrimeOptions = [];
+  candidateDistrictOptions: PrimeOptions = [];
   formSubmitted: boolean = false;
 
   form: FormGroup = this.fb.group({
@@ -77,12 +79,11 @@ export class ContactDetailComponent implements OnInit {
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
+    this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
 
     this.form?.get('type')?.valueChanges.subscribe((value: string) => {
       if (value === ContactTypes.CANDIDATE) {
-        this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels).filter(
-          (option) => !['AA', 'AE', 'AP'].includes(option.code)
-        );
+        this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
       } else {
         this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
       }
@@ -100,7 +101,7 @@ export class ContactDetailComponent implements OnInit {
     });
 
     this.form?.get('candidate_office')?.valueChanges.subscribe((value: string) => {
-      if (value === CandidateOfficeTypes.PRESIDENTIAL) {
+      if (!value || value === CandidateOfficeTypes.PRESIDENTIAL) {
         this.form.patchValue({
           candidate_state: '',
           candidate_district: '',
@@ -116,6 +117,14 @@ export class ContactDetailComponent implements OnInit {
       } else {
         this.form?.get('candidate_state')?.enable();
         this.form?.get('candidate_district')?.enable();
+      }
+    });
+
+    this.form?.get('candidate_state')?.valueChanges.subscribe((value: string) => {
+      if (!!value && this.form.get('candidate_office')?.value === CandidateOfficeTypes.HOUSE) {
+        this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(value));
+      } else {
+        this.candidateDistrictOptions = [];
       }
     });
   }
@@ -139,10 +148,10 @@ export class ContactDetailComponent implements OnInit {
       return;
     }
 
-    const formValues = { ...this.form.value };
-
-    // Disabled form type input needs to be explicitly put into formValues.
-    formValues.type = this.form.get('type')?.value;
+    const formValues: Record<string, string | null> = {};
+    Contact.getFieldsByType(this.form.get('type')?.value).forEach((field: string) => {
+      formValues[field] = this.form.get(field)?.value;
+    });
 
     const payload: Contact = Contact.fromJSON({ ...this.contact, ...formValues });
 

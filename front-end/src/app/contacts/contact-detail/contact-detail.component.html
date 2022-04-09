@@ -340,7 +340,7 @@
               <p-dropdown
                 inputId="candidate_state"
                 formControlName="candidate_state"
-                [options]="stateOptions"
+                [options]="candidateStateOptions"
                 optionLabel="name"
                 optionValue="code"
                 [autoDisplayFirst]="false"
@@ -364,10 +364,7 @@
               <p-dropdown
                 inputId="candidate_district"
                 formControlName="candidate_district"
-                [options]="[
-                  { name: '01', code: '01' },
-                  { name: '02', code: '02' }
-                ]"
+                [options]="candidateDistrictOptions"
                 optionLabel="name"
                 optionValue="code"
                 appendTo="body"
