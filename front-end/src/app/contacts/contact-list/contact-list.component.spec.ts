@@ -1,5 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormBuilder } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { UserLoginData } from 'app/shared/models/user.model';
+import { selectUserLoginData } from 'app/store/login.selectors';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
+import { DialogModule } from 'primeng/dialog';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
 import { ContactListComponent } from './contact-list.component';
 
 describe('ContactListComponent', () => {
@@ -7,8 +19,33 @@ describe('ContactListComponent', () => {
   let fixture: ComponentFixture<ContactListComponent>;
 
   beforeEach(async () => {
+    const userLoginData: UserLoginData = {
+      committee_id: 'C00101212',
+      email: 'test@fec.gov',
+      role: null,
+      token: 'foo',
+    };
+
     await TestBed.configureTestingModule({
-      declarations: [ContactListComponent],
+      imports: [
+        HttpClientTestingModule,
+        ToastModule,
+        TableModule,
+        ToolbarModule,
+        DialogModule,
+        FileUploadModule,
+        ConfirmDialogModule,
+      ],
+      declarations: [ContactListComponent, ContactDetailComponent],
+      providers: [
+        ConfirmationService,
+        MessageService,
+        FormBuilder,
+        provideMockStore({
+          initialState: { fecfile_online_userLoginData: userLoginData },
+          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
+        }),
+      ],
     }).compileComponents();
   });
 
@@ -18,7 +55,7 @@ describe('ContactListComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
