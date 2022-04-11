@@ -16,7 +16,7 @@ describe('Contact', () => {
     expect(contact.id).toBe(999);
     expect(contact.type).toBe(ContactTypes.COMMITTEE);
     expect(contact.name).toBe('foo');
-    expect(contact.occupation).toBeNull;
+    expect(contact.occupation).toBe(null);
   });
 
   it('#getFieldsByType() should return correct fields', () => {

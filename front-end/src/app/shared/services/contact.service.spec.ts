@@ -41,8 +41,8 @@ describe('ContactService', () => {
   it('#getTableData() should return a list of contacts', () => {
     const mockResponse: ListRestResponse = {
       count: 2,
-      next: 'http://next-page',
-      previous: 'http://previous-page',
+      next: 'https://next-page',
+      previous: 'https://previous-page',
       results: [
         Contact.fromJSON({
           id: 'C00000001',
