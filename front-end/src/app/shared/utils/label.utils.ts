@@ -14,9 +14,9 @@ export class LabelUtils {
    * @returns
    */
   public static get(labelArrays: LabelList, key: string): string {
-    const item: LabelList = labelArrays.filter((item: string[]) => item[0] === key);
-    if (!!item.length) {
-      return item[0][1];
+    const items: LabelList = labelArrays.filter((item: string[]) => item[0] === key);
+    if (!!items.length) {
+      return items[0][1];
     }
     return '';
   }

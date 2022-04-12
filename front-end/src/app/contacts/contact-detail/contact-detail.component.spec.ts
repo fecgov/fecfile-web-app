@@ -7,7 +7,7 @@ import { UserLoginData } from '../../shared/models/user.model';
 import { Roles } from '../../shared/models/role.model';
 import { FormBuilder } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { Contact } from '../../shared/models/contact.model';
+import { CandidateOfficeTypes, Contact, ContactTypes } from '../../shared/models/contact.model';
 import { environment } from '../../../environments/environment';
 
 describe('ContactDetailComponent', () => {
@@ -99,7 +99,7 @@ describe('ContactDetailComponent', () => {
   });
 
   it('#saveItem should save a new contact record', () => {
-    component.contact = Contact.fromJSON({ ...contact });
+    component.form.patchValue({ ...contact });
     component.saveItem(false);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/`);
     expect(req.request.method).toEqual('POST');
@@ -107,11 +107,47 @@ describe('ContactDetailComponent', () => {
   });
 
   it('#saveItem should update an existing contact record', () => {
-    component.contact = Contact.fromJSON({ ...contact });
     component.contact.id = 10;
+    component.form.patchValue({ ...contact });
     component.saveItem(true);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/10/`);
     expect(req.request.method).toEqual('PUT');
     httpTestingController.verify();
+  });
+
+  it('#saveItem should do nothing if candidate data is not valid', () => {
+    // Organization type without name data is invalid
+    component.form.patchValue({
+      type: ContactTypes.ORGANIZATION,
+    });
+    component.saveItem();
+    httpTestingController.expectNone(`${environment.apiUrl}/contacts/`);
+    httpTestingController.verify();
+  });
+
+  it('#ngOnInit should set district and state options for candidate types', () => {
+    component.contact.type = ContactTypes.CANDIDATE;
+    component.contact.candidate_office = CandidateOfficeTypes.HOUSE;
+    component.contact.candidate_state = 'VA';
+    component.contact.candidate_district = '01';
+    component.form.patchValue({ ...component.contact });
+    expect(component.form.get('candidate_state')?.value).toBe('VA');
+    expect(component.form.get('candidate_district')?.value).toBe('01');
+
+    component.form.patchValue({
+      candidate_office: CandidateOfficeTypes.PRESIDENTIAL,
+    });
+    expect(component.form.get('candidate_state')?.value).toBe('');
+    expect(component.form.get('candidate_district')?.value).toBe('');
+
+    component.contact.candidate_office = CandidateOfficeTypes.HOUSE;
+    component.contact.candidate_state = 'VA';
+    component.contact.candidate_district = '01';
+    component.form.patchValue({ ...component.contact });
+    component.form.patchValue({
+      candidate_office: CandidateOfficeTypes.SENATE,
+    });
+    expect(component.form.get('candidate_state')?.value).toBe('VA');
+    expect(component.form.get('candidate_district')?.value).toBe('');
   });
 });
