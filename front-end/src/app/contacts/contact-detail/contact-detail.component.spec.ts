@@ -21,7 +21,7 @@ describe('ContactDetailComponent', () => {
     candidate_id: null,
     committee_id: null,
     name: null,
-    last_name: 'Doe',
+    last_name: 'Smith',
     first_name: 'Jane',
     middle_name: null,
     prefix: null,
@@ -92,10 +92,10 @@ describe('ContactDetailComponent', () => {
   it('#onOpenDetail should patch values to the form from the contact object', () => {
     let name: string | null = component.form.get('name')?.value;
     expect(name).toBe('');
-    component.contact.name = 'ABC Inc.';
+    component.contact.name = 'ABC Inc';
     component.onOpenDetail();
     name = component.form.get('name')?.value;
-    expect(name).toBe('ABC Inc.');
+    expect(name).toBe('ABC Inc');
   });
 
   it('#saveItem should save a new contact record', () => {
@@ -125,7 +125,7 @@ describe('ContactDetailComponent', () => {
     httpTestingController.verify();
   });
 
-  it('#ngOnInit should set district and state options for candidate types', () => {
+  it('changing candidate office should set district and state options', () => {
     component.contact.type = ContactTypes.CANDIDATE;
     component.contact.candidate_office = CandidateOfficeTypes.HOUSE;
     component.contact.candidate_state = 'VA';
@@ -149,5 +149,20 @@ describe('ContactDetailComponent', () => {
     });
     expect(component.form.get('candidate_state')?.value).toBe('VA');
     expect(component.form.get('candidate_district')?.value).toBe('');
+  });
+
+  it('changing country from USA should change state', () => {
+    component.form.patchValue({
+      country: 'USA',
+      state: 'VA',
+    });
+    expect(component.form.get('country')?.value).toBe('USA');
+    expect(component.form.get('state')?.value).toBe('VA');
+
+    component.form.patchValue({
+      country: 'CANADA',
+    });
+    expect(component.form.get('country')?.value).toBe('CANADA');
+    expect(component.form.get('state')?.value).toBe('ZZ');
   });
 });

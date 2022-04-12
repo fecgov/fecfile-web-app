@@ -21,8 +21,8 @@ describe('ContactListComponent', () => {
 
   const contact = new Contact();
   contact.first_name = 'Jane';
-  contact.last_name = 'Doe';
-  contact.name = 'ABC Corp.';
+  contact.last_name = 'Smith';
+  contact.name = 'ABC Inc';
 
   beforeEach(async () => {
     const userLoginData: UserLoginData = {
@@ -79,11 +79,11 @@ describe('ContactListComponent', () => {
 
   it('#displayName returns the contact name', () => {
     let name = component.displayName(contact);
-    expect(name).toBe('Jane Doe');
+    expect(name).toBe('Jane Smith');
 
     contact.type = ContactTypes.ORGANIZATION;
     name = component.displayName(contact);
-    expect(name).toBe('ABC Corp.');
+    expect(name).toBe('ABC Inc');
 
     contact.name = null;
     name = component.displayName(contact);
