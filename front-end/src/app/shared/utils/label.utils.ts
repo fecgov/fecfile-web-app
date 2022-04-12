@@ -2,23 +2,53 @@ export type LabelList = string[][];
 
 export type PrimeOptions = { name: string; code: string }[];
 
+/**
+ * Class to provide utilities for options lists
+ * Methods called statically
+ */
 export class LabelUtils {
+  /**
+   * For a given key, return a LabelList pair
+   * @param {LabelList} labelArrays
+   * @param {string} key
+   * @returns
+   */
   public static get(labelArrays: LabelList, key: string): string {
-    return labelArrays.filter((item: string[]) => item[0] === key)[0][1];
+    const item: LabelList = labelArrays.filter((item: string[]) => item[0] === key);
+    if (!!item.length) {
+      return item[0][1];
+    }
+    return '';
   }
 
+  /**
+   * Convert a LabelList to a javascript Map
+   * @param labelArrays
+   * @returns {Map<string, string}>
+   */
   public static getMap(labelArrays: LabelList): Map<string, string> {
     const labelMap = new Map();
     labelArrays.forEach((item: string[]) => labelMap.set(item[0], item[1]));
     return labelMap;
   }
 
+  /**
+   * Get a list of options formatted so that it can be used easily in a
+   * PrimeNG dropdown
+   * @param {LabelList} labelArrays
+   * @returns {PrimeOptions}
+   */
   public static getPrimeOptions(labelArrays: LabelList): PrimeOptions {
     let options: PrimeOptions = [];
     options = labelArrays.map((item: string[]) => ({ name: item[1], code: item[0] }));
     return options;
   }
 
+  /**
+   * Get a listing of the congressional districts for a given state
+   * @param {string} state - 2-letter code
+   * @returns {LabelList}
+   */
   public static getCongressionalDistrictLabels(state: string): LabelList {
     const numberOfDistricts: number = CongressionalDistricts[state];
     if (numberOfDistricts === 0) {
@@ -33,6 +63,10 @@ export class LabelUtils {
     return labelList;
   }
 
+  /**
+   * Returns the state listing without the military and foreign country entries
+   * @returns {LabelList}
+   */
   public static getStateCodeLabelsWithoutMilitary(): LabelList {
     return StatesCodeLabels.filter((list: string[]) => !['AA', 'AE', 'AP', 'ZZ'].includes(list[0]));
   }
