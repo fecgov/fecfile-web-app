@@ -8,7 +8,7 @@ describe('AccountInfoComponent', () => {
   let fixture: ComponentFixture<AccountInfoComponent>;
 
   beforeEach(async () => {
-    let committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
+    const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
       affiliated_committee_name: 'NONE',
       candidate_ids: [],
       city: 'FORT LAUDERDALE',
