@@ -28,7 +28,7 @@ export class LoginService {
    *
    * @return     {Observable}  The JSON web token response.
    */
-  public signIn(email: string, cmteId: string, password: string): Observable<any> {
+  public signIn(email: string, cmteId: string, password: string): Observable<UserLoginData> {
     // Django uses cmteId+email as unique username
     const username = cmteId + email;
 
@@ -39,9 +39,9 @@ export class LoginService {
   }
 
   public validateCode(code: string) {
-    const payload: any = { code: code.toString() };
+    const payload = { code: code.toString() };
     const token: string = this.sessionService.getToken();
-    const headers: any = {
+    const headers = {
       'Content-Type': 'application/json',
       token: token,
     };

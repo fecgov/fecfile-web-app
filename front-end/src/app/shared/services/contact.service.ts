@@ -15,22 +15,22 @@ export class ContactService implements TableListService<Contact> {
   public getTableData(pageNumber = 1): Observable<ListRestResponse> {
     return this.apiService.get<ListRestResponse>(`/contacts/?page=${pageNumber}`).pipe(
       map((response: ListRestResponse) => {
-        response.results = response.results.map((item: any) => Contact.fromJSON(item));
+        response.results = response.results.map((item) => Contact.fromJSON(item));
         return response;
       })
     );
   }
 
   public create(contact: Contact): Observable<Contact> {
-    const payload: any = contact.toJson();
-    return this.apiService.post<any>(`/contacts/`, payload).pipe(map((response: any) => Contact.fromJSON(response)));
+    const payload = contact.toJson();
+    return this.apiService.post<Contact>(`/contacts/`, payload).pipe(map((response) => Contact.fromJSON(response)));
   }
 
   public update(contact: Contact): Observable<Contact> {
-    const payload: any = contact.toJson();
+    const payload = contact.toJson();
     return this.apiService
-      .put<any>(`/contacts/${contact.id}/`, payload)
-      .pipe(map((response: any) => Contact.fromJSON(response)));
+      .put<Contact>(`/contacts/${contact.id}/`, payload)
+      .pipe(map((response) => Contact.fromJSON(response)));
   }
 
   public delete(contact: Contact): Observable<null> {

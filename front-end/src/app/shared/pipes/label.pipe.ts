@@ -6,7 +6,7 @@ import { LabelList, LabelUtils } from '../utils/label.utils';
 })
 export class LabelPipe implements PipeTransform {
   transform(value: string | null | undefined, labels: LabelList): string {
-    if (!!value) {
+    if (value) {
       return LabelUtils.get(labels, value);
     }
     return '';

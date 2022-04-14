@@ -19,10 +19,10 @@ export class ConfirmTwoFactorComponent implements OnInit {
   resendOption!: string;
   isValid = true;
   entryPoint!: string;
-  contactData!: any;
+  contactData!: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   isAccountLocked!: boolean;
   private subscription!: Subscription;
-  private response!: any;
+  private response!: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -43,7 +43,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/login']).then((r) => {
+    this.router.navigate(['/login']).then(() => {
       // do nothing
     });
   }
@@ -60,7 +60,8 @@ export class ConfirmTwoFactorComponent implements OnInit {
     this.twoFactInfo.markAsTouched();
     if (this.twoFactInfo.valid) {
       const code = this.twoFactInfo.get('securityCode')?.value;
-      this.loginService.validateCode(code).subscribe((res: any) => {
+      // prettier-ignore
+      this.loginService.validateCode(code).subscribe((res: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
         if (res) {
           this.response = res;
           const isAllowed = res['is_allowed'];
@@ -84,13 +85,14 @@ export class ConfirmTwoFactorComponent implements OnInit {
    * @param response
    * @private
    */
-  private handleAccountLock(response: any) {
+  // prettier-ignore
+  private handleAccountLock(response: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
     this.isAccountLocked = false;
     if (response['msg'] === this.ACCOUNT_LOCKED_MSG) {
       this.isAccountLocked = true;
       setTimeout(() => {
         this.authService.doSignOut();
-        this.router.navigate(['/login']).then((r) => {
+        this.router.navigate(['/login']).then(() => {
           // do nothing
         });
       }, 5000);
@@ -104,7 +106,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
    */
   private askConsent() {
     this.authService.doSignIn(this.response.token);
-    this.router.navigate(['/dashboard']).then((r) => {
+    this.router.navigate(['/dashboard']).then(() => {
       // do nothing
     });
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { Contact, ContactTypes, ContactTypeLabels, CandidateOfficeTypeLabels } from '../../shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
@@ -14,7 +14,7 @@ export class ContactDetailComponent implements OnInit {
   @Input() detailVisible = false;
   @Input() isNewContact = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() loadTableItems: EventEmitter<any> = new EventEmitter<any>();
+  @Output() loadTableItems: EventEmitter<LazyLoadEvent> = new EventEmitter<LazyLoadEvent>();
 
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = [];
@@ -97,7 +97,7 @@ export class ContactDetailComponent implements OnInit {
 
     // Null fields that are not part of this contact type.
     const typeFields = Contact.getFieldsByType(formValues.type);
-    Object.entries(formValues).forEach(([key, value]) => {
+    Object.entries(formValues).forEach(([key]) => {
       if (!typeFields.includes(key)) {
         formValues[key] = null;
       }
@@ -107,16 +107,16 @@ export class ContactDetailComponent implements OnInit {
     // Problem is default select values not getting assigned to fields when untouched
     // Problem may be that field names have "_" in them
     if (formValues.type === ContactTypes.CANDIDATE) {
-      formValues.candidate_office = !!formValues.candidate_office ? formValues.candidate_office : 'H';
-      formValues.candidate_state = !!formValues.candidate_state ? formValues.candidate_state : 'AL';
-      formValues.candidate_district = !!formValues.candidate_district ? formValues.candidate_district : '01';
+      formValues.candidate_office = formValues.candidate_office ? formValues.candidate_office : 'H';
+      formValues.candidate_state = formValues.candidate_state ? formValues.candidate_state : 'AL';
+      formValues.candidate_district = formValues.candidate_district ? formValues.candidate_district : '01';
     }
 
     const payload: Contact = Contact.fromJSON(formValues);
 
     if (this.contact.id) {
       payload.id = this.contact.id;
-      this.contactService.update(payload).subscribe((result) => {
+      this.contactService.update(payload).subscribe(() => {
         this.loadTableItems.emit();
         this.messageService.add({
           severity: 'success',
@@ -126,7 +126,7 @@ export class ContactDetailComponent implements OnInit {
         });
       });
     } else {
-      this.contactService.create(payload).subscribe((result) => {
+      this.contactService.create(payload).subscribe(() => {
         this.loadTableItems.emit();
         this.messageService.add({
           severity: 'success',

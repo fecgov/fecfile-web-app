@@ -18,7 +18,7 @@ export class TwoFactorLoginComponent {
 
   back() {
     // destroy current session if any and return to login page
-    this.router.navigate(['/login']).then((r) => {
+    this.router.navigate(['/login']).then(() => {
       // do nothing=
     });
   }
@@ -27,7 +27,7 @@ export class TwoFactorLoginComponent {
     this.twoFactInfo.markAsTouched();
 
     if (this.twoFactInfo.valid) {
-      this.router.navigate(['/confirm-2f']).then((r) => {
+      this.router.navigate(['/confirm-2f']).then(() => {
         // handle it
       });
     }

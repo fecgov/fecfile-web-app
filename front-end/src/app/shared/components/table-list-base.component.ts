@@ -35,7 +35,7 @@ export abstract class TableListBaseComponent<T> {
     if (event) {
       this.pagerState = event;
     } else {
-      event = !!this.pagerState
+      event = this.pagerState
         ? this.pagerState
         : {
             first: 0,
@@ -44,8 +44,8 @@ export abstract class TableListBaseComponent<T> {
     }
 
     // Calculate the record page number to retrieve from the API.
-    const first: number = !!event.first ? event.first : 0;
-    const rows: number = !!event.rows ? event.rows : 10;
+    const first: number = event.first ? event.first : 0;
+    const rows: number = event.rows ? event.rows : 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
 
     this.itemService.getTableData(pageNumber).subscribe((response: ListRestResponse) => {
@@ -60,7 +60,7 @@ export abstract class TableListBaseComponent<T> {
     this.selectedItems = items;
   }
 
-  public onSelectAllChange(event: any) {
+  public onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {
     const checked: boolean = event.checked;
 
     if (checked) {
@@ -87,22 +87,20 @@ export abstract class TableListBaseComponent<T> {
   }
 
   public deleteItem(item: T) {
-    return; // off until ticket work
-    // this.confirmationService.confirm({
-    //   message: 'Are you sure you want to delete this item?',
-    //   header: 'Confirm',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-    //     this.itemService.delete(item).subscribe((response: null) => {
-    //       this.item = this.getEmptyItem();
-    //       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
-    //     });
-    //   },
-    // });
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this item?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.itemService.delete(item).subscribe(() => {
+          this.item = this.getEmptyItem();
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
+        });
+      },
+    });
   }
 
   public deleteSelectedItems() {
-    return; // off until ticket work
     // this.confirmationService.confirm({
     //   message: 'Are you sure you want to delete the selected items?',
     //   header: 'Confirm',
