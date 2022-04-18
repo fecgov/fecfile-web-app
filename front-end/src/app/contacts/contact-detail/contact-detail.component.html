@@ -22,7 +22,6 @@
               inputId="type"
               formControlName="type"
               [options]="contactTypeOptions"
-              [disabled]="!isNewContact"
               optionLabel="name"
               optionValue="code"
             ></p-dropdown>
@@ -30,7 +29,7 @@
         </div>
         <div class="col-6"></div>
       </div>
-      <ng-container *ngIf="form.value.type === ContactTypes.CANDIDATE">
+      <ng-container *ngIf="form.get('type')?.value === ContactTypes.CANDIDATE">
         <div class="grid">
           <div class="col-6">
             <div class="field">
@@ -47,9 +46,9 @@
           <div class="col-4"></div>
         </div>
       </ng-container>
-      <ng-container *ngIf="[ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(form.value.type)">
+      <ng-container *ngIf="[ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(form.get('type')?.value)">
         <div class="grid">
-          <ng-container *ngIf="form.value.type === ContactTypes.COMMITTEE">
+          <ng-container *ngIf="form.get('type')?.value === ContactTypes.COMMITTEE">
             <div class="col-4">
               <div class="field">
                 <label for="committee_id">COMMITTEE ID</label>
@@ -75,12 +74,12 @@
               ></app-error-messages>
             </div>
           </div>
-          <ng-container *ngIf="form.value.type === ContactTypes.ORGANIZATION">
+          <ng-container *ngIf="form.get('type')?.value === ContactTypes.ORGANIZATION">
             <div class="col-4"></div>
           </ng-container>
         </div>
       </ng-container>
-      <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(form.value.type)">
+      <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(form.get('type')?.value)">
         <div class="grid">
           <div class="col-4">
             <div class="field">
@@ -178,7 +177,7 @@
       <div class="grid">
         <div class="col-6">
           <div class="field">
-            <label for="street_1">ADDRESS</label>
+            <label for="street_1">STREET ADDRESS</label>
             <input type="text" pInputText id="street_1" formControlName="street_1" required />
             <app-error-messages
               [form]="form"
@@ -259,7 +258,7 @@
         </div>
         <div class="col-6"></div>
       </div>
-      <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(form.value.type)">
+      <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(form.get('type')?.value)">
         <div class="grid">
           <div class="col-12">
             <hr />
@@ -298,7 +297,7 @@
           </div>
         </div>
       </ng-container>
-      <ng-container *ngIf="form.value.type === ContactTypes.CANDIDATE">
+      <ng-container *ngIf="form.get('type')?.value === ContactTypes.CANDIDATE">
         <div class="grid">
           <div class="col-12">
             <hr />
@@ -319,36 +318,63 @@
                 [options]="candidateOfficeTypeOptions"
                 optionLabel="name"
                 optionValue="code"
+                [autoDisplayFirst]="false"
                 appendTo="body"
               ></p-dropdown>
+              <app-error-messages
+                [form]="form"
+                fieldName="candidate_office"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
             </div>
           </div>
           <div class="col-3">
             <div class="field">
-              <label for="candidate_state">CANDIDATE STATE</label>
+              <label
+                for="candidate_state"
+                [ngClass]="{
+                  disabled: this.form.get('candidate_state')?.disabled
+                }"
+                >CANDIDATE STATE</label
+              >
               <p-dropdown
                 inputId="candidate_state"
                 formControlName="candidate_state"
-                [options]="stateOptions"
+                [options]="candidateStateOptions"
                 optionLabel="name"
                 optionValue="code"
+                [autoDisplayFirst]="false"
               ></p-dropdown>
+              <app-error-messages
+                [form]="form"
+                fieldName="candidate_state"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
             </div>
           </div>
           <div class="col-3">
             <div class="field">
-              <label for="candidate_district">CANDIDATE DISTRICT</label>
+              <label
+                for="candidate_district"
+                [ngClass]="{
+                  disabled: this.form.get('candidate_district')?.disabled
+                }"
+                >CANDIDATE DISTRICT</label
+              >
               <p-dropdown
                 inputId="candidate_district"
                 formControlName="candidate_district"
-                [options]="[
-                  { name: '01', code: '01' },
-                  { name: '02', code: '02' }
-                ]"
+                [options]="candidateDistrictOptions"
                 optionLabel="name"
                 optionValue="code"
                 appendTo="body"
+                [autoDisplayFirst]="false"
               ></p-dropdown>
+              <app-error-messages
+                [form]="form"
+                fieldName="candidate_district"
+                [formSubmitted]="formSubmitted"
+              ></app-error-messages>
             </div>
           </div>
         </div>

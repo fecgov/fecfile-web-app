@@ -89,27 +89,11 @@ export class Contact extends BaseModel {
         'telephone',
         'employer',
         'occupation',
-        'created',
-        'updated',
-        'deleted',
       ];
     }
 
     if (type === ContactTypes.ORGANIZATION) {
-      return [
-        'type',
-        'name',
-        'country',
-        'street_1',
-        'street_2',
-        'city',
-        'state',
-        'zip',
-        'telephone',
-        'created',
-        'updated',
-        'deleted',
-      ];
+      return ['type', 'name', 'country', 'street_1', 'street_2', 'city', 'state', 'zip', 'telephone'];
     }
 
     if (type === ContactTypes.CANDIDATE) {
@@ -133,28 +117,11 @@ export class Contact extends BaseModel {
         'candidate_office',
         'candidate_state',
         'candidate_district',
-        'created',
-        'updated',
-        'deleted',
       ];
     }
 
     if (type === ContactTypes.COMMITTEE) {
-      return [
-        'type',
-        'committee_id',
-        'name',
-        'country',
-        'street_1',
-        'street_2',
-        'city',
-        'state',
-        'zip',
-        'telephone',
-        'created',
-        'updated',
-        'deleted',
-      ];
+      return ['type', 'committee_id', 'name', 'country', 'street_1', 'street_2', 'city', 'state', 'zip', 'telephone'];
     }
 
     return [];
