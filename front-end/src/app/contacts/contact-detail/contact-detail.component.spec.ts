@@ -47,7 +47,7 @@ describe('ContactDetailComponent', () => {
     const userLoginData: UserLoginData = {
       committee_id: 'C00000000',
       email: 'email@fec.com',
-      role: Roles.COMMITTEE_ADMIN,
+      is_allowed: true,
       token: 'jwttokenstring',
     };
     await TestBed.configureTestingModule({

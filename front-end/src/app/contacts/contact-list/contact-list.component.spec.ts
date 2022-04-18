@@ -26,10 +26,10 @@ describe('ContactListComponent', () => {
 
   beforeEach(async () => {
     const userLoginData: UserLoginData = {
-      committee_id: 'C00101212',
-      email: 'test@fec.gov',
-      role: null,
-      token: 'foo',
+      committee_id: 'C00000000',
+      email: 'email@fec.com',
+      is_allowed: true,
+      token: 'jwttokenstring',
     };
 
     await TestBed.configureTestingModule({
