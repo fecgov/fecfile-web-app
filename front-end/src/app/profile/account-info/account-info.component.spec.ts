@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { AccountInfoComponent } from './account-info.component';
+import { DividerModule } from 'primeng/divider';
 
 describe('AccountInfoComponent', () => {
   let component: AccountInfoComponent;
@@ -77,6 +78,7 @@ describe('AccountInfoComponent', () => {
         }),
       ],
       declarations: [AccountInfoComponent],
+      imports: [DividerModule],
     }).compileComponents();
   });
 
