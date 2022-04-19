@@ -93,7 +93,7 @@ describe('ContactService', () => {
   });
 
   it('#delete() should DELETE a record', () => {
-    const mockResponse: null = null;
+    const mockResponse = null;
     const contact: Contact = new Contact();
     contact.id = 1;
 

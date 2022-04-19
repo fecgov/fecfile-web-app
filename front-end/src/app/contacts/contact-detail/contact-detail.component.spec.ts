@@ -4,7 +4,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { MessageService } from 'primeng/api';
 import { ContactDetailComponent } from './contact-detail.component';
 import { UserLoginData } from '../../shared/models/user.model';
-import { Roles } from '../../shared/models/role.model';
 import { FormBuilder } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../../shared/models/contact.model';

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ConfirmationService, MessageService, LazyLoadEvent } from 'primeng/api';
 import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { TableListService } from '../services/table-list-service.interface';
+import { Observable, forkJoin } from 'rxjs';
 
 @Component({
   template: '',
@@ -101,16 +102,21 @@ export abstract class TableListBaseComponent<T> {
   }
 
   public deleteSelectedItems() {
-    // this.confirmationService.confirm({
-    //   message: 'Are you sure you want to delete the selected items?',
-    //   header: 'Confirm',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-    //     // this.itemService.delete(item)
-    //     this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
-    //     this.selectedItems = [];
-    //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
-    //   },
-    // });
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the selected items?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        const obs: Observable<null>[] = [];
+        this.selectedItems.forEach((item: T) => {
+          obs.push(this.itemService.delete(item));
+        });
+        forkJoin(obs).subscribe(() => {
+          this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
+          this.selectedItems = [];
+          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
+        });
+      },
+    });
   }
 }
