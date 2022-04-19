@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ApiService } from './api.service';
+import { mergeMap, Observable } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
+import { FecApiService } from './fec-api.service';
+import { Store } from '@ngrx/store';
+import { selectUserLoginData } from 'app/store/login.selectors';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommitteeAccountService {
-  constructor(private apiService: ApiService) {}
+  constructor(private fecApiService: FecApiService, private store: Store) {}
 
   /**
    * Gets the commitee account details.
@@ -15,6 +17,11 @@ export class CommitteeAccountService {
    * @return     {Observable}  The commitee details.
    */
   public getDetails(): Observable<CommitteeAccount> {
-    return this.apiService.get<CommitteeAccount>('/core/get_committee_details');
+    const userLoginData$ = this.store.select(selectUserLoginData);
+    return userLoginData$.pipe(
+      mergeMap((userLoginData) => {
+        return this.fecApiService.getDetails(userLoginData.committee_id);
+      })
+    );
   }
 }

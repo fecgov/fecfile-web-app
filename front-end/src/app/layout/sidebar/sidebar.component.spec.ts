@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidebarComponent } from './sidebar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MenuModule } from 'primeng/menu';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -8,9 +10,9 @@ describe('SidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SidebarComponent ]
-    })
-    .compileComponents();
+      imports: [BrowserAnimationsModule, MenuModule],
+      declarations: [SidebarComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
