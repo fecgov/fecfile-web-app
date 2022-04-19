@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
+import { JsonSchema } from '../interfaces/json-schema.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -8,35 +9,57 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 export class ValidateService {
   constructor() {}
 
-  validate(): ValidationError[] {
-    const data = {
-      form_type: '',
-      filer_committee_id_number: 'C00123456',
-      committee_name: 'Foes of Chris',
-      change_of_address: false,
-      street_1: '123 main street',
-      street_2: '',
-      city: 'Best Town',
-      state: 'DC^^',
-      zip: '20000',
-      report_code: '',
-      election_code: '',
-      date_of_election: '20021101',
-      state_of_election: 'DC',
-      coverage_from_date: '20000101',
-      coverage_through_date: '20000201',
-      qualified_committee: true,
-      treasurer_last_name: 'Doe',
-      treasurer_first_name: 'J',
-      treasurer_middle_name: 'X',
-      treasurer_prefix: 'Dr',
-      treasurer_suffix: 'PhD',
-      date_signed: '20040729',
-      L6b_cash_on_hand_beginning_period: 1,
-    };
-
-    const errors: ValidationError[] = validate(f3xSchema, data);
+  validate(
+    schema: Record<string, string | number | boolean | null>,
+    data: Record<string, string | number | boolean | null>
+  ): ValidationError[] {
+    const errors: ValidationError[] = validate(schema, data);
     console.log(errors);
     return errors;
+  }
+
+  getFormGroupFields(schemas: JsonSchema[]) {
+    let groupFields = {};
+    schemas.forEach((schema: JsonSchema) => {
+      const schemaFields: any = {};
+      for (const property in schema.properties) {
+        const validators = [];
+        if (schema.required.includes(property)) {
+          validators.push(Validators.required);
+        }
+        if ('maxLength' in schema.properties[property]) {
+          validators.push(Validators.maxLength(schema.properties[property].maxLength));
+        }
+        if ('pattern' in schema.properties[property]) {
+          validators.push(Validators.pattern(schema.properties[property].pattern));
+        }
+        schemaFields[property] = ['', validators];
+      }
+      groupFields = { ...groupFields, ...schemaFields };
+    });
+    return groupFields;
+    // form: FormGroup = this.fb.group({
+    //   type: ['', [Validators.required]],
+    //   candidate_id: ['', [Validators.required, Validators.maxLength(9)]],
+    //   committee_id: ['', [Validators.required, Validators.maxLength(9)]],
+    //   name: ['', [Validators.required, Validators.maxLength(200)]],
+    //   last_name: ['', [Validators.required, Validators.maxLength(30)]],
+    //   first_name: ['', [Validators.required, Validators.maxLength(20)]],
+    //   middle_name: ['', [Validators.maxLength(20)]],
+    //   prefix: ['', [Validators.maxLength(10)]],
+    //   suffix: ['', [Validators.maxLength(10)]],
+    //   street_1: ['', [Validators.required, Validators.maxLength(34)]],
+    //   street_2: ['', [Validators.maxLength(34)]],
+    //   city: ['', [Validators.required, Validators.maxLength(30)]],
+    //   state: ['', [Validators.required]],
+    //   zip: ['', [Validators.required, Validators.maxLength(9)]],
+    //   employer: ['', [Validators.maxLength(38)]],
+    //   occupation: ['', [Validators.maxLength(38)]],
+    //   candidate_office: ['', [Validators.required, Validators.maxLength(10)]],
+    //   candidate_state: ['', [Validators.required, Validators.maxLength(10)]],
+    //   candidate_district: ['', [Validators.required, Validators.maxLength(10)]],
+    //   telephone: ['', [Validators.pattern('[0-9]{10}')]],
+    //   country: ['', [Validators.required]],
+    // });
   }
 }

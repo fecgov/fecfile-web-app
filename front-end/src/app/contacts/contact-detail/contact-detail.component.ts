@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import {
   Contact,
+  ContactType,
   ContactTypes,
   ContactTypeLabels,
   CandidateOfficeTypes,
@@ -11,6 +12,10 @@ import {
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
+import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
+import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
+import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
+import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 
 @Component({
   selector: 'app-contact-detail',
@@ -45,29 +50,14 @@ export class ContactDetailComponent implements OnInit {
   candidateDistrictOptions: PrimeOptions = [];
   formSubmitted: boolean = false;
 
-  form: FormGroup = this.fb.group({
-    type: ['', [Validators.required]],
-    candidate_id: ['', [Validators.required, Validators.maxLength(9)]],
-    committee_id: ['', [Validators.required, Validators.maxLength(9)]],
-    name: ['', [Validators.required, Validators.maxLength(200)]],
-    last_name: ['', [Validators.required, Validators.maxLength(30)]],
-    first_name: ['', [Validators.required, Validators.maxLength(20)]],
-    middle_name: ['', [Validators.maxLength(20)]],
-    prefix: ['', [Validators.maxLength(10)]],
-    suffix: ['', [Validators.maxLength(10)]],
-    street_1: ['', [Validators.required, Validators.maxLength(34)]],
-    street_2: ['', [Validators.maxLength(34)]],
-    city: ['', [Validators.required, Validators.maxLength(30)]],
-    state: ['', [Validators.required]],
-    zip: ['', [Validators.required, Validators.maxLength(9)]],
-    employer: ['', [Validators.maxLength(38)]],
-    occupation: ['', [Validators.maxLength(38)]],
-    candidate_office: ['', [Validators.required, Validators.maxLength(10)]],
-    candidate_state: ['', [Validators.required, Validators.maxLength(10)]],
-    candidate_district: ['', [Validators.required, Validators.maxLength(10)]],
-    telephone: ['', [Validators.pattern('[0-9]{10}')]],
-    country: ['', [Validators.required]],
-  });
+  form: FormGroup = this.fb.group(
+    this.validateService.getFormGroupFields([
+      contactIndividualSchema,
+      contactCandidateSchema,
+      contactCommitteeSchema,
+      contactOrganizationSchema,
+    ])
+  );
 
   constructor(
     private messageService: MessageService,
@@ -146,14 +136,12 @@ export class ContactDetailComponent implements OnInit {
   public saveItem(closeDetail: boolean = true) {
     this.formSubmitted = true;
 
-    this.validateService.validate();
-
     if (this.isFormInvalid()) {
       return;
     }
 
     const formValues: Record<string, string | null> = {};
-    Contact.getFieldsByType(this.form.get('type')?.value).forEach((field: string) => {
+    this.getFieldsByType(this.form.get('type')?.value).forEach((field: string) => {
       if (!!this.form.get(field)?.value) {
         formValues[field] = this.form.get(field)?.value;
       }
@@ -188,6 +176,66 @@ export class ContactDetailComponent implements OnInit {
     this.resetForm();
   }
 
+  getFieldsByType(type: ContactType): string[] {
+    if (type === ContactTypes.INDIVIDUAL) {
+      return Object.keys(contactIndividualSchema.properties);
+      // return [
+      //   'type',
+      //   'last_name',
+      //   'first_name',
+      //   'middle_name',
+      //   'prefix',
+      //   'suffix',
+      //   'country',
+      //   'street_1',
+      //   'street_2',
+      //   'city',
+      //   'state',
+      //   'zip',
+      //   'telephone',
+      //   'employer',
+      //   'occupation',
+      // ];
+    }
+
+    if (type === ContactTypes.ORGANIZATION) {
+      return Object.keys(contactOrganizationSchema.properties);
+      // return ['type', 'name', 'country', 'street_1', 'street_2', 'city', 'state', 'zip', 'telephone'];
+    }
+
+    if (type === ContactTypes.CANDIDATE) {
+      return Object.keys(contactCandidateSchema.properties);
+      // return [
+      //   'type',
+      //   'candidate_id',
+      //   'last_name',
+      //   'first_name',
+      //   'middle_name',
+      //   'prefix',
+      //   'suffix',
+      //   'country',
+      //   'street_1',
+      //   'street_2',
+      //   'city',
+      //   'state',
+      //   'zip',
+      //   'telephone',
+      //   'employer',
+      //   'occupation',
+      //   'candidate_office',
+      //   'candidate_state',
+      //   'candidate_district',
+      // ];
+    }
+
+    if (type === ContactTypes.COMMITTEE) {
+      return Object.keys(contactCommitteeSchema.properties);
+      // return ['type', 'committee_id', 'name', 'country', 'street_1', 'street_2', 'city', 'state', 'zip', 'telephone'];
+    }
+
+    return [];
+  }
+
   public closeDetail() {
     this.detailVisibleChange.emit(false);
     this.resetForm();
@@ -200,7 +248,7 @@ export class ContactDetailComponent implements OnInit {
 
   private isFormInvalid(): boolean {
     const type: ContactTypes = this.form?.get('type')?.value;
-    return Contact.getFieldsByType(type).reduce(
+    return this.getFieldsByType(type).reduce(
       (isInvalid: boolean, fieldName: string) => isInvalid || !!this.form?.get(fieldName)?.invalid,
       false
     );
