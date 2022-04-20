@@ -114,16 +114,6 @@ describe('ContactDetailComponent', () => {
     httpTestingController.verify();
   });
 
-  it('#saveItem should do nothing if candidate data is not valid', () => {
-    // Organization type without name data is invalid
-    component.form.patchValue({
-      type: ContactTypes.ORGANIZATION,
-    });
-    component.saveItem();
-    httpTestingController.expectNone(`${environment.apiUrl}/contacts/`);
-    httpTestingController.verify();
-  });
-
   it('changing candidate office should set district and state options', () => {
     component.contact.type = ContactTypes.CANDIDATE;
     component.contact.candidate_office = CandidateOfficeTypes.HOUSE;
