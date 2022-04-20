@@ -1,7 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AccountInfoComponent } from "./account-info/account-info.component";
 
-const routes: Routes = [{ path: '**', redirectTo: '' }];
+const routes: Routes = [
+  {
+    path: 'account',
+    component: AccountInfoComponent,
+    pathMatch: 'full',
+  },
+  { path: '**', redirectTo: '' }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

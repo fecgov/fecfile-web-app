@@ -1,0 +1,10 @@
+.account-info-footer .col-12 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// for long words that would not nicely wrap with overflowss
+.long-word-value {
+  word-wrap: break-word;
+}

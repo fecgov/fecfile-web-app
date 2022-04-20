@@ -1,2 +1,2 @@
-gitpython
-invoke
+gitpython==3.1.27
+invoke==1.7.0

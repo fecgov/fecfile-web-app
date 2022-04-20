@@ -24,6 +24,8 @@ li {
 }
 
 .ng-submitted .p-inputtext.ng-invalid,
-.p-inputtext.ng-invalid.ng-touched {
+.p-inputtext.ng-invalid.ng-touched,
+.ng-submitted p-dropdown.ng-invalid div.p-dropdown,
+p-dropdown.ng-invalid.ng-touched div.p-dropdown {
   border-color: #dc3545;
 }
