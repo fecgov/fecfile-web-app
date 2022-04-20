@@ -90,7 +90,7 @@ describe('TableListBaseComponent', () => {
   });
 
   it('#deleteItems should delete items', () => {
-    component.loadTableItems({});
+    component.loadTableItems({ first: 0, rows: 2 });
     component.selectedItems = ['abc'];
     component.deleteSelectedItems();
     component.deleteSelectedItemsAccept();

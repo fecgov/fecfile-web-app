@@ -33,7 +33,7 @@ export abstract class TableListBaseComponent<T> {
     // event is undefined when triggered from the detail page because
     // the detail doesn't know what page we are on. We check the local
     // pagerState variable to retrieve the page state.
-    if (event) {
+    if ('first' in event) {
       this.pagerState = event;
     } else {
       event = this.pagerState
