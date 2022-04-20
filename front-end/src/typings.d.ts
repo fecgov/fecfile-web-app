@@ -3,7 +3,7 @@
  * set in nodeJs server for running local configuration.
  * See environment.local.ts and extra-webpack.config where the _process var is used.
  */
-declare var _process: Process;
+declare let _process: Process;
 
 interface Process {
     env: Env

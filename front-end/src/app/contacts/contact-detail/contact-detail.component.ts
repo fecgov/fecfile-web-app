@@ -141,7 +141,7 @@ export class ContactDetailComponent implements OnInit {
     this.form.patchValue(this.contact);
   }
 
-  public saveItem(closeDetail: boolean = true) {
+  public saveItem(closeDetail = true) {
     this.formSubmitted = true;
 
     if (this.isFormInvalid()) {

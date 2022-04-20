@@ -13,11 +13,11 @@ import { SessionService } from '../../shared/services/SessionService/session.ser
 })
 export class LoginComponent implements OnInit {
   public frm!: FormGroup;
-  public isBusy: boolean = false;
-  public hasFailed: boolean = false;
-  public committeeIdInputError: boolean = false;
-  public passwordInputError: boolean = false;
-  public loginEmailInputError: boolean = false;
+  public isBusy = false;
+  public hasFailed = false;
+  public committeeIdInputError = false;
+  public passwordInputError = false;
+  public loginEmailInputError = false;
   public appTitle: string | null = null;
   public loggedOut: any = '';
   public titleF!: string;

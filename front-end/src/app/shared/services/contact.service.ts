@@ -12,7 +12,7 @@ import { Contact } from '../models/contact.model';
 export class ContactService implements TableListService<Contact> {
   constructor(private apiService: ApiService) {}
 
-  public getTableData(pageNumber: number = 1): Observable<ListRestResponse> {
+  public getTableData(pageNumber = 1): Observable<ListRestResponse> {
     return this.apiService.get<ListRestResponse>(`/contacts/?page=${pageNumber}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item: any) => Contact.fromJSON(item));

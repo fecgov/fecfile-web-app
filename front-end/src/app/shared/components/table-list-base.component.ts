@@ -9,13 +9,13 @@ import { TableListService } from '../services/table-list-service.interface';
 export abstract class TableListBaseComponent<T> {
   item!: T;
   items: T[] = [];
-  totalItems: number = 0;
+  totalItems = 0;
   pagerState: LazyLoadEvent | null = null;
-  loading: boolean = false;
-  selectAll: boolean = false;
+  loading = false;
+  selectAll = false;
   selectedItems: T[] = [];
-  detailVisible: boolean = false;
-  isNewContact: boolean = true;
+  detailVisible = false;
+  isNewContact = true;
   protected itemService!: TableListService<T>;
 
   constructor(protected messageService: MessageService, protected confirmationService: ConfirmationService) {}
