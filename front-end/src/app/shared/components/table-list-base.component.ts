@@ -106,17 +106,19 @@ export abstract class TableListBaseComponent<T> {
       message: 'Are you sure you want to delete the selected items?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        const obs: Observable<null>[] = [];
-        this.selectedItems.forEach((item: T) => {
-          obs.push(this.itemService.delete(item));
-        });
-        forkJoin(obs).subscribe(() => {
-          this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
-          this.selectedItems = [];
-          this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
-        });
-      },
+      accept: this.deleteSelectedItemsAccept,
+    });
+  }
+
+  public deleteSelectedItemsAccept() {
+    const obs: Observable<null>[] = [];
+    this.selectedItems.forEach((item: T) => {
+      obs.push(this.itemService.delete(item));
+    });
+    forkJoin(obs).subscribe(() => {
+      this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
+      this.selectedItems = [];
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     });
   }
 }

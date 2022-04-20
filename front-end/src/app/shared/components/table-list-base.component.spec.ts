@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Observable, of } from 'rxjs';
 import { TableListService } from '../services/table-list-service.interface';
@@ -39,7 +39,6 @@ describe('TableListBaseComponent', () => {
   let component: TestTableListBaseComponent;
   let fixture: ComponentFixture<TestTableListBaseComponent>;
   let testTableListService: TestTableListService;
-  let confirmationService: ConfirmationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -50,7 +49,6 @@ describe('TableListBaseComponent', () => {
 
   beforeEach(() => {
     testTableListService = TestBed.inject(TestTableListService);
-    confirmationService = TestBed.inject(ConfirmationService);
     fixture = TestBed.createComponent(TestTableListBaseComponent);
     component = fixture.componentInstance;
     component.loadItemService(testTableListService);
@@ -76,5 +74,26 @@ describe('TableListBaseComponent', () => {
     component.onSelectAllChange({ checked: false, event: {} as PointerEvent });
     expect(component.selectedItems.length).toBe(0);
     expect(component.selectAll).toBe(false);
+  });
+
+  it('#onSelectionChange should update selected property values', () => {
+    component.loadTableItems({});
+    component.onSelectionChange();
+    expect(component.selectAll).toBe(false);
+    expect(component.selectedItems.length).toBe(0);
+  });
+
+  it('#deleteItem should delete an item', () => {
+    component.loadTableItems({});
+    component.deleteItem('abc');
+    expect(component.items.length).toBe(2);
+  });
+
+  it('#deleteItems should delete items', () => {
+    component.loadTableItems({});
+    component.selectedItems = ['abc'];
+    component.deleteSelectedItems();
+    component.deleteSelectedItemsAccept();
+    expect(component.items.length).toBe(1);
   });
 });
