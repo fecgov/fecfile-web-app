@@ -1,18 +1,22 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
-import { RoleType } from './role.model';
 
+/**
+ * The UserLoginData type captures the fields returned from the server
+ * after a successful login.
+ */
 export type UserLoginData = {
   committee_id: string | null;
   email: string | null;
-  role: RoleType | null;
+  is_allowed: boolean;
   token: string | null;
 };
 
 export class User extends BaseModel {
-  id: number = 0;
+  id = 0;
 
-  static getInstance(json: any): User {
+  // prettier-ignore
+  static fromJSON(json: any): User { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(User, json);
   }
 }

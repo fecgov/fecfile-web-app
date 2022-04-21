@@ -50,23 +50,24 @@ export class Contact extends BaseModel {
   middle_name: string | null = null;
   prefix: string | null = null;
   suffix: string | null = null;
-  street_1: string = '';
+  street_1 = '';
   street_2: string | null = null;
-  city: string = '';
-  state: string = '';
-  zip: string = '';
+  city = '';
+  state = '';
+  zip = '';
   employer: string | null = null;
   occupation: string | null = null;
   candidate_office: CandidateOfficeType | null = null;
   candidate_state: string | null = null;
   candidate_district: string | null = null;
   telephone: string | null = null;
-  country: string = '';
+  country = '';
   created: string | null = null;
   updated: string | null = null;
   deleted: string | null = null;
 
-  static fromJSON(json: any): Contact {
+  // prettier-ignore
+  static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(Contact, json);
   }
 }

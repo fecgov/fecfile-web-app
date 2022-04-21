@@ -12,8 +12,8 @@ import { environment } from '../../../../environments/environment';
 export class SessionService {
   public accessToken!: string;
   public readonly REFESH_TOKEN_THRESHOLD_IN_MINUTES = 15;
-  private isRefreshing: any = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private isRefreshing = false;
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   constructor(private http: HttpClient, private cookieService: CookieService) {}
 
@@ -53,7 +53,7 @@ export class SessionService {
   }
 
   getTokenExpirationDate(token: string): Date {
-    const decoded: any = jwt_decode(token);
+    const decoded: any = jwt_decode(token); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     if (decoded.exp === undefined) return new Date();
 
@@ -63,9 +63,9 @@ export class SessionService {
   }
 
   isSessionAboutToExpire(): boolean {
-    let currentTime = new Date();
+    const currentTime = new Date();
     currentTime.setMinutes(currentTime.getMinutes() + this.REFESH_TOKEN_THRESHOLD_IN_MINUTES);
-    let minimumTimeToRefreshToken = new Date(currentTime.getTime());
+    const minimumTimeToRefreshToken = new Date(currentTime.getTime());
     if (this.getToken()) {
       const currentExpirationTime = this.getTokenExpirationDate(this.getToken());
       if (minimumTimeToRefreshToken > currentExpirationTime) {
@@ -82,10 +82,12 @@ export class SessionService {
         this.isRefreshing = true;
         this.refreshTokenSubject.next(null);
         return this.getRefreshTokenFromServer(currentToken).pipe(
-          tap((token: any) => {
+          // prettier-ignore
+          tap((token: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
             this.setToken(token.token);
           }),
-          switchMap((token: any) => {
+          // prettier-ignore
+          switchMap((token: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
             this.isRefreshing = false;
             this.refreshTokenSubject.next(token);
             return token;
@@ -95,7 +97,8 @@ export class SessionService {
         return this.refreshTokenSubject.pipe(
           filter((token) => token !== null),
           take(1),
-          switchMap((token: any) => {
+          // prettier-ignore
+          switchMap((token: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
             console.log('token ' + token);
             return token;
           })
@@ -111,7 +114,8 @@ export class SessionService {
         token: currentToken,
       })
       .pipe(
-        tap((tokens: any) => {
+        // prettier-ignore
+        tap((tokens: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
           this.setToken(tokens.token);
         })
       );

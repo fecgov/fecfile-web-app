@@ -4,7 +4,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { MessageService } from 'primeng/api';
 import { ContactDetailComponent } from './contact-detail.component';
 import { UserLoginData } from '../../shared/models/user.model';
-import { Roles } from '../../shared/models/role.model';
 import { FormBuilder } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../../shared/models/contact.model';
@@ -47,7 +46,7 @@ describe('ContactDetailComponent', () => {
     const userLoginData: UserLoginData = {
       committee_id: 'C00000000',
       email: 'email@fec.com',
-      role: Roles.COMMITTEE_ADMIN,
+      is_allowed: true,
       token: 'jwttokenstring',
     };
     await TestBed.configureTestingModule({
@@ -112,16 +111,6 @@ describe('ContactDetailComponent', () => {
     component.saveItem(true);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/10/`);
     expect(req.request.method).toEqual('PUT');
-    httpTestingController.verify();
-  });
-
-  it('#saveItem should do nothing if candidate data is not valid', () => {
-    // Organization type without name data is invalid
-    component.form.patchValue({
-      type: ContactTypes.ORGANIZATION,
-    });
-    component.saveItem();
-    httpTestingController.expectNone(`${environment.apiUrl}/contacts/`);
     httpTestingController.verify();
   });
 

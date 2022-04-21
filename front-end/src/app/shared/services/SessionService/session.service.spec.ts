@@ -1,38 +1,49 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CookieService } from 'ngx-cookie-service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
 import { SessionService } from './session.service';
 
-xdescribe('SessionService', () => {
+describe('SessionService', () => {
+  let service: SessionService;
   let cookieService: CookieService;
-  let sessionService: SessionService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [SessionService, CookieService],
+      providers: [CookieService],
     });
+    service = TestBed.inject(SessionService);
+    cookieService = TestBed.inject(CookieService);
   });
 
-  beforeEach(() => {
-    cookieService = TestBed.get(CookieService);
-
-    sessionService = TestBed.get(SessionService);
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 
-  xit('should be created', () => {
-    expect(sessionService).toBeTruthy();
+  it('#getSession should return user cookie', () => {
+    const cookieValue = 'abc';
+    spyOn(cookieService, 'get').and.callFake(() => cookieValue);
+    const session = service.getSession();
+    expect(session).toBe(cookieValue);
   });
 
-  xit('should get session cookie', () => {
-    cookieService.set('user', 'test');
-
-    expect(sessionService.getSession()).toBe('test');
+  it('#getSession should return 0 if no cookie value', () => {
+    spyOn(cookieService, 'get').and.callFake(() => '');
+    const session = service.getSession();
+    expect(session).toBe(0);
   });
 
-  xit('should destroy session cookie', () => {
-    cookieService.delete('user');
+  it('#destroy should clear access token', () => {
+    service.accessToken = 'abc';
+    service.destroy();
+    expect(service.accessToken).toBe('');
+  });
 
-    expect(sessionService.getSession()).toBe(0);
+  it('#getToken should return token string from user cookie', () => {
+    const cookieValue = '{ "token": "abc" }';
+    spyOn(cookieService, 'get').and.callFake(() => cookieValue);
+    const token = service.getToken();
+    expect(token).toEqual(JSON.parse(cookieValue));
   });
 });

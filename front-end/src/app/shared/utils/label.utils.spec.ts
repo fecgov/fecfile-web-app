@@ -43,7 +43,7 @@ describe('LabelUtils', () => {
   });
 
   it('#getStateCodeLabelsWithoutMilitary() should return the state listing without the military and foreign country entries', () => {
-    let states: LabelList = LabelUtils.getStateCodeLabelsWithoutMilitary();
+    const states: LabelList = LabelUtils.getStateCodeLabelsWithoutMilitary();
     expect(states[2][0]).toBe('AS');
     expect(states[5][0]).toBe('CA'); // This should be AA if military included
   });

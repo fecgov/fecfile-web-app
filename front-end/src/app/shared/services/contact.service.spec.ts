@@ -12,10 +12,10 @@ describe('ContactService', () => {
   let httpTestingController: HttpTestingController;
   let service: ContactService;
   const userLoginData: UserLoginData = {
-    committee_id: 'C00101212',
-    email: 'test@fec.gov',
-    role: null,
-    token: 'foo',
+    committee_id: 'C00000000',
+    email: 'email@fec.com',
+    is_allowed: true,
+    token: 'jwttokenstring',
   };
 
   beforeEach(() => {
@@ -93,7 +93,7 @@ describe('ContactService', () => {
   });
 
   it('#delete() should DELETE a record', () => {
-    const mockResponse: null = null;
+    const mockResponse = null;
     const contact: Contact = new Contact();
     contact.id = 1;
 

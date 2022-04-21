@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { LoginService } from '../../shared/services/login.service';
 import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { SessionService } from '../../shared/services/SessionService/session.service';
+import { UserLoginData } from 'app/shared/models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -13,13 +14,12 @@ import { SessionService } from '../../shared/services/SessionService/session.ser
 })
 export class LoginComponent implements OnInit {
   public frm!: FormGroup;
-  public isBusy: boolean = false;
-  public hasFailed: boolean = false;
-  public committeeIdInputError: boolean = false;
-  public passwordInputError: boolean = false;
-  public loginEmailInputError: boolean = false;
+  public isBusy = false;
+  public hasFailed = false;
+  public committeeIdInputError = false;
+  public passwordInputError = false;
+  public loginEmailInputError = false;
   public appTitle: string | null = null;
-  public loggedOut: any = '';
   public titleF!: string;
   public titleR!: string;
   public show!: boolean;
@@ -46,10 +46,6 @@ export class LoginComponent implements OnInit {
     this.titleF = this.appTitle.substring(0, 3);
     this.titleR = this.appTitle.substring(3);
     this.loginService.logOut();
-  }
-
-  public getLoggedOut() {
-    return this.loggedOut;
   }
 
   /**
@@ -92,13 +88,13 @@ export class LoginComponent implements OnInit {
     const email: string = this.frm.get('emailId')?.value;
 
     this.loginService.signIn(email, committeeId, password).subscribe({
-      next: (res: any) => {
+      next: (res: UserLoginData) => {
         if (res.token) {
           this.authService.doSignIn(res.token);
           this.router.navigate(['twoFactLogin']);
         }
       },
-      error: (error: any) => {
+      error: () => {
         this.isBusy = false;
         this.hasFailed = true;
       },

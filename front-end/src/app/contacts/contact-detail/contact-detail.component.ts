@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import {
   Contact,
   ContactType,
@@ -23,11 +23,11 @@ import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_va
 })
 export class ContactDetailComponent implements OnInit {
   @Input() contact: Contact = new Contact();
-  @Input() detailVisible: boolean = false;
+  @Input() detailVisible = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() loadTableItems: EventEmitter<any> = new EventEmitter<any>();
+  @Output() loadTableItems: EventEmitter<LazyLoadEvent> = new EventEmitter<LazyLoadEvent>();
 
-  private _isNewContact: boolean = false;
+  private _isNewContact = false;
   @Input() set isNewContact(value: boolean) {
     this._isNewContact = value;
     if (this._isNewContact) {
@@ -48,7 +48,7 @@ export class ContactDetailComponent implements OnInit {
   countryOptions: PrimeOptions = [];
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
-  formSubmitted: boolean = false;
+  formSubmitted = false;
 
   form: FormGroup = this.fb.group(
     this.validateService.getFormGroupFields([
@@ -133,7 +133,7 @@ export class ContactDetailComponent implements OnInit {
     this.form.patchValue(this.contact);
   }
 
-  public saveItem(closeDetail: boolean = true) {
+  public saveItem(closeDetail = true) {
     this.formSubmitted = true;
 
     if (this.isFormInvalid()) {
@@ -142,7 +142,7 @@ export class ContactDetailComponent implements OnInit {
 
     const formValues: Record<string, string | null> = {};
     this.getFieldsByType(this.form.get('type')?.value).forEach((field: string) => {
-      if (!!this.form.get(field)?.value) {
+      if (this.form.get(field)?.value) {
         formValues[field] = this.form.get(field)?.value;
       }
     });
@@ -150,7 +150,7 @@ export class ContactDetailComponent implements OnInit {
     const payload: Contact = Contact.fromJSON({ ...this.contact, ...formValues });
 
     if (payload.id) {
-      this.contactService.update(payload).subscribe((result) => {
+      this.contactService.update(payload).subscribe(() => {
         this.loadTableItems.emit();
         this.messageService.add({
           severity: 'success',
@@ -160,7 +160,7 @@ export class ContactDetailComponent implements OnInit {
         });
       });
     } else {
-      this.contactService.create(payload).subscribe((result) => {
+      this.contactService.create(payload).subscribe(() => {
         this.loadTableItems.emit();
         this.messageService.add({
           severity: 'success',
