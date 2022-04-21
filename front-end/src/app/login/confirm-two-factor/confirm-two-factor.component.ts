@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LoginService } from 'app/shared/services/login.service';
 import { AuthService } from '../../shared/services/AuthService/auth.service';
@@ -22,11 +22,10 @@ export class ConfirmTwoFactorComponent implements OnInit {
   contactData!: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   isAccountLocked!: boolean;
   private subscription!: Subscription;
-  private response!: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  public response!: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute,
     private loginService: LoginService,
     private authService: AuthService
   ) {
@@ -40,12 +39,6 @@ export class ConfirmTwoFactorComponent implements OnInit {
   }
   onDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  back() {
-    this.router.navigate(['/login']).then(() => {
-      // do nothing
-    });
   }
 
   /**
@@ -73,7 +66,6 @@ export class ConfirmTwoFactorComponent implements OnInit {
             return;
           }
           this.isValid = true;
-          this.askConsent();
         } else {
           this.isValid = false;
         }
@@ -96,30 +88,6 @@ export class ConfirmTwoFactorComponent implements OnInit {
           // do nothing
         });
       }, 5000);
-    }
-  }
-
-  /**
-   * After successful two factor code verification ask for consent
-   * If accepted navigate to dashboard else sign-out and navigate to HomePAge
-   * @private
-   */
-  private askConsent() {
-    this.authService.doSignIn(this.response.token);
-    this.router.navigate(['/dashboard']).then(() => {
-      // do nothing
-    });
-  }
-
-  public selectAnotherType() {
-    if (this.entryPoint === 'login') {
-      this.router.navigate(['/twoFactLogin']);
-    } else if (this.entryPoint === 'registration') {
-      this.router.navigate(['/register'], {
-        queryParams: { register_token: this.activatedRoute.snapshot.queryParams['register_token'] },
-      });
-    } else if (this.entryPoint === 'reset') {
-      this.router.navigate(['/reset-selector']);
     }
   }
 }
