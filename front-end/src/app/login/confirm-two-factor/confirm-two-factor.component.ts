@@ -66,6 +66,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
             return;
           }
           this.isValid = true;
+          this.router.navigate(['/dashboard']);
         } else {
           this.isValid = false;
         }

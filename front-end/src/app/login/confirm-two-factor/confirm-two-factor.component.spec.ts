@@ -1,9 +1,10 @@
-import { ComponentFixture, flush, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
-import { User, UserLoginData } from 'app/shared/models/user.model';
+import { UserLoginData } from 'app/shared/models/user.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { LoginService } from 'app/shared/services/login.service';
@@ -21,6 +22,7 @@ describe('ConfirmTwoFactorComponent', () => {
     token: 'jwttokenstring',
   };
   let loginService: LoginService;
+  const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -34,6 +36,7 @@ describe('ConfirmTwoFactorComponent', () => {
           initialState: { fecfile_online_userLoginData: userLoginData },
           selectors: [{ selector: selectUserLoginData, value: userLoginData }],
         }),
+        { provide: Router, useValue: routerSpy },
       ],
     }).compileComponents();
   }));
@@ -58,11 +61,14 @@ describe('ConfirmTwoFactorComponent', () => {
     component.next();
     expect(component.response).toEqual(data);
     expect(component.isValid).toBe(true);
+    const navArgs = routerSpy.navigate.calls.mostRecent().args[0];
+    expect(navArgs[0]).toBe('/dashboard');
   });
 
   it('#next should not validate invalid code', () => {
-    const data: UserLoginData = { ...userLoginData };
+    const data: any = { ...userLoginData }; // eslint-disable-line @typescript-eslint/no-explicit-any
     data.is_allowed = false;
+    data.msg = component.ACCOUNT_LOCKED_MSG;
     spyOn(loginService, 'validateCode').and.returnValue(of(data));
     component.twoFactInfo.patchValue({
       securityCode: '111111',
