@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 
@@ -7,12 +7,7 @@ import { JsonSchema } from '../interfaces/json-schema.interface';
   providedIn: 'root',
 })
 export class ValidateService {
-  constructor() {}
-
-  validate(
-    schema: Record<string, string | number | boolean | null>,
-    data: Record<string, string | number | boolean | null>
-  ): ValidationError[] {
+  validate(schema: any, data: any): ValidationError[] {
     const errors: ValidationError[] = validate(schema, data);
     console.log(errors);
     return errors;
@@ -26,6 +21,9 @@ export class ValidateService {
         const validators = [];
         if (schema.required.includes(property)) {
           validators.push(Validators.required);
+        }
+        if ('minLength' in schema.properties[property]) {
+          validators.push(Validators.minLength(schema.properties[property].minLength));
         }
         if ('maxLength' in schema.properties[property]) {
           validators.push(Validators.maxLength(schema.properties[property].maxLength));
