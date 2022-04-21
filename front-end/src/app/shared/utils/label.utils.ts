@@ -15,7 +15,7 @@ export class LabelUtils {
    */
   public static get(labelArrays: LabelList, key: string): string {
     const items: LabelList = labelArrays.filter((item: string[]) => item[0] === key);
-    if (!!items.length) {
+    if (items.length) {
       return items[0][1];
     }
     return '';
@@ -57,7 +57,7 @@ export class LabelUtils {
 
     const labelList: LabelList = [];
     for (let i = 1; i <= numberOfDistricts; i++) {
-      let district: string = String(i).padStart(2, '0');
+      const district: string = String(i).padStart(2, '0');
       labelList.push([district, district]);
     }
     return labelList;

@@ -10,9 +10,6 @@
       <div class="grid-row">
         <div class="grid-row__col grid-row__col--12">
           <div class="text-error" *ngIf="hasFailed">Invalid email, committee id or password.</div>
-          <div class="logged-out-msg text-info" *ngIf="loggedOut.loggedOut">
-            {{ loggedOut?.msg }}
-          </div>
         </div>
       </div>
       <div class="grid-row form-field__info">

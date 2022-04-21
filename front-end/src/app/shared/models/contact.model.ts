@@ -66,7 +66,8 @@ export class Contact extends BaseModel {
   updated: string | null = null;
   deleted: string | null = null;
 
-  static fromJSON(json: any): Contact {
+  // prettier-ignore
+  static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(Contact, json);
   }
 

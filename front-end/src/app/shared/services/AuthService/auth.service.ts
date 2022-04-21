@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-  private data!: { committeeId: any; email: any };
+  private data!: { committeeId: string; email: string };
 
   constructor(private session: SessionService, private cookieService: CookieService, private router: Router) {}
 

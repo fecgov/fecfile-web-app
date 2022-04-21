@@ -1,7 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
 
-
 export class CommitteeAccount extends BaseModel {
   custodian_city: string | null = null;
   zip: string | null = null;
@@ -61,9 +60,10 @@ export class CommitteeAccount extends BaseModel {
   custodian_zip: string | null = null;
   affiliated_committee_name: string | null = null;
   website: string | null = null;
-  cycles:  number[] | null = null;
+  cycles: number[] | null = null;
 
-  static fromJSON(json: any): CommitteeAccount {
+  // prettier-ignore
+  static fromJSON(json: any): CommitteeAccount { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(CommitteeAccount, json);
   }
 }
