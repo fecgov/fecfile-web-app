@@ -21,7 +21,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
   entryPoint!: string;
   contactData!: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   isAccountLocked!: boolean;
-  private subscription!: Subscription;
+  public subscription: Subscription = new Subscription();
   public response!: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   constructor(
     private router: Router,
@@ -55,6 +55,7 @@ export class ConfirmTwoFactorComponent implements OnInit {
       const code = this.twoFactInfo.get('securityCode')?.value;
       // prettier-ignore
       this.loginService.validateCode(code).subscribe((res: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+        this.isValid = false;
         if (res) {
           this.response = res;
           const isAllowed = res['is_allowed'];
@@ -67,8 +68,6 @@ export class ConfirmTwoFactorComponent implements OnInit {
           }
           this.isValid = true;
           this.router.navigate(['/dashboard']);
-        } else {
-          this.isValid = false;
         }
       });
     }

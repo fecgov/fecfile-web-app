@@ -77,4 +77,11 @@ describe('ConfirmTwoFactorComponent', () => {
     expect(component.response).toEqual(data);
     expect(component.isValid).toBe(false);
   });
+
+  it('#onDestroy should call unsubscribe on the subscription', () => {
+    let unsubscribeCalled = false;
+    spyOn(component.subscription, 'unsubscribe').and.callFake(() => (unsubscribeCalled = true));
+    component.onDestroy();
+    expect(unsubscribeCalled).toBe(true);
+  });
 });

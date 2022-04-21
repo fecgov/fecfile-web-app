@@ -39,4 +39,11 @@ describe('SessionService', () => {
     service.destroy();
     expect(service.accessToken).toBe('');
   });
+
+  it('#getToken should return token string from user cookie', () => {
+    const cookieValue = '{ "token": "abc" }';
+    spyOn(cookieService, 'get').and.callFake(() => cookieValue);
+    const token = service.getToken();
+    expect(token).toEqual(JSON.parse(cookieValue));
+  });
 });
