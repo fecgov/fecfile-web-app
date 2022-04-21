@@ -66,6 +66,15 @@ describe('TableListBaseComponent', () => {
     expect(component.loading).toBe(false);
   });
 
+  it('#loadTableItems should load default pagerState if no event passed', () => {
+    component.pagerState = {
+      first: 5,
+      rows: 20,
+    };
+    component.loadTableItems({});
+    expect(component.loading).toBe(false);
+  });
+
   it('#onSelectAllChange should update selected property values', () => {
     component.onSelectAllChange({ checked: true, event: {} as PointerEvent });
     expect(component.selectedItems[0]).toBe('abc');
