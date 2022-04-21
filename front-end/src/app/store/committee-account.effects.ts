@@ -11,18 +11,18 @@ import { CommitteeAccountService } from 'app/shared/services/committee-account.s
 export class CommitteeAccountEffects {
   constructor(private actions$: Actions, private committeeAccountService: CommitteeAccountService) {}
 
-  // loadCommitteeAccount$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(userLoggedInAction.type),
-  //     mergeMap(() =>
-  //       this.committeeAccountService.getDetails().pipe(
-  //         map((committeeAccount: CommitteeAccount) => ({
-  //           type: setCommitteeAccountDetailsAction.type,
-  //           payload: committeeAccount,
-  //         })),
-  //         catchError(() => of({ type: errorRetrievingAccountDetailsAction.type }))
-  //       )
-  //     )
-  //   )
-  // );
+  loadCommitteeAccount$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(userLoggedInAction.type),
+      mergeMap(() =>
+        this.committeeAccountService.getDetails().pipe(
+          map((committeeAccount: CommitteeAccount) => ({
+            type: setCommitteeAccountDetailsAction.type,
+            payload: committeeAccount,
+          })),
+          catchError(() => of({ type: errorRetrievingAccountDetailsAction.type }))
+        )
+      )
+    )
+  );
 }
