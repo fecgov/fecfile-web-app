@@ -7,7 +7,8 @@ import { JsonSchema } from '../interfaces/json-schema.interface';
   providedIn: 'root',
 })
 export class ValidateService {
-  validate(schema: any, data: any): ValidationError[] {
+  // prettier-ignore
+  validate(schema: JsonSchema, data: any): ValidationError[] { // eslint-disable-line @typescript-eslint/no-explicit-any
     const errors: ValidationError[] = validate(schema, data);
     console.log(errors);
     return errors;
@@ -16,7 +17,7 @@ export class ValidateService {
   getFormGroupFields(schemas: JsonSchema[]) {
     let groupFields = {};
     schemas.forEach((schema: JsonSchema) => {
-      const schemaFields: any = {};
+      const schemaFields: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
       for (const property in schema.properties) {
         const validators = [];
         if (schema.required.includes(property)) {
