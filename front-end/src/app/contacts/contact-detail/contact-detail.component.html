@@ -38,7 +38,6 @@
               <app-error-messages
                 [form]="form"
                 fieldName="candidate_id"
-                [maxlength]="9"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -56,7 +55,6 @@
                 <app-error-messages
                   [form]="form"
                   fieldName="committee_id"
-                  [maxlength]="9"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
               </div>
@@ -66,12 +64,7 @@
             <div class="field">
               <label for="name">NAME</label>
               <input type="text" pInputText id="name" formControlName="name" required />
-              <app-error-messages
-                [form]="form"
-                fieldName="name"
-                [maxlength]="200"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="name" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
           <ng-container *ngIf="form.get('type')?.value === ContactTypes.ORGANIZATION">
@@ -88,7 +81,6 @@
               <app-error-messages
                 [form]="form"
                 fieldName="last_name"
-                [maxlength]="30"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -100,7 +92,6 @@
               <app-error-messages
                 [form]="form"
                 fieldName="first_name"
-                [maxlength]="20"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -112,8 +103,6 @@
               <app-error-messages
                 [form]="form"
                 fieldName="middle_name"
-                [required]="false"
-                [maxlength]="20"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -124,26 +113,14 @@
             <div class="field">
               <label for="prefix">PREFIX (OPTIONAL)</label>
               <input type="text" pInputText id="prefix" formControlName="prefix" />
-              <app-error-messages
-                [form]="form"
-                fieldName="prefix"
-                [required]="false"
-                [maxlength]="10"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="prefix" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
           <div class="col-3">
             <div class="field">
               <label for="suffix">SUFFIX (OPTIONAL)</label>
               <input type="text" pInputText id="suffix" formControlName="suffix" />
-              <app-error-messages
-                [form]="form"
-                fieldName="suffix"
-                [required]="false"
-                [maxlength]="10"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
+              <app-error-messages [form]="form" fieldName="suffix" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
           <div class="col-6"></div>
@@ -179,25 +156,14 @@
           <div class="field">
             <label for="street_1">STREET ADDRESS</label>
             <input type="text" pInputText id="street_1" formControlName="street_1" required />
-            <app-error-messages
-              [form]="form"
-              fieldName="street_1"
-              [maxlength]="34"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
+            <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
         <div class="col-6">
           <div class="field">
             <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
             <input type="text" pInputText id="street_2" formControlName="street_2" />
-            <app-error-messages
-              [form]="form"
-              fieldName="street_2"
-              [required]="false"
-              [maxlength]="34"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
+            <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
       </div>
@@ -206,12 +172,7 @@
           <div class="field">
             <label for="city">CITY</label>
             <input type="text" pInputText id="city" formControlName="city" required />
-            <app-error-messages
-              [form]="form"
-              fieldName="city"
-              [maxlength]="30"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
+            <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
         <div class="col-3">
@@ -233,12 +194,7 @@
           <div class="field">
             <label for="zip">ZIP/POSTAL CODE</label>
             <input type="text" pInputText id="zip" formControlName="zip" required />
-            <app-error-messages
-              [form]="form"
-              fieldName="zip"
-              [maxlength]="9"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
+            <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
           </div>
         </div>
       </div>
@@ -250,9 +206,8 @@
             <app-error-messages
               [form]="form"
               fieldName="telephone"
-              [required]="false"
-              [maxlength]="10"
               [formSubmitted]="formSubmitted"
+              patternErrorMessage="This field must contain 10 numeric characters."
             ></app-error-messages>
           </div>
         </div>
@@ -277,7 +232,6 @@
               <app-error-messages
                 [form]="form"
                 fieldName="employer"
-                [maxlength]="38"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
@@ -289,8 +243,6 @@
               <app-error-messages
                 [form]="form"
                 fieldName="occupation"
-                [required]="false"
-                [maxlength]="38"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
             </div>
