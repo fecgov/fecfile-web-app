@@ -9,7 +9,6 @@ orbs:
 
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-
   lint:
     docker:
       - image: cimg/node:14.18-browsers
@@ -51,7 +50,6 @@ jobs:
       - node/install-packages:
           override-ci-command: npm install
           app-dir: ~/project/front-end/
-
 
       - run:
           name: run unit tests
@@ -172,7 +170,6 @@ jobs:
             snyk config set disableSuggestions=true
             snyk auth $SNYK_AUTH_TOKEN
 
-
       - save_cache:
           key: v2-snyk-files
           paths:
@@ -191,8 +188,11 @@ jobs:
     steps:
       - checkout
 
+      # If we need to modify the params for install-packages:
+      # https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
       - node/install-packages:
-          app-dir: ~/project/front-end
+          override-ci-command: npm install
+          app-dir: ~/project/front-end/
 
       - restore_cache:
           keys:
@@ -244,7 +244,6 @@ jobs:
             cd front-end
             snyk test
 
-
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -257,5 +256,3 @@ workflows:
           requires:
             - test
             - dependendency-check
-
-
