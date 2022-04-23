@@ -10,9 +10,29 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() fieldName = '';
   @Input() formSubmitted = false;
   @Input() requiredErrorMessage = 'This is a required field.';
-  @Input() minLengthErrorMessage = '';
-  @Input() maxLengthErrorMessage = '';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
+
+  private _minLengthErrorMessage = '';
+  @Input() set minLengthErrorMessage(value: string) {
+    this._minLengthErrorMessage = value;
+  }
+  get minLengthErrorMessage(): string {
+    if (this._minLengthErrorMessage) {
+      return this._minLengthErrorMessage;
+    }
+    return `This field must contain at least ${this.control?.errors?.['minlength']?.requiredLength} alphanumeric characters.`;
+  }
+
+  private _maxLengthErrorMessage = '';
+  @Input() set maxLengthErrorMessage(value: string) {
+    this._maxLengthErrorMessage = value;
+  }
+  get maxLengthErrorMessage(): string {
+    if (this._maxLengthErrorMessage) {
+      return this._maxLengthErrorMessage;
+    }
+    return `This field cannot contain more than ${this.control?.errors?.['maxlength']?.requiredLength} alphanumeric characters.`;
+  }
 
   control: FormGroup | null = null;
 

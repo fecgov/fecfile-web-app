@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import {
   Contact,
-  ContactType,
   ContactTypes,
   ContactTypeLabels,
   CandidateOfficeTypes,
@@ -28,6 +27,7 @@ export class ContactDetailComponent implements OnInit {
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() loadTableItems: EventEmitter<LazyLoadEvent> = new EventEmitter<LazyLoadEvent>();
 
+  // Need this setter/getter to get the isNewContact value into the template
   private _isNewContact = false;
   @Input() set isNewContact(value: boolean) {
     this._isNewContact = value;
@@ -37,7 +37,6 @@ export class ContactDetailComponent implements OnInit {
       this.form.get('type')?.disable();
     }
   }
-
   get isNewContact(): boolean {
     return this._isNewContact;
   }
@@ -76,12 +75,25 @@ export class ContactDetailComponent implements OnInit {
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
     this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
 
-    // Initialize validation tracking of current schema and form data
+    // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = contactIndividualSchema;
     this.validateService.formValidatorForm = this.form;
 
     this.form?.get('type')?.valueChanges.subscribe((value: string) => {
+      // Update validator JSON schema to the selected contact type
       this.validateService.formValidatorSchema = this.getSchemaByType(value as ContactTypes);
+
+      // Clear out non-schema form values
+      const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+      const schemaProperties: string[] = this.validateService.getSchemaProperties(
+        this.validateService.formValidatorSchema
+      );
+      Object.keys(this.form.controls).forEach((property: string) => {
+        if (!schemaProperties.includes(property)) {
+          formValues[property] = '';
+        }
+      });
+      this.form.patchValue(formValues);
 
       if (value === ContactTypes.CANDIDATE) {
         this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
@@ -188,22 +200,11 @@ export class ContactDetailComponent implements OnInit {
     this.formSubmitted = false;
   }
 
-  private getPropertiesByType(type: ContactType): string[] {
-    if (type === ContactTypes.INDIVIDUAL) {
-      return this.validateService.getSchemaProperties(contactIndividualSchema);
-    }
-    if (type === ContactTypes.ORGANIZATION) {
-      return this.validateService.getSchemaProperties(contactOrganizationSchema);
-    }
-    if (type === ContactTypes.CANDIDATE) {
-      return this.validateService.getSchemaProperties(contactCandidateSchema);
-    }
-    if (type === ContactTypes.COMMITTEE) {
-      return this.validateService.getSchemaProperties(contactCommitteeSchema);
-    }
-    return [];
-  }
-
+  /**
+   * Given the type of contact given, return the appropriate JSON schema doc
+   * @param {ContactTypes} type
+   * @returns {JsonSchema} schema
+   */
   private getSchemaByType(type: ContactTypes): JsonSchema {
     let schema: JsonSchema = contactIndividualSchema;
     if (type === ContactTypes.CANDIDATE) {

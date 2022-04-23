@@ -1,19 +1,7 @@
 <ng-container *ngIf="formSubmitted || (control?.invalid && (control?.dirty || control?.touched))">
   <small class="p-error" *ngIf="control?.hasError('required')">{{ requiredErrorMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('minlength') && minLengthErrorMessage">{{
-    minLengthErrorMessage
-  }}</small>
-  <small class="p-error" *ngIf="control?.hasError('minlength') && !minLengthErrorMessage"
-    >This field must contain at least {{ control?.errors?.['minlength']?.requiredLength }} alphanumeric
-    characters.</small
-  >
-  <small class="p-error" *ngIf="control?.hasError('maxlength') && maxLengthErrorMessage">{{
-    maxLengthErrorMessage
-  }}</small>
-  <small class="p-error" *ngIf="control?.hasError('maxlength') && !maxLengthErrorMessage"
-    >This field cannot contain more than {{ control?.errors?.['maxlength']?.requiredLength }} alphanumeric
-    characters.</small
-  >
+  <small class="p-error" *ngIf="control?.hasError('minlength')">{{ minLengthErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('maxlength')">{{ maxLengthErrorMessage }}</small>
   <small
     class="p-error"
     *ngIf="!control?.hasError('minlength') && !control?.hasError('maxlength') && control?.hasError('pattern')"
