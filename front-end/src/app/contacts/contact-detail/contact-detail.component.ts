@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import {
   Contact,
@@ -11,8 +11,7 @@ import {
 } from '../../shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
-import { ValidationError } from 'fecfile-validate';
+import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
@@ -53,17 +52,20 @@ export class ContactDetailComponent implements OnInit {
   formSubmitted = false;
 
   form: FormGroup = this.fb.group(
-    ValidateUtils.getFormGroupFields([
-      contactIndividualSchema,
-      contactCandidateSchema,
-      contactCommitteeSchema,
-      contactOrganizationSchema,
+    this.validateService.getFormGroupFields([
+      ...new Set([
+        ...this.validateService.getSchemaProperties(contactIndividualSchema),
+        ...this.validateService.getSchemaProperties(contactCandidateSchema),
+        ...this.validateService.getSchemaProperties(contactCommitteeSchema),
+        ...this.validateService.getSchemaProperties(contactOrganizationSchema),
+      ]),
     ])
   );
 
   constructor(
     private messageService: MessageService,
     private contactService: ContactService,
+    private validateService: ValidateService,
     private fb: FormBuilder
   ) {}
 
@@ -74,14 +76,13 @@ export class ContactDetailComponent implements OnInit {
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
     this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
 
-    // Add required validator rules for candidate_state and candidate_district. These
-    // were not automatically picked up when the form group was initialized above because these properties
-    // are conditionally set in the JSON schema as a dependency of the value of candidate_office
-    // See "allOf" property in the Contact_Candidate.json schema
-    this.form?.get('candidate_state')?.addValidators(Validators.required);
-    this.form?.get('candidate_district')?.addValidators(Validators.required);
+    // Initialize validation tracking of current schema and form data
+    this.validateService.formValidatorSchema = contactIndividualSchema;
+    this.validateService.formValidatorForm = this.form;
 
     this.form?.get('type')?.valueChanges.subscribe((value: string) => {
+      this.validateService.formValidatorSchema = this.getSchemaByType(value as ContactTypes);
+
       if (value === ContactTypes.CANDIDATE) {
         this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
       } else {
@@ -144,29 +145,11 @@ export class ContactDetailComponent implements OnInit {
   public saveItem(closeDetail = true) {
     this.formSubmitted = true;
 
-    // Test to see if reactive angular form group inputs are valid
-    if (this.isFormInvalid()) {
+    if (this.form.invalid) {
       return;
     }
 
-    const formValues: Record<string, string | null> = {};
-    this.getPropertiesByType(this.form.get('type')?.value).forEach((field: string) => {
-      if (this.form.get(field)?.value) {
-        formValues[field] = this.form.get(field)?.value;
-      }
-    });
-
-    const payload: Contact = Contact.fromJSON({ ...this.contact, ...formValues });
-
-    // Test to see if payload is valid JSON schema
-    const errors: ValidationError[] = ValidateUtils.validate(
-      this.getSchemaByType(this.form?.get('type')?.value),
-      payload
-    );
-    if (errors.length) {
-      console.log(errors);
-      return;
-    }
+    const payload: Contact = Contact.fromJSON({ ...this.contact, ...this.validateService.getFormValues(this.form) });
 
     if (payload.id) {
       this.contactService.update(payload).subscribe(() => {
@@ -207,23 +190,18 @@ export class ContactDetailComponent implements OnInit {
 
   private getPropertiesByType(type: ContactType): string[] {
     if (type === ContactTypes.INDIVIDUAL) {
-      return ValidateUtils.getSchemaProperties(contactIndividualSchema);
+      return this.validateService.getSchemaProperties(contactIndividualSchema);
     }
     if (type === ContactTypes.ORGANIZATION) {
-      return ValidateUtils.getSchemaProperties(contactOrganizationSchema);
+      return this.validateService.getSchemaProperties(contactOrganizationSchema);
     }
     if (type === ContactTypes.CANDIDATE) {
-      return ValidateUtils.getSchemaProperties(contactCandidateSchema);
+      return this.validateService.getSchemaProperties(contactCandidateSchema);
     }
     if (type === ContactTypes.COMMITTEE) {
-      return ValidateUtils.getSchemaProperties(contactCommitteeSchema);
+      return this.validateService.getSchemaProperties(contactCommitteeSchema);
     }
     return [];
-  }
-
-  private isFormInvalid(): boolean {
-    const schema: JsonSchema = this.getSchemaByType(this.form?.get('type')?.value);
-    return ValidateUtils.isFormInvalid(this.form, schema);
   }
 
   private getSchemaByType(type: ContactTypes): JsonSchema {
