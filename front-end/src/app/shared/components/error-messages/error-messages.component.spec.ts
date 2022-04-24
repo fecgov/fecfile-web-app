@@ -22,6 +22,13 @@ describe('ErrorMessagesComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should provide default error messages', () => {
+    expect(component.minLengthErrorMessage).toBe('This field must contain at least undefined alphanumeric characters.');
+    expect(component.maxLengthErrorMessage).toBe(
+      'This field cannot contain more than undefined alphanumeric characters.'
+    );
+  });
+
   it('should let us override the error messages', () => {
     component.minLengthErrorMessage = 'My custom min error message';
     expect(component.minLengthErrorMessage).toBe('My custom min error message');

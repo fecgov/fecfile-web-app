@@ -119,6 +119,7 @@ describe('ContactDetailComponent', () => {
     badContact.telephone = 'bad number';
     component.form.patchValue({ ...badContact });
     component.saveItem();
+    expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(`${environment.apiUrl}/contacts/`);
     httpTestingController.verify();
   });

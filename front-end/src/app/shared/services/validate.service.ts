@@ -95,7 +95,7 @@ export class ValidateService {
         const result: ValidationErrors = {};
         errors.forEach((error) => {
           // The keyword === 'type' indicates a conditional check fail as part of an 'anyOf' JSON schema rule
-          // Basically, we tried to pass a null to a JSON schema type: ['string'] rule.
+          // Basically, we tried to pass a null to a JSON schema type: ["string"] rule rather than a type: ["string", "null"] rule.
           if (error.keyword === 'required' || (error.keyword === 'type' && error['params']['type'] === 'string')) {
             result['required'] = true;
           }
