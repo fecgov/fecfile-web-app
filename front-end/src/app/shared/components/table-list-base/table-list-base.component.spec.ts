@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Observable, of } from 'rxjs';
-import { TableListService } from '../interfaces/table-list-service.interface';
-import { ListRestResponse } from '../models/rest-api.model';
+import { TableListService } from '../../interfaces/table-list-service.interface';
+import { ListRestResponse } from '../../models/rest-api.model';
 import { TableListBaseComponent } from './table-list-base.component';
 
 class TestTableListBaseComponent extends TableListBaseComponent<string> {

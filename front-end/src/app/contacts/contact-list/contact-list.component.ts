@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { TableListBaseComponent } from 'app/shared/components/table-list-base.component';
+import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 
 import { ContactService } from '../../shared/services/contact.service';
 import { Contact, ContactTypes, ContactTypeLabels } from '../../shared/models/contact.model';
