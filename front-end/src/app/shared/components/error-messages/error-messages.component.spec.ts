@@ -8,9 +8,8 @@ describe('ErrorMessagesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ErrorMessagesComponent ]
-    })
-    .compileComponents();
+      declarations: [ErrorMessagesComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +20,12 @@ describe('ErrorMessagesComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should let us override the error messages', () => {
+    component.minLengthErrorMessage = 'My custom min error message';
+    expect(component.minLengthErrorMessage).toBe('My custom min error message');
+    component.maxLengthErrorMessage = 'My custom max error message';
+    expect(component.maxLengthErrorMessage).toBe('My custom max error message');
   });
 });
