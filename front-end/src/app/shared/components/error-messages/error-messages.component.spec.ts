@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { ValidateService } from 'app/shared/services/validate.service';
 
