@@ -11,7 +11,7 @@ describe('ErrorMessagesComponent', () => {
   let validateService: ValidateService;
 
   const testSchema: JsonSchema = {
-    $schema: 'https://json-schema.org/draft-07/schema#',
+    $schema: 'http://json-schema.org/draft-07/schema#',
     $id: 'https://unit-test',
     type: 'object',
     required: [],
