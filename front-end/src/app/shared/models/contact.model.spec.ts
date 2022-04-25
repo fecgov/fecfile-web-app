@@ -18,22 +18,4 @@ describe('Contact', () => {
     expect(contact.name).toBe('foo');
     expect(contact.occupation).toBe(null);
   });
-
-  it('#getFieldsByType() should return correct fields', () => {
-    let result = Contact.getFieldsByType(ContactTypes.INDIVIDUAL);
-    expect(result[0]).toBe('type');
-    expect(result.length).toBe(15);
-
-    result = Contact.getFieldsByType(ContactTypes.COMMITTEE);
-    expect(result[1]).toBe('committee_id');
-    expect(result.length).toBe(10);
-
-    result = Contact.getFieldsByType(ContactTypes.CANDIDATE);
-    expect(result[1]).toBe('candidate_id');
-    expect(result.length).toBe(19);
-
-    result = Contact.getFieldsByType(ContactTypes.ORGANIZATION);
-    expect(result[1]).toBe('name');
-    expect(result.length).toBe(9);
-  });
 });

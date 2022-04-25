@@ -11,7 +11,7 @@
         icon="pi pi-trash"
         class="p-button-danger"
         (click)="deleteSelectedItems()"
-        [disabled]="!selectedItems || !selectedItems.length"
+        [disabled]="!selectedItems?.length"
       ></button>
     </ng-template>
 

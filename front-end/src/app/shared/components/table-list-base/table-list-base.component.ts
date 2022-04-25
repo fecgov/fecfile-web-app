@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ConfirmationService, MessageService, LazyLoadEvent } from 'primeng/api';
-import { ListRestResponse } from 'app/shared/models/rest-api.model';
-import { TableListService } from '../services/table-list-service.interface';
+import { ListRestResponse } from '../../../shared/models/rest-api.model';
+import { TableListService } from '../../interfaces/table-list-service.interface';
 import { Observable, forkJoin } from 'rxjs';
 
 @Component({

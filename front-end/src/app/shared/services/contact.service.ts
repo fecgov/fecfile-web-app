@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TableListService } from '../services/table-list-service.interface';
+import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 import { Contact } from '../models/contact.model';

@@ -114,6 +114,16 @@ describe('ContactDetailComponent', () => {
     httpTestingController.verify();
   });
 
+  it('#saveItem should not save an invalid contact record', () => {
+    const badContact: Contact = Contact.fromJSON({ ...contact });
+    badContact.telephone = 'bad number';
+    component.form.patchValue({ ...badContact });
+    component.saveItem();
+    expect(component.form.invalid).toBe(true);
+    httpTestingController.expectNone(`${environment.apiUrl}/contacts/`);
+    httpTestingController.verify();
+  });
+
   it('changing candidate office should set district and state options', () => {
     component.contact.type = ContactTypes.CANDIDATE;
     component.contact.candidate_office = CandidateOfficeTypes.HOUSE;
