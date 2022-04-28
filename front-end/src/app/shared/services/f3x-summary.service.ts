@@ -10,6 +10,12 @@ import { F3xSummary } from '../models/f3x-summary.model';
 export class F3xSummaryService {
   constructor(private apiService: ApiService) {}
 
+  public get(id: number): Observable<F3xSummary> {
+    return this.apiService
+      .get<F3xSummary>(`/f3x-summaries/${id}`)
+      .pipe(map((response) => F3xSummary.fromJSON(response)));
+  }
+
   public create(f3xSummary: F3xSummary): Observable<F3xSummary> {
     const payload = f3xSummary.toJson();
     return this.apiService

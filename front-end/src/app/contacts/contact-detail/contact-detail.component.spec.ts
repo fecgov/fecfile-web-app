@@ -75,10 +75,10 @@ describe('ContactDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#isNewContact getter should get correct value', () => {
-    expect(component.isNewContact).toBe(false);
-    component.isNewContact = true;
-    expect(component.isNewContact).toBe(true);
+  it('#isNewItem getter should get correct value', () => {
+    expect(component.isNewItem).toBe(false);
+    component.isNewItem = true;
+    expect(component.isNewItem).toBe(true);
   });
 
   it('#CandidateOfficeTypes getter should return the list of office types', () => {

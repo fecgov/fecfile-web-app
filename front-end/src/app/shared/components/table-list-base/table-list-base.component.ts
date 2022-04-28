@@ -16,7 +16,7 @@ export abstract class TableListBaseComponent<T> {
   selectAll = false;
   selectedItems: T[] = [];
   detailVisible = false;
-  isNewContact = true;
+  isNewItem = true;
   protected itemService!: TableListService<T>;
 
   constructor(protected messageService: MessageService, protected confirmationService: ConfirmationService) {}
@@ -49,7 +49,13 @@ export abstract class TableListBaseComponent<T> {
     const rows: number = event.rows ? event.rows : 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
 
-    this.itemService.getTableData(pageNumber).subscribe((response: ListRestResponse) => {
+    // Determine query sort ordering
+    let ordering: string = event.sortField ? event.sortField : '';
+    if (ordering && event.sortOrder === -1) {
+      ordering = `-${ordering}`;
+    }
+
+    this.itemService.getTableData(pageNumber, ordering).subscribe((response: ListRestResponse) => {
       this.items = [...response.results];
       this.totalItems = response.count;
       this.loading = false;
@@ -78,13 +84,13 @@ export abstract class TableListBaseComponent<T> {
   public addItem() {
     this.item = this.getEmptyItem();
     this.detailVisible = true;
-    this.isNewContact = true;
+    this.isNewItem = true;
   }
 
   public editItem(item: T) {
     this.item = item;
     this.detailVisible = true;
-    this.isNewContact = false;
+    this.isNewItem = false;
   }
 
   public deleteItem(item: T) {

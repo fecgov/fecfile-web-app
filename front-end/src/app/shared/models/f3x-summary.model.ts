@@ -1,5 +1,6 @@
+import { BaseModel } from './base.model';
+import { Report } from '../interfaces/report.interface';
 import { plainToClass } from 'class-transformer';
-import { Report } from './report.model';
 import { LabelList } from '../utils/label.utils';
 
 export enum F3xFormTypes {
@@ -11,6 +12,12 @@ export enum F3xFormTypes {
 export type F3xFormType = F3xFormTypes.F3XN | F3xFormTypes.F3XA | F3xFormTypes.F3XT;
 
 export const F3xFormTypeLabels: LabelList = [
+  [F3xFormTypes.F3XN, 'FORM 3X'],
+  [F3xFormTypes.F3XA, 'FORM 3X'],
+  [F3xFormTypes.F3XT, 'FORM 3X'],
+];
+
+export const F3xFormVersionLabels: LabelList = [
   [F3xFormTypes.F3XN, 'Original'],
   [F3xFormTypes.F3XA, 'Amendment'],
   [F3xFormTypes.F3XT, 'Termination'],
@@ -72,34 +79,34 @@ export type F3xReportCode =
   | F3xReportCodes.M12;
 
 export const F3xReportCodeLabels: LabelList = [
-  [F3xReportCodes.Q1, 'April 15 Quarterly'],
-  [F3xReportCodes.Q2, 'July 15 Quarterly'],
-  [F3xReportCodes.Q3, 'October 15 Quarterly'],
-  [F3xReportCodes.YE, 'January 31 Year-End'],
-  [F3xReportCodes.TER, 'Termination'],
-  [F3xReportCodes.MY, 'Monthly due on Jan 31'],
-  [F3xReportCodes.TwelveG, '12-Day Pre-Election General'],
-  [F3xReportCodes.TwelveP, '12-Day Pre-Election Primary'],
-  [F3xReportCodes.TwelveR, '12-Day Pre-Election Runoff'],
-  [F3xReportCodes.TwelveS, '12-Day Pre-Election Special'],
-  [F3xReportCodes.TwelveC, '12-Day Pre-Election Convention'],
-  [F3xReportCodes.ThirtyG, '30-Day Post-Election General'],
-  [F3xReportCodes.ThirtyR, '30-Day Post-Election Runoff'],
-  [F3xReportCodes.ThirtyS, '30-Day Post-Election Special'],
-  [F3xReportCodes.M2, 'Monthly due on Feb 20'],
-  [F3xReportCodes.M3, 'Monthly due on Mar 20'],
-  [F3xReportCodes.M4, 'Monthly due on Apr 20'],
-  [F3xReportCodes.M5, 'Monthly due on May 20'],
-  [F3xReportCodes.M6, 'Monthly due on Jun 20'],
-  [F3xReportCodes.M7, 'Monthly due on Jul 20'],
-  [F3xReportCodes.M8, 'Monthly due on Aug 20'],
-  [F3xReportCodes.M9, 'Monthly due on Sep 20'],
-  [F3xReportCodes.M10, 'Monthly due on Oct 20'],
-  [F3xReportCodes.M11, 'Monthly due on Nov 20'],
-  [F3xReportCodes.M12, 'Monthly due on Dec 20'],
+  [F3xReportCodes.Q1, 'APRIL 15 (Q1)'],
+  [F3xReportCodes.Q2, 'JULY 15 (Q2)'],
+  [F3xReportCodes.Q3, 'OCTOBER 15 (Q3)'],
+  [F3xReportCodes.YE, 'JANUARY 31 (YE)'],
+  [F3xReportCodes.TER, 'TERMINATION (TER)'],
+  [F3xReportCodes.MY, 'JANUARY 31 (MY)'],
+  [F3xReportCodes.TwelveG, 'GENERAL (12G)'],
+  [F3xReportCodes.TwelveP, 'PRIMARY (12P)'],
+  [F3xReportCodes.TwelveR, 'RUNOFF (12R)'],
+  [F3xReportCodes.TwelveS, 'SPECIAL (12S)'],
+  [F3xReportCodes.TwelveC, 'CONVENTION (12C)'],
+  [F3xReportCodes.ThirtyG, 'GENERAL (30G)'],
+  [F3xReportCodes.ThirtyR, 'RUNOFF (30R)'],
+  [F3xReportCodes.ThirtyS, 'SPECIAL (30S)'],
+  [F3xReportCodes.M2, 'FEBRUARY 20 (M2)'],
+  [F3xReportCodes.M3, 'MARCH 20 (M3)'],
+  [F3xReportCodes.M4, 'APRIL 20 (M4)'],
+  [F3xReportCodes.M5, 'MAY 20 (M5)'],
+  [F3xReportCodes.M6, 'JUNE 20 (M6)'],
+  [F3xReportCodes.M7, 'JULY 20 (M7)'],
+  [F3xReportCodes.M8, 'AUGUST 20 (M8)'],
+  [F3xReportCodes.M9, 'SEPTEMBER 20 (M9)'],
+  [F3xReportCodes.M10, 'OCTOBER 20 (M10)'],
+  [F3xReportCodes.M11, 'NOVEMBER 20 (M11)'],
+  [F3xReportCodes.M12, 'DECEMBER 20 (M12)'],
 ];
 
-export class F3xSummary extends Report {
+export class F3xSummary extends BaseModel implements Report {
   id: number | null = null;
 
   form_type: F3xFormType = F3xFormTypes.F3XT;

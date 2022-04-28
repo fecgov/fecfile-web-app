@@ -33,12 +33,12 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
 
   public override addItem() {
     super.addItem();
-    this.isNewContact = true;
+    this.isNewItem = true;
   }
 
   public override editItem(item: Contact) {
     super.editItem(item);
-    this.isNewContact = false;
+    this.isNewItem = false;
   }
 
   /**
