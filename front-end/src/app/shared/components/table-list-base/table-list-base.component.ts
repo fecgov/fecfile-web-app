@@ -33,12 +33,23 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     paginatorLastButton?.setAttribute('title', 'paginator go to last table page');
   }
 
+  /**
+   * Returns and empty instance of the class model being displayed in the table.
+   */
   protected abstract getEmptyItem(): T;
 
+  /**
+   * Makes the data service available to the component. Used for getting data from backend.
+   * @param {TableListService<T>} itemService
+   */
   protected loadItemService(itemService: TableListService<T>) {
     this.itemService = itemService;
   }
 
+  /**
+   * Method is called when the table data needs to be refreshed.
+   * @param {LazyLoadEvent} event
+   */
   public loadTableItems(event: LazyLoadEvent) {
     this.loading = true;
 
@@ -74,11 +85,19 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     });
   }
 
+  /**
+   * Event listener when user selects table row checkboxes.
+   * @param items
+   */
   public onSelectionChange(items: T[] = []) {
     this.selectAll = items.length === this.totalItems;
     this.selectedItems = items;
   }
 
+  /**
+   * Event listener when user selects the "all" checkbox to select/deselect row checkboxes.
+   * @param event
+   */
   public onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {
     const checked: boolean = event.checked;
 

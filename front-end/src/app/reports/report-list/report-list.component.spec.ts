@@ -8,6 +8,8 @@ import { selectUserLoginData } from 'app/store/login.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
+import { F3xSummary, F3xFormTypes } from '../../shared/models/f3x-summary.model';
+import { Report } from '../../shared/interfaces/report.interface';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -44,5 +46,15 @@ describe('ReportListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('#getEmptyItem should return a new F3xSummary instance', () => {
+    const item: F3xSummary = component['getEmptyItem']();
+    expect(item.id).toBe(null);
+  });
+
+  it('#displayName should display the item form_type code', () => {
+    const item: Report = F3xSummary.fromJSON({ form_type: F3xFormTypes.F3XT });
+    expect(item.form_type).toBe(F3xFormTypes.F3XT);
   });
 });
