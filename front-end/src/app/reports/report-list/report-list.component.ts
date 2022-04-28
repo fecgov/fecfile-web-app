@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report } from '../../shared/interfaces/report.interface';
@@ -23,9 +23,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
+    protected override elementRef: ElementRef,
     protected override itemService: ReportService
   ) {
-    super(messageService, confirmationService);
+    super(messageService, confirmationService, elementRef);
   }
 
   ngOnInit() {

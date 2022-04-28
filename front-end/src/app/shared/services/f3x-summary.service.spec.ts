@@ -7,7 +7,6 @@ import { F3xSummaryService } from './f3x-summary.service';
 
 describe('F3xSummaryService', () => {
   let service: F3xSummaryService;
-  // let httpTestingController: HttpTestingController;
   const userLoginData: UserLoginData = {
     committee_id: 'C00000000',
     email: 'email@fec.com',
@@ -27,7 +26,6 @@ describe('F3xSummaryService', () => {
       ],
     });
 
-    // httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(F3xSummaryService);
   });
 

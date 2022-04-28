@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService, LazyLoadEvent } from 'primeng/api';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
@@ -7,7 +7,7 @@ import { Observable, forkJoin } from 'rxjs';
 @Component({
   template: '',
 })
-export abstract class TableListBaseComponent<T> {
+export abstract class TableListBaseComponent<T> implements AfterViewInit {
   item!: T;
   items: T[] = [];
   totalItems = 0;
@@ -19,7 +19,19 @@ export abstract class TableListBaseComponent<T> {
   isNewItem = true;
   protected itemService!: TableListService<T>;
 
-  constructor(protected messageService: MessageService, protected confirmationService: ConfirmationService) {}
+  constructor(
+    protected messageService: MessageService,
+    protected confirmationService: ConfirmationService,
+    protected elementRef: ElementRef
+  ) {}
+
+  ngAfterViewInit(): void {
+    // Fix accessibility issues in paginator buttons.
+    const paginatorNextButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-next');
+    paginatorNextButton?.setAttribute('title', 'paginator go to next table page');
+    const paginatorLastButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-last');
+    paginatorLastButton?.setAttribute('title', 'paginator go to last table page');
+  }
 
   protected abstract getEmptyItem(): T;
 

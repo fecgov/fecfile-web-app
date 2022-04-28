@@ -34,24 +34,30 @@
       </div>
     </ng-template>
     <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="TBD" id="form-type-column">Form type <p-sortIcon field="TBD"></p-sortIcon></th>
-        <th pSortableColumn="report_code_label" id="report-code-column">
+      <tr role="row">
+        <th pSortableColumn="TBD" id="form-type-column" role="columnheader">
+          Form type <p-sortIcon field="TBD"></p-sortIcon>
+        </th>
+        <th pSortableColumn="report_code_label" id="report-code-column" role="columnheader">
           Type of report <p-sortIcon field="report_code_label"></p-sortIcon>
         </th>
-        <th pSortableColumn="coverage_through_date" id="coverage-dates-column">
+        <th pSortableColumn="coverage_through_date" id="coverage-dates-column" role="columnheader">
           Coverage dates <p-sortIcon field="coverage_through_date"></p-sortIcon>
         </th>
-        <th pSortableColumn="status" id="status-column">Status <p-sortIcon field="status"></p-sortIcon></th>
-        <th pSortableColumn="form_type" id="version">Version <p-sortIcon field="form_type"></p-sortIcon></th>
-        <th pSortableColumn="date_filed" id="date-filed-column">
+        <th pSortableColumn="status" id="status-column" role="columnheader">
+          Status <p-sortIcon field="status"></p-sortIcon>
+        </th>
+        <th pSortableColumn="form_type" id="version" role="columnheader">
+          Version <p-sortIcon field="form_type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="date_filed" id="date-filed-column" role="columnheader">
           Date filed <p-sortIcon field="date_filed"></p-sortIcon>
         </th>
-        <th id="buttons"></th>
+        <th id="buttons" role="columnheader"></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
-      <tr>
+      <tr role="row">
         <td>{{ item.form_type | label: f3xFormTypeLabels }}</td>
         <td>{{ item.report_code | label: f3xReportCodeLabels }}</td>
         <td>{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</td>
