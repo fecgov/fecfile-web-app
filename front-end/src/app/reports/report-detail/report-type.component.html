@@ -1,0 +1,97 @@
+<h1>FEC Form 3X</h1>
+<p>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</p>
+<hr />
+<div>
+  <form id="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+    <div class="grid">
+      <div class="col-12">
+        <h3>Type of report</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="type">(CHOOSE ONE)</label>
+          <div *ngFor="let reportTypeCategory of reportTypeCategories" class="p-field-checkbox">
+            <p-radioButton
+              [inputId]="reportTypeCategory"
+              name="reportTypeCategory"
+              [value]="reportTypeCategory"
+              [(ngModel)]="selectedReportTypeCategory"
+            ></p-radioButton>
+            <label [for]="reportTypeCategory">{{ reportTypeCategory }}</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <ng-container *ngIf="selectedReportTypeCategory === F3xReportTypeCategories.MONTHLY_REPORTS">
+      <div class="grid">
+        <div class="col-12">
+          <h3>Monthly report due on</h3>
+        </div>
+        <div class="col-12">
+          <div class="field">
+            <div *ngFor="let reportType of getReportTypes()" class="p-field-checkbox">
+              <p-radioButton
+                [inputId]="reportType"
+                name="reportType"
+                [value]="reportType"
+                [(ngModel)]="selectedReportType"
+              ></p-radioButton>
+              <label [for]="reportType">{{ reportType }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h3>Covering period</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="covering_period_start">FROM</label>
+          <p-calendar
+            id="covering_period_start"
+            [(ngModel)]="coveringPeriodStart"
+            [ngModelOptions]="{ standalone: true }"
+          ></p-calendar>
+          <app-error-messages fieldName="covering_period_start" [formSubmitted]="formSubmitted"></app-error-messages>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="field">
+          <label for="covering_period_end">TO</label>
+          <p-calendar
+            id="covering_period_start"
+            [(ngModel)]="coveringPeriodEnd"
+            [ngModelOptions]="{ standalone: true }"
+          ></p-calendar>
+          <app-error-messages fieldName="covering_period_end" [formSubmitted]="formSubmitted"></app-error-messages>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="grid">
+  <div class="col-1">
+    <button pButton pRipple label="Back" class="p-button-secondary"></button>
+  </div>
+  <div class="col-11">
+    <button pButton pRipple label="Save" class="p-button-primary"></button>
+    <button pButton pRipple label="Save and continue" class="p-button-info"></button>
+  </div>
+</div>
