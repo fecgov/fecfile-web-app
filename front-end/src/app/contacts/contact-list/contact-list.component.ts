@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 
@@ -17,9 +17,10 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
+    protected override elementRef: ElementRef,
     protected override itemService: ContactService
   ) {
-    super(messageService, confirmationService);
+    super(messageService, confirmationService, elementRef);
   }
 
   ngOnInit() {
@@ -33,12 +34,12 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
 
   public override addItem() {
     super.addItem();
-    this.isNewContact = true;
+    this.isNewItem = true;
   }
 
   public override editItem(item: Contact) {
     super.editItem(item);
-    this.isNewContact = false;
+    this.isNewItem = false;
   }
 
   /**

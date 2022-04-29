@@ -27,18 +27,18 @@ export class ContactDetailComponent implements OnInit {
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() loadTableItems: EventEmitter<LazyLoadEvent> = new EventEmitter<LazyLoadEvent>();
 
-  // Need this setter/getter to get the isNewContact value into the template
-  private _isNewContact = false;
-  @Input() set isNewContact(value: boolean) {
-    this._isNewContact = value;
-    if (this._isNewContact) {
+  // Need this setter/getter to get the isNewItem value into the template
+  private _isNewItem = false;
+  @Input() set isNewItem(value: boolean) {
+    this._isNewItem = value;
+    if (this._isNewItem) {
       this.form.get('type')?.enable();
     } else {
       this.form.get('type')?.disable();
     }
   }
-  get isNewContact(): boolean {
-    return this._isNewContact;
+  get isNewItem(): boolean {
+    return this._isNewItem;
   }
 
   ContactTypes = ContactTypes;

@@ -1,7 +1,7 @@
 <p-dialog
   [(visible)]="detailVisible"
   [style]="{ width: '90%' }"
-  [header]="isNewContact ? 'Add Contact' : 'Edit Contact'"
+  [header]="isNewItem ? 'Add Contact' : 'Edit Contact'"
   [modal]="true"
   styleClass="p-fluid"
   (onShow)="onOpenDetail()"
@@ -349,7 +349,7 @@
       <div class="col-11">
         <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-primary" (click)="saveItem()"></button>
         <button
-          *ngIf="isNewContact"
+          *ngIf="isNewItem"
           pButton
           pRipple
           label="Save & Add More"
