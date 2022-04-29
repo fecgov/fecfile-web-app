@@ -78,6 +78,8 @@ export type F3xReportCode =
   | F3xReportCodes.M11
   | F3xReportCodes.M12;
 
+// NOTE: If this label list is updated, please sync up the values in the api backend as well:
+// https://github.com/fecgov/fecfile-web-api/blob/develop/django-backend/fecfiler/f3x_summaries/views.py
 export const F3xReportCodeLabels: LabelList = [
   [F3xReportCodes.Q1, 'APRIL 15 (Q1)'],
   [F3xReportCodes.Q2, 'JULY 15 (Q2)'],

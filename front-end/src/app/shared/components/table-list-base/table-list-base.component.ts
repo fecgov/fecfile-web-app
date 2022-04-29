@@ -27,6 +27,10 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
 
   ngAfterViewInit(): void {
     // Fix accessibility issues in paginator buttons.
+    const paginatorFirstButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-first');
+    paginatorFirstButton?.setAttribute('title', 'paginator go to first table page');
+    const paginatorPrevButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-prev');
+    paginatorPrevButton?.setAttribute('title', 'paginator go to previous table page');
     const paginatorNextButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-next');
     paginatorNextButton?.setAttribute('title', 'paginator go to next table page');
     const paginatorLastButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-last');
