@@ -1,5 +1,4 @@
 // @ts-check
-//import { environment } from "src/environments/environment.local.ts";
 
 const email         = "rlanz@fec.gov";
 const committeeID   = "C00601211";
