@@ -1,8 +1,8 @@
 // @ts-check
 
-const email         = "rlanz@fec.gov";
-const committeeID   = "C00601211";
-const testPassword  = "test";
+const email         = Cypress.env("EMAIL");
+const committeeID   = Cypress.env("COMMITTEE_ID");
+const testPassword  = Cypress.env("PASSWORD");
 
 const fieldEmail      = ".login-email-id";
 const fieldCommittee  = ".login-committee-id";
