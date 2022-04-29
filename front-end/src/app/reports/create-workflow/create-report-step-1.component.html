@@ -19,7 +19,7 @@
               [value]="reportTypeCategory"
               [(ngModel)]="selectedReportTypeCategory"
             ></p-radioButton>
-            <label [for]="reportTypeCategory">{{ reportTypeCategory }}</label>
+            <label [for]="reportTypeCategory">{{ reportTypeCategory | uppercase }}</label>
           </div>
         </div>
       </div>
@@ -30,26 +30,63 @@
         <hr />
       </div>
     </div>
-    <ng-container *ngIf="selectedReportTypeCategory === F3xReportTypeCategories.MONTHLY_REPORTS">
-      <div class="grid">
-        <div class="col-12">
-          <h3>Monthly report due on</h3>
-        </div>
-        <div class="col-12">
-          <div class="field">
-            <div *ngFor="let reportType of getReportTypes()" class="p-field-checkbox">
-              <p-radioButton
-                [inputId]="reportType"
-                name="reportType"
-                [value]="reportType"
-                [(ngModel)]="selectedReportType"
-              ></p-radioButton>
-              <label [for]="reportType">{{ reportType }}</label>
-            </div>
+    <div class="grid">
+      <div class="col-12">
+        <h3>{{ selectedReportTypeCategory }}</h3>
+      </div>
+      <div class="col-12">
+        <div class="field grid">
+          <div
+            *ngFor="let reportType of getReportTypes()"
+            class="p-field-checkbox col-{{ Math.floor(Math.max(2, 12 / getReportTypes().length)) }}"
+          >
+            <p-radioButton
+              [inputId]="reportType"
+              name="reportType"
+              [value]="reportType"
+              [(ngModel)]="selectedReportType"
+            ></p-radioButton>
+            <label [for]="reportType">{{ reportType | label: f3xReportCodeLabels }}</label>
           </div>
         </div>
       </div>
-    </ng-container>
+      {{
+        [
+          F3xReportTypeCategories.TWELVE_DAY_PRE_ELECTION_REPORT,
+          F3xReportTypeCategories.THIRTY_DAY_POST_ELECTION_REPORT
+        ].includes(selectedReportTypeCategory)
+      }}
+      <ng-container *ngIf="isElectionReport()">
+        <div class="grid">
+          <div class="col-6">
+            <div class="field">
+              <label for="election_date">ELECTION ON</label>
+              <p-calendar
+                id="election_date"
+                [(ngModel)]="electionDate"
+                [ngModelOptions]="{ standalone: true }"
+              ></p-calendar>
+              <app-error-messages fieldName="election_date" [formSubmitted]="formSubmitted"></app-error-messages>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="field">
+              <label for="state">IN THE STATE/PROVINCE OF</label>
+              <p-dropdown
+                inputId="state"
+                formControlName="state"
+                [options]="stateOptions"
+                optionLabel="name"
+                optionValue="code"
+                [autoDisplayFirst]="false"
+                appendTo="body"
+              ></p-dropdown>
+              <app-error-messages fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
     <div class="grid">
       <div class="col-12">
         <hr />
