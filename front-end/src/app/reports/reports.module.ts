@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../app/shared/shared.module';
+
 import { ReportsRoutingModule } from './reports-routing.module';
 import { ReportListComponent } from './report-list/report-list.component';
 import { CreateReportStep1 } from './create-workflow/create-report-step1.component';
@@ -9,9 +11,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
-import { SharedModule } from 'app/shared/shared.module';
 import { DropdownModule } from 'primeng/dropdown';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
 
 @NgModule({
   declarations: [ReportListComponent, CreateReportStep1],
@@ -26,6 +29,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     RadioButtonModule,
     SelectButtonModule,
     SharedModule,
+    TableModule,
+    ToolbarModule,
   ],
 })
 export class ReportsModule {}

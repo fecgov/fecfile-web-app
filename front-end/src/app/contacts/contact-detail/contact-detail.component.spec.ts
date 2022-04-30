@@ -8,6 +8,7 @@ import { FormBuilder } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../../shared/models/contact.model';
 import { environment } from '../../../environments/environment';
+import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 
 describe('ContactDetailComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -75,10 +76,10 @@ describe('ContactDetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#isNewContact getter should get correct value', () => {
-    expect(component.isNewContact).toBe(false);
-    component.isNewContact = true;
-    expect(component.isNewContact).toBe(true);
+  it('#isNewItem getter should get correct value', () => {
+    expect(component.isNewItem).toBe(false);
+    component.isNewItem = true;
+    expect(component.isNewItem).toBe(true);
   });
 
   it('#CandidateOfficeTypes getter should return the list of office types', () => {
@@ -163,5 +164,13 @@ describe('ContactDetailComponent', () => {
     });
     expect(component.form.get('country')?.value).toBe('CANADA');
     expect(component.form.get('state')?.value).toBe('ZZ');
+  });
+
+  it('#getSchemaByType should return the correct schema', () => {
+    let schema: JsonSchema = component['getSchemaByType'](ContactTypes.COMMITTEE);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Committee.json');
+
+    schema = component['getSchemaByType'](ContactTypes.ORGANIZATION);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Organization.json');
   });
 });

@@ -57,7 +57,7 @@ describe('ContactService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/?page=1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/?page=1&ordering=name`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();

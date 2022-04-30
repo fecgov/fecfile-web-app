@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService, LazyLoadEvent } from 'primeng/api';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
@@ -7,7 +7,7 @@ import { Observable, forkJoin } from 'rxjs';
 @Component({
   template: '',
 })
-export abstract class TableListBaseComponent<T> {
+export abstract class TableListBaseComponent<T> implements AfterViewInit {
   item!: T;
   items: T[] = [];
   totalItems = 0;
@@ -16,17 +16,44 @@ export abstract class TableListBaseComponent<T> {
   selectAll = false;
   selectedItems: T[] = [];
   detailVisible = false;
-  isNewContact = true;
+  isNewItem = true;
   protected itemService!: TableListService<T>;
 
-  constructor(protected messageService: MessageService, protected confirmationService: ConfirmationService) {}
+  constructor(
+    protected messageService: MessageService,
+    protected confirmationService: ConfirmationService,
+    protected elementRef: ElementRef
+  ) {}
 
+  ngAfterViewInit(): void {
+    // Fix accessibility issues in paginator buttons.
+    const paginatorFirstButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-first');
+    paginatorFirstButton?.setAttribute('title', 'paginator go to first table page');
+    const paginatorPrevButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-prev');
+    paginatorPrevButton?.setAttribute('title', 'paginator go to previous table page');
+    const paginatorNextButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-next');
+    paginatorNextButton?.setAttribute('title', 'paginator go to next table page');
+    const paginatorLastButton = (<HTMLElement>this.elementRef.nativeElement).querySelector('.p-paginator-last');
+    paginatorLastButton?.setAttribute('title', 'paginator go to last table page');
+  }
+
+  /**
+   * Returns and empty instance of the class model being displayed in the table.
+   */
   protected abstract getEmptyItem(): T;
 
+  /**
+   * Makes the data service available to the component. Used for getting data from backend.
+   * @param {TableListService<T>} itemService
+   */
   protected loadItemService(itemService: TableListService<T>) {
     this.itemService = itemService;
   }
 
+  /**
+   * Method is called when the table data needs to be refreshed.
+   * @param {LazyLoadEvent} event
+   */
   public loadTableItems(event: LazyLoadEvent) {
     this.loading = true;
 
@@ -49,18 +76,32 @@ export abstract class TableListBaseComponent<T> {
     const rows: number = event.rows ? event.rows : 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
 
-    this.itemService.getTableData(pageNumber).subscribe((response: ListRestResponse) => {
+    // Determine query sort ordering
+    let ordering: string = event.sortField ? event.sortField : '';
+    if (ordering && event.sortOrder === -1) {
+      ordering = `-${ordering}`;
+    }
+
+    this.itemService.getTableData(pageNumber, ordering).subscribe((response: ListRestResponse) => {
       this.items = [...response.results];
       this.totalItems = response.count;
       this.loading = false;
     });
   }
 
+  /**
+   * Event listener when user selects table row checkboxes.
+   * @param items
+   */
   public onSelectionChange(items: T[] = []) {
     this.selectAll = items.length === this.totalItems;
     this.selectedItems = items;
   }
 
+  /**
+   * Event listener when user selects the "all" checkbox to select/deselect row checkboxes.
+   * @param event
+   */
   public onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {
     const checked: boolean = event.checked;
 
@@ -78,13 +119,13 @@ export abstract class TableListBaseComponent<T> {
   public addItem() {
     this.item = this.getEmptyItem();
     this.detailVisible = true;
-    this.isNewContact = true;
+    this.isNewItem = true;
   }
 
   public editItem(item: T) {
     this.item = item;
     this.detailVisible = true;
-    this.isNewContact = false;
+    this.isNewItem = false;
   }
 
   public deleteItem(item: T) {
