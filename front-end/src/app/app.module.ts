@@ -24,6 +24,7 @@ import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 // Third party
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
@@ -90,6 +91,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ButtonModule,
     ProgressBarModule,
     RadioButtonModule,
+    SelectButtonModule,
     SharedModule,
   ],
   providers: [
