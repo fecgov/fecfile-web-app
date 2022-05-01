@@ -1,0 +1,96 @@
+<h1>FEC Form 3X</h1>
+<h5>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</h5>
+<p-divider></p-divider>
+<form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+  <div class="grid">
+    <div class="col-12">
+      <h3>Committee address</h3>
+      <div>Has your address changed in the last 10 days?</div>
+      <div>
+        <p-radioButton
+          name="change_of_address"
+          [value]="false"
+          label="NO"
+          formControlName="change_of_address"
+        ></p-radioButton>
+      </div>
+      <div>
+        <p-radioButton
+          name="change_of_address"
+          [value]="true"
+          label="YES"
+          formControlName="change_of_address"
+        ></p-radioButton>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="street_1">STREET ADDRESS</label>
+        <input type="text" pInputText id="street_1" formControlName="street_1" />
+        <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted"></app-error-messages>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="field">
+        <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+        <input type="text" pInputText id="street_2" formControlName="street_2" />
+        <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="city">CITY</label>
+        <input type="text" pInputText id="city" formControlName="city" />
+        <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label for="state">STATE/PROVINCE</label>
+        <p-dropdown
+          inputId="state"
+          formControlName="state"
+          [options]="stateOptions"
+          optionLabel="name"
+          optionValue="code"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-dropdown>
+        <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label for="zip">ZIP/POSTAL CODE</label>
+        <input type="text" pInputText id="zip" formControlName="zip" />
+        <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
+      </div>
+    </div>
+  </div>
+  <p-divider></p-divider>
+  <div class="grid">
+    <div class="col-12">
+      <h3>Committee status</h3>
+      <div>This committee has qualified as a multicandidate committee.</div>
+      <div>
+        <a href="">Learn more about multicandidate committee status</a>
+      </div>
+    </div>
+  </div>
+  <p-divider></p-divider>
+  <div class="grid">
+    <div class="col-12">
+      <h3>Memo</h3>
+      <p-checkbox name="memo_checkbox" [value]="true" formControlName="zip"></p-checkbox>
+      <div>I WOULD LIKE TO ENTER A MEMO RELATED TO THIS FORM 3X</div>
+      <div>This step is optional and can be entered later in the filing process.</div>
+      <div>
+        <textarea formControlName="memo"></textarea>
+      </div>
+    </div>
+  </div>
+</form>
