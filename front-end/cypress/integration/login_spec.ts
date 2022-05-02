@@ -3,18 +3,25 @@
 //Test login information retrieved from environment variables prefixed with "CYPRESS_"
 const email         = Cypress.env("EMAIL");
 const committeeID   = Cypress.env("COMMITTEE_ID");
-const testPassword  = Cypress.env("PASSWORD")
+const testPassword  = Cypress.env("PASSWORD");
+const testPIN       = Cypress.env("PIN");
 
 //login page form-fields' id's
 const fieldEmail      = "#login-email-id";
 const fieldCommittee  = "#login-committee-id";
 const fieldPassword   = "#login-password";
-const fieldLoginButton= ".login__btn"; //The current login button has no id, so its class is used instead
+const fieldLoginButton= ".login__btn"; //This element has no id, so its class is used instead
 
 //two-factor authentication page form-fields' ids
 const fieldTwoFactorEmail     = "#email";
 const fieldTwoFactorPhoneText = "#phone_number_text";
 const fieldTwoFactorPhoneCall = "#phone_number_call";
+const fieldTwoFactorSubmit    = ".action__btn.next"; //See fieldLoginButton
+const fieldTwoFactorBack      = ".action__btn.clear"; //See fieldLoginButton
+
+//security code page form-fields' ids
+const fieldSecurityCodeText = ".form-control" //See fieldLoginButton
+const fieldSecurityCodeNext = ".action__btn.next" //See fieldLoginButton
 
 /*
 
@@ -37,6 +44,16 @@ function login_no_two_factor(){
   fill_login_form();
   cy.get(fieldPassword)
     .type("{enter}");
+}
+
+//Logs in and requests Two Factor Authentication via Email
+function login_request_two_factor_auth(){
+  login_no_two_factor();
+
+  cy.get(fieldTwoFactorEmail)
+    .check();
+  cy.get(fieldTwoFactorSubmit)
+    .click();
 }
 
 /*
@@ -79,5 +96,60 @@ describe('Testing login', () => {
     cy.url()
       .should('contain',"/twoFactLogin");
   });
+
+  it.only("Submits Two Factor Auth via email", () => {
+    login_no_two_factor();
+
+    cy.get(fieldTwoFactorEmail)
+      .check();
+    cy.get(fieldTwoFactorSubmit)
+      .click();
+    cy.url()
+      .should('contain',"/confirm-2f");
+ });
+
+  it.only("Submits Two Factor Auth via phone, text", () => {
+    login_no_two_factor();
+
+    cy.get(fieldTwoFactorPhoneText)
+      .check();
+    cy.get(fieldTwoFactorSubmit)
+      .click();
+    cy.url()
+      .should('contain',"/confirm-2f");
+});
+
+  it.only("Submits Two Factor Auth via phone, call", () => {
+    login_no_two_factor();
+
+    cy.get(fieldTwoFactorPhoneCall)
+      .check();
+    cy.get(fieldTwoFactorSubmit)
+      .click();
+    cy.url()
+      .should('contain',"/confirm-2f");
+  });
+
+  it.only("Fully logs in through Two Factor Authentication with {enter}", () => {
+    login_request_two_factor_auth();
+
+    cy.get(fieldSecurityCodeText)
+      .type(testPIN)
+      .type("{enter}");
+    cy.url()
+      .should('contain',"/dashboard");
+ });
+
+  it.only("Fully logs in through Two Factor Authentication with a click", () => {
+    login_request_two_factor_auth();
+
+    cy.get(fieldSecurityCodeText)
+      .type(testPIN)
+    cy.get(fieldSecurityCodeNext)
+      .click();
+    cy.url()
+      .should('contain',"/dashboard");
+ });
+
 
 });
