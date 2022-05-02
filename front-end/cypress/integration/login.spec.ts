@@ -1,27 +1,32 @@
 // @ts-check
 
+import { identity } from "lodash";
+
 //Test login information retrieved from environment variables prefixed with "CYPRESS_"
 const email         = Cypress.env("EMAIL");
 const committeeID   = Cypress.env("COMMITTEE_ID");
 const testPassword  = Cypress.env("PASSWORD");
 const testPIN       = Cypress.env("PIN");
 
-//login page form-fields' id's
+//login page form-fields' id's (or classes where elements have no id's)
 const fieldEmail      = "#login-email-id";
 const fieldCommittee  = "#login-committee-id";
 const fieldPassword   = "#login-password";
-const fieldLoginButton= ".login__btn"; //This element has no id, so its class is used instead
+const fieldLoginButton= ".login__btn";
+const errorEmail      = ".error__email-id";
+const errorCommitteeID= ".error__committee-id"
+const errorPassword   = ".error__password-error";
 
 //two-factor authentication page form-fields' ids
 const fieldTwoFactorEmail     = "#email";
 const fieldTwoFactorPhoneText = "#phone_number_text";
 const fieldTwoFactorPhoneCall = "#phone_number_call";
-const fieldTwoFactorSubmit    = ".action__btn.next"; //See fieldLoginButton
-const fieldTwoFactorBack      = ".action__btn.clear"; //See fieldLoginButton
+const fieldTwoFactorSubmit    = ".action__btn.next"; 
+const fieldTwoFactorBack      = ".action__btn.clear";
 
 //security code page form-fields' ids
-const fieldSecurityCodeText = ".form-control" //See fieldLoginButton
-const fieldSecurityCodeNext = ".action__btn.next" //See fieldLoginButton
+const fieldSecurityCodeText = ".form-control"
+const fieldSecurityCodeNext = ".action__btn.next"
 
 /*
 
@@ -64,9 +69,9 @@ function login_request_two_factor_auth(){
 
 
 describe('Testing login', () => {
-    beforeEach(() => {
-      cy.visit('/');
-    });
+  beforeEach(() => {
+    cy.visit('/');
+  });
     
   it.only('Accepts input', () => {
     fill_login_form();
@@ -106,7 +111,7 @@ describe('Testing login', () => {
       .click();
     cy.url()
       .should('contain',"/confirm-2f");
- });
+  });
 
   it.only("Submits Two Factor Auth via phone, text", () => {
     login_no_two_factor();
@@ -117,7 +122,7 @@ describe('Testing login', () => {
       .click();
     cy.url()
       .should('contain',"/confirm-2f");
-});
+  });
 
   it.only("Submits Two Factor Auth via phone, call", () => {
     login_no_two_factor();
@@ -138,7 +143,7 @@ describe('Testing login', () => {
       .type("{enter}");
     cy.url()
       .should('contain',"/dashboard");
- });
+  });
 
   it.only("Fully logs in through Two Factor Authentication with a click", () => {
     login_request_two_factor_auth();
@@ -149,7 +154,21 @@ describe('Testing login', () => {
       .click();
     cy.url()
       .should('contain',"/dashboard");
- });
+  });
 
+  it.only("Fails to login with no included information", () => {
+    cy.get(fieldEmail)
+      .type("{enter}"); //Submits an empty login form
 
+    cy.url()
+      .should("not.contain", "/twoFactLogin")
+      .should("not.contain", "/confirm-f")
+      .should("not.contain", "/dashboard");
+    cy.get(errorEmail)
+      .should("contain","Please enter");
+    cy.get(errorCommitteeID)
+      .should("contain", "Please enter");
+    cy.get(errorPassword)
+      .should("contain", "Please enter");
+  });
 });
