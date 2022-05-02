@@ -1,96 +1,145 @@
-<h1>FEC Form 3X</h1>
-<h5>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</h5>
-<p-divider></p-divider>
-<form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
-  <div class="grid">
-    <div class="col-12">
-      <h3>Committee address</h3>
-      <div>Has your address changed in the last 10 days?</div>
-      <div>
-        <p-radioButton
-          name="change_of_address"
-          [value]="false"
-          label="NO"
-          formControlName="change_of_address"
-        ></p-radioButton>
-      </div>
-      <div>
-        <p-radioButton
-          name="change_of_address"
-          [value]="true"
-          label="YES"
-          formControlName="change_of_address"
-        ></p-radioButton>
-      </div>
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-6">
-      <div class="field">
-        <label for="street_1">STREET ADDRESS</label>
-        <input type="text" pInputText id="street_1" formControlName="street_1" />
-        <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted"></app-error-messages>
-      </div>
-    </div>
-    <div class="col-6">
-      <div class="field">
-        <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-        <input type="text" pInputText id="street_2" formControlName="street_2" />
-        <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages>
-      </div>
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-6">
-      <div class="field">
-        <label for="city">CITY</label>
-        <input type="text" pInputText id="city" formControlName="city" />
-        <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="field">
-        <label for="state">STATE/PROVINCE</label>
-        <p-dropdown
-          inputId="state"
-          formControlName="state"
-          [options]="stateOptions"
-          optionLabel="name"
-          optionValue="code"
-          [autoDisplayFirst]="false"
-          appendTo="body"
-        ></p-dropdown>
-        <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="field">
-        <label for="zip">ZIP/POSTAL CODE</label>
-        <input type="text" pInputText id="zip" formControlName="zip" />
-        <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
-      </div>
-    </div>
-  </div>
+<div class="p-fluid">
+  <h1>FEC Form 3X</h1>
+  <h5>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</h5>
   <p-divider></p-divider>
-  <div class="grid">
-    <div class="col-12">
-      <h3>Committee status</h3>
-      <div>This committee has qualified as a multicandidate committee.</div>
-      <div>
-        <a href="">Learn more about multicandidate committee status</a>
+  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <h3>Committee address</h3>
+          <div>Has your address changed in the last 10 days?</div>
+          <div class="radio-button-spacer">
+            <p-radioButton
+              name="change_of_address"
+              [value]="false"
+              label="NO"
+              formControlName="change_of_address"
+            ></p-radioButton>
+          </div>
+          <div>
+            <p-radioButton
+              name="change_of_address"
+              [value]="true"
+              label="YES"
+              formControlName="change_of_address"
+            ></p-radioButton>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <p-divider></p-divider>
-  <div class="grid">
-    <div class="col-12">
-      <h3>Memo</h3>
-      <p-checkbox name="memo_checkbox" [value]="true" formControlName="zip"></p-checkbox>
-      <div>I WOULD LIKE TO ENTER A MEMO RELATED TO THIS FORM 3X</div>
-      <div>This step is optional and can be entered later in the filing process.</div>
-      <div>
-        <textarea formControlName="memo"></textarea>
+    <ng-container *ngIf="form.get('change_of_address')?.value">
+      <div class="grid">
+        <div class="col-6">
+          <div class="field">
+            <label for="street_1">STREET ADDRESS</label>
+            <input type="text" pInputText id="street_1" formControlName="street_1" />
+            <app-error-messages [form]="form" fieldName="street_1" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="field">
+            <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+            <input type="text" pInputText id="street_2" formControlName="street_2" />
+            <app-error-messages [form]="form" fieldName="street_2" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-6">
+          <div class="field">
+            <label for="city">CITY</label>
+            <input type="text" pInputText id="city" formControlName="city" />
+            <app-error-messages [form]="form" fieldName="city" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="field">
+            <label for="state">STATE/PROVINCE</label>
+            <p-dropdown
+              inputId="state"
+              formControlName="state"
+              [options]="stateOptions"
+              optionLabel="name"
+              optionValue="code"
+              [autoDisplayFirst]="false"
+              appendTo="body"
+            ></p-dropdown>
+            <app-error-messages [form]="form" fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="field">
+            <label for="zip">ZIP/POSTAL CODE</label>
+            <input type="text" pInputText id="zip" formControlName="zip" />
+            <app-error-messages [form]="form" fieldName="zip" [formSubmitted]="formSubmitted"></app-error-messages>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <p-divider></p-divider>
+    <div class="grid">
+      <div class="col-12">
+        <h3>Committee status</h3>
+        <div>
+          This committee has
+          <ng-container *ngIf="(committeeAccount$ | async)?.committee_type !== 'N'"
+            ><span class="bold">NOT</span></ng-container
+          >
+          qualified as a <span class="bold">multicandidate committee</span>.
+        </div>
+        <div>
+          <a
+            href="https://www.fec.gov/help-candidates-and-committees/filing-pac-reports/multicandidate-status/"
+            target="_blank"
+            >Learn more about multicandidate committee status</a
+          >
+        </div>
       </div>
     </div>
-  </div>
-</form>
+    <p-divider></p-divider>
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <h3>Memo</h3>
+          <p-checkbox
+            [binary]="true"
+            formControlName="memo_checkbox"
+            label="I WOULD LIKE TO ENTER A MEMO RELATED TO THIS FORM 3X"
+            class="bold"
+          ></p-checkbox>
+          <div class="memo-checkbox-note">This step is optional and can be entered later in the filing process.</div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="form.get('memo_checkbox')?.value">
+      <div class="grid">
+        <div class="col-12">
+          <div><span class="bold">REPORT LEVEL MEMO</span> (OPTIONAL)</div>
+          <div>
+            <textarea [rows]="5" [cols]="30" pInputTextarea [autoResize]="true" formControlName="memo"></textarea>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <p-divider></p-divider>
+    <div class="grid">
+      <div class="col-2">
+        <button pButton pRipple label="Back" icon="pi pi-times" class="p-button-info" (click)="save('back')"></button>
+      </div>
+      <div class="col-5"></div>
+      <div class="col-2">
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-primary" (click)="save()"></button>
+      </div>
+      <div class="col-3">
+        <button
+          pButton
+          pRipple
+          label="Save and continue"
+          icon="pi pi-check"
+          class="p-button-secondary"
+          (click)="save('continue')"
+        ></button>
+      </div>
+    </div>
+  </form>
+</div>

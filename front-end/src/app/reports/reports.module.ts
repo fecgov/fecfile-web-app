@@ -11,6 +11,8 @@ import { DividerModule } from 'primeng/divider';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { ReportsRoutingModule } from './reports-routing.module';
 import { ReportListComponent } from './report-list/report-list.component';
@@ -30,6 +32,8 @@ import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2/
     DropdownModule,
     RadioButtonModule,
     CheckboxModule,
+    InputTextModule,
+    InputTextareaModule,
     SharedModule,
   ],
 })

@@ -20,10 +20,11 @@ export class ApiService {
     });
   }
 
-  getHeaders() {
+  getHeaders(fieldsToValidate: string[] = []) {
     return {
       'Content-Type': 'application/json',
       Authorization: `JWT ${this.token}`,
+      fields_to_validate: fieldsToValidate,
     };
   }
 
@@ -33,14 +34,14 @@ export class ApiService {
   }
 
   // prettier-ignore
-  public post<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const headers = this.getHeaders();
+  public post<T>(endpoint: string, payload: any, fieldsToValidate: string[] = []): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const headers = this.getHeaders(fieldsToValidate);
     return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers });
   }
 
   // prettier-ignore
-  public put<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const headers = this.getHeaders();
+  public put<T>(endpoint: string, payload: any, fieldsToValidate: string[] = []): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const headers = this.getHeaders(fieldsToValidate);
     return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers });
   }
 

@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { mergeMap, Observable, of } from 'rxjs';
+import { mergeMap, Observable, skipUntil, Subject, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { refreshCommitteeAccountDetailsAction } from '../../../../store/committee-account.actions';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -13,7 +17,7 @@ import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
   templateUrl: './create-f3x-step2.component.html',
   styleUrls: ['./create-f3x-step2.component.scss'],
 })
-export class CreateF3xStep2Component implements OnInit {
+export class CreateF3xStep2Component implements OnInit, OnDestroy {
   report: F3xSummary | null = null;
   formProperties: string[] = [
     'change_of_address',
@@ -28,6 +32,8 @@ export class CreateF3xStep2Component implements OnInit {
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
+  destroy$: Subject<void> = new Subject();
+  committeeAccount$: Observable<CommitteeAccount> | null = null;
 
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
@@ -36,28 +42,37 @@ export class CreateF3xStep2Component implements OnInit {
     private route: ActivatedRoute,
     private reportService: F3xSummaryService,
     private validateService: ValidateService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
+    // Refresh committee account details whenever page loads
+    this.store.dispatch(refreshCommitteeAccountDetailsAction());
+
+    this.committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
     this.route.paramMap
       .pipe(
-        // prettier-ignore
-        mergeMap((params): Observable<any> => { // eslint-disable-line @typescript-eslint/no-explicit-any
-          const id: string | null = params.get('id');
-          if (id) {
-            return this.reportService.get(id);
-          }
-          return of(null);
+        takeUntil(this.destroy$),
+        mergeMap((params): Observable<F3xSummary> => {
+          const id: string = params.get('id') as string;
+          return this.reportService.get(id);
         })
       )
-      .subscribe((report: F3xSummary | null) => {
+      .subscribe((report: F3xSummary) => {
         this.report = report;
         this.form.patchValue({
-          change_of_address: !!this.report?.change_of_address,
+          change_of_address: '',
+          street_1: this.report.street_1,
+          street_2: this.report.street_2,
+          city: this.report.city,
+          state: this.report.state,
+          zip: this.report.zip,
+          memo_checkbox: false,
+          memo: '',
         });
       });
 
@@ -66,7 +81,12 @@ export class CreateF3xStep2Component implements OnInit {
     this.validateService.formValidatorForm = this.form;
   }
 
-  public save() {
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  public save(jump: 'continue' | 'back' | null = null): void {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
@@ -78,8 +98,13 @@ export class CreateF3xStep2Component implements OnInit {
       ...this.validateService.getFormValues(this.form),
     });
 
-    console.log(payload);
-
-    // this.reportService.update(payload).subscribe();
+    this.reportService.update(payload, this.formProperties).subscribe(() => {
+      if (jump === 'continue' && this.report?.id) {
+        this.router.navigate([`/reports/f3x/create/step3/${this.report.id}`]);
+      }
+      if (jump === 'back' && this.report?.id) {
+        this.router.navigate([`/reports/f3x/create/step1/${this.report.id}`]);
+      }
+    });
   }
 }
