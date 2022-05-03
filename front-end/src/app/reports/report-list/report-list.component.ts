@@ -41,7 +41,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   public startReport(): void {
-    this.router.navigate(['create-f3x-step1']);
+    this.router.navigateByUrl('reports/create-f3x-step1');
   }
 
   /**

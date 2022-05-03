@@ -17,6 +17,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { environment } from 'environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -73,7 +74,12 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
 
-  constructor(private store: Store, private validateService: ValidateService, private fb: FormBuilder) {}
+  constructor(
+    private store: Store,
+    private validateService: ValidateService,
+    private fb: FormBuilder,
+    protected router: Router
+  ) {}
 
   ngOnInit(): void {
     this.store
@@ -143,6 +149,10 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
 
   public isElectionReport() {
     return electionReportCodes.includes(this.form.get('report_code')?.value);
+  }
+
+  public goBack() {
+    this.router.navigateByUrl('reports');
   }
 }
 
