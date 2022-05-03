@@ -7,10 +7,6 @@ import { UserLoginData } from 'app/shared/models/user.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { MessageService } from 'primeng/api';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { SharedModule } from '../../../shared/shared.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -24,14 +20,7 @@ describe('CreateF3XStep1Component', () => {
       token: 'jwttokenstring',
     };
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        RadioButtonModule,
-        SelectButtonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        SharedModule,
-      ],
+      imports: [RouterTestingModule.withRoutes([])],
       declarations: [CreateF3XStep1Component, LabelPipe],
       providers: [
         FormBuilder,
@@ -50,16 +39,16 @@ describe('CreateF3XStep1Component', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should update form when filing frequency changes', () => {
+  it('should update form when filing frequency changes', () => {
     component.form.controls['filing_frequency'].setValue('M');
     expect(component.form.controls['report_type_category'].value).toEqual(F3xReportTypeCategories.ELECTION_YEAR);
   });
 
-  xit('should update codes when report_type_category changes', () => {
+  it('should update codes when report_type_category changes', () => {
     component.form.controls['filing_frequency'].setValue('Q');
     component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.SPECIAL);
     expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.TwelveP);
