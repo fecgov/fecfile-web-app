@@ -10,6 +10,7 @@ import {
   F3xReportCodeLabels,
   F3xFormVersionLabels,
 } from 'app/shared/models/f3x-summary.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-report-list',
@@ -24,7 +25,8 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
-    protected override itemService: ReportService
+    protected override itemService: ReportService,
+    protected router: Router
   ) {
     super(messageService, confirmationService, elementRef);
   }
@@ -36,6 +38,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
 
   protected getEmptyItem(): F3xSummary {
     return new F3xSummary();
+  }
+
+  public startReport(): void {
+    this.router.navigate(['create-f3x-step1']);
   }
 
   /**
