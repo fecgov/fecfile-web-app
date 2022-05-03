@@ -10,6 +10,7 @@ import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
 import { F3xSummary, F3xFormTypes } from '../../shared/models/f3x-summary.model';
 import { Report } from '../../shared/interfaces/report.interface';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -24,7 +25,7 @@ describe('ReportListComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, TableModule, ToolbarModule],
+      imports: [HttpClientTestingModule, TableModule, ToolbarModule, RouterTestingModule.withRoutes([])],
       declarations: [ReportListComponent],
       providers: [
         ConfirmationService,
