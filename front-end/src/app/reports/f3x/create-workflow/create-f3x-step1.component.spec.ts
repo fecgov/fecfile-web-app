@@ -4,7 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { MessageService } from 'primeng/api';
-import { CreateF3XStep1Component } from './create-f3x-step1.component';
+import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -38,5 +38,10 @@ describe('CreateF3XStep1Component', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should update form when filing frequency changes', () => {
+    component.form.controls['filing_frequency'].setValue('M');
+    expect(component.form.controls['report_type_category'].value).toEqual(F3xReportTypeCategories.ELECTION_YEAR);
   });
 });

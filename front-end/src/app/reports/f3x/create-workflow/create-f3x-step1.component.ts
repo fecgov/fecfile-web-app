@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   electionReportCodes,
+  F3xReportCode,
   F3xReportCodes,
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
@@ -8,7 +9,6 @@ import {
   quarterlyNonElectionYearReportCodes,
   quarterlySpecialReportCodes,
 } from 'app/shared/models/f3x-summary.model';
-import { F3xReportCode } from 'app/shared/models/f3x-summary.model';
 import { LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ValidateService } from 'app/shared/services/validate.service';
@@ -40,7 +40,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
 
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
-  f3xReportCodeLabels: LabelList = [
+  f3xReportCodeCreationLabels: LabelList = [
     [F3xReportCodes.Q1, 'APRIL 15 QUARTERLY REPORT (Q1)'],
     [F3xReportCodes.Q2, 'JULY 15 QUARTERLY REPORT (Q2)'],
     [F3xReportCodes.Q3, 'OCTOBER 15 QUARTERLY REPORT(Q3)'],
