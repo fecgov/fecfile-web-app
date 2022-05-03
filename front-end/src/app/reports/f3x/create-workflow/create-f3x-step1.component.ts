@@ -40,6 +40,9 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
 
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
+  /**  This different label list is 'necessarry' because the labels in the wireframe are
+   * different between the list and the creation steps
+   * */
   f3xReportCodeCreationLabels: LabelList = [
     [F3xReportCodes.Q1, 'APRIL 15 QUARTERLY REPORT (Q1)'],
     [F3xReportCodes.Q2, 'JULY 15 QUARTERLY REPORT (Q2)'],

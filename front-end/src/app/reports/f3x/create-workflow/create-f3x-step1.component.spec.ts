@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
+import { F3xReportCodes } from 'app/shared/models/f3x-summary.model';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { MessageService } from 'primeng/api';
@@ -43,5 +44,11 @@ describe('CreateF3XStep1Component', () => {
   it('should update form when filing frequency changes', () => {
     component.form.controls['filing_frequency'].setValue('M');
     expect(component.form.controls['report_type_category'].value).toEqual(F3xReportTypeCategories.ELECTION_YEAR);
+  });
+
+  it('should update codes when report_type_category changes', () => {
+    component.form.controls['filing_frequency'].setValue('Q');
+    component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.NON_ELECTION_YEAR);
+    expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.TwelveP);
   });
 });
