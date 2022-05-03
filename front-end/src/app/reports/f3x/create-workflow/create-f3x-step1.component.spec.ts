@@ -48,7 +48,7 @@ describe('CreateF3XStep1Component', () => {
 
   it('should update codes when report_type_category changes', () => {
     component.form.controls['filing_frequency'].setValue('Q');
-    component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.NON_ELECTION_YEAR);
+    component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.SPECIAL);
     expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.TwelveP);
   });
 });
