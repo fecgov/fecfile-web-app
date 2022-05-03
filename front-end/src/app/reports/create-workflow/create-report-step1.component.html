@@ -1,8 +1,54 @@
-<h1>FEC Form 3X</h1>
-<p>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</p>
-<hr />
-<div>
-  <form id="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+<div styleClass="p-fluid">
+  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+    <div class="grid">
+      <div class="col-12">
+        <h1>FEC Form 3X</h1>
+        <p>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</p>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <ng-container *ngIf="userCanSetFilingFrequency">
+      <div class="grid">
+        <div class="col-12">
+          <h3>Reporting Frequency</h3>
+        </div>
+
+        <div class="col-12">
+          <div class="field grid">
+            <div class="col-12">
+              <label for="type">(CHOOSE ONE)</label>
+            </div>
+            <div class="col-12">
+              <p-radioButton
+                id="Q"
+                name="filing_frequency"
+                value="Q"
+                formControlName="filing_frequency"
+              ></p-radioButton>
+              <label for="Q">QUARTERLY REPORTING</label>
+            </div>
+            <div class="col-12">
+              <p-radioButton
+                id="M"
+                name="filing_frequency"
+                value="M"
+                formControlName="filing_frequency"
+              ></p-radioButton>
+              <label for="M">MONTHLY REPORTING</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
     <div class="grid">
       <div class="col-12">
         <h3>Report type</h3>
@@ -10,12 +56,7 @@
       <div class="col-12">
         <div class="field">
           <label for="report_type_category">TIME PERIOD</label>
-          <p-selectButton
-            [options]="getReportTypeCategories()"
-            [(ngModel)]="selectedReportTypeCategory"
-            (ngModelChange)="onReportTypeCategoryChange()"
-            [ngModelOptions]="{ standalone: true }"
-          ></p-selectButton>
+          <p-selectButton [options]="getReportTypeCategories()" formControlName="report_type_category"></p-selectButton>
           <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
@@ -25,41 +66,36 @@
           <div *ngFor="let reportCode of getReportCodes()" class="p-field-checkbox col-12">
             <p-radioButton
               [inputId]="reportCode"
-              name="reportCode"
+              name="report_code"
               [value]="reportCode"
-              [(ngModel)]="selectedReportCode"
-              [ngModelOptions]="{ standalone: true }"
+              formControlName="report_code"
             ></p-radioButton>
             <label [for]="reportCode">{{ reportCode | label: f3xReportCodeLabels }}</label>
           </div>
         </div>
       </div>
       <ng-container *ngIf="isElectionReport()">
-        <div class="col-6 grid">
-          <div class="col-6">
+        <div class="election-info col-6 grid">
+          <div class="col-12">
             <div class="field">
-              <label for="election_date">ELECTION ON</label>
-              <p-calendar
-                id="election_date"
-                [(ngModel)]="electionDate"
-                [ngModelOptions]="{ standalone: true }"
-              ></p-calendar>
-              <app-error-messages fieldName="election_date" [formSubmitted]="formSubmitted"></app-error-messages>
+              <label for="date_of_election">ELECTION ON</label>
+              <p-calendar id="date_of_election" name="date_of_election" formControlName="date_of_election"></p-calendar>
+              <app-error-messages fieldName="date_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
-          <div class="col-6">
+          <div class="col-12">
             <div class="field">
-              <label for="state">IN THE STATE/PROVINCE OF</label>
+              <label for="state_of_election">IN THE STATE/PROVINCE OF</label>
               <p-dropdown
-                inputId="state"
-                formControlName="state"
+                inputId="state_of_election"
+                formControlName="state_of_election"
                 [options]="stateOptions"
                 optionLabel="name"
                 optionValue="code"
                 [autoDisplayFirst]="false"
                 appendTo="body"
               ></p-dropdown>
-              <app-error-messages fieldName="state" [formSubmitted]="formSubmitted"></app-error-messages>
+              <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
             </div>
           </div>
         </div>
@@ -78,24 +114,24 @@
     <div class="grid">
       <div class="col-6">
         <div class="field">
-          <label for="covering_period_start">FROM</label>
+          <label for="coverage_from_date">FROM</label>
           <p-calendar
-            id="covering_period_start"
-            [(ngModel)]="coveringPeriodStart"
-            [ngModelOptions]="{ standalone: true }"
+            id="coverage_from_date"
+            name="coverage_from_date"
+            formControlName="coverage_from_date"
           ></p-calendar>
-          <app-error-messages fieldName="covering_period_start" [formSubmitted]="formSubmitted"></app-error-messages>
+          <app-error-messages fieldName="coverage_from_date" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
       <div class="col-6">
         <div class="field">
-          <label for="covering_period_end">TO</label>
+          <label for="coverage_through_date">TO</label>
           <p-calendar
-            id="covering_period_start"
-            [(ngModel)]="coveringPeriodEnd"
-            [ngModelOptions]="{ standalone: true }"
+            id="coverage_through_date"
+            name="coverage_through_date"
+            formControlName="coverage_through_date"
           ></p-calendar>
-          <app-error-messages fieldName="covering_period_end" [formSubmitted]="formSubmitted"></app-error-messages>
+          <app-error-messages fieldName="coverage_through_date" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
     </div>

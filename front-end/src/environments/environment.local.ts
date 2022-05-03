@@ -6,4 +6,5 @@ export const environment = {
   dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
   fecApiCommitteeUrl: 'https://api.open.fec.gov/v1/committee',
   fecApiKey: 'DEMO_KEY',
+  userCanSetFilingFrequency: true,
 };

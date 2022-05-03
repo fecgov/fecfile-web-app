@@ -3,108 +3,115 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 
 import { F3xSummaryService } from '../../shared/services/f3x-summary.service';
-import { F3xReportCodes, F3xSummary } from 'app/shared/models/f3x-summary.model';
+import {
+  electionReportCodes,
+  F3xReportCodes,
+  F3xSummary,
+  monthlyElectionYearReportCodes,
+  monthlyNonElectionYearReportCodes,
+  quarterlyElectionYearReportCodes,
+  quarterlyNonElectionYearReportCodes,
+  quarterlySpecialReportCodes,
+} from 'app/shared/models/f3x-summary.model';
 import { F3xReportCode, F3xReportCodeLabels } from 'app/shared/models/f3x-summary.model';
 import { LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { Observable, Subscription } from 'rxjs';
+import { ValidateService } from 'app/shared/services/validate.service';
+import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
+import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-create-report-step1',
+  styleUrls: ['./create-report-step1.component.scss'],
   templateUrl: './create-report-step1.component.html',
 })
 export class CreateReportStep1 implements OnInit {
-  Math = Math;
-  committeeAccountSub: Subscription | null = null;
-  filingFrequency: string | null = null;
-  selectedReportTypeCategory: any = null;
-  selectedReportCode: any = undefined;
-  coveringPeriodStart: Date = new Date();
-  coveringPeriodEnd: Date = new Date();
-  electionDate: Date = new Date();
-  state: string | null = null;
+  private destroy$ = new Subject();
+  formProperties: string[] = [
+    'filing_frequency',
+    'report_type_category',
+    'report_code',
+    'coverage_from_date',
+    'coverage_through_date',
+    'date_of_election',
+    'state_of_election',
+  ];
+  userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
 
-  f3xReportCodeLabels: LabelList = F3xReportCodeLabels;
+  form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
-  monthlyElectionYearReportCodes: F3xReportCode[] = [
-    F3xReportCodes.M2,
-    F3xReportCodes.M3,
-    F3xReportCodes.M4,
-    F3xReportCodes.M5,
-    F3xReportCodes.M6,
-    F3xReportCodes.M7,
-    F3xReportCodes.M8,
-    F3xReportCodes.M9,
-    F3xReportCodes.M10,
-    F3xReportCodes.TwelveG,
-    F3xReportCodes.ThirtyG,
-    F3xReportCodes.YE,
-    F3xReportCodes.TER,
-  ];
-
-  monthlyNonElectionYearReportCodes: F3xReportCode[] = [
-    F3xReportCodes.M2,
-    F3xReportCodes.M3,
-    F3xReportCodes.M4,
-    F3xReportCodes.M5,
-    F3xReportCodes.M6,
-    F3xReportCodes.M7,
-    F3xReportCodes.M8,
-    F3xReportCodes.M9,
-    F3xReportCodes.M10,
-    F3xReportCodes.M11,
-    F3xReportCodes.M12,
-    F3xReportCodes.YE,
-    F3xReportCodes.TER,
-  ];
-
-  quarterlyElectionYearReportCodes: F3xReportCode[] = [
-    F3xReportCodes.Q1,
-    F3xReportCodes.Q2,
-    F3xReportCodes.Q3,
-    F3xReportCodes.YE,
-    F3xReportCodes.TwelveG,
-    F3xReportCodes.ThirtyG,
-    F3xReportCodes.TER,
-  ];
-  quarterlyNonElectionYearReportCodes: F3xReportCode[] = [F3xReportCodes.MY, F3xReportCodes.YE, F3xReportCodes.TER];
-
-  quarterlySpecialReportCodes: F3xReportCode[] = [
-    F3xReportCodes.TwelveP,
-    F3xReportCodes.TwelveR,
-    F3xReportCodes.TwelveC,
-    F3xReportCodes.TwelveS,
-    F3xReportCodes.ThirtyR,
-    F3xReportCodes.ThirtyS,
+  f3xReportCodeLabels: LabelList = [
+    [F3xReportCodes.Q1, 'APRIL 15 QUARTERLY REPORT (Q1)'],
+    [F3xReportCodes.Q2, 'JULY 15 QUARTERLY REPORT (Q2)'],
+    [F3xReportCodes.Q3, 'OCTOBER 15 QUARTERLY REPORT(Q3)'],
+    [F3xReportCodes.YE, 'JANUARY 31 YEAR-END (YE)'],
+    [F3xReportCodes.TER, 'TERMINATION REPORT (TER)'],
+    [F3xReportCodes.MY, 'JULY 31 MID-YEAR REPORT (NON-ELECTION YEAR ONLY) (MY)'],
+    [F3xReportCodes.TwelveG, '12-DAY PRE-ELECTION GENERAL (12G)'],
+    [F3xReportCodes.TwelveP, '12-DAY PRE-ELECTION PRIMARY (12P)'],
+    [F3xReportCodes.TwelveR, '12-DAY PRE-ELECTION RUNOFF (12R)'],
+    [F3xReportCodes.TwelveS, '12-DAY PRE-ELECTION SPECIAL (12S)'],
+    [F3xReportCodes.TwelveC, '12-DAY PRE-ELECTION CONVENTION (12C)'],
+    [F3xReportCodes.ThirtyG, '30-DAY POST-ELECTION GENERAL (30G)'],
+    [F3xReportCodes.ThirtyR, '30-DAY POST-ELECTION RUNOFF (30R)'],
+    [F3xReportCodes.ThirtyS, '30-DAY POST-ELECTION SPECIAL (30S)'],
+    [F3xReportCodes.M2, 'FEBRUARY 20 MONTHLY REPORT (M2)'],
+    [F3xReportCodes.M3, 'MARCH 20 MONTHLY REPORT (M3)'],
+    [F3xReportCodes.M4, 'APRIL 20 MONTHLY REPORT (M4)'],
+    [F3xReportCodes.M5, 'MAY 20 MONTHLY REPORT (M5))'],
+    [F3xReportCodes.M6, 'JUNE 20 MONTHLY REPORT (M6)'],
+    [F3xReportCodes.M7, 'JULY 20 MONTHLY REPORT (M7)'],
+    [F3xReportCodes.M8, 'AUGUST 20 MONTHLY REPORT (M8)'],
+    [F3xReportCodes.M9, 'SEPTEMBER 20 MONTHLY REPORT (M9)'],
+    [F3xReportCodes.M10, 'OCTOBER 20 MONTHLY REPORT (M10)'],
+    [F3xReportCodes.M11, 'NOVEMBER 20 MONTHLY REPORT (M11)'],
+    [F3xReportCodes.M12, 'DECEMBER 20 MONTHLY REPORT (M12)'],
   ];
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private validateService: ValidateService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.committeeAccountSub = this.store.select(selectCommitteeAccount).subscribe((committeeAccount) => {
-      this.filingFrequency = 'M'; //committeeAccount.filing_frequency;
-      this.selectedReportTypeCategory = this.getReportTypeCategories()[0];
-      this.selectedReportCode = this.getReportCodes()[0];
-    });
+    this.store
+      .select(selectCommitteeAccount)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((committeeAccount) => {
+        let filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount.filing_frequency;
+        this.form.addControl('filing_frequency', new FormControl());
+        this.form.addControl('report_type_category', new FormControl());
+        this.form?.patchValue({ filing_frequency: filingFrequency });
+        this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
+        this.form?.patchValue({ report_code: this.getReportCodes()[0] });
+        this.form
+          ?.get('report_type_category')
+          ?.valueChanges.pipe(takeUntil(this.destroy$))
+          .subscribe((reportTypeCategory) => {
+            this.form.patchValue({
+              report_code: this.getReportCodes()[0],
+            });
+          });
+      });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+
+    // Initialize validation tracking of current JSON schema and form data
+    this.validateService.formValidatorSchema = f3xSchema;
+    this.validateService.formValidatorForm = this.form;
   }
 
   ngOnDestroy(): void {
-    this.committeeAccountSub?.unsubscribe();
-  }
-
-  public onReportTypeCategoryChange(): void {
-    this.selectedReportCode = this.getReportCodes()[0];
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   public getReportTypeCategories(): F3xReportTypeCategoryType[] {
-    if (this.filingFrequency === 'M') {
+    if (this.form?.get('filing_frequency')?.value === 'M') {
       return [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
     }
     return [
@@ -115,30 +122,21 @@ export class CreateReportStep1 implements OnInit {
   }
 
   public getReportCodes(): F3xReportCode[] {
-    const isMonthly = this.filingFrequency === 'M';
-    switch (this.selectedReportTypeCategory) {
+    const isMonthly = this.form?.get('filing_frequency')?.value === 'M';
+    switch (this.form.get('report_type_category')?.value) {
       case F3xReportTypeCategories.ELECTION_YEAR:
-        return isMonthly ? this.monthlyElectionYearReportCodes : this.quarterlyElectionYearReportCodes;
+        return isMonthly ? monthlyElectionYearReportCodes : quarterlyElectionYearReportCodes;
       case F3xReportTypeCategories.NON_ELECTION_YEAR:
-        return isMonthly ? this.monthlyNonElectionYearReportCodes : this.quarterlyNonElectionYearReportCodes;
+        return isMonthly ? monthlyNonElectionYearReportCodes : quarterlyNonElectionYearReportCodes;
       case F3xReportTypeCategories.SPECIAL:
-        return isMonthly ? [] : this.quarterlySpecialReportCodes;
+        return isMonthly ? [] : quarterlySpecialReportCodes;
       default:
         return [];
     }
   }
 
   public isElectionReport() {
-    return [
-      F3xReportCodes.ThirtyG,
-      F3xReportCodes.ThirtyR,
-      F3xReportCodes.ThirtyS,
-      F3xReportCodes.TwelveC,
-      F3xReportCodes.TwelveG,
-      F3xReportCodes.TwelveP,
-      F3xReportCodes.TwelveR,
-      F3xReportCodes.TwelveS,
-    ].includes(this.selectedReportCode);
+    return electionReportCodes.includes(this.form.get('report_code')?.value);
   }
 }
 
