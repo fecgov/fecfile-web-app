@@ -20,7 +20,7 @@ export class ApiService {
     });
   }
 
-  getHeaders(headersToAdd: any = {}) {
+  getHeaders(headersToAdd: object = {}) {
     const baseHeaders = {
       'Content-Type': 'application/json',
       Authorization: `JWT ${this.token}`,

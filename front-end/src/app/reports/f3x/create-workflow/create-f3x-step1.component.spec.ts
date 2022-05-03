@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -20,7 +21,7 @@ describe('CreateF3XStep1Component', () => {
       token: 'jwttokenstring',
     };
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [HttpClientTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [CreateF3XStep1Component, LabelPipe],
       providers: [
         FormBuilder,

@@ -90,8 +90,8 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const existingReport$: Observable<any> = this.activatedRoute.paramMap.pipe(
-      switchMap((paramMap): any => {
+    const existingReport$: Observable<F3xSummary | undefined> = this.activatedRoute.paramMap.pipe(
+      switchMap((paramMap): Observable<F3xSummary | undefined> => {
         const id = paramMap.get('id');
         if (id) {
           return this.f3xSummaryService.get(parseInt(id));
