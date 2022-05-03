@@ -1,27 +1,21 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-
-import { F3xSummaryService } from '../../shared/services/f3x-summary.service';
+import { Component, OnInit } from '@angular/core';
 import {
   electionReportCodes,
   F3xReportCodes,
-  F3xSummary,
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
   quarterlyNonElectionYearReportCodes,
   quarterlySpecialReportCodes,
 } from 'app/shared/models/f3x-summary.model';
-import { F3xReportCode, F3xReportCodeLabels } from 'app/shared/models/f3x-summary.model';
+import { F3xReportCode } from 'app/shared/models/f3x-summary.model';
 import { LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { environment } from 'environments/environment';
 
 @Component({
