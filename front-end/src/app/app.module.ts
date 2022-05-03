@@ -23,8 +23,6 @@ import { MenuModule } from 'primeng/menu';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { SelectButtonModule } from 'primeng/selectbutton';
 
 // Third party
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
@@ -43,7 +41,6 @@ import { TwoFactorLoginComponent } from './login/two-factor-login/two-factor-log
 import { ConfirmTwoFactorComponent } from './login/confirm-two-factor/confirm-two-factor.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
-import { CalendarModule } from 'primeng/calendar';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -70,7 +67,6 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    CalendarModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -90,8 +86,6 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     PanelModule,
     ButtonModule,
     ProgressBarModule,
-    RadioButtonModule,
-    SelectButtonModule,
     SharedModule,
   ],
   providers: [
