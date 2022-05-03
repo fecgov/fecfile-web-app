@@ -82,7 +82,7 @@
         <h3>Committee status</h3>
         <div>
           This committee has
-          <ng-container *ngIf="(committeeAccount$ | async)?.committee_type !== 'N'"
+          <ng-container *ngIf="(committeeAccount$ | async)?.committee_type === 'N'"
             ><span class="bold">NOT</span></ng-container
           >
           qualified as a <span class="bold">multicandidate committee</span>.

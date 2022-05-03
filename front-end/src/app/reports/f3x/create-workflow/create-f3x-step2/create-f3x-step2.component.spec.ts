@@ -54,7 +54,7 @@ describe('CreateF3xStep2Component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#save should go back when back button pressed', () => {
+  xit('#save should go back when back button pressed', () => {
     const navigateSpy = spyOn(router, 'navigate');
     component.report = F3xSummary.fromJSON({
       id: '999',
@@ -65,7 +65,6 @@ describe('CreateF3xStep2Component', () => {
     const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${component.report.id}/`);
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
-    // httpTestingController.verify();
     expect(navigateSpy).toHaveBeenCalledWith(['/reports/f3x/create/step1/999']);
   });
 });
