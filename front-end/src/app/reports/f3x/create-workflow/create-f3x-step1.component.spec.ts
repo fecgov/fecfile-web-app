@@ -4,11 +4,11 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { MessageService } from 'primeng/api';
-import { CreateReportStep1Component } from './create-report-step1.component';
+import { CreateF3XStep1Component } from './create-f3x-step1.component';
 
-describe('CreateReportStep1Component', () => {
-  let component: CreateReportStep1Component;
-  let fixture: ComponentFixture<CreateReportStep1Component>;
+describe('CreateF3XStep1Component', () => {
+  let component: CreateF3XStep1Component;
+  let fixture: ComponentFixture<CreateF3XStep1Component>;
 
   beforeEach(async () => {
     const userLoginData: UserLoginData = {
@@ -18,7 +18,7 @@ describe('CreateReportStep1Component', () => {
       token: 'jwttokenstring',
     };
     await TestBed.configureTestingModule({
-      declarations: [CreateReportStep1Component, LabelPipe],
+      declarations: [CreateF3XStep1Component, LabelPipe],
       providers: [
         FormBuilder,
         MessageService,
@@ -31,7 +31,7 @@ describe('CreateReportStep1Component', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateReportStep1Component);
+    fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

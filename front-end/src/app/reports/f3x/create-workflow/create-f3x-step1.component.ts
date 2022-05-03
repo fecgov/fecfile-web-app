@@ -19,11 +19,11 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { environment } from 'environments/environment';
 
 @Component({
-  selector: 'app-create-report-step1',
-  styleUrls: ['./create-report-step1.component.scss'],
-  templateUrl: './create-report-step1.component.html',
+  selector: 'app-create-f3x-step1',
+  styleUrls: ['./create-f3x-step1.component.scss'],
+  templateUrl: './create-f3x-step1.component.html',
 })
-export class CreateReportStep1Component implements OnInit, OnDestroy {
+export class CreateF3XStep1Component implements OnInit, OnDestroy {
   private destroy$ = new Subject();
   formProperties: string[] = [
     'filing_frequency',

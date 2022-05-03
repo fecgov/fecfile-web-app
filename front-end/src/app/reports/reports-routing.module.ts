@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CreateReportStep1Component } from './create-workflow/create-report-step1.component';
+import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { ReportListComponent } from './report-list/report-list.component';
 
 const routes: Routes = [
@@ -10,8 +10,8 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'create-report-step1',
-    component: CreateReportStep1Component,
+    path: 'create-f3x-step1',
+    component: CreateF3XStep1Component,
     pathMatch: 'full',
   },
   { path: '**', redirectTo: '' },

@@ -4,7 +4,7 @@ import { SharedModule } from '../../app/shared/shared.module';
 
 import { ReportsRoutingModule } from './reports-routing.module';
 import { ReportListComponent } from './report-list/report-list.component';
-import { CreateReportStep1Component } from './create-workflow/create-report-step1.component';
+import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // PrimeNG
@@ -17,7 +17,7 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 
 @NgModule({
-  declarations: [ReportListComponent, CreateReportStep1Component],
+  declarations: [ReportListComponent, CreateF3XStep1Component],
   imports: [
     FormsModule,
     ReactiveFormsModule,
