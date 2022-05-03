@@ -1,9 +1,9 @@
-<div styleClass="p-fluid">
+<div class="p-fluid">
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
       <div class="col-12">
         <h1>FEC Form 3X</h1>
-        <p>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</p>
+        <h5>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</h5>
       </div>
     </div>
     <div class="grid">
@@ -27,18 +27,18 @@
                 inputId="Q"
                 name="filing_frequency"
                 value="Q"
+                label="QUARTERLY REPORTING"
                 formControlName="filing_frequency"
               ></p-radioButton>
-              <label for="Q">QUARTERLY REPORTING</label>
             </div>
             <div class="col-12">
               <p-radioButton
                 inputId="M"
                 name="filing_frequency"
                 value="M"
+                label="MONTHLY REPORTING"
                 formControlName="filing_frequency"
               ></p-radioButton>
-              <label for="M">MONTHLY REPORTING</label>
             </div>
           </div>
         </div>
@@ -53,13 +53,14 @@
       <div class="col-12">
         <h3>Report type</h3>
       </div>
-      <div class="col-12">
+      <div class="col-6">
         <div class="field">
           <label for="report_type_category">TIME PERIOD</label>
           <p-selectButton [options]="getReportTypeCategories()" formControlName="report_type_category"></p-selectButton>
           <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
+      <div class="col-6"></div>
       <div class="col-6">
         <div class="field grid">
           <label for="type">(CHOOSE ONE)</label>
@@ -68,9 +69,9 @@
               [inputId]="reportCode"
               name="report_code"
               [value]="reportCode"
+              label="{{ reportCode | label: f3xReportCodeLabels }}"
               formControlName="report_code"
             ></p-radioButton>
-            <label [for]="reportCode">{{ reportCode | label: f3xReportCodeLabels }}</label>
           </div>
         </div>
       </div>
@@ -138,11 +139,15 @@
   </form>
 </div>
 <div class="grid">
-  <div class="col-1">
+  <div class="col-2">
     <button pButton pRipple label="Back" class="p-button-secondary"></button>
   </div>
-  <div class="col-11">
-    <button pButton pRipple label="Save" class="p-button-primary"></button>
-    <button pButton pRipple label="Save and continue" class="p-button-info"></button>
+  <div class="col-10 grid save-buttons">
+    <div>
+      <button pButton pRipple label="Save" class="p-button-primary"></button>
+    </div>
+    <div>
+      <button pButton pRipple label="Save and continue" class="p-button-info"></button>
+    </div>
   </div>
 </div>
