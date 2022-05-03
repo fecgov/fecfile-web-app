@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Subject, of } from 'rxjs';
+import { of } from 'rxjs';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';

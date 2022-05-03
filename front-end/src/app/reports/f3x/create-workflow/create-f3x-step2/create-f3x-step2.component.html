@@ -14,6 +14,7 @@
               [value]="null"
               label="NO"
               formControlName="change_of_address"
+              ariaLabel="Address has not changed in the last 10 days"
             ></p-radioButton>
           </div>
           <div>
@@ -22,6 +23,7 @@
               value="X"
               label="YES"
               formControlName="change_of_address"
+              ariaLabel="Address has changed in the last 10 days"
             ></p-radioButton>
           </div>
         </div>
@@ -107,6 +109,7 @@
             formControlName="memo_checkbox"
             label="I WOULD LIKE TO ENTER A MEMO RELATED TO THIS FORM 3X"
             class="bold"
+            ariaLabel="I would like to enter a memo related to this Form 3X"
           ></p-checkbox>
           <div class="memo-checkbox-note">This step is optional and can be entered later in the filing process.</div>
         </div>
