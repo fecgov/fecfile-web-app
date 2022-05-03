@@ -38,9 +38,9 @@ describe('F3xSummaryService', () => {
   });
 
   it('#get should return a specific f3x summary record', () => {
-    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: 999 });
+    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: '999' });
 
-    service.get(999).subscribe((response: F3xSummary) => {
+    service.get('999').subscribe((response: F3xSummary) => {
       expect(response).toEqual(f3xSummary);
     });
 

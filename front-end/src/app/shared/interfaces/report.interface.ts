@@ -1,5 +1,5 @@
 export interface Report {
-  id: number | null;
+  id: string | null;
   form_type: string;
   filer_committee_id_number: string | null;
 }

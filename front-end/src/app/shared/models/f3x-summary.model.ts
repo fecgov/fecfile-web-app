@@ -109,7 +109,7 @@ export const F3xReportCodeLabels: LabelList = [
 ];
 
 export class F3xSummary extends BaseModel implements Report {
-  id: number | null = null;
+  id: string | null = null;
 
   form_type: F3xFormType = F3xFormTypes.F3XT;
   filer_committee_id_number: string | null = null;
