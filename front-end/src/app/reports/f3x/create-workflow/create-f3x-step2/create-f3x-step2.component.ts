@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { mergeMap, Observable, skipUntil, Subject, takeUntil } from 'rxjs';
+import { mergeMap, Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { refreshCommitteeAccountDetailsAction } from '../../../../store/committee-account.actions';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';

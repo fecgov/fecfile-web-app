@@ -77,7 +77,7 @@ describe('F3xSummaryService', () => {
   });
 
   it('#delete() should DELETE a record', () => {
-    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: 999 });
+    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: '999' });
 
     service.delete(f3xSummary).subscribe((response: null) => {
       expect(response).toBeNull();
