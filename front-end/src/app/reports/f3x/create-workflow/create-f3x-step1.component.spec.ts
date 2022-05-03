@@ -60,6 +60,10 @@ describe('CreateF3XStep1Component', () => {
     component.form.controls['filing_frequency'].setValue('Q');
     component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.SPECIAL);
     expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.TwelveP);
+    component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.NON_ELECTION_YEAR);
+    expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.Q1);
+    component.form.controls['report_type_category'].setValue(undefined);
+    expect(component.form.controls['report_code'].value).toEqual(undefined);
   });
 
   it('#save should save a new f3x record', () => {
