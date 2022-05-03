@@ -10,6 +10,11 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'create-f3x-step1/:id',
+    component: CreateF3XStep1Component,
+    pathMatch: 'full',
+  },
+  {
     path: 'create-f3x-step1',
     component: CreateF3XStep1Component,
     pathMatch: 'full',
