@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { mergeMap, Observable, Subject, takeUntil } from 'rxjs';
+import { mergeMap, Observable, Subject, takeUntil, skipUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { refreshCommitteeAccountDetailsAction } from '../../../../store/committee-account.actions';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -32,7 +32,8 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
-  destroy$: Subject<void> = new Subject();
+  destroy$: Subject<boolean> = new Subject<boolean>();
+  committeeAccount: CommitteeAccount | null = null;
   committeeAccount$: Observable<CommitteeAccount> | null = null;
 
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
@@ -50,27 +51,31 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
     // Refresh committee account details whenever page loads
     this.store.dispatch(refreshCommitteeAccountDetailsAction());
 
-    this.committeeAccount$ = this.store.select(selectCommitteeAccount).pipe(takeUntil(this.destroy$));
+    this.committeeAccount$ = this.store.select(selectCommitteeAccount);
+    this.committeeAccount$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((committeeAccount: CommitteeAccount) => (this.committeeAccount = committeeAccount));
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
     this.route.paramMap
       .pipe(
         takeUntil(this.destroy$),
+        skipUntil(this.committeeAccount$),
         mergeMap((params): Observable<F3xSummary> => {
-          const id: string = params.get('id') as string;
+          const id = Number(params.get('id'));
           return this.reportService.get(id);
         })
       )
       .subscribe((report: F3xSummary) => {
         this.report = report;
         this.form.patchValue({
-          change_of_address: '',
-          street_1: this.report.street_1,
-          street_2: this.report.street_2,
-          city: this.report.city,
-          state: this.report.state,
-          zip: this.report.zip,
+          change_of_address: 'not-selected',
+          street_1: this.report.street_1 ? this.report.street_1 : this.committeeAccount?.street_1,
+          street_2: this.report.street_2 ? this.report.street_2 : this.committeeAccount?.street_2,
+          city: this.report.city ? this.report.city : this.committeeAccount?.city,
+          state: this.report.state ? this.report.state : this.committeeAccount?.state,
+          zip: this.report.zip ? this.report.zip : this.committeeAccount?.zip,
           memo_checkbox: false,
           memo: '',
         });
@@ -82,7 +87,7 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 
@@ -100,10 +105,10 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
 
     this.reportService.update(payload, this.formProperties).subscribe(() => {
       if (jump === 'continue' && this.report?.id) {
-        this.router.navigate([`/reports/f3x/create/step3/${this.report.id}`]);
+        this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
       }
       if (jump === 'back' && this.report?.id) {
-        this.router.navigate([`/reports/f3x/create/step1/${this.report.id}`]);
+        this.router.navigateByUrl('/reports');
       }
     });
   }

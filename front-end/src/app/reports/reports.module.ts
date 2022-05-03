@@ -21,7 +21,6 @@ import { ReportListComponent } from './report-list/report-list.component';
 import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2/create-f3x-step2.component';
 
-
 @NgModule({
   declarations: [ReportListComponent, CreateF3XStep1Component, CreateF3xStep2Component],
   imports: [
@@ -38,23 +37,9 @@ import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2/
     CheckboxModule,
     InputTextModule,
     InputTextareaModule,
-    SharedModule,
-
-@NgModule({
-  declarations: [ReportListComponent, CreateF3XStep1Component],
-  imports: [
-    FormsModule,
-    ReactiveFormsModule,
-    ButtonModule,
     CalendarModule,
-    CommonModule,
-    DropdownModule,
-    ReportsRoutingModule,
-    RadioButtonModule,
     SelectButtonModule,
     SharedModule,
-    TableModule,
-    ToolbarModule,
   ],
 })
 export class ReportsModule {}

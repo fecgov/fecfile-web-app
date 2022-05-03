@@ -43,8 +43,8 @@ describe('CreateF3xStep2Component', () => {
   });
 
   beforeEach(() => {
-    router = TestBed.get(Router);
-    httpTestingController = TestBed.get(HttpTestingController);
+    router = TestBed.inject(Router);
+    httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(CreateF3xStep2Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
