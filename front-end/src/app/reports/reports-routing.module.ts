@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CreateReportStep1 } from './create-workflow/create-report-step1.component';
+import { CreateReportStep1Component } from './create-workflow/create-report-step1.component';
 import { ReportListComponent } from './report-list/report-list.component';
 
 const routes: Routes = [
@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: 'create-report-step1',
-    component: CreateReportStep1,
+    component: CreateReportStep1Component,
     pathMatch: 'full',
   },
   { path: '**', redirectTo: '' },

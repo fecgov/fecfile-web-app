@@ -84,6 +84,15 @@ export class CreateReportStep1Component implements OnInit, OnDestroy {
         this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
         this.form?.patchValue({ report_code: this.getReportCodes()[0] });
         this.form
+          ?.get('filing_frequency')
+          ?.valueChanges.pipe(takeUntil(this.destroy$))
+          .subscribe(() => {
+            this.form.patchValue({
+              report_type_category: this.getReportTypeCategories()[0],
+            });
+            this.form?.patchValue({ report_code: this.getReportCodes()[0] });
+          });
+        this.form
           ?.get('report_type_category')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
           .subscribe(() => {
