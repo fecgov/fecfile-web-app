@@ -21,6 +21,7 @@ import { environment } from 'environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { MessageService } from 'primeng/api';
+import { DateTime } from 'luxon';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -124,6 +125,12 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
               report_code: this.getReportCodes()[0],
             });
           });
+        this.form
+          ?.get('coverage_from_date')
+          ?.valueChanges.pipe(takeUntil(this.destroy$))
+          .subscribe((coverageFromDate) => {
+            console.log(coverageFromDate);
+          });
         if (existingReport) {
           this.form.patchValue(existingReport);
         }
@@ -179,6 +186,12 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
+
+    this.form.patchValue({
+      coverage_from_date: this.convertDateToFecFormat(this.form.get('coverage_from_date')?.value),
+      coverage_through_date: this.convertDateToFecFormat(this.form.get('coverage_through_date')?.value),
+      date_of_election: this.convertDateToFecFormat(this.form.get('date_of_election')?.value),
+    });
     const summary: F3xSummary = F3xSummary.fromJSON(this.validateService.getFormValues(this.form));
     this.f3xSummaryService.create(summary, this.formProperties).subscribe(() => {
       this.router.navigateByUrl('reports');
@@ -189,6 +202,13 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         life: 3000,
       });
     });
+  }
+
+  public convertDateToFecFormat(date: Date | null) {
+    if (!date) {
+      return date;
+    }
+    return DateTime.fromJSDate(date).toFormat('yyyyMMdd');
   }
 }
 
