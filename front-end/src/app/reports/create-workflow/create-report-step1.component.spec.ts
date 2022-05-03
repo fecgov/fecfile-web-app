@@ -4,8 +4,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateReportStep1Component } from './create-report-step1.component';
 
 describe('CreateReportStep1Component', () => {
