@@ -89,19 +89,17 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
-        this.form?.patchValue({
-          filing_frequency: filingFrequency,
-          report_type_category: this.getReportTypeCategories()[0],
-          report_code: this.getReportCodes()[0],
-        });
+        this.form?.patchValue({ filing_frequency: filingFrequency });
+        this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
+        this.form?.patchValue({ report_code: this.getReportCodes()[0] });
         this.form
           ?.get('filing_frequency')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
           .subscribe(() => {
             this.form.patchValue({
               report_type_category: this.getReportTypeCategories()[0],
-              report_code: this.getReportCodes()[0],
             });
+            this.form?.patchValue({ report_code: this.getReportCodes()[0] });
           });
         this.form
           ?.get('report_type_category')
