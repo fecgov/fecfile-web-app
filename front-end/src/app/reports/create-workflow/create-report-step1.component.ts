@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   electionReportCodes,
   F3xReportCodes,
@@ -23,7 +23,7 @@ import { environment } from 'environments/environment';
   styleUrls: ['./create-report-step1.component.scss'],
   templateUrl: './create-report-step1.component.html',
 })
-export class CreateReportStep1 implements OnInit {
+export class CreateReportStep1Component implements OnInit, OnDestroy {
   private destroy$ = new Subject();
   formProperties: string[] = [
     'filing_frequency',
@@ -77,7 +77,7 @@ export class CreateReportStep1 implements OnInit {
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => {
-        let filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount.filing_frequency;
+        const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
         this.form?.patchValue({ filing_frequency: filingFrequency });
@@ -86,7 +86,7 @@ export class CreateReportStep1 implements OnInit {
         this.form
           ?.get('report_type_category')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
-          .subscribe((reportTypeCategory) => {
+          .subscribe(() => {
             this.form.patchValue({
               report_code: this.getReportCodes()[0],
             });
