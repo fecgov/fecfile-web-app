@@ -3,13 +3,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { UserLoginData } from 'app/shared/models/user.model';
-
+import { SharedModule } from 'primeng/api';
 import { CreateF3xStep2Component } from './create-f3x-step2.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { environment } from '../../../../../environments/environment';
@@ -17,6 +17,7 @@ import { CommitteeAccount } from '../../../../shared/models/committee-account.mo
 import { selectCommitteeAccount } from '../../../../store/committee-account.selectors';
 import { ValidateService } from '../../../../shared/services/validate.service';
 import { F3xSummaryService } from '../../../../shared/services/f3x-summary.service';
+import { ReportsModule } from '../../../reports.module';
 
 describe('CreateF3xStep2Component', () => {
   let component: CreateF3xStep2Component;
@@ -43,10 +44,13 @@ describe('CreateF3xStep2Component', () => {
         DividerModule,
         CheckboxModule,
         RadioButtonModule,
+        SharedModule,
+        ReportsModule,
       ],
       declarations: [CreateF3xStep2Component],
       providers: [
         ValidateService,
+        FormBuilder,
         F3xSummaryService,
         provideMockStore({
           initialState: {
@@ -87,6 +91,7 @@ describe('CreateF3xStep2Component', () => {
     component.report = F3xSummary.fromJSON({
       id: '999',
     });
+    component.form.patchValue({ change_of_address: 'X' });
 
     component.save('back');
     const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${component.report.id}/`);
@@ -95,11 +100,12 @@ describe('CreateF3xStep2Component', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  it('#save should continue when save & contineu button clicked', () => {
+  it('#save should continue when save & continue button clicked', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.report = F3xSummary.fromJSON({
       id: '999',
     });
+    component.form.patchValue({ change_of_address: 'X' });
 
     component.save('continue');
     const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${component.report.id}/`);
