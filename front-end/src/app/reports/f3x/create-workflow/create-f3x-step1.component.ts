@@ -21,7 +21,6 @@ import { environment } from 'environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { MessageService } from 'primeng/api';
-import { DateTime } from 'luxon';
 import { DateUtils } from 'app/shared/utils/date.utils';
 
 @Component({
