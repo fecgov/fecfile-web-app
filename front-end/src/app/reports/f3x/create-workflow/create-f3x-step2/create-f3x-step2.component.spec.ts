@@ -94,21 +94,14 @@ describe('CreateF3xStep2Component', () => {
     component.form.patchValue({ change_of_address: 'X' });
 
     component.save('back');
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${component.report.id}/`);
+    let req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${component.report.id}/`);
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
-  });
 
-  it('#save should continue when save & continue button clicked', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.report = F3xSummary.fromJSON({
-      id: '999',
-    });
-    component.form.patchValue({ change_of_address: 'X' });
-
+    navigateSpy.calls.reset();
     component.save('continue');
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${component.report.id}/`);
+    req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${component.report.id}/`);
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
