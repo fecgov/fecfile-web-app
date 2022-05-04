@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { mergeMap, Observable, Subject, takeUntil, skipUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { refreshCommitteeAccountDetailsAction } from '../../../../store/committee-account.actions';
+import { refreshCommitteeAccountDetailsAction } from '../../../store/committee-account.actions';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';

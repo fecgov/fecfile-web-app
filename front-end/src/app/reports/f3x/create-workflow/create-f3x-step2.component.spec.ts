@@ -12,12 +12,12 @@ import { UserLoginData } from 'app/shared/models/user.model';
 import { SharedModule } from 'primeng/api';
 import { CreateF3xStep2Component } from './create-f3x-step2.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { environment } from '../../../../../environments/environment';
-import { CommitteeAccount } from '../../../../shared/models/committee-account.model';
-import { selectCommitteeAccount } from '../../../../store/committee-account.selectors';
-import { ValidateService } from '../../../../shared/services/validate.service';
-import { F3xSummaryService } from '../../../../shared/services/f3x-summary.service';
-import { ReportsModule } from '../../../reports.module';
+import { environment } from '../../../../environments/environment';
+import { CommitteeAccount } from '../../../shared/models/committee-account.model';
+import { selectCommitteeAccount } from '../../../store/committee-account.selectors';
+import { ValidateService } from '../../../shared/services/validate.service';
+import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
+import { ReportsModule } from '../../reports.module';
 
 describe('CreateF3xStep2Component', () => {
   let component: CreateF3xStep2Component;

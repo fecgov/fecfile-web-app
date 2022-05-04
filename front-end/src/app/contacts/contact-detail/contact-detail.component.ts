@@ -28,7 +28,7 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() loadTableItems: EventEmitter<LazyLoadEvent> = new EventEmitter<LazyLoadEvent>();
 
-  private destroy$: Subject<void> = new Subject();
+  private destroy$: Subject<boolean> = new Subject();
 
   // Need this setter/getter to get the isNewItem value into the template
   private _isNewItem = false;
@@ -158,7 +158,7 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true);
     this.destroy$.complete();
   }
 
