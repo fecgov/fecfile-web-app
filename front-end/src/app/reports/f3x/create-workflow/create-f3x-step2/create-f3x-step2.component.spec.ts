@@ -25,6 +25,7 @@ describe('CreateF3xStep2Component', () => {
   let httpTestingController: HttpTestingController;
   let reportService: F3xSummaryService;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
+  const mockParamMap = new Map([['id', 1]]);
 
   beforeEach(async () => {
     const userLoginData: UserLoginData = {
@@ -46,7 +47,7 @@ describe('CreateF3xStep2Component', () => {
       declarations: [CreateF3xStep2Component],
       providers: [
         ValidateService,
-        F3xSummary,
+        F3xSummaryService,
         provideMockStore({
           initialState: {
             fecfile_online_committeeAccount: committeeAccount,
@@ -60,7 +61,7 @@ describe('CreateF3xStep2Component', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            paramMap: of({ id: 1 }),
+            paramMap: of(mockParamMap),
           },
         },
       ],
