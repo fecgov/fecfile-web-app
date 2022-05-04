@@ -15,12 +15,14 @@ import { environment } from '../../../../../environments/environment';
 import { CommitteeAccount } from '../../../../shared/models/committee-account.model';
 import { selectCommitteeAccount } from '../../../../store/committee-account.selectors';
 import { ValidateService } from '../../../../shared/services/validate.service';
+import { F3xSummaryService } from '../../../../shared/services/f3x-summary.service';
 
 describe('CreateF3xStep2Component', () => {
   let component: CreateF3xStep2Component;
   let fixture: ComponentFixture<CreateF3xStep2Component>;
   let router: Router;
   let httpTestingController: HttpTestingController;
+  let reportService: F3xSummaryService;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
 
   beforeEach(async () => {
@@ -37,6 +39,7 @@ describe('CreateF3xStep2Component', () => {
       declarations: [CreateF3xStep2Component],
       providers: [
         ValidateService,
+        F3xSummary,
         provideMockStore({
           initialState: { fecfile_online_committeeAccount: committeeAccount },
           selectors: [{ selector: selectCommitteeAccount, value: committeeAccount }],
@@ -53,10 +56,12 @@ describe('CreateF3xStep2Component', () => {
 
   beforeEach(() => {
     router = TestBed.inject(Router);
+    reportService = TestBed.inject(F3xSummaryService);
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(CreateF3xStep2Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));
   });
 
   it('should create', () => {
