@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import {
   Contact,
@@ -21,11 +22,13 @@ import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
   selector: 'app-contact-detail',
   templateUrl: './contact-detail.component.html',
 })
-export class ContactDetailComponent implements OnInit {
+export class ContactDetailComponent implements OnInit, OnDestroy {
   @Input() contact: Contact = new Contact();
   @Input() detailVisible = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() loadTableItems: EventEmitter<LazyLoadEvent> = new EventEmitter<LazyLoadEvent>();
+
+  private destroy$: Subject<boolean> = new Subject();
 
   // Need this setter/getter to get the isNewItem value into the template
   private _isNewItem = false;
@@ -79,67 +82,84 @@ export class ContactDetailComponent implements OnInit {
     this.validateService.formValidatorSchema = contactIndividualSchema;
     this.validateService.formValidatorForm = this.form;
 
-    this.form?.get('type')?.valueChanges.subscribe((value: string) => {
-      // Update validator JSON schema to the selected contact type
-      this.validateService.formValidatorSchema = this.getSchemaByType(value as ContactTypes);
+    this.form
+      ?.get('type')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value: string) => {
+        // Update validator JSON schema to the selected contact type
+        this.validateService.formValidatorSchema = this.getSchemaByType(value as ContactTypes);
 
-      // Clear out non-schema form values
-      const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-      const schemaProperties: string[] = this.validateService.getSchemaProperties(
-        this.validateService.formValidatorSchema
-      );
-      Object.keys(this.form.controls).forEach((property: string) => {
-        if (!schemaProperties.includes(property)) {
-          formValues[property] = '';
+        // Clear out non-schema form values
+        const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+        const schemaProperties: string[] = this.validateService.getSchemaProperties(
+          this.validateService.formValidatorSchema
+        );
+        Object.keys(this.form.controls).forEach((property: string) => {
+          if (!schemaProperties.includes(property)) {
+            formValues[property] = '';
+          }
+        });
+        this.form.patchValue(formValues);
+
+        if (value === ContactTypes.CANDIDATE) {
+          this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
+        } else {
+          this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
         }
       });
-      this.form.patchValue(formValues);
 
-      if (value === ContactTypes.CANDIDATE) {
-        this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
-      } else {
-        this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-      }
-    });
+    this.form
+      ?.get('country')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value: string) => {
+        if (value !== 'USA') {
+          this.form.patchValue({
+            state: 'ZZ',
+          });
+          this.form?.get('state')?.disable();
+        } else {
+          this.form?.get('state')?.enable();
+        }
+      });
 
-    this.form?.get('country')?.valueChanges.subscribe((value: string) => {
-      if (value !== 'USA') {
-        this.form.patchValue({
-          state: 'ZZ',
-        });
-        this.form?.get('state')?.disable();
-      } else {
-        this.form?.get('state')?.enable();
-      }
-    });
+    this.form
+      ?.get('candidate_office')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value: string) => {
+        if (!value || value === CandidateOfficeTypes.PRESIDENTIAL) {
+          this.form.patchValue({
+            candidate_state: '',
+            candidate_district: '',
+          });
+          this.form?.get('candidate_state')?.disable();
+          this.form?.get('candidate_district')?.disable();
+        } else if (value === CandidateOfficeTypes.SENATE) {
+          this.form.patchValue({
+            candidate_district: '',
+          });
+          this.form?.get('candidate_state')?.enable();
+          this.form?.get('candidate_district')?.disable();
+        } else {
+          this.form?.get('candidate_state')?.enable();
+          this.form?.get('candidate_district')?.enable();
+        }
+      });
 
-    this.form?.get('candidate_office')?.valueChanges.subscribe((value: string) => {
-      if (!value || value === CandidateOfficeTypes.PRESIDENTIAL) {
-        this.form.patchValue({
-          candidate_state: '',
-          candidate_district: '',
-        });
-        this.form?.get('candidate_state')?.disable();
-        this.form?.get('candidate_district')?.disable();
-      } else if (value === CandidateOfficeTypes.SENATE) {
-        this.form.patchValue({
-          candidate_district: '',
-        });
-        this.form?.get('candidate_state')?.enable();
-        this.form?.get('candidate_district')?.disable();
-      } else {
-        this.form?.get('candidate_state')?.enable();
-        this.form?.get('candidate_district')?.enable();
-      }
-    });
+    this.form
+      ?.get('candidate_state')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value: string) => {
+        if (!!value && this.form.get('candidate_office')?.value === CandidateOfficeTypes.HOUSE) {
+          this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(value));
+        } else {
+          this.candidateDistrictOptions = [];
+        }
+      });
+  }
 
-    this.form?.get('candidate_state')?.valueChanges.subscribe((value: string) => {
-      if (!!value && this.form.get('candidate_office')?.value === CandidateOfficeTypes.HOUSE) {
-        this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(value));
-      } else {
-        this.candidateDistrictOptions = [];
-      }
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   /**
