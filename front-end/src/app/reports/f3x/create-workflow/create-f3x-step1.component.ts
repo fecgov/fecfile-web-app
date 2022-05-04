@@ -22,6 +22,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { MessageService } from 'primeng/api';
 import { DateTime } from 'luxon';
+import { DateUtils } from 'app/shared/utils/date.utils';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -188,9 +189,9 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     }
 
     this.form.patchValue({
-      coverage_from_date: this.convertDateToFecFormat(this.form.get('coverage_from_date')?.value),
-      coverage_through_date: this.convertDateToFecFormat(this.form.get('coverage_through_date')?.value),
-      date_of_election: this.convertDateToFecFormat(this.form.get('date_of_election')?.value),
+      coverage_from_date: DateUtils.convertDateToFecFormat(this.form.get('coverage_from_date')?.value),
+      coverage_through_date: DateUtils.convertDateToFecFormat(this.form.get('coverage_through_date')?.value),
+      date_of_election: DateUtils.convertDateToFecFormat(this.form.get('date_of_election')?.value),
     });
     const summary: F3xSummary = F3xSummary.fromJSON(this.validateService.getFormValues(this.form));
     this.f3xSummaryService.create(summary, this.formProperties).subscribe(() => {
@@ -202,13 +203,6 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         life: 3000,
       });
     });
-  }
-
-  public convertDateToFecFormat(date: Date | null) {
-    if (!date) {
-      return date;
-    }
-    return DateTime.fromJSDate(date).toFormat('yyyyMMdd');
   }
 }
 
