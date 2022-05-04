@@ -125,12 +125,6 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
               report_code: this.getReportCodes()[0],
             });
           });
-        this.form
-          ?.get('coverage_from_date')
-          ?.valueChanges.pipe(takeUntil(this.destroy$))
-          .subscribe((coverageFromDate) => {
-            console.log(coverageFromDate);
-          });
         if (existingReport) {
           this.form.patchValue(existingReport);
         }
