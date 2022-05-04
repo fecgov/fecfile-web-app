@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { UserLoginData } from 'app/shared/models/user.model';
 
 import { CreateF3xStep2Component } from './create-f3x-step2.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -26,6 +27,12 @@ describe('CreateF3xStep2Component', () => {
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
 
   beforeEach(async () => {
+    const userLoginData: UserLoginData = {
+      committee_id: 'C00000000',
+      email: 'email@fec.com',
+      is_allowed: true,
+      token: 'jwttokenstring',
+    };
     await TestBed.configureTestingModule({
       imports: [
         FormsModule,
@@ -41,8 +48,14 @@ describe('CreateF3xStep2Component', () => {
         ValidateService,
         F3xSummary,
         provideMockStore({
-          initialState: { fecfile_online_committeeAccount: committeeAccount },
-          selectors: [{ selector: selectCommitteeAccount, value: committeeAccount }],
+          initialState: {
+            fecfile_online_committeeAccount: committeeAccount,
+            fecfile_online_userLoginData: userLoginData,
+          },
+          selectors: [
+            { selector: selectCommitteeAccount, value: committeeAccount },
+            { selector: 'selectUserLoginData', value: userLoginData },
+          ],
         }),
         {
           provide: ActivatedRoute,
@@ -60,8 +73,8 @@ describe('CreateF3xStep2Component', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(CreateF3xStep2Component);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));
+    fixture.detectChanges();
   });
 
   it('should create', () => {
