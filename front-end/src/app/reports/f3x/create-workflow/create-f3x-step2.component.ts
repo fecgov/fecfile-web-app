@@ -70,7 +70,7 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
       .subscribe((report: F3xSummary) => {
         this.report = report;
         this.form.patchValue({
-          change_of_address: 'not-selected',
+          change_of_address: this.report.change_of_address ? this.report.change_of_address : 'not-selected',
           street_1: this.report.street_1 ? this.report.street_1 : this.committeeAccount?.street_1,
           street_2: this.report.street_2 ? this.report.street_2 : this.committeeAccount?.street_2,
           city: this.report.city ? this.report.city : this.committeeAccount?.city,
@@ -100,12 +100,12 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
 
     const payload: F3xSummary = F3xSummary.fromJSON({
       ...this.report,
-      ...this.validateService.getFormValues(this.form),
+      ...this.form.value,
     });
 
     this.reportService.update(payload, this.formProperties).subscribe(() => {
       if (jump === 'continue' && this.report?.id) {
-        this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
+        this.router.navigateByUrl('/reports');
       }
       if (jump === 'back' && this.report?.id) {
         this.router.navigateByUrl('/reports');

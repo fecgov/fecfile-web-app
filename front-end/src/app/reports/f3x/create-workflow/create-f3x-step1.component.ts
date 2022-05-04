@@ -177,10 +177,10 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   }
 
   public goBack() {
-    this.router.navigateByUrl('reports');
+    this.router.navigateByUrl('/reports');
   }
 
-  public save() {
+  public save(jump: 'continue' | null = null) {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
@@ -193,14 +193,18 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       date_of_election: DateUtils.convertDateToFecFormat(this.form.get('date_of_election')?.value),
     });
     const summary: F3xSummary = F3xSummary.fromJSON(this.validateService.getFormValues(this.form));
-    this.f3xSummaryService.create(summary, this.formProperties).subscribe(() => {
-      this.router.navigateByUrl('reports');
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Contact Updated',
-        life: 3000,
-      });
+    this.f3xSummaryService.create(summary, this.formProperties).subscribe((report: F3xSummary) => {
+      if (jump === 'continue') {
+        this.router.navigateByUrl(`/reports/f3x/create/step2/${report.id}`);
+      } else {
+        this.router.navigateByUrl('/reports');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Contact Updated',
+          life: 3000,
+        });
+      }
     });
   }
 }

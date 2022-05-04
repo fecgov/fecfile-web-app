@@ -41,11 +41,11 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   public override addItem(): void {
-    this.router.navigateByUrl('reports/create-f3x-step1');
+    this.router.navigateByUrl('/reports/f3x/create/step1');
   }
 
   public override editItem(item: Report): void {
-    this.router.navigateByUrl(`reports/create-f3x-step1/${item.id}`);
+    this.router.navigateByUrl(`/reports/f3x/create/step2/${item.id}`);
   }
 
   /**

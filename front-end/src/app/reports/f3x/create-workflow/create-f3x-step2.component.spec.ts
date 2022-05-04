@@ -104,6 +104,6 @@ describe('CreateF3xStep2Component', () => {
     req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${component.report.id}/`);
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 });

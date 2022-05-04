@@ -60,13 +60,13 @@ describe('ReportListComponent', () => {
   it('#addItem should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.addItem();
-    expect(navigateSpy).toHaveBeenCalledWith('reports/create-f3x-step1');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
   });
 
   it('#editItem should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.editItem({ id: 999 } as Report);
-    expect(navigateSpy).toHaveBeenCalledWith('reports/create-f3x-step1/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step2/999');
   });
 
   it('#displayName should display the item form_type code', () => {
