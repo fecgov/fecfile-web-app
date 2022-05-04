@@ -1,5 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -17,6 +18,7 @@ import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-s
 describe('CreateF3XStep1Component', () => {
   let httpTestingController: HttpTestingController;
   let component: CreateF3XStep1Component;
+  let router: Router;
   let fixture: ComponentFixture<CreateF3XStep1Component>;
   const f3x: F3xSummary = F3xSummary.fromJSON({
     coverage_from_date: '20220525',
@@ -54,6 +56,7 @@ describe('CreateF3XStep1Component', () => {
   });
 
   beforeEach(() => {
+    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -84,5 +87,11 @@ describe('CreateF3XStep1Component', () => {
     const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
+  });
+
+  it('back button should go back to report list page', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.goBack();
+    expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 });
