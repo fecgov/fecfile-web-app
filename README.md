@@ -18,23 +18,13 @@ finance information. The project code is distributed across these repositories:
 ### Prerequisites
 Software necessary to run the application locally
 
-* [Docker](https://docs.docker.com/get-docker/)
-* [Docker Compose](https://docs.docker.com/compose/install/)
+A Snyk authentication token is needed and should be set as the SNYK_AUTH_TOKEN environment varialbe.  This is needed so that the `snyk protect` command can be run to apply security patches to package dependencies.  You can setup a free account with [Snyk](https://app.snyk.io/) and obtain a token on the Snyk [Account Settings](https://app.snyk.io/account) page.
 
-### Docker basic usage.
-When running docker-compose you will need to be in the root directory of the project. The reason for this is that docker-compose looks for docker-compose.yml to be in the same directory where it's run. You will also need at least 3GB of memory allocated for docker during the build.
+### Running the Front-End locally
 
-A Snyk authentication token is needed and should be set as the SNYK_AUTH_TOKEN environment varialbe.  This is needed so that the `snyk protect` command can be run to apply security patches to package dependencies.  You can setup a free account with [Snyk](https://app.snyk.io/) and obtain a token on the Snyk [Account Settings](https://app.snyk.io/account) page. 
-
-### Run the front-end application
-`docker-compose up --build`
-### Shut down the containers
-Ctrl-c in the terminal where you ran docker-compose up or `docker-compose down`
-### see all running containers
-`docker ps`
-### running commands in a running container
-`docker-compose exec <container name> <command>`
-
+From within the front-end directory, run the command
+    ng serve
+to start a local server for the application.  The front-end can then be accessed through your browser at port 4200.
 
 # Deployment (FEC team only)
 
