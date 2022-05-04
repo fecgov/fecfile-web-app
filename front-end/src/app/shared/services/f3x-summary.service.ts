@@ -19,14 +19,14 @@ export class F3xSummaryService {
   public create(f3xSummary: F3xSummary, fieldsToValidate: string[] = []): Observable<F3xSummary> {
     const payload = f3xSummary.toJson();
     return this.apiService
-      .post<F3xSummary>(`/f3x-summaries/`, payload, fieldsToValidate)
+      .post<F3xSummary>(`/f3x-summaries/`, payload, { fields_to_validate: fieldsToValidate })
       .pipe(map((response) => F3xSummary.fromJSON(response)));
   }
 
   public update(f3xSummary: F3xSummary, fieldsToValidate: string[] = []): Observable<F3xSummary> {
     const payload = f3xSummary.toJson();
     return this.apiService
-      .put<F3xSummary>(`/f3x-summaries/${f3xSummary.id}/`, payload, fieldsToValidate)
+      .put<F3xSummary>(`/f3x-summaries/${f3xSummary.id}/`, payload, { fields_to_validate: fieldsToValidate })
       .pipe(map((response) => F3xSummary.fromJSON(response)));
   }
 
