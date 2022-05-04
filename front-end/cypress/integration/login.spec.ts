@@ -1,7 +1,5 @@
 // @ts-check
 
-import { identity } from "lodash";
-
 //Test login information retrieved from environment variables prefixed with "CYPRESS_"
 const email         = Cypress.env("EMAIL");
 const committeeID   = Cypress.env("COMMITTEE_ID");
