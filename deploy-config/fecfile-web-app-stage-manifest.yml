@@ -1,0 +1,11 @@
+applications:
+  - name: fecfile-web-app
+    instances: 2
+    memory: 128M
+    buildpack: nginx_buildpack
+
+    routes:
+      - route:  fecfile-web-app-stage.app.cloud.gov
+
+    env:
+      EXAMPLE: example
