@@ -57,7 +57,7 @@ describe('F3xSummaryService', () => {
       expect(response).toEqual(f3xSummary);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/?fields_to_validate=`);
     expect(req.request.method).toEqual('POST');
     req.flush(f3xSummary);
     httpTestingController.verify();
@@ -70,7 +70,9 @@ describe('F3xSummaryService', () => {
       expect(response).toEqual(f3xSummary);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${f3xSummary.id}/`);
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/f3x-summaries/${f3xSummary.id}/?fields_to_validate=`
+    );
     expect(req.request.method).toEqual('PUT');
     req.flush(f3xSummary);
     httpTestingController.verify();

@@ -94,14 +94,18 @@ describe('CreateF3xStep2Component', () => {
     component.form.patchValue({ change_of_address: 'X' });
 
     component.save('back');
-    let req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${component.report.id}/`);
+    let req = httpTestingController.expectOne(
+      `${environment.apiUrl}/f3x-summaries/${component.report.id}/?fields_to_validate=change_of_address,street_1,street_2,city,state,zip,memo_checkbox,memo`
+    );
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
 
     navigateSpy.calls.reset();
     component.save('continue');
-    req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/${component.report.id}/`);
+    req = httpTestingController.expectOne(
+      `${environment.apiUrl}/f3x-summaries/${component.report.id}/?fields_to_validate=change_of_address,street_1,street_2,city,state,zip,memo_checkbox,memo`
+    );
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');

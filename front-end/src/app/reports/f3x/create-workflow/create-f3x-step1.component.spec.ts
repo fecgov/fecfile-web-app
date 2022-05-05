@@ -84,7 +84,9 @@ describe('CreateF3XStep1Component', () => {
   it('#save should save a new f3x record', () => {
     component.form.patchValue({ ...f3x });
     component.save();
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/`);
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/f3x-summaries/?fields_to_validate=filing_frequency,report_type_category,report_code,coverage_from_date,coverage_through_date,date_of_election,state_of_election,form_type`
+    );
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
   });
