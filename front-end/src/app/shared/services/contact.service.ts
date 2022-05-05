@@ -12,8 +12,11 @@ import { Contact } from '../models/contact.model';
 export class ContactService implements TableListService<Contact> {
   constructor(private apiService: ApiService) {}
 
-  public getTableData(pageNumber = 1): Observable<ListRestResponse> {
-    return this.apiService.get<ListRestResponse>(`/contacts/?page=${pageNumber}`).pipe(
+  public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
+    if (!ordering) {
+      ordering = 'name';
+    }
+    return this.apiService.get<ListRestResponse>(`/contacts/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => Contact.fromJSON(item));
         return response;
