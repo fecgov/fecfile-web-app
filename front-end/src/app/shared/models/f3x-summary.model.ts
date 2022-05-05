@@ -108,13 +108,80 @@ export const F3xReportCodeLabels: LabelList = [
   [F3xReportCodes.M12, 'DECEMBER 20 (M12)'],
 ];
 
+export const monthlyElectionYearReportCodes: F3xReportCode[] = [
+  F3xReportCodes.M2,
+  F3xReportCodes.M3,
+  F3xReportCodes.M4,
+  F3xReportCodes.M5,
+  F3xReportCodes.M6,
+  F3xReportCodes.M7,
+  F3xReportCodes.M8,
+  F3xReportCodes.M9,
+  F3xReportCodes.M10,
+  F3xReportCodes.TwelveG,
+  F3xReportCodes.ThirtyG,
+  F3xReportCodes.YE,
+  F3xReportCodes.TER,
+];
+export const monthlyNonElectionYearReportCodes: F3xReportCode[] = [
+  F3xReportCodes.M2,
+  F3xReportCodes.M3,
+  F3xReportCodes.M4,
+  F3xReportCodes.M5,
+  F3xReportCodes.M6,
+  F3xReportCodes.M7,
+  F3xReportCodes.M8,
+  F3xReportCodes.M9,
+  F3xReportCodes.M10,
+  F3xReportCodes.M11,
+  F3xReportCodes.M12,
+  F3xReportCodes.YE,
+  F3xReportCodes.TER,
+];
+export const quarterlyElectionYearReportCodes: F3xReportCode[] = [
+  F3xReportCodes.Q1,
+  F3xReportCodes.Q2,
+  F3xReportCodes.Q3,
+  F3xReportCodes.TwelveG,
+  F3xReportCodes.ThirtyG,
+  F3xReportCodes.YE,
+  F3xReportCodes.TER,
+];
+export const quarterlyNonElectionYearReportCodes: F3xReportCode[] = [
+  F3xReportCodes.Q1,
+  F3xReportCodes.MY,
+  F3xReportCodes.Q2,
+  F3xReportCodes.YE,
+  F3xReportCodes.TER,
+];
+
+export const quarterlySpecialReportCodes: F3xReportCode[] = [
+  F3xReportCodes.TwelveP,
+  F3xReportCodes.TwelveR,
+  F3xReportCodes.TwelveC,
+  F3xReportCodes.TwelveS,
+  F3xReportCodes.ThirtyR,
+  F3xReportCodes.ThirtyS,
+];
+
+export const electionReportCodes: F3xReportCode[] = [
+  F3xReportCodes.ThirtyG,
+  F3xReportCodes.ThirtyR,
+  F3xReportCodes.ThirtyS,
+  F3xReportCodes.TwelveC,
+  F3xReportCodes.TwelveG,
+  F3xReportCodes.TwelveP,
+  F3xReportCodes.TwelveR,
+  F3xReportCodes.TwelveS,
+];
+
 export class F3xSummary extends BaseModel implements Report {
   id: number | null = null;
 
   form_type: F3xFormType = F3xFormTypes.F3XT;
   filer_committee_id_number: string | null = null;
   committee_name: string | null = null;
-  change_of_address = false;
+  change_of_address: string | null = null;
   street_1: string | null = null;
   street_2: string | null = null;
   city: string | null = null;
@@ -126,7 +193,7 @@ export class F3xSummary extends BaseModel implements Report {
   state_of_election: string | null = null;
   coverage_from_date: string | null = null;
   coverage_through_date: string | null = null;
-  qualified_committee = false;
+  qualified_committee: string | null = null;
   treasurer_last_name: string | null = null;
   treasurer_first_name: string | null = null;
   treasurer_middle_name: string | null = null;

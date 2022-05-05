@@ -20,11 +20,12 @@ export class ApiService {
     });
   }
 
-  getHeaders() {
-    return {
+  getHeaders(headersToAdd: object = {}) {
+    const baseHeaders = {
       'Content-Type': 'application/json',
       Authorization: `JWT ${this.token}`,
     };
+    return { ...baseHeaders, ...headersToAdd };
   }
 
   public get<T>(endpoint: string): Observable<T> {
@@ -33,14 +34,14 @@ export class ApiService {
   }
 
   // prettier-ignore
-  public post<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const headers = this.getHeaders();
+  public post<T>(endpoint: string, payload: any, headersToAdd: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const headers = this.getHeaders(headersToAdd);
     return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers });
   }
 
   // prettier-ignore
-  public put<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const headers = this.getHeaders();
+  public put<T>(endpoint: string, payload: any, headersToAdd: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const headers = this.getHeaders(headersToAdd);
     return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers });
   }
 

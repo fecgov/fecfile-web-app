@@ -14,4 +14,8 @@ describe('FecDatePipe', () => {
   it('transforms should return the correctly formatted date', () => {
     expect(pipe.transform('20020727')).toBe('07/27/2002');
   });
+
+  it('returns empty for missing date', () => {
+    expect(pipe.transform('')).toBe('');
+  });
 });

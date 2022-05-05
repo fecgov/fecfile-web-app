@@ -1,0 +1,153 @@
+<div class="p-fluid">
+  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+    <div class="grid">
+      <div class="col-12">
+        <h1>FEC Form 3X</h1>
+        <h5>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</h5>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <ng-container *ngIf="userCanSetFilingFrequency">
+      <div class="grid">
+        <div class="col-12">
+          <h3>Reporting Frequency</h3>
+        </div>
+
+        <div class="col-12">
+          <div class="field grid">
+            <div class="col-12">
+              <label for="type">(CHOOSE ONE)</label>
+            </div>
+            <div class="col-12">
+              <p-radioButton
+                inputId="Q"
+                name="filing_frequency"
+                value="Q"
+                label="QUARTERLY REPORTING"
+                formControlName="filing_frequency"
+              ></p-radioButton>
+            </div>
+            <div class="col-12">
+              <p-radioButton
+                inputId="M"
+                name="filing_frequency"
+                value="M"
+                label="MONTHLY REPORTING"
+                formControlName="filing_frequency"
+              ></p-radioButton>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h3>Report type</h3>
+      </div>
+      <div class="col-6">
+        <div class="field">
+          <label for="report_type_category">TIME PERIOD</label>
+          <p-selectButton [options]="getReportTypeCategories()" formControlName="report_type_category"></p-selectButton>
+          <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
+        </div>
+      </div>
+      <div class="col-6"></div>
+      <div class="col-6">
+        <div class="field grid">
+          <label for="type">(CHOOSE ONE)</label>
+          <div *ngFor="let reportCode of getReportCodes()" class="p-field-checkbox col-12">
+            <p-radioButton
+              [inputId]="reportCode"
+              name="report_code"
+              [value]="reportCode"
+              label="{{ reportCode | label: f3xReportCodeCreationLabels }}"
+              formControlName="report_code"
+            ></p-radioButton>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="isElectionReport()">
+        <div class="election-info col-6 grid">
+          <div class="col-12">
+            <div class="field">
+              <label for="date_of_election">ELECTION ON</label>
+              <p-calendar id="date_of_election" name="date_of_election" formControlName="date_of_election"></p-calendar>
+              <app-error-messages fieldName="date_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="field">
+              <label for="state_of_election">IN THE STATE/PROVINCE OF</label>
+              <p-dropdown
+                inputId="state_of_election"
+                formControlName="state_of_election"
+                [options]="stateOptions"
+                optionLabel="name"
+                optionValue="code"
+                [autoDisplayFirst]="false"
+                appendTo="body"
+              ></p-dropdown>
+              <app-error-messages fieldName="state_of_election" [formSubmitted]="formSubmitted"></app-error-messages>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <hr />
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-12">
+        <h3>Covering period</h3>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="coverage_from_date">FROM</label>
+          <p-calendar
+            inputId="coverage_from_date"
+            name="coverage_from_date"
+            formControlName="coverage_from_date"
+          ></p-calendar>
+          <app-error-messages fieldName="coverage_from_date" [formSubmitted]="formSubmitted"></app-error-messages>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="field">
+          <label for="coverage_through_date">TO</label>
+          <p-calendar
+            inputId="coverage_through_date"
+            name="coverage_through_date"
+            formControlName="coverage_through_date"
+          ></p-calendar>
+          <app-error-messages fieldName="coverage_through_date" [formSubmitted]="formSubmitted"></app-error-messages>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="grid">
+  <div class="col-2">
+    <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
+  </div>
+  <div class="col-10 grid save-buttons">
+    <div>
+      <button pButton pRipple label="Save" (click)="save()" class="p-button-primary"></button>
+    </div>
+    <div>
+      <button pButton pRipple label="Save and continue" (click)="save('continue')" class="p-button-info"></button>
+    </div>
+  </div>
+</div>
