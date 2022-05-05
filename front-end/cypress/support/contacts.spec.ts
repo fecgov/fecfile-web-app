@@ -1,0 +1,77 @@
+
+import * as _ from "lodash";
+
+function RandomInt(min=0, max=1){
+    return Math.round(Math.random()*(max-min))+min;
+}
+
+export function CreateContactIndividual(contact_given={}, save=true){
+
+  const contact_random = { //_.sample : standard js object method (hence _.); takes a random element from a given list.  Much more readable than [randomint % list.length] on every list
+    last_name:_.sample(['Savage','Skinner','Glenn','Barajas','Moreno','King','Meadows','Grimes','Glover','Carrillo','Stephens','Pacheco','Rios','Olsen','Dorsey','Livingston','Mclaughlin','Orozco','Preston','Rush','Malone','Graham','Patton','Middleton','Boyer']),
+    first_name:_.sample(['Khalil','Anika','Demarion','Kenneth','Albert','Ainsley','Brenton','Mira','Kianna','Adalynn','Bentley','Aden','Cristina','Dayanara','Ronan','Makena','Ramon','Gaige','Matilda','Sebastian','Octavio','Walker','Gia','Gloria','Theresa']),
+    middle_name:_.sample(['Kenzie','Nathaly','Wendy','Deborah','Eve','Raiden','Adam','Teagan','Erika','Levi','Xzavier','Myla','Trystan','Reagan','Barrett','Leroy','Jesus','Adrien','Alexia','Harley','Zaire','Bernard','Kade','Anabelle','Sincere']),
+    prefix:_.sample(['Dr','','','','','','']), //Extra empty strings artificially raises the likelihood of the value being an empty string
+    suffix:_.sample(['Sr', 'Jr', 'III', 'IV', 'V', 'VI','','','','','','','','','','','','','']),
+    street:`${RandomInt(1,9999)} Test ${_.sample(['Rd','Ln','St','Ave','Ct'])}`,
+    apartment:_.sample([`Apt ${RandomInt(1,200)}`, '', '']),
+    city:"Testopolis",
+    zip:"12121",
+    state:_.sample(['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'IllinoisIndiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'MontanaNebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'PennsylvaniaRhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming']),
+    phone:`${RandomInt(1,999).toString().padStart(3, "0")}${RandomInt(1000000, 1999999).toString()}`, //Area code from 001 to 999 || 7-digit number starting with between 100 to 199 because (supposedly) that range always corresponds to fake numbers
+    employer:"",
+    occupation:_.sample(['Police Officer','Radiologic Technologist','Accountant','Statistician','Surveyor','Physician','Teacher','Microbiologist','Insurance Agent','Economist','Childcare worker','Automotive mechanic','Physical Therapist','Coach','Librarian','Painter','High','Software Engineer','Editor','Interpreter','Chef','','','','','','','','','','','','','','','']),
+  }
+
+  let contact = {...contact_random, ...contact_given}; //Merges the provided contact with the randomly generated one, overwriting the random one with any fields found in the provided
+ 
+  cy.visit('/contacts');
+
+  cy.get('#button-contacts-new')
+    .click();
+
+  //Contact
+  cy.get("#last_name")
+    .safe_type(contact["last_name"]);
+  cy.get("#first_name")
+    .safe_type(contact["first_name"]);
+  cy.get("#middle_name")
+    .safe_type(contact["middle_name"]);
+  cy.get("#prefix")
+    .safe_type(contact["prefix"]);
+  cy.get("#suffix")
+    .safe_type(contact["suffix"]);
+
+  //Address
+  cy.get("#street_1")
+    .safe_type(contact["street"]);
+  cy.get("#street_2")
+    .safe_type(contact["apartment"]);
+  cy.get("#city")
+    .safe_type(contact["city"]);
+  cy.get("#zip")
+    .safe_type(contact["zip"]);
+  cy.get("#telephone")
+    .safe_type(contact["phone"]);
+  cy.get("[inputid='state']") //Get the field for State based on its "inputid" attribute
+    .find("div [role='button']") //Get the field's child element, div, based on its role element
+    .click();
+  cy.get("span")
+    .contains(contact["state"])
+    .click();
+
+  //Employer
+  cy.get("#employer")
+    .safe_type(contact["employer"]);
+  cy.get("#occupation")
+    .safe_type(contact["occupation"])
+
+  if (save){
+    cy.get(".p-button-primary > .p-button-label")
+      .contains("Save")
+      .click();
+  }
+
+  cy.wait(500); //Gives the database time to process the request.  It gets a little funky otherwise...
+  return cy.wrap(contact);
+}

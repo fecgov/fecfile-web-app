@@ -22,7 +22,25 @@
 
 */
 
-function support_login(){
+
+Cypress.Commands.add("safe_type", {prevSubject:true}, (subject, stringval) => {
+  subject = cy.wrap(subject);
+  
+  if (! isString(stringval)){
+    stringval = stringval.toString();
+  }
+
+  if (stringval.length != 0) {
+    subject.type(stringval);
+  }
+  else{
+    console.log(`Skipped typing into ${subject.toString()}} because the string was empty`);
+  }
+
+  return subject; //Allows Cypress methods to chain off of this command like normal (IE Cy.get().safe_type().parent().click() and so on)
+});
+
+Cypress.Commands.add("login", () => {
 
   //Dummy login information
   const email         = Cypress.env("EMAIL");
@@ -60,6 +78,22 @@ function support_login(){
   cy.get(fieldSecurityCodeText)
   .type(testPIN)
   .type("{enter}");
-}
 
-Cypress.Commands.add("login",support_login);
+  cy.wait(1000);
+});
+
+Cypress.Commands.add("logout", ()=>{
+  cy.get(".p-menubar")
+    .find(".p-menuitem-link")
+    .contains("Profile")
+    .click();
+
+  cy.get(".p-menuitem-text")
+    .contains("Logout")
+    .click();
+});
+
+
+import { isString } from "lodash";
+import { CreateContactIndividual } from "./contacts.spec";
+Cypress.Commands.add("CreateContactIndividual", CreateContactIndividual);
