@@ -28,7 +28,9 @@ export class ApiService {
     return { ...baseHeaders, ...headersToAdd };
   }
 
-  getQueryParams(queryParams: any = {}) {
+  getQueryParams(
+    queryParams: { [param: string]: string | number | boolean | readonly (string | number | boolean)[] } = {}
+  ) {
     return new HttpParams({ fromObject: queryParams });
   }
 
