@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, delay, switchMap } from 'rxjs/operators';
@@ -28,21 +28,27 @@ export class ApiService {
     return { ...baseHeaders, ...headersToAdd };
   }
 
+  getQueryParams(queryParams: any = {}) {
+    return new HttpParams({ fromObject: queryParams });
+  }
+
   public get<T>(endpoint: string): Observable<T> {
     const headers = this.getHeaders();
     return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers });
   }
 
   // prettier-ignore
-  public post<T>(endpoint: string, payload: any, headersToAdd: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const headers = this.getHeaders(headersToAdd);
-    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers });
+  public post<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const headers = this.getHeaders();
+    const params = this.getQueryParams(queryParams);
+    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params});
   }
 
   // prettier-ignore
-  public put<T>(endpoint: string, payload: any, headersToAdd: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const headers = this.getHeaders(headersToAdd);
-    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers });
+  public put<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const headers = this.getHeaders();
+    const params = this.getQueryParams(queryParams);
+    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params});
   }
 
   public delete<T>(endpoint: string): Observable<T> {
