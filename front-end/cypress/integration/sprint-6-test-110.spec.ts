@@ -26,17 +26,14 @@ const individual_employer     = "University of Testopolis";
 const individual_occupation   = "Historian";
 
 describe('QA Test Script #110 (Sprint 6)', () => {
-  before(() => {
+  beforeEach(() => {
     cy.login();
   });
 
-  beforeEach(() => {
-    cy.visit("/dashboard");
-  });
 
-  //afterEach(() => {
-  //  cy.logout();
-  //});
+  afterEach(() => {
+    cy.logout();
+  });
 
   it('Navigate to contacts page (Step #1)', () => {
       cy.url()
