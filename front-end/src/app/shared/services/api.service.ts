@@ -74,20 +74,20 @@ export class ApiService {
   }
 
   // prettier-ignore
-  public spinnerPost<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  public spinnerPost<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     return of(null).pipe(
       delay(0),
       tap(() => this.store.dispatch(spinnerOnAction())),
-      switchMap(() => this.post<T>(endpoint, payload).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
+      switchMap(() => this.post<T>(endpoint, payload, queryParams).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
     );
   }
 
   // prettier-ignore
-  public spinnerPut<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  public spinnerPut<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     return of(null).pipe(
       delay(0),
       tap(() => this.store.dispatch(spinnerOnAction())),
-      switchMap(() => this.put<T>(endpoint, payload).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
+      switchMap(() => this.put<T>(endpoint, payload, queryParams).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
     );
   }
 

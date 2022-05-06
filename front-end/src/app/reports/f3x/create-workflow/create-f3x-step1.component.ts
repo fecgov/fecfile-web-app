@@ -14,7 +14,7 @@ import { LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/share
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { Subject, takeUntil, combineLatest, switchMap, Observable, of } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { environment } from 'environments/environment';
@@ -90,18 +90,11 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const existingReport$: Observable<F3xSummary | undefined> = this.activatedRoute.paramMap.pipe(
-      switchMap((paramMap): Observable<F3xSummary | undefined> => {
-        const id = paramMap.get('id');
-        if (id) {
-          return this.f3xSummaryService.get(parseInt(id));
-        }
-        return of(undefined);
-      })
-    );
-    combineLatest([this.store.select(selectCommitteeAccount), existingReport$])
+    const report: F3xSummary = this.activatedRoute.snapshot.data['report'];
+    this.store
+      .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(([committeeAccount, existingReport]) => {
+      .subscribe((committeeAccount) => {
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
@@ -125,8 +118,8 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
               report_code: this.getReportCodes()[0],
             });
           });
-        if (existingReport) {
-          this.form.patchValue(existingReport);
+        if (report) {
+          this.form.patchValue(report);
         }
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);

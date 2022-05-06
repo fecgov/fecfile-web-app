@@ -26,7 +26,6 @@ describe('CreateF3xStep2Component', () => {
   let httpTestingController: HttpTestingController;
   let reportService: F3xSummaryService;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
-  const mockParamMap = new Map([['id', 1]]);
 
   beforeEach(async () => {
     const userLoginData: UserLoginData = {
@@ -65,7 +64,11 @@ describe('CreateF3xStep2Component', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            paramMap: of(mockParamMap),
+            snapshot: {
+              data: {
+                report: F3xSummary.fromJSON({}),
+              },
+            },
           },
         },
       ],

@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { mergeMap, Observable, Subject, takeUntil, skipUntil } from 'rxjs';
+import { switchMap, combineLatest, Observable, Subject, takeUntil, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { refreshCommitteeAccountDetailsAction } from '../../../store/committee-account.actions';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 
 @Component({
   selector: 'app-create-f3x-step2',
@@ -18,7 +18,6 @@ import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
   styleUrls: ['./create-f3x-step2.component.scss'],
 })
 export class CreateF3xStep2Component implements OnInit, OnDestroy {
-  report: F3xSummary | null = null;
   formProperties: string[] = [
     'change_of_address',
     'street_1',
@@ -29,19 +28,19 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
     'memo_checkbox',
     'memo',
   ];
+  report: F3xSummary | undefined;
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
-  committeeAccount: CommitteeAccount | null = null;
-  committeeAccount$: Observable<CommitteeAccount> | null = null;
+  committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
 
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
-    private reportService: F3xSummaryService,
+    private activatedRoute: ActivatedRoute,
+    private f3xSummaryService: F3xSummaryService,
     private validateService: ValidateService,
     private fb: FormBuilder,
     private store: Store
@@ -50,32 +49,21 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Refresh committee account details whenever page loads
     this.store.dispatch(refreshCommitteeAccountDetailsAction());
-
-    this.committeeAccount$ = this.store.select(selectCommitteeAccount);
-    this.committeeAccount$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount: CommitteeAccount) => (this.committeeAccount = committeeAccount));
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
-    this.route.paramMap
-      .pipe(
-        takeUntil(this.destroy$),
-        skipUntil(this.committeeAccount$),
-        mergeMap((params): Observable<F3xSummary> => {
-          const id = Number(params.get('id'));
-          return this.reportService.get(id);
-        })
-      )
-      .subscribe((report: F3xSummary) => {
-        this.report = report;
+    this.report = this.activatedRoute.snapshot.data['report'];
+    this.store
+      .select(selectCommitteeAccount)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((committeeAccount) => {
         this.form.patchValue({
-          change_of_address: this.report.change_of_address ? this.report.change_of_address : 'not-selected',
-          street_1: this.report.street_1 ? this.report.street_1 : this.committeeAccount?.street_1,
-          street_2: this.report.street_2 ? this.report.street_2 : this.committeeAccount?.street_2,
-          city: this.report.city ? this.report.city : this.committeeAccount?.city,
-          state: this.report.state ? this.report.state : this.committeeAccount?.state,
-          zip: this.report.zip ? this.report.zip : this.committeeAccount?.zip,
+          change_of_address: this.report?.change_of_address ? this.report.change_of_address : 'not-selected',
+          street_1: this.report?.street_1 ? this.report.street_1 : committeeAccount?.street_1,
+          street_2: this.report?.street_2 ? this.report.street_2 : committeeAccount?.street_2,
+          city: this.report?.city ? this.report.city : committeeAccount?.city,
+          state: this.report?.state ? this.report.state : committeeAccount?.state,
+          zip: this.report?.zip ? this.report.zip : committeeAccount?.zip,
           memo_checkbox: false,
           memo: '',
         });
@@ -103,7 +91,7 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
       ...this.form.value,
     });
 
-    this.reportService.update(payload, this.formProperties).subscribe(() => {
+    this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
       if (jump === 'continue' && this.report?.id) {
         this.router.navigateByUrl('/reports');
       }
