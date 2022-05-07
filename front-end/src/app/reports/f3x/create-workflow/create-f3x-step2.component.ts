@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { switchMap, combineLatest, Observable, Subject, takeUntil, of } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { refreshCommitteeAccountDetailsAction } from '../../../store/committee-account.actions';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
