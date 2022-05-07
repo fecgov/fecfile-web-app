@@ -1,14 +1,15 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { of } from 'rxjs';
 import { F3xReportCodes, F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { SharedModule } from 'app/shared/shared.module';
-import { environment } from 'environments/environment';
 import { MessageService } from 'primeng/api';
 import { CalendarModule } from 'primeng/calendar';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -16,11 +17,12 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 
 describe('CreateF3XStep1Component', () => {
-  let httpTestingController: HttpTestingController;
   let component: CreateF3XStep1Component;
   let router: Router;
   let fixture: ComponentFixture<CreateF3XStep1Component>;
+  let f3xSummaryService: F3xSummaryService;
   const f3x: F3xSummary = F3xSummary.fromJSON({
+    id: 999,
     coverage_from_date: '20220525',
     form_type: 'F3XN',
     report_code: 'Q1',
@@ -44,6 +46,7 @@ describe('CreateF3XStep1Component', () => {
       ],
       declarations: [CreateF3XStep1Component, LabelPipe],
       providers: [
+        F3xSummaryService,
         FormBuilder,
         MessageService,
         provideMockStore({
@@ -52,11 +55,11 @@ describe('CreateF3XStep1Component', () => {
         }),
       ],
     }).compileComponents();
-    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   beforeEach(() => {
     router = TestBed.inject(Router);
+    f3xSummaryService = TestBed.inject(F3xSummaryService);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -82,11 +85,24 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('#save should save a new f3x record', () => {
+    spyOn(f3xSummaryService, 'create').and.returnValue(of(f3x));
+    const navigateSpy = spyOn(router, 'navigateByUrl');
     component.form.patchValue({ ...f3x });
     component.save();
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/`);
-    expect(req.request.method).toEqual('POST');
-    httpTestingController.verify();
+    expect(navigateSpy).toHaveBeenCalledWith('/reports');
+
+    navigateSpy.calls.reset();
+    component.form.patchValue({ ...f3x });
+    component.save('continue');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step2/999');
+  });
+
+  it('#save should not save with invalid f3x record', () => {
+    spyOn(f3xSummaryService, 'create').and.returnValue(of(f3x));
+    component.form.patchValue({ ...f3x });
+    component.form.patchValue({ form_type: 'NO-GOOD' });
+    component.save();
+    expect(component.form.invalid).toBe(true);
   });
 
   it('back button should go back to report list page', () => {
