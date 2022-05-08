@@ -244,6 +244,54 @@ jobs:
             cd front-end
             snyk test
 
+  docs-build:
+    docker:
+      - image: cimg/node:16.15-browsers
+    steps:
+      - checkout
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+
+      - node/install-packages:
+          override-ci-command: npm install
+          app-dir: ~/project/front-end/
+
+      - run:
+          name: run compodoc build documentation
+          command: npm run compodoc
+          working_directory: ~/project/front-end/
+
+      - persist_to_workspace:
+          root: ~/project/front-end/documentation
+          paths: *
+
+  docs-deploy:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project/front-end/documentation
+      - run:
+          name: Disable jekyll builds
+          command: touch ~/project/front-end/documentation/.nojekyll
+      - node/install:
+          install-yarn: false
+          node-version: "16.13"
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Configure git
+          command: |
+            git config user.email "apiinfo@fec.gov"
+            git config user.name "apiinfo"
+      - add_ssh_keys:
+          fingerprints:
+            - "0f:22:e1:9d:81:ea:82:a0:fa:18:f2:0f:25:f7:3f:6f"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: npx gh-pages --dotfiles --dist ~/project/front-end/documentation
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -256,3 +304,13 @@ workflows:
           requires:
             - test
             - dependendency-check
+      - docs-build:
+          requires:
+            - test
+            - dependency-check
+      - docs-deploy:
+          requires:
+            - docs-build
+          filters:
+            branches:
+              only: develop
