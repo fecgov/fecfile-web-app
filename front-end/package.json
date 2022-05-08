@@ -19,7 +19,8 @@
         "lint": "sh ./build-scripts/lint.sh",
         "license-report": "./node_modules/.bin/license-checker",
         "cypress:open": "cypress open",
-        "cypress:run": "cypress run"
+        "cypress:run": "cypress run",
+        "compodoc": "npx compodoc -p tsconfig.doc.json --disableCoverage"
     },
     "private": true,
     "dependencies": {
@@ -60,6 +61,7 @@
         "@angular-eslint/template-parser": "13.1.0",
         "@angular/cli": "~13.2.2",
         "@angular/compiler-cli": "~13.2.0",
+        "@compodoc/compodoc": "^1.1.19",
         "@cypress/schematic": "^1.6.0",
         "@types/jasmine": "~3.10.0",
         "@types/lodash": "^4.14.178",
