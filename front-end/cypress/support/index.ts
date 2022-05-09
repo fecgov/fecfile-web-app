@@ -22,6 +22,8 @@
 
 */
 
+import {$} from 'jquery'
+
 
 Cypress.Commands.add("safe_type", {prevSubject:true}, (subject, stringval) => {
   subject = cy.wrap(subject);
@@ -38,6 +40,29 @@ Cypress.Commands.add("safe_type", {prevSubject:true}, (subject, stringval) => {
   }
 
   return subject; //Allows Cypress methods to chain off of this command like normal (IE Cy.get().safe_type().parent().click() and so on)
+});
+
+Cypress.Commands.add("dropdown_set_value", (dropdown, target) => {
+  eval('$("#pr_id_5_label").click()');
+  cy.wait(150);
+  
+  /*
+  cy.get(dropdown)
+    .find("div[role='button']")
+    .click();
+  cy.get("li[role='option']")
+    .contains(target)
+    .trigger('mousemove')
+    .then(element =>{
+      console.log(element);
+      element[0].click();
+      //element.trigger("click");
+    });
+  cy.wait(150);
+  cy.get(dropdown)
+    .trigger('change');
+  */
+  
 });
 
 Cypress.Commands.add("login", () => {
@@ -94,6 +119,7 @@ Cypress.Commands.add("logout", ()=>{
 });
 
 
+import { watchFile } from "fs";
 import { isString } from "lodash";
 import { CreateContactIndividual } from "./contacts.spec";
 Cypress.Commands.add("CreateContactIndividual", CreateContactIndividual);

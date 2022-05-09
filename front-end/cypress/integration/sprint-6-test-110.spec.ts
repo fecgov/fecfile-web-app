@@ -30,7 +30,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
   });
 
   it("Steps 2-5: Creates a contact", () => {
-    const contact = GenerateContactObject();
+    const contact = GenerateContactObject({"contact_type":"Candidate"});
     cy.CreateContactIndividual(contact, false);
 
     cy.get("#last_name")
