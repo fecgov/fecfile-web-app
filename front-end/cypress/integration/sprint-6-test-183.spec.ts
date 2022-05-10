@@ -1,6 +1,5 @@
 // @ts-check
 
-import { after } from "lodash";
 import { GenerateContactObject } from "../support/contacts.spec";
 
 /*
