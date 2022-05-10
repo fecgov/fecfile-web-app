@@ -7,28 +7,28 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-profile',
   templateUrl: './account-info.component.html',
-  styleUrls: ['./account-info.component.scss']
+  styleUrls: ['./account-info.component.scss'],
 })
 export class AccountInfoComponent implements OnInit {
   committeeAccount$: Observable<CommitteeAccount> | null = null;
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
   }
 
   /**
- * This sends the user to their F3X on fec.gov.
- */
+   * This sends the user to their F3X on fec.gov.
+   */
   viewF3X(): void {
     return;
   }
 
   /**
- * This sends the user to their F3X on fec.gov.
- */
+   * This sends the user to their F3X on fec.gov.
+   */
   updateForm1(): void {
-    return;
+    window.open('https://webforms.fec.gov/webforms/form1/index.htm', '_blank');
   }
 }
