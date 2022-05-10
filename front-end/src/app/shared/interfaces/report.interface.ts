@@ -3,3 +3,5 @@ export interface Report {
   form_type: string;
   filer_committee_id_number: string | null;
 }
+
+export ReportDBModel
