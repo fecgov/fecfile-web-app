@@ -10,6 +10,7 @@ export const environment = {
   dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
   fecApiCommitteeUrl: 'https://api.open.fec.gov/v1/committee',
   fecApiKey: 'DVoLzo07NBfrbDZPj0LJs3PS0GIRL3fk4eOp7Zo6',
+  userCanSetFilingFrequency: true,
 };
 
 /*

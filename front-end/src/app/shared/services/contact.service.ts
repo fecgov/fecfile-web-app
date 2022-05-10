@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { TableListService } from '../services/table-list-service.interface';
+import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 import { Contact } from '../models/contact.model';
@@ -12,25 +12,28 @@ import { Contact } from '../models/contact.model';
 export class ContactService implements TableListService<Contact> {
   constructor(private apiService: ApiService) {}
 
-  public getTableData(pageNumber = 1): Observable<ListRestResponse> {
-    return this.apiService.get<ListRestResponse>(`/contacts/?page=${pageNumber}`).pipe(
+  public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
+    if (!ordering) {
+      ordering = 'name';
+    }
+    return this.apiService.get<ListRestResponse>(`/contacts/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
-        response.results = response.results.map((item: any) => Contact.fromJSON(item));
+        response.results = response.results.map((item) => Contact.fromJSON(item));
         return response;
       })
     );
   }
 
   public create(contact: Contact): Observable<Contact> {
-    const payload: any = contact.toJson();
-    return this.apiService.post<any>(`/contacts/`, payload).pipe(map((response: any) => Contact.fromJSON(response)));
+    const payload = contact.toJson();
+    return this.apiService.post<Contact>(`/contacts/`, payload).pipe(map((response) => Contact.fromJSON(response)));
   }
 
   public update(contact: Contact): Observable<Contact> {
-    const payload: any = contact.toJson();
+    const payload = contact.toJson();
     return this.apiService
-      .put<any>(`/contacts/${contact.id}/`, payload)
-      .pipe(map((response: any) => Contact.fromJSON(response)));
+      .put<Contact>(`/contacts/${contact.id}/`, payload)
+      .pipe(map((response) => Contact.fromJSON(response)));
   }
 
   public delete(contact: Contact): Observable<null> {

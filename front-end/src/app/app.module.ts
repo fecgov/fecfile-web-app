@@ -6,7 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // NGRX
-import { StoreModule, ActionReducer, MetaReducer } from '@ngrx/store';
+import { StoreModule, ActionReducer, MetaReducer, Action } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { loginReducer } from './store/login.reducer';
@@ -14,6 +14,7 @@ import { committeeAccountReducer } from './store/committee-account.reducer';
 import { spinnerReducer } from './store/spinner.reducer';
 import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { LoginEffects } from './store/login.effects';
+import { AppState } from './store/app-state.model';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -42,14 +43,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 
 // Save ngrx store to localStorage dynamically
-function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
     keys: ['committeeAccount', 'spinnerOn', 'userLoginData'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
 }
-const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
+const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncReducer];
 
 @NgModule({
   declarations: [

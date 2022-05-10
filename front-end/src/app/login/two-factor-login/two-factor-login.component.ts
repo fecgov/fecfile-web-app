@@ -8,28 +8,22 @@ import { Router } from '@angular/router';
   styleUrls: ['./two-factor-login.component.scss'],
 })
 export class TwoFactorLoginComponent {
-  twoFactInfo!: FormGroup;
+  twoFactInfo: FormGroup = this.fb.group({
+    twoFactOption: ['', Validators.required],
+  });
 
-  constructor(private router: Router, private fb: FormBuilder) {
-    this.twoFactInfo = fb.group({
-      twoFactOption: ['', Validators.required],
-    });
-  }
+  constructor(private router: Router, private fb: FormBuilder) {}
 
   back() {
     // destroy current session if any and return to login page
-    this.router.navigate(['/login']).then((r) => {
-      // do nothing=
-    });
+    this.router.navigate(['/login']);
   }
 
   submit() {
     this.twoFactInfo.markAsTouched();
 
     if (this.twoFactInfo.valid) {
-      this.router.navigate(['/confirm-2f']).then((r) => {
-        // handle it
-      });
+      this.router.navigate(['/confirm-2f']);
     }
   }
 }

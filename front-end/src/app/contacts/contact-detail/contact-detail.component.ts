@@ -1,9 +1,21 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { Contact, ContactTypes, ContactTypeLabels, CandidateOfficeTypeLabels } from '../../shared/models/contact.model';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
+import {
+  Contact,
+  ContactTypes,
+  ContactTypeLabels,
+  CandidateOfficeTypes,
+  CandidateOfficeTypeLabels,
+} from '../../shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
+import { ValidateService } from 'app/shared/services/validate.service';
+import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
+import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
+import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
+import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
+import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 
 @Component({
   selector: 'app-contact-detail',
@@ -12,44 +24,47 @@ import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'a
 export class ContactDetailComponent implements OnInit {
   @Input() contact: Contact = new Contact();
   @Input() detailVisible = false;
-  @Input() isNewContact = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() loadTableItems: EventEmitter<any> = new EventEmitter<any>();
+  @Output() loadTableItems: EventEmitter<LazyLoadEvent> = new EventEmitter<LazyLoadEvent>();
+
+  // Need this setter/getter to get the isNewItem value into the template
+  private _isNewItem = false;
+  @Input() set isNewItem(value: boolean) {
+    this._isNewItem = value;
+    if (this._isNewItem) {
+      this.form.get('type')?.enable();
+    } else {
+      this.form.get('type')?.disable();
+    }
+  }
+  get isNewItem(): boolean {
+    return this._isNewItem;
+  }
 
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = [];
   candidateOfficeTypeOptions: PrimeOptions = [];
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
+  candidateStateOptions: PrimeOptions = [];
+  candidateDistrictOptions: PrimeOptions = [];
   formSubmitted = false;
 
-  form: FormGroup = this.fb.group({
-    type: ['', [Validators.required]],
-    candidate_id: ['', [Validators.required, Validators.maxLength(9)]],
-    committee_id: ['', [Validators.required, Validators.maxLength(9)]],
-    name: ['', [Validators.required, Validators.maxLength(200)]],
-    last_name: ['', [Validators.required, Validators.maxLength(30)]],
-    first_name: ['', [Validators.required, Validators.maxLength(20)]],
-    middle_name: ['', [Validators.maxLength(20)]],
-    prefix: ['', [Validators.maxLength(10)]],
-    suffix: ['', [Validators.maxLength(10)]],
-    street_1: ['', [Validators.required, Validators.maxLength(34)]],
-    street_2: ['', [Validators.maxLength(34)]],
-    city: ['', [Validators.required, Validators.maxLength(30)]],
-    state: ['', [Validators.required]],
-    zip: ['', [Validators.required, Validators.maxLength(9)]],
-    employer: ['', [Validators.maxLength(38)]],
-    occupation: ['', [Validators.maxLength(38)]],
-    candidate_office: ['', [Validators.maxLength(10)]],
-    candidate_state: ['', [Validators.maxLength(10)]],
-    candidate_district: ['', [Validators.maxLength(10)]],
-    telephone: ['', [Validators.pattern('[0-9]{10}')]],
-    country: ['', [Validators.required]],
-  });
+  form: FormGroup = this.fb.group(
+    this.validateService.getFormGroupFields([
+      ...new Set([
+        ...this.validateService.getSchemaProperties(contactIndividualSchema),
+        ...this.validateService.getSchemaProperties(contactCandidateSchema),
+        ...this.validateService.getSchemaProperties(contactCommitteeSchema),
+        ...this.validateService.getSchemaProperties(contactOrganizationSchema),
+      ]),
+    ])
+  );
 
   constructor(
     private messageService: MessageService,
     private contactService: ContactService,
+    private validateService: ValidateService,
     private fb: FormBuilder
   ) {}
 
@@ -58,12 +73,30 @@ export class ContactDetailComponent implements OnInit {
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
+    this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
+
+    // Initialize validation tracking of current JSON schema and form data
+    this.validateService.formValidatorSchema = contactIndividualSchema;
+    this.validateService.formValidatorForm = this.form;
 
     this.form?.get('type')?.valueChanges.subscribe((value: string) => {
+      // Update validator JSON schema to the selected contact type
+      this.validateService.formValidatorSchema = this.getSchemaByType(value as ContactTypes);
+
+      // Clear out non-schema form values
+      const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+      const schemaProperties: string[] = this.validateService.getSchemaProperties(
+        this.validateService.formValidatorSchema
+      );
+      Object.keys(this.form.controls).forEach((property: string) => {
+        if (!schemaProperties.includes(property)) {
+          formValues[property] = '';
+        }
+      });
+      this.form.patchValue(formValues);
+
       if (value === ContactTypes.CANDIDATE) {
-        this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels).filter(
-          (option) => !['AA', 'AE', 'AP'].includes(option.code)
-        );
+        this.stateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
       } else {
         this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
       }
@@ -79,9 +112,44 @@ export class ContactDetailComponent implements OnInit {
         this.form?.get('state')?.enable();
       }
     });
+
+    this.form?.get('candidate_office')?.valueChanges.subscribe((value: string) => {
+      if (!value || value === CandidateOfficeTypes.PRESIDENTIAL) {
+        this.form.patchValue({
+          candidate_state: '',
+          candidate_district: '',
+        });
+        this.form?.get('candidate_state')?.disable();
+        this.form?.get('candidate_district')?.disable();
+      } else if (value === CandidateOfficeTypes.SENATE) {
+        this.form.patchValue({
+          candidate_district: '',
+        });
+        this.form?.get('candidate_state')?.enable();
+        this.form?.get('candidate_district')?.disable();
+      } else {
+        this.form?.get('candidate_state')?.enable();
+        this.form?.get('candidate_district')?.enable();
+      }
+    });
+
+    this.form?.get('candidate_state')?.valueChanges.subscribe((value: string) => {
+      if (!!value && this.form.get('candidate_office')?.value === CandidateOfficeTypes.HOUSE) {
+        this.candidateDistrictOptions = LabelUtils.getPrimeOptions(LabelUtils.getCongressionalDistrictLabels(value));
+      } else {
+        this.candidateDistrictOptions = [];
+      }
+    });
   }
 
-  onOpenDetail() {
+  /**
+   * Pass the CandidateOfficeTypes enum into the template
+   */
+  public get CandidateOfficeTypes() {
+    return CandidateOfficeTypes;
+  }
+
+  public onOpenDetail() {
     this.resetForm();
     this.form.patchValue(this.contact);
   }
@@ -89,34 +157,14 @@ export class ContactDetailComponent implements OnInit {
   public saveItem(closeDetail = true) {
     this.formSubmitted = true;
 
-    if (this.isFormInvalid()) {
+    if (this.form.invalid) {
       return;
     }
 
-    const formValues = { ...this.form.value };
+    const payload: Contact = Contact.fromJSON({ ...this.contact, ...this.validateService.getFormValues(this.form) });
 
-    // Null fields that are not part of this contact type.
-    const typeFields = Contact.getFieldsByType(formValues.type);
-    Object.entries(formValues).forEach(([key, value]) => {
-      if (!typeFields.includes(key)) {
-        formValues[key] = null;
-      }
-    });
-
-    // Temporary patch until ticket app#119 addresses the candidate dropdown inputs
-    // Problem is default select values not getting assigned to fields when untouched
-    // Problem may be that field names have "_" in them
-    if (formValues.type === ContactTypes.CANDIDATE) {
-      formValues.candidate_office = !!formValues.candidate_office ? formValues.candidate_office : 'H';
-      formValues.candidate_state = !!formValues.candidate_state ? formValues.candidate_state : 'AL';
-      formValues.candidate_district = !!formValues.candidate_district ? formValues.candidate_district : '01';
-    }
-
-    const payload: Contact = Contact.fromJSON(formValues);
-
-    if (this.contact.id) {
-      payload.id = this.contact.id;
-      this.contactService.update(payload).subscribe((result) => {
+    if (payload.id) {
+      this.contactService.update(payload).subscribe(() => {
         this.loadTableItems.emit();
         this.messageService.add({
           severity: 'success',
@@ -126,7 +174,7 @@ export class ContactDetailComponent implements OnInit {
         });
       });
     } else {
-      this.contactService.create(payload).subscribe((result) => {
+      this.contactService.create(payload).subscribe(() => {
         this.loadTableItems.emit();
         this.messageService.add({
           severity: 'success',
@@ -152,11 +200,22 @@ export class ContactDetailComponent implements OnInit {
     this.formSubmitted = false;
   }
 
-  private isFormInvalid(): boolean {
-    const type: ContactTypes = this.form?.get('type')?.value;
-    return Contact.getFieldsByType(type).reduce(
-      (isInvalid: boolean, fieldName: string) => isInvalid || !!this.form?.get(fieldName)?.invalid,
-      false
-    );
+  /**
+   * Given the type of contact given, return the appropriate JSON schema doc
+   * @param {ContactTypes} type
+   * @returns {JsonSchema} schema
+   */
+  private getSchemaByType(type: ContactTypes): JsonSchema {
+    let schema: JsonSchema = contactIndividualSchema;
+    if (type === ContactTypes.CANDIDATE) {
+      schema = contactCandidateSchema;
+    }
+    if (type === ContactTypes.COMMITTEE) {
+      schema = contactCommitteeSchema;
+    }
+    if (type === ContactTypes.ORGANIZATION) {
+      schema = contactOrganizationSchema;
+    }
+    return schema;
   }
 }

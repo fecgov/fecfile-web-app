@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Action } from '@ngrx/store';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { map, mergeMap, catchError } from 'rxjs/operators';
@@ -15,7 +14,7 @@ export class CommitteeAccountEffects {
   loadCommitteeAccount$ = createEffect(() =>
     this.actions$.pipe(
       ofType(userLoggedInAction.type),
-      mergeMap((action: Action) =>
+      mergeMap(() =>
         this.committeeAccountService.getDetails().pipe(
           map((committeeAccount: CommitteeAccount) => ({
             type: setCommitteeAccountDetailsAction.type,

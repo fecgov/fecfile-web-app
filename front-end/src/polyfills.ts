@@ -45,19 +45,16 @@
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
- import 'zone.js';  // Included with Angular CLI.
+import 'zone.js'; // Included with Angular CLI.
 
-
- /***************************************************************************************************
-  * APPLICATION IMPORTS
-  */
- 
+/***************************************************************************************************
+ * APPLICATION IMPORTS
+ */
 
 // import '@angular/localize/init';
-
 
 // Add global to window, assigning the value of window itself.
 // For AWS issue
 // https://github.com/aws/aws-sdk-js/issues/1944
 // https://github.com/aws-amplify/amplify-js/issues/678
-(window as any).global = window;
+(window as any).global = window; // eslint-disable-line @typescript-eslint/no-explicit-any

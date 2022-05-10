@@ -1,17 +1,10 @@
-<ng-container
-  *ngIf="
-    formSubmitted || (form?.get(fieldName)?.invalid && (form?.get(fieldName)?.dirty || form?.get(fieldName)?.touched))
-  "
->
-  <small class="p-error" *ngIf="required && form?.get(fieldName)?.hasError('required')"
-    >This is a required field.</small
-  >
-  <small class="p-error" *ngIf="!!maxlength && form?.get(fieldName)?.hasError('maxlength')"
-    >This field cannot contain more than {{ maxlength }} alphanumeric characters.</small
-  >
+<ng-container *ngIf="formSubmitted || (control?.invalid && (control?.dirty || control?.touched))">
+  <small class="p-error" *ngIf="control?.hasError('required')">{{ requiredErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('minlength')">{{ minLengthErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('maxlength')">{{ maxLengthErrorMessage }}</small>
   <small
     class="p-error"
-    *ngIf="!!maxlength && form?.get(fieldName)?.errors?.['pattern']?.requiredPattern?.startsWith('^[0-9]')"
-    >This field cannot contain more than {{ maxlength }} numeric characters.</small
+    *ngIf="!control?.hasError('minlength') && !control?.hasError('maxlength') && control?.hasError('pattern')"
+    >{{ patternErrorMessage }}</small
   >
 </ng-container>

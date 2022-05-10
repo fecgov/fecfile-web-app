@@ -32,12 +32,14 @@ export class ApiService {
     return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers });
   }
 
-  public post<T>(endpoint: string, payload: any): Observable<T> {
+  // prettier-ignore
+  public post<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers });
   }
 
-  public put<T>(endpoint: string, payload: any): Observable<T> {
+  // prettier-ignore
+  public put<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers });
   }
@@ -58,23 +60,25 @@ export class ApiService {
     return of(null).pipe(
       delay(0),
       tap(() => this.store.dispatch(spinnerOnAction())),
-      switchMap(() => this.get<T>(endpoint).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
+      switchMap(() => this.get<T>(endpoint).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
     );
   }
 
-  public spinnerPost<T>(endpoint: string, payload: any): Observable<T> {
+  // prettier-ignore
+  public spinnerPost<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     return of(null).pipe(
       delay(0),
       tap(() => this.store.dispatch(spinnerOnAction())),
-      switchMap(() => this.post<T>(endpoint, payload).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
+      switchMap(() => this.post<T>(endpoint, payload).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
     );
   }
 
-  public spinnerPut<T>(endpoint: string, payload: any): Observable<T> {
+  // prettier-ignore
+  public spinnerPut<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     return of(null).pipe(
       delay(0),
       tap(() => this.store.dispatch(spinnerOnAction())),
-      switchMap(() => this.put<T>(endpoint, payload).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
+      switchMap(() => this.put<T>(endpoint, payload).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
     );
   }
 
@@ -82,7 +86,7 @@ export class ApiService {
     return of(null).pipe(
       delay(0),
       tap(() => this.store.dispatch(spinnerOnAction())),
-      switchMap(() => this.delete<T>(endpoint).pipe(tap((_) => this.store.dispatch(spinnerOffAction()))))
+      switchMap(() => this.delete<T>(endpoint).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
     );
   }
 }

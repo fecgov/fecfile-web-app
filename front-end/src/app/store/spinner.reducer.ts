@@ -3,8 +3,8 @@ import { spinnerOnAction, spinnerOffAction } from './spinner.actions';
 
 const _spinnerReducer = createReducer(
   false,
-  on(spinnerOnAction, (state) => true),
-  on(spinnerOffAction, (state) => false)
+  on(spinnerOnAction, () => true),
+  on(spinnerOffAction, () => false)
 );
 
 export function spinnerReducer(state: boolean | undefined, action: Action) {
