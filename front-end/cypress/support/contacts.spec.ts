@@ -120,7 +120,6 @@ export function GenerateContactObject(contact_given = {}) {
       'Delaware',
       'District of Columbia',
       'Florida',
-      'Foreign Countries',
       'Georgia',
       'Guam',
       'Hawaii',
