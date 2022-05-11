@@ -17,6 +17,6 @@ const meta: { [transaction_type_identifier: string]: TransactionMeta } = {
 
 export class TransactionUtils {
   static getMeta(transaction_type_identifier: string): TransactionMeta {
-    return meta[transaction_type_identifier];
+    return meta[transaction_type_identifier.toUpperCase()];
   }
 }

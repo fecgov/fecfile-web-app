@@ -8,14 +8,14 @@ const routes: Routes = [
     path: 'report/:reportId/create/:transactionType',
     component: TransactionContainerComponent,
     resolve: {
-      transaction: TransactionResolver,
+      transactionMeta: TransactionResolver,
     },
   },
   {
     path: 'report/:reportId/edit/:transactionId',
     component: TransactionContainerComponent,
     resolve: {
-      transaction: TransactionResolver,
+      transactionMeta: TransactionResolver,
     },
   },
   { path: '**', redirectTo: '' },

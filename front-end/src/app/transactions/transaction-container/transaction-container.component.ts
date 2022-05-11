@@ -1,15 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TransactionMeta } from 'app/shared/interfaces/transaction-meta.interface';
 
 @Component({
   selector: 'app-transaction-container',
   templateUrl: './transaction-container.component.html',
-  styleUrls: ['./transaction-container.component.scss']
 })
-export class TransactionContainerComponent implements OnInit {
+export class TransactionContainerComponent {
+  meta: TransactionMeta = this.activatedRoute.snapshot.data['transactionMeta'];
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
+  constructor(private activatedRoute: ActivatedRoute) {}
 }

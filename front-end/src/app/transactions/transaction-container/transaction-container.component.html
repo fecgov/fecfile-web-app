@@ -1,1 +1,3 @@
-<p>transaction-container works!</p>
+<ng-container *ngIf="meta.componentGroupId === 'B'">
+  <app-transaction-group-b [schema]="meta.schema" [transaction]="meta.transaction"></app-transaction-group-b>
+</ng-container>
