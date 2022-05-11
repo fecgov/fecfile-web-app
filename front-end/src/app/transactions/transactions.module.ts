@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // PrimeNG
+import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
@@ -13,17 +14,16 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 
-import { SharedModule } from '../../../app/shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionGroupBComponent } from './transaction-group-b/transaction-group-b.component';
+import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 
 @NgModule({
-  declarations: [
-    TransactionContainerComponent,
-    TransactionGroupBComponent
-  ],
+  declarations: [TransactionContainerComponent, TransactionGroupBComponent, TransactionTypePickerComponent],
   imports: [
+    AccordionModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
