@@ -63,17 +63,12 @@ describe('QA Test Script #183 (Sprint 6)', () => {
       .find('p-button[icon="pi pi-pencil"]')                        //Gets the edit button
       .click();
 
-    cy.get("[inputid='state']")
+    cy.get("p-dropdown[formcontrolname='state']")
       .should("contain","Virginia")
       .should("not.contain","Texas") //Demonstrates that it's not just finding a value within the dropdown options
 
     // TO BE DEPRECATED by dropdown_set_value()
-    cy.get("[inputid='state'")
-      .find("div[role='button']")
-      .click();
-    cy.get("li[role='option']")
-      .contains("West Virginia")
-      .click()
+    cy.dropdown_set_value("p-dropdown[formcontrolname='state']","West Virginia");
 
     cy.get("button[label='Save']")
       .click();
@@ -86,7 +81,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
       .find('p-button[icon="pi pi-pencil"]')                        //Gets the edit button
       .click();
 
-    cy.get("[inputid='state']")
+    cy.get("p-dropdown[formcontrolname='state']")
       .should("contain","West Virginia");
     cy.get("button[label='Cancel']")
       .click();

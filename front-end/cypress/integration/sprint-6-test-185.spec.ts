@@ -5,7 +5,7 @@ import { GenerateContactObject } from "../support/contacts.spec";
 //  Will not work until the dropdown bug is fixed!
 const contact = GenerateContactObject({"contact_type":"Candidate"});
 
-describe('QA Test Script #184 (Sprint 6)', () => {
+describe('QA Test Script #185 (Sprint 6)', () => {
 
 
 

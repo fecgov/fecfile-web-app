@@ -1,5 +1,6 @@
 // @ts-check
 
+import { before } from "lodash";
 import { GenerateContactObject } from "../support/contacts.spec";
 
 /*
@@ -9,24 +10,26 @@ import { GenerateContactObject } from "../support/contacts.spec";
 */
 
 describe('QA Test Script #110 (Sprint 6)', () => {
-  beforeEach(() => {
-    //cy.login();
-  });
+  function before(){
+    cy.login();
+  };
 
 
-  afterEach(() => {
-    //cy.logout();
-  });
+  function after(){
+    cy.logout();
+  };
 
   it('Step 1: Navigate to contacts page', () => {
-      cy.url()
-        .should("contain","/dashboard");
-      cy.get(".p-menubar")
-        .find(".p-menuitem-link")
-        .contains("Contacts")
-        .click();
-      cy.url()
-        .should("contain","/contacts");
+    before();
+    
+    cy.url()
+      .should("contain","/dashboard");
+    cy.get(".p-menubar")
+      .find(".p-menuitem-link")
+      .contains("Contacts")
+      .click();
+    cy.url()
+      .should("contain","/contacts");
   });
 
   it("Steps 2-5: Creates a contact", () => {
@@ -55,13 +58,8 @@ describe('QA Test Script #110 (Sprint 6)', () => {
       .should("have.value", contact["zip"]);
     cy.get("#telephone")
       .should("have.value", contact["phone"]);
-    cy.get("[inputid='state']") //Get the field for State based on its "inputid" attribute
-      .find("div [role='button']") //Get the field's child element, div, based on its role element
-      .click();
-    cy.get("span")
-      .contains(contact["state"])
-      .click();
-    cy.get("[inputid='state']") //Gets the field for the input for State
+    cy.dropdown_set_value("p-dropdown[formcontrolname='state']",contact["state"]);
+    cy.get("p-dropdown[formcontrolname='state']") //Gets the field for the input for State
       .should("contain", contact["state"]);
 
     cy.get("#employer")
@@ -77,7 +75,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
     cy.get("tbody")
       .find("tr")
       .contains(`${contact["first_name"]} ${contact["last_name"]}`).parent()
-      .should("contain","Individual")
+      .should("contain",contact["contact_type"])
       .should("contain",contact["employer"])
       .should("contain",contact["occupation"]);
   });

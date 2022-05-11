@@ -48,64 +48,18 @@ export function GenerateContactObject(contact_given={}){
 
 
 export function CreateContactIndividual(contact, save=true){
-  cy.visit('/contacts');
+  cy.get(".p-menubar")
+    .find(".p-menuitem-link")
+    .contains("Contacts")
+    .click();
+  cy.wait(100);
 
   cy.get('#button-contacts-new')
     .click();
-  cy.wait(250);
+  cy.wait(100);
 
-  if (contact["contact_type"] != "Individual"){
-    cy.pause();
-
-    var arrow_input_string = "";
-    switch(contact["contact_type"]){
-      case "Candidate":
-        arrow_input_string = "{downArrow}"; break;
-      case "Committee":
-        arrow_input_string = "{downArrow}{downArrow}"; break;
-      case "Organization":
-        arrow_input_string = "{downArrow}{downArrow}{downArrow}"; break;
-    }
-    /*
-        Current Workaround for selecting a Contact Type
-
-        Open the dropdown menu with the button
-        use .type("{downArrow}") to manipulate the dropdown menu
-        use .click() again on the button to close the menu
-
-    */
-
-    cy.get("[inputid='type']")
-    //cy.get("#pr_id_5_label")
-      .find("div[role='button']")
-      .click()
-      //.type(arrow_input_string)
-      //.click();
-    cy.get("span")
-      .contains("Candidate")
-      .click()
-    //cy.get("p-dropdownitem[ng-reflect-label='Candidate']"
-    //  .click();
-  
-    cy.wait(100);
-  }
-
-  /*
-  //cy.dropdown_set_value("[inputid='type']", contact["contact_type"]);
-  var element = null;
-  var elements = document.getElementsByClassName("p-inputwrapper");
-  for (var i = 0; i < elements.length; i++){
-    if (elements[i].getAttribute("inputid") == "type"){
-      element = elements[i];
-      break;
-    }
-  }
-  if (element != null)
-    element.click();
-  
-  cy.pause();
-  */
-
+  cy.dropdown_set_value("p-dropdown[formcontrolname='type']", contact["contact_type"])
+    
   if (contact["contact_type"] == "Individual" || contact["contact_type"] == "Candidate"){
     //Contact
     cy.get("#last_name")
@@ -137,40 +91,20 @@ export function CreateContactIndividual(contact, save=true){
     .safe_type(contact["zip"]);
   cy.get("#telephone")
     .safe_type(contact["phone"]);
-  cy.get("[inputid='state']") //Get the field for State based on its "inputid" attribute
-    .find("div [role='button']") //Get the field's child element, div, based on its role element
-    .click();
-  cy.get("span")
-    .contains(contact["state"])
-    .click();
+  cy.dropdown_set_value("p-dropdown[formcontrolname='state']", contact["state"]);
 
   //Candidate-exclusive fields
   if (contact["contact_type"] == "Candidate"){
     cy.get("#candidate_id")
       .safe_type(contact["candidate_id"]);
 
-    cy.get("p-dropdown[inputid='candidate_office']")
-      .find("div[role='button']")
-      .click();
-    cy.get("li[role='option']")
-      .contains(contact["candidate_office"])
-      .click();
+    cy.dropdown_set_value("p-dropdown[formcontrolname='candidate_office']",contact["candidate_office"]);
     
     if (contact["candidate_office"] != "Presidential"){
-      cy.get("p-dropdown[inputid='candidate_state']")
-        .find("div[role='button']")
-        .click();
-      cy.get("li[role='option']")
-        .contains(contact["candidate_state"])
-        .click();
+      cy.dropdown_set_value("p-dropdown[formcontrolname='candidate_state']", contact["candidate_state"]);
 
       if(contact["candidate_office"] == "House"){
-        cy.get("p-dropdown[inputid='candidate_district']")
-          .find("div[role='button']")
-          .click();
-        cy.get("li[role='option']")
-          .contains(contact["candidate_district"])
-          .click();
+        cy.dropdown_set_value("p-dropdown[formcontrolname='candidate_district']",contact["candidate_district"]);
       }
     }    
   }

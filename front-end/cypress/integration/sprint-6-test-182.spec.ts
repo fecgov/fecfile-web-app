@@ -16,7 +16,6 @@ const states = [
   'Delaware',
   'District of Columbia',
   'Florida',
-  'Foreign Countries',
   'Georgia',
   'Guam',
   'Hawaii',
@@ -100,22 +99,22 @@ describe('QA Test Script #182 (Sprint 6)', () => {
   });
 
   it("Step 4: The 'State' field should be empty", () => {
-    cy.get("[inputid='state']").should('have.value', '');
+    cy.get("[formcontrolname='state']").should('have.value', '');
   });
 
   it("Steps 5-8: Open the 'State' dropdown, check for all the relevent states, check that it does not contain 'Armed Forces' entries, and select 'Virginia'", () => {
-    cy.get("[inputid='state']").find("div[role='button']").click();
+    cy.get("[formcontrolname='state']").click();
 
     for (var i = 0; i < states.length; i++) {
       var state = states[i];
-      cy.get("li[role='option']").contains(state).should('contain', state);
+      cy.get("li[role='option']").contains(state).should('exist');
     }
 
     cy.get("li[role='option']")
-      //.should("not.contain","Armed Forces")   Fails because we cannot select 'Candidate' from the dropdown menu
+      .should("not.contain","Armed Forces")
       .contains('Virginia')
-      .click();
+      .click({force:true});
 
-    cy.get("[inputid='state']").should('contain', 'Virginia');
+    cy.get("[formcontrolname='state']").should('contain', 'Virginia');
   });
 });

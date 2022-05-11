@@ -5,7 +5,7 @@ import { GenerateContactObject } from "../support/contacts.spec";
 //  Will not work until the dropdown bug is fixed!
 const contact = GenerateContactObject({"contact_type":"Committee"});
 
-describe('QA Test Script #184 (Sprint 6)', () => {
+describe('QA Test Script #186 (Sprint 6)', () => {
 
 
 
@@ -17,7 +17,7 @@ describe('QA Test Script #184 (Sprint 6)', () => {
   function after(){
     cy.get("p-table")
       .find("tr")
-      .contains(`${contact["first_name"]} ${contact["last_name"]}`) //Finds out contact in the Manage Contacts table
+      .contains(`${contact["committee_name"]}`) //Finds out contact in the Manage Contacts table
       .parent()                                                     //Gets the row its in
       .find('p-button[icon="pi pi-trash"]')                         //Gets the edit button
       .click();
@@ -48,7 +48,7 @@ describe('QA Test Script #184 (Sprint 6)', () => {
   it("Steps 2 & 3: Select a contact and open the edit menu", ()=>{
     cy.get("p-table")
       .find("tr")
-      .contains(`${contact["first_name"]} ${contact["last_name"]}`) //Finds out contact in the Manage Contacts table
+      .contains(`${contact["committee_name"]}`) //Finds out contact in the Manage Contacts table
       .parent()                                                     //Gets the row its in
       .find("p-tablecheckbox")
       .click()                                                      //Check the checkbox for step 2

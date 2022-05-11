@@ -43,26 +43,8 @@ Cypress.Commands.add("safe_type", {prevSubject:true}, (subject, stringval) => {
 });
 
 Cypress.Commands.add("dropdown_set_value", (dropdown, target) => {
-  eval('$("#pr_id_5_label").click()');
-  cy.wait(150);
-  
-  /*
-  cy.get(dropdown)
-    .find("div[role='button']")
-    .click();
-  cy.get("li[role='option']")
-    .contains(target)
-    .trigger('mousemove')
-    .then(element =>{
-      console.log(element);
-      element[0].click();
-      //element.trigger("click");
-    });
-  cy.wait(150);
-  cy.get(dropdown)
-    .trigger('change');
-  */
-  
+  cy.get(dropdown).click();
+  cy.get("p-dropdownitem").contains(target).should("exist").click({force:true});
 });
 
 Cypress.Commands.add("login", () => {
