@@ -10,7 +10,7 @@ function after(contact) {
     .find('tr')
     .contains(contact['name']) //Finds out contact in the Manage Contacts table
     .parent() //Gets the row its in
-    .find('p-button[icon="pi pi-trash"]') //Gets the edit button
+    .find('p-button[icon="pi pi-trash"]') //Gets the trash button
     .click();
 
   cy.wait(100);
