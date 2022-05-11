@@ -6,8 +6,8 @@ function RandomInt(min=0, max=1){
 }
 
 export function GenerateContactObject(contact_given={}){
-  const contact_random = { //_.sample : standard js object method (hence _.); takes a random element from a given list.  Much more readable than [randomint % list.length] on every list 
-    contact_type:"Individual",
+  var contact_random = { //_.sample : standard js object method (hence _.); takes a random element from a given list.  Much more readable than [randomint % list.length] on every list 
+    contact_type:_.sample(["Individual","Candidate","Committee","Organization"]),
 
     // Fields needed for an Individual
     //Names were provided by a random name generator
@@ -39,9 +39,24 @@ export function GenerateContactObject(contact_given={}){
     //Organization-exclusive fields
     organization_name:`${_.sample(["A","B","C","D","E","F", "G", "H"])} for American ${_.sample(["Happiness","Exceptionalism","Integrity","Unity","Prosperity"])}`,
 
+    //Name that will show up on the "Manage Contacts" table
+    name:"",
+  }
+  
+  let contact = {...contact_random, ...contact_given}; //Merges the provided contact with the randomly generated one, overwriting the random one with any fields found in the provided
+
+  //  Resolve the contact object's "name" based on contact_type.  This must be done after merging in case the contact_given object does not provide first, last, committee, or organization names
+  if (contact["contact_type"] == "Individual" || contact["contact_type"] == "Candidate"){
+    contact["name"] = `${contact["first_name"]} ${contact["last_name"]}`;
+  }
+  if (contact["contact_type"] == "Committee"){
+    contact["name"] = contact["committee_name"];
+  }
+  if (contact["contact_type"] == "Organization"){
+    contact["name"] = contact["organization_name"];
   }
 
-  let contact = {...contact_random, ...contact_given}; //Merges the provided contact with the randomly generated one, overwriting the random one with any fields found in the provided
+
   return contact
 }
 
@@ -126,12 +141,6 @@ export function CreateContactIndividual(contact, save=true){
       .contains("Save")
       .click();
   }
-
-  const promise = new Promise<any>( (resolve, reject) =>{
-    setTimeout( function(): void {
-      resolve( contact );
-    }, 2500);
-  });
-
+  
   cy.wait(250); //Gives the database time to process the request.  It gets a little funky otherwise...
 }
