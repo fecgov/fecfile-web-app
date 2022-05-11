@@ -1,13 +1,16 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { SchaTransactionService } from './scha-transaction.service';
+import { SchATransactionService } from './scha-transaction.service';
 
-describe('SchaTransactionService', () => {
-  let service: SchaTransactionService;
+describe('SchATransactionService', () => {
+  let service: SchATransactionService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(SchaTransactionService);
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+    });
+    service = TestBed.inject(SchATransactionService);
   });
 
   it('should be created', () => {

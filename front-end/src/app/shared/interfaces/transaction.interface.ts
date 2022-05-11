@@ -1,4 +1,4 @@
-export interface Schedule {
+export interface Transaction {
   id: number | null;
   form_type: string | null;
   filer_committee_id_number: string | null;

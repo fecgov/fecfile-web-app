@@ -13,16 +13,13 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 
-import { SharedModule } from '../../../app/shared/shared.module';
+import { SharedModule } from '../../app/shared/shared.module';
 import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionGroupBComponent } from './transaction-group-b/transaction-group-b.component';
 
 @NgModule({
-  declarations: [
-    TransactionContainerComponent,
-    TransactionGroupBComponent
-  ],
+  declarations: [TransactionContainerComponent, TransactionGroupBComponent],
   imports: [
     CommonModule,
     FormsModule,

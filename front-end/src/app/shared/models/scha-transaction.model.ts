@@ -1,8 +1,8 @@
 import { BaseModel } from './base.model';
-import { Schedule } from '../interfaces/schedule.interface';
+import { Transaction } from '../interfaces/transaction.interface';
 import { plainToClass } from 'class-transformer';
 
-export class SchATransaction extends BaseModel implements Schedule {
+export class SchATransaction extends BaseModel implements Transaction {
   id: number | null = null;
 
   form_type: string | null = null;

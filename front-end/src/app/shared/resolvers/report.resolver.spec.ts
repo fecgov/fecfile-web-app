@@ -4,6 +4,7 @@ import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummaryService } from '../services/f3x-summary.service';
 import { ReportResolver } from './report.resolver';
+import { Report } from '../interfaces/report.interface';
 import { F3xSummary } from '../models/f3x-summary.model';
 import { environment } from '../../../environments/environment';
 
@@ -30,7 +31,7 @@ describe('ReportResolver', () => {
       paramMap: convertToParamMap({ id: 999 }),
     };
 
-    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: F3xSummary | undefined) => {
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Report | undefined) => {
       expect(response).toEqual(f3xSummary);
     });
 
@@ -45,7 +46,7 @@ describe('ReportResolver', () => {
       paramMap: convertToParamMap({ id: undefined }),
     };
 
-    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: F3xSummary | undefined) => {
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Report | undefined) => {
       expect(response).toEqual(undefined);
     });
   });
