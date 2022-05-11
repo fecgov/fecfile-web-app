@@ -44,7 +44,7 @@ describe("QA Test Scripts 184 through 187",() => {
       });
       
       it(`Creates a ${c_type} contact`, ()=>{
-        cy.CreateContactIndividual(contact);
+        cy.EnterContact(contact);
         cy.wait(100);
       });
 

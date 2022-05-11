@@ -17,7 +17,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
   function before(){
 
     cy.login();
-    cy.CreateContactIndividual(contact);
+    cy.EnterContact(contact);
   }
 
   function after(){

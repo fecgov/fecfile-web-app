@@ -62,7 +62,7 @@ export function GenerateContactObject(contact_given={}){
 
 
 
-export function CreateContactIndividual(contact, save=true){
+export function EnterContact(contact, save=true){
   cy.get(".p-menubar")
     .find(".p-menuitem-link")
     .contains("Contacts")
