@@ -1,9 +1,5 @@
 // @ts-check
 
-/*
-    !  This test file will not work before the dropdown bug is squashed   !
-*/
-
 const states = [
   'Alabama',
   'Alaska',
@@ -64,18 +60,6 @@ const states = [
 ];
 
 describe('QA Test Script #182 (Sprint 6)', () => {
-  /*
-            No login is currently required for fully testing this QA script
-  before(() => {
-    //cy.login();
-  });
-
-
-  after(() => {
-    //cy.logout();
-  });
-  */
-
   it('Step 1: Navigate to contacts page', () => {
     cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
@@ -110,10 +94,7 @@ describe('QA Test Script #182 (Sprint 6)', () => {
       cy.get("li[role='option']").contains(state).should('exist');
     }
 
-    cy.get("li[role='option']")
-      .should("not.contain","Armed Forces")
-      .contains('Virginia')
-      .click({force:true});
+    cy.get("li[role='option']").should('not.contain', 'Armed Forces').contains('Virginia').click({ force: true });
 
     cy.get("[formcontrolname='state']").should('contain', 'Virginia');
   });
