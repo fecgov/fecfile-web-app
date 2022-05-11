@@ -262,8 +262,8 @@ jobs:
           working_directory: ~/project/front-end/
 
       - persist_to_workspace:
-          root: ~/project/front-end/documentation
-          paths: *
+          root: ~/project/front-end
+          paths: documentation
 
   docs-deploy:
     docker:
@@ -277,7 +277,7 @@ jobs:
           command: touch ~/project/front-end/documentation/.nojekyll
       - node/install:
           install-yarn: false
-          node-version: "16.13"
+          node-version: '16.13'
       - node/install-packages:
           pkg-manager: npm
       - run:
@@ -287,7 +287,7 @@ jobs:
             git config user.name "apiinfo"
       - add_ssh_keys:
           fingerprints:
-            - "0f:22:e1:9d:81:ea:82:a0:fa:18:f2:0f:25:f7:3f:6f"
+            - '0f:22:e1:9d:81:ea:82:a0:fa:18:f2:0f:25:f7:3f:6f'
       - run:
           name: Deploy docs to gh-pages branch
           command: npx gh-pages --dotfiles --dist ~/project/front-end/documentation
