@@ -60,7 +60,7 @@ export class TransactionTypePickerComponent implements OnInit {
           ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
           ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED,
           ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED,
-          ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT,
+          ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC,
         ];
       case ScheduleATransactionGroups.TRANSFER:
         return [

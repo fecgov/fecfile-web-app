@@ -102,7 +102,7 @@ export enum ScheduleATransactionTypes {
   PAC_EARMARK_RECEIPT = 'PAC_EAR_REC',
   PAC_CONDUIT_EARMARK_DEPOSITED = 'PAC_CONDUIT_EARMARK_DEPOSITED',
   PAC_CONDUIT_EARMARK_UNDEPOSITED = 'PAC_CONDUIT_EARMARK_UNDEPOSITED',
-  RETURNED_BOUNCED_RECEIPT = 'PARTY_RET',
+  RETURNED_BOUNCED_RECEIPT_PAC = 'PAC_RET',
   // Transfers
   TRANSFERS = 'TRAN',
   JF_TRANSFERS = 'JF_TRAN',
@@ -148,7 +148,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PARTNERSHIP_RECEIPT, 'Partnership Receipt'],
   [ScheduleATransactionTypes.REATTRIBUTION, 'Reattribution'],
   [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-Kind Receipt'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt'],
+  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt (Individual)'],
   [ScheduleATransactionTypes.EARMARK_RECEIPT, 'Earmark Receipt'],
   [ScheduleATransactionTypes.CONDUIT_EARMARK_DEPOSITED, 'Conduit Earmark (Deposited)'],
   [ScheduleATransactionTypes.CONDUIT_EARMARK_UNDEPOSITED, 'Conduit Earmark (Undeposited)'],
@@ -160,13 +160,13 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   // Contributions from Registered Filers
   [ScheduleATransactionTypes.PARTY_RECEIPT, 'Party Receipt'],
   [ScheduleATransactionTypes.PARTY_IN_KIND, 'Party In-Kind'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PARTY, 'Returned/Bounced Receipt'],
+  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PARTY, 'Returned/Bounced Receipt (Party)'],
   [ScheduleATransactionTypes.PAC_RECEIPT, 'PAC Receipt'],
   [ScheduleATransactionTypes.PAC_IN_KIND, 'PAC In-Kind'],
   [ScheduleATransactionTypes.PAC_EARMARK_RECEIPT, 'PAC Earmark Receipt'],
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED, 'PAC Conduit Earmark (Deposited)'],
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED, 'PAC Conduit Earmark (Undeposited)'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT, 'Returned/Bounced Receipt'],
+  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC, 'Returned/Bounced Receipt (PAC)'],
   // Transfers
   [ScheduleATransactionTypes.TRANSFERS, 'Transfers'],
   [ScheduleATransactionTypes.JF_TRANSFERS, 'JF Transfers'],
