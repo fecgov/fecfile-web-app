@@ -7,6 +7,6 @@ import { Schedule } from '../interfaces/schedule.interface';
 })
 export class TransactionService {
   public get(transactionId: number): Observable<Schedule> {
-    return of({ id: transactionId } as Schedule);
+    return of({ id: transactionId, transaction_type_identifier: 'ABC' } as Schedule);
   }
 }
