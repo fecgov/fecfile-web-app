@@ -3,7 +3,7 @@
 var contact_type;
 var contacts = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
-describe('QA Test Script #119 (Sprint 7)', () => {
+describe('QA Test Script #224 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
@@ -12,7 +12,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   for (var i = 0; i < Object.keys(contacts).length; i++) {
     contact_type = Object.keys(contacts)[i];
 
-    context(`QA Script #110 - ${contact_type}`, (c_type = contact_type) => {
+    context(`---> ${contact_type}`, (c_type = contact_type) => {
       it("Step 2: Open the 'Add Contact' form", () => {
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
         cy.url().should('contain', '/contacts');

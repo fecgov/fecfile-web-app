@@ -1,6 +1,6 @@
 // @ts-check
 
-describe('QA Test Script #119 (Sprint 7)', () => {
+describe('QA Test Script #137 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page', () => {
     cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
