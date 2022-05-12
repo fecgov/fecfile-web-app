@@ -4,7 +4,7 @@ import { GenerateContactObject, EnterContact } from '../support/contacts.spec';
 
 const contact_types = ['Individual', 'Candidate', 'Committee', 'Organization'];
 
-describe('QA Test Script #119 (Sprint 7)', () => {
+describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
   function after() {
     cy.get('p-table')
       .find('tr')
@@ -23,7 +23,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   for (var i = 0; i < contact_types.length; i++) {
     var contact_type = contact_types[i];
 
-    context(`QA Script #110 - ${contact_type}`, (c_type = contact_type) => {
+    context(`---> ${contact_type}`, (c_type = contact_type) => {
       var contact = GenerateContactObject({
         contact_type: c_type,
         first_name: 'Test',
@@ -70,12 +70,9 @@ describe('QA Test Script #119 (Sprint 7)', () => {
         }
       });
 
-      it('Step 7: Save the contact', () => {
+      it('Steps 7 & 8: Save the contact and check for the popup', () => {
         cy.get("button[label='Save']").click();
-        cy.wait(50);
-      });
-
-      it("Step 8: Verify that the 'Contact Updated' alert is shown", () => {
+        cy.wait(10);
         cy.get("div[role='alert']").contains('Contact Updated').should('exist');
       });
 
