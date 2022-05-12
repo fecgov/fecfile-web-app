@@ -6,9 +6,7 @@ import { Schedule } from '../interfaces/schedule.interface';
   providedIn: 'root',
 })
 export class TransactionService {
-  constructor() {}
-
   public get(transactionId: number): Observable<Schedule> {
-    return of({} as Schedule);
+    return of({ id: transactionId } as Schedule);
   }
 }
