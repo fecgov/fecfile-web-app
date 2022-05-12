@@ -2,12 +2,6 @@
 
 import { GenerateContactObject } from '../support/contacts.spec';
 
-/*
-    !  This test file will not work before the dropdown bug is squashed   !
-*/
-
-//      Cannot use type "Candidate" until the dropdown bug is fixed.  Using "Individual" for now
-//const contact = GenerateContactObject({"contact_type":"Candidate", "state":"Oklahoma"});
 const contact = GenerateContactObject({ contact_type: 'Individual', state: 'Virginia' });
 
 describe('QA Test Script #183 (Sprint 6)', () => {
