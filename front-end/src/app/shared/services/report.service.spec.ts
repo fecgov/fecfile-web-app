@@ -3,14 +3,14 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { ContactService } from './contact.service';
-import { Contact } from '../models/contact.model';
+import { ReportService } from './report.service';
 import { ListRestResponse } from '../models/rest-api.model';
+import { F3xSummary } from '../models/f3x-summary.model';
 import { environment } from '../../../environments/environment';
 
-describe('ContactService', () => {
+describe('ReportService', () => {
+  let service: ReportService;
   let httpTestingController: HttpTestingController;
-  let service: ContactService;
   const userLoginData: UserLoginData = {
     committee_id: 'C00000000',
     email: 'email@fec.com',
@@ -22,16 +22,15 @@ describe('ContactService', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        ContactService,
+        ReportService,
         provideMockStore({
           initialState: { fecfile_online_userLoginData: userLoginData },
           selectors: [{ selector: selectUserLoginData, value: userLoginData }],
         }),
       ],
     });
-
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(ContactService);
+    service = TestBed.inject(ReportService);
   });
 
   it('should be created', () => {
@@ -44,11 +43,11 @@ describe('ContactService', () => {
       next: 'https://next-page',
       previous: 'https://previous-page',
       results: [
-        Contact.fromJSON({
-          id: 'C00000001',
+        F3xSummary.fromJSON({
+          id: 1,
         }),
-        Contact.fromJSON({
-          id: 'C00000002',
+        F3xSummary.fromJSON({
+          id: 2,
         }),
       ],
     };
@@ -57,51 +56,21 @@ describe('ContactService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/?page=1&ordering=name`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/?page=1&ordering=form_type`);
     expect(req.request.method).toEqual('GET');
-    req.flush(mockResponse);
-    httpTestingController.verify();
-  });
-
-  it('#create() should POST a payload', () => {
-    const mockResponse: Contact = new Contact();
-    const contact: Contact = mockResponse;
-
-    service.create(contact).subscribe((response: Contact) => {
-      expect(response).toEqual(mockResponse);
-    });
-
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/`);
-    expect(req.request.method).toEqual('POST');
-    req.flush(mockResponse);
-    httpTestingController.verify();
-  });
-
-  it('#update() should PUT a payload', () => {
-    const mockResponse: Contact = new Contact();
-    const contact: Contact = mockResponse;
-    contact.id = 1;
-
-    service.update(contact).subscribe((response: Contact) => {
-      expect(response).toEqual(mockResponse);
-    });
-
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/${contact.id}/`);
-    expect(req.request.method).toEqual('PUT');
     req.flush(mockResponse);
     httpTestingController.verify();
   });
 
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
-    const contact: Contact = new Contact();
-    contact.id = 1;
+    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: 1 });
 
-    service.delete(contact).subscribe((response: null) => {
+    service.delete(f3xSummary).subscribe((response: null) => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/1`);
     expect(req.request.method).toEqual('DELETE');
     req.flush(mockResponse);
     httpTestingController.verify();

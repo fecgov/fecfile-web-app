@@ -66,15 +66,15 @@ describe('ContactListComponent', () => {
   });
 
   it('#addItem opens the dialog to add an item', () => {
-    component.isNewContact = false;
+    component.isNewItem = false;
     component.addItem();
-    expect(component.isNewContact).toBe(true);
+    expect(component.isNewItem).toBe(true);
   });
 
   it('#editItem opens the dialog to edit an item', () => {
-    component.isNewContact = true;
+    component.isNewItem = true;
     component.editItem(contact);
-    expect(component.isNewContact).toBe(false);
+    expect(component.isNewItem).toBe(false);
   });
 
   it('#displayName returns the contact name', () => {
