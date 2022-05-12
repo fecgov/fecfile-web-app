@@ -84,7 +84,7 @@ function randomString(length, type = 'alphanumeric') {
   return outString;
 }
 
-describe('QA Test Script #119 (Sprint 7)', () => {
+describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page', () => {
     cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
@@ -95,7 +95,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   for (var i = 0; i < Object.keys(contacts).length; i++) {
     contact_type = Object.keys(contacts)[i];
 
-    context(`QA Script #110 - ${contact_type}`, (c_type = contact_type) => {
+    context(`---> ${contact_type}`, (c_type = contact_type) => {
       var contact = contacts[c_type];
       it('Check every field for required/optional and maximum length', () => {
         cy.get("button[label='New']").click();
