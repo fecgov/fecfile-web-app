@@ -74,13 +74,8 @@ export class TransactionTypePickerComponent implements OnInit {
         ];
       case ScheduleATransactionGroups.REFUNDS:
         return [
-          ScheduleATransactionTypes.TRANSFERS,
-          ScheduleATransactionTypes.JF_TRANSFERS,
-          ScheduleATransactionTypes.IN_KIND_TRANSFER,
-          ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA,
-          ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-          ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-          ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+          ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES,
+          ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_UNREGISTERED_COMMITTEES,
         ];
       case ScheduleATransactionGroups.OTHER:
         return [
