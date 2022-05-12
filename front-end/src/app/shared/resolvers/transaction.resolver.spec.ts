@@ -5,7 +5,6 @@ import { TransactionMeta } from '../interfaces/transaction-meta.interface';
 import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
 
 import { TransactionResolver } from './transaction.resolver';
-import { SchATransaction } from '../models/scha-transaction.model';
 import { Schedule } from '../interfaces/schedule.interface';
 
 describe('TransactionResolver', () => {
