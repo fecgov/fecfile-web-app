@@ -64,7 +64,7 @@ describe('Testing login', () => {
     cy.visit('/');
   });
 
-  it.only('Accepts input', () => {
+  it('Accepts input', () => {
     fill_login_form();
 
     cy.get(fieldEmail).should('have.value', email);
@@ -72,21 +72,21 @@ describe('Testing login', () => {
     cy.get(fieldPassword).should('have.value', testPassword);
   });
 
-  it.only('Submits email/committee ID/password with {Enter}', () => {
+  it('Submits email/committee ID/password with {Enter}', () => {
     fill_login_form();
 
     cy.get(fieldPassword).type('{enter}');
     cy.url().should('contain', '/twoFactLogin');
   });
 
-  it.only('Submits email/committee ID/password with a click', () => {
+  it('Submits email/committee ID/password with a click', () => {
     fill_login_form();
 
     cy.get(fieldLoginButton).click();
     cy.url().should('contain', '/twoFactLogin');
   });
 
-  it.only('Submits Two Factor Auth via email', () => {
+  it('Submits Two Factor Auth via email', () => {
     login_no_two_factor();
 
     cy.get(fieldTwoFactorEmail).check();
@@ -94,7 +94,7 @@ describe('Testing login', () => {
     cy.url().should('contain', '/confirm-2f');
   });
 
-  it.only('Submits Two Factor Auth via phone, text', () => {
+  it('Submits Two Factor Auth via phone, text', () => {
     login_no_two_factor();
 
     cy.get(fieldTwoFactorPhoneText).check();
@@ -102,7 +102,7 @@ describe('Testing login', () => {
     cy.url().should('contain', '/confirm-2f');
   });
 
-  it.only('Submits Two Factor Auth via phone, call', () => {
+  it('Submits Two Factor Auth via phone, call', () => {
     login_no_two_factor();
 
     cy.get(fieldTwoFactorPhoneCall).check();
@@ -110,14 +110,14 @@ describe('Testing login', () => {
     cy.url().should('contain', '/confirm-2f');
   });
 
-  it.only('Fully logs in through Two Factor Authentication with {enter}', () => {
+  it('Fully logs in through Two Factor Authentication with {enter}', () => {
     login_request_two_factor_auth();
 
     cy.get(fieldSecurityCodeText).type(testPIN).type('{enter}');
     cy.url().should('contain', '/dashboard');
   });
 
-  it.only('Fully logs in through Two Factor Authentication with a click', () => {
+  it('Fully logs in through Two Factor Authentication with a click', () => {
     login_request_two_factor_auth();
 
     cy.get(fieldSecurityCodeText).type(testPIN);
@@ -125,7 +125,7 @@ describe('Testing login', () => {
     cy.url().should('contain', '/dashboard');
   });
 
-  it.only('Fails to login with no included information', () => {
+  it('Fails to login with no included information', () => {
     cy.get(fieldEmail).type('{enter}'); //Submits an empty login form
 
     cy.url()
