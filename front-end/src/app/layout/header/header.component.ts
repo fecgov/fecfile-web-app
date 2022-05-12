@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
       },
       {
         label: 'Reports',
+        routerLink: ['/reports'],
       },
       {
         label: 'Contacts',
