@@ -36,8 +36,11 @@ export class ValidateService {
    * @param {JsonSchema} schema
    * @returns {string[]} list of property names
    */
-  getSchemaProperties(schema: JsonSchema): string[] {
-    return Object.keys(schema.properties);
+  getSchemaProperties(schema: JsonSchema | null): string[] {
+    if (schema) {
+      return Object.keys(schema.properties);
+    }
+    return [];
   }
 
   /**

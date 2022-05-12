@@ -5,6 +5,7 @@ import { Transaction } from '../interfaces/transaction.interface';
 import { TransactionUtils } from '../utils/transaction.utils';
 import { TransactionMeta } from '../interfaces/transaction-meta.interface';
 import { TransactionService } from '../services/transaction.service';
+import { SchATransaction } from '../models/scha-transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +22,16 @@ export class TransactionResolver implements Resolve<TransactionMeta | undefined>
     if (transactionType) {
       // This is a new transaction
       tm = TransactionUtils.getMeta(transactionType);
-      tm.transaction.report_id = Number(reportId);
+      if (tm.scheduleId === 'A') {
+        tm.transaction = new SchATransaction();
+      }
+      if (tm.transaction) {
+        tm.transaction.form_type = tm.formType;
+        tm.transaction.filer_committee_id_number = 'getFromStore';
+        tm.transaction.transaction_type_identifier = transactionType.toUpperCase();
+        tm.transaction.transaction_id = 'randomAN20';
+        tm.transaction.report_id = Number(reportId);
+      }
       return of(tm);
     }
     if (transactionId) {

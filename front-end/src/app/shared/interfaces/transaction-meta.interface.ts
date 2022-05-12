@@ -8,6 +8,7 @@ import { Transaction } from './transaction.interface';
 export interface TransactionMeta {
   scheduleId: string;
   componentGroupId: string;
+  formType: string;
   schema: JsonSchema;
-  transaction: Transaction;
+  transaction: Transaction | null;
 }

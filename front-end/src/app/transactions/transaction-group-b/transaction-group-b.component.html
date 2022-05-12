@@ -1,1 +1,34 @@
-<p>transaction-group-b works!</p>
+<div class="p-fluid">
+  <h1>FEC Form 3X</h1>
+  <h5>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</h5>
+  <p-divider></p-divider>
+  <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
+    <div class="grid">
+      <div class="col-12">
+        <div class="field">
+          <label for="entity_type">CONTRIBUTOR TYPE</label>
+          <p-dropdown
+            inputId="entity_type"
+            formControlName="entity_type"
+            [options]="contactTypeOptions"
+            optionLabel="name"
+            optionValue="code"
+          ></p-dropdown>
+        </div>
+      </div>
+    </div>
+    <p-divider></p-divider>
+    <div class="grid">
+      <div class="col-2">
+        <button pButton pRipple label="Back" class="p-button-secondary" (click)="cancel()"></button>
+      </div>
+      <div class="col-5"></div>
+      <div class="col-2">
+        <button pButton pRipple label="Save" class="p-button-primary" (click)="save('list')"></button>
+      </div>
+      <div class="col-3">
+        <button pButton pRipple label="Save and continue" class="p-button-info" (click)="save('another')"></button>
+      </div>
+    </div>
+  </form>
+</div>
