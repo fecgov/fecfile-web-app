@@ -1,14 +1,12 @@
 import { HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
-import { environment } from 'environments/environment';
 import { TransactionMeta } from '../interfaces/transaction-meta.interface';
 
 import { TransactionResolver } from './transaction.resolver';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
-  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
