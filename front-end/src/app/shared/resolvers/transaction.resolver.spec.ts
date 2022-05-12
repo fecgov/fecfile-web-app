@@ -1,4 +1,3 @@
-import { HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { TransactionMeta } from '../interfaces/transaction-meta.interface';
