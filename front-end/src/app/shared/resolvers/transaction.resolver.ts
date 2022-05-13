@@ -27,9 +27,8 @@ export class TransactionResolver implements Resolve<TransactionMeta | undefined>
       }
       if (tm.transaction) {
         tm.transaction.form_type = tm.formType;
-        tm.transaction.filer_committee_id_number = 'getFromStore';
         tm.transaction.transaction_type_identifier = transactionType.toUpperCase();
-        tm.transaction.transaction_id = 'randomAN20';
+        tm.transaction.transaction_id = this.generateTransactionId();
         tm.transaction.report_id = Number(reportId);
       }
       return of(tm);
@@ -49,5 +48,15 @@ export class TransactionResolver implements Resolve<TransactionMeta | undefined>
       );
     }
     return of(undefined);
+  }
+
+  private generateTransactionId() {
+    let id = '';
+    const LENGTH = 20;
+    const TOKENS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    for (let i = 0; i < LENGTH; i++) {
+      id += TOKENS.charAt(Math.floor(Math.random() * TOKENS.length));
+    }
+    return id;
   }
 }

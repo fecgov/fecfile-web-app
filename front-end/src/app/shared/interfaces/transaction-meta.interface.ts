@@ -9,6 +9,8 @@ export interface TransactionMeta {
   scheduleId: string;
   componentGroupId: string;
   formType: string;
+  title: string;
+  contributionPurposeDescripReadonly: (...params: any) => string; // eslint-disable-line @typescript-eslint/no-explicit-any
   schema: JsonSchema;
   transaction: Transaction | null;
 }

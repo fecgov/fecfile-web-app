@@ -1,6 +1,10 @@
 <ng-container *ngIf="meta.componentGroupId === 'A'"> Group A </ng-container>
 <ng-container *ngIf="meta.componentGroupId === 'B'">
-  <app-transaction-group-b [schema]="meta.schema" [transaction]="meta.transaction"></app-transaction-group-b>
+  <app-transaction-group-b
+    [title]="meta.title"
+    [schema]="meta.schema"
+    [transaction]="meta.transaction"
+  ></app-transaction-group-b>
 </ng-container>
 <ng-container *ngIf="meta.componentGroupId === 'C'"> Group C </ng-container>
 <ng-container *ngIf="meta.componentGroupId === 'D'"> Group D </ng-container>

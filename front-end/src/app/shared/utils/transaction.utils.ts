@@ -7,7 +7,9 @@ const meta: { [transaction_type_identifier: string]: TransactionMeta } = {
   OFFSET_TO_OPEX: {
     scheduleId: 'A',
     componentGroupId: 'B',
-    formType: '15',
+    formType: 'SA15',
+    title: 'Offsets to Operating Expenditures',
+    contributionPurposeDescripReadonly: () => '',
     schema: OFFSET_TO_OPEX,
     transaction: null,
   },
