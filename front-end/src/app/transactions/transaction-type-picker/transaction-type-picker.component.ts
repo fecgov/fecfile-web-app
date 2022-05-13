@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Report } from 'app/shared/interfaces/report.interface';
 import {
   ScheduleATransactionGroups,
   ScheduleATransactionGroupsType,
@@ -16,7 +16,7 @@ import { LabelList } from 'app/shared/utils/label.utils';
 })
 export class TransactionTypePickerComponent implements OnInit {
   scheduleATransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
-  report: F3xSummary | undefined;
+  report: Report | undefined;
 
   constructor(private activatedRoute: ActivatedRoute) {}
 
@@ -79,13 +79,30 @@ export class TransactionTypePickerComponent implements OnInit {
         ];
       case ScheduleATransactionGroups.OTHER:
         return [
-          ScheduleATransactionTypes.TRANSFERS,
-          ScheduleATransactionTypes.JF_TRANSFERS,
-          ScheduleATransactionTypes.IN_KIND_TRANSFER,
-          ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA,
-          ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-          ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-          ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+          ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES,
+          ScheduleATransactionTypes.OTHER_RECEIPTS,
+          ScheduleATransactionTypes.IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+          ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+          ScheduleATransactionTypes.BUSINESS_LABOR_ORG_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+          ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT,
+          ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
+          ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT,
+          ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
+          ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+          ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+          ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+          ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+          ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
+          ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
+          ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
+          ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
+          ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+          ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+          ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+          ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+          ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
+          ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
+          ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
         ];
       default:
         return [];
