@@ -14,6 +14,7 @@ import { CreateF3xStep2Component } from './create-f3x-step2.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { environment } from '../../../../environments/environment';
 import { CommitteeAccount } from '../../../shared/models/committee-account.model';
+import { selectUserLoginData } from 'app/store/login.selectors';
 import { selectCommitteeAccount } from '../../../store/committee-account.selectors';
 import { ValidateService } from '../../../shared/services/validate.service';
 import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
@@ -59,7 +60,7 @@ describe('CreateF3xStep2Component', () => {
           },
           selectors: [
             { selector: selectCommitteeAccount, value: committeeAccount },
-            { selector: 'selectUserLoginData', value: userLoginData },
+            { selector: selectUserLoginData, value: userLoginData },
           ],
         }),
         {
