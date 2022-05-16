@@ -37,9 +37,50 @@ Cypress.Commands.add('safe_type', { prevSubject: true }, (subject, stringval) =>
   return subject; //Allows Cypress methods to chain off of this command like normal (IE Cy.get().safe_type().parent().click() and so on)
 });
 
-Cypress.Commands.add('dropdown_set_value', (dropdown, target) => {
+Cypress.Commands.add('dropdown_set_value', (dropdown, value) => {
   cy.get(dropdown).click();
-  cy.get('p-dropdownitem').contains(target).should('exist').click({ force: true });
+  cy.wait(25);
+  cy.get('p-dropdownitem').contains(value).should('exist').click({ force: true });
+});
+
+Cypress.Commands.add('calendar_set_value', (calendar, date = new Date()) => {
+  var current_date = new Date();
+  cy.get(calendar).click();
+  cy.wait(25);
+
+  //    Choose the year
+  cy.get('.p-datepicker-year').click();
+  cy.wait(25);
+
+  const year = date.getFullYear();
+  const current_year = current_date.getFullYear();
+  const decade_start = current_year - (current_year % 10);
+  const decade_end = decade_start + 9;
+  if (year < decade_start) {
+    for (var i = 0; i < decade_start - year; i += 10) {
+      cy.get('.p-datepicker-prev').click();
+      cy.wait(25);
+    }
+  }
+  if (year > decade_end) {
+    for (var i = 0; i < year - decade_end; i += 10) {
+      cy.get('.p-datepicker-next').click();
+      cy.wait(25);
+    }
+  }
+  cy.get('.p-yearpicker-year').contains(year.toString()).click();
+  cy.wait(25);
+
+  //    Choose the month
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const month = months[date.getMonth()];
+  cy.get('.p-monthpicker-month').contains(month).click();
+  cy.wait(25);
+
+  //    Choose the day
+  const day = date.getDate().toString();
+  cy.get('td').find('span').not('.p-disabled').parent().contains(day).click();
+  cy.wait(25);
 });
 
 Cypress.Commands.add('login', () => {
@@ -81,7 +122,10 @@ Cypress.Commands.add('logout', () => {
   cy.get('.p-menuitem-text').contains('Logout').click();
 });
 
-import { watchFile } from 'fs';
 import { isString } from 'lodash';
+
 import { EnterContact } from './contacts.spec';
 Cypress.Commands.add('EnterContact', EnterContact);
+
+import { EnterReport } from './reports.spec';
+Cypress.Commands.add('EnterReport', EnterReport);
