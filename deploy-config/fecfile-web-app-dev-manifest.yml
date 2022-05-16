@@ -1,11 +1,11 @@
 applications:
- - name: fecfile-web-app
+ - name: fecfile-web-app-login
    instances: 2
    memory: 128M
    buildpack: nginx_buildpack
 
    routes:
-     - route:  fecfile-web-app-dev.app.cloud.gov
+     - route:  fecfile-web-app-login-dev.app.cloud.gov
 
    env:
      EXAMPLE: example
