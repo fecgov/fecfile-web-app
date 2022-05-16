@@ -115,4 +115,29 @@ describe('CreateF3xStep2Component', () => {
     req.flush(component.report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
+
+  it('#save should not save when form data invalid', () => {
+    component.report = F3xSummary.fromJSON({
+      id: '999',
+      change_of_address: 'A',
+      street_1: '123 Main St',
+      street_2: 'Apt A',
+      city: 'Washington',
+      state: 'DC',
+      zip: '20001',
+    });
+    fixture.detectChanges();
+    component.form.patchValue({
+      id: '999',
+      change_of_address: 'A',
+      street_1: '123 Main St',
+      street_2: 'Apt A',
+      city: 'Washington',
+      state: 'DC',
+      zip: '20001',
+    });
+
+    component.save();
+    expect(component.form.invalid).toBe(true);
+  });
 });
