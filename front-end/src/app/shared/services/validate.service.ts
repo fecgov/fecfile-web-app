@@ -55,13 +55,18 @@ export class ValidateService {
   /**
    *
    * @param {FormGroup} form
+   * @param {string[]} propertiesSubset - Only get values for the listed subset of schema parameters.
    * @returns object containing the form property values limited to the current validation schema
+   * This method will 'null' any schema values that do not have a form value.
    */
-  getFormValues(form: FormGroup) {
+  getFormValues(form: FormGroup, propertiesSubset: string[] = []) {
     const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
     if (this.formValidatorSchema) {
       this.getSchemaProperties(this.formValidatorSchema).forEach((property: string) => {
+        if (propertiesSubset.length > 0 && !propertiesSubset.includes(property)) {
+          return;
+        }
         if (form?.get(property)?.value) {
           formValues[property] = form?.get(property)?.value;
         } else {
@@ -110,6 +115,9 @@ export class ValidateService {
           }
           if (error.keyword === 'enum') {
             result['pattern'] = { requiredPattern: `Allowed values: ${error.params['allowedValues'].join(', ')}` };
+          }
+          if (error.keyword === 'type' && error.params['type'].includes('boolean')) {
+            result['pattern'] = { requiredPattern: error.message };
           }
         });
         return result;

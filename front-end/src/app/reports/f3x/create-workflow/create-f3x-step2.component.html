@@ -1,3 +1,5 @@
+<p-toast></p-toast>
+
 <div class="p-fluid">
   <h1>FEC Form 3X</h1>
   <h5>REPORT OF RECEIPTS AND DISBURSEMENTS FOR OTHER THAN AN AUTHORIZED COMMITTEE</h5>
@@ -11,7 +13,7 @@
           <div class="radio-button-spacer">
             <p-radioButton
               name="change_of_address"
-              [value]="null"
+              [value]="false"
               label="NO"
               formControlName="change_of_address"
               ariaLabel="Address has not changed in the last 10 days"
@@ -20,7 +22,7 @@
           <div>
             <p-radioButton
               name="change_of_address"
-              value="X"
+              [value]="true"
               label="YES"
               formControlName="change_of_address"
               ariaLabel="Address has changed in the last 10 days"
@@ -35,7 +37,7 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="form.get('change_of_address')?.value === 'X'">
+    <ng-container *ngIf="form.get('change_of_address')?.value">
       <div class="col-12">
         Within 10 days of an address change you must notify the FEC by amending your Form 1, in addition to updating
         your address here.
