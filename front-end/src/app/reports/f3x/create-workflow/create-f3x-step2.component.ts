@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { MessageService } from 'primeng/api';
 import { refreshCommitteeAccountDetailsAction } from '../../../store/committee-account.actions';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
@@ -43,7 +44,8 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
     private f3xSummaryService: F3xSummaryService,
     private validateService: ValidateService,
     private fb: FormBuilder,
-    private store: Store
+    private store: Store,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -58,7 +60,7 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => {
         this.form.patchValue({
-          change_of_address: this.report?.change_of_address ? this.report.change_of_address : 'not-selected',
+          change_of_address: this.report?.change_of_address !== null ? this.report?.change_of_address : null,
           street_1: this.report?.street_1 ? this.report.street_1 : committeeAccount?.street_1,
           street_2: this.report?.street_2 ? this.report.street_2 : committeeAccount?.street_2,
           city: this.report?.city ? this.report.city : committeeAccount?.city,
@@ -98,6 +100,12 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
       if (jump === 'back' && this.report?.id) {
         this.router.navigateByUrl('/reports');
       }
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Report Updated',
+        life: 3000,
+      });
     });
   }
 }
