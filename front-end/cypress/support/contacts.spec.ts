@@ -1,9 +1,5 @@
 import * as _ from 'lodash';
 
-function RandomInt(min = 0, max = 1) {
-  return Math.round(Math.random() * (max - min)) + min;
-}
-
 export function GenerateContactObject(contact_given = {}) {
   var contact_random = {
     //_.sample : standard js object method (hence _.); takes a random element from a given list.  Much more readable than [randomint % list.length] on every list
@@ -94,8 +90,8 @@ export function GenerateContactObject(contact_given = {}) {
     ]),
     prefix: _.sample(['Dr', '', '', '', '', '', '']), //Extra empty strings artificially raise the likelihood of the value being an empty string
     suffix: _.sample(['Sr', 'Jr', 'III', 'IV', 'V', 'VI', '', '', '', '', '', '', '', '', '', '', '', '', '']),
-    street: `${RandomInt(1, 9999)} Test ${_.sample(['Rd', 'Ln', 'St', 'Ave', 'Ct'])}`,
-    apartment: _.sample([`Apt ${RandomInt(1, 200)}`, '', '']),
+    street: `${_.random(1, 9999)} Test ${_.sample(['Rd', 'Ln', 'St', 'Ave', 'Ct'])}`,
+    apartment: _.sample([`Apt ${_.random(1, 200)}`, '', '']),
     city: _.sample([
       'Testopolis',
       'Testville',
@@ -107,66 +103,12 @@ export function GenerateContactObject(contact_given = {}) {
       'Testborough',
       'Testbury',
     ]),
-    zip: RandomInt(1, 9999).toString().padStart(5, '0'), //Zipcodes starting with 0 are pretty uncommon
-    state: _.sample([
-      'Alabama',
-      'Alaska',
-      'American Samoa',
-      'Arizona',
-      'Arkansas',
-      'California',
-      'Colorado',
-      'Connecticut',
-      'Delaware',
-      'District of Columbia',
-      'Florida',
-      'Georgia',
-      'Guam',
-      'Hawaii',
-      'Idaho',
-      'Illinois',
-      'Indiana',
-      'Iowa',
-      'Kansas',
-      'Kentucky',
-      'Louisiana',
-      'Maine',
-      'Maryland',
-      'Massachusetts',
-      'Michigan',
-      'Minnesota',
-      'Mississippi',
-      'Missouri',
-      'Montana',
-      'Nebraska',
-      'Nevada',
-      'New Hampshire',
-      'New Jersey',
-      'New Mexico',
-      'New York',
-      'North Carolina',
-      'North Dakota',
-      'Northern Mariana Islands',
-      'Ohio',
-      'Oklahoma',
-      'Oregon',
-      'Pennsylvania',
-      'Puerto Rico',
-      'Rhode Island',
-      'South Carolina',
-      'South Dakota',
-      'Tennessee',
-      'Texas',
-      'U.S. Virgin Islands',
-      'Utah',
-      'Vermont',
-      'Virginia',
-      'Washington',
-      'West Virginia',
-      'Wisconsin',
-      'Wyoming',
+    zip: _.random(1, 9999).toString().padStart(5, '0'), //Zipcodes starting with 0 are pretty uncommon
+    // prettier-ignore
+    state: _.sample([ // prettier-ignore
+      'Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','U.S. Virgin Islands','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming',
     ]),
-    phone: `${RandomInt(1, 999).toString().padStart(3, '0')}${RandomInt(1000000, 1999999).toString()}`, //Area code from 001 to 999 || 7-digit number starting with between 100 to 199 because (supposedly) that range always corresponds to fake numbers
+    phone: `${_.random(1, 999).toString().padStart(3, '0')}${_.random(1000000, 1999999).toString()}`, //Area code from 001 to 999 || 7-digit number starting with between 100 to 199 because (supposedly) that range always corresponds to fake numbers
     employer: '',
     //Jobs provided by another random generator
     occupation: _.sample([
@@ -209,7 +151,7 @@ export function GenerateContactObject(contact_given = {}) {
     ]),
 
     //Candidate-exclusive fields
-    candidate_id: `C${RandomInt(1, 99999999).toString().padStart(8, '0')}`,
+    candidate_id: `C${_.random(1, 99999999).toString().padStart(8, '0')}`,
     candidate_office: _.sample(['House', 'Presidential', 'Senate']),
     candidate_state: _.sample([
       'Alabama',
@@ -266,7 +208,7 @@ export function GenerateContactObject(contact_given = {}) {
     candidate_district: '01',
 
     //Committee-exclusive fields
-    committee_id: `C${RandomInt(1, 99999999).toString().padStart(8, '0')}`,
+    committee_id: `C${_.random(1, 99999999).toString().padStart(8, '0')}`,
     committee_name: `${_.sample(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])} for American ${_.sample([
       'Happiness',
       'Exceptionalism',
