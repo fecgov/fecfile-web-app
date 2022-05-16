@@ -111,6 +111,9 @@ export class ValidateService {
           if (error.keyword === 'enum') {
             result['pattern'] = { requiredPattern: `Allowed values: ${error.params['allowedValues'].join(', ')}` };
           }
+          if (error.keyword === 'type' && error.params['type'].includes('boolean')) {
+            result['pattern'] = { requiredPattern: error.message };
+          }
         });
         return result;
       }

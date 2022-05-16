@@ -5,6 +5,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
+import { MessageService } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -51,6 +52,7 @@ describe('CreateF3xStep2Component', () => {
         ValidateService,
         FormBuilder,
         F3xSummaryService,
+        MessageService,
         provideMockStore({
           initialState: {
             fecfile_online_committeeAccount: committeeAccount,
@@ -94,7 +96,7 @@ describe('CreateF3xStep2Component', () => {
     component.report = F3xSummary.fromJSON({
       id: '999',
     });
-    component.form.patchValue({ change_of_address: 'X' });
+    component.form.patchValue({ change_of_address: true });
 
     component.save('back');
     let req = httpTestingController.expectOne(
