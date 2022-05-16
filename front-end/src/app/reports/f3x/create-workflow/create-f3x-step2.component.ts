@@ -58,22 +58,24 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => {
-        this.form.patchValue({
-          change_of_address: this.report?.change_of_address !== null ? this.report?.change_of_address : null,
-          street_1: this.report?.street_1 ? this.report.street_1 : committeeAccount?.street_1,
-          street_2: this.report?.street_2 ? this.report.street_2 : committeeAccount?.street_2,
-          city: this.report?.city ? this.report.city : committeeAccount?.city,
-          state: this.report?.state ? this.report.state : committeeAccount?.state,
-          zip: this.report?.zip ? this.report.zip : committeeAccount?.zip,
-          memo_checkbox: false,
-          memo: '',
-        });
-      });
+      .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
     this.validateService.formValidatorForm = this.form;
+  }
+
+  setDefaultFormValues(committeeAccount: CommitteeAccount) {
+    this.form.patchValue({
+      change_of_address: this.report?.change_of_address !== null ? this.report?.change_of_address : null,
+      street_1: this.report?.street_1 ? this.report.street_1 : committeeAccount?.street_1,
+      street_2: this.report?.street_2 ? this.report.street_2 : committeeAccount?.street_2,
+      city: this.report?.city ? this.report.city : committeeAccount?.city,
+      state: this.report?.state ? this.report.state : committeeAccount?.state,
+      zip: this.report?.zip ? this.report.zip : committeeAccount?.zip,
+      memo_checkbox: false,
+      memo: '',
+    });
   }
 
   ngOnDestroy(): void {

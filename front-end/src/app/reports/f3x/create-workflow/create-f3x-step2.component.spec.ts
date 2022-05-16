@@ -126,16 +126,13 @@ describe('CreateF3xStep2Component', () => {
       state: 'DC',
       zip: '20001',
     });
-    component.ngOnInit();
-    component.form.patchValue({
-      id: '999',
-      change_of_address: 'A',
-      street_1: '123 Main St',
-      street_2: 'Apt A',
-      city: 'Washington',
-      state: 'DC',
-      zip: '20001',
-    });
+    component.setDefaultFormValues({
+      street_1: '3 Oak St',
+      street_2: null,
+      city: 'Pheonix',
+      state: 'AZ',
+      zip: '12345',
+    } as CommitteeAccount);
 
     component.save();
     expect(component.form.invalid).toBe(true);
