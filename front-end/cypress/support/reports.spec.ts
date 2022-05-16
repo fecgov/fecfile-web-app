@@ -2,7 +2,7 @@
 
 import * as _ from 'lodash';
 
-function RandomDate() {
+export function RandomDate() {
   var outDate = new Date();
 
   const month = _.random(1, 12);
@@ -20,7 +20,7 @@ function RandomDate() {
   return outDate;
 }
 
-function date_to_string(date) {
+export function DateToString(date) {
   const m = (date.getMonth() + 1).toString().padStart(2, '0');
   const d = date.getDate().toString().padStart(2, '0');
   const y = date.getFullYear().toString();
@@ -86,7 +86,7 @@ export function GenerateReportObject(report_given = {}) {
   }
 
   const election_date = RandomDate();
-  report['page_1']['date_of_election'] = date_to_string(election_date);
+  report['page_1']['date_of_election'] = DateToString(election_date);
 
   // prettier-ignore
   report['page_1']['state_of_election'] = _.sample([
@@ -94,14 +94,14 @@ export function GenerateReportObject(report_given = {}) {
   ])
 
   var coverage_date = RandomDate();
-  report['page_1']['coverage_from_date'] = date_to_string(coverage_date); //Generate a starting date
+  report['page_1']['coverage_from_date'] = DateToString(coverage_date); //Generate a starting date
 
   var filing_frequency_offset = 0;
   if (report['page_1']['filing_frequency'] == 'QUARTERLY') filing_frequency_offset = 3;
   else if (report['page_1']['filing_frequency'] == 'MONTHLY') filing_frequency_offset = 1;
   coverage_date.setMonth(coverage_date.getMonth() + filing_frequency_offset); //Add 1 or 3 months to the date depending on Monthly/Quarterly filing
 
-  report['page_1']['coverage_through_date'] = date_to_string(coverage_date);
+  report['page_1']['coverage_through_date'] = DateToString(coverage_date);
 
   return report;
 }
