@@ -16,9 +16,9 @@ export class ReportResolver implements Resolve<F3xSummary | undefined> {
    * @returns {Observable<F3xSummary | undefined>}
    */
   resolve(route: ActivatedRouteSnapshot): Observable<F3xSummary | undefined> {
-    const id = route.paramMap.get('id');
-    if (id) {
-      return this.f3xSummaryService.get(Number(id));
+    const reportId = route.paramMap.get('reportId');
+    if (reportId) {
+      return this.f3xSummaryService.get(Number(reportId));
     }
     return of(undefined);
   }

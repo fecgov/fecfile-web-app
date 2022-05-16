@@ -48,6 +48,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     this.router.navigateByUrl(`/reports/f3x/create/step2/${item.id}`);
   }
 
+  public createTransaction(item: Report): void {
+    this.router.navigateByUrl(`/transactions/report/${item.id}/create`);
+  }
+
   /**
    * Get the display name for the contact to show in the table column.
    * @param item
