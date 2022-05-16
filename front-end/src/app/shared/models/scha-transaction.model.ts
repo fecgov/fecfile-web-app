@@ -1,6 +1,7 @@
 import { BaseModel } from './base.model';
 import { Transaction } from '../interfaces/transaction.interface';
 import { plainToClass } from 'class-transformer';
+// import { DateUtils } from '../utils/date.utils';
 
 export class SchATransaction extends BaseModel implements Transaction {
   id: number | null = null;
@@ -60,6 +61,9 @@ export class SchATransaction extends BaseModel implements Transaction {
 
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+    // if (json.contribution_date) {
+    //   json.contribution_date = DateUtils.convertFecFormatToDate(json.contribution_date);
+    // }
     return plainToClass(SchATransaction, json);
   }
 }

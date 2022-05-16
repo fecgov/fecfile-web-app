@@ -11,6 +11,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionUtils } from 'app/shared/utils/transaction.utils';
+import { DateUtils } from 'app/shared/utils/date.utils';
 
 @Component({
   selector: 'app-transaction-group-b',
@@ -66,10 +67,16 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
     this.validateService.formValidatorForm = this.form;
 
     // Intialize form on "Individual" entity type
-    this.form.patchValue({
-      entity_type: ContactTypes.INDIVIDUAL,
-      contribution_aggregate: '0',
-    });
+    if (this.transaction?.id) {
+      const txn = { ...this.transaction } as SchATransaction;
+      this.form.patchValue({ ...txn });
+      this.form.patchValue({ contribution_date: DateUtils.convertFecFormatToDate(txn.contribution_date) });
+    } else {
+      this.form.patchValue({
+        entity_type: ContactTypes.INDIVIDUAL,
+        contribution_aggregate: '0',
+      });
+    }
 
     this.form
       ?.get('entity_type')
