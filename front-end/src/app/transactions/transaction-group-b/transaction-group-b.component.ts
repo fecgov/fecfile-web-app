@@ -10,6 +10,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 
 @Component({
   selector: 'app-transaction-group-b',
@@ -67,7 +68,7 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
     // Intialize form on "Individual" entity type
     this.form.patchValue({
       entity_type: ContactTypes.INDIVIDUAL,
-      contribution_aggregate: '$0.00',
+      contribution_aggregate: '0',
     });
 
     this.form
@@ -100,19 +101,29 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Force selection of checkbox to true/false even if never checked
+    this.form.patchValue({
+      memo_code: !!this.form.get('memo_code')?.value,
+    });
+
     const payload: SchATransaction = SchATransaction.fromJSON({
       ...this.transaction,
       ...this.validateService.getFormValues(this.form, this.formProperties),
     });
 
-    if (payload.id) {
-      this.transactionService.update(payload).subscribe(() => {
-        this.navigateTo(navigateTo);
-      });
-    } else {
-      this.transactionService.create(payload).subscribe(() => {
-        this.navigateTo(navigateTo);
-      });
+    // Generating the transaction id will be moved into the backend API
+    payload.transaction_id = TransactionUtils.generateTransactionId();
+
+    if (this.transaction?.transaction_type_identifier) {
+      if (payload.id) {
+        this.transactionService.update(payload, this.transaction.transaction_type_identifier).subscribe(() => {
+          this.navigateTo(navigateTo);
+        });
+      } else {
+        this.transactionService.create(payload, this.transaction.transaction_type_identifier).subscribe(() => {
+          this.navigateTo(navigateTo);
+        });
+      }
     }
   }
 
@@ -124,8 +135,10 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
         detail: 'Transaction Saved',
         life: 3000,
       });
-      this.form.reset();
       this.formSubmitted = false;
+      this.form.reset();
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
     } else {
       this.router.navigateByUrl('/reports');
     }

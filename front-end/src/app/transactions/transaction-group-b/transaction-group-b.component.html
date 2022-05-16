@@ -180,7 +180,11 @@
             name="contribution_date"
             formControlName="contribution_date"
           ></p-calendar>
-          <app-error-messages fieldName="contribution_date" [formSubmitted]="formSubmitted"></app-error-messages>
+          <app-error-messages
+            [form]="form"
+            fieldName="contribution_date"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
     </div>
@@ -193,6 +197,8 @@
             formControlName="memo_code"
             label="MEMO ITEM"
             ariaLabel="have memo item"
+            [trueValue]="true"
+            [falseValue]="false"
           ></p-checkbox>
           <div class="memo-checkbox-note">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.

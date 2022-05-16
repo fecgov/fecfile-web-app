@@ -1,22 +1,38 @@
 import { TransactionMeta } from '../interfaces/transaction-meta.interface';
 
-// Import transaction schemas
+// Transaction schemas
 import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
+
+// Transaction models
+import { SchATransaction } from '../models/scha-transaction.model';
 
 const meta: { [transaction_type_identifier: string]: TransactionMeta } = {
   OFFSET_TO_OPEX: {
     scheduleId: 'A',
     componentGroupId: 'B',
-    formType: 'SA15',
     title: 'Offsets to Operating Expenditures',
     contributionPurposeDescripReadonly: () => '',
     schema: OFFSET_TO_OPEX,
-    transaction: null,
+    transaction: SchATransaction.fromJSON({
+      form_type: 'SA15',
+      transaction_type_identifier: 'OFFSET_TO_OPEX',
+    }),
   },
 };
 
 export class TransactionUtils {
   static getMeta(transaction_type_identifier: string): TransactionMeta {
     return meta[transaction_type_identifier.toUpperCase()];
+  }
+
+  // This method will be phased out to the backend API
+  static generateTransactionId() {
+    let id = '';
+    const LENGTH = 20;
+    const TOKENS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    for (let i = 0; i < LENGTH; i++) {
+      id += TOKENS.charAt(Math.floor(Math.random() * TOKENS.length));
+    }
+    return id;
   }
 }

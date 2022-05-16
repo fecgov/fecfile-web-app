@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
+import { DateUtils } from '../utils/date.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -61,7 +62,8 @@ export class ValidateService {
    * @param {string[]} propertiesSubset - Only get values for the listed subset of schema parameters.
    * @returns object containing the form property values limited to the current validation schema
    * This method will 'null' any schema values that do not have a form value and, more importantly,
-   * set those form fields with an empty '' value to null for the backend.
+   * set those form fields with an empty '' value to null for the backend. It will also convert
+   * strings to number types when necessary.
    */
   getFormValues(form: FormGroup, propertiesSubset: string[] = []) {
     const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -74,7 +76,20 @@ export class ValidateService {
         if (form?.get(property)?.value === undefined || form?.get(property)?.value === '') {
           formValues[property] = null;
         } else {
-          formValues[property] = form?.get(property)?.value;
+          // Convert string to number is expected in schema
+          if (
+            (Array.isArray(this.formValidatorSchema?.properties[property].type) &&
+              this.formValidatorSchema?.properties[property].type.includes('number')) ||
+            this.formValidatorSchema?.properties[property].type === 'number'
+          ) {
+            formValues[property] = Number(form?.get(property)?.value);
+            // Convert date to string
+          } else if (Object.prototype.toString.call(form?.get(property)?.value) === '[object Date]') {
+            formValues[property] = DateUtils.convertDateToFecFormat(form?.get(property)?.value);
+            // All else are strings so copy straight into value
+          } else {
+            formValues[property] = form?.get(property)?.value;
+          }
         }
       });
     }
@@ -111,7 +126,7 @@ export class ValidateService {
           if (error.keyword === 'minLength') {
             result['minlength'] = { requiredLength: error.params['limit'] };
           }
-          if (error.keyword === 'maxLength') {
+          if (error.keyword === 'maxLength' || error.keyword === 'maximum') {
             result['maxlength'] = { requiredLength: error.params['limit'] };
           }
           if (error.keyword === 'pattern') {
@@ -119,6 +134,13 @@ export class ValidateService {
           }
           if (error.keyword === 'enum') {
             result['pattern'] = { requiredPattern: `Allowed values: ${error.params['allowedValues'].join(', ')}` };
+          }
+          if (error.keyword === 'type' && error.params['type'] === 'number') {
+            if (this.formValidatorForm?.get(error.path)?.value === '') {
+              result['required'] = true;
+            } else {
+              result['pattern'] = { requiredPattern: 'Value must be a number' };
+            }
           }
         });
         return result;

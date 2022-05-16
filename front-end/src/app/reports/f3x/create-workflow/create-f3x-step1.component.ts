@@ -174,12 +174,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       return;
     }
 
-    this.form.patchValue({
-      coverage_from_date: DateUtils.convertDateToFecFormat(this.form.get('coverage_from_date')?.value),
-      coverage_through_date: DateUtils.convertDateToFecFormat(this.form.get('coverage_through_date')?.value),
-      date_of_election: DateUtils.convertDateToFecFormat(this.form.get('date_of_election')?.value),
-    });
-    const summary: F3xSummary = F3xSummary.fromJSON(this.validateService.getFormValues(this.form));
+    const summary: F3xSummary = F3xSummary.fromJSON(this.validateService.getFormValues(this.form, this.formProperties));
     this.f3xSummaryService.create(summary, this.formProperties).subscribe((report: F3xSummary) => {
       if (jump === 'continue') {
         this.router.navigateByUrl(`/reports/f3x/create/step2/${report.id}`);

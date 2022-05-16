@@ -88,7 +88,7 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
 
     const payload: F3xSummary = F3xSummary.fromJSON({
       ...this.report,
-      ...this.form.value,
+      ...this.validateService.getFormValues(this.form, this.formProperties),
     });
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
