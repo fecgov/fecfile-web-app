@@ -57,7 +57,8 @@ export class ValidateService {
    * @param {FormGroup} form
    * @param {string[]} propertiesSubset - Only get values for the listed subset of schema parameters.
    * @returns object containing the form property values limited to the current validation schema
-   * This method will 'null' any schema values that do not have a form value.
+   * This method will 'null' any schema values that do not have a form value and, more importantly,
+   * set those form fields with an empty '' value to null for the backend.
    */
   getFormValues(form: FormGroup, propertiesSubset: string[] = []) {
     const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -67,10 +68,10 @@ export class ValidateService {
         if (propertiesSubset.length > 0 && !propertiesSubset.includes(property)) {
           return;
         }
-        if (form?.get(property)?.value) {
-          formValues[property] = form?.get(property)?.value;
-        } else {
+        if (form?.get(property)?.value === undefined || form?.get(property)?.value === '') {
           formValues[property] = null;
+        } else {
+          formValues[property] = form?.get(property)?.value;
         }
       });
     }
