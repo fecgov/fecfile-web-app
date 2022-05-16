@@ -126,7 +126,7 @@ describe('CreateF3xStep2Component', () => {
       state: 'DC',
       zip: '20001',
     });
-    fixture.detectChanges();
+    component.ngOnInit();
     component.form.patchValue({
       id: '999',
       change_of_address: 'A',
