@@ -5,12 +5,11 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { MessageService, SharedModule } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { UserLoginData } from 'app/shared/models/user.model';
-import { SharedModule } from 'primeng/api';
 import { CreateF3xStep2Component } from './create-f3x-step2.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { environment } from '../../../../environments/environment';
