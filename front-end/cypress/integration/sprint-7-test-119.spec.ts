@@ -63,6 +63,18 @@ const CandidateStates: object = {
   Wyoming: 1,
 };
 
+function CheckEveryStateThenSelectWestVirgia() {
+  cy.get(FieldCandidateState).click();
+
+  for (let State of Object.keys(CandidateStates)) {
+    cy.get('p-dropdownitem').contains(State).should('exist');
+  }
+
+  cy.get('p-dropdownitem').contains('West Virginia').click({ force: true });
+
+  cy.get(FieldCandidateState).should('contain', 'West Virginia');
+}
+
 describe('QA Test Script #119 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page', () => {
     cy.visit('/dashboard');
@@ -113,15 +125,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   });
 
   it('Step 9: Verify all states are present (Senate) and then select "West Virginia"', () => {
-    cy.get(FieldCandidateState).click();
-
-    for (let State of Object.keys(CandidateStates)) {
-      cy.get('p-dropdownitem').contains(State).should('exist');
-    }
-
-    cy.get('p-dropdownitem').contains('West Virginia').click({ force: true });
-
-    cy.get(FieldCandidateState).should('contain', 'West Virginia');
+    CheckEveryStateThenSelectWestVirgia();
   });
 
   it("Step 10: Select 'House' from the 'Candidate Office' dropdown", () => {
@@ -136,15 +140,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   });
 
   it('Step 12: Verify all states are present (House) and then select "West Virginia"', () => {
-    cy.get(FieldCandidateState).click();
-
-    for (let State of Object.keys(CandidateStates)) {
-      cy.get('p-dropdownitem').contains(State).should('exist');
-    }
-
-    cy.get('p-dropdownitem').contains('West Virginia').click({ force: true });
-
-    cy.get(FieldCandidateState).should('contain', 'West Virginia');
+    CheckEveryStateThenSelectWestVirgia();
   });
 
   it('Steps 13 & 14: Check that every state has its corresponding number of districts', () => {
