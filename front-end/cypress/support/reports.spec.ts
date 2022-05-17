@@ -106,7 +106,7 @@ export function GenerateReportObject(report_given = {}) {
   return report;
 }
 
-export function EnterReport(report) {
+export function EnterReport(report, Save = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
   cy.wait(100);
 
@@ -150,4 +150,9 @@ export function EnterReport(report) {
   );
   cy.wait(50);
   cy.wait(250);
+
+  if (Save) {
+    cy.get("button[label='Save']").click();
+    cy.wait(50);
+  }
 }
