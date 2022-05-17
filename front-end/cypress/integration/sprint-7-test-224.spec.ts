@@ -5,7 +5,7 @@ let Contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organizat
 
 describe('QA Test Script #224 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page', () => {
-    cy.login();
+    cy.Login();
     cy.url().should('contain', '/dashboard');
   });
 
@@ -23,7 +23,7 @@ describe('QA Test Script #224 (Sprint 7)', () => {
       });
 
       it('Steps 3, 4, & 5: Checks that the "street_1" field is labeled "Street Address" instead of "Street"', () => {
-        cy.dropdown_set_value("p-dropdown[FormControlName='type']", CType);
+        cy.DropdownSetValue("p-dropdown[FormControlName='type']", CType);
 
         cy.get('#street_1').parent().should('contain', 'STREET ADDRESS');
       });

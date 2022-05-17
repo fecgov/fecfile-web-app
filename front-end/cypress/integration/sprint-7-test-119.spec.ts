@@ -78,7 +78,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   });
 
   it("Step 3: Set the Contact Type to 'Candidate'", () => {
-    cy.dropdown_set_value("p-dropdown[FormControlName='type']", 'Candidate');
+    cy.DropdownSetValue("p-dropdown[FormControlName='type']", 'Candidate');
     cy.wait(50);
     cy.get("p-dropdown[FormControlName='type']").should('contain', 'Candidate');
   });
@@ -103,7 +103,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   });
 
   it("Step 7: Select 'Senate' from the 'Candidate Office' dropdown", () => {
-    cy.dropdown_set_value(FieldCandidateOffice, 'Senate');
+    cy.DropdownSetValue(FieldCandidateOffice, 'Senate');
     cy.wait(50);
     cy.get(FieldCandidateOffice).should('contain', 'Senate');
   });
@@ -127,7 +127,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   });
 
   it("Step 10: Select 'House' from the 'Candidate Office' dropdown", () => {
-    cy.dropdown_set_value(FieldCandidateOffice, 'House');
+    cy.DropdownSetValue(FieldCandidateOffice, 'House');
     cy.wait(50);
     cy.get(FieldCandidateOffice).should('contain', 'House');
   });
@@ -156,7 +156,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
       let DistrictCount: number = CandidateStates[State];
       if (DistrictCount == 0) DistrictCount = 1; //For some odd reason, states with 0 districts have '00' in the dropdown; According to Shelly, this is intended behavior
 
-      cy.dropdown_set_value(FieldCandidateState, State);
+      cy.DropdownSetValue(FieldCandidateState, State);
       cy.wait(25);
       cy.get(FieldCandidateDistrict).click();
       cy.get('p-dropdownitem').should('have.length', DistrictCount);

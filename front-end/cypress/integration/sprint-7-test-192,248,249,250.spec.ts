@@ -111,7 +111,7 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
         cy.wait(50);
         cy.get("div[role='dialog']").contains('Add Contact').should('exist');
 
-        cy.dropdown_set_value("p-dropdown[FormControlName='type']", c_type);
+        cy.DropdownSetValue("p-dropdown[FormControlName='type']", c_type);
         cy.wait(50);
         cy.get("button[label='Save']").click();
         cy.wait(50);
@@ -134,13 +134,13 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
           }
 
           cy.get('#' + Field)
-            .type(RandString)
+            .SafeType(RandString)
             .parent()
             .find('app-error-messages')
             .children()
             .should('have.length', 0);
           cy.get('#' + Field)
-            .type('0')
+            .SafeType('0')
             .parent()
             .find('app-error-messages')
             .should('contain', `This field cannot contain more than ${Length}`);

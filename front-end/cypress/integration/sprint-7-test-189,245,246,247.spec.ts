@@ -17,7 +17,7 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
     cy.get('.p-confirm-dialog-accept').click();
 
     cy.wait(100);
-    cy.logout();
+    cy.Logout();
   }
 
   for (let i: number = 0; i < ContactTypes.length; i++) {
@@ -33,7 +33,7 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
       });
 
       it('Step 1: Navigate to contacts page', () => {
-        cy.login();
+        cy.Login();
 
         cy.url().should('contain', '/dashboard');
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
@@ -60,12 +60,18 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
 
       it('Steps 5 & 6: Set the contact\'s name to "First Last"', () => {
         if (CType == 'Individual' || CType == 'Candidate') {
-          cy.get('#first_name').type('{backspace}{backspace}{backspace}{backspace}First').should('have.value', 'First');
-          cy.get('#last_name').type('{backspace}{backspace}{backspace}{backspace}Last').should('have.value', 'Last');
+          cy.get('#first_name')
+            .SafeType('{backspace}{backspace}{backspace}{backspace}First')
+            .should('have.value', 'First');
+          cy.get('#last_name')
+            .SafeType('{backspace}{backspace}{backspace}{backspace}Last')
+            .should('have.value', 'Last');
         } else {
           cy.get('#name')
-            .type(`{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}`)
-            .type('First Last')
+            .SafeType(
+              `{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}`
+            )
+            .SafeType('First Last')
             .should('have.value', 'First Last');
         }
       });
