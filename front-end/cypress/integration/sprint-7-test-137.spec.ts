@@ -15,7 +15,7 @@ describe('QA Test Script #137 (Sprint 7)', () => {
 
   it('Step 2: Open a New Report', () => {
     const report = GenerateReportObject();
-    cy.EnterReport(report);
+    cy.EnterReport(report, false); //Enter a report without saving it
     //cy.get("button[label='Create a new report']").click();
     //cy.wait(50);
     cy.get('app-create-f3x-step1').contains('FEC Form 3X').should('exist');
