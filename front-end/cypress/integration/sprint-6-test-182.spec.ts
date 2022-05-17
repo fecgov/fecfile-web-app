@@ -89,8 +89,7 @@ describe('QA Test Script #182 (Sprint 6)', () => {
   it("Steps 5-8: Open the 'State' dropdown, check for all the relevent states, check that it does not contain 'Armed Forces' entries, and select 'Virginia'", () => {
     cy.get("[formcontrolname='state']").click();
 
-    for (let i: number = 0; i < States.length; i++) {
-      let State: string = States[i];
+    for (let State of States)
       cy.get("li[role='option']").contains(State).should('exist');
     }
 

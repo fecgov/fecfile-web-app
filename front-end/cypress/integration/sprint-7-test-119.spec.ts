@@ -151,8 +151,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   });
 
   it('Steps 13 & 14: Check that every state has its corresponding number of districts', () => {
-    for (let i: number = 0; i < Object.keys(CandidateStates).length; i++) {
-      let State: string = Object.keys(CandidateStates)[i];
+    for (let State of Object.keys(CandidateStates)) {
       let DistrictCount: number = CandidateStates[State];
       if (DistrictCount == 0) DistrictCount = 1; //For some odd reason, states with 0 districts have '00' in the dropdown; According to Shelly, this is intended behavior
 
