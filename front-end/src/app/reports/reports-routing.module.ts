@@ -16,12 +16,12 @@ const routes: Routes = [
     component: CreateF3XStep1Component,
   },
   {
-    path: 'f3x/create/step1/:id',
+    path: 'f3x/create/step1/:reportId',
     component: CreateF3XStep1Component,
     resolve: { report: ReportResolver },
   },
   {
-    path: 'f3x/create/step2/:id',
+    path: 'f3x/create/step2/:reportId',
     component: CreateF3xStep2Component,
     resolve: { report: ReportResolver },
   },

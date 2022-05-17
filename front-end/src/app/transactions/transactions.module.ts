@@ -3,34 +3,31 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // PrimeNG
+import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { SelectButtonModule } from 'primeng/selectbutton';
-import { TableModule } from 'primeng/table';
-import { ToolbarModule } from 'primeng/toolbar';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ToastModule } from 'primeng/toast';
 
-import { SharedModule } from '../../app/shared/shared.module';
-import { ReportsRoutingModule } from './reports-routing.module';
-import { ReportListComponent } from './report-list/report-list.component';
-import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
-import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2.component';
+import { SharedModule } from '../shared/shared.module';
+import { TransactionsRoutingModule } from './transactions-routing.module';
+import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
+import { TransactionGroupBComponent } from './transaction-group-b/transaction-group-b.component';
+import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 
 @NgModule({
-  declarations: [ReportListComponent, CreateF3XStep1Component, CreateF3xStep2Component],
+  declarations: [TransactionContainerComponent, TransactionGroupBComponent, TransactionTypePickerComponent],
   imports: [
+    AccordionModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ReportsRoutingModule,
-    TableModule,
-    ToolbarModule,
+    TransactionsRoutingModule,
     ButtonModule,
     DividerModule,
     DropdownModule,
@@ -40,8 +37,7 @@ import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2.
     InputTextareaModule,
     CalendarModule,
     SelectButtonModule,
-    ToastModule,
     SharedModule,
   ],
 })
-export class ReportsModule {}
+export class TransactionsModule {}
