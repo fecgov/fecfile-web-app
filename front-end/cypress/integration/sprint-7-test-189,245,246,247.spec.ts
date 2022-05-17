@@ -2,7 +2,7 @@
 
 import { GenerateContactObject, EnterContact } from '../support/contacts.spec';
 
-const contact_types = ['Individual', 'Candidate', 'Committee', 'Organization'];
+const ContactTypes: Array<string> = ['Individual', 'Candidate', 'Committee', 'Organization'];
 
 describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
   function after() {
@@ -20,12 +20,12 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
     cy.logout();
   }
 
-  for (var i = 0; i < contact_types.length; i++) {
-    var contact_type = contact_types[i];
+  for (let i: number = 0; i < ContactTypes.length; i++) {
+    let ContactType = ContactTypes[i];
 
-    context(`---> ${contact_type}`, (c_type = contact_type) => {
-      var contact = GenerateContactObject({
-        contact_type: c_type,
+    context(`---> ${ContactType}`, (CType = ContactType) => {
+      let Contact: object = GenerateContactObject({
+        contact_type: CType,
         first_name: 'Test',
         last_name: 'Edit',
         organization_name: 'Test Edit',
@@ -38,7 +38,7 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
         cy.url().should('contain', '/dashboard');
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
         cy.url().should('contain', '/contacts');
-        cy.EnterContact(contact);
+        cy.EnterContact(Contact);
       });
 
       it('Steps 2 & 3: Find the created contact, verify that it is an individual, and then select its edit checkbox', () => {
@@ -46,7 +46,7 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
           .contains('Test Edit') //Find the correct row; side effect: selects the element with the name
           .should('exist') //Double check that it exists
           .parent() //Get back to the row itself
-          .should('contain', c_type)
+          .should('contain', CType)
           .find("div[role='checkbox']")
           .click()
           .find('.pi-check')
@@ -59,7 +59,7 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
       });
 
       it('Steps 5 & 6: Set the contact\'s name to "First Last"', () => {
-        if (c_type == 'Individual' || c_type == 'Candidate') {
+        if (CType == 'Individual' || CType == 'Candidate') {
           cy.get('#first_name').type('{backspace}{backspace}{backspace}{backspace}First').should('have.value', 'First');
           cy.get('#last_name').type('{backspace}{backspace}{backspace}{backspace}Last').should('have.value', 'Last');
         } else {
