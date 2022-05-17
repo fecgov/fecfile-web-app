@@ -4,7 +4,7 @@
 //                  Double check with Shelly to ensure a proper understanding of the test script
 //import { GenerateReportObject, EnterReport } from '../support/reports.spec';
 
-describe('QA Test Script #137 (Sprint 7)', () => {
+describe('QA Test Script #165 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page and populate it with one report', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
@@ -13,7 +13,6 @@ describe('QA Test Script #137 (Sprint 7)', () => {
 
     //const report1 = GenerateReportObject();
     //cy.EnterReport(report1);
-    //cy.get("button[label='Save']").click().wait(50);
   });
 
   it('Steps 2-13: Check for sortability on each column', () => {
