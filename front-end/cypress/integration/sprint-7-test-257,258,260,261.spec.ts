@@ -71,15 +71,12 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
         context(`--->       ${TimePeriod}`, () => {
           it('Step 1: Navigate to contacts page', () => {
             cy.visit('/dashboard');
-            cy.url().should('contain', '/dashboard');
             cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-            cy.url().should('contain', '/reports');
           });
 
           it('Step 2: Open a New Report', () => {
             cy.get("button[label='Create a new report']").click();
             cy.wait(50);
-            cy.get('app-create-f3x-step1').contains('FEC Form 3X').should('exist');
           });
 
           it(`Step 3: Select the Filing Frequency ${FilingFrequency}`, () => {
