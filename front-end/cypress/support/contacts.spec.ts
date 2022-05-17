@@ -254,51 +254,51 @@ export function EnterContact(Contact: object, Save: boolean = true) {
   cy.get('#button-contacts-new').click();
   cy.wait(100);
 
-  cy.dropdown_set_value("p-dropdown[formcontrolname='type']", Contact['contact_type']);
+  cy.DropdownSetValue("p-dropdown[formcontrolname='type']", Contact['contact_type']);
 
   if (Contact['contact_type'] == 'Individual' || Contact['contact_type'] == 'Candidate') {
     //Contact
-    cy.get('#last_name').safe_type(Contact['last_name']);
-    cy.get('#first_name').safe_type(Contact['first_name']);
-    cy.get('#middle_name').safe_type(Contact['middle_name']);
-    cy.get('#prefix').safe_type(Contact['prefix']);
-    cy.get('#suffix').safe_type(Contact['suffix']);
+    cy.get('#last_name').SafeType(Contact['last_name']);
+    cy.get('#first_name').SafeType(Contact['first_name']);
+    cy.get('#middle_name').SafeType(Contact['middle_name']);
+    cy.get('#prefix').SafeType(Contact['prefix']);
+    cy.get('#suffix').SafeType(Contact['suffix']);
 
     //Employer
-    cy.get('#employer').safe_type(Contact['employer']);
-    cy.get('#occupation').safe_type(Contact['occupation']);
+    cy.get('#employer').SafeType(Contact['employer']);
+    cy.get('#occupation').SafeType(Contact['occupation']);
   }
 
   //Address
-  cy.get('#street_1').safe_type(Contact['street']);
-  cy.get('#street_2').safe_type(Contact['apartment']);
-  cy.get('#city').safe_type(Contact['city']);
-  cy.get('#zip').safe_type(Contact['zip']);
-  cy.get('#telephone').safe_type(Contact['phone']);
-  cy.dropdown_set_value("p-dropdown[formcontrolname='state']", Contact['state']);
+  cy.get('#street_1').SafeType(Contact['street']);
+  cy.get('#street_2').SafeType(Contact['apartment']);
+  cy.get('#city').SafeType(Contact['city']);
+  cy.get('#zip').SafeType(Contact['zip']);
+  cy.get('#telephone').SafeType(Contact['phone']);
+  cy.DropdownSetValue("p-dropdown[formcontrolname='state']", Contact['state']);
 
   //Candidate-exclusive fields
   if (Contact['contact_type'] == 'Candidate') {
-    cy.get('#candidate_id').safe_type(Contact['candidate_id']);
+    cy.get('#candidate_id').SafeType(Contact['candidate_id']);
 
-    cy.dropdown_set_value("p-dropdown[formcontrolname='candidate_office']", Contact['candidate_office']);
+    cy.DropdownSetValue("p-dropdown[formcontrolname='candidate_office']", Contact['candidate_office']);
 
     if (Contact['candidate_office'] != 'Presidential') {
-      cy.dropdown_set_value("p-dropdown[formcontrolname='candidate_state']", Contact['candidate_state']);
+      cy.DropdownSetValue("p-dropdown[formcontrolname='candidate_state']", Contact['candidate_state']);
 
       if (Contact['candidate_office'] == 'House') {
-        cy.dropdown_set_value("p-dropdown[formcontrolname='candidate_district']", Contact['candidate_district']);
+        cy.DropdownSetValue("p-dropdown[formcontrolname='candidate_district']", Contact['candidate_district']);
       }
     }
   }
 
   if (Contact['contact_type'] == 'Committee') {
-    cy.get('#committee_id').type(Contact['committee_id']);
-    cy.get('#name').type(Contact['committee_name']);
+    cy.get('#committee_id').SafeType(Contact['committee_id']);
+    cy.get('#name').SafeType(Contact['committee_name']);
   }
 
   if (Contact['contact_type'] == 'Organization') {
-    cy.get('#name').type(Contact['organization_name']);
+    cy.get('#name').SafeType(Contact['organization_name']);
   }
 
   if (Save) {

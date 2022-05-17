@@ -6,7 +6,7 @@ const Contact: Object = GenerateContactObject({ contact_type: 'Individual', stat
 
 describe('QA Test Script #183 (Sprint 6)', () => {
   function before() {
-    cy.login();
+    cy.Login();
     cy.EnterContact(Contact);
   }
 
@@ -22,7 +22,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
     cy.get('.p-confirm-dialog-accept').click();
 
     cy.wait(100);
-    cy.logout();
+    cy.Logout();
   }
 
   it('Step 1: Navigate to contacts page', () => {
@@ -48,7 +48,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
 
     cy.get("p-dropdown[formcontrolname='state']").should('contain', 'Virginia').should('not.contain', 'Texas'); //Demonstrates that it's not just finding a value within the dropdown options
 
-    cy.dropdown_set_value("p-dropdown[formcontrolname='state']", 'West Virginia');
+    cy.DropdownSetValue("p-dropdown[formcontrolname='state']", 'West Virginia');
 
     cy.get("button[label='Save']").click();
 

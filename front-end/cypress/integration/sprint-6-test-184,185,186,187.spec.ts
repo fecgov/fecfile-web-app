@@ -17,7 +17,7 @@ function after(Contact) {
   cy.get('.p-confirm-dialog-accept').click();
 
   cy.wait(100);
-  cy.logout();
+  cy.Logout();
 }
 
 describe('QA Test Scripts 184 through 187', () => {
@@ -29,7 +29,7 @@ describe('QA Test Scripts 184 through 187', () => {
       let Contact: object = Contacts[CType];
 
       it('Step 1: Navigate to contacts page', () => {
-        cy.login();
+        cy.Login();
         cy.visit('/dashboard');
         cy.url().should('contain', '/dashboard');
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();

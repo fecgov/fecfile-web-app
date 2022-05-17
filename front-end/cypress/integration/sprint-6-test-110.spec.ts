@@ -13,7 +13,7 @@ let Contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organizat
 
 describe('QA Test Script #110 (Sprint 6)', () => {
   function before() {
-    cy.login();
+    cy.Login();
   }
 
   function after() {
@@ -23,7 +23,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
       cy.get('.p-confirm-dialog-accept').click();
       cy.wait(50);
     });
-    cy.logout();
+    cy.Logout();
   }
 
   for (let i: number = 0; i < Object.keys(Contacts).length; i++) {

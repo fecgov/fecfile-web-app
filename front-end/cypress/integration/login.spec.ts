@@ -33,21 +33,21 @@ const FieldSecurityCodeNext: string = '.action__btn.next';
 */
 
 //Fills the login form's fields with test data *without* submitting the form
-function fill_login_form() {
-  cy.get(FieldEmail).type(Email);
-  cy.get(FieldCommittee).type(CommitteeID);
-  cy.get(FieldPassword).type(TestPassword);
+function FillLoginForm() {
+  cy.get(FieldEmail).SafeType(Email);
+  cy.get(FieldCommittee).SafeType(CommitteeID);
+  cy.get(FieldPassword).SafeType(TestPassword);
 }
 
 //Logs in without entering anything for Two Factor Authentication
-function login_no_two_factor() {
-  fill_login_form();
-  cy.get(FieldPassword).type('{enter}');
+function LoginNoTwoFactor() {
+  FillLoginForm();
+  cy.get(FieldPassword).SafeType('{enter}');
 }
 
 //Logs in and requests Two Factor Authentication via Email
-function login_request_two_factor_auth() {
-  login_no_two_factor();
+function LoginRequestTwoFactorAuth() {
+  LoginNoTwoFactor();
 
   cy.get(FieldTwoFactorEmail).check();
   cy.get(FieldTwoFactorSubmit).click();
@@ -65,7 +65,7 @@ describe('Testing login', () => {
   });
 
   it('Accepts input', () => {
-    fill_login_form();
+    FillLoginForm();
 
     cy.get(FieldEmail).should('have.value', Email);
     cy.get(FieldCommittee).should('have.value', CommitteeID);
@@ -73,21 +73,21 @@ describe('Testing login', () => {
   });
 
   it('Submits Email/committee ID/password with {Enter}', () => {
-    fill_login_form();
+    FillLoginForm();
 
-    cy.get(FieldPassword).type('{enter}');
+    cy.get(FieldPassword).SafeType('{enter}');
     cy.url().should('contain', '/twoFactLogin');
   });
 
   it('Submits Email/committee ID/password with a click', () => {
-    fill_login_form();
+    FillLoginForm();
 
     cy.get(FieldLoginButton).click();
     cy.url().should('contain', '/twoFactLogin');
   });
 
   it('Submits Two Factor Auth via Email', () => {
-    login_no_two_factor();
+    LoginNoTwoFactor();
 
     cy.get(FieldTwoFactorEmail).check();
     cy.get(FieldTwoFactorSubmit).click();
@@ -95,7 +95,7 @@ describe('Testing login', () => {
   });
 
   it('Submits Two Factor Auth via phone, text', () => {
-    login_no_two_factor();
+    LoginNoTwoFactor();
 
     cy.get(FieldTwoFactorPhoneText).check();
     cy.get(FieldTwoFactorSubmit).click();
@@ -103,7 +103,7 @@ describe('Testing login', () => {
   });
 
   it('Submits Two Factor Auth via phone, call', () => {
-    login_no_two_factor();
+    LoginNoTwoFactor();
 
     cy.get(FieldTwoFactorPhoneCall).check();
     cy.get(FieldTwoFactorSubmit).click();
@@ -111,22 +111,22 @@ describe('Testing login', () => {
   });
 
   it('Fully logs in through Two Factor Authentication with {enter}', () => {
-    login_request_two_factor_auth();
+    LoginRequestTwoFactorAuth();
 
-    cy.get(FieldSecurityCodeText).type(TestPIN).type('{enter}');
+    cy.get(FieldSecurityCodeText).SafeType(TestPIN).SafeType('{enter}');
     cy.url().should('contain', '/dashboard');
   });
 
   it('Fully logs in through Two Factor Authentication with a click', () => {
-    login_request_two_factor_auth();
+    LoginRequestTwoFactorAuth();
 
-    cy.get(FieldSecurityCodeText).type(TestPIN);
+    cy.get(FieldSecurityCodeText).SafeType(TestPIN);
     cy.get(FieldSecurityCodeNext).click();
     cy.url().should('contain', '/dashboard');
   });
 
   it('Fails to login with no included information', () => {
-    cy.get(FieldEmail).type('{enter}'); //Submits an empty login form
+    cy.get(FieldEmail).SafeType('{enter}'); //Submits an empty login form
 
     cy.url()
       .should('not.contain', '/twoFactLogin')

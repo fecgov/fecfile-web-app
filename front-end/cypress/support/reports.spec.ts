@@ -129,22 +129,22 @@ export function EnterReport(report, Save = true) {
     report['page_1']['report_code'] == '30G' ||
     report['page_1']['report_code'] == '12G'
   ) {
-    cy.calendar_set_value(
+    cy.CalendarSetValue(
       "p-calendar[FormControlName='date_of_election']",
       new Date(report['page_1']['date_of_election'])
     );
     cy.wait(25);
 
-    cy.dropdown_set_value("p-dropdown[FormControlName='state_of_election']", report['page_1']['state_of_election']);
+    cy.DropdownSetValue("p-dropdown[FormControlName='state_of_election']", report['page_1']['state_of_election']);
     cy.wait(25);
   }
 
-  cy.calendar_set_value(
+  cy.CalendarSetValue(
     "p-calendar[FormControlName='coverage_from_date']",
     new Date(report['page_1']['coverage_from_date'])
   );
   cy.wait(250);
-  cy.calendar_set_value(
+  cy.CalendarSetValue(
     "p-calendar[FormControlName='coverage_through_date']",
     new Date(report['page_1']['coverage_through_date'])
   );
