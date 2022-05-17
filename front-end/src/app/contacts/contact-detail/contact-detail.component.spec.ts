@@ -9,6 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../../shared/models/contact.model';
 import { environment } from '../../../environments/environment';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { selectUserLoginData } from 'app/store/login.selectors';
 
 describe('ContactDetailComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -58,7 +59,7 @@ describe('ContactDetailComponent', () => {
         MessageService,
         provideMockStore({
           initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: 'selectUserLoginData', value: userLoginData }],
+          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
         }),
       ],
     }).compileComponents();
