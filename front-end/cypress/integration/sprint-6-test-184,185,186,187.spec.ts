@@ -2,13 +2,13 @@
 
 import { GenerateContactObject } from '../support/contacts.spec';
 
-var contact_type;
-var contacts = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
+let ContactType: string;
+let Contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
-function after(contact) {
+function after(Contact) {
   cy.get('p-table')
     .find('tr')
-    .contains(contact['name']) //Finds out contact in the Manage Contacts table
+    .contains(Contact['name']) //Finds out contact in the Manage Contacts table
     .parent() //Gets the row its in
     .find('p-button[icon="pi pi-trash"]') //Gets the trash button
     .click();
@@ -21,12 +21,12 @@ function after(contact) {
 }
 
 describe('QA Test Scripts 184 through 187', () => {
-  for (var i = 0; i < Object.keys(contacts).length; i++) {
-    contact_type = Object.keys(contacts)[i];
-    contacts[contact_type] = GenerateContactObject({ contact_type: contact_type });
+  for (let i: number = 0; i < Object.keys(Contacts).length; i++) {
+    ContactType = Object.keys(Contacts)[i];
+    Contacts[ContactType] = GenerateContactObject({ contact_type: ContactType });
 
-    context(`QA Test Script #${184 + i} (Sprint 6) - ${contact_type}`, (c_type = contact_type) => {
-      var contact = contacts[c_type];
+    context(`QA Test Script #${184 + i} (Sprint 6) - ${ContactType}`, (CType = ContactType) => {
+      let Contact: object = Contacts[CType];
 
       it('Step 1: Navigate to contacts page', () => {
         cy.login();
@@ -36,15 +36,15 @@ describe('QA Test Scripts 184 through 187', () => {
         cy.url().should('contain', '/contacts');
       });
 
-      it(`Creates a ${c_type} contact`, () => {
-        cy.EnterContact(contact);
+      it(`Creates a ${CType} contact`, () => {
+        cy.EnterContact(Contact);
         cy.wait(100);
       });
 
       it('Steps 2 & 3: Select a contact and open the edit menu', () => {
         cy.get('p-table')
           .find('tr')
-          .contains(`${contact['name']}`) //Finds out contact in the Manage Contacts table
+          .contains(`${Contact['name']}`) //Finds out contact in the Manage Contacts table
           .parent() //Gets the row its in
           .find('p-tablecheckbox')
           .click() //Check the checkbox for step 2
@@ -64,7 +64,7 @@ describe('QA Test Scripts 184 through 187', () => {
         cy.get('.p-dialog-header-close-icon').click(); //Close the form with the 'X' button
 
         cy.wait(100);
-        after(contact);
+        after(Contact);
       });
     });
   }
