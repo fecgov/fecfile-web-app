@@ -1,7 +1,5 @@
 // @ts-check
 
-import { RandomDate, DateToString, GenerateReportObject, EnterReport } from '../support/reports.spec';
-
 const InteractionTree: object = {
   //Defines the structure of the Report Type radiobuttons and whether or not each button should be connected to the "State" dropdown and "Election On" date picker
   QUARTERLY: {
