@@ -1,7 +1,7 @@
 // @ts-check
 
-var contact_type;
-var contacts = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
+let ContactType: string;
+let Contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 describe('QA Test Script #224 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page', () => {
@@ -9,10 +9,10 @@ describe('QA Test Script #224 (Sprint 7)', () => {
     cy.url().should('contain', '/dashboard');
   });
 
-  for (var i = 0; i < Object.keys(contacts).length; i++) {
-    contact_type = Object.keys(contacts)[i];
+  for (let i: number = 0; i < Object.keys(Contacts).length; i++) {
+    ContactType = Object.keys(Contacts)[i];
 
-    context(`---> ${contact_type}`, (c_type = contact_type) => {
+    context(`---> ${ContactType}`, (CType = ContactType) => {
       it("Step 2: Open the 'Add Contact' form", () => {
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
         cy.url().should('contain', '/contacts');
@@ -23,7 +23,7 @@ describe('QA Test Script #224 (Sprint 7)', () => {
       });
 
       it('Steps 3, 4, & 5: Checks that the "street_1" field is labeled "Street Address" instead of "Street"', () => {
-        cy.dropdown_set_value("p-dropdown[FormControlName='type']", c_type);
+        cy.dropdown_set_value("p-dropdown[FormControlName='type']", CType);
 
         cy.get('#street_1').parent().should('contain', 'STREET ADDRESS');
       });
