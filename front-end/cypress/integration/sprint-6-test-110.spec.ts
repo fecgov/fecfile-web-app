@@ -26,8 +26,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
     cy.Logout();
   }
 
-  for (let i: number = 0; i < Object.keys(Contacts).length; i++) {
-    ContactType = Object.keys(Contacts)[i];
+  for (ContactType of Object.keys(Contacts)) {
     Contacts[ContactType] = GenerateContactObject({ contact_type: ContactType });
 
     context(`QA Script #110 - ${ContactType}`, (c_type = ContactType) => {
@@ -82,7 +81,6 @@ describe('QA Test Script #110 (Sprint 6)', () => {
         cy.get('#city').should('have.value', Contact['city']);
         cy.get('#zip').should('have.value', Contact['zip']);
         cy.get('#telephone').should('have.value', Contact['phone']);
-        //cy.dropdown_set_value("p-dropdown[formcontrolname='state']", Contact['state']);
         cy.get("p-dropdown[formcontrolname='state']") //Gets the field for the input for State
           .should('contain', Contact['state']);
 
