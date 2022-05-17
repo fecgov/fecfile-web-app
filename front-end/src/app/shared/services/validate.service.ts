@@ -135,17 +135,15 @@ export class ValidateService {
           if (error.keyword === 'enum') {
             result['pattern'] = { requiredPattern: `Allowed values: ${error.params['allowedValues'].join(', ')}` };
           }
-<<<<<<< HEAD
           if (error.keyword === 'type' && error.params['type'] === 'number') {
             if (this.formValidatorForm?.get(error.path)?.value === '') {
               result['required'] = true;
             } else {
               result['pattern'] = { requiredPattern: 'Value must be a number' };
             }
-=======
+          }
           if (error.keyword === 'type' && error.params['type'].includes('boolean')) {
             result['pattern'] = { requiredPattern: error.message };
->>>>>>> develop
           }
         });
         return result;

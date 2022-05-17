@@ -96,7 +96,7 @@ describe('CreateF3xStep2Component', () => {
     component.report = F3xSummary.fromJSON({
       id: '999',
     });
-    component.form.patchValue({ change_of_address: true });
+    component.form.patchValue({ change_of_address: 'X' });
 
     component.save('back');
     let req = httpTestingController.expectOne(

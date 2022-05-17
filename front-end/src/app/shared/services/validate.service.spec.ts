@@ -60,11 +60,11 @@ describe('ValidateService', () => {
     let result: ValidationErrors | null = validator(service.formValidatorForm.get('change_of_address') as FormControl);
     expect(result).not.toBe(null);
     if (result) {
-      expect(result['pattern'].requiredPattern).toBe('must be boolean,null');
+      expect(result['pattern'].requiredPattern).toBe('Allowed values: X, ');
     }
 
     service.formValidatorForm.patchValue({
-      change_of_address: true,
+      change_of_address: 'X',
     });
     validator = service.formValidator('change_of_address');
     result = validator(service.formValidatorForm.get('change_of_address') as FormControl);
