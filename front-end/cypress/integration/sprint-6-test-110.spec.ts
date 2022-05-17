@@ -26,7 +26,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
     cy.logout();
   }
 
-  for (var i = 0; i < Object.keys(Contacts).length; i++) {
+  for (let i: number = 0; i < Object.keys(Contacts).length; i++) {
     ContactType = Object.keys(Contacts)[i];
     Contacts[ContactType] = GenerateContactObject({ contact_type: ContactType });
 
