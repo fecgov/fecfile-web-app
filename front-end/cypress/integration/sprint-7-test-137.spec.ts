@@ -1,10 +1,10 @@
 // @ts-check
 
-import { RandomDate, DateToString, GenerateReportObject, EnterReport } from '../support/reports.spec';
+import { RandomDate, DateToString, GenerateReportObject } from '../support/reports.spec';
 
 describe('QA Test Script #137 (Sprint 7)', () => {
-  const from_date = RandomDate();
-  const through_date = RandomDate();
+  const FromDate: Date = RandomDate();
+  const ThroughDate: Date = RandomDate();
 
   it('Step 1: Navigate to contacts page', () => {
     cy.visit('/dashboard');
@@ -14,10 +14,8 @@ describe('QA Test Script #137 (Sprint 7)', () => {
   });
 
   it('Step 2: Open a New Report', () => {
-    const report = GenerateReportObject();
-    cy.EnterReport(report, false); //Enter a report without saving it
-    //cy.get("button[label='Create a new report']").click();
-    //cy.wait(50);
+    const Report: object = GenerateReportObject();
+    cy.EnterReport(Report, false); //Enter a report without saving it
     cy.get('app-create-f3x-step1').contains('FEC Form 3X').should('exist');
   });
 
@@ -27,18 +25,18 @@ describe('QA Test Script #137 (Sprint 7)', () => {
   });
 
   it('Step 4: Enter any date into the FROM and TO fields', () => {
-    cy.calendar_set_value("p-calendar[FormControlName='coverage_from_date']", from_date);
+    cy.calendar_set_value("p-calendar[FormControlName='coverage_from_date']", FromDate);
     cy.wait(250);
-    cy.calendar_set_value("p-calendar[FormControlName='coverage_through_date']", through_date);
+    cy.calendar_set_value("p-calendar[FormControlName='coverage_through_date']", ThroughDate);
     cy.wait(50);
   });
 
   it('Step 5: Checks that the dates entered are displayed in their fields', () => {
     cy.get('p-calendar[FormControlName="coverage_from_date"]')
       .find('input')
-      .should('have.value', DateToString(from_date));
+      .should('have.value', DateToString(FromDate));
     cy.get('p-calendar[FormControlName="coverage_through_date"]')
       .find('input')
-      .should('have.value', DateToString(through_date));
+      .should('have.value', DateToString(ThroughDate));
   });
 });
