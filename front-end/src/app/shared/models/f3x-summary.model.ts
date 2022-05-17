@@ -181,7 +181,7 @@ export class F3xSummary extends BaseModel implements Report {
   form_type: F3xFormType = F3xFormTypes.F3XT;
   filer_committee_id_number: string | null = null;
   committee_name: string | null = null;
-  change_of_address: string | null = null;
+  change_of_address: boolean | null = null;
   street_1: string | null = null;
   street_2: string | null = null;
   city: string | null = null;
@@ -193,7 +193,7 @@ export class F3xSummary extends BaseModel implements Report {
   state_of_election: string | null = null;
   coverage_from_date: string | null = null;
   coverage_through_date: string | null = null;
-  qualified_committee: string | null = null;
+  qualified_committee: boolean | null = null;
   treasurer_last_name: string | null = null;
   treasurer_first_name: string | null = null;
   treasurer_middle_name: string | null = null;
