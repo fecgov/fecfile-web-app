@@ -1,6 +1,6 @@
 // @ts-check
 
-const states = [
+const States: Array<string> = [
   'Alabama',
   'Alaska',
   'American Samoa',
@@ -89,9 +89,9 @@ describe('QA Test Script #182 (Sprint 6)', () => {
   it("Steps 5-8: Open the 'State' dropdown, check for all the relevent states, check that it does not contain 'Armed Forces' entries, and select 'Virginia'", () => {
     cy.get("[formcontrolname='state']").click();
 
-    for (var i = 0; i < states.length; i++) {
-      var state = states[i];
-      cy.get("li[role='option']").contains(state).should('exist');
+    for (let i: number = 0; i < States.length; i++) {
+      let State: string = States[i];
+      cy.get("li[role='option']").contains(State).should('exist');
     }
 
     cy.get("li[role='option']").should('not.contain', 'Armed Forces').contains('Virginia').click({ force: true });
