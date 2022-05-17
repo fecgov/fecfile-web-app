@@ -73,28 +73,41 @@ export class ValidateService {
         if (propertiesSubset.length > 0 && !propertiesSubset.includes(property)) {
           return;
         }
-        if (form?.get(property)?.value === undefined || form?.get(property)?.value === '') {
-          formValues[property] = null;
-        } else {
-          // Convert string to number is expected in schema
-          if (
-            (Array.isArray(this.formValidatorSchema?.properties[property].type) &&
-              this.formValidatorSchema?.properties[property].type.includes('number')) ||
-            this.formValidatorSchema?.properties[property].type === 'number'
-          ) {
-            formValues[property] = Number(form?.get(property)?.value);
-            // Convert date to string
-          } else if (Object.prototype.toString.call(form?.get(property)?.value) === '[object Date]') {
-            formValues[property] = DateUtils.convertDateToFecFormat(form?.get(property)?.value);
-            // All else are strings so copy straight into value
-          } else {
-            formValues[property] = form?.get(property)?.value;
-          }
-        }
+        formValues[property] = this.getPropertyValue(property, form);
       });
     }
 
     return formValues;
+  }
+
+  /**
+   * Convert the form input value to the appropriate type.
+   * @param {string} property
+   * @param {FromGroup} form
+   * @returns
+   */
+  private getPropertyValue(property: string, form: FormGroup) {
+    // Undefined and empty strings are set to null.
+    if (form?.get(property)?.value === undefined || form?.get(property)?.value === '') {
+      return null;
+    }
+
+    // Convert a string to number if expected in the schema.
+    if (
+      (Array.isArray(this.formValidatorSchema?.properties[property].type) &&
+        this.formValidatorSchema?.properties[property].type.includes('number')) ||
+      this.formValidatorSchema?.properties[property].type === 'number'
+    ) {
+      return Number(form?.get(property)?.value);
+    }
+
+    // Convert date to string
+    if (Object.prototype.toString.call(form?.get(property)?.value) === '[object Date]') {
+      return DateUtils.convertDateToFecFormat(form?.get(property)?.value);
+    }
+
+    // All else are strings so copy straight into value
+    return form?.get(property)?.value;
   }
 
   /**

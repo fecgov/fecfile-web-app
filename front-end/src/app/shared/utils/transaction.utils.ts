@@ -24,15 +24,4 @@ export class TransactionUtils {
   static getMeta(transaction_type_identifier: string): TransactionMeta {
     return meta[transaction_type_identifier.toUpperCase()];
   }
-
-  // This method will be phased out to the backend API
-  static generateTransactionId() {
-    let id = '';
-    const LENGTH = 20;
-    const TOKENS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    for (let i = 0; i < LENGTH; i++) {
-      id += TOKENS.charAt(Math.floor(Math.random() * TOKENS.length));
-    }
-    return id;
-  }
 }

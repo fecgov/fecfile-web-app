@@ -10,7 +10,6 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { TransactionUtils } from 'app/shared/utils/transaction.utils';
 import { DateUtils } from 'app/shared/utils/date.utils';
 
 @Component({
@@ -118,18 +117,24 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
       ...this.validateService.getFormValues(this.form, this.formProperties),
     });
 
-    // Generating the transaction id will be moved into the backend API
-    payload.transaction_id = TransactionUtils.generateTransactionId();
-
     if (this.transaction?.transaction_type_identifier) {
+      // Remove transaction_id from list of validate properties because it will be added in the back end.
+      const fieldsToValidate: string[] = this.validateService
+        .getSchemaProperties(this.schema)
+        .filter((p) => p !== 'transaction_id');
+
       if (payload.id) {
-        this.transactionService.update(payload, this.transaction.transaction_type_identifier).subscribe(() => {
-          this.navigateTo(navigateTo);
-        });
+        this.transactionService
+          .update(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
+          .subscribe(() => {
+            this.navigateTo(navigateTo);
+          });
       } else {
-        this.transactionService.create(payload, this.transaction.transaction_type_identifier).subscribe(() => {
-          this.navigateTo(navigateTo);
-        });
+        this.transactionService
+          .create(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
+          .subscribe(() => {
+            this.navigateTo(navigateTo);
+          });
       }
     }
   }

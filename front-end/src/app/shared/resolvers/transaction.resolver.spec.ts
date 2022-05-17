@@ -3,15 +3,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { TransactionMeta } from '../interfaces/transaction-meta.interface';
-import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
 import { TransactionResolver } from './transaction.resolver';
-import { Transaction } from '../interfaces/transaction.interface';
 import { TransactionService } from '../services/transaction.service';
 import { UserLoginData } from '../models/user.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { of } from 'rxjs';
 import { SchATransaction } from '../models/scha-transaction.model';
-import { assert } from 'console';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionResolver;
@@ -51,9 +48,10 @@ describe('TransactionResolver', () => {
   it('should be created', () => {
     expect(resolver).toBeTruthy();
   });
-  it('should return a transaction', () => {
+
+  it('should return an existing transaction', () => {
     const route = {
-      paramMap: convertToParamMap({ reportId: 1, transactionId: '999' }),
+      paramMap: convertToParamMap({ transactionId: '999' }),
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionMeta | undefined) => {
@@ -71,6 +69,19 @@ describe('TransactionResolver', () => {
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionMeta | undefined) => {
       expect(response).toEqual(undefined);
+    });
+  });
+
+  it('should return an existing transaction', () => {
+    const route = {
+      paramMap: convertToParamMap({ reportId: 1, transactionType: 'offset_to_opex' }),
+    };
+
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionMeta | undefined) => {
+      expect(response).toBeTruthy();
+      if (response) {
+        expect(response.title).toEqual('Offsets to Operating Expenditures');
+      }
     });
   });
 });
