@@ -9,9 +9,7 @@ describe('QA Test Script #224 (Sprint 7)', () => {
     cy.url().should('contain', '/dashboard');
   });
 
-  for (let i: number = 0; i < Object.keys(Contacts).length; i++) {
-    ContactType = Object.keys(Contacts)[i];
-
+  for (ContactType of Object.keys(Contacts)) {
     context(`---> ${ContactType}`, (CType = ContactType) => {
       it("Step 2: Open the 'Add Contact' form", () => {
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();

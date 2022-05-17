@@ -18,8 +18,7 @@ describe('QA Test Script #165 (Sprint 7)', () => {
   it('Steps 2-13: Check for sortability on each column', () => {
     const Columns: Array<string> = ['Form type', 'Type of report', 'Coverage dates', 'Status', 'Version', 'Date filed'];
     let Column: string;
-    for (let i: number = 0; i < Columns.length; i++) {
-      Column = Columns[i];
+    for (Column of Columns) {
       cy.get('th')
         .contains(Column)
         .should('contain', Column)
@@ -29,8 +28,7 @@ describe('QA Test Script #165 (Sprint 7)', () => {
         .find('i')
         .should('have.class', 'pi-sort-amount-up-alt');
     }
-    for (let i: number = 0; i < Columns.length; i++) {
-      Column = Columns[i];
+    for (Column of Columns) {
       cy.get('th')
         .contains(Column)
         .should('contain', Column)

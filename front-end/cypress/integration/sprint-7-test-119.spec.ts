@@ -88,8 +88,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
 
     let OfficeType: string;
     const OfficeTypes: Array<string> = ['House', 'Senate', 'Presidential'];
-    for (let i: number = 0; i < OfficeTypes.length; i++) {
-      OfficeType = OfficeTypes[i];
+    for (let OfficeType of OfficeTypes) {
       cy.get('p-dropdownitem').contains(OfficeType).should('exist');
     }
     cy.get('p-dropdownitem').contains('Presidential').click({ force: true });
@@ -113,11 +112,10 @@ describe('QA Test Script #119 (Sprint 7)', () => {
     cy.get(FieldCandidateDistrict).find('.p-disabled').should('exist');
   });
 
-  it('Step 9: Verify all states are present and then select "West Virginia"', () => {
+  it('Step 9: Verify all states are present (Senate) and then select "West Virginia"', () => {
     cy.get(FieldCandidateState).click();
 
-    for (let i: number = 0; i < Object.keys(CandidateStates).length; i++) {
-      let State: string = Object.keys(CandidateStates)[i];
+    for (let State of Object.keys(CandidateStates)) {
       cy.get('p-dropdownitem').contains(State).should('exist');
     }
 
@@ -137,11 +135,10 @@ describe('QA Test Script #119 (Sprint 7)', () => {
     cy.get(FieldCandidateDistrict).find('.p-disabled').should('not.exist');
   });
 
-  it('Step 12: Verify all states are present and then select "West Virginia"', () => {
+  it('Step 12: Verify all states are present (House) and then select "West Virginia"', () => {
     cy.get(FieldCandidateState).click();
 
-    for (let i: number = 0; i < Object.keys(CandidateStates).length; i++) {
-      let State: string = Object.keys(CandidateStates)[i];
+    for (let State of Object.keys(CandidateStates)) {
       cy.get('p-dropdownitem').contains(State).should('exist');
     }
 

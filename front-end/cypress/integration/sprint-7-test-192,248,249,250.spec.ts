@@ -101,9 +101,7 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
     cy.url().should('contain', '/contacts');
   });
 
-  for (let i: number = 0; i < Object.keys(Contacts).length; i++) {
-    ContactType = Object.keys(Contacts)[i];
-
+  for (ContactType of Object.keys(Contacts)) {
     context(`---> ${ContactType}`, (c_type = ContactType) => {
       let Contact: object = Contacts[c_type];
       it('Check every field for required/optional and maximum length', () => {
@@ -116,8 +114,7 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
         cy.get("button[label='Save']").click();
         cy.wait(50);
 
-        for (let j: number = 0; j < Object.keys(ContactFields[c_type]).length; j++) {
-          let Field: string = Object.keys(ContactFields[c_type])[j];
+        for (let Field of Object.keys(ContactFields[c_type])) {
           let Length: number = ContactFields[c_type][Field];
 
           if (FieldsRequired.includes(Field)) {

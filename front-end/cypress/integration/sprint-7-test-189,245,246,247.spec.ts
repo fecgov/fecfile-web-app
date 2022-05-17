@@ -1,6 +1,6 @@
 // @ts-check
 
-import { GenerateContactObject, EnterContact } from '../support/contacts.spec';
+import { GenerateContactObject } from '../support/contacts.spec';
 
 const ContactTypes: Array<string> = ['Individual', 'Candidate', 'Committee', 'Organization'];
 
@@ -20,9 +20,7 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
     cy.Logout();
   }
 
-  for (let i: number = 0; i < ContactTypes.length; i++) {
-    let ContactType = ContactTypes[i];
-
+  for (let ContactType of ContactTypes) {
     context(`---> ${ContactType}`, (CType = ContactType) => {
       let Contact: object = GenerateContactObject({
         contact_type: CType,
