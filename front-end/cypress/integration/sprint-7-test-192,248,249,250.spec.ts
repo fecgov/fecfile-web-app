@@ -102,20 +102,19 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
   });
 
   for (ContactType of Object.keys(Contacts)) {
-    context(`---> ${ContactType}`, (c_type = ContactType) => {
-      let Contact: object = Contacts[c_type];
+    context(`---> ${ContactType}`, (CType = ContactType) => {
       it('Check every field for required/optional and maximum length', () => {
         cy.get("button[label='New']").click();
         cy.wait(50);
         cy.get("div[role='dialog']").contains('Add Contact').should('exist');
 
-        cy.DropdownSetValue("p-dropdown[FormControlName='type']", c_type);
+        cy.DropdownSetValue("p-dropdown[FormControlName='type']", CType);
         cy.wait(50);
         cy.get("button[label='Save']").click();
         cy.wait(50);
 
-        for (let Field of Object.keys(ContactFields[c_type])) {
-          let Length: number = ContactFields[c_type][Field];
+        for (let Field of Object.keys(ContactFields[CType])) {
+          let Length: number = ContactFields[CType][Field];
 
           if (FieldsRequired.includes(Field)) {
             cy.get('#' + Field)

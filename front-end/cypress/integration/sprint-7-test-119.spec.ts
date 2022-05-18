@@ -98,7 +98,6 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   it("Steps 4 & 5: Verify 'Candidate Office' dropdown contains House, Senate, and Presidential and then select Presidential", () => {
     cy.get(FieldCandidateOffice).click();
 
-    let OfficeType: string;
     const OfficeTypes: Array<string> = ['House', 'Senate', 'Presidential'];
     for (let OfficeType of OfficeTypes) {
       cy.get('p-dropdownitem').contains(OfficeType).should('exist');
