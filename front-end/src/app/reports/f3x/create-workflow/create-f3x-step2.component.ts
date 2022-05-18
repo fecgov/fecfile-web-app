@@ -93,7 +93,7 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
       if (jump === 'continue' && this.report?.id) {
-        this.router.navigateByUrl('/reports');
+        this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
       }
       if (jump === 'back' && this.report?.id) {
         this.router.navigateByUrl('/reports');

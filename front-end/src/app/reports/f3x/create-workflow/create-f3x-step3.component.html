@@ -1,0 +1,90 @@
+<div class="card">
+  <p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">Transactions</ng-template>
+
+    <ng-template pTemplate="right"
+      ><button
+        pButton
+        pRipple
+        label="Add new transaction"
+        icon="pi pi-plus"
+        class="p-button-success mr-2"
+        [routerLink]="['/transactions/report/', report?.id, 'create']"
+      ></button>
+    </ng-template>
+  </p-toolbar>
+
+  <!-- <p-table
+    #dt
+    [value]="items"
+    [lazy]="true"
+    (onLazyLoad)="loadTableItems($event)"
+    responsiveLayout="scroll"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="10"
+    [totalRecords]="totalItems"
+    [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h5 class="m-0">Transactions during coverage dates</h5>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr role="row">
+        <th pSortableColumn="TBD" id="form-type-column" role="columnheader">
+          Form type <p-sortIcon field="TBD"></p-sortIcon>
+        </th>
+        <th pSortableColumn="report_code_label" id="report-code-column" role="columnheader">
+          Type of report <p-sortIcon field="report_code_label"></p-sortIcon>
+        </th>
+        <th pSortableColumn="coverage_through_date" id="coverage-dates-column" role="columnheader">
+          Coverage dates <p-sortIcon field="coverage_through_date"></p-sortIcon>
+        </th>
+        <th pSortableColumn="status" id="status-column" role="columnheader">
+          Status <p-sortIcon field="status"></p-sortIcon>
+        </th>
+        <th pSortableColumn="form_type" id="version" role="columnheader">
+          Version <p-sortIcon field="form_type"></p-sortIcon>
+        </th>
+        <th pSortableColumn="date_filed" id="date-filed-column" role="columnheader">
+          Date filed <p-sortIcon field="date_filed"></p-sortIcon>
+        </th>
+        <th id="buttons" role="columnheader"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr role="row">
+        <td>{{ item.form_type | label: f3xFormTypeLabels }}</td>
+        <td>{{ item.report_code | label: f3xReportCodeLabels }}</td>
+        <td>
+          <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
+            >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container
+          >
+        </td>
+        <td>In Progress</td>
+        <td>{{ item.form_type | label: f3xFormVerionLabels }}</td>
+        <td>-</td>
+        <td>
+          <p-button
+            pRipple
+            icon="pi pi-pencil"
+            styleClass="p-button-rounded p-button-success mr-2"
+            (click)="editItem(item)"
+            [ariaLabel]="'edit ' + displayName(item)"
+          ></p-button>
+          <p-button
+            pRipple
+            icon="pi pi-plus"
+            styleClass="p-button-rounded p-button-success mr-2"
+            (click)="createTransaction(item)"
+            [ariaLabel]="'edit ' + displayName(item)"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table> -->
+</div>
