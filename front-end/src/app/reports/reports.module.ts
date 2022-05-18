@@ -14,6 +14,7 @@ import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ToastModule } from 'primeng/toast';
 
 import { SharedModule } from '../../app/shared/shared.module';
 import { ReportsRoutingModule } from './reports-routing.module';
@@ -40,6 +41,7 @@ import { CreateF3xStep3Component } from './f3x/create-workflow/create-f3x-step3.
     InputTextareaModule,
     CalendarModule,
     SelectButtonModule,
+    ToastModule,
     SharedModule,
   ],
 })

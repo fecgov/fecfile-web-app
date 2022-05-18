@@ -70,4 +70,9 @@ describe('ValidateService', () => {
     result = validator(service.formValidatorForm.get('change_of_address') as FormControl);
     expect(result).toBe(null);
   });
+
+  it('#getSchemaProperties() should return empty array when no schema', () => {
+    const properties: string[] = service.getSchemaProperties(null);
+    expect(properties.length).toBe(0);
+  });
 });

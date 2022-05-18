@@ -5,7 +5,6 @@ import { Transaction } from '../interfaces/transaction.interface';
 import { TransactionUtils } from '../utils/transaction.utils';
 import { TransactionMeta } from '../interfaces/transaction-meta.interface';
 import { TransactionService } from '../services/transaction.service';
-import { SchATransaction } from '../models/scha-transaction.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,15 +21,7 @@ export class TransactionResolver implements Resolve<TransactionMeta | undefined>
     if (transactionType) {
       // This is a new transaction
       tm = TransactionUtils.getMeta(transactionType);
-      if (tm.scheduleId === 'A') {
-        tm.transaction = new SchATransaction();
-      }
-      if (tm.transaction) {
-        tm.transaction.form_type = tm.formType;
-        tm.transaction.transaction_type_identifier = transactionType.toUpperCase();
-        tm.transaction.transaction_id = this.generateTransactionId();
-        tm.transaction.report_id = Number(reportId);
-      }
+      tm.transaction.report_id = Number(reportId);
       return of(tm);
     }
     if (transactionId) {
@@ -48,15 +39,5 @@ export class TransactionResolver implements Resolve<TransactionMeta | undefined>
       );
     }
     return of(undefined);
-  }
-
-  private generateTransactionId() {
-    let id = '';
-    const LENGTH = 20;
-    const TOKENS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    for (let i = 0; i < LENGTH; i++) {
-      id += TOKENS.charAt(Math.floor(Math.random() * TOKENS.length));
-    }
-    return id;
   }
 }

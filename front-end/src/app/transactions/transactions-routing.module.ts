@@ -21,7 +21,7 @@ const routes: Routes = [
     },
   },
   {
-    path: 'report/:reportId/edit/:transactionId',
+    path: 'edit/:transactionId',
     component: TransactionContainerComponent,
     resolve: {
       transactionMeta: TransactionResolver,

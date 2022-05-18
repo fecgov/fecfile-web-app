@@ -48,7 +48,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   conduit_city: string | null = null;
   conduit_state: string | null = null;
   conduit_zip: string | null = null;
-  memo_code: string | null = null;
+  memo_code: boolean | null = null;
   memo_text_description: string | null = null;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | null = null;
   transaction_type_identifier: string | null = null;

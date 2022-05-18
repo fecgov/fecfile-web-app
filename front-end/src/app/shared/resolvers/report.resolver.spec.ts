@@ -7,15 +7,30 @@ import { ReportResolver } from './report.resolver';
 import { Report } from '../interfaces/report.interface';
 import { F3xSummary } from '../models/f3x-summary.model';
 import { environment } from '../../../environments/environment';
+import { UserLoginData } from '../models/user.model';
+import { selectUserLoginData } from 'app/store/login.selectors';
 
 describe('ReportResolver', () => {
   let resolver: ReportResolver;
   let httpTestingController: HttpTestingController;
 
+  const userLoginData: UserLoginData = {
+    committee_id: 'C00000000',
+    email: 'email@fec.com',
+    is_allowed: true,
+    token: 'jwttokenstring',
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [F3xSummaryService, provideMockStore({})],
+      providers: [
+        F3xSummaryService,
+        provideMockStore({
+          initialState: { fecfile_online_userLoginData: userLoginData },
+          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
+        }),
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     resolver = TestBed.inject(ReportResolver);

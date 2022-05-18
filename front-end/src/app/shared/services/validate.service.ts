@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
+import { DateUtils } from '../utils/date.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -60,7 +61,9 @@ export class ValidateService {
    * @param {FormGroup} form
    * @param {string[]} propertiesSubset - Only get values for the listed subset of schema parameters.
    * @returns object containing the form property values limited to the current validation schema
-   * This method will 'null' any schema values that do not have a form value.
+   * This method will 'null' any schema values that do not have a form value and, more importantly,
+   * set those form fields with an empty '' value to null for the backend. It will also convert
+   * strings to number types when necessary.
    */
   getFormValues(form: FormGroup, propertiesSubset: string[] = []) {
     const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -70,15 +73,41 @@ export class ValidateService {
         if (propertiesSubset.length > 0 && !propertiesSubset.includes(property)) {
           return;
         }
-        if (form?.get(property)?.value) {
-          formValues[property] = form?.get(property)?.value;
-        } else {
-          formValues[property] = null;
-        }
+        formValues[property] = this.getPropertyValue(property, form);
       });
     }
 
     return formValues;
+  }
+
+  /**
+   * Convert the form input value to the appropriate type.
+   * @param {string} property
+   * @param {FromGroup} form
+   * @returns
+   */
+  private getPropertyValue(property: string, form: FormGroup) {
+    // Undefined and empty strings are set to null.
+    if (form?.get(property)?.value === undefined || form?.get(property)?.value === '') {
+      return null;
+    }
+
+    // Convert a string to number if expected in the schema.
+    if (
+      (Array.isArray(this.formValidatorSchema?.properties[property].type) &&
+        this.formValidatorSchema?.properties[property].type.includes('number')) ||
+      this.formValidatorSchema?.properties[property].type === 'number'
+    ) {
+      return Number(form?.get(property)?.value);
+    }
+
+    // Convert date to string
+    if (Object.prototype.toString.call(form?.get(property)?.value) === '[object Date]') {
+      return DateUtils.convertDateToFecFormat(form?.get(property)?.value);
+    }
+
+    // All else are strings so copy straight into value
+    return form?.get(property)?.value;
   }
 
   /**
@@ -110,7 +139,7 @@ export class ValidateService {
           if (error.keyword === 'minLength') {
             result['minlength'] = { requiredLength: error.params['limit'] };
           }
-          if (error.keyword === 'maxLength') {
+          if (error.keyword === 'maxLength' || error.keyword === 'maximum') {
             result['maxlength'] = { requiredLength: error.params['limit'] };
           }
           if (error.keyword === 'pattern') {
@@ -118,6 +147,16 @@ export class ValidateService {
           }
           if (error.keyword === 'enum') {
             result['pattern'] = { requiredPattern: `Allowed values: ${error.params['allowedValues'].join(', ')}` };
+          }
+          if (error.keyword === 'type' && error.params['type'] === 'number') {
+            if (this.formValidatorForm?.get(error.path)?.value === '') {
+              result['required'] = true;
+            } else {
+              result['pattern'] = { requiredPattern: 'Value must be a number' };
+            }
+          }
+          if (error.keyword === 'type' && error.params['type'].includes('boolean')) {
+            result['pattern'] = { requiredPattern: error.message };
           }
         });
         return result;
