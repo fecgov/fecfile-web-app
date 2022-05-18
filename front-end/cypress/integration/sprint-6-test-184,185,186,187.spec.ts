@@ -1,14 +1,13 @@
 // @ts-check
 
-import { GenerateContactObject } from '../support/contacts.spec';
+import { generateContactObject } from '../support/contacts.spec';
 
-let ContactType: string;
-let Contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
+let contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
-function after(Contact) {
+function after(contact) {
   cy.get('p-table')
     .find('tr')
-    .contains(Contact['name']) //Finds out contact in the Manage Contacts table
+    .contains(contact['name']) //Finds out contact in the Manage Contacts table
     .parent() //Gets the row its in
     .find('p-button[icon="pi pi-trash"]') //Gets the trash button
     .click();
@@ -17,34 +16,33 @@ function after(Contact) {
   cy.get('.p-confirm-dialog-accept').click();
 
   cy.wait(100);
-  cy.Logout();
+  cy.logout();
 }
 
 describe('QA Test Scripts 184 through 187', () => {
-  for (let i: number = 0; i < Object.keys(Contacts).length; i++) {
-    ContactType = Object.keys(Contacts)[i];
-    Contacts[ContactType] = GenerateContactObject({ contact_type: ContactType });
+  for (let contactType of Object.keys(contacts)) {
+    contacts[contactType] = generateContactObject({ contact_type: contactType });
 
-    context(`QA Test Script #${184 + i} (Sprint 6) - ${ContactType}`, (CType = ContactType) => {
-      let Contact: object = Contacts[CType];
+    context(`---> ${contactType}`, (cType = contactType) => {
+      let contact: object = contacts[cType];
 
       it('Step 1: Navigate to contacts page', () => {
-        cy.Login();
+        cy.login();
         cy.visit('/dashboard');
         cy.url().should('contain', '/dashboard');
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
         cy.url().should('contain', '/contacts');
       });
 
-      it(`Creates a ${CType} contact`, () => {
-        cy.EnterContact(Contact);
+      it(`Creates a ${cType} contact`, () => {
+        cy.enterContact(contact);
         cy.wait(100);
       });
 
       it('Steps 2 & 3: Select a contact and open the edit menu', () => {
         cy.get('p-table')
           .find('tr')
-          .contains(`${Contact['name']}`) //Finds out contact in the Manage Contacts table
+          .contains(`${contact['name']}`) //Finds out contact in the Manage Contacts table
           .parent() //Gets the row its in
           .find('p-tablecheckbox')
           .click() //Check the checkbox for step 2
@@ -64,7 +62,7 @@ describe('QA Test Scripts 184 through 187', () => {
         cy.get('.p-dialog-header-close-icon').click(); //Close the form with the 'X' button
 
         cy.wait(100);
-        after(Contact);
+        after(contact);
       });
     });
   }

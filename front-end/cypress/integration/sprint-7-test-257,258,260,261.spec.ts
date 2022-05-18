@@ -1,6 +1,6 @@
 // @ts-check
 
-const InteractionTree: object = {
+const interactionTree: object = {
   //Defines the structure of the Report Type radiobuttons and whether or not each button should be connected to the "State" dropdown and "Election On" date picker
   QUARTERLY: {
     'Election Year': {
@@ -63,12 +63,12 @@ const InteractionTree: object = {
 };
 
 describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
-  const FilingFrequencies: Array<string> = Object.keys(InteractionTree);
-  for (let FilingFrequency of FilingFrequencies) {
-    context(`Testing interactivity under ${FilingFrequency}`, () => {
-      let TimePeriods: Array<string> = Object.keys(InteractionTree[FilingFrequency]);
-      for (let TimePeriod of TimePeriods) {
-        context(`--->       ${TimePeriod}`, () => {
+  const filingFrequencies: Array<string> = Object.keys(interactionTree);
+  for (let filingFrequency of filingFrequencies) {
+    context(`Testing interactivity under ${filingFrequency}`, () => {
+      let timePeriods: Array<string> = Object.keys(interactionTree[filingFrequency]);
+      for (let timePeriod of timePeriods) {
+        context(`--->       ${timePeriod}`, () => {
           it('Step 1: Navigate to contacts page', () => {
             cy.visit('/dashboard');
             cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
@@ -79,9 +79,9 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
             cy.wait(50);
           });
 
-          it(`Step 3: Select the Filing Frequency ${FilingFrequency}`, () => {
+          it(`Step 3: Select the Filing Frequency ${filingFrequency}`, () => {
             cy.get('p-radiobutton[FormControlName="filing_frequency"]')
-              .contains(FilingFrequency)
+              .contains(filingFrequency)
               .parent()
               .click()
               .find('div')
@@ -89,9 +89,9 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
               .wait(50);
           });
 
-          it(`Step 4: Select the Time Period button for ${TimePeriod}`, () => {
+          it(`Step 4: Select the Time Period button for ${timePeriod}`, () => {
             cy.get('div[role="button"]')
-              .contains(TimePeriod)
+              .contains(timePeriod)
               .click()
               .parent()
               .should('have.class', 'p-highlight')
@@ -99,16 +99,16 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
           });
 
           it(`Step 5: Check each Report Type radio button for interactivity and the presence of the "State" dropdown and the "Election On" date picker`, () => {
-            let ReportTypes: Array<string> = Object.keys(InteractionTree[FilingFrequency][TimePeriod]);
-            for (let ReportType of ReportTypes) {
+            let reportTypes: Array<string> = Object.keys(interactionTree[filingFrequency][timePeriod]);
+            for (let reportType of reportTypes) {
               cy.get('p-radiobutton[FormControlName="report_code"]')
-                .contains(ReportType)
+                .contains(reportType)
                 .parent()
                 .click()
                 .find('div')
                 .should('have.class', 'p-radiobutton-checked');
 
-              if (InteractionTree[FilingFrequency][TimePeriod][ReportType]) {
+              if (interactionTree[filingFrequency][timePeriod][reportType]) {
                 cy.get("p-calendar[FormControlName='date_of_election']").should('exist');
                 cy.get("p-dropdown[FormControlName='state_of_election']").should('exist');
               } else {

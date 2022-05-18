@@ -1,10 +1,10 @@
 // @ts-check
 
-const FieldCandidateOffice: string = "p-dropdown[FormControlName='candidate_office']";
-const FieldCandidateState: string = 'p-dropdown[FormControlName="candidate_state"]';
-const FieldCandidateDistrict: string = 'p-dropdown[FormControlName="candidate_district"]';
+const fieldCandidateOffice: string = "p-dropdown[FormControlName='candidate_office']";
+const fieldCandidateState: string = 'p-dropdown[FormControlName="candidate_state"]';
+const fieldCandidateDistrict: string = 'p-dropdown[FormControlName="candidate_district"]';
 
-const CandidateStates: object = {
+const candidateStates: object = {
   Alabama: 7,
   Alaska: 1,
   'American Samoa': 0,
@@ -63,16 +63,16 @@ const CandidateStates: object = {
   Wyoming: 1,
 };
 
-function CheckEveryStateThenSelectWestVirgia() {
-  cy.get(FieldCandidateState).click();
+function checkEveryStateThenSelectWestVirgia() {
+  cy.get(fieldCandidateState).click();
 
-  for (let State of Object.keys(CandidateStates)) {
-    cy.get('p-dropdownitem').contains(State).should('exist');
+  for (let state of Object.keys(candidateStates)) {
+    cy.get('p-dropdownitem').contains(state).should('exist');
   }
 
   cy.get('p-dropdownitem').contains('West Virginia').click({ force: true });
 
-  cy.get(FieldCandidateState).should('contain', 'West Virginia');
+  cy.get(fieldCandidateState).should('contain', 'West Virginia');
 }
 
 describe('QA Test Script #119 (Sprint 7)', () => {
@@ -90,67 +90,67 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   });
 
   it("Step 3: Set the Contact Type to 'Candidate'", () => {
-    cy.DropdownSetValue("p-dropdown[FormControlName='type']", 'Candidate');
+    cy.dropdownSetValue("p-dropdown[FormControlName='type']", 'Candidate');
     cy.wait(50);
     cy.get("p-dropdown[FormControlName='type']").should('contain', 'Candidate');
   });
 
   it("Steps 4 & 5: Verify 'Candidate Office' dropdown contains House, Senate, and Presidential and then select Presidential", () => {
-    cy.get(FieldCandidateOffice).click();
+    cy.get(fieldCandidateOffice).click();
 
-    const OfficeTypes: Array<string> = ['House', 'Senate', 'Presidential'];
-    for (let OfficeType of OfficeTypes) {
-      cy.get('p-dropdownitem').contains(OfficeType).should('exist');
+    const officeTypes: Array<string> = ['House', 'Senate', 'Presidential'];
+    for (let officeType of officeTypes) {
+      cy.get('p-dropdownitem').contains(officeType).should('exist');
     }
     cy.get('p-dropdownitem').contains('Presidential').click({ force: true });
     cy.wait(50);
-    cy.get(FieldCandidateOffice).should('contain', 'Presidential');
+    cy.get(fieldCandidateOffice).should('contain', 'Presidential');
   });
 
   it("Step 6: Verify 'Candidate State' and 'Candidate District' are non-interactive", () => {
-    cy.get(FieldCandidateState).find('.p-disabled').should('exist');
-    cy.get(FieldCandidateDistrict).find('.p-disabled').should('exist');
+    cy.get(fieldCandidateState).find('.p-disabled').should('exist');
+    cy.get(fieldCandidateDistrict).find('.p-disabled').should('exist');
   });
 
   it("Step 7: Select 'Senate' from the 'Candidate Office' dropdown", () => {
-    cy.DropdownSetValue(FieldCandidateOffice, 'Senate');
+    cy.dropdownSetValue(fieldCandidateOffice, 'Senate');
     cy.wait(50);
-    cy.get(FieldCandidateOffice).should('contain', 'Senate');
+    cy.get(fieldCandidateOffice).should('contain', 'Senate');
   });
 
   it('Step 8: Verify "Candidate State" dropdown is interactive and not "Candidate District"', () => {
-    cy.get(FieldCandidateState).find('.p-disabled').should('not.exist');
-    cy.get(FieldCandidateDistrict).find('.p-disabled').should('exist');
+    cy.get(fieldCandidateState).find('.p-disabled').should('not.exist');
+    cy.get(fieldCandidateDistrict).find('.p-disabled').should('exist');
   });
 
   it('Step 9: Verify all states are present (Senate) and then select "West Virginia"', () => {
-    CheckEveryStateThenSelectWestVirgia();
+    checkEveryStateThenSelectWestVirgia();
   });
 
   it("Step 10: Select 'House' from the 'Candidate Office' dropdown", () => {
-    cy.DropdownSetValue(FieldCandidateOffice, 'House');
+    cy.dropdownSetValue(fieldCandidateOffice, 'House');
     cy.wait(50);
-    cy.get(FieldCandidateOffice).should('contain', 'House');
+    cy.get(fieldCandidateOffice).should('contain', 'House');
   });
 
   it('Step 11: Verify "Candidate State" and "Candidate District" dropdowns are interactive', () => {
-    cy.get(FieldCandidateState).find('.p-disabled').should('not.exist');
-    cy.get(FieldCandidateDistrict).find('.p-disabled').should('not.exist');
+    cy.get(fieldCandidateState).find('.p-disabled').should('not.exist');
+    cy.get(fieldCandidateDistrict).find('.p-disabled').should('not.exist');
   });
 
   it('Step 12: Verify all states are present (House) and then select "West Virginia"', () => {
-    CheckEveryStateThenSelectWestVirgia();
+    checkEveryStateThenSelectWestVirgia();
   });
 
   it('Steps 13 & 14: Check that every state has its corresponding number of districts', () => {
-    for (let State of Object.keys(CandidateStates)) {
-      let DistrictCount: number = CandidateStates[State];
-      if (DistrictCount == 0) DistrictCount = 1; //For some odd reason, states with 0 districts have '00' in the dropdown; According to Shelly, this is intended behavior
+    for (let state of Object.keys(candidateStates)) {
+      let districtCount: number = candidateStates[state];
+      if (districtCount == 0) districtCount = 1; //For some odd reason, states with 0 districts have '00' in the dropdown; According to Shelly, this is intended behavior
 
-      cy.DropdownSetValue(FieldCandidateState, State);
+      cy.dropdownSetValue(fieldCandidateState, state);
       cy.wait(25);
-      cy.get(FieldCandidateDistrict).click();
-      cy.get('p-dropdownitem').should('have.length', DistrictCount);
+      cy.get(fieldCandidateDistrict).click();
+      cy.get('p-dropdownitem').should('have.length', districtCount);
     }
   });
 });

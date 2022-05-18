@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
-export function GenerateContactObject(ContactGiven: object = {}): object {
-  let ContactRandom: object = {
+export function generateContactObject(contactGiven: object = {}): object {
+  let contactRandom: object = {
     //fields defined in this object are intentionally not CamelCase as they are intended to mirror the FormControlNames of elements on the Front-End
     //_.sample : standard js object method (hence _.); takes a random element from a given list.  Much more readable than [randomint % list.length] on every list
     contact_type: _.sample(['Individual', 'Candidate', 'Committee', 'Organization']),
@@ -231,77 +231,77 @@ export function GenerateContactObject(ContactGiven: object = {}): object {
     name: '',
   };
 
-  let Contact = { ...ContactRandom, ...ContactGiven }; //Merges the provided contact with the randomly generated one, overwriting the random one with any fields found in the provided
+  let contact = { ...contactRandom, ...contactGiven }; //Merges the provided contact with the randomly generated one, overwriting the random one with any fields found in the provided
 
-  //  Resolve the contact object's "name" based on contact_type.  This must be done after merging in case the ContactGiven object does not provide first, last, committee, or organization names
-  if (Contact['contact_type'] == 'Individual' || Contact['contact_type'] == 'Candidate') {
-    Contact['name'] = `${Contact['first_name']} ${Contact['last_name']}`;
+  //  Resolve the contact object's "name" based on contact_type.  This must be done after merging in case the contactGiven object does not provide first, last, committee, or organization names
+  if (contact['contact_type'] == 'Individual' || contact['contact_type'] == 'Candidate') {
+    contact['name'] = `${contact['first_name']} ${contact['last_name']}`;
   }
-  if (Contact['contact_type'] == 'Committee') {
-    Contact['name'] = Contact['committee_name'];
+  if (contact['contact_type'] == 'Committee') {
+    contact['name'] = contact['committee_name'];
   }
-  if (Contact['contact_type'] == 'Organization') {
-    Contact['name'] = Contact['organization_name'];
+  if (contact['contact_type'] == 'Organization') {
+    contact['name'] = contact['organization_name'];
   }
 
-  return Contact;
+  return contact;
 }
 
-export function EnterContact(Contact: object, Save: boolean = true) {
+export function enterContact(contact: object, save: boolean = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
   cy.wait(100);
 
   cy.get('#button-contacts-new').click();
   cy.wait(100);
 
-  cy.DropdownSetValue("p-dropdown[formcontrolname='type']", Contact['contact_type']);
+  cy.dropdownSetValue("p-dropdown[formcontrolname='type']", contact['contact_type']);
 
-  if (Contact['contact_type'] == 'Individual' || Contact['contact_type'] == 'Candidate') {
+  if (contact['contact_type'] == 'Individual' || contact['contact_type'] == 'Candidate') {
     //Contact
-    cy.get('#last_name').SafeType(Contact['last_name']);
-    cy.get('#first_name').SafeType(Contact['first_name']);
-    cy.get('#middle_name').SafeType(Contact['middle_name']);
-    cy.get('#prefix').SafeType(Contact['prefix']);
-    cy.get('#suffix').SafeType(Contact['suffix']);
+    cy.get('#last_name').safeType(contact['last_name']);
+    cy.get('#first_name').safeType(contact['first_name']);
+    cy.get('#middle_name').safeType(contact['middle_name']);
+    cy.get('#prefix').safeType(contact['prefix']);
+    cy.get('#suffix').safeType(contact['suffix']);
 
     //Employer
-    cy.get('#employer').SafeType(Contact['employer']);
-    cy.get('#occupation').SafeType(Contact['occupation']);
+    cy.get('#employer').safeType(contact['employer']);
+    cy.get('#occupation').safeType(contact['occupation']);
   }
 
   //Address
-  cy.get('#street_1').SafeType(Contact['street']);
-  cy.get('#street_2').SafeType(Contact['apartment']);
-  cy.get('#city').SafeType(Contact['city']);
-  cy.get('#zip').SafeType(Contact['zip']);
-  cy.get('#telephone').SafeType(Contact['phone']);
-  cy.DropdownSetValue("p-dropdown[formcontrolname='state']", Contact['state']);
+  cy.get('#street_1').safeType(contact['street']);
+  cy.get('#street_2').safeType(contact['apartment']);
+  cy.get('#city').safeType(contact['city']);
+  cy.get('#zip').safeType(contact['zip']);
+  cy.get('#telephone').safeType(contact['phone']);
+  cy.dropdownSetValue("p-dropdown[formcontrolname='state']", contact['state']);
 
   //Candidate-exclusive fields
-  if (Contact['contact_type'] == 'Candidate') {
-    cy.get('#candidate_id').SafeType(Contact['candidate_id']);
+  if (contact['contact_type'] == 'Candidate') {
+    cy.get('#candidate_id').safeType(contact['candidate_id']);
 
-    cy.DropdownSetValue("p-dropdown[formcontrolname='candidate_office']", Contact['candidate_office']);
+    cy.dropdownSetValue("p-dropdown[formcontrolname='candidate_office']", contact['candidate_office']);
 
-    if (Contact['candidate_office'] != 'Presidential') {
-      cy.DropdownSetValue("p-dropdown[formcontrolname='candidate_state']", Contact['candidate_state']);
+    if (contact['candidate_office'] != 'Presidential') {
+      cy.dropdownSetValue("p-dropdown[formcontrolname='candidate_state']", contact['candidate_state']);
 
-      if (Contact['candidate_office'] == 'House') {
-        cy.DropdownSetValue("p-dropdown[formcontrolname='candidate_district']", Contact['candidate_district']);
+      if (contact['candidate_office'] == 'House') {
+        cy.dropdownSetValue("p-dropdown[formcontrolname='candidate_district']", contact['candidate_district']);
       }
     }
   }
 
-  if (Contact['contact_type'] == 'Committee') {
-    cy.get('#committee_id').SafeType(Contact['committee_id']);
-    cy.get('#name').SafeType(Contact['committee_name']);
+  if (contact['contact_type'] == 'Committee') {
+    cy.get('#committee_id').safeType(contact['committee_id']);
+    cy.get('#name').safeType(contact['committee_name']);
   }
 
-  if (Contact['contact_type'] == 'Organization') {
-    cy.get('#name').SafeType(Contact['organization_name']);
+  if (contact['contact_type'] == 'Organization') {
+    cy.get('#name').safeType(contact['organization_name']);
   }
 
-  if (Save) {
+  if (save) {
     cy.get('.p-button-primary > .p-button-label').contains('Save').click();
   }
 

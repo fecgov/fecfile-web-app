@@ -2,7 +2,7 @@
 
 import * as _ from 'lodash';
 
-const ContactFields: object = {
+const contactFields: object = {
   //Contains the max allowable length for any given field
   Individual: {
     last_name: 30,
@@ -52,7 +52,7 @@ const ContactFields: object = {
   },
 };
 
-const FieldsRequired: Array<string> = [
+const fieldsRequired: Array<string> = [
   'street_1',
   'city',
   'zip',
@@ -63,32 +63,32 @@ const FieldsRequired: Array<string> = [
   'candidate_id',
 ];
 
-let ContactType: string;
-let Contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
+let contactType: string;
+let contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
-function RandomString(Length, Type = 'alphanumeric'): string {
+function randomString(strLength: number, charType: string = 'alphanumeric'): string {
   // prettier-ignore
-  const Alphanumeric: Array<string> = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9',];
+  const alphanumeric: Array<string> = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9',];
   // prettier-ignore
-  const Alphabet: Array<string> =   ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9',];
+  const alphabet: Array<string> =   ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9',];
   // prettier-ignore
-  const Numeric: Array<string> = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const numeric: Array<string> = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-  let Characters: Array<string> = [];
-  if (Type == 'alphanumeric') {
-    Characters = Alphanumeric;
-  } else if (Type == 'numeric') {
-    Characters = Numeric;
-  } else if (Type == 'alphabet') {
-    Characters = Alphabet;
+  let characters: Array<string> = [];
+  if (charType == 'alphanumeric') {
+    characters = alphanumeric;
+  } else if (charType == 'numeric') {
+    characters = numeric;
+  } else if (charType == 'alphabet') {
+    characters = alphabet;
   } else {
-    console.log('RandomString: Invalid type');
+    console.log('RandomString: Invalid charType');
     return '';
   }
 
   let outString: string = '';
-  while (outString.length < Length) {
-    outString += _.sample(Characters);
+  while (outString.length < strLength) {
+    outString += _.sample(characters);
   }
   return outString;
 }
@@ -101,45 +101,45 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
     cy.url().should('contain', '/contacts');
   });
 
-  for (ContactType of Object.keys(Contacts)) {
-    context(`---> ${ContactType}`, (CType = ContactType) => {
+  for (contactType of Object.keys(contacts)) {
+    context(`---> ${contactType}`, (cType = contactType) => {
       it('Check every field for required/optional and maximum length', () => {
         cy.get("button[label='New']").click();
         cy.wait(50);
         cy.get("div[role='dialog']").contains('Add Contact').should('exist');
 
-        cy.DropdownSetValue("p-dropdown[FormControlName='type']", CType);
+        cy.dropdownSetValue("p-dropdown[FormControlName='type']", cType);
         cy.wait(50);
         cy.get("button[label='Save']").click();
         cy.wait(50);
 
-        for (let Field of Object.keys(ContactFields[CType])) {
-          let Length: number = ContactFields[CType][Field];
+        for (let field of Object.keys(contactFields[cType])) {
+          let strLength: number = contactFields[cType][field];
 
-          if (FieldsRequired.includes(Field)) {
-            cy.get('#' + Field)
+          if (fieldsRequired.includes(field)) {
+            cy.get('#' + field)
               .parent()
               .should('contain', 'This is a required field');
           }
 
-          let RandString: string = '';
-          if (Field == 'telephone') {
-            RandString = RandomString(Length, 'numeric');
+          let randString: string = '';
+          if (field == 'telephone') {
+            randString = randomString(strLength, 'numeric');
           } else {
-            RandString = RandomString(Length);
+            randString = randomString(strLength);
           }
 
-          cy.get('#' + Field)
-            .SafeType(RandString)
+          cy.get('#' + field)
+            .safeType(randString)
             .parent()
             .find('app-error-messages')
             .children()
             .should('have.length', 0);
-          cy.get('#' + Field)
-            .SafeType('0')
+          cy.get('#' + field)
+            .safeType('0')
             .parent()
             .find('app-error-messages')
-            .should('contain', `This field cannot contain more than ${Length}`);
+            .should('contain', `This field cannot contain more than ${strLength}`);
         }
 
         cy.get("p-dropdown[FormControlName='country']").should('contain', 'United States of America');

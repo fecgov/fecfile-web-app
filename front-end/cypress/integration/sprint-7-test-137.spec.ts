@@ -1,10 +1,10 @@
 // @ts-check
 
-import { RandomDate, DateToString, GenerateReportObject } from '../support/reports.spec';
+import { randomDate, dateToString, generateReportObject } from '../support/reports.spec';
 
 describe('QA Test Script #137 (Sprint 7)', () => {
-  const FromDate: Date = RandomDate();
-  const ThroughDate: Date = RandomDate();
+  const fromDate: Date = randomDate();
+  const throughDate: Date = randomDate();
 
   it('Step 1: Navigate to contacts page', () => {
     cy.visit('/dashboard');
@@ -14,8 +14,8 @@ describe('QA Test Script #137 (Sprint 7)', () => {
   });
 
   it('Step 2: Open a New Report', () => {
-    const Report: object = GenerateReportObject();
-    cy.EnterReport(Report, false); //Enter a report without saving it
+    const report: object = generateReportObject();
+    cy.enterReport(report, false); //Enter a report without saving it
     cy.get('app-create-f3x-step1').contains('FEC Form 3X').should('exist');
   });
 
@@ -25,18 +25,18 @@ describe('QA Test Script #137 (Sprint 7)', () => {
   });
 
   it('Step 4: Enter any date into the FROM and TO fields', () => {
-    cy.CalendarSetValue("p-calendar[FormControlName='coverage_from_date']", FromDate);
+    cy.calendarSetValue("p-calendar[FormControlName='coverage_from_date']", fromDate);
     cy.wait(250);
-    cy.CalendarSetValue("p-calendar[FormControlName='coverage_through_date']", ThroughDate);
+    cy.calendarSetValue("p-calendar[FormControlName='coverage_through_date']", throughDate);
     cy.wait(50);
   });
 
   it('Step 5: Checks that the dates entered are displayed in their fields', () => {
     cy.get('p-calendar[FormControlName="coverage_from_date"]')
       .find('input')
-      .should('have.value', DateToString(FromDate));
+      .should('have.value', dateToString(fromDate));
     cy.get('p-calendar[FormControlName="coverage_through_date"]')
       .find('input')
-      .should('have.value', DateToString(ThroughDate));
+      .should('have.value', dateToString(throughDate));
   });
 });

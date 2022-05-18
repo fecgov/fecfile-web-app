@@ -2,119 +2,119 @@
 
 import * as _ from 'lodash';
 
-export function RandomDate(): Date {
-  let OutDate: Date = new Date();
+export function randomDate(): Date {
+  let outDate: Date = new Date();
 
-  const Month: number = _.random(1, 12);
-  OutDate.setMonth(Month);
+  const month: number = _.random(1, 12);
+  outDate.setMonth(month);
 
-  OutDate.setDate(0); //Setting the date (day of the month) to '0' sets it to the last day of that month.  Easy way to get the length of the month.
-  let Day: number = _.sample(_.range(1, OutDate.getDate() + 1));
-  Day += 1;
-  OutDate.setDate(Day);
+  outDate.setDate(0); //Setting the date (day of the month) to '0' sets it to the last day of that month.  Easy way to get the length of the month.
+  let day: number = _.sample(_.range(1, outDate.getDate() + 1));
+  day += 1;
+  outDate.setDate(day);
 
-  const CurrentYear: number = OutDate.getFullYear();
-  const Year: number = _.random(CurrentYear, CurrentYear + 3);
-  OutDate.setFullYear(Year);
+  const currentYear: number = outDate.getFullYear();
+  const year: number = _.random(currentYear, currentYear + 3);
+  outDate.setFullYear(year);
 
-  return OutDate;
+  return outDate;
 }
 
-export function DateToString(DateObj: Date): string {
-  const M: string = (DateObj.getMonth() + 1).toString().padStart(2, '0');
-  const D: string = DateObj.getDate().toString().padStart(2, '0');
-  const Y: string = DateObj.getFullYear().toString();
+export function dateToString(dateObj: Date): string {
+  const m: string = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+  const d: string = dateObj.getDate().toString().padStart(2, '0');
+  const y: string = dateObj.getFullYear().toString();
 
-  return `${M}/${D}/${Y}`;
+  return `${m}/${d}/${y}`;
 }
 
-function FillMissingReportCategory(Report: object) {
+function fillMissingReportCategory(report: object) {
   //    Report Type Category
-  if (Report['page_1']['report_type_category'] == '') {
-    if (Report['page_1']['filing_frequency'] == 'QUARTERLY')
-      Report['page_1']['report_type_category'] = _.sample(['Non-Election Year', 'Election Year', 'Special']);
-    else if (Report['page_1']['filing_frequency'] == 'MONTHLY')
-      Report['page_1']['report_type_category'] = _.sample(['Non-Election Year', 'Election Year']);
+  if (report['page_1']['report_type_category'] == '') {
+    if (report['page_1']['filing_frequency'] == 'QUARTERLY')
+      report['page_1']['report_type_category'] = _.sample(['Non-Election Year', 'Election Year', 'Special']);
+    else if (report['page_1']['filing_frequency'] == 'MONTHLY')
+      report['page_1']['report_type_category'] = _.sample(['Non-Election Year', 'Election Year']);
   }
-  return Report;
+  return report;
 }
 
-function FillMissingReportCode(Report: object) {
+function fillMissingReportCode(report: object) {
   //    Report Code
-  if (Report['page_1']['report_code'] == '') {
-    if (Report['page_1']['filing_frequency'] == 'MONTHLY') {
-      switch (Report['page_1']['report_type_category']) {
+  if (report['page_1']['report_code'] == '') {
+    if (report['page_1']['filing_frequency'] == 'MONTHLY') {
+      switch (report['page_1']['report_type_category']) {
         case 'Non-Election Year':
           // prettier-ignore
-          Report['page_1']['report_code'] = _.sample(['M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12','YE','TER',]);
+          report['page_1']['report_code'] = _.sample(['M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12','YE','TER',]);
           break;
         case 'Election Year':
           // prettier-ignore
-          Report['page_1']['report_code'] = _.sample(['M2','M3','M4','M5','M6','M7','M8','M9','M10','12G','30G','YE','TER',]);
+          report['page_1']['report_code'] = _.sample(['M2','M3','M4','M5','M6','M7','M8','M9','M10','12G','30G','YE','TER',]);
           break;
       }
-    } else if (Report['page_1']['filing_frequency'] == 'QUARTERLY') {
-      switch (Report['page_1']['report_type_category']) {
+    } else if (report['page_1']['filing_frequency'] == 'QUARTERLY') {
+      switch (report['page_1']['report_type_category']) {
         case 'Non-Election Year':
-          Report['page_1']['report_code'] = _.sample(['Q1', 'MY', 'Q2', 'YE', 'TER']);
+          report['page_1']['report_code'] = _.sample(['Q1', 'MY', 'Q2', 'YE', 'TER']);
           break;
         case 'Election Year':
-          Report['page_1']['report_code'] = _.sample(['Q1', 'Q2', 'Q3', '12G', '30G', 'YE', 'TER']);
+          report['page_1']['report_code'] = _.sample(['Q1', 'Q2', 'Q3', '12G', '30G', 'YE', 'TER']);
           break;
         case 'Special':
-          Report['page_1']['report_code'] = _.sample(['12P', '12R', '12C', '12S', '30R', '30S']);
+          report['page_1']['report_code'] = _.sample(['12P', '12R', '12C', '12S', '30R', '30S']);
           break;
       }
     }
   }
-  return Report;
+  return report;
 }
 
-function FillMissingElectionData(Report: object) {
+function fillMissingElectionData(report: object) {
   //Date of Election
-  if (Report['page_1']['date_of_election'] == '') {
-    const ElectionDate: Date = RandomDate();
-    Report['page_1']['date_of_election'] = DateToString(ElectionDate);
+  if (report['page_1']['date_of_election'] == '') {
+    const ElectionDate: Date = randomDate();
+    report['page_1']['date_of_election'] = dateToString(ElectionDate);
   }
 
   //State of Election
-  if (Report['page_1']['state_of_election'] == '') {
+  if (report['page_1']['state_of_election'] == '') {
     // prettier-ignore
-    Report['page_1']['state_of_election'] = _.sample([
+    report['page_1']['state_of_election'] = _.sample([
         'Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','U.S. Virgin Islands','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming',
     ]);
   }
 
-  return Report;
+  return report;
 }
 
-function FillMissingCoverageDates(Report: object) {
+function fillMissingCoverageDates(report: object) {
   //Coverage From Date
-  if (Report['page_1']['coverage_from_date'] == '') {
-    let CoverageDate: Date = RandomDate();
+  if (report['page_1']['coverage_from_date'] == '') {
+    let coverageDate: Date = randomDate();
 
-    Report['page_1']['coverage_from_date'] = DateToString(CoverageDate); //Generate a starting date
+    report['page_1']['coverage_from_date'] = dateToString(coverageDate); //Generate a starting date
   }
 
   //Coverage Through Date
-  if (Report['page_1']['coverage_through_date'] == '') {
-    let CoverageDate: Date = new Date(Report['page_1']['coverage_from_date']);
-    let FilingFrequencyOffset: number = 0;
+  if (report['page_1']['coverage_through_date'] == '') {
+    let coverageDate: Date = new Date(report['page_1']['coverage_from_date']);
+    let filingFrequencyOffset: number = 0;
 
-    if (Report['page_1']['filing_frequency'] == 'QUARTERLY') FilingFrequencyOffset = 3;
-    else if (Report['page_1']['filing_frequency'] == 'MONTHLY') FilingFrequencyOffset = 1;
+    if (report['page_1']['filing_frequency'] == 'QUARTERLY') filingFrequencyOffset = 3;
+    else if (report['page_1']['filing_frequency'] == 'MONTHLY') filingFrequencyOffset = 1;
 
-    CoverageDate.setMonth(CoverageDate.getMonth() + FilingFrequencyOffset); //Add 1 or 3 months to the date depending on Monthly/Quarterly filing
+    coverageDate.setMonth(coverageDate.getMonth() + filingFrequencyOffset); //Add 1 or 3 months to the date depending on Monthly/Quarterly filing
 
-    Report['page_1']['coverage_through_date'] = DateToString(CoverageDate);
+    report['page_1']['coverage_through_date'] = dateToString(coverageDate);
   }
 
-  return Report;
+  return report;
 }
 
 //    The keys of the objects generated by this function are deliberately not CamelCase.  They specifically mirror the FormControlName values of elements in the Front-End
-export function GenerateReportObject(ReportGiven: object = {}): object {
-  let ReportRandom: object = {
+export function generateReportObject(reportGiven: object = {}): object {
+  let reportRandom: object = {
     page_1: {
       filing_frequency: _.sample(['MONTHLY', 'QUARTERLY']),
       report_type_category: '',
@@ -134,62 +134,62 @@ export function GenerateReportObject(ReportGiven: object = {}): object {
     },
   };
 
-  let Report: object = { ...ReportRandom, ...ReportGiven };
+  let report: object = { ...reportRandom, ...reportGiven };
 
-  Report = FillMissingReportCategory(Report);
-  Report = FillMissingReportCode(Report);
-  Report = FillMissingElectionData(Report);
-  Report = FillMissingCoverageDates(Report);
+  report = fillMissingReportCategory(report);
+  report = fillMissingReportCode(report);
+  report = fillMissingElectionData(report);
+  report = fillMissingCoverageDates(report);
 
-  return Report;
+  return report;
 }
 
-export function EnterReport(Report, Save = true) {
+export function enterReport(report, save = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
   cy.wait(100);
 
   cy.get('button[label="Create a new report"]').click();
   cy.wait(100);
 
-  cy.get("p-radiobutton[FormControlName='filing_frequency']").contains(Report['page_1']['filing_frequency']).click();
+  cy.get("p-radiobutton[FormControlName='filing_frequency']").contains(report['page_1']['filing_frequency']).click();
   cy.wait(25);
 
   cy.get("p-selectbutton[FormControlName='report_type_category']")
-    .contains(Report['page_1']['report_type_category'])
+    .contains(report['page_1']['report_type_category'])
     .click();
   cy.wait(25);
 
-  cy.get("p-radiobutton[FormControlName='report_code']").contains(Report['page_1']['report_code']).click();
+  cy.get("p-radiobutton[FormControlName='report_code']").contains(report['page_1']['report_code']).click();
   cy.wait(25);
 
   if (
-    Report['page_1']['report_type_category'] == 'Special' ||
-    Report['page_1']['report_code'] == '30G' ||
-    Report['page_1']['report_code'] == '12G'
+    report['page_1']['report_type_category'] == 'Special' ||
+    report['page_1']['report_code'] == '30G' ||
+    report['page_1']['report_code'] == '12G'
   ) {
-    cy.CalendarSetValue(
+    cy.calendarSetValue(
       "p-calendar[FormControlName='date_of_election']",
-      new Date(Report['page_1']['date_of_election'])
+      new Date(report['page_1']['date_of_election'])
     );
     cy.wait(25);
 
-    cy.DropdownSetValue("p-dropdown[FormControlName='state_of_election']", Report['page_1']['state_of_election']);
+    cy.dropdownSetValue("p-dropdown[FormControlName='state_of_election']", report['page_1']['state_of_election']);
     cy.wait(25);
   }
 
-  cy.CalendarSetValue(
+  cy.calendarSetValue(
     "p-calendar[FormControlName='coverage_from_date']",
-    new Date(Report['page_1']['coverage_from_date'])
+    new Date(report['page_1']['coverage_from_date'])
   );
   cy.wait(250);
-  cy.CalendarSetValue(
+  cy.calendarSetValue(
     "p-calendar[FormControlName='coverage_through_date']",
-    new Date(Report['page_1']['coverage_through_date'])
+    new Date(report['page_1']['coverage_through_date'])
   );
   cy.wait(50);
   cy.wait(250);
 
-  if (Save) {
+  if (save) {
     cy.get("button[label='Save']").click();
     cy.wait(50);
   }

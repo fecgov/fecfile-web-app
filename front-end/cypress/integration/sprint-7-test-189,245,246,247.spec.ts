@@ -1,8 +1,8 @@
 // @ts-check
 
-import { GenerateContactObject } from '../support/contacts.spec';
+import { generateContactObject } from '../support/contacts.spec';
 
-const ContactTypes: Array<string> = ['Individual', 'Candidate', 'Committee', 'Organization'];
+const contactTypes: Array<string> = ['Individual', 'Candidate', 'Committee', 'Organization'];
 
 describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
   function after() {
@@ -17,13 +17,13 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
     cy.get('.p-confirm-dialog-accept').click();
 
     cy.wait(100);
-    cy.Logout();
+    cy.logout();
   }
 
-  for (let ContactType of ContactTypes) {
-    context(`---> ${ContactType}`, (CType = ContactType) => {
-      let Contact: object = GenerateContactObject({
-        contact_type: CType,
+  for (let contactType of contactTypes) {
+    context(`---> ${contactType}`, (cType = contactType) => {
+      let contact: object = generateContactObject({
+        contact_type: cType,
         first_name: 'Test',
         last_name: 'Edit',
         organization_name: 'Test Edit',
@@ -31,12 +31,12 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
       });
 
       it('Step 1: Navigate to contacts page', () => {
-        cy.Login();
+        cy.login();
 
         cy.url().should('contain', '/dashboard');
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
         cy.url().should('contain', '/contacts');
-        cy.EnterContact(Contact);
+        cy.enterContact(contact);
       });
 
       it('Steps 2 & 3: Find the created contact, verify that it is an individual, and then select its edit checkbox', () => {
@@ -44,7 +44,7 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
           .contains('Test Edit') //Find the correct row; side effect: selects the element with the name
           .should('exist') //Double check that it exists
           .parent() //Get back to the row itself
-          .should('contain', CType)
+          .should('contain', cType)
           .find("div[role='checkbox']")
           .click()
           .find('.pi-check')
@@ -57,19 +57,19 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
       });
 
       it('Steps 5 & 6: Set the contact\'s name to "First Last"', () => {
-        if (CType == 'Individual' || CType == 'Candidate') {
+        if (cType == 'Individual' || cType == 'Candidate') {
           cy.get('#first_name')
-            .SafeType('{backspace}{backspace}{backspace}{backspace}First')
+            .safeType('{backspace}{backspace}{backspace}{backspace}First')
             .should('have.value', 'First');
           cy.get('#last_name')
-            .SafeType('{backspace}{backspace}{backspace}{backspace}Last')
+            .safeType('{backspace}{backspace}{backspace}{backspace}Last')
             .should('have.value', 'Last');
         } else {
           cy.get('#name')
-            .SafeType(
+            .safeType(
               `{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}`
             )
-            .SafeType('First Last')
+            .safeType('First Last')
             .should('have.value', 'First Last');
         }
       });

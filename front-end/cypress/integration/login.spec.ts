@@ -1,30 +1,30 @@
 // @ts-check
 
 //Test login information retrieved from environment variables prefixed with "CYPRESS_"
-const Email: string = Cypress.env('EMAIL');
-const CommitteeID: string = Cypress.env('COMMITTEE_ID');
-const TestPassword: string = Cypress.env('PASSWORD');
-const TestPIN: string = Cypress.env('PIN');
+const email: string = Cypress.env('EMAIL');
+const committeeID: string = Cypress.env('COMMITTEE_ID');
+const testPassword: string = Cypress.env('PASSWORD');
+const testPIN: string = Cypress.env('PIN');
 
 //login page form-fields' id's (or classes where elements have no id's)
-const FieldEmail: string = '#login-email-id';
-const FieldCommittee: string = '#login-committee-id';
-const FieldPassword: string = '#login-password';
-const FieldLoginButton: string = '.login__btn';
+const fieldEmail: string = '#login-email-id';
+const fieldCommittee: string = '#login-committee-id';
+const fieldPassword: string = '#login-password';
+const fieldLoginButton: string = '.login__btn';
 const errorEmail: string = '.error__email-id';
 const errorCommitteeID: string = '.error__committee-id';
 const errorPassword: string = '.error__password-error';
 
 //two-factor authentication page form-fields' ids
-const FieldTwoFactorEmail: string = '#email';
-const FieldTwoFactorPhoneText: string = '#phone_number_text';
-const FieldTwoFactorPhoneCall: string = '#phone_number_call';
-const FieldTwoFactorSubmit: string = '.action__btn.next';
-const FieldTwoFactorBack: string = '.action__btn.clear';
+const fieldTwoFactorEmail: string = '#email';
+const fieldTwoFactorPhoneText: string = '#phone_number_text';
+const fieldTwoFactorPhoneCall: string = '#phone_number_call';
+const fieldTwoFactorSubmit: string = '.action__btn.next';
+const fieldTwoFactorBack: string = '.action__btn.clear';
 
 //security code page form-fields' ids
-const FieldSecurityCodeText: string = '.form-control';
-const FieldSecurityCodeNext: string = '.action__btn.next';
+const fieldSecurityCodeText: string = '.form-control';
+const fieldSecurityCodeNext: string = '.action__btn.next';
 
 /*
 
@@ -33,24 +33,24 @@ const FieldSecurityCodeNext: string = '.action__btn.next';
 */
 
 //Fills the login form's fields with test data *without* submitting the form
-function FillLoginForm() {
-  cy.get(FieldEmail).SafeType(Email);
-  cy.get(FieldCommittee).SafeType(CommitteeID);
-  cy.get(FieldPassword).SafeType(TestPassword);
+function fillLoginForm() {
+  cy.get(fieldEmail).safeType(email);
+  cy.get(fieldCommittee).safeType(committeeID);
+  cy.get(fieldPassword).safeType(testPassword);
 }
 
 //Logs in without entering anything for Two Factor Authentication
-function LoginNoTwoFactor() {
-  FillLoginForm();
-  cy.get(FieldPassword).SafeType('{enter}');
+function loginNoTwoFactor() {
+  fillLoginForm();
+  cy.get(fieldPassword).safeType('{enter}');
 }
 
 //Logs in and requests Two Factor Authentication via Email
-function LoginRequestTwoFactorAuth() {
-  LoginNoTwoFactor();
+function loginRequestTwoFactorAuth() {
+  loginNoTwoFactor();
 
-  cy.get(FieldTwoFactorEmail).check();
-  cy.get(FieldTwoFactorSubmit).click();
+  cy.get(fieldTwoFactorEmail).check();
+  cy.get(fieldTwoFactorSubmit).click();
 }
 
 /*
@@ -65,68 +65,68 @@ describe('Testing login', () => {
   });
 
   it('Accepts input', () => {
-    FillLoginForm();
+    fillLoginForm();
 
-    cy.get(FieldEmail).should('have.value', Email);
-    cy.get(FieldCommittee).should('have.value', CommitteeID);
-    cy.get(FieldPassword).should('have.value', TestPassword);
+    cy.get(fieldEmail).should('have.value', email);
+    cy.get(fieldCommittee).should('have.value', committeeID);
+    cy.get(fieldPassword).should('have.value', testPassword);
   });
 
   it('Submits Email/committee ID/password with {Enter}', () => {
-    FillLoginForm();
+    fillLoginForm();
 
-    cy.get(FieldPassword).SafeType('{enter}');
+    cy.get(fieldPassword).safeType('{enter}');
     cy.url().should('contain', '/twoFactLogin');
   });
 
   it('Submits Email/committee ID/password with a click', () => {
-    FillLoginForm();
+    fillLoginForm();
 
-    cy.get(FieldLoginButton).click();
+    cy.get(fieldLoginButton).click();
     cy.url().should('contain', '/twoFactLogin');
   });
 
   it('Submits Two Factor Auth via Email', () => {
-    LoginNoTwoFactor();
+    loginNoTwoFactor();
 
-    cy.get(FieldTwoFactorEmail).check();
-    cy.get(FieldTwoFactorSubmit).click();
+    cy.get(fieldTwoFactorEmail).check();
+    cy.get(fieldTwoFactorSubmit).click();
     cy.url().should('contain', '/confirm-2f');
   });
 
   it('Submits Two Factor Auth via phone, text', () => {
-    LoginNoTwoFactor();
+    loginNoTwoFactor();
 
-    cy.get(FieldTwoFactorPhoneText).check();
-    cy.get(FieldTwoFactorSubmit).click();
+    cy.get(fieldTwoFactorPhoneText).check();
+    cy.get(fieldTwoFactorSubmit).click();
     cy.url().should('contain', '/confirm-2f');
   });
 
   it('Submits Two Factor Auth via phone, call', () => {
-    LoginNoTwoFactor();
+    loginNoTwoFactor();
 
-    cy.get(FieldTwoFactorPhoneCall).check();
-    cy.get(FieldTwoFactorSubmit).click();
+    cy.get(fieldTwoFactorPhoneCall).check();
+    cy.get(fieldTwoFactorSubmit).click();
     cy.url().should('contain', '/confirm-2f');
   });
 
   it('Fully logs in through Two Factor Authentication with {enter}', () => {
-    LoginRequestTwoFactorAuth();
+    loginRequestTwoFactorAuth();
 
-    cy.get(FieldSecurityCodeText).SafeType(TestPIN).SafeType('{enter}');
+    cy.get(fieldSecurityCodeText).safeType(testPIN).safeType('{enter}');
     cy.url().should('contain', '/dashboard');
   });
 
   it('Fully logs in through Two Factor Authentication with a click', () => {
-    LoginRequestTwoFactorAuth();
+    loginRequestTwoFactorAuth();
 
-    cy.get(FieldSecurityCodeText).SafeType(TestPIN);
-    cy.get(FieldSecurityCodeNext).click();
+    cy.get(fieldSecurityCodeText).safeType(testPIN);
+    cy.get(fieldSecurityCodeNext).click();
     cy.url().should('contain', '/dashboard');
   });
 
   it('Fails to login with no included information', () => {
-    cy.get(FieldEmail).SafeType('{enter}'); //Submits an empty login form
+    cy.get(fieldEmail).safeType('{enter}'); //Submits an empty login form
 
     cy.url()
       .should('not.contain', '/twoFactLogin')
