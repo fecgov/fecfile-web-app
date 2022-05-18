@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -7,22 +7,30 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { TransactionService } from 'app/shared/services/transaction.service';
 
 @Component({
   selector: 'app-create-f3x-step3',
   templateUrl: './create-f3x-step3.component.html',
 })
-export class CreateF3xStep3Component implements OnInit, OnDestroy {
+export class CreateF3xStep3Component extends TableListBaseComponent<Transaction> implements OnInit, OnDestroy {
   report: F3xSummary | undefined;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
 
   constructor(
-    private router: Router,
+    protected override messageService: MessageService,
+    protected override confirmationService: ConfirmationService,
+    protected override elementRef: ElementRef,
+    protected override itemService: TransactionService,
     private activatedRoute: ActivatedRoute,
-    private f3xSummaryService: F3xSummaryService,
     private store: Store
-  ) {}
+  ) {
+    super(messageService, confirmationService, elementRef);
+  }
 
   ngOnInit(): void {
     // Refresh committee account details whenever page loads
@@ -34,5 +42,9 @@ export class CreateF3xStep3Component implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  protected getEmptyItem(): Transaction {
+    return {} as Transaction;
   }
 }
