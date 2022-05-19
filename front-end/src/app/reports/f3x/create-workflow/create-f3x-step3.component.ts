@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -46,5 +46,12 @@ export class CreateF3xStep3Component extends TableListBaseComponent<Transaction>
 
   protected getEmptyItem(): Transaction {
     return {} as Transaction;
+  }
+}
+
+@Pipe({ name: 'memoCode' })
+export class MemoCodePipe implements PipeTransform {
+  transform(value: boolean) {
+    return value ? 'Y' : '-';
   }
 }
