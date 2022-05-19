@@ -9,7 +9,7 @@ import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, LazyLoadEvent, MessageService, SortEvent, SortMeta } from 'primeng/api';
 import { TransactionService } from 'app/shared/services/transaction.service';
 
 @Component({
@@ -42,6 +42,19 @@ export class CreateF3xStep3Component extends TableListBaseComponent<Transaction>
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  public override loadTableItems(event: LazyLoadEvent) {
+    if (event.sortField == 'contributor_name') {
+      const order: number = event.sortOrder || 1;
+      event.multiSortMeta = [
+        { field: 'contributor_organization_name', order },
+        { field: 'contributor_last_name', order },
+        { field: 'contributor_first_name', order },
+      ];
+      event.sortField = undefined;
+    }
+    super.loadTableItems(event);
   }
 
   protected getEmptyItem(): Transaction {

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef } from '@angular/core';
-import { ConfirmationService, MessageService, LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService, MessageService, LazyLoadEvent, SortMeta } from 'primeng/api';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
 import { Observable, forkJoin } from 'rxjs';
@@ -76,9 +76,13 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     const rows: number = event.rows ? event.rows : 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
 
-    // Determine query sort ordering
     let ordering: string = event.sortField ? event.sortField : '';
-    if (ordering && event.sortOrder === -1) {
+    // Determine query sort ordering
+    if (event.multiSortMeta) {
+      ordering = event.multiSortMeta
+        .map((sortMeta: SortMeta) => (sortMeta.order === 1 ? sortMeta.field : `-${sortMeta.field}`))
+        .join(',');
+    } else if (event.sortField && ordering && event.sortOrder === -1) {
       ordering = `-${ordering}`;
     }
 
