@@ -71,10 +71,7 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
       this.form.patchValue({ ...txn });
       this.form.patchValue({ contribution_date: DateUtils.convertFecFormatToDate(txn.contribution_date) });
     } else {
-      this.form.patchValue({
-        entity_type: ContactTypes.INDIVIDUAL,
-        contribution_aggregate: '0',
-      });
+      this.resetForm();
     }
 
     this.form
@@ -106,11 +103,6 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
     if (this.form.invalid) {
       return;
     }
-
-    // Force selection of checkbox to true/false even if never checked
-    this.form.patchValue({
-      memo_code: !!this.form.get('memo_code')?.value,
-    });
 
     const payload: SchATransaction = SchATransaction.fromJSON({
       ...this.transaction,
@@ -147,12 +139,21 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
         detail: 'Transaction Saved',
         life: 3000,
       });
-      this.formSubmitted = false;
-      this.form.reset();
-      this.form.markAsPristine();
-      this.form.markAsUntouched();
+      this.resetForm();
     } else {
       this.router.navigateByUrl('/reports');
     }
+  }
+
+  private resetForm() {
+    this.formSubmitted = false;
+    this.form.reset();
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+    this.form.patchValue({
+      entity_type: ContactTypes.INDIVIDUAL,
+      contribution_aggregate: '0',
+      memo_code: false,
+    });
   }
 }
