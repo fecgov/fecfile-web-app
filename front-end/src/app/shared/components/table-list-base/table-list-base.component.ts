@@ -76,13 +76,9 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     const rows: number = event.rows ? event.rows : 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
 
-    let ordering: string = event.sortField ? event.sortField : '';
     // Determine query sort ordering
-    if (event.multiSortMeta) {
-      ordering = event.multiSortMeta
-        .map((sortMeta: SortMeta) => (sortMeta.order === 1 ? sortMeta.field : `-${sortMeta.field}`))
-        .join(',');
-    } else if (event.sortField && ordering && event.sortOrder === -1) {
+    let ordering: string = event.sortField ? event.sortField : '';
+    if (ordering && event.sortOrder === -1) {
       ordering = `-${ordering}`;
     }
 

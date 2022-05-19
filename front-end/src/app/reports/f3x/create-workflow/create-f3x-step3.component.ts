@@ -44,19 +44,6 @@ export class CreateF3xStep3Component extends TableListBaseComponent<Transaction>
     this.destroy$.complete();
   }
 
-  public override loadTableItems(event: LazyLoadEvent) {
-    if (event.sortField == 'contributor_name') {
-      const order: number = event.sortOrder || 1;
-      event.multiSortMeta = [
-        { field: 'contributor_organization_name', order },
-        { field: 'contributor_last_name', order },
-        { field: 'contributor_first_name', order },
-      ];
-      event.sortField = undefined;
-    }
-    super.loadTableItems(event);
-  }
-
   protected getEmptyItem(): Transaction {
     return {} as Transaction;
   }
