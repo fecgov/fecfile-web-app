@@ -5,14 +5,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // PrimeNG
 import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
-import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
-import { SelectButtonModule } from 'primeng/selectbutton';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ToastModule } from 'primeng/toast';
 
 import { SharedModule } from '../shared/shared.module';
 import { TransactionsRoutingModule } from './transactions-routing.module';
@@ -31,12 +30,11 @@ import { TransactionTypePickerComponent } from './transaction-type-picker/transa
     ButtonModule,
     DividerModule,
     DropdownModule,
-    RadioButtonModule,
     CheckboxModule,
     InputTextModule,
     InputTextareaModule,
     CalendarModule,
-    SelectButtonModule,
+    ToastModule,
     SharedModule,
   ],
 })
