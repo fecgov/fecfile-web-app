@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef } from '@angular/core';
-import { ConfirmationService, MessageService, LazyLoadEvent, SortMeta } from 'primeng/api';
+import { ConfirmationService, MessageService, LazyLoadEvent } from 'primeng/api';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
 import { Observable, forkJoin } from 'rxjs';

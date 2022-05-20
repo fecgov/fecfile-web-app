@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { refreshCommitteeAccountDetailsAction } from '../../../store/committee-account.actions';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -15,9 +15,8 @@ import { TransactionService } from 'app/shared/services/transaction.service';
   selector: 'app-create-f3x-step3',
   templateUrl: './create-f3x-step3.component.html',
 })
-export class CreateF3xStep3Component extends TableListBaseComponent<Transaction> implements OnInit, OnDestroy {
+export class CreateF3xStep3Component extends TableListBaseComponent<Transaction> implements OnInit {
   report: F3xSummary | undefined;
-  destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
 
   constructor(
@@ -36,11 +35,6 @@ export class CreateF3xStep3Component extends TableListBaseComponent<Transaction>
     this.store.dispatch(refreshCommitteeAccountDetailsAction());
 
     this.report = this.activatedRoute.snapshot.data['report'];
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   protected getEmptyItem(): Transaction {
