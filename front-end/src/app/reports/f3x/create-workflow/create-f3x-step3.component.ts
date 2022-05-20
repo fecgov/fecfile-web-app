@@ -1,15 +1,14 @@
 import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { refreshCommitteeAccountDetailsAction } from '../../../store/committee-account.actions';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
-import { ConfirmationService, LazyLoadEvent, MessageService, SortEvent, SortMeta } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from 'app/shared/services/transaction.service';
 
 @Component({
