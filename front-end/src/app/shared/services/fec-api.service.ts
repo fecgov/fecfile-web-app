@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from 'app/shared/models/fec-api.model';
 import { FecFiling } from '../models/fec-filing.model';
@@ -46,7 +46,17 @@ export class FecApiService {
       .pipe(map((response: FecApiPaginatedResponse) => (response.results[0] as CommitteeAccount) || undefined));
   }
 
-  public getCommitteeRecentFiling(committeeId: string | null): Observable<FecFiling> {
+  /**
+   * Gets the most recent F1 filing
+   *
+   * Fist checks the realtime enpdpoint for a recent F1 filing.  If none is found, a request is
+   * made to a different endpoint that is updated nightly.  The realtime endpoint will have
+   * more recent filings, but does not provide filings older than 6 months.
+   * The nightly endpoint keeps a longer history
+   *
+   * @return     {Observable<FecFiling | undefined>}  Most recent F1 filing.
+   */
+  public getCommitteeRecentFiling(committeeId: string | null): Observable<FecFiling | undefined> {
     if (!committeeId) {
       throw new Error('No Committee Id provided.');
     }
@@ -58,21 +68,40 @@ export class FecApiService {
       committee_id: committeeId,
       form_type: 'F1',
     });
-    const realTimeEndpointParams = this.getQueryParams({
-      committee_id: committeeId,
 
-    })
-    const nightlyEndpoint = this.http.get<FecApiPaginatedResponse>(`${environment.fecApiUrl}/filing`, {
-      headers: headers,
-      params: nightlyEndpointParams,
-    });
-    const realTimeEndpoint = this.http.get<FecApiPaginatedResponse>(`${environment.fecApiUrl}/efile/filings/`, {
-      headers: headers,
-      params: realTimeEndpointParams
-    }).pipe(map((response: FecApiPaginatedResponse) => {
-      response.results.find(filing: FecFiling => filing['form_type'].startsWith('F1'))
-    }));
+    const nightlyEndpoint = this.http
+      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}/filing`, {
+        headers: headers,
+        params: nightlyEndpointParams,
+      })
+      .pipe(
+        map((response: FecApiPaginatedResponse) => {
+          return (response.results as FecFiling[]).find((filing: FecFiling) => filing.form_type?.startsWith('F1'));
+        })
+      );
 
-    
+    const realTimeEndpoint = this.http
+      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}/efile/filings/`, {
+        headers: headers,
+        params: this.getQueryParams({
+          committee_id: committeeId,
+          sort: '-receipt_date',
+        }),
+      })
+      .pipe(
+        map((response: FecApiPaginatedResponse) => {
+          return (response.results as FecFiling[]).find((filing: FecFiling) => filing.form_type?.startsWith('F1'));
+        })
+      );
+
+    // Check real time endpoint for result. If it doesn't have one, check the nightly endpoint
+    return realTimeEndpoint.pipe(
+      switchMap((realTimeResult) => {
+        if (realTimeResult) {
+          return of(realTimeResult);
+        }
+        return nightlyEndpoint;
+      })
+    );
   }
 }
