@@ -28,7 +28,7 @@ export class TransactionTypePickerComponent implements OnInit {
     return [
       ScheduleATransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS,
       ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS,
-      ScheduleATransactionGroups.TRANSFER,
+      ScheduleATransactionGroups.TRANSFERS,
       ScheduleATransactionGroups.REFUNDS,
       ScheduleATransactionGroups.OTHER,
     ];
@@ -62,7 +62,7 @@ export class TransactionTypePickerComponent implements OnInit {
           ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED,
           ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC,
         ];
-      case ScheduleATransactionGroups.TRANSFER:
+      case ScheduleATransactionGroups.TRANSFERS:
         return [
           ScheduleATransactionTypes.TRANSFERS,
           ScheduleATransactionTypes.JF_TRANSFERS,
