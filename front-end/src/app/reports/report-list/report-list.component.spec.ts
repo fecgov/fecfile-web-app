@@ -65,8 +65,11 @@ describe('ReportListComponent', () => {
 
   it('#editItem should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.editItem({ id: 999 } as Report);
+    component.editItem({ id: 999, change_of_address: null } as F3xSummary);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step2/999');
+
+    component.editItem({ id: 999, change_of_address: true } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
   });
 
   it('#displayName should display the item form_type code', () => {

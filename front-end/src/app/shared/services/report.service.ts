@@ -27,7 +27,7 @@ export class ReportService implements TableListService<Report> {
     );
   }
 
-  public get(reportId: number): Observable<F3xSummary> {
+  public get(reportId: number): Observable<Report> {
     return this.f3xSummaryService.get(reportId);
   }
 

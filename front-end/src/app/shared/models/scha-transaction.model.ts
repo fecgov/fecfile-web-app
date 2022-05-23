@@ -1,9 +1,9 @@
 import { BaseModel } from './base.model';
-import { Schedule } from '../interfaces/schedule.interface';
+import { Transaction } from '../interfaces/transaction.interface';
 import { plainToClass } from 'class-transformer';
 import { LabelList } from '../utils/label.utils';
 
-export class SchATransaction extends BaseModel implements Schedule {
+export class SchATransaction extends BaseModel implements Transaction {
   id: number | null = null;
 
   form_type: string | null = null;
@@ -48,7 +48,7 @@ export class SchATransaction extends BaseModel implements Schedule {
   conduit_city: string | null = null;
   conduit_state: string | null = null;
   conduit_zip: string | null = null;
-  memo_code: string | null = null;
+  memo_code: boolean | null = null;
   memo_text_description: string | null = null;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | null = null;
   transaction_type_identifier: string | null = null;
@@ -68,7 +68,7 @@ export class SchATransaction extends BaseModel implements Schedule {
 export enum ScheduleATransactionGroups {
   CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS = 'CONTRIBUTIONS FROM INDIVIDUALS/PERSONS',
   CONTRIBUTIONS_FROM_REGISTERED_FILERS = 'CONTRIBUTIONS FROM REGISTERED FILERS',
-  TRANSFER = 'TRANSFER',
+  TRANSFERS = 'TRANSFERS',
   REFUNDS = 'REFUNDS',
   OTHER = 'OTHER',
 }
@@ -76,7 +76,7 @@ export enum ScheduleATransactionGroups {
 export type ScheduleATransactionGroupsType =
   | ScheduleATransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS
   | ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS
-  | ScheduleATransactionGroups.TRANSFER
+  | ScheduleATransactionGroups.TRANSFERS
   | ScheduleATransactionGroups.REFUNDS
   | ScheduleATransactionGroups.OTHER;
 

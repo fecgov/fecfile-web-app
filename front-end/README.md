@@ -24,7 +24,15 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Before you can run the end-to-end tests, you must first set the following environment variables: (the values will depend on your local database)
+```
+export CYPRESS_EMAIL=''
+export CYPRESS_COMMITTEE_ID=''
+export CYPRESS_PASSWORD=''
+export CYPRESS_PIN=''
+```
+
+Once ready, run `ng e2e` to execute the end-to-end tests via [Cypress](https://www.cypress.io/).
 
 ## Further help
 
