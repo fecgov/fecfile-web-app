@@ -21,6 +21,7 @@ export class TransactionResolver implements Resolve<TransactionMeta | undefined>
     if (transactionType) {
       // This is a new transaction
       tm = TransactionUtils.getMeta(transactionType);
+      tm.transaction = tm.factory();
       tm.transaction.report_id = Number(reportId);
       return of(tm);
     }

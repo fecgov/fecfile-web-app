@@ -11,5 +11,6 @@ export interface TransactionMeta {
   title: string;
   contributionPurposeDescripReadonly: (...params: any) => string; // eslint-disable-line @typescript-eslint/no-explicit-any
   schema: JsonSchema;
-  transaction: Transaction;
+  factory: () => Transaction;
+  transaction: Transaction | null;
 }
