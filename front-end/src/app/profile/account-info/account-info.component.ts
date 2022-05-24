@@ -27,16 +27,16 @@ export class AccountInfoComponent implements OnInit {
   }
 
   /**
-   * This sends the user to their F3X on fec.gov.
+   * This sends the user to their Form 1 PDF on fec.gov.
    */
-  viewF3X(): void {
+  viewForm1(): void {
     if (this.mostRecentFilingPdfUrl) {
       window.open(this.mostRecentFilingPdfUrl, '_blank');
     }
   }
 
   /**
-   * This sends the user to their F3X on fec.gov.
+   * This sends the user to fec.gov to update their Form 1.
    */
   updateForm1(): void {
     window.open('https://webforms.fec.gov/webforms/form1/index.htm', '_blank');
