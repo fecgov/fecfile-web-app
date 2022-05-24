@@ -92,4 +92,11 @@ describe('AccountInfoComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('opens FEC form', () => {
+    spyOn(window, 'open');
+    const f1FormLink = fixture.debugElement.nativeElement.querySelector('#update-form-1-link');
+    f1FormLink.click();
+    expect(window.open).toHaveBeenCalledWith('https://webforms.fec.gov/webforms/form1/index.htm', '_blank');
+  });
 });
