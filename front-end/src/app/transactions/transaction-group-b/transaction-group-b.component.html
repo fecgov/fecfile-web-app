@@ -251,6 +251,11 @@
             [autoResize]="true"
             formControlName="contribution_purpose_descrip"
           ></textarea>
+          <app-error-messages
+            [form]="form"
+            fieldName="contribution_purpose_descrip"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
     </div>
@@ -266,6 +271,11 @@
             [autoResize]="true"
             formControlName="memo_text_description"
           ></textarea>
+          <app-error-messages
+            [form]="form"
+            fieldName="memo_text_description"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
     </div>
