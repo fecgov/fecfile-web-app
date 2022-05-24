@@ -27,6 +27,10 @@ export class ReportService implements TableListService<Report> {
     );
   }
 
+  public get(reportId: number): Observable<Report> {
+    return this.f3xSummaryService.get(reportId);
+  }
+
   public delete(report: Report): Observable<null> {
     return this.f3xSummaryService.delete(report as F3xSummary);
   }

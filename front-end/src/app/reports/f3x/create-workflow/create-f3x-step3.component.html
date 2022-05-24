@@ -1,0 +1,85 @@
+<div class="card">
+  <p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">Transactions</ng-template>
+
+    <ng-template pTemplate="right"
+      ><button
+        pButton
+        pRipple
+        label="Add new transaction"
+        icon="pi pi-plus"
+        class="p-button-success mr-2"
+        [routerLink]="['/transactions/report/', report?.id, 'create']"
+      ></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="items"
+    [lazy]="true"
+    (onLazyLoad)="loadTableItems($event)"
+    responsiveLayout="scroll"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="10"
+    [totalRecords]="totalItems"
+    [loading]="loading"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h5 class="m-0">Transactions during coverage dates</h5>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr role="row">
+        <th pSortableColumn="transaction_type_identifier" id="transaction-type-identifier-column" role="columnheader">
+          Transaction type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
+        </th>
+        <th pSortableColumn="contributor_name" id="contributor--name-column" role="columnheader">
+          Contribution name <p-sortIcon field="contributor_name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="contribution_date" id="contribution-date-column" role="columnheader">
+          Contribution date <p-sortIcon field="contribution_date"></p-sortIcon>
+        </th>
+        <th pSortableColumn="memo_code" id="memo-code-column" role="columnheader">
+          Memo code <p-sortIcon field="memo_code"></p-sortIcon>
+        </th>
+        <th pSortableColumn="contribution_amount" id="contribution-amount-column" role="columnheader">
+          Contribution amount <p-sortIcon field="contribution_amount"></p-sortIcon>
+        </th>
+        <th pSortableColumn="contribution_aggregate" id="contribution-aggregate-column" role="columnheader">
+          Contribution aggregate <p-sortIcon field="contribution_aggregate"></p-sortIcon>
+        </th>
+        <th id="buttons" role="columnheader">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr role="row">
+        <td>
+          <a [routerLink]="['/transactions/edit/', item?.id]">{{ item.transaction_type_identifier }}</a>
+        </td>
+        <td>
+          {{ item.contributor_organization_name || item.contributor_last_name + ', ' + item.contributor_first_name }}
+        </td>
+        <td>
+          {{ item.contribution_date | fecDate }}
+        </td>
+        <td>
+          {{ item.memo_code | memoCode }}
+        </td>
+        <td>
+          {{ item.contribution_amount | currency }}
+        </td>
+        <td>
+          {{ item.contribution_aggregate | currency }}
+        </td>
+        <td>
+          <p-button pRipple icon="pi pi-ellipsis-v" styleClass="p-button-text" ariaLabel="action"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

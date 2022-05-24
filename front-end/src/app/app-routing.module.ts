@@ -28,6 +28,10 @@ const routes: Routes = [
         loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsModule),
       },
       { path: 'profile', loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule) },
+      {
+        path: 'transactions',
+        loadChildren: () => import('./transactions/transactions.module').then((m) => m.TransactionsModule),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

@@ -48,7 +48,7 @@ describe('ValidateService', () => {
     expect(result).toBe(null);
   });
 
-  it('#formValidator should validate enum properties correctly', () => {
+  it('#formValidator should validate boolean properties correctly', () => {
     const fb: FormBuilder = new FormBuilder();
     service.formValidatorSchema = f3xSchema;
     service.formValidatorForm = fb.group(service.getFormGroupFields(service.getSchemaProperties(f3xSchema)));
@@ -60,14 +60,19 @@ describe('ValidateService', () => {
     let result: ValidationErrors | null = validator(service.formValidatorForm.get('change_of_address') as FormControl);
     expect(result).not.toBe(null);
     if (result) {
-      expect(result['pattern'].requiredPattern).toBe('Allowed values: X, ');
+      expect(result['pattern'].requiredPattern).toBe('must be boolean,null');
     }
 
     service.formValidatorForm.patchValue({
-      change_of_address: 'X',
+      change_of_address: true,
     });
     validator = service.formValidator('change_of_address');
     result = validator(service.formValidatorForm.get('change_of_address') as FormControl);
     expect(result).toBe(null);
+  });
+
+  it('#getSchemaProperties() should return empty array when no schema', () => {
+    const properties: string[] = service.getSchemaProperties(null);
+    expect(properties.length).toBe(0);
   });
 });
