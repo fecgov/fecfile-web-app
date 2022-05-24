@@ -6,6 +6,8 @@ import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from 'app/shared/models/fec-api.model';
 import { FecFiling } from '../models/fec-filing.model';
 
+export type QueryParamsType = { [param: string]: string | number | boolean | readonly (string | number | boolean)[] };
+
 @Injectable({
   providedIn: 'root',
 })
@@ -20,11 +22,9 @@ export class FecApiService {
     };
   }
 
-  getQueryParams(
-    queryParams: { [param: string]: string | number | boolean | readonly (string | number | boolean)[] } = {}
-  ) {
-    const allParams = { ...{ apiKey: this.apiKey }, ...queryParams };
-    return new HttpParams({ fromObject: queryParams });
+  getQueryParams(queryParams: QueryParamsType = {}) {
+    const allParams: QueryParamsType = { ...{ api_key: this.apiKey || '' }, ...queryParams };
+    return new HttpParams({ fromObject: allParams });
   }
 
   /**
@@ -39,7 +39,7 @@ export class FecApiService {
     const headers = this.getHeaders();
     const params = this.getQueryParams();
     return this.http
-      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}/committee/${committeeId}/`, {
+      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}committee/${committeeId}/`, {
         headers: headers,
         params: params,
       })
@@ -70,7 +70,7 @@ export class FecApiService {
     });
 
     const nightlyEndpoint = this.http
-      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}/filing`, {
+      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}filings/`, {
         headers: headers,
         params: nightlyEndpointParams,
       })
@@ -81,7 +81,7 @@ export class FecApiService {
       );
 
     const realTimeEndpoint = this.http
-      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}/efile/filings/`, {
+      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}efile/filings/`, {
         headers: headers,
         params: this.getQueryParams({
           committee_id: committeeId,
