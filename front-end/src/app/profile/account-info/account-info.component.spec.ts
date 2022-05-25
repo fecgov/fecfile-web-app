@@ -3,6 +3,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { AccountInfoComponent } from './account-info.component';
 import { DividerModule } from 'primeng/divider';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AccountInfoComponent', () => {
   let component: AccountInfoComponent;
@@ -78,7 +79,7 @@ describe('AccountInfoComponent', () => {
         }),
       ],
       declarations: [AccountInfoComponent],
-      imports: [DividerModule],
+      imports: [DividerModule, HttpClientTestingModule],
     }).compileComponents();
   });
 
@@ -90,5 +91,12 @@ describe('AccountInfoComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('opens FEC form', () => {
+    spyOn(window, 'open');
+    const f1FormLink = fixture.debugElement.nativeElement.querySelector('#update-form-1-link');
+    f1FormLink.click();
+    expect(window.open).toHaveBeenCalledWith('https://webforms.fec.gov/webforms/form1/index.htm', '_blank');
   });
 });
