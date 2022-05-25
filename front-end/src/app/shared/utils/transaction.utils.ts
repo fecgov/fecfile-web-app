@@ -13,10 +13,11 @@ const meta: { [transaction_type_identifier: string]: TransactionMeta } = {
     title: 'Offsets to Operating Expenditures',
     contributionPurposeDescripReadonly: () => '',
     schema: OFFSET_TO_OPEX,
-    transaction: SchATransaction.fromJSON({
+    factory: () => SchATransaction.fromJSON({
       form_type: 'SA15',
       transaction_type_identifier: 'OFFSET_TO_OPEX',
     }),
+    transaction: null,
   },
 };
 
