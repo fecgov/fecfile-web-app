@@ -215,6 +215,8 @@
             [form]="form"
             fieldName="contribution_amount"
             [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must be a number"
+            maxLengthErrorMessage="The amount can be 12 digits max"
           ></app-error-messages>
         </div>
       </div>
@@ -233,6 +235,8 @@
             [form]="form"
             fieldName="contribution_aggregate"
             [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must be a number"
+            maxLengthErrorMessage="The aggregate can be 12 digits max"
           ></app-error-messages>
         </div>
       </div>
