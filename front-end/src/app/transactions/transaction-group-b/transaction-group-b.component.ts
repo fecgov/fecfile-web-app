@@ -42,7 +42,9 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
     'memo_text_description',
   ];
   ContactTypes = ContactTypes;
-  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter(
+    option => [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
+  );
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
   formSubmitted = false;
@@ -78,16 +80,15 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
       ?.get('entity_type')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
-        if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(value as ContactTypes)) {
-          this.form.patchValue({
-            contributor_organization_name: '',
-          });
+        if (value === ContactTypes.INDIVIDUAL) {
+          this.form.get('contributor_organization_name')?.reset();
         }
-        if ([ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(value as ContactTypes)) {
-          this.form.patchValue({
-            contributor_last_name: '',
-            contributor_first_name: '',
-          });
+        if (value === ContactTypes.ORGANIZATION) {
+          this.form.get('contributor_last_name')?.reset();
+          this.form.get('contributor_first_name')?.reset();
+          this.form.get('contributor_middle_name')?.reset();
+          this.form.get('contributor_prefix')?.reset();
+          this.form.get('contributor_suffix')?.reset();
         }
       });
   }
