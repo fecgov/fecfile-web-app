@@ -8,7 +8,7 @@ export const environment = {
   apiUrl: 'https://fecfile-web-api-stage.app.cloud.gov/api/v1',
   appTitle: 'FECfile',
   dcfConverterApiUrl: 'https://dev-efile-api.efdev.fec.gov/dcf_converter/v1',
-  fecApiCommitteeUrl: 'https://api.open.fec.gov/v1/committee',
+  fecApiUrl: 'https://api.open.fec.gov/v1/',
   fecApiKey: 'fWkpM7VN0mjtZXsGyfCJy2zeVtgePB2QhiyZcx2X',
   userCanSetFilingFrequency: true,
 };

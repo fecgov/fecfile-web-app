@@ -1,0 +1,72 @@
+import { plainToClass } from 'class-transformer';
+import { BaseModel } from './base.model';
+
+export class FecFiling extends BaseModel {
+  additional_bank_names: string[] | null = null;
+  amendment_chain: number[] | null = null;
+  amendment_indicator: string | null = null;
+  amendment_version: number | null = null;
+  bank_depository_city: string | null = null;
+  bank_depository_name: string | null = null;
+  bank_depository_state: string | null = null;
+  bank_depository_street_1: string | null = null;
+  bank_depository_street_2: string | null = null;
+  bank_depository_zip: string | null = null;
+  beginning_image_number: string | null = null;
+  candidate_id: string | null = null;
+  candidate_name: string | null = null;
+  cash_on_hand_beginning_period: number | null = null;
+  cash_on_hand_end_period: number | null = null;
+  committee_id: string | null = null;
+  committee_name: string | null = null;
+  committee_type: string | null = null;
+  coverage_end_date: Date | null = null;
+  coverage_start_date: Date | null = null;
+  csv_url: string | null = null;
+  cycle: number | null = null;
+  debts_owed_by_committee: number | null = null;
+  debts_owed_to_committee: number | null = null;
+  document_description: string | null = null;
+  document_type: string | null = null;
+  document_type_full: string | null = null;
+  election_year: number | null = null;
+  ending_image_number: string | null = null;
+  fec_file_id: string | null = null;
+  fec_url: string | null = null;
+  file_number: number | null = null;
+  form_category: string | null = null;
+  form_type: string | null = null;
+  house_personal_funds: number | null = null;
+  html_url: string | null = null;
+  is_amended: boolean | null = null;
+  means_filed: string | null = null;
+  most_recent: boolean | null = null;
+  most_recent_file_number: number | null = null;
+  net_donations: number | null = null;
+  office: string | null = null;
+  opposition_personal_funds: number | null = null;
+  pages: number | null = null;
+  party: string | null = null;
+  pdf_url: string | null = null;
+  previous_file_number: number | null = null;
+  primary_general_indicator: string | null = null;
+  receipt_date: Date | null = null;
+  report_type: string | null = null;
+  report_type_full: string | null = null;
+  report_year: number | null = null;
+  request_type: string | null = null;
+  senate_personal_funds: number | null = null;
+  state: string | null = null;
+  sub_id: string | null = null;
+  total_communication_cost: number | null = null;
+  total_disbursements: number | null = null;
+  total_independent_expenditures: number | null = null;
+  total_individual_contributions: number | null = null;
+  total_receipts: number | null = null;
+  treasurer_name: string | null = null;
+  update_date: Date | null = null;
+  // prettier-ignore
+  static fromJSON(json: any): FecFiling { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(FecFiling, json);
+  }
+}
