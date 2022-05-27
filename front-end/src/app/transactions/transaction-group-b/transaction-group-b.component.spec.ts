@@ -20,6 +20,7 @@ import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { environment } from '../../../environments/environment';
 import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 describe('TransactionGroupBComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -63,6 +64,7 @@ describe('TransactionGroupBComponent', () => {
         CalendarModule,
         ButtonModule,
         CheckboxModule,
+        InputNumberModule,
         InputTextModule,
         InputTextareaModule,
       ],
