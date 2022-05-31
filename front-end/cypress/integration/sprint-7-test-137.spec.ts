@@ -6,7 +6,7 @@ describe('QA Test Script #137 (Sprint 7)', () => {
   const fromDate: Date = randomDate();
   const throughDate: Date = randomDate();
 
-  it('Step 1: Navigate to contacts page', () => {
+  it('Step 1: Navigate to reports page', () => {
     cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
