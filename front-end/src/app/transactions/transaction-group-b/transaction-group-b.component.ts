@@ -72,8 +72,10 @@ export class TransactionGroupBComponent implements OnInit, OnDestroy {
       const txn = { ...this.transaction } as SchATransaction;
       this.form.patchValue({ ...txn });
       this.form.patchValue({ contribution_date: DateUtils.convertFecFormatToDate(txn.contribution_date) });
+      this.form.get('entity_type')?.disable();
     } else {
       this.resetForm();
+      this.form.get('entity_type')?.enable();
     }
 
     this.form
