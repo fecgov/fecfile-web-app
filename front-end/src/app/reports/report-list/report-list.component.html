@@ -60,7 +60,11 @@
       <tr role="row">
         <td>{{ item.form_type | label: f3xFormTypeLabels }}</td>
         <td>{{ item.report_code | label: f3xReportCodeLabels }}</td>
-        <td>{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</td>
+        <td>
+          <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
+            >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container
+          >
+        </td>
         <td>In Progress</td>
         <td>{{ item.form_type | label: f3xFormVerionLabels }}</td>
         <td>-</td>

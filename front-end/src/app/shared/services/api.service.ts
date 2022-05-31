@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, delay, switchMap } from 'rxjs/operators';
@@ -20,11 +20,18 @@ export class ApiService {
     });
   }
 
-  getHeaders() {
-    return {
+  getHeaders(headersToAdd: object = {}) {
+    const baseHeaders = {
       'Content-Type': 'application/json',
       Authorization: `JWT ${this.token}`,
     };
+    return { ...baseHeaders, ...headersToAdd };
+  }
+
+  getQueryParams(
+    queryParams: { [param: string]: string | number | boolean | readonly (string | number | boolean)[] } = {}
+  ) {
+    return new HttpParams({ fromObject: queryParams });
   }
 
   public get<T>(endpoint: string): Observable<T> {
@@ -33,15 +40,17 @@ export class ApiService {
   }
 
   // prettier-ignore
-  public post<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  public post<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
-    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers });
+    const params = this.getQueryParams(queryParams);
+    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params});
   }
 
   // prettier-ignore
-  public put<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  public put<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
-    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers });
+    const params = this.getQueryParams(queryParams);
+    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params});
   }
 
   public delete<T>(endpoint: string): Observable<T> {
@@ -65,20 +74,20 @@ export class ApiService {
   }
 
   // prettier-ignore
-  public spinnerPost<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  public spinnerPost<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     return of(null).pipe(
       delay(0),
       tap(() => this.store.dispatch(spinnerOnAction())),
-      switchMap(() => this.post<T>(endpoint, payload).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
+      switchMap(() => this.post<T>(endpoint, payload, queryParams).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
     );
   }
 
   // prettier-ignore
-  public spinnerPut<T>(endpoint: string, payload: any): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+  public spinnerPut<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     return of(null).pipe(
       delay(0),
       tap(() => this.store.dispatch(spinnerOnAction())),
-      switchMap(() => this.put<T>(endpoint, payload).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
+      switchMap(() => this.put<T>(endpoint, payload, queryParams).pipe(tap(() => this.store.dispatch(spinnerOffAction()))))
     );
   }
 

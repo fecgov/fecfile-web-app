@@ -1,10 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../../app/shared/shared.module';
-
-import { ReportsRoutingModule } from './reports-routing.module';
-import { ReportListComponent } from './report-list/report-list.component';
-import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // PrimeNG
@@ -15,22 +10,45 @@ import { DropdownModule } from 'primeng/dropdown';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
+import { DividerModule } from 'primeng/divider';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ToastModule } from 'primeng/toast';
+
+import { SharedModule } from '../../app/shared/shared.module';
+import { ReportsRoutingModule } from './reports-routing.module';
+import { ReportListComponent } from './report-list/report-list.component';
+import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
+import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2.component';
+import { CreateF3xStep3Component, MemoCodePipe } from './f3x/create-workflow/create-f3x-step3.component';
 
 @NgModule({
-  declarations: [ReportListComponent, CreateF3XStep1Component],
+  declarations: [
+    ReportListComponent,
+    CreateF3XStep1Component,
+    CreateF3xStep2Component,
+    CreateF3xStep3Component,
+    MemoCodePipe,
+  ],
   imports: [
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ButtonModule,
-    CalendarModule,
-    CommonModule,
-    DropdownModule,
     ReportsRoutingModule,
-    RadioButtonModule,
-    SelectButtonModule,
-    SharedModule,
     TableModule,
     ToolbarModule,
+    ButtonModule,
+    DividerModule,
+    DropdownModule,
+    RadioButtonModule,
+    CheckboxModule,
+    InputTextModule,
+    InputTextareaModule,
+    CalendarModule,
+    SelectButtonModule,
+    ToastModule,
+    SharedModule,
   ],
 })
 export class ReportsModule {}

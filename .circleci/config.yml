@@ -11,7 +11,7 @@ orbs:
 jobs:
   lint:
     docker:
-      - image: cimg/node:14.18-browsers
+      - image: cimg/node:16.15-browsers
     resource_class: large
     steps:
       - checkout
@@ -32,7 +32,7 @@ jobs:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
-      - image: cimg/node:14.18-browsers
+      - image: cimg/node:16.15-browsers
     resource_class: large
     steps:
       - checkout
@@ -97,7 +97,7 @@ jobs:
 
   e2e-test:
     docker:
-      - image: cimg/node:14.18-browsers
+      - image: cimg/node:16.15-browsers
     steps:
       - checkout
       - browser-tools/install-chrome
@@ -115,7 +115,7 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/node:14.18-browsers
+      - image: cimg/node:16.15-browsers
     resource_class: large
     steps:
       - checkout
@@ -171,7 +171,7 @@ jobs:
             snyk auth $SNYK_AUTH_TOKEN
 
       - save_cache:
-          key: v2-snyk-files
+          key: v3-snyk-files
           paths:
             - snyk-linux
             - snyk.version
@@ -183,7 +183,7 @@ jobs:
 
   dependendency-check:
     docker:
-      - image: cimg/node:14.18-browsers
+      - image: cimg/node:16.15-browsers
 
     steps:
       - checkout
@@ -196,7 +196,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-snyk-files
+            - v3-snyk-files
 
       - run:
           name: Verify Snyk auth token is present

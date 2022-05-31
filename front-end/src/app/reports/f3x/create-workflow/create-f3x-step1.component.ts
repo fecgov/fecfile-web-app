@@ -3,6 +3,7 @@ import {
   electionReportCodes,
   F3xReportCode,
   F3xReportCodes,
+  F3xSummary,
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
@@ -17,7 +18,9 @@ import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { environment } from 'environments/environment';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -34,6 +37,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     'coverage_through_date',
     'date_of_election',
     'state_of_election',
+    'form_type',
   ];
   userCanSetFilingFrequency: boolean = environment.userCanSetFilingFrequency;
   stateOptions: PrimeOptions = [];
@@ -78,10 +82,14 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     private store: Store,
     private validateService: ValidateService,
     private fb: FormBuilder,
+    private f3xSummaryService: F3xSummaryService,
+    private messageService: MessageService,
+    private activatedRoute: ActivatedRoute,
     protected router: Router
   ) {}
 
   ngOnInit(): void {
+    const report: F3xSummary = this.activatedRoute.snapshot.data['report'];
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
@@ -89,7 +97,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
-        this.form?.patchValue({ filing_frequency: filingFrequency });
+        this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
         this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
         this.form?.patchValue({ report_code: this.getReportCodes()[0] });
         this.form
@@ -109,6 +117,9 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
               report_code: this.getReportCodes()[0],
             });
           });
+        if (report) {
+          this.form.patchValue(report);
+        }
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
 
@@ -152,7 +163,30 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   }
 
   public goBack() {
-    this.router.navigateByUrl('reports');
+    this.router.navigateByUrl('/reports');
+  }
+
+  public save(jump: 'continue' | null = null) {
+    this.formSubmitted = true;
+
+    if (this.form.invalid) {
+      return;
+    }
+
+    const summary: F3xSummary = F3xSummary.fromJSON(this.validateService.getFormValues(this.form, this.formProperties));
+    this.f3xSummaryService.create(summary, this.formProperties).subscribe((report: F3xSummary) => {
+      if (jump === 'continue') {
+        this.router.navigateByUrl(`/reports/f3x/create/step2/${report.id}`);
+      } else {
+        this.router.navigateByUrl('/reports');
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Contact Updated',
+          life: 3000,
+        });
+      }
+    });
   }
 }
 

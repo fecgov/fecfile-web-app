@@ -18,23 +18,15 @@ finance information. The project code is distributed across these repositories:
 ### Prerequisites
 Software necessary to run the application locally
 
-* [Docker](https://docs.docker.com/get-docker/)
-* [Docker Compose](https://docs.docker.com/compose/install/)
+A Snyk authentication token is needed and should be set as the SNYK_AUTH_TOKEN environment varialbe.  This is needed so that the `snyk protect` command can be run to apply security patches to package dependencies.  You can setup a free account with [Snyk](https://app.snyk.io/) and obtain a token on the Snyk [Account Settings](https://app.snyk.io/account) page.
 
-### Docker basic usage.
-When running docker-compose you will need to be in the root directory of the project. The reason for this is that docker-compose looks for docker-compose.yml to be in the same directory where it's run. You will also need at least 3GB of memory allocated for docker during the build.
+### Running the Front-End locally
 
-A Snyk authentication token is needed and should be set as the SNYK_AUTH_TOKEN environment varialbe.  This is needed so that the `snyk protect` command can be run to apply security patches to package dependencies.  You can setup a free account with [Snyk](https://app.snyk.io/) and obtain a token on the Snyk [Account Settings](https://app.snyk.io/account) page. 
-
-### Run the front-end application
-`docker-compose up --build`
-### Shut down the containers
-Ctrl-c in the terminal where you ran docker-compose up or `docker-compose down`
-### see all running containers
-`docker ps`
-### running commands in a running container
-`docker-compose exec <container name> <command>`
-
+From within the front-end directory, run the command:
+	```
+    ng serve
+	```
+to start a local server for the application.  The front-end can then be accessed through your browser at port 4200.
 
 # Deployment (FEC team only)
 
@@ -103,6 +95,18 @@ git push --set-upstream origin hotfix/my-fix
 * In GitHub, go to `Code -> tags -> releases -> Draft a new release`
 * Publish a new release using tag sprint-#, be sure to Auto-generate release notes
 
+## Technical Environment Plan
+
+The fecfile-web-api is our system's backend while the fecfile-web-app is the single-page angular app. The fecfile-web-api is deployed as a cloud.gov application per environment (dev, stage, and prod). Each cloud.gov fecfile-web-api application has at least two instances running.  Similarly, the fecfile-web-app is deployed as a cloud.gov application per environment (dev, stage, and prod).  There are also at least two instances running per cloud.gov fecfile-web-app application.
+ 
+The following events occur for fecfile-web-api and fecfile-web-app independently of each other:
+
+* When a branch is merged into the develop branch, it is deployed to the dev environment on cloud.gov
+	* The Dev environment is used for the bulk of sprint integration and QA testing 
+* When a release is cut (creating a release tag in git), that release is deployed to the stage environment on cloud.gov.
+	* The Stage environment is used for final deployment preparation, integration testing, and final QA testing.  
+* When the release is merged into the main branch, it is deployed to the prod environment on cloud.gov
+	* The Production environment will be used by end users once the application launches.  
 
 ## Additional developer notes
 This section covers a few topics we think might help developers after setup.

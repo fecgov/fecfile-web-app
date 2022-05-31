@@ -1,17 +1,33 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { F3xReportCodes } from 'app/shared/models/f3x-summary.model';
+import { of } from 'rxjs';
+import { F3xReportCodes, F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
+import { SharedModule } from 'app/shared/shared.module';
 import { MessageService } from 'primeng/api';
+import { CalendarModule } from 'primeng/calendar';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
+import { selectUserLoginData } from 'app/store/login.selectors';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
+  let router: Router;
   let fixture: ComponentFixture<CreateF3XStep1Component>;
-
+  let f3xSummaryService: F3xSummaryService;
+  const f3x: F3xSummary = F3xSummary.fromJSON({
+    id: 999,
+    coverage_from_date: '20220525',
+    form_type: 'F3XN',
+    report_code: 'Q1',
+  });
   beforeEach(async () => {
     const userLoginData: UserLoginData = {
       committee_id: 'C00000000',
@@ -20,20 +36,31 @@ describe('CreateF3XStep1Component', () => {
       token: 'jwttokenstring',
     };
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
+      imports: [
+        HttpClientTestingModule,
+        SelectButtonModule,
+        SharedModule,
+        RadioButtonModule,
+        CalendarModule,
+        ReactiveFormsModule,
+        RouterTestingModule.withRoutes([]),
+      ],
       declarations: [CreateF3XStep1Component, LabelPipe],
       providers: [
+        F3xSummaryService,
         FormBuilder,
         MessageService,
         provideMockStore({
           initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: 'selectUserLoginData', value: userLoginData }],
+          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
         }),
       ],
     }).compileComponents();
   });
 
   beforeEach(() => {
+    router = TestBed.inject(Router);
+    f3xSummaryService = TestBed.inject(F3xSummaryService);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -52,5 +79,36 @@ describe('CreateF3XStep1Component', () => {
     component.form.controls['filing_frequency'].setValue('Q');
     component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.SPECIAL);
     expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.TwelveP);
+    component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.NON_ELECTION_YEAR);
+    expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.Q1);
+    component.form.controls['report_type_category'].setValue(undefined);
+    expect(component.form.controls['report_code'].value).toEqual(undefined);
+  });
+
+  it('#save should save a new f3x record', () => {
+    spyOn(f3xSummaryService, 'create').and.returnValue(of(f3x));
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.form.patchValue({ ...f3x });
+    component.save();
+    expect(navigateSpy).toHaveBeenCalledWith('/reports');
+
+    navigateSpy.calls.reset();
+    component.form.patchValue({ ...f3x });
+    component.save('continue');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step2/999');
+  });
+
+  it('#save should not save with invalid f3x record', () => {
+    spyOn(f3xSummaryService, 'create').and.returnValue(of(f3x));
+    component.form.patchValue({ ...f3x });
+    component.form.patchValue({ form_type: 'NO-GOOD' });
+    component.save();
+    expect(component.form.invalid).toBe(true);
+  });
+
+  it('back button should go back to report list page', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.goBack();
+    expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 });

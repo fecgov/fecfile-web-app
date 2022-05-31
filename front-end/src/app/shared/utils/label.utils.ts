@@ -96,7 +96,7 @@ export const StatesCodeLabels: LabelList = [
   ['IN', 'Indiana'],
   ['IA', 'Iowa'],
   ['KS', 'Kansas'],
-  ['KY', 'Kentuky'],
+  ['KY', 'Kentucky'],
   ['LA', 'Louisiana'],
   ['ME', 'Maine'],
   ['MD', 'Maryland'],

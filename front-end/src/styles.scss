@@ -33,3 +33,16 @@ p-dropdown.ng-invalid.ng-touched div.p-dropdown {
 label.disabled {
   color: rgba(118, 118, 118, 0.3);
 }
+
+.bold {
+  font-weight: bolder;
+}
+
+.readonly {
+  background-color: lightgray;
+}
+
+.memo-checkbox-note {
+  padding-left: 28px;
+  padding-bottom: 10px;
+}
