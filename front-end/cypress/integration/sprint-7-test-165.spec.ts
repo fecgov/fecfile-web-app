@@ -3,7 +3,7 @@
 import { generateReportObject } from '../support/reports.spec';
 
 describe('QA Test Script #165 (Sprint 7)', () => {
-  it('Step 1: Navigate to contacts page and populate it with one report', () => {
+  it('Step 1: Navigate to reports page and populate it with one report', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
