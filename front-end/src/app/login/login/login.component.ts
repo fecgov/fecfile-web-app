@@ -6,6 +6,7 @@ import { LoginService } from '../../shared/services/login.service';
 import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { SessionService } from '../../shared/services/SessionService/session.service';
 import { UserLoginData } from 'app/shared/models/user.model';
+import { ApiService } from 'app/shared/services/api.service';
 
 @Component({
   selector: 'app-login',
@@ -23,13 +24,15 @@ export class LoginComponent implements OnInit {
   public titleF!: string;
   public titleR!: string;
   public show!: boolean;
+  public loginDotGovAuthUrl: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
     private authService: AuthService,
     private router: Router,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private apiService: ApiService
   ) {
     this.frm = this.fb.group({
       commiteeId: ['', Validators.required],
@@ -45,7 +48,8 @@ export class LoginComponent implements OnInit {
     this.appTitle = environment.appTitle;
     this.titleF = this.appTitle.substring(0, 3);
     this.titleR = this.appTitle.substring(3);
-    this.loginService.logOut();
+    this.apiService.clearTokens();
+    this.loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
   }
 
   /**
@@ -103,5 +107,9 @@ export class LoginComponent implements OnInit {
 
   showPassword() {
     this.show = !this.show;
+  }
+
+  navigateToLoginDotGov() {
+    window.location.href = this.loginDotGovAuthUrl || "";
   }
 }

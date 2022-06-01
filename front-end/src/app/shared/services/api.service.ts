@@ -5,23 +5,27 @@ import { environment } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { UserLoginData } from '../models/user.model';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private token: string | null = null;
+  private jwt = "";
+  private csrfToken = "";
 
-  constructor(private http: HttpClient, private store: Store) {
-    this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
-      this.token = userLoginData.token;
-    });
+  constructor(private http: HttpClient, private store: Store, 
+    private cookieService: CookieService) {
+    this.jwt = `${this.cookieService.get("ffapi_jwt")}`;
+    this.cookieService.delete("ffapi_jwt")
+    this.csrfToken = `${this.cookieService.get("csrftoken")}`;
   }
 
   getHeaders(headersToAdd: object = {}) {
     const baseHeaders = {
       'Content-Type': 'application/json',
-      Authorization: `JWT ${this.token}`,
+      ...(this.jwt && {Authorization: `JWT ${this.jwt}`}),
+      ...(this.csrfToken && {'X-CSRFToken':`${this.csrfToken}` })
     };
     return { ...baseHeaders, ...headersToAdd };
   }
@@ -34,25 +38,37 @@ export class ApiService {
 
   public get<T>(endpoint: string): Observable<T> {
     const headers = this.getHeaders();
-    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers });
+    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, withCredentials: true });
   }
 
   // prettier-ignore
   public post<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params});
+    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params, withCredentials: true});
+  }
+
+  // prettier-ignore
+  public postAbsoluteUrl<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const headers = this.getHeaders();
+    const params = this.getQueryParams(queryParams);
+    return this.http.post<T>(`${endpoint}`, payload, { headers: headers , params: params, withCredentials: true});
   }
 
   // prettier-ignore
   public put<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params});
+    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params, withCredentials: true});
   }
 
   public delete<T>(endpoint: string): Observable<T> {
     const headers = this.getHeaders();
-    return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers: headers });
+    return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, withCredentials: true });
+  }
+
+  public clearTokens() {
+    this.jwt = "";
+    this.csrfToken = "";
   }
 }

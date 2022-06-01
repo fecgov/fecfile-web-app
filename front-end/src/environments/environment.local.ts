@@ -7,4 +7,6 @@ export const environment = {
   fecApiCommitteeUrl: 'https://api.open.fec.gov/v1/committee',
   fecApiKey: 'DEMO_KEY',
   userCanSetFilingFrequency: true,
+  loginDotGovAuthUrl: 'http://localhost:8080/oidc/authenticate',
+  loginDotGovLogoutUrl: 'http://localhost:8080/oidc/logout/',
 };

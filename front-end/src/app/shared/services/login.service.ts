@@ -55,6 +55,11 @@ export class LoginService {
   }
 
   public logOut() {
-    this.store.dispatch(userLoggedOutAction());
+    this.apiService.postAbsoluteUrl(`${environment.loginDotGovLogoutUrl}`, null).pipe(
+      tap(() => {
+        this.apiService.clearTokens();
+        this.store.dispatch(userLoggedOutAction());
+      })
+    ).subscribe(() => {});
   }
 }
