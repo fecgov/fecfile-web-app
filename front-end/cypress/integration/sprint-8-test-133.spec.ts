@@ -1,21 +1,22 @@
 // @ts-check
 
-import { randomDate, generateReportObject } from '../support/reports.spec';
+import { randomDate, generateReportObject, deleteAllReports, enterReport } from '../support/reports.spec';
 import { generateContactObject } from '../support/contacts.spec';
 
 const contact = generateContactObject(); //Leveraging its address generator
 
-describe('QA Test Script #137 (Sprint 7)', () => {
+describe('QA Test Script #133 (Sprint 8)', () => {
   const fromDate: Date = randomDate();
   const throughDate: Date = randomDate();
 
   it('Step 1: Navigate to reports page and create a report', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
+    cy.wait(250);
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.url().should('contain', '/reports');
 
-    const report: object = generateReportObject();
+    let report: object = generateReportObject();
     cy.enterReport(report);
     cy.wait(250);
   });
@@ -40,6 +41,12 @@ describe('QA Test Script #137 (Sprint 7)', () => {
   it('Step 6: Go back', () => {
     cy.get("button[label='Back']").click();
   });
+
+  /*it('Cleanup between reports', ()=>{
+    cy.deleteAllReports();
+    let report: object = generateReportObject();
+    cy.enterReport(report);
+  });*/
 
   it('Step 7: Reopen the report', () => {
     cy.get("p-button[icon='pi pi-pencil']").first().click();
@@ -75,5 +82,10 @@ describe('QA Test Script #137 (Sprint 7)', () => {
     cy.get("input[formControlName='city']").safeType('{selectAll}').safeType(contact['city']);
     cy.get("input[formControlName='zip']").safeType('{selectAll}').safeType(contact['zip']);
     cy.dropdownSetValue("p-dropdown[formControlName='state']", contact['state']);
+  });
+
+  it('Cleanup', () => {
+    cy.deleteAllReports();
+    cy.logout();
   });
 });
