@@ -1,6 +1,7 @@
 // @ts-check
 
 import * as _ from 'lodash';
+import { getAuthToken } from './commands';
 
 export function randomDate(): Date {
   let outDate: Date = new Date();
@@ -193,4 +194,36 @@ export function enterReport(report, save = true) {
     cy.get("button[label='Save']").click();
     cy.wait(50);
   }
+}
+
+//Deletes all reports belonging to the logged-in committee
+export function deleteAllReports() {
+  let authToken: string = getAuthToken();
+  cy.request({
+    method: 'GET',
+    url: 'http://localhost:8080/api/v1/f3x-summaries/',
+    headers: {
+      Authorization: authToken,
+    },
+  }).then((resp) => {
+    let reports = resp.body.results;
+    for (let report of reports) {
+      deleteReport(report.id, authToken);
+    }
+  });
+}
+
+//Deletes a single report by its ID
+export function deleteReport(reportID: number, authToken: string = null) {
+  if (authToken == null) {
+    authToken = getAuthToken();
+  }
+
+  cy.request({
+    method: 'DELETE',
+    url: `http://localhost:8080/api/v1/f3x-summaries/${reportID}/`,
+    headers: {
+      Authorization: authToken,
+    },
+  });
 }
