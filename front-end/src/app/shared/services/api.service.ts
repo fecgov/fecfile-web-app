@@ -1,11 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { UserLoginData } from '../models/user.model';
 import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +15,10 @@ export class ApiService {
 
   constructor(private http: HttpClient, private store: Store, 
     private cookieService: CookieService) {
-    this.jwt = `${this.cookieService.get("ffapi_jwt")}`;
-    this.cookieService.delete("ffapi_jwt")
+    const userLoginData$ = this.store.select(selectUserLoginData);
+    userLoginData$.subscribe(userLoginData => {
+      this.jwt = (userLoginData && userLoginData.token) || "";
+    });
     this.csrfToken = `${this.cookieService.get("csrftoken")}`;
   }
 
