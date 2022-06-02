@@ -3,24 +3,6 @@
 import * as _ from 'lodash';
 import { getAuthToken } from './commands';
 
-export function randomDate(): Date {
-  let outDate: Date = new Date();
-
-  const month: number = _.random(1, 12);
-  outDate.setMonth(month);
-
-  outDate.setDate(0); //Setting the date (day of the month) to '0' sets it to the last day of that month.  Easy way to get the length of the month.
-  let day: number = _.sample(_.range(1, outDate.getDate() + 1));
-  day += 1;
-  outDate.setDate(day);
-
-  const currentYear: number = outDate.getFullYear();
-  const year: number = _.random(currentYear, currentYear + 3);
-  outDate.setFullYear(year);
-
-  return outDate;
-}
-
 export function dateToString(dateObj: Date): string {
   const m: string = (dateObj.getMonth() + 1).toString().padStart(2, '0');
   const d: string = dateObj.getDate().toString().padStart(2, '0');
@@ -74,7 +56,7 @@ function fillMissingReportCode(report: object) {
 function fillMissingElectionData(report: object) {
   //Date of Election
   if (report['page_1']['date_of_election'] == '') {
-    const ElectionDate: Date = randomDate();
+    const ElectionDate: Date = date();
     report['page_1']['date_of_election'] = dateToString(ElectionDate);
   }
 
@@ -92,7 +74,7 @@ function fillMissingElectionData(report: object) {
 function fillMissingCoverageDates(report: object) {
   //Coverage From Date
   if (report['page_1']['coverage_from_date'] == '') {
-    let coverageDate: Date = randomDate();
+    let coverageDate: Date = date();
 
     report['page_1']['coverage_from_date'] = dateToString(coverageDate); //Generate a starting date
   }
