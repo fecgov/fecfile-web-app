@@ -1,4 +1,5 @@
 import { isString } from 'lodash';
+import { getAuthToken } from './commands';
 
 export function login() {
   //Dummy login information
@@ -30,7 +31,9 @@ export function login() {
 
   cy.get(fieldSecurityCodeText).type(testPIN).type('{enter}');
 
-  cy.wait(1000);
+  cy.wait(1000).then(() => {
+    Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
+  });
 }
 
 export function logout() {
@@ -38,11 +41,15 @@ export function logout() {
   cy.get('.p-menuitem-text').contains('Logout').click();
 }
 
-export function getAuthToken() {
+function retrieveAuthToken() {
   let storedData: string = localStorage.getItem('fecfile_online_userLoginData');
   let loginData: JSON = JSON.parse(storedData);
   let authToken: string = 'JWT ' + loginData.token;
   return authToken;
+}
+
+export function getAuthToken() {
+  return Cypress.env('AUTH_TOKEN');
 }
 
 export function safeType(subject: any, stringVal: string | number) {
