@@ -2,8 +2,13 @@
 
 import { randomDate, generateReportObject, deleteAllReports, enterReport } from '../support/reports.spec';
 import { generateContactObject } from '../support/contacts.spec';
+import { getAuthToken } from '../support/commands';
 
-const contact = generateContactObject(); //Leveraging its address generator
+// prettier-ignore
+const stateCodes = {'ALABAMA': 'AL', 'ALASKA': 'AK', 'AMERICAN SAMOA': 'AS', 'ARIZONA': 'AZ', 'ARKANSAS': 'AR', 'CALIFORNIA': 'CA', 'COLORADO': 'CO', 'CONNECTICUT': 'CT', 'DELAWARE': 'DE', 'DISTRICT OF COLUMBIA': 'DC', 'FLORIDA': 'FL', 'GEORGIA': 'GA', 'GUAM': 'GU', 'HAWAII': 'HI', 'IDAHO': 'ID', 'ILLINOIS': 'IL', 'INDIANA': 'IN', 'IOWA': 'IA', 'KANSAS': 'KS', 'KENTUCKY': 'KY', 'LOUISIANA': 'LA', 'MAINE': 'ME', 'MARYLAND': 'MD', 'MASSACHUSETTS': 'MA', 'MICHIGAN': 'MI', 'MINNESOTA': 'MN', 'MISSISSIPPI': 'MS', 'MISSOURI': 'MO', 'MONTANA': 'MT', 'NEBRASKA': 'NE', 'NEVADA': 'NV', 'NEW HAMPSHIRE': 'NH', 'NEW JERSEY': 'NJ', 'NEW MEXICO': 'NM', 'NEW YORK': 'NY', 'NORTH CAROLINA': 'NC', 'NORTH DAKOTA': 'ND', 'NORTHERN MARIANA IS': 'MP', 'OHIO': 'OH', 'OKLAHOMA': 'OK', 'OREGON': 'OR', 'PENNSYLVANIA': 'PA', 'PUERTO RICO': 'PR', 'RHODE ISLAND': 'RI', 'SOUTH CAROLINA': 'SC', 'SOUTH DAKOTA': 'SD', 'TENNESSEE': 'TN', 'TEXAS': 'TX', 'UTAH': 'UT', 'VERMONT': 'VT', 'VIRGINIA': 'VA', 'VIRGIN ISLANDS': 'VI', 'WASHINGTON': 'WA', 'WEST VIRGINIA': 'WV', 'WISCONSIN': 'WI', 'WYOMING': 'WY'}
+
+const contact = generateContactObject({ apartment: '' }); //Leveraging its address generator
+let authToken: string;
 
 describe('QA Test Script #133 (Sprint 8)', () => {
   const fromDate: Date = randomDate();
@@ -42,22 +47,16 @@ describe('QA Test Script #133 (Sprint 8)', () => {
     cy.get("button[label='Back']").click();
   });
 
-  /*it('Cleanup between reports', ()=>{
-    cy.deleteAllReports();
+  it('Delete previous report and make a new one', () => {
     let report: object = generateReportObject();
+    cy.wait(50);
+    cy.deleteAllReports();
     cy.enterReport(report);
-  });*/
+  });
 
   it('Step 7: Reopen the report', () => {
     cy.get("p-button[icon='pi pi-pencil']").first().click();
-  });
-
-  it('Step 8: Check that the "Has your address changed" radio-button defaults to "NO"', () => {
-    cy.get("p-radiobutton[formControlName='change_of_address']")
-      .contains('NO')
-      .parent()
-      .find('.p-radiobutton')
-      .should('have.class', 'p-radiobutton-checked');
+    cy.wait(50);
   });
 
   it('Step 9: Set the "Has your address changed" radio-button to "YES"', () => {
@@ -82,6 +81,33 @@ describe('QA Test Script #133 (Sprint 8)', () => {
     cy.get("input[formControlName='city']").safeType('{selectAll}').safeType(contact['city']);
     cy.get("input[formControlName='zip']").safeType('{selectAll}').safeType(contact['zip']);
     cy.dropdownSetValue("p-dropdown[formControlName='state']", contact['state']);
+    cy.get("button[label='Save']").click();
+    cy.wait(250);
+  });
+
+  it('Step 12: Check that the address changed', () => {
+    let authToken: string = getAuthToken();
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:8080/api/v1/f3x-summaries/',
+      headers: {
+        Authorization: authToken,
+      },
+    }).then((resp) => {
+      let report = resp.body.results[0];
+      console.log(contact);
+      console.log(report);
+      cy.expect(report.street_1).to.eql(contact['street']);
+      cy.expect(report.city).to.eql(contact['city']);
+      cy.expect(report.zip).to.eql(contact['zip']);
+
+      if (contact['apartment'] != '') cy.expect(report.street_2).to.eql(contact['apartment']);
+      else cy.expect(report.street_2).to.be.null;
+
+      let state: string = contact['state'];
+      let stateCode: string = stateCodes[state.toUpperCase()];
+      cy.expect(report.state).to.eql(stateCode);
+    });
   });
 
   it('Cleanup', () => {
