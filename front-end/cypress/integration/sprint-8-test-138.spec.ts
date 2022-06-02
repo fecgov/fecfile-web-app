@@ -13,7 +13,6 @@ describe('QA Test Script #138 (Sprint 8)', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
     cy.wait(250);
-    cy.deleteAllReports();
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.url().should('contain', '/reports');
   });
@@ -47,6 +46,7 @@ describe('QA Test Script #138 (Sprint 8)', () => {
 
   it('Cleanup', () => {
     cy.wait(250);
+    cy.deleteAllReports();
     cy.logout();
   });
 });
