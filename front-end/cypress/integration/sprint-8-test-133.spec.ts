@@ -97,7 +97,7 @@ describe('QA Test Script #133 (Sprint 8)', () => {
       cy.expect(report.zip).to.eql(reportZip);
 
       if (reportStreet_2 != '') cy.expect(report.street_2).to.eql(reportStreet_2);
-      else cy.expect(report.street_2).to.be.null;
+      else console.log(cy.expect(report.street_2).to.be.null); //SonarCloud throws a fit because it thinks this line is an 'expression' without putting it inside a useless function wrapper...
 
       let state: string = reportState;
       let stateCode: string = generator.stateCodes[state.toUpperCase()];

@@ -1,5 +1,4 @@
 // @ts-check
-import * as generator from '../support/generators/generators.spec';
 import { generateReportObject } from '../support/generators/reports.spec';
 
 describe('QA Test Script #138 (Sprint 8)', () => {

@@ -1,7 +1,6 @@
 // @ts-check
 
 import { generateReportObject } from '../support/generators/reports.spec';
-import { date as randomDate } from '../support/generators/generators.spec';
 
 describe('QA Test Script #133 (Sprint 8)', () => {
   it('Step 1: Navigate to reports page and create a report', () => {

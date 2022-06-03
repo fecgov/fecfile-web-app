@@ -1,6 +1,5 @@
 // @ts-check
 
-import * as _ from 'lodash';
 import { getAuthToken } from './commands';
 
 export function dateToString(dateObj: Date): string {
