@@ -1,5 +1,3 @@
-import { dropdownSetValue, safeType, calendarSetValue } from './commands';
-
 export function enterTransactionSchA(transaction: object) {
   const tType = transaction['contributor_type'];
 

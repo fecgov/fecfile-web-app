@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import * as generator from './generators.spec';
 import { dateToString } from '../reports.spec';
 

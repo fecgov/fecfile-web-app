@@ -1,12 +1,9 @@
 // @ts-check
 
 import { generateReportObject } from '../support/generators/reports.spec';
-import { date as randomDate, stateCodes } from '../support/generators/generators.spec';
+import { date as randomDate } from '../support/generators/generators.spec';
 
 describe('QA Test Script #133 (Sprint 8)', () => {
-  const fromDate: Date = randomDate();
-  const throughDate: Date = randomDate();
-
   it('Step 1: Navigate to reports page and create a report', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');

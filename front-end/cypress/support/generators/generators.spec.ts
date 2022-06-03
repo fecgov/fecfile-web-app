@@ -1,6 +1,4 @@
 import * as _ from 'lodash';
-import { fromPairs } from 'lodash';
-
 export function firstName(): string {
   return _.sample([
     'Khalil',
@@ -300,8 +298,8 @@ export function candidateOffice(): string {
   return _.sample(['House', 'Presidential', 'Senate']);
 }
 
-export function candidateID(candidateOffice: string): string {
-  return `${candidateOffice[0]}${_.random(1, 99999999).toString().padStart(8, '0')}`;
+export function candidateID(candidateOfficeName: string): string {
+  return `${candidateOfficeName[0]}${_.random(1, 99999999).toString().padStart(8, '0')}`;
 }
 
 export function committeeID(): string {

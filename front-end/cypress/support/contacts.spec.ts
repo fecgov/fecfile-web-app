@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 
 export function enterContact(contact: object, save: boolean = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();

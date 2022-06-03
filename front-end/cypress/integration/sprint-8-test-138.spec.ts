@@ -3,9 +3,6 @@ import * as generator from '../support/generators/generators.spec';
 import { generateReportObject } from '../support/generators/reports.spec';
 
 describe('QA Test Script #138 (Sprint 8)', () => {
-  const fromDate: Date = generator.date();
-  const throughDate: Date = generator.date();
-
   it('Step 1: Navigate to reports page', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
