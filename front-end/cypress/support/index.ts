@@ -14,7 +14,11 @@ Cypress.Commands.add('logout', logout);
 import { enterContact } from './contacts.spec';
 Cypress.Commands.add('enterContact', enterContact);
 
-import { enterReport, deleteAllReports, deleteReport } from './reports.spec';
+import { enterReport, progressReport, deleteAllReports, deleteReport } from './reports.spec';
 Cypress.Commands.add('enterReport', enterReport);
+Cypress.Commands.add('progressReport', progressReport);
 Cypress.Commands.add('deleteAllReports', deleteAllReports);
 Cypress.Commands.add('deleteReport', deleteReport);
+
+import { enterTransactionSchA } from './transactions.spec';
+Cypress.Commands.add('enterTransactionSchA', enterTransactionSchA);

@@ -47,6 +47,31 @@ export function enterReport(report, save = true) {
   }
 }
 
+export function progressReport(address_details: object = null) {
+  if (address_details == null) {
+    cy.get("p-radiobutton[formControlName='change_of_address']")
+      .contains('p-radiobutton', 'NO')
+      .find('.p-radiobutton-box')
+      .click();
+    cy.wait(100);
+  } else {
+    cy.get("p-radiobutton[formControlName='change_of_address']")
+      .contains('p-radiobutton', 'YES')
+      .find('.p-radiobutton-box')
+      .click();
+    cy.wait(100);
+
+    cy.get("input[formControlName='street_1']").safeType(address_details['street']);
+    cy.get("input[formControlName='street_2']").safeType(address_details['apartment']);
+    cy.get("input[formControlName='city']").safeType(address_details['city']);
+    cy.get("input[formControlName='zip']").safeType(address_details['zip']);
+    cy.dropdownSetValue("p-dropdown[formControlName='state']", address_details['state']);
+  }
+
+  cy.get("button[label='Save and continue']").click();
+  cy.wait(100);
+}
+
 //Deletes all reports belonging to the logged-in committee
 export function deleteAllReports() {
   let authToken: string = getAuthToken();

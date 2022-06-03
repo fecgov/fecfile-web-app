@@ -54,7 +54,9 @@ export function getAuthToken() {
 export function safeType(subject: any, stringVal: string | number) {
   subject = cy.wrap(subject);
 
-  if (!isString(stringVal)) {
+  if (stringVal == null) {
+    stringVal = '';
+  } else if (!isString(stringVal)) {
     stringVal = stringVal.toString();
   }
 

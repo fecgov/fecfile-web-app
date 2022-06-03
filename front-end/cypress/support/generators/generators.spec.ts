@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { fromPairs } from 'lodash';
 
 export function firstName(): string {
   return _.sample([
@@ -382,4 +383,43 @@ export function f3xCoverageThroughDate(coverageFromDate: string, filingFrequency
 
   coverageDate.setMonth(coverageDate.getMonth() + filingFrequencyOffset); //Add 1 or 3 months to the date depending on Monthly/Quarterly filing
   return coverageDate;
+}
+
+export function transactionDateReceived(coverageFromDate: string = '', coverageThroughDate: string = ''): Date {
+  if (coverageFromDate == '' || coverageThroughDate == '') return date();
+
+  let fromDate = new Date(coverageFromDate);
+  let throughDate = new Date(coverageThroughDate);
+  let outDate = new Date();
+
+  let year: number = _.random(fromDate.getFullYear(), throughDate.getFullYear());
+  outDate.setFullYear(year);
+
+  let month: number;
+  let day: number;
+
+  if (fromDate.getFullYear() == throughDate.getFullYear()) {
+    month = _.random(fromDate.getMonth(), throughDate.getMonth());
+  } else if (year == fromDate.getFullYear()) {
+    month = _.random(fromDate.getMonth(), 11);
+  } else if (year == throughDate.getFullYear()) {
+    month = _.random(throughDate.getMonth());
+  } else {
+    month = _.random(11);
+  }
+  outDate.setMonth(month);
+  outDate.setDate(0); //Setting the day to '0' sets it to the last day of the month
+
+  if (fromDate.getMonth() == throughDate.getMonth()) {
+    day = _.random(fromDate.getDate(), throughDate.getDate());
+  } else if (month == fromDate.getMonth()) {
+    day = _.random(fromDate.getDate(), outDate.getDate());
+  } else if (month == throughDate.getMonth()) {
+    day = _.random(throughDate.getDate());
+  } else {
+    day = _.random(outDate.getDate());
+  }
+  outDate.setDate(day);
+
+  return outDate;
 }
