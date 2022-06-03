@@ -1,5 +1,4 @@
 import { isString } from 'lodash';
-import { getAuthToken } from './commands';
 
 export function login() {
   //Dummy login information
