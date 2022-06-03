@@ -16,12 +16,18 @@ import { ToastModule } from 'primeng/toast';
 import { SharedModule } from '../shared/shared.module';
 import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
+import { TransactionGroupAComponent } from './transaction-group-a/transaction-group-a.component';
 import { TransactionGroupBComponent } from './transaction-group-b/transaction-group-b.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
-  declarations: [TransactionContainerComponent, TransactionGroupBComponent, TransactionTypePickerComponent],
+  declarations: [
+    TransactionContainerComponent,
+    TransactionTypePickerComponent,
+    TransactionGroupAComponent,
+    TransactionGroupBComponent
+  ],
   imports: [
     AccordionModule,
     CommonModule,

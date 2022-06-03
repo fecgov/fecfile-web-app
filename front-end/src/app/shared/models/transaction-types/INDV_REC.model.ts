@@ -1,0 +1,25 @@
+import { TransactionType } from '../../interfaces/transaction-type.interface';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
+import { SchATransaction } from '../scha-transaction.model';
+import { ScheduleATransactionTypes } from '../scha-transaction.model';
+import { ScheduleATransactionTypeLabels } from '../scha-transaction.model';
+import { LabelUtils } from 'app/shared/utils/label.utils';
+
+export class INDV_REC implements TransactionType {
+  scheduleId = 'A';
+  componentGroupId = 'A';
+  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
+  schema = schema;
+  transaction = null;
+
+  contributionPurposeDescripReadonly(): string {
+    return '';
+  }
+
+  getNewTransaction() {
+    return SchATransaction.fromJSON({
+      form_type: 'SA11a',
+      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+    });
+  }
+}
