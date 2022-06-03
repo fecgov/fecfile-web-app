@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-export function firstName() {
+export function firstName(): string {
   return _.sample([
     'Khalil',
     'Anika',
@@ -30,7 +30,7 @@ export function firstName() {
   ]);
 }
 
-export function middleName() {
+export function middleName(): string {
   return _.sample([
     'Kenzie',
     'Nathaly',
@@ -60,7 +60,7 @@ export function middleName() {
   ]);
 }
 
-export function lastName() {
+export function lastName(): string {
   return _.sample([
     'Savage',
     'Skinner',
@@ -90,23 +90,23 @@ export function lastName() {
   ]);
 }
 
-export function prefix() {
+export function prefix(): string {
   return _.sample(['Dr', '', '', '', '', '', '']); //Extra empty strings artificially raise the likelihood of the value being an empty string
 }
 
-export function suffix() {
+export function suffix(): string {
   return _.sample(['Sr', 'Jr', 'III', 'IV', 'V', 'VI', '', '', '', '', '', '', '', '', '', '', '', '', '']);
 }
 
-export function street() {
+export function street(): string {
   return `${_.random(1, 9999)} Test ${_.sample(['Rd', 'Ln', 'St', 'Ave', 'Ct'])}`;
 }
 
-export function apartment() {
+export function apartment(): string {
   return _.sample([`Apt ${_.random(1, 200)}`, '', '']);
 }
 
-export function city() {
+export function city(): string {
   return _.sample([
     'Testopolis',
     'Testville',
@@ -120,82 +120,82 @@ export function city() {
   ]);
 }
 
-export function zipcode() {
+export function zipcode(): string {
   return _.random(1, 9999).toString().padStart(5, '0'); //Zipcodes starting with 0 are pretty uncommon
 }
 
-export function state(theFifty: boolean = true) {
-  const territories: string[] = [
-    'American Samoa',
-    'Guam',
-    'Northern Mariana Islands',
-    'U.S. Virgin Islands',
-    'Puerto Rico',
-  ];
+export const states: string[] = [
+  'Alabama',
+  'Alaska',
+  'Arizona',
+  'Arkansas',
+  'California',
+  'Colorado',
+  'Connecticut',
+  'Delaware',
+  'District of Columbia',
+  'Florida',
+  'Georgia',
+  'Hawaii',
+  'Idaho',
+  'Illinois',
+  'Indiana',
+  'Iowa',
+  'Kansas',
+  'Kentucky',
+  'Louisiana',
+  'Maine',
+  'Maryland',
+  'Massachusetts',
+  'Michigan',
+  'Minnesota',
+  'Mississippi',
+  'Missouri',
+  'Montana',
+  'Nebraska',
+  'Nevada',
+  'New Hampshire',
+  'New Jersey',
+  'New Mexico',
+  'New York',
+  'North Carolina',
+  'North Dakota',
+  'Ohio',
+  'Oklahoma',
+  'Oregon',
+  'Pennsylvania',
+  'Rhode Island',
+  'South Carolina',
+  'South Dakota',
+  'Tennessee',
+  'Texas',
+  'Utah',
+  'Vermont',
+  'Virginia',
+  'Washington',
+  'West Virginia',
+  'Wisconsin',
+  'Wyoming',
+];
 
-  const states: string[] = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'District of Columbia',
-    'Florida',
-    'Georgia',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Maryland',
-    'Massachusetts',
-    'Michigan',
-    'Minnesota',
-    'Mississippi',
-    'Missouri',
-    'Montana',
-    'Nebraska',
-    'Nevada',
-    'New Hampshire',
-    'New Jersey',
-    'New Mexico',
-    'New York',
-    'North Carolina',
-    'North Dakota',
-    'Ohio',
-    'Oklahoma',
-    'Oregon',
-    'Pennsylvania',
-    'Rhode Island',
-    'South Carolina',
-    'South Dakota',
-    'Tennessee',
-    'Texas',
-    'Utah',
-    'Vermont',
-    'Virginia',
-    'Washington',
-    'West Virginia',
-    'Wisconsin',
-    'Wyoming',
-  ];
+export const territories: string[] = [
+  'American Samoa',
+  'Guam',
+  'Northern Mariana Islands',
+  'U.S. Virgin Islands',
+  'Puerto Rico',
+];
 
+export function state(theFifty: boolean = true): string {
   if (theFifty) return _.sample(states);
   else return _.sample(states.concat(territories));
 }
 
-export function phone() {
+export function phone(): string {
   return `${_.random(1, 999).toString().padStart(3, '0')}${_.random(1000000, 1999999).toString()}`; //Area code from 001 to 999 || 7-digit number starting with between 100 to 199 because (supposedly) that range always corresponds to fake numbers
 }
 
-export function occupation() {
+export function occupation(): string {
   return _.sample([
     'Police Officer',
     'Radiologic Technologist',
@@ -236,19 +236,19 @@ export function occupation() {
   ]);
 }
 
-export function candidateOffice() {
+export function candidateOffice(): string {
   return _.sample(['House', 'Presidential', 'Senate']);
 }
 
-export function candidateID(candidateOffice: string) {
+export function candidateID(candidateOffice: string): string {
   return `${candidateOffice[0]}${_.random(1, 99999999).toString().padStart(8, '0')}`;
 }
 
-export function committeeID() {
+export function committeeID(): string {
   return `C${_.random(1, 99999999).toString().padStart(8, '0')}`;
 }
 
-export function groupName() {
+export function groupName(): string {
   return `${_.sample(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])} for American ${_.sample([
     'Happiness',
     'Exceptionalism',
@@ -274,4 +274,53 @@ export function date(): Date {
   outDate.setFullYear(year);
 
   return outDate;
+}
+
+export function f3xFilingFrequency(): string {
+  return _.sample(['MONTHLY', 'QUARTERLY']);
+}
+
+export const f3xReportCategories: object = {
+  QUARTERLY: ['Non-Election Year', 'Election Year', 'Special'],
+  MONTHLY: ['Non-Election Year', 'Election Year'],
+};
+export function f3xReportCategory(filingFrequency: string): string {
+  //    Report Type Category
+  if (filingFrequency in f3xReportCategories) return _.sample(f3xReportCategories[filingFrequency]);
+  else return `Invalid Filing Frequency: ${filingFrequency}`;
+}
+
+export const f3xReportCodes: object = {
+  MONTHLY: {
+    'Non-Election Year': ['M1', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'YE', 'TER'],
+    'Election Year': ['M1', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', '12G', '30G', 'YE', 'TER'],
+  },
+  QUARTERLY: {
+    'Non-Election Year': ['Q0', 'MY', 'Q2', 'YE', 'TER'],
+    'Election Year': ['Q0', 'Q2', 'Q3', '12G', '30G', 'YE', 'TER'],
+    Special: ['11P', '12R', '12C', '12S', '30R', '30S'],
+  },
+};
+export function f3xReportCode(filingFrequency: string, reportCategory: string): string {
+  if (filingFrequency in f3xReportCodes) {
+    if (reportCategory in f3xReportCodes[filingFrequency]) {
+      return _.sample(f3xReportCodes[filingFrequency][reportCategory]);
+    } else {
+      return `Invalid Report Category: ${reportCategory}`;
+    }
+  } else {
+    return `Invalid Filing Frequency: ${filingFrequency}`;
+  }
+}
+
+export function f3xCoverageThroughDate(coverageFromDate: string, filingFrequency: string = 'MONTHLY'): Date {
+  //Coverage Through Date
+  let coverageDate: Date = new Date(coverageFromDate);
+  let filingFrequencyOffset: number = 0;
+
+  if (filingFrequency == 'QUARTERLY') filingFrequencyOffset = 3;
+  else if (filingFrequency == 'MONTHLY') filingFrequencyOffset = 1;
+
+  coverageDate.setMonth(coverageDate.getMonth() + filingFrequencyOffset); //Add 1 or 3 months to the date depending on Monthly/Quarterly filing
+  return coverageDate;
 }
