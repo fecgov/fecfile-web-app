@@ -1,13 +1,13 @@
 // @ts-check
-
-import { randomDate, generateReportObject, deleteAllReports, enterReport } from '../support/reports.spec';
+import * as generator from '../support/generators/generators.spec';
+import { generateReportObject } from '../support/generators/reports.spec';
 import { generateContactObject } from '../support/contacts.spec';
 
 const contact = generateContactObject(); //Leveraging its address generator
 
 describe('QA Test Script #138 (Sprint 8)', () => {
-  const fromDate: Date = randomDate();
-  const throughDate: Date = randomDate();
+  const fromDate: Date = generator.date();
+  const throughDate: Date = generator.date();
 
   it('Step 1: Navigate to reports page', () => {
     cy.login();
@@ -23,9 +23,9 @@ describe('QA Test Script #138 (Sprint 8)', () => {
     cy.wait(250);
 
     cy.get('tr')
-      .contains('tr', report['page_1']['report_code'])
-      .contains('tr', report['page_1']['coverage_from_date'])
-      .contains('tr', report['page_1']['coverage_through_date'])
+      .contains('tr', report['report_code'])
+      .contains('tr', report['coverage_from_date'])
+      .contains('tr', report['coverage_through_date'])
       .should('exist');
   });
 
@@ -38,9 +38,9 @@ describe('QA Test Script #138 (Sprint 8)', () => {
     cy.wait(250);
 
     cy.get('tr')
-      .contains('tr', report['page_1']['report_code'])
-      .contains('tr', report['page_1']['coverage_from_date'])
-      .contains('tr', report['page_1']['coverage_through_date'])
+      .contains('tr', report['report_code'])
+      .contains('tr', report['coverage_from_date'])
+      .contains('tr', report['coverage_through_date'])
       .should('exist');
   });
 

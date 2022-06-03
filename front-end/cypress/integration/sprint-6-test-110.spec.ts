@@ -1,6 +1,6 @@
 // @ts-check
 
-import { generateContactObject } from '../support/contacts.spec';
+import { generateContactObject } from '../support/generators/contacts.spec';
 
 /*
 
@@ -27,7 +27,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
   }
 
   for (contactType of Object.keys(contacts)) {
-    contacts[contactType] = generateContactObject({ contact_type: contactType});
+    contacts[contactType] = generateContactObject({ contact_type: contactType });
     context(`QA Script #110 - ${contactType}`, (cType = contactType) => {
       it('Step 1: Navigate to contacts page', () => {
         before();

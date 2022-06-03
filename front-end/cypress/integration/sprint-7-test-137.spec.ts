@@ -1,6 +1,8 @@
 // @ts-check
 
-import { randomDate, dateToString, generateReportObject } from '../support/reports.spec';
+import { date as randomDate } from '../support/generators/generators.spec';
+import { dateToString } from '../support/reports.spec';
+import { generateReportObject } from '../support/generators/reports.spec';
 
 describe('QA Test Script #137 (Sprint 7)', () => {
   const fromDate: Date = randomDate();

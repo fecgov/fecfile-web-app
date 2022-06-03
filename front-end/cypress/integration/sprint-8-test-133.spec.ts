@@ -1,19 +1,16 @@
 // @ts-check
 
-import { randomDate, generateReportObject, deleteAllReports, enterReport } from '../support/reports.spec';
-import { generateContactObject } from '../support/contacts.spec';
+import * as generator from '../support/generators/generators.spec';
+import { generateReportObject } from '../support/generators/reports.spec';
 import { getAuthToken } from '../support/commands';
 
-// prettier-ignore
-const stateCodes = {'ALABAMA': 'AL', 'ALASKA': 'AK', 'AMERICAN SAMOA': 'AS', 'ARIZONA': 'AZ', 'ARKANSAS': 'AR', 'CALIFORNIA': 'CA', 'COLORADO': 'CO', 'CONNECTICUT': 'CT', 'DELAWARE': 'DE', 'DISTRICT OF COLUMBIA': 'DC', 'FLORIDA': 'FL', 'GEORGIA': 'GA', 'GUAM': 'GU', 'HAWAII': 'HI', 'IDAHO': 'ID', 'ILLINOIS': 'IL', 'INDIANA': 'IN', 'IOWA': 'IA', 'KANSAS': 'KS', 'KENTUCKY': 'KY', 'LOUISIANA': 'LA', 'MAINE': 'ME', 'MARYLAND': 'MD', 'MASSACHUSETTS': 'MA', 'MICHIGAN': 'MI', 'MINNESOTA': 'MN', 'MISSISSIPPI': 'MS', 'MISSOURI': 'MO', 'MONTANA': 'MT', 'NEBRASKA': 'NE', 'NEVADA': 'NV', 'NEW HAMPSHIRE': 'NH', 'NEW JERSEY': 'NJ', 'NEW MEXICO': 'NM', 'NEW YORK': 'NY', 'NORTH CAROLINA': 'NC', 'NORTH DAKOTA': 'ND', 'NORTHERN MARIANA IS': 'MP', 'OHIO': 'OH', 'OKLAHOMA': 'OK', 'OREGON': 'OR', 'PENNSYLVANIA': 'PA', 'PUERTO RICO': 'PR', 'RHODE ISLAND': 'RI', 'SOUTH CAROLINA': 'SC', 'SOUTH DAKOTA': 'SD', 'TENNESSEE': 'TN', 'TEXAS': 'TX', 'UTAH': 'UT', 'VERMONT': 'VT', 'VIRGINIA': 'VA', 'VIRGIN ISLANDS': 'VI', 'WASHINGTON': 'WA', 'WEST VIRGINIA': 'WV', 'WISCONSIN': 'WI', 'WYOMING': 'WY'}
-
-const contact = generateContactObject({ apartment: '' }); //Leveraging its address generator
-let authToken: string;
+const reportStreet_1: string = generator.street();
+const reportStreet_2: string = generator.apartment();
+const reportZip: string = generator.zipcode();
+const reportCity: string = generator.city();
+const reportState: string = generator.state();
 
 describe('QA Test Script #133 (Sprint 8)', () => {
-  const fromDate: Date = randomDate();
-  const throughDate: Date = randomDate();
-
   it('Step 1: Navigate to reports page and create a report', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
@@ -76,11 +73,11 @@ describe('QA Test Script #133 (Sprint 8)', () => {
   });
 
   it('Step 11: Update the address', () => {
-    cy.get("input[formControlName='street_1']").safeType('{selectAll}').safeType(contact['street']);
-    cy.get("input[formControlName='street_2']").safeType('{selectAll}').safeType(contact['apartment']);
-    cy.get("input[formControlName='city']").safeType('{selectAll}').safeType(contact['city']);
-    cy.get("input[formControlName='zip']").safeType('{selectAll}').safeType(contact['zip']);
-    cy.dropdownSetValue("p-dropdown[formControlName='state']", contact['state']);
+    cy.get("input[formControlName='street_1']").safeType('{selectAll}').safeType(reportStreet_1);
+    cy.get("input[formControlName='street_2']").safeType('{selectAll}').safeType(reportStreet_2);
+    cy.get("input[formControlName='city']").safeType('{selectAll}').safeType(reportCity);
+    cy.get("input[formControlName='zip']").safeType('{selectAll}').safeType(reportZip);
+    cy.dropdownSetValue("p-dropdown[formControlName='state']", reportState);
     cy.get("button[label='Save']").click();
     cy.wait(250);
   });
@@ -95,17 +92,15 @@ describe('QA Test Script #133 (Sprint 8)', () => {
       },
     }).then((resp) => {
       let report = resp.body.results[0];
-      console.log(contact);
-      console.log(report);
-      cy.expect(report.street_1).to.eql(contact['street']);
-      cy.expect(report.city).to.eql(contact['city']);
-      cy.expect(report.zip).to.eql(contact['zip']);
+      cy.expect(report.street_1).to.eql(reportStreet_1);
+      cy.expect(report.city).to.eql(reportCity);
+      cy.expect(report.zip).to.eql(reportZip);
 
-      if (contact['apartment'] != '') cy.expect(report.street_2).to.eql(contact['apartment']);
+      if (reportStreet_2 != '') cy.expect(report.street_2).to.eql(reportStreet_2);
       else cy.expect(report.street_2).to.be.null;
 
-      let state: string = contact['state'];
-      let stateCode: string = stateCodes[state.toUpperCase()];
+      let state: string = reportState;
+      let stateCode: string = generator.stateCodes[state.toUpperCase()];
       cy.expect(report.state).to.eql(stateCode);
     });
   });

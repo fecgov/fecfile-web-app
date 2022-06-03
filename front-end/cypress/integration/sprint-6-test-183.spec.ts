@@ -1,6 +1,6 @@
 // @ts-check
 
-import { generateContactObject } from '../support/contacts.spec';
+import { generateContactObject } from '../support/generators/contacts.spec';
 
 const contact: Object = generateContactObject({ contact_type: 'Individual', state: 'Virginia' });
 

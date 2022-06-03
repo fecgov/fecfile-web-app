@@ -1,4 +1,4 @@
-import { generateContactObject } from '../support/contacts.spec';
+import { generateContactObject } from '../support/generators/contacts.spec';
 // @ts-check
 
 const contact: object = generateContactObject({ contact_type: 'Committee' });

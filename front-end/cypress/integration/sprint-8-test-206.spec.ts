@@ -1,5 +1,4 @@
-import { isContext } from 'vm';
-import { generateContactObject } from '../support/contacts.spec';
+import { generateContactObject } from '../support/generators/contacts.spec';
 // @ts-check
 
 const candidateTypes: string[] = ['P', 'H', 'S'];

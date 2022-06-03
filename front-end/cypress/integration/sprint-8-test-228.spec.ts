@@ -1,6 +1,6 @@
 // @ts-check
 
-import { generateReportObject } from '../support/reports.spec';
+import { generateReportObject } from '../support/generators/reports.spec';
 
 const accordion = {
   'CONTRIBUTIONS FROM INDIVIDUALS': [

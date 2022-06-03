@@ -1,14 +1,7 @@
 // @ts-check
 
-import { randomDate, generateReportObject, deleteAllReports, enterReport } from '../support/reports.spec';
-import { generateContactObject } from '../support/contacts.spec';
-import { getAuthToken } from '../support/commands';
-
-// prettier-ignore
-const stateCodes = {'ALABAMA': 'AL', 'ALASKA': 'AK', 'AMERICAN SAMOA': 'AS', 'ARIZONA': 'AZ', 'ARKANSAS': 'AR', 'CALIFORNIA': 'CA', 'COLORADO': 'CO', 'CONNECTICUT': 'CT', 'DELAWARE': 'DE', 'DISTRICT OF COLUMBIA': 'DC', 'FLORIDA': 'FL', 'GEORGIA': 'GA', 'GUAM': 'GU', 'HAWAII': 'HI', 'IDAHO': 'ID', 'ILLINOIS': 'IL', 'INDIANA': 'IN', 'IOWA': 'IA', 'KANSAS': 'KS', 'KENTUCKY': 'KY', 'LOUISIANA': 'LA', 'MAINE': 'ME', 'MARYLAND': 'MD', 'MASSACHUSETTS': 'MA', 'MICHIGAN': 'MI', 'MINNESOTA': 'MN', 'MISSISSIPPI': 'MS', 'MISSOURI': 'MO', 'MONTANA': 'MT', 'NEBRASKA': 'NE', 'NEVADA': 'NV', 'NEW HAMPSHIRE': 'NH', 'NEW JERSEY': 'NJ', 'NEW MEXICO': 'NM', 'NEW YORK': 'NY', 'NORTH CAROLINA': 'NC', 'NORTH DAKOTA': 'ND', 'NORTHERN MARIANA IS': 'MP', 'OHIO': 'OH', 'OKLAHOMA': 'OK', 'OREGON': 'OR', 'PENNSYLVANIA': 'PA', 'PUERTO RICO': 'PR', 'RHODE ISLAND': 'RI', 'SOUTH CAROLINA': 'SC', 'SOUTH DAKOTA': 'SD', 'TENNESSEE': 'TN', 'TEXAS': 'TX', 'UTAH': 'UT', 'VERMONT': 'VT', 'VIRGINIA': 'VA', 'VIRGIN ISLANDS': 'VI', 'WASHINGTON': 'WA', 'WEST VIRGINIA': 'WV', 'WISCONSIN': 'WI', 'WYOMING': 'WY'}
-
-const contact = generateContactObject({ apartment: '' }); //Leveraging its address generator
-let authToken: string;
+import { generateReportObject } from '../support/generators/reports.spec';
+import { date as randomDate, stateCodes } from '../support/generators/generators.spec';
 
 describe('QA Test Script #133 (Sprint 8)', () => {
   const fromDate: Date = randomDate();
@@ -28,6 +21,7 @@ describe('QA Test Script #133 (Sprint 8)', () => {
 
   it('Step 2: Edit a report', () => {
     cy.get("p-button[icon='pi pi-pencil']").first().click();
+    cy.wait(250);
   });
 
   it('Step 3: Set the "Has your address changed" radio-button to "YES"', () => {
@@ -36,6 +30,7 @@ describe('QA Test Script #133 (Sprint 8)', () => {
       .parent()
       .find('.p-radiobutton')
       .click();
+    cy.wait(50);
   });
 
   it('Step 4: The "Update your committee address" link should exist', () => {

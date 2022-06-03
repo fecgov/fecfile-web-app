@@ -1,6 +1,6 @@
 // @ts-check
 
-import { generateContactObject } from '../support/contacts.spec';
+import { generateContactObject } from '../support/generators/contacts.spec';
 
 let contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 

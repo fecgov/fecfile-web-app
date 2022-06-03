@@ -1,6 +1,6 @@
 // @ts-check
 
-import { generateContactObject } from '../support/contacts.spec';
+import { generateContactObject } from '../support/generators/contacts.spec';
 
 const contactTypes: Array<string> = ['Individual', 'Candidate', 'Committee', 'Organization'];
 
@@ -58,19 +58,10 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
 
       it('Steps 5 & 6: Set the contact\'s name to "First Last"', () => {
         if (cType == 'Individual' || cType == 'Candidate') {
-          cy.get('#first_name')
-            .safeType('{backspace}{backspace}{backspace}{backspace}First')
-            .should('have.value', 'First');
-          cy.get('#last_name')
-            .safeType('{backspace}{backspace}{backspace}{backspace}Last')
-            .should('have.value', 'Last');
+          cy.get('#first_name').safeType('{selectall}First').should('have.value', 'First');
+          cy.get('#last_name').safeType('{selectall}Last').should('have.value', 'Last');
         } else {
-          cy.get('#name')
-            .safeType(
-              `{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}`
-            )
-            .safeType('First Last')
-            .should('have.value', 'First Last');
+          cy.get('#name').safeType(`{selectall}`).safeType('First Last').should('have.value', 'First Last');
         }
       });
 
