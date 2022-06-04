@@ -19,4 +19,9 @@ describe('OFFSET_TO_OPEX', () => {
     expect(txn.form_type).toBe('SA15');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES);
   });
+
+  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
+    const descrip = transactionType.contributionPurposeDescripReadonly();
+    expect(descrip).toBe('');
+  });
 });

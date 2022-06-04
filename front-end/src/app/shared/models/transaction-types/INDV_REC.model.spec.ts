@@ -19,4 +19,9 @@ describe('INDV_REC', () => {
     expect(txn.form_type).toBe('SA11a');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
   });
+
+  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
+    const descrip = transactionType.contributionPurposeDescripReadonly();
+    expect(descrip).toBe('');
+  });
 });
