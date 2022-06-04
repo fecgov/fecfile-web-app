@@ -18,12 +18,12 @@ export class CreateF3xStep3Component extends TableListBaseComponent<Transaction>
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     protected override itemService: TransactionService,
-    private activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute
   ) {
     super(messageService, confirmationService, elementRef);
   }
 
-  ngOnInit(): void {
+  override ngOnInit(): void {
     this.report = this.activatedRoute.snapshot.data['report'];
     this.loading = true;
   }
