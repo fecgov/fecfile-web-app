@@ -1,11 +1,13 @@
 import { TransactionType } from '../interfaces/transaction-type.interface';
-import { OFFSET_TO_OPEX } from '../models/transaction-types/OFFSET_TO_OPEX.model';
 import { INDV_REC } from '../models/transaction-types/INDV_REC.model';
+import { OFFSET_TO_OPEX } from '../models/transaction-types/OFFSET_TO_OPEX.model';
+import { TRIB_REC } from '../models/transaction-types/TRIB_REC.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
-  OFFSET_TO_OPEX,
   INDV_REC,
+  OFFSET_TO_OPEX,
+  TRIB_REC,
 }
 
 export class TransactionTypeUtils {

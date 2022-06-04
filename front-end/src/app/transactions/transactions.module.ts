@@ -18,6 +18,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionGroupAComponent } from './transaction-group-a/transaction-group-a.component';
 import { TransactionGroupBComponent } from './transaction-group-b/transaction-group-b.component';
+import { TransactionGroupDComponent } from './transaction-group-d/transaction-group-d.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { InputNumberModule } from 'primeng/inputnumber';
 
@@ -26,7 +27,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     TransactionContainerComponent,
     TransactionTypePickerComponent,
     TransactionGroupAComponent,
-    TransactionGroupBComponent
+    TransactionGroupBComponent,
+    TransactionGroupDComponent,
   ],
   imports: [
     AccordionModule,
