@@ -14,7 +14,14 @@
     [contributionPurposeDescrip]="transactionType.contributionPurposeDescripReadonly()"
   ></app-transaction-group-b>
 </ng-container>
-<ng-container *ngIf="transactionType.componentGroupId === 'C'"> Group C </ng-container>
+<ng-container *ngIf="transactionType.componentGroupId === 'C'">
+  <app-transaction-group-c
+    [title]="transactionType.title"
+    [schema]="transactionType.schema"
+    [transaction]="transactionType.transaction"
+    [contributionPurposeDescrip]="transactionType.contributionPurposeDescripReadonly()"
+  ></app-transaction-group-c>
+</ng-container>
 <ng-container *ngIf="transactionType.componentGroupId === 'D'">
   <app-transaction-group-d
     [title]="transactionType.title"
