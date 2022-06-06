@@ -60,6 +60,6 @@ export class LoginService {
         this.apiService.clearTokens();
         this.store.dispatch(userLoggedOutAction());
       })
-    ).subscribe(() => {});
+    ).subscribe(() => undefined);
   }
 }

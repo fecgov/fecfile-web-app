@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { userLoggedInAction } from 'app/store/login.actions';
@@ -9,14 +9,14 @@ import { CookieService } from 'ngx-cookie-service';
   templateUrl: './dashboard.component.html',
   // styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
   constructor(
     private store: Store,
     private cookieService: CookieService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     const userLoginData: UserLoginData = {
       committee_id: this.cookieService.get("ffapi_committee_id"),
       email: this.cookieService.get("ffapi_email"),
