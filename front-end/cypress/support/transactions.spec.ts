@@ -27,7 +27,7 @@ export function enterTransactionSchA(transaction: object) {
   if (transaction['contribution_memo_item']) {
     cy.get("p-checkbox[formControlName='memo_code']").find("div[class='p-checkbox-box']").click();
   }
-  cy.get("input[formControlName='contribution_amount']").safeType(transaction['contribution_amount']);
+  cy.get("p-inputnumber[formControlName='contribution_amount']").safeType(transaction['contribution_amount']);
 
   //Additional Information
   cy.get("textarea[formControlName='contribution_purpose_descrip']").safeType(transaction['contribution_purpose']);
