@@ -18,6 +18,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionGroupBComponent } from './transaction-group-b/transaction-group-b.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [TransactionContainerComponent, TransactionGroupBComponent, TransactionTypePickerComponent],
@@ -33,6 +34,7 @@ import { TransactionTypePickerComponent } from './transaction-type-picker/transa
     CheckboxModule,
     InputTextModule,
     InputTextareaModule,
+    InputNumberModule,
     CalendarModule,
     ToastModule,
     SharedModule,

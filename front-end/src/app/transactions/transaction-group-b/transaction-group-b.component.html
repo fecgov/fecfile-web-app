@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="[ContactTypes.COMMITTEE, ContactTypes.ORGANIZATION].includes(form.get('entity_type')?.value)">
+    <ng-container *ngIf="form.get('entity_type')?.value === ContactTypes.ORGANIZATION">
       <div class="grid">
         <div class="col-8">
           <div class="field">
@@ -38,7 +38,7 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="[ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(form.get('entity_type')?.value)">
+    <ng-container *ngIf="form.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
       <div class="grid">
         <div class="col-4">
           <div class="field">
@@ -210,29 +210,40 @@
       <div class="col-6">
         <div class="field">
           <label for="contribution_amount">CONTRIBUTION AMOUNT</label>
-          <input type="text" pInputText id="contribution_amount" formControlName="contribution_amount" />
+          <p-inputNumber
+            id="contribution_amount"
+            formControlName="contribution_amount"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+          ></p-inputNumber>
           <app-error-messages
             [form]="form"
             fieldName="contribution_amount"
             [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must be a number"
+            maxLengthErrorMessage="The amount can be 12 digits max"
           ></app-error-messages>
         </div>
       </div>
       <div class="col-6">
         <div class="field">
           <label for="contribution_aggregate">CONTRIBUTION AGGREGATE</label>
-          <input
-            type="text"
-            pInputText
+          <p-inputNumber
             id="contribution_aggregate"
             formControlName="contribution_aggregate"
-            class="readonly"
-            readonly
-          />
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            [readonly]="true"
+            styleClass="readonly"
+          ></p-inputNumber>
           <app-error-messages
             [form]="form"
             fieldName="contribution_aggregate"
             [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must be a number"
+            maxLengthErrorMessage="The aggregate can be 12 digits max"
           ></app-error-messages>
         </div>
       </div>
@@ -250,7 +261,14 @@
             pInputTextarea
             [autoResize]="true"
             formControlName="contribution_purpose_descrip"
+            class="readonly"
+            readonly
           ></textarea>
+          <app-error-messages
+            [form]="form"
+            fieldName="contribution_purpose_descrip"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
     </div>
@@ -266,6 +284,11 @@
             [autoResize]="true"
             formControlName="memo_text_description"
           ></textarea>
+          <app-error-messages
+            [form]="form"
+            fieldName="memo_text_description"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
     </div>

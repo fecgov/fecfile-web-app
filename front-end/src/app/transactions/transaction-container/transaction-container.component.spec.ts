@@ -19,6 +19,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 describe('TransactionContainerComponent', () => {
   let component: TransactionContainerComponent;
@@ -42,6 +43,7 @@ describe('TransactionContainerComponent', () => {
         CalendarModule,
         CheckboxModule,
         InputTextModule,
+        InputNumberModule,
         InputTextareaModule,
       ],
       declarations: [TransactionContainerComponent, TransactionGroupBComponent],
