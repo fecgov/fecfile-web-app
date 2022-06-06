@@ -16,7 +16,6 @@ const contactFields: object = {
     contributor_street_2: 34,
     contributor_city: 30,
     contributor_zip: 9,
-    contribution_purpose_descrip: 100,
     memo_text_description: 100,
     contribution_amount: 12,
   },
@@ -26,7 +25,6 @@ const contactFields: object = {
     contributor_city: 30,
     contributor_zip: 9,
     contributor_organization_name: 200,
-    contribution_purpose_descrip: 100,
     memo_text_description: 100,
     contribution_amount: 12,
   },
@@ -84,6 +82,12 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
         cy.wait(50);
       });
 
+      it('Checks non-text fields', () => {
+        cy.calendarSetValue('p-calendar[formControlName="contribution_date"]', randomDate());
+        cy.dropdownSetValue("p-dropdown[formControlName='contributor_state']", randomState());
+        cy.get('.p-checkbox-box').click();
+      });
+
       for (let field of Object.keys(contactFields[cType])) {
         let strLength: number = contactFields[cType][field];
 
@@ -101,25 +105,18 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
             randString = randomString(strLength);
           }
 
+          cy.get(`[formControlName='${field}']`).safeType(randString);
+          cy.get('h1').first().click();
           cy.get(`[formControlName='${field}']`)
-            .safeType(randString)
             .parent()
             .find('app-error-messages')
             .children()
             .should('have.length', 0);
-          cy.get(`[formControlName='${field}']`)
-            .safeType('0')
-            .parent()
-            .find('app-error-messages')
-            .should('contain', `This field cannot contain more than ${strLength}`);
+          cy.get(`[formControlName='${field}']`).safeType('{home}1');
+          cy.get('h1').first().click();
+          cy.get(`[formControlName='${field}']`).parent().find('app-error-messages').should('have.length', 1);
         });
       }
-
-      it('Checks non-text fields', () => {
-        cy.calendarSetValue('p-calendar[formControlName="contribution_date"]', randomDate());
-        cy.dropdownSetValue("p-dropdown[formControlName='contributor_state']", randomState());
-        cy.get('.p-checkbox-box').click();
-      });
 
       it('Closes out the form', () => {
         cy.get("button[label='Cancel']").click();
