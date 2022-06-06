@@ -19,6 +19,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   @Input() title = '';
   @Input() schema: JsonSchema | null = null;
   @Input() transaction: Transaction | null = null;
+  @Input() contributionPurposeDescrip = '';
 
   abstract formProperties: string[];
 
@@ -136,6 +137,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       entity_type: ContactTypes.INDIVIDUAL,
       contribution_aggregate: '0',
       memo_code: false,
+      contribution_purpose_descrip: this.contributionPurposeDescrip,
     });
   }
 }

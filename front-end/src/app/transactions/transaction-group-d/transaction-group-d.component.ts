@@ -9,17 +9,13 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 
 @Component({
-  selector: 'app-transaction-group-a',
-  templateUrl: './transaction-group-a.component.html',
+  selector: 'app-transaction-group-d',
+  templateUrl: './transaction-group-d.component.html',
 })
-export class TransactionGroupAComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
+export class TransactionGroupDComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
     'entity_type',
-    'contributor_last_name',
-    'contributor_first_name',
-    'contributor_middle_name',
-    'contributor_prefix',
-    'contributor_suffix',
+    'contributor_organization_name',
     'contributor_street_1',
     'contributor_street_2',
     'contributor_city',
@@ -29,13 +25,11 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
     'contribution_amount',
     'contribution_aggregate',
     'contribution_purpose_descrip',
-    'contributor_employer',
-    'contributor_occupation',
     'memo_code',
     'memo_text_description',
   ];
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
+    [ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
   );
 
   constructor(
