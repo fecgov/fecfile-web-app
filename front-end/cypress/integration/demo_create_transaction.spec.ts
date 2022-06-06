@@ -13,10 +13,10 @@ describe('Demos the automated creation of a SchA Transaction', () => {
 
     let report = generateReportObject();
     cy.enterReport(report);
+    cy.wait(250);
   });
 
   it('Navigates to the create transaction page', () => {
-    cy.wait(250);
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.wait(50);
     cy.progressReport();

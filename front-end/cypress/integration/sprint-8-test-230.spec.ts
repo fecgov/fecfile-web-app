@@ -93,7 +93,7 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
         it(`Tests the "${field}" field for required/optional and max length`, () => {
           if (fieldsRequired.includes(field)) {
             cy.get(`[formControlName="${field}"]`).click();
-            cy.get('h1').first().click();
+            cy.get('h1').last().click();
             cy.get(`[formControlName="${field}"]`).parent().should('contain', 'This is a required field');
           }
 
@@ -105,14 +105,14 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
           }
 
           cy.get(`[formControlName='${field}']`).safeType(randString);
-          cy.get('h1').first().click();
+          cy.get('h1').last().click();
           cy.get(`[formControlName='${field}']`)
             .parent()
             .find('app-error-messages')
             .children()
             .should('have.length', 0);
           cy.get(`[formControlName='${field}']`).safeType('{home}1');
-          cy.get('h1').first().click();
+          cy.get('h1').last().click();
           cy.get(`[formControlName='${field}']`).parent().find('app-error-messages').should('have.length', 1);
         });
       }
@@ -123,4 +123,9 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
       });
     });
   }
+
+  after('Cleanup', () => {
+    cy.deleteAllReports();
+    cy.logout();
+  });
 });
