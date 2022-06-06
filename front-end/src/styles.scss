@@ -26,7 +26,11 @@ li {
 .ng-submitted .p-inputtext.ng-invalid,
 .p-inputtext.ng-invalid.ng-touched,
 .ng-submitted p-dropdown.ng-invalid div.p-dropdown,
-p-dropdown.ng-invalid.ng-touched div.p-dropdown {
+p-dropdown.ng-invalid.ng-touched div.p-dropdown,
+.ng-submitted p-inputnumber.ng-invalid input.p-inputtext,
+p-inputnumber.ng-invalid.ng-touched input.p-inputtext,
+.ng-submitted p-calendar.ng-invalid input.p-inputtext,
+p-calendar.ng-invalid.ng-touched input.p-inputtext {
   border-color: #dc3545;
 }
 
@@ -39,7 +43,7 @@ label.disabled {
 }
 
 .readonly {
-  background-color: #F1F1F1;
+  background-color: #f1f1f1;
 }
 
 .memo-checkbox-note {

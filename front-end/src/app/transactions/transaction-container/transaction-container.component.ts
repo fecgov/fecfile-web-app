@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { TransactionMeta } from 'app/shared/interfaces/transaction-meta.interface';
+import { TransactionType } from '../../shared/interfaces/transaction-type.interface';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../../store/committee-account.selectors';
 import { CommitteeAccount } from '../../shared/models/committee-account.model';
@@ -11,7 +11,7 @@ import { CommitteeAccount } from '../../shared/models/committee-account.model';
   templateUrl: './transaction-container.component.html',
 })
 export class TransactionContainerComponent implements OnInit, OnDestroy {
-  meta: TransactionMeta = this.activatedRoute.snapshot.data['transactionMeta'];
+  transactionType: TransactionType = this.activatedRoute.snapshot.data['transactionType'];
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store) {}
@@ -21,8 +21,8 @@ export class TransactionContainerComponent implements OnInit, OnDestroy {
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount: CommitteeAccount) => {
-        if (this.meta.transaction) {
-          this.meta.transaction.filer_committee_id_number = committeeAccount.committee_id;
+        if (this.transactionType.transaction) {
+          this.transactionType.transaction.filer_committee_id_number = committeeAccount.committee_id;
         }
       });
   }

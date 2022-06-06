@@ -3,19 +3,16 @@ import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
-import { ContactTypes, ContactTypeLabels } from '../../shared/models/contact.model';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 
 @Component({
-  selector: 'app-transaction-group-b',
-  templateUrl: './transaction-group-b.component.html',
+  selector: 'app-transaction-group-a',
+  templateUrl: './transaction-group-a.component.html',
 })
-export class TransactionGroupBComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
+export class TransactionGroupAComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
     'entity_type',
-    'contributor_organization_name',
     'contributor_last_name',
     'contributor_first_name',
     'contributor_middle_name',
@@ -30,12 +27,11 @@ export class TransactionGroupBComponent extends TransactionTypeBaseComponent imp
     'contribution_amount',
     'contribution_aggregate',
     'contribution_purpose_descrip',
+    'contributor_employer',
+    'contributor_occupation',
     'memo_code',
     'memo_text_description',
   ];
-  override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
-  );
 
   constructor(
     protected override messageService: MessageService,

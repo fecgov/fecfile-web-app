@@ -14,92 +14,72 @@
             [options]="contactTypeOptions"
             optionLabel="name"
             optionValue="code"
+            [readonly]="true"
+            class="readonly"
           ></p-dropdown>
         </div>
       </div>
     </div>
-    <ng-container *ngIf="form.get('entity_type')?.value === ContactTypes.ORGANIZATION">
-      <div class="grid">
-        <div class="col-8">
-          <div class="field">
-            <label for="contributor_organization_name">ORGANIZATION NAME</label>
-            <input
-              type="text"
-              pInputText
-              id="contributor_organization_name"
-              formControlName="contributor_organization_name"
-            />
-            <app-error-messages
-              [form]="form"
-              fieldName="contributor_organization_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
+    <div class="grid">
+      <div class="col-4">
+        <div class="field">
+          <label for="contributor_last_name">LAST NAME</label>
+          <input type="text" pInputText id="contributor_last_name" formControlName="contributor_last_name" />
+          <app-error-messages
+            [form]="form"
+            fieldName="contributor_last_name"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
-    </ng-container>
-    <ng-container *ngIf="form.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
-      <div class="grid">
-        <div class="col-4">
-          <div class="field">
-            <label for="contributor_last_name">LAST NAME</label>
-            <input type="text" pInputText id="contributor_last_name" formControlName="contributor_last_name" />
-            <app-error-messages
-              [form]="form"
-              fieldName="contributor_last_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="field">
-            <label for="contributor_first_name">FIRST NAME</label>
-            <input type="text" pInputText id="contributor_first_name" formControlName="contributor_first_name" />
-            <app-error-messages
-              [form]="form"
-              fieldName="contributor_first_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-4">
-          <div class="field">
-            <label for="contributor_middle_name">MIDDLE NAME (OPTIONAL)</label>
-            <input type="text" pInputText id="contributor_middle_name" formControlName="contributor_middle_name" />
-            <app-error-messages
-              [form]="form"
-              fieldName="contributor_middle_name"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="contributor_first_name">FIRST NAME</label>
+          <input type="text" pInputText id="contributor_first_name" formControlName="contributor_first_name" />
+          <app-error-messages
+            [form]="form"
+            fieldName="contributor_first_name"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
-      <div class="grid">
-        <div class="col-3">
-          <div class="field">
-            <label for="contributor_prefix">PREFIX (OPTIONAL)</label>
-            <input type="text" pInputText id="contributor_prefix" formControlName="contributor_prefix" />
-            <app-error-messages
-              [form]="form"
-              fieldName="contributor_prefix"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
+      <div class="col-4">
+        <div class="field">
+          <label for="contributor_middle_name">MIDDLE NAME (OPTIONAL)</label>
+          <input type="text" pInputText id="contributor_middle_name" formControlName="contributor_middle_name" />
+          <app-error-messages
+            [form]="form"
+            fieldName="contributor_middle_name"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
-        <div class="col-3">
-          <div class="field">
-            <label for="contributor_suffix">SUFFIX (OPTIONAL)</label>
-            <input type="text" pInputText id="contributor_suffix" formControlName="contributor_suffix" />
-            <app-error-messages
-              [form]="form"
-              fieldName="contributor_suffix"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
-        </div>
-        <div class="col-6"></div>
       </div>
-    </ng-container>
+    </div>
+    <div class="grid">
+      <div class="col-3">
+        <div class="field">
+          <label for="contributor_prefix">PREFIX (OPTIONAL)</label>
+          <input type="text" pInputText id="contributor_prefix" formControlName="contributor_prefix" />
+          <app-error-messages
+            [form]="form"
+            fieldName="contributor_prefix"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="field">
+          <label for="contributor_suffix">SUFFIX (OPTIONAL)</label>
+          <input type="text" pInputText id="contributor_suffix" formControlName="contributor_suffix" />
+          <app-error-messages
+            [form]="form"
+            fieldName="contributor_suffix"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-6"></div>
+    </div>
     <p-divider></p-divider>
     <h3>Address</h3>
     <div class="grid">
@@ -164,6 +144,32 @@
           <app-error-messages
             [form]="form"
             fieldName="contributor_zip"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <p-divider></p-divider>
+    <h3>Employer</h3>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="contributor_employer">EMPLOYER</label>
+          <input type="text" pInputText id="contributor_employer" formControlName="contributor_employer" />
+          <app-error-messages
+            [form]="form"
+            fieldName="contributor_employer"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="field">
+          <label for="contributor_occupation">OCCUPATION</label>
+          <input type="text" pInputText id="contributor_occupation" formControlName="contributor_occupation" />
+          <app-error-messages
+            [form]="form"
+            fieldName="contributor_occupation"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
