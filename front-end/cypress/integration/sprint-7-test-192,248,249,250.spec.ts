@@ -1,6 +1,5 @@
 // @ts-check
 
-import * as _ from 'lodash';
 import { randomString } from '../support/generators/generators.spec';
 
 const contactFields: object = {

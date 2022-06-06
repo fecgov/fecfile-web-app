@@ -1,6 +1,5 @@
 // @ts-check
 
-import * as _ from 'lodash';
 import { randomString, date as randomDate, state as randomState } from '../support/generators/generators.spec';
 import { generateReportObject } from '../support/generators/reports.spec';
 
