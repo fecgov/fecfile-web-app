@@ -88,7 +88,7 @@ export class ValidateService {
    */
   private getPropertyValue(property: string, form: FormGroup) {
     // Undefined and empty strings are set to null.
-    if (form?.get(property)?.value === undefined || form?.get(property)?.value === '') {
+    if (form?.get(property)?.value === undefined || form?.get(property)?.value === '' || form?.get(property)?.value === null) {
       return null;
     }
 
@@ -149,7 +149,7 @@ export class ValidateService {
             result['pattern'] = { requiredPattern: `Allowed values: ${error.params['allowedValues'].join(', ')}` };
           }
           if (error.keyword === 'type' && error.params['type'] === 'number') {
-            if (this.formValidatorForm?.get(error.path)?.value === '') {
+            if (this.formValidatorForm?.get(error.path)?.value === '' || this.formValidatorForm?.get(error.path)?.value === null) {
               result['required'] = true;
             } else {
               result['pattern'] = { requiredPattern: 'Value must be a number' };
