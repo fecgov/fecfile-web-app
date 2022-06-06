@@ -62,15 +62,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       ?.get('entity_type')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
-        if (value === ContactTypes.INDIVIDUAL) {
+        if (value === ContactTypes.INDIVIDUAL || value === ContactTypes.CANDIDATE) {
           this.form.get('contributor_organization_name')?.reset();
         }
-        if (value === ContactTypes.ORGANIZATION) {
+        if (value === ContactTypes.ORGANIZATION || value === ContactTypes.COMMITTEE) {
           this.form.get('contributor_last_name')?.reset();
           this.form.get('contributor_first_name')?.reset();
           this.form.get('contributor_middle_name')?.reset();
           this.form.get('contributor_prefix')?.reset();
           this.form.get('contributor_suffix')?.reset();
+          this.form.get('contributor_employer')?.reset();
+          this.form.get('contributor_occupation')?.reset();
         }
       });
   }
