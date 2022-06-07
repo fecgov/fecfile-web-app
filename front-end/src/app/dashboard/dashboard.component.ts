@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { userLoggedInAction } from 'app/store/login.actions';
+import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
@@ -18,14 +19,15 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     const userLoginData: UserLoginData = {
-      committee_id: this.cookieService.get("ffapi_committee_id"),
-      email: this.cookieService.get("ffapi_email"),
+      committee_id: this.cookieService.get(
+        environment.ffapiCommitteeIdCookieName),
+      email: this.cookieService.get(environment.ffapiEmailCookieName),
       is_allowed: true,
-      token: this.cookieService.get("ffapi_jwt")
+      token: this.cookieService.get(environment.ffapiJwtCookieName)
     }
-    this.cookieService.delete("ffapi_committee_id")
-    this.cookieService.delete("ffapi_email")
-    this.cookieService.delete("ffapi_jwt")
+    this.cookieService.delete(environment.ffapiCommitteeIdCookieName)
+    this.cookieService.delete(environment.ffapiEmailCookieName)
+    this.cookieService.delete(environment.ffapiJwtCookieName)
     this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
   }
   

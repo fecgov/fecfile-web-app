@@ -72,4 +72,9 @@ export class ApiService {
     this.jwt = "";
     this.csrfToken = "";
   }
+
+  public isAuthenticated() {
+    return (!!this.jwt && !!this.csrfToken) || 
+      this.cookieService.check(environment.ffapiJwtCookieName);
+  }
 }
