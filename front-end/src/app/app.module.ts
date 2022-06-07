@@ -15,6 +15,8 @@ import { spinnerReducer } from './store/spinner.reducer';
 import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { LoginEffects } from './store/login.effects';
 import { AppState } from './store/app-state.model';
+import { labelLookupReducer } from './store/label-lookup.reducer';
+import { labelLookupEffects } from './store/label-lookup.effects';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
