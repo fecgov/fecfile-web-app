@@ -58,10 +58,10 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
 
       it('Steps 5 & 6: Set the contact\'s name to "First Last"', () => {
         if (cType == 'Individual' || cType == 'Candidate') {
-          cy.get('#first_name').safeType('{selectall}First').should('have.value', 'First');
-          cy.get('#last_name').safeType('{selectall}Last').should('have.value', 'Last');
+          cy.get('#first_name').overwrite('First').should('have.value', 'First');
+          cy.get('#last_name').overwrite('Last').should('have.value', 'Last');
         } else {
-          cy.get('#name').safeType(`{selectall}`).safeType('First Last').should('have.value', 'First Last');
+          cy.get('#name').overwrite('First Last').should('have.value', 'First Last');
         }
       });
 

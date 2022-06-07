@@ -21,10 +21,7 @@ describe('QA Test Script #205 (Sprint 8)', () => {
     cy.get('tr').contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
 
     cy.wait(50);
-    cy.get("input[formControlName='committee_id']")
-      .type('{selectall}') //Selects all the text inside
-      .type('C12345678'); //  so that it can be cleanly overwritten
-
+    cy.get("input[formControlName='committee_id']").overwrite('C12345678');
     cy.get("button[label='Save']").click();
     cy.wait(250);
   });

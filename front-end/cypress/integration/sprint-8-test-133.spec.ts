@@ -2,7 +2,7 @@
 
 import * as generator from '../support/generators/generators.spec';
 import { generateReportObject } from '../support/generators/reports.spec';
-import { getAuthToken } from '../support/commands';
+import { getAuthToken, overwrite } from '../support/commands';
 
 const reportStreet_1: string = generator.street();
 const reportStreet_2: string = generator.apartment();
@@ -62,6 +62,7 @@ describe('QA Test Script #133 (Sprint 8)', () => {
       .parent()
       .find('.p-radiobutton')
       .click();
+    cy.wait(50);
   });
 
   it('Step 10: Verify that the "Address" fields are displayed', () => {
@@ -73,10 +74,10 @@ describe('QA Test Script #133 (Sprint 8)', () => {
   });
 
   it('Step 11: Update the address', () => {
-    cy.get("input[formControlName='street_1']").safeType('{selectAll}').safeType(reportStreet_1);
-    cy.get("input[formControlName='street_2']").safeType('{selectAll}').safeType(reportStreet_2);
-    cy.get("input[formControlName='city']").safeType('{selectAll}').safeType(reportCity);
-    cy.get("input[formControlName='zip']").safeType('{selectAll}').safeType(reportZip);
+    cy.get("input[formControlName='street_1']").overwrite(reportStreet_1);
+    cy.get("input[formControlName='street_2']").overwrite(reportStreet_2);
+    cy.get("input[formControlName='city']").overwrite(reportCity);
+    cy.get("input[formControlName='zip']").overwrite(reportZip);
     cy.dropdownSetValue("p-dropdown[formControlName='state']", reportState);
     cy.get("button[label='Save']").click();
     cy.wait(250);

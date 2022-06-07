@@ -51,22 +51,31 @@ export function getAuthToken() {
   return Cypress.env('AUTH_TOKEN');
 }
 
-export function safeType(subject: any, stringVal: string | number) {
-  subject = cy.wrap(subject);
-
+function safeString(stringVal: string | number): string {
   if (stringVal == null) {
-    stringVal = '';
-  } else if (!isString(stringVal)) {
-    stringVal = stringVal.toString();
+    return '';
+  } else {
+    return stringVal.toString();
   }
+}
 
-  if (stringVal.length != 0) {
-    subject.type(stringVal);
+export function safeType(prevSubject: any, stringVal: string | number) {
+  let subject: any = cy.wrap(prevSubject);
+  let outString: string = safeString(stringVal);
+
+  if (outString.length != 0) {
+    subject.type(outString);
   } else {
     console.log(`Skipped typing into ${subject.toString()}} because the string was empty`);
   }
 
   return subject; //Allows Cypress methods to chain off of this command like normal (IE Cy.get().safe_type().parent().click() and so on)
+}
+
+export function overwrite(prevSubject: any, stringVal: string | number) {
+  let outString: string = safeString(stringVal);
+
+  return safeType(prevSubject, '{selectall}{del}' + outString);
 }
 
 export function dropdownSetValue(dropdown: string, value: string) {

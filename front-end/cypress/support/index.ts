@@ -4,8 +4,9 @@
 
 */
 
-import { safeType, dropdownSetValue, calendarSetValue, login, logout } from './commands';
+import { safeType, overwrite, dropdownSetValue, calendarSetValue, login, logout } from './commands';
 Cypress.Commands.add('safeType', { prevSubject: true }, safeType);
+Cypress.Commands.add('overwrite', { prevSubject: true }, overwrite);
 Cypress.Commands.add('dropdownSetValue', dropdownSetValue);
 Cypress.Commands.add('calendarSetValue', calendarSetValue);
 Cypress.Commands.add('login', login);

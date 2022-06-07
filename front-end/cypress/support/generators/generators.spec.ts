@@ -356,7 +356,7 @@ export const f3xReportCodes: object = {
   QUARTERLY: {
     'Non-Election Year': ['Q1', 'MY', 'Q2', 'YE', 'TER'],
     'Election Year': ['Q1', 'Q2', 'Q3', '12G', '30G', 'YE', 'TER'],
-    Special: ['11P', '12R', '12C', '12S', '30R', '30S'],
+    Special: ['12P', '12R', '12C', '12S', '30R', '30S'],
   },
 };
 export function f3xReportCode(filingFrequency: string, reportCategory: string): string {
