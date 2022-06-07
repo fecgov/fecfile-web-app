@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { mergeMap, Observable } from 'rxjs';
 import { LabelList } from '../utils/label.utils';
-import { FecApiService } from './fec-api.service';
+import { ApiService } from './api.service';
 import { Store } from '@ngrx/store';
-import { selectReportCodeLabel } from '../../store/label-lookup.selector'
+import { selectReportCodeLabel } from '../../store/label-lookup.selectors';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LabelLookupService {
-  constructor(private fecApiService: FecApiService, private store: Store) {}
+  constructor(private apiService: ApiService, private store: Store) {}
 
   /**
    * Gets the label details
@@ -20,7 +20,7 @@ export class LabelLookupService {
     const reportCodeLabel$ = this.store.select(selectReportCodeLabel);
     return reportCodeLabel$.pipe(
       mergeMap(() => {
-        return this.fecApiService.getLabels();
+        return this.apiService.get('/report-code-labels');
       })
     );
   }
