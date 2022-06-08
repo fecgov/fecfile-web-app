@@ -7,24 +7,24 @@ const testPassword: string = Cypress.env('PASSWORD');
 const testPIN: string = Cypress.env('PIN');
 
 //login page form-fields' id's (or classes where elements have no id's)
-const fieldEmail: string = '#login-email-id';
-const fieldCommittee: string = '#login-committee-id';
-const fieldPassword: string = '#login-password';
-const fieldLoginButton: string = '.login__btn';
-const errorEmail: string = '.error__email-id';
-const errorCommitteeID: string = '.error__committee-id';
-const errorPassword: string = '.error__password-error';
+const fieldEmail = '#login-email-id';
+const fieldCommittee = '#login-committee-id';
+const fieldPassword = '#login-password';
+const fieldLoginButton = '.login__btn';
+const errorEmail = '.error__email-id';
+const errorCommitteeID = '.error__committee-id';
+const errorPassword = '.error__password-error';
 
 //two-factor authentication page form-fields' ids
-const fieldTwoFactorEmail: string = '#email';
-const fieldTwoFactorPhoneText: string = '#phone_number_text';
-const fieldTwoFactorPhoneCall: string = '#phone_number_call';
-const fieldTwoFactorSubmit: string = '.action__btn.next';
-const fieldTwoFactorBack: string = '.action__btn.clear';
+const fieldTwoFactorEmail = '#email';
+const fieldTwoFactorPhoneText = '#phone_number_text';
+const fieldTwoFactorPhoneCall = '#phone_number_call';
+const fieldTwoFactorSubmit = '.action__btn.next';
+const fieldTwoFactorBack = '.action__btn.clear';
 
 //security code page form-fields' ids
-const fieldSecurityCodeText: string = '.form-control';
-const fieldSecurityCodeNext: string = '.action__btn.next';
+const fieldSecurityCodeText = '.form-control';
+const fieldSecurityCodeNext = '.action__btn.next';
 
 /*
 

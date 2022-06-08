@@ -1,8 +1,8 @@
 // @ts-check
 
-const fieldCandidateOffice: string = "p-dropdown[FormControlName='candidate_office']";
-const fieldCandidateState: string = 'p-dropdown[FormControlName="candidate_state"]';
-const fieldCandidateDistrict: string = 'p-dropdown[FormControlName="candidate_district"]';
+const fieldCandidateOffice = "p-dropdown[FormControlName='candidate_office']";
+const fieldCandidateState = 'p-dropdown[FormControlName="candidate_state"]';
+const fieldCandidateDistrict = 'p-dropdown[FormControlName="candidate_district"]';
 
 const candidateStates: object = {
   Alabama: 7,
@@ -66,7 +66,7 @@ const candidateStates: object = {
 function checkEveryStateThenSelectWestVirgia() {
   cy.get(fieldCandidateState).click();
 
-  for (let state of Object.keys(candidateStates)) {
+  for (const state of Object.keys(candidateStates)) {
     cy.get('p-dropdownitem').contains(state).should('exist');
   }
 
@@ -143,7 +143,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   });
 
   it('Steps 13 & 14: Check that every state has its corresponding number of districts', () => {
-    for (let state of Object.keys(candidateStates)) {
+    for (const state of Object.keys(candidateStates)) {
       let districtCount: number = candidateStates[state];
       if (districtCount == 0) districtCount = 1; //For some odd reason, states with 0 districts have '00' in the dropdown; According to Shelly, this is intended behavior
 

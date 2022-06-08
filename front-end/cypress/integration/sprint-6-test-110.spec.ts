@@ -1,6 +1,6 @@
 // @ts-check
 
-import { generateContactObject } from '../support/contacts.spec';
+import { generateContactObject } from '../support/generators/contacts.spec';
 
 /*
 
@@ -9,7 +9,7 @@ import { generateContactObject } from '../support/contacts.spec';
 */
 
 let contactType: string;
-let contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
+const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 describe('QA Test Script #110 (Sprint 6)', () => {
   function before() {
@@ -28,9 +28,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
 
   for (contactType of Object.keys(contacts)) {
     contacts[contactType] = generateContactObject({ contact_type: contactType });
-
     context(`QA Script #110 - ${contactType}`, (cType = contactType) => {
-      let contact: object = contacts[cType];
       it('Step 1: Navigate to contacts page', () => {
         before();
 
@@ -40,6 +38,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
       });
 
       it('Steps 2-5: Creates a contact', () => {
+        let contact: object = contacts[cType];
         cy.enterContact(contact, false);
 
         if (cType == 'Individual' || cType == 'Candidate') {
