@@ -11,7 +11,7 @@ describe('Demos the automated creation of a SchA Transaction', () => {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.wait(100);
 
-    let report = generateReportObject();
+    const report = generateReportObject();
     cy.enterReport(report);
     cy.wait(250);
   });
@@ -29,7 +29,7 @@ describe('Demos the automated creation of a SchA Transaction', () => {
   });
 
   it('Creates a transaction', () => {
-    let transaction: object = generateSchATransactionObject({ contributor_type: 'Individual' });
+    const transaction: object = generateSchATransactionObject({ contributor_type: 'Individual' });
     cy.enterTransactionSchA(transaction);
   });
 });

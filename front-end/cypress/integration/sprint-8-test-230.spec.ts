@@ -40,7 +40,7 @@ const fieldsRequired: Array<string> = [
 ];
 
 let transactionType: string;
-let transactions: object = { Individual: {}, Organization: {} };
+const transactions: object = { Individual: {}, Organization: {} };
 
 describe('QA Test Scripts #230 (Sprint 8)', () => {
   before('Logs in and creates a dummy report', () => {
@@ -51,7 +51,7 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.wait(100);
 
-    let report = generateReportObject();
+    const report = generateReportObject();
     cy.enterReport(report);
 
     cy.wait(250);
@@ -87,8 +87,8 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
         cy.get('.p-checkbox-box').click();
       });
 
-      for (let field of Object.keys(contactFields[cType])) {
-        let strLength: number = contactFields[cType][field];
+      for (const field of Object.keys(contactFields[cType])) {
+        const strLength: number = contactFields[cType][field];
 
         it(`Tests the "${field}" field for required/optional and max length`, () => {
           if (fieldsRequired.includes(field)) {
@@ -97,7 +97,7 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
             cy.get(`[formControlName="${field}"]`).parent().should('contain', 'This is a required field');
           }
 
-          let randString: string = '';
+          let randString = '';
           if (field == 'contribution_amount') {
             randString = randomString(strLength, 'numeric');
           } else {

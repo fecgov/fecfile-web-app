@@ -9,7 +9,7 @@ import { generateContactObject } from '../support/generators/contacts.spec';
 */
 
 let contactType: string;
-let contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
+const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 describe('QA Test Script #110 (Sprint 6)', () => {
   function before() {

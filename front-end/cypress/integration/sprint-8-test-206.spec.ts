@@ -4,9 +4,9 @@ import { generateContactObject } from '../support/generators/contacts.spec';
 const candidateTypes: string[] = ['P', 'H', 'S'];
 
 describe('QA Test Script #206 (Sprint 8)', () => {
-  for (let candidateType of candidateTypes) {
+  for (const candidateType of candidateTypes) {
     context(`${candidateType}-Type Candidate`, (cType = candidateType) => {
-      let contact: object = generateContactObject({ contact_type: 'Candidate' });
+      const contact: object = generateContactObject({ contact_type: 'Candidate' });
 
       it('Step 1: Navigate to the Contacts Page', () => {
         cy.login();

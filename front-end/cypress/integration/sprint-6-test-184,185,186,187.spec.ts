@@ -2,7 +2,7 @@
 
 import { generateContactObject } from '../support/generators/contacts.spec';
 
-let contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
+const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 function after(contact) {
   cy.get('p-table')
@@ -20,7 +20,7 @@ function after(contact) {
 }
 
 describe('QA Test Scripts 184 through 187', () => {
-  for (let contactType of Object.keys(contacts)) {
+  for (const contactType of Object.keys(contacts)) {
     contacts[contactType] = generateContactObject({ contact_type: contactType });
 
     context(`---> ${contactType}`, (cType = contactType) => {

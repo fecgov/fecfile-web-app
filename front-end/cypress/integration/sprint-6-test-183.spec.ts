@@ -2,7 +2,7 @@
 
 import { generateContactObject } from '../support/generators/contacts.spec';
 
-const contact: Object = generateContactObject({ contact_type: 'Individual', state: 'Virginia' });
+const contact: object = generateContactObject({ contact_type: 'Individual', state: 'Virginia' });
 
 describe('QA Test Script #183 (Sprint 6)', () => {
   function before() {

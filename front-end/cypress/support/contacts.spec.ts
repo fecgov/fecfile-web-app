@@ -1,5 +1,4 @@
-
-export function enterContact(contact: object, save: boolean = true) {
+export function enterContact(contact: object, save = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
   cy.wait(100);
 

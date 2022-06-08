@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as generator from './generators.spec';
 
 export function generateContactObject(contactGiven: object = {}): object {
-  let contactRandom: object = {
+  const contactRandom: object = {
     //fields defined in this object are intentionally not CamelCase as they are intended to mirror the FormControlNames of elements on the Front-End
     //_.sample : standard js object method (hence _.); takes a random element from a given list.  Much more readable than [randomint % list.length] on every list
     contact_type: _.sample(['Individual', 'Candidate', 'Committee', 'Organization']),
@@ -41,7 +41,7 @@ export function generateContactObject(contactGiven: object = {}): object {
     name: '',
   };
 
-  let contact = { ...contactRandom, ...contactGiven }; //Merges the provided contact with the randomly generated one, overwriting the random one with any fields found in the provided
+  const contact = { ...contactRandom, ...contactGiven }; //Merges the provided contact with the randomly generated one, overwriting the random one with any fields found in the provided
 
   //  Resolve the contact object's "name" based on contact_type.  This must be done after merging in case the contactGiven object does not provide first, last, committee, or organization names
   if (contact['contact_type'] == 'Individual' || contact['contact_type'] == 'Candidate') {

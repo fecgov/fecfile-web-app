@@ -20,7 +20,7 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.url().should('contain', '/reports');
 
-    let report: object = generateReportObject();
+    const report: object = generateReportObject();
     cy.enterReport(report);
     cy.wait(250);
 
@@ -51,7 +51,7 @@ describe('QA Script 244 (Sprint 8)', () => {
   });
 
   it('Step 5: Verify the column labels', () => {
-    for (let column of columns) {
+    for (const column of columns) {
       cy.get('th').contains(column).should('exist');
     }
   });

@@ -2,7 +2,7 @@
 
 import * as generator from '../support/generators/generators.spec';
 import { generateReportObject } from '../support/generators/reports.spec';
-import { getAuthToken, overwrite } from '../support/commands';
+import { getAuthToken } from '../support/commands';
 
 const reportStreet_1: string = generator.street();
 const reportStreet_2: string = generator.apartment();
@@ -84,7 +84,7 @@ describe('QA Test Script #133 (Sprint 8)', () => {
   });
 
   it('Step 12: Check that the address changed', () => {
-    let authToken: string = getAuthToken();
+    const authToken = getAuthToken();
     cy.request({
       method: 'GET',
       url: 'http://localhost:8080/api/v1/f3x-summaries/',
@@ -92,7 +92,7 @@ describe('QA Test Script #133 (Sprint 8)', () => {
         Authorization: authToken,
       },
     }).then((resp) => {
-      let report = resp.body.results[0];
+      const report = resp.body.results[0];
       cy.expect(report.street_1).to.eql(reportStreet_1);
       cy.expect(report.city).to.eql(reportCity);
       cy.expect(report.zip).to.eql(reportZip);
@@ -100,8 +100,8 @@ describe('QA Test Script #133 (Sprint 8)', () => {
       if (reportStreet_2 != '') cy.expect(report.street_2).to.eql(reportStreet_2);
       else console.log(cy.expect(report.street_2).to.be.null); //SonarCloud throws a fit because it thinks this line is an 'expression' without putting it inside a useless function wrapper...
 
-      let state: string = reportState;
-      let stateCode: string = generator.stateCodes[state.toUpperCase()];
+      const state = reportState;
+      const stateCode: string = generator.stateCodes[state.toUpperCase()];
       cy.expect(report.state).to.eql(stateCode);
     });
   });

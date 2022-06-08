@@ -64,7 +64,7 @@ const fieldsRequired: Array<string> = [
 ];
 
 let contactType: string;
-let contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
+const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page', () => {
@@ -86,8 +86,8 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
         cy.get("button[label='Save']").click();
         cy.wait(50);
 
-        for (let field of Object.keys(contactFields[cType])) {
-          let strLength: number = contactFields[cType][field];
+        for (const field of Object.keys(contactFields[cType])) {
+          const strLength = contactFields[cType][field];
 
           if (fieldsRequired.includes(field)) {
             cy.get('#' + field)
@@ -95,7 +95,7 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
               .should('contain', 'This is a required field');
           }
 
-          let randString: string = '';
+          let randString = '';
           if (field == 'telephone') {
             randString = randomString(strLength, 'numeric');
           } else {

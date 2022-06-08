@@ -46,7 +46,7 @@ export function enterReport(report, save = true) {
   }
 }
 
-export function progressReport(address_details: object = null) {
+export function progressReport(address_details = null) {
   if (address_details == null) {
     cy.get("p-radiobutton[formControlName='change_of_address']")
       .contains('p-radiobutton', 'NO')
@@ -73,7 +73,7 @@ export function progressReport(address_details: object = null) {
 
 //Deletes all reports belonging to the logged-in committee
 export function deleteAllReports() {
-  let authToken: string = getAuthToken();
+  const authToken: string = getAuthToken();
   cy.request({
     method: 'GET',
     url: 'http://localhost:8080/api/v1/f3x-summaries/',
@@ -81,15 +81,15 @@ export function deleteAllReports() {
       Authorization: authToken,
     },
   }).then((resp) => {
-    let reports = resp.body.results;
-    for (let report of reports) {
+    const reports = resp.body.results;
+    for (const report of reports) {
       deleteReport(report.id, authToken);
     }
   });
 }
 
 //Deletes a single report by its ID
-export function deleteReport(reportID: number, authToken: string = null) {
+export function deleteReport(reportID: number, authToken: string | null = null) {
   if (authToken == null) {
     authToken = getAuthToken();
   }

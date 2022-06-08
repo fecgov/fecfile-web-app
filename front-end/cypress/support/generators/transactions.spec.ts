@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as generator from './generators.spec';
 
 export function generateSchATransactionObject(transactionGiven: object = {}): object {
-  let transactionRandom: object = {
+  const transactionRandom: object = {
     //fields defined in this object are intentionally not CamelCase as they are intended to mirror the FormControlNames of elements on the Front-End
     //_.sample : standard js object method (hence _.); takes a random element from a given list.  Much more readable than [randomint % list.length] on every list
     contributor_type: _.sample(['Individual', 'Candidate', 'Committee', 'Organization']),
@@ -45,7 +45,7 @@ export function generateSchATransactionObject(transactionGiven: object = {}): ob
     name: '',
   };
 
-  let transaction = { ...transactionRandom, ...transactionGiven }; //Merges the provided contact with the randomly generated one, overwriting the random one with any fields found in the provided
+  const transaction = { ...transactionRandom, ...transactionGiven }; //Merges the provided contact with the randomly generated one, overwriting the random one with any fields found in the provided
 
   //  Resolve the contact object's "name" based on transaction_type.  This must be done after merging in case the contactGiven object does not provide first, last, committee, or organization names
   if (transaction['transaction_type'] == 'Individual' || transaction['transaction_type'] == 'Candidate') {

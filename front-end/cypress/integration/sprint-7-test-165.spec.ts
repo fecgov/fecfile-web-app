@@ -9,8 +9,8 @@ describe('QA Test Script #165 (Sprint 7)', () => {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.url().should('contain', '/reports');
 
-    for (let i: number = 0; i < 3; i++) {
-      let report = generateReportObject();
+    for (let i = 0; i < 3; i++) {
+      const report = generateReportObject();
       cy.enterReport(report);
     }
   });

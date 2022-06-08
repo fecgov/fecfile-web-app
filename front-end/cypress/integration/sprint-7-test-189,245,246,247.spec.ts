@@ -20,9 +20,9 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
     cy.logout();
   }
 
-  for (let contactType of contactTypes) {
+  for (const contactType of contactTypes) {
     context(`---> ${contactType}`, (cType = contactType) => {
-      let contact: object = generateContactObject({
+      const contact: object = generateContactObject({
         contact_type: cType,
         first_name: 'Test',
         last_name: 'Edit',

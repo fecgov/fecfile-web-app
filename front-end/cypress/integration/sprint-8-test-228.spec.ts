@@ -73,7 +73,7 @@ describe('QA Script 228 (Sprint 8)', () => {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.url().should('contain', '/reports');
 
-    let report: object = generateReportObject();
+    const report: object = generateReportObject();
     cy.enterReport(report);
     cy.wait(250);
 
@@ -101,9 +101,9 @@ describe('QA Script 228 (Sprint 8)', () => {
   });
 
   it('Step 4: Check the accordian tab headers', () => {
-    for (let header of Object.keys(accordion)) {
+    for (const header of Object.keys(accordion)) {
       cy.get('p-accordion').contains(header).should('exist').click();
-      for (let transaction of accordion[header]) {
+      for (const transaction of accordion[header]) {
         cy.get('p-accordion').contains('p-accordion', header).should('contain', transaction);
       }
     }

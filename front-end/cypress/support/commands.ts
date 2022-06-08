@@ -1,5 +1,3 @@
-import { isString } from 'lodash';
-
 export function login() {
   //Dummy login information
   const email = Cypress.env('EMAIL');
@@ -41,9 +39,9 @@ export function logout() {
 }
 
 function retrieveAuthToken() {
-  let storedData: string = localStorage.getItem('fecfile_online_userLoginData');
-  let loginData: JSON = JSON.parse(storedData);
-  let authToken: string = 'JWT ' + loginData.token;
+  const storedData = localStorage.getItem('fecfile_online_userLoginData');
+  const loginData: JSON = JSON.parse(storedData);
+  const authToken = 'JWT ' + loginData.token;
   return authToken;
 }
 
@@ -60,8 +58,8 @@ function safeString(stringVal: string | number): string {
 }
 
 export function safeType(prevSubject: any, stringVal: string | number) {
-  let subject: any = cy.wrap(prevSubject);
-  let outString: string = safeString(stringVal);
+  const subject = cy.wrap(prevSubject);
+  const outString: string = safeString(stringVal);
 
   if (outString.length != 0) {
     subject.type(outString);
@@ -73,7 +71,7 @@ export function safeType(prevSubject: any, stringVal: string | number) {
 }
 
 export function overwrite(prevSubject: any, stringVal: string | number) {
-  let outString: string = safeString(stringVal);
+  const outString = safeString(stringVal);
 
   return safeType(prevSubject, '{selectall}{del}' + outString);
 }
@@ -85,7 +83,7 @@ export function dropdownSetValue(dropdown: string, value: string) {
 }
 
 export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
-  let currentDate: Date = new Date();
+  const currentDate: Date = new Date();
   cy.get(calendar).click();
   cy.wait(25);
 
@@ -98,13 +96,13 @@ export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   const decadeStart: number = currentYear - (currentYear % 10);
   const decadeEnd: number = decadeStart + 9;
   if (year < decadeStart) {
-    for (let i: number = 0; i < decadeStart - year; i += 10) {
+    for (let i = 0; i < decadeStart - year; i += 10) {
       cy.get('.p-datepicker-prev').click();
       cy.wait(25);
     }
   }
   if (year > decadeEnd) {
-    for (let i: number = 0; i < year - decadeEnd; i += 10) {
+    for (let i = 0; i < year - decadeEnd; i += 10) {
       cy.get('.p-datepicker-next').click();
       cy.wait(25);
     }
