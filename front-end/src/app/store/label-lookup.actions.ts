@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { LabelList } from '../shared/utils/label.utils';
+import { LabelList, ReportCodeLabelList } from '../shared/utils/label.utils';
 
 export const setLabelLookupAction = createAction(
   '[Committee Account] Account Retrieved',
-  props<{ payload: LabelList }>()
+  props<{ payload: ReportCodeLabelList }>()
 );
 
 export const errorRetrievingLabelLookupAction = createAction('[Label List] Account Loaded Error');

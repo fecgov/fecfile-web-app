@@ -59,7 +59,8 @@
     <ng-template pTemplate="body" let-item>
       <tr role="row">
         <td>{{ item.form_type | label: f3xFormTypeLabels }}</td>
-        <td>{{ item.report_code | label: f3xReportCodeLabels }}</td>
+        <!--<td>{{ item.report_code | label: f3xReportCodeLabels }}</td>-->
+        <td>{{ this.reportCodeLabels$ | async }}</td>
         <td>
           <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
             >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container

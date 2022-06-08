@@ -1,5 +1,4 @@
-import { createFeatureSelector } from "@ngrx/store";
-import { LabelList } from "../shared/utils/label.utils";
+import { createFeatureSelector } from '@ngrx/store';
+import { ReportCodeLabelList } from '../shared/utils/label.utils';
 
-export const selectReportCodeLabel =
-  createFeatureSelector<LabelList>("ReportCodeLabel");
+export const selectReportCodeLabel = createFeatureSelector<ReportCodeLabelList>('reportCodeLabel');

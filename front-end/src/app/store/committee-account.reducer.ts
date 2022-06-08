@@ -10,5 +10,6 @@ const _committeeAccountReducer = createReducer(
 );
 
 export function committeeAccountReducer(state: CommitteeAccount | undefined, action: Action) {
+  console.log('Committee Account Reducer ', state, action);
   return _committeeAccountReducer(state, action);
 }

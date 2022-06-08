@@ -1,8 +1,10 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
+import { async, asyncScheduler, Observable, Subject, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report } from '../../shared/interfaces/report.interface';
-import { LabelList } from '../../shared/utils/label.utils';
+import { LabelList, ReportCodeLabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
 import {
   F3xSummary,
@@ -11,6 +13,7 @@ import {
   F3xFormVersionLabels,
 } from 'app/shared/models/f3x-summary.model';
 import { Router } from '@angular/router';
+import { selectReportCodeLabel } from 'app/store/label-lookup.selectors';
 
 @Component({
   selector: 'app-report-list',
@@ -20,8 +23,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeLabels: LabelList = F3xReportCodeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
+  reportCodeLabels$: Observable<ReportCodeLabelList>;
 
   constructor(
+    private store: Store,
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
@@ -29,11 +34,21 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     protected router: Router
   ) {
     super(messageService, confirmationService, elementRef);
+    this.reportCodeLabels$ = this.store.select(selectReportCodeLabel);
   }
 
   ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
+    /*this.store
+      .select(selectReportCodeLabel)
+      //.pipe(takeUntil(this.destroy$))
+      .pipe()
+      .subscribe((labelList) => {
+        console.log('ReportCodeLabels:', this);
+        console.log(labelList);
+        //this.reportCodeLabels = resp;
+      });*/
   }
 
   protected getEmptyItem(): F3xSummary {

@@ -1,5 +1,5 @@
 export type LabelList = string[][];
-
+export type ReportCodeLabelList = { report_code: string; label: string }[];
 export type PrimeOptions = { name: string; code: string }[];
 
 /**
