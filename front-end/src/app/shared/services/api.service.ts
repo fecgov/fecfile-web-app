@@ -26,7 +26,7 @@ export class ApiService {
     const baseHeaders = {
       'Content-Type': 'application/json',
       ...(this.jwt && {Authorization: `JWT ${this.jwt}`}),
-      ...(this.csrfToken && {'X-CSRFToken':`${this.csrfToken}` })
+      ...(this.csrfToken && {'x-csrftoken':`${this.csrfToken}` })
     };
     return { ...baseHeaders, ...headersToAdd };
   }
