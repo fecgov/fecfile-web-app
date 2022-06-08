@@ -41,8 +41,7 @@ export function logout() {
 function retrieveAuthToken() {
   const storedData = localStorage.getItem('fecfile_online_userLoginData');
   const loginData: JSON = JSON.parse(storedData);
-  const authToken = 'JWT ' + loginData.token;
-  return authToken;
+  return 'JWT ' + loginData.token;
 }
 
 export function getAuthToken() {
