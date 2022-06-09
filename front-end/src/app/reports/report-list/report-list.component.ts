@@ -23,7 +23,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeLabels: LabelList = F3xReportCodeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
-  reportCodeLabels$: Observable<ReportCodeLabelList>;
+  reportCodeLabels$: Observable<ReportCodeLabelList> | null = null;
 
   constructor(
     private store: Store,
@@ -34,7 +34,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     protected router: Router
   ) {
     super(messageService, confirmationService, elementRef);
-    this.reportCodeLabels$ = this.store.select(selectReportCodeLabel);
   }
 
   ngOnInit() {
@@ -49,6 +48,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
         console.log(labelList);
         //this.reportCodeLabels = resp;
       });*/
+    this.reportCodeLabels$ = this.store.select(selectReportCodeLabel);
   }
 
   protected getEmptyItem(): F3xSummary {
