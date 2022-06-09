@@ -14,6 +14,7 @@ import {
 } from 'app/shared/models/f3x-summary.model';
 import { Router } from '@angular/router';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
+import { updateLabelLookupAction } from '../../store/label-lookup.actions';
 
 @Component({
   selector: 'app-report-list',
@@ -49,6 +50,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
         //this.reportCodeLabels = resp;
       });*/
     this.reportCodeLabelList$ = this.store.select(selectReportCodeLabelList);
+    this.store.dispatch(updateLabelLookupAction());
   }
 
   protected getEmptyItem(): F3xSummary {
