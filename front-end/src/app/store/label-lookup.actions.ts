@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { LabelList, ReportCodeLabelList } from '../shared/utils/label.utils';
+import { LabelList } from '../shared/utils/label.utils';
+import { ReportCodeLabelList } from '../shared/utils/reportCodeLabels.utils';
 
 export const setLabelLookupAction = createAction(
   '[Label Lookup] Report Code Labels Retrieved',

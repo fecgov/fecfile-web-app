@@ -1,6 +1,7 @@
 import { createReducer, on, Action } from '@ngrx/store';
 import { setLabelLookupAction } from './label-lookup.actions';
-import { LabelList, ReportCodeLabelList } from '../shared/utils/label.utils';
+import { LabelList } from '../shared/utils/label.utils';
+import { ReportCodeLabelList } from '../shared/utils/reportCodeLabels.utils';
 
 export const initialState: ReportCodeLabelList = [];
 

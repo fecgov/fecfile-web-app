@@ -1,10 +1,11 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
-import { async, asyncScheduler, Observable, Subject, takeUntil } from 'rxjs';
+import { async, asyncScheduler, map, Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report } from '../../shared/interfaces/report.interface';
-import { LabelList, ReportCodeLabelList } from '../../shared/utils/label.utils';
+import { LabelList } from '../../shared/utils/label.utils';
+import { ReportCodeLabelList } from '../../shared/utils/reportCodeLabels.utils';
 import { ReportService } from '../../shared/services/report.service';
 import {
   F3xSummary,
@@ -24,7 +25,8 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeLabels: LabelList = F3xReportCodeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
-  reportCodeLabelList$: Observable<ReportCodeLabelList> | null = null;
+  reportCodeLabelList: ReportCodeLabelList = [];
+  reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
 
   constructor(
     private store: Store,
@@ -40,16 +42,26 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
-    /*this.store
-      .select(selectReportCodeLabel)
-      //.pipe(takeUntil(this.destroy$))
-      .pipe()
-      .subscribe((labelList) => {
-        console.log('ReportCodeLabels:', this);
-        console.log(labelList);
-        //this.reportCodeLabels = resp;
-      });*/
-    this.reportCodeLabelList$ = this.store.select(selectReportCodeLabelList);
+
+    /*this.store.select(selectReportCodeLabelList).subscribe((labelList) => {
+      console.log('ReportCodeLabels:', this);
+      console.log(labelList);
+      this.reportCodeLabelList$ = labelList;
+    });*/
+
+    this.store.select<ReportCodeLabelList>(selectReportCodeLabelList).pipe(
+      map((reportList) => {
+        this.reportCodeLabelList = reportList;
+      })
+    );
+
+    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
+    /*this.reportCodeLabelList$.pipe(
+      map((reportList) => {
+        this.reportCodeLabelList = reportList;
+      })
+    );*/
+
     this.store.dispatch(updateLabelLookupAction());
   }
 
