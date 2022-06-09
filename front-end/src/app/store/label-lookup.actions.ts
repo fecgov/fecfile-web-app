@@ -2,9 +2,9 @@ import { createAction, props } from '@ngrx/store';
 import { LabelList, ReportCodeLabelList } from '../shared/utils/label.utils';
 
 export const setLabelLookupAction = createAction(
-  '[Report Code Label List] Label List Retrieved',
+  '[Label Lookup] Report Code Labels Retrieved',
   props<{ payload: ReportCodeLabelList }>()
 );
 
-export const errorRetrievingLabelLookupAction = createAction('[Label List] Account Loaded Error');
-export const selectLabelLookupAction = createAction('[Label List] Select Data');
+export const errorRetrievingLabelLookupAction = createAction('[Label Lookup] Report Code Labels Retrieval Error');
+export const updateLabelLookupAction = createAction('[Label List] Update Report Code Labels');

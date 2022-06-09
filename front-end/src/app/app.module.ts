@@ -16,7 +16,7 @@ import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { LoginEffects } from './store/login.effects';
 import { AppState } from './store/app-state.model';
 import { labelLookupReducer } from './store/label-lookup.reducer';
-import { labelLookupEffects } from './store/label-lookup.effects';
+import { LabelLookupEffects } from './store/label-lookup.effects';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -83,7 +83,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
       },
       { metaReducers }
     ),
-    EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects, labelLookupEffects]),
+    EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects, LabelLookupEffects]),
     MenubarModule,
     MenuModule,
     PanelModule,

@@ -13,7 +13,7 @@ import {
   F3xFormVersionLabels,
 } from 'app/shared/models/f3x-summary.model';
 import { Router } from '@angular/router';
-import { selectReportCodeLabel } from 'app/store/label-lookup.selectors';
+import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 
 @Component({
   selector: 'app-report-list',
@@ -23,7 +23,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeLabels: LabelList = F3xReportCodeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
-  reportCodeLabels$: Observable<ReportCodeLabelList> | null = null;
+  reportCodeLabelList$: Observable<ReportCodeLabelList> | null = null;
 
   constructor(
     private store: Store,
@@ -48,7 +48,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
         console.log(labelList);
         //this.reportCodeLabels = resp;
       });*/
-    this.reportCodeLabels$ = this.store.select(selectReportCodeLabel);
+    this.reportCodeLabelList$ = this.store.select(selectReportCodeLabelList);
   }
 
   protected getEmptyItem(): F3xSummary {
