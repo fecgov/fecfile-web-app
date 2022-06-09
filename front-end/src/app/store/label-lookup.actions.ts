@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { LabelList, ReportCodeLabelList } from '../shared/utils/label.utils';
 
 export const setLabelLookupAction = createAction(
-  '[Committee Account] Account Retrieved',
+  '[Report Code Label List] Label List Retrieved',
   props<{ payload: ReportCodeLabelList }>()
 );
 

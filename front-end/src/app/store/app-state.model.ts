@@ -6,5 +6,5 @@ export interface AppState {
   committeeAccount: CommitteeAccount;
   spinnerOn: boolean;
   userLoginData: UserLoginData;
-  reportCodeLabel: ReportCodeLabelList;
+  reportCodeLabelList: ReportCodeLabelList;
 }

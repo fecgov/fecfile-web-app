@@ -47,7 +47,7 @@ import { HttpErrorInterceptor } from './shared/interceptors/http-error.intercept
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
-    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'reportCodeLabels'],
+    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'reportCodeLabelList'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
@@ -79,7 +79,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         committeeAccount: committeeAccountReducer,
         spinnerOn: spinnerReducer,
         userLoginData: loginReducer,
-        reportCodeLabel: labelLookupReducer,
+        reportCodeLabelList: labelLookupReducer,
       },
       { metaReducers }
     ),
