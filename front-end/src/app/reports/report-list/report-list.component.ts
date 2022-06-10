@@ -1,5 +1,5 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
-import { async, asyncScheduler, map, Observable, Subject, takeUntil } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
@@ -7,12 +7,7 @@ import { Report } from '../../shared/interfaces/report.interface';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportCodeLabelList } from '../../shared/utils/reportCodeLabels.utils';
 import { ReportService } from '../../shared/services/report.service';
-import {
-  F3xSummary,
-  F3xFormTypeLabels,
-  F3xReportCodeLabels,
-  F3xFormVersionLabels,
-} from 'app/shared/models/f3x-summary.model';
+import { F3xSummary, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/f3x-summary.model';
 import { Router } from '@angular/router';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { updateLabelLookupAction } from '../../store/label-lookup.actions';
@@ -23,7 +18,6 @@ import { updateLabelLookupAction } from '../../store/label-lookup.actions';
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  f3xReportCodeLabels: LabelList = F3xReportCodeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
   reportCodeLabelList: ReportCodeLabelList = [];
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
@@ -42,26 +36,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
-
-    /*this.store.select(selectReportCodeLabelList).subscribe((labelList) => {
-      console.log('ReportCodeLabels:', this);
-      console.log(labelList);
-      this.reportCodeLabelList$ = labelList;
-    });*/
-
-    this.store.select<ReportCodeLabelList>(selectReportCodeLabelList).pipe(
-      map((reportList) => {
-        this.reportCodeLabelList = reportList;
-      })
-    );
-
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
-    /*this.reportCodeLabelList$.pipe(
-      map((reportList) => {
-        this.reportCodeLabelList = reportList;
-      })
-    );*/
-
     this.store.dispatch(updateLabelLookupAction());
   }
 
