@@ -10,6 +10,5 @@ const _labelLookupReducer = createReducer(
 );
 
 export function labelLookupReducer(state: ReportCodeLabelList | undefined, action: Action) {
-  console.log('Label-Lookup Reducer called', state, action);
   return _labelLookupReducer(state, action);
 }
