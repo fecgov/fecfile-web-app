@@ -5,28 +5,29 @@ import { selectUserLoginData } from 'app/store/login.selectors';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { UserLoginData } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private jwt = "";
-  private csrfToken = "";
+  private token: string | null = null;
+  private loggedInEmail: string | null = null;
 
   constructor(private http: HttpClient, private store: Store, 
     private cookieService: CookieService) {
-    const userLoginData$ = this.store.select(selectUserLoginData);
-    userLoginData$.subscribe(userLoginData => {
-      this.jwt = (userLoginData && userLoginData.token) || "";
-    });
-    this.csrfToken = `${this.cookieService.get("csrftoken")}`;
+    this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
+      this.token = userLoginData.token;
+      this.loggedInEmail = userLoginData.email;
+    })
   }
 
   getHeaders(headersToAdd: object = {}) {
+    const csrfToken = `${this.cookieService.get("csrftoken")}`;
     const baseHeaders = {
       'Content-Type': 'application/json',
-      ...(this.jwt && {Authorization: `JWT ${this.jwt}`}),
-      ...(this.csrfToken && {'x-csrftoken':`${this.csrfToken}` })
+      ...(this.token && {Authorization: `JWT ${this.token}`}),
+      ...(csrfToken && {'x-csrftoken':`${csrfToken}`})
     };
     return { ...baseHeaders, ...headersToAdd };
   }
@@ -68,13 +69,9 @@ export class ApiService {
     return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, withCredentials: true });
   }
 
-  public clearTokens() {
-    this.jwt = "";
-    this.csrfToken = "";
+  public isAuthenticated() {
+    return this.loggedInEmail || 
+      this.cookieService.check(environment.ffapiEmailCookieName);
   }
 
-  public isAuthenticated() {
-    return (!!this.jwt && !!this.csrfToken) || 
-      this.cookieService.check(environment.ffapiJwtCookieName);
-  }
 }

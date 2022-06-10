@@ -9,7 +9,7 @@ export const environment = {
   userCanSetFilingFrequency: true,
   loginDotGovAuthUrl: 'http://localhost:8080/oidc/authenticate',
   loginDotGovLogoutUrl: 'http://localhost:8080/oidc/logout/',
-  ffapiJwtCookieName: 'ffapi_jwt',
   ffapiCommitteeIdCookieName: 'ffapi_committee_id',
   ffapiEmailCookieName: 'ffapi_email',
+  sessionIdCookieName: 'sessionid',
 };

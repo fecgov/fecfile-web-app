@@ -21,13 +21,13 @@ export class DashboardComponent implements OnInit {
     const userLoginData: UserLoginData = {
       committee_id: this.cookieService.get(
         environment.ffapiCommitteeIdCookieName),
-      email: this.cookieService.get(environment.ffapiEmailCookieName),
+      email: this.cookieService.get(
+        environment.ffapiEmailCookieName),
       is_allowed: true,
-      token: this.cookieService.get(environment.ffapiJwtCookieName)
+      token: null
     }
     this.cookieService.delete(environment.ffapiCommitteeIdCookieName)
     this.cookieService.delete(environment.ffapiEmailCookieName)
-    this.cookieService.delete(environment.ffapiJwtCookieName)
     this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
   }
   
