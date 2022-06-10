@@ -64,10 +64,10 @@ const interactionTree: object = {
 
 describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
   const filingFrequencies: Array<string> = Object.keys(interactionTree);
-  for (let filingFrequency of filingFrequencies) {
+  for (const filingFrequency of filingFrequencies) {
     context(`Testing interactivity under ${filingFrequency}`, () => {
-      let timePeriods: Array<string> = Object.keys(interactionTree[filingFrequency]);
-      for (let timePeriod of timePeriods) {
+      const timePeriods: Array<string> = Object.keys(interactionTree[filingFrequency]);
+      for (const timePeriod of timePeriods) {
         context(`--->       ${timePeriod}`, () => {
           it('Step 1: Navigate to contacts page', () => {
             cy.visit('/dashboard');
@@ -99,8 +99,8 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
           });
 
           it(`Step 5: Check each Report Type radio button for interactivity and the presence of the "State" dropdown and the "Election On" date picker`, () => {
-            let reportTypes: Array<string> = Object.keys(interactionTree[filingFrequency][timePeriod]);
-            for (let reportType of reportTypes) {
+            const reportTypes: Array<string> = Object.keys(interactionTree[filingFrequency][timePeriod]);
+            for (const reportType of reportTypes) {
               cy.get('p-radiobutton[FormControlName="report_code"]')
                 .contains(reportType)
                 .parent()

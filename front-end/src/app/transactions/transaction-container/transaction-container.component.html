@@ -1,12 +1,34 @@
-<ng-container *ngIf="meta.componentGroupId === 'A'"> Group A </ng-container>
-<ng-container *ngIf="meta.componentGroupId === 'B'">
+<ng-container *ngIf="transactionType.componentGroupId === 'A'">
+  <app-transaction-group-a
+    [title]="transactionType.title"
+    [schema]="transactionType.schema"
+    [transaction]="transactionType.transaction"
+    [contributionPurposeDescrip]="transactionType.contributionPurposeDescripReadonly()"
+  ></app-transaction-group-a>
+</ng-container>
+<ng-container *ngIf="transactionType.componentGroupId === 'B'">
   <app-transaction-group-b
-    [title]="meta.title"
-    [schema]="meta.schema"
-    [transaction]="meta.transaction"
+    [title]="transactionType.title"
+    [schema]="transactionType.schema"
+    [transaction]="transactionType.transaction"
+    [contributionPurposeDescrip]="transactionType.contributionPurposeDescripReadonly()"
   ></app-transaction-group-b>
 </ng-container>
-<ng-container *ngIf="meta.componentGroupId === 'C'"> Group C </ng-container>
-<ng-container *ngIf="meta.componentGroupId === 'D'"> Group D </ng-container>
-<ng-container *ngIf="meta.componentGroupId === 'E'"> Group E </ng-container>
-<ng-container *ngIf="meta.componentGroupId === 'F'"> Group F </ng-container>
+<ng-container *ngIf="transactionType.componentGroupId === 'C'">
+  <app-transaction-group-c
+    [title]="transactionType.title"
+    [schema]="transactionType.schema"
+    [transaction]="transactionType.transaction"
+    [contributionPurposeDescrip]="transactionType.contributionPurposeDescripReadonly()"
+  ></app-transaction-group-c>
+</ng-container>
+<ng-container *ngIf="transactionType.componentGroupId === 'D'">
+  <app-transaction-group-d
+    [title]="transactionType.title"
+    [schema]="transactionType.schema"
+    [transaction]="transactionType.transaction"
+    [contributionPurposeDescrip]="transactionType.contributionPurposeDescripReadonly()"
+  ></app-transaction-group-d>
+</ng-container>
+<ng-container *ngIf="transactionType.componentGroupId === 'E'"> Group E </ng-container>
+<ng-container *ngIf="transactionType.componentGroupId === 'F'"> Group F </ng-container>

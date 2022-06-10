@@ -16,7 +16,7 @@ import { updateLabelLookupAction } from '../../store/label-lookup.actions';
   selector: 'app-report-list',
   templateUrl: './report-list.component.html',
 })
-export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit {
+export class ReportListComponent extends TableListBaseComponent<Report> {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
@@ -32,7 +32,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     super(messageService, confirmationService, elementRef);
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);

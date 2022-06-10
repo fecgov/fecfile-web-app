@@ -20,6 +20,7 @@ import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { environment } from '../../../environments/environment';
 import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 describe('TransactionGroupBComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -63,6 +64,7 @@ describe('TransactionGroupBComponent', () => {
         CalendarModule,
         ButtonModule,
         CheckboxModule,
+        InputNumberModule,
         InputTextModule,
         InputTextareaModule,
       ],
@@ -100,7 +102,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({
       entity_type: ContactTypes.INDIVIDUAL,
     });
-    expect(component.form.get('contributor_organization_name')?.value).toBe('');
+    expect(component.form.get('contributor_organization_name')?.value).toBe(null);
     expect(component.form.get('contributor_last_name')?.value).toBe('last name');
     expect(component.form.get('contributor_first_name')?.value).toBe('first name');
 
@@ -113,8 +115,8 @@ describe('TransactionGroupBComponent', () => {
       entity_type: ContactTypes.ORGANIZATION,
     });
     expect(component.form.get('contributor_organization_name')?.value).toBe('org name');
-    expect(component.form.get('contributor_last_name')?.value).toBe('');
-    expect(component.form.get('contributor_first_name')?.value).toBe('');
+    expect(component.form.get('contributor_last_name')?.value).toBe(null);
+    expect(component.form.get('contributor_first_name')?.value).toBe(null);
   });
 
   it('#save() should save a new record', () => {

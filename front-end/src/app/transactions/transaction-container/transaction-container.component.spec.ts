@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { selectCommitteeAccount } from '../../store/committee-account.selectors';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { TransactionUtils } from '../../shared/utils/transaction.utils';
+import { TransactionTypeUtils } from '../../shared/utils/transaction-type.utils';
 import { TransactionContainerComponent } from './transaction-container.component';
 import { TransactionGroupBComponent } from '../transaction-group-b/transaction-group-b.component';
 import { MessageService } from 'primeng/api';
@@ -19,6 +19,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 describe('TransactionContainerComponent', () => {
   let component: TransactionContainerComponent;
@@ -42,6 +43,7 @@ describe('TransactionContainerComponent', () => {
         CalendarModule,
         CheckboxModule,
         InputTextModule,
+        InputNumberModule,
         InputTextareaModule,
       ],
       declarations: [TransactionContainerComponent, TransactionGroupBComponent],
@@ -53,7 +55,7 @@ describe('TransactionContainerComponent', () => {
           useValue: {
             snapshot: {
               data: {
-                transactionMeta: TransactionUtils.getMeta('offset_to_opex'),
+                transactionType: TransactionTypeUtils.factory('OFFSET_TO_OPEX'),
               },
             },
           },

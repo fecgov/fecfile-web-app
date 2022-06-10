@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 
@@ -10,7 +10,7 @@ import { LabelList } from 'app/shared/utils/label.utils';
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
 })
-export class ContactListComponent extends TableListBaseComponent<Contact> implements OnInit {
+export class ContactListComponent extends TableListBaseComponent<Contact> {
   override item: Contact = new Contact();
   contactTypeLabels: LabelList = ContactTypeLabels;
 
@@ -21,11 +21,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> implem
     protected override itemService: ContactService
   ) {
     super(messageService, confirmationService, elementRef);
-  }
-
-  ngOnInit() {
-    this.loading = true;
-    this.loadItemService(this.itemService);
   }
 
   protected getEmptyItem(): Contact {
