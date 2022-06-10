@@ -4,7 +4,6 @@ import { ReportCodeLabelList, ReportCodeLabel } from '../utils/reportCodeLabels.
 @Pipe({ name: 'findOnReportCodePipe' })
 export class FindOnReportCodePipe implements PipeTransform {
   transform(list: ReportCodeLabelList | null, reportCode: string) {
-    console.log(list, reportCode);
     let label: ReportCodeLabel = { label: '', report_code: '' };
     let found: ReportCodeLabel | undefined = undefined;
     if (list != null) {
