@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -16,7 +16,7 @@ import { updateLabelLookupAction } from '../../store/label-lookup.actions';
   selector: 'app-report-list',
   templateUrl: './report-list.component.html',
 })
-export class ReportListComponent extends TableListBaseComponent<Report> {
+export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
