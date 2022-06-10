@@ -19,7 +19,6 @@ import { updateLabelLookupAction } from '../../store/label-lookup.actions';
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
-  reportCodeLabelList: ReportCodeLabelList = [];
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
 
   constructor(
