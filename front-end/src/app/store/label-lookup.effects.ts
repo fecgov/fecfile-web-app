@@ -12,9 +12,7 @@ import { ReportCodeLabelList } from '../shared/utils/reportCodeLabels.utils';
 
 @Injectable()
 export class LabelLookupEffects {
-  constructor(private actions$: Actions, private apiService: ApiService) {
-    console.log('LabelLookupEffects', actions$, apiService);
-  }
+  constructor(private actions$: Actions, private apiService: ApiService) {}
 
   loadLabelLookup$ = createEffect(() =>
     this.actions$.pipe(
