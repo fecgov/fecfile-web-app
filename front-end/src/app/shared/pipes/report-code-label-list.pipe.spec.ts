@@ -2,7 +2,7 @@ import { ReportCodeLabelList } from '../utils/reportCodeLabels.utils';
 import { FindOnReportCodePipe } from './report-code-label-list.pipe';
 
 describe('FindOnReportCodePipe', () => {
-  let labelList: ReportCodeLabelList = [
+  const labelList: ReportCodeLabelList = [
     {
       label: 'Quarter 1',
       report_code: 'Q1',
