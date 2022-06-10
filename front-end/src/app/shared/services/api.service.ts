@@ -36,7 +36,6 @@ export class ApiService {
 
   public get<T>(endpoint: string): Observable<T> {
     const headers = this.getHeaders();
-    console.log(endpoint);
     return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers });
   }
 
