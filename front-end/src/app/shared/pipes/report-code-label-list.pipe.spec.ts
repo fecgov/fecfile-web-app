@@ -28,10 +28,10 @@ describe('FindOnReportCodePipe', () => {
   });
 
   it('transforms should return empty ReportCodeLabel object if no label found', () => {
-    expect(pipe.transform(labelList, 'does-not-exist')).toEqual({ label: '', report_code: '' });
+    expect(pipe.transform(labelList, 'does-not-exist')).toBe(undefined);
   });
 
-  it('transforms should return an empty ReportCodeLabel object is the labelList is null', () => {
-    expect(pipe.transform(null, 'Q1')).toEqual({ report_code: '', label: '' });
+  it('transforms should return an empty ReportCodeLabel object if the labelList is null', () => {
+    expect(pipe.transform(null, 'Q1')).toBe(undefined);
   });
 });
