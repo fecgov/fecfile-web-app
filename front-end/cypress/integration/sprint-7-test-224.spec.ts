@@ -1,6 +1,6 @@
 // @ts-check
 
-let contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
+const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 describe('QA Test Script #224 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page', () => {
@@ -8,7 +8,7 @@ describe('QA Test Script #224 (Sprint 7)', () => {
     cy.url().should('contain', '/dashboard');
   });
 
-  for (let contactType of Object.keys(contacts)) {
+  for (const contactType of Object.keys(contacts)) {
     context(`---> ${contactType}`, (cType = contactType) => {
       it("Step 2: Open the 'Add Contact' form", () => {
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();

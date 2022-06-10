@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report } from '../../shared/interfaces/report.interface';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   selector: 'app-report-list',
   templateUrl: './report-list.component.html',
 })
-export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit {
+export class ReportListComponent extends TableListBaseComponent<Report> {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeLabels: LabelList = F3xReportCodeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
@@ -29,11 +29,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     protected router: Router
   ) {
     super(messageService, confirmationService, elementRef);
-  }
-
-  ngOnInit() {
-    this.loading = true;
-    this.loadItemService(this.itemService);
   }
 
   protected getEmptyItem(): F3xSummary {

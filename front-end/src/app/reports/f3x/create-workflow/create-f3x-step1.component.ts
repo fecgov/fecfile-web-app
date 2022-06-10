@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   electionReportCodes,
+  F3xFormTypes,
   F3xReportCode,
   F3xReportCodes,
   F3xSummary,
@@ -174,6 +175,12 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     }
 
     const summary: F3xSummary = F3xSummary.fromJSON(this.validateService.getFormValues(this.form, this.formProperties));
+
+    // If a termination report, set the form_type appropriately.
+    if (summary.report_code === F3xReportCodes.TER) {
+      summary.form_type = F3xFormTypes.F3XT;
+    }
+
     this.f3xSummaryService.create(summary, this.formProperties).subscribe((report: F3xSummary) => {
       if (jump === 'continue') {
         this.router.navigateByUrl(`/reports/f3x/create/step2/${report.id}`);

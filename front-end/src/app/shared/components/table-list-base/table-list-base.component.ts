@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService, LazyLoadEvent } from 'primeng/api';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
@@ -7,7 +7,7 @@ import { Observable, forkJoin } from 'rxjs';
 @Component({
   template: '',
 })
-export abstract class TableListBaseComponent<T> implements AfterViewInit {
+export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit {
   item!: T;
   items: T[] = [];
   totalItems = 0;
@@ -24,6 +24,11 @@ export abstract class TableListBaseComponent<T> implements AfterViewInit {
     protected confirmationService: ConfirmationService,
     protected elementRef: ElementRef
   ) {}
+
+  ngOnInit() {
+    this.loading = true;
+    this.loadItemService(this.itemService);
+  }
 
   ngAfterViewInit(): void {
     // Fix accessibility issues in paginator buttons.

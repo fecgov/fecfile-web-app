@@ -1,12 +1,14 @@
 // @ts-check
 
-import { randomDate, dateToString, generateReportObject } from '../support/reports.spec';
+import { date as randomDate } from '../support/generators/generators.spec';
+import { dateToString } from '../support/reports.spec';
+import { generateReportObject } from '../support/generators/reports.spec';
 
 describe('QA Test Script #137 (Sprint 7)', () => {
   const fromDate: Date = randomDate();
   const throughDate: Date = randomDate();
 
-  it('Step 1: Navigate to contacts page', () => {
+  it('Step 1: Navigate to reports page', () => {
     cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
