@@ -20,7 +20,7 @@ export class LoginService {
     private http: HttpClient,
     private apiService: ApiService,
     private cookieService: CookieService
-  ) { }
+  ) {}
 
   /**
    * Logs a user into the API.
@@ -38,7 +38,7 @@ export class LoginService {
       username,
       password,
     });
-  } 
+  }
 
   public validateCode(code: string) {
     const payload = { code: code.toString() };
@@ -57,10 +57,10 @@ export class LoginService {
   }
 
   public logOut() {
+    this.store.dispatch(userLoggedOutAction());
     this.apiService.postAbsoluteUrl(`${environment.loginDotGovLogoutUrl}`, null).pipe(
       tap(() => {
         this.clearUserLoggedInCookies();
-        this.store.dispatch(userLoggedOutAction());
       })
     ).subscribe(() => undefined);
   }

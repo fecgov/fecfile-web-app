@@ -5,7 +5,7 @@ applications:
    buildpack: nginx_buildpack
 
    routes:
-     - route: fecfile-web-app-dev.app.cloud.gov
+     - route:  fecfile-web-app-dev.app.cloud.gov
 
    env:
      EXAMPLE: example

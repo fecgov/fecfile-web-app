@@ -18,17 +18,19 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const userLoginData: UserLoginData = {
-      committee_id: this.cookieService.get(
-        environment.ffapiCommitteeIdCookieName),
-      email: this.cookieService.get(
-        environment.ffapiEmailCookieName),
-      is_allowed: true,
-      token: null
+    if (this.cookieService.check(environment.ffapiCommitteeIdCookieName)) {
+      const userLoginData: UserLoginData = {
+        committee_id: this.cookieService.get(
+          environment.ffapiCommitteeIdCookieName),
+        email: this.cookieService.get(
+          environment.ffapiEmailCookieName),
+        is_allowed: true,
+        token: null
+      }
+      this.cookieService.delete(environment.ffapiCommitteeIdCookieName)
+      this.cookieService.delete(environment.ffapiEmailCookieName)
+      this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
     }
-    this.cookieService.delete(environment.ffapiCommitteeIdCookieName)
-    this.cookieService.delete(environment.ffapiEmailCookieName)
-    this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
   }
-  
+
 }

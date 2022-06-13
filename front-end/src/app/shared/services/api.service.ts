@@ -12,13 +12,13 @@ import { UserLoginData } from '../models/user.model';
 })
 export class ApiService {
   private token: string | null = null;
-  private loggedInEmail: string | null = null;
+  private loggedInCommitteeId: string | null = null;
 
   constructor(private http: HttpClient, private store: Store, 
     private cookieService: CookieService) {
     this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
       this.token = userLoginData.token;
-      this.loggedInEmail = userLoginData.email;
+      this.loggedInCommitteeId = userLoginData.committee_id
     })
   }
 
@@ -70,8 +70,8 @@ export class ApiService {
   }
 
   public isAuthenticated() {
-    return this.loggedInEmail || 
-      this.cookieService.check(environment.ffapiEmailCookieName);
+    return this.loggedInCommitteeId || 
+      this.cookieService.check(environment.ffapiCommitteeIdCookieName);
   }
 
 }
