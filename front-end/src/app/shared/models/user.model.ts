@@ -28,9 +28,9 @@ export class CommitteeUser {
 
   public getRoleLabel(): string {
     const role: string | null = this.role;
-    const def_label: string = '';
+    const def_label = '';
 
-    for (let R of RoleLabels) {
+    for (const R of RoleLabels) {
       if (R[0] == role) return R[1];
     }
 

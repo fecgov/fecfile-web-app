@@ -1,10 +1,8 @@
 import { Component, ElementRef } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { RoleLabels } from '../../shared/models/role.model';
 import { UsersService } from '../../shared/services/users.service';
 import { CommitteeUser } from '../../shared/models/user.model';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-list',
