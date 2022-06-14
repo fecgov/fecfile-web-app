@@ -57,10 +57,12 @@ export class LoginService {
   }
 
   public logOut() {
+    this.clearUserLoggedInCookies();
     this.store.dispatch(userLoggedOutAction());
     this.apiService.postAbsoluteUrl(`${environment.loginDotGovLogoutUrl}`, null).pipe(
       tap(() => {
-        this.clearUserLoggedInCookies();
+        this.cookieService.delete(
+          environment.sessionIdCookieName);
       })
     ).subscribe(() => undefined);
   }
@@ -70,8 +72,6 @@ export class LoginService {
       environment.ffapiCommitteeIdCookieName);
     this.cookieService.delete(
       environment.ffapiEmailCookieName);
-    this.cookieService.delete(
-      environment.sessionIdCookieName);
   }
 
 }
