@@ -26,15 +26,14 @@ export class CommitteeUser {
     return plainToClass(CommitteeUser, json);
   }
 
-  public getRoleLabel(): string {
+  public getRoleLabel(): string | null {
     const role: string | null = this.role;
-    const def_label = '';
 
     for (const R of RoleLabels) {
       if (R[0] == role) return R[1];
     }
 
-    return def_label;
+    return null;
   }
 }
 
