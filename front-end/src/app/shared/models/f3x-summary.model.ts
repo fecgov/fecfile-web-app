@@ -145,13 +145,23 @@ export const quarterlyElectionYearReportCodes: F3xReportCode[] = [
   F3xReportCodes.TwelveG,
   F3xReportCodes.ThirtyG,
   F3xReportCodes.YE,
+  F3xReportCodes.TwelveP,
+  F3xReportCodes.TwelveR,
+  F3xReportCodes.TwelveS,
+  F3xReportCodes.TwelveC,
+  F3xReportCodes.ThirtyR,
+  F3xReportCodes.ThirtyS,
   F3xReportCodes.TER,
 ];
 export const quarterlyNonElectionYearReportCodes: F3xReportCode[] = [
-  F3xReportCodes.Q1,
   F3xReportCodes.MY,
-  F3xReportCodes.Q2,
   F3xReportCodes.YE,
+  F3xReportCodes.TwelveP,
+  F3xReportCodes.TwelveR,
+  F3xReportCodes.TwelveS,
+  F3xReportCodes.TwelveC,
+  F3xReportCodes.ThirtyR,
+  F3xReportCodes.ThirtyS,
   F3xReportCodes.TER,
 ];
 
