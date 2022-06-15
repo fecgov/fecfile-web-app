@@ -135,9 +135,6 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   }
 
   public getReportTypeCategories(): F3xReportTypeCategoryType[] {
-    if (this.form?.get('filing_frequency')?.value === 'M') {
-      return [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
-    }
     return [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   }
 
