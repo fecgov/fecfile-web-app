@@ -9,7 +9,6 @@ import {
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
   quarterlyNonElectionYearReportCodes,
-  quarterlySpecialReportCodes,
 } from 'app/shared/models/f3x-summary.model';
 import { LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -145,8 +144,6 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         return isMonthly ? monthlyElectionYearReportCodes : quarterlyElectionYearReportCodes;
       case F3xReportTypeCategories.NON_ELECTION_YEAR:
         return isMonthly ? monthlyNonElectionYearReportCodes : quarterlyNonElectionYearReportCodes;
-      case F3xReportTypeCategories.SPECIAL:
-        return isMonthly ? [] : quarterlySpecialReportCodes;
       default:
         return [];
     }
