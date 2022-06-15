@@ -80,7 +80,7 @@ describe('ContactListComponent', () => {
   });
 
   it("the Committee User's names should be correct", () => {
-    let name = `${committeeUser.last_name}, ${committeeUser.first_name}`;
+    const name = `${committeeUser.last_name}, ${committeeUser.first_name}`;
     expect(name).toBe('Smith, John');
   });
 });
