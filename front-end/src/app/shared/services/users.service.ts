@@ -13,10 +13,11 @@ export class UsersService implements TableListService<CommitteeUser> {
   constructor(private apiService: ApiService) {}
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
-    if (!ordering) {
-      ordering = 'name';
+    let parameter_string = `?page=${pageNumber}`;
+    if (ordering?.length > 0) {
+      parameter_string += `&ordering=${ordering}`;
     }
-    return this.apiService.get<ListRestResponse>(`/committee/users/?page=${pageNumber}&ordering=${ordering}`).pipe(
+    return this.apiService.get<ListRestResponse>(`/committee/users/${parameter_string}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => CommitteeUser.fromJSON(item));
         return response;
