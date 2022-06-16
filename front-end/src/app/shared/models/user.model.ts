@@ -1,6 +1,7 @@
 import { plainToClass } from 'class-transformer';
 import { BaseModel } from './base.model';
 import { RoleLabels } from './role.model';
+import { LabelUtils } from '../utils/label.utils';
 
 /**
  * The UserLoginData type captures the fields returned from the server
@@ -27,13 +28,8 @@ export class CommitteeUser {
   }
 
   public getRoleLabel(): string | null {
-    const role: string | null = this.role;
-
-    for (const R of RoleLabels) {
-      if (R[0] == role) return R[1];
-    }
-
-    return null;
+    if (this.role != null) return LabelUtils.get(RoleLabels, this.role);
+    else return null;
   }
 }
 
