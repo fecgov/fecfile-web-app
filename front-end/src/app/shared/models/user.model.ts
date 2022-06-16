@@ -28,8 +28,7 @@ export class CommitteeUser {
   }
 
   public getRoleLabel(): string | null {
-    if (this.role == null) return null;
-    else return LabelUtils.get(RoleLabels, this.role);
+    return LabelUtils.get(RoleLabels, this.role);
   }
 }
 

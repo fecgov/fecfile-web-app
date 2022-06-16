@@ -30,8 +30,8 @@ describe('CommitteeUser', () => {
     cUser.role = 'C_ADMIN';
     expect(cUser.getRoleLabel()).toBe('Committee Administrator');
   });
-  it('should return null for a role label if role is null', () => {
-    expect(new CommitteeUser().getRoleLabel()).toBe(null);
+  it('should return an empty string for a role label if role is null', () => {
+    expect(new CommitteeUser().getRoleLabel()).toBe('');
   });
   it('should return an empty string for a label if the role is not present in the LabelList', () => {
     const cUser = new CommitteeUser();
