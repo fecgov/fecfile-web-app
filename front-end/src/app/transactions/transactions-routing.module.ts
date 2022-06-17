@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { TransactionTypeResolver } from 'app/shared/resolvers/transaction-type.resolver';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
+import { TransactionGroupFComponent } from './transaction-group-f/transaction-group-f.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 
 const routes: Routes = [
@@ -19,6 +20,10 @@ const routes: Routes = [
     resolve: {
       transactionType: TransactionTypeResolver,
     },
+  },
+  {
+    path: 'report/:reportId/dummy/group-f-transaction-screen',
+    component: TransactionGroupFComponent,
   },
   {
     path: 'edit/:transactionId',

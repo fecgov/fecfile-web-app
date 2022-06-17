@@ -15,11 +15,8 @@ import { ValidateService } from 'app/shared/services/validate.service';
 export class TransactionGroupFComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
     'entity_type',
-    'contributor_last_name',
-    'contributor_first_name',
-    'contributor_middle_name',
-    'contributor_prefix',
-    'contributor_suffix',
+    'contributor_organization_name',
+    'contributor_fec_id',
     'contributor_street_1',
     'contributor_street_2',
     'contributor_city',
@@ -29,8 +26,6 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     'contribution_amount',
     'contribution_aggregate',
     'contribution_purpose_descrip',
-    'contributor_employer',
-    'contributor_occupation',
     'memo_code',
     'memo_text_description',
   ];
