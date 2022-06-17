@@ -341,7 +341,7 @@ export function f3xFilingFrequency(): string | undefined {
 }
 
 export const f3xReportCategories: object = {
-  QUARTERLY: ['Non-Election Year', 'Election Year', 'Special'],
+  QUARTERLY: ['Non-Election Year', 'Election Year'],
   MONTHLY: ['Non-Election Year', 'Election Year'],
 };
 export function f3xReportCategory(filingFrequency: string): string | undefined {
@@ -356,9 +356,8 @@ export const f3xReportCodes: object = {
     'Election Year': ['M1', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', '12G', '30G', 'YE', 'TER'],
   },
   QUARTERLY: {
-    'Non-Election Year': ['Q1', 'MY', 'Q2', 'YE', 'TER'],
-    'Election Year': ['Q1', 'Q2', 'Q3', '12G', '30G', 'YE', 'TER'],
-    Special: ['12P', '12R', '12C', '12S', '30R', '30S'],
+    'Non-Election Year': ['MY', 'YE', '12P', '12R', '12S', '12C', '30R', '30S', 'TER'],
+    'Election Year': ['Q1', 'Q2', 'Q3', '12G', '30G', 'YE', '12P', '12R', '12S', '12C', '30R', '30S', 'TER'],
   },
 };
 export function f3xReportCode(filingFrequency: string, reportCategory: string): string {
