@@ -78,36 +78,6 @@ export type F3xReportCode =
   | F3xReportCodes.M11
   | F3xReportCodes.M12;
 
-// NOTE: If this label list is updated, please sync up the values in the api backend as well:
-// https://github.com/fecgov/fecfile-web-api/blob/develop/django-backend/fecfiler/f3x_summaries/views.py
-export const F3xReportCodeLabels: LabelList = [
-  [F3xReportCodes.Q1, 'APRIL 15 (Q1)'],
-  [F3xReportCodes.Q2, 'JULY 15 (Q2)'],
-  [F3xReportCodes.Q3, 'OCTOBER 15 (Q3)'],
-  [F3xReportCodes.YE, 'JANUARY 31 (YE)'],
-  [F3xReportCodes.TER, 'TERMINATION (TER)'],
-  [F3xReportCodes.MY, 'JANUARY 31 (MY)'],
-  [F3xReportCodes.TwelveG, 'GENERAL (12G)'],
-  [F3xReportCodes.TwelveP, 'PRIMARY (12P)'],
-  [F3xReportCodes.TwelveR, 'RUNOFF (12R)'],
-  [F3xReportCodes.TwelveS, 'SPECIAL (12S)'],
-  [F3xReportCodes.TwelveC, 'CONVENTION (12C)'],
-  [F3xReportCodes.ThirtyG, 'GENERAL (30G)'],
-  [F3xReportCodes.ThirtyR, 'RUNOFF (30R)'],
-  [F3xReportCodes.ThirtyS, 'SPECIAL (30S)'],
-  [F3xReportCodes.M2, 'FEBRUARY 20 (M2)'],
-  [F3xReportCodes.M3, 'MARCH 20 (M3)'],
-  [F3xReportCodes.M4, 'APRIL 20 (M4)'],
-  [F3xReportCodes.M5, 'MAY 20 (M5)'],
-  [F3xReportCodes.M6, 'JUNE 20 (M6)'],
-  [F3xReportCodes.M7, 'JULY 20 (M7)'],
-  [F3xReportCodes.M8, 'AUGUST 20 (M8)'],
-  [F3xReportCodes.M9, 'SEPTEMBER 20 (M9)'],
-  [F3xReportCodes.M10, 'OCTOBER 20 (M10)'],
-  [F3xReportCodes.M11, 'NOVEMBER 20 (M11)'],
-  [F3xReportCodes.M12, 'DECEMBER 20 (M12)'],
-];
-
 export const monthlyElectionYearReportCodes: F3xReportCode[] = [
   F3xReportCodes.M2,
   F3xReportCodes.M3,
