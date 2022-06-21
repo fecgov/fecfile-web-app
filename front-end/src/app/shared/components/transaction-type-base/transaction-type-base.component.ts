@@ -36,7 +36,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected transactionService: TransactionService,
     protected validateService: ValidateService,
     protected fb: FormBuilder,
-    protected router: Router
+    protected router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -82,7 +82,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.destroy$.complete();
   }
 
-  save(navigateTo: 'list' | 'add another') {
+  save(navigateTo: 'list' | 'add another' | 'add sub-transaction') {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
@@ -116,7 +116,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  navigateTo(navigateTo: 'list' | 'add another') {
+  navigateTo(navigateTo: 'list' | 'add another' | 'add sub-transaction') {
     if (navigateTo === 'add another') {
       this.messageService.add({
         severity: 'success',
@@ -125,8 +125,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.resetForm();
-    } else {
+    } else if (navigateTo === 'add sub-transaction') {
       this.router.navigateByUrl('/reports');
+    } else {
+      // TODO: impl
+      // this.router.navigate(['OTH_REC'], { relativeTo: this.activatedRoute }) ;
     }
   }
 
