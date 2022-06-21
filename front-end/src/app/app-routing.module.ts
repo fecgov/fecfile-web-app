@@ -5,7 +5,7 @@ import { TwoFactorLoginComponent } from './login/two-factor-login/two-factor-log
 import { ConfirmTwoFactorComponent } from './login/confirm-two-factor/confirm-two-factor.component';
 import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { LoginGuard } from './login/guards/login-page.guard';
+import { LoginGuard } from './shared/guards/login-page.guard';
 
 const routes: Routes = [
   {

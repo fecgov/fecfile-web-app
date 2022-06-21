@@ -70,7 +70,7 @@ export class ApiService {
   }
 
   public isAuthenticated() {
-    return this.loggedInCommitteeId || 
+    return !!this.loggedInCommitteeId || 
       this.cookieService.check(environment.ffapiCommitteeIdCookieName);
   }
 

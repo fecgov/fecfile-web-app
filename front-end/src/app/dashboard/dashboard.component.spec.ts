@@ -3,17 +3,40 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CookieService } from 'ngx-cookie-service';
 import { DashboardComponent } from './dashboard.component';
+import { provideMockStore } from '@ngrx/store/testing';
+import { UserLoginData } from 'app/shared/models/user.model';
+import { selectUserLoginData } from 'app/store/login.selectors';
+import { PanelModule } from 'primeng/panel';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-xdescribe('DashboardComponent', () => {
+describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
   beforeEach(
     waitForAsync(() => {
+      const userLoginData: UserLoginData = {
+        committee_id: 'C00000000',
+        email: 'email@fec.com',
+        is_allowed: true,
+        token: 'jwttokenstring',
+      };
+      
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule, RouterTestingModule],
+        imports: [
+          HttpClientTestingModule, 
+          RouterTestingModule,
+          PanelModule,
+          BrowserAnimationsModule,
+        ],
         declarations: [DashboardComponent],
-        providers: [CookieService],
+        providers: [
+          CookieService,
+          provideMockStore({
+            initialState: { fecfile_online_userLoginData: userLoginData },
+            selectors: [{ selector: selectUserLoginData, value: userLoginData }],
+          }),
+        ],
       }).compileComponents();
     })
   );
@@ -24,7 +47,7 @@ xdescribe('DashboardComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
