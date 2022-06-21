@@ -1,18 +1,17 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { LoginComponent } from './login.component';
 import { environment } from '../../../environments/environment';
+import { LoginComponent } from './login.component';
 
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let windowMock: Window = <any>{ };
 
   const userLoginData: UserLoginData = {
     committee_id: 'C00000000',
@@ -30,7 +29,7 @@ describe('LoginComponent', () => {
         ReactiveFormsModule,
       ],
       providers: [
-        { provide: Window, useFactory: (() => { return windowMock; }) },
+        { provide: Window, useValue: window },
         provideMockStore({
           initialState: { fecfile_online_userLoginData: userLoginData },
           selectors: [{ selector: selectUserLoginData, value: userLoginData }],

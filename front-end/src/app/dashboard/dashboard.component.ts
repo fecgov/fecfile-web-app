@@ -18,6 +18,10 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.dispatchUserLoggedInFromCookies();
+  }
+
+  dispatchUserLoggedInFromCookies() {
     if (this.cookieService.check(environment.ffapiCommitteeIdCookieName)) {
       const userLoginData: UserLoginData = {
         committee_id: this.cookieService.get(
