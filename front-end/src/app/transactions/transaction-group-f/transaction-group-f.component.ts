@@ -16,7 +16,7 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
   formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
-    'contributor_fec_id',
+    'donor_committee_fec_id',
     'contributor_street_1',
     'contributor_street_2',
     'contributor_city',
