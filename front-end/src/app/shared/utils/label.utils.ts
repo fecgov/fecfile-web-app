@@ -9,13 +9,15 @@ export class LabelUtils {
   /**
    * For a given key, return a LabelList pair
    * @param {LabelList} labelArrays
-   * @param {string} key
+   * @param {string | null} key
    * @returns
    */
-  public static get(labelArrays: LabelList, key: string): string {
-    const items: LabelList = labelArrays.filter((item: string[]) => item[0] === key);
-    if (items.length) {
-      return items[0][1];
+  public static get(labelArrays: LabelList, key: string | null): string {
+    if (key != null) {
+      const items: LabelList = labelArrays.filter((item: string[]) => item[0] === key);
+      if (items.length) {
+        return items[0][1];
+      }
     }
     return '';
   }
