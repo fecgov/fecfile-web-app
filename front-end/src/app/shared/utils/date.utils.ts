@@ -11,7 +11,7 @@ export class DateUtils {
     if (!date) {
       return date;
     }
-    return DateTime.fromJSDate(date).toFormat('yyyyMMdd');
+    return DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
   }
 
   /**
@@ -23,6 +23,6 @@ export class DateUtils {
     if (!date) {
       return null;
     }
-    return DateTime.fromFormat(date, 'yyyyMMdd').toJSDate();
+    return DateTime.fromFormat(date, 'yyyy-MM-dd').toJSDate();
   }
 }

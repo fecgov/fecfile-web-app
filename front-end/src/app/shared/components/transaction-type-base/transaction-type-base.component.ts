@@ -51,7 +51,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction?.id) {
       const txn = { ...this.transaction } as SchATransaction;
       this.form.patchValue({ ...txn });
-      this.form.patchValue({ contribution_date: DateUtils.convertFecFormatToDate(txn.contribution_date) });
       this.form.get('entity_type')?.disable();
     } else {
       this.resetForm();
