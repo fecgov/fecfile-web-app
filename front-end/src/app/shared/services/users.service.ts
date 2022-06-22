@@ -33,7 +33,7 @@ export class UsersService implements TableListService<CommitteeUser> {
     return of(user);
   }
 
-  public delete(user: CommitteeUser): Observable<null> {
+  public delete(_user: CommitteeUser): Observable<null> {
     return of(null);
   }
 }
