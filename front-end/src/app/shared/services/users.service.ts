@@ -25,15 +25,7 @@ export class UsersService implements TableListService<CommitteeUser> {
     );
   }
 
-  public create(user: CommitteeUser): Observable<CommitteeUser> {
-    return of(user);
-  }
-
-  public update(user: CommitteeUser): Observable<CommitteeUser> {
-    return of(user);
-  }
-
-  public delete(): Observable<null> {
+  public delete(user: CommitteeUser): Observable<null> {
     return of(null);
   }
 }

@@ -72,10 +72,8 @@ describe('TransactionService', () => {
     httpTestingController.verify();
   });
 
-  it('should have snubbed out "Create", "Update", and "Delete" methods', () => {
+  it('should have stubbed out "Delete" methods', () => {
     const cUser = new CommitteeUser();
-    expect(service.create(cUser)).toBeTruthy();
-    expect(service.update(cUser)).toBeTruthy();
     expect(service.delete(cUser)).toBeTruthy();
   });
 });
