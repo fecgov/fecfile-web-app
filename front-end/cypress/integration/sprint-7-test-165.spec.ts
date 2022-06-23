@@ -1,16 +1,16 @@
 // @ts-check
 
-import { generateReportObject } from '../support/reports.spec';
+import { generateReportObject } from '../support/generators/reports.spec';
 
 describe('QA Test Script #165 (Sprint 7)', () => {
-  it('Step 1: Navigate to contacts page and populate it with one report', () => {
+  it('Step 1: Navigate to reports page and populate it with one report', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.url().should('contain', '/reports');
 
-    for (let i: number = 0; i < 3; i++) {
-      let report = generateReportObject();
+    for (let i = 0; i < 3; i++) {
+      const report = generateReportObject();
       cy.enterReport(report);
     }
   });

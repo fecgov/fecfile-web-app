@@ -1,16 +1,16 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report } from '../../shared/interfaces/report.interface';
 import { LabelList } from '../../shared/utils/label.utils';
+import { ReportCodeLabelList } from '../../shared/utils/reportCodeLabels.utils';
 import { ReportService } from '../../shared/services/report.service';
-import {
-  F3xSummary,
-  F3xFormTypeLabels,
-  F3xReportCodeLabels,
-  F3xFormVersionLabels,
-} from 'app/shared/models/f3x-summary.model';
+import { F3xSummary, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/f3x-summary.model';
 import { Router } from '@angular/router';
+import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
+import { updateLabelLookupAction } from '../../store/label-lookup.actions';
 
 @Component({
   selector: 'app-report-list',
@@ -18,10 +18,11 @@ import { Router } from '@angular/router';
 })
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  f3xReportCodeLabels: LabelList = F3xReportCodeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
+  reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
 
   constructor(
+    private store: Store,
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
@@ -31,9 +32,11 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     super(messageService, confirmationService, elementRef);
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
+    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
+    this.store.dispatch(updateLabelLookupAction());
   }
 
   protected getEmptyItem(): F3xSummary {

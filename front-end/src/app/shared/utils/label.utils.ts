@@ -1,5 +1,4 @@
 export type LabelList = string[][];
-
 export type PrimeOptions = { name: string; code: string }[];
 
 /**

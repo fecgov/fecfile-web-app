@@ -1,6 +1,6 @@
 // @ts-check
 
-import * as _ from 'lodash';
+import { randomString } from '../support/generators/generators.spec';
 
 const contactFields: object = {
   //Contains the max allowable length for any given field
@@ -64,34 +64,7 @@ const fieldsRequired: Array<string> = [
 ];
 
 let contactType: string;
-let contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
-
-function randomString(strLength: number, charType: string = 'alphanumeric'): string {
-  // prettier-ignore
-  const alphanumeric: Array<string> = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9',];
-  // prettier-ignore
-  const alphabet: Array<string> =   ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9',];
-  // prettier-ignore
-  const numeric: Array<string> = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-  let characters: Array<string> = [];
-  if (charType == 'alphanumeric') {
-    characters = alphanumeric;
-  } else if (charType == 'numeric') {
-    characters = numeric;
-  } else if (charType == 'alphabet') {
-    characters = alphabet;
-  } else {
-    console.log('RandomString: Invalid charType');
-    return '';
-  }
-
-  let outString: string = '';
-  while (outString.length < strLength) {
-    outString += _.sample(characters);
-  }
-  return outString;
-}
+const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page', () => {
@@ -113,8 +86,8 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
         cy.get("button[label='Save']").click();
         cy.wait(50);
 
-        for (let field of Object.keys(contactFields[cType])) {
-          let strLength: number = contactFields[cType][field];
+        for (const field of Object.keys(contactFields[cType])) {
+          const strLength = contactFields[cType][field];
 
           if (fieldsRequired.includes(field)) {
             cy.get('#' + field)
@@ -122,7 +95,7 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
               .should('contain', 'This is a required field');
           }
 
-          let randString: string = '';
+          let randString = '';
           if (field == 'telephone') {
             randString = randomString(strLength, 'numeric');
           } else {

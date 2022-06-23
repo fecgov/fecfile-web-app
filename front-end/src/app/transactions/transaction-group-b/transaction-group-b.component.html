@@ -210,7 +210,13 @@
       <div class="col-6">
         <div class="field">
           <label for="contribution_amount">CONTRIBUTION AMOUNT</label>
-          <input type="text" pInputText id="contribution_amount" formControlName="contribution_amount" />
+          <p-inputNumber
+            inputId="contribution_amount"
+            formControlName="contribution_amount"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+          ></p-inputNumber>
           <app-error-messages
             [form]="form"
             fieldName="contribution_amount"
@@ -223,14 +229,15 @@
       <div class="col-6">
         <div class="field">
           <label for="contribution_aggregate">CONTRIBUTION AGGREGATE</label>
-          <input
-            type="text"
-            pInputText
-            id="contribution_aggregate"
+          <p-inputNumber
+            inputId="contribution_aggregate"
             formControlName="contribution_aggregate"
-            class="readonly"
-            readonly
-          />
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            [readonly]="true"
+            inputStyleClass="readonly"
+          ></p-inputNumber>
           <app-error-messages
             [form]="form"
             fieldName="contribution_aggregate"
@@ -254,6 +261,8 @@
             pInputTextarea
             [autoResize]="true"
             formControlName="contribution_purpose_descrip"
+            class="readonly"
+            readonly
           ></textarea>
           <app-error-messages
             [form]="form"
