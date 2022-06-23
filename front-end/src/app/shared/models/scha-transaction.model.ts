@@ -1,6 +1,6 @@
 import { BaseModel } from './base.model';
 import { Transaction } from '../interfaces/transaction.interface';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, Transform } from 'class-transformer';
 import { LabelList } from '../utils/label.utils';
 
 export class SchATransaction extends BaseModel implements Transaction {
@@ -25,7 +25,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   contributor_zip: string | null = null;
   election_code: string | null = null;
   election_other_description: string | null = null;
-  contribution_date: Date | null = null;
+  @Transform(BaseModel.dateTransform) contribution_date: Date | null = null;
   contribution_amount: number | null = null;
   contribution_aggregate: number | null = null;
   contribution_purpose_descrip: string | null = null;
