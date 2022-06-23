@@ -25,7 +25,8 @@ export class UsersService implements TableListService<CommitteeUser> {
     );
   }
 
-  public delete(user: CommitteeUser): Observable<null> {
+  // prettier-ignore
+  public delete(user: CommitteeUser): Observable<null> { // eslint-disable-line @typescript-eslint/no-unused-vars
     return of(null);
   }
 }
