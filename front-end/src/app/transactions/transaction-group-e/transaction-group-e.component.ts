@@ -43,4 +43,10 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
   ) {
     super(messageService, transactionService, validateService, fb, router);
   }
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this.form.get('entity_type')?.setValue(this.contactTypeOptions[0].code);
+  }
+  
 }

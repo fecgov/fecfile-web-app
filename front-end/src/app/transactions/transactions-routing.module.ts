@@ -27,6 +27,13 @@ const routes: Routes = [
       transactionType: TransactionTypeResolver,
     },
   },
+  {
+    path: 'edit/:transactionId/create-child/:transactionType',
+    component: TransactionContainerComponent,
+    resolve: {
+      transactionType: TransactionTypeResolver,
+    },
+  },
   { path: '**', redirectTo: '' },
 ];
 
