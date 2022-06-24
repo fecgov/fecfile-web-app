@@ -1,7 +1,7 @@
 import { TransactionType } from '../../interfaces/transaction-type.interface';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIB_REC';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/JF_TRAN';
 
 export class JF_TRANSFERS implements TransactionType {
   scheduleId = 'A';
@@ -16,7 +16,7 @@ export class JF_TRANSFERS implements TransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11a',
+      form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFERS,
     });
   }

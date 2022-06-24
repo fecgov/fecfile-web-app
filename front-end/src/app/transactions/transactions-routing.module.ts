@@ -22,11 +22,14 @@ const routes: Routes = [
     },
   },
   {
-    path: 'report/:reportId/dummy/group-f-transaction-screen',
-    component: TransactionGroupFComponent,
+    path: 'edit/:transactionId',
+    component: TransactionContainerComponent,
+    resolve: {
+      transactionType: TransactionTypeResolver,
+    },
   },
   {
-    path: 'edit/:transactionId',
+    path: 'edit/:transactionId/create/:transactionType',
     component: TransactionContainerComponent,
     resolve: {
       transactionType: TransactionTypeResolver,
