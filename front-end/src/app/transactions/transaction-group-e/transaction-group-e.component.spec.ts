@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { ContactTypes } from 'app/shared/models/contact.model';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -67,5 +68,7 @@ describe('TransactionGroupEComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    component.ngOnInit();
+    expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.COMMITTEE);
   });
 });
