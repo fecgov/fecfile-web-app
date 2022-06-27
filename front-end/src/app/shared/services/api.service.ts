@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { spinnerOffAction, spinnerOnAction } from 'app/store/spinner.actions';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { delay, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { UserLoginData } from '../models/user.model';
