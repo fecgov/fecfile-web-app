@@ -78,36 +78,6 @@ export type F3xReportCode =
   | F3xReportCodes.M11
   | F3xReportCodes.M12;
 
-// NOTE: If this label list is updated, please sync up the values in the api backend as well:
-// https://github.com/fecgov/fecfile-web-api/blob/develop/django-backend/fecfiler/f3x_summaries/views.py
-export const F3xReportCodeLabels: LabelList = [
-  [F3xReportCodes.Q1, 'APRIL 15 (Q1)'],
-  [F3xReportCodes.Q2, 'JULY 15 (Q2)'],
-  [F3xReportCodes.Q3, 'OCTOBER 15 (Q3)'],
-  [F3xReportCodes.YE, 'JANUARY 31 (YE)'],
-  [F3xReportCodes.TER, 'TERMINATION (TER)'],
-  [F3xReportCodes.MY, 'JANUARY 31 (MY)'],
-  [F3xReportCodes.TwelveG, 'GENERAL (12G)'],
-  [F3xReportCodes.TwelveP, 'PRIMARY (12P)'],
-  [F3xReportCodes.TwelveR, 'RUNOFF (12R)'],
-  [F3xReportCodes.TwelveS, 'SPECIAL (12S)'],
-  [F3xReportCodes.TwelveC, 'CONVENTION (12C)'],
-  [F3xReportCodes.ThirtyG, 'GENERAL (30G)'],
-  [F3xReportCodes.ThirtyR, 'RUNOFF (30R)'],
-  [F3xReportCodes.ThirtyS, 'SPECIAL (30S)'],
-  [F3xReportCodes.M2, 'FEBRUARY 20 (M2)'],
-  [F3xReportCodes.M3, 'MARCH 20 (M3)'],
-  [F3xReportCodes.M4, 'APRIL 20 (M4)'],
-  [F3xReportCodes.M5, 'MAY 20 (M5)'],
-  [F3xReportCodes.M6, 'JUNE 20 (M6)'],
-  [F3xReportCodes.M7, 'JULY 20 (M7)'],
-  [F3xReportCodes.M8, 'AUGUST 20 (M8)'],
-  [F3xReportCodes.M9, 'SEPTEMBER 20 (M9)'],
-  [F3xReportCodes.M10, 'OCTOBER 20 (M10)'],
-  [F3xReportCodes.M11, 'NOVEMBER 20 (M11)'],
-  [F3xReportCodes.M12, 'DECEMBER 20 (M12)'],
-];
-
 export const monthlyElectionYearReportCodes: F3xReportCode[] = [
   F3xReportCodes.M2,
   F3xReportCodes.M3,
@@ -145,23 +115,24 @@ export const quarterlyElectionYearReportCodes: F3xReportCode[] = [
   F3xReportCodes.TwelveG,
   F3xReportCodes.ThirtyG,
   F3xReportCodes.YE,
+  F3xReportCodes.TwelveP,
+  F3xReportCodes.TwelveR,
+  F3xReportCodes.TwelveS,
+  F3xReportCodes.TwelveC,
+  F3xReportCodes.ThirtyR,
+  F3xReportCodes.ThirtyS,
   F3xReportCodes.TER,
 ];
 export const quarterlyNonElectionYearReportCodes: F3xReportCode[] = [
-  F3xReportCodes.Q1,
   F3xReportCodes.MY,
-  F3xReportCodes.Q2,
   F3xReportCodes.YE,
-  F3xReportCodes.TER,
-];
-
-export const quarterlySpecialReportCodes: F3xReportCode[] = [
   F3xReportCodes.TwelveP,
   F3xReportCodes.TwelveR,
-  F3xReportCodes.TwelveC,
   F3xReportCodes.TwelveS,
+  F3xReportCodes.TwelveC,
   F3xReportCodes.ThirtyR,
   F3xReportCodes.ThirtyS,
+  F3xReportCodes.TER,
 ];
 
 export const electionReportCodes: F3xReportCode[] = [
@@ -181,7 +152,7 @@ export class F3xSummary extends BaseModel implements Report {
   form_type: F3xFormType = F3xFormTypes.F3XT;
   filer_committee_id_number: string | null = null;
   committee_name: string | null = null;
-  change_of_address: string | null = null;
+  change_of_address: boolean | null = null;
   street_1: string | null = null;
   street_2: string | null = null;
   city: string | null = null;
@@ -193,7 +164,7 @@ export class F3xSummary extends BaseModel implements Report {
   state_of_election: string | null = null;
   coverage_from_date: string | null = null;
   coverage_through_date: string | null = null;
-  qualified_committee: string | null = null;
+  qualified_committee: boolean | null = null;
   treasurer_last_name: string | null = null;
   treasurer_first_name: string | null = null;
   treasurer_middle_name: string | null = null;

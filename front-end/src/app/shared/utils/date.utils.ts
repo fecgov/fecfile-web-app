@@ -13,4 +13,16 @@ export class DateUtils {
     }
     return DateTime.fromJSDate(date).toFormat('yyyyMMdd');
   }
+
+  /**
+   *
+   * @param date For given date string YYYYMMDD, return a Date object.
+   * @returns {Date}
+   */
+  public static convertFecFormatToDate(date: string | null): Date | null {
+    if (!date) {
+      return null;
+    }
+    return DateTime.fromFormat(date, 'yyyyMMdd').toJSDate();
+  }
 }

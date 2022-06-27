@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   electionReportCodes,
+  F3xFormTypes,
   F3xReportCode,
   F3xReportCodes,
   F3xSummary,
@@ -8,7 +9,6 @@ import {
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
   quarterlyNonElectionYearReportCodes,
-  quarterlySpecialReportCodes,
 } from 'app/shared/models/f3x-summary.model';
 import { LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -21,7 +21,6 @@ import { environment } from 'environments/environment';
 import { ActivatedRoute, Router } from '@angular/router';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { MessageService } from 'primeng/api';
-import { DateUtils } from 'app/shared/utils/date.utils';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -55,15 +54,15 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     [F3xReportCodes.Q3, 'OCTOBER 15 QUARTERLY REPORT(Q3)'],
     [F3xReportCodes.YE, 'JANUARY 31 YEAR-END (YE)'],
     [F3xReportCodes.TER, 'TERMINATION REPORT (TER)'],
-    [F3xReportCodes.MY, 'JULY 31 MID-YEAR REPORT (NON-ELECTION YEAR ONLY) (MY)'],
-    [F3xReportCodes.TwelveG, '12-DAY PRE-ELECTION GENERAL (12G)'],
-    [F3xReportCodes.TwelveP, '12-DAY PRE-ELECTION PRIMARY (12P)'],
-    [F3xReportCodes.TwelveR, '12-DAY PRE-ELECTION RUNOFF (12R)'],
-    [F3xReportCodes.TwelveS, '12-DAY PRE-ELECTION SPECIAL (12S)'],
-    [F3xReportCodes.TwelveC, '12-DAY PRE-ELECTION CONVENTION (12C)'],
-    [F3xReportCodes.ThirtyG, '30-DAY POST-ELECTION GENERAL (30G)'],
-    [F3xReportCodes.ThirtyR, '30-DAY POST-ELECTION RUNOFF (30R)'],
-    [F3xReportCodes.ThirtyS, '30-DAY POST-ELECTION SPECIAL (30S)'],
+    [F3xReportCodes.MY, 'JULY 31 MID-YEAR REPORT (MY)'],
+    [F3xReportCodes.TwelveG, '12-DAY PRE-GENERAL (12G)'],
+    [F3xReportCodes.TwelveP, '12-DAY PRE-PRIMARY (12P)'],
+    [F3xReportCodes.TwelveR, '12-DAY PRE-RUNOFF (12R)'],
+    [F3xReportCodes.TwelveS, '12-DAY PRE-SPECIAL (12S)'],
+    [F3xReportCodes.TwelveC, '12-DAY PRE-CONVENTION (12C)'],
+    [F3xReportCodes.ThirtyG, '30-DAY POST-GENERAL (30G)'],
+    [F3xReportCodes.ThirtyR, '30-DAY POST-RUNOFF (30R)'],
+    [F3xReportCodes.ThirtyS, '30-DAY POST-SPECIAL (30S)'],
     [F3xReportCodes.M2, 'FEBRUARY 20 MONTHLY REPORT (M2)'],
     [F3xReportCodes.M3, 'MARCH 20 MONTHLY REPORT (M3)'],
     [F3xReportCodes.M4, 'APRIL 20 MONTHLY REPORT (M4)'],
@@ -135,14 +134,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   }
 
   public getReportTypeCategories(): F3xReportTypeCategoryType[] {
-    if (this.form?.get('filing_frequency')?.value === 'M') {
-      return [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
-    }
-    return [
-      F3xReportTypeCategories.ELECTION_YEAR,
-      F3xReportTypeCategories.NON_ELECTION_YEAR,
-      F3xReportTypeCategories.SPECIAL,
-    ];
+    return [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   }
 
   public getReportCodes(): F3xReportCode[] {
@@ -152,8 +144,6 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         return isMonthly ? monthlyElectionYearReportCodes : quarterlyElectionYearReportCodes;
       case F3xReportTypeCategories.NON_ELECTION_YEAR:
         return isMonthly ? monthlyNonElectionYearReportCodes : quarterlyNonElectionYearReportCodes;
-      case F3xReportTypeCategories.SPECIAL:
-        return isMonthly ? [] : quarterlySpecialReportCodes;
       default:
         return [];
     }
@@ -174,12 +164,13 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       return;
     }
 
-    this.form.patchValue({
-      coverage_from_date: DateUtils.convertDateToFecFormat(this.form.get('coverage_from_date')?.value),
-      coverage_through_date: DateUtils.convertDateToFecFormat(this.form.get('coverage_through_date')?.value),
-      date_of_election: DateUtils.convertDateToFecFormat(this.form.get('date_of_election')?.value),
-    });
-    const summary: F3xSummary = F3xSummary.fromJSON(this.validateService.getFormValues(this.form));
+    const summary: F3xSummary = F3xSummary.fromJSON(this.validateService.getFormValues(this.form, this.formProperties));
+
+    // If a termination report, set the form_type appropriately.
+    if (summary.report_code === F3xReportCodes.TER) {
+      summary.form_type = F3xFormTypes.F3XT;
+    }
+
     this.f3xSummaryService.create(summary, this.formProperties).subscribe((report: F3xSummary) => {
       if (jump === 'continue') {
         this.router.navigateByUrl(`/reports/f3x/create/step2/${report.id}`);

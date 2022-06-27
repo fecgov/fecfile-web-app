@@ -1,0 +1,27 @@
+import { INDV_REC } from './INDV_REC.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+
+describe('INDV_REC', () => {
+  let transactionType: INDV_REC;
+
+  beforeEach(() => {
+    transactionType = new INDV_REC();
+  });
+
+  it('should create an instance', () => {
+    expect(transactionType).toBeTruthy();
+    expect(transactionType.scheduleId).toBe('A');
+    expect(transactionType.componentGroupId).toBe('A');
+  });
+
+  it('#factory() should return a SchATransaction', () => {
+    const txn: SchATransaction = transactionType.getNewTransaction();
+    expect(txn.form_type).toBe('SA11a');
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
+  });
+
+  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
+    const descrip = transactionType.contributionPurposeDescripReadonly();
+    expect(descrip).toBe('');
+  });
+});

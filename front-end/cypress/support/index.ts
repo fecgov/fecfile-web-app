@@ -1,17 +1,25 @@
-// ***********************************************************
-// This example support/index.js is processed and
-// loaded automatically before your test files.
-//
-// This is a great place to put global configuration and
-// behavior that modifies Cypress.
-//
-// You can change the location of this file or turn off
-// automatically serving support files with the
-// 'supportFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/configuration
-// ***********************************************************
+/*
 
-// When a command from ./commands is ready to use, import with `import './commands'` syntax
-// import './commands';
+  The index file imports commands and adds them to Cypress
+
+*/
+
+import { safeType, overwrite, dropdownSetValue, calendarSetValue, login, logout } from './commands';
+Cypress.Commands.add('safeType', { prevSubject: true }, safeType);
+Cypress.Commands.add('overwrite', { prevSubject: true }, overwrite);
+Cypress.Commands.add('dropdownSetValue', dropdownSetValue);
+Cypress.Commands.add('calendarSetValue', calendarSetValue);
+Cypress.Commands.add('login', login);
+Cypress.Commands.add('logout', logout);
+
+import { enterContact } from './contacts.spec';
+Cypress.Commands.add('enterContact', enterContact);
+
+import { enterReport, progressReport, deleteAllReports, deleteReport } from './reports.spec';
+Cypress.Commands.add('enterReport', enterReport);
+Cypress.Commands.add('progressReport', progressReport);
+Cypress.Commands.add('deleteAllReports', deleteAllReports);
+Cypress.Commands.add('deleteReport', deleteReport);
+
+import { enterTransactionSchA } from './transactions.spec';
+Cypress.Commands.add('enterTransactionSchA', enterTransactionSchA);

@@ -23,6 +23,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'reports', loadChildren: () => import('./reports/reports.module').then((m) => m.ReportsModule) },
       { path: 'contacts', loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule) },
+      { path: 'committee/users', loadChildren: () => import('./users/users.module').then((m) => m.UsersModule) },
       { path: 'tools', loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule) },
       { path: 'help', loadChildren: () => import('./help/help.module').then((m) => m.HelpModule) },
       {
@@ -30,6 +31,10 @@ const routes: Routes = [
         loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsModule),
       },
       { path: 'profile', loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule) },
+      {
+        path: 'transactions',
+        loadChildren: () => import('./transactions/transactions.module').then((m) => m.TransactionsModule),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

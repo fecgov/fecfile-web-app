@@ -5,15 +5,16 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
+import { MessageService, SharedModule } from 'primeng/api';
 import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { UserLoginData } from 'app/shared/models/user.model';
-import { SharedModule } from 'primeng/api';
 import { CreateF3xStep2Component } from './create-f3x-step2.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { environment } from '../../../../environments/environment';
 import { CommitteeAccount } from '../../../shared/models/committee-account.model';
+import { selectUserLoginData } from 'app/store/login.selectors';
 import { selectCommitteeAccount } from '../../../store/committee-account.selectors';
 import { ValidateService } from '../../../shared/services/validate.service';
 import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
@@ -51,6 +52,7 @@ describe('CreateF3xStep2Component', () => {
         ValidateService,
         FormBuilder,
         F3xSummaryService,
+        MessageService,
         provideMockStore({
           initialState: {
             fecfile_online_committeeAccount: committeeAccount,
@@ -58,7 +60,7 @@ describe('CreateF3xStep2Component', () => {
           },
           selectors: [
             { selector: selectCommitteeAccount, value: committeeAccount },
-            { selector: 'selectUserLoginData', value: userLoginData },
+            { selector: selectUserLoginData, value: userLoginData },
           ],
         }),
         {
@@ -94,7 +96,7 @@ describe('CreateF3xStep2Component', () => {
     component.report = F3xSummary.fromJSON({
       id: '999',
     });
-    component.form.patchValue({ change_of_address: 'X' });
+    component.form.patchValue({ change_of_address: true });
 
     component.save('back');
     let req = httpTestingController.expectOne(
@@ -111,6 +113,28 @@ describe('CreateF3xStep2Component', () => {
     );
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
+  });
+
+  it('#save should not save when form data invalid', () => {
+    component.report = F3xSummary.fromJSON({
+      id: '999',
+      change_of_address: 'A',
+      street_1: '123 Main St',
+      street_2: 'Apt A',
+      city: 'Washington',
+      state: 'DC',
+      zip: '20001',
+    });
+    component.setDefaultFormValues({
+      street_1: '3 Oak St',
+      street_2: null,
+      city: 'Pheonix',
+      state: 'AZ',
+      zip: '12345',
+    } as CommitteeAccount);
+
+    component.save();
+    expect(component.form.invalid).toBe(true);
   });
 });

@@ -56,7 +56,7 @@ export class HeaderComponent implements OnInit {
         icon: 'pi pi-fw pi-user',
         items: [
           { label: 'Account', routerLink: ['/profile/account'] },
-          { label: 'Add User' },
+          { label: 'Users', routerLink: ['/committee/users'] },
           { label: 'Logout', command: () => this.loginService.logOut() },
         ],
       },

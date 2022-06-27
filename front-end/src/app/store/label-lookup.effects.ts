@@ -1,0 +1,32 @@
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { first, of } from 'rxjs';
+import { map, mergeMap, catchError } from 'rxjs/operators';
+import {
+  setLabelLookupAction,
+  errorRetrievingLabelLookupAction,
+  updateLabelLookupAction,
+} from './label-lookup.actions';
+import { ApiService } from '../shared/services/api.service';
+import { ReportCodeLabelList } from '../shared/utils/reportCodeLabels.utils';
+
+@Injectable()
+export class LabelLookupEffects {
+  constructor(private actions$: Actions, private apiService: ApiService) {}
+
+  loadLabelLookup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateLabelLookupAction.type),
+      first(),
+      mergeMap(() =>
+        this.apiService.get<ReportCodeLabelList>('/report-code-labels').pipe(
+          map((reportCodeLabelList: ReportCodeLabelList) => ({
+            type: setLabelLookupAction.type,
+            payload: reportCodeLabelList,
+          })),
+          catchError(() => of({ type: errorRetrievingLabelLookupAction.type }))
+        )
+      )
+    )
+  );
+}
