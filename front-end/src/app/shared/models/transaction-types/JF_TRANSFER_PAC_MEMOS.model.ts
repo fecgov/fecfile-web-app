@@ -3,10 +3,10 @@ import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLab
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/JF_TRAN';
 
-export class JF_TRANSFERS implements TransactionType {
+export class JF_TRANSFER_PAC_MEMOS implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'F';
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JF_TRANSFERS);
+  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JF_TRANSFER_PAC_MEMOS);
   schema = schema;
   transaction = null;
 
@@ -17,7 +17,7 @@ export class JF_TRANSFERS implements TransactionType {
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',
-      transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFERS,
+      transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFER_PAC_MEMOS,
     });
   }
 }
