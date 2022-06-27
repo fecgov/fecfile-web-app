@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
@@ -25,18 +25,8 @@ export class UsersService implements TableListService<CommitteeUser> {
     );
   }
 
-  public create(user: CommitteeUser): Observable<CommitteeUser> {
-    console.log('Create', user);
-    return new Observable<CommitteeUser>();
-  }
-
-  public update(user: CommitteeUser): Observable<CommitteeUser> {
-    console.log('Update', user);
-    return new Observable<CommitteeUser>();
-  }
-
-  public delete(user: CommitteeUser): Observable<null> {
-    console.log('Delete', user);
-    return new Observable<null>();
+  // prettier-ignore
+  public delete(_user: CommitteeUser): Observable<null> { // eslint-disable-line @typescript-eslint/no-unused-vars
+    return of(null);
   }
 }
