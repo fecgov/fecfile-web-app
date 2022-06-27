@@ -6,7 +6,6 @@ import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { DateUtils } from 'app/shared/utils/date.utils';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
@@ -51,7 +50,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction?.id) {
       const txn = { ...this.transaction } as SchATransaction;
       this.form.patchValue({ ...txn });
-      this.form.patchValue({ contribution_date: DateUtils.convertFecFormatToDate(txn.contribution_date) });
       this.form.get('entity_type')?.disable();
     } else {
       this.resetForm();

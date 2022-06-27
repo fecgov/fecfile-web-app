@@ -1,6 +1,6 @@
 import { BaseModel } from './base.model';
 import { Report } from '../interfaces/report.interface';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, Transform } from 'class-transformer';
 import { LabelList } from '../utils/label.utils';
 
 export enum F3xFormTypes {
@@ -160,17 +160,17 @@ export class F3xSummary extends BaseModel implements Report {
   zip: string | null = null;
   report_code: F3xReportCode | null = null;
   election_code: string | null = null;
-  date_of_election: string | null = null; // YYYYMMDD
+  @Transform(BaseModel.dateTransform) date_of_election: Date | null = null;
   state_of_election: string | null = null;
-  coverage_from_date: string | null = null;
-  coverage_through_date: string | null = null;
+  @Transform(BaseModel.dateTransform) coverage_from_date: Date | null = null;
+  @Transform(BaseModel.dateTransform) coverage_through_date: Date | null = null;
   qualified_committee: boolean | null = null;
   treasurer_last_name: string | null = null;
   treasurer_first_name: string | null = null;
   treasurer_middle_name: string | null = null;
   treasurer_prefix: string | null = null;
   treasurer_suffix: string | null = null;
-  date_signed: string | null = null;
+  @Transform(BaseModel.dateTransform) date_signed: Date | null = null;
 
   L6b_cash_on_hand_beginning_period: number | null = null;
   L6c_total_receipts_period: number | null = null;
