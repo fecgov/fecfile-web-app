@@ -107,7 +107,7 @@ export enum ScheduleATransactionTypes {
   // Transfers
   TRANSFERS = 'TRAN',
   JF_TRANSFERS = 'JF_TRAN',
-  JF_TRANSFER_PAC_MEMOS = 'JF_TRAN_PAC_MEMO',
+  JF_TRAN_PAC_MEMO = 'JF_TRAN_PAC_MEMO',
   IN_KIND_TRANSFER = 'IK_TRAN',
   IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRAN_NP_RECNT_ACC',
@@ -172,7 +172,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   // Transfers
   [ScheduleATransactionTypes.TRANSFERS, 'Transfers'],
   [ScheduleATransactionTypes.JF_TRANSFERS, 'JF Transfers'],
-  [ScheduleATransactionTypes.JF_TRANSFER_PAC_MEMOS, 'JF Transfer PAC Memos'],
+  [ScheduleATransactionTypes.JF_TRAN_PAC_MEMO, 'JF Transfer PAC Memos'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer-FEA'],
   [

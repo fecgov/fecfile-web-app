@@ -24,7 +24,10 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
       transactionType = TransactionTypeUtils.factory(transactionTypeName) as TransactionType;
       transactionType.transaction = transactionType.getNewTransaction();
       transactionType.transaction.report_id = Number(reportId);
-      transactionType.transaction.parent_transaction = Number(parentTransactionId);
+
+      if (parentTransactionId != null) transactionType.transaction.parent_transaction = Number(parentTransactionId);
+      else transactionType.transaction.parent_transaction = null;
+
       return of(transactionType);
     }
     if (transactionId) {
