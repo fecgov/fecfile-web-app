@@ -16,6 +16,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
     const reportId = route.paramMap.get('reportId');
     const transactionTypeName = route.paramMap.get('transactionType');
     const transactionId = route.paramMap.get('transactionId');
+    const parentTransactionId = route.paramMap.get('parentTransactionId');
     let transactionType: TransactionType;
 
     if (transactionTypeName) {
@@ -23,6 +24,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
       transactionType = TransactionTypeUtils.factory(transactionTypeName) as TransactionType;
       transactionType.transaction = transactionType.getNewTransaction();
       transactionType.transaction.report_id = Number(reportId);
+      transactionType.transaction.parent_transaction = Number(parentTransactionId);
       return of(transactionType);
     }
     if (transactionId) {
