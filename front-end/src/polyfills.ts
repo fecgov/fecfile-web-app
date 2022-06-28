@@ -58,3 +58,4 @@ import 'zone.js'; // Included with Angular CLI.
 // https://github.com/aws/aws-sdk-js/issues/1944
 // https://github.com/aws-amplify/amplify-js/issues/678
 (window as any).global = window; // eslint-disable-line @typescript-eslint/no-explicit-any
+import 'reflect-metadata';

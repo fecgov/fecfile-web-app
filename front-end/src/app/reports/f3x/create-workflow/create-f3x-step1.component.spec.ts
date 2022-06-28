@@ -24,7 +24,7 @@ describe('CreateF3XStep1Component', () => {
   let f3xSummaryService: F3xSummaryService;
   const f3x: F3xSummary = F3xSummary.fromJSON({
     id: 999,
-    coverage_from_date: '20220525',
+    coverage_from_date: '2022-05-25',
     form_type: 'F3XN',
     report_code: 'Q1',
   });
