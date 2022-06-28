@@ -17,33 +17,57 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
     const transactionTypeName = route.paramMap.get('transactionType');
     const transactionId = route.paramMap.get('transactionId');
     const parentTransactionId = route.paramMap.get('parentTransactionId');
-    let transactionType: TransactionType;
 
-    if (transactionTypeName) {
-      // This is a new transaction
-      transactionType = TransactionTypeUtils.factory(transactionTypeName) as TransactionType;
-      transactionType.transaction = transactionType.getNewTransaction();
-      transactionType.transaction.report_id = Number(reportId);
-
-      if (parentTransactionId != null) transactionType.transaction.parent_transaction = Number(parentTransactionId);
-      else transactionType.transaction.parent_transaction = null;
-
-      return of(transactionType);
+    if (parentTransactionId && transactionTypeName) {
+      return this.resolve_parent_transaction(parentTransactionId, transactionTypeName);
+    }
+    if (reportId && transactionTypeName) {
+      return this.resolve_new_transaction(reportId, transactionTypeName);
     }
     if (transactionId) {
-      // This is an edit of an existing transacion
-      return this.transactionService.get(Number(transactionId)).pipe(
-        map((transaction: Transaction) => {
-          if (transaction.transaction_type_identifier) {
-            transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier) as TransactionType;
-            transactionType.transaction = transaction;
-            return transactionType;
-          } else {
-            return undefined;
-          }
-        })
-      );
+      return this.resolve_existing_transaction(transactionId);
     }
     return of(undefined);
+  }
+
+  resolve_new_transaction(reportId: string, transactionTypeName: string): Observable<TransactionType | undefined> {
+    const transactionType = TransactionTypeUtils.factory(transactionTypeName) as TransactionType;
+    transactionType.transaction = transactionType.getNewTransaction();
+    transactionType.transaction.report_id = Number(reportId);
+
+    return of(transactionType);
+  }
+
+  resolve_parent_transaction(
+    parentTransactionId: string,
+    transactionTypeName: string
+  ): Observable<TransactionType | undefined> {
+    const transactionType = TransactionTypeUtils.factory(transactionTypeName) as TransactionType;
+    return this.transactionService.get(Number(parentTransactionId)).pipe(
+      map((transaction: Transaction) => {
+        transactionType.transaction = transactionType.getNewTransaction();
+
+        transactionType.parent = transaction;
+        transactionType.transaction.parent_transaction = Number(parentTransactionId);
+
+        return transactionType;
+      })
+    );
+  }
+
+  resolve_existing_transaction(transactionId: string): Observable<TransactionType | undefined> {
+    return this.transactionService.get(Number(transactionId)).pipe(
+      map((transaction: Transaction) => {
+        if (transaction.transaction_type_identifier) {
+          const transactionType = TransactionTypeUtils.factory(
+            transaction.transaction_type_identifier
+          ) as TransactionType;
+          transactionType.transaction = transaction;
+          return transactionType;
+        } else {
+          return undefined;
+        }
+      })
+    );
   }
 }
