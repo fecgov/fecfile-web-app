@@ -145,7 +145,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.form.markAsPristine();
     this.form.markAsUntouched();
     this.form.patchValue({
-      entity_type: ContactTypes.INDIVIDUAL,
+      entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: false,
       contribution_purpose_descrip: this.contributionPurposeDescrip,
