@@ -1,15 +1,15 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
-import { MessageService } from 'primeng/api';
-import { ContactTypes, ContactTypeLabels } from '../../models/contact.model';
+import { Router } from '@angular/router';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
+import { ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
   template: '',
@@ -35,7 +35,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected transactionService: TransactionService,
     protected validateService: ValidateService,
     protected fb: FormBuilder,
-    protected router: Router
+    protected router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +80,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.destroy$.complete();
   }
 
-  save(navigateTo: 'list' | 'add another') {
+  save(navigateTo: 'list' | 'add another' | 'add-sub-tran', 
+    transactionTypeToAdd?: string) {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
@@ -101,20 +102,21 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       if (payload.id) {
         this.transactionService
           .update(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
-          .subscribe(() => {
-            this.navigateTo(navigateTo);
+          .subscribe((transaction) => {
+            this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
           });
       } else {
         this.transactionService
           .create(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
-          .subscribe(() => {
-            this.navigateTo(navigateTo);
+          .subscribe((transaction) => {
+            this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
           });
       }
     }
   }
 
-  navigateTo(navigateTo: 'list' | 'add another') {
+  navigateTo(navigateTo: 'list' | 'add another' | 'add-sub-tran', 
+    transactionId?: number, transactionTypeToAdd?: string) {
     if (navigateTo === 'add another') {
       this.messageService.add({
         severity: 'success',
@@ -123,6 +125,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.resetForm();
+    } else if (navigateTo === 'add-sub-tran') {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successful',
+        detail: 'Parent Transaction Saved',
+        life: 3000,
+      });
+      this.router.navigateByUrl(`transactions/edit/` +
+        `${transactionId}/create-child/${transactionTypeToAdd}`);
     } else {
       this.router.navigateByUrl('/reports');
     }
@@ -134,7 +145,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.form.markAsPristine();
     this.form.markAsUntouched();
     this.form.patchValue({
-      entity_type: ContactTypes.INDIVIDUAL,
+      entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: false,
       contribution_purpose_descrip: this.contributionPurposeDescrip,
