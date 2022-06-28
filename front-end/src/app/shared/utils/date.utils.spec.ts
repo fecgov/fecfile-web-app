@@ -5,7 +5,7 @@ describe('DateUtils', () => {
     expect(new DateUtils()).toBeTruthy();
   });
 
-  it('#convertDateToFecFormat(date: Date | null) should return a YYYYMMDD string', () => {
+  it('#convertDateToFecFormat(date: Date | null) should return a YYYY-MM-DD string', () => {
     const dateDate: Date = new Date('December 17, 1995 03:24:00');
     let stringDate: string | null;
 
@@ -13,6 +13,6 @@ describe('DateUtils', () => {
     expect(stringDate).toBeNull();
 
     stringDate = DateUtils.convertDateToFecFormat(dateDate);
-    expect(stringDate).toBe('19951217');
+    expect(stringDate).toBe('1995-12-17');
   });
 });
