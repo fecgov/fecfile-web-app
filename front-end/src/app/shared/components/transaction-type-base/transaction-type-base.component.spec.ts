@@ -4,10 +4,12 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { Message, MessageService } from 'primeng/api';
+import { of } from 'rxjs';
 import { selectUserLoginData } from '../../../store/login.selectors';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
@@ -46,6 +48,7 @@ describe('TransactionTypeBaseComponent', () => {
   let fixture: ComponentFixture<TestTransactionTypeBaseComponent>;
   let testMessageService: MessageService;
   let testRouter: Router;
+  let testTransactionService: TransactionService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -65,6 +68,7 @@ describe('TransactionTypeBaseComponent', () => {
 
     testMessageService = TestBed.inject(MessageService);
     testRouter = TestBed.inject(Router);
+    testTransactionService = TestBed.inject(TransactionService);
   });
 
   beforeEach(() => {
@@ -75,6 +79,60 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('#save should navigate for create', () => {
+    const testTransaction: Transaction = {
+      id: null,
+      report_id: null,
+      form_type: null,
+      filer_committee_id_number: null,
+      transaction_id: null,
+      transaction_type_identifier: null,
+      contribution_purpose_descrip: null
+    }
+    spyOn(testTransactionService, 'create').and.returnValue(
+      of(testTransaction));
+    const componentNavigateToSpy = spyOn(component, 'navigateTo');
+    component.transaction = {
+      id: null,
+      report_id: null,
+      form_type: null,
+      filer_committee_id_number: null,
+      transaction_id: null,
+      transaction_type_identifier: 'test',
+      contribution_purpose_descrip: null
+    }
+    
+    component.save('list');
+    expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('#save should navigate for update', () => {
+    const testTransaction: Transaction = {
+      id: 123,
+      report_id: null,
+      form_type: null,
+      filer_committee_id_number: null,
+      transaction_id: null,
+      transaction_type_identifier: null,
+      contribution_purpose_descrip: null
+    }
+    spyOn(testTransactionService, 'update').and.returnValue(
+      of(testTransaction));
+    const componentNavigateToSpy = spyOn(component, 'navigateTo');
+    component.transaction = {
+      id: 123,
+      report_id: null,
+      form_type: null,
+      filer_committee_id_number: null,
+      transaction_id: null,
+      transaction_type_identifier: 'test',
+      contribution_purpose_descrip: null
+    }
+    
+    component.save('list');
+    expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 
   it('#navigateTo \'add another\' should show popup', () => {
