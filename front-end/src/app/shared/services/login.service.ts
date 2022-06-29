@@ -1,24 +1,32 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
-import { SessionService } from './SessionService/session.service';
+import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
+import { SessionService } from './SessionService/session.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
+  private userLoginData: UserLoginData | null = null;
   constructor(
     private store: Store,
     private sessionService: SessionService,
     private http: HttpClient,
-    private apiService: ApiService
-  ) {}
+    private apiService: ApiService,
+    private cookieService: CookieService
+  ) {
+    this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
+      this.userLoginData = userLoginData;
+    });
+  }
 
   /**
    * Logs a user into the API.
@@ -55,6 +63,25 @@ export class LoginService {
   }
 
   public logOut() {
-    this.store.dispatch(userLoggedOutAction());
+    if (this.userLoginData && this.userLoginData.token) { // Non-login.gov auth
+      this.store.dispatch(userLoggedOutAction());
+    } else {
+      this.apiService.postAbsoluteUrl(`${environment.loginDotGovLogoutUrl}`, null).pipe(
+        tap(() => {
+          this.clearUserLoggedInCookies();
+          this.store.dispatch(userLoggedOutAction());
+        })
+      ).subscribe(() => undefined);
+    }
   }
+
+  public clearUserLoggedInCookies() {
+    this.cookieService.delete(
+      environment.ffapiCommitteeIdCookieName);
+    this.cookieService.delete(
+      environment.ffapiEmailCookieName);
+    this.cookieService.delete(
+      environment.sessionIdCookieName);
+  }
+
 }
