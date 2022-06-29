@@ -85,7 +85,7 @@ describe('TransactionResolver', () => {
     });
   });
 
-  it('should return a parent transaction', () => {
+  it('should return a child transaction', () => {
     const route = {
       paramMap: convertToParamMap({ parentTransactionId: 1, transactionType: 'JF_TRAN_PAC_MEMO' }),
     };

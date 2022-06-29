@@ -19,7 +19,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
     const parentTransactionId = route.paramMap.get('parentTransactionId');
 
     if (parentTransactionId && transactionTypeName) {
-      return this.resolve_parent_transaction(parentTransactionId, transactionTypeName);
+      return this.resolve_child_transaction(parentTransactionId, transactionTypeName);
     }
     if (reportId && transactionTypeName) {
       return this.resolve_new_transaction(reportId, transactionTypeName);
@@ -38,7 +38,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
     return of(transactionType);
   }
 
-  resolve_parent_transaction(
+  resolve_child_transaction(
     parentTransactionId: string,
     transactionTypeName: string
   ): Observable<TransactionType | undefined> {
