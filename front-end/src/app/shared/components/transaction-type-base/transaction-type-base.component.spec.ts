@@ -159,7 +159,7 @@ describe('TransactionTypeBaseComponent', () => {
       detail: 'Parent Transaction Saved',
       life: 3000,
     };
-    const expectedRoute = `transactions/edit/` + `${testTransactionId}/create-child/${testTransactionTypeToAdd}`;
+    const expectedRoute = `transactions/edit/` + `${testTransactionId}/create-sub-transaction/${testTransactionTypeToAdd}`;
 
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
