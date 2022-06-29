@@ -303,19 +303,33 @@
       <div class="col-2">
         <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="navigateTo('list')"></button>
       </div>
-      <div class="col-4"></div>
-      <div class="col-3">
-        <button
-          pButton
-          pRipple
-          label="Save & view all transactions"
-          class="p-button-primary"
-          (click)="save('list')"
-        ></button>
-      </div>
-      <div class="col-3">
-        <button pButton pRipple label="Save & add another" class="p-button-info" (click)="save('add another')"></button>
-      </div>
+      <ng-container *ngIf="this.transaction?.id != null">
+        <div class="col-7"></div>
+        <div class="col-3">
+          <button
+            pButton
+            pRipple
+            label="Save & view all transactions"
+            class="p-button-primary"
+            (click)="save('list')"
+          ></button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="this.transaction?.id == null">
+        <div class="col-4"></div>
+        <div class="col-3">
+          <button
+            pButton
+            pRipple
+            label="Save & view all transactions"
+            class="p-button-primary"
+            (click)="save('list')"
+          ></button>
+        </div>
+        <div class="col-3">
+          <button pButton pRipple label="Save & add another" class="p-button-info" (click)="save('add another')"></button>
+        </div>
+      </ng-container>
     </div>
   </form>
 </div>
