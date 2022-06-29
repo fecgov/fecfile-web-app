@@ -11,6 +11,11 @@ export const environment = {
   fecApiUrl: 'https://api.open.fec.gov/v1/',
   fecApiKey: 'fWkpM7VN0mjtZXsGyfCJy2zeVtgePB2QhiyZcx2X',
   userCanSetFilingFrequency: true,
+  loginDotGovAuthUrl: 'https://fecfile-web-api-stage.app.cloud.gov/oidc/authenticate',
+  loginDotGovLogoutUrl: 'https://fecfile-web-api-stage.app.cloud.gov/oidc/logout/',
+  ffapiCommitteeIdCookieName: 'ffapi_committee_id',
+  ffapiEmailCookieName: 'ffapi_email',
+  sessionIdCookieName: 'sessionid',
 };
 
 /*
