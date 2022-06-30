@@ -1,4 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import {
   electionReportCodes,
   F3xFormTypes,
@@ -8,19 +11,16 @@ import {
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
-  quarterlyNonElectionYearReportCodes,
+  quarterlyNonElectionYearReportCodes
 } from 'app/shared/models/f3x-summary.model';
+import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { ValidateService } from 'app/shared/services/validate.service';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { Subject, takeUntil } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { environment } from 'environments/environment';
-import { ActivatedRoute, Router } from '@angular/router';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -122,6 +122,13 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         }
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+
+    this.f3xSummaryService.getF3xCoverageDates().subscribe((dates) => {
+      if (dates) {
+        dates.forEach(date => console.log(date));
+      }
+      console.log(dates);
+    });
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
