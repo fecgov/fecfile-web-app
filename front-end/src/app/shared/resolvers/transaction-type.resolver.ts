@@ -22,7 +22,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
       // This is a new transaction
       transactionType = TransactionTypeUtils.factory(transactionTypeName) as TransactionType;
       transactionType.transaction = transactionType.getNewTransaction();
-      transactionType.transaction.report_id = Number(reportId);
+      transactionType.transaction.f3x_summary = Number(reportId);
       return of(transactionType);
     }
     if (transactionId) {
