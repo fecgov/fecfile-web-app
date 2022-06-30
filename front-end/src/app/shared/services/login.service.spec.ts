@@ -1,19 +1,15 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { userLoggedOutAction } from 'app/store/login.actions';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from 'environments/environment';
-import { of } from 'rxjs';
+import { UserLoginData } from 'app/shared/models/user.model';
+import { selectUserLoginData } from 'app/store/login.selectors';
 import { ApiService } from './api.service';
-import { LoginService } from './login.service';
 
+import { LoginService } from './login.service';
 
 describe('LoginService', () => {
   let service: LoginService;
-  let store: MockStore;
-  let apiService: ApiService;
   let httpTestingController: HttpTestingController;
 
   const userLoginData: UserLoginData = {
@@ -37,8 +33,6 @@ describe('LoginService', () => {
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(LoginService);
-    store  = TestBed.inject(MockStore);
-    apiService = TestBed.inject(ApiService);
   });
 
   it('should be created', () => {
@@ -66,31 +60,4 @@ describe('LoginService', () => {
     req.flush(userLoginData);
     httpTestingController.verify();
   });
-
-  it('#logOut non-login.gov happy path', async () => {  
-    userLoginData.token = 'testVal';
-    TestBed.resetTestingModule();
-    
-    spyOn(store, 'dispatch');
-    spyOn(apiService, 'postAbsoluteUrl').and.returnValue(of('test'));
-    
-    service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
-    expect(apiService.postAbsoluteUrl).toHaveBeenCalledTimes(0);
-  });
-
-  it('#logOut login.gov happy path', () => {
-    userLoginData.token = null;
-    TestBed.resetTestingModule();
-    
-    spyOn(store, 'dispatch');
-    spyOn(apiService, 'postAbsoluteUrl').and.returnValue(of('test'));
-    spyOn(service, 'clearUserLoggedInCookies');
-    
-    service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
-    expect(apiService.postAbsoluteUrl).toHaveBeenCalledTimes(1);
-    expect(service.clearUserLoggedInCookies).toHaveBeenCalledTimes(1);
-  });
-
 });
