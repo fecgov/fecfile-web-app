@@ -1,5 +1,5 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
@@ -32,10 +32,4 @@ describe('ApiService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
-  it('isAuthenticated should return true with committee_id set', () => {
-    const retval = service.isAuthenticated();
-    expect(retval).toBeTrue();
-  });
-
 });
