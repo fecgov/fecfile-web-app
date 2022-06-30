@@ -53,7 +53,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | null = null;
   transaction_type_identifier: string | null = null;
 
-  parent_transaction: number | null = null; // Foreign key to the SchATransaction model
+  parent_transaction_id: number | null = null; // Foreign key to the SchATransaction model
 
   created: string | null = null;
   updated: string | null = null;

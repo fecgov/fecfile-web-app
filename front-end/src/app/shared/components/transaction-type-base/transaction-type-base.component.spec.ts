@@ -90,7 +90,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_id: null,
       transaction_type_identifier: null,
       contribution_purpose_descrip: null,
-      parent_transaction: null,
+      parent_transaction_id: null,
     };
     spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
@@ -102,7 +102,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_id: null,
       transaction_type_identifier: 'test',
       contribution_purpose_descrip: null,
-      parent_transaction: null,
+      parent_transaction_id: null,
     };
 
     component.save('list');
@@ -118,7 +118,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_id: null,
       transaction_type_identifier: null,
       contribution_purpose_descrip: null,
-      parent_transaction: null,
+      parent_transaction_id: null,
     };
     spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
@@ -130,7 +130,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_id: null,
       transaction_type_identifier: 'test',
       contribution_purpose_descrip: null,
-      parent_transaction: null,
+      parent_transaction_id: null,
     };
 
     component.save('list');
@@ -159,7 +159,8 @@ describe('TransactionTypeBaseComponent', () => {
       detail: 'Parent Transaction Saved',
       life: 3000,
     };
-    const expectedRoute = `transactions/edit/` + `${testTransactionId}/create-sub-transaction/${testTransactionTypeToAdd}`;
+    const expectedRoute =
+      `transactions/edit/` + `${testTransactionId}/create-sub-transaction/${testTransactionTypeToAdd}`;
 
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');

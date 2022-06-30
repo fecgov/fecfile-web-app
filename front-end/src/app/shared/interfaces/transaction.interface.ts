@@ -6,5 +6,5 @@ export interface Transaction {
   transaction_id: string | null;
   transaction_type_identifier: string | null;
   contribution_purpose_descrip: string | null;
-  parent_transaction: number | null;
+  parent_transaction_id: number | null;
 }
