@@ -131,81 +131,53 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       this.f3xCoverageDatesList = dates;
     });
     this.form.controls['coverage_from_date'].addValidators(
-      this.coverageFromDatesValidator());
+      this.buildCoverageDatesValidator('coverage_from_date'));
     this.form.controls['coverage_through_date'].addValidators(
-      this.coverageThroughDatesValidator());
+      this.buildCoverageDatesValidator('coverage_through_date'));
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
     this.validateService.formValidatorForm = this.form;
   }
 
-  coverageFromDatesValidator(): ValidatorFn {
+  buildCoverageDatesValidator(valueFormControlName: string,): ValidatorFn {
     return (): ValidationErrors | null => {
       let result: ValidationErrors | null = null;
-      const fromDate: Date = this.form?.get('coverage_from_date')?.value
-      if (this.f3xCoverageDatesList && fromDate) {
+      const formValue: Date = this.form?.get(valueFormControlName)?.value
+      if (this.f3xCoverageDatesList && formValue) {
         const retval = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
           return (f3xCoverageDate &&
             f3xCoverageDate.coverage_from_date &&
             f3xCoverageDate.coverage_through_date &&
-            (fromDate >= f3xCoverageDate.coverage_from_date &&
-              fromDate <= f3xCoverageDate.coverage_through_date)
+            (formValue >= f3xCoverageDate.coverage_from_date &&
+              formValue <= f3xCoverageDate.coverage_through_date)
           )
         });
-        if (retval) {
-          const f3xReportCodeLabel = this.f3xReportCodeCreationLabels.find(
-            label => label[0] === retval.report_code);
-          const reportCodeLabel = f3xReportCodeLabel ? f3xReportCodeLabel[1] ||
-            retval.report_code?.valueOf : 'invalid name';
-          const coverageFromDate = this.fecDatePipe.transform(
-            retval.coverage_from_date);
-          const coverageThroughDate = this.fecDatePipe.transform(
-            retval.coverage_through_date);
-          result = {};
-          result['invaliddate'] = {
-            msg: `You have entered coverage dates that overlap ` +
-              `the coverage dates of the following report: ${reportCodeLabel} ` +
-              ` ${coverageFromDate} - ${coverageThroughDate}`
-          };
-        }
+        result = this.getCoverageDatesValidator(retval);
       }
       return result;
     };
   }
 
-  coverageThroughDatesValidator(): ValidatorFn {
-    return (): ValidationErrors | null => {
-      let result: ValidationErrors | null = null;
-      const throughDate: Date = this.form?.get('coverage_through_date')?.value
-      if (this.f3xCoverageDatesList && throughDate) {
-        const retval = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
-          return (f3xCoverageDate &&
-            f3xCoverageDate.coverage_from_date &&
-            f3xCoverageDate.coverage_through_date &&
-            (throughDate >= f3xCoverageDate.coverage_from_date &&
-              throughDate <= f3xCoverageDate.coverage_through_date)
-          )
-        });
-        if (retval) {
-          const f3xReportCodeLabel = this.f3xReportCodeCreationLabels.find(
-            label => label[0] === retval.report_code);
-          const reportCodeLabel = f3xReportCodeLabel ? f3xReportCodeLabel[1] ||
-            retval.report_code?.valueOf : 'invalid name';
-          const coverageFromDate = this.fecDatePipe.transform(
-            retval.coverage_from_date);
-          const coverageThroughDate = this.fecDatePipe.transform(
-            retval.coverage_through_date);
-          result = {};
-          result['invaliddate'] = {
-            msg: `You have entered coverage dates that overlap ` +
-              `the coverage dates of the following report: ${reportCodeLabel} ` +
-              ` ${coverageFromDate} - ${coverageThroughDate}`
-          };
-        }
-      }
-      return result;
-    };
+  getCoverageDatesValidator(f3xCoverageDates?: F3xCoverageDates) {
+    let retval: ValidationErrors | null = null;
+    if (f3xCoverageDates) {
+      const f3xReportCodeLabel = this.f3xReportCodeCreationLabels.find(
+        label => label[0] === f3xCoverageDates.report_code);
+      const reportCodeLabel = f3xReportCodeLabel ? f3xReportCodeLabel[1] ||
+        f3xCoverageDates.report_code?.valueOf : 'invalid name';
+      const coverageFromDate = this.fecDatePipe.transform(
+        f3xCoverageDates.coverage_from_date);
+      const coverageThroughDate = this.fecDatePipe.transform(
+        f3xCoverageDates.coverage_through_date);
+      retval = {};
+      retval['invaliddate'] = {
+        msg: `You have entered coverage dates that overlap ` +
+          `the coverage dates of the following report: ${reportCodeLabel} ` +
+          ` ${coverageFromDate} - ${coverageThroughDate}`
+      };
+    }
+    return retval;
   }
 
   ngOnDestroy(): void {
