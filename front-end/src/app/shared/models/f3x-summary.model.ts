@@ -147,8 +147,8 @@ export const electionReportCodes: F3xReportCode[] = [
 ];
 
 export class F3xCoverageDates {
-  coverage_from_date: Date | null = null;
-  coverage_through_date: Date | null = null;
+  @Transform(BaseModel.dateTransform) coverage_from_date: Date | null = null;
+  @Transform(BaseModel.dateTransform) coverage_through_date: Date | null = null;
   report_code: F3xReportCodes | null = null;
   // prettier-ignore
   static fromJSON(json: any): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any

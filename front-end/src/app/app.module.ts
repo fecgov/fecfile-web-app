@@ -43,6 +43,7 @@ import { TwoFactorLoginComponent } from './login/two-factor-login/two-factor-log
 import { ConfirmTwoFactorComponent } from './login/confirm-two-factor/confirm-two-factor.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
+import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -96,6 +97,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ConfirmationService,
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    FecDatePipe,
   ],
   bootstrap: [AppComponent],
 })
