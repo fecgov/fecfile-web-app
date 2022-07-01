@@ -18,7 +18,7 @@ class TestTableListBaseComponent extends TableListBaseComponent<string> {
 class TestTableListService implements TableListService<string> {
   getTableData(pageNumber: number): Observable<ListRestResponse> {
     return of({
-      count: pageNumber,
+      count: 2,
       next: 'https://next',
       previous: 'https://previous',
       results: ['abc', 'def'],
