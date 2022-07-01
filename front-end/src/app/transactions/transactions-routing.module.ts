@@ -28,7 +28,7 @@ const routes: Routes = [
     },
   },
   {
-    path: 'edit/:transactionId/create-child/:transactionType',
+    path: 'edit/:parentTransactionId/create-sub-transaction/:transactionType',
     component: TransactionContainerComponent,
     resolve: {
       transactionType: TransactionTypeResolver,

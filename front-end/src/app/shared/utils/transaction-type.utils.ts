@@ -4,6 +4,7 @@ import { JF_TRAN } from '../models/transaction-types/JF_TRAN.model';
 import { OFFSET_TO_OPEX } from '../models/transaction-types/OFFSET_TO_OPEX.model';
 import { OTH_REC } from '../models/transaction-types/OTH_REC.model';
 import { TRIB_REC } from '../models/transaction-types/TRIB_REC.model';
+import { JF_TRAN_PAC_MEMO } from '../models/transaction-types/JF_TRAN_PAC_MEMO.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -12,6 +13,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   OFFSET_TO_OPEX,
   OTH_REC,
   TRIB_REC,
+  JF_TRAN_PAC_MEMO,
 }
 
 export class TransactionTypeUtils {
