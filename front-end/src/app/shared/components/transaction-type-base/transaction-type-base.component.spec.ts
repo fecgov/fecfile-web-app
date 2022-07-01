@@ -89,10 +89,10 @@ describe('TransactionTypeBaseComponent', () => {
       filer_committee_id_number: null,
       transaction_id: null,
       transaction_type_identifier: null,
-      contribution_purpose_descrip: null
-    }
-    spyOn(testTransactionService, 'create').and.returnValue(
-      of(testTransaction));
+      contribution_purpose_descrip: null,
+      parent_transaction_id: null,
+    };
+    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transaction = {
       id: null,
@@ -101,9 +101,10 @@ describe('TransactionTypeBaseComponent', () => {
       filer_committee_id_number: null,
       transaction_id: null,
       transaction_type_identifier: 'test',
-      contribution_purpose_descrip: null
-    }
-    
+      contribution_purpose_descrip: null,
+      parent_transaction_id: null,
+    };
+
     component.save('list');
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
@@ -116,10 +117,10 @@ describe('TransactionTypeBaseComponent', () => {
       filer_committee_id_number: null,
       transaction_id: null,
       transaction_type_identifier: null,
-      contribution_purpose_descrip: null
-    }
-    spyOn(testTransactionService, 'update').and.returnValue(
-      of(testTransaction));
+      contribution_purpose_descrip: null,
+      parent_transaction_id: null,
+    };
+    spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transaction = {
       id: 123,
@@ -128,14 +129,15 @@ describe('TransactionTypeBaseComponent', () => {
       filer_committee_id_number: null,
       transaction_id: null,
       transaction_type_identifier: 'test',
-      contribution_purpose_descrip: null
-    }
-    
+      contribution_purpose_descrip: null,
+      parent_transaction_id: null,
+    };
+
     component.save('list');
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('#navigateTo \'add another\' should show popup', () => {
+  it("#navigateTo 'add another' should show popup", () => {
     const expectedMessage: Message = {
       severity: 'success',
       summary: 'Successful',
@@ -144,11 +146,10 @@ describe('TransactionTypeBaseComponent', () => {
     };
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
     component.navigateTo('add another');
-    expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(
-      expectedMessage);
+    expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
-  it('#navigateTo \'add-sub-tran\' should show popup + navigate', () => {
+  it("#navigateTo 'add-sub-tran' should show popup + navigate", () => {
     const testTransactionId = 1;
     const testTransactionTypeToAdd = 'testTransactionTypeToAdd';
 
@@ -158,26 +159,21 @@ describe('TransactionTypeBaseComponent', () => {
       detail: 'Parent Transaction Saved',
       life: 3000,
     };
-    const expectedRoute = `transactions/edit/` +
-    `${testTransactionId}/create-child/${testTransactionTypeToAdd}`;
+    const expectedRoute =
+      `transactions/edit/` + `${testTransactionId}/create-sub-transaction/${testTransactionTypeToAdd}`;
 
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
 
-    component.navigateTo('add-sub-tran', testTransactionId, 
-      testTransactionTypeToAdd);
-    expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(
-      expectedMessage);
-    expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(
-      expectedRoute);
+    component.navigateTo('add-sub-tran', testTransactionId, testTransactionTypeToAdd);
+    expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
+    expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
-  it('#navigateTo \'list\' should navigate', () => {
+  it("#navigateTo 'list' should navigate", () => {
     const expectedRoute = '/reports';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
-    expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(
-      expectedRoute);
+    expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
-
 });

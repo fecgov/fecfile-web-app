@@ -84,4 +84,17 @@ describe('TransactionResolver', () => {
       }
     });
   });
+
+  it('should return a child transaction', () => {
+    const route = {
+      paramMap: convertToParamMap({ parentTransactionId: 1, transactionType: 'JF_TRAN_PAC_MEMO' }),
+    };
+
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionType | undefined) => {
+      expect(response).toBeTruthy();
+      if (response) {
+        expect(response.title).toEqual('JF Transfer PAC Memos');
+      }
+    });
+  });
 });

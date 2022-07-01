@@ -53,6 +53,8 @@ export class SchATransaction extends BaseModel implements Transaction {
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | null = null;
   transaction_type_identifier: string | null = null;
 
+  parent_transaction_id: number | null = null; // Foreign key to the SchATransaction model
+
   created: string | null = null;
   updated: string | null = null;
   deleted: string | null = null;
@@ -106,6 +108,7 @@ export enum ScheduleATransactionTypes {
   // Transfers
   TRANSFERS = 'TRAN',
   JF_TRANSFERS = 'JF_TRAN',
+  JF_TRAN_PAC_MEMO = 'JF_TRAN_PAC_MEMO',
   IN_KIND_TRANSFER = 'IK_TRAN',
   IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRAN_NP_RECNT_ACC',
@@ -170,6 +173,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   // Transfers
   [ScheduleATransactionTypes.TRANSFERS, 'Transfers'],
   [ScheduleATransactionTypes.JF_TRANSFERS, 'JF Transfers'],
+  [ScheduleATransactionTypes.JF_TRAN_PAC_MEMO, 'JF Transfer PAC Memos'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer-FEA'],
   [

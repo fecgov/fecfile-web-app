@@ -35,7 +35,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected transactionService: TransactionService,
     protected validateService: ValidateService,
     protected fb: FormBuilder,
-    protected router: Router,
+    protected router: Router
   ) {}
 
   ngOnInit(): void {
@@ -80,8 +80,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.destroy$.complete();
   }
 
-  save(navigateTo: 'list' | 'add another' | 'add-sub-tran', 
-    transactionTypeToAdd?: string) {
+  save(navigateTo: 'list' | 'add another' | 'add-sub-tran', transactionTypeToAdd?: string) {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
@@ -115,8 +114,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  navigateTo(navigateTo: 'list' | 'add another' | 'add-sub-tran', 
-    transactionId?: number, transactionTypeToAdd?: string) {
+  navigateTo(
+    navigateTo: 'list' | 'add another' | 'add-sub-tran',
+    transactionId?: number,
+    transactionTypeToAdd?: string
+  ) {
     if (navigateTo === 'add another') {
       this.messageService.add({
         severity: 'success',
@@ -132,8 +134,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         detail: 'Parent Transaction Saved',
         life: 3000,
       });
-      this.router.navigateByUrl(`transactions/edit/` +
-        `${transactionId}/create-child/${transactionTypeToAdd}`);
+      this.router.navigateByUrl(
+        `transactions/edit/` + `${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
+      );
     } else {
       this.router.navigateByUrl('/reports');
     }
