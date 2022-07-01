@@ -19,6 +19,7 @@ class TestTableListService implements TableListService<string> {
   getTableData(pageNumber: number): Observable<ListRestResponse> {
     return of({
       count: 2,
+      pageNumber: pageNumber,
       next: 'https://next',
       previous: 'https://previous',
       results: ['abc', 'def'],
