@@ -32,9 +32,10 @@ export class CreateF3xStep3Component extends TableListBaseComponent<Transaction>
     return {} as Transaction;
   }
 
-  override filterItem(item: Transaction): boolean {
+  override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
-    return item.f3x_summary == reportId;
+    const params = { report_id: reportId };
+    return params;
   }
 }
 

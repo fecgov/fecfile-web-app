@@ -57,7 +57,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   updated: string | null = null;
   deleted: string | null = null;
 
-  f3x_summary: number | null = null; // Foreign key to the F3XSummary model
+  report_id: number | null = null; // Foreign key to the F3XSummary model
 
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
