@@ -27,7 +27,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     protected override itemService: ReportService,
-    protected router: Router
+    public router: Router
   ) {
     super(messageService, confirmationService, elementRef);
   }
