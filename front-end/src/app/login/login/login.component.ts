@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { userLoggedOutAction } from 'app/store/login.actions';
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { LoginService } from '../../shared/services/login.service';
+import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { SessionService } from '../../shared/services/SessionService/session.service';
+import { UserLoginData } from 'app/shared/models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -25,15 +23,13 @@ export class LoginComponent implements OnInit {
   public titleF!: string;
   public titleR!: string;
   public show!: boolean;
-  public loginDotGovAuthUrl: string | null = null;
 
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
     private authService: AuthService,
     private router: Router,
-    private sessionService: SessionService,
-    private store: Store,
+    private sessionService: SessionService
   ) {
     this.frm = this.fb.group({
       commiteeId: ['', Validators.required],
@@ -49,9 +45,7 @@ export class LoginComponent implements OnInit {
     this.appTitle = environment.appTitle;
     this.titleF = this.appTitle.substring(0, 3);
     this.titleR = this.appTitle.substring(3);
-    this.loginService.clearUserLoggedInCookies();
-    this.store.dispatch(userLoggedOutAction());
-    this.loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
+    this.loginService.logOut();
   }
 
   /**
@@ -109,9 +103,5 @@ export class LoginComponent implements OnInit {
 
   showPassword() {
     this.show = !this.show;
-  }
-
-  navigateToLoginDotGov() {
-    window.location.href = this.loginDotGovAuthUrl || "";
   }
 }
