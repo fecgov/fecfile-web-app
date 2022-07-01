@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
