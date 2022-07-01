@@ -1,9 +1,15 @@
 <div class="summary-header">
   <h1>Summary page</h1>
-  <div><b>FORM 3X:</b> {{ (this.reportCodeLabelList$ | async | findOnReportCodePipe: report.report_code)?.label }}</div>
+  <div>
+    <strong>FORM 3X:</strong>
+    {{ (this.reportCodeLabelList$ | async | findOnReportCodePipe: report.report_code)?.label }}
+  </div>
 </div>
 
 <table class="report-summary collapse">
+  <caption>
+    Report Summary
+  </caption>
   <tr>
     <th class="right-border">LINE NUMBER</th>
     <th class="justify-left right-border">LINE DESCRIPTION</th>
@@ -53,7 +59,7 @@
   <tr>
     <td class="right-border">9</td>
     <td class="justify-left right-border">
-      Debts and obligations owed <b>TO</b> the committee (Itemize all on Schedule C and/or Schedule D)
+      Debts and obligations owed <strong>TO</strong> the committee (Itemize all on Schedule C and/or Schedule D)
     </td>
     <td class="right-border">{{ report.L9_debts_to_period | defaultZero | currency }}</td>
     <td></td>
@@ -61,7 +67,7 @@
   <tr class="gray">
     <td class="right-border last">10</td>
     <td class="justify-left right-border last">
-      Debts and obligations owed <b>BY</b> the committee (Itemized all on Schedule C and/or Schedule D)
+      Debts and obligations owed <strong>BY</strong> the committee (Itemized all on Schedule C and/or Schedule D)
     </td>
     <td class="right-border last">{{ report.L10_debts_by_period | defaultZero | currency }}</td>
     <td class="last"></td>
