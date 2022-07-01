@@ -88,8 +88,11 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
     }
 
     this.itemService.getTableData(pageNumber, ordering).subscribe((response: ListRestResponse) => {
-      this.items = [...response.results];
-      this.totalItems = response.count;
+      for (let item of response.results) {
+        if (this.filterItem(item)) this.items.push(item);
+      }
+
+      this.totalItems = this.items.length;
       this.loading = false;
     });
   }
@@ -166,5 +169,9 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
       this.selectedItems = [];
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     });
+  }
+
+  protected filterItem(item: T): boolean {
+    return true;
   }
 }

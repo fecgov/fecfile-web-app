@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
@@ -30,6 +30,11 @@ export class CreateF3xStep3Component extends TableListBaseComponent<Transaction>
 
   protected getEmptyItem(): Transaction {
     return {} as Transaction;
+  }
+
+  override filterItem(item: Transaction): boolean {
+    const reportId = this.activatedRoute.snapshot.params['reportId'];
+    return item.f3x_summary == reportId;
   }
 }
 
