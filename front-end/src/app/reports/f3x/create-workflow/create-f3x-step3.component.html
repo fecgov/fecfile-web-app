@@ -53,6 +53,8 @@
         <th pSortableColumn="contribution_aggregate" id="contribution-aggregate-column" role="columnheader">
           Contribution aggregate <p-sortIcon field="contribution_aggregate"></p-sortIcon>
         </th>
+				<th id="transaction_id" role="columnheader">Transaction ID</th>
+				<th id="transaction_parent" role="columnheader">Associated With</th>
         <th id="buttons" role="columnheader">Actions</th>
       </tr>
     </ng-template>
@@ -76,6 +78,12 @@
         <td>
           {{ item.contribution_aggregate | currency }}
         </td>
+				<td>
+					{{ item.id }}
+				</td>
+				<td>
+					{{ item.parent_transaction_id }}
+				</td>
         <td>
           <p-button pRipple icon="pi pi-ellipsis-v" styleClass="p-button-text" ariaLabel="action"></p-button>
         </td>
