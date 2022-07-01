@@ -62,7 +62,7 @@ describe('TableListBaseComponent', () => {
   it('#loadTableItems should load items', () => {
     component.loadTableItems({});
     expect(component.items[0]).toBe('abc');
-    expect(component.totalItems).toBe(1);
+    expect(component.totalItems).toBe(2);
     expect(component.loading).toBe(false);
   });
 
