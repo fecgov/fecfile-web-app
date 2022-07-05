@@ -180,7 +180,6 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
    */
 
   public getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
-    const params = {};
-    return params;
+    return {};
   }
 }
