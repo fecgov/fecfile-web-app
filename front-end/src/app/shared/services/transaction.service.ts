@@ -14,17 +14,23 @@ import { ApiService } from './api.service';
 export class TransactionService implements TableListService<Transaction> {
   constructor(private apiService: ApiService, private schATransactionService: SchATransactionService) {}
 
-  public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
+  public getTableData(
+    pageNumber = 1,
+    ordering = '',
+    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
+  ): Observable<ListRestResponse> {
     if (!ordering) {
       ordering = 'form_type';
     }
     // Pull list from Sch A Transactions until we have more report models built
-    return this.apiService.get<ListRestResponse>(`/sch-a-transactions/?page=${pageNumber}&ordering=${ordering}`).pipe(
-      map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => SchATransaction.fromJSON(item));
-        return response;
-      })
-    );
+    return this.apiService
+      .get<ListRestResponse>(`/sch-a-transactions/?page=${pageNumber}&ordering=${ordering}`, params)
+      .pipe(
+        map((response: ListRestResponse) => {
+          response.results = response.results.map((item) => SchATransaction.fromJSON(item));
+          return response;
+        })
+      );
   }
 
   public get(transactionId: number): Observable<Transaction> {

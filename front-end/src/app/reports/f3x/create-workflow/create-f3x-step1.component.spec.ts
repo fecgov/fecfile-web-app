@@ -16,6 +16,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { selectUserLoginData } from 'app/store/login.selectors';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -50,6 +51,7 @@ describe('CreateF3XStep1Component', () => {
         F3xSummaryService,
         FormBuilder,
         MessageService,
+        FecDatePipe,
         provideMockStore({
           initialState: { fecfile_online_userLoginData: userLoginData },
           selectors: [{ selector: selectUserLoginData, value: userLoginData }],

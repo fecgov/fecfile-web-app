@@ -1,14 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { F3xCoverageDates, F3xSummary } from '../models/f3x-summary.model';
 import { ApiService } from './api.service';
-import { F3xSummary } from '../models/f3x-summary.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class F3xSummaryService {
   constructor(private apiService: ApiService) {}
+
+  public getF3xCoverageDates(): Observable<F3xCoverageDates[]> {
+    return this.apiService
+      .get<F3xCoverageDates[]>(`/f3x-summaries/coverage_dates`)
+      .pipe(map((response) => response.map(fx3CoverageDate => 
+        F3xCoverageDates.fromJSON(fx3CoverageDate))));
+  }
 
   public get(id: number): Observable<F3xSummary> {
     return this.apiService

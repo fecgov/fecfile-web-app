@@ -34,6 +34,17 @@ export class ErrorMessagesComponent implements OnInit {
     return `This field cannot contain more than ${this.control?.errors?.['maxlength']?.requiredLength} alphanumeric characters.`;
   }
 
+  private _invalidDateErrorMessage = '';
+  @Input() set invalidDateErrorMessage(value: string) {
+    this._invalidDateErrorMessage = value;
+  }
+  get invalidDateErrorMessage(): string {
+    if (this._invalidDateErrorMessage) {
+      return this._invalidDateErrorMessage;
+    }
+    return this.control?.errors?.['invaliddate']?.msg;
+  }
+
   control: FormGroup | null = null;
 
   ngOnInit(): void {

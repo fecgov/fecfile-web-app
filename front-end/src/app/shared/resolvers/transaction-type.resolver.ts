@@ -49,6 +49,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
 
         transactionType.parent = transaction;
         transactionType.transaction.parent_transaction_id = Number(parentTransactionId);
+        transactionType.transaction.report_id = Number(transaction.report_id);
 
         return transactionType;
       })

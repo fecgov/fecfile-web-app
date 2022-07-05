@@ -1,7 +1,7 @@
-import { BaseModel } from './base.model';
-import { Report } from '../interfaces/report.interface';
 import { plainToClass, Transform } from 'class-transformer';
+import { Report } from '../interfaces/report.interface';
 import { LabelList } from '../utils/label.utils';
+import { BaseModel } from './base.model';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -145,6 +145,16 @@ export const electionReportCodes: F3xReportCode[] = [
   F3xReportCodes.TwelveR,
   F3xReportCodes.TwelveS,
 ];
+
+export class F3xCoverageDates {
+  @Transform(BaseModel.dateTransform) coverage_from_date: Date | null = null;
+  @Transform(BaseModel.dateTransform) coverage_through_date: Date | null = null;
+  report_code: F3xReportCodes | null = null;
+  // prettier-ignore
+  static fromJSON(json: any): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(F3xCoverageDates, json);
+  }
+}
 
 export class F3xSummary extends BaseModel implements Report {
   id: number | null = null;
