@@ -34,8 +34,7 @@ export class CreateF3xStep3Component extends TableListBaseComponent<Transaction>
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
-    const params = { report_id: reportId };
-    return params;
+    return { report_id: reportId };
   }
 }
 
