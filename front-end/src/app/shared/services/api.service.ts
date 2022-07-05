@@ -34,9 +34,12 @@ export class ApiService {
     return new HttpParams({ fromObject: queryParams });
   }
 
-  public get<T>(endpoint: string): Observable<T> {
+  public get<T>(
+    endpoint: string,
+    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
+  ): Observable<T> {
     const headers = this.getHeaders();
-    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers });
+    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, params: params });
   }
 
   // prettier-ignore

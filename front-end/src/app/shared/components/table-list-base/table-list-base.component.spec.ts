@@ -18,7 +18,8 @@ class TestTableListBaseComponent extends TableListBaseComponent<string> {
 class TestTableListService implements TableListService<string> {
   getTableData(pageNumber: number): Observable<ListRestResponse> {
     return of({
-      count: pageNumber,
+      count: 2,
+      pageNumber: pageNumber,
       next: 'https://next',
       previous: 'https://previous',
       results: ['abc', 'def'],
@@ -62,7 +63,7 @@ describe('TableListBaseComponent', () => {
   it('#loadTableItems should load items', () => {
     component.loadTableItems({});
     expect(component.items[0]).toBe('abc');
-    expect(component.totalItems).toBe(1);
+    expect(component.totalItems).toBe(2);
     expect(component.loading).toBe(false);
   });
 

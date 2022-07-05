@@ -31,6 +31,11 @@ export class CreateF3xStep3Component extends TableListBaseComponent<Transaction>
   protected getEmptyItem(): Transaction {
     return {} as Transaction;
   }
+
+  override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
+    const reportId = this.activatedRoute.snapshot.params['reportId'];
+    return { report_id: reportId };
+  }
 }
 
 @Pipe({ name: 'memoCode' })
