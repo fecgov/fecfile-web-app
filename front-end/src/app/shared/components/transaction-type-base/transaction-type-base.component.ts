@@ -115,7 +115,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   navigateTo(
-    navigateTo: 'list' | 'add another' | 'add-sub-tran',
+    navigateTo: 'list' | 'add another' | 'add-sub-tran' | 'to-parent',
     transactionId?: number,
     transactionTypeToAdd?: string
   ) {
@@ -137,6 +137,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.router.navigateByUrl(
         `transactions/edit/` + `${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
       );
+    } else if (navigateTo === 'to-parent') {
+      this.router.navigateByUrl(`/transactions/edit/${this.transaction?.parent_transaction_id}`);
     } else {
       this.router.navigateByUrl(`/reports/f3x/create/step3/${this.transaction?.report_id}`);
     }

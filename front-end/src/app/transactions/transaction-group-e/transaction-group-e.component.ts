@@ -26,7 +26,6 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'donor_committee_fec_id',
-    'donor_committee_name',
     'memo_code',
     'memo_text_description',
   ];
@@ -43,5 +42,4 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
   ) {
     super(messageService, transactionService, validateService, fb, router);
   }
-  
 }
