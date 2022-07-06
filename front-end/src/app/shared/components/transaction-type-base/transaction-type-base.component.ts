@@ -138,7 +138,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         `transactions/edit/` + `${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
       );
     } else {
-      this.router.navigateByUrl('/reports');
+      this.router.navigateByUrl(`/reports/f3x/create/step3/${this.transaction?.report_id}`);
     }
   }
 
