@@ -92,7 +92,7 @@ describe('QA Script 228 (Sprint 8)', () => {
 
   it('Step 2: Select the edit button for the created report', () => {
     cy.get("p-button[icon='pi pi-pencil']").first().click();
-    cy.shshortWait();
+    cy.shortWait();
   });
 
   it('Step 3: Select the "Add new transaction" button', () => {

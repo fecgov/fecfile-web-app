@@ -80,6 +80,7 @@ export function dropdownSetValue(dropdown: string, value: string) {
   cy.get(dropdown).click();
   cy.shortWait();
   cy.get('p-dropdownitem').contains(value).should('exist').click({ force: true });
+  cy.shortWait();
 }
 
 export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {

@@ -51,7 +51,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
     cy.dropdownSetValue("p-dropdown[formcontrolname='state']", 'West Virginia');
 
     cy.get("button[label='Save']").click();
-    cy.medWait();
+    cy.longWait();
 
     cy.get('p-table')
       .find('tr')

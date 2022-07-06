@@ -1,6 +1,6 @@
 // @ts-check
 
-import { randomString } from '../../support/generators/generators.spec';
+import { randomString, candidateID, committeeID } from '../../support/generators/generators.spec';
 
 const contactFields: object = {
   //Contains the max allowable length for any given field
@@ -98,6 +98,10 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
           let randString = '';
           if (field == 'telephone') {
             randString = randomString(strLength, 'numeric');
+          } else if (field == 'candidate_id') {
+            randString = candidateID('Presidential');
+          } else if (field == 'committee_id') {
+            randString = committeeID();
           } else {
             randString = randomString(strLength);
           }

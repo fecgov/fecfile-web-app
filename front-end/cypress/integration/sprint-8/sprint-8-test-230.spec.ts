@@ -61,7 +61,7 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
     context(`---> ${transactionType}`, (cType = transactionType) => {
       it('Opens a new transaction', () => {
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-        cy.shortWait();
+        cy.medWait();
         cy.get('p-button[icon="pi pi-pencil"]').click();
         cy.shortWait();
         cy.get('button[label="Add new transaction"]').click();
