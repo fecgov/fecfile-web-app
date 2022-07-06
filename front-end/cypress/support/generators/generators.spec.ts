@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+
 export function firstName(): string | undefined {
   return _.sample([
     'Khalil',
@@ -299,7 +300,13 @@ export function candidateOffice(): string | undefined {
 }
 
 export function candidateID(candidateOfficeName: string): string {
-  return `${candidateOfficeName[0]}${_.random(1, 99999999).toString().padStart(8, '0')}`;
+  const letter = candidateOfficeName[0];
+  if (letter == 'H' || letter == 'S') {
+    const randomLetterCode = _.sample(Object.values(stateCodes));
+    const endCode = _.random(0, 99999).toString().padStart(5, '0');
+    return `${letter}${_.random(0, 9)}${randomLetterCode}${endCode}`;
+  }
+  return `${letter}${_.random(1, 99999999).toString().padStart(8, '0')}`;
 }
 
 export function committeeID(): string {
