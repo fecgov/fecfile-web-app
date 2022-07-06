@@ -28,9 +28,9 @@ describe('QA Test Script #137 (Sprint 7)', () => {
 
   it('Step 4: Enter any date into the FROM and TO fields', () => {
     cy.calendarSetValue("p-calendar[FormControlName='coverage_from_date']", fromDate);
-    cy.wait(250);
+    cy.medWait();
     cy.calendarSetValue("p-calendar[FormControlName='coverage_through_date']", throughDate);
-    cy.wait(50);
+    cy.medWait();
   });
 
   it('Step 5: Checks that the dates entered are displayed in their fields', () => {

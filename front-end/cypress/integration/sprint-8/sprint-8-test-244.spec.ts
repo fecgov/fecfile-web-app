@@ -16,16 +16,15 @@ describe('QA Script 244 (Sprint 8)', () => {
   it('Step 1: Log in, navigate to the reports page, create a report, and set it up to be ready for transactions', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
-    cy.wait(250);
+    cy.medWait();
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.url().should('contain', '/reports');
 
     const report: object = generateReportObject();
     cy.enterReport(report);
-    cy.wait(250);
 
     cy.get("p-button[icon='pi pi-pencil']").first().click();
-    cy.wait(50);
+    cy.shortWait();
     cy.get("p-radiobutton[formControlName='change_of_address']")
       .contains('YES')
       .parent()
@@ -34,12 +33,12 @@ describe('QA Script 244 (Sprint 8)', () => {
 
     cy.get("button[label='Save']").click();
     cy.get("button[label='Back']").click();
-    cy.wait(250);
+    cy.longWait();
   });
 
   it('Step 2: Select the edit button for the created report', () => {
     cy.get("p-button[icon='pi pi-pencil']").first().click();
-    cy.wait(50);
+    cy.shortWait();
   });
 
   it('Step 3: Verify that you are on the "Transactions" page', () => {

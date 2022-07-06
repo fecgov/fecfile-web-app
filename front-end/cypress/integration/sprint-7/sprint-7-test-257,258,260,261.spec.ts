@@ -76,7 +76,7 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
 
           it('Step 2: Open a New Report', () => {
             cy.get("button[label='Create a new report']").click();
-            cy.wait(50);
+            cy.shortWait();
           });
 
           it(`Step 3: Select the Filing Frequency ${filingFrequency}`, () => {

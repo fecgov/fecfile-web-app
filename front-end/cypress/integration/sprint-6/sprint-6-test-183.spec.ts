@@ -18,10 +18,10 @@ describe('QA Test Script #183 (Sprint 6)', () => {
       .find('p-button[icon="pi pi-trash"]') //Gets the edit button
       .click();
 
-    cy.wait(100);
+    cy.medWait();
     cy.get('.p-confirm-dialog-accept').click();
 
-    cy.wait(100);
+    cy.shortWait();
     cy.logout();
   }
 
@@ -52,7 +52,6 @@ describe('QA Test Script #183 (Sprint 6)', () => {
 
     cy.get("button[label='Save']").click();
 
-    cy.wait(100); //Wait for the form to close itself
     cy.get('p-table')
       .find('tr')
       .contains(`${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
@@ -65,7 +64,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
   });
 
   it('Cleanup', () => {
-    cy.wait(100);
+    cy.medWait();
     after();
   });
 });

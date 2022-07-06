@@ -19,9 +19,9 @@ describe('QA Test Script #110 (Sprint 6)', () => {
   function after() {
     cy.get('p-button[icon="pi pi-trash"]').each((element) => {
       cy.wrap(element).click();
-      cy.wait(50);
+      cy.medWait();
       cy.get('.p-confirm-dialog-accept').click();
-      cy.wait(50);
+      cy.shortWait();
     });
     cy.logout();
   }
@@ -85,7 +85,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
 
         cy.get('.p-button-primary > .p-button-label').contains('Save').click();
 
-        cy.wait(250);
+        cy.longWait();
         cy.get('tbody').find('tr').contains(`${contact['name']}`).parent().should('contain', contact['contact_type']);
         if (cType == 'Individual' || cType == 'Candidate') {
           cy.get('tbody')
@@ -108,7 +108,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
         cy.get('#first_name').should('have.value', '');
 
         cy.get("button[label='Cancel']").click();
-        cy.wait(100);
+        cy.medWait();
       });
 
       it('Cleanup', () => {

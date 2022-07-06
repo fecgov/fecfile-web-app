@@ -78,13 +78,13 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
     context(`---> ${contactType}`, (cType = contactType) => {
       it('Check every field for required/optional and maximum length', () => {
         cy.get("button[label='New']").click();
-        cy.wait(50);
+        cy.shortWait();
         cy.get("div[role='dialog']").contains('Add Contact').should('exist');
 
         cy.dropdownSetValue("p-dropdown[FormControlName='type']", cType);
-        cy.wait(50);
+        cy.shortWait();
         cy.get("button[label='Save']").click();
-        cy.wait(50);
+        cy.shortWait();
 
         for (const field of Object.keys(contactFields[cType])) {
           const strLength = contactFields[cType][field];
@@ -120,7 +120,7 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
         cy.get('p-dropdownitem').should('not.have.length', 0);
 
         cy.get("button[label='Cancel']").click();
-        cy.wait(50);
+        cy.shortWait();
       });
     });
   }

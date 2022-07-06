@@ -13,10 +13,10 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
       .find('p-button[icon="pi pi-trash"]') //Gets the edit button
       .click();
 
-    cy.wait(100);
+    cy.shortWait();
     cy.get('.p-confirm-dialog-accept').click();
 
-    cy.wait(100);
+    cy.shortWait();
     cy.logout();
   }
 
@@ -67,7 +67,7 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
 
       it('Steps 7 & 8: Save the contact and check for the popup', () => {
         cy.get("button[label='Save']").click();
-        cy.wait(150);
+        cy.longWait();
         cy.get("div[role='alert']").contains('Contact Updated').should('exist');
       });
 

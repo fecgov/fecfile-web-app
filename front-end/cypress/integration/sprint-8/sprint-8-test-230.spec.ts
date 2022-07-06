@@ -45,40 +45,36 @@ const transactions: object = { Individual: {}, Organization: {} };
 describe('QA Test Scripts #230 (Sprint 8)', () => {
   before('Logs in and creates a dummy report', () => {
     cy.login();
-    cy.wait(100);
     cy.deleteAllReports();
-    cy.wait(100);
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-    cy.wait(100);
+    cy.shortWait();
 
     const report = generateReportObject();
     cy.enterReport(report);
 
-    cy.wait(250);
     cy.get('p-button[icon="pi pi-pencil"]').click();
-    cy.wait(50);
+    cy.shortWait();
     cy.progressReport();
-    cy.wait(250);
   });
 
   for (transactionType of Object.keys(transactions)) {
     context(`---> ${transactionType}`, (cType = transactionType) => {
       it('Opens a new transaction', () => {
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-        cy.wait(100);
+        cy.shortWait();
         cy.get('p-button[icon="pi pi-pencil"]').click();
-        cy.wait(50);
+        cy.shortWait();
         cy.get('button[label="Add new transaction"]').click();
-        cy.wait(50);
+        cy.shortWait();
         cy.get('p-accordiontab').contains('p-accordiontab', 'OTHER').click();
-        cy.wait(50);
+        cy.shortWait();
         cy.get('a').contains('Offsets to Operating Expenditures').click();
-        cy.wait(50);
+        cy.shortWait();
       });
 
       it('Checks every field for required/optional and maximum length', () => {
         cy.dropdownSetValue("p-dropdown[FormControlName='entity_type']", cType);
-        cy.wait(50);
+        cy.shortWait();
       });
 
       it('Checks non-text fields', () => {
@@ -119,7 +115,7 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
 
       it('Closes out the form', () => {
         cy.get("button[label='Cancel']").click();
-        cy.wait(50);
+        cy.shortWait();
       });
     });
   }

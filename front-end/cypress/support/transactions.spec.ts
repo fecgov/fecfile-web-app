@@ -2,7 +2,7 @@ export function enterTransactionSchA(transaction: object) {
   const tType = transaction['contributor_type'];
 
   cy.dropdownSetValue('p-dropdown[formcontrolname="entity_type"]', tType);
-  cy.wait(100);
+  cy.shortWait();
 
   //Contributor
   if (tType == 'Individual' || tType == 'Candidate') {
@@ -35,5 +35,5 @@ export function enterTransactionSchA(transaction: object) {
 
   //Save
   cy.get("button[label='Save & view all transactions']").click();
-  cy.wait(250);
+  cy.longWait();
 }

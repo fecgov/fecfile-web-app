@@ -1,6 +1,6 @@
 // @ts-check
 
-import { getAuthToken } from './commands';
+import { getAuthToken, shortWait } from './commands';
 
 export function dateToString(dateObj: Date): string {
   const m: string = (dateObj.getMonth() + 1).toString().padStart(2, '0');
@@ -12,37 +12,36 @@ export function dateToString(dateObj: Date): string {
 
 export function enterReport(report, save = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-  cy.wait(100);
+  cy.medWait();
 
   cy.get('button[label="Create a new report"]').click();
-  cy.wait(100);
+  cy.medWait();
 
   cy.get("p-radiobutton[FormControlName='filing_frequency']").contains(report['filing_frequency']).click();
-  cy.wait(25);
+  cy.shortWait();
 
   cy.get("p-selectbutton[FormControlName='report_type_category']").contains(report['report_type_category']).click();
-  cy.wait(25);
+  cy.shortWait();
 
   cy.get("p-radiobutton[FormControlName='report_code']").contains(report['report_code']).click();
-  cy.wait(25);
+  cy.shortWait();
 
   if (report['report_type_category'] == 'Special' || report['report_code'] == '30G' || report['report_code'] == '12G') {
     cy.calendarSetValue("p-calendar[FormControlName='date_of_election']", new Date(report['date_of_election']));
-    cy.wait(25);
+    cy.shortWait();
 
     cy.dropdownSetValue("p-dropdown[FormControlName='state_of_election']", report['state_of_election']);
-    cy.wait(25);
+    cy.shortWait();
   }
 
   cy.calendarSetValue("p-calendar[FormControlName='coverage_from_date']", new Date(report['coverage_from_date']));
-  cy.wait(250);
+  cy.medWait();
   cy.calendarSetValue("p-calendar[FormControlName='coverage_through_date']", new Date(report['coverage_through_date']));
-  cy.wait(50);
-  cy.wait(250);
+  cy.medWait();
 
   if (save) {
     cy.get("button[label='Save']").click();
-    cy.wait(50);
+    cy.longWait();
   }
 }
 
@@ -52,13 +51,13 @@ export function progressReport(address_details = null) {
       .contains('p-radiobutton', 'NO')
       .find('.p-radiobutton-box')
       .click();
-    cy.wait(100);
+    cy.shortWait();
   } else {
     cy.get("p-radiobutton[formControlName='change_of_address']")
       .contains('p-radiobutton', 'YES')
       .find('.p-radiobutton-box')
       .click();
-    cy.wait(100);
+    cy.shortWait();
 
     cy.get("input[formControlName='street_1']").safeType(address_details['street']);
     cy.get("input[formControlName='street_2']").safeType(address_details['apartment']);
@@ -68,7 +67,7 @@ export function progressReport(address_details = null) {
   }
 
   cy.get("button[label='Save and continue']").click();
-  cy.wait(100);
+  cy.longWait();
 }
 
 //Deletes all reports belonging to the logged-in committee
@@ -85,6 +84,7 @@ export function deleteAllReports() {
     for (const report of reports) {
       deleteReport(report.id, authToken);
     }
+    cy.longWait();
   });
 }
 

@@ -31,6 +31,7 @@ export function login() {
   cy.wait(1000).then(() => {
     Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
   });
+  cy.longWait();
 }
 
 export function logout() {
@@ -77,18 +78,18 @@ export function overwrite(prevSubject: any, stringVal: string | number) {
 
 export function dropdownSetValue(dropdown: string, value: string) {
   cy.get(dropdown).click();
-  cy.wait(25);
+  cy.shortWait();
   cy.get('p-dropdownitem').contains(value).should('exist').click({ force: true });
 }
 
 export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   const currentDate: Date = new Date();
   cy.get(calendar).click();
-  cy.wait(25);
+  cy.shortWait();
 
   //    Choose the year
   cy.get('.p-datepicker-year').click();
-  cy.wait(25);
+  cy.shortWait();
 
   const year: number = dateObj.getFullYear();
   const currentYear: number = currentDate.getFullYear();
@@ -97,26 +98,41 @@ export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   if (year < decadeStart) {
     for (let i = 0; i < decadeStart - year; i += 10) {
       cy.get('.p-datepicker-prev').click();
-      cy.wait(25);
+      cy.shortWait();
     }
   }
   if (year > decadeEnd) {
     for (let i = 0; i < year - decadeEnd; i += 10) {
       cy.get('.p-datepicker-next').click();
-      cy.wait(25);
+      cy.shortWait();
     }
   }
   cy.get('.p-yearpicker-year').contains(year.toString()).click();
-  cy.wait(25);
+  cy.shortWait();
 
   //    Choose the month
   const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const Month: string = Months[dateObj.getMonth()];
   cy.get('.p-monthpicker-month').contains(Month).click();
-  cy.wait(25);
+  cy.shortWait();
 
   //    Choose the day
   const Day: string = dateObj.getDate().toString();
   cy.get('td').find('span').not('.p-disabled').parent().contains(Day).click();
-  cy.wait(25);
+  cy.shortWait();
+}
+
+// shortWait() is appropriate for waiting for the UI to update after changing a field
+export function shortWait(): void {
+  cy.wait(100);
+}
+
+// medWait() is appropriate for waiting for loading a page or a table
+export function medWait(): void {
+  cy.wait(250);
+}
+
+// longWait() is appropriate for waiting on a database call such as saving a form
+export function longWait(): void {
+  cy.wait(400);
 }

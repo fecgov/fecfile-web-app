@@ -4,13 +4,26 @@
 
 */
 
-import { safeType, overwrite, dropdownSetValue, calendarSetValue, login, logout } from './commands';
+import {
+  safeType,
+  overwrite,
+  dropdownSetValue,
+  calendarSetValue,
+  login,
+  logout,
+  shortWait,
+  medWait,
+  longWait,
+} from './commands';
 Cypress.Commands.add('safeType', { prevSubject: true }, safeType);
 Cypress.Commands.add('overwrite', { prevSubject: true }, overwrite);
 Cypress.Commands.add('dropdownSetValue', dropdownSetValue);
 Cypress.Commands.add('calendarSetValue', calendarSetValue);
 Cypress.Commands.add('login', login);
 Cypress.Commands.add('logout', logout);
+Cypress.Commands.add('shortWait', shortWait);
+Cypress.Commands.add('medWait', medWait);
+Cypress.Commands.add('longWait', longWait);
 
 import { enterContact } from './contacts.spec';
 Cypress.Commands.add('enterContact', enterContact);

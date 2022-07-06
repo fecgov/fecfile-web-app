@@ -12,10 +12,10 @@ function after(contact) {
     .find('p-button[icon="pi pi-trash"]') //Gets the trash button
     .click();
 
-  cy.wait(100);
+  cy.medWait();
   cy.get('.p-confirm-dialog-accept').click();
 
-  cy.wait(100);
+  cy.shortWait();
   cy.logout();
 }
 
@@ -36,7 +36,7 @@ describe('QA Test Scripts 184 through 187', () => {
 
       it(`Creates a ${cType} contact`, () => {
         cy.enterContact(contact);
-        cy.wait(100);
+        cy.longWait();
       });
 
       it('Steps 2 & 3: Select a contact and open the edit menu', () => {
@@ -61,7 +61,7 @@ describe('QA Test Scripts 184 through 187', () => {
       it("Step 6: Close the form with the 'X' button", () => {
         cy.get('.p-dialog-header-close-icon').click(); //Close the form with the 'X' button
 
-        cy.wait(100);
+        cy.medWait();
         after(contact);
       });
     });
