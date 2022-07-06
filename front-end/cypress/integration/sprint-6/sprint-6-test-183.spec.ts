@@ -51,6 +51,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
     cy.dropdownSetValue("p-dropdown[formcontrolname='state']", 'West Virginia');
 
     cy.get("button[label='Save']").click();
+    cy.medWait();
 
     cy.get('p-table')
       .find('tr')
@@ -61,6 +62,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
 
     cy.get("p-dropdown[formcontrolname='state']").should('contain', 'West Virginia');
     cy.get("button[label='Cancel']").click();
+    cy.shortWait();
   });
 
   it('Cleanup', () => {
