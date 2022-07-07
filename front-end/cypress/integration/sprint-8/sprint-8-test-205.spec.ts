@@ -26,7 +26,8 @@ describe('QA Test Script #205 (Sprint 8)', () => {
   });
 
   it('Step 10: Verify that the Committee ID changed', () => {
-    cy.wait(500).then(() => {
+    //The GET request that occurs *sometimes* comes in before the previous PUT request, so a long, long wait is needed
+    cy.wait(1000).then(() => {
       cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
 
       cy.shortWait();
