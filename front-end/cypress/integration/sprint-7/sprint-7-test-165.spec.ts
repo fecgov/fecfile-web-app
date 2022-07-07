@@ -19,8 +19,7 @@ describe('QA Test Script #165 (Sprint 7)', () => {
     const columns: Array<string> = ['Form type', 'Type of report', 'Coverage dates', 'Status', 'Version', 'Date filed'];
     let column: string;
     for (column of columns) {
-      cy.get('th')
-        .contains(column)
+      cy.contains('th', column)
         .should('contain', column)
         .find('p-sorticon')
         .should('exist')
@@ -29,8 +28,7 @@ describe('QA Test Script #165 (Sprint 7)', () => {
         .should('have.class', 'pi-sort-amount-up-alt');
     }
     for (column of columns) {
-      cy.get('th')
-        .contains(column)
+      cy.contains('th', column)
         .should('contain', column)
         .find('p-sorticon')
         .should('exist')
