@@ -37,19 +37,21 @@ describe('QA Test Script #206 (Sprint 8)', () => {
       });
 
       it('Step 10: Verify that the Committee ID changed', () => {
-        cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
+        cy.wait(500).then(() => {
+          cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
 
-        cy.shortWait();
-        cy.get("input[formControlName='candidate_id']").should('have.value', c_id);
-        cy.get("button[label='Cancel']").click();
-        cy.medWait();
+          cy.shortWait();
+          cy.get("input[formControlName='candidate_id']").should('have.value', c_id);
+          cy.get("button[label='Cancel']").click();
+          cy.medWait();
+        });
       });
 
       it('Cleanup', () => {
         cy.contains('tr', contact['name']).find("p-button[icon='pi pi-trash']").click();
 
         cy.shortWait();
-        cy.get('button').contains('button', 'Yes').click();
+        cy.contains('button', 'Yes').click();
         cy.shortWait();
         cy.logout();
       });

@@ -33,7 +33,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
         before();
 
         cy.url().should('contain', '/dashboard');
-        cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
+        cy.get('.p-menubar').contains('.p-menuitem-link', 'Contacts').click();
         cy.url().should('contain', '/contacts');
       });
 
@@ -83,15 +83,13 @@ describe('QA Test Script #110 (Sprint 6)', () => {
         cy.get("p-dropdown[formcontrolname='state']") //Gets the field for the input for State
           .should('contain', contact['state']);
 
-        cy.get('.p-button-primary > .p-button-label').contains('Save').click();
+        cy.contains('.p-button-primary', 'Save').click();
 
         cy.longWait();
-        cy.get('tbody').find('tr').contains(`${contact['name']}`).parent().should('contain', contact['contact_type']);
+        cy.contains('tr', `${contact['name']}`).should('contain', contact['contact_type']);
         if (cType == 'Individual' || cType == 'Candidate') {
           cy.get('tbody')
-            .find('tr')
-            .contains(`${contact['name']}`)
-            .parent()
+            .contains('tr', `${contact['name']}`)
             .should('contain', contact['employer'])
             .should('contain', contact['occupation']);
         }
@@ -100,7 +98,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
       it('Steps 6-11: Test "Save & Add More"', () => {
         cy.enterContact(generateContactObject(), false);
 
-        cy.get('.p-button-label').contains('Save & Add More').click();
+        cy.contains('.p-button-label', 'Save & Add More').click();
 
         cy.contains('.p-toast-message', 'Contact Created').should('exist');
 

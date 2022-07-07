@@ -5,10 +5,7 @@ import { generateContactObject } from '../../support/generators/contacts.spec';
 const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 function after(contact) {
-  cy.get('p-table')
-    .find('tr')
-    .contains(contact['name']) //Finds out contact in the Manage Contacts table
-    .parent() //Gets the row its in
+  cy.contains('tr', contact['name']) //Finds out contact in the Manage Contacts table
     .find('p-button[icon="pi pi-trash"]') //Gets the trash button
     .click();
 
@@ -40,10 +37,7 @@ describe('QA Test Scripts 184 through 187', () => {
       });
 
       it('Steps 2 & 3: Select a contact and open the edit menu', () => {
-        cy.get('p-table')
-          .find('tr')
-          .contains(`${contact['name']}`) //Finds out contact in the Manage Contacts table
-          .parent() //Gets the row its in
+        cy.contains('tr', `${contact['name']}`) //Finds out contact in the Manage Contacts table
           .find('p-tablecheckbox')
           .click() //Check the checkbox for step 2
           .parent()

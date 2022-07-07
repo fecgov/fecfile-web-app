@@ -11,10 +11,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
   }
 
   function after() {
-    cy.get('p-table')
-      .find('tr')
-      .contains(`${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
-      .parent() //Gets the row its in
+    cy.contains('tr', `${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
       .find('p-button[icon="pi pi-trash"]') //Gets the edit button
       .click();
 
@@ -35,10 +32,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
   });
 
   it("Steps 2-8: Select a contact, edit that contact's state, verify that it saved", () => {
-    cy.get('p-table')
-      .find('tr')
-      .contains(`${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
-      .parent() //Gets the row its in
+    cy.contains('tr', `${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
       .find('p-tablecheckbox')
       .click() //Check the checkbox for step 2
       .parent()
@@ -53,9 +47,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
     cy.get("button[label='Save']").click();
     cy.longWait();
 
-    cy.get('p-table')
-      .find('tr')
-      .contains(`${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
+    cy.contains('tr', `${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
       .parent() //Gets the row its in
       .find('p-button[icon="pi pi-pencil"]') //Gets the edit button
       .click();
