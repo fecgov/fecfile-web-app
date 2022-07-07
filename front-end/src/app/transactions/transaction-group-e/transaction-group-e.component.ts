@@ -26,7 +26,6 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'donor_committee_fec_id',
-    'donor_committee_name',
     'memo_code',
     'memo_text_description',
   ];
@@ -43,5 +42,9 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
   ) {
     super(messageService, transactionService, validateService, fb, router);
   }
-  
+
+  override getFieldsToValidate(): string[] {
+    // Remove donor_committee_name until populated after committee id lookup added to screen
+    return this.validateService.getSchemaProperties(this.schema).filter((p) => p !== 'donor_committee_name');
+  }
 }

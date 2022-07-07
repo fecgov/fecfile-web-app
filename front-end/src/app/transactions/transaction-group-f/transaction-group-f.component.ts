@@ -16,7 +16,7 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
   formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
-    'filer_committee_id_number',
+    'donor_committee_fec_id',
     'contributor_street_1',
     'contributor_street_2',
     'contributor_city',
@@ -41,5 +41,10 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     protected override router: Router
   ) {
     super(messageService, transactionService, validateService, fb, router);
+  }
+
+  override getFieldsToValidate(): string[] {
+    // Remove donor_committee_name until populated after committee id lookup added to screen
+    return this.validateService.getSchemaProperties(this.schema).filter((p) => p !== 'donor_committee_name');
   }
 }

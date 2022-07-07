@@ -93,10 +93,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     });
 
     if (this.transaction?.transaction_type_identifier) {
+      let fieldsToValidate: string[] = this.getFieldsToValidate();
       // Remove transaction_id from list of validate properties because it will be added in the back end.
-      const fieldsToValidate: string[] = this.validateService
-        .getSchemaProperties(this.schema)
-        .filter((p) => p !== 'transaction_id');
+      fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id');
 
       if (payload.id) {
         this.transactionService
@@ -112,6 +111,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           });
       }
     }
+  }
+
+  /**
+   * Generate a list of schema property values that the back-end should use to validate the form.
+   * @returns {string[]} List of schema properties
+   */
+  getFieldsToValidate(): string[] {
+    return this.validateService.getSchemaProperties(this.schema);
   }
 
   navigateTo(
