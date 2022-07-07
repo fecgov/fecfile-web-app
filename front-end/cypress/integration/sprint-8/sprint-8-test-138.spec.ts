@@ -14,8 +14,7 @@ describe('QA Test Script #138 (Sprint 8)', () => {
     const report: object = generateReportObject();
     cy.enterReport(report);
 
-    cy.get('tr')
-      .contains('tr', report['report_code'])
+    cy.contains('tr', report['report_code'])
       .contains('tr', report['coverage_from_date'])
       .contains('tr', report['coverage_through_date'])
       .should('exist');
@@ -25,19 +24,18 @@ describe('QA Test Script #138 (Sprint 8)', () => {
     const report: object = generateReportObject();
     cy.enterReport(report, false); //Enter a report without saving it
     cy.get("button[label='Save and continue']").click();
-    cy.shortWait();
+    cy.longWait();
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.longWait();
 
-    cy.get('tr')
-      .contains('tr', report['report_code'])
+    cy.contains('tr', report['report_code'])
       .contains('tr', report['coverage_from_date'])
       .contains('tr', report['coverage_through_date'])
       .should('exist');
   });
 
   it('Cleanup', () => {
-    cy.longWait();
+    cy.shortWait();
     cy.deleteAllReports();
     cy.logout();
   });

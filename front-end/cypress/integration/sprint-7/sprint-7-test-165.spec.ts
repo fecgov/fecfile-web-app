@@ -40,4 +40,9 @@ describe('QA Test Script #165 (Sprint 7)', () => {
         .should('have.class', 'pi-sort-amount-down');
     }
   });
+
+  it('Cleanup', () => {
+    cy.deleteAllReports();
+    cy.logout();
+  });
 });

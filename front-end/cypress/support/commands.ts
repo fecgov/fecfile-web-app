@@ -76,11 +76,13 @@ export function overwrite(prevSubject: any, stringVal: string | number) {
   return safeType(prevSubject, '{selectall}{del}' + outString);
 }
 
-export function dropdownSetValue(dropdown: string, value: string) {
+export function dropdownSetValue(dropdown: string, value: string, wait: boolean = true) {
   cy.get(dropdown).click();
   cy.shortWait();
   cy.get('p-dropdownitem').contains(value).should('exist').click({ force: true });
-  cy.shortWait();
+  if (wait) {
+    cy.shortWait();
+  }
 }
 
 export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {

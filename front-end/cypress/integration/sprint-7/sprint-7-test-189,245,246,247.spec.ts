@@ -7,9 +7,7 @@ const contactTypes: Array<string> = ['Individual', 'Candidate', 'Committee', 'Or
 describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
   function after() {
     cy.get('p-table')
-      .find('tr')
-      .contains('First Last') //Finds out contact in the Manage Contacts table
-      .parent() //Gets the row its in
+      .contains('tr', 'First Last') //Finds out contact in the Manage Contacts table
       .find('p-button[icon="pi pi-trash"]') //Gets the edit button
       .click();
 
@@ -40,10 +38,8 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
       });
 
       it('Steps 2 & 3: Find the created contact, verify that it is an individual, and then select its edit checkbox', () => {
-        cy.get('tr')
-          .contains('Test Edit') //Find the correct row; side effect: selects the element with the name
+        cy.contains('tr', 'Test Edit') //Find the correct row; side effect: selects the element with the name
           .should('exist') //Double check that it exists
-          .parent() //Get back to the row itself
           .should('contain', cType)
           .find("div[role='checkbox']")
           .click()
@@ -52,8 +48,8 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
       });
 
       it('Step 4: Open the "Edit Contact" form', () => {
-        cy.get('tr').contains('Test Edit').parent().find("p-button[icon='pi pi-pencil']").click();
-        cy.get('div').contains('Edit Contact').should('exist');
+        cy.contains('tr', 'Test Edit').find("p-button[icon='pi pi-pencil']").click();
+        cy.contains('div', 'Edit Contact').should('exist');
       });
 
       it('Steps 5 & 6: Set the contact\'s name to "First Last"', () => {
@@ -68,11 +64,11 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
       it('Steps 7 & 8: Save the contact and check for the popup', () => {
         cy.get("button[label='Save']").click();
         cy.medWait();
-        cy.get("div[role='alert']").contains('Contact Updated').should('exist');
+        cy.contains("div[role='alert']", 'Contact Updated').should('exist');
       });
 
       it('Step 9: Verify that the contact name is now "First Last"', () => {
-        cy.get('tr').contains('First Last').should('exist');
+        cy.contains('tr', 'First Last').should('exist');
       });
 
       it('Cleanup', () => {

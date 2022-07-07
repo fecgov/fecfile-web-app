@@ -27,7 +27,7 @@ describe('QA Test Script #206 (Sprint 8)', () => {
       });
 
       it("Steps 7-9: Edit the created contact's Candidate ID", () => {
-        cy.get('tr').contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
+        cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
 
         cy.shortWait();
         cy.get("input[formControlName='candidate_id']").overwrite(c_id);
@@ -37,7 +37,7 @@ describe('QA Test Script #206 (Sprint 8)', () => {
       });
 
       it('Step 10: Verify that the Committee ID changed', () => {
-        cy.get('tr').contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
+        cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
 
         cy.shortWait();
         cy.get("input[formControlName='candidate_id']").should('have.value', c_id);
@@ -46,7 +46,7 @@ describe('QA Test Script #206 (Sprint 8)', () => {
       });
 
       it('Cleanup', () => {
-        cy.get('tr').contains('tr', contact['name']).find("p-button[icon='pi pi-trash']").click();
+        cy.contains('tr', contact['name']).find("p-button[icon='pi pi-trash']").click();
 
         cy.shortWait();
         cy.get('button').contains('button', 'Yes').click();

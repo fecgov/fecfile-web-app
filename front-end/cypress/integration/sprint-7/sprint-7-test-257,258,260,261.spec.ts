@@ -19,9 +19,7 @@ const interactionTree: object = {
       TER: false,
     },
     'Non-Election Year': {
-      Q1: false,
       MY: false,
-      Q2: false,
       YE: false,
       '12P': true,
       '12R': true,
@@ -30,14 +28,6 @@ const interactionTree: object = {
       '30R': true,
       '30S': true,
       TER: false,
-    },
-    Special: {
-      '12P': true,
-      '12R': true,
-      '12C': true,
-      '12S': true,
-      '30R': true,
-      '30S': true,
     },
   },
   MONTHLY: {

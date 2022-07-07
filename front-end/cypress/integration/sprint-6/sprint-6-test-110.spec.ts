@@ -102,7 +102,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
 
         cy.get('.p-button-label').contains('Save & Add More').click();
 
-        cy.get('.p-toast-message').should('contain', 'Contact Created');
+        cy.contains('.p-toast-message', 'Contact Created').should('exist');
 
         cy.get('#last_name').should('have.value', '');
         cy.get('#first_name').should('have.value', '');

@@ -36,7 +36,7 @@ describe('QA Test Script #133 (Sprint 8)', () => {
   });
 
   it('Step 5: Check for the "Success" toast', () => {
-    cy.get('.p-toast-summary').should('contain', 'Success');
+    cy.contains('.p-toast-summary', 'Success').should('exist');
   });
 
   it('Step 6: Go back', () => {
@@ -83,24 +83,26 @@ describe('QA Test Script #133 (Sprint 8)', () => {
 
   it('Step 12: Check that the address changed', () => {
     const authToken = getAuthToken();
-    cy.request({
-      method: 'GET',
-      url: 'http://localhost:8080/api/v1/f3x-summaries/',
-      headers: {
-        Authorization: authToken,
-      },
-    }).then((resp) => {
-      const report = resp.body.results[0];
-      cy.expect(report.street_1).to.eql(reportStreet_1);
-      cy.expect(report.city).to.eql(reportCity);
-      cy.expect(report.zip).to.eql(reportZip);
+    cy.wait(500).then(() => {
+      cy.request({
+        method: 'GET',
+        url: 'http://localhost:8080/api/v1/f3x-summaries/',
+        headers: {
+          Authorization: authToken,
+        },
+      }).then((resp) => {
+        const report = resp.body.results[0];
+        cy.expect(report.street_1).to.eql(reportStreet_1);
+        cy.expect(report.city).to.eql(reportCity);
+        cy.expect(report.zip).to.eql(reportZip);
 
-      if (reportStreet_2 != '') cy.expect(report.street_2).to.eql(reportStreet_2);
-      else console.log(cy.expect(report.street_2).to.be.null); //SonarCloud throws a fit because it thinks this line is an 'expression' without putting it inside a useless function wrapper...
+        if (reportStreet_2 != '') cy.expect(report.street_2).to.eql(reportStreet_2);
+        else console.log(cy.expect(report.street_2).to.be.null); //SonarCloud throws a fit because it thinks this line is an 'expression' without putting it inside a useless function wrapper...
 
-      const state = reportState;
-      const stateCode: string = generator.stateCodes[state.toUpperCase()];
-      cy.expect(report.state).to.eql(stateCode);
+        const state = reportState;
+        const stateCode: string = generator.stateCodes[state.toUpperCase()];
+        cy.expect(report.state).to.eql(stateCode);
+      });
     });
   });
 
