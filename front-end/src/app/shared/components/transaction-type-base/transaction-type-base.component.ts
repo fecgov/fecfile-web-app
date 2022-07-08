@@ -95,7 +95,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.transaction?.transaction_type_identifier) {
       let fieldsToValidate: string[] = this.getFieldsToValidate();
       // Remove transaction_id from list of validate properties because it will be added in the back end.
-      fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id');
+      fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_commttee_name');
 
       if (payload.id) {
         this.transactionService

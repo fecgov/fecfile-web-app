@@ -18,7 +18,6 @@ import { UserLoginData } from '../../shared/models/user.model';
 import { SharedModule } from '../../shared/shared.module';
 import { selectUserLoginData } from '../../store/login.selectors';
 import { TransactionGroupEComponent } from './transaction-group-e.component';
-import { schema as JF_TRAN } from 'fecfile-validate/fecfile_validate_js/dist/JF_TRAN';
 
 describe('TransactionGroupEComponent', () => {
   let component: TransactionGroupEComponent;
@@ -71,12 +70,5 @@ describe('TransactionGroupEComponent', () => {
     expect(component).toBeTruthy();
     component.ngOnInit();
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.COMMITTEE);
-  });
-
-  it('schema should not check donor_committee_name', () => {
-    component.schema = JF_TRAN;
-    component.ngOnInit();
-    const fieldsToValidate: string[] = component.getFieldsToValidate();
-    expect(fieldsToValidate.includes('donor_committee_name')).toEqual(false);
   });
 });

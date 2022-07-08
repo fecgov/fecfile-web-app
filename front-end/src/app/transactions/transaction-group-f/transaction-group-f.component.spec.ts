@@ -103,11 +103,4 @@ describe('TransactionGroupFComponent', () => {
     );
     httpTestingController.verify();
   });
-
-  it('schema should not check donor_committee_name', () => {
-    component.schema = JF_TRAN_PAC_MEMO;
-    component.ngOnInit();
-    const fieldsToValidate: string[] = component.getFieldsToValidate();
-    expect(fieldsToValidate.includes('donor_committee_name')).toEqual(false);
-  });
 });
