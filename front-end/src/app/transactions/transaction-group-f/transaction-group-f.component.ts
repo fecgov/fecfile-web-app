@@ -42,9 +42,4 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
   ) {
     super(messageService, transactionService, validateService, fb, router);
   }
-
-  override getFieldsToValidate(): string[] {
-    // Remove donor_committee_name until populated after committee id lookup added to screen
-    return this.validateService.getSchemaProperties(this.schema).filter((p) => p !== 'donor_committee_name');
-  }
 }
