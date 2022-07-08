@@ -112,7 +112,7 @@ describe('CreateF3XStep1Component', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  xit('#should set f3xCoverageDatesList on ngOnInit()', () => {
+  it('#should set f3xCoverageDatesList on ngOnInit()', () => {
     const test_coverage_from_date1 = new Date(2022, 1);
     const test_coverage_through_date1 = new Date(2022, 2);
     const test_report_code1 = F3xReportCodes.M10;
@@ -140,7 +140,7 @@ describe('CreateF3XStep1Component', () => {
       JSON.stringify(testF3xCoverageDatesList));
   });
 
-  it('#buildCoverageDatesValidator() test happy path', () => {
+  it('#buildCoverageDateValidator() test happy path', () => {
     const test_coverage_from_date1 = new Date(2022, 1);
     const test_coverage_through_date1 = new Date(2022, 2);
     const test_report_code1 = F3xReportCodes.M10;
@@ -172,7 +172,50 @@ describe('CreateF3XStep1Component', () => {
     component.form.controls[testFormControlName].setValue(
       testFormControlDate);
 
-    component.buildCoverageDatesValidator(testFormControlName);
+    component.buildCoverageDateValidator(testFormControlName);
+    expect(coverageDatesValidatorSpy).toHaveBeenCalledWith(
+      testF3xCoverageDatesList[0]);
+  });
+
+  it('#buildCoveragePeriodValidator() test happy path', () => {
+    const test_coverage_from_date1 = new Date(2022, 2);
+    const test_coverage_through_date1 = new Date(2022, 7);
+    const test_report_code1 = F3xReportCodes.M10;
+
+    const test_coverage_from_date2 = new Date(2022, 9);
+    const test_coverage_through_date2 = new Date(2022, 12);
+    const test_report_code2 = F3xReportCodes.M11;
+
+    const testF3xCoverageDatesList: F3xCoverageDates[] = [
+      {
+        coverage_from_date: test_coverage_from_date1,
+        coverage_through_date: test_coverage_through_date1,
+        report_code: test_report_code1
+      },
+      {
+        coverage_from_date: test_coverage_from_date2,
+        coverage_through_date: test_coverage_through_date2,
+        report_code: test_report_code2
+      },
+    ];
+    const testFromCoverageDate = new Date(2020, 1);
+    const testThroughCoverageDate = new Date(2025, 1);
+
+    const testFromFormControlName = 'coverage_from_date';
+    const testThroughFormControlName = 'coverage_through_date';
+
+    spyOn(f3xSummaryService, 'getF3xCoverageDates').and.returnValue(
+      of(testF3xCoverageDatesList));
+    const coverageDatesValidatorSpy = 
+      spyOn(component, 'getCoverageDatesValidator');  
+    component.ngOnInit();
+    component.form.controls[testFromFormControlName].setValue(
+      testFromCoverageDate);
+    component.form.controls[testThroughFormControlName].setValue(
+      testThroughCoverageDate);
+
+    component.buildCoveragePeriodValidator(testFromFormControlName, 
+      testThroughFormControlName);
     expect(coverageDatesValidatorSpy).toHaveBeenCalledWith(
       testF3xCoverageDatesList[0]);
   });

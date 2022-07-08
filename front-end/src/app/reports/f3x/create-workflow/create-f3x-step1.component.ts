@@ -131,26 +131,57 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       this.f3xCoverageDatesList = dates;
     });
     this.form.controls['coverage_from_date'].addValidators(
-      this.buildCoverageDatesValidator('coverage_from_date'));
+      this.buildCoverageDateValidator('coverage_from_date'));
     this.form.controls['coverage_through_date'].addValidators(
-      this.buildCoverageDatesValidator('coverage_through_date'));
+      this.buildCoverageDateValidator('coverage_through_date'));
+    this.form.controls['coverage_through_date'].addValidators(
+      this.buildCoveragePeriodValidator('coverage_from_date',
+        'coverage_through_date'));
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
     this.validateService.formValidatorForm = this.form;
   }
 
-  buildCoverageDatesValidator(valueFormControlName: string,): ValidatorFn {
+  buildCoverageDateValidator(coverageDateFormControlName: string): ValidatorFn {
     return (): ValidationErrors | null => {
       let result: ValidationErrors | null = null;
-      const formValue: Date = this.form?.get(valueFormControlName)?.value
-      if (this.f3xCoverageDatesList && formValue) {
+      const coverageDate: Date = this.form?.get(coverageDateFormControlName)?.value
+      if (this.f3xCoverageDatesList && coverageDate) {
         const retval = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
           return (f3xCoverageDate &&
             f3xCoverageDate.coverage_from_date &&
             f3xCoverageDate.coverage_through_date &&
-            (formValue >= f3xCoverageDate.coverage_from_date &&
-              formValue <= f3xCoverageDate.coverage_through_date)
+            (coverageDate >= f3xCoverageDate.coverage_from_date &&
+              coverageDate <= f3xCoverageDate.coverage_through_date)
+          )
+        });
+        result = this.getCoverageDatesValidator(retval);
+      }
+      return result;
+    };
+  }
+
+  buildCoveragePeriodValidator(fromCoverageDateFormControlName: string,
+    throughCoverageDateFormControlName: string): ValidatorFn {
+    const fromCoverageFormControl = this.form?.get(fromCoverageDateFormControlName);
+    const throughCoverageFormControl = this.form?.get(throughCoverageDateFormControlName);
+    fromCoverageFormControl?.valueChanges.subscribe(() => {
+      throughCoverageFormControl?.updateValueAndValidity();
+    });
+    return (): ValidationErrors | null => {
+      let result: ValidationErrors | null = null;
+      const fromCoverageDate: Date = fromCoverageFormControl?.value
+      const throughCoverageDate: Date = throughCoverageFormControl?.value
+      if (this.f3xCoverageDatesList && fromCoverageDate && throughCoverageDate) {
+        const retval = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
+          return (f3xCoverageDate &&
+            f3xCoverageDate.coverage_from_date &&
+            f3xCoverageDate.coverage_through_date &&
+            ((f3xCoverageDate.coverage_from_date >= fromCoverageDate &&
+              f3xCoverageDate.coverage_from_date <= throughCoverageDate) ||
+              (f3xCoverageDate.coverage_through_date >= fromCoverageDate &&
+                f3xCoverageDate.coverage_through_date <= throughCoverageDate))
           )
         });
         result = this.getCoverageDatesValidator(retval);
