@@ -359,12 +359,12 @@ export function f3xReportCategory(filingFrequency: string): string | undefined {
 
 export const f3xReportCodes: object = {
   MONTHLY: {
-    'Non-Election Year': ['M1', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'YE', 'TER'],
-    'Election Year': ['M1', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', '12G', '30G', 'YE', 'TER'],
+    'Non-Election Year': ['M1', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'YE', '(TER)'],
+    'Election Year': ['M1', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', '12G', '30G', 'YE', '(TER)'],
   },
   QUARTERLY: {
-    'Non-Election Year': ['MY', 'YE', '12P', '12R', '12S', '12C', '30R', '30S', 'TER'],
-    'Election Year': ['Q1', 'Q2', 'Q3', '12G', '30G', 'YE', '12P', '12R', '12S', '12C', '30R', '30S', 'TER'],
+    'Non-Election Year': ['MY', 'YE', '12P', '12R', '12S', '12C', '30R', '30S', '(TER)'],
+    'Election Year': ['Q1', 'Q2', 'Q3', '12G', '30G', 'YE', '12P', '12R', '12S', '12C', '30R', '30S', '(TER)'],
   },
 };
 export function f3xReportCode(filingFrequency: string, reportCategory: string): string {

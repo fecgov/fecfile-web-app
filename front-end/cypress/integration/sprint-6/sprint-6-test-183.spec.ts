@@ -45,7 +45,12 @@ describe('QA Test Script #183 (Sprint 6)', () => {
     cy.dropdownSetValue("p-dropdown[formcontrolname='state']", 'West Virginia');
 
     cy.get("button[label='Save']").click();
-    cy.longWait();
+    cy.medWait();
+
+    cy.contains('.p-menuitem-link', 'Dashboard').click();
+    cy.shortWait();
+    cy.contains('.p-menuitem-link', 'Contacts').click();
+    cy.shortWait();
 
     cy.contains('tr', `${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
       .parent() //Gets the row its in

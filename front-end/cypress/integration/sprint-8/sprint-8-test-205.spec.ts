@@ -8,8 +8,9 @@ describe('QA Test Script #205 (Sprint 8)', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
     cy.medWait();
-    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-    cy.url().should('contain', '/reports');
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
+    cy.url().should('contain', '/contacts');
+    cy.medWait();
   });
 
   it('Steps 2-6: Create a "Committee" type Contact', () => {

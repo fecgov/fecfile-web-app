@@ -1,16 +1,20 @@
 // @ts-check
 
+import { date } from '../../support/generators/generators.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
+import { dateToString } from '../../support/reports.spec';
 
 describe('QA Test Script #165 (Sprint 7)', () => {
-  it('Step 1: Navigate to reports page and populate it with one report', () => {
+  it('Step 1: Navigate to the reports page and populate it with three reports', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.url().should('contain', '/reports');
 
     for (let i = 0; i < 3; i++) {
-      const report = generateReportObject();
+      let report_date: Date = date();
+      report_date.setFullYear(2030 + i);
+      const report = generateReportObject({ coverage_from_date: dateToString(report_date) });
       cy.enterReport(report);
     }
   });

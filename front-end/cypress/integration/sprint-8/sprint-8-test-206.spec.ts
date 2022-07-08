@@ -18,8 +18,8 @@ describe('QA Test Script #206 (Sprint 8)', () => {
         cy.login();
         cy.url().should('contain', '/dashboard');
         cy.medWait();
-        cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-        cy.url().should('contain', '/reports');
+        cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
+        cy.url().should('contain', '/contacts');
       });
 
       it('Steps 2-6: Create a "Candidate" type Contact', () => {
@@ -37,14 +37,19 @@ describe('QA Test Script #206 (Sprint 8)', () => {
       });
 
       it('Step 10: Verify that the Committee ID changed', () => {
-        cy.wait(500).then(() => {
-          cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
+        cy.contains('.p-menuitem-link', 'Dashboard').click();
+        cy.shortWait();
+        cy.contains('.p-menuitem-link', 'Contacts').click();
+        cy.shortWait();
 
-          cy.shortWait();
-          cy.get("input[formControlName='candidate_id']").should('have.value', c_id);
-          cy.get("button[label='Cancel']").click();
-          cy.medWait();
-        });
+        //cy.wait(500).then(() => {
+        cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
+
+        cy.shortWait();
+        cy.get("input[formControlName='candidate_id']").should('have.value', c_id);
+        cy.get("button[label='Cancel']").click();
+        cy.medWait();
+        //});
       });
 
       it('Cleanup', () => {
