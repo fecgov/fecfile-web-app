@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { ValidateService } from 'app/shared/services/validate.service';
-
 import { ErrorMessagesComponent } from './error-messages.component';
 
 describe('ErrorMessagesComponent', () => {
@@ -54,6 +53,11 @@ describe('ErrorMessagesComponent', () => {
     expect(component.minLengthErrorMessage).toBe('This field must contain at least 10 alphanumeric characters.');
     component.form.patchValue({ in_between: 'looooooooooooooooooong' });
     expect(component.maxLengthErrorMessage).toBe('This field cannot contain more than 20 alphanumeric characters.');
+    
+    const x = component?.control?.errors || {}; 
+    const testMessage = 'test message';
+    x['invaliddate'] = {msg: testMessage};
+    expect(component.invalidDateErrorMessage).toBe(testMessage);
   });
 
   it('should let us override the error messages', () => {
@@ -61,5 +65,7 @@ describe('ErrorMessagesComponent', () => {
     expect(component.minLengthErrorMessage).toBe('My custom min error message');
     component.maxLengthErrorMessage = 'My custom max error message';
     expect(component.maxLengthErrorMessage).toBe('My custom max error message');
+    component.invalidDateErrorMessage = 'My custom invalid date error message';
+    expect(component.invalidDateErrorMessage).toBe('My custom invalid date error message');
   });
 });

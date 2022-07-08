@@ -1,22 +1,22 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { of } from 'rxjs';
-import { F3xReportCodes, F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { F3xCoverageDates, F3xReportCodes, F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { UserLoginData } from 'app/shared/models/user.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
+import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { SharedModule } from 'app/shared/shared.module';
+import { selectUserLoginData } from 'app/store/login.selectors';
 import { MessageService } from 'primeng/api';
 import { CalendarModule } from 'primeng/calendar';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { of } from 'rxjs';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
-import { selectUserLoginData } from 'app/store/login.selectors';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -111,4 +111,96 @@ describe('CreateF3XStep1Component', () => {
     component.goBack();
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
+
+  xit('#should set f3xCoverageDatesList on ngOnInit()', () => {
+    const test_coverage_from_date1 = new Date(2022, 1);
+    const test_coverage_through_date1 = new Date(2022, 2);
+    const test_report_code1 = F3xReportCodes.M10;
+
+    const test_coverage_from_date2 = new Date(2022, 3);
+    const test_coverage_through_date2 = new Date(2022, 4);
+    const test_report_code2 = F3xReportCodes.M11;
+
+    const testF3xCoverageDatesList: F3xCoverageDates[] = [
+      {
+        coverage_from_date: test_coverage_from_date1,
+        coverage_through_date: test_coverage_through_date1,
+        report_code: test_report_code1
+      },
+      {
+        coverage_from_date: test_coverage_from_date2,
+        coverage_through_date: test_coverage_through_date2,
+        report_code: test_report_code2
+      },
+    ];
+    spyOn(f3xSummaryService, 'getF3xCoverageDates').and.returnValue(
+      of(testF3xCoverageDatesList));
+    component.ngOnInit();
+    expect(JSON.stringify(component['f3xCoverageDatesList'])).toEqual(
+      JSON.stringify(testF3xCoverageDatesList));
+  });
+
+  it('#buildCoverageDatesValidator() test happy path', () => {
+    const test_coverage_from_date1 = new Date(2022, 1);
+    const test_coverage_through_date1 = new Date(2022, 2);
+    const test_report_code1 = F3xReportCodes.M10;
+
+    const test_coverage_from_date2 = new Date(2022, 3);
+    const test_coverage_through_date2 = new Date(2022, 4);
+    const test_report_code2 = F3xReportCodes.M11;
+
+    const testF3xCoverageDatesList: F3xCoverageDates[] = [
+      {
+        coverage_from_date: test_coverage_from_date1,
+        coverage_through_date: test_coverage_through_date1,
+        report_code: test_report_code1
+      },
+      {
+        coverage_from_date: test_coverage_from_date2,
+        coverage_through_date: test_coverage_through_date2,
+        report_code: test_report_code2
+      },
+    ];
+    const testFormControlDate = new Date(2022, 1);
+
+    spyOn(f3xSummaryService, 'getF3xCoverageDates').and.returnValue(
+      of(testF3xCoverageDatesList));
+    const coverageDatesValidatorSpy = 
+      spyOn(component, 'getCoverageDatesValidator');  
+    component.ngOnInit();
+    const testFormControlName = 'coverage_from_date';
+    component.form.controls[testFormControlName].setValue(
+      testFormControlDate);
+
+    component.buildCoverageDatesValidator(testFormControlName);
+    expect(coverageDatesValidatorSpy).toHaveBeenCalledWith(
+      testF3xCoverageDatesList[0]);
+  });
+
+  it('#getCoverageDatesValidator() test no coverage dates', () => {
+    const testF3xCoverageDates: F3xCoverageDates | undefined = undefined;
+    const expectedRetval = null;
+    const actualRetval = component.getCoverageDatesValidator(
+      testF3xCoverageDates);
+    expect(actualRetval).toEqual(expectedRetval);
+  });
+
+  it('#getCoverageDatesValidator() test happy path', () => {
+    const test_coverage_from_date1 = new Date(2022, 1);
+    const test_coverage_through_date1 = new Date(2022, 2);
+    const test_report_code1 = F3xReportCodes.M10;
+    const testF3xCoverageDates: F3xCoverageDates = {
+      coverage_from_date: test_coverage_from_date1,
+      coverage_through_date: test_coverage_through_date1,
+      report_code: test_report_code1
+    };
+    const expectedRetval = { invaliddate: Object({ 
+      msg: 'You have entered coverage dates that overlap ' + 
+      'the coverage dates of the following report: OCTOBER ' + 
+      '20 MONTHLY REPORT (M10)  02/01/2022 - 03/01/2022' }) };
+    const actualRetval = component.getCoverageDatesValidator(
+      testF3xCoverageDates);
+    expect(actualRetval).toEqual(expectedRetval);
+  });
+
 });

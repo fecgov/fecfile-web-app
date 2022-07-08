@@ -1,11 +1,11 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { F3xSummaryService } from './f3x-summary.service';
-import { F3xSummary } from '../models/f3x-summary.model';
 import { environment } from '../../../environments/environment';
+import { F3xCoverageDates, F3xSummary } from '../models/f3x-summary.model';
+import { F3xSummaryService } from './f3x-summary.service';
 
 describe('F3xSummaryService', () => {
   let service: F3xSummaryService;
@@ -35,6 +35,24 @@ describe('F3xSummaryService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('#getF3xCoverageDates return F3xCoverageDates list', () => {
+    const f3xCoverageDates: F3xCoverageDates[] = 
+      [F3xCoverageDates.fromJSON({
+        "report_code": "Q1",
+        "coverage_from_date": "2022-01-01",
+        "coverage_through_date": "2022-03-31"
+      })];
+
+    service.getF3xCoverageDates().subscribe((response: F3xCoverageDates[]) => {
+      expect(response).toEqual(f3xCoverageDates);
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/f3x-summaries/coverage_dates`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(f3xCoverageDates);
+    httpTestingController.verify();
   });
 
   it('#get should return a specific f3x summary record', () => {
