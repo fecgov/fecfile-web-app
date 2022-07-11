@@ -54,7 +54,8 @@ def _detect_branch(repo):
 DEPLOY_RULES = (
     ("prod", lambda _, branch: branch == "main"),
     ("stage", lambda _, branch: branch.startswith("release")),
-    ("dev", lambda _, branch: branch == "develop"),
+    ("dev", lambda _,
+     branch: branch == "debugging/feature/109-django-login-dot-gov"),
 )
 
 def _build_angular_app(ctx,space):
