@@ -50,6 +50,11 @@ describe('QA Test Script #133 (Sprint 8)', () => {
   });
 
   it('Step 7: Reopen the report', () => {
+    cy.contains('.p-menuitem-link', 'Dashboard').click();
+    cy.shortWait();
+    cy.contains('.p-menuitem-link', 'Reports').click();
+    cy.shortWait();
+
     cy.get("p-button[icon='pi pi-pencil']").first().click();
     cy.medWait();
   });
