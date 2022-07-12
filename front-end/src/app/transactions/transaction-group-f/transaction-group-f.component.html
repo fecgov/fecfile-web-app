@@ -24,7 +24,12 @@
       <div class="col-8">
         <div class="field">
           <label for="contributor_organization_name">CONTRIBUTOR COMMITTEE</label>
-          <input type="text" pInputText id="contributor_organization_name" formControlName="contributor_organization_name" />
+          <input
+            type="text"
+            pInputText
+            id="contributor_organization_name"
+            formControlName="contributor_organization_name"
+          />
           <app-error-messages
             [form]="form"
             fieldName="contributor_organization_name"
@@ -34,11 +39,11 @@
       </div>
       <div class="col-4">
         <div class="field">
-          <label for="filer_committee_id_number">CONTRIBUTOR FEC ID</label>
-          <input type="text" pInputText id="filer_committee_id_number" formControlName="filer_committee_id_number" />
+          <label for="donor_committee_fec_id">CONTRIBUTOR FEC ID</label>
+          <input type="text" pInputText id="donor_committee_fec_id" formControlName="donor_committee_fec_id" />
           <app-error-messages
             [form]="form"
-            fieldName="filer_committee_id_number"
+            fieldName="donor_committee_fec_id"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
