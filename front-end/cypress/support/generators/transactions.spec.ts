@@ -1,10 +1,15 @@
 import * as _ from 'lodash';
-import * as generator from './generators.spec';
-import { groupANavTree, TransactionNavTree, TransactionField } from '../transaction_nav_trees.spec';
+import {
+  groupANavTree,
+  TransactionNavTree,
+  TransactionField,
+  TransactionCategory,
+  SchATransaction,
+} from '../transaction_nav_trees.spec';
 
 export type Transaction = {
-  [accordion: string]: {
-    [transaction_type: string]: {
+  [accordion in TransactionCategory]?: {
+    [transaction_type in SchATransaction]?: {
       entity_type?: 'Individual' | 'Committee' | 'Organization';
       contributorLastName?: string;
       contributorFirstName?: string;
@@ -25,12 +30,25 @@ export type Transaction = {
 export function generateTransactionObject(transactionGiven: Transaction = {}): Transaction {
   let newTransaction: Transaction = {};
 
-  const accordions = Object.keys(groupANavTree);
-  const accordion = _.sample(accordions);
-  const transactionTypes = Object.keys(groupANavTree[accordion]);
-  const transactionType = _.sample(transactionTypes);
-  const transactionFields = Object.keys(groupANavTree[accordion][transactionType]);
+  let accordion: string;
+  if (Object.keys(transactionGiven).length == 0) {
+    const accordions = Object.keys(groupANavTree);
+    accordion = _.sample(accordions);
+  } else {
+    accordion = Object.keys(transactionGiven)[0];
+  }
 
+  let transactionType: string;
+  if (Object.keys(transactionGiven[accordion])?.length == 0) {
+    const transactionTypes = Object.keys(groupANavTree[accordion]);
+    transactionType = _.sample(transactionTypes);
+    console.log('New Type');
+  } else {
+    transactionType = Object.keys(transactionGiven[accordion])[0];
+    console.log('Given Type');
+  }
+
+  const transactionFields = Object.keys(groupANavTree[accordion][transactionType]);
   newTransaction[accordion] = {};
   newTransaction[accordion][transactionType] = {};
   for (let field of transactionFields) {
@@ -47,7 +65,17 @@ export function generateTransactionObject(transactionGiven: Transaction = {}): T
     }
   }
 
-  const finalTransaction = { ...newTransaction, ...transactionGiven };
+  const finalFields = {
+    ...newTransaction[accordion][transactionType],
+    ...transactionGiven[accordion][transactionType],
+  };
+  let finalTransaction: Transaction = {};
+  finalTransaction[accordion] = {};
+  finalTransaction[accordion][transactionType] = finalFields;
+
+  console.log('Generated:', newTransaction);
+  console.log('Given:', transactionGiven);
+  console.log('Final', finalTransaction);
 
   return finalTransaction;
 }

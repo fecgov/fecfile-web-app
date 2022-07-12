@@ -1,8 +1,6 @@
 import { Transaction } from './generators/transactions.spec';
-import { dropdownSetValue, calendarSetValue, medWait, safeType } from './commands';
 import { TransactionFields } from './transaction_nav_trees.spec';
-import { notDeepStrictEqual } from 'assert';
-import _, { forEach } from 'lodash';
+import _ from 'lodash';
 
 //Run this on the transaction creation accordion to navigate to the desired transaction
 function navigateTransactionAccordion(category: string, transactionType: string) {
@@ -32,18 +30,24 @@ export function enterTransactionSchA(transaction: Transaction, save: boolean = t
   const form = transaction[category][transactionType];
   const fields = Object.keys(form);
 
+  //Gets the value of the first field-key in the form that starts with "entityType"
+  const entityType =
+    form[
+      Object.keys(form).find((key) => {
+        return key.startsWith('entityType');
+      })
+    ];
+
   for (let field of fields) {
     const fieldRules = TransactionFields[field];
     const fieldName = fieldRules['fieldName'];
-    const entityType = form['entityType'];
 
-    const readOnly: boolean = 'readOnly' in fieldRules && fieldRules['readOnly'];
-    console.log(fieldRules, readOnly);
-    //If a field is universal *or* that field belongs to this Transaction's entity type
-    const belongsToEntity: boolean = !('entities' in fieldRules) || _.includes(fieldRules['entities'], entityType);
-    if (readOnly || !belongsToEntity) {
-      console.log(`Skipped ${field}`);
-      continue; //Then skip it
+    const readOnly = 'readOnly' in fieldRules && fieldRules['readOnly'];
+    const universalField = !('entities' in fieldRules);
+    const belongsToEntity = _.includes(fieldRules['entities'], entityType);
+    //Skip if field is read only or doesn't belong to the Transaction's entity type
+    if (readOnly || (!universalField && !belongsToEntity)) {
+      continue;
     }
 
     const fieldType = fieldRules['fieldType'];
@@ -57,6 +61,7 @@ export function enterTransactionSchA(transaction: Transaction, save: boolean = t
         break;
       case 'Textarea':
         cy.get(`textarea[formControlName=${fieldName}]`).safeType(fieldValue);
+        break;
       case 'Dropdown':
         cy.dropdownSetValue(`p-dropdown[formControlName=${fieldName}]`, fieldValue);
         break;
@@ -64,5 +69,10 @@ export function enterTransactionSchA(transaction: Transaction, save: boolean = t
         cy.calendarSetValue(`p-calendar[formControlName=${fieldName}]`, fieldValue);
         break;
     }
+  }
+
+  if (save) {
+    cy.get('button[label="Save & view all transactions"]').click();
+    cy.medWait();
   }
 }

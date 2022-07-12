@@ -3,6 +3,7 @@
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { Transaction, generateTransactionObject } from '../../support/generators/transactions.spec';
 import { enterTransactionSchA } from '../../support/transactions.spec';
+import { TransactionNavTree, groupANavTree } from '../../support/transaction_nav_trees.spec';
 
 describe('QA Test Scripts #230 (Sprint 8)', () => {
   before('Logs in and creates a dummy report', () => {
@@ -20,11 +21,19 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
     cy.medWait();
   });
 
-  it('Creates a transaction', () => {
-    const transaction: Transaction = generateTransactionObject({ INDIVIDUAL: { individualReceipt: {} } });
-    console.log(transaction);
-    enterTransactionSchA(transaction, false);
-  });
+  const navTree = groupANavTree;
+  for (let category of Object.keys(navTree)) {
+    for (let transactionName of Object.keys(navTree[category])) {
+      const tTree: TransactionNavTree = {};
+      tTree[category] = {};
+      tTree[category][transactionName] = {};
+      const transaction: Transaction = generateTransactionObject(tTree);
+
+      it('Creates a transaction', () => {
+        enterTransactionSchA(transaction);
+      });
+    }
+  }
 
   after('Cleanup', () => {
     cy.deleteAllReports();

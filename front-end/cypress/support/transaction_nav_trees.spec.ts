@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { dropdownSetValue } from './commands';
 import {
   apartment,
   city,
@@ -17,9 +16,23 @@ import {
   zipcode,
 } from './generators/generators.spec';
 
+/*
+ *          Adding support for a new transaction:
+ *  1. Add the name to the SchATransaction type
+ *  2. Create a new Transaction Form object for it
+ *  3. Add it to the SchA Nav Tree
+ */
+export type TransactionCategory = 'INDIVIDUALS/PERSONS' | 'REGISTERED FILERS' | 'TRANSFERS' | 'REFUNDS' | 'OTHER';
+export type SchATransaction =
+  | 'Individual Receipt'
+  | 'Tribal Receipt'
+  | 'JF Transfers'
+  | 'Offsets to Operating Expenditures'
+  | 'Other Receipts';
+
 export type TransactionNavTree = {
-  [key: string]: {
-    [key: string]: TransactionForm;
+  [key in TransactionCategory]?: {
+    [key in SchATransaction]?: TransactionForm;
   };
 };
 
@@ -49,173 +62,173 @@ export const TransactionFields: { [key: string]: TransactionField } = {
    */
   entityType: {
     fieldName: 'entity_type',
+    fieldType: 'Dropdown',
     generator: () => {
       return _.sample(['Individual', 'Organization', 'Committee']);
     },
-    fieldType: 'Dropdown',
     required: true,
     maxLength: -1,
   },
   entityTypeIndividual: {
     fieldName: 'entity_type',
+    fieldType: 'Dropdown',
     generator: () => {
       return 'Individual';
     },
-    fieldType: 'Dropdown',
     required: true,
     readOnly: true,
     maxLength: -1,
   },
   entityTypeOrganization: {
     fieldName: 'entity_type',
+    fieldType: 'Dropdown',
     generator: () => {
       return 'Organization';
     },
-    fieldType: 'Dropdown',
     required: true,
     readOnly: true,
     maxLength: -1,
   },
   entityTypeCommittee: {
     fieldName: 'entity_type',
+    fieldType: 'Dropdown',
     generator: () => {
       return 'Committee';
     },
-    fieldType: 'Dropdown',
     required: true,
     readOnly: true,
     maxLength: -1,
   },
   contributorLastName: {
     fieldName: 'contributor_last_name',
-    generator: lastName,
     fieldType: 'Text',
+    generator: lastName,
     required: true,
     entities: ['Individual'],
     maxLength: 30,
   },
   contributorFirstName: {
     fieldName: 'contributor_first_name',
-    generator: firstName,
     fieldType: 'Text',
+    generator: firstName,
     required: true,
     entities: ['Individual'],
     maxLength: 20,
   },
   contributorMiddleName: {
     fieldName: 'contributor_middle_name',
-    generator: middleName,
     fieldType: 'Text',
+    generator: middleName,
     required: false,
     entities: ['Individual'],
     maxLength: 20,
   },
   contributorPrefix: {
     fieldName: 'contributor_prefix',
-    generator: prefix,
     fieldType: 'Text',
+    generator: prefix,
     required: false,
     entities: ['Individual'],
     maxLength: 10,
   },
   contributorSuffix: {
     fieldName: 'contributor_suffix',
-    generator: suffix,
     fieldType: 'Text',
+    generator: suffix,
     required: false,
     entities: ['Individual'],
     maxLength: 10,
   },
   contributorEmployer: {
     fieldName: 'contributor_employer',
+    fieldType: 'Text',
     generator: () => {
       return 'Bob Rohrman';
     },
-    fieldType: 'Text',
     required: false,
     entities: ['Individual'],
     maxLength: 38,
   },
   contributorOccupation: {
     fieldName: 'contributor_occupation',
+    fieldType: 'Text',
     generator: () => {
       return 'Car Salesperson';
     },
-    fieldType: 'Text',
     required: false,
     entities: ['Individual'],
     maxLength: 38,
   },
   contributorOrganizationName: {
     fieldName: 'contributor_organization_name',
-    generator: groupName,
     fieldType: 'Text',
+    generator: groupName,
     required: true,
     entities: ['Organization', 'Committee'],
     maxLength: 200,
   },
   donorCommitteeFECId: {
     fieldName: 'donor_committee_fec_id',
-    generator: committeeID,
     fieldType: 'Text',
+    generator: committeeID,
     required: true,
     entities: ['Committee'],
     maxLength: 9,
   },
   contributorStreet1: {
     fieldName: 'contributor_street_1',
-    generator: street,
     fieldType: 'Text',
+    generator: street,
     required: true,
     maxLength: 34,
   },
   contributorStreet2: {
     fieldName: 'contributor_street_2',
-    generator: apartment,
     fieldType: 'Text',
+    generator: apartment,
     required: false,
     maxLength: 34,
   },
   contributorCity: {
     fieldName: 'contributor_city',
-    generator: city,
     fieldType: 'Text',
+    generator: city,
     required: true,
     maxLength: 30,
   },
   contributorState: {
     fieldName: 'contributor_state',
-    generator: state,
     fieldType: 'Dropdown',
+    generator: state,
     required: true,
     maxLength: -1,
   },
   contributorZip: {
     fieldName: 'contributor_zip',
-    generator: zipcode,
     fieldType: 'Text',
+    generator: zipcode,
     required: true,
     maxLength: 9,
   },
   memoTextDescription: {
     fieldName: 'memo_text_description',
-    generator: randomString,
     fieldType: 'Textarea',
+    generator: randomString,
     genArgs: [100],
     required: false,
     maxLength: 100,
   },
   contributionDate: {
     fieldName: 'contribution_date',
-    generator: date,
     fieldType: 'Calendar',
+    generator: date,
     required: true,
     maxLength: -1,
   },
   contributionAmount: {
     fieldName: 'contribution_amount',
-    generator: _.random,
     fieldType: 'P-InputNumber',
+    generator: _.random,
     genArgs: [10, 10000, true],
     required: true,
     maxLength: 12,
@@ -336,6 +349,7 @@ const otherReceipt: TransactionForm = {
  * can take in generating a valid transaction.
  *
  */
+
 export const groupANavTree: TransactionNavTree = {
   //Commented out lines are branches that have not yet been implemented
   'INDIVIDUALS/PERSONS': {
