@@ -5,11 +5,11 @@ import { DateTime } from 'luxon';
   name: 'fecDate',
 })
 export class FecDatePipe implements PipeTransform {
-  transform(value: string): string {
+  transform(value: Date | null): string {
     if (!value) {
       return '';
     }
-    const date = DateTime.fromFormat(value, 'yyyyMMdd');
+    const date = DateTime.fromJSDate(value);
     return date.toFormat('MM/dd/yyyy');
   }
 }

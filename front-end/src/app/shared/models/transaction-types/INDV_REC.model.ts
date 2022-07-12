@@ -9,6 +9,7 @@ export class INDV_REC implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
   schema = schema;
   transaction = null;
+  parent = null;
 
   contributionPurposeDescripReadonly(): string {
     return '';

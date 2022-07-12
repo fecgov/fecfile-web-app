@@ -20,6 +20,8 @@ import { TransactionGroupAComponent } from './transaction-group-a/transaction-gr
 import { TransactionGroupBComponent } from './transaction-group-b/transaction-group-b.component';
 import { TransactionGroupCComponent } from './transaction-group-c/transaction-group-c.component';
 import { TransactionGroupDComponent } from './transaction-group-d/transaction-group-d.component';
+import { TransactionGroupEComponent } from './transaction-group-e/transaction-group-e.component';
+import { TransactionGroupFComponent } from './transaction-group-f/transaction-group-f.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { InputNumberModule } from 'primeng/inputnumber';
 
@@ -31,6 +33,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     TransactionGroupBComponent,
     TransactionGroupCComponent,
     TransactionGroupDComponent,
+    TransactionGroupEComponent,
+    TransactionGroupFComponent,
   ],
   imports: [
     AccordionModule,

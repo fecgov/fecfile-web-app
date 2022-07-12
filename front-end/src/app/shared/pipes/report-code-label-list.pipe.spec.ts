@@ -34,4 +34,8 @@ describe('FindOnReportCodePipe', () => {
   it('transforms should return an empty ReportCodeLabel object if the labelList is null', () => {
     expect(pipe.transform(null, 'Q1')).toBe(undefined);
   });
+
+  it('transforms should return undefined if value is null', () => {
+    expect(pipe.transform(labelList, null)).toBe(undefined);
+  });
 });

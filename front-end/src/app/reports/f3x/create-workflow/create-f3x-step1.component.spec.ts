@@ -16,6 +16,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { selectUserLoginData } from 'app/store/login.selectors';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -24,7 +25,7 @@ describe('CreateF3XStep1Component', () => {
   let f3xSummaryService: F3xSummaryService;
   const f3x: F3xSummary = F3xSummary.fromJSON({
     id: 999,
-    coverage_from_date: '20220525',
+    coverage_from_date: '2022-05-25',
     form_type: 'F3XN',
     report_code: 'Q1',
   });
@@ -50,6 +51,7 @@ describe('CreateF3XStep1Component', () => {
         F3xSummaryService,
         FormBuilder,
         MessageService,
+        FecDatePipe,
         provideMockStore({
           initialState: { fecfile_online_userLoginData: userLoginData },
           selectors: [{ selector: selectUserLoginData, value: userLoginData }],
@@ -77,10 +79,8 @@ describe('CreateF3XStep1Component', () => {
 
   it('should update codes when report_type_category changes', () => {
     component.form.controls['filing_frequency'].setValue('Q');
-    component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.SPECIAL);
-    expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.TwelveP);
     component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.NON_ELECTION_YEAR);
-    expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.Q1);
+    expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.MY);
     component.form.controls['report_type_category'].setValue(undefined);
     expect(component.form.controls['report_code'].value).toEqual(undefined);
   });

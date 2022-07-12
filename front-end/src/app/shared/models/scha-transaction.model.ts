@@ -1,6 +1,6 @@
 import { BaseModel } from './base.model';
 import { Transaction } from '../interfaces/transaction.interface';
-import { plainToClass } from 'class-transformer';
+import { plainToClass, Transform } from 'class-transformer';
 import { LabelList } from '../utils/label.utils';
 
 export class SchATransaction extends BaseModel implements Transaction {
@@ -25,7 +25,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   contributor_zip: string | null = null;
   election_code: string | null = null;
   election_other_description: string | null = null;
-  contribution_date: string | null = null;
+  @Transform(BaseModel.dateTransform) contribution_date: Date | null = null;
   contribution_amount: number | null = null;
   contribution_aggregate: number | null = null;
   contribution_purpose_descrip: string | null = null;
@@ -52,6 +52,8 @@ export class SchATransaction extends BaseModel implements Transaction {
   memo_text_description: string | null = null;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | null = null;
   transaction_type_identifier: string | null = null;
+
+  parent_transaction_id: number | null = null; // Foreign key to the SchATransaction model
 
   created: string | null = null;
   updated: string | null = null;
@@ -106,6 +108,7 @@ export enum ScheduleATransactionTypes {
   // Transfers
   TRANSFERS = 'TRAN',
   JF_TRANSFERS = 'JF_TRAN',
+  JF_TRAN_PAC_MEMO = 'JF_TRAN_PAC_MEMO',
   IN_KIND_TRANSFER = 'IK_TRAN',
   IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRAN_NP_RECNT_ACC',
@@ -170,6 +173,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   // Transfers
   [ScheduleATransactionTypes.TRANSFERS, 'Transfers'],
   [ScheduleATransactionTypes.JF_TRANSFERS, 'JF Transfers'],
+  [ScheduleATransactionTypes.JF_TRAN_PAC_MEMO, 'JF Transfer PAC Memos'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer-FEA'],
   [

@@ -3,7 +3,11 @@ import { ReportCodeLabelList, ReportCodeLabel } from '../utils/reportCodeLabels.
 
 @Pipe({ name: 'findOnReportCodePipe' })
 export class FindOnReportCodePipe implements PipeTransform {
-  transform(list: ReportCodeLabelList | null, reportCode: string): ReportCodeLabel | undefined {
+  transform(list: ReportCodeLabelList | null, reportCode: string | null): ReportCodeLabel | undefined {
+    if (reportCode === null) {
+      return undefined;
+    }
+
     let label: ReportCodeLabel | undefined = undefined;
 
     if (list != undefined && list?.length > 0) {

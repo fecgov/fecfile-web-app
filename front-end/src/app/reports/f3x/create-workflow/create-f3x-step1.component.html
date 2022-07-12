@@ -121,7 +121,7 @@
             name="coverage_from_date"
             formControlName="coverage_from_date"
           ></p-calendar>
-          <app-error-messages fieldName="coverage_from_date" [formSubmitted]="formSubmitted"></app-error-messages>
+          <app-error-messages [form]="form" fieldName="coverage_from_date" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
       <div class="col-6">
@@ -132,7 +132,7 @@
             name="coverage_through_date"
             formControlName="coverage_through_date"
           ></p-calendar>
-          <app-error-messages fieldName="coverage_through_date" [formSubmitted]="formSubmitted"></app-error-messages>
+          <app-error-messages [form]="form" fieldName="coverage_through_date" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
     </div>

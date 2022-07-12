@@ -1,7 +1,7 @@
-import { BaseModel } from './base.model';
+import { plainToClass, Transform } from 'class-transformer';
 import { Report } from '../interfaces/report.interface';
-import { plainToClass } from 'class-transformer';
 import { LabelList } from '../utils/label.utils';
+import { BaseModel } from './base.model';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -78,36 +78,6 @@ export type F3xReportCode =
   | F3xReportCodes.M11
   | F3xReportCodes.M12;
 
-// NOTE: If this label list is updated, please sync up the values in the api backend as well:
-// https://github.com/fecgov/fecfile-web-api/blob/develop/django-backend/fecfiler/f3x_summaries/views.py
-export const F3xReportCodeLabels: LabelList = [
-  [F3xReportCodes.Q1, 'APRIL 15 (Q1)'],
-  [F3xReportCodes.Q2, 'JULY 15 (Q2)'],
-  [F3xReportCodes.Q3, 'OCTOBER 15 (Q3)'],
-  [F3xReportCodes.YE, 'JANUARY 31 (YE)'],
-  [F3xReportCodes.TER, 'TERMINATION (TER)'],
-  [F3xReportCodes.MY, 'JANUARY 31 (MY)'],
-  [F3xReportCodes.TwelveG, 'GENERAL (12G)'],
-  [F3xReportCodes.TwelveP, 'PRIMARY (12P)'],
-  [F3xReportCodes.TwelveR, 'RUNOFF (12R)'],
-  [F3xReportCodes.TwelveS, 'SPECIAL (12S)'],
-  [F3xReportCodes.TwelveC, 'CONVENTION (12C)'],
-  [F3xReportCodes.ThirtyG, 'GENERAL (30G)'],
-  [F3xReportCodes.ThirtyR, 'RUNOFF (30R)'],
-  [F3xReportCodes.ThirtyS, 'SPECIAL (30S)'],
-  [F3xReportCodes.M2, 'FEBRUARY 20 (M2)'],
-  [F3xReportCodes.M3, 'MARCH 20 (M3)'],
-  [F3xReportCodes.M4, 'APRIL 20 (M4)'],
-  [F3xReportCodes.M5, 'MAY 20 (M5)'],
-  [F3xReportCodes.M6, 'JUNE 20 (M6)'],
-  [F3xReportCodes.M7, 'JULY 20 (M7)'],
-  [F3xReportCodes.M8, 'AUGUST 20 (M8)'],
-  [F3xReportCodes.M9, 'SEPTEMBER 20 (M9)'],
-  [F3xReportCodes.M10, 'OCTOBER 20 (M10)'],
-  [F3xReportCodes.M11, 'NOVEMBER 20 (M11)'],
-  [F3xReportCodes.M12, 'DECEMBER 20 (M12)'],
-];
-
 export const monthlyElectionYearReportCodes: F3xReportCode[] = [
   F3xReportCodes.M2,
   F3xReportCodes.M3,
@@ -145,23 +115,24 @@ export const quarterlyElectionYearReportCodes: F3xReportCode[] = [
   F3xReportCodes.TwelveG,
   F3xReportCodes.ThirtyG,
   F3xReportCodes.YE,
+  F3xReportCodes.TwelveP,
+  F3xReportCodes.TwelveR,
+  F3xReportCodes.TwelveS,
+  F3xReportCodes.TwelveC,
+  F3xReportCodes.ThirtyR,
+  F3xReportCodes.ThirtyS,
   F3xReportCodes.TER,
 ];
 export const quarterlyNonElectionYearReportCodes: F3xReportCode[] = [
-  F3xReportCodes.Q1,
   F3xReportCodes.MY,
-  F3xReportCodes.Q2,
   F3xReportCodes.YE,
-  F3xReportCodes.TER,
-];
-
-export const quarterlySpecialReportCodes: F3xReportCode[] = [
   F3xReportCodes.TwelveP,
   F3xReportCodes.TwelveR,
-  F3xReportCodes.TwelveC,
   F3xReportCodes.TwelveS,
+  F3xReportCodes.TwelveC,
   F3xReportCodes.ThirtyR,
   F3xReportCodes.ThirtyS,
+  F3xReportCodes.TER,
 ];
 
 export const electionReportCodes: F3xReportCode[] = [
@@ -174,6 +145,16 @@ export const electionReportCodes: F3xReportCode[] = [
   F3xReportCodes.TwelveR,
   F3xReportCodes.TwelveS,
 ];
+
+export class F3xCoverageDates {
+  @Transform(BaseModel.dateTransform) coverage_from_date: Date | null = null;
+  @Transform(BaseModel.dateTransform) coverage_through_date: Date | null = null;
+  report_code: F3xReportCodes | null = null;
+  // prettier-ignore
+  static fromJSON(json: any): F3xCoverageDates { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(F3xCoverageDates, json);
+  }
+}
 
 export class F3xSummary extends BaseModel implements Report {
   id: number | null = null;
@@ -189,17 +170,17 @@ export class F3xSummary extends BaseModel implements Report {
   zip: string | null = null;
   report_code: F3xReportCode | null = null;
   election_code: string | null = null;
-  date_of_election: string | null = null; // YYYYMMDD
+  @Transform(BaseModel.dateTransform) date_of_election: Date | null = null;
   state_of_election: string | null = null;
-  coverage_from_date: string | null = null;
-  coverage_through_date: string | null = null;
+  @Transform(BaseModel.dateTransform) coverage_from_date: Date | null = null;
+  @Transform(BaseModel.dateTransform) coverage_through_date: Date | null = null;
   qualified_committee: boolean | null = null;
   treasurer_last_name: string | null = null;
   treasurer_first_name: string | null = null;
   treasurer_middle_name: string | null = null;
   treasurer_prefix: string | null = null;
   treasurer_suffix: string | null = null;
-  date_signed: string | null = null;
+  @Transform(BaseModel.dateTransform) date_signed: Date | null = null;
 
   L6b_cash_on_hand_beginning_period: number | null = null;
   L6c_total_receipts_period: number | null = null;

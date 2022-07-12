@@ -80,6 +80,7 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
     const first: number = event.first ? event.first : 0;
     const rows: number = event.rows ? event.rows : 10;
     const pageNumber: number = Math.floor(first / rows) + 1;
+    const params = this.getGetParams();
 
     // Determine query sort ordering
     let ordering: string = event.sortField ? event.sortField : '';
@@ -87,7 +88,7 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
       ordering = `-${ordering}`;
     }
 
-    this.itemService.getTableData(pageNumber, ordering).subscribe((response: ListRestResponse) => {
+    this.itemService.getTableData(pageNumber, ordering, params).subscribe((response: ListRestResponse) => {
       this.items = [...response.results];
       this.totalItems = response.count;
       this.loading = false;
@@ -166,5 +167,19 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
       this.selectedItems = [];
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     });
+  }
+
+  /**
+   * getGetParams() is a method that provides optional parameters that the table-list-base component
+   * will pass in the GET request that loads the table's items, passing the parameters through the
+   * itemService and to the api service.  A component extending this component can override this
+   * method in order to control the parameters being sent in the GET request without overriding the
+   * entire loadTableItems() method.
+   *
+   * @return { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> }
+   */
+
+  public getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
+    return {};
   }
 }

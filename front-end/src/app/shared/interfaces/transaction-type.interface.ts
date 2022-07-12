@@ -11,6 +11,7 @@ export interface TransactionType {
   title: string;
   schema: JsonSchema;
   transaction: Transaction | null;
+  parent: Transaction | null;
   contributionPurposeDescripReadonly(): string;
   getNewTransaction(): Transaction;
 }

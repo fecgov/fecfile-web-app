@@ -30,5 +30,19 @@
     [contributionPurposeDescrip]="transactionType.contributionPurposeDescripReadonly()"
   ></app-transaction-group-d>
 </ng-container>
-<ng-container *ngIf="transactionType.componentGroupId === 'E'"> Group E </ng-container>
-<ng-container *ngIf="transactionType.componentGroupId === 'F'"> Group F </ng-container>
+<ng-container *ngIf="transactionType.componentGroupId === 'E'">
+  <app-transaction-group-e
+    [title]="transactionType.title"
+    [schema]="transactionType.schema"
+    [transaction]="transactionType.transaction"
+    [contributionPurposeDescrip]="transactionType.contributionPurposeDescripReadonly()"
+  ></app-transaction-group-e>
+</ng-container>
+<ng-container *ngIf="transactionType.componentGroupId === 'F'">
+  <app-transaction-group-f
+    [title]="transactionType.title"
+    [schema]="transactionType.schema"
+    [transaction]="transactionType.transaction"
+    [contributionPurposeDescrip]="transactionType.contributionPurposeDescripReadonly()"
+  ></app-transaction-group-f>
+</ng-container>
