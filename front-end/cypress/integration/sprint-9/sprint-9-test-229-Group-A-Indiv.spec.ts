@@ -1,10 +1,8 @@
 // @ts-check
 
 import { generateReportObject } from '../../support/generators/reports.spec';
-import { Transaction, generateTransaction } from '../../support/generators/transactions.spec';
-import { createTransactionSchA } from '../../support/transactions.spec';
-
-const transaction: Transaction = generateTransaction();
+import { Transaction, generateTransactionObject } from '../../support/generators/transactions.spec';
+import { enterTransactionSchA } from '../../support/transactions.spec';
 
 describe('QA Test Scripts #230 (Sprint 8)', () => {
   before('Logs in and creates a dummy report', () => {
@@ -23,9 +21,9 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
   });
 
   it('Creates a transaction', () => {
+    const transaction: Transaction = generateTransactionObject({ INDIVIDUAL: { individualReceipt: {} } });
     console.log(transaction);
-    createTransactionSchA(transaction, false);
-    cy.pause();
+    enterTransactionSchA(transaction, false);
   });
 
   after('Cleanup', () => {
