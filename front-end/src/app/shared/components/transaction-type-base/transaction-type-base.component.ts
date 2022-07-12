@@ -93,7 +93,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     });
 
     if (this.transaction?.transaction_type_identifier) {
-      let fieldsToValidate: string[] = this.getFieldsToValidate();
+      let fieldsToValidate: string[] = this.validateService.getSchemaProperties(this.schema);
       // Remove properties populated in the back-end from list of properties to validate
       fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_committee_name');
 
@@ -111,14 +111,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           });
       }
     }
-  }
-
-  /**
-   * Generate a list of schema property values that the back-end should use to validate the form.
-   * @returns {string[]} List of schema properties
-   */
-  getFieldsToValidate(): string[] {
-    return this.validateService.getSchemaProperties(this.schema);
   }
 
   navigateTo(
