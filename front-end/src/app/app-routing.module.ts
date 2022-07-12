@@ -5,12 +5,14 @@ import { TwoFactorLoginComponent } from './login/two-factor-login/two-factor-log
 import { ConfirmTwoFactorComponent } from './login/confirm-two-factor/confirm-two-factor.component';
 import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { LoginGuard } from './shared/guards/login-page.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: LoginComponent,
     pathMatch: 'full',
+    canActivate:[LoginGuard],
   },
   { path: 'twoFactLogin', component: TwoFactorLoginComponent },
   { path: 'confirm-2f', component: ConfirmTwoFactorComponent },
