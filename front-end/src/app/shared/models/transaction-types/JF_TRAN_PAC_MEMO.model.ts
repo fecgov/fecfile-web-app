@@ -18,8 +18,9 @@ export class JF_TRAN_PAC_MEMO implements TransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11AI',
+      form_type: 'SA12',
       transaction_type_identifier: ScheduleATransactionTypes.JF_TRAN_PAC_MEMO,
+      back_reference_sched_name: 'SA12',
     });
   }
 }
