@@ -73,9 +73,5 @@ export function generateTransactionObject(transactionGiven: Transaction = {}): T
   finalTransaction[accordion] = {};
   finalTransaction[accordion][transactionType] = finalFields;
 
-  console.log('Generated:', newTransaction);
-  console.log('Given:', transactionGiven);
-  console.log('Final', finalTransaction);
-
   return finalTransaction;
 }
