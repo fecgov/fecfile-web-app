@@ -4,6 +4,40 @@ import { generateReportObject } from '../../support/generators/reports.spec';
 import { Transaction, generateTransactionObject } from '../../support/generators/transactions.spec';
 import { enterTransactionSchA } from '../../support/transactions.spec';
 import { TransactionNavTree, groupANavTree } from '../../support/transaction_nav_trees.spec';
+import { shortWait, overwrite } from '../../support/commands';
+
+function testEditTransaction(transactionForm) {
+  const lastName = transactionForm['contributorLastName'];
+  const firstName = transactionForm['contributorFirstName'];
+  const groupName = transactionForm['contributorOrganizationName'];
+
+  let name: string = '';
+  if (lastName && firstName) name = `${lastName}, ${firstName}`;
+  else if (groupName) name = groupName;
+  console.log(transactionForm);
+
+  cy.contains('tr', name).find('a').click();
+  cy.shortWait();
+
+  cy.get("input[FormControlName='contributor_street_1']").overwrite('100 West Virginia Avenue');
+  cy.shortWait();
+  cy.get('button[label="Save & view all transactions"]').click();
+  cy.longWait();
+  cy.url().should('contain', '/reports/f3x/create/step3/');
+
+  /*cy.contains('a[role="menuitem"]', 'Reports').click();
+  cy.medWait();
+  cy.get('p-button[icon="pi pi-pencil"]').click();
+  cy.medWait();*/
+
+  cy.contains('tr', name).find('a').click();
+  cy.shortWait();
+
+  cy.get("input[FormControlName='contributor_street_1']").should('have.value', '100 West Virginia Avenue');
+
+  cy.get('button[label="Cancel"]').click();
+  cy.shortWait();
+}
 
 describe('QA Test Scripts #230 (Sprint 8)', () => {
   before('Logs in and creates a dummy report', () => {
@@ -27,10 +61,25 @@ describe('QA Test Scripts #230 (Sprint 8)', () => {
       const tTree: TransactionNavTree = {};
       tTree[category] = {};
       tTree[category][transactionName] = {};
-      const transaction: Transaction = generateTransactionObject(tTree);
 
-      it('Creates a transaction', () => {
+      it(`Creates a ${transactionName} transaction`, () => {
+        const transaction: Transaction = generateTransactionObject(tTree);
         enterTransactionSchA(transaction);
+        cy.longWait();
+
+        const tForm = transaction[category][transactionName];
+        testEditTransaction(tForm);
+      });
+
+      it(`Creates a ${transactionName} transaction with "Save & add another"`, () => {
+        const transaction: Transaction = generateTransactionObject(tTree);
+        enterTransactionSchA(transaction, false);
+        cy.get('button[label="Save & add another"]').click();
+        cy.longWait();
+        cy.get('button[label="Cancel"]').click();
+
+        const tForm = transaction[category][transactionName];
+        testEditTransaction(tForm);
       });
     }
   }
