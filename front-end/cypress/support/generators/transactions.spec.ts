@@ -48,7 +48,6 @@ export function generateTransactionObject(transactionGiven: Transaction = {}): T
   const entityTypeKey = fields.find((key) => {
     return key.startsWith('entityType');
   });
-  console.log(entityTypeKey);
 
   const entityTypeGenerator = TransactionFields[entityTypeKey]['generator'];
   const entityType = entityTypeGenerator();

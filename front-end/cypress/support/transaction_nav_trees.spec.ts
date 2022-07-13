@@ -229,7 +229,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     fieldName: 'contribution_amount',
     fieldType: 'P-InputNumber',
     generator: _.random,
-    genArgs: [10, 10000, false], //Make a random number between 10 and 10000 and it is *not* a float
+    genArgs: [10, 10000, true], //Make a random number between 10 and 10000 and it is *not* a float
     required: true,
     maxLength: 12,
   },

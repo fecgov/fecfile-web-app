@@ -5,34 +5,7 @@ import { Transaction, generateTransactionObject } from '../../support/generators
 import { enterTransactionSchA } from '../../support/transactions.spec';
 import { TransactionNavTree, groupANavTree } from '../../support/transaction_nav_trees.spec';
 
-function testEditTransaction(transactionForm) {
-  const lastName = transactionForm['contributorLastName'];
-  const firstName = transactionForm['contributorFirstName'];
-  const groupName = transactionForm['contributorOrganizationName'];
-
-  let name: string = '';
-  if (lastName && firstName) name = `${lastName}, ${firstName}`;
-  else if (groupName) name = groupName;
-
-  cy.contains('tr', name).find('a').click();
-  cy.shortWait();
-
-  cy.get("input[FormControlName='contributor_street_1']").overwrite('100 West Virginia Avenue');
-  cy.shortWait();
-  cy.get('button[label="Save & view all transactions"]').click();
-  cy.longWait();
-  cy.url().should('contain', '/reports/f3x/create/step3/');
-
-  cy.contains('tr', name).find('a').click();
-  cy.shortWait();
-
-  cy.get("input[FormControlName='contributor_street_1']").should('have.value', '100 West Virginia Avenue');
-
-  cy.get('button[label="Cancel"]').click();
-  cy.shortWait();
-}
-
-describe('Test saving and editing on all transactions', () => {
+describe('Test max lengths, requirements, and allowed characters on all fields on all transactions', () => {
   before('Logs in and creates a dummy report', () => {
     cy.login();
     cy.deleteAllReports();
