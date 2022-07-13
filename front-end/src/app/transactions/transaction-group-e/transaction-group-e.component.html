@@ -24,7 +24,12 @@
       <div class="col-4">
         <div class="field">
           <label for="contributor_organization_name">COMMITTEE NAME</label>
-          <input type="text" pInputText id="contributor_organization_name" formControlName="contributor_organization_name" />
+          <input
+            type="text"
+            pInputText
+            id="contributor_organization_name"
+            formControlName="contributor_organization_name"
+          />
           <app-error-messages
             [form]="form"
             fieldName="contributor_organization_name"
@@ -253,7 +258,7 @@
       <div class="col-2">
         <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="navigateTo('list')"></button>
       </div>
-      <ng-container *ngIf="this.transaction?.id != null">
+      <ng-container *ngIf="this.transaction?.id !== null">
         <div class="col-7"></div>
         <div class="col-3">
           <button
@@ -277,7 +282,13 @@
           ></button>
         </div>
         <div class="col-3">
-          <button pButton pRipple label="Save & add another" class="p-button-info" (click)="save('add another')"></button>
+          <button
+            pButton
+            pRipple
+            label="Save & add another"
+            class="p-button-info"
+            (click)="save('add another')"
+          ></button>
         </div>
       </ng-container>
     </div>
