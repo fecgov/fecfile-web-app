@@ -32,4 +32,10 @@ describe('ApiService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('isAuthenticated should return true with committee_id set', () => {
+    const retval = service.isAuthenticated();
+    expect(retval).toBeTrue();
+  });
+  
 });
