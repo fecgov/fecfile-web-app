@@ -171,7 +171,18 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it("#navigateTo 'list' should navigate", () => {
-    const expectedRoute = '/reports';
+    const testTransaction: Transaction = {
+      id: 123,
+      report_id: 99,
+      form_type: null,
+      filer_committee_id_number: null,
+      transaction_id: null,
+      transaction_type_identifier: null,
+      contribution_purpose_descrip: null,
+      parent_transaction_id: null,
+    };
+    component.transaction = testTransaction;
+    const expectedRoute = `/reports/f3x/create/step3/${testTransaction.report_id}`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
