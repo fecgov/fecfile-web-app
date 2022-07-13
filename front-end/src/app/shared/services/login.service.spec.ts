@@ -7,6 +7,8 @@ import { selectUserLoginData } from 'app/store/login.selectors';
 import { ApiService } from './api.service';
 
 import { LoginService } from './login.service';
+import { userLoggedOutAction } from 'app/store/login.actions';
+import { of } from 'rxjs';
 
 describe('LoginService', () => {
   let service: LoginService;
