@@ -67,6 +67,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
       return _.sample(['Individual', 'Organization', 'Committee']);
     },
     required: true,
+    entities: ['Individual', 'Organization', 'Committee'],
     maxLength: -1,
   },
   entityTypeIndividual: {
@@ -76,6 +77,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
       return 'Individual';
     },
     required: true,
+    entities: ['Individual'],
     readOnly: true,
     maxLength: -1,
   },
@@ -86,6 +88,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
       return 'Organization';
     },
     required: true,
+    entities: ['Organization'],
     readOnly: true,
     maxLength: -1,
   },
@@ -96,6 +99,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
       return 'Committee';
     },
     required: true,
+    entities: ['Committee'],
     readOnly: true,
     maxLength: -1,
   },
@@ -258,6 +262,10 @@ const entityCommittee = {
   entityTypeCommittee: TransactionFields['entityTypeCommittee'],
 };
 
+const donorCommitteeFECId = {
+  donorCommitteeFECId: TransactionFields['donorCommitteeFECId'],
+};
+
 const personNameFields: { [key: string]: TransactionField } = {
   contributorLastName: TransactionFields['contributorLastName'],
   contributorFirstName: TransactionFields['contributorFirstName'],
@@ -318,6 +326,7 @@ const tribalReceipt: TransactionForm = {
 
 const JFTransfer: TransactionForm = {
   ...entityCommittee,
+  ...donorCommitteeFECId,
   ...groupNameFields,
   ...addressFields,
   ...memoFields,

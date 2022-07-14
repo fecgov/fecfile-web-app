@@ -3,7 +3,7 @@ import { TransactionFields } from './transaction_nav_trees.spec';
 import _ from 'lodash';
 
 //Run this on the transaction creation accordion to navigate to the desired transaction
-function navigateTransactionAccordion(category: string, transactionType: string) {
+export function navigateTransactionAccordion(category: string, transactionType: string) {
   cy.get('p-accordiontab').contains('p-accordiontab', category).click();
   cy.shortWait();
   cy.get('a').contains(transactionType).click();
