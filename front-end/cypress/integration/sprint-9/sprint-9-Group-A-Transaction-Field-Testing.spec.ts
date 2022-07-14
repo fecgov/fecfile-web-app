@@ -37,6 +37,48 @@ function testField(fieldName, fieldRules, number: boolean = false) {
   cy.get(fieldName).parent().find('.p-error').should('exist');
 }
 
+function testFields(fields, entityType) {
+  for (let field of fields) {
+    const fieldRules = TransactionFields[field];
+    const fieldName = fieldRules['fieldName'];
+
+    const readOnly = Object.keys(fieldRules).includes('readOnly') && fieldRules['readOnly'];
+    const universalField = !('entities' in fieldRules);
+    const belongsToEntity = _.includes(fieldRules['entities'], entityType);
+    //Skip if field is read only or doesn't belong to the Transaction's entity type
+    if (readOnly || (!universalField && !belongsToEntity)) {
+      continue;
+    }
+
+    //Skip if it's the entity_type field
+    if (fieldRules['fieldName'] == 'entity_type') {
+      continue;
+    }
+
+    const fieldType = fieldRules['fieldType'];
+    let fieldId: string;
+    switch (fieldType) {
+      case 'Text':
+        fieldId = `input[formControlName=${fieldName}]`;
+        testField(fieldId, fieldRules);
+        break;
+      case 'P-InputNumber':
+        fieldId = `p-inputnumber[formControlName=${fieldName}]`;
+        testField(fieldId, fieldRules, true);
+        break;
+      case 'Textarea':
+        fieldId = `textarea[formControlName=${fieldName}]`;
+        testField(fieldId, fieldRules);
+        break;
+      case 'Dropdown':
+        cy.get(`p-dropdown[formControlName=${fieldName}`)
+          .parent()
+          .find('app-error-messages')
+          .should('not.have.length', 0);
+    }
+  }
+}
+
 describe('Test max lengths, requirements, and allowed characters on all fields on all transactions', () => {
   before('Logs in and creates a dummy report', () => {
     cy.login();
@@ -77,48 +119,8 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
             cy.dropdownSetValue('p-dropdown[formcontrolname="entity_type"]', entityType);
             cy.shortWait();
           }
-
-          for (let field of fields) {
-            const fieldRules = TransactionFields[field];
-            const fieldName = fieldRules['fieldName'];
-
-            const readOnly = Object.keys(fieldRules).includes('readOnly') && fieldRules['readOnly'];
-            const universalField = !('entities' in fieldRules);
-            const belongsToEntity = _.includes(fieldRules['entities'], entityType);
-            //Skip if field is read only or doesn't belong to the Transaction's entity type
-            if (readOnly || (!universalField && !belongsToEntity)) {
-              continue;
-            }
-
-            //Skip if it's the entity_type field
-            if (fieldRules['fieldName'] == 'entity_type') {
-              continue;
-            }
-
-            const fieldType = fieldRules['fieldType'];
-            let fieldId: string;
-            switch (fieldType) {
-              case 'Text':
-                fieldId = `input[formControlName=${fieldName}]`;
-                testField(fieldId, fieldRules);
-                break;
-              case 'P-InputNumber':
-                fieldId = `p-inputnumber[formControlName=${fieldName}]`;
-                testField(fieldId, fieldRules, true);
-                break;
-              case 'Textarea':
-                fieldId = `textarea[formControlName=${fieldName}]`;
-                testField(fieldId, fieldRules);
-                break;
-              case 'Dropdown':
-                cy.get(`p-dropdown[formControlName=${fieldName}`)
-                  .parent()
-                  .find('app-error-messages')
-                  .should('not.have.length', 0);
-            }
-          }
+          testFields(fields, entityType);
         }
-
         cy.get('button[label="Cancel"]').click();
         cy.shortWait();
       });
