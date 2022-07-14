@@ -43,6 +43,7 @@ describe('QA Test Script #183 (Sprint 6)', () => {
     cy.get("p-dropdown[formcontrolname='state']").should('contain', 'Virginia').should('not.contain', 'Texas'); //Demonstrates that it's not just finding a value within the dropdown options
 
     cy.dropdownSetValue("p-dropdown[formcontrolname='state']", 'West Virginia');
+    cy.contains('Edit Contact').click({ scrollBehavior: false, force: true }); //Doing this forces the dropdown to update
 
     cy.get("button[label='Save']").click();
     cy.medWait();
@@ -53,7 +54,6 @@ describe('QA Test Script #183 (Sprint 6)', () => {
     cy.shortWait();
 
     cy.contains('tr', `${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
-      .parent() //Gets the row its in
       .find('p-button[icon="pi pi-pencil"]') //Gets the edit button
       .click();
 
