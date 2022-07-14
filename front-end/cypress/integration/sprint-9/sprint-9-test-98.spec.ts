@@ -1,4 +1,3 @@
-import { after } from 'lodash';
 import { getAuthToken } from '../../support/commands';
 import { generateReportObject } from '../../support/generators/reports.spec';
 
@@ -14,8 +13,8 @@ describe('Sprint 9 QA Script 98', () => {
       cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
       cy.shortWait();
 
-      const report = generateReportObject({ filing_frequency: filing_frequency, report_code: '(TER)' });
-      cy.enterReport(report);
+      const reportObject = generateReportObject({ filing_frequency: filing_frequency, report_code: '(TER)' });
+      cy.enterReport(reportObject);
 
       cy.get('tr').contains('Termination').should('exist');
 

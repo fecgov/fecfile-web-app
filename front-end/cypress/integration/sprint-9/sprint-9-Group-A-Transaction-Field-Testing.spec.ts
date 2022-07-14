@@ -2,15 +2,13 @@
 
 import _ from 'lodash';
 import { generateReportObject } from '../../support/generators/reports.spec';
-import { Transaction, generateTransactionObject } from '../../support/generators/transactions.spec';
 import { navigateTransactionAccordion } from '../../support/transactions.spec';
-import { TransactionNavTree, groupANavTree, TransactionFields } from '../../support/transaction_nav_trees.spec';
+import { groupANavTree, TransactionFields } from '../../support/transaction_nav_trees.spec';
 import { committeeID, randomString } from '../../support/generators/generators.spec';
-import { shortWait, overwrite } from '../../support/commands';
 
 function testField(fieldName, fieldRules, number: boolean = false) {
   const fieldLength = fieldRules['maxLength'];
-  const required = 'required' in Object.keys(fieldRules) && fieldRules['required'];
+  const required = Object.keys(fieldRules).includes('required') && fieldRules['required'];
   cy.get(fieldName).overwrite('{selectAll}{backspace}');
   cy.get('h1').first().click({ scrollBehavior: false, force: true }); //We do this to force refresh the errors in a field
 
@@ -84,7 +82,7 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
             const fieldRules = TransactionFields[field];
             const fieldName = fieldRules['fieldName'];
 
-            const readOnly = 'readOnly' in fieldRules && fieldRules['readOnly'];
+            const readOnly = Object.keys(fieldRules).includes('readOnly') && fieldRules['readOnly'];
             const universalField = !('entities' in fieldRules);
             const belongsToEntity = _.includes(fieldRules['entities'], entityType);
             //Skip if field is read only or doesn't belong to the Transaction's entity type

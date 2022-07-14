@@ -31,8 +31,8 @@ export type SchATransaction =
   | 'Other Receipts';
 
 export type TransactionNavTree = {
-  [key in TransactionCategory]?: {
-    [key in SchATransaction]?: TransactionForm;
+  [category in TransactionCategory]?: {
+    [transactionName in SchATransaction]?: TransactionForm;
   };
 };
 

@@ -1,6 +1,6 @@
 // @ts-check
 
-import { getAuthToken, shortWait } from './commands';
+import { getAuthToken } from './commands';
 
 export function dateToString(dateObj: Date): string {
   const m: string = (dateObj.getMonth() + 1).toString().padStart(2, '0');
