@@ -7,23 +7,29 @@ import { Store } from '@ngrx/store';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { UserLoginData } from '../models/user.model';
 import { spinnerOnAction, spinnerOffAction } from 'app/store/spinner.actions';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
   private token: string | null = null;
+  private loggedInCommitteeId: string | null = null;
 
-  constructor(private http: HttpClient, private store: Store) {
+  constructor(private http: HttpClient, private store: Store,
+    private cookieService: CookieService) {
     this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
       this.token = userLoginData.token;
+      this.loggedInCommitteeId = userLoginData.committee_id;
     });
   }
 
   getHeaders(headersToAdd: object = {}) {
+    const csrfToken = `${this.cookieService.get("csrftoken")}`;
     const baseHeaders = {
       'Content-Type': 'application/json',
-      Authorization: `JWT ${this.token}`,
+      ...(this.token && {Authorization: `JWT ${this.token}`}),
+      ...(csrfToken && {'x-csrftoken':`${csrfToken}`})
     };
     return { ...baseHeaders, ...headersToAdd };
   }
@@ -39,26 +45,38 @@ export class ApiService {
     params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
   ): Observable<T> {
     const headers = this.getHeaders();
-    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, params: params });
+    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, params: params, withCredentials: true });
   }
 
   // prettier-ignore
   public post<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params});
+    return this.http.post<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params, withCredentials: true});
+  }
+
+  // prettier-ignore
+  public postAbsoluteUrl<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const headers = this.getHeaders();
+    const params = this.getQueryParams(queryParams);
+    return this.http.post<T>(`${endpoint}`, payload, { headers: headers , params: params, withCredentials: true});
   }
 
   // prettier-ignore
   public put<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
     const params = this.getQueryParams(queryParams);
-    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params});
+    return this.http.put<T>(`${environment.apiUrl}${endpoint}`, payload, { headers: headers , params: params, withCredentials: true});
   }
 
   public delete<T>(endpoint: string): Observable<T> {
     const headers = this.getHeaders();
-    return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers: headers });
+    return this.http.delete<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, withCredentials: true });
+  }
+
+  public isAuthenticated() {
+    return !!this.loggedInCommitteeId || 
+      this.cookieService.check(environment.ffapiCommitteeIdCookieName);
   }
 
   public spinnerGet<T>(endpoint: string): Observable<T> {
