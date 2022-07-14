@@ -4,8 +4,8 @@ import { ReportListComponent } from './report-list/report-list.component';
 import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2.component';
 import { CreateF3xStep3Component } from './f3x/create-workflow/create-f3x-step3.component';
-import { ReportSummaryComponent } from './report-summary/report-summary.component';
-import { ReportDetailedSummaryComponent } from './report-detailed-summary/report-detailed-summary.component';
+import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
+import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 
 const routes: Routes = [

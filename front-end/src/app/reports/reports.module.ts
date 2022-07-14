@@ -15,6 +15,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
+import { CardModule } from 'primeng/card';
 
 import { SharedModule } from '../../app/shared/shared.module';
 import { ReportsRoutingModule } from './reports-routing.module';
@@ -22,8 +23,8 @@ import { ReportListComponent } from './report-list/report-list.component';
 import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2.component';
 import { CreateF3xStep3Component, MemoCodePipe } from './f3x/create-workflow/create-f3x-step3.component';
-import { ReportSummaryComponent } from './report-summary/report-summary.component';
-import { ReportDetailedSummaryComponent } from './report-detailed-summary/report-detailed-summary.component';
+import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
+import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { ReportDetailedSummaryComponent } from './report-detailed-summary/report
     CalendarModule,
     SelectButtonModule,
     ToastModule,
+    CardModule,
     SharedModule,
   ],
 })

@@ -1,0 +1,397 @@
+<p-card>
+  <div class="summary-header">
+    <h1>Detailed summary page</h1>
+    <div>
+      <strong>FORM 3X:</strong>
+      {{ (this.reportCodeLabelList$ | async | findOnReportCodePipe: report.report_code)?.label }}
+    </div>
+  </div>
+
+  <table class="collapse">
+    <caption>
+      Receipts
+    </caption>
+    <tr>
+      <th class="right-border">LINE NUMBER</th>
+      <th class="justify-left right-border">LINE DESCRIPTION</th>
+      <th class="right-border">THIS PERIOD</th>
+      <th>CALENDAR YEAR-TO-DATE</th>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">11</td>
+      <td class="justify-left right-border bold">TOTAL CONTRIBUTIONS</td>
+      <td class="right-border"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="right-border">(a)</td>
+      <td class="justify-left right-border indent-1">Total individual contributions</td>
+      <td class="right-border"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="right-border">(i)</td>
+      <td class="justify-left right-border indent-2"><em>Itemized individual contributions</em></td>
+      <td class="right-border">{{ report.L11ai_itemized_period | defaultZero | currency }}</td>
+      <td>{{ report.L11ai_itemized_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(ii)</td>
+      <td class="justify-left right-border indent-2"><em>Unitemized individual contributions</em></td>
+      <td class="right-border">{{ report.L11aii_unitemized_period | defaultZero | currency }}</td>
+      <td>{{ report.L11aii_unitemized_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(iii)</td>
+      <td class="justify-left right-border indent-2"><em>Unitemized individual contributions</em></td>
+      <td class="right-border">{{ report.L11aiii_total_period | defaultZero | currency }}</td>
+      <td>{{ report.L11aiii_total_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(b)</td>
+      <td class="justify-left right-border indent-1">Party committee contributions</td>
+      <td class="right-border">{{ report.L11b_political_party_committees_period | defaultZero | currency }}</td>
+      <td>{{ report.L11b_political_party_committees_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(c)</td>
+      <td class="justify-left right-border indent-1">Other committee contributions</td>
+      <td class="right-border">{{ report.L11c_other_political_committees_pacs_period | defaultZero | currency }}</td>
+      <td>{{ report.L11c_other_political_committees_pacs_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(d)</td>
+      <td class="justify-left right-border indent-1">Presidential public funds</td>
+      <td class="right-border">{{ report.L11d_total_contributions_period | defaultZero | currency }}</td>
+      <td>{{ report.L11d_total_contributions_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">12</td>
+      <td class="justify-left right-border bold">TRANSFERS FROM AFFILIATED COMMITTEES</td>
+      <td class="right-border">
+        {{ report.L12_transfers_from_affiliated_other_party_cmtes_period | defaultZero | currency }}
+      </td>
+      <td>{{ report.L12_transfers_from_affiliated_other_party_cmtes_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">13</td>
+      <td class="justify-left right-border bold">ALL LOANS RECEIVED</td>
+      <td class="right-border">{{ report.L13_all_loans_received_period | defaultZero | currency }}</td>
+      <td>{{ report.L13_all_loans_received_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">14</td>
+      <td class="justify-left right-border bold">LOAN REPAYMENTS RECEIVED</td>
+      <td class="right-border">{{ report.L14_loan_repayments_received_period | defaultZero | currency }}</td>
+      <td>{{ report.L14_loan_repayments_received_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">15</td>
+      <td class="justify-left right-border bold">OFFSETS TO OPERATING EXPENDITURES (REFUNDS, REBATES, ETC.)</td>
+      <td class="right-border">
+        {{ report.L15_offsets_to_operating_expenditures_refunds_period | defaultZero | currency }}
+      </td>
+      <td>{{ report.L15_offsets_to_operating_expenditures_refunds_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">16</td>
+      <td class="justify-left right-border bold">CANDIDATE REFUNDS</td>
+      <td class="right-border">{{ report.L16_refunds_of_federal_contributions_period | defaultZero | currency }}</td>
+      <td>{{ report.L16_refunds_of_federal_contributions_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">17</td>
+      <td class="justify-left right-border bold">OTHER FEDERAL RECEIPTS</td>
+      <td class="right-border">{{ report.L17_other_federal_receipts_dividends_period | defaultZero | currency }}</td>
+      <td>{{ report.L17_other_federal_receipts_dividends_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">18</td>
+      <td class="justify-left right-border bold">TRANSFERS FROM NON-FEDERAL AND LEVIN FUNDS</td>
+      <td class="right-border"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="right-border">(a)</td>
+      <td class="justify-left right-border indent-1">Non-federal transfers (from Schedule H3)</td>
+      <td class="right-border">
+        {{ report.L18a_transfers_from_nonfederal_account_h3_period | defaultZero | currency }}
+      </td>
+      <td>{{ report.L18a_transfers_from_nonfederal_account_h3_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(b)</td>
+      <td class="justify-left right-border indent-1">Levin funds (from Schedule H5)</td>
+      <td class="right-border">{{ report.L18b_transfers_from_nonfederal_levin_h5_period | defaultZero | currency }}</td>
+      <td>{{ report.L18b_transfers_from_nonfederal_levin_h5_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(c)</td>
+      <td class="justify-left right-border indent-1">Total Transfers</td>
+      <td class="right-border">{{ report.L18c_total_nonfederal_transfers_18a_18b_period | defaultZero | currency }}</td>
+      <td>{{ report.L18c_total_nonfederal_transfers_18a_18b_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">19</td>
+      <td class="justify-left right-border bold">TOTAL FEDERAL RECEIPTS</td>
+      <td class="right-border">{{ report.L19_total_receipts_period | defaultZero | currency }}</td>
+      <td>{{ report.L19_total_receipts_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="dark-gray last">
+      <td class="right-border bold">20</td>
+      <td class="justify-left right-border bold">TOTAL RECEIPTS</td>
+      <td class="right-border">{{ report.L20_total_federal_receipts_period | defaultZero | currency }}</td>
+      <td class="bold">{{ report.L20_total_federal_receipts_ytd | defaultZero | currency }}</td>
+    </tr>
+  </table>
+
+  <div class="table-spacer"></div>
+
+  <table class="collapse">
+    <caption>
+      Disbursements
+    </caption>
+    <tr>
+      <th class="right-border">LINE NUMBER</th>
+      <th class="justify-left right-border">DISBURSEMENT TYPES</th>
+      <th class="right-border">THIS PERIOD</th>
+      <th>CALENDAR YEAR-TO-DATE</th>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">21</td>
+      <td class="justify-left right-border bold">OPERATING EXPENDITURES</td>
+      <td class="right-border"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="right-border">(a)(i)</td>
+      <td class="justify-left right-border indent-2"><em>Allocated operating expenditures - federal</em></td>
+      <td class="right-border">{{ report.L21ai_federal_share_period | defaultZero | currency }}</td>
+      <td>{{ report.L21ai_federal_share_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(a)(ii)</td>
+      <td class="justify-left right-border indent-2"><em>Allocated operating expenditures - non-federal</em></td>
+      <td class="right-border">{{ report.L21aii_nonfederal_share_period | defaultZero | currency }}</td>
+      <td>{{ report.L21aii_nonfederal_share_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(b)</td>
+      <td class="justify-left right-border indent-1">Other federal operating expenditures</td>
+      <td class="right-border">
+        {{ report.L21b_other_federal_operating_expenditures_period | defaultZero | currency }}
+      </td>
+      <td>{{ report.L21b_other_federal_operating_expenditures_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(c)</td>
+      <td class="justify-left right-border indent-1">Total operating expenditures</td>
+      <td class="right-border">{{ report.L21c_total_operating_expenditures_period | defaultZero | currency }}</td>
+      <td>{{ report.L21c_total_operating_expenditures_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">22</td>
+      <td class="justify-left right-border bold">TRANSFERS TO AFFILIATED COMMITTEES</td>
+      <td class="right-border">
+        {{ report.L22_transfers_to_affiliated_other_party_cmtes_period | defaultZero | currency }}
+      </td>
+      <td>{{ report.L22_transfers_to_affiliated_other_party_cmtes_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">23</td>
+      <td class="justify-left right-border bold">CONTRIBUTIONS TO OTHER COMMITTEES</td>
+      <td class="right-border">
+        {{ report.L23_contributions_to_federal_candidates_cmtes_period | defaultZero | currency }}
+      </td>
+      <td>{{ report.L23_contributions_to_federal_candidates_cmtes_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">24</td>
+      <td class="justify-left right-border bold">INDEPENDENT EXPENDITURES</td>
+      <td class="right-border">{{ report.L24_independent_expenditures_period | defaultZero | currency }}</td>
+      <td>{{ report.L24_independent_expenditures_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">25</td>
+      <td class="justify-left right-border bold">PARTY COORDINATED EXPENDITURES</td>
+      <td class="right-border">
+        {{ report.L25_coordinated_expend_made_by_party_cmtes_period | defaultZero | currency }}
+      </td>
+      <td>{{ report.L25_coordinated_expend_made_by_party_cmtes_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">26</td>
+      <td class="justify-left right-border bold">LOANDS MADE</td>
+      <td class="right-border">{{ report.L26_loan_repayments_period | defaultZero | currency }}</td>
+      <td>{{ report.L26_loan_repayments_made_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">27</td>
+      <td class="justify-left right-border bold">LOAN REPAYMENTS MADE</td>
+      <td class="right-border">{{ report.L27_loans_made_period | defaultZero | currency }}</td>
+      <td>{{ report.L27_loans_made_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">28</td>
+      <td class="justify-left right-border bold">TOTAL CONTRIBUTION REFUNDS</td>
+      <td class="right-border"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="right-border">(a)</td>
+      <td class="justify-left right-border indent-1">Individual refunds</td>
+      <td class="right-border">{{ report.L28a_individuals_persons_period | defaultZero | currency }}</td>
+      <td>{{ report.L28a_individuals_persons_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(b)</td>
+      <td class="justify-left right-border indent-1">Political party refunds</td>
+      <td class="right-border">{{ report.L28b_political_party_committees_period | defaultZero | currency }}</td>
+      <td>{{ report.L28b_political_party_committees_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(c)</td>
+      <td class="justify-left right-border indent-1">Other committee refunds</td>
+      <td class="right-border">{{ report.L28c_other_political_committees_period | defaultZero | currency }}</td>
+      <td>{{ report.L28c_other_political_committees_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(d)</td>
+      <td class="justify-left right-border indent-1">Total Contribution Refunds</td>
+      <td class="right-border">{{ report.L28d_total_contributions_refunds_period | defaultZero | currency }}</td>
+      <td>{{ report.L28d_total_contributions_refunds_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">29</td>
+      <td class="justify-left right-border bold">OTHER DISBURSEMENTS</td>
+      <td class="right-border">{{ report.L29_other_disbursements_period | defaultZero | currency }}</td>
+      <td>{{ report.L29_other_disbursements_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">30</td>
+      <td class="justify-left right-border bold">TOTAL FEDERAL ELECTION ACTIVITY</td>
+      <td class="right-border"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td class="right-border">(a)(i)</td>
+      <td class="justify-left right-border indent-1">Allocated federal election activity - federal share</td>
+      <td class="right-border">
+        {{ report.L30ai_shared_federal_activity_h6_fed_share_period | defaultZero | currency }}
+      </td>
+      <td>{{ report.L30ai_shared_federal_activity_h6_fed_share_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(a)(ii)</td>
+      <td class="justify-left right-border indent-1">Allocated federal election activity - Levin share</td>
+      <td class="right-border">
+        {{ report.L30aii_shared_federal_activity_h6_nonfed_period | defaultZero | currency }}
+      </td>
+      <td>{{ report.L30aii_shared_federal_activity_h6_nonfed_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(b)</td>
+      <td class="justify-left right-border indent-1">Federal election activity paid entirely with federal funds</td>
+      <td class="right-border">{{ report.L30b_nonallocable_fed_election_activity_period | defaultZero | currency }}</td>
+      <td>{{ report.L30b_nonallocable_fed_election_activity_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr>
+      <td class="right-border">(c)</td>
+      <td class="justify-left right-border indent-1">Total Federal election activity</td>
+      <td class="right-border">{{ report.L30c_total_federal_election_activity_period | defaultZero | currency }}</td>
+      <td>{{ report.L30c_total_federal_election_activity_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">31</td>
+      <td class="justify-left right-border bold">TOTAL DISBURSEMENTS</td>
+      <td class="right-border">{{ report.L31_total_disbursements_period | defaultZero | currency }}</td>
+      <td>{{ report.L31_total_disbursements_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="dark-gray last">
+      <td class="right-border bold">32</td>
+      <td class="justify-left right-border bold">TOTAL FEDERAL DISBURSEMENTS</td>
+      <td class="right-border">{{ report.L32_total_federal_disbursements_period | defaultZero | currency }}</td>
+      <td>{{ report.L32_total_federal_disbursements_ytd | defaultZero | currency }}</td>
+    </tr>
+  </table>
+
+  <div class="table-spacer"></div>
+
+  <table class="collapse">
+    <caption>
+      Net Contributions/Operating Expenditures
+    </caption>
+    <tr>
+      <th class="right-border">LINE NUMBER</th>
+      <th class="justify-left right-border">CONTRIBUTION AND EXPENDITURE TYPES</th>
+      <th class="right-border">THIS PERIOD</th>
+      <th>CALENDAR YEAR-TO-DATE</th>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">33</td>
+      <td class="justify-left right-border bold">TOTAL CONTRIBUTIONS</td>
+      <td class="right-border">{{ report.L33_total_contributions_period | defaultZero | currency }}</td>
+      <td>{{ report.L33_total_contributions_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">34</td>
+      <td class="justify-left right-border bold">TOTAL CONTRIBUTION REFUNDS</td>
+      <td class="right-border">{{ report.L34_total_contribution_refunds_period | defaultZero | currency }}</td>
+      <td>{{ report.L34_total_contribution_refunds_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">35</td>
+      <td class="justify-left right-border bold">NET CONTRIBUTIONS</td>
+      <td class="right-border">{{ report.L35_net_contributions_period | defaultZero | currency }}</td>
+      <td>{{ report.L35_net_contributions_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">36</td>
+      <td class="justify-left right-border bold">TOTAL FEDERAL OPERATING EXPENDITURES</td>
+      <td class="right-border">
+        {{ report.L36_total_federal_operating_expenditures_period | defaultZero | currency }}
+      </td>
+      <td>{{ report.L36_total_federal_operating_expenditures_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">37</td>
+      <td class="justify-left right-border bold">OFFSETS TO OPERATING EXPENDITURES</td>
+      <td class="right-border">{{ report.L37_offsets_to_operating_expenditures_period | defaultZero | currency }}</td>
+      <td>{{ report.L37_offsets_to_operating_expenditures_ytd | defaultZero | currency }}</td>
+    </tr>
+    <tr class="gray">
+      <td class="right-border bold">38</td>
+      <td class="justify-left right-border bold">NET OPERATING EXPENDITURES</td>
+      <td class="right-border">{{ report.L38_net_operating_expenditures_period | defaultZero | currency }}</td>
+      <td>{{ report.L38_net_operating_expenditures_ytd | defaultZero | currency }}</td>
+    </tr>
+  </table>
+</p-card>
+
+<div class="grid">
+  <div class="col-4">
+    <div>
+      <button
+        pButton
+        pRipple
+        label="Back"
+        class="p-button-secondary"
+        (click)="router.navigateByUrl('/reports/f3x/summary/' + report.id)"
+      ></button>
+    </div>
+    <div class="button-message">PREVIOUS: SUMMARY PAGE</div>
+  </div>
+  <div class="col-4"></div>
+  <div class="col-4 align-right">
+    <div>
+      <button
+        pButton
+        pRipple
+        label="See print preview"
+        class="p-button-primary"
+        (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
+      ></button>
+    </div>
+    <div class="button-message">NEXT: PRINT PREVIEW</div>
+  </div>
+</div>
