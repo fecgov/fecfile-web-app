@@ -63,6 +63,39 @@ const fieldsRequired: Array<string> = [
   'candidate_id',
 ];
 
+function testField(cType, field) {
+  const strLength = contactFields[cType][field];
+
+  if (fieldsRequired.includes(field)) {
+    cy.get('#' + field)
+      .parent()
+      .should('contain', 'This is a required field');
+  }
+
+  let randString = '';
+  if (field == 'telephone') {
+    randString = randomString(strLength, 'numeric');
+  } else if (field == 'candidate_id') {
+    randString = candidateID('Presidential');
+  } else if (field == 'committee_id') {
+    randString = committeeID();
+  } else {
+    randString = randomString(strLength);
+  }
+
+  cy.get('#' + field)
+    .safeType(randString)
+    .parent()
+    .find('app-error-messages')
+    .children()
+    .should('have.length', 0);
+  cy.get('#' + field)
+    .safeType('0')
+    .parent()
+    .find('app-error-messages')
+    .should('contain', `This field cannot contain more than ${strLength}`);
+}
+
 let contactType: string;
 const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
@@ -87,36 +120,7 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
         cy.shortWait();
 
         for (const field of Object.keys(contactFields[cType])) {
-          const strLength = contactFields[cType][field];
-
-          if (fieldsRequired.includes(field)) {
-            cy.get('#' + field)
-              .parent()
-              .should('contain', 'This is a required field');
-          }
-
-          let randString = '';
-          if (field == 'telephone') {
-            randString = randomString(strLength, 'numeric');
-          } else if (field == 'candidate_id') {
-            randString = candidateID('Presidential');
-          } else if (field == 'committee_id') {
-            randString = committeeID();
-          } else {
-            randString = randomString(strLength);
-          }
-
-          cy.get('#' + field)
-            .safeType(randString)
-            .parent()
-            .find('app-error-messages')
-            .children()
-            .should('have.length', 0);
-          cy.get('#' + field)
-            .safeType('0')
-            .parent()
-            .find('app-error-messages')
-            .should('contain', `This field cannot contain more than ${strLength}`);
+          testField(cType, field);
         }
 
         cy.get("p-dropdown[FormControlName='country']").should('contain', 'United States of America');

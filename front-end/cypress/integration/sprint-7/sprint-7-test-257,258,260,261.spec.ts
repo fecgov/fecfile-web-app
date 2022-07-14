@@ -64,6 +64,26 @@ const interactionTree: object = {
   },
 };
 
+function testRadioButtons(filingFrequency, timePeriod) {
+  const reportTypes: Array<string> = Object.keys(interactionTree[filingFrequency][timePeriod]);
+  for (const reportType of reportTypes) {
+    cy.get('p-radiobutton[FormControlName="report_code"]')
+      .contains(reportType)
+      .parent()
+      .click()
+      .find('div')
+      .should('have.class', 'p-radiobutton-checked');
+
+    if (interactionTree[filingFrequency][timePeriod][reportType]) {
+      cy.get("p-calendar[FormControlName='date_of_election']").should('exist');
+      cy.get("p-dropdown[FormControlName='state_of_election']").should('exist');
+    } else {
+      cy.get("p-calendar[FormControlName='date_of_election']").should('not.exist');
+      cy.get("p-dropdown[FormControlName='state_of_election']").should('not.exist');
+    }
+  }
+}
+
 describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
   const filingFrequencies: Array<string> = Object.keys(interactionTree);
   for (const filingFrequency of filingFrequencies) {
@@ -101,23 +121,7 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
           });
 
           it(`Step 5: Check each Report Type radio button for interactivity and the presence of the "State" dropdown and the "Election On" date picker`, () => {
-            const reportTypes: Array<string> = Object.keys(interactionTree[filingFrequency][timePeriod]);
-            for (const reportType of reportTypes) {
-              cy.get('p-radiobutton[FormControlName="report_code"]')
-                .contains(reportType)
-                .parent()
-                .click()
-                .find('div')
-                .should('have.class', 'p-radiobutton-checked');
-
-              if (interactionTree[filingFrequency][timePeriod][reportType]) {
-                cy.get("p-calendar[FormControlName='date_of_election']").should('exist');
-                cy.get("p-dropdown[FormControlName='state_of_election']").should('exist');
-              } else {
-                cy.get("p-calendar[FormControlName='date_of_election']").should('not.exist');
-                cy.get("p-dropdown[FormControlName='state_of_election']").should('not.exist');
-              }
-            }
+            testRadioButtons(filingFrequency, timePeriod);
           });
         });
       }
