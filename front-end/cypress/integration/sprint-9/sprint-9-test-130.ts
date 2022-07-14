@@ -1,7 +1,14 @@
+/*
+ *    This test does not work due to limitations with Cypress.
+ *    After consulting with Shelly and Mitchell, we are no longer
+ *    attempting to test this ticket with an E2E test.
+ *
+ */
+
 import { after } from 'lodash';
 
 describe('Sprint 9 QA Script 130', () => {
-  before('Logs in and creates a dummy report', () => {
+  before('Logs in', () => {
     cy.login();
   });
 
