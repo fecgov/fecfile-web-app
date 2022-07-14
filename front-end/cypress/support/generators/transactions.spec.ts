@@ -68,11 +68,8 @@ export function generateTransactionObject(transactionGiven: Transaction = {}): T
     }
 
     if (fieldRules['required'] || _.random(10) < 2) {
-      if ('genArgs' in fieldRules) {
-        fieldValue = fieldRules['generator'](...fieldRules['genArgs']);
-      } else {
-        fieldValue = fieldRules['generator']();
-      }
+      const args = fieldRules['genArgs'] || [];
+      fieldValue = fieldRules['generator'](...args);
       newTransaction[accordion][transactionType][field] = fieldValue;
     }
   }
