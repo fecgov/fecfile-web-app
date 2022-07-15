@@ -4,12 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { ReportCodeLabelList } from '../../shared/utils/reportCodeLabels.utils';
+import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 
 @Component({
   selector: 'app-report-summary',
   templateUrl: './report-summary.component.html',
-  styleUrls: ['./report-summary.component.scss'],
+  styleUrls: ['../../style.scss'],
 })
 export class ReportSummaryComponent implements OnInit {
   report: F3xSummary = new F3xSummary();
