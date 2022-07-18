@@ -66,7 +66,8 @@ export class LoginService {
     if (this.userLoginData && this.userLoginData.token) { // Non-login.gov auth
       this.store.dispatch(userLoggedOutAction());
     } else {
-      this.apiService.postAbsoluteUrl(`${environment.loginDotGovLogoutUrl}`, null).pipe(
+      this.cookieService.delete('csrftoken');
+      this.apiService.getAbsoluteUrl(`${environment.loginDotGovLogoutUrl}`).pipe(
         tap(() => {
           this.clearUserLoggedInCookies();
           this.store.dispatch(userLoggedOutAction());

@@ -48,6 +48,14 @@ export class ApiService {
     return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, params: params, withCredentials: true });
   }
 
+  public getAbsoluteUrl<T>(
+    endpoint: string,
+    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
+  ): Observable<T> {
+    const headers = this.getHeaders();
+    return this.http.get<T>(`${endpoint}`, { headers: headers, params: params, withCredentials: true });
+  }
+
   // prettier-ignore
   public post<T>(endpoint: string, payload: any, queryParams: any = {}): Observable<T> { // eslint-disable-line @typescript-eslint/no-explicit-any
     const headers = this.getHeaders();
