@@ -21,7 +21,7 @@ import { LabelLookupEffects } from './store/label-lookup.effects';
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
-import { MenuModule } from 'primeng/menu';
+import { PanelMenuModule } from 'primeng/panelmenu';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -86,7 +86,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ),
     EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects, LabelLookupEffects]),
     MenubarModule,
-    MenuModule,
+    PanelMenuModule,
     PanelModule,
     ButtonModule,
     ProgressBarModule,

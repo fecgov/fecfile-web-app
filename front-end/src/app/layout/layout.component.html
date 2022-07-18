@@ -1,45 +1,45 @@
 <div class="grid">
-  <div class="col-12 bg-gray-700">
-    <app-header></app-header>
-  </div>
-</div>
-<div class="grid">
-  <div class="col-fixed bg-blue-900">
+  <div class="col-fixed fec-blue">
     <app-sidebar></app-sidebar>
   </div>
   <div class="col">
-    <div class="grid committee-banner">
-      <div class="col">
-        <h1>
-          {{ (committeeAccount$ | async)?.committee_id }}
-        </h1>
-      </div>
-      <div class="col">
-        <h2>
-          {{ (committeeAccount$ | async)?.name }}
-        </h2>
-      </div>
-      <div class="col">
-        <h2>
-          {{ (committeeAccount$ | async)?.committee_type_full }}
-        </h2>
-      </div>
+    <div class="col-12">
+      <app-header></app-header>
     </div>
-    <div class="grid">
-      <div class="col-12">
-        <div *ngIf="progressBarVisible$ | async">
-          <p-progressBar mode="indeterminate"></p-progressBar>
+    <div class="col">
+      <div class="grid committee-banner">
+        <div class="col">
+          <h1>
+            {{ (committeeAccount$ | async)?.committee_id }}
+          </h1>
+        </div>
+        <div class="col">
+          <h2>
+            {{ (committeeAccount$ | async)?.name }}
+          </h2>
+        </div>
+        <div class="col">
+          <h2>
+            {{ (committeeAccount$ | async)?.committee_type_full }}
+          </h2>
         </div>
       </div>
-    </div>
-    <div class="grid">
-      <div class="col-12">
-        <router-outlet></router-outlet>
+      <div class="grid">
+        <div class="col-12">
+          <div *ngIf="progressBarVisible$ | async">
+            <p-progressBar mode="indeterminate"></p-progressBar>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="grid">
-      <div class="col-12">
-        <app-footer></app-footer>
+      <div class="grid">
+        <div class="col-12">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="col-12">
+          <app-footer></app-footer>
+        </div>
       </div>
     </div>
   </div>
