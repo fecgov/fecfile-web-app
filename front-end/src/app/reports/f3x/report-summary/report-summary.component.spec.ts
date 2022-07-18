@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
+import { CardModule } from 'primeng/card';
 
 import { ReportSummaryComponent } from './report-summary.component';
 
@@ -20,7 +21,7 @@ describe('ReportSummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule.withRoutes([])],
+      imports: [SharedModule, CardModule, RouterTestingModule.withRoutes([])],
       declarations: [ReportSummaryComponent],
       providers: [
         provideMockStore({
