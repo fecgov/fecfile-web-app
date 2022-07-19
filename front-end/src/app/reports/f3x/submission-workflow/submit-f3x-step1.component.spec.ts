@@ -10,7 +10,7 @@ import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { UserLoginData } from 'app/shared/models/user.model';
-import { CreateF3xStep2Component } from './submit-f3x-step1.component';
+import { SubmitF3xStep1Component } from './submit-f3x-step1.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { environment } from '../../../../environments/environment';
 import { CommitteeAccount } from '../../../shared/models/committee-account.model';
@@ -21,8 +21,8 @@ import { F3xSummaryService } from '../../../shared/services/f3x-summary.service'
 import { ReportsModule } from '../../reports.module';
 
 describe('SubmitF3xStep1Component', () => {
-  let component: CreateF3xStep2Component;
-  let fixture: ComponentFixture<CreateF3xStep2Component>;
+  let component: SubmitF3xStep1Component;
+  let fixture: ComponentFixture<SubmitF3xStep1Component>;
   let router: Router;
   let httpTestingController: HttpTestingController;
   let reportService: F3xSummaryService;
@@ -47,7 +47,7 @@ describe('SubmitF3xStep1Component', () => {
         SharedModule,
         ReportsModule,
       ],
-      declarations: [CreateF3xStep2Component],
+      declarations: [SubmitF3xStep1Component],
       providers: [
         ValidateService,
         FormBuilder,
@@ -81,7 +81,7 @@ describe('SubmitF3xStep1Component', () => {
     router = TestBed.inject(Router);
     reportService = TestBed.inject(F3xSummaryService);
     httpTestingController = TestBed.inject(HttpTestingController);
-    fixture = TestBed.createComponent(CreateF3xStep2Component);
+    fixture = TestBed.createComponent(SubmitF3xStep1Component);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));
     fixture.detectChanges();
@@ -100,7 +100,7 @@ describe('SubmitF3xStep1Component', () => {
 
     component.save('back');
     let req = httpTestingController.expectOne(
-      `${environment.apiUrl}/f3x-summaries/${component.report.id}/?fields_to_validate=change_of_address,street_1,street_2,city,state,zip,memo_checkbox,memo`
+      `${environment.apiUrl}/f3x-summaries/${component.report.id}/?fields_to_validate=confirmation_email_1,confirmation_email_2,change_of_address,street_1,street_2,city,state,zip`
     );
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
@@ -109,7 +109,7 @@ describe('SubmitF3xStep1Component', () => {
     navigateSpy.calls.reset();
     component.save('continue');
     req = httpTestingController.expectOne(
-      `${environment.apiUrl}/f3x-summaries/${component.report.id}/?fields_to_validate=change_of_address,street_1,street_2,city,state,zip,memo_checkbox,memo`
+      `${environment.apiUrl}/f3x-summaries/${component.report.id}/?fields_to_validate=confirmation_email_1,confirmation_email_2,change_of_address,street_1,street_2,city,state,zip`
     );
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
@@ -119,6 +119,7 @@ describe('SubmitF3xStep1Component', () => {
   it('#save should not save when form data invalid', () => {
     component.report = F3xSummary.fromJSON({
       id: '999',
+      confirmation_email_1: 'test@test.com',
       change_of_address: 'A',
       street_1: '123 Main St',
       street_2: 'Apt A',
