@@ -12,7 +12,6 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { ValidationError } from 'fecfile-validate';
 
 @Component({
   selector: 'app-submit-f3x-step1',
@@ -93,25 +92,21 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     return (): ValidationErrors | null => {
       const email: string = this.form?.get(valueFormControlName)?.value;
 
-      if (email.length === 0 && valueFormControlName === 'confirmation_email_1') {
-        console.log('Error: Empty', valueFormControlName);
+      if (email?.length === 0 && valueFormControlName === 'confirmation_email_1') {
         return { required: true };
       }
-      if (email.length > 44) {
-        console.log('Error: Too Long', valueFormControlName);
+      if (email?.length > 44) {
         return { maxlength: { requiredLength: 44 } };
       }
 
-      const matches = email.match(/^\S+@\S+\.\S{2,}/g);
-      if (email.length > 0) {
+      const matches = email?.match(/^\S+@\S+\.\S{2,}/g);
+      if (email?.length > 0) {
         if (!matches || matches.length == 0) {
-          console.log('Error: Invalid', valueFormControlName);
           return { invalidemail: true };
         }
       }
 
       if (this.identicalEmails()) {
-        console.log('Error: Identical', valueFormControlName);
         return { identicalemail: true };
       }
 
