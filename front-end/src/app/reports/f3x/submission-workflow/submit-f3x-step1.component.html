@@ -2,7 +2,7 @@
 
 <div class="p-fluid">
   <h1>Confirm Information</h1>
-  <h5><b>Form 3X:</b> REPORT NAME</h5>
+  <h5><strong>Form 3X:</strong> REPORT NAME</h5>
   <p-divider></p-divider>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
@@ -15,14 +15,14 @@
     <div class="grid">
       <div class="col-6">
         <div class="field">
-          <label for="confirmation_email_1"><b>Email #1</b></label>
+          <label for="confirmation_email_1"><strong>Email #1</strong></label>
           <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
           <app-error-messages [form]="form" fieldName="confirmation_email_1" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
       <div class="col-6">
         <div class="field">
-          <label for="confirmation_email_2"><b>Email #2</b> (Optional)</label>
+          <label for="confirmation_email_2"><strong>Email #2</strong> (Optional)</label>
           <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2"/>
           <app-error-messages [form]="form" fieldName="confirmation_email_2" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
