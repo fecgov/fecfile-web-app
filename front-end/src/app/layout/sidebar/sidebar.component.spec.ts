@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideMockStore } from '@ngrx/store/testing';
+import { UserLoginData } from 'app/shared/models/user.model';
+import { selectUserLoginData } from 'app/store/login.selectors';
 import { SidebarComponent } from './sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuModule } from 'primeng/menu';
@@ -9,9 +11,22 @@ describe('SidebarComponent', () => {
   let fixture: ComponentFixture<SidebarComponent>;
 
   beforeEach(async () => {
+    const userLoginData: UserLoginData = {
+      committee_id: 'C00000000',
+      email: 'email@fec.com',
+      is_allowed: true,
+      token: 'jwttokenstring',
+    };
+
     await TestBed.configureTestingModule({
       imports: [BrowserAnimationsModule, MenuModule],
       declarations: [SidebarComponent],
+      providers: [
+        provideMockStore({
+          initialState: { fecfile_online_userLoginData: userLoginData },
+          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
+        }),
+      ],
     }).compileComponents();
   });
 
