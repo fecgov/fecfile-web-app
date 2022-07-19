@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -17,11 +16,10 @@ export class SidebarComponent implements OnInit {
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   items: MenuItem[] = [];
 
-  constructor(private store: Store, private activatedRoute: ActivatedRoute, public router: Router) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
-    this.report = this.activatedRoute.snapshot.data['report'];
 
     this.items = [
       {
