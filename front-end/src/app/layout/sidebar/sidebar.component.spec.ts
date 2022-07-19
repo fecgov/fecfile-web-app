@@ -5,6 +5,7 @@ import { selectUserLoginData } from 'app/store/login.selectors';
 import { SidebarComponent } from './sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuModule } from 'primeng/menu';
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -19,7 +20,7 @@ describe('SidebarComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, MenuModule],
+      imports: [BrowserAnimationsModule, MenuModule, PanelMenuModule],
       declarations: [SidebarComponent],
       providers: [
         provideMockStore({
