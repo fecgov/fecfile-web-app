@@ -1,9 +1,9 @@
 export function enterContact(contact: object, save = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
-  cy.wait(100);
+  cy.shortWait();
 
   cy.get('#button-contacts-new').click();
-  cy.wait(100);
+  cy.shortWait();
 
   cy.dropdownSetValue("p-dropdown[formcontrolname='type']", contact['contact_type']);
 
@@ -56,5 +56,5 @@ export function enterContact(contact: object, save = true) {
     cy.get('.p-button-primary > .p-button-label').contains('Save').click();
   }
 
-  cy.wait(250); //Gives the database time to process the request.  It gets a little funky otherwise...
+  cy.longWait(); //Gives the database time to process the request.  It gets a little funky otherwise...
 }

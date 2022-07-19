@@ -10,22 +10,24 @@ const interactionTree: object = {
       '12G': true,
       '30G': true,
       YE: false,
+      '12P': true,
+      '12R': true,
+      '12S': true,
+      '12C': true,
+      '30R': true,
+      '30S': true,
       TER: false,
     },
     'Non-Election Year': {
-      Q1: false,
       MY: false,
-      Q2: false,
       YE: false,
-      TER: false,
-    },
-    Special: {
       '12P': true,
       '12R': true,
-      '12C': true,
       '12S': true,
+      '12C': true,
       '30R': true,
       '30S': true,
+      TER: false,
     },
   },
   MONTHLY: {
@@ -62,6 +64,26 @@ const interactionTree: object = {
   },
 };
 
+function testRadioButtons(filingFrequency, timePeriod) {
+  const reportTypes: Array<string> = Object.keys(interactionTree[filingFrequency][timePeriod]);
+  for (const reportType of reportTypes) {
+    cy.get('p-radiobutton[FormControlName="report_code"]')
+      .contains(reportType)
+      .parent()
+      .click()
+      .find('div')
+      .should('have.class', 'p-radiobutton-checked');
+
+    if (interactionTree[filingFrequency][timePeriod][reportType]) {
+      cy.get("p-calendar[FormControlName='date_of_election']").should('exist');
+      cy.get("p-dropdown[FormControlName='state_of_election']").should('exist');
+    } else {
+      cy.get("p-calendar[FormControlName='date_of_election']").should('not.exist');
+      cy.get("p-dropdown[FormControlName='state_of_election']").should('not.exist');
+    }
+  }
+}
+
 describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
   const filingFrequencies: Array<string> = Object.keys(interactionTree);
   for (const filingFrequency of filingFrequencies) {
@@ -76,7 +98,7 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
 
           it('Step 2: Open a New Report', () => {
             cy.get("button[label='Create a new report']").click();
-            cy.wait(50);
+            cy.shortWait();
           });
 
           it(`Step 3: Select the Filing Frequency ${filingFrequency}`, () => {
@@ -99,23 +121,7 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
           });
 
           it(`Step 5: Check each Report Type radio button for interactivity and the presence of the "State" dropdown and the "Election On" date picker`, () => {
-            const reportTypes: Array<string> = Object.keys(interactionTree[filingFrequency][timePeriod]);
-            for (const reportType of reportTypes) {
-              cy.get('p-radiobutton[FormControlName="report_code"]')
-                .contains(reportType)
-                .parent()
-                .click()
-                .find('div')
-                .should('have.class', 'p-radiobutton-checked');
-
-              if (interactionTree[filingFrequency][timePeriod][reportType]) {
-                cy.get("p-calendar[FormControlName='date_of_election']").should('exist');
-                cy.get("p-dropdown[FormControlName='state_of_election']").should('exist');
-              } else {
-                cy.get("p-calendar[FormControlName='date_of_election']").should('not.exist');
-                cy.get("p-dropdown[FormControlName='state_of_election']").should('not.exist');
-              }
-            }
+            testRadioButtons(filingFrequency, timePeriod);
           });
         });
       }
