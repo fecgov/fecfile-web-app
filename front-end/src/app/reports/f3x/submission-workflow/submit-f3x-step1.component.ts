@@ -33,7 +33,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     'zip',
   ];
   report: F3xSummary | undefined;
-  report_code: string = '';
+  report_code = '';
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
