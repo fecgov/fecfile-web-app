@@ -23,17 +23,16 @@ export class SidebarComponent implements OnInit {
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
     this.report = this.activatedRoute.snapshot.data['report'];
 
-    console.log('===', this.report);
-
     this.items = [
       {
         label: 'ENTER A TRANSACTION',
+        icon: '',
         items: [
           { label: 'Manage your transactions' },
           { label: 'Add a receipt' },
-          { label: 'Add a disbursements' },
-          { label: 'Add loans and debts' },
-          { label: 'Add other transactions' },
+          { label: 'Add a disbursements', styleClass: 'menu-item-disabled' },
+          { label: 'Add loans and debts', styleClass: 'menu-item-disabled' },
+          { label: 'Add other transactions', styleClass: 'menu-item-disabled' },
         ],
       },
       {
