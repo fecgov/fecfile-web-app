@@ -12,6 +12,9 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
+import { updateLabelLookupAction } from '../../../store/label-lookup.actions';
+import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 
 @Component({
   selector: 'app-submit-f3x-step1',
@@ -30,12 +33,13 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     'zip',
   ];
   report: F3xSummary | undefined;
+  report_code: string = '';
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
-
+  reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
   constructor(
@@ -55,10 +59,20 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
     this.report = this.activatedRoute.snapshot.data['report'];
+    if (this.report?.report_code) {
+      if (this.report?.report_code?.length > 0) {
+        this.report_code = this.report.report_code;
+      }
+    } else {
+      this.report_code = '';
+    }
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
+
+    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
+    this.store.dispatch(updateLabelLookupAction());
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
@@ -123,6 +137,8 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
 
   public save(jump: 'continue' | 'back' | null = null): void {
     this.formSubmitted = true;
+
+    console.log(this.report);
 
     if (this.form.invalid) {
       return;

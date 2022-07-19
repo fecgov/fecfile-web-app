@@ -2,7 +2,7 @@
 
 <div class="p-fluid">
   <h1>Confirm Information</h1>
-  <h5><strong>Form 3X:</strong> REPORT NAME</h5>
+  <h5><strong>Form 3X:</strong> {{ (this.reportCodeLabelList$ | async | findOnReportCodePipe: this.report_code)?.label }}</h5>
   <p-divider></p-divider>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
