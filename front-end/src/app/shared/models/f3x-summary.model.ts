@@ -180,6 +180,8 @@ export class F3xSummary extends BaseModel implements Report {
   treasurer_middle_name: string | null = null;
   treasurer_prefix: string | null = null;
   treasurer_suffix: string | null = null;
+  confirmation_email_1: string | null = null;
+  confirmation_email_2: string | null = null;
   @Transform(BaseModel.dateTransform) date_signed: Date | null = null;
 
   L6b_cash_on_hand_beginning_period: number | null = null;

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
@@ -12,6 +12,7 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { ValidationError } from 'fecfile-validate';
 
 @Component({
   selector: 'app-submit-f3x-step1',
@@ -63,6 +64,8 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
     this.validateService.formValidatorForm = this.form;
+    this.form.controls['confirmation_email_1'].addValidators(this.buildEmailValidator('confirmation_email_1'));
+    this.form.controls['confirmation_email_2'].addValidators(this.buildEmailValidator('confirmation_email_2'));
   }
 
   setDefaultFormValues(committeeAccount: CommitteeAccount) {
@@ -77,12 +80,50 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       memo: '',
       confirmation_email_1:
         this.report?.confirmation_email_1 !== null ? this.report?.confirmation_email_1 : committeeAccount?.email,
+      confirmation_email_2: this.report?.confirmation_email_2 !== null ? this.report?.confirmation_email_2 : null,
     });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  public buildEmailValidator(valueFormControlName: string): ValidatorFn {
+    return (): ValidationErrors | null => {
+      const email: string = this.form?.get(valueFormControlName)?.value;
+
+      if (email.length === 0 && valueFormControlName === 'confirmation_email_1') {
+        console.log('Error: Empty', valueFormControlName);
+        return { required: true };
+      }
+      if (email.length > 44) {
+        console.log('Error: Too Long', valueFormControlName);
+        return { maxlength: { requiredLength: 44 } };
+      }
+
+      const matches = email.match(/^\S+@\S+\.\S{2,}/g);
+      if (email.length > 0) {
+        if (!matches || matches.length == 0) {
+          console.log('Error: Invalid', valueFormControlName);
+          return { invalidemail: true };
+        }
+      }
+
+      if (this.identicalEmails()) {
+        console.log('Error: Identical', valueFormControlName);
+        return { identicalemail: true };
+      }
+
+      return null;
+    };
+  }
+
+  public identicalEmails(): Boolean {
+    const email_1 = this.form?.get('confirmation_email_1')?.value;
+    const email_2 = this.form?.get('confirmation_email_2')?.value;
+
+    return email_1 != null && email_1.length > 0 && email_1 === email_2;
   }
 
   public save(jump: 'continue' | 'back' | null = null): void {
@@ -92,9 +133,28 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       return;
     }
 
+    let addressFields: object;
+    if (this.form.value.change_of_address === false) {
+      addressFields = {
+        change_of_address: false,
+        city: null,
+        street_1: null,
+        street_2: null,
+        state: null,
+        zip: null,
+      };
+    } else {
+      addressFields = {
+        change_of_address: true,
+        ...this.validateService.getFormValues(this.form, this.formProperties),
+      };
+    }
+
     const payload: F3xSummary = F3xSummary.fromJSON({
       ...this.report,
-      //...this.validateService.getFormValues(this.form, this.formProperties),
+      ...addressFields,
+      confirmation_email_1: this.form.value.confirmation_email_1,
+      confirmation_email_2: this.form.value.confirmation_email_2,
     });
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
