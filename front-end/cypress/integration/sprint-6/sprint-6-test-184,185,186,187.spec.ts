@@ -1,21 +1,18 @@
 // @ts-check
 
-import { generateContactObject } from '../support/generators/contacts.spec';
+import { generateContactObject } from '../../support/generators/contacts.spec';
 
 const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 function after(contact) {
-  cy.get('p-table')
-    .find('tr')
-    .contains(contact['name']) //Finds out contact in the Manage Contacts table
-    .parent() //Gets the row its in
+  cy.contains('tr', contact['name']) //Finds out contact in the Manage Contacts table
     .find('p-button[icon="pi pi-trash"]') //Gets the trash button
     .click();
 
-  cy.wait(100);
+  cy.medWait();
   cy.get('.p-confirm-dialog-accept').click();
 
-  cy.wait(100);
+  cy.shortWait();
   cy.logout();
 }
 
@@ -36,14 +33,11 @@ describe('QA Test Scripts 184 through 187', () => {
 
       it(`Creates a ${cType} contact`, () => {
         cy.enterContact(contact);
-        cy.wait(100);
+        cy.longWait();
       });
 
       it('Steps 2 & 3: Select a contact and open the edit menu', () => {
-        cy.get('p-table')
-          .find('tr')
-          .contains(`${contact['name']}`) //Finds out contact in the Manage Contacts table
-          .parent() //Gets the row its in
+        cy.contains('tr', `${contact['name']}`) //Finds out contact in the Manage Contacts table
           .find('p-tablecheckbox')
           .click() //Check the checkbox for step 2
           .parent()
@@ -61,7 +55,7 @@ describe('QA Test Scripts 184 through 187', () => {
       it("Step 6: Close the form with the 'X' button", () => {
         cy.get('.p-dialog-header-close-icon').click(); //Close the form with the 'X' button
 
-        cy.wait(100);
+        cy.medWait();
         after(contact);
       });
     });

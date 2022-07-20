@@ -1,6 +1,6 @@
 // @ts-check
 
-import * as generator from '../support/generators/generators.spec';
+import * as generator from '../../support/generators/generators.spec';
 
 const states: Array<string> = generator.states.concat(generator.territories);
 
@@ -14,7 +14,7 @@ describe('QA Test Script #182 (Sprint 6)', () => {
 
   it('Step 2: Open the "Add Contact" form', () => {
     cy.get('#button-contacts-new').click();
-    cy.wait(250);
+    cy.medWait();
 
     cy.get('.p-dialog-header').contains('Add Contact').should('contain', 'Add Contact');
   });

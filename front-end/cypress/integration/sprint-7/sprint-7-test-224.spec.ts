@@ -15,7 +15,7 @@ describe('QA Test Script #224 (Sprint 7)', () => {
         cy.url().should('contain', '/contacts');
 
         cy.get("button[label='New']").click();
-        cy.wait(50);
+        cy.shortWait();
         cy.get("div[role='dialog']").contains('Add Contact').should('exist');
       });
 
@@ -27,7 +27,7 @@ describe('QA Test Script #224 (Sprint 7)', () => {
 
       it('Closes the form', () => {
         cy.get("button[label='Cancel']").click();
-        cy.wait(50);
+        cy.shortWait();
       });
     });
   }

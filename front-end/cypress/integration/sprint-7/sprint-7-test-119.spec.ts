@@ -85,13 +85,12 @@ describe('QA Test Script #119 (Sprint 7)', () => {
 
   it('Step 2: Open a New Contact', () => {
     cy.get("button[label='New']").click();
-    cy.wait(50);
+    cy.shortWait();
     cy.get("div[role='dialog']").contains('Add Contact').should('exist');
   });
 
   it("Step 3: Set the Contact Type to 'Candidate'", () => {
     cy.dropdownSetValue("p-dropdown[FormControlName='type']", 'Candidate');
-    cy.wait(50);
     cy.get("p-dropdown[FormControlName='type']").should('contain', 'Candidate');
   });
 
@@ -103,7 +102,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
       cy.get('p-dropdownitem').contains(officeType).should('exist');
     }
     cy.get('p-dropdownitem').contains('Presidential').click({ force: true });
-    cy.wait(50);
+    cy.shortWait();
     cy.get(fieldCandidateOffice).should('contain', 'Presidential');
   });
 
@@ -114,7 +113,6 @@ describe('QA Test Script #119 (Sprint 7)', () => {
 
   it("Step 7: Select 'Senate' from the 'Candidate Office' dropdown", () => {
     cy.dropdownSetValue(fieldCandidateOffice, 'Senate');
-    cy.wait(50);
     cy.get(fieldCandidateOffice).should('contain', 'Senate');
   });
 
@@ -129,7 +127,6 @@ describe('QA Test Script #119 (Sprint 7)', () => {
 
   it("Step 10: Select 'House' from the 'Candidate Office' dropdown", () => {
     cy.dropdownSetValue(fieldCandidateOffice, 'House');
-    cy.wait(50);
     cy.get(fieldCandidateOffice).should('contain', 'House');
   });
 
@@ -147,8 +144,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
       let districtCount: number = candidateStates[state];
       if (districtCount == 0) districtCount = 1; //For some odd reason, states with 0 districts have '00' in the dropdown; According to Shelly, this is intended behavior
 
-      cy.dropdownSetValue(fieldCandidateState, state);
-      cy.wait(25);
+      cy.dropdownSetValue(fieldCandidateState, state, false);
       cy.get(fieldCandidateDistrict).click();
       cy.get('p-dropdownitem').should('have.length', districtCount);
     }
