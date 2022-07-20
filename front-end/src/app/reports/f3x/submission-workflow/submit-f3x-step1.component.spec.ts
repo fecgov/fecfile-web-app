@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
@@ -37,6 +38,7 @@ describe('SubmitF3xStep1Component', () => {
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([]),
+        HttpClientTestingModule,
         DividerModule,
         CheckboxModule,
         RadioButtonModule,
