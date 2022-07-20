@@ -7,7 +7,7 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
-import { Pipe, PipeTransform } from '@angular/core';
+import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
 
 @Component({
   selector: 'app-report-summary',
@@ -18,6 +18,7 @@ export class ReportSubmissionStatusComponent implements OnInit {
   report: F3xSummary = new F3xSummary();
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
+  f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
 
   constructor(private store: Store, private activatedRoute: ActivatedRoute, public router: Router) {}
 

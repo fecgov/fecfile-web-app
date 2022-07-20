@@ -15,6 +15,7 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { updateLabelLookupAction } from '../../../store/label-lookup.actions';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
+import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
 
 @Component({
   selector: 'app-submit-f3x-step1',
@@ -41,6 +42,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
+  f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
 
   constructor(
     private router: Router,
