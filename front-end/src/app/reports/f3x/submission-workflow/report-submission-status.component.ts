@@ -5,9 +5,8 @@ import { Store } from '@ngrx/store';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
-import { LabelList } from '../../../shared/utils/label.utils';
+import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
-import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
 
 @Component({
   selector: 'app-report-summary',
