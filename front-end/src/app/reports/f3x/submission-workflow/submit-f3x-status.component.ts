@@ -10,8 +10,8 @@ import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
 
 @Component({
   selector: 'app-report-summary',
-  templateUrl: './report-submission-status.component.html',
-  styleUrls: ['./report-submission-status.component.scss'],
+  templateUrl: './submit-f3x-status.component.html',
+  styleUrls: ['./submit-f3x-status.component.scss'],
 })
 export class ReportSubmissionStatusComponent implements OnInit {
   report: F3xSummary = new F3xSummary();

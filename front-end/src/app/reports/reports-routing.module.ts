@@ -7,7 +7,7 @@ import { CreateF3xStep3Component } from './f3x/create-workflow/create-f3x-step3.
 import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
-import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/report-submission-status.component';
+import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
 import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-step1.component';
 
 const routes: Routes = [

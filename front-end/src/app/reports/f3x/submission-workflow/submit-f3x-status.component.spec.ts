@@ -7,7 +7,7 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
 
-import { ReportSubmissionStatusComponent } from './report-submission-status.component';
+import { ReportSubmissionStatusComponent } from './submit-f3x-status.component';
 
 describe('ReportSummaryComponent', () => {
   let component: ReportSubmissionStatusComponent;
