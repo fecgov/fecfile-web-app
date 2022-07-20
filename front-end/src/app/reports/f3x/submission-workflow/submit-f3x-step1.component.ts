@@ -125,7 +125,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
 
   public checkInvalidEmail(email: string): boolean {
     const matches = email?.match(/^\S+@\S+\.\S{2,}/g);
-    if (email.length == 0) return false; //An empty email should be caught by the required validator
+    if (!email || email.length == 0) return false; //An empty email should be caught by the required validator
 
     return matches == null || matches.length == 0;
   }
@@ -139,6 +139,11 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
 
   public save(jump: 'continue' | 'back' | null = null): void {
     this.formSubmitted = true;
+
+    if (jump === 'back' && this.report?.id) {
+      this.router.navigateByUrl('/reports');
+      return;
+    }
 
     if (this.form.invalid) {
       return;
@@ -172,9 +177,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       if (jump === 'continue' && this.report?.id) {
         this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
       }
-      if (jump === 'back' && this.report?.id) {
-        this.router.navigateByUrl('/reports');
-      }
+
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',

@@ -99,21 +99,7 @@ describe('SubmitF3xStep1Component', () => {
     component.form.patchValue({ change_of_address: true });
 
     component.save('back');
-    let req = httpTestingController.expectOne(
-      `${environment.apiUrl}/f3x-summaries/${component.report.id}/?fields_to_validate=confirmation_email_1,confirmation_email_2,change_of_address,street_1,street_2,city,state,zip`
-    );
-    expect(req.request.method).toEqual('PUT');
-    req.flush(component.report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
-
-    navigateSpy.calls.reset();
-    component.save('continue');
-    req = httpTestingController.expectOne(
-      `${environment.apiUrl}/f3x-summaries/${component.report.id}/?fields_to_validate=confirmation_email_1,confirmation_email_2,change_of_address,street_1,street_2,city,state,zip`
-    );
-    expect(req.request.method).toEqual('PUT');
-    req.flush(component.report);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
   });
 
   it('#save should not save when form data invalid', () => {
