@@ -7,11 +7,11 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
 
-import { ReportSummaryComponent } from './report-submission-status.component';
+import { ReportSubmissionStatusComponent } from './report-submission-status.component';
 
 describe('ReportSummaryComponent', () => {
-  let component: ReportSummaryComponent;
-  let fixture: ComponentFixture<ReportSummaryComponent>;
+  let component: ReportSubmissionStatusComponent;
+  let fixture: ComponentFixture<ReportSubmissionStatusComponent>;
   const f3x: F3xSummary = F3xSummary.fromJSON({
     id: 999,
     coverage_from_date: '2022-05-25',
@@ -22,7 +22,7 @@ describe('ReportSummaryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SharedModule, CardModule, RouterTestingModule.withRoutes([])],
-      declarations: [ReportSummaryComponent],
+      declarations: [ReportSubmissionStatusComponent],
       providers: [
         provideMockStore({
           selectors: [{ selector: selectReportCodeLabelList, value: {} }],
@@ -42,7 +42,7 @@ describe('ReportSummaryComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReportSummaryComponent);
+    fixture = TestBed.createComponent(ReportSubmissionStatusComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
