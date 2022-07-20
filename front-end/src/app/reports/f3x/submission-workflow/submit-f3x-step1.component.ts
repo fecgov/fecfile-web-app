@@ -89,8 +89,6 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       city: this.report?.city ? this.report.city : committeeAccount?.city,
       state: this.report?.state ? this.report.state : committeeAccount?.state,
       zip: this.report?.zip ? this.report.zip : committeeAccount?.zip,
-      memo_checkbox: false,
-      memo: '',
       confirmation_email_1:
         this.report?.confirmation_email_1 !== null ? this.report?.confirmation_email_1 : committeeAccount?.email,
       confirmation_email_2: this.report?.confirmation_email_2 !== null ? this.report?.confirmation_email_2 : null,
