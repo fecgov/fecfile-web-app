@@ -8,6 +8,7 @@ import { ReportSummaryComponent } from './f3x/report-summary/report-summary.comp
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/report-submission-status.component';
+import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-step1.component';
 
 const routes: Routes = [
   {
@@ -47,6 +48,11 @@ const routes: Routes = [
   {
     path: 'f3x/detailed-summary/:reportId',
     component: ReportDetailedSummaryComponent,
+    resolve: { report: ReportResolver },
+  },
+  {
+    path: 'f3x/submit/step1/:reportId',
+    component: SubmitF3xStep1Component,
     resolve: { report: ReportResolver },
   },
   { path: '**', redirectTo: '' },

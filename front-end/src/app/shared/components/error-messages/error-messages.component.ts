@@ -11,6 +11,8 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() formSubmitted = false;
   @Input() requiredErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
+  @Input() invalidEmailErrorMessage = 'This email is invalid';
+  @Input() identicalEmailErrorMessage = 'Confirmation emails cannot be identical';
 
   private _minLengthErrorMessage = '';
   @Input() set minLengthErrorMessage(value: string) {

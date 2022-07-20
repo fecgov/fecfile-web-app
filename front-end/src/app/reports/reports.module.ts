@@ -26,6 +26,7 @@ import { CreateF3xStep3Component, MemoCodePipe } from './f3x/create-workflow/cre
 import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/report-submission-status.component';
+import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-step1.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/repor
     CreateF3XStep1Component,
     CreateF3xStep2Component,
     CreateF3xStep3Component,
+    SubmitF3xStep1Component,
     MemoCodePipe,
     ReportSummaryComponent,
     ReportDetailedSummaryComponent,
