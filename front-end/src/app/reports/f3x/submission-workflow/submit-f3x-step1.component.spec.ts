@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router, ActivatedRoute } from '@angular/router';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { of } from 'rxjs';
@@ -12,7 +12,6 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { SubmitF3xStep1Component } from './submit-f3x-step1.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { environment } from '../../../../environments/environment';
 import { CommitteeAccount } from '../../../shared/models/committee-account.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { selectCommitteeAccount } from '../../../store/committee-account.selectors';
@@ -24,7 +23,6 @@ describe('SubmitF3xStep1Component', () => {
   let component: SubmitF3xStep1Component;
   let fixture: ComponentFixture<SubmitF3xStep1Component>;
   let router: Router;
-  let httpTestingController: HttpTestingController;
   let reportService: F3xSummaryService;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
 
@@ -80,7 +78,6 @@ describe('SubmitF3xStep1Component', () => {
   beforeEach(() => {
     router = TestBed.inject(Router);
     reportService = TestBed.inject(F3xSummaryService);
-    httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(SubmitF3xStep1Component);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));
@@ -99,21 +96,7 @@ describe('SubmitF3xStep1Component', () => {
     component.form.patchValue({ change_of_address: true });
 
     component.save('back');
-    let req = httpTestingController.expectOne(
-      `${environment.apiUrl}/f3x-summaries/${component.report.id}/?fields_to_validate=confirmation_email_1,confirmation_email_2,change_of_address,street_1,street_2,city,state,zip`
-    );
-    expect(req.request.method).toEqual('PUT');
-    req.flush(component.report);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
-
-    navigateSpy.calls.reset();
-    component.save('continue');
-    req = httpTestingController.expectOne(
-      `${environment.apiUrl}/f3x-summaries/${component.report.id}/?fields_to_validate=confirmation_email_1,confirmation_email_2,change_of_address,street_1,street_2,city,state,zip`
-    );
-    expect(req.request.method).toEqual('PUT');
-    req.flush(component.report);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
   });
 
   it('#save should not save when form data invalid', () => {

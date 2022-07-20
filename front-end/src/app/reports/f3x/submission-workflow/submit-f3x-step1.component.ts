@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
@@ -79,8 +79,15 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
     this.validateService.formValidatorForm = this.form;
-    this.form.controls['confirmation_email_1'].addValidators(this.buildEmailValidator('confirmation_email_1'));
-    this.form.controls['confirmation_email_2'].addValidators(this.buildEmailValidator('confirmation_email_2'));
+    this.form.controls['confirmation_email_1'].addValidators([
+      Validators.required,
+      Validators.maxLength(44),
+      this.buildIdenticalEmailValidator('confirmation_email_1'),
+    ]);
+    this.form.controls['confirmation_email_2'].addValidators([
+      Validators.maxLength(44),
+      this.buildIdenticalEmailValidator('confirmation_email_2'),
+    ]);
   }
 
   setDefaultFormValues(committeeAccount: CommitteeAccount) {
@@ -102,33 +109,30 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public buildEmailValidator(valueFormControlName: string): ValidatorFn {
+  public buildIdenticalEmailValidator(valueFormControlName: string): ValidatorFn {
     return (): ValidationErrors | null => {
       const email: string = this.form?.get(valueFormControlName)?.value;
 
-      if (email?.length === 0 && valueFormControlName === 'confirmation_email_1') {
-        return { required: true };
-      }
-      if (email?.length > 44) {
-        return { maxlength: { requiredLength: 44 } };
+      if (this.checkInvalidEmail(email)) {
+        return { email: 'invalid' };
       }
 
-      const matches = email?.match(/^\S+@\S+\.\S{2,}/g);
-      if (email?.length > 0) {
-        if (!matches || matches.length == 0) {
-          return { invalidemail: true };
-        }
-      }
-
-      if (this.identicalEmails()) {
-        return { identicalemail: true };
+      if (this.checkIdenticalEmails()) {
+        return { email: 'identical' };
       }
 
       return null;
     };
   }
 
-  public identicalEmails(): boolean {
+  public checkInvalidEmail(email: string): boolean {
+    const matches = email?.match(/^\S+@\S+\.\S{2,}/g);
+    if (!email || email.length == 0) return false; //An empty email should be caught by the required validator
+
+    return matches == null || matches.length == 0;
+  }
+
+  public checkIdenticalEmails(): boolean {
     const email_1 = this.form?.get('confirmation_email_1')?.value;
     const email_2 = this.form?.get('confirmation_email_2')?.value;
 
@@ -138,7 +142,10 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
   public save(jump: 'continue' | 'back' | null = null): void {
     this.formSubmitted = true;
 
-    console.log(this.report);
+    if (jump === 'back' && this.report?.id) {
+      this.router.navigateByUrl('/reports');
+      return;
+    }
 
     if (this.form.invalid) {
       return;
@@ -172,9 +179,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       if (jump === 'continue' && this.report?.id) {
         this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
       }
-      if (jump === 'back' && this.report?.id) {
-        this.router.navigateByUrl('/reports');
-      }
+
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
