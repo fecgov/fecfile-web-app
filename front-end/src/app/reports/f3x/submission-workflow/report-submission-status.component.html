@@ -1,0 +1,70 @@
+<div class="grid">
+  <div class="col-4">
+    <div class="grid">
+      <div class="col-12">
+        <h3>Your form type:<br>
+          {{ this.report.form_type | label: f3xFormTypeLabels }}
+        </h3>
+      </div>
+      <div class="col-12">
+        <h3>Your report type:<br>
+          {{ (this.reportCodeLabelList$ | async | findOnReportCodePipe: report.report_code)?.label }}
+        </h3>
+      </div>
+      <div class="col-12">
+        <h3 style="white-space: nowrap;">Your coverage dates:<br>
+          {{ this.dateTransform(this.report.coverage_from_date) }} — <wbr>
+          {{ this.dateTransform(this.report.coverage_through_date) }}
+        </h3>
+      </div>
+      <div class="col-12">
+        <h3>Confirmation emails:<br>
+          {{ this.report.confirmation_email_1 }} <br>
+          {{ this.report.confirmation_email_2 }}
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-8">
+
+  </div>
+</div>
+
+<p-card>
+  <div class="summary-header">
+    <h1>Summary page</h1>
+    <div>
+      <strong>FORM 3X:</strong>
+      {{ (this.reportCodeLabelList$ | async | findOnReportCodePipe: report.report_code)?.label }}
+    </div>
+  </div>
+
+</p-card>
+
+<div class="grid">
+  <div class="col-4">
+    <div>
+      <button
+        pButton
+        pRipple
+        label="Back"
+        class="p-button-secondary"
+        (click)="router.navigateByUrl('/reports')"
+      ></button>
+    </div>
+    <div class="button-message">PREVIOUS: VALIDATE YOUR REPORT</div>
+  </div>
+  <div class="col-4"></div>
+  <div class="col-4 align-right">
+    <div>
+      <button
+        pButton
+        pRipple
+        label="Review detailed summary page"
+        class="p-button-primary"
+        (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + report.id)"
+      ></button>
+    </div>
+    <div class="button-message">NEXT: DETAILED SUMMARY PAGE</div>
+  </div>
+</div>
