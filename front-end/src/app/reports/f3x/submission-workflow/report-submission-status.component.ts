@@ -12,7 +12,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Component({
   selector: 'app-report-summary',
   templateUrl: './report-submission-status.component.html',
-  styleUrls: ['../../style.scss'],
+  styleUrls: ['./report-submission-status.component.scss'],
 })
 export class ReportSubmissionStatusComponent implements OnInit {
   report: F3xSummary = new F3xSummary();
@@ -35,5 +35,9 @@ export class ReportSubmissionStatusComponent implements OnInit {
     const year = date.getFullYear();
 
     return `${month} ${day}, ${year}`;
+  }
+
+  public backToReports() {
+    this.router.navigateByUrl('/reports');
   }
 }
