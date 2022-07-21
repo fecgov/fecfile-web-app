@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -138,7 +138,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         if (this.treasurerNameChanged()) {
-          this.loading = 1;
           this.saveTreasurerName().subscribe(() => {
             this.messageService.add({
               severity: 'success',
@@ -156,7 +155,8 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     });
   }
 
-  private saveTreasurerName(): any {
+  private saveTreasurerName() {
+    this.loading = 1;
     const payload: F3xSummary = F3xSummary.fromJSON({
       ...this.report,
       ...this.validateService.getFormValues(this.form, this.formProperties),
