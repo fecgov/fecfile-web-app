@@ -73,13 +73,13 @@
           <div class="field">
             <label for="filing_password">
               <strong>Electronic Filing Password </strong>
-              <i 
+              <p-i 
                 id="filing_password_info" 
                 class="pi pi-info-circle"
                 pTooltip="Hover text"
                 tooltipPosition="top"
                 tooltipEvent="hover"
-              ></i>
+              ></p-i>
             </label>
             <input type="text" pInputText id="filing_password" formControlName="filing_password" />
             <app-error-messages [form]="form" fieldName="filing_password" [formSubmitted]="formSubmitted"></app-error-messages>
