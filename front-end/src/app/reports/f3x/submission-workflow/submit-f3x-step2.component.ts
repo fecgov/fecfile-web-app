@@ -24,14 +24,13 @@ import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
 })
 export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   formProperties: string[] = [
-    'confirmation_email_1',
-    'confirmation_email_2',
-    'change_of_address',
-    'street_1',
-    'street_2',
-    'city',
-    'state',
-    'zip',
+    'treasurer_first_name',
+    'treasurer_last_name',
+    'treasurer_middle_name',
+    'treasurer_prefix',
+    'treasurer_suffix',
+    'filing_password',
+    'truth_statement',
   ];
   report: F3xSummary | undefined;
   report_code = '';
@@ -79,64 +78,33 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
     this.validateService.formValidatorForm = this.form;
-    this.form.controls['confirmation_email_1'].addValidators([
-      Validators.required,
-      Validators.maxLength(44),
-      this.buildEmailValidator('confirmation_email_1'),
-    ]);
-    this.form.controls['confirmation_email_2'].addValidators([
-      Validators.maxLength(44),
-      this.buildEmailValidator('confirmation_email_2'),
-    ]);
+    this.form.controls['filing_password'].addValidators(Validators.required);
+    this.form.controls['truth_statement'].addValidators(Validators.requiredTrue);
   }
 
   setDefaultFormValues(committeeAccount: CommitteeAccount) {
     this.form.patchValue({
-      change_of_address: this.report?.change_of_address !== null ? this.report?.change_of_address : false,
-      street_1: this.report?.street_1 ? this.report.street_1 : committeeAccount?.street_1,
-      street_2: this.report?.street_2 ? this.report.street_2 : committeeAccount?.street_2,
-      city: this.report?.city ? this.report.city : committeeAccount?.city,
-      state: this.report?.state ? this.report.state : committeeAccount?.state,
-      zip: this.report?.zip ? this.report.zip : committeeAccount?.zip,
-      confirmation_email_1:
-        this.report?.confirmation_email_1 !== null ? this.report?.confirmation_email_1 : committeeAccount?.email,
-      confirmation_email_2: this.report?.confirmation_email_2 !== null ? this.report?.confirmation_email_2 : null,
+      treasurer_last_name: this.report?.treasurer_last_name
+        ? this.report.treasurer_last_name
+        : committeeAccount?.treasurer_name_2,
+      treasurer_first_name: this.report?.treasurer_first_name
+        ? this.report.treasurer_first_name
+        : committeeAccount?.treasurer_name_1,
+      treasurer_middle_name: this.report?.treasurer_middle_name
+        ? this.report.treasurer_middle_name
+        : committeeAccount?.treasurer_name_middle,
+      treasurer_prefix: this.report?.treasurer_prefix
+        ? this.report.treasurer_prefix
+        : committeeAccount?.treasurer_name_prefix,
+      treasurer_suffix: this.report?.treasurer_suffix
+        ? this.report.treasurer_suffix
+        : committeeAccount?.treasurer_name_suffix,
     });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-  }
-
-  public buildEmailValidator(valueFormControlName: string): ValidatorFn {
-    return (): ValidationErrors | null => {
-      const email: string = this.form?.get(valueFormControlName)?.value;
-
-      if (this.checkInvalidEmail(email)) {
-        return { email: 'invalid' };
-      }
-
-      if (this.checkIdenticalEmails()) {
-        return { email: 'identical' };
-      }
-
-      return null;
-    };
-  }
-
-  public checkInvalidEmail(email: string): boolean {
-    const matches = email?.match(/^\S+@\S+\.\S{2,}/g);
-    if (!email || email.length == 0) return false; //An empty email should be caught by the required validator
-
-    return matches == null || matches.length == 0;
-  }
-
-  public checkIdenticalEmails(): boolean {
-    const email_1 = this.form?.get('confirmation_email_1')?.value;
-    const email_2 = this.form?.get('confirmation_email_2')?.value;
-
-    return email_1 != null && email_1.length > 0 && email_1 === email_2;
   }
 
   public save(jump: 'continue' | 'back' | null = null): void {
@@ -151,33 +119,14 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       return;
     }
 
-    let addressFields: object;
-    if (this.form.value.change_of_address === false) {
-      addressFields = {
-        change_of_address: false,
-        city: null,
-        street_1: null,
-        street_2: null,
-        state: null,
-        zip: null,
-      };
-    } else {
-      addressFields = {
-        change_of_address: true,
-        ...this.validateService.getFormValues(this.form, this.formProperties),
-      };
-    }
-
     const payload: F3xSummary = F3xSummary.fromJSON({
       ...this.report,
-      ...addressFields,
-      confirmation_email_1: this.form.value.confirmation_email_1,
-      confirmation_email_2: this.form.value.confirmation_email_2,
+      ...this.validateService.getFormValues(this.form, this.formProperties),
     });
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
       if (jump === 'continue' && this.report?.id) {
-        this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
+        this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`);
       }
 
       this.messageService.add({
