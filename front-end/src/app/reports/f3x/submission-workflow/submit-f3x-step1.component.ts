@@ -80,11 +80,11 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     this.form.controls['confirmation_email_1'].addValidators([
       Validators.required,
       Validators.maxLength(44),
-      this.buildIdenticalEmailValidator('confirmation_email_1'),
+      this.buildEmailValidator('confirmation_email_1'),
     ]);
     this.form.controls['confirmation_email_2'].addValidators([
       Validators.maxLength(44),
-      this.buildIdenticalEmailValidator('confirmation_email_2'),
+      this.buildEmailValidator('confirmation_email_2'),
     ]);
   }
 
@@ -107,7 +107,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public buildIdenticalEmailValidator(valueFormControlName: string): ValidatorFn {
+  public buildEmailValidator(valueFormControlName: string): ValidatorFn {
     return (): ValidationErrors | null => {
       const email: string = this.form?.get(valueFormControlName)?.value;
 
