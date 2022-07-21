@@ -16,6 +16,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
+import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { SharedModule } from '../../app/shared/shared.module';
 import { ReportsRoutingModule } from './reports-routing.module';
@@ -61,6 +64,9 @@ import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submi
     ToastModule,
     CardModule,
     SharedModule,
+    TooltipModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule,
   ],
 })
 export class ReportsModule {}

@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { refreshCommitteeAccountDetailsAction } from '../../../store/committee-account.actions';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
@@ -42,6 +42,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
   f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
+  loading: 0 | 1 | 2 = 0;
 
   constructor(
     private router: Router,
@@ -50,7 +51,8 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     private validateService: ValidateService,
     private fb: FormBuilder,
     private store: Store,
-    private messageService: MessageService
+    private messageService: MessageService,
+    protected confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -107,34 +109,64 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public save(jump: 'continue' | 'back' | null = null): void {
-    this.formSubmitted = true;
+  public treasurerNameChanged(): boolean {
+    if (!this.report) return true;
 
-    if (jump === 'back' && this.report?.id) {
-      this.router.navigateByUrl('/reports');
-      return;
-    }
+    return (
+      this.form.value['treasurer_last_name'] != this.report.treasurer_last_name ||
+      this.form.value['treasurer_first_name'] != this.report.treasurer_first_name ||
+      this.form.value['treasurer_middle_name'] != this.report.treasurer_middle_name ||
+      this.form.value['treasurer_prefix'] != this.report.treasurer_prefix ||
+      this.form.value['treasurer_suffix'] != this.report.treasurer_suffix
+    );
+  }
+
+  public back(): void {
+    this.router.navigateByUrl('/reports');
+  }
+
+  public submit(): void {
+    this.formSubmitted = true;
 
     if (this.form.invalid) {
       return;
     }
 
+    this.confirmationService.confirm({
+      message:
+        'Are you sure you want to submit this form electronically? Please note that you cannot undo this action. Any changes needed will need to be filed as an amended report.',
+      header: 'Are you sure?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        if (this.treasurerNameChanged()) {
+          this.loading = 1;
+          this.saveTreasurerName().subscribe(() => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'Report Updated',
+              life: 3000,
+            });
+
+            this.submitReport();
+          });
+        } else {
+          this.submitReport();
+        }
+      },
+    });
+  }
+
+  private saveTreasurerName(): any {
     const payload: F3xSummary = F3xSummary.fromJSON({
       ...this.report,
       ...this.validateService.getFormValues(this.form, this.formProperties),
     });
 
-    this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
-      if (jump === 'continue' && this.report?.id) {
-        this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`);
-      }
+    return this.f3xSummaryService.update(payload, this.formProperties);
+  }
 
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Successful',
-        detail: 'Report Updated',
-        life: 3000,
-      });
-    });
+  private submitReport(): void {
+    this.loading = 2;
   }
 }
