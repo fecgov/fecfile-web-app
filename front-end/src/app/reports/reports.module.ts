@@ -23,6 +23,7 @@ import { ReportListComponent } from './report-list/report-list.component';
 import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2.component';
 import { CreateF3xStep3Component, MemoCodePipe } from './f3x/create-workflow/create-f3x-step3.component';
+import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-step2.component';
 import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 
@@ -32,6 +33,7 @@ import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/re
     CreateF3XStep1Component,
     CreateF3xStep2Component,
     CreateF3xStep3Component,
+    SubmitF3xStep2Component,
     MemoCodePipe,
     ReportSummaryComponent,
     ReportDetailedSummaryComponent,
