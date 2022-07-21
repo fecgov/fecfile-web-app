@@ -23,8 +23,8 @@
       <div class="col-12">
         <h5 class="no-vert-margins">YOUR COVERAGE DATES:</h5>
         <h3 class="no-vert-margins no-wrap">
-          {{ dateTransform(report.coverage_from_date) }} — <wbr />
-          {{ dateTransform(report.coverage_through_date) }}
+          {{ report.coverage_from_date | longDate }} — <wbr />
+          {{ report.coverage_through_date | longDate }}
         </h3>
         <br />
       </div>

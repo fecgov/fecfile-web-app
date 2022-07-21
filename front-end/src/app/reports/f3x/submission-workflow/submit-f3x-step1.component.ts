@@ -20,7 +20,6 @@ import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
 @Component({
   selector: 'app-submit-f3x-step1',
   templateUrl: './submit-f3x-step1.component.html',
-  styleUrls: ['./submit-f3x-step1.component.scss'],
 })
 export class SubmitF3xStep1Component implements OnInit, OnDestroy {
   formProperties: string[] = [

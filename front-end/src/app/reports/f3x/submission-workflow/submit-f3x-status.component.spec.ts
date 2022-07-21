@@ -6,7 +6,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
-
+import { DividerModule } from 'primeng/divider';
 import { ReportSubmissionStatusComponent } from './submit-f3x-status.component';
 
 describe('ReportSummaryComponent', () => {
@@ -21,7 +21,7 @@ describe('ReportSummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, CardModule, RouterTestingModule.withRoutes([])],
+      imports: [SharedModule, DividerModule, CardModule, RouterTestingModule.withRoutes([])],
       declarations: [ReportSubmissionStatusComponent],
       providers: [
         provideMockStore({

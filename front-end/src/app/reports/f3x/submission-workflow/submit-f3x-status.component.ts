@@ -11,7 +11,6 @@ import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
 @Component({
   selector: 'app-report-summary',
   templateUrl: './submit-f3x-status.component.html',
-  styleUrls: ['./submit-f3x-status.component.scss'],
 })
 export class ReportSubmissionStatusComponent implements OnInit {
   report: F3xSummary = new F3xSummary();
@@ -24,17 +23,6 @@ export class ReportSubmissionStatusComponent implements OnInit {
   ngOnInit(): void {
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
     this.report = this.activatedRoute.snapshot.data['report'];
-    console.log(typeof this.report.coverage_from_date);
-  }
-
-  public dateTransform(date: Date | null): string {
-    if (date == null) return '';
-
-    const month = date.toLocaleString('default', { month: 'long' });
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    return `${month} ${day}, ${year}`;
   }
 
   public backToReports() {

@@ -27,7 +27,6 @@ import { LabelList } from '../../../shared/utils/label.utils';
 
 @Component({
   selector: 'app-create-f3x-step1',
-  styleUrls: ['./create-f3x-step1.component.scss'],
   templateUrl: './create-f3x-step1.component.html',
 })
 export class CreateF3XStep1Component implements OnInit, OnDestroy {
