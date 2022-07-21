@@ -2,7 +2,7 @@
 
 <div class="p-fluid">
   <h1>Confirm Information</h1>
-  <h5><strong>Form 3X:</strong> {{ (this.reportCodeLabelList$ | async | findOnReportCodePipe: this.report_code)?.label }}</h5>
+  <h5><strong>Form 3X:</strong> {{ report_code | label: f3xReportCodeDetailedLabels }}</h5>
   <p-divider></p-divider>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
@@ -17,14 +17,22 @@
         <div class="field">
           <label for="confirmation_email_1"><strong>Email #1</strong></label>
           <input type="text" pInputText id="confirmation_email_1" formControlName="confirmation_email_1" />
-          <app-error-messages [form]="form" fieldName="confirmation_email_1" [formSubmitted]="formSubmitted"></app-error-messages>
+          <app-error-messages
+            [form]="form"
+            fieldName="confirmation_email_1"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
       <div class="col-6">
         <div class="field">
           <label for="confirmation_email_2"><strong>Email #2</strong> (Optional)</label>
-          <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2"/>
-          <app-error-messages [form]="form" fieldName="confirmation_email_2" [formSubmitted]="formSubmitted"></app-error-messages>
+          <input type="text" pInputText id="confirmation_email_2" formControlName="confirmation_email_2" />
+          <app-error-messages
+            [form]="form"
+            fieldName="confirmation_email_2"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
     </div>
@@ -33,13 +41,13 @@
       <div class="col-12">
         <div class="field">
           <h3>Verify physical address</h3>
-          <br>
+          <br />
           <div>Has your address changed in the last 10 days?</div>
         </div>
       </div>
     </div>
     <div class="grid">
-     <div class="col-2">
+      <div class="col-2">
         <div class="field">
           <div class="radio-button-spacer">
             <p-radioButton
@@ -139,9 +147,15 @@
       <div class="col-2">
         <button pButton pRipple label="Back" class="p-button-secondary" (click)="save('back')"></button>
       </div>
-    <div class="col-6"></div>
+      <div class="col-6"></div>
       <div class="col-4">
-        <button pButton pRipple label="Confirm information" class="p-button-primary" (click)="save('continue')"></button>
+        <button
+          pButton
+          pRipple
+          label="Confirm information"
+          class="p-button-primary"
+          (click)="save('continue')"
+        ></button>
       </div>
     </div>
   </form>
