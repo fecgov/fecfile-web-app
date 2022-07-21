@@ -12,6 +12,24 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() requiredErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
 
+  private _emailErrorMessage = '';
+  @Input() set emailErrorMessage(value: string) {
+    this._emailErrorMessage = value;
+  }
+  get emailErrorMessage(): string {
+    if (this._emailErrorMessage) {
+      return this._emailErrorMessage;
+    }
+
+    switch (this.control?.errors?.['email']) {
+      case 'identical':
+        return 'Confirmation emails cannot be identical';
+      case 'invalid':
+        return 'This email is invalid';
+    }
+    return 'Email Error';
+  }
+
   private _minLengthErrorMessage = '';
   @Input() set minLengthErrorMessage(value: string) {
     this._minLengthErrorMessage = value;

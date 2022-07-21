@@ -12,17 +12,18 @@ import {
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
-  quarterlyNonElectionYearReportCodes
+  quarterlyNonElectionYearReportCodes,
 } from 'app/shared/models/f3x-summary.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { LabelList, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
+import { f3xReportCodeDetailedLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
+import { LabelList } from '../../../shared/utils/label.utils';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -47,39 +48,10 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
 
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
-  /**  This different label list is 'necessarry' because the labels in the wireframe are
-   * different between the list and the creation steps
-   * */
-  f3xReportCodeCreationLabels: LabelList = [
-    [F3xReportCodes.Q1, 'APRIL 15 QUARTERLY REPORT (Q1)'],
-    [F3xReportCodes.Q2, 'JULY 15 QUARTERLY REPORT (Q2)'],
-    [F3xReportCodes.Q3, 'OCTOBER 15 QUARTERLY REPORT(Q3)'],
-    [F3xReportCodes.YE, 'JANUARY 31 YEAR-END (YE)'],
-    [F3xReportCodes.TER, 'TERMINATION REPORT (TER)'],
-    [F3xReportCodes.MY, 'JULY 31 MID-YEAR REPORT (MY)'],
-    [F3xReportCodes.TwelveG, '12-DAY PRE-GENERAL (12G)'],
-    [F3xReportCodes.TwelveP, '12-DAY PRE-PRIMARY (12P)'],
-    [F3xReportCodes.TwelveR, '12-DAY PRE-RUNOFF (12R)'],
-    [F3xReportCodes.TwelveS, '12-DAY PRE-SPECIAL (12S)'],
-    [F3xReportCodes.TwelveC, '12-DAY PRE-CONVENTION (12C)'],
-    [F3xReportCodes.ThirtyG, '30-DAY POST-GENERAL (30G)'],
-    [F3xReportCodes.ThirtyR, '30-DAY POST-RUNOFF (30R)'],
-    [F3xReportCodes.ThirtyS, '30-DAY POST-SPECIAL (30S)'],
-    [F3xReportCodes.M2, 'FEBRUARY 20 MONTHLY REPORT (M2)'],
-    [F3xReportCodes.M3, 'MARCH 20 MONTHLY REPORT (M3)'],
-    [F3xReportCodes.M4, 'APRIL 20 MONTHLY REPORT (M4)'],
-    [F3xReportCodes.M5, 'MAY 20 MONTHLY REPORT (M5))'],
-    [F3xReportCodes.M6, 'JUNE 20 MONTHLY REPORT (M6)'],
-    [F3xReportCodes.M7, 'JULY 20 MONTHLY REPORT (M7)'],
-    [F3xReportCodes.M8, 'AUGUST 20 MONTHLY REPORT (M8)'],
-    [F3xReportCodes.M9, 'SEPTEMBER 20 MONTHLY REPORT (M9)'],
-    [F3xReportCodes.M10, 'OCTOBER 20 MONTHLY REPORT (M10)'],
-    [F3xReportCodes.M11, 'NOVEMBER 20 MONTHLY REPORT (M11)'],
-    [F3xReportCodes.M12, 'DECEMBER 20 MONTHLY REPORT (M12)'],
-  ];
-
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   private f3xCoverageDatesList: F3xCoverageDates[] | undefined;
+
+  public f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
 
   constructor(
     private store: Store,
@@ -90,7 +62,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     private messageService: MessageService,
     private activatedRoute: ActivatedRoute,
     protected router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const report: F3xSummary = this.activatedRoute.snapshot.data['report'];
@@ -130,28 +102,29 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     this.f3xSummaryService.getF3xCoverageDates().subscribe((dates) => {
       this.f3xCoverageDatesList = dates;
     });
-    this.form.controls['coverage_from_date'].addValidators(
-      this.buildCoverageDatesValidator('coverage_from_date'));
+    this.form.controls['coverage_from_date'].addValidators(this.buildCoverageDatesValidator('coverage_from_date'));
     this.form.controls['coverage_through_date'].addValidators(
-      this.buildCoverageDatesValidator('coverage_through_date'));
+      this.buildCoverageDatesValidator('coverage_through_date')
+    );
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
     this.validateService.formValidatorForm = this.form;
   }
 
-  buildCoverageDatesValidator(valueFormControlName: string,): ValidatorFn {
+  buildCoverageDatesValidator(valueFormControlName: string): ValidatorFn {
     return (): ValidationErrors | null => {
       let result: ValidationErrors | null = null;
-      const formValue: Date = this.form?.get(valueFormControlName)?.value
+      const formValue: Date = this.form?.get(valueFormControlName)?.value;
       if (this.f3xCoverageDatesList && formValue) {
         const retval = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
-          return (f3xCoverageDate &&
+          return (
+            f3xCoverageDate &&
             f3xCoverageDate.coverage_from_date &&
             f3xCoverageDate.coverage_through_date &&
-            (formValue >= f3xCoverageDate.coverage_from_date &&
-              formValue <= f3xCoverageDate.coverage_through_date)
-          )
+            formValue >= f3xCoverageDate.coverage_from_date &&
+            formValue <= f3xCoverageDate.coverage_through_date
+          );
         });
         result = this.getCoverageDatesValidator(retval);
       }
@@ -162,19 +135,18 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   getCoverageDatesValidator(f3xCoverageDates?: F3xCoverageDates) {
     let retval: ValidationErrors | null = null;
     if (f3xCoverageDates) {
-      const f3xReportCodeLabel = this.f3xReportCodeCreationLabels.find(
-        label => label[0] === f3xCoverageDates.report_code);
-      const reportCodeLabel = f3xReportCodeLabel ? f3xReportCodeLabel[1] ||
-        f3xCoverageDates.report_code?.valueOf : 'invalid name';
-      const coverageFromDate = this.fecDatePipe.transform(
-        f3xCoverageDates.coverage_from_date);
-      const coverageThroughDate = this.fecDatePipe.transform(
-        f3xCoverageDates.coverage_through_date);
+      const f3xReportCodeLabel = f3xReportCodeDetailedLabels.find((label) => label[0] === f3xCoverageDates.report_code);
+      const reportCodeLabel = f3xReportCodeLabel
+        ? f3xReportCodeLabel[1] || f3xCoverageDates.report_code?.valueOf
+        : 'invalid name';
+      const coverageFromDate = this.fecDatePipe.transform(f3xCoverageDates.coverage_from_date);
+      const coverageThroughDate = this.fecDatePipe.transform(f3xCoverageDates.coverage_through_date);
       retval = {};
       retval['invaliddate'] = {
-        msg: `You have entered coverage dates that overlap ` +
+        msg:
+          `You have entered coverage dates that overlap ` +
           `the coverage dates of the following report: ${reportCodeLabel} ` +
-          ` ${coverageFromDate} - ${coverageThroughDate}`
+          ` ${coverageFromDate} - ${coverageThroughDate}`,
       };
     }
     return retval;

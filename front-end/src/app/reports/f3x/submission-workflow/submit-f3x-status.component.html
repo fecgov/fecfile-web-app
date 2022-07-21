@@ -1,0 +1,62 @@
+
+<div class="grid">
+  <div class="col-12">
+    <h1 class="super-header">
+      Thank you for submitting your report.  It is currently being processed.
+    </h1>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-4">
+    <div class="grid">
+      <div class="col-12">
+        <h5 class="no-vert-margins">YOUR FORM TYPE:</h5>
+        <h3 class="no-vert-margins">
+          {{ this.report.form_type | label: f3xFormTypeLabels }}
+        </h3>
+        <br>
+      </div>
+      <div class="col-12">
+        <h5 class="no-vert-margins">YOUR REPORT TYPE:</h5>
+        <h3 class="no-vert-margins">
+          {{ this.report.report_code | label: this.f3xReportCodeDetailedLabels }}
+        </h3>
+        <br>
+      </div>
+      <div class="col-12">
+        <h5 class="no-vert-margins">YOUR COVERAGE DATES:</h5>
+        <h3 class="no-vert-margins no-wrap">
+          {{ this.dateTransform(this.report.coverage_from_date) }} — <wbr>
+          {{ this.dateTransform(this.report.coverage_through_date) }}
+        </h3>
+        <br>
+      </div>
+      <div class="col-12">
+        <h5 class="no-vert-margins">CONFIRMATION EMAILS:</h5>
+        <h3 class="no-vert-margins">
+          {{ this.report.confirmation_email_1 }} <br>
+          {{ this.report.confirmation_email_2 }}
+        </h3>
+        <br>
+      </div>
+    </div>
+  </div>
+  <div class="col-8">
+    <img _ngcontent-kve-c61="" src="assets/img/image-f3x-pages-spread.png" draggable="false" alt="Form 3X pages spread out aesthetically">
+  </div>
+</div>
+<div class="grid">
+  <div class="col-12">
+    <p>The FEC will send a report status message to the confirmation emails you provided 
+      during the submission process.  If any problems are encountered during the process, 
+      Web Upload will terminate the upload session and relay the specifics of the error.</p>
+  </div>
+</div>
+
+<p-divider></p-divider>
+<div class="grid">
+  <div class="col-4"></div>
+  <div class="col-4">
+    <button pButton pRipple label="Close & return to manage reports" class="p-button-secondary button-max-width" (click)="this.backToReports()"></button>
+  </div>
+</div>
