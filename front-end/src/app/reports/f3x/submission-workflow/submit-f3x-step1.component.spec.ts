@@ -66,7 +66,7 @@ describe('SubmitF3xStep1Component', () => {
           useValue: {
             snapshot: {
               data: {
-                report: F3xSummary.fromJSON({}),
+                report: F3xSummary.fromJSON({ report_code: 'Q1' }),
               },
             },
           },
@@ -86,6 +86,44 @@ describe('SubmitF3xStep1Component', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('Should build the email validator', () => {
+    component.form.patchValue({
+      confirmation_email_1: 'test@test.com',
+      confirmation_email_2: 'test2@test.com',
+    });
+
+    const emailValidatorA = component.buildEmailValidator('confirmation_email_1');
+    const emailValidatorB = component.buildEmailValidator('confirmation_email_2');
+    expect(emailValidatorA).toBeTruthy();
+    expect(emailValidatorB).toBeTruthy();
+  });
+
+  it('Should catch identical email errors', () => {
+    component.form.patchValue({
+      confirmation_email_1: 'test@test.com',
+      confirmation_email_2: 'test@test.com',
+    });
+    expect(component.checkIdenticalEmails()).toBe(true);
+
+    component.form.patchValue({ confirmation_email_1: 'test@test.net' });
+    expect(component.checkIdenticalEmails()).toBe(false);
+
+    component.form.patchValue({
+      confirmation_email_1: '',
+      confirmation_email_2: '',
+    });
+    expect(component.checkIdenticalEmails()).toBe(false);
+  });
+
+  it('Should catch invalid emails', () => {
+    expect(component.checkInvalidEmail('test')).toBe(true);
+    expect(component.checkInvalidEmail('test@')).toBe(true);
+    expect(component.checkInvalidEmail('test@test')).toBe(true);
+    expect(component.checkInvalidEmail('test@test.')).toBe(true);
+    expect(component.checkInvalidEmail('test@test.c')).toBe(true);
+    expect(component.checkInvalidEmail('test@test.com')).toBe(false);
   });
 
   it('#save should go back when back button clicked', () => {
