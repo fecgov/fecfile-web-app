@@ -69,17 +69,15 @@
         <div class="col-12">
           <h3>Enter Password</h3>
         </div>
+        <div class="grid">
+          <div class="col-12">
+            <p>If you any questions on how to enroll, confirming your email, two-factor authentication, or your Personel Key please go to the following page: <a href="https://webforms.fec.gov/psa/help.htm">FEC Electronic Filing Password Assignment System Help</a></p>
+          </div>
+        </div>
         <div class="col-6">
           <div class="field">
             <label for="filing_password">
               <strong>Electronic Filing Password </strong>
-              <p-i 
-                id="filing_password_info" 
-                class="pi pi-info-circle"
-                pTooltip="Hover text"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              ></p-i>
             </label>
             <input type="text" pInputText id="filing_password" formControlName="filing_password" />
             <app-error-messages [form]="form" fieldName="filing_password" [formSubmitted]="formSubmitted"></app-error-messages>

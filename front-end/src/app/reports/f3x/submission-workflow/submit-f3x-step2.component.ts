@@ -137,22 +137,26 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       header: 'Are you sure?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        if (this.treasurerNameChanged()) {
-          this.saveTreasurerName().subscribe(() => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Successful',
-              detail: 'Report Updated',
-              life: 3000,
-            });
-
-            this.submitReport();
-          });
-        } else {
-          this.submitReport();
-        }
+        this.onConfirm();
       },
     });
+  }
+
+  public onConfirm() {
+    if (this.treasurerNameChanged()) {
+      this.saveTreasurerName().subscribe(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successful',
+          detail: 'Report Updated',
+          life: 3000,
+        });
+
+        this.submitReport();
+      });
+    } else {
+      this.submitReport();
+    }
   }
 
   private saveTreasurerName() {
