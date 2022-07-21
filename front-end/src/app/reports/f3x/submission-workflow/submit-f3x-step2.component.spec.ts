@@ -89,7 +89,18 @@ describe('SubmitF3xStep2Component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#save should go back when back button clicked', () => {
+  it('should catch a change in the Treasurer Name', () => {
+    component.form.patchValue({
+      treasurer_first_name: 'Bill',
+      treasurer_last_name: 'Testerson',
+    });
+
+    expect(component.treasurerNameChanged()).toBe(true);
+
+    component.onConfirm();
+  });
+
+  it('#back should go back when back button clicked', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.report = F3xSummary.fromJSON({
       id: '999',
@@ -99,7 +110,7 @@ describe('SubmitF3xStep2Component', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  it('#save should not save when form data invalid', () => {
+  it('#submit should not save when form data invalid', () => {
     component.report = F3xSummary.fromJSON({
       id: '999',
     });
