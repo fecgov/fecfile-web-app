@@ -93,7 +93,7 @@ describe('SubmitF3xStep2Component', () => {
 
   it("should set the default form values with the committee's values", () => {
     component.report = F3xSummary.fromJSON({});
-    const committeeAccount = CommitteeAccount.fromJSON({
+    const testCommitteeAccount = CommitteeAccount.fromJSON({
       treasurer_name_1: 'Test',
       treasurer_name_2: 'McTest',
       treasurer_name_middle: 'T',
@@ -101,7 +101,7 @@ describe('SubmitF3xStep2Component', () => {
       treasurer_name_suffix: 'IV',
     });
 
-    component.setDefaultFormValues(committeeAccount);
+    component.setDefaultFormValues(testCommitteeAccount);
     expect(component.form.value['treasurer_first_name']).toBe('Test');
     expect(component.form.value['treasurer_last_name']).toBe('McTest');
     expect(component.form.value['treasurer_middle_name']).toBe('T');
@@ -116,12 +116,24 @@ describe('SubmitF3xStep2Component', () => {
       treasurer_suffix: 'III',
     });
 
-    component.setDefaultFormValues(committeeAccount);
+    component.setDefaultFormValues(testCommitteeAccount);
     expect(component.form.value['treasurer_first_name']).toBe('Samantha');
     expect(component.form.value['treasurer_last_name']).toBe('Testfield');
     expect(component.form.value['treasurer_middle_name']).toBe('Antoinette');
     expect(component.form.value['treasurer_prefix']).toBe('Mrs.');
     expect(component.form.value['treasurer_suffix']).toBe('III');
+
+    component.report = F3xSummary.fromJSON({
+      treasurer_first_name: 'Required',
+      treasurer_last_name: 'Fields',
+    });
+
+    component.setDefaultFormValues(testCommitteeAccount);
+    expect(component.form.value['treasurer_first_name']).toBe('Required');
+    expect(component.form.value['treasurer_last_name']).toBe('Fields');
+    expect(component.form.value['treasurer_middle_name']).toBe(null);
+    expect(component.form.value['treasurer_prefix']).toBe(null);
+    expect(component.form.value['treasurer_suffix']).toBe(null);
   });
 
   it('should catch a change in the Treasurer Name', () => {
