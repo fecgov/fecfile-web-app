@@ -71,6 +71,28 @@ label.disabled {
   background-image: linear-gradient(to bottom right, #1a4f82, #112e51);
 }
 
+.radio-button-spacer {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.button-max-width {
+  width: 100%;
+}
+
+.no-vert-margins {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.super-header {
+  font-size: 48px;
+}
+
 // PRIMENG PANELMENU STYLE OVERRIDE
 
 .menu-item-disabled {
