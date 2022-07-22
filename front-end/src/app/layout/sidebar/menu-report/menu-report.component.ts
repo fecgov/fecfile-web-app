@@ -26,6 +26,7 @@ export class MenuReportComponent implements OnInit {
     /^\/reports\/f3x\/summary\/\d+/,
     /^\/reports\/f3x\/detailed-summary\/\d+/,
     /^\/reports\/f3x\/submit\/step1\/\d+/,
+    /^\/report\/f3x\/submit\/status\/\d+/,
   ];
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
@@ -87,7 +88,7 @@ export class MenuReportComponent implements OnInit {
               expanded: this.isActive(this.urlMatch.slice(4, 5), event.url),
               items: [
                 { label: 'Confirm information', routerLink: [`/reports/f3x/submit/step1/${this.currentReportId}`] },
-                { label: 'Submit report' },
+                { label: 'Submit report', routerLink: [`/reports/f3x/submit/status/${this.currentReportId}`] },
               ],
             },
           ];
