@@ -6,6 +6,7 @@ import { SidebarComponent } from './sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
+// import { MenuReportComponent } from './menu-report/menu-report.component';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;

@@ -20,23 +20,28 @@ export class MenuReportComponent implements OnInit {
   currentReportId: number | null = null;
   items: MenuItem[] = [];
   displayMenu = false;
-  urlMatch: RegExp[] = [
-    /^\/reports\/f3x\/create\/step3\/\d+/,
-    /^\/transactions\/report\/\d+\/create/,
-    /^\/reports\/f3x\/summary\/\d+/,
-    /^\/reports\/f3x\/detailed-summary\/\d+/,
-    /^\/reports\/f3x\/submit\/step1\/\d+/,
-    /^\/report\/f3x\/submit\/status\/\d+/,
-  ];
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
+
+  // The order of the url regular expressions listed inthe urlMatch array is important
+  // because the order determines the expanded menu item group in the panal menu:
+  // 'Enter A Transaction', 'Review A Report', and 'Submit Your Report'.
+  urlMatch: RegExp[] = [
+    /^\/reports\/f3x\/create\/step3\/\d+/, // Enter a transaction group
+    /^\/transactions\/report\/\d+\/create/, // Enter a transaction group
+    /^\/reports\/f3x\/summary\/\d+/, // Review a report group
+    /^\/reports\/f3x\/detailed-summary\/\d+/, // Review a report group
+    /^\/reports\/f3x\/submit\/step1\/\d+/, // Submit your report group
+    /^\/report\/f3x\/submit\/status\/\d+/, // Submit your report group
+  ];
 
   constructor(private router: Router, private store: Store) {}
 
   ngOnInit(): void {
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
 
+    // Update the active report whenever a new one is pushed to the ngrx store.
     this.store.select(selectActiveReport).subscribe((report: Report | null) => {
       this.activeReport = report;
     });
@@ -44,6 +49,8 @@ export class MenuReportComponent implements OnInit {
     // Watch the router changes and display menu if URL is in urlMatch list.
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
+        // Show the sidebar report menu if the router url matches one of the url
+        // regular expressions in the matchUrl array.
         this.displayMenu = this.isActive(this.urlMatch, event.url);
 
         if (this.displayMenu && this.activeReport && this.activeReport.id !== this.currentReportId) {
@@ -97,6 +104,14 @@ export class MenuReportComponent implements OnInit {
     });
   }
 
+  /**
+   * Determine if the given url matches one of the regular expressions that define which
+   * group of menu items is selected.
+   *
+   * @param urlMatch {RegExp{}} - List of url regular expressions to compare to current router url
+   * @param url {string} - Current url in browser address bar
+   * @returns {boolean} - True is url matches one of the matchUrl regular expressions
+   */
   isActive(urlMatch: RegExp[], url: string): boolean {
     return urlMatch.reduce((prev: boolean, regex: RegExp) => prev || regex.test(url), false);
   }
