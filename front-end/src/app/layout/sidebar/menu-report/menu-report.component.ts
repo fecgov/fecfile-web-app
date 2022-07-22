@@ -98,8 +98,8 @@ export class MenuReportComponent implements OnInit, OnDestroy {
               label: 'View detailed summary page',
               routerLink: [`/reports/f3x/detailed-summary/${this.currentReportId}`],
             },
-            { label: 'View print preview' },
-            { label: 'Add a report level memo' },
+            { label: 'View print preview', styleClass: 'menu-item-disabled' },
+            { label: 'Add a report level memo', styleClass: 'menu-item-disabled' },
           ],
         },
         {
