@@ -16,7 +16,6 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 @Component({
   selector: 'app-create-f3x-step2',
   templateUrl: './create-f3x-step2.component.html',
-  styleUrls: ['./create-f3x-step2.component.scss'],
 })
 export class CreateF3xStep2Component implements OnInit, OnDestroy {
   formProperties: string[] = [
