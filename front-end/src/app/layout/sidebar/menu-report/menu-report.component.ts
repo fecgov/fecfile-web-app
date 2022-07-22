@@ -19,7 +19,7 @@ export class MenuReportComponent implements OnInit {
   activeReport: Report | null = null;
   currentReportId: number | null = null;
   items: MenuItem[] = [];
-  displayMenu = false;
+  showMenu = false;
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
@@ -33,7 +33,8 @@ export class MenuReportComponent implements OnInit {
     /^\/reports\/f3x\/summary\/\d+/, // Review a report group
     /^\/reports\/f3x\/detailed-summary\/\d+/, // Review a report group
     /^\/reports\/f3x\/submit\/step1\/\d+/, // Submit your report group
-    /^\/report\/f3x\/submit\/status\/\d+/, // Submit your report group
+    /^\/reports\/f3x\/submit\/step2\/\d+/, // Submit your report group
+    /^\/reports\/f3x\/submit\/status\/\d+/, // Submit your report group
   ];
 
   constructor(private router: Router, private store: Store) {}
@@ -51,9 +52,9 @@ export class MenuReportComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         // Show the sidebar report menu if the router url matches one of the url
         // regular expressions in the matchUrl array.
-        this.displayMenu = this.isActive(this.urlMatch, event.url);
+        this.showMenu = this.isActive(this.urlMatch, event.url);
 
-        if (this.displayMenu && this.activeReport && this.activeReport.id !== this.currentReportId) {
+        if (this.showMenu && this.activeReport && this.activeReport.id !== this.currentReportId) {
           this.currentReportId = this.activeReport.id;
 
           this.items = [
@@ -92,10 +93,11 @@ export class MenuReportComponent implements OnInit {
             },
             {
               label: 'SUBMIT YOUR REPORT',
-              expanded: this.isActive(this.urlMatch.slice(4, 5), event.url),
+              expanded: this.isActive(this.urlMatch.slice(4, 6), event.url),
               items: [
                 { label: 'Confirm information', routerLink: [`/reports/f3x/submit/step1/${this.currentReportId}`] },
-                { label: 'Submit report', routerLink: [`/reports/f3x/submit/status/${this.currentReportId}`] },
+                { label: 'Submit report', routerLink: [`/reports/f3x/submit/step2/${this.currentReportId}`] },
+                { label: 'Report status', routerLink: [`/reports/f3x/submit/status/${this.currentReportId}`] },
               ],
             },
           ];
