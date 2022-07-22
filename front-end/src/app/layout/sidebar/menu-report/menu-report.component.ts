@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, Event } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { selectActiveReport } from '../../../store/active-report.selectors';
@@ -15,7 +15,7 @@ import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
   templateUrl: './menu-report.component.html',
   styleUrls: ['./menu-report.component.scss'],
 })
-export class MenuReportComponent implements OnInit {
+export class MenuReportComponent implements OnInit, OnDestroy {
   activeReport: Report | null = null;
   currentReportId: number | null = null;
   items: MenuItem[] = [];
@@ -23,6 +23,8 @@ export class MenuReportComponent implements OnInit {
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
+
+  private destroy$ = new Subject<boolean>(); //
 
   // The order of the url regular expressions listed inthe urlMatch array is important
   // because the order determines the expanded menu item group in the panal menu:
@@ -43,12 +45,15 @@ export class MenuReportComponent implements OnInit {
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
 
     // Update the active report whenever a new one is pushed to the ngrx store.
-    this.store.select(selectActiveReport).subscribe((report: Report | null) => {
-      this.activeReport = report;
-    });
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report: Report | null) => {
+        this.activeReport = report;
+      });
 
     // Watch the router changes and display menu if URL is in urlMatch list.
-    this.router.events.subscribe((event: Event) => {
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         // Show the sidebar report menu if the router url matches one of the url
         // regular expressions in the matchUrl array.
@@ -116,5 +121,10 @@ export class MenuReportComponent implements OnInit {
    */
   isActive(urlMatch: RegExp[], url: string): boolean {
     return urlMatch.reduce((prev: boolean, regex: RegExp) => prev || regex.test(url), false);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }

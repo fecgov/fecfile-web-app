@@ -11,7 +11,7 @@ export const initialState: UserLoginData = {
 
 const _loginReducer = createReducer(
   initialState,
-  on(userLoggedInAction, (state, update) => update.payload),
+  on(userLoggedInAction, (_state, update) => update.payload),
   on(userLoggedOutAction, () => initialState)
 );
 

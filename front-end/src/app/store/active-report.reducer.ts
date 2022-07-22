@@ -6,7 +6,7 @@ export const initialState: Report | null = null;
 
 const _activeReportReducer = createReducer<Report | null, Action>(
   initialState,
-  on(setActiveReportAction, (state, update) => update.payload)
+  on(setActiveReportAction, (_state, update) => update.payload)
 );
 
 export function activeReportReducer(state: Report | null | undefined, action: Action) {
