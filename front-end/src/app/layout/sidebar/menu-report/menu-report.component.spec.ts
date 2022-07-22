@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
@@ -62,5 +62,12 @@ describe('MenuReportComponent', () => {
 
     url = '/report/999';
     expect(component.isActive(urlMatch, url)).toBe(true);
+  });
+
+  it('should process a NavigationEnd event', () => {
+    component.items = [];
+    component.currentReportId = 888;
+    component.handleNavigationEvent({ url: '/reports/f3x/create/step3/999' } as NavigationEnd);
+    expect(component.items.length).toBe(3);
   });
 });
