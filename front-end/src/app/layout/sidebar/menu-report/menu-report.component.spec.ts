@@ -54,4 +54,13 @@ describe('MenuReportComponent', () => {
     router.navigateByUrl('/reports/f3x/create/step3/999');
     expect(component.activeReport?.id).toBe(999);
   });
+
+  it('should determine an active url', () => {
+    const urlMatch: RegExp[] = [/\/report\/999/];
+    let url = 'no-match';
+    expect(component.isActive(urlMatch, url)).toBe(false);
+
+    url = '/report/999';
+    expect(component.isActive(urlMatch, url)).toBe(true);
+  });
 });
