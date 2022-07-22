@@ -175,7 +175,8 @@ label.disabled {
 .p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:not(.p-disabled):hover .p-submenu-icon {
   color: white;
 }
-.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:focus {
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:focus,
+.p-panelmenu .p-menuitem-link-active {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: none;
