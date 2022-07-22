@@ -58,15 +58,8 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     this.store.dispatch(refreshCommitteeAccountDetailsAction());
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-
     this.report = this.activatedRoute.snapshot.data['report'];
-    if (this.report?.report_code) {
-      if (this.report?.report_code?.length > 0) {
-        this.report_code = this.report.report_code;
-      }
-    } else {
-      this.report_code = '';
-    }
+    this.report_code = this.report?.report_code || '';
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
@@ -90,27 +83,22 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
   }
 
   setDefaultFormValues(committeeAccount: CommitteeAccount) {
+    const reportHasAddress = this.report?.street_1;
+    const addressSource = reportHasAddress ? this.report : committeeAccount;
+    this.form.patchValue({
+      street_1: addressSource?.street_1,
+      street_2: addressSource?.street_2,
+      city: addressSource?.city,
+      state: addressSource?.state,
+      zip: addressSource?.zip,
+    });
+
     this.form.patchValue({
       change_of_address: this.report?.change_of_address !== null ? this.report?.change_of_address : false,
-      street_1: this.report?.street_1 ? this.report.street_1 : committeeAccount?.street_1,
-      city: this.report?.city ? this.report.city : committeeAccount?.city,
-      state: this.report?.state ? this.report.state : committeeAccount?.state,
-      zip: this.report?.zip ? this.report.zip : committeeAccount?.zip,
       confirmation_email_1:
         this.report?.confirmation_email_1 !== null ? this.report?.confirmation_email_1 : committeeAccount?.email,
       confirmation_email_2: this.report?.confirmation_email_2 !== null ? this.report?.confirmation_email_2 : null,
     });
-
-    //Get `street_2` from the same place the form got `street_1`
-    if (this.report?.street_1) {
-      this.form.patchValue({
-        street_2: this.report.street_2,
-      });
-    } else {
-      this.form.patchValue({
-        street_2: committeeAccount.street_2,
-      });
-    }
   }
 
   ngOnDestroy(): void {
