@@ -171,5 +171,9 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
 
   private submitReport(): void {
     this.loading = 2;
+    setTimeout(() => {
+      if (this.report?.id) this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`);
+      else this.router.navigateByUrl('/reports');
+    }, 5000);
   }
 }

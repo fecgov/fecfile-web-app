@@ -176,7 +176,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
       if (jump === 'continue' && this.report?.id) {
-        this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
+        this.router.navigateByUrl(`/reports/f3x/submit/step2/${this.report.id}`);
       }
 
       this.messageService.add({
