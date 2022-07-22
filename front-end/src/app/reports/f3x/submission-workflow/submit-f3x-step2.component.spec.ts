@@ -67,7 +67,9 @@ describe('SubmitF3xStep2Component', () => {
           useValue: {
             snapshot: {
               data: {
-                report: F3xSummary.fromJSON({ report_code: 'Q1' }),
+                report: F3xSummary.fromJSON({
+                  report_code: 'Q1',
+                }),
               },
             },
           },
@@ -100,17 +102,33 @@ describe('SubmitF3xStep2Component', () => {
     component.onConfirm();
   });
 
-  it('#back should go back when back button clicked', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
+  it("should catch when there's no change in Treasurer Name", () => {
     component.report = F3xSummary.fromJSON({
-      id: '999',
+      id: 999,
+      treasurer_last_name: 'McTest',
+      treasurer_first_name: 'Test',
+    });
+    component.form.patchValue({
+      treasurer_last_name: 'McTest',
+      treasurer_first_name: 'Test',
     });
 
+    expect(component.treasurerNameChanged()).toBe(false);
+
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.onConfirm();
+    setTimeout(() => {
+      expect(navigateSpy).toHaveBeenCalledWith(`/reports/submit/status/999`);
+    }, 5000);
+  });
+
+  it('#back should go back when back button clicked', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
     component.back();
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  it('#submit should not save when form data invalid', () => {
+  it('#submit should not submit when form data invalid', () => {
     component.report = F3xSummary.fromJSON({
       id: '999',
     });
