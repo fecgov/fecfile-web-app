@@ -61,13 +61,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
     this.report = this.activatedRoute.snapshot.data['report'];
-    if (this.report?.report_code) {
-      if (this.report?.report_code?.length > 0) {
-        this.report_code = this.report.report_code;
-      }
-    } else {
-      this.report_code = '';
-    }
+    this.report_code = this.report?.report_code || '';
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
@@ -84,19 +78,11 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   }
 
   setDefaultFormValues(committeeAccount: CommitteeAccount) {
-    this.form.patchValue({
-      //Take the required fields: first and last name
-      treasurer_last_name: this.report?.treasurer_last_name
-        ? this.report.treasurer_last_name
-        : committeeAccount?.treasurer_name_2,
-      treasurer_first_name: this.report?.treasurer_first_name
-        ? this.report.treasurer_first_name
-        : committeeAccount?.treasurer_name_1,
-    });
-
     //If the report provided them, take the remaining fields from the report
     if (this.report?.treasurer_last_name && this.report?.treasurer_first_name) {
       this.form.patchValue({
+        treasurer_first_name: this.report.treasurer_first_name,
+        treasurer_last_name: this.report.treasurer_last_name,
         treasurer_middle_name: this.report.treasurer_middle_name,
         treasurer_prefix: this.report.treasurer_prefix,
         treasurer_suffix: this.report.treasurer_suffix,
@@ -104,6 +90,8 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     } else {
       //Else, take them from the Committee Account
       this.form.patchValue({
+        treasurer_first_name: committeeAccount?.treasurer_name_1,
+        treasurer_last_name: committeeAccount?.treasurer_name_2,
         treasurer_middle_name: committeeAccount?.treasurer_name_middle,
         treasurer_prefix: committeeAccount?.treasurer_name_prefix,
         treasurer_suffix: committeeAccount?.treasurer_name_suffix,
