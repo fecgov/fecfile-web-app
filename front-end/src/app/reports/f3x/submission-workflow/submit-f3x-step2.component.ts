@@ -116,7 +116,12 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public treasurerNameChanged(): boolean {
+  public treasurerNameChanged(): boolean { 
+		/*
+		 *	Checks whether or not the form's treasurer name is different from the report's.
+		 *	This is used to determine whether or not the report needs to be updated before
+		 *	being submitted to the FEC.
+		 */
     if (!this.report) return true;
 
     return (
