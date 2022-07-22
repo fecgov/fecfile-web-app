@@ -9,7 +9,7 @@ import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.util
 @Component({
   selector: 'app-report-summary',
   templateUrl: './report-summary.component.html',
-  styleUrls: ['../../style.scss'],
+  styleUrls: ['../../styles.scss'],
 })
 export class ReportSummaryComponent implements OnInit {
   report: F3xSummary = new F3xSummary();

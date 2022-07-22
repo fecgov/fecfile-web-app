@@ -93,7 +93,6 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     this.form.patchValue({
       change_of_address: this.report?.change_of_address !== null ? this.report?.change_of_address : false,
       street_1: this.report?.street_1 ? this.report.street_1 : committeeAccount?.street_1,
-      street_2: this.report?.street_2 ? this.report.street_2 : committeeAccount?.street_2,
       city: this.report?.city ? this.report.city : committeeAccount?.city,
       state: this.report?.state ? this.report.state : committeeAccount?.state,
       zip: this.report?.zip ? this.report.zip : committeeAccount?.zip,
@@ -101,6 +100,17 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
         this.report?.confirmation_email_1 !== null ? this.report?.confirmation_email_1 : committeeAccount?.email,
       confirmation_email_2: this.report?.confirmation_email_2 !== null ? this.report?.confirmation_email_2 : null,
     });
+
+    //Get `street_2` from the same place the form got `street_1`
+    if (this.report?.street_1) {
+      this.form.patchValue({
+        street_2: this.report.street_2,
+      });
+    } else {
+      this.form.patchValue({
+        street_2: committeeAccount.street_2,
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -176,7 +186,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
       if (jump === 'continue' && this.report?.id) {
-        this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
+        this.router.navigateByUrl(`/reports/f3x/submit/step2/${this.report.id}`);
       }
 
       this.messageService.add({
