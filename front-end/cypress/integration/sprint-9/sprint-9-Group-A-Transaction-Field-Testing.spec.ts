@@ -25,7 +25,8 @@ function testField(fieldName, fieldRules, number: boolean = false) {
   } else if (fieldRules['fieldName'] == 'donor_committee_fec_id') {
     randString = committeeID();
   } else {
-    randString = randomString(fieldLength);
+    randString = randomString(fieldLength, 'special');
+    console.log(randString);
   }
 
   cy.get(fieldName).overwrite(randString);

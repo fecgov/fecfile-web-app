@@ -218,7 +218,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     fieldName: 'memo_text_description',
     fieldType: 'Textarea',
     generator: randomString,
-    genArgs: [100],
+    genArgs: [100, 'special'],
     required: false,
     maxLength: 100,
   },

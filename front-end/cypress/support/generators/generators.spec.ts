@@ -432,8 +432,10 @@ export function transactionDateReceived(coverageFromDate = '', coverageThroughDa
 
 export function randomString(
   strLength: number,
-  charType: 'alphanumeric' | 'alphabet' | 'numeric' = 'alphanumeric'
+  charType: 'special' | 'alphanumeric' | 'alphabet' | 'numeric' = 'alphanumeric'
 ): string {
+  // prettier-ignore
+  const special: Array<string> = [' ', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '[', '\\', ']', '^', '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~', '`'];
   // prettier-ignore
   const alphanumeric: Array<string> = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9',];
   // prettier-ignore
@@ -442,7 +444,9 @@ export function randomString(
   const numeric: Array<string> = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
   let characters: Array<string> = [];
-  if (charType == 'alphanumeric') {
+  if (charType == 'special') {
+    characters = special;
+  } else if (charType == 'alphanumeric') {
     characters = alphanumeric;
   } else if (charType == 'numeric') {
     characters = numeric;
@@ -457,5 +461,10 @@ export function randomString(
   while (outString.length < strLength) {
     outString += _.sample(characters);
   }
-  return outString;
+  /*
+   *  Cypress uses {} to escape the previous character.
+   *  This is necessary to avoid accidentally passing
+   *  cypress a command
+   */
+  return outString.replaceAll('{', '{{}');
 }
