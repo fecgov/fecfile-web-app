@@ -91,6 +91,39 @@ describe('SubmitF3xStep2Component', () => {
     expect(component).toBeTruthy();
   });
 
+  it("should set the default form values with the committee's values", () => {
+    component.report = F3xSummary.fromJSON({});
+    const committeeAccount = CommitteeAccount.fromJSON({
+      treasurer_name_1: 'Test',
+      treasurer_name_2: 'McTest',
+      treasurer_name_middle: 'T',
+      treasurer_name_prefix: 'Mr.',
+      treasurer_name_suffix: 'IV',
+    });
+
+    component.setDefaultFormValues(committeeAccount);
+    expect(component.form.value['treasurer_first_name']).toBe('Test');
+    expect(component.form.value['treasurer_last_name']).toBe('McTest');
+    expect(component.form.value['treasurer_middle_name']).toBe('T');
+    expect(component.form.value['treasurer_prefix']).toBe('Mr.');
+    expect(component.form.value['treasurer_suffix']).toBe('IV');
+
+    component.report = F3xSummary.fromJSON({
+      treasurer_first_name: 'Samantha',
+      treasurer_last_name: 'Testfield',
+      treasurer_middle_name: 'Antoinette',
+      treasurer_prefix: 'Mrs.',
+      treasurer_suffix: 'III',
+    });
+
+    component.setDefaultFormValues(committeeAccount);
+    expect(component.form.value['treasurer_first_name']).toBe('Samantha');
+    expect(component.form.value['treasurer_last_name']).toBe('Testfield');
+    expect(component.form.value['treasurer_middle_name']).toBe('Antoinette');
+    expect(component.form.value['treasurer_prefix']).toBe('Mrs.');
+    expect(component.form.value['treasurer_suffix']).toBe('III');
+  });
+
   it('should catch a change in the Treasurer Name', () => {
     component.form.patchValue({
       treasurer_first_name: 'Bill',
