@@ -92,6 +92,13 @@
             [ariaLabel]="'report detailed summary ' + displayName(item)"
             >Detail</p-button
           >
+          <p-button
+            pRipple
+            styleClass="p-button-success"
+            (click)="router.navigateByUrl('/reports/f3x/memo/' + item.id)"
+            [ariaLabel]="'report level memo ' + displayName(item)"
+            >Memo</p-button
+          >
         </td>
       </tr>
     </ng-template>
