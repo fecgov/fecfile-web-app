@@ -25,12 +25,13 @@ export class TestDotFecComponent implements OnInit {
   }
 
   download(): void {
+    // prettier-ignore
     this.http
       .get(`${environment.apiUrl}/web-services/dot-fec/${this.report?.id}/`, {
         headers: this.apiService.getHeaders(),
         responseType: 'text',
       })
-      .subscribe((dotFEC: any) => {
+      .subscribe((dotFEC: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
         const newBlob = new Blob([dotFEC], { type: 'application/text' });
         const data = window.URL.createObjectURL(newBlob);
         const link = document.createElement('a');
