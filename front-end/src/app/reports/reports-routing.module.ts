@@ -10,6 +10,7 @@ import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-step1.component';
 import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-step2.component';
 import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
+import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
 
 const routes: Routes = [
   {
@@ -59,6 +60,11 @@ const routes: Routes = [
   {
     path: 'f3x/submit/step1/:reportId',
     component: SubmitF3xStep1Component,
+    resolve: { report: ReportResolver },
+  },
+  {
+    path: 'f3x/test-dot-fec/:reportId',
+    component: TestDotFecComponent,
     resolve: { report: ReportResolver },
   },
   { path: '**', redirectTo: '' },

@@ -31,6 +31,7 @@ import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-st
 import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
+import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submi
     ReportSummaryComponent,
     ReportDetailedSummaryComponent,
     ReportSubmissionStatusComponent,
+    TestDotFecComponent,
   ],
   imports: [
     CommonModule,
