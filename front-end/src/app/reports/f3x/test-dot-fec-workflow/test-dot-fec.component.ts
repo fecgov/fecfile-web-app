@@ -31,9 +31,9 @@ export class TestDotFecComponent implements OnInit {
         responseType: 'text',
       })
       .subscribe((dotFEC: any) => {
-        let newBlob = new Blob([dotFEC], { type: 'application/text' });
+        const newBlob = new Blob([dotFEC], { type: 'application/text' });
         const data = window.URL.createObjectURL(newBlob);
-        let link = document.createElement('a');
+        const link = document.createElement('a');
         link.href = data;
         link.download = this.report?.id + '.fec';
         link.click();
