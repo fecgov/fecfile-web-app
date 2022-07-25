@@ -11,7 +11,7 @@ import { environment } from 'environments/environment';
 })
 export class TestDotFecComponent implements OnInit {
   report: F3xSummary | undefined;
-  fileIsGenerated: boolean = false;
+  fileIsGenerated = false;
   constructor(private activatedRoute: ActivatedRoute, private apiService: ApiService, private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -31,9 +31,9 @@ export class TestDotFecComponent implements OnInit {
         responseType: 'text',
       })
       .subscribe((dotFEC: any) => {
-        var newBlob = new Blob([dotFEC], { type: 'application/text' });
+        let newBlob = new Blob([dotFEC], { type: 'application/text' });
         const data = window.URL.createObjectURL(newBlob);
-        var link = document.createElement('a');
+        let link = document.createElement('a');
         link.href = data;
         link.download = this.report?.id + '.fec';
         link.click();
