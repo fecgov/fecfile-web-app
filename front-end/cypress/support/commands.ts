@@ -17,6 +17,11 @@ export function login() {
   //security code page form-fields' ids
   const fieldSecurityCodeText = '.form-control';
 
+  cy.fixture("FEC_Get_Committee_Account").then((response) => {
+    response.results.committee_id = Cypress.env("COMMITTEE_ID");
+    cy.intercept("GET", "https://api.open.fec.gov/*/committee/*", response);
+  });
+ 
   cy.visit('/');
 
   cy.get(fieldEmail).type(email);
