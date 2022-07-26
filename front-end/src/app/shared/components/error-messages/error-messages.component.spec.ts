@@ -54,6 +54,8 @@ describe('ErrorMessagesComponent', () => {
     expect(component.minLengthErrorMessage).toBe('This field must contain at least 10 alphanumeric characters.');
     component.form.patchValue({ in_between: 'looooooooooooooooooong' });
     expect(component.maxLengthErrorMessage).toBe('This field cannot contain more than 20 alphanumeric characters.');
+    component.form.patchValue({ in_between: '' });
+    expect(component.requiredErrorMessage).toBe('This is a required field.');
   });
 
   it('should let us override the error messages', () => {
@@ -61,5 +63,13 @@ describe('ErrorMessagesComponent', () => {
     expect(component.minLengthErrorMessage).toBe('My custom min error message');
     component.maxLengthErrorMessage = 'My custom max error message';
     expect(component.maxLengthErrorMessage).toBe('My custom max error message');
+    component.requiredErrorMessage = 'My custom required error message';
+    expect(component.requiredErrorMessage).toBe('My custom required error message');
+    component.emailErrorMessage = 'My custom email error message';
+    expect(component.emailErrorMessage).toBe('My custom email error message');
+    component.patternErrorMessage = 'My custom pattern error message';
+    expect(component.patternErrorMessage).toBe('My custom pattern error message');
+    component.invalidDateErrorMessage = 'My custom date error message';
+    expect(component.invalidDateErrorMessage).toBe('My custom date error message');
   });
 });

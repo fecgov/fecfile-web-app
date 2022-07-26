@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { DateUtils } from '../utils/date.utils';
@@ -88,7 +88,11 @@ export class ValidateService {
    */
   private getPropertyValue(property: string, form: FormGroup) {
     // Undefined and empty strings are set to null.
-    if (form?.get(property)?.value === undefined || form?.get(property)?.value === '' || form?.get(property)?.value === null) {
+    if (
+      form?.get(property)?.value === undefined ||
+      form?.get(property)?.value === '' ||
+      form?.get(property)?.value === null
+    ) {
       return null;
     }
 
@@ -149,7 +153,10 @@ export class ValidateService {
             result['pattern'] = { requiredPattern: `Allowed values: ${error.params['allowedValues'].join(', ')}` };
           }
           if (error.keyword === 'type' && error.params['type'] === 'number') {
-            if (this.formValidatorForm?.get(error.path)?.value === '' || this.formValidatorForm?.get(error.path)?.value === null) {
+            if (
+              this.formValidatorForm?.get(error.path)?.value === '' ||
+              this.formValidatorForm?.get(error.path)?.value === null
+            ) {
               result['required'] = true;
             } else {
               result['pattern'] = { requiredPattern: 'Value must be a number' };
@@ -164,5 +171,19 @@ export class ValidateService {
 
       return null;
     };
+  }
+
+  passwordValidator(): ValidatorFn | ValidatorFn[] {
+    const v = Validators.compose([
+      Validators.required,
+      Validators.minLength(8),
+      Validators.maxLength(16),
+      Validators.pattern('.*[A-Z].*'),
+      Validators.pattern('.*[a-z].*'),
+      Validators.pattern('.*[0-9].*'),
+      Validators.pattern('.*[!@#$%&*()].*'),
+    ]);
+
+    return v ? v : [];
   }
 }

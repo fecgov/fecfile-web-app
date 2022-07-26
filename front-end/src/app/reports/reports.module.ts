@@ -1,31 +1,38 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 // PrimeNG
 import { ButtonModule } from 'primeng/button';
-import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { TableModule } from 'primeng/table';
-import { ToolbarModule } from 'primeng/toolbar';
-import { DividerModule } from 'primeng/divider';
+import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { CardModule } from 'primeng/card';
-
+import { ToolbarModule } from 'primeng/toolbar';
+import { TooltipModule } from 'primeng/tooltip';
 import { SharedModule } from '../../app/shared/shared.module';
-import { ReportsRoutingModule } from './reports-routing.module';
-import { ReportListComponent } from './report-list/report-list.component';
 import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2.component';
 import { CreateF3xStep3Component, MemoCodePipe } from './f3x/create-workflow/create-f3x-step3.component';
-import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 import { ReportLevelMemoComponent } from './f3x/report-level-memo/report-level-memo.component';
+import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
+import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
+import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-step1.component';
+import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-step2.component';
+import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
+import { ReportListComponent } from './report-list/report-list.component';
+import { ReportsRoutingModule } from './reports-routing.module';
+
+
 
 @NgModule({
   declarations: [
@@ -33,10 +40,14 @@ import { ReportLevelMemoComponent } from './f3x/report-level-memo/report-level-m
     CreateF3XStep1Component,
     CreateF3xStep2Component,
     CreateF3xStep3Component,
+    SubmitF3xStep1Component,
+    SubmitF3xStep2Component,
     MemoCodePipe,
     ReportSummaryComponent,
     ReportDetailedSummaryComponent,
     ReportLevelMemoComponent,
+    ReportSubmissionStatusComponent,
+    TestDotFecComponent,
   ],
   imports: [
     CommonModule,
@@ -57,6 +68,9 @@ import { ReportLevelMemoComponent } from './f3x/report-level-memo/report-level-m
     ToastModule,
     CardModule,
     SharedModule,
+    TooltipModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule,
   ],
 })
 export class ReportsModule {}
