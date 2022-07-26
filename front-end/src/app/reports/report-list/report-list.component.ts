@@ -55,6 +55,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     }
   }
 
+  public goToTest(item: Report): void {
+    this.router.navigateByUrl(`/reports/f3x/test-dot-fec/${item.id}`);
+  }
+
   public createTransaction(item: Report): void {
     this.router.navigateByUrl(`/transactions/report/${item.id}/create`);
   }
