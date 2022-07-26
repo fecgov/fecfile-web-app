@@ -16,7 +16,7 @@ import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.util
 @Component({
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
-  styleUrls: ['../../style.scss'],
+  styleUrls: ['../../styles.scss'],
 })
 export class ReportLevelMemoComponent implements OnInit {
   readonly recTypeFormProperty = 'rec_type';
