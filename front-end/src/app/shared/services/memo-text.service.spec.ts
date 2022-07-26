@@ -50,6 +50,20 @@ describe('MemoTextService', () => {
     httpTestingController.verify();
   });
 
+  it('#getForReportId should return memo texts for report id', () => {
+    const memoTexts: MemoText[] = [MemoText.fromJSON({ id: 999 })];
+
+    service.getForReportId(1).subscribe((response: MemoText[]) => {
+      expect(response).toEqual(memoTexts);
+    });
+
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/memo-text/${memoTexts[0].id}`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(memoTexts);
+    httpTestingController.verify();
+  });
+
   it('#create() should POST a payload', () => {
     const memoText: MemoText = new MemoText();
 
