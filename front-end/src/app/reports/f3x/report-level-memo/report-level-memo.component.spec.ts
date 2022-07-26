@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -6,7 +7,10 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
+import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ToastModule } from 'primeng/toast';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
 
 
@@ -23,9 +27,13 @@ describe('ReportLevelMemoComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        SharedModule, 
+        HttpClientTestingModule,
+        SharedModule,
         CardModule,
-        ReactiveFormsModule, 
+        ToastModule,
+        ReactiveFormsModule,
+        ButtonModule,
+        InputTextareaModule,
         RouterTestingModule.withRoutes([])
       ],
       declarations: [ReportLevelMemoComponent],
