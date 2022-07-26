@@ -22,7 +22,7 @@ export type Transaction = {
 };
 
 export function generateTransactionObject(transactionGiven: Transaction = {}): Transaction {
-  let newTransaction: Transaction = {};
+  const newTransaction: Transaction = {};
 
   let accordion: string;
   if (Object.keys(transactionGiven).length == 0) {
@@ -33,7 +33,7 @@ export function generateTransactionObject(transactionGiven: Transaction = {}): T
   }
 
   let transactionType: string;
-  if (Object.keys(transactionGiven[accordion])?.length == 0) {
+  if (!transactionGiven[accordion] || Object.keys(transactionGiven[accordion])?.length == 0) {
     const transactionTypes = Object.keys(groupANavTree[accordion]);
     transactionType = _.sample(transactionTypes);
   } else {
@@ -74,9 +74,14 @@ export function generateTransactionObject(transactionGiven: Transaction = {}): T
     }
   }
 
+  let givenFields = {};
+  if (transactionGiven[accordion] && transactionGiven[accordion][transactionType]){
+    givenFields = transactionGiven[accordion][transactionType];
+  }
+
   const finalFields = {
     ...newTransaction[accordion][transactionType],
-    ...transactionGiven[accordion][transactionType],
+    ...givenFields,
   };
   let finalTransaction: Transaction = {};
   finalTransaction[accordion] = {};
