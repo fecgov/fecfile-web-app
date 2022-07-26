@@ -89,6 +89,7 @@ describe('ReportLevelMemoComponent', () => {
     component.form.get('text4000')?.setValue(testText4kValue);
     spyOn(testMemoTextService, 
       'getForReportId').and.returnValue(of([testMemoText]));
+    component.ngOnInit();
     expect(component).toBeTruthy();
   });
 
