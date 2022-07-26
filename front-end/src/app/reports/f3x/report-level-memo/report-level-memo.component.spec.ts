@@ -1,12 +1,13 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -38,6 +39,8 @@ describe('ReportLevelMemoComponent', () => {
       ],
       declarations: [ReportLevelMemoComponent],
       providers: [
+        MessageService,
+        FormBuilder,
         provideMockStore({
           selectors: [{ selector: selectReportCodeLabelList, value: {} }],
         }),
