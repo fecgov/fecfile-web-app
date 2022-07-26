@@ -1,13 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
+import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { CardModule } from 'primeng/card';
-
 import { ReportLevelMemoComponent } from './report-level-memo.component';
+
 
 describe('ReportLevelMemoComponent', () => {
   let component: ReportLevelMemoComponent;
@@ -21,7 +22,12 @@ describe('ReportLevelMemoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, CardModule, RouterTestingModule.withRoutes([])],
+      imports: [
+        SharedModule, 
+        CardModule,
+        ReactiveFormsModule, 
+        RouterTestingModule.withRoutes([])
+      ],
       declarations: [ReportLevelMemoComponent],
       providers: [
         provideMockStore({
