@@ -58,7 +58,7 @@ describe('MemoTextService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/memo-text/${memoTexts[0].id}`);
+      `${environment.apiUrl}/memo-text/?report_id=1`);
     expect(req.request.method).toEqual('GET');
     req.flush(memoTexts);
     httpTestingController.verify();
