@@ -76,22 +76,6 @@
             (click)="editItem(item)"
             [ariaLabel]="'edit ' + displayName(item)"
           ></p-button>
-          <br />
-          <p-button
-            pRipple
-            styleClass="p-button-success"
-            (click)="router.navigateByUrl('/reports/f3x/summary/' + item.id)"
-            [ariaLabel]="'report summary ' + displayName(item)"
-            >Summary</p-button
-          >
-          <br />
-          <p-button
-            pRipple
-            styleClass="p-button-success"
-            (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + item.id)"
-            [ariaLabel]="'report detailed summary ' + displayName(item)"
-            >Detail</p-button
-          >
         </td>
       </tr>
     </ng-template>

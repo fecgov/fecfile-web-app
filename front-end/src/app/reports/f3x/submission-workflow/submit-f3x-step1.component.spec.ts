@@ -88,6 +88,60 @@ describe('SubmitF3xStep1Component', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should set the default form values as expected', () => {
+    component.report = F3xSummary.fromJSON({});
+    const testCommitteeAccount = CommitteeAccount.fromJSON({
+      street_1: 'Test St',
+      street_2: 'Unit 11b',
+      state: 'AK',
+      city: 'Testville',
+      zip: '12345',
+      email: 'test@committee.net',
+    });
+
+    component.setDefaultFormValues(testCommitteeAccount);
+    expect(component.form.value['street_1']).toBe('Test St');
+    expect(component.form.value['street_2']).toBe('Unit 11b');
+    expect(component.form.value['state']).toBe('AK');
+    expect(component.form.value['city']).toBe('Testville');
+    expect(component.form.value['zip']).toBe('12345');
+    expect(component.form.value['confirmation_email_1']).toBe('test@committee.net');
+
+    component.report = F3xSummary.fromJSON({
+      street_1: 'Test Ln',
+      street_2: 'Apt. 22',
+      state: 'CA',
+      city: 'Testopolis',
+      zip: '54321',
+      confirmation_email_1: 'test@report.com',
+      confirmation_email_2: 'test2@report.com',
+    });
+    component.setDefaultFormValues(testCommitteeAccount);
+    expect(component.form.value['street_1']).toBe('Test Ln');
+    expect(component.form.value['street_2']).toBe('Apt. 22');
+    expect(component.form.value['state']).toBe('CA');
+    expect(component.form.value['city']).toBe('Testopolis');
+    expect(component.form.value['zip']).toBe('54321');
+    expect(component.form.value['confirmation_email_1']).toBe('test@report.com');
+    expect(component.form.value['confirmation_email_2']).toBe('test2@report.com');
+
+    component.report = F3xSummary.fromJSON({
+      street_1: 'Test Ln',
+      state: 'CA',
+      city: 'Testopolis',
+      zip: '54321',
+      confirmation_email_1: 'test@report.com',
+    });
+    component.setDefaultFormValues(testCommitteeAccount);
+    expect(component.form.value['street_1']).toBe('Test Ln');
+    expect(component.form.value['street_2']).toBe(null);
+    expect(component.form.value['state']).toBe('CA');
+    expect(component.form.value['city']).toBe('Testopolis');
+    expect(component.form.value['zip']).toBe('54321');
+    expect(component.form.value['confirmation_email_1']).toBe('test@report.com');
+    expect(component.form.value['confirmation_email_2']).toBe(null);
+  });
+
   it('Should build the email validator', () => {
     component.form.patchValue({
       confirmation_email_1: 'test@test.com',
