@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
@@ -18,7 +19,7 @@ import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.util
   templateUrl: './report-level-memo.component.html',
   styleUrls: ['../../styles.scss'],
 })
-export class ReportLevelMemoComponent implements OnInit {
+export class ReportLevelMemoComponent implements OnInit, OnDestroy {
   readonly recTypeFormProperty = 'rec_type';
   readonly committeeIdFormProperty = 'filer_committee_id_number';
   readonly brSchedFormProperty = 'back_reference_sched_form_name';
@@ -34,15 +35,15 @@ export class ReportLevelMemoComponent implements OnInit {
   report: F3xSummary = new F3xSummary();
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   committeeAccountId: string | null = null;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   assignedMemoText: MemoText = new MemoText();
 
   formSubmitted = false;
   form: FormGroup = this.fb.group({});
-  
 
   constructor(
-    private store: Store, 
+    private store: Store,
     private activatedRoute: ActivatedRoute,
     protected validateService: ValidateService,
     protected fb: FormBuilder,
@@ -64,28 +65,32 @@ export class ReportLevelMemoComponent implements OnInit {
     this.validateService.formValidatorForm = this.form;
 
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
-    this.store.select(selectCommitteeAccount).subscribe(committeeAccount => 
-      this.committeeAccountId = committeeAccount.committee_id);
+    this.store
+      .select(selectCommitteeAccount)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((committeeAccount) => (this.committeeAccountId = committeeAccount.committee_id));
     this.report = this.activatedRoute.snapshot.data['report'];
     if (this.report && this.report.id) {
-      this.memoTextService.getForReportId(this.report.id).subscribe(memoTextList => {
+      this.memoTextService.getForReportId(this.report.id).subscribe((memoTextList) => {
         if (memoTextList && memoTextList.length > 0) {
           this.assignedMemoText = memoTextList[0];
-          this.form.get(this.text4kFormProperty)?.setValue(
-            this.assignedMemoText.text4000);
+          this.form.get(this.text4kFormProperty)?.setValue(this.assignedMemoText.text4000);
         }
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   save() {
     this.formSubmitted = true;
 
     this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
-    this.form.get(this.committeeIdFormProperty)?.setValue(
-      this.committeeAccountId);
-    this.form.get(this.brSchedFormProperty)?.setValue(
-      this.report.form_type);
+    this.form.get(this.committeeIdFormProperty)?.setValue(this.committeeAccountId);
+    this.form.get(this.brSchedFormProperty)?.setValue(this.report.form_type);
 
     const payload: MemoText = MemoText.fromJSON({
       ...this.assignedMemoText,
@@ -93,9 +98,11 @@ export class ReportLevelMemoComponent implements OnInit {
     });
     payload.report_id = this.report.id;
 
+    const nextUrl = `/reports/f3x/submit/step1/${this.report.id}`;
+
     if (this.assignedMemoText.id) {
       this.memoTextService.update(payload, this.formProperties).subscribe(() => {
-        this.router.navigateByUrl('/reports');
+        this.router.navigateByUrl(nextUrl);
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -105,7 +112,7 @@ export class ReportLevelMemoComponent implements OnInit {
       });
     } else {
       this.memoTextService.create(payload, this.formProperties).subscribe(() => {
-        this.router.navigateByUrl('/reports');
+        this.router.navigateByUrl(nextUrl);
         this.messageService.add({
           severity: 'success',
           summary: 'Successful',
@@ -115,5 +122,4 @@ export class ReportLevelMemoComponent implements OnInit {
       });
     }
   }
-
 }

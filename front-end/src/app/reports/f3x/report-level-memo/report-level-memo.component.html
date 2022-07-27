@@ -10,19 +10,19 @@
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
       <div class="col-11">
-        <label for="{{text4kFormProperty}}"><strong>ENTER A MEMO RELATED TO THIS FORM 3X</strong> (OPTIONAL)</label>
+        <label for="{{ text4kFormProperty }}"><strong>ENTER A MEMO RELATED TO THIS FORM 3X</strong> (OPTIONAL)</label>
         <div>
           <textarea
-            id="{{text4kFormProperty}}"
+            id="{{ text4kFormProperty }}"
             [rows]="20"
             [cols]="30"
             pInputTextarea
             [autoResize]="true"
-            formControlName="{{text4kFormProperty}}"
+            formControlName="{{ text4kFormProperty }}"
           ></textarea>
           <app-error-messages
             [form]="form"
-            fieldName="{{text4kFormProperty}}"
+            fieldName="{{ text4kFormProperty }}"
             [formSubmitted]="formSubmitted"
           ></app-error-messages>
         </div>
@@ -37,7 +37,7 @@
             pRipple
             label="Back"
             class="p-button-secondary"
-            (click)="router.navigateByUrl('/reports')"
+            (click)="router.navigateByUrl('/reports/f3x/memo/' + report.id)"
           ></button>
         </div>
         <div class="button-message">PREVIOUS: PRINT PREVIEW</div>
@@ -45,17 +45,10 @@
       <div class="col-4"></div>
       <div class="col-4 align-right">
         <div>
-          <button
-            pButton
-            pRipple
-            label="Save & continue"
-            class="p-button-primary"
-            (click)="save()"
-          ></button>
+          <button pButton pRipple label="Save & continue" class="p-button-primary" (click)="save()"></button>
         </div>
         <div class="button-message">NEXT: SUBMIT YOUR REPORT</div>
       </div>
     </div>
   </form>
 </div>
-
