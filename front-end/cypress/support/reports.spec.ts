@@ -2,6 +2,80 @@
 
 import { getAuthToken } from './commands';
 
+export type FilingFrequency = "QUARTERLY" | "MONTHLY";
+export type FilingType = "Election Year" | "Non-Election Year";
+export type FilingFrequencyTree = {
+  [key in FilingFrequency]: {
+    [key in FilingType]: {
+      [key: string] : boolean
+    }
+  }
+}
+
+export const filingFrequencyTree: FilingFrequencyTree = {
+  //Defines the structure of the Report Type radiobuttons and whether or not each button should be connected to the "State" dropdown and "Election On" date picker
+  QUARTERLY: {
+    'Election Year': {
+      Q1: false,
+      Q2: false,
+      Q3: false,
+      '12G': true,
+      '30G': true,
+      YE: false,
+      '12P': true,
+      '12R': true,
+      '12S': true,
+      '12C': true,
+      '30R': true,
+      '30S': true,
+      TER: false,
+    },
+    'Non-Election Year': {
+      MY: false,
+      YE: false,
+      '12P': true,
+      '12R': true,
+      '12S': true,
+      '12C': true,
+      '30R': true,
+      '30S': true,
+      TER: false,
+    },
+  },
+  MONTHLY: {
+    'Election Year': {
+      M2: false,
+      M3: false,
+      M4: false,
+      M5: false,
+      M6: false,
+      M7: false,
+      M8: false,
+      M9: false,
+      M10: false,
+      '12G': true,
+      '30G': true,
+      YE: false,
+      TER: false,
+    },
+    'Non-Election Year': {
+      M2: false,
+      M3: false,
+      M4: false,
+      M5: false,
+      M6: false,
+      M7: false,
+      M8: false,
+      M9: false,
+      M10: false,
+      M11: false,
+      M12: false,
+      YE: false,
+      TER: false,
+    },
+  },
+};
+
 export function dateToString(dateObj: Date): string {
   const m: string = (dateObj.getMonth() + 1).toString().padStart(2, '0');
   const d: string = dateObj.getDate().toString().padStart(2, '0');
