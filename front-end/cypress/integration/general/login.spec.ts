@@ -20,7 +20,6 @@ const fieldTwoFactorEmail = '#email';
 const fieldTwoFactorPhoneText = '#phone_number_text';
 const fieldTwoFactorPhoneCall = '#phone_number_call';
 const fieldTwoFactorSubmit = '.action__btn.next';
-const fieldTwoFactorBack = '.action__btn.clear';
 
 //security code page form-fields' ids
 const fieldSecurityCodeText = '.form-control';
@@ -115,6 +114,7 @@ describe('Testing login', () => {
 
     cy.get(fieldSecurityCodeText).safeType(testPIN).safeType('{enter}');
     cy.url().should('contain', '/dashboard');
+    cy.logout();
   });
 
   it('Fully logs in through Two Factor Authentication with a click', () => {
@@ -123,6 +123,25 @@ describe('Testing login', () => {
     cy.get(fieldSecurityCodeText).safeType(testPIN);
     cy.get(fieldSecurityCodeNext).click();
     cy.url().should('contain', '/dashboard');
+    cy.logout();
+  });
+
+  it('Logs in and checks for Committee Account Details', () => {
+    loginRequestTwoFactorAuth();
+
+    cy.get(fieldSecurityCodeText).safeType(testPIN);
+
+    cy.intercept(
+      "GET", "https://api.open.fec.gov/v1/committee/*/*"
+    ).as("GetCommitteeAccount");
+
+    cy.get(fieldSecurityCodeNext).click();
+
+    cy.wait("@GetCommitteeAccount");
+    cy.url().should('contain', '/dashboard');
+    cy.get(".committee-banner").contains(committeeID).should("exist");
+
+    cy.logout();
   });
 
   it('Fails to login with no included information', () => {
