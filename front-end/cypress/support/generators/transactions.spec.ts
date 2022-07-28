@@ -24,6 +24,40 @@ export type Transaction = {
   childTransactions?: Transaction[];
 };
 
+function genTransactionNavData(transactionGiven: TransactionTree = {}): 
+  [TransactionCategory, SchATransaction] {
+  let accordion: TransactionCategory;
+  if (Object.keys(transactionGiven).length == 0) {
+    const accordions = Object.keys(groupANavTree);
+    accordion = _.sample(accordions) as TransactionCategory;
+  } else {
+    accordion = Object.keys(transactionGiven)[0] as TransactionCategory;
+  }
+
+  let transactionType: SchATransaction;
+  if (!transactionGiven[accordion] || Object.keys(transactionGiven[accordion])?.length == 0) {
+    const transactionTypes = Object.keys(groupANavTree[accordion]);
+    transactionType = _.sample(transactionTypes) as SchATransaction;
+  } else {
+    transactionType = Object.keys(transactionGiven[accordion])[0] as SchATransaction;
+  }
+
+  return [accordion, transactionType];
+}
+
+function chooseTransactionForm(
+  accordion: TransactionCategory, 
+  transactionType: SchATransaction): TransactionForm{
+  const transactionForm: TransactionForm | undefined = 
+    groupANavTree[accordion][transactionType];
+
+  if (!transactionForm){
+    console.log("Error: Invalid Transaction Category/Type", accordion, transactionType);
+    return {};
+  }
+  return transactionForm;
+}
+
 function genRandomTransaction(transactionForm: TransactionForm): Transaction {
   const outTransaction: Transaction = {}
   const fields: string[] = Object.keys(transactionForm);
@@ -75,23 +109,10 @@ function genRandomTransaction(transactionForm: TransactionForm): Transaction {
 }
 
 export function generateTransactionObject(transactionGiven: TransactionTree = {}): TransactionTree {
-  let accordion: string;
-  if (Object.keys(transactionGiven).length == 0) {
-    const accordions = Object.keys(groupANavTree);
-    accordion = _.sample(accordions) as string;
-  } else {
-    accordion = Object.keys(transactionGiven)[0];
-  }
-
-  let transactionType: string;
-  if (!transactionGiven[accordion] || Object.keys(transactionGiven[accordion])?.length == 0) {
-    const transactionTypes = Object.keys(groupANavTree[accordion]);
-    transactionType = _.sample(transactionTypes);
-  } else {
-    transactionType = Object.keys(transactionGiven[accordion])[0];
-  }
-
-  const newTransaction = genRandomTransaction(groupANavTree[accordion][transactionType]);
+  
+  const [accordion, transactionType] = genTransactionNavData(transactionGiven);
+  const transactionForm = chooseTransactionForm(accordion, transactionType);
+  const newTransaction = genRandomTransaction(transactionForm);
   
   let givenFields = {};
   if (transactionGiven[accordion] && transactionGiven[accordion][transactionType]){
@@ -107,5 +128,6 @@ export function generateTransactionObject(transactionGiven: TransactionTree = {}
   finalTransaction[accordion] = {};
   finalTransaction[accordion][transactionType] = finalFields;
 
+  if (newTransaction["childTransactions"]) console.log(newTransaction);
   return finalTransaction;
 }
