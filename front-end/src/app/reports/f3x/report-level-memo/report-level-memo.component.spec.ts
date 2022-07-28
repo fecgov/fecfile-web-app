@@ -17,7 +17,6 @@ import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
 
-
 describe('ReportLevelMemoComponent', () => {
   let component: ReportLevelMemoComponent;
   let fixture: ComponentFixture<ReportLevelMemoComponent>;
@@ -41,7 +40,7 @@ describe('ReportLevelMemoComponent', () => {
         ReactiveFormsModule,
         ButtonModule,
         InputTextareaModule,
-        RouterTestingModule.withRoutes([])
+        RouterTestingModule.withRoutes([]),
       ],
       declarations: [ReportLevelMemoComponent],
       providers: [
@@ -74,7 +73,7 @@ describe('ReportLevelMemoComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => { 
+  it('should create', () => {
     const testText4kValue = 'testText4k';
     const testMemoText: MemoText = new MemoText();
     testMemoText.id = 4;
@@ -87,50 +86,42 @@ describe('ReportLevelMemoComponent', () => {
     testMemoText.text4000 = 'test_text4k';
     component.form.addControl('text4000', new FormControl());
     component.form.get('text4000')?.setValue(testText4kValue);
-    spyOn(testMemoTextService, 
-      'getForReportId').and.returnValue(of([testMemoText]));
+    spyOn(testMemoTextService, 'getForReportId').and.returnValue(of([testMemoText]));
     component.ngOnInit();
     expect(component).toBeTruthy();
   });
 
-  it('save for existing memo text happy path', () => { 
+  it('save for existing memo text happy path', () => {
     const expectedMessage: Message = {
       severity: 'success',
       summary: 'Successful',
       detail: 'Report Memo Updated',
       life: 3000,
-    }
-    const testMemoTextServiceSpy = spyOn(testMemoTextService, 
-      'update').and.returnValue(of(new MemoText()));
+    };
+    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'update').and.returnValue(of(new MemoText()));
     const navigateSpy = spyOn(testRouter, 'navigateByUrl');
-    const testMessageServiceSpy = spyOn(testMessageService, 
-      'add');
+    const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = 1;
     component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
-    expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(
-      expectedMessage);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
+    expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
-  it('save for new memo text happy path', () => { 
+  it('save for new memo text happy path', () => {
     const expectedMessage: Message = {
       severity: 'success',
       summary: 'Successful',
       detail: 'Report Memo Created',
       life: 3000,
-    }
-    const testMemoTextServiceSpy = spyOn(testMemoTextService, 
-      'create').and.returnValue(of(new MemoText()));
+    };
+    const testMemoTextServiceSpy = spyOn(testMemoTextService, 'create').and.returnValue(of(new MemoText()));
     const navigateSpy = spyOn(testRouter, 'navigateByUrl');
-    const testMessageServiceSpy = spyOn(testMessageService, 
-      'add');
+    const testMessageServiceSpy = spyOn(testMessageService, 'add');
     component.assignedMemoText.id = null;
     component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
-    expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(
-      expectedMessage);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');
+    expect(testMessageServiceSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
-
 });
