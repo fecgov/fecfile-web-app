@@ -20,7 +20,7 @@ describe('Sprint 10 QA Script 125', () => {
       cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
       cy.medWait();
       cy.contains("th", "Coverage dates").click();
-      cy.shortWait();
+      cy.medWait();
       cy.get('p-button[icon="pi pi-pencil"]').eq(i)
         .click(); //prettier-ignore
       cy.medWait();
