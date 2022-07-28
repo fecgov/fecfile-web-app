@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
@@ -11,7 +11,6 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
-import { Observable } from 'rxjs';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 
 @Component({
