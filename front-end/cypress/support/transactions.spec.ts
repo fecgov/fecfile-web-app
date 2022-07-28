@@ -10,23 +10,40 @@ export function navigateTransactionAccordion(category: string, transactionType: 
   cy.medWait();
 }
 
+function navigateToTransactionForm(category: string, transactionType: string){
+  cy.get('button[label="Add new transaction"]').click();
+  cy.shortWait();
+
+  navigateTransactionAccordion(category, transactionType);
+  cy.medWait();
+}
+
 /*
  *                Create Transaction (Schedule A)
  *  Run this function while Cypress is on the View All Transactions page
  *  to create a new transaction.
  *
- *  transaction: the Transaction object to be used (see the Transaction Generator file)
- *  save: Boolean.  Controls whether or not to save when finished. (Default: True)
+ *  @transaction: the Transaction object to be used (see the Transaction Generator file)
+ *  @save: Boolean.  Controls whether or not to save when finished. (Default: True)
  */
-export function enterTransactionSchA(transaction: Transaction, save: boolean = true) {
-  cy.get('button[label="Add new transaction"]').click();
-  cy.shortWait();
+export function createTransactionSchA(transaction: Transaction, save: boolean = true) {
 
   const category = Object.keys(transaction)[0];
   const transactionType = Object.keys(transaction[category])[0];
-  navigateTransactionAccordion(category, transactionType);
-  cy.medWait();
 
+  cy.wrap(navigateToTransactionForm(category, transactionType)).then(()=>{
+    enterTransactionSchA(transaction);
+  });
+
+  if (save) {
+    cy.get('button[label="Save & view all transactions"]').click();
+    cy.medWait();
+  }
+}
+
+export function enterTransactionSchA(transaction: Transaction){
+  const category = Object.keys(transaction)[0];
+  const transactionType = Object.keys(transaction[category])[0];
   const form = transaction[category][transactionType];
   const fields = Object.keys(form);
 
@@ -38,7 +55,9 @@ export function enterTransactionSchA(transaction: Transaction, save: boolean = t
       })
     ];
 
-  for (let field of fields) {
+  for (const field of fields) {
+    if (field == "childTransactions") continue;
+
     const fieldRules = TransactionFields[field];
     const fieldName = fieldRules['fieldName'];
 
@@ -52,27 +71,26 @@ export function enterTransactionSchA(transaction: Transaction, save: boolean = t
 
     const fieldType = fieldRules['fieldType'];
     const fieldValue = form[field];
-    switch (fieldType) {
-      case 'Text':
-        cy.get(`input[formControlName=${fieldName}]`).safeType(fieldValue);
-        break;
-      case 'P-InputNumber':
-        cy.get(`p-inputnumber[formControlName=${fieldName}]`).safeType(fieldValue);
-        break;
-      case 'Textarea':
-        cy.get(`textarea[formControlName=${fieldName}]`).safeType(fieldValue);
-        break;
-      case 'Dropdown':
-        cy.dropdownSetValue(`p-dropdown[formControlName=${fieldName}]`, fieldValue);
-        break;
-      case 'Calendar':
-        cy.calendarSetValue(`p-calendar[formControlName=${fieldName}]`, fieldValue);
-        break;
-    }
+    fillFormField(fieldName, fieldValue, fieldType);
   }
+}
 
-  if (save) {
-    cy.get('button[label="Save & view all transactions"]').click();
-    cy.medWait();
+function fillFormField(fieldName: string, fieldValue: string, fieldType: string){
+  switch (fieldType) {
+    case 'Text':
+      cy.get(`input[formControlName=${fieldName}]`).safeType(fieldValue);
+      break;
+    case 'P-InputNumber':
+      cy.get(`p-inputnumber[formControlName=${fieldName}]`).safeType(fieldValue);
+      break;
+    case 'Textarea':
+      cy.get(`textarea[formControlName=${fieldName}]`).safeType(fieldValue);
+      break;
+    case 'Dropdown':
+      cy.dropdownSetValue(`p-dropdown[formControlName=${fieldName}]`, fieldValue);
+      break;
+    case 'Calendar':
+      cy.calendarSetValue(`p-calendar[formControlName=${fieldName}]`, fieldValue);
+      break;
   }
 }

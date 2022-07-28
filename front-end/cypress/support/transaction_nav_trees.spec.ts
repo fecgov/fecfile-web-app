@@ -37,7 +37,20 @@ export type TransactionNavTree = {
 };
 
 export type TransactionForm = {
-  [key: string]: TransactionField;
+  entity_type?: 'Individual' | 'Committee' | 'Organization';
+  contributorLastName?: TransactionField;
+  contributorFirstName?: TransactionField;
+  contributorMiddleName?: TransactionField;
+  contributorPrefix?: TransactionField;
+  contributorSuffix?: TransactionField;
+  contributorOrganizationName?: TransactionField;
+  contributorStreet1?: TransactionField;
+  contributorStreet2?: TransactionField;
+  contributorCity?: TransactionField;
+  contributorZip?: TransactionField;
+  memoTextDescription?: TransactionField;
+  contributionAmount?: TransactionField;
+  childTransactions?: TransactionForm[]
 };
 
 export type FieldType = 'Text' | 'Calendar' | 'Dropdown' | 'P-InputNumber' | 'Textarea';
@@ -51,7 +64,6 @@ export type TransactionField = {
   readOnly?: boolean; //Denotes whether or not the field is read only (Assumes False)
   entities?: Array<string>; //If a field only appears on one or more entity types
   maxLength: number; //The max number of characters that may be entered (-1 for N/A)
-  childTransaction?: TransactionForm; //The transaction fields necessary for creating a child
 };
 
 export const TransactionFields: { [key: string]: TransactionField } = {
@@ -324,6 +336,15 @@ const tribalReceipt: TransactionForm = {
   ...contributionFields,
 };
 
+const JFTransferMemo: TransactionForm = {
+  ...entityCommittee,
+  ...donorCommitteeFECId,
+  ...groupNameFields,
+  ...addressFields,
+  ...memoFields,
+  ...contributionFields
+}
+
 const JFTransfer: TransactionForm = {
   ...entityCommittee,
   ...donorCommitteeFECId,
@@ -331,6 +352,7 @@ const JFTransfer: TransactionForm = {
   ...addressFields,
   ...memoFields,
   ...contributionFields,
+  childTransactions: [JFTransferMemo],
 };
 
 const offsetToOpex: TransactionForm = {
