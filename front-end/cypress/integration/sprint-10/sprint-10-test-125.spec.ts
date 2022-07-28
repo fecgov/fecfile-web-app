@@ -1,7 +1,7 @@
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 
-describe('Sprint 10 QA Script 125', () => {
+describe('QA Script 125 (Sprint 10)', () => {
   before('Logs in and creates a dummy report', () => {
     cy.login();
 
