@@ -36,8 +36,12 @@ export function createTransactionSchA(transaction: Transaction, save: boolean = 
   });
 
   if (save) {
-    cy.get('button[label="Save & view all transactions"]').click();
-    cy.medWait();
+    if (!transaction.childTransactions){
+      cy.get('button[label="Save & view all transactions"]').click();
+      cy.medWait();
+    } else {
+
+    }
   }
 }
 
