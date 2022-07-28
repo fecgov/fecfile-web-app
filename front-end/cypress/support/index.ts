@@ -28,9 +28,10 @@ Cypress.Commands.add('longWait', longWait);
 import { enterContact } from './contacts.spec';
 Cypress.Commands.add('enterContact', enterContact);
 
-import { enterReport, progressReport, deleteAllReports, deleteReport } from './reports.spec';
+import { enterReport, progressReport, navigateReportSidebar, deleteAllReports, deleteReport } from './reports.spec';
 Cypress.Commands.add('enterReport', enterReport);
 Cypress.Commands.add('progressReport', progressReport);
+Cypress.Commands.add("navigateReportSidebar", navigateReportSidebar);
 Cypress.Commands.add('deleteAllReports', deleteAllReports);
 Cypress.Commands.add('deleteReport', deleteReport);
 

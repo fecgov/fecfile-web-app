@@ -21,25 +21,25 @@ export const filingFrequencyTree: FilingFrequencyTree = {
       Q3: false,
       '12G': true,
       '30G': true,
-      YE: false,
+      '(YE)': false,
       '12P': true,
       '12R': true,
       '12S': true,
       '12C': true,
       '30R': true,
       '30S': true,
-      TER: false,
+      '(TER)': false,
     },
     'Non-Election Year': {
       MY: false,
-      YE: false,
+      '(YE)': false,
       '12P': true,
       '12R': true,
       '12S': true,
       '12C': true,
       '30R': true,
       '30S': true,
-      TER: false,
+      '(TER)': false,
     },
   },
   MONTHLY: {
@@ -55,8 +55,8 @@ export const filingFrequencyTree: FilingFrequencyTree = {
       M10: false,
       '12G': true,
       '30G': true,
-      YE: false,
-      TER: false,
+      '(YE)': false,
+      '(TER)': false,
     },
     'Non-Election Year': {
       M2: false,
@@ -70,8 +70,8 @@ export const filingFrequencyTree: FilingFrequencyTree = {
       M10: false,
       M11: false,
       M12: false,
-      YE: false,
-      TER: false,
+      '(YE)': false,
+      '(TER)': false,
     },
   },
 };
@@ -142,6 +142,16 @@ export function progressReport(address_details = null) {
 
   cy.get("button[label='Save and continue']").click();
   cy.longWait();
+}
+
+export function navigateReportSidebar(type: "Transaction" | "Submit" | "Review", link: string){
+  cy.get("p-panelmenu")
+    .contains(type.toUpperCase()).click();
+  
+  cy.shortWait();
+  cy.get("p-panelmenu")
+    .contains("a", link)
+    .click();
 }
 
 //Deletes all reports belonging to the logged-in committee

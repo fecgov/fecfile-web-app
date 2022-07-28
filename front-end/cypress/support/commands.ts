@@ -140,6 +140,7 @@ export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   cy.shortWait();
 }
 
+
 // shortWait() is appropriate for waiting for the UI to update after changing a field
 export function shortWait(): void {
   cy.wait(100);
