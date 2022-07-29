@@ -40,6 +40,8 @@ function testField(fieldName, fieldRules, number: boolean = false) {
 
 function testFields(fields, entityType) {
   for (let field of fields) {
+    if (field === "childTransactions") continue;
+
     const fieldRules = TransactionFields[field];
     const fieldName = fieldRules['fieldName'];
 
