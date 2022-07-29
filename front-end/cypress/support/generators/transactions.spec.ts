@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { groupANavTree, TransactionCategory, SchATransaction, TransactionFields, TransactionForm, TransactionField } from '../transaction_nav_trees.spec';
+import { groupANavTree, TransactionCategory, SchATransaction, TransactionFields, TransactionForm } from '../transaction_nav_trees.spec';
 
 export type TransactionTree = {
   [accordion in TransactionCategory]?: {
@@ -58,6 +58,28 @@ function chooseTransactionForm(
   return transactionForm;
 }
 
+function genTransactionField(field: string, transactionForm: TransactionForm, entityType: string, entityTypeKey: string) {
+  if (field == entityTypeKey) return;
+  if (field == "childTransactions") return;
+
+  const fieldRules = transactionForm[field];
+
+  const universalField = !('entities' in fieldRules);
+  const belongsToEntity = _.includes(fieldRules['entities'], entityType);
+  //Skip if field is not universal or doesn't belong to the Transaction's entity type
+  if (!universalField && !belongsToEntity) {
+    return;
+  }
+
+  if (fieldRules['required'] || _.random(10) < 2) {
+    const args = fieldRules['genArgs'] || [];
+    const fieldValue = fieldRules['generator'](...args);
+    return fieldValue;
+  }
+  
+  return;
+}
+
 function genRandomTransaction(transactionForm: TransactionForm): Transaction {
   const outTransaction: Transaction = {}
   const fields: string[] = Object.keys(transactionForm);
@@ -78,23 +100,9 @@ function genRandomTransaction(transactionForm: TransactionForm): Transaction {
   outTransaction[entityTypeKey] = entityType;
 
   for (const field of fields) {
-    if (field == entityTypeKey) continue;
-    if (field == "childTransactions") continue;
-
-    const fieldRules = transactionForm[field];
-
-    const universalField = !('entities' in fieldRules);
-    const belongsToEntity = _.includes(fieldRules['entities'], entityType);
-    //Skip if field is not universal or doesn't belong to the Transaction's entity type
-    if (!universalField && !belongsToEntity) {
-      continue;
-    }
-
-    if (fieldRules['required'] || _.random(10) < 2) {
-      const args = fieldRules['genArgs'] || [];
-      const fieldValue = fieldRules['generator'](...args);
-      outTransaction[field] = fieldValue;
-    }
+    const value = genTransactionField(field, transactionForm, entityType, entityTypeKey);
+    if (value)
+      outTransaction[field] = value;
   }
 
   if (transactionForm["childTransactions"]){

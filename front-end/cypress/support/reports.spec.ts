@@ -5,9 +5,9 @@ import { getAuthToken } from './commands';
 export type FilingFrequency = "QUARTERLY" | "MONTHLY";
 export type FilingType = "Election Year" | "Non-Election Year";
 export type FilingFrequencyTree = {
-  [key in FilingFrequency]: {
-    [key in FilingType]: {
-      [key: string] : boolean
+  [frequencyKey in FilingFrequency]: {
+    [typeKey in FilingType]: {
+      [fieldKey: string] : boolean
     }
   }
 }
