@@ -11,7 +11,7 @@ describe('QA Test Script #133 (Sprint 8)', () => {
     cy.url().should('contain', '/reports');
 
     let report: object = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
   });
 
   it('Step 2: Edit a report', () => {

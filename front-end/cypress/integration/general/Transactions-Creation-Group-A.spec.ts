@@ -40,7 +40,7 @@ describe('Test saving and editing on all transactions', () => {
     cy.shortWait();
 
     const report = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
 
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.shortWait();

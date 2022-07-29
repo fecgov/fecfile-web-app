@@ -12,7 +12,7 @@ function testReportType(frequency: FilingFrequency, type: FilingType, reportCode
     report_code: reportCode,
   });
 
-  cy.enterReport(report);
+  cy.createReport(report);
 
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
   cy.shortWait();

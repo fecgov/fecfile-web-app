@@ -89,7 +89,7 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
     cy.shortWait();
 
     const report = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
 
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.shortWait();

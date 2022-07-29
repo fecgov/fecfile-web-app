@@ -71,7 +71,7 @@ describe('Testing login', () => {
     cy.get(fieldPassword).should('have.value', testPassword);
   });
 
-  it('Submits Email/committee ID/password with {Enter}', () => {
+  it('Submits Email/committee ID/password with {enter}', () => {
     fillLoginForm();
 
     cy.get(fieldPassword).safeType('{enter}');

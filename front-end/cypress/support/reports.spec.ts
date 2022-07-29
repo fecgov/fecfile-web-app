@@ -84,7 +84,7 @@ export function dateToString(dateObj: Date): string {
   return `${m}/${d}/${y}`;
 }
 
-export function enterReport(report, save = true) {
+export function createReport(report, save = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
   cy.medWait();
 

@@ -11,8 +11,8 @@ describe('QA Script 125 (Sprint 10)', () => {
     const reportObject1 = generateReportObject();
     const reportObject2 = generateReportObject();
 
-    cy.enterReport(reportObject1);
-    cy.enterReport(reportObject2);
+    cy.createReport(reportObject1);
+    cy.createReport(reportObject2);
   });
 
   it('Enters transactions', () => {

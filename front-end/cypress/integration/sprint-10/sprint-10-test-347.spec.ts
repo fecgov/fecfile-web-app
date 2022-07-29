@@ -7,7 +7,7 @@ describe('QA Script 347 (Sprint 10)', () => {
   before('Logs in and creates a dummy report', () => {
     cy.login();
     const report = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
     cy.get('p-button[icon="pi pi-pencil"]')
       .click();
     cy.progressReport();

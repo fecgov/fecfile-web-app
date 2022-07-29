@@ -25,11 +25,11 @@ Cypress.Commands.add('shortWait', shortWait);
 Cypress.Commands.add('medWait', medWait);
 Cypress.Commands.add('longWait', longWait);
 
-import { enterContact } from './contacts.spec';
-Cypress.Commands.add('enterContact', enterContact);
+import { createContact } from './contacts.spec';
+Cypress.Commands.add('createContact', createContact);
 
-import { enterReport, progressReport, navigateReportSidebar, deleteAllReports, deleteReport } from './reports.spec';
-Cypress.Commands.add('enterReport', enterReport);
+import { createReport, progressReport, navigateReportSidebar, deleteAllReports, deleteReport } from './reports.spec';
+Cypress.Commands.add('createReport', createReport);
 Cypress.Commands.add('progressReport', progressReport);
 Cypress.Commands.add("navigateReportSidebar", navigateReportSidebar);
 Cypress.Commands.add('deleteAllReports', deleteAllReports);
