@@ -26,7 +26,6 @@ function testField(fieldName, fieldRules, number: boolean = false) {
     randString = committeeID();
   } else {
     randString = randomString(fieldLength, 'special');
-    console.log(randString);
   }
 
   cy.get(fieldName).overwrite(randString);
