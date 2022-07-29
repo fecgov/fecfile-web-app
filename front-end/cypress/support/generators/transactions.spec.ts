@@ -128,6 +128,5 @@ export function generateTransactionObject(transactionGiven: TransactionTree = {}
   finalTransaction[accordion] = {};
   finalTransaction[accordion][transactionType] = finalFields;
 
-  if (newTransaction["childTransactions"]) console.log(newTransaction);
   return finalTransaction;
 }

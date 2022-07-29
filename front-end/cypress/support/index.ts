@@ -35,5 +35,5 @@ Cypress.Commands.add("navigateReportSidebar", navigateReportSidebar);
 Cypress.Commands.add('deleteAllReports', deleteAllReports);
 Cypress.Commands.add('deleteReport', deleteReport);
 
-import { enterTransactionSchA } from './transactions.spec';
-Cypress.Commands.add('enterTransactionSchA', enterTransactionSchA);
+import { createTransactionSchA } from './transactions.spec';
+Cypress.Commands.add('createTransactionSchA', createTransactionSchA);
