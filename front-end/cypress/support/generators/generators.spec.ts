@@ -314,7 +314,7 @@ export function committeeID(): string {
 }
 
 export function groupName(): string {
-  return `${_.sample(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'])} for American ${_.sample([
+  return `${randomString(6, "alphabet")} for American ${_.sample([
     'Happiness',
     'Exceptionalism',
     'Integrity',
