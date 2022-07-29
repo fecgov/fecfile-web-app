@@ -2,19 +2,12 @@ import { TransactionTree } from './generators/transactions.spec';
 import { TransactionFields } from './transaction_nav_trees.spec';
 import _ from 'lodash';
 
+
 //Run this on the transaction creation accordion to navigate to the desired transaction
 export function navigateTransactionAccordion(category: string, transactionType: string) {
   cy.get('p-accordiontab').contains('p-accordiontab', category).click();
   cy.shortWait();
   cy.get('a').contains(transactionType).click();
-  cy.medWait();
-}
-
-function navigateToTransactionForm(category: string, transactionType: string){
-  cy.get('button[label="Add new transaction"]').click();
-  cy.shortWait();
-
-  navigateTransactionAccordion(category, transactionType);
   cy.medWait();
 }
 
@@ -27,14 +20,16 @@ function navigateToTransactionForm(category: string, transactionType: string){
  *  @save: Boolean.  Controls whether or not to save when finished. (Default: True)
  */
 export function createTransactionSchA(transactionTree: TransactionTree, save: boolean = true) {
-
   const category = Object.keys(transactionTree)[0];
   const transactionType = Object.keys(transactionTree[category])[0];
   const transaction = transactionTree[category][transactionType];
 
-  cy.wrap(navigateToTransactionForm(category, transactionType)).then(()=>{
-    enterTransactionSchA(transaction);
-  });
+  cy.get('button[label="Add new transaction"]').click();
+  cy.shortWait();
+
+  navigateTransactionAccordion(category, transactionType);
+  cy.medWait();
+  enterTransactionSchA(transaction);
 
   if (save) {
     if (transaction.childTransactions){
