@@ -26,7 +26,11 @@ describe('QA Script 125 (Sprint 10)', () => {
       cy.medWait();
       cy.progressReport();
 
-      const transaction = generateTransactionObject();
+      const transaction = generateTransactionObject({
+        "INDIVIDUALS/PERSONS":{
+          "Individual Receipt":{}
+        }
+      });
       cy.createTransactionSchA(transaction);
       cy.medWait();
     }
