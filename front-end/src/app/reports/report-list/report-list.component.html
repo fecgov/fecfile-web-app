@@ -76,6 +76,13 @@
             (click)="editItem(item)"
             [ariaLabel]="'edit ' + displayName(item)"
           ></p-button>
+          <p-button
+            pRipple
+            icon="pi pi-ellipsis-v"
+            styleClass="p-button-rounded p-button-success mr-2"
+            (click)="goToTest(item)"
+            [ariaLabel]="'edit ' + displayName(item)"
+          ></p-button>
         </td>
       </tr>
     </ng-template>
