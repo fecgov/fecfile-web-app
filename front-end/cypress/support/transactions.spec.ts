@@ -1,4 +1,4 @@
-import { Transaction } from './generators/transactions.spec';
+import { TransactionTree } from './generators/transactions.spec';
 import { TransactionFields } from './transaction_nav_trees.spec';
 import _ from 'lodash';
 
@@ -26,35 +26,42 @@ function navigateToTransactionForm(category: string, transactionType: string){
  *  @transaction: the Transaction object to be used (see the Transaction Generator file)
  *  @save: Boolean.  Controls whether or not to save when finished. (Default: True)
  */
-export function createTransactionSchA(transaction: Transaction, save: boolean = true) {
+export function createTransactionSchA(transactionTree: TransactionTree, save: boolean = true) {
 
-  const category = Object.keys(transaction)[0];
-  const transactionType = Object.keys(transaction[category])[0];
+  const category = Object.keys(transactionTree)[0];
+  const transactionType = Object.keys(transactionTree[category])[0];
+  const transaction = transactionTree[category][transactionType];
 
   cy.wrap(navigateToTransactionForm(category, transactionType)).then(()=>{
     enterTransactionSchA(transaction);
   });
 
   if (save) {
-    if (!transaction.childTransactions){
-      cy.get('button[label="Save & view all transactions"]').click();
-      cy.medWait();
-    } else {
+    if (transaction.childTransactions){
+      for (let i = 0; i < transaction["childTransactions"].length; i++){
+        const childTransaction = transaction["childTransactions"][i];
 
+        if (i == 0){
+          cy.get('button[label="Save & add a JF Transfer Memo"]').click();
+        } else {
+           cy.get('button[label="Save & add another JF Transfer Memo"]').click();
+        }
+        cy.medWait();
+        enterTransactionSchA(childTransaction);
+      }
     }
+    cy.get('button[label="Save & view all transactions"]').click();
+    cy.medWait();
   }
 }
 
 export function enterTransactionSchA(transaction: Transaction){
-  const category = Object.keys(transaction)[0];
-  const transactionType = Object.keys(transaction[category])[0];
-  const form = transaction[category][transactionType];
-  const fields = Object.keys(form);
+  const fields = Object.keys(transaction);
 
   //Gets the value of the first field-key in the form that starts with "entityType"
   const entityType =
-    form[
-      Object.keys(form).find((key) => {
+    transaction[
+      Object.keys(transaction).find((key) => {
         return key.startsWith('entityType');
       })
     ];
@@ -74,7 +81,7 @@ export function enterTransactionSchA(transaction: Transaction){
     }
 
     const fieldType = fieldRules['fieldType'];
-    const fieldValue = form[field];
+    const fieldValue = transaction[field];
     fillFormField(fieldName, fieldValue, fieldType);
   }
 }
