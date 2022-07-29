@@ -73,11 +73,8 @@ function genTransactionField(field: string, transactionForm: TransactionForm, en
 
   if (fieldRules['required'] || _.random(10) < 2) {
     const args = fieldRules['genArgs'] || [];
-    const fieldValue = fieldRules['generator'](...args);
-    return fieldValue;
+    return fieldRules['generator'](...args);
   }
-  
-  return;
 }
 
 function genRandomTransaction(transactionForm: TransactionForm): Transaction {
