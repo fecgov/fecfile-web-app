@@ -1,0 +1,11 @@
+$primaryLightColor: rgba(38, 143, 255, 0.5) !default;
+$primaryColor: #112e51 !default;
+$primaryDarkColor: #164f85 !default;
+$primaryDarkerColor: #112e51 !default;
+$primaryTextColor: #ffffff !default;
+$primaryAccentBg: #0aacfa !default;
+
+$highlightBg: $primaryColor !default;
+$highlightTextColor: $primaryTextColor !default;
+
+@import 'src/assets/styles/_variables_light';
