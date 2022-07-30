@@ -170,11 +170,11 @@ input[type=search]{
     text-indent:.15em;
     width:1.6rem;
     vertical-align:-4px
-}[type=radio]+label::before{
-    height:1.6rem;
-    width:1.6rem;
-    border-radius:1.6rem
-}[type=radio]:checked+label{
+}
+/*
+[type=radio]+label::before{height:1.6rem; width:1.6rem; border-radius:1.6rem}
+ */
+[type=radio]:checked+label{
     background-color:transparent
 }[type=radio]:checked+label::before{
     background-color:#5b616b;
