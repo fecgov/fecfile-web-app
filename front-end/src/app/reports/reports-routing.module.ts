@@ -12,6 +12,7 @@ import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-st
 import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-step2.component';
 import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
+import { ReportWebPrintComponent } from './f3x/report-web-print/f3x-web-print.component';
 
 const routes: Routes = [
   {
@@ -71,6 +72,11 @@ const routes: Routes = [
   {
     path: 'f3x/memo/:reportId',
     component: ReportLevelMemoComponent,
+    resolve: { report: ReportResolver },
+  },
+  {
+    path: 'f3x/web-print/:reportId',
+    component: ReportWebPrintComponent,
     resolve: { report: ReportResolver },
   },
   { path: '**', redirectTo: '' },

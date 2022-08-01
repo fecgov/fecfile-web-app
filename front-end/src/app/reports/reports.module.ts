@@ -28,6 +28,7 @@ import { ReportSummaryComponent } from './f3x/report-summary/report-summary.comp
 import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
 import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-step1.component';
 import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-step2.component';
+import { ReportWebPrintComponent } from './f3x/report-web-print/f3x-web-print.component';
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportsRoutingModule } from './reports-routing.module';
@@ -47,6 +48,7 @@ import { ReportsRoutingModule } from './reports-routing.module';
     ReportDetailedSummaryComponent,
     ReportLevelMemoComponent,
     ReportSubmissionStatusComponent,
+    ReportWebPrintComponent,
     TestDotFecComponent,
   ],
   imports: [

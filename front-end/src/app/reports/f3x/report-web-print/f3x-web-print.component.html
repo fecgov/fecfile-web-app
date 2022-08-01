@@ -1,0 +1,96 @@
+<div class="grid">
+  <div class="col-12">
+    <h1 class="super-header no-vert-margins">Print preview</h1>
+  </div>
+</div>
+<div class="grid">
+  <div class="col-12">
+    <h3 class="no-vert-margins">
+      {{ report.form_type | label: f3xFormTypeLabels }}: {{ report.report_code | label: f3xReportCodeDetailedLabels }}
+    </h3>
+    <br />
+  </div>
+ <div class="col-12">
+    <img
+      _ngcontent-kve-c61=""
+      class="image-max-width image-centered-horiz"
+      src="assets/img/image-f3x-pages-spread.png"
+      draggable="false"
+      alt="Form 3X pages spread out aesthetically"
+      [ngClass]="{'disabled-pages-banner': webPrintStage === 1}"
+    />
+    <ng-container *ngIf="webPrintStage===1">
+      <div class="fec-loader-div col-12">
+        <img
+          class="image-max-width fec-loader-image"
+          src="assets/img/fec-loading-flag.gif"
+          draggable="false"
+          alt="The report's web print status is loading..."
+        />
+        <h1 class="align-center super-header">
+          <br><br><br><br><br>
+          <strong>Compiling your preview</strong>
+        </h1>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<div class="grid">
+  <ng-container *ngIf="webPrintStage===0">
+    <div class="col-5"></div>
+    <div class="col-2">
+      <button
+        pButton
+        pRipple
+        label="Compile PDF"
+        class="p-button-warning button-full-width"
+        (click)="mockedAdvancePrint()"
+      ></button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="webPrintStage===2">
+    <div class="col-3"></div>
+    <div class="col-2">
+      <button
+        pButton
+        pRipple
+        label="Download PDF"
+        class="p-button-info button-full-width"
+      ></button>
+    </div>
+    <div class="col-2">
+      <p class="align-center"><strong>OR</strong></p>
+    </div>
+    <div class="col-2">
+      <button
+        pButton
+        pRipple
+        label="Open in a new tab"
+        class="p-button-warning button-full-width"
+      ></button>
+    </div>
+  </ng-container>
+</div>
+
+<p-divider></p-divider>
+<div class="grid">
+  <div class="col-2">
+    <button
+      pButton
+      pRipple
+      label="Back"
+      class="p-button-secondary p-button-outlined button-full-width"
+      (click)="backToReports()"
+    ></button>
+  </div>
+  <div class="col-8"></div>
+  <div class="col-2">
+    <button
+      pButton
+      pRipple
+      label="Sign & submit report"
+      class="p-button-secondary button-full-width"
+      (click)="backToReports()"
+    ></button>
+  </div>
+</div>
