@@ -54,7 +54,7 @@ def _detect_branch(repo):
 DEPLOY_RULES = (
     ("prod", lambda _, branch: branch == "main"),
     ("stage", lambda _, branch: branch.startswith("release")),
-    ("dev", lambda _, branch: branch == "develop"),
+    ("dev", lambda _, branch: branch == "new-css"),
 )
 
 def _build_angular_app(ctx,space):
