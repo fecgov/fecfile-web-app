@@ -31,7 +31,7 @@ export class ReportWebPrintComponent implements OnInit {
     if (this.webPrintStage === 0){
       this.webPrintStage = 1;
       setTimeout(() => {
-        this.webPrintStage = 1;
+        this.webPrintStage = 2;
       }, 5000);
     }
   }

@@ -8,13 +8,16 @@
 
 .fec-loader-div {
   height:994px;
-  display:flex;
+  display:block;
   align-items: center;
   align-content: center;
 }
 
 .fec-loader-image {
+  position: relative;
   left:50%;
+  top:30%;
+  transform-origin: 50% 50%;
 }
 
 .disabled-pages-banner {
