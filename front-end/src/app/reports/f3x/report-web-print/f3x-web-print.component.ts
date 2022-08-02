@@ -7,6 +7,8 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
+import { WebPrintService } from '../../../shared/services/web-print.service';
+import { WebPrint } from '../../../shared/models/web-print.model';
 
 @Component({
   selector: 'app-report-summary',
@@ -20,7 +22,12 @@ export class ReportWebPrintComponent implements OnInit {
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
   webPrintStage: 0 | 1 | 2 = 0;
 
-  constructor(private store: Store, private activatedRoute: ActivatedRoute, public router: Router) {}
+  constructor(
+    private store: Store,
+    private activatedRoute: ActivatedRoute,
+    public router: Router,
+    private webPrintService: WebPrintService,
+  ) {}
 
   ngOnInit(): void {
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
@@ -38,5 +45,19 @@ export class ReportWebPrintComponent implements OnInit {
 
   public backToReports() {
     this.router.navigateByUrl('/reports');
+  }
+
+  public getPrintStatus(){
+    this.webPrintService.getDetails(this.report.reportId).subscribe((response: WebPrint)=>{
+      const status = response.status;
+      switch (status) {
+        case undefined:
+          this.webPrintStage = 0; break;
+        case "in-progress":
+          this.webPrintStage = 1; break;
+        case "success":
+          this.webPrintStage = 2; break;
+      }
+    });
   }
 }
