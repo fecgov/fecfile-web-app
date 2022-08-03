@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
@@ -162,7 +162,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     return retval;
   }
 
-  autoValidateCoverageDates(controls: any){
+  autoValidateCoverageDates(controls: { [key: string]: AbstractControl; }){
     controls['coverage_from_date'].updateValueAndValidity();
     controls['coverage_through_date'].updateValueAndValidity();
   }
