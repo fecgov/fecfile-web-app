@@ -51,4 +51,11 @@ describe('ReportWebPrintComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('Sets the status messages as expected', ()=>{
+    component.pollPrintStatus(0, false);
+    expect(component.pollingStatusMessage).toBe("This may take a while...");
+    component.pollPrintStatus(0, true);
+    expect(component.pollingStatusMessage).toBe("Checking Web-Print Status...");
+  });
 });
