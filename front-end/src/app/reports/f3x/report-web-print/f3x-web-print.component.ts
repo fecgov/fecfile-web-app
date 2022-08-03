@@ -22,8 +22,8 @@ export class ReportWebPrintComponent implements OnInit {
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
 
   submitDate: Date | undefined;
-  downloadURL: string = "";
-  printError: string = "";
+  downloadURL = "";
+  printError = "";
   pollingStatusMessage: "This may take a while..." |
     "Your report is still being processed. Please check back later to access your PDF" |
     "Checking Web-Print Status..." = "Checking Web-Print Status...";
@@ -45,8 +45,8 @@ export class ReportWebPrintComponent implements OnInit {
     this.pollPrintStatus(0, true);
   }
 
-  public pollPrintStatus(pollingCount: number = 0, firstLoad: boolean = false){
-    let pollingTime: number = 1000;
+  public pollPrintStatus(pollingCount = 0, firstLoad = false){
+    let pollingTime = 1000;
     if (firstLoad)
       this.pollingStatusMessage = "Checking Web-Print Status...";
     else
@@ -67,7 +67,7 @@ export class ReportWebPrintComponent implements OnInit {
     this.router.navigateByUrl('/reports');
   }
 
-  public downloadPDF(newTab: boolean = false){
+  public downloadPDF(newTab = false){
     if (this.downloadURL.length > 0){
       if (newTab)
         window.open(this.downloadURL, '_blank');
@@ -85,7 +85,7 @@ export class ReportWebPrintComponent implements OnInit {
     }
   }
 
-  public getPrintStatus(pollingCount: number = 0, firstLoad: boolean = false){
+  public getPrintStatus(pollingCount = 0, firstLoad = false){
     if (this.report.id){
       this.webPrintService.getStatus(this.report.id).subscribe((response: WebPrint)=>{
         this.processResponse(response, pollingCount, firstLoad);
@@ -93,7 +93,7 @@ export class ReportWebPrintComponent implements OnInit {
     }
   }
 
-  private processResponse(response: WebPrint, pollingCount: number = 0, firstLoad: boolean = false){
+  private processResponse(response: WebPrint, pollingCount = 0, firstLoad = false){
     const status = response.status;
     switch (status) {
       case null:
