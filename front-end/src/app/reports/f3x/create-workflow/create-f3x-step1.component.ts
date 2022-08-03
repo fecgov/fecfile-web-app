@@ -120,10 +120,10 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
    * Checks if a field's date is within another report's dates or if 
    * another report's dates fall within the form's "from" and "through" dates
    * 
-   * @param fieldDate the date of the field being checked
-   * @param fromDate the form's "from" date
-   * @param throughDate the form's "through" date
-   * @param targetDate the object whose date is being checked for an overlap
+   * @param fieldDate {Date} the date of the field being checked
+   * @param fromDate {Date} the form's "from" date
+   * @param throughDate {Date} the form's "through" date
+   * @param targetDate {F3xCoverageDates} the object whose date is being checked for an overlap
    * @returns true if there is an overlap in dates
    */
   checkForDateOverlap(
