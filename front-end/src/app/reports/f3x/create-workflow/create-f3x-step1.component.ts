@@ -146,7 +146,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         //Another report's through date is inside the form's dates
         ( fromDate <= targetDate.coverage_through_date && 
           throughDate >= targetDate.coverage_through_date)
-      ) as boolean
+      )
     ) as boolean;
   }
 
