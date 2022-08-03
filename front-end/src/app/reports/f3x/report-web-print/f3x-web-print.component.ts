@@ -20,7 +20,17 @@ export class ReportWebPrintComponent implements OnInit {
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
-  webPrintStage: 0 | 1 | 2 = 0;
+
+  submitDate: Date | undefined;
+  downloadURL: string = "";
+  printError: string = "";
+  pollingStatusMessage: "This may take a while..." |
+    "Your report is still being processed. Please check back later to access your PDF" |
+    "Checking Web-Print Status..." = "Checking Web-Print Status...";
+  webPrintStage: "checking" | 
+                  "not-submitted" | 
+                  "success" | 
+                  "failure" = "checking";
 
   constructor(
     private store: Store,
@@ -32,32 +42,77 @@ export class ReportWebPrintComponent implements OnInit {
   ngOnInit(): void {
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
     this.report = this.activatedRoute.snapshot.data['report'];
+    this.pollPrintStatus(0, true);
   }
 
-  public mockedAdvancePrint(){
-    if (this.webPrintStage === 0){
-      this.webPrintStage = 1;
-      setTimeout(() => {
-        this.webPrintStage = 2;
-      }, 5000);
+  public pollPrintStatus(pollingCount: number = 0, firstLoad: boolean = false){
+    let pollingTime: number = 1000;
+    if (firstLoad)
+      this.pollingStatusMessage = "Checking Web-Print Status...";
+    else
+      this.pollingStatusMessage = "This may take a while...";
+
+    if (pollingCount > 4){
+      pollingTime = 3000;
+      this.pollingStatusMessage = "Your report is still being processed. Please check back later to access your PDF";
     }
+
+    this.webPrintStage = "checking";
+    setTimeout(() => {
+      this.getPrintStatus(pollingCount, firstLoad);
+    }, pollingTime);
   }
 
   public backToReports() {
     this.router.navigateByUrl('/reports');
   }
 
-  public getPrintStatus(){
-    this.webPrintService.getDetails(this.report.reportId).subscribe((response: WebPrint)=>{
-      const status = response.status;
-      switch (status) {
-        case undefined:
-          this.webPrintStage = 0; break;
-        case "in-progress":
-          this.webPrintStage = 1; break;
-        case "success":
-          this.webPrintStage = 2; break;
+  public downloadPDF(newTab: boolean = false){
+    if (this.downloadURL.length > 0){
+      if (newTab)
+        window.open(this.downloadURL, '_blank');
+      else {
+        window.open(this.downloadURL);
       }
-    });
+    }
+  }
+
+  public submitPrintJob(){
+    if (this.report.id){
+      this.webPrintService.submitPrintJob(this.report.id).subscribe((response: WebPrint)=>{
+        this.processResponse(response);
+      })
+    }
+  }
+
+  public getPrintStatus(pollingCount: number = 0, firstLoad: boolean = false){
+    if (this.report.id){
+      this.webPrintService.getStatus(this.report.id).subscribe((response: WebPrint)=>{
+        this.processResponse(response, pollingCount, firstLoad);
+      });
+    }
+  }
+
+  private processResponse(response: WebPrint, pollingCount: number = 0, firstLoad: boolean = false){
+    const status = response.status;
+    switch (status) {
+      case null:
+        this.webPrintStage = "not-submitted";
+        break;
+      case "success":
+        this.webPrintStage = "success";
+        if (response.result)
+          this.downloadURL = response.result;
+          this.submitDate = response.submitted;
+        break;
+      case "in-progress":
+        this.pollPrintStatus(pollingCount+1, firstLoad);
+        break;
+      case "failure":
+        this.webPrintStage = "failure";
+        if (response.result)
+          this.printError = response.result;
+        break;
+    }
   }
 }

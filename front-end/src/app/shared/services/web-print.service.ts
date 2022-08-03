@@ -16,7 +16,13 @@ export class WebPrintService {
    *
    * @return     {Observable}  The WebPrint status.
    */
-  public getDetails(reportId: number): Observable<WebPrint> {
-    return this.apiService.get<WebPrint>(`/web-services/${reportId}`);
+  public getStatus(reportId: number): Observable<WebPrint> {
+    return this.apiService.get<WebPrint>(`/web-services/web-print/${reportId}`);
+  }
+
+  public submitPrintJob(reportId: number): Observable<WebPrint> {
+    return this.apiService.post<WebPrint>('/web-services/web-print/', {
+      report_id: reportId,
+    })
   }
 }

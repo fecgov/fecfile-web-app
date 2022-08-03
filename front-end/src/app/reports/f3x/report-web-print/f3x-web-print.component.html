@@ -17,9 +17,9 @@
       src="assets/img/image-f3x-pages-spread.png"
       draggable="false"
       alt="Form 3X pages spread out aesthetically"
-      [ngClass]="{'disabled-pages-banner': webPrintStage === 1}"
+      [ngClass]="{'disabled-pages-banner': webPrintStage === 'checking'}"
     />
-    <ng-container *ngIf="webPrintStage===1">
+    <ng-container *ngIf="webPrintStage==='checking'">
       <div class="fec-loader-div col-12">
         <img
           class="image-max-width fec-loader-image"
@@ -28,19 +28,24 @@
           alt="The report's web print status is loading..."
         />
         <h1 class="align-center super-header">
-          <br><br><br><br><br>
+          <br><br>
           <strong>Compiling your preview</strong>
           <br>
         </h1>
         <h2 class="align-center">
-          This may take a moment...
+          {{ pollingStatusMessage }}
         </h2>
       </div>
     </ng-container>
   </div>
 </div>
 <div class="grid">
-  <ng-container *ngIf="webPrintStage===0">
+  <ng-container *ngIf="webPrintStage==='not-submitted' || webPrintStage ==='failure'">
+    <ng-container *ngIf="webPrintStage==='failure'">
+      <div class="col-12">
+        <h2 class="align-center">Printing error:<br>{{printError}}</h2>
+      </div>
+    </ng-container>
     <div class="col-5"></div>
     <div class="col-2">
       <button
@@ -48,18 +53,20 @@
         pRipple
         label="Compile PDF"
         class="p-button-warning button-full-width"
-        (click)="mockedAdvancePrint()"
+        (click)="submitPrintJob()"
       ></button>
     </div>
   </ng-container>
-  <ng-container *ngIf="webPrintStage===2">
+  <ng-container *ngIf="webPrintStage==='success'">
+    <h2 class="col-12 align-center">PDF Compiled<br>Submitted on: {{submitDate}}</h2>
     <div class="col-3"></div>
     <div class="col-2">
       <button
         pButton
         pRipple
-        label="Download PDF"
+        label="Open PDF"
         class="p-button-info button-full-width"
+        (click)="downloadPDF()"
       ></button>
     </div>
     <div class="col-2">
@@ -69,8 +76,9 @@
       <button
         pButton
         pRipple
-        label="Open in a new tab"
+        label="Compile New PDF"
         class="p-button-warning button-full-width"
+        (click)="submitPrintJob()"
       ></button>
     </div>
   </ng-container>
