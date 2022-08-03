@@ -109,6 +109,9 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
     this.validateService.formValidatorForm = this.form;
+    setInterval(()=>{
+      this.autoValidateCoverageDates(this.form.controls);
+    }, 1000);
   }
 
   buildCoverageDatesValidator(valueFormControlName: string): ValidatorFn {
@@ -157,6 +160,11 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       };
     }
     return retval;
+  }
+
+  autoValidateCoverageDates(controls: any){
+    controls['coverage_from_date'].updateValueAndValidity();
+    controls['coverage_through_date'].updateValueAndValidity();
   }
 
   ngOnDestroy(): void {
