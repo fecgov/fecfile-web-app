@@ -114,16 +114,11 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('should catch date overlaps', ()=>{
-    let fieldDate: Date;
-    let fromDate: Date;
-    let throughDate: Date;
-    let targetDate: F3xCoverageDates
-
     //New dates inside of existing report
-    fieldDate = new Date("12/01/2012");
-    fromDate = new Date("12/01/2012");
-    throughDate = new Date("12/31/2012");
-    targetDate = F3xCoverageDates.fromJSON({
+    const fieldDate = new Date("12/01/2012");
+    const fromDate = new Date("12/01/2012");
+    const throughDate = new Date("12/31/2012");
+    let targetDate = F3xCoverageDates.fromJSON({
       "coverage_from_date": new Date("11/01/2012"),
       "coverage_through_date": new Date("1/01/2013"),
     });
