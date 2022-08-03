@@ -109,6 +109,8 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
     this.validateService.formValidatorForm = this.form;
+
+    //Re-checks the validators on the coverage date fields every second
     setInterval(()=>{
       this.autoValidateCoverageDates(this.form.controls);
     }, 1000);
@@ -127,10 +129,13 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
             f3xCoverageDate.coverage_from_date &&
             f3xCoverageDate.coverage_through_date &&
             (
+              //The form's date is between another report's from/through date
               ( formValue >= f3xCoverageDate.coverage_from_date &&
               formValue <= f3xCoverageDate.coverage_through_date ) ||
+              //Another report's from date is inside the form's dates
               ( fromDate <= f3xCoverageDate.coverage_from_date && 
                 throughDate >= f3xCoverageDate.coverage_from_date) ||
+              //Another report's through date is inside the form's dates
               ( fromDate <= f3xCoverageDate.coverage_through_date && 
                 throughDate >= f3xCoverageDate.coverage_through_date)
             )
@@ -162,6 +167,10 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     return retval;
   }
 
+  /**
+   * Runs the validators on the from/through date fields
+   * @param controls this.form.controls
+   */
   autoValidateCoverageDates(controls: { [key: string]: AbstractControl; }){
     controls['coverage_from_date'].updateValueAndValidity();
     controls['coverage_through_date'].updateValueAndValidity();
