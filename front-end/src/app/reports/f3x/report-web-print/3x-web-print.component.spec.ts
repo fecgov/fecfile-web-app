@@ -8,10 +8,11 @@ import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { ReportWebPrintComponent } from './f3x-web-print.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('ReportSummaryComponent', () => {
-  let component: ReportSubmissionStatusComponent;
-  let fixture: ComponentFixture<ReportSubmissionStatusComponent>;
+describe('ReportWebPrintComponent', () => {
+  let component: ReportWebPrintComponent;
+  let fixture: ComponentFixture<ReportWebPrintComponent>;
   const f3x: F3xSummary = F3xSummary.fromJSON({
     id: 999,
     coverage_from_date: '2022-05-25',
@@ -21,8 +22,8 @@ describe('ReportSummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, DividerModule, CardModule, RouterTestingModule.withRoutes([])],
-      declarations: [ReportSubmissionStatusComponent],
+      imports: [SharedModule, DividerModule, CardModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule],
+      declarations: [ReportWebPrintComponent],
       providers: [
         provideMockStore({
           selectors: [{ selector: selectReportCodeLabelList, value: {} }],
@@ -42,7 +43,7 @@ describe('ReportSummaryComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ReportSubmissionStatusComponent);
+    fixture = TestBed.createComponent(ReportWebPrintComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
