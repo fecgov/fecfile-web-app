@@ -115,14 +115,22 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     return (): ValidationErrors | null => {
       let result: ValidationErrors | null = null;
       const formValue: Date = this.form?.get(valueFormControlName)?.value;
+      const fromDate: Date = this.form?.get("coverage_from_date")?.value;
+      const throughDate: Date = this.form?.get("coverage_through_date")?.value;
       if (this.f3xCoverageDatesList && formValue) {
         const retval = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
           return (
             f3xCoverageDate &&
             f3xCoverageDate.coverage_from_date &&
             f3xCoverageDate.coverage_through_date &&
-            formValue >= f3xCoverageDate.coverage_from_date &&
-            formValue <= f3xCoverageDate.coverage_through_date
+            (
+              ( formValue >= f3xCoverageDate.coverage_from_date &&
+              formValue <= f3xCoverageDate.coverage_through_date ) ||
+              ( fromDate <= f3xCoverageDate.coverage_from_date && 
+                throughDate >= f3xCoverageDate.coverage_from_date) ||
+              ( fromDate <= f3xCoverageDate.coverage_through_date && 
+                throughDate >= f3xCoverageDate.coverage_through_date)
+            )
           );
         });
         result = this.getCoverageDatesValidator(retval);
