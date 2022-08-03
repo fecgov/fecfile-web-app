@@ -63,6 +63,14 @@ export class ReportWebPrintComponent implements OnInit {
     }, pollingTime);
   }
 
+  public submitPrintJob(){
+    if (this.report.id){
+      this.webPrintService.submitPrintJob(this.report.id).subscribe((response: WebPrint)=>{
+        this.processResponse(response);
+      })
+    }
+  }
+
   public backToReports() {
     this.router.navigateByUrl('/reports');
   }
@@ -74,14 +82,6 @@ export class ReportWebPrintComponent implements OnInit {
       else {
         window.open(this.downloadURL);
       }
-    }
-  }
-
-  public submitPrintJob(){
-    if (this.report.id){
-      this.webPrintService.submitPrintJob(this.report.id).subscribe((response: WebPrint)=>{
-        this.processResponse(response);
-      })
     }
   }
 
