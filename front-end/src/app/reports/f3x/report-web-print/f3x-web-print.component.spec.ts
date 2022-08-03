@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
@@ -9,10 +9,19 @@ import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { ReportWebPrintComponent } from './f3x-web-print.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { CommitteeAccount } from '../../../shared/models/committee-account.model';
+import { UserLoginData } from '../../../shared/models/user.model';
+import { selectCommitteeAccount } from '../../../store/committee-account.selectors';
+import { selectUserLoginData } from 'app/store/login.selectors';
+import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
+import { of } from 'rxjs';
 
 describe('ReportWebPrintComponent', () => {
   let component: ReportWebPrintComponent;
   let fixture: ComponentFixture<ReportWebPrintComponent>;
+  let router: Router;
+  let reportService: F3xSummaryService; 
+  const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
   const f3x: F3xSummary = F3xSummary.fromJSON({
     id: 999,
     coverage_from_date: '2022-05-25',
@@ -43,8 +52,55 @@ describe('ReportWebPrintComponent', () => {
   });
 
   beforeEach(() => {
+    const userLoginData: UserLoginData = {
+      committee_id: 'C00000000',
+      email: 'email@fec.com',
+      is_allowed: true,
+      token: 'jwttokenstring',
+    };
+    await TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule.withRoutes([]),
+        HttpClientTestingModule,
+        DividerModule,
+        SharedModule,
+      ],
+      declarations: [ReportWebPrintComponent],
+      providers: [
+        provideMockStore({
+          initialState: {
+            fecfile_online_committeeAccount: committeeAccount,
+            fecfile_online_userLoginData: userLoginData,
+          },
+          selectors: [
+            { selector: selectCommitteeAccount, value: committeeAccount },
+            { selector: selectUserLoginData, value: userLoginData },
+          ],
+        }),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                report: F3xSummary.fromJSON({
+                  report_code: 'Q1',
+                }),
+              },
+            },
+          },
+        },
+      ],
+    }).compileComponents();
+    fixture = TestBed.createComponent(ReportWebPrintComponent);
+    fixture.detectChanges();
+  });
+
+  beforeEach(() => {
+    router = TestBed.inject(Router);
+    reportService = TestBed.inject(F3xSummaryService);
     fixture = TestBed.createComponent(ReportWebPrintComponent);
     component = fixture.componentInstance;
+    spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));
     fixture.detectChanges();
   });
 
