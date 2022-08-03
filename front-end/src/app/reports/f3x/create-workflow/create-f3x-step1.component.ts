@@ -116,6 +116,40 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     }, 1000);
   }
 
+  /**
+   * Checks if a field's date is within another report's dates or if 
+   * another report's dates fall within the form's "from" and "through" dates
+   * 
+   * @param fieldDate the date of the field being checked
+   * @param fromDate the form's "from" date
+   * @param throughDate the form's "through" date
+   * @param targetDate the object whose date is being checked for an overlap
+   * @returns true if there is an overlap in dates
+   */
+  checkForDateOverlap(
+    fieldDate: Date,
+    fromDate: Date,
+    throughDate: Date,
+    targetDate: F3xCoverageDates
+  ): boolean {
+    return (
+      targetDate &&
+      targetDate.coverage_from_date &&
+      targetDate.coverage_through_date &&
+      (
+        //The form's date is between another report's from/through date
+        ( fieldDate >= targetDate.coverage_from_date &&
+        fieldDate <= targetDate.coverage_through_date ) ||
+        //Another report's from date is inside the form's dates
+        ( fromDate <= targetDate.coverage_from_date && 
+          throughDate >= targetDate.coverage_from_date) ||
+        //Another report's through date is inside the form's dates
+        ( fromDate <= targetDate.coverage_through_date && 
+          throughDate >= targetDate.coverage_through_date)
+      ) as boolean
+    ) as boolean;
+  }
+
   buildCoverageDatesValidator(valueFormControlName: string): ValidatorFn {
     return (): ValidationErrors | null => {
       let result: ValidationErrors | null = null;
@@ -124,22 +158,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       const throughDate: Date = this.form?.get("coverage_through_date")?.value;
       if (this.f3xCoverageDatesList && formValue) {
         const retval = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
-          return (
-            f3xCoverageDate &&
-            f3xCoverageDate.coverage_from_date &&
-            f3xCoverageDate.coverage_through_date &&
-            (
-              //The form's date is between another report's from/through date
-              ( formValue >= f3xCoverageDate.coverage_from_date &&
-              formValue <= f3xCoverageDate.coverage_through_date ) ||
-              //Another report's from date is inside the form's dates
-              ( fromDate <= f3xCoverageDate.coverage_from_date && 
-                throughDate >= f3xCoverageDate.coverage_from_date) ||
-              //Another report's through date is inside the form's dates
-              ( fromDate <= f3xCoverageDate.coverage_through_date && 
-                throughDate >= f3xCoverageDate.coverage_through_date)
-            )
-          );
+          return this.checkForDateOverlap(formValue, fromDate, throughDate, f3xCoverageDate);
         });
         result = this.getCoverageDatesValidator(retval);
       }
