@@ -48,7 +48,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
-  private f3xCoverageDatesList: F3xCoverageDates[] | undefined;
+  public f3xCoverageDatesList: F3xCoverageDates[] | undefined;
 
   public f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
 
@@ -69,7 +69,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => {
-        const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount.filing_frequency;
+        const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount?.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
         this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
@@ -159,10 +159,12 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         const throughDate = group.controls['coverage_through_date'];
         if (this.f3xCoverageDatesList) {
           for (const formValue of [fromDate, throughDate]){
+            console.log("Formvalue:", formValue);
             const overlap = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
               return this.checkForDateOverlap(formValue.value, fromDate.value, throughDate.value, f3xCoverageDate);
             });
             if (overlap){
+              console.log("OVERLAP!");
               this.setCoverageOverlapError(formValue, overlap);
             } else {
               formValue.setErrors(null);

@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
@@ -185,9 +185,34 @@ describe('CreateF3XStep1Component', () => {
     ).toBe(false);
   });
 
+  it('setCoverageOverlapError should set an error', ()=>{
+    const formValue: AbstractControl = component.form.controls['coverage_from_date'];
+    const overlap: F3xCoverageDates = F3xCoverageDates.fromJSON({
+      coverage_from_date: "10/10/2010",
+      coverage_through_date: "11/10/2010",
+    });
+    component.setCoverageOverlapError(formValue, overlap);
+    expect(component.form.controls['coverage_from_date'].errors).not.toBe(null);
+  });
+
   it('The coverage date validator does not explode if passed an AbstractControl instead of a FormGroup', ()=>{
     const validatorFn = component.buildCoverageDatesValidator();
     const field = component.form.controls['coverage_from_date'];
     expect(validatorFn(field)).toBe(null);
+
+  });
+
+  it('Should catch an overlap in dates with the constructed validator function', ()=>{
+    const validatorFn = component.buildCoverageDatesValidator();
+    component.form.controls['coverage_from_date'].setValue(new Date("12/15/2010"));
+    component.form.controls['coverage_through_date'].setValue(new Date("1/01/2011"));
+    component.f3xCoverageDatesList = [F3xCoverageDates.fromJSON({
+      coverage_from_date: new Date("12/01/2010"),
+      coverage_through_date: new Date("12/31/2010"),
+    })];
+
+    validatorFn(component.form);
+    expect(component.form.controls['coverage_from_date'].errors).not.toEqual(null);
+   
   });
 });
