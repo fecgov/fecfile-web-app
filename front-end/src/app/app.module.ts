@@ -17,11 +17,12 @@ import { LoginEffects } from './store/login.effects';
 import { AppState } from './store/app-state.model';
 import { labelLookupReducer } from './store/label-lookup.reducer';
 import { LabelLookupEffects } from './store/label-lookup.effects';
+import { activeReportReducer } from './store/active-report.reducer';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MenubarModule } from 'primeng/menubar';
-import { MenuModule } from 'primeng/menu';
+import { PanelMenuModule } from 'primeng/panelmenu';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -44,11 +45,12 @@ import { ConfirmTwoFactorComponent } from './login/confirm-two-factor/confirm-tw
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
+import { MenuReportComponent } from './layout/sidebar/menu-report/menu-report.component';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
-    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'reportCodeLabelList'],
+    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'reportCodeLabelList', 'activeReport'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
@@ -66,6 +68,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     TwoFactorLoginComponent,
     ConfirmTwoFactorComponent,
     DashboardComponent,
+    MenuReportComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,12 +84,13 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         spinnerOn: spinnerReducer,
         userLoginData: loginReducer,
         reportCodeLabelList: labelLookupReducer,
+        activeReport: activeReportReducer,
       },
       { metaReducers }
     ),
     EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects, LabelLookupEffects]),
     MenubarModule,
-    MenuModule,
+    PanelMenuModule,
     PanelModule,
     ButtonModule,
     ProgressBarModule,

@@ -175,6 +175,11 @@
         .login__btn:hover {
           background-color: #c80505;
         }
+        .login-dot-gov-button {
+          @extend .login__btn;
+          width: 240px;
+          margin-left: 0px;
+        }
         .logged-out-msg {
           font-size: 1em;
           font-weight: bold;

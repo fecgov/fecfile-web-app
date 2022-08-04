@@ -1,0 +1,64 @@
+.summary-header {
+  margin-bottom: 20px;
+}
+
+.summary-header h1 {
+  margin-bottom: 0;
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  border-top: 2px solid black;
+  border-bottom: 3px solid lightgray;
+  border-left: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+td {
+  text-align: center;
+  border-top: 0;
+  border-bottom: 1px solid lightgray;
+  border-left: 0;
+  padding: 10px;
+}
+
+.right-border {
+  border-right: 1px solid lightgray;
+}
+
+th.justify-left,
+td.justify-left {
+  text-align: left;
+}
+
+.last {
+  border-bottom: 2px solid black;
+}
+
+.button-message {
+  margin-top: 10px;
+  color: gray;
+}
+
+caption {
+  font-weight: bolder;
+  text-align: left;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.indent-1 {
+  padding-left: 2em;
+}
+
+.indent-2 {
+  padding-left: 4em;
+}
+
+.table-spacer {
+  height: 3em;
+}

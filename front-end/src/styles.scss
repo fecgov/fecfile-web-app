@@ -60,5 +60,169 @@ label.disabled {
 }
 
 .gray {
-  background-color: #efefef;
+  background-color: #f1f1f1;
+}
+
+.dark-gray {
+  background-color: #aeb0b5;
+}
+
+.fec-background-gradient {
+  background-image: linear-gradient(to bottom right, #1a4f82, #112e51);
+}
+
+.radio-button-spacer {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.button-full-width {
+  width: 100%;
+}
+
+.image-max-width {
+  max-width:100%;
+}
+
+.no-vert-margins {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.super-header {
+  font-size: 48px;
+}
+
+// PRIMENG PANELMENU STYLE OVERRIDE
+
+.menu-item-disabled {
+  opacity: 0.3;
+}
+
+.p-panelmenu-icon {
+  display: none;
+}
+
+.p-panelmenu .p-panelmenu-header > a {
+  padding: 1rem 1.25rem;
+  color: white;
+  background-color: transparent;
+  font-weight: 600;
+  border: 0;
+}
+.p-panelmenu .p-panelmenu-header > a .p-panelmenu-icon {
+  margin-right: 0.5rem;
+}
+.p-panelmenu .p-panelmenu-header > a .p-menuitem-icon {
+  margin-right: 0.5rem;
+}
+.p-panelmenu .p-panelmenu-header > a:focus {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: 0 0 0 0;
+}
+.p-panelmenu .p-panelmenu-header:not(.p-highlight):not(.p-disabled) > a:hover {
+  background-color: transparent;
+  border-color: #dee2e6;
+  color: white;
+}
+.p-panelmenu .p-panelmenu-header.p-highlight {
+  margin-bottom: 0;
+  border-left: 5px solid white;
+}
+.p-panelmenu .p-panelmenu-header.p-highlight > a {
+  background-color: transparent;
+  color: white;
+}
+.p-panelmenu .p-panelmenu-header.p-highlight:not(.p-disabled) > a:hover {
+  background-color: transparent;
+  color: white;
+}
+.p-panelmenu .p-panelmenu-content {
+  background-color: transparent;
+  color: white;
+  margin-bottom: 0;
+  border-top: 0;
+  border: 0;
+  padding-left: 1em;
+}
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link {
+  padding: 0.75rem 1rem;
+  color: white;
+  border-radius: 0;
+  transition: box-shadow 0.15s;
+  user-select: none;
+}
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link .p-menuitem-text {
+  color: white;
+}
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link .p-menuitem-icon {
+  color: white;
+  margin-right: 0.5rem;
+}
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link .p-submenu-icon {
+  color: white;
+}
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:not(.p-disabled):hover {
+  background-color: transparent;
+}
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:not(.p-disabled):hover .p-menuitem-text {
+  color: white;
+}
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:not(.p-disabled):hover .p-menuitem-icon {
+  color: white;
+}
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:not(.p-disabled):hover .p-submenu-icon {
+  color: white;
+}
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link:focus,
+.p-panelmenu .p-menuitem-link-active {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: none;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  font-weight: bolder;
+}
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link .p-panelmenu-icon {
+  margin-right: 0.5rem;
+}
+.p-panelmenu .p-panelmenu-content .p-submenu-list:not(.p-panelmenu-root-submenu) {
+  padding: 0 0 0 1rem;
+}
+.p-panelmenu .p-panelmenu-panel {
+  margin-bottom: 0;
+  border-top: 1px solid white;
+}
+.p-panelmenu .p-panelmenu-panel:first-of-type {
+  border-top: 0;
+}
+.p-panelmenu .p-panelmenu-panel .p-panelmenu-header > a {
+  border-radius: 0;
+}
+.p-panelmenu .p-panelmenu-panel .p-panelmenu-content {
+  border-radius: 0;
+}
+.p-panelmenu .p-panelmenu-panel:not(:first-child) .p-panelmenu-header > a {
+  border-top: 0 none;
+}
+.p-panelmenu .p-panelmenu-panel:not(:first-child) .p-panelmenu-header:not(.p-highlight):not(.p-disabled):hover > a,
+.p-panelmenu .p-panelmenu-panel:not(:first-child) .p-panelmenu-header:not(.p-disabled).p-highlight:hover > a {
+  border-top: 0 none;
+}
+.p-panelmenu .p-panelmenu-panel:first-child .p-panelmenu-header > a {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+.p-panelmenu .p-panelmenu-panel:last-child .p-panelmenu-header:not(.p-highlight) > a {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.p-panelmenu .p-panelmenu-panel:last-child .p-panelmenu-content {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
