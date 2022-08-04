@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
@@ -158,7 +158,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         const fromDate = group.controls['coverage_from_date'];
         const throughDate = group.controls['coverage_through_date'];
         if (this.f3xCoverageDatesList) {
-          for (let formValue of [fromDate, throughDate]){
+          for (const formValue of [fromDate, throughDate]){
             const overlap = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
               return this.checkForDateOverlap(formValue.value, fromDate.value, throughDate.value, f3xCoverageDate);
             });
