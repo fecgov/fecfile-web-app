@@ -163,4 +163,14 @@ describe('CreateF3XStep1Component', () => {
       component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
     ).toBe(false);
   });
+
+  it('Tests the getCoverageDatesValidator() method', ()=>{
+    const dates = F3xCoverageDates.fromJSON({
+      coverage_from_date: '10/10/2010',
+      coverage_through_date: '11/10/2010'
+    });
+
+    expect(component.getCoverageDatesValidator(dates)).toBeTruthy();
+    expect(component.getCoverageDatesValidator(undefined)).not.toBeTruthy();
+  })
 });
