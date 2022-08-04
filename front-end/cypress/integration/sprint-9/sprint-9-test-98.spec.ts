@@ -14,7 +14,7 @@ describe('Sprint 9 QA Script 98', () => {
       cy.shortWait();
 
       const reportObject = generateReportObject({ filing_frequency: filing_frequency, report_code: '(TER)' });
-      cy.enterReport(reportObject);
+      cy.createReport(reportObject);
 
       cy.get('tr').contains('Termination').should('exist');
 

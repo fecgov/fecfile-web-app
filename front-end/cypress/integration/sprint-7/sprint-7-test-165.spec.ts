@@ -15,7 +15,7 @@ describe('QA Test Script #165 (Sprint 7)', () => {
       let report_date: Date = date();
       report_date.setFullYear(2030 + i);
       const report = generateReportObject({ coverage_from_date: dateToString(report_date) });
-      cy.enterReport(report);
+      cy.createReport(report);
     }
   });
 

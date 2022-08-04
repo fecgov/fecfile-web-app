@@ -14,7 +14,7 @@ describe('QA Test Script #205 (Sprint 8)', () => {
   });
 
   it('Steps 2-6: Create a "Committee" type Contact', () => {
-    cy.enterContact(contact);
+    cy.createContact(contact);
   });
 
   it("Steps 7-9: Edit the created contact's Committee ID", () => {

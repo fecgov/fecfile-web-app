@@ -1,84 +1,135 @@
 import * as _ from 'lodash';
-import { groupANavTree, TransactionCategory, SchATransaction, TransactionFields } from '../transaction_nav_trees.spec';
+import { groupANavTree, TransactionCategory, SchATransaction, TransactionFields, TransactionForm } from '../transaction_nav_trees.spec';
+
+export type TransactionTree = {
+  [accordion in TransactionCategory]?: {
+    [transaction_type in SchATransaction]?: Transaction
+  }
+}
 
 export type Transaction = {
-  [accordion in TransactionCategory]?: {
-    [transaction_type in SchATransaction]?: {
-      entity_type?: 'Individual' | 'Committee' | 'Organization';
-      contributorLastName?: string;
-      contributorFirstName?: string;
-      contributorMiddleName?: string;
-      contributorPrefix?: string;
-      contributorSuffix?: string;
-      contributorOrganizationName?: string;
-      contributorStreet1?: string;
-      contributorStreet2?: string;
-      contributorCity?: string;
-      contributorZip?: string | number;
-      memoTextDescription?: string;
-      contributionAmount?: number;
-    };
-  };
+  entity_type?: 'Individual' | 'Committee' | 'Organization';
+  contributorLastName?: string;
+  contributorFirstName?: string;
+  contributorMiddleName?: string;
+  contributorPrefix?: string;
+  contributorSuffix?: string;
+  contributorOrganizationName?: string;
+  contributorStreet1?: string;
+  contributorStreet2?: string;
+  contributorCity?: string;
+  contributorZip?: string | number;
+  memoTextDescription?: string;
+  contributionAmount?: number;
+  childTransactions?: Transaction[];
 };
 
-export function generateTransactionObject(transactionGiven: Transaction = {}): Transaction {
-  let newTransaction: Transaction = {};
-
-  let accordion: string;
+function genTransactionNavData(transactionGiven: TransactionTree = {}): 
+  [TransactionCategory, SchATransaction] {
+  let accordion: TransactionCategory;
   if (Object.keys(transactionGiven).length == 0) {
     const accordions = Object.keys(groupANavTree);
-    accordion = _.sample(accordions);
+    accordion = _.sample(accordions) as TransactionCategory;
   } else {
-    accordion = Object.keys(transactionGiven)[0];
+    accordion = Object.keys(transactionGiven)[0] as TransactionCategory;
   }
 
-  let transactionType: string;
-  if (Object.keys(transactionGiven[accordion])?.length == 0) {
+  let transactionType: SchATransaction;
+  if (!transactionGiven[accordion] || Object.keys(transactionGiven[accordion])?.length == 0) {
     const transactionTypes = Object.keys(groupANavTree[accordion]);
-    transactionType = _.sample(transactionTypes);
+    transactionType = _.sample(transactionTypes) as SchATransaction;
   } else {
-    transactionType = Object.keys(transactionGiven[accordion])[0];
+    transactionType = Object.keys(transactionGiven[accordion])[0] as SchATransaction;
   }
 
-  const fields = Object.keys(groupANavTree[accordion][transactionType]);
-  newTransaction[accordion] = {};
-  newTransaction[accordion][transactionType] = {};
+  return [accordion, transactionType];
+}
+
+function chooseTransactionForm(
+  accordion: TransactionCategory, 
+  transactionType: SchATransaction): TransactionForm{
+  const transactionForm: TransactionForm | undefined = 
+    groupANavTree[accordion][transactionType];
+
+  if (!transactionForm){
+    console.log("Error: Invalid Transaction Category/Type", accordion, transactionType);
+    return {};
+  }
+  return transactionForm;
+}
+
+function genTransactionField(field: string, transactionForm: TransactionForm, entityType: string, entityTypeKey: string) {
+  if (field == entityTypeKey) return;
+  if (field == "childTransactions") return;
+
+  const fieldRules = transactionForm[field];
+
+  const universalField = !('entities' in fieldRules);
+  const belongsToEntity = _.includes(fieldRules['entities'], entityType);
+  //Skip if field is not universal or doesn't belong to the Transaction's entity type
+  if (!universalField && !belongsToEntity) {
+    return;
+  }
+
+  if (fieldRules['required'] || _.random(10) < 2) {
+    const args = fieldRules['genArgs'] || [];
+    return fieldRules['generator'](...args);
+  }
+}
+
+function genRandomTransaction(transactionForm: TransactionForm): Transaction {
+  const outTransaction: Transaction = {}
+  const fields: string[] = Object.keys(transactionForm);
 
   //Gets the value of the first field-key in the form that starts with "entityType"
-  const entityTypeKey = fields.find((key) => {
+  const entityTypeKey: string | undefined = fields.find((key) => {
     return key.startsWith('entityType');
   });
 
+  if (entityTypeKey == undefined){
+    console.log("Error: Transaction Generator - Entity Type not found", transactionForm);
+    return {};
+  }
+
   const entityTypeGenerator = TransactionFields[entityTypeKey]['generator'];
-  const entityType = entityTypeGenerator();
+  const entityType: string = entityTypeGenerator();
 
-  newTransaction[accordion][transactionType][entityTypeKey] = entityType;
+  outTransaction[entityTypeKey] = entityType;
 
-  for (let field of fields) {
-    const fieldRules = groupANavTree[accordion][transactionType][field];
-    let fieldValue: string | number;
+  for (const field of fields) {
+    const value = genTransactionField(field, transactionForm, entityType, entityTypeKey);
+    if (value)
+      outTransaction[field] = value;
+  }
 
-    if (field == entityTypeKey) continue;
-
-    const universalField = !('entities' in fieldRules);
-    const belongsToEntity = _.includes(fieldRules['entities'], entityType);
-    //Skip if field is not universal or doesn't belong to the Transaction's entity type
-    if (!universalField && !belongsToEntity) {
-      continue;
-    }
-
-    if (fieldRules['required'] || _.random(10) < 2) {
-      const args = fieldRules['genArgs'] || [];
-      fieldValue = fieldRules['generator'](...args);
-      newTransaction[accordion][transactionType][field] = fieldValue;
+  if (transactionForm["childTransactions"]){
+    outTransaction["childTransactions"] = [];
+    const childTransactions: TransactionForm[] = transactionForm['childTransactions'];
+    for (const childTransactionForm of childTransactions){
+      outTransaction["childTransactions"] = [genRandomTransaction(childTransactionForm), ...outTransaction["childTransactions"]];
     }
   }
 
+  return outTransaction;
+}
+
+export function generateTransactionObject(transactionGiven: TransactionTree = {}): TransactionTree {
+  
+  const [accordion, transactionType] = genTransactionNavData(transactionGiven);
+  const transactionForm = chooseTransactionForm(accordion, transactionType);
+  const newTransaction = genRandomTransaction(transactionForm);
+  
+  let givenFields = {};
+  if (transactionGiven[accordion] && transactionGiven[accordion][transactionType]){
+    givenFields = transactionGiven[accordion][transactionType];
+  }
+
   const finalFields = {
-    ...newTransaction[accordion][transactionType],
-    ...transactionGiven[accordion][transactionType],
+    ...newTransaction,
+    ...givenFields,
   };
-  let finalTransaction: Transaction = {};
+
+  const finalTransaction: TransactionTree = {};
   finalTransaction[accordion] = {};
   finalTransaction[accordion][transactionType] = finalFields;
 
