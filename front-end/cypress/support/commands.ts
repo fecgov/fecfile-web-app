@@ -17,6 +17,19 @@ export function login() {
   //security code page form-fields' ids
   const fieldSecurityCodeText = '.form-control';
 
+  cy.fixture("FEC_Get_Committee_Account").then((response_body) => {
+    response_body.results[0].committee_id = Cypress.env("COMMITTEE_ID");
+    const response = {
+      body: response_body,
+      statusCode: 200,
+    }
+
+    cy.intercept(
+      "GET", "https://api.open.fec.gov/v1/committee/*/*",
+      response
+    ).as("GetCommitteeAccount");
+  });
+ 
   cy.visit('/');
 
   cy.get(fieldEmail).type(email);
@@ -27,6 +40,8 @@ export function login() {
   cy.get(fieldTwoFactorSubmit).click();
 
   cy.get(fieldSecurityCodeText).type(testPIN).type('{enter}');
+
+  cy.wait('@GetCommitteeAccount');
 
   cy.wait(1000).then(() => {
     Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
@@ -124,6 +139,7 @@ export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   cy.get('td').find('span').not('.p-disabled').parent().contains(Day).click();
   cy.shortWait();
 }
+
 
 // shortWait() is appropriate for waiting for the UI to update after changing a field
 export function shortWait(): void {

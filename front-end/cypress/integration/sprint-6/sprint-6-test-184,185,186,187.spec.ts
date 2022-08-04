@@ -32,7 +32,7 @@ describe('QA Test Scripts 184 through 187', () => {
       });
 
       it(`Creates a ${cType} contact`, () => {
-        cy.enterContact(contact);
+        cy.createContact(contact);
         cy.longWait();
       });
 

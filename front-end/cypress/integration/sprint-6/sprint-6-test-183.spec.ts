@@ -7,7 +7,7 @@ const contact: object = generateContactObject({ contact_type: 'Individual', stat
 describe('QA Test Script #183 (Sprint 6)', () => {
   function before() {
     cy.login();
-    cy.enterContact(contact);
+    cy.createContact(contact);
   }
 
   function after() {
