@@ -159,12 +159,10 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         const throughDate = group.controls['coverage_through_date'];
         if (this.f3xCoverageDatesList) {
           for (const formValue of [fromDate, throughDate]){
-            console.log("Formvalue:", formValue);
             const overlap = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
               return this.checkForDateOverlap(formValue.value, fromDate.value, throughDate.value, f3xCoverageDate);
             });
             if (overlap){
-              console.log("OVERLAP!");
               this.setCoverageOverlapError(formValue, overlap);
             } else {
               formValue.setErrors(null);
