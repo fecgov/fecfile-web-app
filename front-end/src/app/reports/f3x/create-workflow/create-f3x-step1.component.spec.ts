@@ -27,6 +27,7 @@ describe('CreateF3XStep1Component', () => {
   const f3x: F3xSummary = F3xSummary.fromJSON({
     id: 999,
     coverage_from_date: '2022-05-25',
+    coverage_through_date: '2022-06-25',
     form_type: 'F3XN',
     report_code: 'Q1',
   });
