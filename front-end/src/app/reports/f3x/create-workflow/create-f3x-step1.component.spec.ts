@@ -116,9 +116,9 @@ describe('CreateF3XStep1Component', () => {
 
   it('should catch date overlaps', ()=>{
     //New dates inside of existing report
-    const fieldDate = new Date("12/01/2012");
     const fromDate = new Date("12/01/2012");
     const throughDate = new Date("12/31/2012");
+    let fieldDate = fromDate;
     let targetDate = F3xCoverageDates.fromJSON({
       "coverage_from_date": new Date("11/01/2012"),
       "coverage_through_date": new Date("1/01/2013"),
@@ -127,7 +127,7 @@ describe('CreateF3XStep1Component', () => {
       component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
     ).toBe(true);
 
-    //New dates start inside of existing report
+    //New dates start inside of existing report - FromDate
     targetDate = F3xCoverageDates.fromJSON({
       "coverage_from_date": new Date("11/01/2012"),
       "coverage_through_date": new Date("12/15/2012"),
@@ -136,7 +136,28 @@ describe('CreateF3XStep1Component', () => {
       component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
     ).toBe(true);
 
-    //New dates end inside of existing report
+    //New dates start inside of existing report - ThroughDate
+    fieldDate = throughDate;
+    targetDate = F3xCoverageDates.fromJSON({
+      "coverage_from_date": new Date("11/01/2012"),
+      "coverage_through_date": new Date("12/15/2012"),
+    });
+    expect(
+      component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
+    ).toBe(false);
+
+    //New dates end inside of existing report - FromDate
+    fieldDate = fromDate;
+    targetDate = F3xCoverageDates.fromJSON({
+      "coverage_from_date": new Date("12/15/2012"),
+      "coverage_through_date": new Date("1/15/2013"),
+    });
+    expect(
+      component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
+    ).toBe(false);
+
+    //New dates end inside of existing report - ThroughDate
+    fieldDate = throughDate;
     targetDate = F3xCoverageDates.fromJSON({
       "coverage_from_date": new Date("12/15/2012"),
       "coverage_through_date": new Date("1/15/2013"),
@@ -164,13 +185,9 @@ describe('CreateF3XStep1Component', () => {
     ).toBe(false);
   });
 
-  it('Tests the getCoverageDatesValidator() method', ()=>{
-    const dates = F3xCoverageDates.fromJSON({
-      coverage_from_date: '10/10/2010',
-      coverage_through_date: '11/10/2010'
-    });
-
-    expect(component.getCoverageDatesValidator(dates)).toBeTruthy();
-    expect(component.getCoverageDatesValidator()).not.toBeTruthy();
-  })
+  it('The coverage date validator does not explode if passed an AbstractControl instead of a FormGroup', ()=>{
+    const validatorFn = component.buildCoverageDatesValidator();
+    const field = component.form.controls['coverage_from_date'];
+    expect(validatorFn(field)).toBe(null);
+  });
 });

@@ -101,30 +101,13 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     this.f3xSummaryService.getF3xCoverageDates().subscribe((dates) => {
       this.f3xCoverageDatesList = dates;
     });
-    this.form.controls['coverage_from_date'].addValidators([
-        this.buildCoverageDatesValidator('coverage_from_date'),
-        Validators.required
-      ]);
-    this.form.controls['coverage_through_date'].addValidators([
-      this.buildCoverageDatesValidator('coverage_through_date'),
-      Validators.required
-    ]);
+    this.form.controls['coverage_from_date'].addValidators([Validators.required]);
+    this.form.controls['coverage_through_date'].addValidators([Validators.required]);
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
     this.validateService.formValidatorForm = this.form;
-
-    //Re-checks the validators on the coverage date fields every second
-    //setInterval(()=>{
-      //this.autoValidateCoverageDates(this.form.controls);
-    //}, 1000);
-
-    this.form.addValidators(this.coverageDatesValidator());
-    //const coveragedatefields = new FormGroup({
-      //'coverage_from_date': this.form.controls['coverage_from_date'],
-      //'coverage_through_date': this.form.controls['coverage_through_date'],
-    //},
-    //{ validators: this.buildCoverageDatesValidator('coverage_through_date') });
+    this.form.addValidators(this.buildCoverageDatesValidator());
   }
 
   /**
@@ -151,90 +134,60 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         //The form's date is between another report's from/through date
         ( fieldDate >= targetDate.coverage_from_date &&
         fieldDate <= targetDate.coverage_through_date ) ||
-        //Another report's from date is inside the form's dates
+        //Another report's dates are inside the form's dates
         ( fromDate <= targetDate.coverage_from_date && 
-          throughDate >= targetDate.coverage_from_date) ||
-        //Another report's through date is inside the form's dates
-        ( fromDate <= targetDate.coverage_through_date && 
+          throughDate >= targetDate.coverage_from_date &&
+          fromDate <= targetDate.coverage_through_date && 
           throughDate >= targetDate.coverage_through_date)
       )
     ) as boolean;
   }
 
-  coverageDatesValidator(): any {
-    return (group: FormGroup) => {
-      const fromDate = group.controls['coverage_from_date'];
-      const throughDate = group.controls['coverage_through_date'];
-      if (this.f3xCoverageDatesList) {
-        for (let formValue of [fromDate, throughDate]){
-          const overlap = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
-            return this.checkForDateOverlap(formValue.value, fromDate.value, throughDate.value, f3xCoverageDate);
-          });
-          if (overlap){
-            const f3xReportCodeLabel = f3xReportCodeDetailedLabels.find((label) => label[0] === overlap.report_code);
-            const reportCodeLabel = f3xReportCodeLabel
-              ? f3xReportCodeLabel[1] || overlap.report_code?.valueOf
-              : 'invalid name';
-            const overlapFromDate = this.fecDatePipe.transform(overlap.coverage_from_date);
-            const overlapThroughDate = this.fecDatePipe.transform(overlap.coverage_through_date);
-            formValue.setErrors({
-              'invaliddate':{
-                msg:`You have entered coverage dates that overlap ` +
-                `the coverage dates of the following report: ${reportCodeLabel} ` +
-                ` ${overlapFromDate} - ${overlapThroughDate}`,
-              }
+  buildCoverageDatesValidator(): ValidatorFn {
+    /**
+     * This is being used as a group validator, so it will always be called with a FormGroup
+     * for the parameter, but addValidators() only takes a method that returns a ValidatorFn,
+     * and a ValidatorFn must have parameters of AbstractControl or AbstractControl | FormGroup
+     * 
+     * Additionally, a unit test is present to make sure that the constructed validator function
+     * does not explode if passed an AbstractControl parameter.
+     */
+    return (toValidate: AbstractControl | FormGroup): null => {
+      const group = toValidate as FormGroup;
+      if (group.controls){
+        const fromDate = group.controls['coverage_from_date'];
+        const throughDate = group.controls['coverage_through_date'];
+        if (this.f3xCoverageDatesList) {
+          for (let formValue of [fromDate, throughDate]){
+            const overlap = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
+              return this.checkForDateOverlap(formValue.value, fromDate.value, throughDate.value, f3xCoverageDate);
             });
-          } else {
-            formValue.setErrors(null);
+            if (overlap){
+              this.setCoverageOverlapError(formValue, overlap);
+            } else {
+              formValue.setErrors(null);
+            }
           }
         }
       }
+      return null;
     }
   }
 
-  buildCoverageDatesValidator(valueFormControlName: string): ValidatorFn {
-    return (): ValidationErrors | null => {
-      let result: ValidationErrors | null = null;
-      const formValue: Date = this.form?.get(valueFormControlName)?.value;
-      const fromDate: Date = this.form?.get("coverage_from_date")?.value;
-      const throughDate: Date = this.form?.get("coverage_through_date")?.value;
-      if (this.f3xCoverageDatesList && formValue) {
-        const retval = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
-          return this.checkForDateOverlap(formValue, fromDate, throughDate, f3xCoverageDate);
-        });
-        result = this.getCoverageDatesValidator(retval);
+  setCoverageOverlapError(formValue: AbstractControl, overlap: F3xCoverageDates){
+    const f3xReportCodeLabel = f3xReportCodeDetailedLabels.find((label) => label[0] === overlap.report_code);
+    const reportCodeLabel = f3xReportCodeLabel
+      ? f3xReportCodeLabel[1] || overlap.report_code?.valueOf
+      : 'invalid name';
+    const overlapFromDate = this.fecDatePipe.transform(overlap.coverage_from_date);
+    const overlapThroughDate = this.fecDatePipe.transform(overlap.coverage_through_date);
+    formValue.setErrors({
+      'invaliddate':{
+        msg:`You have entered coverage dates that overlap ` +
+        `the coverage dates of the following report: ${reportCodeLabel} ` +
+        ` ${overlapFromDate} - ${overlapThroughDate}`,
       }
-      return result;
-    };
-  }
-
-  getCoverageDatesValidator(f3xCoverageDates?: F3xCoverageDates) {
-    let retval: ValidationErrors | null = null;
-    if (f3xCoverageDates) {
-      const f3xReportCodeLabel = f3xReportCodeDetailedLabels.find((label) => label[0] === f3xCoverageDates.report_code);
-      const reportCodeLabel = f3xReportCodeLabel
-        ? f3xReportCodeLabel[1] || f3xCoverageDates.report_code?.valueOf
-        : 'invalid name';
-      const coverageFromDate = this.fecDatePipe.transform(f3xCoverageDates.coverage_from_date);
-      const coverageThroughDate = this.fecDatePipe.transform(f3xCoverageDates.coverage_through_date);
-      retval = {};
-      retval['invaliddate'] = {
-        msg:
-          `You have entered coverage dates that overlap ` +
-          `the coverage dates of the following report: ${reportCodeLabel} ` +
-          ` ${coverageFromDate} - ${coverageThroughDate}`,
-      };
-    }
-    return retval;
-  }
-
-  /**
-   * Runs the validators on the from/through date fields
-   * @param controls this.form.controls
-   */
-  autoValidateCoverageDates(controls: { [key: string]: AbstractControl; }){
-    controls['coverage_from_date'].updateValueAndValidity();
-    controls['coverage_through_date'].updateValueAndValidity();
+    });
   }
 
   ngOnDestroy(): void {
