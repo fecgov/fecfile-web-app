@@ -115,9 +115,16 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     this.validateService.formValidatorForm = this.form;
 
     //Re-checks the validators on the coverage date fields every second
-    setInterval(()=>{
-      this.autoValidateCoverageDates(this.form.controls);
-    }, 1000);
+    //setInterval(()=>{
+      //this.autoValidateCoverageDates(this.form.controls);
+    //}, 1000);
+
+    this.form.addValidators(this.coverageDatesValidator());
+    //const coveragedatefields = new FormGroup({
+      //'coverage_from_date': this.form.controls['coverage_from_date'],
+      //'coverage_through_date': this.form.controls['coverage_through_date'],
+    //},
+    //{ validators: this.buildCoverageDatesValidator('coverage_through_date') });
   }
 
   /**
@@ -152,6 +159,37 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
           throughDate >= targetDate.coverage_through_date)
       )
     ) as boolean;
+  }
+
+  coverageDatesValidator(): any {
+    return (group: FormGroup) => {
+      const fromDate = group.controls['coverage_from_date'];
+      const throughDate = group.controls['coverage_through_date'];
+      if (this.f3xCoverageDatesList) {
+        for (let formValue of [fromDate, throughDate]){
+          const overlap = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
+            return this.checkForDateOverlap(formValue.value, fromDate.value, throughDate.value, f3xCoverageDate);
+          });
+          if (overlap){
+            const f3xReportCodeLabel = f3xReportCodeDetailedLabels.find((label) => label[0] === overlap.report_code);
+            const reportCodeLabel = f3xReportCodeLabel
+              ? f3xReportCodeLabel[1] || overlap.report_code?.valueOf
+              : 'invalid name';
+            const overlapFromDate = this.fecDatePipe.transform(overlap.coverage_from_date);
+            const overlapThroughDate = this.fecDatePipe.transform(overlap.coverage_through_date);
+            formValue.setErrors({
+              'invaliddate':{
+                msg:`You have entered coverage dates that overlap ` +
+                `the coverage dates of the following report: ${reportCodeLabel} ` +
+                ` ${overlapFromDate} - ${overlapThroughDate}`,
+              }
+            });
+          } else {
+            formValue.setErrors(null);
+          }
+        }
+      }
+    }
   }
 
   buildCoverageDatesValidator(valueFormControlName: string): ValidatorFn {
