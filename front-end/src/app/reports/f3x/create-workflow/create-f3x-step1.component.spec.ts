@@ -171,6 +171,6 @@ describe('CreateF3XStep1Component', () => {
     });
 
     expect(component.getCoverageDatesValidator(dates)).toBeTruthy();
-    expect(component.getCoverageDatesValidator(undefined)).not.toBeTruthy();
+    expect(component.getCoverageDatesValidator()).not.toBeTruthy();
   })
 });
