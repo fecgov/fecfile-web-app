@@ -67,7 +67,7 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => (this.committeeAccountId = committeeAccount.committee_id));
+      .subscribe((committeeAccount) => (this.committeeAccountId = committeeAccount?.committee_id));
     this.report = this.activatedRoute.snapshot.data['report'];
     if (this.report && this.report.id) {
       this.memoTextService.getForReportId(this.report.id).subscribe((memoTextList) => {
