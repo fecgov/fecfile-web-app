@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
@@ -101,10 +101,14 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     this.f3xSummaryService.getF3xCoverageDates().subscribe((dates) => {
       this.f3xCoverageDatesList = dates;
     });
-    this.form.controls['coverage_from_date'].addValidators(this.buildCoverageDatesValidator('coverage_from_date'));
-    this.form.controls['coverage_through_date'].addValidators(
-      this.buildCoverageDatesValidator('coverage_through_date')
-    );
+    this.form.controls['coverage_from_date'].addValidators([
+        this.buildCoverageDatesValidator('coverage_from_date'),
+        Validators.required
+      ]);
+    this.form.controls['coverage_through_date'].addValidators([
+      this.buildCoverageDatesValidator('coverage_through_date'),
+      Validators.required
+    ]);
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
