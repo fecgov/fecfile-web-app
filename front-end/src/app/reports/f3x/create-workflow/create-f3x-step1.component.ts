@@ -165,7 +165,11 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
             if (overlap){
               this.setCoverageOverlapError(formValue, overlap);
             } else {
-              formValue.setErrors(null);
+              const errors = formValue.errors;
+              if (errors){
+                delete errors["invaliddate"];
+                formValue.setErrors(errors);
+              }
             }
           }
         }
@@ -181,13 +185,12 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       : 'invalid name';
     const overlapFromDate = this.fecDatePipe.transform(overlap.coverage_from_date);
     const overlapThroughDate = this.fecDatePipe.transform(overlap.coverage_through_date);
-    formValue.setErrors({
-      'invaliddate':{
-        msg:`You have entered coverage dates that overlap ` +
+    const errors = formValue.errors ? formValue.errors : {};
+    errors["invaliddate"] = {msg:`You have entered coverage dates that overlap ` +
         `the coverage dates of the following report: ${reportCodeLabel} ` +
         ` ${overlapFromDate} - ${overlapThroughDate}`,
-      }
-    });
+    }
+    formValue.setErrors(errors);
   }
 
   ngOnDestroy(): void {
