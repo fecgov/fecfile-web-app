@@ -2,7 +2,7 @@
 
 <div class="p-fluid">
   <p-card>
-    <h1>Confirm Information</h1>
+    <h1>Submit report</h1>
     <h5><strong>Form 3X:</strong> {{ report_code | label: f3xReportCodeDetailedLabels }}</h5>
     <p-divider></p-divider>
     <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
@@ -82,7 +82,9 @@
             <p>
               If you any questions on how to enroll, confirming your email, two-factor authentication, or your Personel
               Key please go to the following page:
-              <a href="https://webforms.fec.gov/psa/help.htm">FEC Electronic Filing Password Assignment System Help</a>
+              <a href="https://webforms.fec.gov/psa/help.htm" target="_blank" rel="noopener"
+                >FEC Electronic Filing Password Assignment System Help</a
+              >
             </p>
           </div>
         </div>
