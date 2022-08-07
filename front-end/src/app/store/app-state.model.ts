@@ -9,4 +9,5 @@ export interface AppState {
   userLoginData: UserLoginData;
   reportCodeLabelList: ReportCodeLabelList;
   activeReport: Report | null;
+  cohNeeded: boolean; // Flag that indicates whether the COH has yet to be input in the system
 }
