@@ -71,5 +71,9 @@ describe('ErrorMessagesComponent', () => {
     expect(component.patternErrorMessage).toBe('My custom pattern error message');
     component.invalidDateErrorMessage = 'My custom date error message';
     expect(component.invalidDateErrorMessage).toBe('My custom date error message');
+    component.minErrorMessage = 'My custom min error message';
+    expect(component.minErrorMessage).toBe('My custom min error message');
+    component.maxErrorMessage = 'My custom max error message';
+    expect(component.maxErrorMessage).toBe('My custom max error message');
   });
 });

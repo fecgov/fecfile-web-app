@@ -10,7 +10,6 @@ import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 @Component({
   selector: 'app-cash-on-hand',
   templateUrl: './cash-on-hand.component.html',
-  styleUrls: ['./cash-on-hand.component.scss'],
 })
 export class CashOnHandComponent implements OnInit {
   formProperties: string[] = ['L6a_cash_on_hand_jan_1_ytd', 'cash_on_hand_date'];
