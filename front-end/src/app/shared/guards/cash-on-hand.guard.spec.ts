@@ -21,4 +21,9 @@ describe('CashOnHandGuard', () => {
   it('should be created', () => {
     expect(guard).toBeTruthy();
   });
+
+  it('should provide status of COH need', () => {
+    const result = guard.canActivate();
+    expect(result).toBeTruthy();
+  });
 });
