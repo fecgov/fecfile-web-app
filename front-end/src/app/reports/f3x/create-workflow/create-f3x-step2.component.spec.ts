@@ -113,7 +113,7 @@ describe('CreateF3xStep2Component', () => {
     );
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/999/list');
   });
 
   it('#save should not save when form data invalid', () => {

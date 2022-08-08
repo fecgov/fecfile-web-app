@@ -51,7 +51,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     if ((item as F3xSummary).change_of_address === null) {
       this.router.navigateByUrl(`/reports/f3x/create/step2/${item.id}`);
     } else {
-      this.router.navigateByUrl(`/reports/f3x/create/step3/${item.id}`);
+      this.router.navigateByUrl(`/transactions/report/${item.id}/list`);
     }
   }
 

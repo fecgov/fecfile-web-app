@@ -43,6 +43,17 @@ const userLoginData: UserLoginData = {
   token: 'jwttokenstring',
 };
 
+const testTransaction = {
+  id: 123,
+  report_id: 999,
+  form_type: null,
+  filer_committee_id_number: null,
+  transaction_id: null,
+  transaction_type_identifier: 'test',
+  contribution_purpose_descrip: null,
+  parent_transaction_id: null,
+};
+
 describe('TransactionTypeBaseComponent', () => {
   let component: TestTransactionTypeBaseComponent;
   let fixture: ComponentFixture<TestTransactionTypeBaseComponent>;
@@ -153,14 +164,15 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransactionId = 1;
     const testTransactionTypeToAdd = 'testTransactionTypeToAdd';
 
+    component.transaction = testTransaction;
+
     const expectedMessage: Message = {
       severity: 'success',
       summary: 'Successful',
       detail: 'Parent Transaction Saved',
       life: 3000,
     };
-    const expectedRoute =
-      `transactions/edit/` + `${testTransactionId}/create-sub-transaction/${testTransactionTypeToAdd}`;
+    const expectedRoute = `/transactions/report/999/list/edit/${testTransactionId}/create-sub-transaction/${testTransactionTypeToAdd}`;
 
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
@@ -182,7 +194,7 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction_id: null,
     };
     component.transaction = testTransaction;
-    const expectedRoute = `/reports/f3x/create/step3/${testTransaction.report_id}`;
+    const expectedRoute = `/transactions/report/${testTransaction.report_id}/list`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);

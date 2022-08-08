@@ -30,7 +30,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   // because the order determines the expanded menu item group in the panal menu:
   // 'Enter A Transaction', 'Review A Report', and 'Submit Your Report'.
   urlMatch: RegExp[] = [
-    /^\/reports\/f3x\/create\/step3\/\d+/, // Enter a transaction group
+    /^\/transactions\/report\/\d+\/list/, // Enter a transaction group
     /^\/transactions\/report\/\d+\/create/, // Enter a transaction group
     /^\/reports\/f3x\/summary\/\d+/, // Review a report group
     /^\/reports\/f3x\/detailed-summary\/\d+/, // Review a report group
@@ -77,7 +77,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
             items: [
               {
                 label: 'Manage your transactions',
-                routerLink: [`/reports/f3x/create/step3/${this.currentReportId}`],
+                routerLink: [`/transactions/report/${this.currentReportId}/list`],
               },
               {
                 label: 'Add a receipt',
