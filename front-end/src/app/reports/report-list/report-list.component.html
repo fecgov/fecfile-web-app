@@ -67,7 +67,7 @@
         </td>
         <td>In Progress</td>
         <td>{{ item.form_type | label: f3xFormVerionLabels }}</td>
-        <td>-</td>
+        <td>{{ item.upload_status?.acceptance_datetime | fecDate }}</td>
         <td>
           <p-button
             pRipple

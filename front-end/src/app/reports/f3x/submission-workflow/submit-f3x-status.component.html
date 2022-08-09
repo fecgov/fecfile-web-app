@@ -1,6 +1,14 @@
 <div class="grid">
   <div class="col-12">
-    <h1 class="super-header">Thank you for submitting your report. It is currently being processed.</h1>
+    <h1 *ngIf='report.upload_status?.status==="ACCEPTED"' class="super-header">
+      Congratulations, your report was successfully submitted and accepted.
+    </h1>
+    <h1 *ngIf='report.upload_status?.status==="REJECTED"' class="super-header">
+      Your report has been rejected.  Error message: {{ report.upload_status?.message }}
+    </h1>
+    <h1 *ngIf='report.upload_status?.status==="PROCESSING"' class="super-header">
+      Thank you for submitting your report. It is currently being processed.
+    </h1>
   </div>
 </div>
 <div class="grid">
@@ -36,6 +44,14 @@
         </h3>
         <br />
       </div>
+      <ng-container *ngIf='report.upload_status?.status==="ACCEPTED"'>
+        <div class="col-12">
+          <h5 class="no-vert-margins">FILING ID:</h5>
+          <h3 class="no-vert-margins">
+            {{ report.upload_status?.fec_report_id }}
+          </h3>
+        </div>
+      </ng-container>
     </div>
   </div>
   <div class="col-8">
