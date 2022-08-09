@@ -3,10 +3,10 @@ import { BaseModel } from "./base.model";
 
 
 export class FECUploadStatus {
-  fec_report_id: string = "";
-  message: string = "";
+  fec_report_id = "";
+  message = "";
   status: "ACCEPTED" | "REJECTED" | "PROCESSING" | "" = "";
-  submission_id: string = "";
+  submission_id = "";
   success: boolean | null = null;
   @Transform(BaseModel.dateTransform) acceptance_datetime: Date | null = null;
 
