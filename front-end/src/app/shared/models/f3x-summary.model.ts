@@ -184,7 +184,7 @@ export class F3xSummary extends BaseModel implements Report {
   confirmation_email_1: string | null = null;
   confirmation_email_2: string | null = null;
   @Transform(BaseModel.dateTransform) date_signed: Date | null = null;
-  @Transform(FECUploadStatus.fromJSON) upload_status: FECUploadStatus | null = FECUploadStatus.fromJSON({
+  upload_status: FECUploadStatus | null = FECUploadStatus.fromJSON({
     status:"ACCEPTED",
     fec_report_id: "FEC-1234567",
     message:"",
