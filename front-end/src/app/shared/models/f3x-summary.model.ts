@@ -184,6 +184,7 @@ export class F3xSummary extends BaseModel implements Report {
   confirmation_email_2: string | null = null;
   @Transform(BaseModel.dateTransform) date_signed: Date | null = null;
 
+  @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | null = null;
   L6b_cash_on_hand_beginning_period: number | null = null;
   L6c_total_receipts_period: number | null = null;
   L6d_subtotal_period: number | null = null;

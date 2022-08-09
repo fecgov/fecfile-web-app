@@ -16,6 +16,7 @@ import { environment } from '../../../../environments/environment';
 import { CommitteeAccount } from '../../../shared/models/committee-account.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { selectCommitteeAccount } from '../../../store/committee-account.selectors';
+import { selectCohNeededStatus } from 'app/store/coh-needed.selectors';
 import { ValidateService } from '../../../shared/services/validate.service';
 import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
 import { ReportsModule } from '../../reports.module';
@@ -57,10 +58,12 @@ describe('CreateF3xStep2Component', () => {
           initialState: {
             fecfile_online_committeeAccount: committeeAccount,
             fecfile_online_userLoginData: userLoginData,
+            fecfile_online_cohNeeded: false,
           },
           selectors: [
             { selector: selectCommitteeAccount, value: committeeAccount },
             { selector: selectUserLoginData, value: userLoginData },
+            { selector: selectCohNeededStatus, value: false },
           ],
         }),
         {

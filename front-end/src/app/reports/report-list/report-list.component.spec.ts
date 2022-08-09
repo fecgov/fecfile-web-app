@@ -5,6 +5,7 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
+import { selectCohNeededStatus } from 'app/store/coh-needed.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
@@ -34,8 +35,11 @@ describe('ReportListComponent', () => {
         MessageService,
         ApiService,
         provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
+          initialState: { fecfile_online_userLoginData: userLoginData, fecfile_online_cohNeeded: false },
+          selectors: [
+            { selector: selectUserLoginData, value: userLoginData },
+            { selector: selectCohNeededStatus, value: false },
+          ],
         }),
       ],
     }).compileComponents();
