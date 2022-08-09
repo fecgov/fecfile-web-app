@@ -10,6 +10,8 @@ export interface JsonSchema {
       type: string;
       minLength?: number;
       maxLength?: number;
+      minimum?: number;
+      maximum?: number;
       pattern?: string;
     };
   };

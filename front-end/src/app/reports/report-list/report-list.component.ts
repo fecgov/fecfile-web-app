@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { selectCohNeededStatus } from 'app/store/coh-needed.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report } from '../../shared/interfaces/report.interface';
@@ -16,10 +17,12 @@ import { updateLabelLookupAction } from '../../store/label-lookup.actions';
   selector: 'app-report-list',
   templateUrl: './report-list.component.html',
 })
-export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit {
+export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
+  cohNeededFlag = false;
+  private destroy$ = new Subject<boolean>();
 
   constructor(
     private store: Store,
@@ -37,6 +40,18 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     this.loadItemService(this.itemService);
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
     this.store.dispatch(updateLabelLookupAction());
+
+    this.store
+      .select(selectCohNeededStatus)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cohNeededFlag: boolean) => {
+        this.cohNeededFlag = cohNeededFlag;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   protected getEmptyItem(): F3xSummary {
@@ -48,7 +63,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   public override editItem(item: Report): void {
-    if ((item as F3xSummary).change_of_address === null) {
+    if (this.cohNeededFlag) {
+      this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
+    } else if ((item as F3xSummary).change_of_address === null) {
       this.router.navigateByUrl(`/reports/f3x/create/step2/${item.id}`);
     } else {
       this.router.navigateByUrl(`/transactions/report/${item.id}/list`);

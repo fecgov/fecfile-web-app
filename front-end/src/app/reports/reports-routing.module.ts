@@ -11,12 +11,20 @@ import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-st
 import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-step2.component';
 import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
+import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
+import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: ReportListComponent,
     pathMatch: 'full',
+  },
+  {
+    path: 'f3x/create/cash-on-hand/:reportId',
+    component: CashOnHandComponent,
+    canActivate: [CashOnHandGuard],
+    resolve: { report: ReportResolver },
   },
   {
     path: 'f3x/create/step1',

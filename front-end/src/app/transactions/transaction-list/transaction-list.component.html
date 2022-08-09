@@ -79,10 +79,10 @@
           {{ item.contribution_aggregate | currency }}
         </td>
         <td>
-          {{ item.id }}
+          {{ item.transaction_id }}
         </td>
         <td>
-          {{ item.parent_transaction_id }}
+          {{ item.back_reference_tran_id_number }}
         </td>
         <td>
           <p-button pRipple icon="pi pi-ellipsis-v" styleClass="p-button-text" ariaLabel="action"></p-button>

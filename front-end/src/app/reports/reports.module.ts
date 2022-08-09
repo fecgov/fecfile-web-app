@@ -31,6 +31,8 @@ import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-st
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportsRoutingModule } from './reports-routing.module';
+import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,7 @@ import { ReportsRoutingModule } from './reports-routing.module';
     ReportLevelMemoComponent,
     ReportSubmissionStatusComponent,
     TestDotFecComponent,
+    CashOnHandComponent,
   ],
   imports: [
     CommonModule,
@@ -67,6 +70,7 @@ import { ReportsRoutingModule } from './reports-routing.module';
     TooltipModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
+    InputNumberModule,
   ],
 })
 export class ReportsModule {}

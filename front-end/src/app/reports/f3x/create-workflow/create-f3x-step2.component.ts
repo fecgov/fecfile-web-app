@@ -5,6 +5,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { selectCohNeededStatus } from 'app/store/coh-needed.selectors';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -33,6 +34,7 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
+  cohNeededFlag = false;
 
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
@@ -55,6 +57,10 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
+    this.store
+      .select(selectCohNeededStatus)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cohNeededFlag) => (this.cohNeededFlag = cohNeededFlag));
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
@@ -93,7 +99,11 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
       if (jump === 'continue' && this.report?.id) {
-        this.router.navigateByUrl(`/transactions/report/${this.report.id}/list`);
+        if (this.cohNeededFlag) {
+          this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${this.report.id}`);
+        } else {
+          this.router.navigateByUrl(`/transactions/report/${this.report.id}/list`);
+        }
       }
       if (jump === 'back' && this.report?.id) {
         this.router.navigateByUrl('/reports');
