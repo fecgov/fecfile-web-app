@@ -93,7 +93,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should navigate for create', () => {
-    const testTransaction: Transaction = {
+    const testTransaction1: Transaction = {
       id: null,
       report_id: null,
       form_type: null,
@@ -103,7 +103,7 @@ describe('TransactionTypeBaseComponent', () => {
       contribution_purpose_descrip: null,
       parent_transaction_id: null,
     };
-    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction));
+    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transaction = {
       id: null,
@@ -121,7 +121,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should navigate for update', () => {
-    const testTransaction: Transaction = {
+    const testTransaction2: Transaction = {
       id: 123,
       report_id: null,
       form_type: null,
@@ -131,7 +131,7 @@ describe('TransactionTypeBaseComponent', () => {
       contribution_purpose_descrip: null,
       parent_transaction_id: null,
     };
-    spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction));
+    spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction2));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transaction = {
       id: 123,
@@ -183,7 +183,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it("#navigateTo 'list' should navigate", () => {
-    const testTransaction: Transaction = {
+    const testTransaction3: Transaction = {
       id: 123,
       report_id: 99,
       form_type: null,
@@ -193,8 +193,33 @@ describe('TransactionTypeBaseComponent', () => {
       contribution_purpose_descrip: null,
       parent_transaction_id: null,
     };
+    component.transaction = testTransaction3;
+    const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
+    const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
+    component.navigateTo('list');
+    expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
+  });
+
+  it("#navigateTo 'add-sub-tran' should navigate", () => {
     component.transaction = testTransaction;
-    const expectedRoute = `/transactions/report/${testTransaction.report_id}/list`;
+    const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDV_REC';
+    const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
+    component.navigateTo('add-sub-tran', 123, 'INDV_REC');
+    expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
+  });
+
+  it("#navigateTo 'to-parent' should navigate", () => {
+    component.transaction = { ...testTransaction };
+    component.transaction.parent_transaction_id = 333;
+    const expectedRoute = '/transactions/report/999/list/edit/333';
+    const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
+    component.navigateTo('to-parent');
+    expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
+  });
+
+  it('#navigateTo default should navigate', () => {
+    component.transaction = testTransaction;
+    const expectedRoute = '/transactions/report/999/list';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
