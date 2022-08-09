@@ -14,7 +14,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { TransactionListComponent } from './transaction-list.component';
+import { TransactionListComponent, MemoCodePipe } from './transaction-list.component';
 
 describe('CreateF3xStep4Component', () => {
   let component: TransactionListComponent;
@@ -82,5 +82,13 @@ describe('CreateF3xStep4Component', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should memoCode transform', () => {
+    const pipe = new MemoCodePipe();
+    let result = pipe.transform(true);
+    expect(result).toBe('Y');
+    result = pipe.transform(false);
+    expect(result).toBe('-');
   });
 });
