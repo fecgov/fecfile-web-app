@@ -21,5 +21,6 @@ describe('F3XSummary', () => {
     expect(uploadStatus.acceptance_datetime?.getFullYear()).toBe(2010);
     expect(uploadStatus.fec_report_id).toBe("FEC-1234567");
     expect(uploadStatus.success).toBe(true);
+    expect(JSON.stringify(uploadStatus)).toContain("FEC-1234567");
   });
 });

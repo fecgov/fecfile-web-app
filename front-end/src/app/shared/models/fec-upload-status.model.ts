@@ -13,8 +13,6 @@ export class FECUploadStatus {
 
   // prettier-ignore
   static fromJSON(json: any): FECUploadStatus { // eslint-disable-line @typescript-eslint/no-explicit-any
-    if (json === undefined || json === null)
-      return new FECUploadStatus();
     return plainToClass(FECUploadStatus, json);
   }
 
