@@ -4,7 +4,7 @@
       Congratulations, your report was successfully submitted and accepted.
     </h1>
     <h1 *ngIf='report.upload_status?.status==="REJECTED"' class="super-header">
-      Your report has been rejected.  Error message: {{ report.upload_status?.message }}
+      Your report has been rejected.
     </h1>
     <h1 *ngIf='report.upload_status?.status==="PROCESSING"' class="super-header">
       Thank you for submitting your report. It is currently being processed.
@@ -37,8 +37,8 @@
         <br />
       </div>
       <div class="col-12">
-        <h5 class="no-vert-margins">CONFIRMATION EMAILS:</h5>
-        <h3 class="no-vert-margins">
+        <h5 class="no-vert-margins word-break">CONFIRMATION EMAILS:</h5>
+        <h3 class="no-vert-margins word-break">
           {{ report.confirmation_email_1 }} <br />
           {{ report.confirmation_email_2 }}
         </h3>
@@ -66,10 +66,13 @@
 </div>
 <div class="grid">
   <div class="col-12">
-    <p>
+    <p *ngIf="report.upload_status?.status!=='ACCEPTED' && report.upload_status?.status !=='REJECTED'">
       The FEC will send a report status message to the confirmation emails you provided during the submission process.
       If any problems are encountered during the process, Web Upload will terminate the upload session and relay the
       specifics of the error.
+    </p>
+    <p *ngIf="report.upload_status?.status==='REJECTED' && report.upload_status?.message">
+      FEC Error Message: {{ report.upload_status?.message }}
     </p>
   </div>
 </div>
