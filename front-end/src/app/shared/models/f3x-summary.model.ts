@@ -1,4 +1,4 @@
-import { plainToClass, Transform } from 'class-transformer';
+import { plainToClass, Transform, Type } from 'class-transformer';
 import { Report } from '../interfaces/report.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
@@ -184,14 +184,16 @@ export class F3xSummary extends BaseModel implements Report {
   confirmation_email_1: string | null = null;
   confirmation_email_2: string | null = null;
   @Transform(BaseModel.dateTransform) date_signed: Date | null = null;
-  upload_status: FECUploadStatus | null = FECUploadStatus.fromJSON({
+  
+  @Type(()=>FECUploadStatus)
+  @Transform(FECUploadStatus.transform) upload_status: FECUploadStatus | null = null /*FECUploadStatus.fromJSON({
     status:"ACCEPTED",
     fec_report_id: "FEC-1234567",
     message:"",
     submission_id:"",
     success:true,
     acceptance_datetime: new Date("10/10/2010"),
-  });
+  });*/
 
   @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | null = null;
   L6b_cash_on_hand_beginning_period: number | null = null;
