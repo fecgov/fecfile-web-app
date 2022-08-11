@@ -24,10 +24,11 @@ export class ReportIsEditableService {
 
 
       return this.store.select(selectActiveReport).subscribe((report: Report | null)=>{
+        console.log("EDITABLE SERVICE CALLED", report);
         if (report){
           const status = report?.upload_status?.status;
           const bool = status != "ACCEPTED" && status != "PROCESSING";
-          console.log("EDITABLE GUARD CALLED", bool);
+          console.log("SERVICE RETURNS", bool);
           return bool
         } else {
           return false
