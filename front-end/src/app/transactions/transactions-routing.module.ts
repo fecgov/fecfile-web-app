@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { TransactionTypeResolver } from 'app/shared/resolvers/transaction-type.resolver';
+import { ReportIsEditableGuard } from '../shared/guards/access-permissions.guards';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 
@@ -12,6 +13,7 @@ const routes: Routes = [
     resolve: {
       report: ReportResolver,
     },
+    canActivate: [ReportIsEditableGuard]
   },
   {
     path: 'report/:reportId/create/:transactionType',
@@ -19,6 +21,7 @@ const routes: Routes = [
     resolve: {
       transactionType: TransactionTypeResolver,
     },
+    canActivate: [ReportIsEditableGuard]
   },
   {
     path: 'edit/:transactionId',
@@ -33,6 +36,7 @@ const routes: Routes = [
     resolve: {
       transactionType: TransactionTypeResolver,
     },
+    canActivate: [ReportIsEditableGuard]
   },
   { path: '**', redirectTo: '' },
 ];

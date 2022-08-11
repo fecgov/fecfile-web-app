@@ -10,6 +10,8 @@ import { Report } from '../../../shared/interfaces/report.interface';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
+import { ReportIsEditableGuard } from '../../../shared/guards/access-permissions.guards';
+import { ReportIsEditable } from '../../../shared/services/access-permissions.service';
 
 @Component({
   selector: 'app-menu-report',
@@ -25,6 +27,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
   cohNeededFlag = false;
+  reportIsEditableFlag = false;
 
   private destroy$ = new Subject<boolean>();
 
@@ -54,6 +57,8 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report: Report | null) => {
         this.activeReport = report;
+        if (this.activeReport)
+          this.reportIsEditableFlag = ReportIsEditable(this.activeReport);
       });
 
     this.store
@@ -97,6 +102,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
               {
                 label: 'Add a receipt',
                 routerLink: [`/transactions/report/${this.currentReportId}/create`],
+                visible: this.reportIsEditableFlag,
               },
               { label: 'Add a disbursements', styleClass: 'menu-item-disabled' },
               { label: 'Add loans and debts', styleClass: 'menu-item-disabled' },
@@ -116,16 +122,31 @@ export class MenuReportComponent implements OnInit, OnDestroy {
                 routerLink: [`/reports/f3x/detailed-summary/${this.currentReportId}`],
               },
               { label: 'View print preview', styleClass: 'menu-item-disabled' },
-              { label: 'Add a report level memo', routerLink: [`/reports/f3x/memo/${this.currentReportId}`] },
+              { 
+                label: 'Add a report level memo',
+                routerLink: [`/reports/f3x/memo/${this.currentReportId}`],
+                visible: this.reportIsEditableFlag,
+              },
             ],
           },
           {
             label: 'SUBMIT YOUR REPORT',
             expanded: false,
             items: [
-              { label: 'Confirm information', routerLink: [`/reports/f3x/submit/step1/${this.currentReportId}`] },
-              { label: 'Submit report', routerLink: [`/reports/f3x/submit/step2/${this.currentReportId}`] },
-              { label: 'Report status', routerLink: [`/reports/f3x/submit/status/${this.currentReportId}`] },
+              { 
+                label: 'Confirm information',
+                routerLink: [`/reports/f3x/submit/step1/${this.currentReportId}`],
+                visible: this.reportIsEditableFlag,
+              },
+              { 
+                label: 'Submit report',
+                routerLink: [`/reports/f3x/submit/step2/${this.currentReportId}`],
+                visible: this.reportIsEditableFlag,
+              },
+              { 
+                label: 'Report status',
+                routerLink: [`/reports/f3x/submit/status/${this.currentReportId}`]
+              },
             ],
           },
         ];

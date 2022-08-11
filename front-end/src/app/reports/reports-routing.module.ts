@@ -25,7 +25,7 @@ const routes: Routes = [
   {
     path: 'f3x/create/cash-on-hand/:reportId',
     component: CashOnHandComponent,
-    canActivate: [CashOnHandGuard, ReportIsEditableGuard],
+    canActivate: [CashOnHandGuard],
     resolve: { report: ReportResolver },
   },
   {
@@ -48,7 +48,6 @@ const routes: Routes = [
     path: 'f3x/create/step3/:reportId',
     component: CreateF3xStep3Component,
     resolve: { report: ReportResolver },
-    canActivate: [ReportIsEditableGuard]
   },
   {
     path: 'f3x/submit/step2/:reportId',

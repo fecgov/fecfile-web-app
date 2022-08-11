@@ -15,8 +15,11 @@ export class ReportIsEditableGuard implements CanActivate {
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return new Observable<boolean>(()=>{
       return this.store.select(selectActiveReport).subscribe((report: Report | null)=>{
-        if (report)
-          return ReportIsEditable(report);
+        if (report){
+          const bool = ReportIsEditable(report);
+          console.log("LISTEN", bool);
+          return bool
+        }
         return false
       });
     });
