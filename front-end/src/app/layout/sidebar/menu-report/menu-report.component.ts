@@ -26,7 +26,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
   cohNeededFlag = false;
-  reportIsEditableFlag = true;
+  reportIsEditableFlag = false;
 
   private destroy$ = new Subject<boolean>();
 
@@ -67,7 +67,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
 
     this.editableService.isEditable().subscribe((isEditable: boolean)=>{
       this.reportIsEditableFlag = isEditable;
-      console.log(isEditable);
     })
 
     // Watch the router changes and display menu if URL is in urlMatch list.
