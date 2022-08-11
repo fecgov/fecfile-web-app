@@ -18,21 +18,21 @@ describe('F3XSummary', () => {
     expect(f3xSummary.form_type).toBe(F3xFormTypes.F3XT);
     expect(f3xSummary.committee_name).toBe('foo');
     expect(f3xSummary.election_code).toBe(null);
-    expect(f3xSummary.upload_status).toBe(null);
+    expect(f3xSummary.upload_submission).toBe(null);
   });
 
   it('#fromJSON() should return an F3xSummary instance with a valid FECUploadStatus instance', ()=>{
     const data = {
-      upload_status: {
+      upload_submission: {
         fec_report_id: "FEC-1234567",
-        acceptance_datetime: "12/12/2012",
+        created: "12/12/2012",
       }
     };
 
     const f3xSummary = F3xSummary.fromJSON(data);
-    expect(f3xSummary.upload_status).toBeInstanceOf(FECUploadStatus);
-    expect(f3xSummary.upload_status?.fec_report_id).toBe("FEC-1234567");
-    expect(f3xSummary.upload_status?.acceptance_datetime).toBeInstanceOf(Date);
-    expect(f3xSummary.upload_status?.acceptance_datetime?.getFullYear()).toBe(2012);
+    expect(f3xSummary.upload_submission).toBeInstanceOf(FECUploadStatus);
+    expect(f3xSummary.upload_submission?.fec_report_id).toBe("FEC-1234567");
+    expect(f3xSummary.upload_submission?.created).toBeInstanceOf(Date);
+    expect(f3xSummary.upload_submission?.created?.getFullYear()).toBe(2012);
   });
 });

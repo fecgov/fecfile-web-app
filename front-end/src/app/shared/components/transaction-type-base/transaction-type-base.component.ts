@@ -134,12 +134,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.router.navigateByUrl(
-        `transactions/edit/` + `${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
+        `/transactions/report/${this.transaction?.report_id}/list/edit/${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
       );
     } else if (navigateTo === 'to-parent') {
-      this.router.navigateByUrl(`/transactions/edit/${this.transaction?.parent_transaction_id}`);
+      this.router.navigateByUrl(
+        `/transactions/report/${this.transaction?.report_id}/list/edit/${this.transaction?.parent_transaction_id}`
+      );
     } else {
-      this.router.navigateByUrl(`/reports/f3x/create/step3/${this.transaction?.report_id}`);
+      this.router.navigateByUrl(`/transactions/report/${this.transaction?.report_id}/list`);
     }
   }
 

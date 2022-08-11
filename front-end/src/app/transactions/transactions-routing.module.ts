@@ -5,8 +5,14 @@ import { TransactionTypeResolver } from 'app/shared/resolvers/transaction-type.r
 import { ReportIsEditableGuard } from '../shared/guards/access-permissions.guards';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
+import { TransactionListComponent } from './transaction-list/transaction-list.component';
 
 const routes: Routes = [
+  {
+    path: 'report/:reportId/list',
+    component: TransactionListComponent,
+    resolve: { report: ReportResolver },
+  },
   {
     path: 'report/:reportId/create',
     component: TransactionTypePickerComponent,
@@ -24,14 +30,14 @@ const routes: Routes = [
     canActivate: [ReportIsEditableGuard]
   },
   {
-    path: 'edit/:transactionId',
+    path: 'report/:reportId/list/edit/:transactionId',
     component: TransactionContainerComponent,
     resolve: {
       transactionType: TransactionTypeResolver,
     },
   },
   {
-    path: 'edit/:parentTransactionId/create-sub-transaction/:transactionType',
+    path: 'report/:reportId/list/edit/:parentTransactionId/create-sub-transaction/:transactionType',
     component: TransactionContainerComponent,
     resolve: {
       transactionType: TransactionTypeResolver,

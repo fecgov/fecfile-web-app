@@ -14,11 +14,11 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { CreateF3xStep3Component } from './create-f3x-step3.component';
+import { TransactionListComponent, MemoCodePipe } from './transaction-list.component';
 
 describe('CreateF3xStep4Component', () => {
-  let component: CreateF3xStep3Component;
-  let fixture: ComponentFixture<CreateF3xStep3Component>;
+  let component: TransactionListComponent;
+  let fixture: ComponentFixture<TransactionListComponent>;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
 
   beforeEach(async () => {
@@ -30,7 +30,7 @@ describe('CreateF3xStep4Component', () => {
     };
     await TestBed.configureTestingModule({
       imports: [ToolbarModule, TableModule, RouterTestingModule],
-      declarations: [CreateF3xStep3Component],
+      declarations: [TransactionListComponent],
       providers: [
         MessageService,
         ConfirmationService,
@@ -75,12 +75,20 @@ describe('CreateF3xStep4Component', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateF3xStep3Component);
+    fixture = TestBed.createComponent(TransactionListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should memoCode transform', () => {
+    const pipe = new MemoCodePipe();
+    let result = pipe.transform(true);
+    expect(result).toBe('Y');
+    result = pipe.transform(false);
+    expect(result).toBe('-');
   });
 });

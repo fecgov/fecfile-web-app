@@ -186,7 +186,7 @@ export class F3xSummary extends BaseModel implements Report {
   @Transform(BaseModel.dateTransform) date_signed: Date | null = null;
   
   @Type(()=>FECUploadStatus)
-  @Transform(FECUploadStatus.transform) upload_status: FECUploadStatus | null = null; 
+  @Transform(FECUploadStatus.transform) upload_submission: FECUploadStatus | null = null; 
 
   @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | null = null;
   L6b_cash_on_hand_beginning_period: number | null = null;
