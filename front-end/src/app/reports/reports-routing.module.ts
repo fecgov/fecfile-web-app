@@ -14,6 +14,7 @@ import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submi
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
 import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
 import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
+import { ReportIsEditableGuard } from '../shared/guards/access-permissions.guards';
 
 const routes: Routes = [
   {
@@ -24,7 +25,7 @@ const routes: Routes = [
   {
     path: 'f3x/create/cash-on-hand/:reportId',
     component: CashOnHandComponent,
-    canActivate: [CashOnHandGuard],
+    canActivate: [CashOnHandGuard, ReportIsEditableGuard],
     resolve: { report: ReportResolver },
   },
   {
@@ -35,21 +36,25 @@ const routes: Routes = [
     path: 'f3x/create/step1/:reportId',
     component: CreateF3XStep1Component,
     resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard]
   },
   {
     path: 'f3x/create/step2/:reportId',
     component: CreateF3xStep2Component,
     resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard]
   },
   {
     path: 'f3x/create/step3/:reportId',
     component: CreateF3xStep3Component,
     resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard]
   },
   {
     path: 'f3x/submit/step2/:reportId',
     component: SubmitF3xStep2Component,
     resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard]
   },
   {
     path: 'f3x/submit/status/:reportId',
@@ -70,6 +75,7 @@ const routes: Routes = [
     path: 'f3x/submit/step1/:reportId',
     component: SubmitF3xStep1Component,
     resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard]
   },
   {
     path: 'f3x/test-dot-fec/:reportId',
@@ -80,6 +86,7 @@ const routes: Routes = [
     path: 'f3x/memo/:reportId',
     component: ReportLevelMemoComponent,
     resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard]
   },
   { path: '**', redirectTo: '' },
 ];

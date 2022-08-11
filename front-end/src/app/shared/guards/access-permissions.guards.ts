@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { ReportIsEditable } from '../services/access-permissions.service';
 import { selectActiveReport } from '../../store/active-report.selectors';
+import { Report } from '../interfaces/report.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ReportIsEditable implements CanActivate {
+export class ReportIsEditableGuard implements CanActivate {
   constructor(private store: Store) {}
 
   canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return new Observable<boolean>(()=>{
-      let report = this.store.select(selectActiveReport);
-      return report.subscribe((report)=>{
-        return !report?.upload_status?.status;
+      return this.store.select(selectActiveReport).subscribe((report: Report | null)=>{
+        if (report)
+          return ReportIsEditable(report);
+        return false
       });
     });
   }
