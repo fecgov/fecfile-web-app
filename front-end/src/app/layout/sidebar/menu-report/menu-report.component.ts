@@ -90,6 +90,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
           {
             label: 'ENTER A TRANSACTION',
             expanded: false,
+            visible: this.reportIsEditableFlag,
             items: [
               {
                 label: 'Cash on hand',
