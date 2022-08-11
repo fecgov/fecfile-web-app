@@ -19,6 +19,10 @@ export class FECUploadStatus {
     return plainToClass(FECUploadStatus, json);
   }
 
+  toString(): string {
+    return "[object FECUploadStatus]";
+  }
+
   /**
    *
    * @param {TransformFnParams} params
@@ -31,13 +35,6 @@ export class FECUploadStatus {
       typeof params.value === 'string'
     ) {
       return FECUploadStatus.fromJSON(params.value);
-    }
-    if (
-      params.type === TransformationType.CLASS_TO_PLAIN &&
-      params.value &&
-      Object.prototype.toString.call(params.value) === '[object FECUploadStatus]'
-    ) {
-      return JSON.stringify(params.value);
     }
     return params.value;
   }

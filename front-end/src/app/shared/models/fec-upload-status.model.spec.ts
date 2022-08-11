@@ -1,3 +1,4 @@
+import { TransformationType, TransformFnParams } from "class-transformer";
 import { FECUploadStatus } from "./fec-upload-status.model"
 
 describe('F3XSummary', () => {
