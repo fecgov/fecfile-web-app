@@ -15,8 +15,10 @@ export class ReportIsEditableService {
     this.store.select(selectActiveReport).subscribe((report: Report | null)=>{
       const status = report?.upload_status?.status;
       const bool = status != "ACCEPTED" && status != "PROCESSING";
-      observe = of(bool);    
+      observe = of(bool);
     });
     return observe;
   }
+
+
 }
