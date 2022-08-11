@@ -73,7 +73,7 @@ describe('ReportListComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step2/999');
 
     component.editItem({ id: 999, change_of_address: true } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/999/list');
   });
 
   it('#displayName should display the item form_type code', () => {

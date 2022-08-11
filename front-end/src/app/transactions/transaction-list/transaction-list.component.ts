@@ -7,10 +7,10 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from 'app/shared/services/transaction.service';
 
 @Component({
-  selector: 'app-create-f3x-step3',
-  templateUrl: './create-f3x-step3.component.html',
+  selector: 'app-transaction-list',
+  templateUrl: './transaction-list.component.html',
 })
-export class CreateF3xStep3Component extends TableListBaseComponent<Transaction> implements OnInit {
+export class TransactionListComponent extends TableListBaseComponent<Transaction> implements OnInit {
   report: F3xSummary | undefined;
 
   constructor(

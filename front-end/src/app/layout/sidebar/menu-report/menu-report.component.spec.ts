@@ -34,7 +34,7 @@ describe('MenuReportComponent', () => {
         SharedModule,
         PanelMenuModule,
         BrowserAnimationsModule,
-        RouterTestingModule.withRoutes([{ path: 'reports/f3x/create/step3/999', redirectTo: '' }]),
+        RouterTestingModule.withRoutes([{ path: 'transactions/report/999/list', redirectTo: '' }]),
       ],
     }).compileComponents();
   });
@@ -51,23 +51,23 @@ describe('MenuReportComponent', () => {
   });
 
   it('should navigate to menu', () => {
-    router.navigateByUrl('/reports/f3x/create/step3/999');
+    router.navigateByUrl('/transactions/report/999/list');
     expect(component.activeReport?.id).toBe(999);
   });
 
   it('should determine an active url', () => {
-    const urlMatch: RegExp[] = [/\/report\/999/];
+    const urlMatch: RegExp[] = [/\/report\/999\/list/];
     let url = 'no-match';
     expect(component.isActive(urlMatch, url)).toBe(false);
 
-    url = '/report/999';
+    url = '/report/999/list';
     expect(component.isActive(urlMatch, url)).toBe(true);
   });
 
   it('should process a NavigationEnd event', () => {
     component.items = [];
     component.currentReportId = 888;
-    component.handleNavigationEvent({ url: '/reports/f3x/create/step3/999' } as NavigationEnd);
+    component.handleNavigationEvent({ url: '/transactions/report/999/list' } as NavigationEnd);
     expect(component.items.length).toBe(3);
   });
 });

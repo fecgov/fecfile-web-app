@@ -12,6 +12,9 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
+import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 import { SharedModule } from '../shared/shared.module';
 import { TransactionsRoutingModule } from './transactions-routing.module';
@@ -23,12 +26,14 @@ import { TransactionGroupDComponent } from './transaction-group-d/transaction-gr
 import { TransactionGroupEComponent } from './transaction-group-e/transaction-group-e.component';
 import { TransactionGroupFComponent } from './transaction-group-f/transaction-group-f.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { TransactionListComponent, MemoCodePipe } from './transaction-list/transaction-list.component';
 
 @NgModule({
   declarations: [
     TransactionContainerComponent,
     TransactionTypePickerComponent,
+    TransactionListComponent,
+    MemoCodePipe,
     TransactionGroupAComponent,
     TransactionGroupBComponent,
     TransactionGroupCComponent,
@@ -51,6 +56,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     InputNumberModule,
     CalendarModule,
     ToastModule,
+    ToolbarModule,
+    TableModule,
     SharedModule,
   ],
 })

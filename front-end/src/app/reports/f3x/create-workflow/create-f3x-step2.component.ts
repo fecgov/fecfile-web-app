@@ -102,7 +102,7 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
         if (this.cohNeededFlag) {
           this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${this.report.id}`);
         } else {
-          this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
+          this.router.navigateByUrl(`/transactions/report/${this.report.id}/list`);
         }
       }
       if (jump === 'back' && this.report?.id) {
