@@ -1,6 +1,27 @@
+import { Injectable } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { Observable } from "rxjs";
+import { selectActiveReport } from "../../store/active-report.selectors";
 import { Report } from "../interfaces/report.interface";
 
-export function ReportIsEditable(report: Report): boolean{
-  const status = report?.upload_status?.status;
-  return status != "ACCEPTED" && status != "PROCESSING";
+@Injectable({
+  providedIn: 'root',
+})
+export class ReportIsEditableService {
+  constructor(private store: Store){}
+
+  isEditable(): Observable<boolean> {
+    return new Observable<boolean>(()=>{
+      return this.store.select(selectActiveReport).subscribe((report: Report | null)=>{
+        if (report){
+          const status = report?.upload_status?.status;
+          const bool = status != "ACCEPTED" && status != "PROCESSING";
+          console.log("EDITABLE GUARD CALLED", bool);
+          return bool
+        } else {
+          return false
+        }
+      });
+    });
+  }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, UrlTree } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { ReportIsEditable } from '../services/access-permissions.service';
+import { ReportIsEditableService } from '../services/access-permissions.service';
 import { selectActiveReport } from '../../store/active-report.selectors';
 import { Report } from '../interfaces/report.interface';
 
@@ -10,19 +10,9 @@ import { Report } from '../interfaces/report.interface';
   providedIn: 'root',
 })
 export class ReportIsEditableGuard implements CanActivate {
-  constructor(private store: Store) {}
+  constructor(private store: Store, private editableService: ReportIsEditableService) {}
 
   canActivate(): Observable<boolean> {
-    return new Observable<boolean>(()=>{
-      return this.store.select(selectActiveReport).subscribe((report: Report | null)=>{
-        if (report){
-          const bool = ReportIsEditable(report);
-          console.log("EDITABLE GUARD CALLED", bool);
-          return bool
-        } else {
-          return false
-        }
-      });
-    });
+    return this.editableService.isEditable();
   }
 }
