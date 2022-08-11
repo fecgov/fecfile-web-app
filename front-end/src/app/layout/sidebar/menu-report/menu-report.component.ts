@@ -32,15 +32,15 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   // because the order determines the expanded menu item group in the panal menu:
   // 'Enter A Transaction', 'Review A Report', and 'Submit Your Report'.
   urlMatch: RegExp[] = [
-    /^\/reports\/f3x\/create\/cash-on-hand\/\d+/, // Transaction group
-    /^\/reports\/f3x\/create\/step3\/\d+/, // Transaction group
-    /^\/transactions\/report\/\d+\/create/, // Transaction group
-    /^\/reports\/f3x\/summary\/\d+/, // Review group
-    /^\/reports\/f3x\/detailed-summary\/\d+/, // Review group
-    /^\/reports\/f3x\/memo\/\d+/, // Review group
-    /^\/reports\/f3x\/submit\/step1\/\d+/, // Submit group
-    /^\/reports\/f3x\/submit\/step2\/\d+/, // Submit group
-    /^\/reports\/f3x\/submit\/status\/\d+/, // Submit group
+    /^\/reports\/f3x\/create\/cash-on-hand\/\d+/, // Enter a transaction group
+    /^\/transactions\/report\/\d+\/list/, // Enter a transaction group
+    /^\/transactions\/report\/\d+\/create/, // Enter a transaction group
+    /^\/reports\/f3x\/summary\/\d+/, // Review a report group
+    /^\/reports\/f3x\/detailed-summary\/\d+/, // Review a report group
+    /^\/reports\/f3x\/memo\/\d+/, // Review a report group
+    /^\/reports\/f3x\/submit\/step1\/\d+/, // Submit your report group
+    /^\/reports\/f3x\/submit\/step2\/\d+/, // Submit your report group
+    /^\/reports\/f3x\/submit\/status\/\d+/, // Submit your report group
   ];
 
   constructor(private router: Router, private store: Store) {}
@@ -92,7 +92,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
               },
               {
                 label: 'Manage your transactions',
-                routerLink: [`/reports/f3x/create/step3/${this.currentReportId}`],
+                routerLink: [`/transactions/report/${this.currentReportId}/list`],
               },
               {
                 label: 'Add a receipt',
