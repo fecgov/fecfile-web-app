@@ -26,7 +26,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
   cohNeededFlag = false;
-  reportIsEditableFlag = false;
+  reportIsEditableFlag = true;
 
   private destroy$ = new Subject<boolean>();
 

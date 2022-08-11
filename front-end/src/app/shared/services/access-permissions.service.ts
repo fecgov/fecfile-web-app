@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { Observable } from "rxjs";
+import { Observable, mergeMap } from "rxjs";
 import { selectActiveReport } from "../../store/active-report.selectors";
 import { Report } from "../interfaces/report.interface";
 
@@ -12,6 +12,17 @@ export class ReportIsEditableService {
 
   isEditable(): Observable<boolean> {
     return new Observable<boolean>(()=>{
+      /*const report$ = this.store.select(selectActiveReport);
+      return report$.pipe(mergeMap((report)=>{
+          const status = report?.upload_status?.status;
+          const bool = status != "ACCEPTED" && status != "PROCESSING";
+          console.log("EDITABLE GUARD CALLED", bool);
+          return bool
+      }))
+          WIP Section
+      */
+
+
       return this.store.select(selectActiveReport).subscribe((report: Report | null)=>{
         if (report){
           const status = report?.upload_status?.status;
