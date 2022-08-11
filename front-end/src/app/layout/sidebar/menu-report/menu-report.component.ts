@@ -10,8 +10,7 @@ import { Report } from '../../../shared/interfaces/report.interface';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
-import { ReportIsEditableGuard } from '../../../shared/guards/access-permissions.guards';
-import { ReportIsEditable } from '../../../shared/services/access-permissions.service';
+import { ReportIsEditableService } from '../../../shared/services/access-permissions.service';
 
 @Component({
   selector: 'app-menu-report',
@@ -46,7 +45,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     /^\/reports\/f3x\/submit\/status\/\d+/, // Submit group
   ];
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(private router: Router, private store: Store, private editableService: ReportIsEditableService) {}
 
   ngOnInit(): void {
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
@@ -57,8 +56,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report: Report | null) => {
         this.activeReport = report;
-        if (this.activeReport)
-          this.reportIsEditableFlag = ReportIsEditable(this.activeReport);
       });
 
     this.store
@@ -67,6 +64,11 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       .subscribe((cohNeededFlag: boolean) => {
         this.cohNeededFlag = cohNeededFlag;
       });
+
+    this.editableService.isEditable().subscribe((isEditable: boolean)=>{
+      this.reportIsEditableFlag = isEditable;
+      console.log(isEditable);
+    })
 
     // Watch the router changes and display menu if URL is in urlMatch list.
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event: Event) => {
