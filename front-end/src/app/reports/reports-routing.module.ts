@@ -13,7 +13,7 @@ import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submi
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
 import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
 import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
-import { ReportIsEditableGuard } from '../shared/guards/access-permissions.guards';
+import { ReportIsEditableGuard } from '../shared/guards/report-is-editable.guards';
 
 const routes: Routes = [
   {

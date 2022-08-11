@@ -10,7 +10,7 @@ import { Report } from '../../../shared/interfaces/report.interface';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
-import { ReportIsEditableService } from '../../../shared/services/access-permissions.service';
+import { ReportIsEditableService } from '../../../shared/services/report-is-editable.service';
 
 @Component({
   selector: 'app-menu-report',

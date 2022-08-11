@@ -8,5 +8,5 @@ export interface Report {
   report_code: F3xReportCode | null;
   coverage_from_date: Date | null;
   coverage_through_date: Date | null;
-  upload_status: FECUploadStatus | null;
+  upload_submission: FECUploadStatus | null;
 }

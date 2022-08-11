@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ReportIsEditableService } from '../services/access-permissions.service';
+import { ReportIsEditableService } from '../services/report-is-editable.service';
 
 @Injectable({
   providedIn: 'root',

@@ -13,7 +13,7 @@ export class ReportIsEditableService {
   isEditable(): Observable<boolean> {
     let observe = new Observable<boolean>();
     this.store.select(selectActiveReport).subscribe((report: Report | null)=>{
-      const status = report?.upload_status?.status;
+      const status = report?.upload_submission?.fec_status;
       const bool = status != "ACCEPTED" && status != "PROCESSING";
       observe = of(bool);
     });
