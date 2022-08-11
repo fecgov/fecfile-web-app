@@ -12,15 +12,16 @@ import { Report } from '../interfaces/report.interface';
 export class ReportIsEditableGuard implements CanActivate {
   constructor(private store: Store) {}
 
-  canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  canActivate(): Observable<boolean> {
     return new Observable<boolean>(()=>{
       return this.store.select(selectActiveReport).subscribe((report: Report | null)=>{
         if (report){
           const bool = ReportIsEditable(report);
-          console.log("LISTEN", bool);
+          console.log("EDITABLE GUARD CALLED", bool);
           return bool
+        } else {
+          return false
         }
-        return false
       });
     });
   }
