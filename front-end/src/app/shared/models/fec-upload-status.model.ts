@@ -3,13 +3,16 @@ import { BaseModel } from "./base.model";
 
 
 export class FECUploadStatus {
+  fecfile_task_state = "";
+  fecfile_error = "";
+  fec_submission_id = "";
   fec_report_id = "";
-  message = "";
-  status: "ACCEPTED" | "REJECTED" | "PROCESSING" | "" = "";
-  submission_id = "";
-  success: boolean | null = null;
+  fec_message = "";
+  fec_status: "ACCEPTED" | "REJECTED" | "PROCESSING" | null = null;
   @Type(()=> Date)
-  @Transform(BaseModel.dateTransform) acceptance_datetime: Date | null = null;
+  @Transform(BaseModel.dateTransform) created: Date | null = null;
+  @Type(()=> Date)
+  @Transform(BaseModel.dateTransform) updated: Date | null = null;
 
   // prettier-ignore
   static fromJSON(json: any): FECUploadStatus { // eslint-disable-line @typescript-eslint/no-explicit-any
