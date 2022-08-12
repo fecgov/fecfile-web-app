@@ -1,6 +1,14 @@
 <div class="grid">
   <div class="col-12">
-    <h1 class="super-header">Thank you for submitting your report. It is currently being processed.</h1>
+    <h1 *ngIf='report.upload_submission?.fec_status==="ACCEPTED"' class="super-header">
+      Congratulations, your report was successfully submitted and accepted.
+    </h1>
+    <h1 *ngIf='report.upload_submission?.fec_status==="REJECTED"' class="super-header">
+      Your report has been rejected.
+    </h1>
+    <h1 *ngIf='report.upload_submission?.fec_status==="PROCESSING"' class="super-header">
+      Thank you for submitting your report. It is currently being processed.
+    </h1>
   </div>
 </div>
 <div class="grid">
@@ -29,13 +37,21 @@
         <br />
       </div>
       <div class="col-12">
-        <h5 class="no-vert-margins">CONFIRMATION EMAILS:</h5>
-        <h3 class="no-vert-margins">
+        <h5 class="no-vert-margins word-break">CONFIRMATION EMAILS:</h5>
+        <h3 class="no-vert-margins word-break">
           {{ report.confirmation_email_1 }} <br />
           {{ report.confirmation_email_2 }}
         </h3>
         <br />
       </div>
+      <ng-container *ngIf='report.upload_submission?.fec_status==="ACCEPTED"'>
+        <div class="col-12">
+          <h5 class="no-vert-margins">FILING ID:</h5>
+          <h3 class="no-vert-margins">
+            {{ report.upload_submission?.fec_report_id }}
+          </h3>
+        </div>
+      </ng-container>
     </div>
   </div>
   <div class="col-8">
@@ -50,10 +66,13 @@
 </div>
 <div class="grid">
   <div class="col-12">
-    <p>
+    <p *ngIf="report.upload_submission?.fec_status!=='ACCEPTED' && report.upload_submission?.fec_status !=='REJECTED'">
       The FEC will send a report status message to the confirmation emails you provided during the submission process.
       If any problems are encountered during the process, Web Upload will terminate the upload session and relay the
       specifics of the error.
+    </p>
+    <p *ngIf="report.upload_submission?.fec_status==='REJECTED' && report.upload_submission?.fec_message">
+      FEC Error Message: {{ report.upload_submission?.fec_message }}
     </p>
   </div>
 </div>

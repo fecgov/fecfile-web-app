@@ -83,6 +83,7 @@ describe('ValidateService', () => {
     let result: ValidationErrors | null = validator(
       service.formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as FormControl
     );
+    expect(result).not.toEqual(null);
     if (result) {
       expect(result['max'].max).toBe(999999999.99);
     }
