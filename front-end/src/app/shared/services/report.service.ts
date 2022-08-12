@@ -42,7 +42,7 @@ export class ReportService implements TableListService<Report> {
    * Dispatches the Cash On Hand data for the first report in the list to the ngrx store.
    * @param reports - List of reports on the current page of the Reports table
    */
-  private setStoreCashOnHand(reports: Report[]) {
+  public setStoreCashOnHand(reports: Report[]) {
     if (reports.length === 1) {
       const report: F3xSummary = reports[0] as F3xSummary;
       const payload: CashOnHand = {
