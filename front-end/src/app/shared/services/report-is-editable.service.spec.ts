@@ -7,7 +7,6 @@ import { selectActiveReport } from '../../store/active-report.selectors';
 import { ReportIsEditableService } from './report-is-editable.service'
 
 describe('TransactionService', () => {
-  let httpTestingController: HttpTestingController;
   let service: ReportIsEditableService;
 
   const activeReport: F3xSummary = F3xSummary.fromJSON({
