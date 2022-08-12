@@ -3,6 +3,7 @@ import { Report } from '../interfaces/report.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { FECUploadStatus } from './fec-upload-status.model';
+import { FECWebPrintStatus } from './fec-webprint-status.model';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -187,6 +188,8 @@ export class F3xSummary extends BaseModel implements Report {
   
   @Type(()=>FECUploadStatus)
   @Transform(FECUploadStatus.transform) upload_submission: FECUploadStatus | null = null; 
+  @Type(()=>FECWebPrintStatus)
+  @Transform(FECWebPrintStatus.transform) webprint_submission: FECWebPrintStatus | null = null;
 
   @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | null = null;
   L6b_cash_on_hand_beginning_period: number | null = null;
