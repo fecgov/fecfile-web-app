@@ -37,7 +37,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     /^\/transactions\/report\/\d+\/create/, // Enter a transaction group
     /^\/reports\/f3x\/summary\/\d+/, // Review a report group
     /^\/reports\/f3x\/detailed-summary\/\d+/, // Review a report group
-    /^\/reports\/f3x\/web\-print\/\d+/, // Review a report group
+    /^\/reports\/f3x\/web-print\/\d+/, // Review a report group
     /^\/reports\/f3x\/memo\/\d+/, // Review a report group
     /^\/reports\/f3x\/submit\/step1\/\d+/, // Submit your report group
     /^\/reports\/f3x\/submit\/step2\/\d+/, // Submit your report group
