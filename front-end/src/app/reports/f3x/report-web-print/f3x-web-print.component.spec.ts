@@ -16,11 +16,13 @@ import { selectUserLoginData } from 'app/store/login.selectors';
 import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
 import { of } from 'rxjs';
 import { selectActiveReport } from '../../../store/active-report.selectors';
+import { WebPrintService } from '../../../shared/services/web-print.service';
 
 describe('ReportWebPrintComponent', () => {
   let component: ReportWebPrintComponent;
   let fixture: ComponentFixture<ReportWebPrintComponent>;
-  let reportService: F3xSummaryService; 
+  let reportService: F3xSummaryService;
+  let webPrintService: WebPrintService;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
   const userLoginData: UserLoginData = {
     committee_id: 'C00000000',
@@ -83,13 +85,9 @@ describe('ReportWebPrintComponent', () => {
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(ReportWebPrintComponent);
-    fixture.detectChanges();
-  });
-
-  beforeEach(() => {
     TestBed.inject(Router);
     reportService = TestBed.inject(F3xSummaryService);
-    fixture = TestBed.createComponent(ReportWebPrintComponent);
+    webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));
     fixture.detectChanges();
@@ -102,5 +100,11 @@ describe('ReportWebPrintComponent', () => {
   it('Sets the status messages as expected', ()=>{
     component.pollPrintStatus();
     expect(component.pollingStatusMessage).toBe("This may take a while...");
+  });
+
+  it('refreshes the active report', ()=>{
+    const refresh = spyOn(webPrintService, 'getStatus');
+    component.refreshReportStatus();
+    expect(refresh).toHaveBeenCalled();
   });
 });
