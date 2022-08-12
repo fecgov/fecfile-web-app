@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { map, Observable, of } from "rxjs";
+import { map, Observable } from "rxjs";
 import { selectActiveReport } from "../../store/active-report.selectors";
 import { Report } from "../interfaces/report.interface";
 
