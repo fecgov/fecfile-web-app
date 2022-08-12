@@ -5,6 +5,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { selectCohNeededStatus } from 'app/store/coh-needed.selectors';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -15,6 +16,7 @@ import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.util
 import { updateLabelLookupAction } from '../../../store/label-lookup.actions';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
+import { ApiService } from 'app/shared/services/api.service';
 
 @Component({
   selector: 'app-submit-f3x-step2',
@@ -35,6 +37,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
+  cohNeededFlag = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
@@ -50,7 +53,8 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService,
-    protected confirmationService: ConfirmationService
+    protected confirmationService: ConfirmationService,
+    private apiService: ApiService
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +67,10 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
+    this.store
+      .select(selectCohNeededStatus)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cohNeededFlag: boolean) => (this.cohNeededFlag = cohNeededFlag));
 
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
     this.store.dispatch(updateLabelLookupAction());
@@ -171,9 +179,15 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
 
   private submitReport(): void {
     this.loading = 2;
-    setTimeout(() => {
+
+    const payload = {
+      report_id: this.report?.id,
+      password: this.form.value['filing_password'],
+    };
+
+    this.apiService.post('/web-services/submit-to-fec/', payload).subscribe(() => {
       if (this.report?.id) this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`);
       else this.router.navigateByUrl('/reports');
-    }, 5000);
+    });
   }
 }

@@ -21,7 +21,7 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.url().should('contain', '/reports');
 
     const report: object = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
 
     cy.get("p-button[icon='pi pi-pencil']").first().click();
     cy.shortWait();

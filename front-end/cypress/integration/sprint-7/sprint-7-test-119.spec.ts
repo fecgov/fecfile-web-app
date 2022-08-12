@@ -79,7 +79,7 @@ describe('QA Test Script #119 (Sprint 7)', () => {
   it('Step 1: Navigate to contacts page', () => {
     cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
-    cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
+    cy.get('.p-menubar').contains('.p-menuitem-link', 'Contacts').click();
     cy.url().should('contain', '/contacts');
   });
 

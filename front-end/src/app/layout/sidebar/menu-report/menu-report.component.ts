@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
+import { selectCohNeededStatus } from 'app/store/coh-needed.selectors';
 import { Report } from '../../../shared/interfaces/report.interface';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
@@ -23,14 +24,16 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
+  cohNeededFlag = false;
 
-  private destroy$ = new Subject<boolean>(); //
+  private destroy$ = new Subject<boolean>();
 
   // The order of the url regular expressions listed inthe urlMatch array is important
   // because the order determines the expanded menu item group in the panal menu:
   // 'Enter A Transaction', 'Review A Report', and 'Submit Your Report'.
   urlMatch: RegExp[] = [
-    /^\/reports\/f3x\/create\/step3\/\d+/, // Enter a transaction group
+    /^\/reports\/f3x\/create\/cash-on-hand\/\d+/, // Enter a transaction group
+    /^\/transactions\/report\/\d+\/list/, // Enter a transaction group
     /^\/transactions\/report\/\d+\/create/, // Enter a transaction group
     /^\/reports\/f3x\/summary\/\d+/, // Review a report group
     /^\/reports\/f3x\/detailed-summary\/\d+/, // Review a report group
@@ -51,6 +54,13 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report: Report | null) => {
         this.activeReport = report;
+      });
+
+    this.store
+      .select(selectCohNeededStatus)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cohNeededFlag: boolean) => {
+        this.cohNeededFlag = cohNeededFlag;
       });
 
     // Watch the router changes and display menu if URL is in urlMatch list.
@@ -76,8 +86,13 @@ export class MenuReportComponent implements OnInit, OnDestroy {
             expanded: false,
             items: [
               {
+                label: 'Cash on hand',
+                routerLink: [`/reports/f3x/create/cash-on-hand/${this.currentReportId}`],
+                visible: this.cohNeededFlag,
+              },
+              {
                 label: 'Manage your transactions',
-                routerLink: [`/reports/f3x/create/step3/${this.currentReportId}`],
+                routerLink: [`/transactions/report/${this.currentReportId}/list`],
               },
               {
                 label: 'Add a receipt',
@@ -116,9 +131,10 @@ export class MenuReportComponent implements OnInit, OnDestroy {
         ];
       }
 
-      this.items[0].expanded = this.isActive(this.urlMatch.slice(0, 2), event.url);
-      this.items[1].expanded = this.isActive(this.urlMatch.slice(2, 5), event.url);
-      this.items[2].expanded = this.isActive(this.urlMatch.slice(5, 8), event.url);
+      // Slice indexes are determined by the number of entries in each urlMatch group
+      this.items[0].expanded = this.isActive(this.urlMatch.slice(0, 3), event.url);
+      this.items[1].expanded = this.isActive(this.urlMatch.slice(3, 6), event.url);
+      this.items[2].expanded = this.isActive(this.urlMatch.slice(6, 9), event.url);
     }
   }
 

@@ -34,7 +34,7 @@ describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
         cy.url().should('contain', '/dashboard');
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
         cy.url().should('contain', '/contacts');
-        cy.enterContact(contact);
+        cy.createContact(contact);
       });
 
       it('Steps 2 & 3: Find the created contact, verify that it is an individual, and then select its edit checkbox', () => {

@@ -1,6 +1,7 @@
-import { Transaction } from './generators/transactions.spec';
+import { TransactionTree } from './generators/transactions.spec';
 import { TransactionFields } from './transaction_nav_trees.spec';
 import _ from 'lodash';
+
 
 //Run this on the transaction creation accordion to navigate to the desired transaction
 export function navigateTransactionAccordion(category: string, transactionType: string) {
@@ -15,30 +16,54 @@ export function navigateTransactionAccordion(category: string, transactionType: 
  *  Run this function while Cypress is on the View All Transactions page
  *  to create a new transaction.
  *
- *  transaction: the Transaction object to be used (see the Transaction Generator file)
- *  save: Boolean.  Controls whether or not to save when finished. (Default: True)
+ *  @transaction: the Transaction object to be used (see the Transaction Generator file)
+ *  @save: Boolean.  Controls whether or not to save when finished. (Default: True)
  */
-export function enterTransactionSchA(transaction: Transaction, save: boolean = true) {
+export function createTransactionSchA(transactionTree: TransactionTree, save: boolean = true) {
+  const category = Object.keys(transactionTree)[0];
+  const transactionType = Object.keys(transactionTree[category])[0];
+  const transaction = transactionTree[category][transactionType];
+
   cy.get('button[label="Add new transaction"]').click();
   cy.shortWait();
 
-  const category = Object.keys(transaction)[0];
-  const transactionType = Object.keys(transaction[category])[0];
   navigateTransactionAccordion(category, transactionType);
   cy.medWait();
+  enterTransactionSchA(transaction);
 
-  const form = transaction[category][transactionType];
-  const fields = Object.keys(form);
+  if (save) {
+    if (transaction.childTransactions){
+      for (let i = 0; i < transaction["childTransactions"].length; i++){
+        const childTransaction = transaction["childTransactions"][i];
+
+        if (i == 0){
+          cy.get('button[label="Save & add a JF Transfer Memo"]').click();
+        } else {
+           cy.get('button[label="Save & add another JF Transfer Memo"]').click();
+        }
+        cy.medWait();
+        enterTransactionSchA(childTransaction);
+      }
+    }
+    cy.get('button[label="Save & view all transactions"]').click();
+    cy.medWait();
+  }
+}
+
+export function enterTransactionSchA(transaction: Transaction){
+  const fields = Object.keys(transaction);
 
   //Gets the value of the first field-key in the form that starts with "entityType"
   const entityType =
-    form[
-      Object.keys(form).find((key) => {
+    transaction[
+      Object.keys(transaction).find((key) => {
         return key.startsWith('entityType');
       })
     ];
 
-  for (let field of fields) {
+  for (const field of fields) {
+    if (field == "childTransactions") continue;
+
     const fieldRules = TransactionFields[field];
     const fieldName = fieldRules['fieldName'];
 
@@ -51,28 +76,27 @@ export function enterTransactionSchA(transaction: Transaction, save: boolean = t
     }
 
     const fieldType = fieldRules['fieldType'];
-    const fieldValue = form[field];
-    switch (fieldType) {
-      case 'Text':
-        cy.get(`input[formControlName=${fieldName}]`).safeType(fieldValue);
-        break;
-      case 'P-InputNumber':
-        cy.get(`p-inputnumber[formControlName=${fieldName}]`).safeType(fieldValue);
-        break;
-      case 'Textarea':
-        cy.get(`textarea[formControlName=${fieldName}]`).safeType(fieldValue);
-        break;
-      case 'Dropdown':
-        cy.dropdownSetValue(`p-dropdown[formControlName=${fieldName}]`, fieldValue);
-        break;
-      case 'Calendar':
-        cy.calendarSetValue(`p-calendar[formControlName=${fieldName}]`, fieldValue);
-        break;
-    }
+    const fieldValue = transaction[field];
+    fillFormField(fieldName, fieldValue, fieldType);
   }
+}
 
-  if (save) {
-    cy.get('button[label="Save & view all transactions"]').click();
-    cy.medWait();
+function fillFormField(fieldName: string, fieldValue: string, fieldType: string){
+  switch (fieldType) {
+    case 'Text':
+      cy.get(`input[formControlName=${fieldName}]`).safeType(fieldValue);
+      break;
+    case 'P-InputNumber':
+      cy.get(`p-inputnumber[formControlName=${fieldName}]`).safeType(fieldValue);
+      break;
+    case 'Textarea':
+      cy.get(`textarea[formControlName=${fieldName}]`).safeType(fieldValue);
+      break;
+    case 'Dropdown':
+      cy.dropdownSetValue(`p-dropdown[formControlName=${fieldName}]`, fieldValue);
+      break;
+    case 'Calendar':
+      cy.calendarSetValue(`p-calendar[formControlName=${fieldName}]`, fieldValue);
+      break;
   }
 }

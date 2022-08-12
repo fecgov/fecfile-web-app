@@ -23,7 +23,7 @@ describe('QA Test Script #206 (Sprint 8)', () => {
       });
 
       it('Steps 2-6: Create a "Candidate" type Contact', () => {
-        cy.enterContact(contact);
+        cy.createContact(contact);
       });
 
       it("Steps 7-9: Edit the created contact's Candidate ID", () => {

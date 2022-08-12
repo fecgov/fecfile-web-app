@@ -80,7 +80,7 @@ function testField(cType, field) {
   } else if (field == 'committee_id') {
     randString = committeeID();
   } else {
-    randString = randomString(strLength);
+    randString = randomString(strLength, 'special');
   }
 
   cy.get('#' + field)

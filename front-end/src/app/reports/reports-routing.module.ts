@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReportListComponent } from './report-list/report-list.component';
 import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2.component';
-import { CreateF3xStep3Component } from './f3x/create-workflow/create-f3x-step3.component';
 import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
@@ -13,12 +12,20 @@ import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-st
 import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
 import { ReportWebPrintComponent } from './f3x/report-web-print/f3x-web-print.component';
+import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
+import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: ReportListComponent,
     pathMatch: 'full',
+  },
+  {
+    path: 'f3x/create/cash-on-hand/:reportId',
+    component: CashOnHandComponent,
+    canActivate: [CashOnHandGuard],
+    resolve: { report: ReportResolver },
   },
   {
     path: 'f3x/create/step1',
@@ -32,11 +39,6 @@ const routes: Routes = [
   {
     path: 'f3x/create/step2/:reportId',
     component: CreateF3xStep2Component,
-    resolve: { report: ReportResolver },
-  },
-  {
-    path: 'f3x/create/step3/:reportId',
-    component: CreateF3xStep3Component,
     resolve: { report: ReportResolver },
   },
   {
