@@ -7,10 +7,14 @@ import { selectUserLoginData } from '../../store/login.selectors';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { F3xSummary } from '../models/f3x-summary.model';
 import { UserLoginData } from '../models/user.model';
+import { ApiService } from './api.service';
+import { ReportService } from './report.service';
 import { WebPrintService } from './web-print.service';
 
 describe('WebPrintService', () => {
   let service: WebPrintService;
+  let apiService: ApiService;
+  let reportService: ReportService;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
   const userLoginData: UserLoginData = {
     committee_id: 'C00000000',
@@ -58,9 +62,25 @@ describe('WebPrintService', () => {
 
     TestBed.inject(HttpTestingController);
     service = TestBed.inject(WebPrintService);
+    apiService = TestBed.inject(ApiService);
+    reportService = TestBed.inject(ReportService);
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should post as expected', ()=>{
+    const api = spyOn(apiService, "post")
+    service.submitPrintJob(1);
+    expect(api).toHaveBeenCalledWith('/web-services/submit-to-webprint/', {
+      report_id: 1,
+    });
+  });
+
+  it('should get new reports', () => {
+    const reportRequest = spyOn(reportService, "get");
+    service.getStatus(1);
+    expect(reportRequest).toHaveBeenCalledWith(1);
+  })
 });

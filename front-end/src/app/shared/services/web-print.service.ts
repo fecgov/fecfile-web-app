@@ -17,16 +17,24 @@ export class WebPrintService {
    * @return     {Observable}  The WebPrint status.
    */
   public getStatus(reportId: number): void {
-    this.reportService.get(reportId).subscribe((report)=>{
-      this.store.dispatch(setActiveReportAction({ payload: report}));
-    });
+    const request = this.reportService.get(reportId);
+    
+    if (request){
+      request.subscribe((report)=>{
+        this.store.dispatch(setActiveReportAction({ payload: report}));
+      });
+    }
   }
 
   public submitPrintJob(reportId: number): void{
-    this.apiService.post('/web-services/submit-to-webprint/', {
+    const request = this.apiService.post('/web-services/submit-to-webprint/', {
       report_id: reportId,
-    }).subscribe(()=>{
-      this.getStatus(reportId);
     });
+    
+    if(request){
+      request.subscribe(()=>{
+        this.getStatus(reportId);
+      });
+    }
   }
 }
