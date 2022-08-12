@@ -71,7 +71,7 @@ export class ReportWebPrintComponent implements OnInit {
   }
 
   public pollPrintStatus(){
-    let pollingTime = 5000;
+    const pollingTime = 5000;
     this.pollingStatusMessage = "This may take a while...";
     this.webPrintStage = "checking";
 
