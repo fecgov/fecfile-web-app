@@ -69,6 +69,7 @@ describe('SubmitF3xStep2Component', () => {
               data: {
                 report: F3xSummary.fromJSON({
                   report_code: 'Q1',
+                  id: 999,
                 }),
               },
             },
@@ -83,7 +84,7 @@ describe('SubmitF3xStep2Component', () => {
     reportService = TestBed.inject(F3xSummaryService);
     fixture = TestBed.createComponent(SubmitF3xStep2Component);
     component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({})));
+    spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({id:999})));
     fixture.detectChanges();
   });
 
@@ -92,7 +93,7 @@ describe('SubmitF3xStep2Component', () => {
   });
 
   it("should set the default form values with the committee's values", () => {
-    component.report = F3xSummary.fromJSON({});
+    component.report = F3xSummary.fromJSON({id:999});
     const testCommitteeAccount = CommitteeAccount.fromJSON({
       treasurer_name_1: 'Test',
       treasurer_name_2: 'McTest',
