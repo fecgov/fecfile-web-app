@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ReportIsEditableGuard } from './report-is-editable.guards';
+import { ReportIsEditableGuard } from './report-is-editable.guard';
 
 describe('ReportIsEditableGuard', () => {
   let guard: ReportIsEditableGuard;
