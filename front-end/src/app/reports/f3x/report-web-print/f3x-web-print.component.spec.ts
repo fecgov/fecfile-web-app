@@ -107,6 +107,72 @@ describe('ReportWebPrintComponent', () => {
     expect(refresh).toHaveBeenCalled();
   });
 
+  it('Updates with a failed report', ()=>{
+    const testF3x: F3xSummary = F3xSummary.fromJSON({
+      id: 999,
+      coverage_from_date: '2022-05-25',
+      form_type: 'F3XN',
+      report_code: 'Q1',
+      webprint_submission: {
+        fec_email: "test@test.com",
+        fec_batch_id: "1234",
+        fec_image_url: "image.test.com",
+        fec_submission_id: "FEC-1234567",
+        fec_message: "Message Goes Here",
+        fec_status: "FAILED",
+        fecfile_error: "Things didn't work out...",
+        fecfile_task_state:"COMPLETED",
+        id: 0,
+        created: "10/10/2010",
+        updated: "10/12/2010",
+      }
+    });
+
+    component.updatePrintStatus(testF3x);
+    expect(component.webPrintStage).toBe("failure");
+    expect(component.printError).toBe("Things didn't work out...");
+  });
+
+  it('Updates with an unsubmitted report', ()=>{
+    const testF3x: F3xSummary = F3xSummary.fromJSON({
+      id: 999,
+      coverage_from_date: '2022-05-25',
+      form_type: 'F3XN',
+      report_code: 'Q1',
+      webprint_submission: null,
+    });
+
+    component.updatePrintStatus(testF3x);
+    expect(component.webPrintStage).toBe("not-submitted");
+  });
+
+
+  it('Updates with a processing report', ()=>{
+    const testF3x: F3xSummary = F3xSummary.fromJSON({
+      id: 999,
+      coverage_from_date: '2022-05-25',
+      form_type: 'F3XN',
+      report_code: 'Q1',
+      webprint_submission: {
+        fec_email: "test@test.com",
+        fec_batch_id: "1234",
+        fec_image_url: "image.test.com",
+        fec_submission_id: "FEC-1234567",
+        fec_message: "Message Goes Here",
+        fec_status: "PROCESSING",
+        fecfile_error: "Things didn't work out...",
+        fecfile_task_state:"COMPLETED",
+        id: 0,
+        created: "10/10/2010",
+        updated: "10/12/2010",
+      }
+    });
+
+    component.updatePrintStatus(testF3x);
+    expect(component.webPrintStage).toBe("checking");
+    expect(component.pollingStatusMessage).toBe("Your report is still being processed. Please check back later to access your PDF");
+  });
+
   it('#submitPrintJob() calls the service', ()=>{
     const submit = spyOn(webPrintService, "submitPrintJob");
     component.submitPrintJob();
