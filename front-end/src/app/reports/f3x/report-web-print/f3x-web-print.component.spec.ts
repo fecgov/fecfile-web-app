@@ -15,6 +15,7 @@ import { selectCommitteeAccount } from '../../../store/committee-account.selecto
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
 import { of } from 'rxjs';
+import { selectActiveReport } from '../../../store/active-report.selectors';
 
 describe('ReportWebPrintComponent', () => {
   let component: ReportWebPrintComponent;
@@ -32,6 +33,19 @@ describe('ReportWebPrintComponent', () => {
     coverage_from_date: '2022-05-25',
     form_type: 'F3XN',
     report_code: 'Q1',
+    webprint_submission: {
+      fec_email: "test@test.com",
+      fec_batch_id: "1234",
+      fec_image_url: "image.test.com",
+      fec_submission_id: "FEC-1234567",
+      fec_message: "Message Goes Here",
+      fec_status: "COMPLETED",
+      fecfile_error: "",
+      fecfile_task_state:"COMPLETED",
+      id: 0,
+      created: "10/10/2010",
+      updated: "10/12/2010",
+    }
   });
 
   beforeEach(() => {
@@ -53,6 +67,7 @@ describe('ReportWebPrintComponent', () => {
           selectors: [
             { selector: selectCommitteeAccount, value: committeeAccount },
             { selector: selectUserLoginData, value: userLoginData },
+            { selector: selectActiveReport, value: f3x },
           ],
         }),
         {
@@ -60,9 +75,7 @@ describe('ReportWebPrintComponent', () => {
           useValue: {
             snapshot: {
               data: {
-                report: F3xSummary.fromJSON({
-                  report_code: 'Q1',
-                }),
+                report: f3x
               },
             },
           },
