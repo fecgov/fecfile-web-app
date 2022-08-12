@@ -107,4 +107,10 @@ describe('ReportWebPrintComponent', () => {
     component.refreshReportStatus();
     expect(refresh).toHaveBeenCalled();
   });
+
+  it('#submitPrintJob() calls the service', ()=>{
+    const submit = spyOn(webPrintService, "submitPrintJob");
+    component.submitPrintJob();
+    expect(submit).toHaveBeenCalled();
+  })
 });
