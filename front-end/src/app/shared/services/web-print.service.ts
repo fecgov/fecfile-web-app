@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ApiService } from './api.service';
-import { WebPrint } from '../models/web-print.model';
 import { setActiveReportAction } from '../../store/active-report.actions';
-import { Report } from '../interfaces/report.interface';
 import { ReportService } from './report.service';
 
 

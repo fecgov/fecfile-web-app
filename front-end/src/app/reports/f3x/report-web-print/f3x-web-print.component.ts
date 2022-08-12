@@ -7,7 +7,6 @@ import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.util
 import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels, F3xSummary } from '../../../shared/models/f3x-summary.model';
 import { WebPrintService } from '../../../shared/services/web-print.service';
-import { WebPrint } from '../../../shared/models/web-print.model';
 import { Report } from '../../../shared/interfaces/report.interface';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 
