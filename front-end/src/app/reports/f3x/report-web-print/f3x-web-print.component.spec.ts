@@ -21,6 +21,12 @@ describe('ReportWebPrintComponent', () => {
   let fixture: ComponentFixture<ReportWebPrintComponent>;
   let reportService: F3xSummaryService; 
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
+  const userLoginData: UserLoginData = {
+    committee_id: 'C00000000',
+    email: 'email@fec.com',
+    is_allowed: true,
+    token: 'jwttokenstring',
+  };
   const f3x: F3xSummary = F3xSummary.fromJSON({
     id: 999,
     coverage_from_date: '2022-05-25',
@@ -28,35 +34,8 @@ describe('ReportWebPrintComponent', () => {
     report_code: 'Q1',
   });
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [SharedModule, DividerModule, CardModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule],
-      declarations: [ReportWebPrintComponent],
-      providers: [
-        provideMockStore({
-          selectors: [{ selector: selectReportCodeLabelList, value: {} }],
-        }),
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: {
-                report: f3x,
-              },
-            },
-          },
-        },
-      ],
-    }).compileComponents();
-  });
-
   beforeEach(() => {
-    const userLoginData: UserLoginData = {
-      committee_id: 'C00000000',
-      email: 'email@fec.com',
-      is_allowed: true,
-      token: 'jwttokenstring',
-    };
+    
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([]),
