@@ -19,7 +19,6 @@ import { of } from 'rxjs';
 describe('ReportWebPrintComponent', () => {
   let component: ReportWebPrintComponent;
   let fixture: ComponentFixture<ReportWebPrintComponent>;
-  let router: Router;
   let reportService: F3xSummaryService; 
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
   const f3x: F3xSummary = F3xSummary.fromJSON({
