@@ -96,7 +96,7 @@ describe('ReportWebPrintComponent', () => {
   });
 
   beforeEach(() => {
-    router = TestBed.inject(Router);
+    TestBed.inject(Router);
     reportService = TestBed.inject(F3xSummaryService);
     fixture = TestBed.createComponent(ReportWebPrintComponent);
     component = fixture.componentInstance;
