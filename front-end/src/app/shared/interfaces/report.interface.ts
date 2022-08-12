@@ -8,3 +8,8 @@ export interface Report {
   coverage_from_date: Date | null;
   coverage_through_date: Date | null;
 }
+
+export interface CashOnHand {
+  report_id: number | null;
+  value: number | null;
+}
