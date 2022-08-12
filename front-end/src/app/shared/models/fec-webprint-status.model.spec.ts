@@ -18,7 +18,6 @@ describe('F3XSummary', () => {
     expect(uploadStatus.created).toBeInstanceOf(Date);
     console.log(uploadStatus.created);
     expect(uploadStatus.created?.getFullYear()).toBe(2010);
-    expect(uploadStatus.fec_report_id).toBe("FEC-1234567");
     expect(JSON.stringify(uploadStatus)).toContain("FEC-1234567");
   });
 });

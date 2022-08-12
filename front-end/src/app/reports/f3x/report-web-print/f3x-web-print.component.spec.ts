@@ -58,7 +58,7 @@ describe('ReportWebPrintComponent', () => {
       is_allowed: true,
       token: 'jwttokenstring',
     };
-    await TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([]),
         HttpClientTestingModule,
@@ -109,9 +109,7 @@ describe('ReportWebPrintComponent', () => {
   });
 
   it('Sets the status messages as expected', ()=>{
-    component.pollPrintStatus(0, false);
+    component.pollPrintStatus();
     expect(component.pollingStatusMessage).toBe("This may take a while...");
-    component.pollPrintStatus(0, true);
-    expect(component.pollingStatusMessage).toBe("Checking Web-Print Status...");
   });
 });
