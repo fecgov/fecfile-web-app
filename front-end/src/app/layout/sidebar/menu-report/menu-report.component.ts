@@ -56,9 +56,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report: Report | null) => {
         this.activeReport = report;
-        this.editableService.isEditable().subscribe((isEditable: boolean)=>{
-          this.reportIsEditableFlag = isEditable;
-        });
+        this.reportIsEditableFlag = this.editableService.isEditableLogic(report);
       });
 
     this.store
