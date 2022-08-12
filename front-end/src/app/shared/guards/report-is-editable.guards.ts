@@ -10,7 +10,6 @@ export class ReportIsEditableGuard implements CanActivate {
   constructor(private editableService: ReportIsEditableService) {}
 
   canActivate(): Observable<boolean> {
-    const observe = this.editableService.isEditable();
-    return observe;
+    return this.editableService.isEditable();
   }
 }

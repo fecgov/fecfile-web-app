@@ -56,6 +56,9 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report: Report | null) => {
         this.activeReport = report;
+        this.editableService.isEditable().subscribe((isEditable: boolean)=>{
+          this.reportIsEditableFlag = isEditable;
+        });
       });
 
     this.store
@@ -64,10 +67,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       .subscribe((cohNeededFlag: boolean) => {
         this.cohNeededFlag = cohNeededFlag;
       });
-
-    this.editableService.isEditable().subscribe((isEditable: boolean)=>{
-      this.reportIsEditableFlag = isEditable;
-    })
 
     // Watch the router changes and display menu if URL is in urlMatch list.
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event: Event) => {
