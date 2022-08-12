@@ -12,11 +12,11 @@ describe('F3XSummary', () => {
       fec_status: "ACCEPTED",
       fec_submission_id: "0123456789",
       created: "10/10/2010",
+      updated: "10/12/2010",
     };
     const uploadStatus: FECWebPrintStatus = FECWebPrintStatus.fromJSON(data);
     expect(uploadStatus).toBeInstanceOf(FECWebPrintStatus);
     expect(uploadStatus.created).toBeInstanceOf(Date);
-    console.log(uploadStatus.created);
     expect(uploadStatus.created?.getFullYear()).toBe(2010);
     expect(JSON.stringify(uploadStatus)).toContain("FEC-1234567");
   });
