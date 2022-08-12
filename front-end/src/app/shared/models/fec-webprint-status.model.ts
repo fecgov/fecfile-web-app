@@ -22,10 +22,6 @@ export class FECWebPrintStatus {
     return plainToClass(FECWebPrintStatus, json);
   }
 
-  toString(): string {
-    return "[object FECUploadStatus]";
-  }
-
   /**
    *
    * @param {TransformFnParams} params
