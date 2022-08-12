@@ -49,9 +49,7 @@ describe('WebPrintService', () => {
           useValue: {
             snapshot: {
               data: {
-                report: F3xSummary.fromJSON({
-                  report_code: 'Q1',
-                }),
+                report: f3x,
               },
             },
           },
