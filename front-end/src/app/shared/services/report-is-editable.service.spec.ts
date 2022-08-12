@@ -27,7 +27,7 @@ describe('TransactionService', () => {
         }),
       ],
     });
-    httpTestingController = TestBed.inject(HttpTestingController);
+    TestBed.inject(HttpTestingController);
     service = TestBed.inject(ReportIsEditableService);
   });
 
