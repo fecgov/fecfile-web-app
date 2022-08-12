@@ -1,11 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
-import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { ReportWebPrintComponent } from './f3x-web-print.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -21,6 +19,7 @@ import { WebPrintService } from '../../../shared/services/web-print.service';
 describe('ReportWebPrintComponent', () => {
   let component: ReportWebPrintComponent;
   let fixture: ComponentFixture<ReportWebPrintComponent>;
+  let router: Router;
   let reportService: F3xSummaryService;
   let webPrintService: WebPrintService;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
@@ -85,7 +84,7 @@ describe('ReportWebPrintComponent', () => {
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(ReportWebPrintComponent);
-    TestBed.inject(Router);
+    router = TestBed.inject(Router);
     reportService = TestBed.inject(F3xSummaryService);
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
@@ -112,5 +111,11 @@ describe('ReportWebPrintComponent', () => {
     const submit = spyOn(webPrintService, "submitPrintJob");
     component.submitPrintJob();
     expect(submit).toHaveBeenCalled();
-  })
+  });
+
+  it('#backToReports() navigates as expected', ()=>{
+    const nav = spyOn(router, "navigateByUrl");
+    component.backToReports();
+    expect(nav).toHaveBeenCalledWith("/reports");
+  });
 });

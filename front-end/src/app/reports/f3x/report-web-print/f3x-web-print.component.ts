@@ -96,13 +96,9 @@ export class ReportWebPrintComponent implements OnInit {
     this.router.navigateByUrl('/reports');
   }
 
-  public downloadPDF(newTab = true){
+  public downloadPDF(){
     if (this.downloadURL.length > 0){
-      if (newTab)
-        window.open(this.downloadURL, '_blank');
-      else {
-        window.open(this.downloadURL);
-      }
+      window.open(this.downloadURL, '_blank');
     }
   }
 }
