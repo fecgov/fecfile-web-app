@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { cohNeededAction } from 'app/store/coh-needed.actions';
-import { Report } from '../interfaces/report.interface';
+import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
+import { Report, CashOnHand } from '../interfaces/report.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { ListRestResponse } from '../models/rest-api.model';
 import { F3xSummaryService } from './f3x-summary.service';
@@ -24,7 +24,7 @@ export class ReportService implements TableListService<Report> {
     return this.apiService.get<ListRestResponse>(`/f3x-summaries/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
         response.results = response.results.map((item) => F3xSummary.fromJSON(item));
-        this.storeCohNeededFlag(response.results);
+        this.setStoreCashOnHand(response.results);
         return response;
       })
     );
@@ -39,15 +39,17 @@ export class ReportService implements TableListService<Report> {
   }
 
   /**
-   * Set the cohNeeded boolean flag in the store.
-   * Currently does not determine COH by looking at amendments or other report types
+   * Dispatches the Cash On Hand data for the first report in the list to the ngrx store.
    * @param reports - List of reports on the current page of the Reports table
    */
-  private storeCohNeededFlag(reports: Report[]) {
-    if (reports.length > 1) {
-      this.store.dispatch(cohNeededAction({ payload: false }));
-    } else {
-      this.store.dispatch(cohNeededAction({ payload: true }));
+  public setStoreCashOnHand(reports: Report[]) {
+    if (reports.length === 1) {
+      const report: F3xSummary = reports[0] as F3xSummary;
+      const payload: CashOnHand = {
+        report_id: report.id,
+        value: report.L6a_cash_on_hand_jan_1_ytd,
+      };
+      this.store.dispatch(setCashOnHandAction({ payload: payload }));
     }
   }
 }

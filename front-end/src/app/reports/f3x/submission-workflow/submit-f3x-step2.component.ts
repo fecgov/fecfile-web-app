@@ -5,7 +5,8 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { selectCohNeededStatus } from 'app/store/coh-needed.selectors';
+import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
+import { CashOnHand } from 'app/shared/interfaces/report.interface';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -37,13 +38,16 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
-  cohNeededFlag = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
   f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
   loading: 0 | 1 | 2 = 0;
+  cashOnHand: CashOnHand = {
+    report_id: null,
+    value: null,
+  };
 
   constructor(
     public router: Router,
@@ -68,9 +72,9 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
     this.store
-      .select(selectCohNeededStatus)
+      .select(selectCashOnHand)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((cohNeededFlag: boolean) => (this.cohNeededFlag = cohNeededFlag));
+      .subscribe((cashOnHand: CashOnHand) => (this.cashOnHand = cashOnHand));
 
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
     this.store.dispatch(updateLabelLookupAction());

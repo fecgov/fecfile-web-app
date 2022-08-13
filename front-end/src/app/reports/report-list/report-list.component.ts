@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectCohNeededStatus } from 'app/store/coh-needed.selectors';
+import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
-import { Report } from '../../shared/interfaces/report.interface';
+import { Report, CashOnHand } from '../../shared/interfaces/report.interface';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportCodeLabelList } from '../../shared/utils/reportCodeLabels.utils';
 import { ReportService } from '../../shared/services/report.service';
@@ -21,7 +21,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
-  cohNeededFlag = false;
+  cashOnHand: CashOnHand = {
+    report_id: null,
+    value: null,
+  };
   private destroy$ = new Subject<boolean>();
 
   constructor(
@@ -42,10 +45,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     this.store.dispatch(updateLabelLookupAction());
 
     this.store
-      .select(selectCohNeededStatus)
+      .select(selectCashOnHand)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((cohNeededFlag: boolean) => {
-        this.cohNeededFlag = cohNeededFlag;
+      .subscribe((cashOnHand: CashOnHand) => {
+        this.cashOnHand = cashOnHand;
       });
   }
 
@@ -63,10 +66,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   public override editItem(item: Report): void {
-    if (this.cohNeededFlag) {
-      this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
-    } else if ((item as F3xSummary).change_of_address === null) {
+    if ((item as F3xSummary).change_of_address === null) {
       this.router.navigateByUrl(`/reports/f3x/create/step2/${item.id}`);
+    } else if (item.id === this.cashOnHand.report_id) {
+      this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
     } else {
       this.router.navigateByUrl(`/transactions/report/${item.id}/list`);
     }

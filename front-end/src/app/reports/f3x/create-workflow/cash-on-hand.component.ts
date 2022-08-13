@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 import { MessageService } from 'primeng/api';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -23,7 +25,8 @@ export class CashOnHandComponent implements OnInit {
     private f3xSummaryService: F3xSummaryService,
     private validateService: ValidateService,
     private fb: FormBuilder,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {
@@ -56,8 +59,18 @@ export class CashOnHandComponent implements OnInit {
     });
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
+      // Write cash on hand to store
+      this.store.dispatch(
+        setCashOnHandAction({
+          payload: {
+            report_id: payload.id,
+            value: payload.L6a_cash_on_hand_jan_1_ytd,
+          },
+        })
+      );
+
       if (this.report) {
-        this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
+        this.router.navigateByUrl(`/transactions/report/${this.report.id}/list`);
       }
 
       this.messageService.add({

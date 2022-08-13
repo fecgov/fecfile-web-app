@@ -10,7 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectCohNeededStatus } from 'app/store/coh-needed.selectors';
+import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import { CashOnHandComponent } from './cash-on-hand.component';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
@@ -43,8 +43,8 @@ describe('CashOnHandComponent', () => {
         FormBuilder,
         MessageService,
         provideMockStore({
-          initialState: { fecfile_online_cohNeeded: false },
-          selectors: [{ selector: selectCohNeededStatus, value: true }],
+          initialState: { fecfile_online_cashOnHand: { report_id: null, value: null } },
+          selectors: [{ selector: selectCashOnHand, value: { report_id: 999, value: 100.0 } }],
         }),
       ],
     }).compileComponents();
@@ -74,6 +74,6 @@ describe('CashOnHandComponent', () => {
 
     component.save();
 
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/999/list');
   });
 });

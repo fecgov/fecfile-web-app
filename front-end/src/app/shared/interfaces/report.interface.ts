@@ -10,3 +10,8 @@ export interface Report {
   coverage_through_date: Date | null;
   webprint_submission: WebPrintSubmission | null;
 }
+
+export interface CashOnHand {
+  report_id: number | null;
+  value: number | null;
+}
