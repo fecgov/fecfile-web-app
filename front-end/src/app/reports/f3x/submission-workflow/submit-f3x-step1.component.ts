@@ -43,7 +43,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
   f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private activatedRoute: ActivatedRoute,
     private f3xSummaryService: F3xSummaryService,
     private validateService: ValidateService,
@@ -133,13 +133,8 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     return email_1 != null && email_1.length > 0 && email_1 === email_2;
   }
 
-  public save(jump: 'continue' | 'back' | null = null): void {
+  public save(): void {
     this.formSubmitted = true;
-
-    if (jump === 'back' && this.report?.id) {
-      this.router.navigateByUrl('/reports');
-      return;
-    }
 
     if (this.form.invalid) {
       return;
@@ -170,7 +165,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     });
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
-      if (jump === 'continue' && this.report?.id) {
+      if (this.report?.id) {
         this.router.navigateByUrl(`/reports/f3x/submit/step2/${this.report.id}`);
       }
 

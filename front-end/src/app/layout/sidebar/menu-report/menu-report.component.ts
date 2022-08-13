@@ -37,6 +37,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     /^\/transactions\/report\/\d+\/create/, // Enter a transaction group
     /^\/reports\/f3x\/summary\/\d+/, // Review a report group
     /^\/reports\/f3x\/detailed-summary\/\d+/, // Review a report group
+    /^\/reports\/f3x\/web-print\/\d+/, // Review a report group
     /^\/reports\/f3x\/memo\/\d+/, // Review a report group
     /^\/reports\/f3x\/submit\/step1\/\d+/, // Submit your report group
     /^\/reports\/f3x\/submit\/step2\/\d+/, // Submit your report group
@@ -115,7 +116,10 @@ export class MenuReportComponent implements OnInit, OnDestroy {
                 label: 'View detailed summary page',
                 routerLink: [`/reports/f3x/detailed-summary/${this.currentReportId}`],
               },
-              { label: 'View print preview', styleClass: 'menu-item-disabled' },
+              {
+                label: 'View print preview',
+                routerLink: [`/reports/f3x/web-print/${this.currentReportId}`],
+              },
               { label: 'Add a report level memo', routerLink: [`/reports/f3x/memo/${this.currentReportId}`] },
             ],
           },
@@ -133,8 +137,8 @@ export class MenuReportComponent implements OnInit, OnDestroy {
 
       // Slice indexes are determined by the number of entries in each urlMatch group
       this.items[0].expanded = this.isActive(this.urlMatch.slice(0, 3), event.url);
-      this.items[1].expanded = this.isActive(this.urlMatch.slice(3, 6), event.url);
-      this.items[2].expanded = this.isActive(this.urlMatch.slice(6, 9), event.url);
+      this.items[1].expanded = this.isActive(this.urlMatch.slice(3, 7), event.url);
+      this.items[2].expanded = this.isActive(this.urlMatch.slice(7, 10), event.url);
     }
   }
 

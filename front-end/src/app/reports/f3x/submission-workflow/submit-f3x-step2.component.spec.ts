@@ -167,12 +167,6 @@ describe('SubmitF3xStep2Component', () => {
     }, 5000);
   });
 
-  it('#back should go back when back button clicked', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.back();
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
-  });
-
   it('#submit should not submit when form data invalid', () => {
     component.report = F3xSummary.fromJSON({
       id: '999',

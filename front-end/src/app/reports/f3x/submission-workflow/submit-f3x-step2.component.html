@@ -154,7 +154,13 @@
   </p-card>
   <div class="grid">
     <div class="col-3">
-      <button pButton pRipple label="Back" class="p-button-secondary p-button-outlined" (click)="back()"></button>
+      <button
+        pButton
+        pRipple
+        label="Back"
+        class="p-button-secondary p-button-outlined"
+        (click)="router.navigateByUrl('/reports/f3x/submit/step1/' + report?.id)"
+      ></button>
     </div>
   </div>
 </div>

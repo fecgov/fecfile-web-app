@@ -11,6 +11,7 @@ import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-st
 import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-step2.component';
 import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
+import { ReportWebPrintComponent } from './f3x/report-web-print/report-web-print.component';
 import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
 import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
 
@@ -41,16 +42,6 @@ const routes: Routes = [
     resolve: { report: ReportResolver },
   },
   {
-    path: 'f3x/submit/step2/:reportId',
-    component: SubmitF3xStep2Component,
-    resolve: { report: ReportResolver },
-  },
-  {
-    path: 'f3x/submit/status/:reportId',
-    component: ReportSubmissionStatusComponent,
-    resolve: { report: ReportResolver },
-  },
-  {
     path: 'f3x/summary/:reportId',
     component: ReportSummaryComponent,
     resolve: { report: ReportResolver },
@@ -61,18 +52,33 @@ const routes: Routes = [
     resolve: { report: ReportResolver },
   },
   {
-    path: 'f3x/submit/step1/:reportId',
-    component: SubmitF3xStep1Component,
-    resolve: { report: ReportResolver },
-  },
-  {
-    path: 'f3x/test-dot-fec/:reportId',
-    component: TestDotFecComponent,
+    path: 'f3x/web-print/:reportId',
+    component: ReportWebPrintComponent,
     resolve: { report: ReportResolver },
   },
   {
     path: 'f3x/memo/:reportId',
     component: ReportLevelMemoComponent,
+    resolve: { report: ReportResolver },
+  },
+  {
+    path: 'f3x/submit/step1/:reportId',
+    component: SubmitF3xStep1Component,
+    resolve: { report: ReportResolver },
+  },
+  {
+    path: 'f3x/submit/step2/:reportId',
+    component: SubmitF3xStep2Component,
+    resolve: { report: ReportResolver },
+  },
+  {
+    path: 'f3x/submit/status/:reportId',
+    component: ReportSubmissionStatusComponent,
+    resolve: { report: ReportResolver },
+  },
+  {
+    path: 'f3x/test-dot-fec/:reportId',
+    component: TestDotFecComponent,
     resolve: { report: ReportResolver },
   },
   { path: '**', redirectTo: '' },
