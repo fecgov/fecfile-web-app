@@ -1,15 +1,17 @@
 import { TestBed } from '@angular/core/testing';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReportIsEditableGuard } from './report-is-editable.guard';
 
 describe('ReportIsEditableGuard', () => {
   let guard: ReportIsEditableGuard;
+  const mockRoute = {} as ActivatedRouteSnapshot;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         provideMockStore({
-          initialState: { },
+          initialState: {},
           selectors: [],
         }),
       ],
@@ -21,8 +23,8 @@ describe('ReportIsEditableGuard', () => {
     expect(guard).toBeTruthy();
   });
 
-  it('should provide status of COH need', () => {
-    const result = guard.canActivate();
+  it('should provide result from CanActivate', () => {
+    const result = guard.canActivate(mockRoute);
     expect(result).toBeTruthy();
   });
 });

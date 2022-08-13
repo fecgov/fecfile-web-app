@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, map, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { setActiveReportAction } from 'app/store/active-report.actions';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 import { Report, CashOnHand } from '../interfaces/report.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
@@ -51,5 +51,26 @@ export class ReportService implements TableListService<Report> {
       };
       this.store.dispatch(setCashOnHandAction({ payload: payload }));
     }
+  }
+
+  /**
+   * Pulls the report from the back end, stores it in the ngrx store, and returns the report to the caller.
+   * @param reportId
+   * @returns Observable<Report>
+   */
+  setActiveReportById(reportId: number): Observable<Report> {
+    return this.get(reportId).pipe(tap((report) => this.store.dispatch(setActiveReportAction({ payload: report }))));
+  }
+
+  /**
+   * Returns true if the report is in "edit" mode
+   * @param report
+   * @returns boolean
+   */
+  isEditable(report: Report | null): boolean {
+    const uploadSubmission = report?.upload_submission;
+    const fecStatus = report?.upload_submission?.fec_status;
+    const fecfileTaskState = report?.upload_submission?.fecfile_task_state;
+    return !uploadSubmission || fecStatus == 'REJECTED' || fecfileTaskState == 'FAILED';
   }
 }

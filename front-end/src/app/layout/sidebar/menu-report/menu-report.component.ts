@@ -10,7 +10,7 @@ import { Report, CashOnHand } from '../../../shared/interfaces/report.interface'
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
-import { ReportIsEditableService } from '../../../shared/services/report-is-editable.service';
+import { ReportService } from '../../../shared/services/report.service';
 
 @Component({
   selector: 'app-menu-report',
@@ -49,7 +49,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     /^\/reports\/f3x\/submit\/status\/\d+/, // Submit your report group
   ];
 
-  constructor(private router: Router, private store: Store, private editableService: ReportIsEditableService) {}
+  constructor(private router: Router, private store: Store, private reportService: ReportService) {}
 
   ngOnInit(): void {
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
@@ -60,7 +60,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report: Report | null) => {
         this.activeReport = report;
-        this.reportIsEditableFlag = this.editableService.isEditableLogic(report);
+        this.reportIsEditableFlag = this.reportService.isEditable(report);
       });
 
     this.store

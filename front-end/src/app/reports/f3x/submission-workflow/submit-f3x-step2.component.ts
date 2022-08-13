@@ -15,11 +15,10 @@ import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { updateLabelLookupAction } from '../../../store/label-lookup.actions';
-import { setActiveReportAction } from '../../../store/active-report.actions';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
 import { ApiService } from 'app/shared/services/api.service';
-import { ReportService } from '../../../shared/services/report.service'
+import { ReportService } from '../../../shared/services/report.service';
 
 @Component({
   selector: 'app-submit-f3x-step2',
@@ -61,7 +60,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     private messageService: MessageService,
     protected confirmationService: ConfirmationService,
     private apiService: ApiService,
-    private reportService: ReportService,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -189,16 +188,12 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     };
 
     this.apiService.post('/web-services/submit-to-fec/', payload).subscribe(() => {
-      if (this.report?.id){
-        const request = this.reportService.get(this.report.id);
-        if (request){
-          request.subscribe((report)=>{
-          this.store.dispatch(setActiveReportAction({ payload: report}));
-          });
-        }
-
+      if (this.report?.id) {
+        this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
         this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`);
-      } else this.router.navigateByUrl('/reports');
+      } else {
+        this.router.navigateByUrl('/reports');
+      }
     });
   }
 }

@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ReportIsEditableService } from '../services/report-is-editable.service';
+import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { Observable, map, of } from 'rxjs';
+import { Report } from '../interfaces/report.interface';
+import { ReportService } from '../services/report.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReportIsEditableGuard implements CanActivate {
-  constructor(private editableService: ReportIsEditableService) {}
+  constructor(private reportService: ReportService) {}
 
-  canActivate(): Observable<boolean> {
-    return this.editableService.isEditable();
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
+    const reportId = Number(route.paramMap.get('reportId'));
+    if (reportId !== null) {
+      this.reportService
+        .setActiveReportById(reportId)
+        .pipe(map((report: Report) => this.reportService.isEditable(report)));
+    }
+    return of(false);
   }
 }

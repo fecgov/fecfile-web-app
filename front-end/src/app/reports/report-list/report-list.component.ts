@@ -12,7 +12,6 @@ import { F3xSummary, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/
 import { Router } from '@angular/router';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { updateLabelLookupAction } from '../../store/label-lookup.actions';
-import { setActiveReportAction } from '../../store/active-report.actions';
 
 @Component({
   selector: 'app-report-list',
@@ -44,7 +43,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     this.loadItemService(this.itemService);
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
     this.store.dispatch(updateLabelLookupAction());
-    this.store.dispatch(setActiveReportAction({payload: null}));
 
     this.store
       .select(selectCashOnHand)
