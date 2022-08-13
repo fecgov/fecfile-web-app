@@ -5,13 +5,14 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { selectCohNeededStatus } from 'app/store/coh-needed.selectors';
+import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { CashOnHand } from 'app/shared/interfaces/report.interface';
 
 @Component({
   selector: 'app-create-f3x-step2',
@@ -34,7 +35,10 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
-  cohNeededFlag = false;
+  cashOnHand: CashOnHand = {
+    report_id: null,
+    value: null,
+  };
 
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
@@ -58,9 +62,9 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
     this.store
-      .select(selectCohNeededStatus)
+      .select(selectCashOnHand)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((cohNeededFlag) => (this.cohNeededFlag = cohNeededFlag));
+      .subscribe((cashOnHand) => (this.cashOnHand = cashOnHand));
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
@@ -99,7 +103,7 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
       if (jump === 'continue' && this.report?.id) {
-        if (this.cohNeededFlag) {
+        if (this.cashOnHand.report_id === this.report.id) {
           this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${this.report.id}`);
         } else {
           this.router.navigateByUrl(`/transactions/report/${this.report.id}/list`);

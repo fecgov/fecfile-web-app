@@ -37,17 +37,15 @@
             pRipple
             label="Back"
             class="p-button-secondary"
-            (click)="router.navigateByUrl('/reports/f3x/memo/' + report.id)"
+            (click)="router.navigateByUrl('/reports/f3x/web-print/' + report.id)"
           ></button>
         </div>
-        <div class="button-message">PREVIOUS: PRINT PREVIEW</div>
       </div>
       <div class="col-4"></div>
       <div class="col-4 align-right">
         <div>
           <button pButton pRipple label="Save & continue" class="p-button-primary" (click)="save()"></button>
         </div>
-        <div class="button-message">NEXT: SUBMIT YOUR REPORT</div>
       </div>
     </div>
   </form>

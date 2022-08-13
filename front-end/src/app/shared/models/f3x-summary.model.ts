@@ -2,7 +2,8 @@ import { plainToClass, Transform, Type } from 'class-transformer';
 import { Report } from '../interfaces/report.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { FECUploadStatus } from './fec-upload-status.model';
+import { UploadSubmission } from './upload-submission.model';
+import { WebPrintSubmission } from './webprint-submission.model';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -184,9 +185,13 @@ export class F3xSummary extends BaseModel implements Report {
   confirmation_email_1: string | null = null;
   confirmation_email_2: string | null = null;
   @Transform(BaseModel.dateTransform) date_signed: Date | null = null;
-  
-  @Type(()=>FECUploadStatus)
-  @Transform(FECUploadStatus.transform) upload_submission: FECUploadStatus | null = null; 
+
+  @Type(() => UploadSubmission)
+  @Transform(UploadSubmission.transform)
+  upload_submission: UploadSubmission | null = null;
+  @Type(() => WebPrintSubmission)
+  @Transform(WebPrintSubmission.transform)
+  webprint_submission: WebPrintSubmission | null = null;
 
   @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | null = null;
   L6b_cash_on_hand_beginning_period: number | null = null;

@@ -5,6 +5,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
+import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { F3xSummary } from '../../../shared/models/f3x-summary.model';
 import { SharedModule } from '../../../shared/shared.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
@@ -23,10 +24,12 @@ describe('MenuReportComponent', () => {
           initialState: {
             fecfile_online_activeReport: { id: 888 } as F3xSummary,
             fecfile_online_reportCodeLabelList: [],
+            fecfile_online_cashOnHand: { report_id: null, value: null },
           },
           selectors: [
             { selector: selectActiveReport, value: { id: 999 } as F3xSummary },
             { selector: selectReportCodeLabelList, value: [] },
+            { selector: selectCashOnHand, value: { report_id: 999, value: 100.0 } },
           ],
         }),
       ],

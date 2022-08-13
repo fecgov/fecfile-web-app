@@ -10,6 +10,7 @@
         icon="pi pi-plus"
         class="p-button-success mr-2"
         (click)="addItem()"
+        [disabled]="items.length === 1 && cashOnHand.value === null"
       ></button>
     </ng-template>
   </p-toolbar>

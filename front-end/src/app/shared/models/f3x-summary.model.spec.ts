@@ -1,5 +1,6 @@
 import { F3xSummary, F3xFormTypes } from './f3x-summary.model';
-import { FECUploadStatus } from './fec-upload-status.model';
+import { UploadSubmission } from './upload-submission.model';
+import { WebPrintSubmission } from './webprint-submission.model';
 
 describe('F3XSummary', () => {
   it('should create an instance', () => {
@@ -21,18 +22,27 @@ describe('F3XSummary', () => {
     expect(f3xSummary.upload_submission).toBe(null);
   });
 
-  it('#fromJSON() should return an F3xSummary instance with a valid FECUploadStatus instance', ()=>{
+  it('#fromJSON() should return an F3xSummary instance with a valid UploadSubmission instance', () => {
     const data = {
       upload_submission: {
-        fec_report_id: "FEC-1234567",
-        created: "12/12/2012",
-      }
+        fec_report_id: 'FEC-1234567',
+        created: '12/12/2012',
+      },
+      webprint_submission: {
+        fec_message: 'test message',
+        fec_status: 'COMPLETED',
+        created: '10/10/2010',
+      },
     };
 
     const f3xSummary = F3xSummary.fromJSON(data);
-    expect(f3xSummary.upload_submission).toBeInstanceOf(FECUploadStatus);
-    expect(f3xSummary.upload_submission?.fec_report_id).toBe("FEC-1234567");
+    expect(f3xSummary.upload_submission).toBeInstanceOf(UploadSubmission);
+    expect(f3xSummary.upload_submission?.fec_report_id).toBe('FEC-1234567');
     expect(f3xSummary.upload_submission?.created).toBeInstanceOf(Date);
     expect(f3xSummary.upload_submission?.created?.getFullYear()).toBe(2012);
+    expect(f3xSummary.webprint_submission).toBeInstanceOf(WebPrintSubmission);
+    expect(f3xSummary.webprint_submission?.fec_status).toBe('COMPLETED');
+    expect(f3xSummary.webprint_submission?.created).toBeInstanceOf(Date);
+    expect(f3xSummary.webprint_submission?.created?.getFullYear()).toBe(2010);
   });
 });

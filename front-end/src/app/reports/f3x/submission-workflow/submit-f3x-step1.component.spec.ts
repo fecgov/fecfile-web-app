@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +22,6 @@ import { ReportsModule } from '../../reports.module';
 describe('SubmitF3xStep1Component', () => {
   let component: SubmitF3xStep1Component;
   let fixture: ComponentFixture<SubmitF3xStep1Component>;
-  let router: Router;
   let reportService: F3xSummaryService;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
 
@@ -76,7 +75,6 @@ describe('SubmitF3xStep1Component', () => {
   });
 
   beforeEach(() => {
-    router = TestBed.inject(Router);
     reportService = TestBed.inject(F3xSummaryService);
     fixture = TestBed.createComponent(SubmitF3xStep1Component);
     component = fixture.componentInstance;
@@ -178,17 +176,6 @@ describe('SubmitF3xStep1Component', () => {
     expect(component.checkInvalidEmail('test@test.')).toBe(true);
     expect(component.checkInvalidEmail('test@test.c')).toBe(true);
     expect(component.checkInvalidEmail('test@test.com')).toBe(false);
-  });
-
-  it('#save should go back when back button clicked', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.report = F3xSummary.fromJSON({
-      id: '999',
-    });
-    component.form.patchValue({ change_of_address: true });
-
-    component.save('back');
-    expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
   it('#save should not save when form data invalid', () => {

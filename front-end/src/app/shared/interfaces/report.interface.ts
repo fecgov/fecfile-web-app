@@ -1,5 +1,5 @@
 import { F3xReportCode } from '../models/f3x-summary.model';
-import { FECUploadStatus } from '../models/fec-upload-status.model';
+import { WebPrintSubmission } from '../models/webprint-submission.model';
 
 export interface Report {
   id: number | null;
@@ -8,5 +8,10 @@ export interface Report {
   report_code: F3xReportCode | null;
   coverage_from_date: Date | null;
   coverage_through_date: Date | null;
-  upload_submission: FECUploadStatus | null;
+  webprint_submission: WebPrintSubmission | null;
+}
+
+export interface CashOnHand {
+  report_id: number | null;
+  value: number | null;
 }
