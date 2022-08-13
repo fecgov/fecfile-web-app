@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { DividerModule } from 'primeng/divider';
-import { ReportWebPrintComponent } from './f3x-web-print.component';
+import { ReportWebPrintComponent } from './report-web-print.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CommitteeAccount } from '../../../shared/models/committee-account.model';
 import { UserLoginData } from '../../../shared/models/user.model';
@@ -19,7 +19,6 @@ import { WebPrintService } from '../../../shared/services/web-print.service';
 describe('ReportWebPrintComponent', () => {
   let component: ReportWebPrintComponent;
   let fixture: ComponentFixture<ReportWebPrintComponent>;
-  let router: Router;
   let reportService: F3xSummaryService;
   let webPrintService: WebPrintService;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
@@ -35,29 +34,23 @@ describe('ReportWebPrintComponent', () => {
     form_type: 'F3XN',
     report_code: 'Q1',
     webprint_submission: {
-      fec_email: "test@test.com",
-      fec_batch_id: "1234",
-      fec_image_url: "image.test.com",
-      fec_submission_id: "FEC-1234567",
-      fec_message: "Message Goes Here",
-      fec_status: "COMPLETED",
-      fecfile_error: "",
-      fecfile_task_state:"COMPLETED",
+      fec_email: 'test@test.com',
+      fec_batch_id: '1234',
+      fec_image_url: 'image.test.com',
+      fec_submission_id: 'FEC-1234567',
+      fec_message: 'Message Goes Here',
+      fec_status: 'COMPLETED',
+      fecfile_error: '',
+      fecfile_task_state: 'COMPLETED',
       id: 0,
-      created: "10/10/2010",
-      updated: "10/12/2010",
-    }
+      created: '10/10/2010',
+      updated: '10/12/2010',
+    },
   });
 
   beforeEach(() => {
-    
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule.withRoutes([]),
-        HttpClientTestingModule,
-        DividerModule,
-        SharedModule,
-      ],
+      imports: [RouterTestingModule.withRoutes([]), HttpClientTestingModule, DividerModule, SharedModule],
       declarations: [ReportWebPrintComponent],
       providers: [
         provideMockStore({
@@ -76,7 +69,7 @@ describe('ReportWebPrintComponent', () => {
           useValue: {
             snapshot: {
               data: {
-                report: f3x
+                report: f3x,
               },
             },
           },
@@ -84,7 +77,6 @@ describe('ReportWebPrintComponent', () => {
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(ReportWebPrintComponent);
-    router = TestBed.inject(Router);
     reportService = TestBed.inject(F3xSummaryService);
     webPrintService = TestBed.inject(WebPrintService);
     component = fixture.componentInstance;
@@ -96,61 +88,56 @@ describe('ReportWebPrintComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Sets the status messages as expected', ()=>{
+  it('Sets the status messages as expected', () => {
     component.pollPrintStatus();
-    expect(component.pollingStatusMessage).toBe("This may take a while...");
+    expect(component.pollingStatusMessage).toBe('This may take a while...');
   });
 
-  it('refreshes the active report', ()=>{
+  it('refreshes the active report', () => {
     const refresh = spyOn(webPrintService, 'getStatus');
     component.refreshReportStatus();
     expect(refresh).toHaveBeenCalled();
   });
 
-  it('Updates with a failed report', ()=>{
+  it('Updates with a failed report', () => {
     const testF3x: F3xSummary = F3xSummary.fromJSON({
       webprint_submission: {
-        fec_status: "FAILED",
+        fec_status: 'FAILED',
         fecfile_error: "Things didn't work out...",
-      }
+      },
     });
 
     component.updatePrintStatus(testF3x);
-    expect(component.webPrintStage).toBe("failure");
+    expect(component.webPrintStage).toBe('failure');
     expect(component.printError).toBe("Things didn't work out...");
   });
 
-  it('Updates with an unsubmitted report', ()=>{
+  it('Updates with an unsubmitted report', () => {
     const testF3x: F3xSummary = F3xSummary.fromJSON({
       webprint_submission: null,
     });
 
     component.updatePrintStatus(testF3x);
-    expect(component.webPrintStage).toBe("not-submitted");
+    expect(component.webPrintStage).toBe('not-submitted');
   });
 
-
-  it('Updates with a processing report', ()=>{
+  it('Updates with a processing report', () => {
     const testF3x: F3xSummary = F3xSummary.fromJSON({
       webprint_submission: {
-        fec_status: "PROCESSING",
-      }
+        fec_status: 'PROCESSING',
+      },
     });
 
     component.updatePrintStatus(testF3x);
-    expect(component.webPrintStage).toBe("checking");
-    expect(component.pollingStatusMessage).toBe("Your report is still being processed. Please check back later to access your PDF");
+    expect(component.webPrintStage).toBe('checking');
+    expect(component.pollingStatusMessage).toBe(
+      'Your report is still being processed. Please check back later to access your PDF'
+    );
   });
 
-  it('#submitPrintJob() calls the service', ()=>{
-    const submit = spyOn(webPrintService, "submitPrintJob");
+  it('#submitPrintJob() calls the service', () => {
+    const submit = spyOn(webPrintService, 'submitPrintJob');
     component.submitPrintJob();
     expect(submit).toHaveBeenCalled();
-  });
-
-  it('#backToReports() navigates as expected', ()=>{
-    const nav = spyOn(router, "navigateByUrl");
-    component.backToReports();
-    expect(nav).toHaveBeenCalledWith("/reports");
   });
 });

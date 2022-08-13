@@ -7,22 +7,22 @@
 }
 
 .fec-loader-div {
-  height:450px;
-  display:block;
+  height: 450px;
+  display: block;
   align-items: center;
   align-content: center;
 }
 
 .fec-loader-image {
   position: relative;
-  left:50%;
-  top:30%;
+  left: 50%;
+  top: 30%;
   transform-origin: 50% 50%;
 }
 
 .disabled-pages-banner {
   //opacity:0.2;
-  display:none;
+  display: none;
 }
 
 table {
@@ -56,11 +56,6 @@ td.justify-left {
 
 .last {
   border-bottom: 2px solid black;
-}
-
-.button-message {
-  margin-top: 10px;
-  color: gray;
 }
 
 caption {

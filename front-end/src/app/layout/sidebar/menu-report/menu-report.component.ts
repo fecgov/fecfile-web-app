@@ -137,8 +137,8 @@ export class MenuReportComponent implements OnInit, OnDestroy {
 
       // Slice indexes are determined by the number of entries in each urlMatch group
       this.items[0].expanded = this.isActive(this.urlMatch.slice(0, 3), event.url);
-      this.items[1].expanded = this.isActive(this.urlMatch.slice(3, 6), event.url);
-      this.items[2].expanded = this.isActive(this.urlMatch.slice(6, 9), event.url);
+      this.items[1].expanded = this.isActive(this.urlMatch.slice(3, 7), event.url);
+      this.items[2].expanded = this.isActive(this.urlMatch.slice(7, 10), event.url);
     }
   }
 

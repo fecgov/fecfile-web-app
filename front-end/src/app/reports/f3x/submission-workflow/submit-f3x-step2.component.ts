@@ -46,7 +46,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   loading: 0 | 1 | 2 = 0;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private activatedRoute: ActivatedRoute,
     private f3xSummaryService: F3xSummaryService,
     private validateService: ValidateService,
@@ -126,10 +126,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       this.form.value['treasurer_prefix'] != this.report.treasurer_prefix ||
       this.form.value['treasurer_suffix'] != this.report.treasurer_suffix
     );
-  }
-
-  public back(): void {
-    this.router.navigateByUrl('/reports');
   }
 
   public submit(): void {

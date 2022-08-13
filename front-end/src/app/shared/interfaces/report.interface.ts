@@ -1,5 +1,5 @@
 import { F3xReportCode } from '../models/f3x-summary.model';
-import { FECWebPrintStatus } from '../models/fec-webprint-status.model';
+import { WebPrintSubmission } from '../models/webprint-submission.model';
 
 export interface Report {
   id: number | null;
@@ -8,5 +8,5 @@ export interface Report {
   report_code: F3xReportCode | null;
   coverage_from_date: Date | null;
   coverage_through_date: Date | null;
-  webprint_submission: FECWebPrintStatus | null;
+  webprint_submission: WebPrintSubmission | null;
 }

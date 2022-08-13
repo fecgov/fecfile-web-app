@@ -11,8 +11,8 @@ import { Report } from '../../../shared/interfaces/report.interface';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 
 @Component({
-  selector: 'app-report-summary',
-  templateUrl: './f3x-web-print.component.html',
+  selector: 'app-report-web-print',
+  templateUrl: './report-web-print.component.html',
   styleUrls: ['../../styles.scss'],
 })
 export class ReportWebPrintComponent implements OnInit {
@@ -22,82 +22,75 @@ export class ReportWebPrintComponent implements OnInit {
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
 
   submitDate: Date | null = null;
-  downloadURL = "";
-  printError = "";
-  pollingStatusMessage: "This may take a while..." |
-    "Your report is still being processed. Please check back later to access your PDF" |
-    "Checking Web-Print Status..." = "Checking Web-Print Status...";
-  webPrintStage: "checking" | 
-                  "not-submitted" | 
-                  "success" | 
-                  "failure" = "checking";
+  downloadURL = '';
+  printError = '';
+  pollingStatusMessage:
+    | 'This may take a while...'
+    | 'Your report is still being processed. Please check back later to access your PDF'
+    | 'Checking Web-Print Status...' = 'Checking Web-Print Status...';
+  webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'checking';
 
   constructor(
     private store: Store,
     private activatedRoute: ActivatedRoute,
     public router: Router,
-    private webPrintService: WebPrintService,
+    private webPrintService: WebPrintService
   ) {}
 
   ngOnInit(): void {
-    this.report = this.activatedRoute.snapshot.data["report"];
+    this.report = this.activatedRoute.snapshot.data['report'];
     this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
-    this.store.select<Report | null>(selectActiveReport).subscribe((report)=>{
-      if (report)
-        this.updatePrintStatus(report);
+    this.store.select<Report | null>(selectActiveReport).subscribe((report) => {
+      if (report) this.updatePrintStatus(report);
     });
   }
 
-  public updatePrintStatus(report: Report){
-    if (!report.webprint_submission){
-      this.webPrintStage = "not-submitted";
+  public updatePrintStatus(report: Report) {
+    if (!report.webprint_submission) {
+      this.webPrintStage = 'not-submitted';
     } else {
-      switch (report?.webprint_submission.fec_status){
-        case "COMPLETED":
-          this.webPrintStage = "success";
+      switch (report?.webprint_submission.fec_status) {
+        case 'COMPLETED':
+          this.webPrintStage = 'success';
           this.downloadURL = report.webprint_submission.fec_image_url;
           this.submitDate = report.webprint_submission.created;
           break;
-        case "FAILED":
-          this.webPrintStage = "failure";
+        case 'FAILED':
+          this.webPrintStage = 'failure';
           this.printError = report.webprint_submission.fecfile_error;
           break;
-        case "PROCESSING":
-          this.webPrintStage = "checking";
-          this.pollingStatusMessage = "Your report is still being processed. Please check back later to access your PDF"; 
+        case 'PROCESSING':
+          this.webPrintStage = 'checking';
+          this.pollingStatusMessage =
+            'Your report is still being processed. Please check back later to access your PDF';
           break;
       }
     }
   }
 
-  public pollPrintStatus(){
+  public pollPrintStatus() {
     const pollingTime = 5000;
-    this.pollingStatusMessage = "This may take a while...";
-    this.webPrintStage = "checking";
+    this.pollingStatusMessage = 'This may take a while...';
+    this.webPrintStage = 'checking';
 
     setTimeout(() => {
       this.refreshReportStatus();
     }, pollingTime);
   }
 
-  public refreshReportStatus(){
-    if (this.report.id)
-      this.webPrintService.getStatus(this.report.id);
+  public refreshReportStatus() {
+    if (this.report.id) this.webPrintService.getStatus(this.report.id);
   }
 
-  public submitPrintJob(){
-    if (this.report.id){
+  public submitPrintJob() {
+    if (this.report.id) {
       this.webPrintService.submitPrintJob(this.report.id);
       this.pollPrintStatus();
     }
   }
 
-  public backToReports() {
-    this.router.navigateByUrl('/reports');
-  }
-
-  public downloadPDF(){
-    if (this.downloadURL.length > 0){
+  public downloadPDF() {
+    if (this.downloadURL.length > 0) {
       window.open(this.downloadURL, '_blank');
     }
   }
