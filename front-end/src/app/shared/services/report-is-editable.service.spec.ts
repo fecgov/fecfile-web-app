@@ -2,17 +2,17 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from '../models/f3x-summary.model';
-import { FECUploadStatus } from '../models/fec-upload-status.model';
+import { UploadSubmission } from '../models/upload-submission.model';
 import { selectActiveReport } from '../../store/active-report.selectors';
-import { ReportIsEditableService } from './report-is-editable.service'
+import { ReportIsEditableService } from './report-is-editable.service';
 
 describe('TransactionService', () => {
   let service: ReportIsEditableService;
 
   const activeReport: F3xSummary = F3xSummary.fromJSON({
-    upload_submission: FECUploadStatus.fromJSON({
-      fec_status:"ACCEPTED"
-    })
+    upload_submission: UploadSubmission.fromJSON({
+      fec_status: 'ACCEPTED',
+    }),
   });
 
   beforeEach(() => {
@@ -36,8 +36,8 @@ describe('TransactionService', () => {
 
   it('should have stubbed out "Delete" methods', () => {
     const observe = service.isEditable();
-    observe.subscribe((bool: boolean)=>{
+    observe.subscribe((bool: boolean) => {
       expect(bool).toBe(false);
-    })
+    });
   });
 });
