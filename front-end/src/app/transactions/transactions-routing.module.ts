@@ -23,9 +23,6 @@ const routes: Routes = [
   {
     path: 'report/:reportId/create',
     component: TransactionTypePickerComponent,
-    resolve: {
-      report: ReportResolver,
-    },
     canActivate: [ReportIsEditableGuard],
   },
   {

@@ -180,7 +180,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('destroy report menu...');
     this.destroy$.next(true);
     this.destroy$.complete();
   }

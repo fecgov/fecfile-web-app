@@ -43,12 +43,22 @@ export class ReportService implements TableListService<Report> {
    * @param reports - List of reports on the current page of the Reports table
    */
   public setStoreCashOnHand(reports: Report[]) {
+    let payload: CashOnHand | null = null;
+
+    if (reports.length === 0) {
+      payload = {
+        report_id: null,
+        value: null,
+      };
+    }
     if (reports.length === 1) {
       const report: F3xSummary = reports[0] as F3xSummary;
-      const payload: CashOnHand = {
+      payload = {
         report_id: report.id,
         value: report.L6a_cash_on_hand_jan_1_ytd,
       };
+    }
+    if (payload) {
       this.store.dispatch(setCashOnHandAction({ payload: payload }));
     }
   }

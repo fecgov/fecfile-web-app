@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   electionReportCodes,
@@ -25,6 +25,7 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { LabelList } from '../../../shared/utils/label.utils';
+import { ReportService } from 'app/shared/services/report.service';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -60,15 +61,18 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private f3xSummaryService: F3xSummaryService,
     private messageService: MessageService,
-    protected router: Router
+    protected router: Router,
+    private activatedRoute: ActivatedRoute,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
+    const reportId = this.activatedRoute.snapshot.data['reportId'];
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
-        if (report) {
+        if (reportId && report) {
           this.form.patchValue(report);
         }
       });
@@ -233,6 +237,9 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
 
     this.f3xSummaryService.create(summary, this.formProperties).subscribe((report: F3xSummary) => {
       if (jump === 'continue') {
+        // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
+        this.reportService.getTableData().subscribe();
+
         this.router.navigateByUrl(`/reports/f3x/create/step2/${report.id}`);
       } else {
         this.router.navigateByUrl('/reports');
