@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ApiService } from './api.service';
-import { setActiveReportAction } from '../../store/active-report.actions';
 import { ReportService } from './report.service';
 
 @Injectable({
@@ -16,13 +15,7 @@ export class WebPrintService {
    * @return     {Observable}  The WebPrint status.
    */
   public getStatus(reportId: number): void {
-    const request = this.reportService.get(reportId);
-
-    if (request) {
-      request.subscribe((report) => {
-        this.store.dispatch(setActiveReportAction({ payload: report }));
-      });
-    }
+    this.reportService.setActiveReportById(reportId).subscribe();
   }
 
   public submitPrintJob(reportId: number): void {

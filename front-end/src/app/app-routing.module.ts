@@ -12,7 +12,7 @@ const routes: Routes = [
     path: '',
     component: LoginComponent,
     pathMatch: 'full',
-    canActivate:[LoginGuard],
+    canActivate: [LoginGuard],
   },
   { path: 'twoFactLogin', component: TwoFactorLoginComponent },
   { path: 'confirm-2f', component: ConfirmTwoFactorComponent },

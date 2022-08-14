@@ -14,6 +14,14 @@ import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.co
 import { ReportWebPrintComponent } from './f3x/report-web-print/report-web-print.component';
 import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
 import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
+import { ReportIsEditableGuard } from '../shared/guards/report-is-editable.guard';
+
+// ROUTING NOTE:
+// Due to lifecycle conflict issues between the ReportIsEditableGuard and the
+// ReportResolver, both the guard and the resovler read the :reportId in the URL
+// and put the report for the ID in the ActiveReport value in the ngrx store. As a result:
+// 1) The component will pull the active report from the ngrx store and not the ActivatedRoute.snapshot.
+// 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
 
 const routes: Routes = [
   {
@@ -24,8 +32,7 @@ const routes: Routes = [
   {
     path: 'f3x/create/cash-on-hand/:reportId',
     component: CashOnHandComponent,
-    canActivate: [CashOnHandGuard],
-    resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard, CashOnHandGuard],
   },
   {
     path: 'f3x/create/step1',
@@ -34,12 +41,12 @@ const routes: Routes = [
   {
     path: 'f3x/create/step1/:reportId',
     component: CreateF3XStep1Component,
-    resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'f3x/create/step2/:reportId',
     component: CreateF3xStep2Component,
-    resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'f3x/summary/:reportId',
@@ -59,17 +66,17 @@ const routes: Routes = [
   {
     path: 'f3x/memo/:reportId',
     component: ReportLevelMemoComponent,
-    resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'f3x/submit/step1/:reportId',
     component: SubmitF3xStep1Component,
-    resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'f3x/submit/step2/:reportId',
     component: SubmitF3xStep2Component,
-    resolve: { report: ReportResolver },
+    canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'f3x/submit/status/:reportId',

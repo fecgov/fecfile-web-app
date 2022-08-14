@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
   electionReportCodes,
@@ -19,11 +19,13 @@ import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { f3xReportCodeDetailedLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { LabelList } from '../../../shared/utils/label.utils';
+import { ReportService } from 'app/shared/services/report.service';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -59,12 +61,22 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private f3xSummaryService: F3xSummaryService,
     private messageService: MessageService,
+    protected router: Router,
     private activatedRoute: ActivatedRoute,
-    protected router: Router
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
-    const report: F3xSummary = this.activatedRoute.snapshot.data['report'];
+    const reportId = this.activatedRoute.snapshot.data['reportId'];
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        if (reportId && report) {
+          this.form.patchValue(report);
+        }
+      });
+
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
@@ -92,9 +104,6 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
               report_code: this.getReportCodes()[0],
             });
           });
-        if (report) {
-          this.form.patchValue(report);
-        }
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
 
@@ -111,36 +120,26 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   }
 
   /**
-   * Checks if a field's date is within another report's dates or if 
+   * Checks if a field's date is within another report's dates or if
    * another report's dates fall within the form's "from" and "through" dates
-   * 
+   *
    * @param fieldDate {Date} the date of the field being checked
    * @param fromDate {Date} the form's "from" date
    * @param throughDate {Date} the form's "through" date
    * @param targetDate {F3xCoverageDates} the object whose date is being checked for an overlap
    * @returns true if there is an overlap in dates
    */
-  checkForDateOverlap(
-    fieldDate: Date,
-    fromDate: Date,
-    throughDate: Date,
-    targetDate: F3xCoverageDates
-  ): boolean {
-    return (
-      targetDate &&
+  checkForDateOverlap(fieldDate: Date, fromDate: Date, throughDate: Date, targetDate: F3xCoverageDates): boolean {
+    return (targetDate &&
       targetDate.coverage_from_date &&
       targetDate.coverage_through_date &&
-      (
-        //The form's date is between another report's from/through date
-        ( fieldDate >= targetDate.coverage_from_date &&
-        fieldDate <= targetDate.coverage_through_date ) ||
+      //The form's date is between another report's from/through date
+      ((fieldDate >= targetDate.coverage_from_date && fieldDate <= targetDate.coverage_through_date) ||
         //Another report's dates are inside the form's dates
-        ( fromDate <= targetDate.coverage_from_date && 
+        (fromDate <= targetDate.coverage_from_date &&
           throughDate >= targetDate.coverage_from_date &&
-          fromDate <= targetDate.coverage_through_date && 
-          throughDate >= targetDate.coverage_through_date)
-      )
-    ) as boolean;
+          fromDate <= targetDate.coverage_through_date &&
+          throughDate >= targetDate.coverage_through_date))) as boolean;
   }
 
   buildCoverageDatesValidator(): ValidatorFn {
@@ -148,26 +147,26 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
      * This is being used as a group validator, so it will always be called with a FormGroup
      * for the parameter, but addValidators() only takes a method that returns a ValidatorFn,
      * and a ValidatorFn must have parameters of AbstractControl or AbstractControl | FormGroup
-     * 
+     *
      * Additionally, a unit test is present to make sure that the constructed validator function
      * does not explode if passed an AbstractControl parameter.
      */
     return (toValidate: AbstractControl | FormGroup): null => {
       const group = toValidate as FormGroup;
-      if (group.controls){
+      if (group.controls) {
         const fromDate = group.controls['coverage_from_date'];
         const throughDate = group.controls['coverage_through_date'];
         if (this.f3xCoverageDatesList) {
-          for (const formValue of [fromDate, throughDate]){
+          for (const formValue of [fromDate, throughDate]) {
             const overlap = this.f3xCoverageDatesList.find((f3xCoverageDate) => {
               return this.checkForDateOverlap(formValue.value, fromDate.value, throughDate.value, f3xCoverageDate);
             });
-            if (overlap){
+            if (overlap) {
               this.setCoverageOverlapError(formValue, overlap);
             } else {
               const errors = formValue.errors;
-              if (errors){
-                delete errors["invaliddate"];
+              if (errors) {
+                delete errors['invaliddate'];
                 formValue.setErrors(errors);
               }
             }
@@ -175,21 +174,21 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         }
       }
       return null;
-    }
+    };
   }
 
-  setCoverageOverlapError(formValue: AbstractControl, overlap: F3xCoverageDates){
+  setCoverageOverlapError(formValue: AbstractControl, overlap: F3xCoverageDates) {
     const f3xReportCodeLabel = f3xReportCodeDetailedLabels.find((label) => label[0] === overlap.report_code);
-    const reportCodeLabel = f3xReportCodeLabel
-      ? f3xReportCodeLabel[1] || overlap.report_code?.valueOf
-      : 'invalid name';
+    const reportCodeLabel = f3xReportCodeLabel ? f3xReportCodeLabel[1] || overlap.report_code?.valueOf : 'invalid name';
     const overlapFromDate = this.fecDatePipe.transform(overlap.coverage_from_date);
     const overlapThroughDate = this.fecDatePipe.transform(overlap.coverage_through_date);
     const errors = formValue.errors ? formValue.errors : {};
-    errors["invaliddate"] = {msg:`You have entered coverage dates that overlap ` +
+    errors['invaliddate'] = {
+      msg:
+        `You have entered coverage dates that overlap ` +
         `the coverage dates of the following report: ${reportCodeLabel} ` +
         ` ${overlapFromDate} - ${overlapThroughDate}`,
-    }
+    };
     formValue.setErrors(errors);
   }
 
@@ -238,6 +237,9 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
 
     this.f3xSummaryService.create(summary, this.formProperties).subscribe((report: F3xSummary) => {
       if (jump === 'continue') {
+        // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
+        this.reportService.getTableData().subscribe();
+
         this.router.navigateByUrl(`/reports/f3x/create/step2/${report.id}`);
       } else {
         this.router.navigateByUrl('/reports');

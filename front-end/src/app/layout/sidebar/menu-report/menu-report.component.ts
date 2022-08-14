@@ -10,6 +10,7 @@ import { Report, CashOnHand } from '../../../shared/interfaces/report.interface'
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
+import { ReportService } from '../../../shared/services/report.service';
 
 @Component({
   selector: 'app-menu-report',
@@ -24,6 +25,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
+  reportIsEditableFlag = false;
   cashOnHand: CashOnHand = {
     report_id: null,
     value: null,
@@ -47,17 +49,19 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     /^\/reports\/f3x\/submit\/status\/\d+/, // Submit your report group
   ];
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(private router: Router, private store: Store, private reportService: ReportService) {}
 
   ngOnInit(): void {
-    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
+    this.reportCodeLabelList$ = this.store
+      .select<ReportCodeLabelList>(selectReportCodeLabelList)
+      .pipe(takeUntil(this.destroy$));
 
-    // Update the active report whenever a new one is pushed to the ngrx store.
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report: Report | null) => {
         this.activeReport = report;
+        this.reportIsEditableFlag = this.reportService.isEditable(report);
       });
 
     this.store
@@ -88,6 +92,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
           {
             label: 'ENTER A TRANSACTION',
             expanded: false,
+            visible: this.reportIsEditableFlag,
             items: [
               {
                 label: 'Cash on hand',
@@ -101,6 +106,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
               {
                 label: 'Add a receipt',
                 routerLink: [`/transactions/report/${this.currentReportId}/create`],
+                visible: this.reportIsEditableFlag,
               },
               { label: 'Add a disbursements', styleClass: 'menu-item-disabled' },
               { label: 'Add loans and debts', styleClass: 'menu-item-disabled' },
@@ -123,16 +129,31 @@ export class MenuReportComponent implements OnInit, OnDestroy {
                 label: 'View print preview',
                 routerLink: [`/reports/f3x/web-print/${this.currentReportId}`],
               },
-              { label: 'Add a report level memo', routerLink: [`/reports/f3x/memo/${this.currentReportId}`] },
+              {
+                label: 'Add a report level memo',
+                routerLink: [`/reports/f3x/memo/${this.currentReportId}`],
+                visible: this.reportIsEditableFlag,
+              },
             ],
           },
           {
             label: 'SUBMIT YOUR REPORT',
             expanded: false,
             items: [
-              { label: 'Confirm information', routerLink: [`/reports/f3x/submit/step1/${this.currentReportId}`] },
-              { label: 'Submit report', routerLink: [`/reports/f3x/submit/step2/${this.currentReportId}`] },
-              { label: 'Report status', routerLink: [`/reports/f3x/submit/status/${this.currentReportId}`] },
+              {
+                label: 'Confirm information',
+                routerLink: [`/reports/f3x/submit/step1/${this.currentReportId}`],
+                visible: this.reportIsEditableFlag,
+              },
+              {
+                label: 'Submit report',
+                routerLink: [`/reports/f3x/submit/step2/${this.currentReportId}`],
+                visible: this.reportIsEditableFlag,
+              },
+              {
+                label: 'Report status',
+                routerLink: [`/reports/f3x/submit/status/${this.currentReportId}`],
+              },
             ],
           },
         ];
