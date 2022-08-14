@@ -56,7 +56,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       .select<ReportCodeLabelList>(selectReportCodeLabelList)
       .pipe(takeUntil(this.destroy$));
 
-    // Update the active report whenever a new one is pushed to the ngrx store.
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
