@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -24,7 +24,6 @@ export class CashOnHandComponent implements OnInit, OnDestroy {
 
   constructor(
     public router: Router,
-    private activatedRoute: ActivatedRoute,
     private f3xSummaryService: F3xSummaryService,
     private validateService: ValidateService,
     private fb: FormBuilder,

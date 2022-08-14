@@ -7,6 +7,13 @@ import { TransactionContainerComponent } from './transaction-container/transacti
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
 
+// ROUTING NOTE:
+// Due to lifecycle conflict issues between the ReportIsEditableGuard and the
+// ReportResolver, both the guard and the resovler read the :reportId in the URL
+// and put the report for the ID in the ActiveReport value in the ngrx store. As a result:
+// 1) The component will pull the active report from the ngrx store and not the ActivatedRoute.snapshot.
+// 2) The ReportResolver should not be declared on routes with a ReportIsEditableGuard declared.
+
 const routes: Routes = [
   {
     path: 'report/:reportId/list',
@@ -19,7 +26,7 @@ const routes: Routes = [
     resolve: {
       report: ReportResolver,
     },
-    canActivate: [ReportIsEditableGuard]
+    canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'report/:reportId/create/:transactionType',
@@ -27,7 +34,7 @@ const routes: Routes = [
     resolve: {
       transactionType: TransactionTypeResolver,
     },
-    canActivate: [ReportIsEditableGuard]
+    canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'report/:reportId/list/edit/:transactionId',
@@ -42,7 +49,7 @@ const routes: Routes = [
     resolve: {
       transactionType: TransactionTypeResolver,
     },
-    canActivate: [ReportIsEditableGuard]
+    canActivate: [ReportIsEditableGuard],
   },
   { path: '**', redirectTo: '' },
 ];

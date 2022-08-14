@@ -41,7 +41,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
-    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
+    this.reportCodeLabelList$ = this.store
+      .select<ReportCodeLabelList>(selectReportCodeLabelList)
+      .pipe(takeUntil(this.destroy$));
+
     this.store.dispatch(updateLabelLookupAction());
 
     this.store

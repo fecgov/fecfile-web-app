@@ -52,7 +52,9 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private store: Store, private reportService: ReportService) {}
 
   ngOnInit(): void {
-    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
+    this.reportCodeLabelList$ = this.store
+      .select<ReportCodeLabelList>(selectReportCodeLabelList)
+      .pipe(takeUntil(this.destroy$));
 
     // Update the active report whenever a new one is pushed to the ngrx store.
     this.store
@@ -178,6 +180,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    console.log('destroy report menu...');
     this.destroy$.next(true);
     this.destroy$.complete();
   }

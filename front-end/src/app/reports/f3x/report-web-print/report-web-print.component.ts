@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subject, takeUntil } from 'rxjs';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
@@ -15,7 +15,8 @@ import { selectActiveReport } from '../../../store/active-report.selectors';
   templateUrl: './report-web-print.component.html',
   styleUrls: ['../../styles.scss'],
 })
-export class ReportWebPrintComponent implements OnInit {
+export class ReportWebPrintComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<boolean>();
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   report: F3xSummary = new F3xSummary();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
@@ -30,19 +31,27 @@ export class ReportWebPrintComponent implements OnInit {
     | 'Checking Web-Print Status...' = 'Checking Web-Print Status...';
   webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'checking';
 
-  constructor(
-    private store: Store,
-    private activatedRoute: ActivatedRoute,
-    public router: Router,
-    private webPrintService: WebPrintService
-  ) {}
+  constructor(private store: Store, public router: Router, private webPrintService: WebPrintService) {}
 
   ngOnInit(): void {
-    this.report = this.activatedRoute.snapshot.data['report'];
-    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
-    this.store.select<Report | null>(selectActiveReport).subscribe((report) => {
-      if (report) this.updatePrintStatus(report);
-    });
+    this.reportCodeLabelList$ = this.store
+      .select<ReportCodeLabelList>(selectReportCodeLabelList)
+      .pipe(takeUntil(this.destroy$));
+
+    this.store
+      .select<Report | null>(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        if (report) {
+          this.report = report as F3xSummary;
+          this.updatePrintStatus(report);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   public updatePrintStatus(report: Report) {
