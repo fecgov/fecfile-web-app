@@ -7,8 +7,11 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
+import { UploadSubmission } from '../../../shared/models/upload-submission.model';
 
 import { ReportSummaryComponent } from './report-summary.component';
+import { WebPrintSubmission } from '../../../shared/models/webprint-submission.model';
+
 
 describe('ReportSummaryComponent', () => {
   let component: ReportSummaryComponent;
@@ -18,6 +21,8 @@ describe('ReportSummaryComponent', () => {
     coverage_from_date: '2022-05-25',
     form_type: 'F3XN',
     report_code: 'Q1',
+    upload_submission: UploadSubmission.fromJSON({}),
+    webprint_submission: WebPrintSubmission.fromJSON({}),
   });
 
   beforeEach(async () => {
@@ -28,7 +33,11 @@ describe('ReportSummaryComponent', () => {
         provideMockStore({
           selectors: [
             { selector: selectReportCodeLabelList, value: {} },
-            { selector: selectActiveReport, value: { id: 999 } },
+            { selector: selectActiveReport, value: {
+              id: 999,
+              upload_submission: UploadSubmission.fromJSON({}),
+              webprint_submission: WebPrintSubmission.fromJSON({}),
+             } },
           ],
         }),
         {
@@ -51,7 +60,7 @@ describe('ReportSummaryComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });
