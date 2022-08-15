@@ -75,7 +75,7 @@ describe('WebPrintService', () => {
     });
   });
 
-  xit('should get new reports', () => {
+  it('should get new reports', () => {
     const reportRequest = spyOn(reportService, 'get');
     service.getStatus(1);
     expect(reportRequest).toHaveBeenCalledWith(1);

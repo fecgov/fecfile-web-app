@@ -21,11 +21,11 @@ describe('ReportIsEditableGuard', () => {
     guard = TestBed.inject(ReportIsEditableGuard);
   });
 
-  xit('should be created', () => {
+  it('should be created', () => {
     expect(guard).toBeTruthy();
   });
 
-  xit('should provide result from CanActivate', () => {
+  it('should provide result from CanActivate', () => {
     const result = guard.canActivate(mockRoute);
     expect(result).toBeTruthy();
   });

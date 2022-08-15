@@ -51,7 +51,7 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('navigateToLoginDotGov should href environment location', () => {
+  it('navigateToLoginDotGov should href environment location', () => {
     component.navigateToLoginDotGov();
     expect(window.location.href).toEqual(environment.loginDotGovAuthUrl);
   });

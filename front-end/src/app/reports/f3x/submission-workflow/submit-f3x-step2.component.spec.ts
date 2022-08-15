@@ -90,11 +90,11 @@ describe('SubmitF3xStep2Component', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  xit("should set the default form values with the committee's values", () => {
+  it("should set the default form values with the committee's values", () => {
     component.report = F3xSummary.fromJSON({ id: 999 });
     const testCommitteeAccount = CommitteeAccount.fromJSON({
       treasurer_name_1: 'Test',
@@ -139,7 +139,7 @@ describe('SubmitF3xStep2Component', () => {
     expect(component.form.value['treasurer_suffix']).toBe(null);
   });
 
-  xit('should catch a change in the Treasurer Name', () => {
+  it('should catch a change in the Treasurer Name', () => {
     component.form.patchValue({
       treasurer_first_name: 'Bill',
       treasurer_last_name: 'Testerson',
@@ -150,7 +150,7 @@ describe('SubmitF3xStep2Component', () => {
     component.onConfirm();
   });
 
-  xit("should catch when there's no change in Treasurer Name", () => {
+  it("should catch when there's no change in Treasurer Name", () => {
     component.report = F3xSummary.fromJSON({
       id: 999,
       treasurer_last_name: 'McTest',
@@ -170,7 +170,7 @@ describe('SubmitF3xStep2Component', () => {
     }, 5000);
   });
 
-  xit('#submit should not submit when form data invalid', () => {
+  it('#submit should not submit when form data invalid', () => {
     component.report = F3xSummary.fromJSON({
       id: '999',
     });
