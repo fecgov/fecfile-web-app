@@ -296,8 +296,10 @@ export class F3xSummary extends BaseModel implements Report {
   L37_offsets_to_operating_expenditures_ytd: number | null = null;
   L38_net_operating_expenditures_ytd: number | null = null;
 
-  created: string | null = null;
-  updated: string | null = null;
+  @Type(() => Date)
+  @Transform(BaseModel.dateTransform) created: Date | null = null;
+  @Type(() => Date)
+  @Transform(BaseModel.dateTransform) updated: Date | null = null;
   deleted: string | null = null;
 
   // prettier-ignore

@@ -20,6 +20,7 @@ import { ReportService } from '../../../shared/services/report.service';
 export class MenuReportComponent implements OnInit, OnDestroy {
   activeReport: Report | null = null;
   currentReportId: number | null = null;
+  currentReportTimestamp: number | null = null;
   items: MenuItem[] = [];
   showMenu = false;
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
@@ -85,8 +86,11 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     this.showMenu = this.isActive(this.urlMatch, event.url);
 
     if (this.showMenu && this.activeReport) {
-      if (this.activeReport.id !== this.currentReportId) {
+      if (this.activeReport.id !== this.currentReportId || 
+        this.activeReport.updated?.getTime() !== this.currentReportTimestamp) {
         this.currentReportId = this.activeReport.id;
+        if (this.activeReport.updated)
+          this.currentReportTimestamp = this.activeReport.updated.getTime();
 
         this.items = [
           {

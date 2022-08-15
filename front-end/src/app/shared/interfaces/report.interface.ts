@@ -11,6 +11,8 @@ export interface Report {
   coverage_through_date: Date | null;
   webprint_submission: WebPrintSubmission | null;
   upload_submission: UploadSubmission | null;
+  created: Date | null;
+  updated: Date | null;
 }
 
 export interface CashOnHand {
