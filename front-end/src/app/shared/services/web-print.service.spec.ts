@@ -1,7 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs'
 import { provideMockStore } from '@ngrx/store/testing';
+import { selectActiveReport } from '../../store/active-report.selectors';
 import { selectCommitteeAccount } from '../../store/committee-account.selectors';
 import { selectUserLoginData } from '../../store/login.selectors';
 import { CommitteeAccount } from '../models/committee-account.model';
@@ -42,18 +43,9 @@ describe('WebPrintService', () => {
           selectors: [
             { selector: selectCommitteeAccount, value: committeeAccount },
             { selector: selectUserLoginData, value: userLoginData },
+            { selector: selectActiveReport, value: f3x },
           ],
         }),
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: {
-                report: f3x,
-              },
-            },
-          },
-        },
       ],
     }).compileComponents();
 
@@ -76,7 +68,7 @@ describe('WebPrintService', () => {
   });
 
   it('should get new reports', () => {
-    const reportRequest = spyOn(reportService, 'get');
+    const reportRequest = spyOn(reportService, 'setActiveReportById').and.returnValue(of(new F3xSummary()));
     service.getStatus(1);
     expect(reportRequest).toHaveBeenCalledWith(1);
   });

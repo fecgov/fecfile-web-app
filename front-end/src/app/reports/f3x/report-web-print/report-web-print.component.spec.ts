@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
@@ -15,6 +14,8 @@ import { F3xSummaryService } from '../../../shared/services/f3x-summary.service'
 import { of } from 'rxjs';
 import { selectActiveReport } from '../../../store/active-report.selectors';
 import { WebPrintService } from '../../../shared/services/web-print.service';
+import { selectReportCodeLabelList } from '../../../store/label-lookup.selectors';
+import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 
 describe('ReportWebPrintComponent', () => {
   let component: ReportWebPrintComponent;
@@ -47,12 +48,17 @@ describe('ReportWebPrintComponent', () => {
       updated: '10/12/2010',
     },
   });
+  const reportCodes: ReportCodeLabelList = [{
+    report_code: 'Q1',
+    label: 'Test Label',
+  }]
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), HttpClientTestingModule, DividerModule, SharedModule],
       declarations: [ReportWebPrintComponent],
       providers: [
+        ReportWebPrintComponent,
         provideMockStore({
           initialState: {
             fecfile_online_committeeAccount: committeeAccount,
@@ -61,19 +67,10 @@ describe('ReportWebPrintComponent', () => {
           selectors: [
             { selector: selectCommitteeAccount, value: committeeAccount },
             { selector: selectUserLoginData, value: userLoginData },
+            { selector: selectReportCodeLabelList, value: reportCodes },
             { selector: selectActiveReport, value: f3x },
           ],
         }),
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: {
-                report: f3x,
-              },
-            },
-          },
-        },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(ReportWebPrintComponent);
