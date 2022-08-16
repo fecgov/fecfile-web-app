@@ -30,26 +30,13 @@ describe('ReportSummaryComponent', () => {
       imports: [SharedModule, CardModule, RouterTestingModule.withRoutes([])],
       declarations: [ReportSummaryComponent],
       providers: [
+        ReportSummaryComponent,
         provideMockStore({
           selectors: [
             { selector: selectReportCodeLabelList, value: {} },
-            { selector: selectActiveReport, value: {
-              id: 999,
-              upload_submission: UploadSubmission.fromJSON({}),
-              webprint_submission: WebPrintSubmission.fromJSON({}),
-             } },
+            { selector: selectActiveReport, value: f3x },
           ],
         }),
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              data: {
-                report: f3x,
-              },
-            },
-          },
-        },
       ],
     }).compileComponents();
   });
