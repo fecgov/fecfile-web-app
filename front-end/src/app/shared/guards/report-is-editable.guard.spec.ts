@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ReportIsEditableGuard } from './report-is-editable.guard';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ReportIsEditableGuard', () => {
   let guard: ReportIsEditableGuard;
-  const mockRoute = {} as ActivatedRouteSnapshot;
+  const mockRoute = {
+    paramMap: convertToParamMap({ reportId: 999 }),
+  } as ActivatedRouteSnapshot;
+  
 
   beforeEach(() => {
     TestBed.configureTestingModule({
