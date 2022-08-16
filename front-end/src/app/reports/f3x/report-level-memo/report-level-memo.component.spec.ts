@@ -18,6 +18,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
+import { selectActiveReport } from '../../../store/active-report.selectors';
 
 describe('ReportLevelMemoComponent', () => {
   let component: ReportLevelMemoComponent;
@@ -57,8 +58,12 @@ describe('ReportLevelMemoComponent', () => {
         FormBuilder,
         provideMockStore({
           selectors: [
-            { selector: selectReportCodeLabelList, value: {} },
-            { selector: selectUserLoginData, value: userLoginData },
+            { selector: selectReportCodeLabelList, value: [{
+              report_code: 'Q1',
+              label: 'Test Label',
+            }] },
+            { selector: selectUserLoginData, value: userLoginData, },
+            { selector: selectActiveReport, value: f3x },
           ],
         }),
         {
