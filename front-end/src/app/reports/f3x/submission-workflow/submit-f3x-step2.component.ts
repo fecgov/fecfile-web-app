@@ -192,7 +192,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
 
     const payload = {
       report_id: this.report?.id,
-      password: this.form.value['filing_password'],
+      password: this.form?.value['filing_password'],
     };
 
     this.apiService.post('/web-services/submit-to-fec/', payload).subscribe(() => {
