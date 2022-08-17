@@ -41,7 +41,8 @@ export function createTransactionSchA(transactionTree: TransactionTree, save: bo
         } else {
            cy.get('button[label="Save & add another JF Transfer Memo"]').click();
         }
-        cy.medWait();
+        cy.longWait();
+        cy.url().should('contain', 'sub-transaction');
         enterTransactionSchA(childTransaction);
       }
     }
