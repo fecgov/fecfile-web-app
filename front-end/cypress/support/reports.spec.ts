@@ -253,11 +253,15 @@ function chooseAReport(identifyingDetails: null | {
     }
   }
 
-  console.log(reportContains);
-  cy.get('tbody').contains("tr", ...reportContains)
-    .first()
-    .find('p-button[icon="pi pi-pencil"]')
-    .click();
+  if (reportContains.length > 0){
+    cy.get('tbody').contains("tr", ...reportContains)
+      .first()
+      .find('p-button[icon="pi pi-pencil"]')
+      .click();
+  } else {
+    cy.get('tbody').find('tr').first().find('p-button[icon="pi pi-pencil"]').click();
+  }
+  
   cy.medWait();
 }
 
