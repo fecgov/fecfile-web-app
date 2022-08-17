@@ -173,7 +173,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   // Transfers
   [ScheduleATransactionTypes.TRANSFERS, 'Transfers'],
   [ScheduleATransactionTypes.JF_TRANSFERS, 'Joint Fundraising Transfers'],
-  [ScheduleATransactionTypes.JF_TRAN_PAC_MEMO, 'JF Transfer PAC Memos'],
+  [ScheduleATransactionTypes.JF_TRAN_PAC_MEMO, 'PAC Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer - Federal Election Activity'],
   [
