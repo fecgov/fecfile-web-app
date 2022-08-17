@@ -1,6 +1,8 @@
 // @ts-check
 
+import * as _ from 'lodash';
 import { getAuthToken } from './commands';
+import { date } from './generators/generators.spec';
 
 export type FilingFrequency = "QUARTERLY" | "MONTHLY";
 export type FilingType = "Election Year" | "Non-Election Year";
@@ -142,6 +144,120 @@ export function progressReport(address_details = null) {
 
   cy.get("button[label='Save and continue']").click();
   cy.longWait();
+
+  cy.url().then((url: string)=>{
+    if (url.includes("cash-on-hand")){
+      progressCashOnHand();
+    }
+  })
+  cy.longWait();
+}
+
+type cohDetailType = {
+  cashOnHand?: number,
+  date?: Date,
+}
+export function progressCashOnHand(cohDetails: cohDetailType | null = null){
+  if (cohDetails === null){
+    cohDetails = {
+      cashOnHand: _.random(1,99999, false),
+      date: date(),
+    }
+  } else {
+    if (!('cashOnHand' in cohDetails)){
+      cohDetails.cashOnHand = _.random(1,99999, false);
+    }
+    if (!('date' in cohDetails)){
+      cohDetails.date = date();
+    }
+  }
+
+  cy.get('p-inputnumber[formcontrolname="L6a_cash_on_hand_jan_1_ytd"]')
+    .safeType(cohDetails.cashOnHand);
+  cy.calendarSetValue('p-calendar[formcontrolname="cash_on_hand_date"]', cohDetails.date);
+  cy.medWait();
+  
+  cy.get('button[label="Save & continue"]').click();
+}
+
+/**
+ * navigateToTransactionManagement
+ * 
+ * Use this method when on the reports management page to select a report and
+ * navigate to its transaction management page.  You may provide additional 
+ * details to aid in choosing a specific report.  This will not likely work
+ * if 
+ * 
+ * Otherwise, this function will choose the first report on the list.
+ * 
+ * @param identifyingDetails Null or object with the following optional attributes:
+ *   - formType: string,
+ *   - reportCode: string,
+ *   - coverageDates: [Date, Date],
+ *   - status: string,
+ *   - version: string,
+ *   - filed: Date,
+ */
+export function navigateToTransactionManagement(identifyingDetails: null | {
+  formType?: string,
+  reportCode?: string,
+  coverageDates?: [Date, Date],
+  status?: string,
+  version?: string,
+  filed?: Date
+} = null) {
+
+  cy.shortWait();
+  cy.url().then((url: string)=>{
+    if (url.includes("step2")){
+      cy.progressReport();
+      cy.navigateToTransactionManagement(identifyingDetails);
+    }
+    else if (url.includes("cash-on-hand")){
+      cy.get('button[label="Skip for now"]').click();
+      cy.navigateToTransactionManagement(identifyingDetails);
+    }
+    else if (url.includes("/reports") && !url.includes("list")){
+      chooseAReport(identifyingDetails);
+      cy.navigateToTransactionManagement(identifyingDetails);
+    }
+  })
+}
+
+function chooseAReport(identifyingDetails: null | {
+  formType?: string,
+  reportCode?: string,
+  coverageDates?: [Date, Date],
+  status?: string,
+  version?: string,
+  filed?: Date
+} = null){
+  const reportContains: Partial<any>[] = [];
+  if (identifyingDetails != null){
+    if (identifyingDetails.formType)
+      reportContains.concat([identifyingDetails.formType]);
+    if (identifyingDetails.reportCode)
+      reportContains.concat([identifyingDetails.reportCode]);
+    if (identifyingDetails.coverageDates){
+      for (const date of Object.values(identifyingDetails.coverageDates)){
+        reportContains.concat([dateToString(date)]);
+      }
+    }
+    if (identifyingDetails.status)
+      reportContains.concat([identifyingDetails.status]);
+    if (identifyingDetails.version)
+      reportContains.concat([identifyingDetails.version]);
+    if (identifyingDetails.filed){
+      const date = identifyingDetails.filed;
+      reportContains.concat([dateToString(date)]);
+    }
+  }
+
+  cy.get("tr").contains("tr", ...reportContains)
+    .first()
+    .find('p-button[icon="pi pi-pencil"]')
+    .click();
+  cy.medWait();
 }
 
 export function navigateReportSidebar(type: "Transaction" | "Submit" | "Review", link: string){
