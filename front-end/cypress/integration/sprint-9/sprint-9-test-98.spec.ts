@@ -15,7 +15,13 @@ describe('Sprint 9 QA Script 98', () => {
 
       const reportObject = generateReportObject({ filing_frequency: filing_frequency, report_code: '(TER)' });
       cy.createReport(reportObject);
+      console.log(reportObject.report_code);
+      cy.navigateToTransactionManagement({
+        reportCode: reportObject.report_code,
+      })
 
+      cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
+      cy.shortWait();
       cy.get('tr').contains('Termination').should('exist');
 
       const authToken: string = getAuthToken();
