@@ -76,22 +76,10 @@ describe('QA Script 228 (Sprint 8)', () => {
     const report: object = generateReportObject();
     cy.createReport(report);
     cy.medWait();
-
-    cy.get("p-button[icon='pi pi-pencil']").first().click();
-    cy.shortWait();
-    cy.get("p-radiobutton[formControlName='change_of_address']")
-      .contains('YES')
-      .parent()
-      .find('.p-radiobutton')
-      .click();
-
-    cy.get("button[label='Save']").click();
-    cy.get("button[label='Back']").click();
-    cy.longWait();
   });
 
   it('Step 2: Select the edit button for the created report', () => {
-    cy.get("p-button[icon='pi pi-pencil']").first().click();
+    cy.navigateToTransactionManagement();
     cy.shortWait();
   });
 
