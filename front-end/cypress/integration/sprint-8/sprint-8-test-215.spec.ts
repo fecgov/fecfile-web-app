@@ -2,7 +2,7 @@
 
 import { generateReportObject } from '../../support/generators/reports.spec';
 
-describe('QA Test Script #133 (Sprint 8)', () => {
+describe('QA Test Script #215 (Sprint 8)', () => {
   it('Step 1: Navigate to reports page and create a report', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
