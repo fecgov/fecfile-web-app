@@ -172,21 +172,21 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC, 'Returned/Bounced Receipt (PAC)'],
   // Transfers
   [ScheduleATransactionTypes.TRANSFERS, 'Transfers'],
-  [ScheduleATransactionTypes.JF_TRANSFERS, 'JF Transfers'],
+  [ScheduleATransactionTypes.JF_TRANSFERS, 'Joint Fundraising Transfers'],
   [ScheduleATransactionTypes.JF_TRAN_PAC_MEMO, 'JF Transfer PAC Memos'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],
-  [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer-FEA'],
+  [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer - Federal Election Activity'],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    'JF Transfer - National Party Recount Account',
+    'Joint Fundraising Transfer - National Party Recount Account',
   ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    'JF Transfer - National Party Convention Account',
+    'Joint Fundraising Transfer - National Party Convention Account',
   ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
-    'JF Transfer - National Party Headquarters Account',
+    'Joint Fundraising Transfer - National Party Headquarters Account',
   ],
   // Refunds
   [
@@ -200,14 +200,14 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   // Other
   [ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
   [ScheduleATransactionTypes.OTHER_RECEIPTS, 'Other Receipts'],
-  [ScheduleATransactionTypes.IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT, 'Ind. Receipt - Non-Contribution Account'],
+  [ScheduleATransactionTypes.IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT, 'Individual Receipt - Non-Contribution Account'],
   [
     ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
     'Other Committee Receipt - Non-Contribution Account',
   ],
   [
     ScheduleATransactionTypes.BUSINESS_LABOR_ORG_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
-    'Business/Labor Org. Receipt - Non-Contribution Account',
+    'Business/Labor Organization Receipt - Non-Contribution Account',
   ],
   [ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT, 'Individual Recount Receipt'],
   [ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT, 'Party Recount Receipt'],
