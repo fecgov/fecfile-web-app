@@ -26,7 +26,7 @@ export type TransactionCategory = 'INDIVIDUALS/PERSONS' | 'REGISTERED FILERS' | 
 export type SchATransaction =
   | 'Individual Receipt'
   | 'Tribal Receipt'
-  | 'Joint Fundraising Transfers'
+  | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
   | 'Other Receipts';
 
@@ -389,7 +389,7 @@ export const groupANavTree: TransactionNavTree = {
   },
   //"REGISTERED FILERS":{},
   TRANSFERS: {
-    'Joint Fundraising Transfers': JFTransfer,
+    'Joint Fundraising Transfer': JFTransfer,
   },
   //"REFUNDS":{},
   OTHER: {

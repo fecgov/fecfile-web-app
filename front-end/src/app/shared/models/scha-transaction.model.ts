@@ -107,7 +107,7 @@ export enum ScheduleATransactionTypes {
   RETURNED_BOUNCED_RECEIPT_PAC = 'PAC_RET',
   // Transfers
   TRANSFERS = 'TRAN',
-  JF_TRANSFERS = 'JF_TRAN',
+  JF_TRANSFER = 'JF_TRAN',
   JF_TRAN_PAC_MEMO = 'JF_TRAN_PAC_MEMO',
   IN_KIND_TRANSFER = 'IK_TRAN',
   IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
@@ -172,7 +172,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC, 'Returned/Bounced Receipt (PAC)'],
   // Transfers
   [ScheduleATransactionTypes.TRANSFERS, 'Transfers'],
-  [ScheduleATransactionTypes.JF_TRANSFERS, 'Joint Fundraising Transfers'],
+  [ScheduleATransactionTypes.JF_TRANSFER, 'Joint Fundraising Transfer'],
   [ScheduleATransactionTypes.JF_TRAN_PAC_MEMO, 'PAC Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer - Federal Election Activity'],

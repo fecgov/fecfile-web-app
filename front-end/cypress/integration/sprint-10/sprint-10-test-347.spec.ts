@@ -14,12 +14,12 @@ describe('QA Script 347 (Sprint 10)', () => {
   it(`Tests the summary page for a report`, () => {
     const transactionTree = generateTransactionObject({
       TRANSFERS: {
-        'Joint Fundraising Transfers': {},
+        'Joint Fundraising Transfer': {},
       },
     });
     createTransactionSchA(transactionTree);
     cy.medWait();
-    const parentTransaction = transactionTree['TRANSFERS']['Joint Fundraising Transfers'];
+    const parentTransaction = transactionTree['TRANSFERS']['Joint Fundraising Transfer'];
     const childTransaction = parentTransaction['childTransactions'][0];
     const childName = childTransaction['contributorOrganizationName'];
 

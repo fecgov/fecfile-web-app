@@ -29,7 +29,7 @@ const accordion = {
   ],
   TRANSFERS: [
     'Transfers',
-    'Joint Fundraising Transfers',
+    'Joint Fundraising Transfer',
     'In-Kind Transfer',
     'In-Kind Transfer - Federal Election Activity',
     'Joint Fundraising Transfer - National Party Recount Account',
