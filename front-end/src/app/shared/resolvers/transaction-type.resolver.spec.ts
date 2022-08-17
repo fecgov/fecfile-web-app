@@ -93,7 +93,7 @@ describe('TransactionResolver', () => {
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionType | undefined) => {
       expect(response).toBeTruthy();
       if (response) {
-        expect(response.title).toEqual('Joint Fundraising Transfer PAC Memos');
+        expect(response.title).toEqual('PAC Joint Fundraising Transfer Memo');
       }
     });
   });
