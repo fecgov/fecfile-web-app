@@ -232,28 +232,29 @@ function chooseAReport(identifyingDetails: null | {
   version?: string,
   filed?: Date
 } = null){
-  const reportContains: Partial<any>[] = [];
+  let reportContains: Partial<any>[] = [];
   if (identifyingDetails != null){
     if (identifyingDetails.formType)
-      reportContains.concat([identifyingDetails.formType]);
+      reportContains = reportContains.concat([identifyingDetails.formType]);
     if (identifyingDetails.reportCode)
-      reportContains.concat([identifyingDetails.reportCode]);
+      reportContains = reportContains.concat([identifyingDetails.reportCode]);
     if (identifyingDetails.coverageDates){
       for (const date of Object.values(identifyingDetails.coverageDates)){
-        reportContains.concat([dateToString(date)]);
+        reportContains = reportContains.concat([dateToString(date)]);
       }
     }
     if (identifyingDetails.status)
-      reportContains.concat([identifyingDetails.status]);
+      reportContains = reportContains.concat([identifyingDetails.status]);
     if (identifyingDetails.version)
-      reportContains.concat([identifyingDetails.version]);
+      reportContains = reportContains.concat([identifyingDetails.version]);
     if (identifyingDetails.filed){
       const date = identifyingDetails.filed;
-      reportContains.concat([dateToString(date)]);
+      reportContains = reportContains.concat([dateToString(date)]);
     }
   }
 
-  cy.get("tr").contains("tr", ...reportContains)
+  console.log(reportContains);
+  cy.get('tbody').contains("tr", ...reportContains)
     .first()
     .find('p-button[icon="pi pi-pencil"]')
     .click();
