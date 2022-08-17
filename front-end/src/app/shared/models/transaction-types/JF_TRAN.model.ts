@@ -6,7 +6,7 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 export class JF_TRAN implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'E';
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JF_TRANSFERS);
+  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JF_TRANSFER);
   schema = schema;
   transaction = null;
   parent = null;
@@ -18,7 +18,7 @@ export class JF_TRAN implements TransactionType {
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA12',
-      transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFERS,
+      transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFER,
     });
   }
 }
