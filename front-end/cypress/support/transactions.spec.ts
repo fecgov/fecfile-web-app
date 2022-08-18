@@ -36,9 +36,9 @@ export function createTransactionSchA(transactionTree: TransactionTree, save: bo
         const childTransaction = transaction['childTransactions'][i];
 
         if (i == 0) {
-          cy.get('button[label="Save & add a Joint Fundraising Transfer Memo"]').click();
+          cy.get('button[label="Save & add a Memo"]').click();
         } else {
-          cy.get('button[label="Save & add another Joint Fundraising Transfer Memo"]').click();
+          cy.get('button[label="Save & add another Memo"]').click();
         }
         cy.longWait();
         cy.url().should('contain', 'sub-transaction');
