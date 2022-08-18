@@ -316,6 +316,14 @@ function chooseAReport(identifyingDetails: null | {
 }
 
 export function navigateReportSidebar(type: "Transaction" | "Submit" | "Review", link: string){
+  //Makes sure that we don't accidentally *close* the accordion we want
+  if (type === "Transaction"){
+    cy.get("p-panelmenu").contains("SUBMIT").click();
+  } else {
+    cy.get("p-panelmenu").contains("TRANSACTION").click();
+  }
+  cy.shortWait();
+
   cy.get("p-panelmenu")
     .contains(type.toUpperCase()).click();
   
