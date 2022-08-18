@@ -24,6 +24,8 @@ describe('QA Test Script #165 (Sprint 7)', () => {
   });
 
   it('Steps 2-13: Check for sortability on each column', () => {
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Dashboard').click();
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     const columns: Array<string> = ['Form type', 'Type of report', 'Coverage dates', 'Status', 'Version', 'Date filed'];
     let column: string;
     for (column of columns) {
