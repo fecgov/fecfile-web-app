@@ -27,12 +27,15 @@ describe('Test creating a report and adding a report-level memo', () => {
     cy.navigateReportSidebar('Review', 'Add a report level memo');
     cy.shortWait();
 
-    const text = randomString(20, 'special');
-    cy.get('textarea').safeType(text).safeType("A");
+    const text = randomString(4000, 'special', false);
 
-    //cy.get("app-error-messages")
-//      .should("contain",
-        //"This field cannot contain more than 4000 alphanumeric characters.");
+    console.log(text.length);
+
+    cy.get('textarea').overwrite(text).safeType("A");
+
+    cy.get("app-error-messages")
+      .should("contain",
+        "This field cannot contain more than 4000 alphanumeric characters.");
     
     cy.get("textarea").safeType("{backspace}");
     cy.get("app-error-messages")
