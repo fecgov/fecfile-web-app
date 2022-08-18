@@ -289,9 +289,9 @@ function chooseAReport(identifyingDetails: null | {
     if (identifyingDetails.reportCode)
       reportContains = reportContains.concat([identifyingDetails.reportCode]);
     if (identifyingDetails.coverageDates){
-      for (const date of Object.values(identifyingDetails.coverageDates)){
-        reportContains = reportContains.concat([dateToString(date)]);
-      }
+      const dates = identifyingDetails.coverageDates;
+      reportContains = reportContains.concat([dateToString(dates[0])]);
+      reportContains = reportContains.concat([dateToString(dates[1])]);
     }
     if (identifyingDetails.status)
       reportContains = reportContains.concat([identifyingDetails.status]);
