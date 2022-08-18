@@ -46,7 +46,7 @@ export function generateConfirmationDetails(): ConfirmationDetails{
     details.email_2 = generator.email();
   }
 
-  if (_.random(100) % 4 === 0 || true){
+  if (_.random(100) % 4 === 0 ){
     details.street_1 = generator.street();
     details.city = generator.city();
     details.state = generator.state(true);
