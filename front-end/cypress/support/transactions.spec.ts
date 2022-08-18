@@ -2,7 +2,6 @@ import { TransactionTree } from './generators/transactions.spec';
 import { TransactionFields } from './transaction_nav_trees.spec';
 import _ from 'lodash';
 
-
 //Run this on the transaction creation accordion to navigate to the desired transaction
 export function navigateTransactionAccordion(category: string, transactionType: string) {
   cy.get('p-accordiontab').contains('p-accordiontab', category).click();
@@ -32,14 +31,14 @@ export function createTransactionSchA(transactionTree: TransactionTree, save: bo
   enterTransactionSchA(transaction);
 
   if (save) {
-    if (transaction.childTransactions){
-      for (let i = 0; i < transaction["childTransactions"].length; i++){
-        const childTransaction = transaction["childTransactions"][i];
+    if (transaction.childTransactions) {
+      for (let i = 0; i < transaction['childTransactions'].length; i++) {
+        const childTransaction = transaction['childTransactions'][i];
 
-        if (i == 0){
-          cy.get('button[label="Save & add a JF Transfer Memo"]').click();
+        if (i == 0) {
+          cy.get('button[label="Save & add a Joint Fundraising Transfer Memo"]').click();
         } else {
-           cy.get('button[label="Save & add another JF Transfer Memo"]').click();
+          cy.get('button[label="Save & add another Joint Fundraising Transfer Memo"]').click();
         }
         cy.longWait();
         cy.url().should('contain', 'sub-transaction');
@@ -51,7 +50,7 @@ export function createTransactionSchA(transactionTree: TransactionTree, save: bo
   }
 }
 
-export function enterTransactionSchA(transaction: Transaction){
+export function enterTransactionSchA(transaction: Transaction) {
   const fields = Object.keys(transaction);
 
   //Gets the value of the first field-key in the form that starts with "entityType"
@@ -63,7 +62,7 @@ export function enterTransactionSchA(transaction: Transaction){
     ];
 
   for (const field of fields) {
-    if (field == "childTransactions") continue;
+    if (field == 'childTransactions') continue;
 
     const fieldRules = TransactionFields[field];
     const fieldName = fieldRules['fieldName'];
@@ -82,7 +81,7 @@ export function enterTransactionSchA(transaction: Transaction){
   }
 }
 
-function fillFormField(fieldName: string, fieldValue: string, fieldType: string){
+function fillFormField(fieldName: string, fieldValue: string, fieldType: string) {
   switch (fieldType) {
     case 'Text':
       cy.get(`input[formControlName=${fieldName}]`).safeType(fieldValue);
