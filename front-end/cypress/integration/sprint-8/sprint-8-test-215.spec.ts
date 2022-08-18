@@ -43,7 +43,6 @@ describe('QA Test Script #215 (Sprint 8)', () => {
     cy.get('a')
       .contains('a', 'Update your committee address')
       .then((jQueryObject) => {
-        console.log(jQueryObject[0]);
         cy.request('GET', jQueryObject[0].href).its('status').should('not.eq', 404);
       });
   });

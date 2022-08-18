@@ -15,7 +15,6 @@ describe('Sprint 9 QA Script 98', () => {
 
       const reportObject = generateReportObject({ filing_frequency: filing_frequency, report_code: '(TER)' });
       cy.createReport(reportObject);
-      console.log(reportObject.report_code);
       cy.navigateToTransactionManagement({
         reportCode: reportObject.report_code,
       })
@@ -34,7 +33,6 @@ describe('Sprint 9 QA Script 98', () => {
       }).then((resp) => {
         const reports = resp.body.results;
         for (const report of reports) {
-          console.log(report);
           cy.expect(report.form_type).to.eq('F3XT');
         }
       });
