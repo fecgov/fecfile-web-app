@@ -6,10 +6,8 @@ import { generateTransactionObject } from "../../support/generators/transactions
 
 const report = generateReportObject();
 const transaction = generateTransactionObject();
-const confirmationDetails = generateConfirmationDetails();
-const filingDetails = generateFilingDetails();
 
-describe('Test creating and submitting a report', () => {
+describe('Test creating a report and submitting it for web print', () => {
   before('Logs in and clears existing reports', () => {
     cy.login();
     cy.deleteAllReports();
