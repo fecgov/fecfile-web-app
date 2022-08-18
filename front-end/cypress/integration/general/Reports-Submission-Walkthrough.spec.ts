@@ -93,4 +93,9 @@ describe('Test creating and submitting a report', () => {
       cy.get('body').should('contain', date)
     }
   });
+
+  after('Cleanup', () => {
+    cy.deleteAllReports();
+    cy.logout();
+  });
 });
