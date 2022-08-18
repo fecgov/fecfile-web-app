@@ -3,6 +3,7 @@
 import * as _ from 'lodash';
 import { getAuthToken } from './commands';
 import { date } from './generators/generators.spec';
+import { ConfirmationDetails, FilingDetails } from './generators/reports.spec';
 
 export type FilingFrequency = "QUARTERLY" | "MONTHLY";
 export type FilingType = "Election Year" | "Non-Election Year";
@@ -157,6 +158,50 @@ type cohDetailType = {
   cashOnHand?: number,
   date?: Date,
 }
+
+export function enterConfirmationDetails(details: ConfirmationDetails, save=true){
+  cy.get('input[formControlName="confirmation_email_1"]').overwrite(details.email_1);
+
+  if (details.email_2){
+    cy.get('input[formControlName="confirmation_email_2"]').overwrite(details.email_2);
+  }
+
+  if (details.street_1){
+    cy.get('p-radiobutton[label="YES"]').find('div').last().click({force: true});
+
+    cy.get('input[formControlName="street_1"]').overwrite(details.street_1);
+    cy.get('input[formControlName="street_2"]').overwrite(details.street_2);
+    cy.get('input[formControlName="city"]').overwrite(details.city);
+    cy.get('input[formControlName="zip"]').overwrite(details.zip);
+    cy.dropdownSetValue('p-dropdown[formControlName="state"]', details.state);
+  }
+
+  cy.shortWait();
+  if (save){
+    cy.get('button[label="Confirm information"]').click();
+    cy.medWait();
+  }
+}
+
+export function enterFilingDetails(details: FilingDetails, save=true){
+  cy.get('input[formControlName="treasurer_first_name"]').overwrite(details.first_name);
+  cy.get('input[formControlName="treasurer_last_name"]').overwrite(details.last_name);
+  cy.get('input[formControlName="treasurer_middle_name"]').overwrite(details.middle_name);
+  cy.get('input[formControlName="treasurer_prefix"]').overwrite(details.prefix);
+  cy.get('input[formControlName="treasurer_suffix"]').overwrite(details.suffix);
+  cy.get('input[formControlName="filing_password"]').overwrite(details.filing_pw);
+
+  cy.get('p-checkbox[formControlName="truth_statement"]').find('div').last().click({force:true});
+
+  cy.shortWait();
+  if (save){
+    cy.get('button[label="Submit"]').click();
+    cy.shortWait();
+    cy.contains('button', 'Yes').click();
+    cy.medWait();
+  }
+}
+
 export function progressCashOnHand(cohDetails: cohDetailType | null = null){
   if (cohDetails === null){
     cohDetails = {
@@ -180,13 +225,18 @@ export function progressCashOnHand(cohDetails: cohDetailType | null = null){
   cy.get('button[label="Save & continue"]').click();
 }
 
+
+
 /**
  * navigateToTransactionManagement
  * 
  * Use this method when on the reports management page to select a report and
- * navigate to its transaction management page.  You may provide additional 
- * details to aid in choosing a specific report.  This will not likely work
- * if 
+ * navigate to its transaction management page.  You may provide additional
+ * details to aid in choosing a specific report.  The targeted report must be
+ * on the page.
+ * 
+ * If this method is called on the report creation (step 2) or cash-on-hand pages,
+ * it will also navigate to the transaction management page for the active report.
  * 
  * Otherwise, this function will choose the first report on the list.
  * 
@@ -273,6 +323,7 @@ export function navigateReportSidebar(type: "Transaction" | "Submit" | "Review",
   cy.get("p-panelmenu")
     .contains("a", link)
     .click();
+  cy.medWait();
 }
 
 //Deletes all reports belonging to the logged-in committee

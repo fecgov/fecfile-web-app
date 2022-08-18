@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-export function firstName(): string | undefined {
+export function firstName(): string {
   return _.sample([
     'Khalil',
     'Anika',
@@ -27,10 +27,10 @@ export function firstName(): string | undefined {
     'Gia',
     'Gloria',
     'Theresa',
-  ]);
+  ]) as string;
 }
 
-export function middleName(): string | undefined {
+export function middleName(): string {
   return _.sample([
     'Kenzie',
     'Nathaly',
@@ -57,10 +57,10 @@ export function middleName(): string | undefined {
     'Kade',
     'Anabelle',
     'Sincere',
-  ]);
+  ]) as string;
 }
 
-export function lastName(): string | undefined {
+export function lastName(): string {
   return _.sample([
     'Savage',
     'Skinner',
@@ -87,26 +87,26 @@ export function lastName(): string | undefined {
     'Patton',
     'Middleton',
     'Boyer',
-  ]);
+  ]) as string;
 }
 
-export function prefix(): string | undefined {
-  return _.sample(['Dr', '', '', '', '', '', '']); //Extra empty strings artificially raise the likelihood of the value being an empty string
+export function prefix(): string {
+  return _.sample(['Dr', '', '', '', '', '', '']) as string; //Extra empty strings artificially raise the likelihood of the value being an empty string
 }
 
-export function suffix(): string | undefined {
-  return _.sample(['Sr', 'Jr', 'III', 'IV', 'V', 'VI', '', '', '', '', '', '', '', '', '', '', '', '', '']);
+export function suffix(): string {
+  return _.sample(['Sr', 'Jr', 'III', 'IV', 'V', 'VI', '', '', '', '', '', '', '', '', '', '', '', '', '']) as string;
 }
 
-export function street(): string | undefined {
+export function street(): string {
   return `${_.random(1, 9999)} Test ${_.sample(['Rd', 'Ln', 'St', 'Ave', 'Ct'])}`;
 }
 
-export function apartment(): string | undefined {
-  return _.sample([`Apt ${_.random(1, 200)}`, '', '']);
+export function apartment(): string {
+  return _.sample([`Apt ${_.random(1, 200)}`, '', '']) as string;
 }
 
-export function city(): string | undefined {
+export function city(): string {
   return _.sample([
     'Testopolis',
     'Testville',
@@ -117,10 +117,10 @@ export function city(): string | undefined {
     'Testmouth',
     'Testborough',
     'Testbury',
-  ]);
+  ]) as string;
 }
 
-export function zipcode(): string | undefined {
+export function zipcode(): string {
   return _.random(1, 9999).toString().padStart(5, '0'); //Zipcodes starting with 0 are pretty uncommon
 }
 
@@ -245,16 +245,16 @@ export const stateCodes: object = {
   WYOMING: 'WY',
 };
 
-export function state(theFifty = true): string | undefined {
-  if (theFifty) return _.sample(states);
-  else return _.sample(states.concat(territories));
+export function state(theFifty = true): string {
+  if (theFifty) return _.sample(states) as string;
+  else return _.sample(states.concat(territories)) as string;
 }
 
 export function phone(): string {
   return `${_.random(1, 999).toString().padStart(3, '0')}${_.random(1000000, 1999999).toString()}`; //Area code from 001 to 999 || 7-digit number starting with between 100 to 199 because (supposedly) that range always corresponds to fake numbers
 }
 
-export function occupation(): string | undefined {
+export function occupation(): string {
   return _.sample([
     'Police Officer',
     'Radiologic Technologist',
@@ -292,11 +292,11 @@ export function occupation(): string | undefined {
     '',
     '',
     '',
-  ]);
+  ]) as string;
 }
 
-export function candidateOffice(): string | undefined {
-  return _.sample(['House', 'Presidential', 'Senate']);
+export function candidateOffice(): string {
+  return _.sample(['House', 'Presidential', 'Senate']) as string;
 }
 
 export function candidateID(candidateOfficeName: string): string {
@@ -323,6 +323,26 @@ export function groupName(): string {
   ])}`;
 }
 
+export function email(): string {
+  if (_.random(100) % 2 == 0){
+    return firstName()+lastName()+`@test${_.random(999)}.com`;
+  } else {
+    return groupName().replaceAll(" ", "_")+'@test.com';
+  }
+}
+
+export function fakeFilingPW(): string {
+  let outString: string = randomString(1, "alphabet").toUpperCase();
+  outString += randomString(1, "alphabet").toLowerCase();
+  outString += randomString(1, "numeric");
+  outString += _.sample(['!','@','#','$','%','&','*','(',')']); //The symbols required to be present are more restrictive
+
+  const length = _.random(8, 16);
+  outString += randomString(length-outString.length, "special");
+
+  return outString
+}
+
 export function date(): Date {
   const outDate: Date = new Date();
 
@@ -343,17 +363,17 @@ export function date(): Date {
   return outDate;
 }
 
-export function f3xFilingFrequency(): string | undefined {
-  return _.sample(['MONTHLY', 'QUARTERLY']);
+export function f3xFilingFrequency(): string {
+  return _.sample(['MONTHLY', 'QUARTERLY']) as string;
 }
 
 export const f3xReportCategories: object = {
   QUARTERLY: ['Non-Election Year', 'Election Year'],
   MONTHLY: ['Non-Election Year', 'Election Year'],
 };
-export function f3xReportCategory(filingFrequency: string): string | undefined {
+export function f3xReportCategory(filingFrequency: string): string {
   //    Report Type Category
-  if (filingFrequency in f3xReportCategories) return _.sample(f3xReportCategories[filingFrequency]);
+  if (filingFrequency in f3xReportCategories) return _.sample(f3xReportCategories[filingFrequency]) as string;
   else return `Invalid Filing Frequency: ${filingFrequency}`;
 }
 
@@ -432,16 +452,17 @@ export function transactionDateReceived(coverageFromDate = '', coverageThroughDa
 
 export function randomString(
   strLength: number,
-  charType: 'special' | 'alphanumeric' | 'alphabet' | 'numeric' = 'alphanumeric'
+  charType: 'special' | 'alphanumeric' | 'alphabet' | 'numeric' | 'symbols' = 'alphanumeric'
 ): string {
   // prettier-ignore
-  const special: Array<string> = [' ', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '[', '\\', ']', '^', '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~', '`'];
+  const symbols: Array<string> = [' ', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', '{', '|', '}', '~', '`'];
   // prettier-ignore
-  const alphanumeric: Array<string> = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9',];
-  // prettier-ignore
-  const alphabet: Array<string> =   ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9',];
+  const alphabet: Array<string> =   ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',];
   // prettier-ignore
   const numeric: Array<string> = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  
+  const alphanumeric = alphabet.concat(numeric);
+  const special = alphanumeric.concat(symbols);
 
   let characters: Array<string> = [];
   if (charType == 'special') {
@@ -452,6 +473,8 @@ export function randomString(
     characters = numeric;
   } else if (charType == 'alphabet') {
     characters = alphabet;
+  } else if (charType == 'symbols') {
+    characters = symbols;
   } else {
     console.log('RandomString: Invalid charType');
     return '';
