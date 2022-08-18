@@ -15,7 +15,7 @@ export function navigateTransactionAccordion(category: string, transactionType: 
  *  Run this function while Cypress is on the View All Transactions page
  *  to create a new transaction.
  *
- *  @transaction: the Transaction object to be used (see the Transaction Generator file)
+ *  @transaction: the Transaction object to be used (see: the Transaction Generator file)
  *  @save: Boolean.  Controls whether or not to save when finished. (Default: True)
  */
 export function createTransactionSchA(transactionTree: TransactionTree, save: boolean = true) {
