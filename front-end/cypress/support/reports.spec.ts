@@ -260,7 +260,7 @@ export function navigateToTransactionManagement(identifyingDetails: null | {
   cy.shortWait();
   cy.url().then((url: string)=>{
     if (url.includes("step2")){
-      cy.progressReport();
+      cy.then(progressReport);
       cy.navigateToTransactionManagement(identifyingDetails);
     }
     else if (url.includes("cash-on-hand")){

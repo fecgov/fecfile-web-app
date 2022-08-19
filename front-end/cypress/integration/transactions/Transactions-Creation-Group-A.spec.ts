@@ -45,7 +45,7 @@ describe('Test saving and editing on all transactions', () => {
 
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.shortWait();
-    cy.progressReport();
+    cy.navigateToTransactionManagement();
     cy.medWait();
   });
 

@@ -28,9 +28,8 @@ Cypress.Commands.add('longWait', longWait);
 import { createContact } from './contacts.spec';
 Cypress.Commands.add('createContact', createContact);
 
-import { createReport, progressReport, enterConfirmationDetails, enterFilingDetails, navigateToTransactionManagement, navigateReportSidebar, deleteAllReports, deleteReport } from './reports.spec';
+import { createReport, enterConfirmationDetails, enterFilingDetails, navigateToTransactionManagement, navigateReportSidebar, deleteAllReports, deleteReport } from './reports.spec';
 Cypress.Commands.add('createReport', createReport);
-Cypress.Commands.add('progressReport', progressReport);
 Cypress.Commands.add('enterConfirmationDetails', enterConfirmationDetails);
 Cypress.Commands.add('enterFilingDetails', enterFilingDetails);
 Cypress.Commands.add('navigateToTransactionManagement', navigateToTransactionManagement);
