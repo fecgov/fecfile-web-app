@@ -39,6 +39,7 @@ describe('Test creating a report and submitting it for web print', () => {
                         `${today.getDate()} ${today.getFullYear()}`;
 
     cy.longWait();
+    cy.longWait();
     cy.contains('body', dateString).should('exist');
   });
 
