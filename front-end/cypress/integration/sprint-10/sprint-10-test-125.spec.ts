@@ -11,13 +11,14 @@ describe('QA Script 125 (Sprint 10)', () => {
 
   before('Logs in and creates a dummy report', () => {
     cy.login();
+    cy.deleteAllReports();
 
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.shortWait();
 
     cy.createReport(reportObject1);
     cy.get('p-button[icon="pi pi-pencil"]').click();
-    cy.progressReport();
+    cy.navigateToTransactionManagement();
     cy.get('.p-menubar').contains('.p-menuitem-link', 'Reports').click();
     cy.longWait();
     cy.createReport(reportObject2);

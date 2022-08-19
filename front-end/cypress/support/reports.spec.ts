@@ -122,7 +122,7 @@ export function createReport(report, save = true) {
   }
 }
 
-export function progressReport(address_details = null) {
+function progressReport(address_details = null) {
   if (address_details == null) {
     cy.get("p-radiobutton[formControlName='change_of_address']")
       .contains('p-radiobutton', 'NO')
@@ -144,13 +144,6 @@ export function progressReport(address_details = null) {
   }
 
   cy.get("button[label='Save and continue']").click();
-  cy.longWait();
-
-  cy.url().then((url: string)=>{
-    if (url.includes("cash-on-hand")){
-      progressCashOnHand();
-    }
-  })
   cy.longWait();
 }
 
@@ -223,6 +216,7 @@ export function progressCashOnHand(cohDetails: cohDetailType | null = null){
   cy.medWait();
   
   cy.get('button[label="Save & continue"]').click();
+  cy.medWait();
 }
 
 
@@ -264,7 +258,7 @@ export function navigateToTransactionManagement(identifyingDetails: null | {
       cy.navigateToTransactionManagement(identifyingDetails);
     }
     else if (url.includes("cash-on-hand")){
-      cy.get('button[label="Skip for now"]').click();
+      cy.then(progressCashOnHand);
       cy.navigateToTransactionManagement(identifyingDetails);
     }
     else if (url.includes("/reports") && !url.includes("list")){
