@@ -8,7 +8,7 @@ describe('QA Script 347 (Sprint 10)', () => {
     const report = generateReportObject();
     cy.createReport(report);
     cy.get('p-button[icon="pi pi-pencil"]').click();
-    cy.progressReport();
+    cy.navigateToTransactionManagement();
   });
 
   it(`Tests the summary page for a report`, () => {
