@@ -1,6 +1,6 @@
 // @ts-check
 
-import { generateConfirmationDetails, generateFilingDetails, generateReportObject } from "../../support/generators/reports.spec";
+import { generateReportObject } from "../../support/generators/reports.spec";
 import { generateTransactionObject } from "../../support/generators/transactions.spec";
 
 

@@ -1,8 +1,7 @@
 // @ts-check
 
 import { randomString } from "../../support/generators/generators.spec";
-import { generateConfirmationDetails, generateFilingDetails, generateReportObject } from "../../support/generators/reports.spec";
-import { generateTransactionObject } from "../../support/generators/transactions.spec";
+import { generateReportObject } from "../../support/generators/reports.spec";
 
 
 const report = generateReportObject();
