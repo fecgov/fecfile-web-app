@@ -60,6 +60,7 @@ describe('ReportResolver', () => {
     const route = {
       paramMap: convertToParamMap({ id: undefined }),
     };
+    expect(route).toBeTruthy();
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Report | undefined) => {
       expect(response).toEqual(undefined);

@@ -1,6 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { MenubarModule } from 'primeng/menubar';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { HeaderComponent } from './header.component';
 
@@ -10,13 +12,9 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MenubarModule, RouterTestingModule],
       declarations: [HeaderComponent],
-      providers: [
-        HeaderComponent,
-        provideMockStore({
-        }),
-      ],
+      providers: [HeaderComponent, provideMockStore({})],
     }).compileComponents();
   });
 
