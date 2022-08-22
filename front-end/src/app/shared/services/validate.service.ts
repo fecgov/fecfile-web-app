@@ -110,6 +110,12 @@ export class ValidateService {
       return DateUtils.convertDateToFecFormat(form?.get(property)?.value);
     }
 
+    // Convert ngx-intl-tel-input ChangeData to number
+    const e164NumberFormat = form?.get(property)?.value['e164Number'];
+    if (e164NumberFormat) {
+      return e164NumberFormat;
+    }
+
     // All else are strings so copy straight into value
     return form?.get(property)?.value;
   }

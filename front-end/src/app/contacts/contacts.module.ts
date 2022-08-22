@@ -20,6 +20,7 @@ import { SharedModule } from '../shared/shared.module';
 import { ContactsRoutingModule } from './contacts-routing.module';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 @NgModule({
   declarations: [ContactListComponent, ContactDetailComponent],
@@ -39,6 +40,7 @@ import { ContactDetailComponent } from './contact-detail/contact-detail.componen
     DialogModule,
     InputTextModule,
     SharedModule,
+    NgxIntlTelInputModule,
   ],
 })
 export class ContactsModule {}

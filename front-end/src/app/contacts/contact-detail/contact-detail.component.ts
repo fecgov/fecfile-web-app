@@ -17,6 +17,7 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 
 @Component({
   selector: 'app-contact-detail',
@@ -52,6 +53,10 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
   formSubmitted = false;
+
+  preferredCountries: CountryISO[] = [CountryISO.UnitedStates];
+  PhoneNumberFormat = PhoneNumberFormat;
+  SearchCountryField = SearchCountryField;
 
   form: FormGroup = this.fb.group(
     this.validateService.getFormGroupFields([

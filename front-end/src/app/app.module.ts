@@ -47,6 +47,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { MenuReportComponent } from './layout/sidebar/menu-report/menu-report.component';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -97,6 +98,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     ButtonModule,
     ProgressBarModule,
     SharedModule,
+    NgxIntlTelInputModule,
   ],
   providers: [
     CookieService,

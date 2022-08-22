@@ -202,7 +202,23 @@
         <div class="col-6">
           <div class="field">
             <label for="telephone">TELEPHONE (OPTIONAL)</label>
-            <input type="text" pInputText id="telephone" formControlName="telephone" />
+              <ngx-intl-tel-input
+                [cssClass]="'custom'"
+                [preferredCountries]="preferredCountries"
+                [searchCountryFlag]="true"
+                [searchCountryField]="[
+                  SearchCountryField.Iso2,
+                  SearchCountryField.Name
+                ]"
+                [maxLength]="10"
+                [separateDialCode]="true"
+                [numberFormat]="PhoneNumberFormat.National"
+                inputId="telephone"
+                name="telephone"
+                formControlName="telephone"
+                (value)="form.get('telephone')?.value?.e164Number"
+              >
+              </ngx-intl-tel-input>
             <app-error-messages
               [form]="form"
               fieldName="telephone"
