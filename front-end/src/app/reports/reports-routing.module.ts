@@ -26,61 +26,73 @@ import { ReportIsEditableGuard } from '../shared/guards/report-is-editable.guard
 const routes: Routes = [
   {
     path: '',
+    title: 'Manage Reports',
     component: ReportListComponent,
     pathMatch: 'full',
   },
   {
     path: 'f3x/create/cash-on-hand/:reportId',
+    title: 'Cash on hand',
     component: CashOnHandComponent,
     canActivate: [ReportIsEditableGuard, CashOnHandGuard],
   },
   {
     path: 'f3x/create/step1',
+    title: 'Create a report',
     component: CreateF3XStep1Component,
   },
   {
     path: 'f3x/create/step1/:reportId',
+    title: 'Create a report',
     component: CreateF3XStep1Component,
     canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'f3x/create/step2/:reportId',
+
     component: CreateF3xStep2Component,
     canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'f3x/summary/:reportId',
+    title: 'View summary page',
     component: ReportSummaryComponent,
     resolve: { report: ReportResolver },
   },
   {
     path: 'f3x/detailed-summary/:reportId',
+    title: 'View detailed summary page',
     component: ReportDetailedSummaryComponent,
     resolve: { report: ReportResolver },
   },
   {
     path: 'f3x/web-print/:reportId',
+    title: 'Print preview',
     component: ReportWebPrintComponent,
     resolve: { report: ReportResolver },
   },
   {
     path: 'f3x/memo/:reportId',
+    title: 'Add a report level memo',
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
     resolve: { report: ReportResolver },
   },
   {
     path: 'f3x/submit/step1/:reportId',
+    title: 'Confirm information',
     component: SubmitF3xStep1Component,
     canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'f3x/submit/step2/:reportId',
+    title: 'Submit report',
     component: SubmitF3xStep2Component,
     canActivate: [ReportIsEditableGuard],
   },
   {
     path: 'f3x/submit/status/:reportId',
+    title: 'Report status',
     component: ReportSubmissionStatusComponent,
     resolve: { report: ReportResolver },
   },
