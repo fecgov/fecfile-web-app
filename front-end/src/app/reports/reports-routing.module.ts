@@ -67,6 +67,7 @@ const routes: Routes = [
     path: 'f3x/memo/:reportId',
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
+    resolve: { report: ReportResolver },
   },
   {
     path: 'f3x/submit/step1/:reportId',
