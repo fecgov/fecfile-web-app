@@ -189,7 +189,7 @@ export class F3xSummary extends BaseModel implements Report {
   @Type(() => UploadSubmission)
   @Transform(UploadSubmission.transform)
   upload_submission: UploadSubmission | null = null;
-  submission_status: string | null = null;
+  report_status: string | null = null;
   @Type(() => WebPrintSubmission)
   @Transform(WebPrintSubmission.transform)
   webprint_submission: WebPrintSubmission | null = null;
