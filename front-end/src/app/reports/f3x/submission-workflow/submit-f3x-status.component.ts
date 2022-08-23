@@ -30,7 +30,7 @@ export class ReportSubmissionStatusComponent implements OnInit, OnDestroy {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = (report as F3xSummary) || new F3xSummary()));
+      .subscribe((report) => (this.report = report as F3xSummary));
   }
 
   ngOnDestroy(): void {

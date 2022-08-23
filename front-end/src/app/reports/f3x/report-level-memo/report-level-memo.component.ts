@@ -84,8 +84,6 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
               this.form.get(this.text4kFormProperty)?.setValue(this.assignedMemoText.text4000);
             }
           });
-        } else {
-          this.report = new F3xSummary();
         }
       });
   }
