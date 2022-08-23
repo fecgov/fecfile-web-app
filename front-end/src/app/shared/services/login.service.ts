@@ -67,12 +67,9 @@ export class LoginService {
       this.store.dispatch(userLoggedOutAction());
     } else {
       this.cookieService.delete('csrftoken');
-      this.apiService.getAbsoluteUrl(`${environment.loginDotGovLogoutUrl}`).pipe(
-        tap(() => {
-          this.clearUserLoggedInCookies();
-          this.store.dispatch(userLoggedOutAction());
-        })
-      ).subscribe(() => undefined);
+      window.location.href = environment.loginDotGovLogoutUrl || "";
+      this.clearUserLoggedInCookies();
+      this.store.dispatch(userLoggedOutAction());
     }
   }
 
