@@ -27,6 +27,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
   formSubmitted = false;
+  memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
 
   form: FormGroup = this.fb.group({});
 
