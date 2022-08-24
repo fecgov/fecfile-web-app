@@ -213,10 +213,11 @@ export function progressCashOnHand(cohDetails: cohDetailType | null = null){
   cy.get('p-inputnumber[formcontrolname="L6a_cash_on_hand_jan_1_ytd"]')
     .safeType(cohDetails.cashOnHand);
   cy.calendarSetValue('p-calendar[formcontrolname="cash_on_hand_date"]', cohDetails.date);
-  cy.medWait();
+  cy.longWait();
   
   cy.get('button[label="Save & continue"]').click();
-  cy.medWait();
+  cy.longWait();
+  cy.longWait();
 }
 
 
