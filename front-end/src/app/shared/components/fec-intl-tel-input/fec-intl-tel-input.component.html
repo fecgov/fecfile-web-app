@@ -1,15 +1,15 @@
 <div [formGroup]="phoneFormGroup">
-<ngx-intl-tel-input 
-  [cssClass]="'custom'" 
-  [preferredCountries]="preferredCountries" 
-  [searchCountryFlag]="true"
-  [searchCountryField]="[
-                  SearchCountryField.Iso2,
-                  SearchCountryField.Name
-                ]" 
-  [maxLength]="10" 
-  [separateDialCode]="true" 
-  [numberFormat]="PhoneNumberFormat.National"
-  formControlName="ngxIntlTelFormControl">
-</ngx-intl-tel-input>
+  <ngx-intl-tel-input 
+    [preferredCountries]="preferredCountries" 
+    [searchCountryFlag]="true"
+    [searchCountryField]="[
+                    SearchCountryField.Iso2,
+                    SearchCountryField.Name
+                  ]" 
+    [maxLength]="15" 
+    [separateDialCode]=false
+    formControlName="ngxIntlTelFormControl"
+    [enableAutoCountrySelect]=true
+    [phoneValidation]="false">
+  </ngx-intl-tel-input>
 </div>
