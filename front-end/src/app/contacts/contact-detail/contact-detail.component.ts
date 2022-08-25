@@ -238,4 +238,8 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
     }
     return schema;
   }
+
+  onCountryCodeChange(code: string) {
+    console.log('=========== changed' + code);
+  }
 }

@@ -202,7 +202,11 @@
         <div class="col-6">
           <div class="field">
             <label for="telephone">TELEPHONE (OPTIONAL)</label>
-            <input type="text" pInputText id="telephone" formControlName="telephone" />
+            <app-intl-tel-input 
+              id="telephone" 
+              formControlName="telephone"
+              (countryCodeChange)="onCountryCodeChange($event)" ngDefaultControl>
+            </app-intl-tel-input>
             <app-error-messages
               [form]="form"
               fieldName="telephone"
