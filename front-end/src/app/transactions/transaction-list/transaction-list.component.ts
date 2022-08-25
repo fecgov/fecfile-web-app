@@ -1,5 +1,8 @@
-import { Component, ElementRef, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
@@ -7,10 +10,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from 'app/shared/services/transaction.service';
 
 @Component({
-  selector: 'app-create-f3x-step3',
-  templateUrl: './create-f3x-step3.component.html',
+  selector: 'app-transaction-list',
+  templateUrl: './transaction-list.component.html',
 })
-export class CreateF3xStep3Component extends TableListBaseComponent<Transaction> implements OnInit {
+export class TransactionListComponent extends TableListBaseComponent<Transaction> implements OnInit, OnDestroy {
+  private destroy$ = new Subject<boolean>();
   report: F3xSummary | undefined;
 
   constructor(
@@ -18,14 +22,24 @@ export class CreateF3xStep3Component extends TableListBaseComponent<Transaction>
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     protected override itemService: TransactionService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private store: Store
   ) {
     super(messageService, confirmationService, elementRef);
   }
 
   override ngOnInit(): void {
-    this.report = this.activatedRoute.snapshot.data['report'];
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => (this.report = report as F3xSummary));
+
     this.loading = true;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   protected getEmptyItem(): Transaction {

@@ -146,6 +146,12 @@ export class ValidateService {
           if (error.keyword === 'maxLength' || error.keyword === 'maximum') {
             result['maxlength'] = { requiredLength: error.params['limit'] };
           }
+          if (error.keyword === 'minimum') {
+            result['min'] = { min: error.params['limit'] };
+          }
+          if (error.keyword === 'maximum') {
+            result['max'] = { max: error.params['limit'] };
+          }
           if (error.keyword === 'pattern') {
             result['pattern'] = { requiredPattern: error.params['pattern'] };
           }

@@ -17,7 +17,7 @@ export class INDV_REC implements TransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11a',
+      form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
     });
   }

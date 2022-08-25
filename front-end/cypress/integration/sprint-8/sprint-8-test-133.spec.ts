@@ -19,7 +19,7 @@ describe('QA Test Script #133 (Sprint 8)', () => {
     cy.url().should('contain', '/reports');
 
     let report: object = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
   });
 
   it('Step 2: Edit a report', () => {
@@ -46,7 +46,7 @@ describe('QA Test Script #133 (Sprint 8)', () => {
   it('Delete previous report and make a new one', () => {
     let report: object = generateReportObject();
     cy.deleteAllReports();
-    cy.enterReport(report);
+    cy.createReport(report);
   });
 
   it('Step 7: Reopen the report', () => {

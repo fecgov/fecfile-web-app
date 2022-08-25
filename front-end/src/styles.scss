@@ -59,6 +59,10 @@ label.disabled {
   text-align: right;
 }
 
+.align-center {
+  text-align: center;
+}
+
 .gray {
   background-color: #f1f1f1;
 }
@@ -91,6 +95,10 @@ label.disabled {
 
 .no-wrap {
   white-space: nowrap;
+}
+
+.word-break {
+  word-break: break-word;
 }
 
 .super-header {

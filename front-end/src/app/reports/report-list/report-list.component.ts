@@ -1,9 +1,10 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
-import { Report } from '../../shared/interfaces/report.interface';
+import { Report, CashOnHand } from '../../shared/interfaces/report.interface';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportCodeLabelList } from '../../shared/utils/reportCodeLabels.utils';
 import { ReportService } from '../../shared/services/report.service';
@@ -16,10 +17,15 @@ import { updateLabelLookupAction } from '../../store/label-lookup.actions';
   selector: 'app-report-list',
   templateUrl: './report-list.component.html',
 })
-export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit {
+export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
+  cashOnHand: CashOnHand = {
+    report_id: null,
+    value: null,
+  };
+  private destroy$ = new Subject<boolean>();
 
   constructor(
     private store: Store,
@@ -35,8 +41,23 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
-    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
+    this.reportCodeLabelList$ = this.store
+      .select<ReportCodeLabelList>(selectReportCodeLabelList)
+      .pipe(takeUntil(this.destroy$));
+
     this.store.dispatch(updateLabelLookupAction());
+
+    this.store
+      .select(selectCashOnHand)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cashOnHand: CashOnHand) => {
+        this.cashOnHand = cashOnHand;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   protected getEmptyItem(): F3xSummary {
@@ -50,8 +71,12 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   public override editItem(item: Report): void {
     if ((item as F3xSummary).change_of_address === null) {
       this.router.navigateByUrl(`/reports/f3x/create/step2/${item.id}`);
+    } else if (!this.itemService.isEditable(item)) {
+      this.router.navigateByUrl(`/reports/f3x/submit/status/${item.id}`);
+    } else if (item.id === this.cashOnHand.report_id) {
+      this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
     } else {
-      this.router.navigateByUrl(`/reports/f3x/create/step3/${item.id}`);
+      this.router.navigateByUrl(`/transactions/report/${item.id}/list`);
     }
   }
 

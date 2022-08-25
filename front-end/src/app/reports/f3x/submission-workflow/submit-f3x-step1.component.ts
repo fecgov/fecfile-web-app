@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
-import { refreshCommitteeAccountDetailsAction } from '../../../store/committee-account.actions';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -44,8 +44,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
   f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
 
   constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
+    public router: Router,
     private f3xSummaryService: F3xSummaryService,
     private validateService: ValidateService,
     private fb: FormBuilder,
@@ -54,18 +53,24 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Refresh committee account details whenever page loads
-    this.store.dispatch(refreshCommitteeAccountDetailsAction());
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-    this.report = this.activatedRoute.snapshot.data['report'];
-    this.report_code = this.report?.report_code || '';
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        this.report = report as F3xSummary;
+        this.report_code = this.report?.report_code || '';
+      });
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
 
-    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
+    this.reportCodeLabelList$ = this.store
+      .select<ReportCodeLabelList>(selectReportCodeLabelList)
+      .pipe(takeUntil(this.destroy$));
+
     this.store.dispatch(updateLabelLookupAction());
 
     // Initialize validation tracking of current JSON schema and form data
@@ -136,13 +141,8 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     return email_1 != null && email_1.length > 0 && email_1 === email_2;
   }
 
-  public save(jump: 'continue' | 'back' | null = null): void {
+  public save(): void {
     this.formSubmitted = true;
-
-    if (jump === 'back' && this.report?.id) {
-      this.router.navigateByUrl('/reports');
-      return;
-    }
 
     if (this.form.invalid) {
       return;
@@ -173,7 +173,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     });
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
-      if (jump === 'continue' && this.report?.id) {
+      if (this.report?.id) {
         this.router.navigateByUrl(`/reports/f3x/submit/step2/${this.report.id}`);
       }
 

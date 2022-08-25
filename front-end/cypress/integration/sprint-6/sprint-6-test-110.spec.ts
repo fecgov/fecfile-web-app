@@ -92,7 +92,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
 
       it('Steps 2-5: Creates a contact', () => {
         let contact: object = contacts[cType];
-        cy.enterContact(contact, false);
+        cy.createContact(contact, false);
 
         testPersonalFields(contact, cType);
         testCandidateFields(contact, cType);
@@ -105,7 +105,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
       });
 
       it('Steps 6-11: Test "Save & Add More"', () => {
-        cy.enterContact(generateContactObject(), false);
+        cy.createContact(generateContactObject(), false);
 
         cy.contains('.p-button-label', 'Save & Add More').click();
 

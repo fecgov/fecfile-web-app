@@ -5,6 +5,7 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
+import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
@@ -34,8 +35,14 @@ describe('ReportListComponent', () => {
         MessageService,
         ApiService,
         provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
+          initialState: {
+            fecfile_online_userLoginData: userLoginData,
+            fecfile_online_cashOnHand: { report_id: null, value: null },
+          },
+          selectors: [
+            { selector: selectUserLoginData, value: userLoginData },
+            { selector: selectCashOnHand, value: { report_id: 999, value: 100.0 } },
+          ],
         }),
       ],
     }).compileComponents();
@@ -69,7 +76,7 @@ describe('ReportListComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step2/999');
 
     component.editItem({ id: 999, change_of_address: true } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
   });
 
   it('#displayName should display the item form_type code', () => {

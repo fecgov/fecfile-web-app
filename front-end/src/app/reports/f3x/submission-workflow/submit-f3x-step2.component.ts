@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { refreshCommitteeAccountDetailsAction } from '../../../store/committee-account.actions';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { CashOnHand } from 'app/shared/interfaces/report.interface';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -16,6 +18,8 @@ import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.util
 import { updateLabelLookupAction } from '../../../store/label-lookup.actions';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
+import { ApiService } from 'app/shared/services/api.service';
+import { ReportService } from '../../../shared/services/report.service';
 
 @Component({
   selector: 'app-submit-f3x-step2',
@@ -42,32 +46,47 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
   f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
   loading: 0 | 1 | 2 = 0;
+  cashOnHand: CashOnHand = {
+    report_id: null,
+    value: null,
+  };
 
   constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
+    public router: Router,
     private f3xSummaryService: F3xSummaryService,
     private validateService: ValidateService,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService,
-    protected confirmationService: ConfirmationService
+    protected confirmationService: ConfirmationService,
+    private apiService: ApiService,
+    private reportService: ReportService
   ) {}
 
   ngOnInit(): void {
-    // Refresh committee account details whenever page loads
-    this.store.dispatch(refreshCommitteeAccountDetailsAction());
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
-    this.report = this.activatedRoute.snapshot.data['report'];
-    this.report_code = this.report?.report_code || '';
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        this.report = report as F3xSummary;
+        this.report_code = this.report?.report_code || '';
+      });
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
+    this.store
+      .select(selectCashOnHand)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cashOnHand: CashOnHand) => (this.cashOnHand = cashOnHand));
 
-    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
+    this.reportCodeLabelList$ = this.store
+      .select<ReportCodeLabelList>(selectReportCodeLabelList)
+      .pipe(takeUntil(this.destroy$));
+
     this.store.dispatch(updateLabelLookupAction());
 
     // Initialize validation tracking of current JSON schema and form data
@@ -123,10 +142,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     );
   }
 
-  public back(): void {
-    this.router.navigateByUrl('/reports');
-  }
-
   public submit(): void {
     this.formSubmitted = true;
 
@@ -174,9 +189,19 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
 
   private submitReport(): void {
     this.loading = 2;
-    setTimeout(() => {
-      if (this.report?.id) this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`);
-      else this.router.navigateByUrl('/reports');
-    }, 5000);
+
+    const payload = {
+      report_id: this.report?.id,
+      password: this.form.value['filing_password'],
+    };
+
+    this.apiService.post('/web-services/submit-to-fec/', payload).subscribe(() => {
+      if (this.report?.id) {
+        this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
+        this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`);
+      } else {
+        this.router.navigateByUrl('/reports');
+      }
+    });
   }
 }
