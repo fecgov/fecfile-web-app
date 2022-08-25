@@ -69,7 +69,11 @@ export class ReportService implements TableListService<Report> {
    * @returns Observable<Report>
    */
   setActiveReportById(reportId: number): Observable<Report> {
-    return this.get(reportId).pipe(tap((report) => this.store.dispatch(setActiveReportAction({ payload: report }))));
+    return this.get(reportId).pipe(
+      tap((report) => {
+        return this.store.dispatch(setActiveReportAction({ payload: report || new F3xSummary() }));
+      })
+    );
   }
 
   /**

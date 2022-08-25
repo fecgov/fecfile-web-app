@@ -113,7 +113,7 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
 
     if (checked) {
       this.itemService.getTableData(1).subscribe((response: ListRestResponse) => {
-        this.selectedItems = response.results;
+        this.selectedItems = response.results || [];
         this.selectAll = true;
       });
     } else {
