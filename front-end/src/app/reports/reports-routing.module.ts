@@ -49,7 +49,7 @@ const routes: Routes = [
   },
   {
     path: 'f3x/create/step2/:reportId',
-
+    title: 'Report Form 3X',
     component: CreateF3xStep2Component,
     canActivate: [ReportIsEditableGuard],
   },
