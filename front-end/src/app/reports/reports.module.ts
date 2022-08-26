@@ -33,7 +33,7 @@ import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.co
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportsRoutingModule } from './reports-routing.module';
 import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
-import { AppSelectButton } from '../shared/components/app-selectbutton';
+import { AppSelectButtonComponent } from '../shared/components/app-selectbutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
@@ -50,7 +50,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     ReportWebPrintComponent,
     TestDotFecComponent,
     CashOnHandComponent,
-    AppSelectButton,
+    AppSelectButtonComponent,
   ],
   imports: [
     CommonModule,
