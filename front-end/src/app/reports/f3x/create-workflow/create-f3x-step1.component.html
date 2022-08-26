@@ -56,7 +56,10 @@
       <div class="col-6">
         <div class="field">
           <label for="report_type_category">TIME PERIOD</label>
-          <p-selectButton [options]="getReportTypeCategories()" formControlName="report_type_category"></p-selectButton>
+          <app-selectButton
+            [options]="getReportTypeCategories()"
+            formControlName="report_type_category"
+          ></app-selectButton>
           <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
