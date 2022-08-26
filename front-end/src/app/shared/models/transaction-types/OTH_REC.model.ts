@@ -8,8 +8,8 @@ export class OTH_REC implements TransactionType {
   componentGroupId = 'C';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OTHER_RECEIPTS);
   schema = schema;
-  transaction = null;
-  parent = null;
+  transaction = undefined;
+  parent = undefined;
 
   contributionPurposeDescripReadonly(): string {
     return '';

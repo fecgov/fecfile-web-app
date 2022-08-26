@@ -6,16 +6,13 @@ import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../../store/committee-account.selectors';
 import { CommitteeAccount } from '../../shared/models/committee-account.model';
 import { Title } from '@angular/platform-browser';
-import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
-import { LabelUtils } from 'app/shared/utils/label.utils';
-import { INDV_REC } from 'app/shared/models/transaction-types/INDV_REC.model';
 
 @Component({
   selector: 'app-transaction-container',
   templateUrl: './transaction-container.component.html',
 })
 export class TransactionContainerComponent implements OnInit, OnDestroy {
-  transactionType: TransactionType = new INDV_REC();
+  transactionType: TransactionType | undefined;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store, private titleService: Title) {
