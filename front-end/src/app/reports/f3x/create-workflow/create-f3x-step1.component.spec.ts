@@ -18,6 +18,7 @@ import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-s
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xCoverageDates } from '../../../shared/models/f3x-summary.model';
+import { AppSelectButtonComponent } from '../../../shared/components/app-selectbutton';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -48,7 +49,7 @@ describe('CreateF3XStep1Component', () => {
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([]),
       ],
-      declarations: [CreateF3XStep1Component, LabelPipe],
+      declarations: [CreateF3XStep1Component, LabelPipe, AppSelectButtonComponent],
       providers: [
         F3xSummaryService,
         FormBuilder,
@@ -114,105 +115,91 @@ describe('CreateF3XStep1Component', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  it('should catch date overlaps', ()=>{
+  it('should catch date overlaps', () => {
     //New dates inside of existing report
-    const fromDate = new Date("12/01/2012");
-    const throughDate = new Date("12/31/2012");
+    const fromDate = new Date('12/01/2012');
+    const throughDate = new Date('12/31/2012');
     let fieldDate = fromDate;
     let targetDate = F3xCoverageDates.fromJSON({
-      "coverage_from_date": new Date("11/01/2012"),
-      "coverage_through_date": new Date("1/01/2013"),
+      coverage_from_date: new Date('11/01/2012'),
+      coverage_through_date: new Date('1/01/2013'),
     });
-    expect(
-      component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
-    ).toBe(true);
+    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(true);
 
     //New dates start inside of existing report - FromDate
     targetDate = F3xCoverageDates.fromJSON({
-      "coverage_from_date": new Date("11/01/2012"),
-      "coverage_through_date": new Date("12/15/2012"),
+      coverage_from_date: new Date('11/01/2012'),
+      coverage_through_date: new Date('12/15/2012'),
     });
-    expect(
-      component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
-    ).toBe(true);
+    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(true);
 
     //New dates start inside of existing report - ThroughDate
     fieldDate = throughDate;
     targetDate = F3xCoverageDates.fromJSON({
-      "coverage_from_date": new Date("11/01/2012"),
-      "coverage_through_date": new Date("12/15/2012"),
+      coverage_from_date: new Date('11/01/2012'),
+      coverage_through_date: new Date('12/15/2012'),
     });
-    expect(
-      component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
-    ).toBe(false);
+    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(false);
 
     //New dates end inside of existing report - FromDate
     fieldDate = fromDate;
     targetDate = F3xCoverageDates.fromJSON({
-      "coverage_from_date": new Date("12/15/2012"),
-      "coverage_through_date": new Date("1/15/2013"),
+      coverage_from_date: new Date('12/15/2012'),
+      coverage_through_date: new Date('1/15/2013'),
     });
-    expect(
-      component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
-    ).toBe(false);
+    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(false);
 
     //New dates end inside of existing report - ThroughDate
     fieldDate = throughDate;
     targetDate = F3xCoverageDates.fromJSON({
-      "coverage_from_date": new Date("12/15/2012"),
-      "coverage_through_date": new Date("1/15/2013"),
+      coverage_from_date: new Date('12/15/2012'),
+      coverage_through_date: new Date('1/15/2013'),
     });
-    expect(
-      component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
-    ).toBe(true);
+    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(true);
 
     //New dates encompass existing report
     targetDate = F3xCoverageDates.fromJSON({
-      "coverage_from_date": new Date("12/05/2012"),
-      "coverage_through_date": new Date("12/25/2012"),
+      coverage_from_date: new Date('12/05/2012'),
+      coverage_through_date: new Date('12/25/2012'),
     });
-    expect(
-      component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
-    ).toBe(true);
+    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(true);
 
     //New dates do not overlap with existing report
     targetDate = F3xCoverageDates.fromJSON({
-      "coverage_from_date": new Date("12/05/2015"),
-      "coverage_through_date": new Date("12/25/2015"),
+      coverage_from_date: new Date('12/05/2015'),
+      coverage_through_date: new Date('12/25/2015'),
     });
-    expect(
-      component.checkForDateOverlap(fieldDate,fromDate,throughDate,targetDate)
-    ).toBe(false);
+    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(false);
   });
 
-  it('setCoverageOverlapError should set an error', ()=>{
+  it('setCoverageOverlapError should set an error', () => {
     const formValue: AbstractControl = component.form.controls['coverage_from_date'];
     const overlap: F3xCoverageDates = F3xCoverageDates.fromJSON({
-      coverage_from_date: "10/10/2010",
-      coverage_through_date: "11/10/2010",
+      coverage_from_date: '10/10/2010',
+      coverage_through_date: '11/10/2010',
     });
     component.setCoverageOverlapError(formValue, overlap);
     expect(component.form.controls['coverage_from_date'].errors).not.toBe(null);
   });
 
-  it('The coverage date validator does not explode if passed an AbstractControl instead of a FormGroup', ()=>{
+  it('The coverage date validator does not explode if passed an AbstractControl instead of a FormGroup', () => {
     const validatorFn = component.buildCoverageDatesValidator();
     const field = component.form.controls['coverage_from_date'];
     expect(validatorFn(field)).toBe(null);
-
   });
 
-  it('Should catch an overlap in dates with the constructed validator function', ()=>{
+  it('Should catch an overlap in dates with the constructed validator function', () => {
     const validatorFn = component.buildCoverageDatesValidator();
-    component.form.controls['coverage_from_date'].setValue(new Date("12/15/2010"));
-    component.form.controls['coverage_through_date'].setValue(new Date("1/01/2011"));
-    component.f3xCoverageDatesList = [F3xCoverageDates.fromJSON({
-      coverage_from_date: new Date("12/01/2010"),
-      coverage_through_date: new Date("12/31/2010"),
-    })];
+    component.form.controls['coverage_from_date'].setValue(new Date('12/15/2010'));
+    component.form.controls['coverage_through_date'].setValue(new Date('1/01/2011'));
+    component.f3xCoverageDatesList = [
+      F3xCoverageDates.fromJSON({
+        coverage_from_date: new Date('12/01/2010'),
+        coverage_through_date: new Date('12/31/2010'),
+      }),
+    ];
 
     validatorFn(component.form);
     expect(component.form.controls['coverage_from_date'].errors).not.toEqual(null);
-   
   });
 });
