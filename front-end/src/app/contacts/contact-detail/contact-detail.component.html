@@ -202,11 +202,10 @@
         <div class="col-6">
           <div class="field">
             <label for="telephone">TELEPHONE (OPTIONAL)</label>
-            <app-intl-tel-input 
+            <app-fec-intl-tel-input 
               id="telephone" 
-              formControlName="telephone"
-              (countryCodeChange)="onCountryCodeChange($event)" ngDefaultControl>
-            </app-intl-tel-input>
+              formControlName="telephone">
+            </app-fec-intl-tel-input>
             <app-error-messages
               [form]="form"
               fieldName="telephone"
