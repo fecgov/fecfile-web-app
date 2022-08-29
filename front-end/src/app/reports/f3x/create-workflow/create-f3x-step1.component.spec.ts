@@ -1,6 +1,25 @@
-/*
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { AbstractControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { of } from 'rxjs';
+import { F3xReportCodes, F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { UserLoginData } from 'app/shared/models/user.model';
+import { LabelPipe } from 'app/shared/pipes/label.pipe';
+import { SharedModule } from 'app/shared/shared.module';
+import { MessageService } from 'primeng/api';
+import { CalendarModule } from 'primeng/calendar';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
+import { selectUserLoginData } from 'app/store/login.selectors';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { F3xCoverageDates } from '../../../shared/models/f3x-summary.model';
+
 describe('CreateF3XStep1Component', () => {
-/*
   let component: CreateF3XStep1Component;
   let router: Router;
   let fixture: ComponentFixture<CreateF3XStep1Component>;
@@ -196,6 +215,4 @@ describe('CreateF3XStep1Component', () => {
     expect(component.form.controls['coverage_from_date'].errors).not.toEqual(null);
    
   });
-  
 });
-*/

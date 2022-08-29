@@ -19,7 +19,7 @@ import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { ReportLevelMemoComponent } from './report-level-memo.component';
 
-xdescribe('ReportLevelMemoComponent', () => {
+describe('ReportLevelMemoComponent', () => {
   let component: ReportLevelMemoComponent;
   let fixture: ComponentFixture<ReportLevelMemoComponent>;
   let testMemoTextService: MemoTextService;
