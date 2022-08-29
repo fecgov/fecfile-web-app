@@ -16,7 +16,7 @@ describe('ValidateService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('#formValidator should validate properties correctly', () => {
+  xit('#formValidator should validate properties correctly', () => {
     const fb: FormBuilder = new FormBuilder();
     service.formValidatorSchema = contactCandidateSchema;
     service.formValidatorForm = fb.group(

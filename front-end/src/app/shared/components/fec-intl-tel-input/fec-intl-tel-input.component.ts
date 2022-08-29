@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, Self, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, Optional, Self, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import * as intlTelInput from 'intl-tel-input';
 
@@ -18,8 +18,10 @@ export class FecIntlTelInputComponent implements AfterViewInit, OnDestroy,
   private countryCode: string | undefined = '';
   private number = '';
 
-  constructor(@Self() private ngControl: NgControl) {
-    this.ngControl.valueAccessor = this;
+  constructor(@Optional() @Self() private ngControl: NgControl) {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
   }
 
   /**

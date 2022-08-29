@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { ValidateService } from 'app/shared/services/validate.service';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FecIntlTelInputComponent } from './fec-intl-tel-input.component';
 
 describe('FecIntlTelInputComponent', () => {
@@ -13,8 +12,8 @@ describe('FecIntlTelInputComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FecIntlTelInputComponent],
-      providers: [ValidateService],
-      imports: [ FormsModule ]
+      providers: [],
+      imports: [ FormsModule, ReactiveFormsModule ]
     }).compileComponents();
   });
 
