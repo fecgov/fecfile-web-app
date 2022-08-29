@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormsModule } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { ValidateService } from 'app/shared/services/validate.service';
-/*
+import { FecIntlTelInputComponent } from './fec-intl-tel-input.component';
+
 describe('ErrorMessagesComponent', () => {
-  let component: ErrorMessagesComponent;
-  let fixture: ComponentFixture<ErrorMessagesComponent>;
+  let component: FecIntlTelInputComponent;
+  let fixture: ComponentFixture<FecIntlTelInputComponent>;
   let validateService: ValidateService;
 
   const testSchema: JsonSchema = {
@@ -29,14 +30,15 @@ describe('ErrorMessagesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ErrorMessagesComponent],
+      declarations: [FecIntlTelInputComponent],
       providers: [ValidateService],
+      imports: [ FormsModule ]
     }).compileComponents();
   });
 
   beforeEach(() => {
     validateService = TestBed.inject(ValidateService);
-    fixture = TestBed.createComponent(ErrorMessagesComponent);
+    fixture = TestBed.createComponent(FecIntlTelInputComponent);
     component = fixture.componentInstance;
 
     fixture.detectChanges();
@@ -46,43 +48,4 @@ describe('ErrorMessagesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should provide default error messages', () => {
-    validateService.formValidatorSchema = testSchema;
-    const fb: FormBuilder = new FormBuilder();
-    validateService.formValidatorForm = fb.group(validateService.getFormGroupFields(['in_between', 'low_high']));
-    component.form = validateService.formValidatorForm;
-    component.fieldName = 'in_between';
-    component.ngOnInit();
-    component.form.patchValue({ in_between: 'short' });
-    expect(component.minLengthErrorMessage).toBe('This field must contain at least 10 alphanumeric characters.');
-    component.form.patchValue({ in_between: 'looooooooooooooooooong' });
-    expect(component.maxLengthErrorMessage).toBe('This field cannot contain more than 20 alphanumeric characters.');
-    component.form.patchValue({ in_between: '' });
-    expect(component.requiredErrorMessage).toBe('This is a required field.');
-    component.fieldName = 'low_high';
-    component.ngOnInit();
-    component.form.patchValue({ low_high: -100 });
-    expect(component.minErrorMessage).toBe('This field must be greater than or equal to $0.00.');
-    component.form.patchValue({ low_high: 100 });
-    expect(component.maxErrorMessage).toBe('This field must be less than or equal to $10.00.');
-  });
-
-  it('should let us override the error messages', () => {
-    component.minLengthErrorMessage = 'My custom min error message';
-    expect(component.minLengthErrorMessage).toBe('My custom min error message');
-    component.maxLengthErrorMessage = 'My custom max error message';
-    expect(component.maxLengthErrorMessage).toBe('My custom max error message');
-    component.requiredErrorMessage = 'My custom required error message';
-    expect(component.requiredErrorMessage).toBe('My custom required error message');
-    component.emailErrorMessage = 'My custom email error message';
-    expect(component.emailErrorMessage).toBe('My custom email error message');
-    component.patternErrorMessage = 'My custom pattern error message';
-    expect(component.patternErrorMessage).toBe('My custom pattern error message');
-    component.invalidDateErrorMessage = 'My custom date error message';
-    expect(component.invalidDateErrorMessage).toBe('My custom date error message');
-    component.minErrorMessage = 'My custom min error message';
-    expect(component.minErrorMessage).toBe('My custom min error message');
-    component.maxErrorMessage = 'My custom max error message';
-    expect(component.maxErrorMessage).toBe('My custom max error message');
-  });
-});*/
+});
