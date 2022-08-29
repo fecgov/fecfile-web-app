@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FecIntlTelInputComponent } from './fec-intl-tel-input.component';
 
 describe('FecIntlTelInputComponent', () => {
