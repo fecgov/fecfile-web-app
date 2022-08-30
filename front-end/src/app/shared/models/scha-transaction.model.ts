@@ -253,3 +253,5 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Earmark Receipt for Headquarters Account (Contribution)',
   ],
 ];
+
+export const ReadOnlyMemoItems = [ScheduleATransactionTypes.JF_TRAN_PAC_MEMO];
