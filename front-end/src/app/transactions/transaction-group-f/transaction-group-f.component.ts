@@ -34,7 +34,7 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
   memoCode: string | null =
     this.activatedRoute.snapshot.data['transactionType']?.transaction?.transaction_type_identifier;
   readOnlyMemo: boolean = Object.values(ReadOnlyMemoItems).includes(this.memoCode as ScheduleATransactionTypes);
-  readOnlyMemoDefault: boolean = this.readOnlyMemo;
+  checked: boolean = this.readOnlyMemo;
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
@@ -48,18 +48,8 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     protected activatedRoute: ActivatedRoute
   ) {
     super(messageService, transactionService, validateService, fb, router);
-    console.log(this.form);
+    console.log(this.readOnlyMemo);
     this.form.patchValue({ memo_code: this.readOnlyMemo });
-    /*this.memoCode = this.activatedRoute.snapshot.data['transactionType']?.transaction?.transaction_type_identifier;
-    if (this.memoCode) {
-      //The default must be set separately or else the memo-code checkbox will become read-only if checked
-      this.readOnlyMemo = Object.values(ReadOnlyMemoItems).includes(this.memoCode as ScheduleATransactionTypes);
-      this.readOnlyMemoDefault = this.readOnlyMemo;
-    }*/
+    console.log(this.form.controls['memo_code']);
   }
-
-  /*override ngOnInit(): void {
-    this.memoCode = this.activatedRoute.snapshot.data['transactionType'];
-    }
-  }*/
 }
