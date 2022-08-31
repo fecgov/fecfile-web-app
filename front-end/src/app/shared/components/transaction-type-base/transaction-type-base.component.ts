@@ -146,7 +146,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  private resetForm() {
+  protected resetForm() {
     this.formSubmitted = false;
     this.form.reset();
     this.form.markAsPristine();
