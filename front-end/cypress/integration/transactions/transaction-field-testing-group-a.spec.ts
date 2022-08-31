@@ -93,7 +93,7 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
 
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.shortWait();
-    cy.progressReport();
+    cy.navigateToTransactionManagement();
     cy.medWait();
   });
 

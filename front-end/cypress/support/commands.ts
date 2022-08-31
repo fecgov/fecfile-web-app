@@ -64,8 +64,8 @@ export function getAuthToken() {
   return Cypress.env('AUTH_TOKEN');
 }
 
-function safeString(stringVal: string | number): string {
-  if (stringVal == null) {
+function safeString(stringVal: string | number | undefined | null): string {
+  if (stringVal === null || stringVal === undefined) {
     return '';
   } else {
     return stringVal.toString();
