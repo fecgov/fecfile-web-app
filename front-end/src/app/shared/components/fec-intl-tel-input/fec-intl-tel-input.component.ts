@@ -52,6 +52,7 @@ export class FecIntlTelInputComponent implements AfterViewInit, OnDestroy,
   ngAfterViewInit(): void {
     if (this.telInput) {
       this.iti = intlTelInput(this.telInput.nativeElement, this.itiOptions);
+      this.countryCode = this.iti?.getSelectedCountryData().dialCode;
       this.telInput.nativeElement.addEventListener("countrychange", () => {
         this.countryCode = this.iti?.getSelectedCountryData().dialCode;
         this.onChange('+' + this.countryCode + ' ' + this.number);
