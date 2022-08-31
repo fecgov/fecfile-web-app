@@ -33,7 +33,7 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
   ];
   override form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
   readOnlyMemo = false;
-  checked = false;
+  memo_checked = false;
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
@@ -51,8 +51,25 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     of(this.activatedRoute.snapshot.data['transactionType']).subscribe((transactionType: TransactionType) => {
       if (Object.keys(transactionType?.schema?.properties['memo_code']).includes('const')) {
         this.readOnlyMemo = true;
-        this.checked = transactionType.schema.properties['memo_code'].const as boolean;
+        this.memo_checked = transactionType.schema.properties['memo_code'].const as boolean;
+        console.log('Updating checked:', this.memo_checked, transactionType);
       }
+    });
+  }
+
+  protected override resetForm() {
+    const memo_item_state = this.memo_checked;
+
+    this.formSubmitted = false;
+    this.form.reset();
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+    this.memo_checked = memo_item_state;
+    this.form.patchValue({
+      entity_type: this.contactTypeOptions[0]?.code,
+      contribution_aggregate: '0',
+      memo_code: this.memo_checked,
+      contribution_purpose_descrip: this.contributionPurposeDescrip,
     });
   }
 }
