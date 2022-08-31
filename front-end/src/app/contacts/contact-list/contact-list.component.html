@@ -21,6 +21,10 @@
         (click)="deleteSelectedItems()"
         [disabled]="!selectedItems.length"
       ></button>
+      <input #search_input type="text" 
+        pInputText [(ngModel)]="searchTerm" 
+        (ngModelChange)='search()' 
+        [ngModelOptions]="{ updateOn: 'blur' }"/>
     </ng-template>
 
     <ng-template pTemplate="right">

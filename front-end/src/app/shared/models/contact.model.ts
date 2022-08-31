@@ -1,6 +1,6 @@
 import { plainToClass } from 'class-transformer';
-import { BaseModel } from './base.model';
 import { LabelList } from '../utils/label.utils';
+import { BaseModel } from './base.model';
 
 export enum ContactTypes {
   CANDIDATE = 'CAN',
@@ -69,5 +69,30 @@ export class Contact extends BaseModel {
   // prettier-ignore
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(Contact, json);
+  }
+}
+
+export class FecfileCommitteeLookupData {
+  committee_id: string | null = null;
+  name: string | null = null;
+  static fromJSON(json: any): FecfileCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(FecfileCommitteeLookupData, json);
+  }
+}
+
+export class FecCommitteeLookupData {
+  id: string | null = null;
+  name: string | null = null;
+  static fromJSON(json: any): FecCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(FecCommitteeLookupData, json);
+  }
+}
+
+export class CommitteeLookupResponse {
+  fec_api_cmtees: FecCommitteeLookupData[] | null = null;
+  fecfile_cmtees: FecfileCommitteeLookupData[] | null = null;
+  // prettier-ignore
+  static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(CommitteeLookupResponse, json);
   }
 }

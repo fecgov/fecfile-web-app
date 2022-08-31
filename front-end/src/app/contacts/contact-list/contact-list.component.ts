@@ -1,10 +1,10 @@
 import { Component, ElementRef } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
-import { ContactService } from '../../shared/services/contact.service';
-import { Contact, ContactTypes, ContactTypeLabels } from '../../shared/models/contact.model';
 import { LabelList } from 'app/shared/utils/label.utils';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
+import { ContactService } from '../../shared/services/contact.service';
 
 @Component({
   selector: 'app-contact-list',
@@ -13,6 +13,8 @@ import { LabelList } from 'app/shared/utils/label.utils';
 export class ContactListComponent extends TableListBaseComponent<Contact> {
   override item: Contact = new Contact();
   contactTypeLabels: LabelList = ContactTypeLabels;
+
+  searchTerm = '';
 
   constructor(
     protected override messageService: MessageService,
@@ -47,6 +49,16 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
       return `${item.first_name} ${item.last_name}`;
     } else {
       return item.name || '';
+    }
+  }
+
+  search() {
+    console.log('==== searched ' + this.searchTerm);
+    if (this.searchTerm) {
+      this.itemService.committeeLookup(
+        this.searchTerm).subscribe((response) => {
+        console.log(JSON.stringify(response));
+      });
     }
   }
 }

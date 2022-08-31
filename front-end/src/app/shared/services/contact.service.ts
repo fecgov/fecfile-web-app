@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
+import { CommitteeLookupResponse, Contact } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { Contact } from '../models/contact.model';
 
 @Injectable({
   providedIn: 'root',
@@ -39,4 +39,10 @@ export class ContactService implements TableListService<Contact> {
   public delete(contact: Contact): Observable<null> {
     return this.apiService.delete<null>(`/contacts/${contact.id}`);
   }
+
+  public committeeLookup(search: string): Observable<CommitteeLookupResponse> {
+    return this.apiService.get<CommitteeLookupResponse>(`/contacts/committee_lookup?q=${search}`).pipe(
+      map((response) => CommitteeLookupResponse.fromJSON(response)));
+  }
+
 }
