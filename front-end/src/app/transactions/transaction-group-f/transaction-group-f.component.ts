@@ -33,11 +33,8 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     'memo_text_description',
   ];
   override form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
-  memoCode: string | null =
-    this.activatedRoute.snapshot.data['transactionType']?.transaction?.transaction_type_identifier;
-
   readOnlyMemo: boolean = false;
-  checked: boolean = this.readOnlyMemo;
+  checked: boolean = false;
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
