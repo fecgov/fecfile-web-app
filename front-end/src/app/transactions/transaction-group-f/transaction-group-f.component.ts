@@ -52,7 +52,6 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
       if (Object.keys(transactionType?.schema?.properties['memo_code']).includes('const')) {
         this.readOnlyMemo = true;
         this.memo_checked = transactionType.schema.properties['memo_code'].const as boolean;
-        console.log('Updating checked:', this.memo_checked, transactionType);
       }
     });
   }
