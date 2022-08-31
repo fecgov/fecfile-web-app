@@ -32,8 +32,8 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     'memo_text_description',
   ];
   override form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
-  readOnlyMemo: boolean = false;
-  checked: boolean = false;
+  readOnlyMemo = false;
+  checked = false;
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
