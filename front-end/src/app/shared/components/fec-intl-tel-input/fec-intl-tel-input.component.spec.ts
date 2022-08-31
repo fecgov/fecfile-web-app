@@ -36,10 +36,15 @@ describe('FecIntlTelInputComponent', () => {
   });
 
   it('registerOnChange() happy path', () => {
-    const onChangeSpy = spyOn<any>(component, 'onChange');
     const testFunction = () => { return; };
     component.registerOnChange(testFunction);
-    expect(onChangeSpy === testFunction).toBeTrue;
+    const onChangeSpy = spyOn<any>(component, 'onChange');
+    const testValue = 'testValue';
+    const testTarget = { value: testValue } as HTMLInputElement;
+    const testEvent = { target: testTarget } as unknown as KeyboardEvent;
+    component.onKey(testEvent);
+    expect(onChangeSpy).toHaveBeenCalledOnceWith('+' +
+      component['countryCode'] + ' ' + component['number']);
   });
 
   it('onKey() happy path', () => {
