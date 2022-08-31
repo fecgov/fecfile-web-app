@@ -52,7 +52,7 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     of(this.activatedRoute.snapshot.data['transactionType']).subscribe((transactionType: TransactionType) => {
       if (Object.keys(transactionType?.schema?.properties['memo_code']).includes('const')) {
         this.readOnlyMemo = true;
-        this.checked = transactionType.schema.properties['memo_code'].const;
+        this.checked = transactionType.schema.properties['memo_code'].const as boolean;
       }
     });
   }
