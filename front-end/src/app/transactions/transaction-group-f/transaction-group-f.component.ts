@@ -7,7 +7,6 @@ import { ContactTypes, ContactTypeLabels } from '../../shared/models/contact.mod
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { ReadOnlyMemoItems, ScheduleATransactionTypes } from '../../shared/models/scha-transaction.model';
 import { TransactionType } from '../../shared/interfaces/transaction-type.interface';
 import { of } from 'rxjs';
 
