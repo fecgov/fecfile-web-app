@@ -8,6 +8,8 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { ReadOnlyMemoItems, ScheduleATransactionTypes } from '../../shared/models/scha-transaction.model';
+import { TransactionType } from '../../shared/interfaces/transaction-type.interface';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-group-f',
@@ -33,7 +35,8 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
   override form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
   memoCode: string | null =
     this.activatedRoute.snapshot.data['transactionType']?.transaction?.transaction_type_identifier;
-  readOnlyMemo: boolean = Object.values(ReadOnlyMemoItems).includes(this.memoCode as ScheduleATransactionTypes);
+
+  readOnlyMemo: boolean = false;
   checked: boolean = this.readOnlyMemo;
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
@@ -48,8 +51,12 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     protected activatedRoute: ActivatedRoute
   ) {
     super(messageService, transactionService, validateService, fb, router);
-    console.log(this.readOnlyMemo);
-    this.form.patchValue({ memo_code: this.readOnlyMemo });
-    console.log(this.form.controls['memo_code']);
+
+    of(this.activatedRoute.snapshot.data['transactionType']).subscribe((transactionType: TransactionType) => {
+      if (Object.keys(transactionType?.schema?.properties['memo_code']).includes('const')) {
+        this.readOnlyMemo = true;
+        this.checked = transactionType.schema.properties['memo_code'].const;
+      }
+    });
   }
 }
