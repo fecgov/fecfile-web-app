@@ -11,7 +11,11 @@ import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_va
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import {
-  CandidateOfficeTypeLabels, CandidateOfficeTypes, Contact, ContactTypeLabels, ContactTypes
+  CandidateOfficeTypeLabels,
+  CandidateOfficeTypes,
+  Contact,
+  ContactTypeLabels,
+  ContactTypes,
 } from '../../shared/models/contact.model';
 
 @Component({
@@ -112,8 +116,11 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             state: 'ZZ',
           });
+          // ajv does not un-require zip when country is not USA
+          this.form.patchValue({ zip: this.form.get('zip')?.value || '' });
           this.form?.get('state')?.disable();
         } else {
+          this.form.patchValue({ zip: this.form.get('zip')?.value || null });
           this.form?.get('state')?.enable();
         }
       });
@@ -234,5 +241,4 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
     }
     return schema;
   }
-
 }
