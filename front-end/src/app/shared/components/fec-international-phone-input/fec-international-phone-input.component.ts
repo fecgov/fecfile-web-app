@@ -3,17 +3,19 @@ import { ControlValueAccessor, NgControl } from '@angular/forms';
 import * as intlTelInput from 'intl-tel-input';
 
 @Component({
-  selector: 'app-fec-intl-tel-input',
-  templateUrl: './fec-intl-tel-input.component.html',
-  styleUrls: ['./fec-intl-tel-input.component.scss'],
+  selector: 'app-fec-international-phone-input',
+  templateUrl: './fec-international-phone-input.component.html',
+  styleUrls: ['./fec-international-phone-input.component.scss'],
 })
-export class FecIntlTelInputComponent implements AfterViewInit, OnDestroy, 
+export class FecInternationalPhoneInputComponent implements AfterViewInit, OnDestroy,
   ControlValueAccessor {
-  @ViewChild('telInput') telInput: ElementRef<HTMLInputElement> | null = null;
+  @ViewChild('internationalPhoneInput') internationalPhoneInputChild:
+    ElementRef<HTMLInputElement> | null = null;
 
-  private iti: intlTelInput.Plugin | null = null;
-  private itiOptions: intlTelInput.Options = {
+  private intlTelInput: intlTelInput.Plugin | null = null;
+  private intlTelInputOptions: intlTelInput.Options = {
     separateDialCode: true,
+    preferredCountries: ["us"],
   }
   private countryCode: string | undefined = '';
   private number = '';
@@ -29,7 +31,7 @@ export class FecIntlTelInputComponent implements AfterViewInit, OnDestroy,
    */
   writeValue(value: string): void {
     if (value) {
-      this.iti?.setNumber(value);
+      this.intlTelInput?.setNumber(value);
       this.onChange(value);
     }
   }
@@ -50,13 +52,18 @@ export class FecIntlTelInputComponent implements AfterViewInit, OnDestroy,
   }
 
   ngAfterViewInit(): void {
-    if (this.telInput) {
-      this.iti = intlTelInput(this.telInput.nativeElement, this.itiOptions);
-      this.countryCode = this.iti?.getSelectedCountryData().dialCode;
-      this.telInput.nativeElement.addEventListener("countrychange", () => {
-        this.countryCode = this.iti?.getSelectedCountryData().dialCode;
-        this.onChange('+' + this.countryCode + ' ' + this.number);
-      });
+    if (this.internationalPhoneInputChild) {
+      this.intlTelInput = intlTelInput(
+        this.internationalPhoneInputChild.nativeElement,
+        this.intlTelInputOptions);
+      this.countryCode =
+        this.intlTelInput?.getSelectedCountryData().dialCode;
+      this.internationalPhoneInputChild.nativeElement.addEventListener(
+        "countrychange", () => {
+          this.countryCode =
+            this.intlTelInput?.getSelectedCountryData().dialCode;
+          this.onChange('+' + this.countryCode + ' ' + this.number);
+        });
     }
   }
 
@@ -66,7 +73,7 @@ export class FecIntlTelInputComponent implements AfterViewInit, OnDestroy,
   }
 
   ngOnDestroy() {
-    this.iti?.destroy();
+    this.intlTelInput?.destroy();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
