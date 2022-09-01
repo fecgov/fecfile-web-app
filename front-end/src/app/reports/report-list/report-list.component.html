@@ -10,6 +10,7 @@
         icon="pi pi-plus"
         class="p-button-success mr-2"
         (click)="addItem()"
+        [disabled]="items.length === 1 && cashOnHand.value === null"
       ></button>
     </ng-template>
   </p-toolbar>
@@ -44,8 +45,8 @@
         <th pSortableColumn="coverage_through_date" id="coverage-dates-column" role="columnheader">
           Coverage dates <p-sortIcon field="coverage_through_date"></p-sortIcon>
         </th>
-        <th pSortableColumn="status" id="status-column" role="columnheader">
-          Status <p-sortIcon field="status"></p-sortIcon>
+        <th pSortableColumn="report_status" id="status-column" role="columnheader">
+          Status <p-sortIcon field="report_status"></p-sortIcon>
         </th>
         <th pSortableColumn="form_type" id="version" role="columnheader">
           Version <p-sortIcon field="form_type"></p-sortIcon>
@@ -53,7 +54,7 @@
         <th pSortableColumn="date_filed" id="date-filed-column" role="columnheader">
           Date filed <p-sortIcon field="date_filed"></p-sortIcon>
         </th>
-        <th id="buttons" role="columnheader"></th>
+        <th id="actions" role="columnheader">Actions</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
@@ -65,9 +66,9 @@
             >{{ item.coverage_from_date | fecDate }} - {{ item.coverage_through_date | fecDate }}</ng-container
           >
         </td>
-        <td>In Progress</td>
+        <td>{{ item.report_status }}</td>
         <td>{{ item.form_type | label: f3xFormVerionLabels }}</td>
-        <td>-</td>
+        <td>{{ item.upload_submission?.created | fecDate }}</td>
         <td>
           <p-button
             pRipple
@@ -76,22 +77,13 @@
             (click)="editItem(item)"
             [ariaLabel]="'edit ' + displayName(item)"
           ></p-button>
-          <br />
           <p-button
             pRipple
-            styleClass="p-button-success"
-            (click)="router.navigateByUrl('/reports/f3x/summary/' + item.id)"
-            [ariaLabel]="'report summary ' + displayName(item)"
-            >Summary</p-button
-          >
-          <br />
-          <p-button
-            pRipple
-            styleClass="p-button-success"
-            (click)="router.navigateByUrl('/reports/f3x/detailed-summary/' + item.id)"
-            [ariaLabel]="'report detailed summary ' + displayName(item)"
-            >Detail</p-button
-          >
+            icon="pi pi-ellipsis-v"
+            styleClass="p-button-rounded p-button-success mr-2"
+            (click)="goToTest(item)"
+            [ariaLabel]="'edit ' + displayName(item)"
+          ></p-button>
         </td>
       </tr>
     </ng-template>

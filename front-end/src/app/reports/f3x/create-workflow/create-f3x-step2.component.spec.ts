@@ -16,6 +16,7 @@ import { environment } from '../../../../environments/environment';
 import { CommitteeAccount } from '../../../shared/models/committee-account.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { selectCommitteeAccount } from '../../../store/committee-account.selectors';
+import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import { ValidateService } from '../../../shared/services/validate.service';
 import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
 import { ReportsModule } from '../../reports.module';
@@ -57,10 +58,12 @@ describe('CreateF3xStep2Component', () => {
           initialState: {
             fecfile_online_committeeAccount: committeeAccount,
             fecfile_online_userLoginData: userLoginData,
+            fecfile_online_cashOnHand: { report_id: null, value: null },
           },
           selectors: [
             { selector: selectCommitteeAccount, value: committeeAccount },
             { selector: selectUserLoginData, value: userLoginData },
+            { selector: selectCashOnHand, value: { report_id: 999, value: 100.0 } },
           ],
         }),
         {
@@ -113,7 +116,7 @@ describe('CreateF3xStep2Component', () => {
     );
     expect(req.request.method).toEqual('PUT');
     req.flush(component.report);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step3/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/999/list');
   });
 
   it('#save should not save when form data invalid', () => {

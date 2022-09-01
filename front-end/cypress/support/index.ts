@@ -4,22 +4,38 @@
 
 */
 
-import { safeType, overwrite, dropdownSetValue, calendarSetValue, login, logout } from './commands';
+import {
+  safeType,
+  overwrite,
+  dropdownSetValue,
+  calendarSetValue,
+  login,
+  logout,
+  shortWait,
+  medWait,
+  longWait,
+} from './commands';
 Cypress.Commands.add('safeType', { prevSubject: true }, safeType);
 Cypress.Commands.add('overwrite', { prevSubject: true }, overwrite);
 Cypress.Commands.add('dropdownSetValue', dropdownSetValue);
 Cypress.Commands.add('calendarSetValue', calendarSetValue);
 Cypress.Commands.add('login', login);
 Cypress.Commands.add('logout', logout);
+Cypress.Commands.add('shortWait', shortWait);
+Cypress.Commands.add('medWait', medWait);
+Cypress.Commands.add('longWait', longWait);
 
-import { enterContact } from './contacts.spec';
-Cypress.Commands.add('enterContact', enterContact);
+import { createContact } from './contacts.spec';
+Cypress.Commands.add('createContact', createContact);
 
-import { enterReport, progressReport, deleteAllReports, deleteReport } from './reports.spec';
-Cypress.Commands.add('enterReport', enterReport);
-Cypress.Commands.add('progressReport', progressReport);
+import { createReport, enterConfirmationDetails, enterFilingDetails, navigateToTransactionManagement, navigateReportSidebar, deleteAllReports, deleteReport } from './reports.spec';
+Cypress.Commands.add('createReport', createReport);
+Cypress.Commands.add('enterConfirmationDetails', enterConfirmationDetails);
+Cypress.Commands.add('enterFilingDetails', enterFilingDetails);
+Cypress.Commands.add('navigateToTransactionManagement', navigateToTransactionManagement);
+Cypress.Commands.add("navigateReportSidebar", navigateReportSidebar);
 Cypress.Commands.add('deleteAllReports', deleteAllReports);
 Cypress.Commands.add('deleteReport', deleteReport);
 
-import { enterTransactionSchA } from './transactions.spec';
-Cypress.Commands.add('enterTransactionSchA', enterTransactionSchA);
+import { createTransactionSchA } from './transactions.spec';
+Cypress.Commands.add('createTransactionSchA', createTransactionSchA);

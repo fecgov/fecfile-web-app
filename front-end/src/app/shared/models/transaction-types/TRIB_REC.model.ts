@@ -8,8 +8,8 @@ export class TRIB_REC implements TransactionType {
   componentGroupId = 'D';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_RECEIPT);
   schema = schema;
-  transaction = null;
-  parent = null;
+  transaction = undefined;
+  parent = undefined;
 
   contributionPurposeDescripReadonly(): string {
     return 'Tribal Receipt';
@@ -17,7 +17,7 @@ export class TRIB_REC implements TransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11a',
+      form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_RECEIPT,
     });
   }

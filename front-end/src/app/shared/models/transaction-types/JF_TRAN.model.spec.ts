@@ -17,7 +17,7 @@ describe('JF_TRAN', () => {
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA12');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.JF_TRANSFERS);
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.JF_TRANSFER);
   });
 
   it('#contributionPurposeDescripReadonly() should return constant', () => {

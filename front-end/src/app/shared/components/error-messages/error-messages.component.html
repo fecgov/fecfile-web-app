@@ -1,11 +1,27 @@
 <ng-container *ngIf="formSubmitted || (control?.invalid && (control?.dirty || control?.touched))">
   <small class="p-error" *ngIf="control?.hasError('required')">{{ requiredErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('minlength')">{{ minLengthErrorMessage }}</small>
-  <small class="p-error" *ngIf="control?.hasError('maxlength')">{{ maxLengthErrorMessage }}</small>
+  <small class="p-error" *ngIf="!control?.hasError('max') && control?.hasError('maxlength')">{{
+    maxLengthErrorMessage
+  }}</small>
+  <small class="p-error" *ngIf="control?.hasError('min')">{{ minErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('max')">{{ maxErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('invaliddate')">{{ invalidDateErrorMessage }}</small>
   <small
     class="p-error"
-    *ngIf="!control?.hasError('minlength') && !control?.hasError('maxlength') && !control?.hasError('invaliddate') && control?.hasError('pattern')"
+    *ngIf="!control?.hasError('maxlength') && !control?.hasError('required') && control?.hasError('email')"
+    >{{ emailErrorMessage }}</small
+  >
+  <small
+    class="p-error"
+    *ngIf="
+      !control?.hasError('minlength') &&
+      !control?.hasError('maxlength') &&
+      !control?.hasError('min') &&
+      !control?.hasError('max') &&
+      !control?.hasError('invaliddate') &&
+      control?.hasError('pattern')
+    "
     >{{ patternErrorMessage }}</small
   >
 </ng-container>

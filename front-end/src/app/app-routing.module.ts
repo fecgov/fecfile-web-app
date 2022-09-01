@@ -12,7 +12,7 @@ const routes: Routes = [
     path: '',
     component: LoginComponent,
     pathMatch: 'full',
-    canActivate:[LoginGuard],
+    canActivate: [LoginGuard],
   },
   { path: 'twoFactLogin', component: TwoFactorLoginComponent },
   { path: 'confirm-2f', component: ConfirmTwoFactorComponent },
@@ -20,7 +20,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      { path: 'dashboard', component: DashboardComponent },
+      { path: 'dashboard', component: DashboardComponent, title: 'FECFile Dashboard' },
       { path: 'reports', loadChildren: () => import('./reports/reports.module').then((m) => m.ReportsModule) },
       { path: 'contacts', loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule) },
       { path: 'committee/users', loadChildren: () => import('./users/users.module').then((m) => m.UsersModule) },

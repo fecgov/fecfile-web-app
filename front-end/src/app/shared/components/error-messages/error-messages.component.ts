@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, LOCALE_ID, Inject } from '@angular/core';
+import { formatCurrency } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -11,6 +12,24 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() formSubmitted = false;
   @Input() requiredErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
+
+  private _emailErrorMessage = '';
+  @Input() set emailErrorMessage(value: string) {
+    this._emailErrorMessage = value;
+  }
+  get emailErrorMessage(): string {
+    if (this._emailErrorMessage) {
+      return this._emailErrorMessage;
+    }
+
+    switch (this.control?.errors?.['email']) {
+      case 'identical':
+        return 'Confirmation emails cannot be identical';
+      case 'invalid':
+        return 'This email is invalid';
+    }
+    return 'Email Error';
+  }
 
   private _minLengthErrorMessage = '';
   @Input() set minLengthErrorMessage(value: string) {
@@ -34,6 +53,36 @@ export class ErrorMessagesComponent implements OnInit {
     return `This field cannot contain more than ${this.control?.errors?.['maxlength']?.requiredLength} alphanumeric characters.`;
   }
 
+  private _minErrorMessage = '';
+  @Input() set minErrorMessage(value: string) {
+    this._minErrorMessage = value;
+  }
+  get minErrorMessage(): string {
+    if (this._minErrorMessage) {
+      return this._minErrorMessage;
+    }
+    return `This field must be greater than or equal to ${formatCurrency(
+      this.control?.errors?.['min']?.min,
+      this.localeId,
+      '$'
+    )}.`;
+  }
+
+  private _maxErrorMessage = '';
+  @Input() set maxErrorMessage(value: string) {
+    this._maxErrorMessage = value;
+  }
+  get maxErrorMessage(): string {
+    if (this._maxErrorMessage) {
+      return this._maxErrorMessage;
+    }
+    return `This field must be less than or equal to ${formatCurrency(
+      this.control?.errors?.['max']?.max,
+      this.localeId,
+      '$'
+    )}.`;
+  }
+
   private _invalidDateErrorMessage = '';
   @Input() set invalidDateErrorMessage(value: string) {
     this._invalidDateErrorMessage = value;
@@ -46,6 +95,8 @@ export class ErrorMessagesComponent implements OnInit {
   }
 
   control: FormGroup | null = null;
+
+  constructor(@Inject(LOCALE_ID) private localeId: string) {}
 
   ngOnInit(): void {
     this.control = this.form?.get(this.fieldName) as FormGroup;

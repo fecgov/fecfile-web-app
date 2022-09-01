@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { DateUtils } from '../utils/date.utils';
@@ -12,13 +12,13 @@ export class ValidateService {
    * @property - This property is a placeholder for the schema to use in the form element
    * custom validator located in the method formValidator() below.
    */
-  formValidatorSchema: JsonSchema | null = null;
+  formValidatorSchema: JsonSchema | undefined;
 
   /**
    * @property - This property is a placeholder for the ng reactive form to use in the form
    * element custom validator located in the method formValidator() below.
    */
-  formValidatorForm: FormGroup | null = null;
+  formValidatorForm: FormGroup | undefined;
 
   /**
    * Validate a data object against a JSON Schema document
@@ -37,7 +37,7 @@ export class ValidateService {
    * @param {JsonSchema} schema
    * @returns {string[]} list of property names
    */
-  getSchemaProperties(schema: JsonSchema | null): string[] {
+  getSchemaProperties(schema: JsonSchema | undefined): string[] {
     if (schema) {
       return Object.keys(schema.properties);
     }
@@ -88,7 +88,11 @@ export class ValidateService {
    */
   private getPropertyValue(property: string, form: FormGroup) {
     // Undefined and empty strings are set to null.
-    if (form?.get(property)?.value === undefined || form?.get(property)?.value === '' || form?.get(property)?.value === null) {
+    if (
+      form?.get(property)?.value === undefined ||
+      form?.get(property)?.value === '' ||
+      form?.get(property)?.value === null
+    ) {
       return null;
     }
 
@@ -142,6 +146,12 @@ export class ValidateService {
           if (error.keyword === 'maxLength' || error.keyword === 'maximum') {
             result['maxlength'] = { requiredLength: error.params['limit'] };
           }
+          if (error.keyword === 'minimum') {
+            result['min'] = { min: error.params['limit'] };
+          }
+          if (error.keyword === 'maximum') {
+            result['max'] = { max: error.params['limit'] };
+          }
           if (error.keyword === 'pattern') {
             result['pattern'] = { requiredPattern: error.params['pattern'] };
           }
@@ -149,7 +159,10 @@ export class ValidateService {
             result['pattern'] = { requiredPattern: `Allowed values: ${error.params['allowedValues'].join(', ')}` };
           }
           if (error.keyword === 'type' && error.params['type'] === 'number') {
-            if (this.formValidatorForm?.get(error.path)?.value === '' || this.formValidatorForm?.get(error.path)?.value === null) {
+            if (
+              this.formValidatorForm?.get(error.path)?.value === '' ||
+              this.formValidatorForm?.get(error.path)?.value === null
+            ) {
               result['required'] = true;
             } else {
               result['pattern'] = { requiredPattern: 'Value must be a number' };
@@ -164,5 +177,19 @@ export class ValidateService {
 
       return null;
     };
+  }
+
+  passwordValidator(): ValidatorFn | ValidatorFn[] {
+    const v = Validators.compose([
+      Validators.required,
+      Validators.minLength(8),
+      Validators.maxLength(16),
+      Validators.pattern('.*[A-Z].*'),
+      Validators.pattern('.*[a-z].*'),
+      Validators.pattern('.*[0-9].*'),
+      Validators.pattern('.*[!@#$%&*()].*'),
+    ]);
+
+    return v ? v : [];
   }
 }

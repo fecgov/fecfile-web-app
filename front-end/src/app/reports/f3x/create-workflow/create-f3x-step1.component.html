@@ -56,7 +56,10 @@
       <div class="col-6">
         <div class="field">
           <label for="report_type_category">TIME PERIOD</label>
-          <p-selectButton [options]="getReportTypeCategories()" formControlName="report_type_category"></p-selectButton>
+          <app-select-button
+            [options]="getReportTypeCategories()"
+            formControlName="report_type_category"
+          ></app-select-button>
           <app-error-messages fieldName="report_type_category" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
@@ -69,7 +72,7 @@
               [inputId]="reportCode"
               name="report_code"
               [value]="reportCode"
-              label="{{ reportCode | label: f3xReportCodeCreationLabels }}"
+              label="{{ reportCode | label: f3xReportCodeDetailedLabels }}"
               formControlName="report_code"
             ></p-radioButton>
           </div>
@@ -121,7 +124,11 @@
             name="coverage_from_date"
             formControlName="coverage_from_date"
           ></p-calendar>
-          <app-error-messages [form]="form" fieldName="coverage_from_date" [formSubmitted]="formSubmitted"></app-error-messages>
+          <app-error-messages
+            [form]="form"
+            fieldName="coverage_from_date"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
       <div class="col-6">
@@ -132,7 +139,11 @@
             name="coverage_through_date"
             formControlName="coverage_through_date"
           ></p-calendar>
-          <app-error-messages [form]="form" fieldName="coverage_through_date" [formSubmitted]="formSubmitted"></app-error-messages>
+          <app-error-messages
+            [form]="form"
+            fieldName="coverage_through_date"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
         </div>
       </div>
     </div>
@@ -142,12 +153,11 @@
   <div class="col-2">
     <button pButton pRipple label="Back" (click)="goBack()" class="p-button-secondary"></button>
   </div>
-  <div class="col-10 grid save-buttons">
-    <div>
-      <button pButton pRipple label="Save" (click)="save()" class="p-button-primary"></button>
-    </div>
-    <div>
-      <button pButton pRipple label="Save and continue" (click)="save('continue')" class="p-button-info"></button>
-    </div>
+  <div class="col-6"></div>
+  <div class="col-1">
+    <button pButton pRipple label="Save" (click)="save()" class="p-button-primary"></button>
+  </div>
+  <div class="col-3">
+    <button pButton pRipple label="Save and continue" (click)="save('continue')" class="p-button-info"></button>
   </div>
 </div>

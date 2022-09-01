@@ -17,6 +17,19 @@ export function login() {
   //security code page form-fields' ids
   const fieldSecurityCodeText = '.form-control';
 
+  cy.fixture("FEC_Get_Committee_Account").then((response_body) => {
+    response_body.results[0].committee_id = Cypress.env("COMMITTEE_ID");
+    const response = {
+      body: response_body,
+      statusCode: 200,
+    }
+
+    cy.intercept(
+      "GET", "https://api.open.fec.gov/v1/committee/*/*",
+      response
+    ).as("GetCommitteeAccount");
+  });
+ 
   cy.visit('/');
 
   cy.get(fieldEmail).type(email);
@@ -28,9 +41,12 @@ export function login() {
 
   cy.get(fieldSecurityCodeText).type(testPIN).type('{enter}');
 
+  cy.wait('@GetCommitteeAccount');
+
   cy.wait(1000).then(() => {
     Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
   });
+  cy.longWait();
 }
 
 export function logout() {
@@ -48,8 +64,8 @@ export function getAuthToken() {
   return Cypress.env('AUTH_TOKEN');
 }
 
-function safeString(stringVal: string | number): string {
-  if (stringVal == null) {
+function safeString(stringVal: string | number | undefined | null): string {
+  if (stringVal === null || stringVal === undefined) {
     return '';
   } else {
     return stringVal.toString();
@@ -75,20 +91,23 @@ export function overwrite(prevSubject: any, stringVal: string | number) {
   return safeType(prevSubject, '{selectall}{del}' + outString);
 }
 
-export function dropdownSetValue(dropdown: string, value: string) {
+export function dropdownSetValue(dropdown: string, value: string, wait: boolean = true) {
   cy.get(dropdown).click();
-  cy.wait(25);
+  cy.shortWait();
   cy.get('p-dropdownitem').contains(value).should('exist').click({ force: true });
+  if (wait) {
+    cy.shortWait();
+  }
 }
 
 export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   const currentDate: Date = new Date();
   cy.get(calendar).click();
-  cy.wait(25);
+  cy.shortWait();
 
   //    Choose the year
   cy.get('.p-datepicker-year').click();
-  cy.wait(25);
+  cy.shortWait();
 
   const year: number = dateObj.getFullYear();
   const currentYear: number = currentDate.getFullYear();
@@ -97,26 +116,42 @@ export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   if (year < decadeStart) {
     for (let i = 0; i < decadeStart - year; i += 10) {
       cy.get('.p-datepicker-prev').click();
-      cy.wait(25);
+      cy.shortWait();
     }
   }
   if (year > decadeEnd) {
     for (let i = 0; i < year - decadeEnd; i += 10) {
       cy.get('.p-datepicker-next').click();
-      cy.wait(25);
+      cy.shortWait();
     }
   }
   cy.get('.p-yearpicker-year').contains(year.toString()).click();
-  cy.wait(25);
+  cy.shortWait();
 
   //    Choose the month
   const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const Month: string = Months[dateObj.getMonth()];
   cy.get('.p-monthpicker-month').contains(Month).click();
-  cy.wait(25);
+  cy.shortWait();
 
   //    Choose the day
   const Day: string = dateObj.getDate().toString();
   cy.get('td').find('span').not('.p-disabled').parent().contains(Day).click();
-  cy.wait(25);
+  cy.shortWait();
+}
+
+
+// shortWait() is appropriate for waiting for the UI to update after changing a field
+export function shortWait(): void {
+  cy.wait(100);
+}
+
+// medWait() is appropriate for waiting for loading a page or a table
+export function medWait(): void {
+  cy.wait(250);
+}
+
+// longWait() is appropriate for waiting on a database call such as saving a form
+export function longWait(): void {
+  cy.wait(400);
 }

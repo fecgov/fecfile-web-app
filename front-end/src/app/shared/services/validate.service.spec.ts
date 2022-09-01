@@ -71,8 +71,35 @@ describe('ValidateService', () => {
     expect(result).toBe(null);
   });
 
+  it('#formValidator should validate min/max numeric properties correctly', () => {
+    const fb: FormBuilder = new FormBuilder();
+    service.formValidatorSchema = f3xSchema;
+    service.formValidatorForm = fb.group(service.getFormGroupFields(service.getSchemaProperties(f3xSchema)));
+    service.formValidatorForm.patchValue({
+      L6a_cash_on_hand_jan_1_ytd: 1000000000.0,
+    });
+
+    let validator: ValidatorFn = service.formValidator('L6a_cash_on_hand_jan_1_ytd');
+    let result: ValidationErrors | null = validator(
+      service.formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as FormControl
+    );
+    expect(result).not.toEqual(null);
+    if (result) {
+      expect(result['max'].max).toBe(999999999.99);
+    }
+
+    service.formValidatorForm.patchValue({
+      L6a_cash_on_hand_jan_1_ytd: -200.0,
+    });
+    validator = service.formValidator('L6a_cash_on_hand_jan_1_ytd');
+    result = validator(service.formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as FormControl);
+    if (result) {
+      expect(result['min'].min).toBe(0);
+    }
+  });
+
   it('#getSchemaProperties() should return empty array when no schema', () => {
-    const properties: string[] = service.getSchemaProperties(null);
+    const properties: string[] = service.getSchemaProperties(undefined);
     expect(properties.length).toBe(0);
   });
 });
