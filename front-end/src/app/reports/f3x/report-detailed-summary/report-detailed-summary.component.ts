@@ -1,11 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { combineLatestWith, delay, merge, Observable, of, startWith, Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
+import { ApiService } from 'app/shared/services/api.service';
+import { ReportService } from 'app/shared/services/report.service';
+import { mergeWith } from 'lodash';
 
 @Component({
   selector: 'app-report-detailed-summary',
@@ -14,10 +17,16 @@ import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.util
 })
 export class ReportDetailedSummaryComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
+  protected calculationFinished$ = new Subject<boolean>();
   report: F3xSummary = new F3xSummary();
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
 
-  constructor(private store: Store, public router: Router) {}
+  constructor(
+    private store: Store,
+    public router: Router,
+    private apiService: ApiService,
+    private reportService: ReportService
+  ) {}
 
   ngOnInit(): void {
     this.reportCodeLabelList$ = this.store
@@ -27,11 +36,28 @@ export class ReportDetailedSummaryComponent implements OnInit, OnDestroy {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report) => (this.report = report as F3xSummary));
+      .subscribe((report) => {
+        this.report = report as F3xSummary;
+        if (!report.calculation_status) {
+          this.apiService
+            .post(`/web-services/summary/calculate-summary/`, { report_id: report.id })
+            .subscribe(() => this.refreshSummary());
+        } else if (report.calculation_status != 'SUCCEEDED') {
+          of()
+            .pipe(delay(10000), takeUntil(merge(this.destroy$, this.calculationFinished$)))
+            .subscribe(() => this.refreshSummary());
+        } else {
+          this.calculationFinished$.next(true);
+        }
+      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  refreshSummary(): void {
+    this.reportService.setActiveReportById(this.report.id).subscribe();
   }
 }
