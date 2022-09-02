@@ -17,14 +17,16 @@
         pRipple
         label="Delete"
         icon="pi pi-trash"
-        class="p-button-danger"
+        class="p-button-danger mr-2"
         (click)="deleteSelectedItems()"
         [disabled]="!selectedItems.length"
       ></button>
-      <input #search_input type="text" 
-        pInputText [(ngModel)]="searchTerm" 
-        (ngModelChange)='search()' 
-        [ngModelOptions]="{ updateOn: 'blur' }"/>
+      <app-contact-lookup 
+        [contactTypeOptions]="contactTypeOptions"
+        [maxFecResults]="5"
+        [maxFecfileResults]="5"
+        (contactSelect)="onContactLookupSelect($event)">
+      </app-contact-lookup>
     </ng-template>
 
     <ng-template pTemplate="right">

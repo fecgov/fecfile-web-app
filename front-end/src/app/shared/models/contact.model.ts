@@ -1,4 +1,5 @@
 import { plainToClass } from 'class-transformer';
+import { SelectItem, SelectItemGroup } from 'primeng/api';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 
@@ -72,27 +73,41 @@ export class Contact extends BaseModel {
   }
 }
 
-export class FecfileCommitteeLookupData {
-  committee_id: string | null = null;
-  name: string | null = null;
-  static fromJSON(json: any): FecfileCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(FecfileCommitteeLookupData, json);
-  }
-}
-
 export class FecCommitteeLookupData {
   id: string | null = null;
   name: string | null = null;
   static fromJSON(json: any): FecCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(FecCommitteeLookupData, json);
   }
+  static toSelectItem(data: FecCommitteeLookupData): SelectItem<string> {
+    return data && {
+      label: `${data.name} (${data.id})`,
+      value: `${data.id}`
+    }
+  }
 }
 
 export class CommitteeLookupResponse {
   fec_api_cmtees: FecCommitteeLookupData[] | null = null;
-  fecfile_cmtees: FecfileCommitteeLookupData[] | null = null;
+  fecfile_cmtees: FecCommitteeLookupData[] | null = null;
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(CommitteeLookupResponse, json);
+  }
+  toSelectItemGroups(): SelectItemGroup[] {
+    const fecApiSelectItems = this.fec_api_cmtees?.map(
+      data => FecCommitteeLookupData.toSelectItem(data)) || [];
+    const fecfileSelectItems = this.fecfile_cmtees?.map(
+      data => FecCommitteeLookupData.toSelectItem(data)) || [];
+    return [
+      {
+        label: 'Select an existing candidate contact:',
+        items: fecApiSelectItems,
+      },
+      {
+        label: 'Create a new contact from list of registered candidates:',
+        items: fecfileSelectItems,
+      }
+    ]
   }
 }

@@ -2,7 +2,7 @@ import { Component, ElementRef } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
-import { LabelList } from 'app/shared/utils/label.utils';
+import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 import { ContactService } from '../../shared/services/contact.service';
 
@@ -15,6 +15,11 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   contactTypeLabels: LabelList = ContactTypeLabels;
 
   searchTerm = '';
+
+  // contact lookup
+  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
+    [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
+  );
 
   constructor(
     protected override messageService: MessageService,
@@ -52,13 +57,9 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     }
   }
 
-  search() {
-    console.log('==== searched ' + this.searchTerm);
-    if (this.searchTerm) {
-      this.itemService.committeeLookup(
-        this.searchTerm).subscribe((response) => {
-        console.log(JSON.stringify(response));
-      });
-    }
+  onContactLookupSelect(id: string) {
+    console.log('Selected lookup contact with ' + 
+      'with commitee id ' + id);
   }
+
 }

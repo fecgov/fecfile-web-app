@@ -40,9 +40,13 @@ export class ContactService implements TableListService<Contact> {
     return this.apiService.delete<null>(`/contacts/${contact.id}`);
   }
 
-  public committeeLookup(search: string): Observable<CommitteeLookupResponse> {
-    return this.apiService.get<CommitteeLookupResponse>(`/contacts/committee_lookup?q=${search}`).pipe(
-      map((response) => CommitteeLookupResponse.fromJSON(response)));
+  public committeeLookup(search: string, maxFecResults: number,
+    maxFecfileResults: number): Observable<CommitteeLookupResponse> {
+    return this.apiService.get<CommitteeLookupResponse>(
+      `/contacts/committee_lookup/?q=${search}` +
+      `&max_fec_results=${maxFecResults}` +
+      `&max_fecfile_results=${maxFecfileResults}`).pipe(
+        map((response) => CommitteeLookupResponse.fromJSON(response)));
   }
 
 }
