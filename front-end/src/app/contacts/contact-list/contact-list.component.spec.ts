@@ -1,19 +1,20 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
+import { SharedModule } from 'app/shared/shared.module';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { TableModule } from 'primeng/table';
-import { ToolbarModule } from 'primeng/toolbar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
+import { Contact, ContactTypes } from '../../shared/models/contact.model';
 import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
 import { ContactListComponent } from './contact-list.component';
-import { Contact, ContactTypes } from '../../shared/models/contact.model';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -41,6 +42,7 @@ describe('ContactListComponent', () => {
         DialogModule,
         FileUploadModule,
         ConfirmDialogModule,
+        SharedModule,
       ],
       declarations: [ContactListComponent, ContactDetailComponent],
       providers: [
