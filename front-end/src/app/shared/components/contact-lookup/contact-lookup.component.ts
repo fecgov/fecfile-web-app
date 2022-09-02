@@ -49,6 +49,8 @@ export class ContactLookupComponent {
             this.lookupDropdown.overlayVisible = true;
           }
         });
+    } else {
+      this.contactLookupList = [];
     }
   }, this.searchDelayMillis);
 
