@@ -65,10 +65,9 @@ describe('Testing login', () => {
 
   it('Accepts input', () => {
     cy.contains('button', 'Login with login.gov').click();
-    cy.shortWait();
-    cy.origin('https://idp.int.identitysandbox.gov/', () => {
-      cy.wait(50);
+    cy.origin('idp.int.identitysandbox.gov', () => {
       cy.get('button[type="submit"]').click();
+      cy.pause();
     });
   });
 });

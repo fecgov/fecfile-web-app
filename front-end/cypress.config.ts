@@ -12,6 +12,6 @@ export default defineConfig({
       return require('./cypress/plugins/index.ts')(on, config)
     },
     baseUrl: 'http://localhost:4200',
-    experimentalSessionAndOrigin: true,
+    experimentalSessionAndOrigin: false,
   },
 })

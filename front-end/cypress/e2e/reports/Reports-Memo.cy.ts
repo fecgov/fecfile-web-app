@@ -1,8 +1,7 @@
 // @ts-check
 
-import { randomString } from "../../support/generators/generators.spec";
-import { generateReportObject } from "../../support/generators/reports.spec";
-
+import { randomString } from '../../support/generators/generators.spec';
+import { generateReportObject } from '../../support/generators/reports.spec';
 
 const report = generateReportObject();
 
@@ -12,17 +11,17 @@ describe('Test creating a report and adding a report-level memo', () => {
     cy.deleteAllReports();
   });
 
-  it('Creates a report', ()=>{
+  it('Creates a report', () => {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.shortWait();
     cy.createReport(report);
   });
 
-  it('Progresses to the Transaction Management Page', ()=>{
+  it('Progresses to the Transaction Management Page', () => {
     cy.navigateToTransactionManagement();
   });
 
-  it('Submits a report level memo', ()=>{
+  it('Submits a report level memo', () => {
     cy.navigateReportSidebar('Review', 'Add a report level memo');
     cy.shortWait();
 
@@ -30,25 +29,25 @@ describe('Test creating a report and adding a report-level memo', () => {
 
     console.log(text.length);
 
-    cy.get('textarea').overwrite(text).safeType("A");
+    cy.get('textarea').overwrite(text).safeType('A');
 
-    cy.get("app-error-messages")
-      .should("contain",
-        "This field cannot contain more than 4000 alphanumeric characters.");
-    
-    cy.get("textarea").safeType("{backspace}");
-    cy.get("app-error-messages")
-      .should("not.contain",
-        "This field cannot contain more than 4000 alphanumeric characters.");
+    cy.get('app-error-messages').should('contain', 'This field cannot contain more than 4000 alphanumeric characters.');
+
+    cy.get('textarea').safeType('{backspace}');
+    cy.get('app-error-messages').should(
+      'not.contain',
+      'This field cannot contain more than 4000 alphanumeric characters.'
+    );
 
     cy.get('button[label="Save & continue"]').click();
     cy.medWait();
 
     cy.navigateReportSidebar('Review', 'Add a report level memo');
     cy.get('textarea').should('have.value', text);
- });
+  });
 
-  after('Cleanup', () => {
+  it('Cleanup', () => {
+    cy.shortWait();
     cy.deleteAllReports();
     cy.logout();
   });
