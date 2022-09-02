@@ -11,6 +11,7 @@ import { CardModule } from 'primeng/card';
 import { ReportDetailedSummaryComponent } from './report-detailed-summary.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReportService } from 'app/shared/services/report.service';
+import { BehaviorSubject, of, ReplaySubject, Subject } from 'rxjs';
 
 describe('ReportDetailedSummaryComponent', () => {
   let component: ReportDetailedSummaryComponent;
@@ -21,6 +22,7 @@ describe('ReportDetailedSummaryComponent', () => {
     form_type: 'F3XN',
     report_code: 'Q1',
   });
+  const f3xSubject: Subject<any> = new BehaviorSubject<any>({ report: f3x });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -37,11 +39,7 @@ describe('ReportDetailedSummaryComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: {
-              data: {
-                report: f3x,
-              },
-            },
+            data: f3xSubject,
           },
         },
       ],
@@ -56,5 +54,20 @@ describe('ReportDetailedSummaryComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('CALCULATING', () => {
+    f3x.calculation_status = 'CALCULATING';
+    f3xSubject.next({ report: f3x });
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+  });
+  describe('SUCCEEDED', () => {
+    f3x.calculation_status = 'SUCCEEDED';
+    f3xSubject.next({ report: f3x });
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
   });
 });
