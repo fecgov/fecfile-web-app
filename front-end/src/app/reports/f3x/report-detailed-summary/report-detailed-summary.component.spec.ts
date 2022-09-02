@@ -59,31 +59,7 @@ describe('ReportDetailedSummaryComponent', () => {
   describe('CALCULATING', () => {
     beforeEach(async () => {
       f3x.calculation_status = 'CALCULATING';
-      f3xSubject.next({ report: f3x });
-      await TestBed.configureTestingModule({
-        imports: [SharedModule, CardModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule],
-        declarations: [ReportDetailedSummaryComponent],
-        providers: [
-          ReportService,
-          provideMockStore({
-            selectors: [
-              { selector: selectReportCodeLabelList, value: {} },
-              { selector: selectActiveReport, value: { id: 999 } },
-            ],
-          }),
-          {
-            provide: ActivatedRoute,
-            useValue: {
-              data: f3xSubject,
-            },
-          },
-        ],
-      }).compileComponents();
-    });
-    beforeEach(() => {
-      fixture = TestBed.createComponent(ReportDetailedSummaryComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+      return f3xSubject.next({ report: f3x });
     });
     it('should create', () => {
       expect(component).toBeTruthy();
@@ -92,32 +68,8 @@ describe('ReportDetailedSummaryComponent', () => {
 
   describe('SUCCEEDED', () => {
     beforeEach(async () => {
-      f3x.calculation_status = 'SUCCEEDED';
-      f3xSubject.next({ report: f3x });
-      await TestBed.configureTestingModule({
-        imports: [SharedModule, CardModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule],
-        declarations: [ReportDetailedSummaryComponent],
-        providers: [
-          ReportService,
-          provideMockStore({
-            selectors: [
-              { selector: selectReportCodeLabelList, value: {} },
-              { selector: selectActiveReport, value: { id: 999 } },
-            ],
-          }),
-          {
-            provide: ActivatedRoute,
-            useValue: {
-              data: f3xSubject,
-            },
-          },
-        ],
-      }).compileComponents();
-    });
-    beforeEach(() => {
-      fixture = TestBed.createComponent(ReportDetailedSummaryComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+      f3x.calculation_status = 'CALCULATING';
+      return f3xSubject.next({ report: f3x });
     });
     it('should create', () => {
       expect(component).toBeTruthy();
