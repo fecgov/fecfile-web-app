@@ -9,6 +9,8 @@ import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
 
 import { ReportDetailedSummaryComponent } from './report-detailed-summary.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ReportService } from 'app/shared/services/report.service';
 
 describe('ReportDetailedSummaryComponent', () => {
   let component: ReportDetailedSummaryComponent;
@@ -22,9 +24,10 @@ describe('ReportDetailedSummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, CardModule, RouterTestingModule.withRoutes([])],
+      imports: [SharedModule, CardModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule],
       declarations: [ReportDetailedSummaryComponent],
       providers: [
+        ReportService,
         provideMockStore({
           selectors: [
             { selector: selectReportCodeLabelList, value: {} },

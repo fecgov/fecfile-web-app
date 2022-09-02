@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { combineLatestWith, delay, merge, Observable, of, startWith, Subject, takeUntil } from 'rxjs';
+import { delay, merge, Observable, of, Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
@@ -8,7 +8,6 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { mergeWith } from 'lodash';
 
 @Component({
   selector: 'app-report-detailed-summary',
