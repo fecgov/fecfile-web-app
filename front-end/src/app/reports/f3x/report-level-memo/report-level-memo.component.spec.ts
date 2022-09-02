@@ -64,11 +64,9 @@ describe('ReportLevelMemoComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: {
-              data: {
-                report: f3x,
-              },
-            },
+            data: of({
+              report: f3x,
+            }),
           },
         },
       ],
