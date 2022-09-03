@@ -58,8 +58,13 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   onContactLookupSelect(id: string) {
-    console.log('Selected lookup contact with ' + 
-      'with commitee id ' + id);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Contact selected',
+      detail: 'Selected lookup contact ' + 
+        'with commitee id ' + id,
+      life: 3000,
+    });
   }
 
 }

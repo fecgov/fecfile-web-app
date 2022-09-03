@@ -34,13 +34,13 @@ export class ContactLookupComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private itemService: ContactService
+    private contactService: ContactService
   ) { }
 
   onDropdownSearch = debounce((event) => {
     const searchTerm = event?.target?.value;
     if (searchTerm) {
-      this.itemService.committeeLookup(
+      this.contactService.committeeLookup(
         searchTerm, this.maxFecResults,
         this.maxFecfileResults).subscribe((response) => {
           this.contactLookupList = response &&
@@ -56,10 +56,12 @@ export class ContactLookupComponent {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContactSelect(event: any) {
-    if (event?.originalEvent?.type === 'click') {
-      const value: string = event?.value;
-      if (value) {
-        this.contactSelect.emit(value)
+    if (event) {
+      if (event.originalEvent?.type === 'click') {
+        const value: string = event.value;
+        if (value) {
+          this.contactSelect.emit(value)
+        }
       }
     }
   }

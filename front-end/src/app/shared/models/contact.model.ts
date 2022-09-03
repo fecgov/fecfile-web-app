@@ -102,11 +102,11 @@ export class CommitteeLookupResponse {
     return [
       {
         label: 'Select an existing candidate contact:',
-        items: fecApiSelectItems,
+        items: fecfileSelectItems,
       },
       {
         label: 'Create a new contact from list of registered candidates:',
-        items: fecfileSelectItems,
+        items: fecApiSelectItems,
       }
     ]
   }

@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, Message, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -24,6 +24,8 @@ describe('ContactListComponent', () => {
   contact.first_name = 'Jane';
   contact.last_name = 'Smith';
   contact.name = 'ABC Inc';
+
+  let testMessageService: MessageService;
 
   beforeEach(async () => {
     const userLoginData: UserLoginData = {
@@ -55,6 +57,8 @@ describe('ContactListComponent', () => {
         }),
       ],
     }).compileComponents();
+
+    testMessageService = TestBed.inject(MessageService);
   });
 
   beforeEach(() => {
@@ -91,4 +95,19 @@ describe('ContactListComponent', () => {
     name = component.displayName(contact);
     expect(name).toBe('');
   });
+
+  it('#onContactLookupSelect displays add msg', () => {
+    const testCommitteeId = "testCommitteeId";
+    const expectedMessage: Message = {
+      severity: 'success',
+      summary: 'Contact selected',
+      detail: 'Selected lookup contact ' + 
+        'with commitee id ' + testCommitteeId,
+      life: 3000,
+    }
+    const messageServiceAddSpy = spyOn(testMessageService, 'add');
+    component.onContactLookupSelect(testCommitteeId);
+    expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
+  });
+
 });
