@@ -68,8 +68,13 @@ describe('ContactLookupComponent', () => {
   }));
 
   it('#onDropdownSearch happy path', fakeAsync(() => {
+    const testCommitteeLookupResponse = new CommitteeLookupResponse();
+    testCommitteeLookupResponse.fec_api_cmtees =
+      [{ id: 'testId', name: 'testName' }];
+    testCommitteeLookupResponse.fecfile_cmtees =
+      [{ id: 'testId', name: 'testName' }];
     spyOn(testContactService, 'committeeLookup').and.returnValue(
-      of(new CommitteeLookupResponse()));
+      of(testCommitteeLookupResponse));
     const testEvent = { target: { value: 'hi' } };
     component.onDropdownSearch(testEvent);
     tick(500);
