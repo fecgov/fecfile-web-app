@@ -27,6 +27,59 @@ describe('SubmitF3xStep2Component', () => {
   let reportService: F3xSummaryService;
   const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
 
+  beforeEach(async () => {
+    const userLoginData: UserLoginData = {
+      committee_id: 'C00000000',
+      email: 'email@fec.com',
+      is_allowed: true,
+      token: 'jwttokenstring',
+    };
+    await TestBed.configureTestingModule({
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        RouterTestingModule.withRoutes([]),
+        HttpClientTestingModule,
+        DividerModule,
+        CheckboxModule,
+        RadioButtonModule,
+        SharedModule,
+        ReportsModule,
+      ],
+      declarations: [SubmitF3xStep2Component],
+      providers: [
+        ValidateService,
+        FormBuilder,
+        F3xSummaryService,
+        MessageService,
+        ConfirmationService,
+        ReportService,
+        provideMockStore({
+          initialState: {
+            fecfile_online_committeeAccount: committeeAccount,
+            fecfile_online_userLoginData: userLoginData,
+          },
+          selectors: [
+            { selector: selectCommitteeAccount, value: committeeAccount },
+            { selector: selectUserLoginData, value: userLoginData },
+          ],
+        }),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {
+                report: F3xSummary.fromJSON({
+                  report_code: 'Q1',
+                  id: 999,
+                }),
+              },
+            },
+          },
+        },
+      ],
+    }).compileComponents();
+  });
 
   beforeEach(() => {
     router = TestBed.inject(Router);
