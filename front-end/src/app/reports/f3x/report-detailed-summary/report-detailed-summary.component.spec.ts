@@ -59,7 +59,8 @@ describe('ReportDetailedSummaryComponent', () => {
   describe('CALCULATING', () => {
     beforeEach(async () => {
       f3x.calculation_status = 'CALCULATING';
-      return f3xSubject.next({ report: f3x });
+      f3xSubject.next({ report: f3x });
+      return component.refreshSummary();
     });
     it('should create', () => {
       expect(component).toBeTruthy();
@@ -69,7 +70,8 @@ describe('ReportDetailedSummaryComponent', () => {
   describe('SUCCEEDED', () => {
     beforeEach(async () => {
       f3x.calculation_status = 'CALCULATING';
-      return f3xSubject.next({ report: f3x });
+      f3xSubject.next({ report: f3x });
+      return component.refreshSummary();
     });
     it('should create', () => {
       expect(component).toBeTruthy();
