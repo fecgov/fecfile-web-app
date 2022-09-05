@@ -8,7 +8,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { TransactionType } from '../../shared/interfaces/transaction-type.interface';
-import { of } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-group-f',
@@ -48,7 +48,8 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
   ) {
     super(messageService, transactionService, validateService, fb, router);
 
-    of(this.activatedRoute.snapshot.data['transactionType']).subscribe((transactionType: TransactionType) => {
+    activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      const transactionType: TransactionType = data['transactionType'];
       if (Object.keys(transactionType?.schema?.properties['memo_code']).includes('const')) {
         this.readOnlyMemo = true;
         this.memo_checked = transactionType.schema.properties['memo_code'].const as boolean;
