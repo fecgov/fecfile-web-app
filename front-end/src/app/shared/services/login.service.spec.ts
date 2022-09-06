@@ -1,20 +1,22 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { environment } from 'environments/environment';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
+import { environment } from 'environments/environment';
 import { ApiService } from './api.service';
 
-import { LoginService } from './login.service';
 import { userLoggedOutAction } from 'app/store/login.actions';
+import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
+import { LoginService } from './login.service';
 
 describe('LoginService', () => {
   let service: LoginService;
   let store: MockStore;
   let apiService: ApiService;
   let httpTestingController: HttpTestingController;
+  let cookieService: CookieService;
 
   const userLoginData: UserLoginData = {
     committee_id: 'C00000000',
@@ -39,6 +41,7 @@ describe('LoginService', () => {
     service = TestBed.inject(LoginService);
     store  = TestBed.inject(MockStore);
     apiService = TestBed.inject(ApiService);
+    cookieService = TestBed.inject(CookieService);
   });
 
   it('should be created', () => {
@@ -84,13 +87,13 @@ describe('LoginService', () => {
     TestBed.resetTestingModule();
 
     spyOn(store, 'dispatch');
-    spyOn(apiService, 'postAbsoluteUrl').and.returnValue(of('test'));
     spyOn(service, 'clearUserLoggedInCookies');
+    spyOn(cookieService, 'delete');
 
     service.logOut();
     expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
-    expect(apiService.postAbsoluteUrl).toHaveBeenCalledTimes(1);
     expect(service.clearUserLoggedInCookies).toHaveBeenCalledTimes(1);
+    expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
 
 });

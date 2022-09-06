@@ -10,10 +10,29 @@ import { FecDatePipe } from './pipes/fec-date.pipe';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
 import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
+import { FecInternationalPhoneInputComponent } from './components/fec-international-phone-input/fec-international-phone-input.component';
 
 @NgModule({
-  imports: [CommonModule, DropdownModule, ReactiveFormsModule, ButtonModule],
-  declarations: [LabelPipe, ErrorMessagesComponent, FecDatePipe, LongDatePipe, FindOnReportCodePipe, DefaultZeroPipe, ContactLookupComponent],
-  exports: [FecDatePipe, LongDatePipe, LabelPipe, ErrorMessagesComponent, FindOnReportCodePipe, DefaultZeroPipe, ContactLookupComponent],
+  imports: [CommonModule, ReactiveFormsModule, ReactiveFormsModule, ButtonModule],
+  declarations: [
+    LabelPipe,
+    ErrorMessagesComponent,
+    FecDatePipe,
+    LongDatePipe,
+    FindOnReportCodePipe,
+    DefaultZeroPipe,
+    FecInternationalPhoneInputComponent,
+    ContactLookupComponent,
+  ],
+  exports: [
+    FecDatePipe,
+    LongDatePipe,
+    LabelPipe,
+    ErrorMessagesComponent,
+    FindOnReportCodePipe,
+    DefaultZeroPipe,
+    FecInternationalPhoneInputComponent,
+    ContactLookupComponent,
+  ],
 })
 export class SharedModule {}

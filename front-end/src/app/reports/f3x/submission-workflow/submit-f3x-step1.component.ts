@@ -138,7 +138,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     const email_1 = this.form?.get('confirmation_email_1')?.value;
     const email_2 = this.form?.get('confirmation_email_2')?.value;
 
-    return email_1 !== null && email_1.length > 0 && email_1 === email_2;
+    return !!email_1 && email_1 === email_2;
   }
 
   public save(): void {

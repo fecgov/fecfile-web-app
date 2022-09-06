@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, forwardRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, HostBinding, ViewEncapsulation } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SelectButton } from 'primeng/selectbutton';
 
@@ -45,8 +45,7 @@ export const SELECTBUTTON_VALUE_ACCESSOR = {
   providers: [SELECTBUTTON_VALUE_ACCESSOR],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: {
-    class: 'p-element',
-  },
 })
-export class AppSelectButtonComponent extends SelectButton {}
+export class AppSelectButtonComponent extends SelectButton {
+  @HostBinding('class') class = 'p-element';
+}
