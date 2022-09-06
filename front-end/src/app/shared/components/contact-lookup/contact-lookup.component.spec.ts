@@ -28,12 +28,7 @@ describe('ContactLookupComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [ContactLookupComponent],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        HttpClientTestingModule,
-        DropdownModule,
-      ],
+      imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule, DropdownModule],
       providers: [
         FormBuilder,
         ContactService,
@@ -69,33 +64,26 @@ describe('ContactLookupComponent', () => {
 
   it('#onDropdownSearch happy path', fakeAsync(() => {
     const testCommitteeLookupResponse = new CommitteeLookupResponse();
-    testCommitteeLookupResponse.fec_api_cmtees =
-      [{ id: 'testId', name: 'testName' }];
-    testCommitteeLookupResponse.fecfile_cmtees =
-      [{ id: 'testId', name: 'testName' }];
-    spyOn(testContactService, 'committeeLookup').and.returnValue(
-      of(testCommitteeLookupResponse));
+    testCommitteeLookupResponse.fec_api_committees = [{ id: 'testId', name: 'testName' }];
+    testCommitteeLookupResponse.fecfile_committees = [{ id: 'testId', name: 'testName' }];
+    spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { target: { value: 'hi' } };
     component.onDropdownSearch(testEvent);
     tick(500);
-    expect(component.lookupDropdown?.overlayVisible
-      === true).toBeTrue();
+    expect(component.lookupDropdown?.overlayVisible === true).toBeTrue();
   }));
 
   it('#onContactSelect happy path', fakeAsync(() => {
-    const eventEmitterEmitSpy = spyOn(
-      component.contactSelect, 'emit');
+    const eventEmitterEmitSpy = spyOn(component.contactSelect, 'emit');
     const testValue = 'testValue';
     const testEvent = {
       originalEvent: {
-        type: 'click'
+        type: 'click',
       },
-      value: testValue
+      value: testValue,
     };
     component.onContactSelect(testEvent);
     tick(500);
-    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
-      testValue);
+    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testValue);
   }));
-
 });
