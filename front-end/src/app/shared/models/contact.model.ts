@@ -76,29 +76,30 @@ export class Contact extends BaseModel {
 export class FecCommitteeLookupData {
   id: string | null = null;
   name: string | null = null;
-  static fromJSON(json: any): FecCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: any): FecCommitteeLookupData {
+    // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(FecCommitteeLookupData, json);
   }
   static toSelectItem(data: FecCommitteeLookupData): SelectItem<string> {
-    return data && {
-      label: `${data.name} (${data.id})`,
-      value: `${data.id}`
-    }
+    return (
+      data && {
+        label: `${data.name} (${data.id})`,
+        value: `${data.id}`,
+      }
+    );
   }
 }
 
 export class CommitteeLookupResponse {
-  fec_api_cmtees: FecCommitteeLookupData[] | null = null;
-  fecfile_cmtees: FecCommitteeLookupData[] | null = null;
+  fec_api_committees: FecCommitteeLookupData[] | null = null;
+  fecfile_committees: FecCommitteeLookupData[] | null = null;
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(CommitteeLookupResponse, json);
   }
   toSelectItemGroups(): SelectItemGroup[] {
-    const fecApiSelectItems = this.fec_api_cmtees?.map(
-      data => FecCommitteeLookupData.toSelectItem(data)) || [];
-    const fecfileSelectItems = this.fecfile_cmtees?.map(
-      data => FecCommitteeLookupData.toSelectItem(data)) || [];
+    const fecApiSelectItems = this.fec_api_committees?.map((data) => FecCommitteeLookupData.toSelectItem(data)) || [];
+    const fecfileSelectItems = this.fecfile_committees?.map((data) => FecCommitteeLookupData.toSelectItem(data)) || [];
     return [
       {
         label: 'Select an existing candidate contact:',
@@ -107,7 +108,7 @@ export class CommitteeLookupResponse {
       {
         label: 'Create a new contact from list of registered candidates:',
         items: fecApiSelectItems,
-      }
-    ]
+      },
+    ];
   }
 }
