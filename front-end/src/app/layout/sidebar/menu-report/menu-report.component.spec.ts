@@ -23,7 +23,7 @@ describe('MenuReportComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
-            fecfile_online_activeReport: { id: 888 } as F3xSummary,
+            fecfile_online_activeReport: F3xSummary.fromJSON({ id: 888, update: '01-01-2020' }),
             fecfile_online_reportCodeLabelList: [],
             fecfile_online_cashOnHand: { report_id: null, value: null },
           },

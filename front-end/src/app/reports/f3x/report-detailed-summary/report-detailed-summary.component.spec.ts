@@ -64,19 +64,7 @@ describe('ReportDetailedSummaryComponent', () => {
 
   describe('CALCULATING', () => {
     beforeEach(async () => {
-      const f3x = {
-        id: 999,
-        form_type: 'F3XN',
-        report_code: 'Q1',
-        calculation_status: 'CALCULATING',
-        filer_committee_id_number: null,
-        coverage_through_date: null,
-        coverage_from_date: null,
-        webprint_submission: null,
-        upload_submission: null,
-        created: null,
-        updated: null,
-      } as Report;
+      f3x.calculation_status = 'CALCULATING';
       TestBed.inject(MockStore).overrideSelector(selectActiveReport, f3x);
       TestBed.inject(MockStore).refreshState();
       fixture.detectChanges();
@@ -89,19 +77,7 @@ describe('ReportDetailedSummaryComponent', () => {
 
   describe('SUCCEEDED', () => {
     beforeEach(async () => {
-      const f3x = {
-        id: 999,
-        form_type: 'F3XN',
-        report_code: 'Q1',
-        calculation_status: 'SUCCEEDED',
-        filer_committee_id_number: null,
-        coverage_through_date: null,
-        coverage_from_date: null,
-        webprint_submission: null,
-        upload_submission: null,
-        created: null,
-        updated: null,
-      } as Report;
+      f3x.calculation_status = 'SUCCEEDED';
       TestBed.inject(MockStore).overrideSelector(selectActiveReport, f3x);
       TestBed.inject(MockStore).refreshState();
       fixture.detectChanges();
