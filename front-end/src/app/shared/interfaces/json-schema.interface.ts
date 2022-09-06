@@ -8,7 +8,7 @@ export interface JsonSchema {
   properties: {
     [key: string]: {
       type: string;
-      const?: string | number | boolean | undefined;
+      const?: string | number | boolean;
       minLength?: number;
       maxLength?: number;
       minimum?: number;
