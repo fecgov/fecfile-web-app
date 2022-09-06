@@ -12,7 +12,7 @@ export const environment = {
   fecApiKey: 'DEMO_KEY',
   userCanSetFilingFrequency: true,
   loginDotGovAuthUrl: 'http://localhost:8080/oidc/authenticate',
-  loginDotGovLogoutUrl: 'http://localhost:8080/oidc/logout/',
+  loginDotGovLogoutUrl: '',
   ffapiCommitteeIdCookieName: 'ffapi_committee_id',
   ffapiEmailCookieName: 'ffapi_email',
   sessionIdCookieName: 'sessionid',
