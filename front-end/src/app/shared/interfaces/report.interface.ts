@@ -3,7 +3,7 @@ import { WebPrintSubmission } from '../models/webprint-submission.model';
 import { UploadSubmission } from '../models/upload-submission.model';
 
 export interface Report {
-  id: number | null;
+  id: number | undefined;
   form_type: string;
   filer_committee_id_number: string | null;
   report_code: F3xReportCode | null;
@@ -13,9 +13,10 @@ export interface Report {
   upload_submission: UploadSubmission | null;
   created: Date | null;
   updated: Date | null;
+  calculation_status: string | undefined;
 }
 
 export interface CashOnHand {
-  report_id: number | null;
+  report_id: number | undefined;
   value: number | null;
 }

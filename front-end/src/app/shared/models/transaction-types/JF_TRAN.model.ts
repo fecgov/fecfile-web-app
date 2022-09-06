@@ -8,8 +8,8 @@ export class JF_TRAN implements TransactionType {
   componentGroupId = 'E';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JF_TRANSFER);
   schema = schema;
-  transaction = null;
-  parent = null;
+  transaction = undefined;
+  parent = undefined;
 
   contributionPurposeDescripReadonly(): string {
     return 'Transfer of JF Proceeds';

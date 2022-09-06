@@ -6,6 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: UserListComponent,
+    title: 'Manage Users',
     pathMatch: 'full',
   },
   { path: '**', redirectTo: '' },

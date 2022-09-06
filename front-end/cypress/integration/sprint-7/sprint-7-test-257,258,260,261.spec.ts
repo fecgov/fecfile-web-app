@@ -29,7 +29,7 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
       const timePeriods: Array<string> = Object.keys(filingFrequencyTree[filingFrequency as FilingFrequency]);
       for (const timePeriod of timePeriods) {
         context(`--->       ${timePeriod}`, () => {
-          it('Step 1: Navigate to contacts page', () => {
+          it('Step 1: Navigate to reports page', () => {
             cy.visit('/dashboard');
             cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
           });

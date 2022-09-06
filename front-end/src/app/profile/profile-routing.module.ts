@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AccountInfoComponent } from "./account-info/account-info.component";
+import { AccountInfoComponent } from './account-info/account-info.component';
 
 const routes: Routes = [
   {
     path: 'account',
+    title: 'Account Page',
     component: AccountInfoComponent,
     pathMatch: 'full',
   },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({

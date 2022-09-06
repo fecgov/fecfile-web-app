@@ -17,11 +17,13 @@ import { TransactionListComponent } from './transaction-list/transaction-list.co
 const routes: Routes = [
   {
     path: 'report/:reportId/list',
+    title: 'Manage your transactions',
     component: TransactionListComponent,
     resolve: { report: ReportResolver },
   },
   {
     path: 'report/:reportId/create',
+    title: 'Add a receipt',
     component: TransactionTypePickerComponent,
     canActivate: [ReportIsEditableGuard],
   },

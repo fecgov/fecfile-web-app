@@ -2,7 +2,7 @@
 
 import { generateReportObject } from '../../support/generators/reports.spec';
 
-describe('QA Test Script #133 (Sprint 8)', () => {
+describe('QA Test Script #215 (Sprint 8)', () => {
   it('Step 1: Navigate to reports page and create a report', () => {
     cy.login();
     cy.url().should('contain', '/dashboard');
@@ -43,7 +43,6 @@ describe('QA Test Script #133 (Sprint 8)', () => {
     cy.get('a')
       .contains('a', 'Update your committee address')
       .then((jQueryObject) => {
-        console.log(jQueryObject[0]);
         cy.request('GET', jQueryObject[0].href).its('status').should('not.eq', 404);
       });
   });

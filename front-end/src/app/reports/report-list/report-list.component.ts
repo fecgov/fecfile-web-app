@@ -22,7 +22,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   cashOnHand: CashOnHand = {
-    report_id: null,
+    report_id: undefined,
     value: null,
   };
   private destroy$ = new Subject<boolean>();

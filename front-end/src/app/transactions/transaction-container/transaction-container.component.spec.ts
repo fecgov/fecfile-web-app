@@ -20,6 +20,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { of } from 'rxjs';
 
 describe('TransactionContainerComponent', () => {
   let component: TransactionContainerComponent;
@@ -53,11 +54,9 @@ describe('TransactionContainerComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: {
-              data: {
-                transactionType: TransactionTypeUtils.factory('OFFSET_TO_OPEX'),
-              },
-            },
+            data: of({
+              transactionType: TransactionTypeUtils.factory('OFFSET_TO_OPEX'),
+            }),
           },
         },
         provideMockStore({

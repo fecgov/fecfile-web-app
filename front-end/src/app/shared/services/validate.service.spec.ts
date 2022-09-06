@@ -98,7 +98,7 @@ describe('ValidateService', () => {
   });
 
   it('#getSchemaProperties() should return empty array when no schema', () => {
-    const properties: string[] = service.getSchemaProperties(null);
+    const properties: string[] = service.getSchemaProperties(undefined);
     expect(properties.length).toBe(0);
   });
 });
