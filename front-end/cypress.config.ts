@@ -1,6 +1,7 @@
 import { defineConfig } from 'cypress'
 
 export default defineConfig({
+  projectId: 'x5egpz',
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
   fixturesFolder: 'cypress/fixtures',
@@ -12,6 +13,6 @@ export default defineConfig({
       return require('./cypress/plugins/index.ts')(on, config)
     },
     baseUrl: 'http://localhost:4200',
-    experimentalSessionAndOrigin: false,
+    experimentalSessionAndOrigin: true,
   },
 })

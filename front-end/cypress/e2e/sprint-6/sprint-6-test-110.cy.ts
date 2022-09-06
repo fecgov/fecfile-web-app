@@ -65,9 +65,9 @@ let contactType: string;
 const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 describe('QA Test Script #110 (Sprint 6)', () => {
-  function before() {
+  beforeEach('Logs in', () => {
     cy.login();
-  }
+  });
 
   function after() {
     cy.get('p-button[icon="pi pi-trash"]').each((element) => {
@@ -81,16 +81,12 @@ describe('QA Test Script #110 (Sprint 6)', () => {
 
   for (contactType of Object.keys(contacts)) {
     contacts[contactType] = generateContactObject({ contact_type: contactType });
-    context(`QA Script #110 - ${contactType}`, (cType = contactType) => {
-      it('Step 1: Navigate to contacts page', () => {
-        before();
 
-        cy.url().should('contain', '/dashboard');
+    context(`QA Script #110 - ${contactType}`, (cType = contactType) => {
+      it('Steps 1-5: Creates a contact', () => {
+        cy.visit('/dashboard');
         cy.get('.p-menubar').contains('.p-menuitem-link', 'Contacts').click();
         cy.url().should('contain', '/contacts');
-      });
-
-      it('Steps 2-5: Creates a contact', () => {
         let contact: object = contacts[cType];
         cy.createContact(contact, false);
 
@@ -105,6 +101,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
       });
 
       it('Steps 6-11: Test "Save & Add More"', () => {
+        cy.get('.p-menubar').contains('.p-menuitem-link', 'Contacts').click();
         cy.createContact(generateContactObject(), false);
 
         cy.contains('.p-button-label', 'Save & Add More').click();
@@ -119,6 +116,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
       });
 
       it('Cleanup', () => {
+        cy.get('.p-menubar').contains('.p-menuitem-link', 'Contacts').click();
         after();
       });
     });

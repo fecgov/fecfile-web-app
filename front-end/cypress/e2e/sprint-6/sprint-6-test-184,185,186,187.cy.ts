@@ -4,19 +4,21 @@ import { generateContactObject } from '../../support/generators/contacts.spec';
 
 const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
-function after(contact) {
+function deleteContact(contact) {
   cy.contains('tr', contact['name']) //Finds out contact in the Manage Contacts table
     .find('p-button[icon="pi pi-trash"]') //Gets the trash button
     .click();
 
   cy.medWait();
   cy.get('.p-confirm-dialog-accept').click();
-
   cy.shortWait();
-  cy.logout();
 }
 
 describe('QA Test Scripts 184 through 187', () => {
+  beforeEach('Logs in', () => {
+    cy.login();
+  });
+
   for (const contactType of Object.keys(contacts)) {
     contacts[contactType] = generateContactObject({ contact_type: contactType });
 
@@ -24,19 +26,15 @@ describe('QA Test Scripts 184 through 187', () => {
       let contact: object = contacts[cType];
 
       it('Step 1: Navigate to contacts page', () => {
-        cy.login();
         cy.visit('/dashboard');
         cy.url().should('contain', '/dashboard');
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
         cy.url().should('contain', '/contacts');
-      });
 
-      it(`Creates a ${cType} contact`, () => {
         cy.createContact(contact);
         cy.longWait();
-      });
 
-      it('Steps 2 & 3: Select a contact and open the edit menu', () => {
+        //Steps 2 & 3: Select a contact and open the edit menu
         cy.contains('tr', `${contact['name']}`) //Finds out contact in the Manage Contacts table
           .find('p-tablecheckbox')
           .click() //Check the checkbox for step 2
@@ -44,19 +42,16 @@ describe('QA Test Scripts 184 through 187', () => {
           .parent() //Get back to the row
           .find('p-button[icon="pi pi-pencil"]') //Gets the edit button
           .click();
-      });
 
-      it("Steps 4 & 5: No 'Save & Add More' button; Save and Cancel buttons exist", () => {
+        //Steps 4 & 5: No 'Save & Add More' button; Save and Cancel buttons exist
         cy.get("button[label='Save & Add More']").should('not.exist'); //Checks that the "Save & Add More button does not exist"
         cy.get("button[label='Save']").should('exist');
         cy.get("button[label='Cancel']").should('exist');
-      });
 
-      it("Step 6: Close the form with the 'X' button", () => {
+        //Step 6: Close the form with the 'X' button
         cy.get('.p-dialog-header-close-icon').click(); //Close the form with the 'X' button
-
         cy.medWait();
-        after(contact);
+        deleteContact(contact);
       });
     });
   }

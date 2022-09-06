@@ -12,21 +12,21 @@ describe('Test creating a report and submitting it for web print', () => {
     cy.deleteAllReports();
   });
 
-  it('Creates a report', () => {
+  it('', () => {
+    cy.visit('/dashboard');
+
+    //Creates a report
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.shortWait();
     cy.createReport(report);
-  });
 
-  it('Progresses to the Transaction Management Page', () => {
+    //Progresses to the Transaction Management Page
     cy.navigateToTransactionManagement();
-  });
 
-  it('Creates a transaction', () => {
+    //Creates a transaction
     cy.createTransactionSchA(transaction);
-  });
 
-  it('Submits the report to web print', () => {
+    //Submits the report to web print
     cy.navigateReportSidebar('Review', 'View print preview');
     cy.get('button[label="Compile PDF"]').click();
 
@@ -44,10 +44,7 @@ describe('Test creating a report and submitting it for web print', () => {
     cy.longWait();
     cy.longWait();
     cy.contains('h2', dateString).should('exist');
-  });
 
-  after('Cleanup', () => {
     cy.deleteAllReports();
-    cy.logout();
   });
 });

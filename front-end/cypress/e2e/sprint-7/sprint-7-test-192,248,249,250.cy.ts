@@ -100,16 +100,14 @@ let contactType: string;
 const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
-  it('Step 1: Navigate to contacts page', () => {
-    cy.visit('/dashboard');
-    cy.url().should('contain', '/dashboard');
-    cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
-    cy.url().should('contain', '/contacts');
-  });
-
   for (contactType of Object.keys(contacts)) {
     context(`---> ${contactType}`, (cType = contactType) => {
       it('Check every field for required/optional and maximum length', () => {
+        cy.visit('/dashboard');
+        cy.url().should('contain', '/dashboard');
+        cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
+        cy.url().should('contain', '/contacts');
+
         cy.get("button[label='New']").click();
         cy.shortWait();
         cy.get("div[role='dialog']").contains('Add Contact').should('exist');
