@@ -6,7 +6,7 @@
       {{ (this.reportCodeLabelList$ | async | findOnReportCodePipe: report.report_code)?.label }}
     </div>
   </div>
-  <div *ngIf="!calculationFinished$">
+  <div *ngIf="!(calculationFinished$ | async)">
     <img
       class="image-max-width fec-loader-image"
       src="assets/img/fec-loading-flag.gif"
@@ -14,7 +14,7 @@
       alt="The report's web print status is loading..."
     />
   </div>
-  <div *ngIf="calculationFinished$">
+  <div *ngIf="calculationFinished$ | async">
     <table class="collapse">
       <caption>
         Receipts

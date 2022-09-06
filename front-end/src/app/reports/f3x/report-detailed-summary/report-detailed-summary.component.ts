@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { delay, merge, Observable, of, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, delay, Observable, of, Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
@@ -16,7 +16,7 @@ import { ReportService } from 'app/shared/services/report.service';
 })
 export class ReportDetailedSummaryComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
-  protected calculationFinished$ = new Subject<boolean>();
+  protected calculationFinished$ = new BehaviorSubject<boolean>(false);
   report: F3xSummary = new F3xSummary();
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
 
@@ -32,6 +32,8 @@ export class ReportDetailedSummaryComponent implements OnInit, OnDestroy {
       .select<ReportCodeLabelList>(selectReportCodeLabelList)
       .pipe(takeUntil(this.destroy$));
 
+    this.calculationFinished$.pipe(takeUntil(this.destroy$)).subscribe();
+
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
@@ -42,8 +44,8 @@ export class ReportDetailedSummaryComponent implements OnInit, OnDestroy {
             .post(`/web-services/summary/calculate-summary/`, { report_id: report.id })
             .subscribe(() => this.refreshSummary());
         } else if (report.calculation_status != 'SUCCEEDED') {
-          of()
-            .pipe(delay(1000), takeUntil(merge(this.destroy$, this.calculationFinished$)))
+          of(true)
+            .pipe(delay(1000), takeUntil(this.destroy$))
             .subscribe(() => this.refreshSummary());
         } else {
           this.calculationFinished$.next(true);
