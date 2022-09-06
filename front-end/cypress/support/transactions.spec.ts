@@ -15,7 +15,7 @@ export function navigateTransactionAccordion(category: string, transactionType: 
  *  Run this function while Cypress is on the View All Transactions page
  *  to create a new transaction.
  *
- *  @transaction: the Transaction object to be used (see the Transaction Generator file)
+ *  @transaction: the Transaction object to be used (see: the Transaction Generator file)
  *  @save: Boolean.  Controls whether or not to save when finished. (Default: True)
  */
 export function createTransactionSchA(transactionTree: TransactionTree, save: boolean = true) {
@@ -36,11 +36,12 @@ export function createTransactionSchA(transactionTree: TransactionTree, save: bo
         const childTransaction = transaction['childTransactions'][i];
 
         if (i == 0) {
-          cy.get('button[label="Save & add a Joint Fundraising Transfer Memo"]').click();
+          cy.get('button[label="Save & add a Memo"]').click();
         } else {
-          cy.get('button[label="Save & add another Joint Fundraising Transfer Memo"]').click();
+          cy.get('button[label="Save & add another Memo"]').click();
         }
-        cy.medWait();
+        cy.longWait();
+        cy.url().should('contain', 'sub-transaction');
         enterTransactionSchA(childTransaction);
       }
     }

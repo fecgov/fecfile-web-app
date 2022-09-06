@@ -5,6 +5,7 @@ import { ContactListComponent } from './contact-list/contact-list.component';
 const routes: Routes = [
   {
     path: '',
+    title: 'Manage Contacts',
     component: ContactListComponent,
     pathMatch: 'full',
   },

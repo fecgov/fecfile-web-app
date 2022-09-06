@@ -9,8 +9,8 @@ export class JF_TRAN_PAC_MEMO implements TransactionType {
   componentGroupId = 'F';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JF_TRAN_PAC_MEMO);
   schema = schema;
-  transaction: Transaction | null = null;
-  parent: SchATransaction | null = null;
+  transaction: Transaction | undefined;
+  parent: SchATransaction | undefined;
 
   contributionPurposeDescripReadonly(): string {
     return `JF Memo: ${this.parent?.contributor_organization_name}`;

@@ -12,13 +12,13 @@ export class ValidateService {
    * @property - This property is a placeholder for the schema to use in the form element
    * custom validator located in the method formValidator() below.
    */
-  formValidatorSchema: JsonSchema | null = null;
+  formValidatorSchema: JsonSchema | undefined;
 
   /**
    * @property - This property is a placeholder for the ng reactive form to use in the form
    * element custom validator located in the method formValidator() below.
    */
-  formValidatorForm: FormGroup | null = null;
+  formValidatorForm: FormGroup | undefined;
 
   /**
    * Validate a data object against a JSON Schema document
@@ -37,7 +37,7 @@ export class ValidateService {
    * @param {JsonSchema} schema
    * @returns {string[]} list of property names
    */
-  getSchemaProperties(schema: JsonSchema | null): string[] {
+  getSchemaProperties(schema: JsonSchema | undefined): string[] {
     if (schema) {
       return Object.keys(schema.properties);
     }

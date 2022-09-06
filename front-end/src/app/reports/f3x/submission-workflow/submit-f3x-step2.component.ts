@@ -47,7 +47,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
   loading: 0 | 1 | 2 = 0;
   cashOnHand: CashOnHand = {
-    report_id: null,
+    report_id: undefined,
     value: null,
   };
 

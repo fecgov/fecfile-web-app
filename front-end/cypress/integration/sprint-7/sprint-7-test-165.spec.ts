@@ -16,10 +16,16 @@ describe('QA Test Script #165 (Sprint 7)', () => {
       report_date.setFullYear(2030 + i);
       const report = generateReportObject({ coverage_from_date: dateToString(report_date) });
       cy.createReport(report);
+      if (i === 0){
+        cy.navigateToTransactionManagement();
+        cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
+      }
     }
   });
 
   it('Steps 2-13: Check for sortability on each column', () => {
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Dashboard').click();
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     const columns: Array<string> = ['Form type', 'Type of report', 'Coverage dates', 'Status', 'Version', 'Date filed'];
     let column: string;
     for (column of columns) {

@@ -3,7 +3,7 @@ import { CashOnHand } from 'app/shared/interfaces/report.interface';
 import { setCashOnHandAction } from './cash-on-hand.actions';
 
 const initialState: CashOnHand = {
-  report_id: null,
+  report_id: undefined,
   value: null,
 };
 
