@@ -11,8 +11,7 @@ import { CardModule } from 'primeng/card';
 import { ReportDetailedSummaryComponent } from './report-detailed-summary.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReportService } from 'app/shared/services/report.service';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { Report } from 'app/shared/interfaces/report.interface';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 import { ApiService } from 'app/shared/services/api.service';
 
 describe('ReportDetailedSummaryComponent', () => {
@@ -56,6 +55,7 @@ describe('ReportDetailedSummaryComponent', () => {
     fixture = TestBed.createComponent(ReportDetailedSummaryComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    spyOn(apiService, 'post').and.returnValue(of(true));
   });
 
   it('should create', () => {

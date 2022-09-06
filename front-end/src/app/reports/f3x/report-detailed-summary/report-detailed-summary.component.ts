@@ -43,7 +43,7 @@ export class ReportDetailedSummaryComponent implements OnInit, OnDestroy {
             .subscribe(() => this.refreshSummary());
         } else if (report.calculation_status != 'SUCCEEDED') {
           of()
-            .pipe(delay(10000), takeUntil(merge(this.destroy$, this.calculationFinished$)))
+            .pipe(delay(1000), takeUntil(merge(this.destroy$, this.calculationFinished$)))
             .subscribe(() => this.refreshSummary());
         } else {
           this.calculationFinished$.next(true);
