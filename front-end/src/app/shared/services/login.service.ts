@@ -63,23 +63,22 @@ export class LoginService {
   }
 
   public logOut() {
-    if (this.userLoginData && this.userLoginData.token) { // Non-login.gov auth
+    if (this.userLoginData && this.userLoginData.token) {
+      // Non-login.gov auth
       this.store.dispatch(userLoggedOutAction());
     } else {
       this.cookieService.delete('csrftoken');
-      window.location.href = environment.loginDotGovLogoutUrl || "";
+      if (environment.loginDotGovLogoutUrl) {
+        window.location.href = environment.loginDotGovLogoutUrl;
+      }
       this.clearUserLoggedInCookies();
       this.store.dispatch(userLoggedOutAction());
     }
   }
 
   public clearUserLoggedInCookies() {
-    this.cookieService.delete(
-      environment.ffapiCommitteeIdCookieName);
-    this.cookieService.delete(
-      environment.ffapiEmailCookieName);
-    this.cookieService.delete(
-      environment.sessionIdCookieName);
+    this.cookieService.delete(environment.ffapiCommitteeIdCookieName);
+    this.cookieService.delete(environment.ffapiEmailCookieName);
+    this.cookieService.delete(environment.sessionIdCookieName);
   }
-  
 }
