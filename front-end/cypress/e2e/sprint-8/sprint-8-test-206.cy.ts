@@ -7,26 +7,26 @@ describe('QA Test Script #206 (Sprint 8)', () => {
   for (const candidateType of candidateTypes) {
     context(`${candidateType}-Type Candidate`, (cType = candidateType) => {
       const contact = generateContactObject({ contact_type: 'Candidate' });
-      let c_id: string = '';
+      let c_id = '';
       if (cType == 'P') {
         c_id = `${cType}12345678`;
       } else if (cType == 'H' || cType == 'S') {
         c_id = `${cType}0AA12345`;
       }
 
-      it('Step 1: Navigate to the Contacts Page', () => {
+      it(`Tests the ${candidateType} candidate type`, () => {
+        //Step 1: Navigate to the Contacts Page
         cy.login();
+        cy.visit('/dashboard');
         cy.url().should('contain', '/dashboard');
         cy.medWait();
         cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
         cy.url().should('contain', '/contacts');
-      });
 
-      it('Steps 2-6: Create a "Candidate" type Contact', () => {
+        //Steps 2-6: Create a "Candidate" type Contact
         cy.createContact(contact);
-      });
 
-      it("Steps 7-9: Edit the created contact's Candidate ID", () => {
+        //Steps 7-9: Edit the created contact's Candidate ID
         cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
 
         cy.shortWait();
@@ -34,9 +34,8 @@ describe('QA Test Script #206 (Sprint 8)', () => {
 
         cy.get("button[label='Save']").click();
         cy.longWait();
-      });
 
-      it('Step 10: Verify that the Committee ID changed', () => {
+        //Step 10: Verify that the Committee ID changed
         cy.contains('.p-menuitem-link', 'Dashboard').click();
         cy.shortWait();
         cy.contains('.p-menuitem-link', 'Contacts').click();
@@ -44,21 +43,16 @@ describe('QA Test Script #206 (Sprint 8)', () => {
 
         //cy.wait(500).then(() => {
         cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
-
         cy.shortWait();
         cy.get("input[formControlName='candidate_id']").should('have.value', c_id);
         cy.get("button[label='Cancel']").click();
         cy.medWait();
         //});
-      });
 
-      it('Cleanup', () => {
+        //Cleanup
         cy.contains('tr', contact['name']).find("p-button[icon='pi pi-trash']").click();
-
         cy.shortWait();
         cy.contains('button', 'Yes').click();
-        cy.shortWait();
-        cy.logout();
       });
     });
   }

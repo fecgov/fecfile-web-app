@@ -66,8 +66,10 @@ const accordion = {
 };
 
 describe('QA Script 228 (Sprint 8)', () => {
-  it('Step 1: Log in, navigate to the reports page, create a report, and set it up to be ready for transactions', () => {
+  it('', () => {
+    //Step 1: Log in, navigate to the reports page, create a report, and set it up to be ready for transactions
     cy.login();
+    cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
     cy.medWait();
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
@@ -76,29 +78,24 @@ describe('QA Script 228 (Sprint 8)', () => {
     const report: object = generateReportObject();
     cy.createReport(report);
     cy.medWait();
-  });
 
-  it('Step 2: Select the edit button for the created report', () => {
+    //Step 2: Select the edit button for the created report
     cy.navigateToTransactionManagement();
     cy.shortWait();
-  });
 
-  it('Step 3: Select the "Add new transaction" button', () => {
+    //Step 3: Select the "Add new transaction" button
     cy.get('button[label="Add new transaction"]').click();
     cy.shortWait();
-  });
 
-  it('Step 4: Check the accordian tab headers', () => {
+    //Step 4: Check the accordian tab headers
     for (const header of Object.keys(accordion)) {
       cy.get('p-accordion').contains(header).should('exist').click();
       for (const transaction of accordion[header]) {
         cy.get('p-accordion').contains('p-accordion', header).should('contain', transaction);
       }
     }
-  });
 
-  it('Cleanup', () => {
+    //Cleanup
     cy.deleteAllReports();
-    cy.logout();
   });
 });

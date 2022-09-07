@@ -3,15 +3,17 @@ import { generateTransactionObject } from '../../support/generators/transactions
 import { createTransactionSchA } from '../../support/transactions.spec';
 
 describe('QA Script 347 (Sprint 10)', () => {
-  before('Logs in and creates a dummy report', () => {
+  it('', () => {
+    //Logs in and creates a dummy report
     cy.login();
+    cy.visit('/dashboard');
     const report = generateReportObject();
     cy.createReport(report);
+    cy.shortWait();
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.navigateToTransactionManagement();
-  });
 
-  it(`Tests the summary page for a report`, () => {
+    //Tests the summary page for a report
     const transactionTree = generateTransactionObject({
       TRANSFERS: {
         'Joint Fundraising Transfer': {},
@@ -32,8 +34,9 @@ describe('QA Script 347 (Sprint 10)', () => {
       });
   });
 
-  it('Cleanup', () => {
+  after('Cleanup', () => {
+    cy.login();
+    cy.visit('/dashboard');
     cy.deleteAllReports();
-    cy.logout();
   });
 });

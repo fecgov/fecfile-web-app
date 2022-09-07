@@ -19,7 +19,11 @@ function getLoginIntervalString(sessionDur: number): string {
     minute = 0;
     hour += 1;
   }
-  return `${hour}:${minute}`;
+  if (minute !== 0) {
+    return `${hour}:${minute}`;
+  } else {
+    return `${hour}:00`;
+  }
 }
 
 function legacyLogin() {

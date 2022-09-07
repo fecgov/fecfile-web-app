@@ -3,14 +3,15 @@ import { generateTransactionObject } from '../../support/generators/transactions
 
 describe('QA Script 125 (Sprint 10)', () => {
   const reportObject1 = generateReportObject({
-    coverage_from_date:"01/01/2010"
+    coverage_from_date: '01/01/2010',
   });
   const reportObject2 = generateReportObject({
-    coverage_from_date:"01/01/2011"
+    coverage_from_date: '01/01/2011',
   });
 
   before('Logs in and creates a dummy report', () => {
     cy.login();
+    cy.visit('/dashboard');
     cy.deleteAllReports();
 
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
@@ -24,11 +25,21 @@ describe('QA Script 125 (Sprint 10)', () => {
     cy.createReport(reportObject2);
   });
 
-  it('Enters transactions', () => {
+  after('Cleanup', () => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
+  it('', () => {
+    //Enters transactions
+    cy.login();
+    cy.visit('/dashboard');
+
     for (let i = 0; i < 2; i++) {
       cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
       cy.medWait();
-      cy.contains("th", "Coverage dates").click();
+      cy.contains('th', 'Coverage dates').click();
       cy.medWait();
       cy.get('p-button[icon="pi pi-pencil"]').eq(i)
         .click(); //prettier-ignore
@@ -36,31 +47,25 @@ describe('QA Script 125 (Sprint 10)', () => {
       cy.navigateToTransactionManagement();
 
       const transaction = generateTransactionObject({
-        "INDIVIDUALS/PERSONS":{
-          "Individual Receipt":{}
-        }
+        'INDIVIDUALS/PERSONS': {
+          'Individual Receipt': {},
+        },
       });
       cy.createTransactionSchA(transaction);
       cy.medWait();
     }
-  });
 
-  it(`Should find only one transaction in each report`, () => {
+    //Should find only one transaction in each report
     for (let i = 0; i < 2; i++) {
       cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
       cy.medWait();
-      cy.contains("th", "Coverage dates").click();
+      cy.contains('th', 'Coverage dates').click();
       cy.shortWait();
       cy.get('p-button[icon="pi pi-pencil"]').eq(i)
         .click(); //prettier-ignore
       cy.medWait();
       cy.navigateToTransactionManagement();
-      cy.get("tbody").find("tr").should("have.length", 1);
+      cy.get('tbody').find('tr').should('have.length', 1);
     }
-  });
-
-  it("Cleanup", ()=>{
-    cy.deleteAllReports();
-    cy.logout();
   });
 });
