@@ -67,11 +67,10 @@ function checkEveryStateThenSelectWestVirgia() {
   cy.get(fieldCandidateState).click();
 
   for (const state of Object.keys(candidateStates)) {
-    cy.get('p-dropdownitem').contains(state).should('exist');
+    cy.contains('p-dropdownitem', state).should('exist');
   }
 
-  cy.get('p-dropdownitem').contains('West Virginia').click({ force: true });
-
+  cy.contains('p-dropdownitem', 'West Virginia').click();
   cy.get(fieldCandidateState).should('contain', 'West Virginia');
 }
 
