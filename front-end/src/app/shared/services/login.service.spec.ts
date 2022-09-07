@@ -39,7 +39,7 @@ describe('LoginService', () => {
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(LoginService);
-    store  = TestBed.inject(MockStore);
+    store = TestBed.inject(MockStore);
     apiService = TestBed.inject(ApiService);
     cookieService = TestBed.inject(CookieService);
   });
@@ -70,16 +70,18 @@ describe('LoginService', () => {
     httpTestingController.verify();
   });
 
-  it('#logOut non-login.gov happy path', async () => {  
+  it('#logOut non-login.gov happy path', async () => {
     userLoginData.token = 'testVal';
     TestBed.resetTestingModule();
 
     spyOn(store, 'dispatch');
     spyOn(apiService, 'postAbsoluteUrl').and.returnValue(of('test'));
+    spyOn(cookieService, 'delete');
 
     service.logOut();
     expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
     expect(apiService.postAbsoluteUrl).toHaveBeenCalledTimes(0);
+    expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
 
   it('#logOut login.gov happy path', () => {
@@ -87,9 +89,11 @@ describe('LoginService', () => {
     TestBed.resetTestingModule();
 
     spyOn(store, 'dispatch');
+    spyOn(cookieService, 'delete');
 
     service.logOut();
     expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutForLoginDotGovAction());
+    expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
 
 });

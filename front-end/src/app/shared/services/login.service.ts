@@ -63,6 +63,7 @@ export class LoginService {
   }
 
   public logOut() {
+    this.cookieService.delete('csrftoken');
     if (this.userLoginData && this.userLoginData.token) {
       // Non-login.gov auth
       this.store.dispatch(userLoggedOutAction());
