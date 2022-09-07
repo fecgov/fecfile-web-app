@@ -41,6 +41,10 @@ local_settings.py
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Cypress
+front-end/cypress/screenshots/
+front-end/cypress/videos/
+
 # misc
 /.sass-cache
 /connect.lock
