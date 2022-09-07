@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
 import { ContactTypes, ContactTypeLabels } from '../../shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
+import { TransactionType } from '../../shared/interfaces/transaction-type.interface';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-group-f',
@@ -29,6 +31,9 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     'memo_code',
     'memo_text_description',
   ];
+  override form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
+  readOnlyMemo = false;
+  memo_checked = false;
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
@@ -38,8 +43,33 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     protected override transactionService: TransactionService,
     protected override validateService: ValidateService,
     protected override fb: FormBuilder,
-    protected override router: Router
+    protected override router: Router,
+    protected activatedRoute: ActivatedRoute
   ) {
     super(messageService, transactionService, validateService, fb, router);
+
+    activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      const transactionType: TransactionType = data['transactionType'];
+      if (Object.keys(transactionType?.schema?.properties['memo_code']).includes('const')) {
+        this.readOnlyMemo = true;
+        this.memo_checked = transactionType.schema.properties['memo_code'].const as boolean;
+      }
+    });
+  }
+
+  protected override resetForm() {
+    const memo_item_state = this.memo_checked;
+
+    this.formSubmitted = false;
+    this.form.reset();
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+    this.memo_checked = memo_item_state;
+    this.form.patchValue({
+      entity_type: this.contactTypeOptions[0]?.code,
+      contribution_aggregate: '0',
+      memo_code: this.memo_checked,
+      contribution_purpose_descrip: this.contributionPurposeDescrip,
+    });
   }
 }

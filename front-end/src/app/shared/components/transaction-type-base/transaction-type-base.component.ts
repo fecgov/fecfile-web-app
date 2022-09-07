@@ -15,10 +15,10 @@ import { ContactTypeLabels, ContactTypes } from '../../models/contact.model';
   template: '',
 })
 export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy {
-  @Input() title = '';
-  @Input() schema: JsonSchema | null = null;
-  @Input() transaction: Transaction | null = null;
-  @Input() contributionPurposeDescrip = '';
+  @Input() title: string | undefined;
+  @Input() schema: JsonSchema | undefined;
+  @Input() transaction: Transaction | undefined;
+  @Input() contributionPurposeDescrip: string | undefined;
 
   abstract formProperties: string[];
 
@@ -146,7 +146,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  private resetForm() {
+  protected resetForm() {
     this.formSubmitted = false;
     this.form.reset();
     this.form.markAsPristine();

@@ -1,22 +1,22 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
-import { LazyLoadEvent, MessageService } from 'primeng/api';
-import {
-  Contact,
-  ContactTypes,
-  ContactTypeLabels,
-  CandidateOfficeTypes,
-  CandidateOfficeTypeLabels,
-} from '../../shared/models/contact.model';
+import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { ContactService } from 'app/shared/services/contact.service';
-import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
+import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
+import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
+import {
+  CandidateOfficeTypeLabels,
+  CandidateOfficeTypes,
+  Contact,
+  ContactTypeLabels,
+  ContactTypes,
+} from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-contact-detail',
@@ -116,8 +116,11 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
           this.form.patchValue({
             state: 'ZZ',
           });
+          // ajv does not un-require zip when country is not USA
+          this.form.patchValue({ zip: this.form.get('zip')?.value || '' });
           this.form?.get('state')?.disable();
         } else {
+          this.form.patchValue({ zip: this.form.get('zip')?.value || null });
           this.form?.get('state')?.enable();
         }
       });

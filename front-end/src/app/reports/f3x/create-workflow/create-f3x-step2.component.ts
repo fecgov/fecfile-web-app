@@ -37,7 +37,7 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   cashOnHand: CashOnHand = {
-    report_id: null,
+    report_id: undefined,
     value: null,
   };
 

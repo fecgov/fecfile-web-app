@@ -69,11 +69,9 @@ describe('ReportLevelMemoComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: {
-              data: {
-                report: f3x,
-              },
-            },
+            data: of({
+              report: f3x,
+            }),
           },
         },
       ],
@@ -134,7 +132,7 @@ describe('ReportLevelMemoComponent', () => {
     const testMemoTextServiceSpy = spyOn(testMemoTextService, 'create').and.returnValue(of(new MemoText()));
     const navigateSpy = spyOn(testRouter, 'navigateByUrl');
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
-    component.assignedMemoText.id = null;
+    component.assignedMemoText.id = undefined;
     component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');

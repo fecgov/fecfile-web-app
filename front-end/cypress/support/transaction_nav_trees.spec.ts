@@ -336,7 +336,7 @@ const tribalReceipt: TransactionForm = {
   ...contributionFields,
 };
 
-const JFTransferMemo: TransactionForm = {
+const JointFundraisingTransferMemo: TransactionForm = {
   ...entityCommittee,
   ...donorCommitteeFECId,
   ...groupNameFields,
@@ -352,7 +352,7 @@ const JointFundraisingTransfer: TransactionForm = {
   ...addressFields,
   ...memoFields,
   ...contributionFields,
-  childTransactions: [JFTransferMemo],
+  childTransactions: [JointFundraisingTransferMemo],
 };
 
 const offsetToOpex: TransactionForm = {
@@ -389,7 +389,7 @@ export const groupANavTree: TransactionNavTree = {
   },
   //"REGISTERED FILERS":{},
   TRANSFERS: {
-    'Joint Fundraising Transfer': JFTransfer,
+    'Joint Fundraising Transfer': JointFundraisingTransfer,
   },
   //"REFUNDS":{},
   OTHER: {

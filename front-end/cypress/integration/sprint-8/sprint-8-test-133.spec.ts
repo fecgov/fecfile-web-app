@@ -45,7 +45,11 @@ describe('QA Test Script #133 (Sprint 8)', () => {
 
   it('Delete previous report and make a new one', () => {
     let report: object = generateReportObject();
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
+    cy.shortWait();
     cy.deleteAllReports();
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
+    cy.shortWait();
     cy.createReport(report);
   });
 
