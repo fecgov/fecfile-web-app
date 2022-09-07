@@ -76,8 +76,8 @@ export class Contact extends BaseModel {
 export class FecCommitteeLookupData {
   id: string | null = null;
   name: string | null = null;
-  static fromJSON(json: any): FecCommitteeLookupData {
-    // eslint-disable-line @typescript-eslint/no-explicit-any
+  // prettier-ignore
+  static fromJSON(json: any): FecCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(FecCommitteeLookupData, json);
   }
   static toSelectItem(data: FecCommitteeLookupData): SelectItem<string> {
@@ -102,11 +102,11 @@ export class CommitteeLookupResponse {
     const fecfileSelectItems = this.fecfile_committees?.map((data) => FecCommitteeLookupData.toSelectItem(data)) || [];
     return [
       {
-        label: 'Select an existing candidate contact:',
+        label: 'Select an existing committee contact:',
         items: fecfileSelectItems,
       },
       {
-        label: 'Create a new contact from list of registered candidates:',
+        label: 'Create a new contact from list of registered committee:',
         items: fecApiSelectItems,
       },
     ];
