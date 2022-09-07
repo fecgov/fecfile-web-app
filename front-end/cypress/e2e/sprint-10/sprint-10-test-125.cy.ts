@@ -18,7 +18,9 @@ describe('QA Script 125 (Sprint 10)', () => {
     cy.shortWait();
 
     cy.createReport(reportObject1);
+    cy.shortWait();
     cy.get('p-button[icon="pi pi-pencil"]').click();
+    cy.shortWait();
     cy.navigateToTransactionManagement();
     cy.get('.p-menubar').contains('.p-menuitem-link', 'Reports').click();
     cy.longWait();
