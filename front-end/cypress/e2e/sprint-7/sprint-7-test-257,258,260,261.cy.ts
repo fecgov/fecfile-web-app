@@ -28,36 +28,34 @@ describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
     context(`Testing interactivity under ${filingFrequency}`, () => {
       const timePeriods: Array<string> = Object.keys(filingFrequencyTree[filingFrequency as FilingFrequency]);
       for (const timePeriod of timePeriods) {
-        context(`--->       ${timePeriod}`, () => {
-          it('', () => {
-            //Step 1: Navigate to reports page
-            cy.visit('/dashboard');
-            cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
+        it(`--->       ${timePeriod}`, () => {
+          //Step 1: Navigate to reports page
+          cy.visit('/dashboard');
+          cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
 
-            //Step 2: Open a New Report
-            cy.get("button[label='Create a new report']").click();
-            cy.shortWait();
+          //Step 2: Open a New Report
+          cy.get("button[label='Create a new report']").click();
+          cy.shortWait();
 
-            //`Step 3: Select the Filing Frequency ${filingFrequency}`
-            cy.get('p-radiobutton[FormControlName="filing_frequency"]')
-              .contains(filingFrequency)
-              .parent()
-              .click()
-              .find('div')
-              .should('have.class', 'p-radiobutton-checked')
-              .wait(50);
+          //`Step 3: Select the Filing Frequency ${filingFrequency}`
+          cy.get('p-radiobutton[FormControlName="filing_frequency"]')
+            .contains(filingFrequency)
+            .parent()
+            .click()
+            .find('div')
+            .should('have.class', 'p-radiobutton-checked')
+            .wait(50);
 
-            //`Step 4: Select the Time Period button for ${timePeriod}`
-            cy.get('div[role="button"]')
-              .contains(timePeriod)
-              .click()
-              .parent()
-              .should('have.class', 'p-highlight')
-              .wait(50);
+          //`Step 4: Select the Time Period button for ${timePeriod}`
+          cy.get('div[role="button"]')
+            .contains(timePeriod)
+            .click()
+            .parent()
+            .should('have.class', 'p-highlight')
+            .wait(50);
 
-            //`Step 5: Check each Report Type radio button for interactivity and the presence of the "State" dropdown and the "Election On" date picker`
-            testRadioButtons(filingFrequency as FilingFrequency, timePeriod as FilingType);
-          });
+          //`Step 5: Check each Report Type radio button for interactivity and the presence of the "State" dropdown and the "Election On" date picker`
+          testRadioButtons(filingFrequency as FilingFrequency, timePeriod as FilingType);
         });
       }
     });

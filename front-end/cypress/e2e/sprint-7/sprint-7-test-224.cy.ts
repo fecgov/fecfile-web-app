@@ -4,28 +4,25 @@ const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organiz
 
 describe('QA Test Script #224 (Sprint 7)', () => {
   for (const contactType of Object.keys(contacts)) {
-    context(`---> ${contactType}`, (cType = contactType) => {
-      it(`Checks that the ${contactType} form is formatted correctly`, () => {
-        //Step 1: Navigate to contacts page
-        cy.login();
-        cy.visit('/dashboard');
-        cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
-        cy.url().should('contain', '/contacts');
+    it(`Checks that the ${contactType} form is formatted correctly`, () => {
+      //Step 1: Navigate to contacts page
+      cy.login();
+      cy.visit('/dashboard');
+      cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
+      cy.url().should('contain', '/contacts');
 
-        //Step 2: Open the 'Add Contact' form
-        cy.get("button[label='New']").click();
-        cy.shortWait();
-        cy.get("div[role='dialog']").contains('Add Contact').should('exist');
+      //Step 2: Open the 'Add Contact' form
+      cy.get("button[label='New']").click();
+      cy.shortWait();
+      cy.get("div[role='dialog']").contains('Add Contact').should('exist');
 
-        //Steps 3, 4, & 5: Checks that the "street_1" field is labeled "Street Address" instead of "Street"
-        cy.dropdownSetValue("p-dropdown[FormControlName='type']", cType);
+      //Steps 3, 4, & 5: Checks that the "street_1" field is labeled "Street Address" instead of "Street"
+      cy.dropdownSetValue("p-dropdown[FormControlName='type']", contactType);
 
-        cy.get('#street_1').parent().should('contain', 'STREET ADDRESS');
+      cy.get('#street_1').parent().should('contain', 'STREET ADDRESS');
 
-        //Closes the form
-        cy.get("button[label='Cancel']").click();
-        cy.shortWait();
-      });
+      //Closes the form
+      cy.get("button[label='Cancel']").click();
     });
   }
 

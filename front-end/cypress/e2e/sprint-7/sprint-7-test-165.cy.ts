@@ -5,6 +5,12 @@ import { generateReportObject } from '../../support/generators/reports.spec';
 import { dateToString } from '../../support/reports.spec';
 
 describe('QA Test Script #165 (Sprint 7)', () => {
+  after(() => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
   it('', () => {
     //Step 1: Navigate to the reports page and populate it with three reports
     cy.login();
@@ -48,8 +54,5 @@ describe('QA Test Script #165 (Sprint 7)', () => {
         .find('i')
         .should('have.class', 'pi-sort-amount-down');
     }
-
-    //Cleanup
-    cy.deleteAllReports();
   });
 });

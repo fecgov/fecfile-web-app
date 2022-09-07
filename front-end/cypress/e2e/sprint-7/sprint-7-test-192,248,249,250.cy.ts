@@ -121,7 +121,7 @@ describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
 
       cy.dropdownSetValue("p-dropdown[FormControlName='type']", contactType);
       cy.shortWait();
-      cy.get("button[label='Save']").click();
+      cy.get("button[label='Save']").click(); //Clicking the save button populates the fields with 'required' error messages
       cy.shortWait();
 
       for (const field of Object.keys(contactFields[contactType])) {
