@@ -1,10 +1,10 @@
 import { Component, ElementRef } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
+import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 import { ContactService } from '../../shared/services/contact.service';
-import { Contact, ContactTypes, ContactTypeLabels } from '../../shared/models/contact.model';
-import { LabelList } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-contact-list',
@@ -13,6 +13,13 @@ import { LabelList } from 'app/shared/utils/label.utils';
 export class ContactListComponent extends TableListBaseComponent<Contact> {
   override item: Contact = new Contact();
   contactTypeLabels: LabelList = ContactTypeLabels;
+
+  searchTerm = '';
+
+  // contact lookup
+  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
+    [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
+  );
 
   constructor(
     protected override messageService: MessageService,
@@ -49,4 +56,15 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
       return item.name || '';
     }
   }
+
+  onContactLookupSelect(id: string) {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Contact selected',
+      detail: 'Selected lookup contact ' + 
+        'with commitee id ' + id,
+      life: 3000,
+    });
+  }
+
 }
