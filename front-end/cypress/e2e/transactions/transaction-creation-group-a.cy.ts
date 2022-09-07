@@ -36,13 +36,19 @@ function testEditTransaction(transactionForm) {
 describe('Test saving and editing on all transactions', () => {
   before('Logs in and creates a dummy report', () => {
     cy.login();
-    cy.deleteAllReports();
+    cy.visit('/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.shortWait();
 
     const report = generateReportObject();
     cy.createReport(report);
+  });
 
+  beforeEach(() => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
+    cy.shortWait();
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.shortWait();
     cy.navigateToTransactionManagement();
@@ -80,7 +86,8 @@ describe('Test saving and editing on all transactions', () => {
   }
 
   after('Cleanup', () => {
+    cy.login();
+    cy.visit('/dashboard');
     cy.deleteAllReports();
-    cy.logout();
   });
 });

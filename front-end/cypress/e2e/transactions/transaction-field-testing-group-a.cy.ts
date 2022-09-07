@@ -39,7 +39,7 @@ function testField(fieldName, fieldRules, number: boolean = false) {
 
 function testFields(fields, entityType) {
   for (let field of fields) {
-    if (field === "childTransactions") continue;
+    if (field === 'childTransactions') continue;
 
     const fieldRules = TransactionFields[field];
     const fieldName = fieldRules['fieldName'];
@@ -84,13 +84,18 @@ function testFields(fields, entityType) {
 describe('Test max lengths, requirements, and allowed characters on all fields on all transactions', () => {
   before('Logs in and creates a dummy report', () => {
     cy.login();
-    cy.deleteAllReports();
+    cy.visit('/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.shortWait();
-
     const report = generateReportObject();
     cy.createReport(report);
+  });
 
+  beforeEach(() => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
+    cy.shortWait();
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.shortWait();
     cy.navigateToTransactionManagement();
@@ -130,7 +135,8 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
   }
 
   after('Cleanup', () => {
+    cy.login();
+    cy.visit('/dashboard');
     cy.deleteAllReports();
-    cy.logout();
   });
 });
