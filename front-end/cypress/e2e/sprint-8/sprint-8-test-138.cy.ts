@@ -2,6 +2,12 @@
 import { generateReportObject } from '../../support/generators/reports.spec';
 
 describe('QA Test Script #138 (Sprint 8)', () => {
+  after(() => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
   it('', () => {
     //Step 1: Navigate to reports page
     cy.login();
@@ -50,9 +56,5 @@ describe('QA Test Script #138 (Sprint 8)', () => {
       .contains('tr', report_2['coverage_from_date'])
       .contains('tr', report_2['coverage_through_date'])
       .should('exist');
-
-    //Cleanup
-    cy.shortWait();
-    cy.deleteAllReports();
   });
 });

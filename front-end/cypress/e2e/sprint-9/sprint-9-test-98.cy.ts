@@ -2,6 +2,12 @@ import { getAuthToken } from '../../support/commands';
 import { generateReportObject } from '../../support/generators/reports.spec';
 
 describe('Sprint 9 QA Script 98', () => {
+  after(() => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
   for (let filing_frequency of ['QUARTERLY', 'MONTHLY']) {
     it(`Test that a ${filing_frequency} report is of type F3XT when it has a "TER" report code`, () => {
       cy.login();
@@ -35,8 +41,6 @@ describe('Sprint 9 QA Script 98', () => {
           }
         });
       });
-
-      cy.deleteAllReports();
     });
   }
 });

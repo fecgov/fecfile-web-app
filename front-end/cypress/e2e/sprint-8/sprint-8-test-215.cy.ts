@@ -3,6 +3,12 @@
 import { generateReportObject } from '../../support/generators/reports.spec';
 
 describe('QA Test Script #215 (Sprint 8)', () => {
+  after(() => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
   it('', () => {
     //Step 1: Navigate to reports page and create a report
     cy.login();
@@ -43,8 +49,5 @@ describe('QA Test Script #215 (Sprint 8)', () => {
       .then((jQueryObject) => {
         cy.request('GET', jQueryObject[0].href).its('status').should('not.eq', 404);
       });
-
-    //Cleanup
-    cy.deleteAllReports();
   });
 });

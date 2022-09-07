@@ -3,6 +3,12 @@ import { generateTransactionObject } from '../../support/generators/transactions
 import { createTransactionSchA } from '../../support/transactions.spec';
 
 describe('QA Script 347 (Sprint 10)', () => {
+  after('Cleanup', () => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
   it('', () => {
     //Logs in and creates a dummy report
     cy.login();
@@ -32,11 +38,5 @@ describe('QA Script 347 (Sprint 10)', () => {
         const parentId = $td.text();
         cy.contains('tr', childName).find('td').eq(7).should('have.text', parentId);
       });
-  });
-
-  after('Cleanup', () => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.deleteAllReports();
   });
 });

@@ -11,6 +11,12 @@ const reportCity: string = generator.city();
 const reportState: string = generator.state();
 
 describe('QA Test Script #133 (Sprint 8)', () => {
+  after(() => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
   it('', () => {
     //Step 1: Navigate to reports page and create a report
     cy.login();
@@ -108,8 +114,5 @@ describe('QA Test Script #133 (Sprint 8)', () => {
         cy.expect(report.state).to.eql(stateCode);
       });
     });
-
-    //Cleanup
-    cy.deleteAllReports();
   });
 });

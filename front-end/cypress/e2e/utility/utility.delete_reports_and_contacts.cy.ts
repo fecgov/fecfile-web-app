@@ -4,5 +4,6 @@ describe('This "Test" deletes reports currently in the database', () => {
     cy.visit('/dashboard');
     cy.shortWait();
     cy.deleteAllReports();
+    cy.deleteAllContacts();
   });
 });

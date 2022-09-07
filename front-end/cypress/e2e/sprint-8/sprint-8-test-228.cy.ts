@@ -66,6 +66,12 @@ const accordion = {
 };
 
 describe('QA Script 228 (Sprint 8)', () => {
+  after(() => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
   it('', () => {
     //Step 1: Log in, navigate to the reports page, create a report, and set it up to be ready for transactions
     cy.login();
@@ -94,8 +100,5 @@ describe('QA Script 228 (Sprint 8)', () => {
         cy.get('p-accordion').contains('p-accordion', header).should('contain', transaction);
       }
     }
-
-    //Cleanup
-    cy.deleteAllReports();
   });
 });

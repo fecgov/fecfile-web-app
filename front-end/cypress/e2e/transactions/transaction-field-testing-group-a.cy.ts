@@ -102,6 +102,12 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
     cy.medWait();
   });
 
+  after('Cleanup', () => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
   const navTree = groupANavTree;
   for (let category of Object.keys(navTree)) {
     for (let transactionName of Object.keys(navTree[category])) {
@@ -133,10 +139,4 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
       });
     }
   }
-
-  after('Cleanup', () => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.deleteAllReports();
-  });
 });

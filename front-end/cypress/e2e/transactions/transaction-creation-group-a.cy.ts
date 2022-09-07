@@ -55,6 +55,12 @@ describe('Test saving and editing on all transactions', () => {
     cy.medWait();
   });
 
+  after('Cleanup', () => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
   const navTree = groupANavTree;
   for (let category of Object.keys(navTree)) {
     for (let transactionName of Object.keys(navTree[category])) {
@@ -84,10 +90,4 @@ describe('Test saving and editing on all transactions', () => {
       });
     }
   }
-
-  after('Cleanup', () => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.deleteAllReports();
-  });
 });

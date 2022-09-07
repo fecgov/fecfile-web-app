@@ -4,6 +4,12 @@ import { generateContactObject } from '../../support/generators/contacts.spec';
 const contact: object = generateContactObject({ contact_type: 'Committee' });
 
 describe('QA Test Script #205 (Sprint 8)', () => {
+  after(() => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllContacts();
+  });
+
   it('', () => {
     //Step 1: Navigate to the Contacts Page
     cy.login();
@@ -38,11 +44,5 @@ describe('QA Test Script #205 (Sprint 8)', () => {
       cy.get("button[label='Cancel']").click();
       cy.shortWait();
     });
-
-    //Cleanup
-    cy.contains('tr', contact['name']).find("p-button[icon='pi pi-trash']").click();
-    cy.medWait();
-    cy.contains('button', 'Yes').click();
-    cy.shortWait();
   });
 });

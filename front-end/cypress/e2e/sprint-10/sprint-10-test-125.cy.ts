@@ -27,7 +27,7 @@ describe('QA Script 125 (Sprint 10)', () => {
     cy.createReport(reportObject2);
   });
 
-  after('Cleanup', () => {
+  after(() => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();

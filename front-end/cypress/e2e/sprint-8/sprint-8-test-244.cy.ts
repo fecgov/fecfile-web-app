@@ -13,7 +13,7 @@ const columns = [
 ];
 
 describe('QA Script 244 (Sprint 8)', () => {
-  after('Cleanup', () => {
+  after(() => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();

@@ -28,6 +28,12 @@ function testReportType(frequency: FilingFrequency, type: FilingType, reportCode
 }
 
 describe('QA Script 344 (Sprint 10)', () => {
+  after('Cleanup', () => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  });
+
   let reportCodes: string[] = [];
   for (const filingFrequency of Object.keys(filingFrequencyTree)) {
     const frequency = filingFrequency as FilingFrequency;
@@ -47,8 +53,4 @@ describe('QA Script 344 (Sprint 10)', () => {
       }
     }
   }
-
-  after('Cleanup', () => {
-    cy.deleteAllReports();
-  });
 });
