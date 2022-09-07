@@ -6,7 +6,7 @@ import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { ApiService } from './api.service';
 
-import { userLoggedOutAction } from 'app/store/login.actions';
+import { userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
 import { LoginService } from './login.service';
@@ -87,13 +87,9 @@ describe('LoginService', () => {
     TestBed.resetTestingModule();
 
     spyOn(store, 'dispatch');
-    spyOn(service, 'clearUserLoggedInCookies');
-    spyOn(cookieService, 'delete');
 
     service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
-    expect(service.clearUserLoggedInCookies).toHaveBeenCalledTimes(1);
-    expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
+    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutForLoginDotGovAction());
   });
 
 });
