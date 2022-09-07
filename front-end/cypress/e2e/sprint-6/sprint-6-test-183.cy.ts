@@ -2,30 +2,24 @@
 
 import { generateContactObject } from '../../support/generators/contacts.spec';
 
-const contact: object = generateContactObject({ contact_type: 'Individual', state: 'Virginia' });
-
 describe('QA Test Script #183 (Sprint 6)', () => {
   beforeEach('Login', () => {
     cy.login();
+    cy.visit('/dashboard');
   });
 
   after('Cleanup', () => {
-    cy.contains('tr', `${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
-      .find('p-button[icon="pi pi-trash"]') //Gets the edit button
-      .click();
-
-    cy.medWait();
-    cy.get('.p-confirm-dialog-accept').click();
-
-    cy.shortWait();
-    cy.logout();
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllContacts();
   });
 
   it('Step 1: Navigate to contacts page', () => {
-    cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
     cy.url().should('contain', '/contacts');
+
+    const contact: object = generateContactObject({ contact_type: 'Individual', state: 'Virginia' });
     cy.createContact(contact);
 
     cy.contains('tr', `${contact['first_name']} ${contact['last_name']}`) //Finds out contact in the Manage Contacts table
@@ -55,6 +49,5 @@ describe('QA Test Script #183 (Sprint 6)', () => {
 
     cy.get("p-dropdown[formcontrolname='state']").should('contain', 'West Virginia');
     cy.get("button[label='Cancel']").click();
-    cy.shortWait();
   });
 });

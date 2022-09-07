@@ -25,15 +25,24 @@ Cypress.Commands.add('shortWait', shortWait);
 Cypress.Commands.add('medWait', medWait);
 Cypress.Commands.add('longWait', longWait);
 
-import { createContact } from './contacts.spec';
+import { createContact, deleteAllContacts } from './contacts.spec';
 Cypress.Commands.add('createContact', createContact);
+Cypress.Commands.add('deleteAllContacts', deleteAllContacts);
 
-import { createReport, enterConfirmationDetails, enterFilingDetails, navigateToTransactionManagement, navigateReportSidebar, deleteAllReports, deleteReport } from './reports.spec';
+import {
+  createReport,
+  enterConfirmationDetails,
+  enterFilingDetails,
+  navigateToTransactionManagement,
+  navigateReportSidebar,
+  deleteAllReports,
+  deleteReport,
+} from './reports.spec';
 Cypress.Commands.add('createReport', createReport);
 Cypress.Commands.add('enterConfirmationDetails', enterConfirmationDetails);
 Cypress.Commands.add('enterFilingDetails', enterFilingDetails);
 Cypress.Commands.add('navigateToTransactionManagement', navigateToTransactionManagement);
-Cypress.Commands.add("navigateReportSidebar", navigateReportSidebar);
+Cypress.Commands.add('navigateReportSidebar', navigateReportSidebar);
 Cypress.Commands.add('deleteAllReports', deleteAllReports);
 Cypress.Commands.add('deleteReport', deleteReport);
 

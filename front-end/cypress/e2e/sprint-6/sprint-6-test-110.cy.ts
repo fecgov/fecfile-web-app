@@ -46,7 +46,7 @@ function testAddressFields(contact) {
   cy.get('#street_2').should('have.value', contact['apartment']);
   cy.get('#city').should('have.value', contact['city']);
   cy.get('#zip').should('have.value', contact['zip']);
-  cy.get('#telephone').should('have.value', contact['phone']);
+  cy.get('#telephone').find('input').should('have.value', contact['phone']);
   cy.get("p-dropdown[formcontrolname='state']") //Gets the field for the input for State
     .should('contain', contact['state']);
 }
@@ -67,24 +67,20 @@ const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organiz
 describe('QA Test Script #110 (Sprint 6)', () => {
   beforeEach('Logs in', () => {
     cy.login();
+    cy.visit('/dashboard');
   });
 
-  function after() {
-    cy.get('p-button[icon="pi pi-trash"]').each((element) => {
-      cy.wrap(element).click();
-      cy.medWait();
-      cy.get('.p-confirm-dialog-accept').click();
-      cy.shortWait();
-    });
-    cy.logout();
-  }
+  after(() => {
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllContacts();
+  });
 
   for (contactType of Object.keys(contacts)) {
     contacts[contactType] = generateContactObject({ contact_type: contactType });
 
     context(`QA Script #110 - ${contactType}`, (cType = contactType) => {
-      it('Steps 1-5: Creates a contact', () => {
-        cy.visit('/dashboard');
+      it('Steps 1-5: Test "Save"', () => {
         cy.get('.p-menubar').contains('.p-menuitem-link', 'Contacts').click();
         cy.url().should('contain', '/contacts');
         let contact: object = contacts[cType];
@@ -101,6 +97,8 @@ describe('QA Test Script #110 (Sprint 6)', () => {
       });
 
       it('Steps 6-11: Test "Save & Add More"', () => {
+        cy.login();
+        cy.visit('/dashboard');
         cy.get('.p-menubar').contains('.p-menuitem-link', 'Contacts').click();
         cy.createContact(generateContactObject(), false);
 
@@ -112,12 +110,6 @@ describe('QA Test Script #110 (Sprint 6)', () => {
         cy.get('#first_name').should('have.value', '');
 
         cy.get("button[label='Cancel']").click();
-        cy.medWait();
-      });
-
-      it('Cleanup', () => {
-        cy.get('.p-menubar').contains('.p-menuitem-link', 'Contacts').click();
-        after();
       });
     });
   }
