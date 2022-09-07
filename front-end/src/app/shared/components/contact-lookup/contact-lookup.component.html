@@ -1,0 +1,29 @@
+<form [formGroup]="contactLookupForm">
+  <p-dropdown
+    styleClass="gray"
+    formControlName="selectedContactType"
+    [options]="contactTypeOptions"
+    optionLabel="name"
+    optionValue="code">
+  </p-dropdown>
+  <p-dropdown 
+    #lookupDropdown
+    class="mr-2"
+    (input)="onDropdownSearch($event)"
+    [editable]="true"
+    dropdownIcon="pi pi-search"
+    [options]="contactLookupList" 
+    formControlName="selectedContact"
+    placeholder="Search for a contact"
+    [group]="true"
+    (onChange)="onContactSelect($event)">
+  </p-dropdown>
+  <span class="mr-2">or</span> 
+  <button
+    pButton
+    pRipple
+    label="Create a new contact"
+    icon="pi pi-plus-circle"
+    class="p-button-info mr-2">
+  </button>
+</form>

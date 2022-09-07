@@ -63,6 +63,12 @@ describe('ReportService', () => {
     httpTestingController.verify();
   });
 
+  it('#setActiveReportById() should throw error if report id is undefined', () => {
+    expect(() => {
+      service.setActiveReportById(undefined);
+    }).toThrowError();
+  });
+
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
     const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: 1 });

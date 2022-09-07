@@ -1,16 +1,20 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { ContactService } from './contact.service';
-import { Contact } from '../models/contact.model';
-import { ListRestResponse } from '../models/rest-api.model';
+import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { CommitteeLookupResponse, Contact } from '../models/contact.model';
+import { ListRestResponse } from '../models/rest-api.model';
+import { ApiService } from './api.service';
+import { ContactService } from './contact.service';
 
 describe('ContactService', () => {
   let httpTestingController: HttpTestingController;
   let service: ContactService;
+  let testApiService: ApiService;
+
   const userLoginData: UserLoginData = {
     committee_id: 'C00000000',
     email: 'email@fec.com',
@@ -23,6 +27,7 @@ describe('ContactService', () => {
       imports: [HttpClientTestingModule],
       providers: [
         ContactService,
+        ApiService,
         provideMockStore({
           initialState: { fecfile_online_userLoginData: userLoginData },
           selectors: [{ selector: selectUserLoginData, value: userLoginData }],
@@ -32,6 +37,7 @@ describe('ContactService', () => {
 
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(ContactService);
+    testApiService = TestBed.inject(ApiService);
   });
 
   it('should be created', () => {
@@ -106,4 +112,22 @@ describe('ContactService', () => {
     req.flush(mockResponse);
     httpTestingController.verify();
   });
+
+  it('#committeeLookup() happy path', () => {
+    const expectedRetval = new CommitteeLookupResponse();
+    const apiServiceGetSpy = spyOn(testApiService,
+      'get').and.returnValue(of(expectedRetval));
+    const testSearch = 'testSearch';
+    const testMaxFecResults = 1;
+    const testMaxFecfileResults = 2;
+
+    const expectedEndpoint = `/contacts/committee_lookup/?q=${testSearch}` +
+      `&max_fec_results=${testMaxFecResults}` +
+      `&max_fecfile_results=${testMaxFecfileResults}`
+
+    service.committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults).subscribe(
+      value => expect(value).toEqual(expectedRetval));
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
+  });
+
 });

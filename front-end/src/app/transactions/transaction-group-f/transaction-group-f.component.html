@@ -139,7 +139,7 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <div class="field">
+        <div class="field" [ngClass]="{ readonly: readOnlyMemo }">
           <p-checkbox
             [binary]="true"
             inputId="memo_code"
@@ -148,6 +148,8 @@
             ariaLabel="have memo item"
             [trueValue]="true"
             [falseValue]="false"
+            [(ngModel)]="memo_checked"
+            [readonly]="readOnlyMemo"
           ></p-checkbox>
           <div class="memo-checkbox-note">
             {{ memoItemHelpText }}
