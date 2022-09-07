@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ActivatedRoute } from '@angular/router';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { CardModule } from 'primeng/card';
@@ -32,12 +32,7 @@ describe('ReportDetailedSummaryComponent', () => {
       declarations: [ReportDetailedSummaryComponent],
       providers: [
         ReportService,
-        provideMockStore({
-          selectors: [
-            { selector: selectReportCodeLabelList, value: {} },
-            { selector: selectActiveReport, value: { id: 999 } },
-          ],
-        }),
+        provideMockStore(testMockStore),
         {
           provide: ActivatedRoute,
           useValue: {

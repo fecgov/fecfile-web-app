@@ -5,29 +5,18 @@ import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { TransactionType } from '../interfaces/transaction-type.interface';
 import { TransactionTypeResolver } from './transaction-type.resolver';
 import { TransactionService } from '../services/transaction.service';
-import { UserLoginData } from '../models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { testMockStore } from '../utils/unit-test.utils';
 import { of } from 'rxjs';
 import { SchATransaction } from '../models/scha-transaction.model';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionTypeResolver;
 
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
+        provideMockStore(testMockStore),
         {
           provide: TransactionService,
           useValue: {

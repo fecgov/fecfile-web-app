@@ -1,12 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { TransactionGroupAComponent } from './transaction-group-a.component';
-import { UserLoginData } from '../../shared/models/user.model';
-import { selectUserLoginData } from '../../store/login.selectors';
 import { ToastModule } from 'primeng/toast';
 import { SharedModule } from '../../shared/shared.module';
 import { DividerModule } from 'primeng/divider';
@@ -21,13 +20,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 describe('TransactionGroupAComponent', () => {
   let component: TransactionGroupAComponent;
   let fixture: ComponentFixture<TransactionGroupAComponent>;
-
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -48,14 +40,7 @@ describe('TransactionGroupAComponent', () => {
         InputNumberModule,
       ],
       declarations: [TransactionGroupAComponent],
-      providers: [
-        MessageService,
-        FormBuilder,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [MessageService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 

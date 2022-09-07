@@ -4,13 +4,12 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
-import { UserLoginData } from 'app/shared/models/user.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { Message, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
-import { selectUserLoginData } from '../../../store/login.selectors';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
@@ -36,13 +35,6 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   ];
 }
 
-const userLoginData: UserLoginData = {
-  committee_id: 'C00000000',
-  email: 'email@fec.com',
-  is_allowed: true,
-  token: 'jwttokenstring',
-};
-
 const testTransaction = {
   id: 123,
   report_id: 999,
@@ -65,16 +57,7 @@ describe('TransactionTypeBaseComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [TestTransactionTypeBaseComponent],
       imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [
-        MessageService,
-        FormBuilder,
-        ValidateService,
-        TransactionService,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [MessageService, FormBuilder, ValidateService, TransactionService, provideMockStore(testMockStore)],
     }).compileComponents();
 
     testMessageService = TestBed.inject(MessageService);

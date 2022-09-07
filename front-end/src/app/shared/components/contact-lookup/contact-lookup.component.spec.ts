@@ -3,10 +3,9 @@ import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { CommitteeLookupResponse } from 'app/shared/models/contact.model';
-import { UserLoginData } from 'app/shared/models/user.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { selectUserLoginData } from 'app/store/login.selectors';
 import { DropdownModule } from 'primeng/dropdown';
 import { of } from 'rxjs';
 
@@ -19,26 +18,10 @@ describe('ContactLookupComponent', () => {
   let testContactService: ContactService;
 
   beforeEach(async () => {
-    const userLoginData: UserLoginData = {
-      committee_id: 'C00000000',
-      email: 'email@fec.com',
-      is_allowed: true,
-      token: 'jwttokenstring',
-    };
-
     await TestBed.configureTestingModule({
       declarations: [ContactLookupComponent],
       imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule, DropdownModule],
-      providers: [
-        FormBuilder,
-        ContactService,
-        ContactService,
-        EventEmitter,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [FormBuilder, ContactService, ContactService, EventEmitter, provideMockStore(testMockStore)],
     }).compileComponents();
 
     testContactService = TestBed.inject(ContactService);

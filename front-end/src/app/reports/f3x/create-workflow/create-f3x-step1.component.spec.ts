@@ -4,10 +4,10 @@ import { Router } from '@angular/router';
 import { AbstractControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of } from 'rxjs';
 import { F3xReportCodes, F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
-import { UserLoginData } from 'app/shared/models/user.model';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { SharedModule } from 'app/shared/shared.module';
 import { MessageService } from 'primeng/api';
@@ -15,7 +15,6 @@ import { CalendarModule } from 'primeng/calendar';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
-import { selectUserLoginData } from 'app/store/login.selectors';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xCoverageDates } from '../../../shared/models/f3x-summary.model';
 import { AppSelectButtonComponent } from '../../../shared/components/app-selectbutton';
@@ -33,12 +32,6 @@ describe('CreateF3XStep1Component', () => {
     report_code: 'Q1',
   });
   beforeEach(async () => {
-    const userLoginData: UserLoginData = {
-      committee_id: 'C00000000',
-      email: 'email@fec.com',
-      is_allowed: true,
-      token: 'jwttokenstring',
-    };
     await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -50,16 +43,7 @@ describe('CreateF3XStep1Component', () => {
         RouterTestingModule.withRoutes([]),
       ],
       declarations: [CreateF3XStep1Component, LabelPipe, AppSelectButtonComponent],
-      providers: [
-        F3xSummaryService,
-        FormBuilder,
-        MessageService,
-        FecDatePipe,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [F3xSummaryService, FormBuilder, MessageService, FecDatePipe, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 

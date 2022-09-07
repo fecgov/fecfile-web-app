@@ -1,12 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { TransactionGroupFComponent } from './transaction-group-f.component';
-import { UserLoginData } from '../../shared/models/user.model';
-import { selectUserLoginData } from '../../store/login.selectors';
 import { ToastModule } from 'primeng/toast';
 import { SharedModule } from '../../shared/shared.module';
 import { DividerModule } from 'primeng/divider';
@@ -27,13 +26,6 @@ describe('TransactionGroupFComponent', () => {
   let httpTestingController: HttpTestingController;
   let component: TransactionGroupFComponent;
   let fixture: ComponentFixture<TransactionGroupFComponent>;
-
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
 
   const transaction = SchATransaction.fromJSON({
     form_type: 'SA11AI',
@@ -70,14 +62,7 @@ describe('TransactionGroupFComponent', () => {
         InputTextareaModule,
       ],
       declarations: [TransactionGroupFComponent],
-      providers: [
-        MessageService,
-        FormBuilder,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [MessageService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 

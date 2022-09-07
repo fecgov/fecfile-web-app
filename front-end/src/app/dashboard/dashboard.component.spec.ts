@@ -5,8 +5,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Store } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { userLoggedInAction } from 'app/store/login.actions';
-import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { PanelModule } from 'primeng/panel';
@@ -18,33 +18,13 @@ describe('DashboardComponent', () => {
   let cookieService: CookieService;
   let store: Store;
 
-  beforeEach(
-    waitForAsync(() => {
-      const userLoginData: UserLoginData = {
-        committee_id: 'C00000000',
-        email: 'email@fec.com',
-        is_allowed: true,
-        token: 'jwttokenstring',
-      };
-
-      TestBed.configureTestingModule({
-        imports: [
-          HttpClientTestingModule, 
-          RouterTestingModule,
-          PanelModule,
-          BrowserAnimationsModule,
-        ],
-        declarations: [DashboardComponent],
-        providers: [
-          CookieService,
-          provideMockStore({
-            initialState: { fecfile_online_userLoginData: userLoginData },
-            selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-          }),
-        ],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule, RouterTestingModule, PanelModule, BrowserAnimationsModule],
+      declarations: [DashboardComponent],
+      providers: [CookieService, provideMockStore(testMockStore)],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
@@ -59,8 +39,8 @@ describe('DashboardComponent', () => {
   });
 
   it('#dispatchUserLoggedInFromCookies happy path', () => {
-    const testCommitteeId = "testCommitteeId";
-    const testEmail = "testEmail";
+    const testCommitteeId = 'testCommitteeId';
+    const testEmail = 'testEmail';
     const testIsAllowed = true;
     const testToken = null;
 
@@ -68,8 +48,8 @@ describe('DashboardComponent', () => {
       committee_id: testCommitteeId,
       email: testEmail,
       is_allowed: testIsAllowed,
-      token: testToken
-    }
+      token: testToken,
+    };
     spyOn(cookieService, 'check').and.returnValue(true);
     spyOn(cookieService, 'get').and.callFake((name: string) => {
       if (name === environment.ffapiCommitteeIdCookieName) {
@@ -78,13 +58,11 @@ describe('DashboardComponent', () => {
       if (name === environment.ffapiEmailCookieName) {
         return testEmail;
       }
-      throw Error("fail!");
+      throw Error('fail!');
     });
     spyOn(store, 'dispatch');
 
     component.dispatchUserLoggedInFromCookies();
-    expect(store.dispatch).toHaveBeenCalledWith(
-      userLoggedInAction({ payload: expectedUserLoginData }));
+    expect(store.dispatch).toHaveBeenCalledWith(userLoggedInAction({ payload: expectedUserLoginData }));
   });
-  
 });

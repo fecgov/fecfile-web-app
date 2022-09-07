@@ -3,8 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectCommitteeAccount } from '../../store/committee-account.selectors';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { TransactionTypeUtils } from '../../shared/utils/transaction-type.utils';
 import { TransactionContainerComponent } from './transaction-container.component';
 import { TransactionGroupBComponent } from '../transaction-group-b/transaction-group-b.component';
@@ -25,9 +24,6 @@ import { of } from 'rxjs';
 describe('TransactionContainerComponent', () => {
   let component: TransactionContainerComponent;
   let fixture: ComponentFixture<TransactionContainerComponent>;
-  const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
-    committee_id: 'C00601211',
-  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -59,10 +55,7 @@ describe('TransactionContainerComponent', () => {
             }),
           },
         },
-        provideMockStore({
-          initialState: { fecfile_online_committeeAccount: committeeAccount },
-          selectors: [{ selector: selectCommitteeAccount, value: committeeAccount }],
-        }),
+        provideMockStore(testMockStore),
       ],
     }).compileComponents();
   });

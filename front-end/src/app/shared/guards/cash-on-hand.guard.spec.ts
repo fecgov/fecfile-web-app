@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { testMockStore } from '../utils/unit-test.utils';
 import { CashOnHandGuard } from './cash-on-hand.guard';
 
 describe('CashOnHandGuard', () => {
@@ -11,15 +10,7 @@ describe('CashOnHandGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        provideMockStore({
-          initialState: { fecfile_online_activeReport: null, fecfile_online_cohNeeded: false },
-          selectors: [
-            { selector: selectActiveReport, value: { id: 999 } },
-            { selector: selectCashOnHand, value: { report_id: 999, value: 100.0 } },
-          ],
-        }),
-      ],
+      providers: [provideMockStore(testMockStore)],
     });
     guard = TestBed.inject(CashOnHandGuard);
   });

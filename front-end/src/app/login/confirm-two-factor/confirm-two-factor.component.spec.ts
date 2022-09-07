@@ -3,24 +3,17 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { of } from 'rxjs';
+import { testUserLoginData, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { of } from 'rxjs';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { LoginService } from 'app/shared/services/login.service';
 import { AuthService } from '../../shared/services/AuthService/auth.service';
-
 import { ConfirmTwoFactorComponent } from './confirm-two-factor.component';
 
 describe('ConfirmTwoFactorComponent', () => {
   let component: ConfirmTwoFactorComponent;
   let fixture: ComponentFixture<ConfirmTwoFactorComponent>;
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
   let loginService: LoginService;
   const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
@@ -32,10 +25,7 @@ describe('ConfirmTwoFactorComponent', () => {
         FormBuilder,
         LoginService,
         AuthService,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
+        provideMockStore(testMockStore),
         { provide: Router, useValue: routerSpy },
       ],
     }).compileComponents();
@@ -53,7 +43,7 @@ describe('ConfirmTwoFactorComponent', () => {
   });
 
   it('#next should validate valid code', () => {
-    const data: UserLoginData = { ...userLoginData };
+    const data: UserLoginData = { ...testUserLoginData };
     spyOn(loginService, 'validateCode').and.returnValue(of(data));
     component.twoFactInfo.patchValue({
       securityCode: '111111',
@@ -66,7 +56,7 @@ describe('ConfirmTwoFactorComponent', () => {
   });
 
   it('#next should not validate invalid code', () => {
-    const data: any = { ...userLoginData }; // eslint-disable-line @typescript-eslint/no-explicit-any
+    const data: any = { ...testUserLoginData }; // eslint-disable-line @typescript-eslint/no-explicit-any
     data.is_allowed = false;
     data.msg = component.ACCOUNT_LOCKED_MSG;
     spyOn(loginService, 'validateCode').and.returnValue(of(data));

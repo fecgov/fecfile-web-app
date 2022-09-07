@@ -1,15 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService } from 'primeng/api';
 import { ContactDetailComponent } from './contact-detail.component';
-import { UserLoginData } from '../../shared/models/user.model';
 import { FormBuilder } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { CandidateOfficeTypes, Contact, ContactTypes } from '../../shared/models/contact.model';
 import { environment } from '../../../environments/environment';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
-import { selectUserLoginData } from 'app/store/login.selectors';
 
 describe('ContactDetailComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -45,23 +44,10 @@ describe('ContactDetailComponent', () => {
   });
 
   beforeEach(async () => {
-    const userLoginData: UserLoginData = {
-      committee_id: 'C00000000',
-      email: 'email@fec.com',
-      is_allowed: true,
-      token: 'jwttokenstring',
-    };
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, DialogModule],
       declarations: [ContactDetailComponent],
-      providers: [
-        FormBuilder,
-        MessageService,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [FormBuilder, MessageService, provideMockStore(testMockStore)],
     }).compileComponents();
 
     httpTestingController = TestBed.inject(HttpTestingController);
