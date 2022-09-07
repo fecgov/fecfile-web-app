@@ -89,11 +89,19 @@ function testField(cType, field) {
     .find('app-error-messages')
     .children()
     .should('have.length', 0);
-  cy.get('#' + field)
-    .safeType('0')
-    .parent()
-    .find('app-error-messages')
-    .should('contain', `This field cannot contain more than ${strLength}`);
+  cy.get('#' + field).safeType('0');
+
+  if (field != 'telephone') {
+    cy.get('#' + field)
+      .parent()
+      .find('app-error-messages')
+      .should('contain', `This field cannot contain more than ${strLength}`);
+  } else {
+    cy.get('#' + field)
+      .parent()
+      .find('app-error-messages')
+      .should('contain', `This field must contain ${strLength} numeric characters`);
+  }
 }
 
 let contactType: string;
@@ -101,33 +109,31 @@ const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organiz
 
 describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
   for (contactType of Object.keys(contacts)) {
-    context(`---> ${contactType}`, (cType = contactType) => {
-      it('Check every field for required/optional and maximum length', () => {
-        cy.visit('/dashboard');
-        cy.url().should('contain', '/dashboard');
-        cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
-        cy.url().should('contain', '/contacts');
+    it(`${contactType} - Check every field for required/optional and maximum length`, () => {
+      cy.visit('/dashboard');
+      cy.url().should('contain', '/dashboard');
+      cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
+      cy.url().should('contain', '/contacts');
 
-        cy.get("button[label='New']").click();
-        cy.shortWait();
-        cy.get("div[role='dialog']").contains('Add Contact').should('exist');
+      cy.get("button[label='New']").click();
+      cy.shortWait();
+      cy.get("div[role='dialog']").contains('Add Contact').should('exist');
 
-        cy.dropdownSetValue("p-dropdown[FormControlName='type']", cType);
-        cy.shortWait();
-        cy.get("button[label='Save']").click();
-        cy.shortWait();
+      cy.dropdownSetValue("p-dropdown[FormControlName='type']", contactType);
+      cy.shortWait();
+      cy.get("button[label='Save']").click();
+      cy.shortWait();
 
-        for (const field of Object.keys(contactFields[cType])) {
-          testField(cType, field);
-        }
+      for (const field of Object.keys(contactFields[contactType])) {
+        testField(contactType, field);
+      }
 
-        cy.get("p-dropdown[FormControlName='country']").should('contain', 'United States of America');
-        cy.get("p-dropdown[FormControlName='state']").click();
-        cy.get('p-dropdownitem').should('not.have.length', 0);
+      cy.get("p-dropdown[FormControlName='country']").should('contain', 'United States of America');
+      cy.get("p-dropdown[FormControlName='state']").click();
+      cy.get('p-dropdownitem').should('not.have.length', 0);
 
-        cy.get("button[label='Cancel']").click();
-        cy.shortWait();
-      });
+      cy.get("button[label='Cancel']").click();
+      cy.shortWait();
     });
   }
 });
