@@ -1,3 +1,5 @@
+import { getAuthToken } from './commands';
+
 export function createContact(contact: object, save = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
   cy.shortWait();
@@ -57,4 +59,37 @@ export function createContact(contact: object, save = true) {
   }
 
   cy.longWait(); //Gives the database time to process the request.  It gets a little funky otherwise...
+}
+
+//Deletes all reports belonging to the logged-in committee
+export function deleteAllContacts() {
+  const authToken: string = getAuthToken();
+  cy.request({
+    method: 'GET',
+    url: 'http://localhost:8080/api/v1/contacts/',
+    headers: {
+      Authorization: authToken,
+    },
+  }).then((resp) => {
+    const contacts = resp.body.results;
+    for (const contact of contacts) {
+      deleteContact(contact.id, authToken);
+    }
+    cy.longWait();
+  });
+}
+
+//Deletes a single report by its ID
+export function deleteContact(contactID: number, authToken: string | null = null) {
+  if (authToken == null) {
+    authToken = getAuthToken();
+  }
+
+  cy.request({
+    method: 'DELETE',
+    url: `http://localhost:8080/api/v1/contacts/${contactID}/`,
+    headers: {
+      Authorization: authToken,
+    },
+  });
 }

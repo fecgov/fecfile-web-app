@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
+import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
@@ -63,16 +63,15 @@ export class LoginService {
   }
 
   public logOut() {
+    this.cookieService.delete('csrftoken');
     if (this.userLoginData && this.userLoginData.token) {
       // Non-login.gov auth
       this.store.dispatch(userLoggedOutAction());
     } else {
-      this.cookieService.delete('csrftoken');
+      this.store.dispatch(userLoggedOutForLoginDotGovAction());
       if (environment.loginDotGovLogoutUrl) {
         window.location.href = environment.loginDotGovLogoutUrl;
       }
-      this.clearUserLoggedInCookies();
-      this.store.dispatch(userLoggedOutAction());
     }
   }
 

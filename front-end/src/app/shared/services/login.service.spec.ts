@@ -6,7 +6,7 @@ import { UserLoginData } from 'app/shared/models/user.model';
 import { environment } from 'environments/environment';
 import { ApiService } from './api.service';
 
-import { userLoggedOutAction } from 'app/store/login.actions';
+import { userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { CookieService } from 'ngx-cookie-service';
 import { of } from 'rxjs';
 import { LoginService } from './login.service';
@@ -62,10 +62,12 @@ describe('LoginService', () => {
 
     spyOn(store, 'dispatch');
     spyOn(apiService, 'postAbsoluteUrl').and.returnValue(of('test'));
+    spyOn(cookieService, 'delete');
 
     service.logOut();
     expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
     expect(apiService.postAbsoluteUrl).toHaveBeenCalledTimes(0);
+    expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
 
   it('#logOut login.gov happy path', () => {
@@ -73,12 +75,10 @@ describe('LoginService', () => {
     TestBed.resetTestingModule();
 
     spyOn(store, 'dispatch');
-    spyOn(service, 'clearUserLoggedInCookies');
     spyOn(cookieService, 'delete');
 
     service.logOut();
-    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutAction());
-    expect(service.clearUserLoggedInCookies).toHaveBeenCalledTimes(1);
+    expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutForLoginDotGovAction());
     expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
 });
