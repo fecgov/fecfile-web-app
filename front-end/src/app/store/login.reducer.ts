@@ -1,6 +1,6 @@
-import { createReducer, on, Action } from '@ngrx/store';
-import { userLoggedInAction, userLoggedOutAction } from './login.actions';
+import { Action, createReducer, on } from '@ngrx/store';
 import { UserLoginData } from 'app/shared/models/user.model';
+import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from './login.actions';
 
 export const initialState: UserLoginData = {
   committee_id: null,
@@ -12,7 +12,8 @@ export const initialState: UserLoginData = {
 const _loginReducer = createReducer(
   initialState,
   on(userLoggedInAction, (_state, update) => update.payload),
-  on(userLoggedOutAction, () => initialState)
+  on(userLoggedOutAction, () => initialState),
+  on(userLoggedOutForLoginDotGovAction, () => initialState)
 );
 
 export function loginReducer(state: UserLoginData | undefined, action: Action) {
