@@ -1,4 +1,32 @@
 export function login() {
+  const sessionDuration = 10; //Login session duration in minutes
+  const intervalString = getLoginIntervalString(sessionDuration);
+  cy.session(`Login Through ${intervalString}`, () => {
+    legacyLogin();
+  });
+
+  //Retrieve the AUTH TOKEN from the created/restored session
+  cy.then(() => {
+    Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
+  });
+}
+
+function getLoginIntervalString(sessionDur: number): string {
+  const datetime = new Date();
+  let hour: number = datetime.getHours();
+  let minute: number = sessionDur * (Math.floor(datetime.getMinutes() / sessionDur) + 1);
+  if (minute >= 60) {
+    minute = 0;
+    hour += 1;
+  }
+  if (minute !== 0) {
+    return `${hour}:${minute}`;
+  } else {
+    return `${hour}:00`;
+  }
+}
+
+function legacyLogin() {
   //Dummy login information
   const email = Cypress.env('EMAIL');
   const committeeID = Cypress.env('COMMITTEE_ID');
@@ -17,19 +45,16 @@ export function login() {
   //security code page form-fields' ids
   const fieldSecurityCodeText = '.form-control';
 
-  cy.fixture("FEC_Get_Committee_Account").then((response_body) => {
-    response_body.results[0].committee_id = Cypress.env("COMMITTEE_ID");
+  cy.fixture('FEC_Get_Committee_Account').then((response_body) => {
+    response_body.results[0].committee_id = Cypress.env('COMMITTEE_ID');
     const response = {
       body: response_body,
       statusCode: 200,
-    }
+    };
 
-    cy.intercept(
-      "GET", "https://api.open.fec.gov/v1/committee/*/*",
-      response
-    ).as("GetCommitteeAccount");
+    cy.intercept('GET', 'https://api.open.fec.gov/v1/committee/*/*', response).as('GetCommitteeAccount');
   });
- 
+
   cy.visit('/');
 
   cy.get(fieldEmail).type(email);
@@ -43,9 +68,6 @@ export function login() {
 
   cy.wait('@GetCommitteeAccount');
 
-  cy.wait(1000).then(() => {
-    Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
-  });
   cy.longWait();
 }
 
@@ -139,7 +161,6 @@ export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   cy.get('td').find('span').not('.p-disabled').parent().contains(Day).click();
   cy.shortWait();
 }
-
 
 // shortWait() is appropriate for waiting for the UI to update after changing a field
 export function shortWait(): void {
