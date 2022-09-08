@@ -32,6 +32,8 @@ export class ContactLookupComponent {
 
   contactLookupList: SelectItemGroup[] = [];
 
+  searchTerm = '';
+
   constructor(
     private formBuilder: FormBuilder,
     private contactService: ContactService
@@ -40,6 +42,7 @@ export class ContactLookupComponent {
   onDropdownSearch = debounce((event) => {
     const searchTerm = event?.target?.value;
     if (searchTerm) {
+      this.searchTerm = searchTerm;
       this.contactService.committeeLookup(
         searchTerm, this.maxFecResults,
         this.maxFecfileResults).subscribe((response) => {

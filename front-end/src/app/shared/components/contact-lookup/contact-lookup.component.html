@@ -17,6 +17,11 @@
     placeholder="Search for a contact"
     [group]="true"
     (onChange)="onContactSelect($event)">
+    <ng-template let-contact pTemplate="item">
+      <div class="country-item">
+        <span [innerHTML]="contact.label | highlightTerm:searchTerm"></span>
+      </div>
+    </ng-template>
   </p-dropdown>
   <span class="mr-2">or</span> 
   <button
