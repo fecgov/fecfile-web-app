@@ -2,7 +2,8 @@ export function login() {
   const sessionDuration = 10; //Login session duration in minutes
   const intervalString = getLoginIntervalString(sessionDuration);
   cy.session(`Login Through ${intervalString}`, () => {
-    legacyLogin();
+    apiLogin();
+    //legacyLogin();
   });
 
   //Retrieve the AUTH TOKEN from the created/restored session
@@ -24,6 +25,42 @@ function getLoginIntervalString(sessionDur: number): string {
   } else {
     return `${hour}:00`;
   }
+}
+
+function apiLogin() {
+  const email = Cypress.env('EMAIL');
+  const committeeID = Cypress.env('COMMITTEE_ID');
+  const testPassword = Cypress.env('PASSWORD');
+  const testPIN = Cypress.env('PIN');
+
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:8080/api/v1/user/login/authenticate',
+    body: {
+      password: testPassword,
+      username: committeeID + email,
+    },
+  }).then((resp) => {
+    if (resp.body.token) {
+      cy.request({
+        method: 'POST',
+        url: 'http://localhost:8080/api/v1/user/login/verify',
+        headers: {
+          token: resp.body.token,
+        },
+        body: {
+          code: testPIN,
+        },
+      }).then((resp) => {
+        if (resp.body.token) {
+          Cypress.env({ AUTH_TOKEN: 'JWT ' + resp.body.token });
+          const loginData =
+            `{"is_allowed":true,"committee_id":"${committeeID}",` + `"email":"${email}","token":"${resp.body.token}"}`;
+          localStorage.setItem('fecfile_online_userLoginData', loginData);
+        }
+      });
+    }
+  });
 }
 
 function legacyLogin() {
@@ -78,6 +115,7 @@ export function logout() {
 
 function retrieveAuthToken() {
   const storedData = localStorage.getItem('fecfile_online_userLoginData');
+  console.log(storedData);
   const loginData: JSON = JSON.parse(storedData);
   return 'JWT ' + loginData.token;
 }
