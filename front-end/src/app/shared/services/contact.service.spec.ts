@@ -1,8 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { testMockStore } from '../utils/unit-test.utils';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CommitteeLookupResponse, Contact } from '../models/contact.model';
@@ -15,24 +14,10 @@ describe('ContactService', () => {
   let service: ContactService;
   let testApiService: ApiService;
 
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        ContactService,
-        ApiService,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [ContactService, ApiService, provideMockStore(testMockStore)],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -115,19 +100,19 @@ describe('ContactService', () => {
 
   it('#committeeLookup() happy path', () => {
     const expectedRetval = new CommitteeLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService,
-      'get').and.returnValue(of(expectedRetval));
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval));
     const testSearch = 'testSearch';
     const testMaxFecResults = 1;
     const testMaxFecfileResults = 2;
 
-    const expectedEndpoint = `/contacts/committee_lookup/?q=${testSearch}` +
+    const expectedEndpoint =
+      `/contacts/committee_lookup/?q=${testSearch}` +
       `&max_fec_results=${testMaxFecResults}` +
-      `&max_fecfile_results=${testMaxFecfileResults}`
+      `&max_fecfile_results=${testMaxFecfileResults}`;
 
-    service.committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults).subscribe(
-      value => expect(value).toEqual(expectedRetval));
+    service
+      .committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults)
+      .subscribe((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
   });
-
 });

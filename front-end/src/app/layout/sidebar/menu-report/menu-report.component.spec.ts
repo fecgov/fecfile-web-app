@@ -2,12 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { NavigationEnd, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
-import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
-import { F3xSummary } from '../../../shared/models/f3x-summary.model';
 import { SharedModule } from '../../../shared/shared.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { MenuReportComponent } from './menu-report.component';
@@ -20,20 +17,7 @@ describe('MenuReportComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MenuReportComponent],
-      providers: [
-        provideMockStore({
-          initialState: {
-            fecfile_online_activeReport: F3xSummary.fromJSON({ id: 888, updated: '01-01-2020' }),
-            fecfile_online_reportCodeLabelList: [],
-            fecfile_online_cashOnHand: { report_id: null, value: null },
-          },
-          selectors: [
-            { selector: selectActiveReport, value: F3xSummary.fromJSON({ id: 999, updated: '02-02-2020' }) },
-            { selector: selectReportCodeLabelList, value: [] },
-            { selector: selectCashOnHand, value: { report_id: 999, value: 100.0 } },
-          ],
-        }),
-      ],
+      providers: [provideMockStore(testMockStore)],
       imports: [
         SharedModule,
         PanelMenuModule,

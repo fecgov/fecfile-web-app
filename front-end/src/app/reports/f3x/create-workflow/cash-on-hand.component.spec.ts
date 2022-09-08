@@ -10,7 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { CashOnHandComponent } from './cash-on-hand.component';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
@@ -38,15 +38,7 @@ describe('CashOnHandComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([]),
       ],
-      providers: [
-        F3xSummaryService,
-        FormBuilder,
-        MessageService,
-        provideMockStore({
-          initialState: { fecfile_online_cashOnHand: { report_id: null, value: null } },
-          selectors: [{ selector: selectCashOnHand, value: { report_id: 999, value: 100.0 } }],
-        }),
-      ],
+      providers: [F3xSummaryService, FormBuilder, MessageService, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 

@@ -131,7 +131,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
    * @returns a boolean
    */
   public treasurerNameChanged(): boolean {
-    if (!this.report) return true;
+    if (!this.report || !this.form) return true;
 
     return (
       this.form.value['treasurer_last_name'] != this.report.treasurer_last_name ||
@@ -192,7 +192,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
 
     const payload = {
       report_id: this.report?.id,
-      password: this.form.value['filing_password'],
+      password: this.form?.value['filing_password'],
     };
 
     this.apiService.post('/web-services/submit-to-fec/', payload).subscribe(() => {

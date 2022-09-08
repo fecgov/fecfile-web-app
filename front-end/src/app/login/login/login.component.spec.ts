@@ -3,40 +3,19 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
 import { LoginComponent } from './login.component';
-
-
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
 
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
-
-
   beforeEach(async () => {
     window.onbeforeunload = jasmine.createSpy();
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule, 
-        RouterTestingModule, 
-        ReactiveFormsModule,
-      ],
-      providers: [
-        { provide: Window, useValue: window },
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      imports: [HttpClientTestingModule, RouterTestingModule, ReactiveFormsModule],
+      providers: [{ provide: Window, useValue: window }, provideMockStore(testMockStore)],
       declarations: [LoginComponent],
     }).compileComponents();
   });
@@ -55,5 +34,4 @@ describe('LoginComponent', () => {
     component.navigateToLoginDotGov();
     expect(window.location.href).toEqual(environment.loginDotGovAuthUrl);
   });
-  
 });

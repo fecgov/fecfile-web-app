@@ -1,8 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { testMockStore } from '../utils/unit-test.utils';
 import { environment } from '../../../environments/environment';
 import { MemoText } from '../models/memo-text.model';
 import { MemoTextService } from './memo-text.service';
@@ -10,23 +9,11 @@ import { MemoTextService } from './memo-text.service';
 describe('MemoTextService', () => {
   let service: MemoTextService;
   let httpTestingController: HttpTestingController;
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        MemoTextService,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [MemoTextService, provideMockStore(testMockStore)],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -57,8 +44,7 @@ describe('MemoTextService', () => {
       expect(response).toEqual(memoTexts);
     });
 
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/memo-text/?report_id=1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/?report_id=1`);
     expect(req.request.method).toEqual('GET');
     req.flush(memoTexts);
     httpTestingController.verify();
@@ -84,9 +70,7 @@ describe('MemoTextService', () => {
       expect(response).toEqual(memoText);
     });
 
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/memo-text/${memoText.id}/?fields_to_validate=`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/memo-text/${memoText.id}/?fields_to_validate=`);
     expect(req.request.method).toEqual('PUT');
     req.flush(memoText);
     httpTestingController.verify();
@@ -104,5 +88,4 @@ describe('MemoTextService', () => {
     req.flush(null);
     httpTestingController.verify();
   });
-  
 });

@@ -18,9 +18,9 @@ export class ReportResolver implements Resolve<Report | undefined> {
    */
   resolve(route: ActivatedRouteSnapshot): Observable<Report | undefined> {
     const reportId = Number(route.paramMap.get('reportId'));
-    if (reportId !== null) {
-      return this.reportService.setActiveReportById(reportId);
+    if (isNaN(reportId)) {
+      return of(undefined);
     }
-    return of(undefined);
+    return this.reportService.setActiveReportById(reportId);
   }
 }

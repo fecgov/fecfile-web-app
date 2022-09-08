@@ -1,8 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { testUserLoginData, testMockStore } from '../utils/unit-test.utils';
 import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { ApiService } from './api.service';
 
@@ -18,24 +18,10 @@ describe('LoginService', () => {
   let httpTestingController: HttpTestingController;
   let cookieService: CookieService;
 
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        ApiService,
-        LoginService,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [ApiService, LoginService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(LoginService);
@@ -50,28 +36,28 @@ describe('LoginService', () => {
 
   it('#signIn should authenticate in the back end', () => {
     service.signIn('email@fec.gov', 'C00000000', 'test').subscribe((response: UserLoginData) => {
-      expect(response).toEqual(userLoginData);
+      expect(response).toEqual(testUserLoginData);
     });
 
     const req = httpTestingController.expectOne(`${environment.apiUrl}/user/login/authenticate`);
     expect(req.request.method).toEqual('POST');
-    req.flush(userLoginData);
+    req.flush(testUserLoginData);
     httpTestingController.verify();
   });
 
   it('#validateCode should verify code in the back end', () => {
     service.validateCode('jwttokenstring').subscribe((response: UserLoginData) => {
-      expect(response).toEqual(userLoginData);
+      expect(response).toEqual(testUserLoginData);
     });
 
     const req = httpTestingController.expectOne(`${environment.apiUrl}/user/login/verify`);
     expect(req.request.method).toEqual('POST');
-    req.flush(userLoginData);
+    req.flush(testUserLoginData);
     httpTestingController.verify();
   });
 
   it('#logOut non-login.gov happy path', async () => {
-    userLoginData.token = 'testVal';
+    testUserLoginData.token = 'testVal';
     TestBed.resetTestingModule();
 
     spyOn(store, 'dispatch');
@@ -85,7 +71,7 @@ describe('LoginService', () => {
   });
 
   it('#logOut login.gov happy path', () => {
-    userLoginData.token = null;
+    testUserLoginData.token = null;
     TestBed.resetTestingModule();
 
     spyOn(store, 'dispatch');
@@ -95,5 +81,4 @@ describe('LoginService', () => {
     expect(store.dispatch).toHaveBeenCalledWith(userLoggedOutForLoginDotGovAction());
     expect(cookieService.delete).toHaveBeenCalledOnceWith('csrftoken');
   });
-
 });

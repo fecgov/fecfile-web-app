@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { testMockStore } from '../utils/unit-test.utils';
 import { F3xSummaryService } from './f3x-summary.service';
 import { F3xSummary } from '../models/f3x-summary.model';
 import { environment } from '../../../environments/environment';
@@ -10,23 +9,11 @@ import { environment } from '../../../environments/environment';
 describe('F3xSummaryService', () => {
   let service: F3xSummaryService;
   let httpTestingController: HttpTestingController;
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        F3xSummaryService,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [F3xSummaryService, provideMockStore(testMockStore)],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);

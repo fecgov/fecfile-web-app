@@ -6,7 +6,7 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SharedModule } from 'app/shared/shared.module';
 import { AccordionModule } from 'primeng/accordion';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectActiveReport } from 'app/store/active-report.selectors';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
 
@@ -29,9 +29,7 @@ describe('TransactionTypePickerComponent', () => {
             },
           },
         },
-        provideMockStore({
-          selectors: [{ selector: selectActiveReport, value: { id: 999 } }],
-        }),
+        provideMockStore(testMockStore),
       ],
     }).compileComponents();
   });

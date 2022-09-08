@@ -2,8 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
@@ -27,13 +26,6 @@ describe('ContactListComponent', () => {
   });
 
   beforeEach(async () => {
-    const userLoginData: UserLoginData = {
-      committee_id: 'C00000000',
-      email: 'email@fec.com',
-      is_allowed: true,
-      token: 'jwttokenstring',
-    };
-
     await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -45,15 +37,7 @@ describe('ContactListComponent', () => {
         ConfirmDialogModule,
       ],
       declarations: [UserListComponent],
-      providers: [
-        ConfirmationService,
-        MessageService,
-        FormBuilder,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [ConfirmationService, MessageService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 

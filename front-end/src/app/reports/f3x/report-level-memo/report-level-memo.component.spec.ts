@@ -4,13 +4,11 @@ import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectUserLoginData } from 'app/store/login.selectors';
-import { UserLoginData } from 'app/shared/models/user.model';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SharedModule } from 'app/shared/shared.module';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { Message, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -33,12 +31,6 @@ describe('ReportLevelMemoComponent', () => {
   });
 
   beforeEach(async () => {
-    const userLoginData: UserLoginData = {
-      committee_id: 'C00000000',
-      email: 'email@fec.com',
-      is_allowed: true,
-      token: 'jwttokenstring',
-    };
     await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -55,12 +47,7 @@ describe('ReportLevelMemoComponent', () => {
         MessageService,
         MemoTextService,
         FormBuilder,
-        provideMockStore({
-          selectors: [
-            { selector: selectReportCodeLabelList, value: {} },
-            { selector: selectUserLoginData, value: userLoginData },
-          ],
-        }),
+        provideMockStore(testMockStore),
         {
           provide: ActivatedRoute,
           useValue: {
