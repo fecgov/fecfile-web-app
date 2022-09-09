@@ -3,12 +3,13 @@ import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { CommitteeLookupResponse } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
 import { of } from 'rxjs';
 
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ContactLookupComponent } from './contact-lookup.component';
 
 describe('ContactLookupComponent', () => {
@@ -20,7 +21,7 @@ describe('ContactLookupComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ContactLookupComponent],
-      imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule, DropdownModule],
+      imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule, DropdownModule, AutoCompleteModule],
       providers: [FormBuilder, ContactService, ContactService, EventEmitter, provideMockStore(testMockStore)],
     }).compileComponents();
 
@@ -39,7 +40,7 @@ describe('ContactLookupComponent', () => {
   });
 
   it('#onDropdownSearch empty search', fakeAsync(() => {
-    const testEvent = { target: { value: null } };
+    const testEvent = { query: null };
     component.onDropdownSearch(testEvent);
     tick(500);
     expect(component.contactLookupList.length === 0).toBeTrue();
@@ -50,10 +51,9 @@ describe('ContactLookupComponent', () => {
     testCommitteeLookupResponse.fec_api_committees = [{ id: 'testId', name: 'testName' }];
     testCommitteeLookupResponse.fecfile_committees = [{ id: 'testId', name: 'testName' }];
     spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
-    const testEvent = { target: { value: 'hi' } };
+    const testEvent = { query: 'hi' };
     component.onDropdownSearch(testEvent);
     tick(500);
-    expect(component.lookupDropdown?.overlayVisible === true).toBeTrue();
   }));
 
   it('#onContactSelect happy path', fakeAsync(() => {

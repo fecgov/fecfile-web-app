@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { ContactLookupComponent } from './components/contact-lookup/contact-lookup.component';
@@ -14,7 +15,7 @@ import { LongDatePipe } from './pipes/long-date.pipe';
 import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
 
 @NgModule({
-  imports: [CommonModule, ReactiveFormsModule, ReactiveFormsModule, ButtonModule, DropdownModule],
+  imports: [CommonModule, ReactiveFormsModule, ReactiveFormsModule, ButtonModule, DropdownModule, AutoCompleteModule],
   declarations: [
     LabelPipe,
     ErrorMessagesComponent,
