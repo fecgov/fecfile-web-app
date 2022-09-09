@@ -42,6 +42,8 @@ function apiLogin() {
     },
   }).then((resp) => {
     if (resp.body.token) {
+      cy.setCookie('user', `%22${resp.body.token}%22`);
+      console.log('authenticate', resp);
       cy.request({
         method: 'POST',
         url: 'http://localhost:8080/api/v1/user/login/verify',
@@ -52,6 +54,7 @@ function apiLogin() {
           code: testPIN,
         },
       }).then((resp) => {
+        console.log('verify', resp);
         if (resp.body.token) {
           Cypress.env({ AUTH_TOKEN: 'JWT ' + resp.body.token });
           const loginData =
