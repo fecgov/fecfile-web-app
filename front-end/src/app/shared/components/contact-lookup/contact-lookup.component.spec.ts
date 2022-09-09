@@ -3,7 +3,7 @@ import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { CommitteeLookupResponse } from 'app/shared/models/contact.model';
+import { CommitteeLookupResponse, IndividualLookupResponse } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
@@ -46,14 +46,35 @@ describe('ContactLookupComponent', () => {
     expect(component.contactLookupList.length === 0).toBeTrue();
   }));
 
-  it('#onDropdownSearch happy path', fakeAsync(() => {
+  it('#onDropdownSearch COM happy path', fakeAsync(() => {
     const testCommitteeLookupResponse = new CommitteeLookupResponse();
     testCommitteeLookupResponse.fec_api_committees = [{ id: 'testId', name: 'testName' }];
     testCommitteeLookupResponse.fecfile_committees = [{ id: 'testId', name: 'testName' }];
     spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
+    component.selectedContactType.setValue("COM");
+    component.onDropdownSearch(testEvent);
+    //tick(500);
+    expect(JSON.stringify(component.contactLookupList) ===
+      JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups())).toBeTrue();
+  }));
+
+  it('#onDropdownSearch IND happy path', fakeAsync(() => {
+    const testIndividualLookupResponse = new IndividualLookupResponse();
+    testIndividualLookupResponse.fecfile_individuals = [
+      {
+        id: 123,
+        last_name: 'testLastName',
+        first_name: 'testFirstName'
+      }
+    ];
+    spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
+    const testEvent = { query: 'hi' };
+    component.selectedContactType.setValue("IND");
     component.onDropdownSearch(testEvent);
     tick(500);
+    expect(JSON.stringify(component.contactLookupList) ===
+      JSON.stringify(testIndividualLookupResponse.toSelectItemGroups())).toBeTrue();
   }));
 
   it('#onContactSelect happy path', fakeAsync(() => {

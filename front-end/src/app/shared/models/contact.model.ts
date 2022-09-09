@@ -76,10 +76,12 @@ export class Contact extends BaseModel {
 export class FecCommitteeLookupData {
   id: string | null = null;
   name: string | null = null;
+
   // prettier-ignore
   static fromJSON(json: any): FecCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(FecCommitteeLookupData, json);
   }
+
   static toSelectItem(data: FecCommitteeLookupData): SelectItem<string> {
     return (
       data && {
@@ -93,10 +95,12 @@ export class FecCommitteeLookupData {
 export class CommitteeLookupResponse {
   fec_api_committees: FecCommitteeLookupData[] | null = null;
   fecfile_committees: FecCommitteeLookupData[] | null = null;
+
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(CommitteeLookupResponse, json);
   }
+
   toSelectItemGroups(): SelectItemGroup[] {
     const fecApiSelectItems = this.fec_api_committees?.map((data) => FecCommitteeLookupData.toSelectItem(data)) || [];
     const fecfileSelectItems = this.fecfile_committees?.map((data) => FecCommitteeLookupData.toSelectItem(data)) || [];
@@ -106,8 +110,47 @@ export class CommitteeLookupResponse {
         items: fecfileSelectItems,
       },
       {
-        label: 'Create a new contact from list of registered committee:',
+        label: 'Create a new contact from list of registered committees:',
         items: fecApiSelectItems,
+      },
+    ];
+  }
+}
+
+export class FecIndividualLookupData {
+  id: number | null = null;
+  last_name: string | null = null;
+  first_name: string | null = null;
+
+  // prettier-ignore
+  static fromJSON(json: any): FecIndividualLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(FecIndividualLookupData, json);
+  }
+
+  static toSelectItem(data: FecIndividualLookupData): SelectItem<string> {
+    return (
+      data && {
+        label: `${data.last_name}, ${data.first_name}`,
+        value: `${data.id}`,
+      }
+    );
+  }
+}
+
+export class IndividualLookupResponse {
+  fecfile_individuals: FecIndividualLookupData[] | null = null;
+
+  // prettier-ignore
+  static fromJSON(json: any): IndividualLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(IndividualLookupResponse, json);
+  }
+
+  toSelectItemGroups(): SelectItemGroup[] {
+    const fecfileSelectItems = this.fecfile_individuals?.map((data) => FecIndividualLookupData.toSelectItem(data)) || [];
+    return [
+      {
+        label: 'Select an existing individual contact:',
+        items: fecfileSelectItems,
       },
     ];
   }

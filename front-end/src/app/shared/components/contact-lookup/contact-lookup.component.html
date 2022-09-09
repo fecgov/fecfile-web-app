@@ -17,6 +17,7 @@
     [suggestions]="contactLookupList"
     formControlName="selectedContact"
     placeholder="Search for a contact"
+    [forceSelection]="true"
     (onSelect)="onContactSelect($event)">
     <ng-template let-contact pTemplate="item">
       <div class="country-item">

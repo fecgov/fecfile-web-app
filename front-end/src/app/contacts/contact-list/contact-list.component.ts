@@ -18,7 +18,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
 
   // contact lookup
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
+    [ContactTypes.COMMITTEE, ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
   );
 
   constructor(
