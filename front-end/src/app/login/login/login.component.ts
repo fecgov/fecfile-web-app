@@ -7,7 +7,7 @@ import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { SessionService } from '../../shared/services/SessionService/session.service';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { Store } from '@ngrx/store';
-import { userLoggedOutAction } from 'app/store/login.actions';
+import { userLoggedOutAction, userLoggedInAction } from 'app/store/login.actions';
 
 @Component({
   selector: 'app-login',
@@ -97,7 +97,8 @@ export class LoginComponent implements OnInit {
       next: (res: UserLoginData) => {
         if (res.token) {
           this.authService.doSignIn(res.token);
-          this.router.navigate(['twoFactLogin']);
+          this.store.dispatch(userLoggedInAction({ payload: res }));
+          this.router.navigate(['dashboard']);
         }
       },
       error: () => {
@@ -112,6 +113,6 @@ export class LoginComponent implements OnInit {
   }
 
   navigateToLoginDotGov() {
-    window.location.href = this.loginDotGovAuthUrl || "";
+    window.location.href = this.loginDotGovAuthUrl || '';
   }
 }

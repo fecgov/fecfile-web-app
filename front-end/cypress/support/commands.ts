@@ -44,24 +44,10 @@ function apiLogin() {
     if (resp.body.token) {
       cy.setCookie('user', `%22${resp.body.token}%22`);
       console.log('authenticate', resp);
-      cy.request({
-        method: 'POST',
-        url: 'http://localhost:8080/api/v1/user/login/verify',
-        headers: {
-          token: resp.body.token,
-        },
-        body: {
-          code: testPIN,
-        },
-      }).then((resp) => {
-        console.log('verify', resp);
-        if (resp.body.token) {
-          Cypress.env({ AUTH_TOKEN: 'JWT ' + resp.body.token });
-          const loginData =
-            `{"is_allowed":true,"committee_id":"${committeeID}",` + `"email":"${email}","token":"${resp.body.token}"}`;
-          localStorage.setItem('fecfile_online_userLoginData', loginData);
-        }
-      });
+      Cypress.env({ AUTH_TOKEN: 'JWT ' + resp.body.token });
+      const loginData =
+        `{"is_allowed":true,"committee_id":"${committeeID}",` + `"email":"${email}","token":"${resp.body.token}"}`;
+      localStorage.setItem('fecfile_online_userLoginData', loginData);
     }
   });
 }
