@@ -1,4 +1,4 @@
-import { Contact, ContactTypes, FecCommitteeLookupData } from './contact.model';
+import { Contact, ContactTypes, FecCommitteeLookupData, FecIndividualLookupData } from './contact.model';
 
 describe('Contact', () => {
   it('should create an instance', () => {
@@ -30,6 +30,21 @@ describe('Contact', () => {
       FecCommitteeLookupData);
     expect(fecCommitteeLookupData.id).toBe("C123");
     expect(fecCommitteeLookupData.name).toBe('foo');
+  });
+
+  it('#fromJSON() should return a populated FecIndividualLookupData class', () => {
+    const data = {
+      id: 123,
+      last_name: 'test_last_name',
+      first_name: 'test_first_name',
+    };
+    const fecIndividualLookupData: FecIndividualLookupData =
+      FecIndividualLookupData.fromJSON(data);
+    expect(fecIndividualLookupData).toBeInstanceOf(
+      FecIndividualLookupData);
+    expect(fecIndividualLookupData.id).toBe(123);
+    expect(fecIndividualLookupData.last_name).toBe('test_last_name');
+    expect(fecIndividualLookupData.first_name).toBe('test_first_name');
   });
 
 });
