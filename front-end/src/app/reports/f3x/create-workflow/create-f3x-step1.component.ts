@@ -26,7 +26,6 @@ import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { ReportService } from 'app/shared/services/report.service';
-import { CashOnHand } from '../../../shared/interfaces/report.interface';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 
 @Component({
