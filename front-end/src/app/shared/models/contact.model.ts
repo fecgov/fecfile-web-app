@@ -73,25 +73,38 @@ export class Contact extends BaseModel {
   }
 }
 
-export interface FecSelectItem<T> extends SelectItem<T> {
+export interface ContactLookupSelectItem<T> extends SelectItem<T> {
   inContacts: boolean;
 }
 
-export class FecCommitteeLookupData {
+export class FecApiCommitteeLookupData {
   id: string | null = null;
   name: string | null = null;
 
   // prettier-ignore
-  static fromJSON(json: any): FecCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(FecCommitteeLookupData, json);
+  static fromJSON(json: any): FecApiCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(FecApiCommitteeLookupData, json);
   }
 
-  static toSelectItem(data: FecCommitteeLookupData,
-    inContacts: boolean): FecSelectItem<string> {
+  static toSelectItem(data: FecApiCommitteeLookupData,
+    inContacts: boolean): ContactLookupSelectItem<FecApiCommitteeLookupData> {
     return (
       data && {
         label: `${data.name} (${data.id})`,
-        value: `${data.id}`,
+        value: data,
+        inContacts: inContacts,
+      }
+    );
+  }
+}
+
+export class FecfileCommitteeLookupData extends Contact {
+  static toSelectItem(data: FecfileCommitteeLookupData,
+    inContacts: boolean): ContactLookupSelectItem<Contact> {
+    return (
+      data && {
+        label: `${data.name} (${data.committee_id})`,
+        value: data,
         inContacts: inContacts,
       }
     );
@@ -99,8 +112,8 @@ export class FecCommitteeLookupData {
 }
 
 export class CommitteeLookupResponse {
-  fec_api_committees: FecCommitteeLookupData[] | null = null;
-  fecfile_committees: FecCommitteeLookupData[] | null = null;
+  fec_api_committees: FecApiCommitteeLookupData[] | null = null;
+  fecfile_committees: FecfileCommitteeLookupData[] | null = null;
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -109,9 +122,9 @@ export class CommitteeLookupResponse {
 
   toSelectItemGroups(): SelectItemGroup[] {
     const fecApiSelectItems = this.fec_api_committees?.map((data) =>
-      FecCommitteeLookupData.toSelectItem(data, false)) || [];
+      FecApiCommitteeLookupData.toSelectItem(data, false)) || [];
     const fecfileSelectItems = this.fecfile_committees?.map((data) =>
-      FecCommitteeLookupData.toSelectItem(data, true)) || [];
+      FecfileCommitteeLookupData.toSelectItem(data, true)) || [];
     return [
       {
         label: 'Select an existing committee contact:',
@@ -125,22 +138,13 @@ export class CommitteeLookupResponse {
   }
 }
 
-export class FecIndividualLookupData {
-  id: number | null = null;
-  last_name: string | null = null;
-  first_name: string | null = null;
-
-  // prettier-ignore
-  static fromJSON(json: any): FecIndividualLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(FecIndividualLookupData, json);
-  }
-
-  static toSelectItem(data: FecIndividualLookupData,
-    inContacts: boolean): FecSelectItem<string> {
+export class FecfileIndividualLookupData extends Contact {
+  static toSelectItem(data: FecfileIndividualLookupData,
+    inContacts: boolean): ContactLookupSelectItem<Contact> {
     return (
       data && {
         label: `${data.last_name}, ${data.first_name}`,
-        value: `${data.id}`,
+        value: data,
         inContacts: inContacts,
       }
     );
@@ -148,7 +152,7 @@ export class FecIndividualLookupData {
 }
 
 export class IndividualLookupResponse {
-  fecfile_individuals: FecIndividualLookupData[] | null = null;
+  fecfile_individuals: FecfileIndividualLookupData[] | null = null;
 
   // prettier-ignore
   static fromJSON(json: any): IndividualLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -157,7 +161,7 @@ export class IndividualLookupResponse {
 
   toSelectItemGroups(): SelectItemGroup[] {
     const fecfileSelectItems = this.fecfile_individuals?.map((data) =>
-      FecIndividualLookupData.toSelectItem(data, true)) || [];
+      FecfileIndividualLookupData.toSelectItem(data, true)) || [];
     return [
       {
         label: 'Select an existing individual contact:',

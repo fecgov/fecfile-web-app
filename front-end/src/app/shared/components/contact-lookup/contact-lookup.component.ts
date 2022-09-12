@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes, FecApiCommitteeLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem, SelectItemGroup } from 'primeng/api';
@@ -15,7 +15,8 @@ export class ContactLookupComponent implements OnInit {
   @Input() maxFecResults = 10;
   @Input() maxFecfileResults = 10;
 
-  @Output() contactSelect = new EventEmitter<string>();
+  @Output() contactSelect =
+    new EventEmitter<Contact | FecApiCommitteeLookupData>();
 
   selectedContactType = new FormControl();
   selectedContact: FormControl<SelectItem> | null = null;
@@ -68,7 +69,7 @@ export class ContactLookupComponent implements OnInit {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContactSelect(event: any) {
     if (event) {
-      const value: string = event.value;
+      const value: Contact | FecApiCommitteeLookupData = event.value;
       if (value) {
         this.contactSelect.emit(value)
       }

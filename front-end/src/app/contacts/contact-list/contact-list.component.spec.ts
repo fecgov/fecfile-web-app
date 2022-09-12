@@ -2,8 +2,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { SharedModule } from 'app/shared/shared.module';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, Message, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
@@ -81,11 +81,12 @@ describe('ContactListComponent', () => {
   });
 
   it('#onContactLookupSelect displays add msg', () => {
-    const testCommitteeId = 'testCommitteeId';
+    const testId = 333;
+    const testCommitteeId = Contact.fromJSON({ id: testId });
     const expectedMessage: Message = {
       severity: 'success',
       summary: 'Contact selected',
-      detail: 'Selected lookup contact ' + 'with commitee id ' + testCommitteeId,
+      detail: 'Selected lookup contact ' + 'with id ' + testId,
       life: 3000,
     };
     const messageServiceAddSpy = spyOn(testMessageService, 'add');

@@ -3,7 +3,7 @@ import { TableListBaseComponent } from 'app/shared/components/table-list-base/ta
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes, FecApiCommitteeLookupData } from '../../shared/models/contact.model';
 import { ContactService } from '../../shared/services/contact.service';
 
 @Component({
@@ -57,12 +57,12 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     }
   }
 
-  onContactLookupSelect(id: string) {
+  onContactLookupSelect(value: Contact | FecApiCommitteeLookupData) {
     this.messageService.add({
       severity: 'success',
       summary: 'Contact selected',
       detail: 'Selected lookup contact ' + 
-        'with commitee id ' + id,
+        'with id ' + value.id,
       life: 3000,
     });
   }
