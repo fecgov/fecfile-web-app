@@ -242,13 +242,16 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
         this.reportService.getTableData().subscribe();
 
-        this.store.select(selectCashOnHand).subscribe((cashOnHand) => {
-          if (cashOnHand.report_id === report.id) {
-            this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
-          } else {
-            this.router.navigateByUrl(`/transactions/report/${report.id}/list`);
-          }
-        });
+        this.store
+          .select(selectCashOnHand)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((cashOnHand) => {
+            if (cashOnHand.report_id === report.id) {
+              this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
+            } else {
+              this.router.navigateByUrl(`/transactions/report/${report.id}/list`);
+            }
+          });
       } else {
         this.router.navigateByUrl('/reports');
         this.messageService.add({
