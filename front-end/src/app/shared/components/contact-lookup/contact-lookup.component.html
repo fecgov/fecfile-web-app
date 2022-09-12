@@ -1,44 +1,54 @@
-<form [formGroup]="contactLookupForm">
-  <p-dropdown
-    styleClass="gray"
-    formControlName="selectedContactType"
-    [options]="contactTypeOptions"
-    optionLabel="name"
-    optionValue="code">
-  </p-dropdown>
-  <p-autoComplete 
-    class="mr-2"
-    [style]="{'width':'300px'}" 
-    [inputStyle]="{'width':'300px'}" 
-    [group]="true"
-    (completeMethod)="onDropdownSearch($event)"
-    field="label"
-    [dropdown]="true"
-    dropdownMode="current"
-    dropdownIcon="pi pi-search"
-    [suggestions]="contactLookupList"
-    formControlName="selectedContact"
-    placeholder="Search for a contact"
-    [forceSelection]="true"
-    (onSelect)="onContactSelect($event)">
-    <ng-template let-contact pTemplate="item">
-      <div>
-        <span [innerHTML]="contact.label | highlightTerm:searchTerm"
-             class="contact-label">
-        </span>
-        <span *ngIf="contact.inContacts" 
-              class="in-contacts">
-          In contacts
-        </span>
+<div class="p-fluid">
+  <form [formGroup]="contactLookupForm">
+    <div class="grid">
+      <div class="col-2">
+        <p-dropdown
+          styleClass="gray"
+          formControlName="selectedContactType"
+          [options]="contactTypeOptions"
+          optionLabel="name"
+          optionValue="code">
+        </p-dropdown>
       </div>
-    </ng-template>
-  </p-autoComplete>
-  <span class="mr-2">or</span> 
-  <button
-    pButton
-    pRipple
-    label="Create a new contact"
-    icon="pi pi-plus-circle"
-    class="p-button-info mr-2">
-  </button>
-</form>
+      <div class="col-3">
+        <p-autoComplete 
+          class="mr-2"
+          [style]="{'width':'325px'}" 
+          [inputStyle]="{'width':'325px'}" 
+          [group]="true"
+          (completeMethod)="onDropdownSearch($event)"
+          field="label"
+          [dropdown]="true"
+          dropdownMode="current"
+          dropdownIcon="pi pi-search"
+          [suggestions]="contactLookupList"
+          formControlName="selectedContact"
+          placeholder="Search for a contact"
+          [forceSelection]="true"
+          (onSelect)="onContactSelect($event)">
+          <ng-template let-contact pTemplate="item">
+            <div>
+              <span [innerHTML]="contact.label | highlightTerm:searchTerm"
+                class="contact-label">
+              </span>
+              <span *ngIf="contact.inContacts" 
+                class="in-contacts">
+                In contacts
+              </span>
+            </div>
+          </ng-template>
+        </p-autoComplete>
+      </div>
+      <p>or</p>
+      <div class="col-2">
+        <button
+          pButton
+          pRipple
+          label="Create a new contact"
+          icon="pi pi-plus-circle"
+          class="p-button-info">
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

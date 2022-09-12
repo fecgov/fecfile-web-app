@@ -9,7 +9,7 @@ import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
   template: '',
@@ -37,7 +37,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected validateService: ValidateService,
     protected fb: FormBuilder,
     protected router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
@@ -158,4 +158,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       contribution_purpose_descrip: this.contributionPurposeDescrip,
     });
   }
+
+  onContactLookupSelect(value: Contact) {
+    if (value && typeof value.id === 'number') {
+      if (this.form?.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
+        this.form.get('contributor_last_name')?.setValue(value.last_name);
+        this.form.get('contributor_first_name')?.setValue(value.first_name);
+        this.form.get('contributor_middle_name')?.setValue(value.middle_name);
+        this.form.get('contributor_prefix')?.setValue(value.prefix);
+        this.form.get('contributor_suffix')?.setValue(value.suffix);
+      }
+    }
+  }
+
 }
