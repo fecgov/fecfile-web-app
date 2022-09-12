@@ -1,3 +1,12 @@
+/**
+ * login()
+ *
+ * The public-facing login method, accessible using
+ * cy.login().  This logs the running e2e test in
+ * either creating a new session or retrieving an
+ * existing one and saves the authentication token
+ * for use in later API calls.
+ */
 export function login() {
   const sessionDuration = 10; //Login session duration in minutes
   const intervalString = getLoginIntervalString(sessionDuration);
@@ -12,6 +21,22 @@ export function login() {
   });
 }
 
+/**
+ * getLoginIntervalString
+ *
+ * Generates a string encoding the time in 24:00 format.
+ * The time generated is the current time rounded up to
+ * the nearest multiple of `sessionDur` minutes.
+ *
+ * This string is used when saving a login session so that
+ * it can be retrieved later without accidentally retrieving
+ * an expired session.
+ *
+ * @param sessionDur the length in minutes where a session
+ *                   should be able to be retrieved.
+ * @returns         `HH:MM` where the minute mark is a
+ *                   multiple of sessionDur.
+ */
 function getLoginIntervalString(sessionDur: number): string {
   const datetime = new Date();
   let hour: number = datetime.getHours();
