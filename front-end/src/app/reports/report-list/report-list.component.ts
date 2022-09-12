@@ -69,9 +69,9 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   public override editItem(item: Report): void {
-    if ((item as F3xSummary).change_of_address === null) {
-      this.router.navigateByUrl(`/reports/f3x/create/step2/${item.id}`);
-    } else if (!this.itemService.isEditable(item)) {
+    //if ((item as F3xSummary).change_of_address === null) {
+    //  this.router.navigateByUrl(`/reports/f3x/create/step2/${item.id}`);
+    if (!this.itemService.isEditable(item)) {
       this.router.navigateByUrl(`/reports/f3x/submit/status/${item.id}`);
     } else if (item.id === this.cashOnHand.report_id) {
       this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);

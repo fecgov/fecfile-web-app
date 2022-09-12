@@ -82,7 +82,7 @@ describe('CreateF3XStep1Component', () => {
     navigateSpy.calls.reset();
     component.form.patchValue({ ...f3x });
     component.save('continue');
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step2/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
   });
 
   it('#save should not save with invalid f3x record', () => {

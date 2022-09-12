@@ -26,6 +26,8 @@ import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { ReportService } from 'app/shared/services/report.service';
+import { CashOnHand } from '../../../shared/interfaces/report.interface';
+import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -240,7 +242,13 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
         this.reportService.getTableData().subscribe();
 
-        this.router.navigateByUrl(`/reports/f3x/create/step2/${report.id}`);
+        this.store.select(selectCashOnHand).subscribe((cashOnHand) => {
+          if (cashOnHand.report_id === report.id) {
+            this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
+          } else {
+            this.router.navigateByUrl(`/transactions/report/${report.id}/list`);
+          }
+        });
       } else {
         this.router.navigateByUrl('/reports');
         this.messageService.add({
