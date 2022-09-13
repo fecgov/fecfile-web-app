@@ -4,10 +4,11 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Message, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
@@ -207,4 +208,19 @@ describe('TransactionTypeBaseComponent', () => {
     component.navigateTo('list');
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
+
+  it('#onContactLookupSelect should set contact fields', () => {
+    const testEntityType = ContactTypes.INDIVIDUAL;
+    const testLastName = 'testLastName';
+    const testContact = new Contact();
+    testContact.id = 123;
+    testContact.last_name = testLastName;
+    component.form.addControl('entity_type', { value: testEntityType });
+
+    component.onContactLookupSelect(testContact);
+    const lastNameFormControl = component.form.get('contributor_last_name');
+    expect(lastNameFormControl).toBeTruthy();
+    expect(lastNameFormControl?.value === testLastName).toBeTrue();
+  });
+
 });
