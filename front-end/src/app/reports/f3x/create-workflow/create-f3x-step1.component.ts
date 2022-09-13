@@ -27,6 +27,7 @@ import { Subject, switchMap, of, takeUntil, zip } from 'rxjs';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { ReportService } from 'app/shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
+import { ListRestResponse } from '../../../shared/models/rest-api.model';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -248,7 +249,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         switchMap((report) => {
           return zip(of(report), tableData);
         }),
-        switchMap((responses: [F3xSummary, any]) => {
+        switchMap((responses: [F3xSummary, ListRestResponse]) => {
           return zip(of(responses[0]), cashOnHand);
         }),
         takeUntil(this.destroy$)
