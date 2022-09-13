@@ -27,7 +27,6 @@ import { Subject, switchMap, of, takeUntil, zip, map } from 'rxjs';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { ReportService } from '../../../shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
-import { ListRestResponse } from '../../../shared/models/rest-api.model';
 
 @Component({
   selector: 'app-create-f3x-step1',
