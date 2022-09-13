@@ -23,7 +23,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { combineLatestWith, Subject, switchMap, of, takeUntil, zip } from 'rxjs';
+import { Subject, switchMap, of, takeUntil, zip } from 'rxjs';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { ReportService } from 'app/shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
@@ -248,7 +248,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         switchMap((report) => {
           return zip(of(report), tableData);
         }),
-        switchMap(([report, _tableData]) => {
+        switchMap(([report, _]) => {
           return zip(of(report), cashOnHand);
         }),
         takeUntil(this.destroy$)
