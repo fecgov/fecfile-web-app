@@ -77,14 +77,14 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('#save should save a new f3x record', () => {
-    let lrr: ListRestResponse = {
+    const listResponse = {
       count: 0,
       next: '/',
       previous: '/',
       results: [],
     };
     spyOn(f3xSummaryService, 'create').and.returnValue(of(f3x));
-    spyOn(reportService, 'getTableData').and.returnValue(of(lrr));
+    spyOn(reportService, 'getTableData').and.returnValue(of(listResponse));
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
     component.form.patchValue({ ...f3x });
