@@ -23,9 +23,10 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, switchMap, of, takeUntil, zip, map } from 'rxjs';
 import { LabelList } from '../../../shared/utils/label.utils';
-import { ReportService } from 'app/shared/services/report.service';
+import { ReportService } from '../../../shared/services/report.service';
+import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -235,22 +236,38 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       summary.form_type = F3xFormTypes.F3XT;
     }
 
-    this.f3xSummaryService.create(summary, this.formProperties).subscribe((report: F3xSummary) => {
-      if (jump === 'continue') {
-        // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
-        this.reportService.getTableData().subscribe();
+    //Observables are *defined* here ahead of their execution
+    const create$ = this.f3xSummaryService.create(summary, this.formProperties);
+    // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
+    const tableData$ = this.reportService.getTableData();
+    const cashOnHand$ = this.store.select(selectCashOnHand);
 
-        this.router.navigateByUrl(`/reports/f3x/create/step2/${report.id}`);
-      } else {
-        this.router.navigateByUrl('/reports');
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Contact Updated',
-          life: 3000,
-        });
-      }
-    });
+    //Create the report, update cashOnHand based on all reports, and then retrieve cashOnHand in that order
+    create$
+      .pipe(
+        switchMap((report) => tableData$.pipe(map(() => report))),
+        switchMap((report) => {
+          return zip(of(report), cashOnHand$);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(([report, coh]) => {
+        if (jump === 'continue') {
+          if (coh.report_id != undefined && coh.report_id != report.id) {
+            this.router.navigateByUrl(`/transactions/report/${report.id}/list`);
+          } else {
+            this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
+          }
+        } else {
+          this.router.navigateByUrl('/reports');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Contact Updated',
+            life: 3000,
+          });
+        }
+      });
   }
 }
 
