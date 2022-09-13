@@ -23,7 +23,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { Subject, switchMap, of, takeUntil, zip } from 'rxjs';
+import { Subject, switchMap, of, takeUntil, zip, map } from 'rxjs';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { ReportService } from '../../../shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
@@ -246,11 +246,9 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     //Create the report, update cashOnHand based on all reports, and then retrieve cashOnHand in that order
     create$
       .pipe(
+        switchMap((report) => tableData$.pipe(map(() => report))),
         switchMap((report) => {
-          return zip(of(report), tableData$);
-        }),
-        switchMap((responses: [F3xSummary, ListRestResponse]) => {
-          return zip(of(responses[0]), cashOnHand$);
+          return zip(of(report), cashOnHand$);
         })
       )
       .subscribe(([report, coh]) => {
