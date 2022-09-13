@@ -248,8 +248,8 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         switchMap((report) => {
           return zip(of(report), tableData);
         }),
-        switchMap(([report, _]) => {
-          return zip(of(report), cashOnHand);
+        switchMap((responses: [F3xSummary, any]) => {
+          return zip(of(responses[0]), cashOnHand);
         }),
         takeUntil(this.destroy$)
       )
