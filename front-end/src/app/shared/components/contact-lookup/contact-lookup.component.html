@@ -1,18 +1,19 @@
 <div class="p-fluid">
   <form [formGroup]="contactLookupForm">
     <div class="grid">
-      <div class="col-2">
+      <div class="col-2 pl-0 pr-0">
         <p-dropdown
-          styleClass="gray"
-          formControlName="selectedContactType"
+          [inputId]="contactTypeInputId"
+          [formControl]="contactTypeFormControl"
           [options]="contactTypeOptions"
           optionLabel="name"
-          optionValue="code">
+          optionValue="code"
+          [readonly]="contactTypeReadOnly"
+          [styleClass]="contactTypeStyleClass">
         </p-dropdown>
       </div>
-      <div class="col-3">
+      <div class="col-2 pl-0">
         <p-autoComplete 
-          class="mr-2"
           [style]="{'width':'325px'}" 
           [inputStyle]="{'width':'325px'}" 
           [group]="true"
@@ -39,7 +40,7 @@
           </ng-template>
         </p-autoComplete>
       </div>
-      <p>or</p>
+      <p class="pr-1 pl-1">or</p>
       <div class="col-2">
         <button
           pButton

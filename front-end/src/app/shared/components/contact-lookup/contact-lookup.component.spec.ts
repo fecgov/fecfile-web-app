@@ -53,7 +53,7 @@ describe('ContactLookupComponent', () => {
       { id: 123, name: 'testName' })];
     spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
-    component.selectedContactType.setValue("COM");
+    component.contactTypeFormControl.setValue("COM");
     component.onDropdownSearch(testEvent);
     //tick(500);
     expect(JSON.stringify(component.contactLookupList) ===
@@ -72,7 +72,7 @@ describe('ContactLookupComponent', () => {
     ];
     spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
     const testEvent = { query: 'hi' };
-    component.selectedContactType.setValue("IND");
+    component.contactTypeFormControl.setValue("IND");
     component.onDropdownSearch(testEvent);
     tick(500);
     expect(JSON.stringify(component.contactLookupList) ===

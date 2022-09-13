@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
@@ -10,18 +10,22 @@ import { SelectItem, SelectItemGroup } from 'primeng/api';
   templateUrl: './contact-lookup.component.html',
   styleUrls: ['./contact-lookup.component.scss'],
 })
-export class ContactLookupComponent implements OnInit {
+export class ContactLookupComponent {
   @Input() contactTypeOptions: PrimeOptions = [];
+  @Input() contactTypeInputId = 'entity_type';
+  @Input() contactTypeFormControl: FormControl = new FormControl();
+  @Input() contactTypeReadOnly = true;
+  @Input() contactTypeStyleClass = "";
+
   @Input() maxFecResults = 10;
   @Input() maxFecfileResults = 10;
-  @Input() selectedContactType = new FormControl();
 
   @Output() contactSelect = new EventEmitter<Contact>();
 
   selectedContact: FormControl<SelectItem> | null = null;
 
   contactLookupForm: FormGroup = this.formBuilder.group({
-    selectedContactType: this.selectedContactType,
+    selectedContactType: this.contactTypeFormControl,
     selectedContact: this.selectedContact
   })
 
@@ -33,17 +37,13 @@ export class ContactLookupComponent implements OnInit {
     private formBuilder: FormBuilder,
     private contactService: ContactService
   ) { }
-  ngOnInit(): void {
-    this.selectedContactType.setValue(
-      this.contactTypeOptions[0]?.code);
-  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onDropdownSearch(event: any) {
     const searchTerm = event?.query;
     if (searchTerm) {
       this.searchTerm = searchTerm;
-      switch (this.selectedContactType.value) {
+      switch (this.contactTypeFormControl?.value) {
         case ContactTypes.COMMITTEE:
           this.contactService.committeeLookup(
             searchTerm, this.maxFecResults,
