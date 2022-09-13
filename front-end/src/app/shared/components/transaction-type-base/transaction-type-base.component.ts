@@ -161,7 +161,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   onContactLookupSelect(value: Contact) {
     if (value && typeof value.id === 'number') {
-      if (this.form?.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
+      if (this.form.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
         this.form.get('contributor_last_name')?.setValue(value.last_name);
         this.form.get('contributor_first_name')?.setValue(value.first_name);
         this.form.get('contributor_middle_name')?.setValue(value.middle_name);

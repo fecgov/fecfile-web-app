@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -207,6 +207,27 @@ describe('TransactionTypeBaseComponent', () => {
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
+  });
+
+  it('#onContactLookupSelect should handle null form', () => {
+    const testContact = new Contact();
+    testContact.id = 123;
+
+    component.form.setControl('entity_type', null);
+    component.onContactLookupSelect(testContact);
+    expect(component.form.get(
+      'contributor_last_name')?.value).toBeFalsy();
+
+    component.form.setControl('entity_type',
+      new FormControl(ContactTypes.INDIVIDUAL));
+    component.form.setControl('contributor_last_name', null);
+    component.form.setControl('contributor_first_name', null);
+    component.form.setControl('contributor_middle_name', null);
+    component.form.setControl('contributor_prefix', null);
+    component.form.setControl('contributor_suffix', null);
+    component.onContactLookupSelect(testContact);
+    expect(component.form.get(
+      'contributor_last_name')?.value).toBeFalsy();
   });
 
   it('#onContactLookupSelect should set contact fields', () => {
