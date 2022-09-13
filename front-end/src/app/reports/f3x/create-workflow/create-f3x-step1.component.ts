@@ -25,7 +25,7 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { MessageService } from 'primeng/api';
 import { Subject, switchMap, of, takeUntil, zip } from 'rxjs';
 import { LabelList } from '../../../shared/utils/label.utils';
-import { ReportService } from 'app/shared/services/report.service';
+import { ReportService } from '../../../shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 
