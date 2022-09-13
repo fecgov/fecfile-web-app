@@ -82,7 +82,7 @@ describe('CreateF3XStep1Component', () => {
       next: '/',
       previous: '/',
       results: [],
-    };
+    } as ListRestResponse;
     spyOn(f3xSummaryService, 'create').and.returnValue(of(f3x));
     spyOn(reportService, 'getTableData').and.returnValue(of(listResponse));
     const navigateSpy = spyOn(router, 'navigateByUrl');
