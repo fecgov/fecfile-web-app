@@ -237,10 +237,10 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     }
 
     //Observables are *defined* here ahead of their execution
-    const create$ = this.f3xSummaryService.create(summary, this.formProperties).pipe(takeUntil(this.destroy$));
+    const create$ = this.f3xSummaryService.create(summary, this.formProperties);
     // Save report to Cash On Hand in the store if necessary by pulling the reports table data.
-    const tableData$ = this.reportService.getTableData().pipe(takeUntil(this.destroy$));
-    const cashOnHand$ = this.store.select(selectCashOnHand).pipe(takeUntil(this.destroy$));
+    const tableData$ = this.reportService.getTableData();
+    const cashOnHand$ = this.store.select(selectCashOnHand);
 
     //Create the report, update cashOnHand based on all reports, and then retrieve cashOnHand in that order
     create$
@@ -248,7 +248,8 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         switchMap((report) => tableData$.pipe(map(() => report))),
         switchMap((report) => {
           return zip(of(report), cashOnHand$);
-        })
+        }),
+        takeUntil(this.destroy$)
       )
       .subscribe(([report, coh]) => {
         if (jump === 'continue') {
