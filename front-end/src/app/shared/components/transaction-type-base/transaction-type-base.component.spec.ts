@@ -212,15 +212,36 @@ describe('TransactionTypeBaseComponent', () => {
   it('#onContactLookupSelect should set contact fields', () => {
     const testEntityType = ContactTypes.INDIVIDUAL;
     const testLastName = 'testLastName';
+    const testFirstName = 'testFirstName';
+    const testMiddleName = 'testMiddleName';
+    const testPrefix = 'testPrefix';
+    const testSuffix = 'testSuffix';
     const testContact = new Contact();
     testContact.id = 123;
     testContact.last_name = testLastName;
+    testContact.first_name = testFirstName;
+    testContact.middle_name = testMiddleName;
+    testContact.prefix = testPrefix;
+    testContact.suffix = testSuffix;
     component.form.addControl('entity_type', { value: testEntityType });
 
     component.onContactLookupSelect(testContact);
-    const lastNameFormControl = component.form.get('contributor_last_name');
-    expect(lastNameFormControl).toBeTruthy();
-    expect(lastNameFormControl?.value === testLastName).toBeTrue();
+    const lastNameFormControlValue =
+      component.form.get('contributor_last_name')?.value;
+    const firstNameFormControlValue =
+      component.form.get('contributor_first_name')?.value;
+    const middleNameFormControlValue =
+      component.form.get('contributor_middle_name')?.value;
+    const prefixFormControlValue =
+      component.form.get('contributor_prefix')?.value;
+    const suffixFormControlValue =
+      component.form.get('contributor_suffix')?.value;
+
+    expect(lastNameFormControlValue === testLastName).toBeTrue();
+    expect(firstNameFormControlValue === testFirstName).toBeTrue();
+    expect(middleNameFormControlValue === testMiddleName).toBeTrue();
+    expect(prefixFormControlValue === testPrefix).toBeTrue();
+    expect(suffixFormControlValue === testSuffix).toBeTrue();
   });
 
 });
