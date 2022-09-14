@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
   public titleR!: string;
   public show!: boolean;
   public loginDotGovAuthUrl: string | null = null;
-  public localLoginAvailable: boolean = false;
+  public localLoginAvailable = false;
 
   constructor(
     private fb: FormBuilder,
