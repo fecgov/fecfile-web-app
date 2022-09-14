@@ -57,7 +57,7 @@ describe('LoginService', () => {
   });
 
   it('should ping the API when requesting local login availability', () => {
-    const spy = spyOn(apiService, 'get').and.returnValue({ is_available: true });
+    const spy = spyOn(apiService, 'get').and.returnValue(of({ is_available: true }));
     service.checkLocalLoginAvailability();
     expect(spy).toHaveBeenCalledWith('/user/login/authenticate');
   });
