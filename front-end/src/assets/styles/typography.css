@@ -1,7 +1,7 @@
 /* TYPOGRAHY */
 h1{
     margin:0 0 1em 0;
-    font-family:gandhi,serif;
+    font-family:gandhiserif-bold,serif;
     font-size:2.4rem;
     font-weight:700;
     line-height:1.2;
@@ -13,7 +13,7 @@ h1{
 }
 h2{
     margin:0 0 1em 0;
-    font-family:gandhi,serif;
+    font-family:gandhiserif-bold,serif;
     font-size:2rem;
     font-weight:700;
     line-height:1.2
@@ -24,16 +24,39 @@ h2{
 }
 h3{
     margin:0 0 1em 0;
-    font-family:gandhi,serif;
+    font-family:gandhiserif-bold,serif;
     font-size:1.8rem;
     font-weight:700;
     line-height:1.6
+}
+h4{
+    margin:0 1.5em 1em 0;
+    font-family:karla,san-serif;
+    font-size:1.8rem;
+    font-weight:700;
+    line-height:1.2
+}
+h5{
+    margin:0 1.5em .75em 0;
+    font-family:gandhiserif-bold,serif;
+    font-size:1.6rem;
+    font-weight:700;
+    line-height:1.3
+}
+h6{
+    margin:0 1.5em 1em 0;
+    font-family:karla,san-serif;
+    font-size:1.63rem;
+    font-weight:700;
+    line-height:1.5;
+    border-bottom: 1px, $base
 }
 p{
     color:inherit;
     font-size:1.6rem;
     margin:0 0 2.4rem 0;
     max-width:80rem;
+    line-height:2.4;
     width:100%
 }
 p+h1{
