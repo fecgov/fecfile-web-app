@@ -77,35 +77,42 @@ export interface ContactLookupSelectItem<T> extends SelectItem<T> {
   inContacts: boolean;
 }
 
-export class FecApiCommitteeLookupData {
+export class FecApiLookupData {
+
+}
+export class FecApiCommitteeLookupData extends FecApiLookupData {
   id: string | null = null;
+  is_active: boolean | null = null;
   name: string | null = null;
 
-  // prettier-ignore
-  static fromJSON(json: any): FecApiCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(FecApiCommitteeLookupData, json);
+  constructor(data: FecApiCommitteeLookupData) {
+    super();
+    Object.assign(this, data);
   }
 
-  static toSelectItem(data: FecApiCommitteeLookupData,
-    inContacts: boolean): ContactLookupSelectItem<FecApiCommitteeLookupData> {
+  toSelectItem(): ContactLookupSelectItem<FecApiCommitteeLookupData> {
     return (
-      data && {
-        label: `${data.name} (${data.id})`,
-        value: data,
-        inContacts: inContacts,
+      {
+        label: `${this.name} (${this.id})`,
+        value: this,
+        inContacts: false,
       }
     );
   }
 }
 
 export class FecfileCommitteeLookupData extends Contact {
-  static toSelectItem(data: FecfileCommitteeLookupData,
-    inContacts: boolean): ContactLookupSelectItem<Contact> {
+  constructor(data: FecfileCommitteeLookupData) {
+    super();
+    Object.assign(this, data);
+  }
+
+  toSelectItem(): ContactLookupSelectItem<Contact> {
     return (
-      data && {
-        label: `${data.name} (${data.committee_id})`,
-        value: data,
-        inContacts: inContacts,
+      {
+        label: `${this.name} (${this.committee_id})`,
+        value: this,
+        inContacts: true,
       }
     );
   }
@@ -122,9 +129,9 @@ export class CommitteeLookupResponse {
 
   toSelectItemGroups(): SelectItemGroup[] {
     const fecApiSelectItems = this.fec_api_committees?.map((data) =>
-      FecApiCommitteeLookupData.toSelectItem(data, false)) || [];
+      new FecApiCommitteeLookupData(data).toSelectItem()) || [];
     const fecfileSelectItems = this.fecfile_committees?.map((data) =>
-      FecfileCommitteeLookupData.toSelectItem(data, true)) || [];
+      new FecfileCommitteeLookupData(data).toSelectItem()) || [];
     return [
       {
         label: 'Select an existing committee contact:',
@@ -139,13 +146,17 @@ export class CommitteeLookupResponse {
 }
 
 export class FecfileIndividualLookupData extends Contact {
-  static toSelectItem(data: FecfileIndividualLookupData,
-    inContacts: boolean): ContactLookupSelectItem<Contact> {
+  constructor(data: FecfileIndividualLookupData) {
+    super();
+    Object.assign(this, data);
+  }
+
+  toSelectItem(): ContactLookupSelectItem<Contact> {
     return (
-      data && {
-        label: `${data.last_name}, ${data.first_name}`,
-        value: data,
-        inContacts: inContacts,
+      {
+        label: `${this.last_name}, ${this.first_name}`,
+        value: this,
+        inContacts: true,
       }
     );
   }
@@ -161,7 +172,7 @@ export class IndividualLookupResponse {
 
   toSelectItemGroups(): SelectItemGroup[] {
     const fecfileSelectItems = this.fecfile_individuals?.map((data) =>
-      FecfileIndividualLookupData.toSelectItem(data, true)) || [];
+      new FecfileIndividualLookupData(data).toSelectItem()) || [];
     return [
       {
         label: 'Select an existing individual contact:',

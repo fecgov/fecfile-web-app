@@ -14,8 +14,6 @@
       </div>
       <div class="col-2 pl-0">
         <p-autoComplete 
-          [style]="{'width':'325px'}" 
-          [inputStyle]="{'width':'325px'}" 
           [group]="true"
           (completeMethod)="onDropdownSearch($event)"
           field="label"
@@ -40,7 +38,7 @@
           </ng-template>
         </p-autoComplete>
       </div>
-      <p class="pr-1 pl-1">or</p>
+      <p>or</p>
       <div class="col-2">
         <button
           pButton

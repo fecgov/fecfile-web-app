@@ -9,7 +9,7 @@ import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactLookupSelectItem, ContactTypeLabels, ContactTypes, FecApiCommitteeLookupData } from '../../models/contact.model';
 
 @Component({
   template: '',
@@ -159,14 +159,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     });
   }
 
-  onContactLookupSelect(value: Contact) {
-    if (value && typeof value.id === 'number') {
-      if (this.form.get('entity_type')?.value === ContactTypes.INDIVIDUAL) {
-        this.form.get('contributor_last_name')?.setValue(value.last_name);
-        this.form.get('contributor_first_name')?.setValue(value.first_name);
-        this.form.get('contributor_middle_name')?.setValue(value.middle_name);
-        this.form.get('contributor_prefix')?.setValue(value.prefix);
-        this.form.get('contributor_suffix')?.setValue(value.suffix);
+  onContactLookupSelect(selectItem: ContactLookupSelectItem<Contact>) {
+    if (selectItem && selectItem.inContacts) {
+      const value = selectItem.value;
+      if (value && value instanceof Contact) {
+        if (value.type === ContactTypes.INDIVIDUAL) {
+          this.form.get('contributor_last_name')?.setValue(value.last_name);
+          this.form.get('contributor_first_name')?.setValue(value.first_name);
+          this.form.get('contributor_middle_name')?.setValue(value.middle_name);
+          this.form.get('contributor_prefix')?.setValue(value.prefix);
+          this.form.get('contributor_suffix')?.setValue(value.suffix);
+        }
       }
     }
   }

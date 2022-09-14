@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SharedModule } from 'app/shared/shared.module';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService, Message, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -24,8 +24,6 @@ describe('ContactListComponent', () => {
   contact.last_name = 'Smith';
   contact.name = 'ABC Inc';
 
-  let testMessageService: MessageService;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -41,8 +39,6 @@ describe('ContactListComponent', () => {
       declarations: [ContactListComponent, ContactDetailComponent],
       providers: [ConfirmationService, MessageService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
-
-    testMessageService = TestBed.inject(MessageService);
   });
 
   beforeEach(() => {
@@ -80,17 +76,4 @@ describe('ContactListComponent', () => {
     expect(name).toBe('');
   });
 
-  it('#onContactLookupSelect displays add msg', () => {
-    const testId = 333;
-    const testCommitteeId = Contact.fromJSON({ id: testId });
-    const expectedMessage: Message = {
-      severity: 'success',
-      summary: 'Contact selected',
-      detail: 'Selected lookup contact ' + 'with id ' + testId,
-      life: 3000,
-    };
-    const messageServiceAddSpy = spyOn(testMessageService, 'add');
-    component.onContactLookupSelect(testCommitteeId);
-    expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
-  });
 });

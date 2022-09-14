@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { Contact, ContactLookupSelectItem, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -212,9 +212,13 @@ describe('TransactionTypeBaseComponent', () => {
   it('#onContactLookupSelect should handle null form', () => {
     const testContact = new Contact();
     testContact.id = 123;
-
+    const testContactLookupSelectItem: ContactLookupSelectItem<Contact> =
+    {
+      value: testContact,
+      inContacts: true
+    }
     component.form.setControl('entity_type', null);
-    component.onContactLookupSelect(testContact);
+    component.onContactLookupSelect(testContactLookupSelectItem);
     expect(component.form.get(
       'contributor_last_name')?.value).toBeFalsy();
 
@@ -225,7 +229,7 @@ describe('TransactionTypeBaseComponent', () => {
     component.form.setControl('contributor_middle_name', null);
     component.form.setControl('contributor_prefix', null);
     component.form.setControl('contributor_suffix', null);
-    component.onContactLookupSelect(testContact);
+    component.onContactLookupSelect(testContactLookupSelectItem);
     expect(component.form.get(
       'contributor_last_name')?.value).toBeFalsy();
   });
@@ -244,9 +248,15 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.middle_name = testMiddleName;
     testContact.prefix = testPrefix;
     testContact.suffix = testSuffix;
-    component.form.addControl('entity_type', { value: testEntityType });
 
-    component.onContactLookupSelect(testContact);
+    const testContactLookupSelectItem: ContactLookupSelectItem<Contact> =
+    {
+      value: testContact,
+      inContacts: true
+    }
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.onContactLookupSelect(testContactLookupSelectItem);
     const lastNameFormControlValue =
       component.form.get('contributor_last_name')?.value;
     const firstNameFormControlValue =
