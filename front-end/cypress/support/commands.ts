@@ -66,7 +66,6 @@ function apiLogin() {
   }).then((resp) => {
     if (resp.body.token) {
       cy.setCookie('user', `%22${resp.body.token}%22`);
-      console.log('authenticate', resp);
       Cypress.env({ AUTH_TOKEN: 'JWT ' + resp.body.token });
       const loginData =
         `{"is_allowed":true,"committee_id":"${committeeID}",` + `"email":"${email}","token":"${resp.body.token}"}`;
@@ -127,7 +126,6 @@ export function logout() {
 
 function retrieveAuthToken() {
   const storedData = localStorage.getItem('fecfile_online_userLoginData');
-  console.log(storedData);
   const loginData: JSON = JSON.parse(storedData);
   return 'JWT ' + loginData.token;
 }
