@@ -252,10 +252,10 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       )
       .subscribe(([report, coh]) => {
         if (jump === 'continue') {
-          if (coh.report_id != undefined && coh.report_id != report.id) {
-            this.router.navigateByUrl(`/transactions/report/${report.id}/list`);
-          } else {
+          if (coh.report_id === report.id) {
             this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${report.id}`);
+          } else {
+            this.router.navigateByUrl(`/transactions/report/${report.id}/list`);
           }
         } else {
           this.router.navigateByUrl('/reports');
