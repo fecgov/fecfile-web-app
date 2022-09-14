@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
   public titleR!: string;
   public show!: boolean;
   public loginDotGovAuthUrl: string | null = null;
+  public localLoginAvailable: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +53,7 @@ export class LoginComponent implements OnInit {
     this.loginService.clearUserLoggedInCookies();
     this.store.dispatch(userLoggedOutAction());
     this.loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
+    this.checkLocalLoginAvailability();
   }
 
   /**
@@ -114,5 +116,11 @@ export class LoginComponent implements OnInit {
 
   navigateToLoginDotGov() {
     window.location.href = this.loginDotGovAuthUrl || '';
+  }
+
+  checkLocalLoginAvailability() {
+    this.loginService.checkLocalLoginAvailability().subscribe((available) => {
+      this.localLoginAvailable = available;
+    });
   }
 }
