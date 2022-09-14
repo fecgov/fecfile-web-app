@@ -12,7 +12,6 @@ export function login() {
   const intervalString = getLoginIntervalString(sessionDuration);
   cy.session(`Login Through ${intervalString}`, () => {
     apiLogin();
-    //legacyLogin();
   });
 
   //Retrieve the AUTH TOKEN from the created/restored session
@@ -56,7 +55,6 @@ function apiLogin() {
   const email = Cypress.env('EMAIL');
   const committeeID = Cypress.env('COMMITTEE_ID');
   const testPassword = Cypress.env('PASSWORD');
-  const testPIN = Cypress.env('PIN');
 
   cy.request({
     method: 'POST',
