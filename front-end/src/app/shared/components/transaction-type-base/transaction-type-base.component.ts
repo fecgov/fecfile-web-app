@@ -9,7 +9,7 @@ import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { MessageService } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { Contact, ContactLookupSelectItem, ContactTypeLabels, ContactTypes, FecApiCommitteeLookupData } from '../../models/contact.model';
+import { Contact, ContactLookupSelectItem, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
   template: '',
