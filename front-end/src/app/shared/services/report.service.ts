@@ -47,7 +47,7 @@ export class ReportService implements TableListService<Report> {
 
     if (reports.length === 0) {
       payload = {
-        report_id: null,
+        report_id: undefined,
         value: null,
       };
     }
@@ -68,8 +68,13 @@ export class ReportService implements TableListService<Report> {
    * @param reportId
    * @returns Observable<Report>
    */
-  setActiveReportById(reportId: number): Observable<Report> {
-    return this.get(reportId).pipe(tap((report) => this.store.dispatch(setActiveReportAction({ payload: report }))));
+  setActiveReportById(reportId: number | undefined): Observable<Report> {
+    if (!reportId) throw new Error('No Report Id Provided.');
+    return this.get(reportId).pipe(
+      tap((report) => {
+        return this.store.dispatch(setActiveReportAction({ payload: report || new F3xSummary() }));
+      })
+    );
   }
 
   /**

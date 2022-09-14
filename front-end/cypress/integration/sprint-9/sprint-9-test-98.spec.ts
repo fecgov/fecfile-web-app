@@ -15,7 +15,12 @@ describe('Sprint 9 QA Script 98', () => {
 
       const reportObject = generateReportObject({ filing_frequency: filing_frequency, report_code: '(TER)' });
       cy.createReport(reportObject);
+      cy.navigateToTransactionManagement({
+        reportCode: reportObject.report_code,
+      })
 
+      cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
+      cy.shortWait();
       cy.get('tr').contains('Termination').should('exist');
 
       const authToken: string = getAuthToken();
@@ -28,7 +33,6 @@ describe('Sprint 9 QA Script 98', () => {
       }).then((resp) => {
         const reports = resp.body.results;
         for (const report of reports) {
-          console.log(report);
           cy.expect(report.form_type).to.eq('F3XT');
         }
       });

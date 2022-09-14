@@ -5,7 +5,7 @@ import { CashOnHand } from 'app/shared/interfaces/report.interface';
 describe('Cash On Hand Reducer', () => {
   it('it should store the boolean status', () => {
     const state: CashOnHand = {
-      report_id: null,
+      report_id: undefined,
       value: null,
     };
 

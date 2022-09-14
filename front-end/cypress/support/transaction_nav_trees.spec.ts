@@ -26,7 +26,7 @@ export type TransactionCategory = 'INDIVIDUALS/PERSONS' | 'REGISTERED FILERS' | 
 export type SchATransaction =
   | 'Individual Receipt'
   | 'Tribal Receipt'
-  | 'JF Transfers'
+  | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
   | 'Other Receipts';
 
@@ -50,7 +50,7 @@ export type TransactionForm = {
   contributorZip?: TransactionField;
   memoTextDescription?: TransactionField;
   contributionAmount?: TransactionField;
-  childTransactions?: TransactionForm[]
+  childTransactions?: TransactionForm[];
 };
 
 export type FieldType = 'Text' | 'Calendar' | 'Dropdown' | 'P-InputNumber' | 'Textarea';
@@ -336,23 +336,23 @@ const tribalReceipt: TransactionForm = {
   ...contributionFields,
 };
 
-const JFTransferMemo: TransactionForm = {
-  ...entityCommittee,
-  ...donorCommitteeFECId,
-  ...groupNameFields,
-  ...addressFields,
-  ...memoFields,
-  ...contributionFields
-}
-
-const JFTransfer: TransactionForm = {
+const JointFundraisingTransferMemo: TransactionForm = {
   ...entityCommittee,
   ...donorCommitteeFECId,
   ...groupNameFields,
   ...addressFields,
   ...memoFields,
   ...contributionFields,
-  childTransactions: [JFTransferMemo],
+};
+
+const JointFundraisingTransfer: TransactionForm = {
+  ...entityCommittee,
+  ...donorCommitteeFECId,
+  ...groupNameFields,
+  ...addressFields,
+  ...memoFields,
+  ...contributionFields,
+  childTransactions: [JointFundraisingTransferMemo],
 };
 
 const offsetToOpex: TransactionForm = {
@@ -389,7 +389,7 @@ export const groupANavTree: TransactionNavTree = {
   },
   //"REGISTERED FILERS":{},
   TRANSFERS: {
-    'JF Transfers': JFTransfer,
+    'Joint Fundraising Transfer': JointFundraisingTransfer,
   },
   //"REFUNDS":{},
   OTHER: {

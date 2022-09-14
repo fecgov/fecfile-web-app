@@ -23,12 +23,12 @@ describe('MenuReportComponent', () => {
       providers: [
         provideMockStore({
           initialState: {
-            fecfile_online_activeReport: { id: 888 } as F3xSummary,
+            fecfile_online_activeReport: F3xSummary.fromJSON({ id: 888, updated: '01-01-2020' }),
             fecfile_online_reportCodeLabelList: [],
             fecfile_online_cashOnHand: { report_id: null, value: null },
           },
           selectors: [
-            { selector: selectActiveReport, value: { id: 999 } as F3xSummary },
+            { selector: selectActiveReport, value: F3xSummary.fromJSON({ id: 999, updated: '02-02-2020' }) },
             { selector: selectReportCodeLabelList, value: [] },
             { selector: selectCashOnHand, value: { report_id: 999, value: 100.0 } },
           ],

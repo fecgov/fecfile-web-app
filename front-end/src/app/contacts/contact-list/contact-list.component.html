@@ -3,16 +3,30 @@
 <div class="card">
   <p-toolbar styleClass="mb-4">
     <ng-template pTemplate="left">
-      <button id="button-contacts-new" pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="addItem()"></button>
+      <button
+        id="button-contacts-new"
+        pButton
+        pRipple
+        label="New"
+        icon="pi pi-plus"
+        class="p-button-success mr-2"
+        (click)="addItem()"
+      ></button>
       <button
         pButton
         pRipple
         label="Delete"
         icon="pi pi-trash"
-        class="p-button-danger"
+        class="p-button-danger mr-2"
         (click)="deleteSelectedItems()"
-        [disabled]="!selectedItems?.length"
+        [disabled]="!selectedItems.length"
       ></button>
+      <app-contact-lookup 
+        [contactTypeOptions]="contactTypeOptions"
+        [maxFecResults]="5"
+        [maxFecfileResults]="5"
+        (contactSelect)="onContactLookupSelect($event)">
+      </app-contact-lookup>
     </ng-template>
 
     <ng-template pTemplate="right">

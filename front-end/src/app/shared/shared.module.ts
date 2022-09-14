@@ -1,15 +1,38 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LabelPipe } from './pipes/label.pipe';
-import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { ContactLookupComponent } from './components/contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
-import { FecDatePipe } from './pipes/fec-date.pipe';
-import { LongDatePipe } from './pipes/long-date.pipe';
+import { FecInternationalPhoneInputComponent } from './components/fec-international-phone-input/fec-international-phone-input.component';
 import { DefaultZeroPipe } from './pipes/default-zero.pipe';
+import { FecDatePipe } from './pipes/fec-date.pipe';
+import { LabelPipe } from './pipes/label.pipe';
+import { LongDatePipe } from './pipes/long-date.pipe';
+import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [LabelPipe, ErrorMessagesComponent, FecDatePipe, LongDatePipe, FindOnReportCodePipe, DefaultZeroPipe],
-  exports: [FecDatePipe, LongDatePipe, LabelPipe, ErrorMessagesComponent, FindOnReportCodePipe, DefaultZeroPipe],
+  imports: [CommonModule, ReactiveFormsModule, ReactiveFormsModule, ButtonModule, DropdownModule],
+  declarations: [
+    LabelPipe,
+    ErrorMessagesComponent,
+    FecDatePipe,
+    LongDatePipe,
+    FindOnReportCodePipe,
+    DefaultZeroPipe,
+    FecInternationalPhoneInputComponent,
+    ContactLookupComponent,
+  ],
+  exports: [
+    FecDatePipe,
+    LongDatePipe,
+    LabelPipe,
+    ErrorMessagesComponent,
+    FindOnReportCodePipe,
+    DefaultZeroPipe,
+    FecInternationalPhoneInputComponent,
+    ContactLookupComponent,
+  ],
 })
 export class SharedModule {}

@@ -159,7 +159,7 @@ export class F3xCoverageDates {
 }
 
 export class F3xSummary extends BaseModel implements Report {
-  id: number | null = null;
+  id: number | undefined;
 
   form_type: F3xFormType = F3xFormTypes.F3XT;
   filer_committee_id_number: string | null = null;
@@ -189,9 +189,12 @@ export class F3xSummary extends BaseModel implements Report {
   @Type(() => UploadSubmission)
   @Transform(UploadSubmission.transform)
   upload_submission: UploadSubmission | null = null;
+  report_status: string | null = null;
   @Type(() => WebPrintSubmission)
   @Transform(WebPrintSubmission.transform)
   webprint_submission: WebPrintSubmission | null = null;
+
+  calculation_status: string | undefined;
 
   @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | null = null;
   L6b_cash_on_hand_beginning_period: number | null = null;
@@ -297,9 +300,11 @@ export class F3xSummary extends BaseModel implements Report {
   L38_net_operating_expenditures_ytd: number | null = null;
 
   @Type(() => Date)
-  @Transform(BaseModel.dateTransform) created: Date | null = null;
+  @Transform(BaseModel.dateTransform)
+  created: Date | null = null;
   @Type(() => Date)
-  @Transform(BaseModel.dateTransform) updated: Date | null = null;
+  @Transform(BaseModel.dateTransform)
+  updated: Date | null = null;
   deleted: string | null = null;
 
   // prettier-ignore

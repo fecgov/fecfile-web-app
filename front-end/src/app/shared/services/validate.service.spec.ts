@@ -32,8 +32,7 @@ describe('ValidateService', () => {
     let result: ValidationErrors | null = validator(service.formValidatorForm.get('telephone') as FormControl);
     expect(result).not.toBe(null);
     if (result) {
-      expect(result['maxlength'].requiredLength).toBe(10);
-      expect(result['pattern'].requiredPattern).toBe('^\\d{10}$');
+      expect(result['pattern'].requiredPattern).toBe('^\\+\\d{1,3} \\d{10}$');
     }
 
     validator = service.formValidator('candidate_state');
@@ -99,7 +98,7 @@ describe('ValidateService', () => {
   });
 
   it('#getSchemaProperties() should return empty array when no schema', () => {
-    const properties: string[] = service.getSchemaProperties(null);
+    const properties: string[] = service.getSchemaProperties(undefined);
     expect(properties.length).toBe(0);
   });
 });

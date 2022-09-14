@@ -21,7 +21,8 @@ function testEditTransaction(transactionForm) {
   cy.shortWait();
   cy.get('button[label="Save & view all transactions"]').click();
   cy.longWait();
-  cy.url().should('contain', '/reports/f3x/create/step3/');
+  cy.url().should('contain', 'transactions/report/');
+  cy.url().should('contain', 'list');
 
   cy.contains('tr', name).find('a').click();
   cy.shortWait();
@@ -44,7 +45,7 @@ describe('Test saving and editing on all transactions', () => {
 
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.shortWait();
-    cy.progressReport();
+    cy.navigateToTransactionManagement();
     cy.medWait();
   });
 

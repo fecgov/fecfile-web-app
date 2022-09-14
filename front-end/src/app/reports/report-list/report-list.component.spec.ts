@@ -61,7 +61,7 @@ describe('ReportListComponent', () => {
 
   it('#getEmptyItem should return a new F3xSummary instance', () => {
     const item: F3xSummary = component['getEmptyItem']();
-    expect(item.id).toBe(null);
+    expect(item.id).toBe(undefined);
   });
 
   it('#addItem should route properly', () => {
