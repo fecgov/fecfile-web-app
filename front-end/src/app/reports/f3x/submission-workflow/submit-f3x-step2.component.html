@@ -2,7 +2,7 @@
 
 <div class="p-fluid">
   <p-card>
-    <h1>Confirm Information</h1>
+    <h1>Submit report</h1>
     <h5><strong>Form 3X:</strong> {{ report_code | label: f3xReportCodeDetailedLabels }}</h5>
     <p-divider></p-divider>
     <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
@@ -82,7 +82,9 @@
             <p>
               If you any questions on how to enroll, confirming your email, two-factor authentication, or your Personel
               Key please go to the following page:
-              <a href="https://webforms.fec.gov/psa/help.htm">FEC Electronic Filing Password Assignment System Help</a>
+              <a href="https://webforms.fec.gov/psa/help.htm" target="_blank" rel="noopener"
+                >FEC Electronic Filing Password Assignment System Help</a
+              >
             </p>
           </div>
         </div>
@@ -117,7 +119,7 @@
           </div>
         </div>
       </div>
-      <div class="grid">
+      <div class="grid" *ngIf="cashOnHand.value !== null">
         <div class="col-4"></div>
         <div class="col-4">
           <button
@@ -145,11 +147,20 @@
           </div>
         </ng-container>
       </div>
+      <div class="grid" *ngIf="cashOnHand.value === null">
+        <div class="col-12">*** You may not submit a report until you have entered an amount for Cash on Hand ***</div>
+      </div>
     </form>
   </p-card>
   <div class="grid">
     <div class="col-3">
-      <button pButton pRipple label="Back" class="p-button-secondary p-button-outlined" (click)="back()"></button>
+      <button
+        pButton
+        pRipple
+        label="Back"
+        class="p-button-secondary p-button-outlined"
+        (click)="router.navigateByUrl('/reports/f3x/submit/step1/' + report?.id)"
+      ></button>
     </div>
   </div>
 </div>

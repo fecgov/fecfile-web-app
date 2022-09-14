@@ -8,8 +8,8 @@ export class OFFSET_TO_OPEX implements TransactionType {
   componentGroupId = 'B';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES);
   schema = schema;
-  transaction = null;
-  parent = null;
+  transaction = undefined;
+  parent = undefined;
 
   contributionPurposeDescripReadonly(): string {
     return '';

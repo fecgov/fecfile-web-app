@@ -18,36 +18,39 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
+
 import { SharedModule } from '../../app/shared/shared.module';
 import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
 import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2.component';
-import { CreateF3xStep3Component, MemoCodePipe } from './f3x/create-workflow/create-f3x-step3.component';
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 import { ReportLevelMemoComponent } from './f3x/report-level-memo/report-level-memo.component';
 import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { ReportSubmissionStatusComponent } from './f3x/submission-workflow/submit-f3x-status.component';
 import { SubmitF3xStep1Component } from './f3x/submission-workflow/submit-f3x-step1.component';
 import { SubmitF3xStep2Component } from './f3x/submission-workflow/submit-f3x-step2.component';
+import { ReportWebPrintComponent } from './f3x/report-web-print/report-web-print.component';
 import { TestDotFecComponent } from './f3x/test-dot-fec-workflow/test-dot-fec.component';
 import { ReportListComponent } from './report-list/report-list.component';
 import { ReportsRoutingModule } from './reports-routing.module';
-
-
+import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
+import { AppSelectButtonComponent } from '../shared/components/app-selectbutton';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [
     ReportListComponent,
     CreateF3XStep1Component,
     CreateF3xStep2Component,
-    CreateF3xStep3Component,
     SubmitF3xStep1Component,
     SubmitF3xStep2Component,
-    MemoCodePipe,
     ReportSummaryComponent,
     ReportDetailedSummaryComponent,
     ReportLevelMemoComponent,
     ReportSubmissionStatusComponent,
+    ReportWebPrintComponent,
     TestDotFecComponent,
+    CashOnHandComponent,
+    AppSelectButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -71,6 +74,7 @@ import { ReportsRoutingModule } from './reports-routing.module';
     TooltipModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
+    InputNumberModule,
   ],
 })
 export class ReportsModule {}

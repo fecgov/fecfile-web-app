@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoggedInAction, userLoggedOutAction } from 'app/store/login.actions';
+import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
@@ -63,25 +63,21 @@ export class LoginService {
   }
 
   public logOut() {
-    if (this.userLoginData && this.userLoginData.token) { // Non-login.gov auth
+    this.cookieService.delete('csrftoken');
+    if (this.userLoginData && this.userLoginData.token) {
+      // Non-login.gov auth
       this.store.dispatch(userLoggedOutAction());
     } else {
-      this.apiService.postAbsoluteUrl(`${environment.loginDotGovLogoutUrl}`, null).pipe(
-        tap(() => {
-          this.clearUserLoggedInCookies();
-          this.store.dispatch(userLoggedOutAction());
-        })
-      ).subscribe(() => undefined);
+      this.store.dispatch(userLoggedOutForLoginDotGovAction());
+      if (environment.loginDotGovLogoutUrl) {
+        window.location.href = environment.loginDotGovLogoutUrl;
+      }
     }
   }
 
   public clearUserLoggedInCookies() {
-    this.cookieService.delete(
-      environment.ffapiCommitteeIdCookieName);
-    this.cookieService.delete(
-      environment.ffapiEmailCookieName);
-    this.cookieService.delete(
-      environment.sessionIdCookieName);
+    this.cookieService.delete(environment.ffapiCommitteeIdCookieName);
+    this.cookieService.delete(environment.ffapiEmailCookieName);
+    this.cookieService.delete(environment.sessionIdCookieName);
   }
-  
 }

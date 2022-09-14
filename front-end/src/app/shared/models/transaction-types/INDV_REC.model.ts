@@ -8,8 +8,8 @@ export class INDV_REC implements TransactionType {
   componentGroupId = 'A';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
   schema = schema;
-  transaction = null;
-  parent = null;
+  transaction = undefined;
+  parent = undefined;
 
   contributionPurposeDescripReadonly(): string {
     return '';
@@ -17,7 +17,7 @@ export class INDV_REC implements TransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11a',
+      form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
     });
   }

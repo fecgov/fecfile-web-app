@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { setActiveReportAction } from '../../store/active-report.actions';
 import { Report } from '../interfaces/report.interface';
 import { ReportService } from '../services/report.service';
 
@@ -18,11 +17,9 @@ export class ReportResolver implements Resolve<Report | undefined> {
    * @returns {Observable<Report | undefined>}
    */
   resolve(route: ActivatedRouteSnapshot): Observable<Report | undefined> {
-    const reportId = route.paramMap.get('reportId');
-    if (reportId) {
-      return this.reportService
-        .get(Number(reportId))
-        .pipe(tap((report) => this.store.dispatch(setActiveReportAction({ payload: report }))));
+    const reportId = Number(route.paramMap.get('reportId'));
+    if (reportId !== null) {
+      return this.reportService.setActiveReportById(reportId);
     }
     return of(undefined);
   }

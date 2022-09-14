@@ -1,7 +1,9 @@
-import { plainToClass, Transform } from 'class-transformer';
+import { plainToClass, Transform, Type } from 'class-transformer';
 import { Report } from '../interfaces/report.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
+import { UploadSubmission } from './upload-submission.model';
+import { WebPrintSubmission } from './webprint-submission.model';
 
 export enum F3xFormTypes {
   F3XN = 'F3XN',
@@ -157,7 +159,7 @@ export class F3xCoverageDates {
 }
 
 export class F3xSummary extends BaseModel implements Report {
-  id: number | null = null;
+  id: number | undefined;
 
   form_type: F3xFormType = F3xFormTypes.F3XT;
   filer_committee_id_number: string | null = null;
@@ -184,6 +186,17 @@ export class F3xSummary extends BaseModel implements Report {
   confirmation_email_2: string | null = null;
   @Transform(BaseModel.dateTransform) date_signed: Date | null = null;
 
+  @Type(() => UploadSubmission)
+  @Transform(UploadSubmission.transform)
+  upload_submission: UploadSubmission | null = null;
+  report_status: string | null = null;
+  @Type(() => WebPrintSubmission)
+  @Transform(WebPrintSubmission.transform)
+  webprint_submission: WebPrintSubmission | null = null;
+
+  calculation_status: string | undefined;
+
+  @Transform(BaseModel.dateTransform) cash_on_hand_date: Date | null = null;
   L6b_cash_on_hand_beginning_period: number | null = null;
   L6c_total_receipts_period: number | null = null;
   L6d_subtotal_period: number | null = null;
@@ -286,8 +299,12 @@ export class F3xSummary extends BaseModel implements Report {
   L37_offsets_to_operating_expenditures_ytd: number | null = null;
   L38_net_operating_expenditures_ytd: number | null = null;
 
-  created: string | null = null;
-  updated: string | null = null;
+  @Type(() => Date)
+  @Transform(BaseModel.dateTransform)
+  created: Date | null = null;
+  @Type(() => Date)
+  @Transform(BaseModel.dateTransform)
+  updated: Date | null = null;
   deleted: string | null = null;
 
   // prettier-ignore

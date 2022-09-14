@@ -15,10 +15,10 @@ import { ContactTypeLabels, ContactTypes } from '../../models/contact.model';
   template: '',
 })
 export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy {
-  @Input() title = '';
-  @Input() schema: JsonSchema | null = null;
-  @Input() transaction: Transaction | null = null;
-  @Input() contributionPurposeDescrip = '';
+  @Input() title: string | undefined;
+  @Input() schema: JsonSchema | undefined;
+  @Input() transaction: Transaction | undefined;
+  @Input() contributionPurposeDescrip: string | undefined;
 
   abstract formProperties: string[];
 
@@ -27,6 +27,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
   formSubmitted = false;
+  memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
 
   form: FormGroup = this.fb.group({});
 
@@ -134,16 +135,18 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.router.navigateByUrl(
-        `transactions/edit/` + `${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
+        `/transactions/report/${this.transaction?.report_id}/list/edit/${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
       );
     } else if (navigateTo === 'to-parent') {
-      this.router.navigateByUrl(`/transactions/edit/${this.transaction?.parent_transaction_id}`);
+      this.router.navigateByUrl(
+        `/transactions/report/${this.transaction?.report_id}/list/edit/${this.transaction?.parent_transaction_id}`
+      );
     } else {
-      this.router.navigateByUrl(`/reports/f3x/create/step3/${this.transaction?.report_id}`);
+      this.router.navigateByUrl(`/transactions/report/${this.transaction?.report_id}/list`);
     }
   }
 
-  private resetForm() {
+  protected resetForm() {
     this.formSubmitted = false;
     this.form.reset();
     this.form.markAsPristine();

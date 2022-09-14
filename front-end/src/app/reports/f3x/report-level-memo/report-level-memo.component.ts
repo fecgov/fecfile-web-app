@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subject, takeUntil, Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -9,6 +9,7 @@ import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
 import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
@@ -43,7 +44,6 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
-    private activatedRoute: ActivatedRoute,
     protected validateService: ValidateService,
     protected fb: FormBuilder,
     public router: Router,
@@ -63,20 +63,29 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
     this.validateService.formValidatorSchema = textSchema;
     this.validateService.formValidatorForm = this.form;
 
-    this.reportCodeLabelList$ = this.store.select<ReportCodeLabelList>(selectReportCodeLabelList);
+    this.reportCodeLabelList$ = this.store
+      .select<ReportCodeLabelList>(selectReportCodeLabelList)
+      .pipe(takeUntil(this.destroy$));
+
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => (this.committeeAccountId = committeeAccount.committee_id));
-    this.report = this.activatedRoute.snapshot.data['report'];
-    if (this.report && this.report.id) {
-      this.memoTextService.getForReportId(this.report.id).subscribe((memoTextList) => {
-        if (memoTextList && memoTextList.length > 0) {
-          this.assignedMemoText = memoTextList[0];
-          this.form.get(this.text4kFormProperty)?.setValue(this.assignedMemoText.text4000);
+      .subscribe((committeeAccount) => (this.committeeAccountId = committeeAccount?.committee_id));
+
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        this.report = report as F3xSummary;
+        if (this.report && this.report.id) {
+          this.memoTextService.getForReportId(this.report.id).subscribe((memoTextList) => {
+            if (memoTextList && memoTextList.length > 0) {
+              this.assignedMemoText = memoTextList[0];
+              this.form.get(this.text4kFormProperty)?.setValue(this.assignedMemoText.text4000);
+            }
+          });
         }
       });
-    }
   }
 
   ngOnDestroy(): void {

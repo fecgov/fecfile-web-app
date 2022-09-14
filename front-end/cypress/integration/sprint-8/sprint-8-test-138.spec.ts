@@ -12,7 +12,7 @@ describe('QA Test Script #138 (Sprint 8)', () => {
 
   it('Steps 2-8: Create a report with "Save" and check to see that it exists in the reports list', () => {
     const report: object = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
 
     cy.contains('.p-menuitem-link', 'Dashboard').click();
     cy.shortWait();
@@ -26,8 +26,13 @@ describe('QA Test Script #138 (Sprint 8)', () => {
   });
 
   it('Steps 9-12: Create a report with "Save & continue" and check to see that it exists in the reports list', () => {
+    cy.deleteAllReports();
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
+    cy.shortWait();
+    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
+    cy.shortWait();
     const report: object = generateReportObject();
-    cy.enterReport(report, false); //Enter a report without saving it
+    cy.createReport(report, false); //Enter a report without saving it
     cy.get("button[label='Save and continue']").click();
     cy.longWait();
 

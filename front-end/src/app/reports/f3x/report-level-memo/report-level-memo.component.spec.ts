@@ -4,6 +4,8 @@ import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { selectUserLoginData } from 'app/store/login.selectors';
+import { UserLoginData } from 'app/shared/models/user.model';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
@@ -31,6 +33,12 @@ describe('ReportLevelMemoComponent', () => {
   });
 
   beforeEach(async () => {
+    const userLoginData: UserLoginData = {
+      committee_id: 'C00000000',
+      email: 'email@fec.com',
+      is_allowed: true,
+      token: 'jwttokenstring',
+    };
     await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -48,16 +56,17 @@ describe('ReportLevelMemoComponent', () => {
         MemoTextService,
         FormBuilder,
         provideMockStore({
-          selectors: [{ selector: selectReportCodeLabelList, value: {} }],
+          selectors: [
+            { selector: selectReportCodeLabelList, value: {} },
+            { selector: selectUserLoginData, value: userLoginData },
+          ],
         }),
         {
           provide: ActivatedRoute,
           useValue: {
-            snapshot: {
-              data: {
-                report: f3x,
-              },
-            },
+            data: of({
+              report: f3x,
+            }),
           },
         },
       ],
@@ -118,7 +127,7 @@ describe('ReportLevelMemoComponent', () => {
     const testMemoTextServiceSpy = spyOn(testMemoTextService, 'create').and.returnValue(of(new MemoText()));
     const navigateSpy = spyOn(testRouter, 'navigateByUrl');
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
-    component.assignedMemoText.id = null;
+    component.assignedMemoText.id = undefined;
     component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');

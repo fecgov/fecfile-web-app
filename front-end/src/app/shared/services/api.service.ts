@@ -16,8 +16,7 @@ export class ApiService {
   private token: string | null = null;
   private loggedInCommitteeId: string | null = null;
 
-  constructor(private http: HttpClient, private store: Store,
-    private cookieService: CookieService) {
+  constructor(private http: HttpClient, private store: Store, private cookieService: CookieService) {
     this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
       this.token = userLoginData.token;
       this.loggedInCommitteeId = userLoginData.committee_id;
@@ -25,11 +24,11 @@ export class ApiService {
   }
 
   getHeaders(headersToAdd: object = {}) {
-    const csrfToken = `${this.cookieService.get("csrftoken")}`;
+    const csrfToken = `${this.cookieService.get('csrftoken')}`;
     const baseHeaders = {
       'Content-Type': 'application/json',
-      ...(this.token && {Authorization: `JWT ${this.token}`}),
-      ...(csrfToken && {'x-csrftoken':`${csrfToken}`})
+      ...(this.token && { Authorization: `JWT ${this.token}` }),
+      ...(csrfToken && { 'x-csrftoken': `${csrfToken}` }),
     };
     return { ...baseHeaders, ...headersToAdd };
   }
@@ -45,7 +44,11 @@ export class ApiService {
     params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
   ): Observable<T> {
     const headers = this.getHeaders();
-    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, { headers: headers, params: params, withCredentials: true });
+    return this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
+      headers: headers,
+      params: params,
+      withCredentials: true,
+    });
   }
 
   // prettier-ignore
@@ -75,8 +78,7 @@ export class ApiService {
   }
 
   public isAuthenticated() {
-    return !!this.loggedInCommitteeId || 
-      this.cookieService.check(environment.ffapiCommitteeIdCookieName);
+    return !!this.loggedInCommitteeId || this.cookieService.check(environment.ffapiCommitteeIdCookieName);
   }
 
   public spinnerGet<T>(endpoint: string): Observable<T> {

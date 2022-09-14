@@ -7,6 +7,7 @@ import { ReportService } from './report.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { F3xSummary } from '../models/f3x-summary.model';
 import { environment } from '../../../environments/environment';
+import { Report } from '../interfaces/report.interface';
 
 describe('ReportService', () => {
   let service: ReportService;
@@ -62,6 +63,12 @@ describe('ReportService', () => {
     httpTestingController.verify();
   });
 
+  it('#setActiveReportById() should throw error if report id is undefined', () => {
+    expect(() => {
+      service.setActiveReportById(undefined);
+    }).toThrowError();
+  });
+
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
     const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: 1 });
@@ -74,5 +81,11 @@ describe('ReportService', () => {
     expect(req.request.method).toEqual('DELETE');
     req.flush(mockResponse);
     httpTestingController.verify();
+  });
+
+  it('should set the COH store values', () => {
+    const reports: Report[] = [{ id: 999 } as Report];
+    const result = service.setStoreCashOnHand(reports);
+    expect(result).not.toBeTruthy();
   });
 });

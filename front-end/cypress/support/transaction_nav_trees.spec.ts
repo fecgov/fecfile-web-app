@@ -26,7 +26,7 @@ export type TransactionCategory = 'INDIVIDUALS/PERSONS' | 'REGISTERED FILERS' | 
 export type SchATransaction =
   | 'Individual Receipt'
   | 'Tribal Receipt'
-  | 'JF Transfers'
+  | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
   | 'Other Receipts';
 
@@ -37,7 +37,20 @@ export type TransactionNavTree = {
 };
 
 export type TransactionForm = {
-  [key: string]: TransactionField;
+  entity_type?: 'Individual' | 'Committee' | 'Organization';
+  contributorLastName?: TransactionField;
+  contributorFirstName?: TransactionField;
+  contributorMiddleName?: TransactionField;
+  contributorPrefix?: TransactionField;
+  contributorSuffix?: TransactionField;
+  contributorOrganizationName?: TransactionField;
+  contributorStreet1?: TransactionField;
+  contributorStreet2?: TransactionField;
+  contributorCity?: TransactionField;
+  contributorZip?: TransactionField;
+  memoTextDescription?: TransactionField;
+  contributionAmount?: TransactionField;
+  childTransactions?: TransactionForm[];
 };
 
 export type FieldType = 'Text' | 'Calendar' | 'Dropdown' | 'P-InputNumber' | 'Textarea';
@@ -51,7 +64,6 @@ export type TransactionField = {
   readOnly?: boolean; //Denotes whether or not the field is read only (Assumes False)
   entities?: Array<string>; //If a field only appears on one or more entity types
   maxLength: number; //The max number of characters that may be entered (-1 for N/A)
-  childTransaction?: TransactionForm; //The transaction fields necessary for creating a child
 };
 
 export const TransactionFields: { [key: string]: TransactionField } = {
@@ -218,7 +230,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     fieldName: 'memo_text_description',
     fieldType: 'Textarea',
     generator: randomString,
-    genArgs: [100],
+    genArgs: [100, 'special'],
     required: false,
     maxLength: 100,
   },
@@ -324,13 +336,23 @@ const tribalReceipt: TransactionForm = {
   ...contributionFields,
 };
 
-const JFTransfer: TransactionForm = {
+const JointFundraisingTransferMemo: TransactionForm = {
   ...entityCommittee,
   ...donorCommitteeFECId,
   ...groupNameFields,
   ...addressFields,
   ...memoFields,
   ...contributionFields,
+};
+
+const JointFundraisingTransfer: TransactionForm = {
+  ...entityCommittee,
+  ...donorCommitteeFECId,
+  ...groupNameFields,
+  ...addressFields,
+  ...memoFields,
+  ...contributionFields,
+  childTransactions: [JointFundraisingTransferMemo],
 };
 
 const offsetToOpex: TransactionForm = {
@@ -367,7 +389,7 @@ export const groupANavTree: TransactionNavTree = {
   },
   //"REGISTERED FILERS":{},
   TRANSFERS: {
-    'JF Transfers': JFTransfer,
+    'Joint Fundraising Transfer': JointFundraisingTransfer,
   },
   //"REFUNDS":{},
   OTHER: {

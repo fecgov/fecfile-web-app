@@ -1,17 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
-import { refreshCommitteeAccountDetailsAction } from '../../../store/committee-account.actions';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { CashOnHand } from 'app/shared/interfaces/report.interface';
 
 @Component({
   selector: 'app-create-f3x-step2',
@@ -34,12 +36,15 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
+  cashOnHand: CashOnHand = {
+    report_id: undefined,
+    value: null,
+  };
 
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private f3xSummaryService: F3xSummaryService,
     private validateService: ValidateService,
     private fb: FormBuilder,
@@ -48,16 +53,21 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Refresh committee account details whenever page loads
-    this.store.dispatch(refreshCommitteeAccountDetailsAction());
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
 
-    this.report = this.activatedRoute.snapshot.data['report'];
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => (this.report = report as F3xSummary));
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
+    this.store
+      .select(selectCashOnHand)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((cashOnHand) => (this.cashOnHand = cashOnHand));
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
@@ -96,7 +106,11 @@ export class CreateF3xStep2Component implements OnInit, OnDestroy {
 
     this.f3xSummaryService.update(payload, this.formProperties).subscribe(() => {
       if (jump === 'continue' && this.report?.id) {
-        this.router.navigateByUrl(`/reports/f3x/create/step3/${this.report.id}`);
+        if (this.cashOnHand.report_id === this.report.id) {
+          this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${this.report.id}`);
+        } else {
+          this.router.navigateByUrl(`/transactions/report/${this.report.id}/list`);
+        }
       }
       if (jump === 'back' && this.report?.id) {
         this.router.navigateByUrl('/reports');

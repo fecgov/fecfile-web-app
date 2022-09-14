@@ -21,7 +21,7 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.url().should('contain', '/reports');
 
     const report: object = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
 
     cy.get("p-button[icon='pi pi-pencil']").first().click();
     cy.shortWait();
@@ -38,6 +38,11 @@ describe('QA Script 244 (Sprint 8)', () => {
 
   it('Step 2: Select the edit button for the created report', () => {
     cy.get("p-button[icon='pi pi-pencil']").first().click();
+    cy.url().then((url: string)=>{ //Skips over the cash on hand step if it runs into it
+      if (url.includes("cash-on-hand")){
+        cy.get('button[label="Skip for now"]').click();
+      }
+    });
     cy.shortWait();
   });
 

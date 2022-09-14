@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
@@ -22,7 +23,13 @@ describe('SidebarComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule, MenuModule, PanelMenuModule, RouterTestingModule.withRoutes([])],
+      imports: [
+        BrowserAnimationsModule,
+        MenuModule,
+        PanelMenuModule,
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([]),
+      ],
       declarations: [SidebarComponent, MenuReportComponent],
       providers: [
         provideMockStore({

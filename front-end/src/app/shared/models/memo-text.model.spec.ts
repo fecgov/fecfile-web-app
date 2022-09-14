@@ -10,7 +10,7 @@ describe('MemoText', () => {
       id: 999,
       report_id: 123,
       rec_type: 'test_rec_type',
-      text4000: 'test_text'
+      text4000: 'test_text',
     };
     const memoText: MemoText = MemoText.fromJSON(data);
     expect(memoText).toBeInstanceOf(MemoText);

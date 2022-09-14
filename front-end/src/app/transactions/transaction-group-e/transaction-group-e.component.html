@@ -150,7 +150,7 @@
             [falseValue]="false"
           ></p-checkbox>
           <div class="memo-checkbox-note">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.
+            {{ memoItemHelpText }}
           </div>
         </div>
       </div>
@@ -201,26 +201,6 @@
     <h3>Additional Information</h3>
     <div class="grid">
       <div class="col-12">
-        <label for="memo_text_description">NOTE OR MEMO TEXT (OPTIONAL)</label>
-        <div>
-          <textarea
-            id="memo_text_description"
-            [rows]="5"
-            [cols]="30"
-            pInputTextarea
-            [autoResize]="true"
-            formControlName="memo_text_description"
-          ></textarea>
-          <app-error-messages
-            [form]="form"
-            fieldName="memo_text_description"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
-      </div>
-    </div>
-    <div class="grid">
-      <div class="col-12">
         <label for="contribution_purpose_descrip">CONTRIBUTION PURPOSE DESCRIPTION (SYSTEM-GENERATED)</label>
         <div>
           <textarea
@@ -242,11 +222,31 @@
       </div>
     </div>
     <div class="grid">
+      <div class="col-12">
+        <label for="memo_text_description">NOTE OR MEMO TEXT (OPTIONAL)</label>
+        <div>
+          <textarea
+            id="memo_text_description"
+            [rows]="5"
+            [cols]="30"
+            pInputTextarea
+            [autoResize]="true"
+            formControlName="memo_text_description"
+          ></textarea>
+          <app-error-messages
+            [form]="form"
+            fieldName="memo_text_description"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
+      </div>
+    </div>
+    <div class="grid">
       <div class="col-3">
         <button
           pButton
           pRipple
-          label="Save & add a JF Transfer Memo"
+          label="Save & add a Memo"
           icon="pi pi-plus"
           class="p-button-warning"
           (click)="save('add-sub-tran', 'JF_TRAN_PAC_MEMO')"

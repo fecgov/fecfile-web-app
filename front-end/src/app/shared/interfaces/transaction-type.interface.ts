@@ -10,8 +10,8 @@ export interface TransactionType {
   componentGroupId: string;
   title: string;
   schema: JsonSchema;
-  transaction: Transaction | null;
-  parent: Transaction | null;
+  transaction: Transaction | undefined;
+  parent: Transaction | undefined;
   contributionPurposeDescripReadonly(): string;
   getNewTransaction(): Transaction;
 }

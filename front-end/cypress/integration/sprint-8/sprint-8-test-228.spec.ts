@@ -29,20 +29,20 @@ const accordion = {
   ],
   TRANSFERS: [
     'Transfers',
-    'JF Transfers',
+    'Joint Fundraising Transfer',
     'In-Kind Transfer',
-    'In-Kind Transfer-FEA',
-    'JF Transfer - National Party Recount Account',
-    'JF Transfer - National Party Convention Account',
-    'JF Transfer - National Party Headquarters Account',
+    'In-Kind Transfer - Federal Election Activity',
+    'Joint Fundraising Transfer - National Party Recount Account',
+    'Joint Fundraising Transfer - National Party Convention Account',
+    'Joint Fundraising Transfer - National Party Headquarters Account',
   ],
   REFUNDS: ['Refunds of Contributions to Registered Committees', 'Refunds of Contributions to Unregistered Committees'],
   OTHER: [
     'Offsets to Operating Expenditures',
     'Other Receipts',
-    'Ind. Receipt - Non-Contribution Account',
+    'Individual Receipt - Non-Contribution Account',
     'Other Committee Receipt - Non-Contribution Account',
-    'Business/Labor Org. Receipt - Non-Contribution Account',
+    'Business/Labor Organization Receipt - Non-Contribution Account',
     'Individual Recount Receipt',
     'Party Recount Receipt',
     'PAC Recount Receipt',
@@ -74,24 +74,12 @@ describe('QA Script 228 (Sprint 8)', () => {
     cy.url().should('contain', '/reports');
 
     const report: object = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
     cy.medWait();
-
-    cy.get("p-button[icon='pi pi-pencil']").first().click();
-    cy.shortWait();
-    cy.get("p-radiobutton[formControlName='change_of_address']")
-      .contains('YES')
-      .parent()
-      .find('.p-radiobutton')
-      .click();
-
-    cy.get("button[label='Save']").click();
-    cy.get("button[label='Back']").click();
-    cy.longWait();
   });
 
   it('Step 2: Select the edit button for the created report', () => {
-    cy.get("p-button[icon='pi pi-pencil']").first().click();
+    cy.navigateToTransactionManagement();
     cy.shortWait();
   });
 

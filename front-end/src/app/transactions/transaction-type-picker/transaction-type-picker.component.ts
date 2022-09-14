@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/interfaces/report.interface';
 import {
   ScheduleATransactionGroups,
@@ -14,14 +16,23 @@ import { LabelList } from 'app/shared/utils/label.utils';
   templateUrl: './transaction-type-picker.component.html',
   styleUrls: ['./transaction-type-picker.component.scss'],
 })
-export class TransactionTypePickerComponent implements OnInit {
+export class TransactionTypePickerComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<boolean>();
   scheduleATransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
-  report: Report | undefined;
+  report: Report | null = null;
 
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.report = this.activatedRoute.snapshot.data['report'];
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => (this.report = report));
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 
   getTransactionGroups(): ScheduleATransactionGroupsType[] {
@@ -65,7 +76,7 @@ export class TransactionTypePickerComponent implements OnInit {
       case ScheduleATransactionGroups.TRANSFERS:
         return [
           ScheduleATransactionTypes.TRANSFERS,
-          ScheduleATransactionTypes.JF_TRANSFERS,
+          ScheduleATransactionTypes.JF_TRANSFER,
           ScheduleATransactionTypes.IN_KIND_TRANSFER,
           ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA,
           ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,

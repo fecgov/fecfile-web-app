@@ -2,7 +2,7 @@
 
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { Transaction, generateTransactionObject } from '../../support/generators/transactions.spec';
-import { enterTransactionSchA } from '../../support/transactions.spec';
+import { createTransactionSchA } from '../../support/transactions.spec';
 import { TransactionNavTree, groupANavTree } from '../../support/transaction_nav_trees.spec';
 
 function testEditTransaction(transactionForm) {
@@ -21,7 +21,8 @@ function testEditTransaction(transactionForm) {
   cy.shortWait();
   cy.get('button[label="Save & view all transactions"]').click();
   cy.longWait();
-  cy.url().should('contain', '/reports/f3x/create/step3/');
+  cy.url().should('contain', 'transactions/report/');
+  cy.url().should('contain', 'list');
 
   cy.contains('tr', name).find('a').click();
   cy.shortWait();
@@ -40,11 +41,11 @@ describe('Test saving and editing on all transactions', () => {
     cy.shortWait();
 
     const report = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
 
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.shortWait();
-    cy.progressReport();
+    cy.navigateToTransactionManagement();
     cy.medWait();
   });
 
@@ -57,7 +58,7 @@ describe('Test saving and editing on all transactions', () => {
 
       it(`Creates a ${transactionName} transaction`, () => {
         const transaction: Transaction = generateTransactionObject(tTree);
-        enterTransactionSchA(transaction);
+        createTransactionSchA(transaction);
         cy.longWait();
 
         const tForm = transaction[category][transactionName];
@@ -66,7 +67,7 @@ describe('Test saving and editing on all transactions', () => {
 
       it(`Creates a ${transactionName} transaction with "Save & add another"`, () => {
         const transaction: Transaction = generateTransactionObject(tTree);
-        enterTransactionSchA(transaction, false);
+        createTransactionSchA(transaction, false);
         cy.get('button[label="Save & add another"]').click();
         cy.get('input[FormControlName="contributor_street_1"]').should('have.value', '');
         cy.longWait();

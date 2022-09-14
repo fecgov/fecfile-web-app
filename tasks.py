@@ -18,7 +18,9 @@ def _detect_space(repo, branch=None):
     """
     space = _resolve_rule(repo, branch)
     if space is None:
-        print("The current configuration does not require a deployment to cloud.gov.   ")
+        print(
+            "The current configuration does not require a deployment to cloud.gov.   "
+        )
         return None
     print("Detected space {space}".format(**locals()))
     return space
@@ -33,6 +35,7 @@ def _resolve_rule(repo, branch):
     print(f"Current branch {branch} does not match any deployment specifications.")
     print(f"Skipping deployment.")
     return None
+
 
 def _resolve_environment_file(repo, branch):
     """Get spacenvironment file associated with first matching rule."""
@@ -57,27 +60,37 @@ DEPLOY_RULES = (
     ("dev", lambda _, branch: branch == "new-css"),
 )
 
-def _build_angular_app(ctx,space):
+
+def _build_angular_app(ctx, space):
     orig_directory = os.getcwd()
-    os.chdir(os.path.join(orig_directory, 'front-end'))
+    os.chdir(os.path.join(orig_directory, "front-end"))
 
     ctx.run("npm install", warn=True, echo=True)
     print(f"Starting build: npm run build-{space}")
     result = ctx.run(f"npm run build-{space}", warn=True, echo=True)
 
     if result.return_code != 0:
-        print (f"error building Angular app.  Exiting with code {result.return_code}")
+        print(f"error building Angular app.  Exiting with code {result.return_code}")
         exit(result.return_code)
 
-    os.chdir (orig_directory)
+    os.chdir(orig_directory)
+
 
 # copies a few nginx config files into the Angualr app distribution directory
 def _prep_distribution_directory(ctx):
-    dist_directory = os.path.join(os.getcwd(), 'front-end', 'dist')
-    nginx_config_dir = os.path.join(os.getcwd(), 'deploy-config', 'front-end-nginx-config')
+    dist_directory = os.path.join(os.getcwd(), "front-end", "dist")
+    nginx_config_dir = os.path.join(
+        os.getcwd(), "deploy-config", "front-end-nginx-config"
+    )
 
-    copyfile(os.path.join(nginx_config_dir, 'nginx.conf'), os.path.join(dist_directory, 'nginx.conf'))
-    copyfile(os.path.join(nginx_config_dir, 'mime.types'), os.path.join(dist_directory, 'mime.types'))
+    copyfile(
+        os.path.join(nginx_config_dir, "nginx.conf"),
+        os.path.join(dist_directory, "nginx.conf"),
+    )
+    copyfile(
+        os.path.join(nginx_config_dir, "mime.types"),
+        os.path.join(dist_directory, "mime.types"),
+    )
 
 
 def _login_to_cf(ctx, space):
@@ -86,8 +99,8 @@ def _login_to_cf(ctx, space):
     ctx.run(f"cf api {api}", echo=True)
 
     # Authenticate
-    user_var_name = f'FEC_CF_USERNAME_{space.upper()}'
-    pass_var_name = f'FEC_CF_PASSWORD_{space.upper()}'
+    user_var_name = f"FEC_CF_USERNAME_{space.upper()}"
+    pass_var_name = f"FEC_CF_PASSWORD_{space.upper()}"
     login_command = f'cf auth "${user_var_name}" "${pass_var_name}"'
     result = ctx.run(login_command, echo=True, warn=True)
     if result.return_code != 0:
@@ -100,21 +113,32 @@ def _login_to_cf(ctx, space):
             print(f"You must set the {user_var_name} and {pass_var_name} environment ")
             print(f"variables with space-deployer service account credentials")
             print(f"")
-            print(f"If you don't have a service account, you can create one with the following commands:")
-            print(f"   cf login -u [email-address] -o {ORG_NAME} -a api.fr.cloud.gov --sso")
+            print(
+                f"If you don't have a service account, you can create one with the following commands:"
+            )
+            print(
+                f"   cf login -u [email-address] -o {ORG_NAME} -a api.fr.cloud.gov --sso"
+            )
             print(f"   cf target -o {ORG_NAME} -s {space}")
-            print(f"   cf create-service cloud-gov-service-account space-deployer [my-service-account-name]")
-            print(f"   cf create-service-key  [my-server-account-name] [my-service-key-name]")
+            print(
+                f"   cf create-service cloud-gov-service-account space-deployer [my-service-account-name]"
+            )
+            print(
+                f"   cf create-service-key  [my-server-account-name] [my-service-key-name]"
+            )
             print(f"   cf service-key  [my-server-account-name] [my-service-key-name]")
 
-        exit (1)
+        exit(1)
+
 
 def _do_deploy(ctx, space):
     orig_directory = os.getcwd()
-    os.chdir( os.path.join(orig_directory, 'front-end', 'dist') )
-    print (f'new dir {os.getcwd()}')
+    os.chdir(os.path.join(orig_directory, "front-end", "dist"))
+    print(f"new dir {os.getcwd()}")
 
-    manifest_filename = os.path.join(orig_directory, "deploy-config", f"{APP_NAME}-{space}-manifest.yml")
+    manifest_filename = os.path.join(
+        orig_directory, "deploy-config", f"{APP_NAME}-{space}-manifest.yml"
+    )
 
     existing_deploy = ctx.run("cf app {0}".format(APP_NAME), echo=True, warn=True)
     print("\n")
@@ -127,6 +151,7 @@ def _do_deploy(ctx, space):
 
     os.chdir(orig_directory)
     return new_deploy
+
 
 def _print_help_text():
     help_text = """
@@ -153,6 +178,7 @@ def _print_help_text():
                     
     """
     print(help_text)
+
 
 def _rollback(ctx):
     print("Build failed!")
@@ -198,8 +224,7 @@ def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False)
 
     if help:
         _print_help_text()
-        exit (0)
-
+        exit(0)
 
     # Detect space
     repo = git.Repo(".")
@@ -218,7 +243,6 @@ def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False)
 
     _prep_distribution_directory(ctx)
 
-
     # Target space
     ctx.run("cf target -o {0} -s {1}".format(ORG_NAME, space), echo=True)
 
@@ -233,7 +257,9 @@ def deploy(ctx, space=None, branch=None, login=False, help=False, nobuild=False)
         return sys.exit(1)
 
     ctx.run("cf apps", echo=True, warn=True)
-    print(f"A new version of your application '{APP_NAME}' has been successfully pushed!")
+    print(
+        f"A new version of your application '{APP_NAME}' has been successfully pushed!"
+    )
 
     # Needed for CircleCI
     return sys.exit(0)

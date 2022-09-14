@@ -25,7 +25,7 @@ function testField(fieldName, fieldRules, number: boolean = false) {
   } else if (fieldRules['fieldName'] == 'donor_committee_fec_id') {
     randString = committeeID();
   } else {
-    randString = randomString(fieldLength);
+    randString = randomString(fieldLength, 'special');
   }
 
   cy.get(fieldName).overwrite(randString);
@@ -39,6 +39,8 @@ function testField(fieldName, fieldRules, number: boolean = false) {
 
 function testFields(fields, entityType) {
   for (let field of fields) {
+    if (field === "childTransactions") continue;
+
     const fieldRules = TransactionFields[field];
     const fieldName = fieldRules['fieldName'];
 
@@ -87,11 +89,11 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
     cy.shortWait();
 
     const report = generateReportObject();
-    cy.enterReport(report);
+    cy.createReport(report);
 
     cy.get('p-button[icon="pi pi-pencil"]').click();
     cy.shortWait();
-    cy.progressReport();
+    cy.navigateToTransactionManagement();
     cy.medWait();
   });
 

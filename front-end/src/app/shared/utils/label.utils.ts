@@ -15,7 +15,7 @@ export class LabelUtils {
    * @returns
    */
   public static get(labelArrays: LabelList, key: string | null): string {
-    if (key != null) {
+    if (key !== null) {
       const items: LabelList = labelArrays.filter((item: string[]) => item[0] === key);
       if (items.length) {
         return items[0][1];
@@ -225,7 +225,7 @@ export const f3xReportCodeDetailedLabels: LabelList = [
   [F3xReportCodes.M2, 'FEBRUARY 20 MONTHLY REPORT (M2)'],
   [F3xReportCodes.M3, 'MARCH 20 MONTHLY REPORT (M3)'],
   [F3xReportCodes.M4, 'APRIL 20 MONTHLY REPORT (M4)'],
-  [F3xReportCodes.M5, 'MAY 20 MONTHLY REPORT (M5))'],
+  [F3xReportCodes.M5, 'MAY 20 MONTHLY REPORT (M5)'],
   [F3xReportCodes.M6, 'JUNE 20 MONTHLY REPORT (M6)'],
   [F3xReportCodes.M7, 'JULY 20 MONTHLY REPORT (M7)'],
   [F3xReportCodes.M8, 'AUGUST 20 MONTHLY REPORT (M8)'],

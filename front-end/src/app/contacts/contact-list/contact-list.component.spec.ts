@@ -1,19 +1,20 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
+import { SharedModule } from 'app/shared/shared.module';
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { TableModule } from 'primeng/table';
-import { ToolbarModule } from 'primeng/toolbar';
+import { ConfirmationService, Message, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
+import { Contact, ContactTypes } from '../../shared/models/contact.model';
 import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
 import { ContactListComponent } from './contact-list.component';
-import { Contact, ContactTypes } from '../../shared/models/contact.model';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -23,6 +24,8 @@ describe('ContactListComponent', () => {
   contact.first_name = 'Jane';
   contact.last_name = 'Smith';
   contact.name = 'ABC Inc';
+
+  let testMessageService: MessageService;
 
   beforeEach(async () => {
     const userLoginData: UserLoginData = {
@@ -41,6 +44,7 @@ describe('ContactListComponent', () => {
         DialogModule,
         FileUploadModule,
         ConfirmDialogModule,
+        SharedModule,
       ],
       declarations: [ContactListComponent, ContactDetailComponent],
       providers: [
@@ -53,6 +57,8 @@ describe('ContactListComponent', () => {
         }),
       ],
     }).compileComponents();
+
+    testMessageService = TestBed.inject(MessageService);
   });
 
   beforeEach(() => {
@@ -89,4 +95,19 @@ describe('ContactListComponent', () => {
     name = component.displayName(contact);
     expect(name).toBe('');
   });
+
+  it('#onContactLookupSelect displays add msg', () => {
+    const testCommitteeId = "testCommitteeId";
+    const expectedMessage: Message = {
+      severity: 'success',
+      summary: 'Contact selected',
+      detail: 'Selected lookup contact ' + 
+        'with commitee id ' + testCommitteeId,
+      life: 3000,
+    }
+    const messageServiceAddSpy = spyOn(testMessageService, 'add');
+    component.onContactLookupSelect(testCommitteeId);
+    expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
+  });
+
 });
