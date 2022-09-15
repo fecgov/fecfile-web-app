@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Contact, ContactLookupSelectItem, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem, SelectItemGroup } from 'primeng/api';
@@ -21,9 +21,9 @@ export class ContactLookupComponent {
   @Input() maxFecfileResults = 10;
 
   @Output() fecfileContactSelect =
-    new EventEmitter<ContactLookupSelectItem<Contact>>();
+    new EventEmitter<SelectItem<Contact>>();
   @Output() fecApiLookupSelect = new EventEmitter<
-    ContactLookupSelectItem<FecApiLookupData>>();
+    SelectItem<FecApiLookupData>>();
 
   selectedContact: FormControl<SelectItem> | null = null;
 
@@ -77,6 +77,10 @@ export class ContactLookupComponent {
         this.fecApiLookupSelect.emit(event);
       }
     }
+  }
+
+  isContact(value: Contact | FecApiLookupData) {
+    return value instanceof Contact;
   }
 
 }

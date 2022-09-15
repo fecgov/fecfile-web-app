@@ -30,7 +30,7 @@
               <span [innerHTML]="contact.label | highlightTerm:searchTerm"
                 class="contact-label">
               </span>
-              <span *ngIf="contact.inContacts" 
+              <span *ngIf="isContact(contact.value)" 
                 class="in-contacts">
                 In contacts
               </span>

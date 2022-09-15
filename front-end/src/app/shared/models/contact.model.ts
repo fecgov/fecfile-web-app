@@ -73,10 +73,6 @@ export class Contact extends BaseModel {
   }
 }
 
-export interface ContactLookupSelectItem<T> extends SelectItem<T> {
-  inContacts: boolean;
-}
-
 export class FecApiLookupData {
 
 }
@@ -90,12 +86,11 @@ export class FecApiCommitteeLookupData extends FecApiLookupData {
     Object.assign(this, data);
   }
 
-  toSelectItem(): ContactLookupSelectItem<FecApiCommitteeLookupData> {
+  toSelectItem(): SelectItem<FecApiCommitteeLookupData> {
     return (
       {
         label: `${this.name} (${this.id})`,
         value: this,
-        inContacts: false,
       }
     );
   }
@@ -107,12 +102,11 @@ export class FecfileCommitteeLookupData extends Contact {
     Object.assign(this, data);
   }
 
-  toSelectItem(): ContactLookupSelectItem<Contact> {
+  toSelectItem(): SelectItem<Contact> {
     return (
       {
         label: `${this.name} (${this.committee_id})`,
         value: this,
-        inContacts: true,
       }
     );
   }
@@ -151,12 +145,11 @@ export class FecfileIndividualLookupData extends Contact {
     Object.assign(this, data);
   }
 
-  toSelectItem(): ContactLookupSelectItem<Contact> {
+  toSelectItem(): SelectItem<Contact> {
     return (
       {
         label: `${this.last_name}, ${this.first_name}`,
         value: this,
-        inContacts: true,
       }
     );
   }
