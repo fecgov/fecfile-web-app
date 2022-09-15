@@ -56,7 +56,7 @@ export class FecApiService {
    *
    * @return     {Observable<FecFiling | undefined>}  Most recent F1 filing.
    */
-  public getCommitteeRecentFiling(committeeId: string | null): Observable<FecFiling | undefined> {
+  public getCommitteeRecentFiling(committeeId: string | undefined): Observable<FecFiling | undefined> {
     if (!committeeId) {
       throw new Error('No Committee Id provided.');
     }

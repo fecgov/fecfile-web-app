@@ -16,20 +16,17 @@ describe('Contact', () => {
     expect(contact.id).toBe(999);
     expect(contact.type).toBe(ContactTypes.COMMITTEE);
     expect(contact.name).toBe('foo');
-    expect(contact.occupation).toBe(null);
+    expect(contact.occupation).toBe(undefined);
   });
 
   it('#fromJSON() should return a populated FecCommitteeLookupData class', () => {
     const data = {
-      id: "C123",
+      id: 'C123',
       name: 'foo',
     };
-    const fecCommitteeLookupData: FecCommitteeLookupData =
-      FecCommitteeLookupData.fromJSON(data);
-    expect(fecCommitteeLookupData).toBeInstanceOf(
-      FecCommitteeLookupData);
-    expect(fecCommitteeLookupData.id).toBe("C123");
+    const fecCommitteeLookupData: FecCommitteeLookupData = FecCommitteeLookupData.fromJSON(data);
+    expect(fecCommitteeLookupData).toBeInstanceOf(FecCommitteeLookupData);
+    expect(fecCommitteeLookupData.id).toBe('C123');
     expect(fecCommitteeLookupData.name).toBe('foo');
   });
-
 });

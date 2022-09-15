@@ -252,4 +252,7 @@ workflows:
       - lint
       - test
       - dependendency-check
-      - deploy
+      - deploy:
+        requires:
+          - test
+          - dependency-check

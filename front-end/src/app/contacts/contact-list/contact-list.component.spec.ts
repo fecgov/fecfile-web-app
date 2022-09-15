@@ -75,7 +75,7 @@ describe('ContactListComponent', () => {
     name = component.displayName(contact);
     expect(name).toBe('ABC Inc');
 
-    contact.name = null;
+    contact.name = undefined;
     name = component.displayName(contact);
     expect(name).toBe('');
   });

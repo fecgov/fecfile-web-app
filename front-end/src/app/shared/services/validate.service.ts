@@ -161,7 +161,8 @@ export class ValidateService {
           if (error.keyword === 'type' && error.params['type'] === 'number') {
             if (
               this.formValidatorForm?.get(error.path)?.value === '' ||
-              this.formValidatorForm?.get(error.path)?.value === null
+              this.formValidatorForm?.get(error.path)?.value === null ||
+              this.formValidatorForm?.get(error.path)?.value === undefined
             ) {
               result['required'] = true;
             } else {

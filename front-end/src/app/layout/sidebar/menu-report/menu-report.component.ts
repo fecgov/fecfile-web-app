@@ -29,7 +29,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   reportIsEditableFlag = false;
   cashOnHand: CashOnHand = {
     report_id: undefined,
-    value: null,
+    value: undefined,
   };
 
   private destroy$ = new Subject<boolean>();

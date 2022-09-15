@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
   name: 'fecDate',
 })
 export class FecDatePipe implements PipeTransform {
-  transform(value: Date | null): string {
+  transform(value: Date | undefined): string {
     if (!value) {
       return '';
     }

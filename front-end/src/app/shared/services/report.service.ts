@@ -48,7 +48,7 @@ export class ReportService implements TableListService<Report> {
     if (reports.length === 0) {
       payload = {
         report_id: undefined,
-        value: null,
+        value: undefined,
       };
     }
     if (reports.length === 1) {

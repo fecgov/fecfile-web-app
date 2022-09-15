@@ -235,7 +235,7 @@
       <div class="col-2">
         <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="navigateTo('list')"></button>
       </div>
-      <ng-container *ngIf="this.transaction?.id !== null">
+      <ng-container *ngIf="this.transaction?.id">
         <div class="col-7"></div>
         <div class="col-3">
           <button
@@ -247,7 +247,7 @@
           ></button>
         </div>
       </ng-container>
-      <ng-container *ngIf="this.transaction?.id === null">
+      <ng-container *ngIf="!this.transaction?.id">
         <div class="col-4"></div>
         <div class="col-3">
           <button

@@ -17,6 +17,6 @@ describe('SchATransaction', () => {
     expect(schATransaction.id).toBe(999);
     expect(schATransaction.form_type).toBe('SA11Ai');
     expect(schATransaction.contributor_organization_name).toBe('foo');
-    expect(schATransaction.election_code).toBe(null);
+    expect(schATransaction.election_code).toBe(undefined);
   });
 });

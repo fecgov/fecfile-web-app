@@ -6,7 +6,7 @@ describe('Cash On Hand Reducer', () => {
   it('it should store the boolean status', () => {
     const state: CashOnHand = {
       report_id: undefined,
-      value: null,
+      value: undefined,
     };
 
     const action = {

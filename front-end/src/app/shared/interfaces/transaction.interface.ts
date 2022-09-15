@@ -1,10 +1,10 @@
 export interface Transaction {
-  id: number | null;
-  report_id: number | null;
-  form_type: string | null;
-  filer_committee_id_number: string | null;
-  transaction_id: string | null;
-  transaction_type_identifier: string | null;
-  contribution_purpose_descrip: string | null;
-  parent_transaction_id: number | null;
+  id: number | undefined;
+  report_id: number | undefined;
+  form_type: string | undefined;
+  filer_committee_id_number: string | undefined;
+  transaction_id: string | undefined;
+  transaction_type_identifier: string | undefined;
+  contribution_purpose_descrip: string | undefined;
+  parent_transaction_id: number | undefined;
 }

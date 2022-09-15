@@ -95,7 +95,7 @@ export class SessionService {
         );
       } else {
         return this.refreshTokenSubject.pipe(
-          filter((token) => token !== null),
+          filter((token) => token !== undefined),
           take(1),
           // prettier-ignore
           switchMap((token: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any

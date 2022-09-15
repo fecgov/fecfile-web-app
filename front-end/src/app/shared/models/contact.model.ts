@@ -41,31 +41,31 @@ export const CandidateOfficeTypeLabels = [
 ];
 
 export class Contact extends BaseModel {
-  id: number | null = null;
+  id: number | undefined;
   type: ContactType = ContactTypes.INDIVIDUAL;
-  candidate_id: string | null = null;
-  committee_id: string | null = null;
-  name: string | null = null;
-  last_name: string | null = null;
-  first_name: string | null = null;
-  middle_name: string | null = null;
-  prefix: string | null = null;
-  suffix: string | null = null;
+  candidate_id: string | undefined;
+  committee_id: string | undefined;
+  name: string | undefined;
+  last_name: string | undefined;
+  first_name: string | undefined;
+  middle_name: string | undefined;
+  prefix: string | undefined;
+  suffix: string | undefined;
   street_1 = '';
-  street_2: string | null = null;
+  street_2: string | undefined;
   city = '';
   state = '';
   zip = '';
-  employer: string | null = null;
-  occupation: string | null = null;
-  candidate_office: CandidateOfficeType | null = null;
-  candidate_state: string | null = null;
-  candidate_district: string | null = null;
-  telephone: string | null = null;
+  employer: string | undefined;
+  occupation: string | undefined;
+  candidate_office: CandidateOfficeType | undefined;
+  candidate_state: string | undefined;
+  candidate_district: string | undefined;
+  telephone: string | undefined;
   country = '';
-  created: string | null = null;
-  updated: string | null = null;
-  deleted: string | null = null;
+  created: string | undefined;
+  updated: string | undefined;
+  deleted: string | undefined;
 
   // prettier-ignore
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -74,8 +74,8 @@ export class Contact extends BaseModel {
 }
 
 export class FecCommitteeLookupData {
-  id: string | null = null;
-  name: string | null = null;
+  id: string | undefined;
+  name: string | undefined;
   // prettier-ignore
   static fromJSON(json: any): FecCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(FecCommitteeLookupData, json);
@@ -91,8 +91,8 @@ export class FecCommitteeLookupData {
 }
 
 export class CommitteeLookupResponse {
-  fec_api_committees: FecCommitteeLookupData[] | null = null;
-  fecfile_committees: FecCommitteeLookupData[] | null = null;
+  fec_api_committees: FecCommitteeLookupData[] | undefined;
+  fecfile_committees: FecCommitteeLookupData[] | undefined;
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(CommitteeLookupResponse, json);

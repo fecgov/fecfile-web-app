@@ -18,8 +18,8 @@ describe('F3XSummary', () => {
     expect(f3xSummary.id).toBe(999);
     expect(f3xSummary.form_type).toBe(F3xFormTypes.F3XT);
     expect(f3xSummary.committee_name).toBe('foo');
-    expect(f3xSummary.election_code).toBe(null);
-    expect(f3xSummary.upload_submission).toBe(null);
+    expect(f3xSummary.election_code).toBe(undefined);
+    expect(f3xSummary.upload_submission).toBe(undefined);
   });
 
   it('#fromJSON() should return an F3xSummary instance with a valid UploadSubmission instance', () => {
