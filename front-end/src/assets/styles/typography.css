@@ -1,6 +1,6 @@
 /* TYPOGRAHY */
 h1{
-    margin:0 0 1em 0;
+    margin:0;
     font-family:gandhiserif-bold,serif;
     font-size:2.4rem;
     font-weight:700;
@@ -111,7 +111,7 @@ input,label,select{
 }
 label{
     margin:0;
-    font-family:karla,sans-serif
+    font-family:karla-bold,sans-serif
 }
 input,select,textarea{
     background-color:#fff;
