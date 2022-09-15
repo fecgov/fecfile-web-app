@@ -15,6 +15,7 @@ import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { SharedModule } from '../shared/shared.module';
 import { TransactionsRoutingModule } from './transactions-routing.module';
@@ -27,6 +28,7 @@ import { TransactionGroupEComponent } from './transaction-group-e/transaction-gr
 import { TransactionGroupFComponent } from './transaction-group-f/transaction-group-f.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent, MemoCodePipe } from './transaction-list/transaction-list.component';
+import { ContactsModule } from '../contacts/contacts.module';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import { TransactionListComponent, MemoCodePipe } from './transaction-list/trans
     ToolbarModule,
     TableModule,
     SharedModule,
+    ConfirmDialogModule,
+    ContactsModule,
   ],
 })
 export class TransactionsModule {}

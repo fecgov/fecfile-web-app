@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../../store/committee-account.selectors';
 import { CommitteeAccount } from '../../shared/models/committee-account.model';
 import { Title } from '@angular/platform-browser';
+import { Contact } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-transaction-container',
@@ -14,6 +15,9 @@ import { Title } from '@angular/platform-browser';
 export class TransactionContainerComponent implements OnInit, OnDestroy {
   transactionType: TransactionType | undefined;
   destroy$: Subject<boolean> = new Subject<boolean>();
+  isNewItem = true;
+  detailVisible = true;
+  item: Contact = Contact.fromJSON({});
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store, private titleService: Title) {
     activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
@@ -34,6 +38,10 @@ export class TransactionContainerComponent implements OnInit, OnDestroy {
           this.transactionType.transaction.filer_committee_id_number = committeeAccount.committee_id;
         }
       });
+
+    setInterval(() => {
+      console.log(this.item);
+    }, 1000);
   }
 
   ngOnDestroy(): void {

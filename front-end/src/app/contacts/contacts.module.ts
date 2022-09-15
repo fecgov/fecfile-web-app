@@ -40,5 +40,6 @@ import { ContactDetailComponent } from './contact-detail/contact-detail.componen
     InputTextModule,
     SharedModule,
   ],
+  exports: [ContactDetailComponent],
 })
 export class ContactsModule {}
