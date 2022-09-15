@@ -10,7 +10,7 @@ describe('SchATransaction', () => {
       id: 999,
       form_type: 'SA11Ai',
       contributor_organization_name: 'foo',
-      contribution_date: null,
+      contribution_date: undefined,
     };
     const schATransaction: SchATransaction = SchATransaction.fromJSON(data);
     expect(schATransaction).toBeInstanceOf(SchATransaction);

@@ -222,7 +222,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     this.router.navigateByUrl('/reports');
   }
 
-  public save(jump: 'continue' | null = null) {
+  public save(jump: 'continue' | undefined = undefined) {
     this.formSubmitted = true;
 
     if (this.form.invalid) {

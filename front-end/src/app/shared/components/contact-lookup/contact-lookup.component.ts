@@ -19,32 +19,27 @@ export class ContactLookupComponent {
 
   @Output() contactSelect = new EventEmitter<string>();
 
-  @ViewChild('lookupDropdown') lookupDropdown: Dropdown | null = null;
+  @ViewChild('lookupDropdown') lookupDropdown: Dropdown | undefined;
 
-  selectedContactType =
-    new FormControl<ContactType>({} as ContactType);
-  selectedContact: FormControl<SelectItem> | null = null;
+  selectedContactType = new FormControl<ContactType>({} as ContactType);
+  selectedContact: FormControl<SelectItem> | undefined = undefined;
 
   contactLookupForm: FormGroup = this.formBuilder.group({
     selectedContactType: this.selectedContactType,
-    selectedContact: this.selectedContact
-  })
+    selectedContact: this.selectedContact,
+  });
 
   contactLookupList: SelectItemGroup[] = [];
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private contactService: ContactService
-  ) { }
+  constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
 
   onDropdownSearch = debounce((event) => {
     const searchTerm = event?.target?.value;
     if (searchTerm) {
-      this.contactService.committeeLookup(
-        searchTerm, this.maxFecResults,
-        this.maxFecfileResults).subscribe((response) => {
-          this.contactLookupList = response &&
-            response.toSelectItemGroups();
+      this.contactService
+        .committeeLookup(searchTerm, this.maxFecResults, this.maxFecfileResults)
+        .subscribe((response) => {
+          this.contactLookupList = response && response.toSelectItemGroups();
           if (this.lookupDropdown) {
             this.lookupDropdown.overlayVisible = true;
           }
@@ -60,10 +55,9 @@ export class ContactLookupComponent {
       if (event.originalEvent?.type === 'click') {
         const value: string = event.value;
         if (value) {
-          this.contactSelect.emit(value)
+          this.contactSelect.emit(value);
         }
       }
     }
   }
-
 }

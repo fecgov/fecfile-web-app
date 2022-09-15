@@ -15,7 +15,7 @@ import { SessionService } from './SessionService/session.service';
   providedIn: 'root',
 })
 export class LoginService {
-  private userLoginData: UserLoginData | null = null;
+  private userLoginData: UserLoginData | undefined;
   constructor(
     private store: Store,
     private sessionService: SessionService,

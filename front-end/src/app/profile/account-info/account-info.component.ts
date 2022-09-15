@@ -12,7 +12,7 @@ import { Observable, switchMap } from 'rxjs';
   styleUrls: ['./account-info.component.scss'],
 })
 export class AccountInfoComponent implements OnInit {
-  committeeAccount$: Observable<CommitteeAccount> | null = null;
+  committeeAccount$: Observable<CommitteeAccount> | undefined;
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
 
   constructor(private store: Store, private fecApiService: FecApiService) {}

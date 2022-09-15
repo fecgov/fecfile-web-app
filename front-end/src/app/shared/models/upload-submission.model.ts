@@ -7,13 +7,13 @@ export class UploadSubmission {
   fec_submission_id = '';
   fec_report_id = '';
   fec_message = '';
-  fec_status: 'ACCEPTED' | 'REJECTED' | 'PROCESSING' | null = null;
+  fec_status: 'ACCEPTED' | 'REJECTED' | 'PROCESSING' | undefined;
   @Type(() => Date)
   @Transform(BaseModel.dateTransform)
-  created: Date | null = null;
+  created: Date | undefined;
   @Type(() => Date)
   @Transform(BaseModel.dateTransform)
-  updated: Date | null = null;
+  updated: Date | undefined;
 
   // prettier-ignore
   static fromJSON(json: any): UploadSubmission { // eslint-disable-line @typescript-eslint/no-explicit-any
