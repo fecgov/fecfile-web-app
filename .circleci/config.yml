@@ -253,6 +253,6 @@ workflows:
       - test
       - dependendency-check
       - deploy:
-        requires:
-          - test
-          - dependency-check
+          requires:
+            - test
+            - dependency-check
