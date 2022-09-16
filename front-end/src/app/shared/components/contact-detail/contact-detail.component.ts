@@ -45,7 +45,7 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
   }
 
   ContactTypes = ContactTypes;
-  contactTypeOptions: PrimeOptions = [];
+  @Input() contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   candidateOfficeTypeOptions: PrimeOptions = [];
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
@@ -72,7 +72,6 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
