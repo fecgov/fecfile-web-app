@@ -3,12 +3,13 @@ import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { CommitteeLookupResponse, Contact, ContactLookupSelectItem, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData, FecfileCommitteeLookupData, FecfileIndividualLookupData, IndividualLookupResponse } from 'app/shared/models/contact.model';
+import { CommitteeLookupResponse, Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData, FecfileCommitteeLookupData, FecfileIndividualLookupData, IndividualLookupResponse } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
 import { of } from 'rxjs';
 
+import { SelectItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ContactLookupComponent } from './contact-lookup.component';
 
@@ -142,8 +143,7 @@ describe('ContactLookupComponent', () => {
     });
     const testValue = {
       value: testContact,
-      inContacts: true
-    } as ContactLookupSelectItem<Contact>;
+    } as SelectItem<Contact>;
     component.onContactSelect(testValue);
     tick(500);
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testValue);
@@ -154,12 +154,18 @@ describe('ContactLookupComponent', () => {
     const testFecApiLookupData = new FecApiLookupData();
     const testValue = {
       value: testFecApiLookupData,
-      inContacts: true
-    } as ContactLookupSelectItem<FecApiLookupData>;
+    } as SelectItem<FecApiLookupData>;
     component.onContactSelect(testValue);
     tick(500);
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
       testValue);
   }));
+
+  it('#isContact happy path', () => {
+    const expectedRetval = true;
+    const retval = component.isContact(new Contact());
+
+    expect(retval).toEqual(expectedRetval);
+  });
 
 });

@@ -1,8 +1,8 @@
-import { HighlightTermPipe } from './highlight-term.pipe';
+import { HighlightTermsPipe } from './highlight-terms.pipe';
 
-describe('HighlightTermPipe', () => {
+describe('HighlightTermsPipe', () => {
   it('create an instance', () => {
-    const pipe = new HighlightTermPipe();
+    const pipe = new HighlightTermsPipe();
     expect(pipe).toBeTruthy();
   });
 
@@ -10,8 +10,8 @@ describe('HighlightTermPipe', () => {
     let expectedRetval;
     let testValue;
     const testTerm = 'testTerm';
-    const testHighlightTermPipe = new HighlightTermPipe();
-    const retval = testHighlightTermPipe.transform(
+    const testHighlightTermsPipe = new HighlightTermsPipe();
+    const retval = testHighlightTermsPipe.transform(
       testValue, testTerm);
     expect(retval).toEqual(expectedRetval);
   });
@@ -21,8 +21,8 @@ describe('HighlightTermPipe', () => {
     const testTerm = 'testTerm';
     const expectedRetval = testValue;
 
-    const testHighlightTermPipe = new HighlightTermPipe();
-    const retval = testHighlightTermPipe.transform(
+    const testHighlightTermsPipe = new HighlightTermsPipe();
+    const retval = testHighlightTermsPipe.transform(
       testValue, testTerm);
     expect(retval).toEqual(expectedRetval);
   });
@@ -32,8 +32,8 @@ describe('HighlightTermPipe', () => {
     let testTerm;
     const expectedRetval = testValue;
 
-    const testHighlightTermPipe = new HighlightTermPipe();
-    const retval = testHighlightTermPipe.transform(
+    const testHighlightTermsPipe = new HighlightTermsPipe();
+    const retval = testHighlightTermsPipe.transform(
       testValue, testTerm);
     expect(retval).toEqual(expectedRetval);
   });
@@ -42,12 +42,13 @@ describe('HighlightTermPipe', () => {
     const testValue = 'the TESTterm testValue containing the testTerm ' +
       'including The TESTTERM four times the testTERM';
     const testTerm = 'the testTerm';
-    const expectedRetval = '<mark>the TESTterm</mark> testValue ' +
-      'containing <mark>the testTerm</mark> including <mark>The ' +
-      'TESTTERM</mark> four times <mark>the testTERM</mark>';
+    const expectedRetval = '<mark>the</mark> <mark>TESTterm</mark> ' + 
+      'testValue containing <mark>the</mark> <mark>testTerm</mark> ' +
+      'including <mark>The</mark> <mark>TESTTERM</mark> four times ' +
+      '<mark>the</mark> <mark>testTERM</mark>';
 
-    const testHighlightTermPipe = new HighlightTermPipe();
-    const retval = testHighlightTermPipe.transform(
+    const testHighlightTermsPipe = new HighlightTermsPipe();
+    const retval = testHighlightTermsPipe.transform(
       testValue, testTerm);
     expect(retval).toEqual(expectedRetval);
   });
