@@ -28,7 +28,7 @@ describe('CreateF3xStep4Component', () => {
         {
           provide: TransactionService,
           useValue: {
-            get: (transactionId: number) =>
+            get: (transactionId: string) =>
               of(
                 SchATransaction.fromJSON({
                   id: transactionId,
