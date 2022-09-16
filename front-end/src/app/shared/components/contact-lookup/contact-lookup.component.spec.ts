@@ -49,7 +49,6 @@ describe('ContactLookupComponent', () => {
 
   it('#onDropdownSearch COM undefined fec_api_committees', fakeAsync(() => {
     const testCommitteeLookupResponse = new CommitteeLookupResponse();
-    testCommitteeLookupResponse.fec_api_committees;
     testCommitteeLookupResponse.fecfile_committees = [
       {
         id: 123,
@@ -73,7 +72,6 @@ describe('ContactLookupComponent', () => {
         is_active: true
       } as FecApiCommitteeLookupData
     ];
-    testCommitteeLookupResponse.fecfile_committees;
     spyOn(testContactService, 'committeeLookup').and.returnValue(
       of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
@@ -108,7 +106,6 @@ describe('ContactLookupComponent', () => {
 
   it('#onDropdownSearch IND undefined fecfile_individuals', fakeAsync(() => {
     const testIndividualLookupResponse = new IndividualLookupResponse();
-    testIndividualLookupResponse.fecfile_individuals;
     spyOn(testContactService, 'individualLookup').and.returnValue(
       of(testIndividualLookupResponse));
     const testEvent = { query: 'hi' };
@@ -140,7 +137,6 @@ describe('ContactLookupComponent', () => {
 
   it('#onDropdownSearch ORG undefined fecfile_organizations', fakeAsync(() => {
     const testOrganizationLookupResponse = new OrganizationLookupResponse();
-    testOrganizationLookupResponse.fecfile_organizations;
     spyOn(testContactService, 'organizationLookup').and.returnValue(
       of(testOrganizationLookupResponse));
     const testEvent = { query: 'hi' };
