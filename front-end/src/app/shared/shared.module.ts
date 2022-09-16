@@ -9,7 +9,7 @@ import { ErrorMessagesComponent } from './components/error-messages/error-messag
 import { FecInternationalPhoneInputComponent } from './components/fec-international-phone-input/fec-international-phone-input.component';
 import { DefaultZeroPipe } from './pipes/default-zero.pipe';
 import { FecDatePipe } from './pipes/fec-date.pipe';
-import { HighlightTermPipe } from './pipes/highlight-term.pipe';
+import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
 import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
@@ -23,7 +23,7 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     LongDatePipe,
     FindOnReportCodePipe,
     DefaultZeroPipe,
-    HighlightTermPipe,
+    HighlightTermsPipe,
     FecInternationalPhoneInputComponent,
     ContactLookupComponent,
   ],
@@ -34,7 +34,7 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     ErrorMessagesComponent,
     FindOnReportCodePipe,
     DefaultZeroPipe,
-    HighlightTermPipe,
+    HighlightTermsPipe,
     FecInternationalPhoneInputComponent,
     ContactLookupComponent,
   ],

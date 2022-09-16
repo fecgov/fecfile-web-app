@@ -73,10 +73,6 @@ export class Contact extends BaseModel {
   }
 }
 
-export interface ContactLookupSelectItem<T> extends SelectItem<T> {
-  inContacts: boolean;
-}
-
 export class FecApiLookupData {
 
 }
@@ -90,12 +86,11 @@ export class FecApiCommitteeLookupData extends FecApiLookupData {
     Object.assign(this, data);
   }
 
-  toSelectItem(): ContactLookupSelectItem<FecApiCommitteeLookupData> {
+  toSelectItem(): SelectItem<FecApiCommitteeLookupData> {
     return (
       {
         label: `${this.name} (${this.id})`,
         value: this,
-        inContacts: false,
       }
     );
   }
@@ -107,20 +102,19 @@ export class FecfileCommitteeLookupData extends Contact {
     Object.assign(this, data);
   }
 
-  toSelectItem(): ContactLookupSelectItem<Contact> {
+  toSelectItem(): SelectItem<Contact> {
     return (
       {
         label: `${this.name} (${this.committee_id})`,
         value: this,
-        inContacts: true,
       }
     );
   }
 }
 
 export class CommitteeLookupResponse {
-  fec_api_committees: FecApiCommitteeLookupData[] | null = null;
-  fecfile_committees: FecfileCommitteeLookupData[] | null = null;
+  fec_api_committees?: FecApiCommitteeLookupData[];
+  fecfile_committees?: FecfileCommitteeLookupData[];
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -151,19 +145,18 @@ export class FecfileIndividualLookupData extends Contact {
     Object.assign(this, data);
   }
 
-  toSelectItem(): ContactLookupSelectItem<Contact> {
+  toSelectItem(): SelectItem<Contact> {
     return (
       {
         label: `${this.last_name}, ${this.first_name}`,
         value: this,
-        inContacts: true,
       }
     );
   }
 }
 
 export class IndividualLookupResponse {
-  fecfile_individuals: FecfileIndividualLookupData[] | null = null;
+  fecfile_individuals?: FecfileIndividualLookupData[];
 
   // prettier-ignore
   static fromJSON(json: any): IndividualLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any

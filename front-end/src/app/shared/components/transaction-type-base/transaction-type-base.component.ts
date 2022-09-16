@@ -7,9 +7,9 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { MessageService } from 'primeng/api';
+import { MessageService, SelectItem } from 'primeng/api';
 import { Subject, takeUntil } from 'rxjs';
-import { Contact, ContactLookupSelectItem, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
   template: '',
@@ -159,17 +159,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     });
   }
 
-  onContactLookupSelect(selectItem: ContactLookupSelectItem<Contact>) {
-    if (selectItem && selectItem.inContacts) {
+  onContactLookupSelect(selectItem: SelectItem<Contact>) {
+    if (selectItem) {
       const value = selectItem.value;
-      if (value && value instanceof Contact) {
-        if (value.type === ContactTypes.INDIVIDUAL) {
-          this.form.get('contributor_last_name')?.setValue(value.last_name);
-          this.form.get('contributor_first_name')?.setValue(value.first_name);
-          this.form.get('contributor_middle_name')?.setValue(value.middle_name);
-          this.form.get('contributor_prefix')?.setValue(value.prefix);
-          this.form.get('contributor_suffix')?.setValue(value.suffix);
-        }
+      if (value && value.type === ContactTypes.INDIVIDUAL) {
+        this.form.get('contributor_last_name')?.setValue(value.last_name);
+        this.form.get('contributor_first_name')?.setValue(value.first_name);
+        this.form.get('contributor_middle_name')?.setValue(value.middle_name);
+        this.form.get('contributor_prefix')?.setValue(value.prefix);
+        this.form.get('contributor_suffix')?.setValue(value.suffix);
       }
     }
   }
