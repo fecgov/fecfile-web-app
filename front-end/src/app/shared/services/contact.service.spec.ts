@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CommitteeLookupResponse, Contact, IndividualLookupResponse } from '../models/contact.model';
+import { CommitteeLookupResponse, Contact, IndividualLookupResponse, OrganizationLookupResponse } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
@@ -128,6 +128,22 @@ describe('ContactService', () => {
 
     service
       .individualLookup(testSearch, testMaxFecfileResults)
+      .subscribe((value) => expect(value).toEqual(expectedRetval));
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
+  });
+
+  it('#organizationLookup() happy path', () => {
+    const expectedRetval = new OrganizationLookupResponse();
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval));
+    const testSearch = 'testSearch';
+    const testMaxFecfileResults = 2;
+
+    const expectedEndpoint =
+      `/contacts/organization_lookup/?q=${testSearch}` +
+      `&max_fecfile_results=${testMaxFecfileResults}`;
+
+    service
+      .organizationLookup(testSearch, testMaxFecfileResults)
       .subscribe((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
   });

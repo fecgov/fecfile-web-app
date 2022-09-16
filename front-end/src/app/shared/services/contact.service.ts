@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { CommitteeLookupResponse, Contact, IndividualLookupResponse } from '../models/contact.model';
+import { CommitteeLookupResponse, Contact, IndividualLookupResponse, OrganizationLookupResponse } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 
@@ -55,6 +55,14 @@ export class ContactService implements TableListService<Contact> {
       `/contacts/individual_lookup/?q=${search}` +
       `&max_fecfile_results=${maxFecfileResults}`).pipe(
         map((response) => IndividualLookupResponse.fromJSON(response)));
+  }
+
+  public organizationLookup(search: string,
+    maxFecfileResults: number): Observable<OrganizationLookupResponse> {
+    return this.apiService.get<OrganizationLookupResponse>(
+      `/contacts/organization_lookup/?q=${search}` +
+      `&max_fecfile_results=${maxFecfileResults}`).pipe(
+        map((response) => OrganizationLookupResponse.fromJSON(response)));
   }
 
 }
