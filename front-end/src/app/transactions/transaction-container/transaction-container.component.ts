@@ -15,9 +15,6 @@ import { Contact } from '../../shared/models/contact.model';
 export class TransactionContainerComponent implements OnInit, OnDestroy {
   transactionType: TransactionType | undefined;
   destroy$: Subject<boolean> = new Subject<boolean>();
-  isNewItem = true;
-  detailVisible = true;
-  item: Contact = Contact.fromJSON({});
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store, private titleService: Title) {
     activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {

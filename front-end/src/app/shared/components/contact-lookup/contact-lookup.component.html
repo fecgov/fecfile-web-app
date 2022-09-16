@@ -9,11 +9,12 @@
           optionLabel="name"
           optionValue="code"
           [readonly]="contactTypeReadOnly"
-          [styleClass]="contactTypeStyleClass">
+          [styleClass]="contactTypeStyleClass"
+        >
         </p-dropdown>
       </div>
       <div class="col-2 pl-0">
-        <p-autoComplete 
+        <p-autoComplete
           [group]="true"
           (completeMethod)="onDropdownSearch($event)"
           field="label"
@@ -24,30 +25,28 @@
           formControlName="selectedContact"
           placeholder="Search for a contact"
           [forceSelection]="true"
-          (onSelect)="onContactSelect($event)">
+          (onSelect)="onContactSelect($event)"
+        >
           <ng-template let-contact pTemplate="item">
             <div>
-              <span [innerHTML]="contact.label | highlightTerms:searchTerm"
-                class="contact-label">
-              </span>
-              <span *ngIf="isContact(contact.value)" 
-                class="in-contacts">
-                In contacts
-              </span>
+              <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
+              <span *ngIf="isContact(contact.value)" class="in-contacts"> In contacts </span>
             </div>
           </ng-template>
         </p-autoComplete>
       </div>
       <p>or</p>
       <div class="col-2">
-        <button
-          pButton
-          pRipple
-          label="Create a new contact"
-          icon="pi pi-plus-circle"
-          class="p-button-info">
-        </button>
+        <button pButton pRipple label="Create a new contact" icon="pi pi-plus-circle" class="p-button-info"></button>
       </div>
     </div>
   </form>
 </div>
+
+<app-contact-detail
+  [contact]="this.item"
+  [(detailVisible)]="detailVisible"
+  [isNewItem]="isNewItem"
+></app-contact-detail>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

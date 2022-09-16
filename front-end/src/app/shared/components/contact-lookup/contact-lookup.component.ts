@@ -15,31 +15,30 @@ export class ContactLookupComponent {
   @Input() contactTypeInputId = 'entity_type';
   @Input() contactTypeFormControl: FormControl = new FormControl();
   @Input() contactTypeReadOnly = true;
-  @Input() contactTypeStyleClass = "";
+  @Input() contactTypeStyleClass = '';
 
   @Input() maxFecResults = 10;
   @Input() maxFecfileResults = 10;
 
-  @Output() fecfileContactSelect =
-    new EventEmitter<SelectItem<Contact>>();
-  @Output() fecApiLookupSelect = new EventEmitter<
-    SelectItem<FecApiLookupData>>();
+  @Output() fecfileContactSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() fecApiLookupSelect = new EventEmitter<SelectItem<FecApiLookupData>>();
 
   selectedContact: FormControl<SelectItem> | null = null;
 
   contactLookupForm: FormGroup = this.formBuilder.group({
     selectedContactType: this.contactTypeFormControl,
-    selectedContact: this.selectedContact
-  })
+    selectedContact: this.selectedContact,
+  });
 
   contactLookupList: SelectItemGroup[] = [];
 
   searchTerm = '';
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private contactService: ContactService
-  ) { }
+  isNewItem = true;
+  detailVisible = true;
+  item: Contact = Contact.fromJSON({});
+
+  constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onDropdownSearch(event: any) {
@@ -48,19 +47,16 @@ export class ContactLookupComponent {
       this.searchTerm = searchTerm;
       switch (this.contactTypeFormControl.value) {
         case ContactTypes.COMMITTEE:
-          this.contactService.committeeLookup(
-            searchTerm, this.maxFecResults,
-            this.maxFecfileResults).subscribe((response) => {
-              this.contactLookupList = response &&
-                response.toSelectItemGroups();
+          this.contactService
+            .committeeLookup(searchTerm, this.maxFecResults, this.maxFecfileResults)
+            .subscribe((response) => {
+              this.contactLookupList = response && response.toSelectItemGroups();
             });
           break;
         case ContactTypes.INDIVIDUAL:
-          this.contactService.individualLookup(searchTerm,
-            this.maxFecfileResults).subscribe((response) => {
-              this.contactLookupList = response &&
-                response.toSelectItemGroups();
-            });
+          this.contactService.individualLookup(searchTerm, this.maxFecfileResults).subscribe((response) => {
+            this.contactLookupList = response && response.toSelectItemGroups();
+          });
           break;
       }
     } else {
@@ -82,5 +78,4 @@ export class ContactLookupComponent {
   isContact(value: Contact | FecApiLookupData) {
     return value instanceof Contact;
   }
-
 }

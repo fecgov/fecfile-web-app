@@ -46,11 +46,3 @@
     [contributionPurposeDescrip]="transactionType?.contributionPurposeDescripReadonly()"
   ></app-transaction-group-f>
 </ng-container>
-
-<app-contact-detail
-  [contact]="this.item"
-  [(detailVisible)]="detailVisible"
-  [isNewItem]="isNewItem"
-></app-contact-detail>
-
-<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
