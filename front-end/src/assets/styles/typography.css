@@ -6,23 +6,14 @@ h1{
     font-weight:700;
     line-height:1.2;
     
-}
-<!-- @media screen and (min-width:40em){
-    h1{
-        font-size:3.6rem} -->
-}
+
 h2{
     margin:0 0 1em 0;
     font-family:gandhiserif-bold,serif;
     font-size:24px;
     font-weight:700;
     line-height:1.2
-}
-<!-- @media screen and (min-width:40em){
-@media screen and (min-width:40em){
-    h2{
-        font-size:2.4rem} -->
-}
+
 h3{
     margin:0 0 1em 0;
     font-family:gandhiserif-bold,serif;
