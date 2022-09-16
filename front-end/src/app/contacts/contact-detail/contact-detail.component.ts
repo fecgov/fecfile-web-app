@@ -158,6 +158,10 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
           this.candidateDistrictOptions = [];
         }
       });
+
+    setInterval(() => {
+      console.log(this.form);
+    }, 2000);
   }
 
   ngOnDestroy(): void {

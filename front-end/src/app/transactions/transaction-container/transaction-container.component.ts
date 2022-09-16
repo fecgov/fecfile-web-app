@@ -38,10 +38,6 @@ export class TransactionContainerComponent implements OnInit, OnDestroy {
           this.transactionType.transaction.filer_committee_id_number = committeeAccount.committee_id;
         }
       });
-
-    setInterval(() => {
-      console.log(this.item);
-    }, 1000);
   }
 
   ngOnDestroy(): void {
