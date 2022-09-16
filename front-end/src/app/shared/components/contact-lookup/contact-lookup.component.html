@@ -37,7 +37,14 @@
       </div>
       <p>or</p>
       <div class="col-2">
-        <button pButton pRipple label="Create a new contact" icon="pi pi-plus-circle" class="p-button-info"></button>
+        <button
+          pButton
+          pRipple
+          label="Create a new contact"
+          icon="pi pi-plus-circle"
+          class="p-button-info"
+          (click)="createNewContact()"
+        ></button>
       </div>
     </div>
   </form>

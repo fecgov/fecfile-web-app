@@ -35,7 +35,7 @@ export class ContactLookupComponent {
   searchTerm = '';
 
   isNewItem = true;
-  detailVisible = true;
+  detailVisible = false;
   item: Contact = Contact.fromJSON({});
 
   constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
@@ -77,5 +77,11 @@ export class ContactLookupComponent {
 
   isContact(value: Contact | FecApiLookupData) {
     return value instanceof Contact;
+  }
+
+  createNewContact() {
+    this.item = Contact.fromJSON({});
+    this.detailVisible = true;
+    this.isNewItem = true;
   }
 }
