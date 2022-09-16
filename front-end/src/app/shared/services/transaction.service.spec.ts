@@ -52,7 +52,7 @@ describe('TransactionService', () => {
   it('#get() should GET a record', () => {
     const mockResponse: SchATransaction = SchATransaction.fromJSON({ id: 1 });
 
-    service.get(1).subscribe((response) => {
+    service.get('1').subscribe((response) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -63,7 +63,7 @@ describe('TransactionService', () => {
   });
 
   it('#create() should POST a record', () => {
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: 1 });
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
 
     service.create(schATransaction, 'OFFSET_TO_OPEX', ['form_type']).subscribe((response) => {
       expect(response).toEqual(schATransaction);
@@ -78,7 +78,7 @@ describe('TransactionService', () => {
   });
 
   it('#update() should PUT  a record', () => {
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: 1 });
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
 
     service.update(schATransaction, 'OFFSET_TO_OPEX').subscribe((response) => {
       expect(response).toEqual(schATransaction);
@@ -94,7 +94,7 @@ describe('TransactionService', () => {
 
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: 1 });
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
 
     service.delete(schATransaction).subscribe((response: null) => {
       expect(response).toEqual(mockResponse);

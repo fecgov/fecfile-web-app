@@ -21,6 +21,7 @@ export class ReportResolver implements Resolve<Report | undefined> {
     if (!reportId) {
       return of(undefined);
     }
+    console.log('active report ' + reportId);
     return this.reportService.setActiveReportById(reportId);
   }
 }

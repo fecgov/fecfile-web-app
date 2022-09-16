@@ -46,7 +46,7 @@ describe('CreateF3xStep4Component', () => {
                 report: F3xSummary.fromJSON({}),
               },
               params: {
-                reportId: 999,
+                reportId: '999',
               },
             },
           },
