@@ -16,7 +16,7 @@ import {
   Contact,
   ContactTypeLabels,
   ContactTypes,
-} from '../../shared/models/contact.model';
+} from '../../models/contact.model';
 
 @Component({
   selector: 'app-contact-detail',
@@ -158,10 +158,6 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
           this.candidateDistrictOptions = [];
         }
       });
-
-    setInterval(() => {
-      console.log(this.form);
-    }, 2000);
   }
 
   ngOnDestroy(): void {

@@ -13,9 +13,19 @@ import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
 import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
+import { ContactDetailComponent } from './components/contact-detail/contact-detail.component';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
-  imports: [CommonModule, ReactiveFormsModule, ReactiveFormsModule, ButtonModule, DropdownModule, AutoCompleteModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    DropdownModule,
+    AutoCompleteModule,
+    DialogModule,
+  ],
   declarations: [
     LabelPipe,
     ErrorMessagesComponent,
@@ -26,6 +36,7 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     HighlightTermsPipe,
     FecInternationalPhoneInputComponent,
     ContactLookupComponent,
+    ContactDetailComponent,
   ],
   exports: [
     FecDatePipe,
@@ -37,6 +48,7 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     HighlightTermsPipe,
     FecInternationalPhoneInputComponent,
     ContactLookupComponent,
+    ContactDetailComponent,
   ],
 })
-export class SharedModule { }
+export class SharedModule {}

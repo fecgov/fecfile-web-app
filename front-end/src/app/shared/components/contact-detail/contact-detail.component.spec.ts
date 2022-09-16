@@ -6,8 +6,8 @@ import { MessageService } from 'primeng/api';
 import { ContactDetailComponent } from './contact-detail.component';
 import { FormBuilder } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { CandidateOfficeTypes, Contact, ContactTypes } from '../../shared/models/contact.model';
-import { environment } from '../../../environments/environment';
+import { CandidateOfficeTypes, Contact, ContactTypes } from '../../models/contact.model';
+import { environment } from '../../../../environments/environment';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 
 describe('ContactDetailComponent', () => {

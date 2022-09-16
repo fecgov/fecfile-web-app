@@ -19,10 +19,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SharedModule } from '../shared/shared.module';
 import { ContactsRoutingModule } from './contacts-routing.module';
 import { ContactListComponent } from './contact-list/contact-list.component';
-import { ContactDetailComponent } from './contact-detail/contact-detail.component';
 
 @NgModule({
-  declarations: [ContactListComponent, ContactDetailComponent],
+  declarations: [ContactListComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -40,6 +39,5 @@ import { ContactDetailComponent } from './contact-detail/contact-detail.componen
     InputTextModule,
     SharedModule,
   ],
-  exports: [ContactDetailComponent],
 })
 export class ContactsModule {}
