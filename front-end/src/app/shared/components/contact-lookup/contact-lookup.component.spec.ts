@@ -47,9 +47,9 @@ describe('ContactLookupComponent', () => {
     expect(component.contactLookupList.length === 0).toBeTrue();
   }));
 
-  it('#onDropdownSearch COM null fec_api_committees', fakeAsync(() => {
+  it('#onDropdownSearch COM undefined fec_api_committees', fakeAsync(() => {
     const testCommitteeLookupResponse = new CommitteeLookupResponse();
-    testCommitteeLookupResponse.fec_api_committees = null;
+    testCommitteeLookupResponse.fec_api_committees;
     testCommitteeLookupResponse.fecfile_committees = [
       {
         id: 123,
@@ -63,7 +63,7 @@ describe('ContactLookupComponent', () => {
     expect(component.contactLookupList[1].items.length === 0).toBeTrue();
   }));
 
-  it('#onDropdownSearch COM null fecfile_committees', fakeAsync(() => {
+  it('#onDropdownSearch COM undefined fecfile_committees', fakeAsync(() => {
     const testCommitteeLookupResponse = new CommitteeLookupResponse();
     testCommitteeLookupResponse.fec_api_committees = [
       {
@@ -72,7 +72,7 @@ describe('ContactLookupComponent', () => {
         is_active: true
       } as FecApiCommitteeLookupData
     ];
-    testCommitteeLookupResponse.fecfile_committees = null;
+    testCommitteeLookupResponse.fecfile_committees;
     spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
     component.contactTypeFormControl.setValue("COM");
@@ -103,9 +103,9 @@ describe('ContactLookupComponent', () => {
       JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups())).toBeTrue();
   }));
 
-  it('#onDropdownSearch IND null fecfile_individuals', fakeAsync(() => {
+  it('#onDropdownSearch IND undefined fecfile_individuals', fakeAsync(() => {
     const testIndividualLookupResponse = new IndividualLookupResponse();
-    testIndividualLookupResponse.fecfile_individuals = null;
+    testIndividualLookupResponse.fecfile_individuals;
     spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
     const testEvent = { query: 'hi' };
     component.contactTypeFormControl.setValue("IND");

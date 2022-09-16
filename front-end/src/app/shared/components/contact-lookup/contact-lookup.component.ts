@@ -43,10 +43,10 @@ export class ContactLookupComponent {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onDropdownSearch(event: any) {
-    const searchTerm = event?.query;
+    const searchTerm = event.query;
     if (searchTerm) {
       this.searchTerm = searchTerm;
-      switch (this.contactTypeFormControl?.value) {
+      switch (this.contactTypeFormControl.value) {
         case ContactTypes.COMMITTEE:
           this.contactService.committeeLookup(
             searchTerm, this.maxFecResults,

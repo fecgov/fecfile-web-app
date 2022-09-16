@@ -113,8 +113,8 @@ export class FecfileCommitteeLookupData extends Contact {
 }
 
 export class CommitteeLookupResponse {
-  fec_api_committees: FecApiCommitteeLookupData[] | null = null;
-  fecfile_committees: FecfileCommitteeLookupData[] | null = null;
+  fec_api_committees?: FecApiCommitteeLookupData[];
+  fecfile_committees?: FecfileCommitteeLookupData[];
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -156,7 +156,7 @@ export class FecfileIndividualLookupData extends Contact {
 }
 
 export class IndividualLookupResponse {
-  fecfile_individuals: FecfileIndividualLookupData[] | null = null;
+  fecfile_individuals?: FecfileIndividualLookupData[];
 
   // prettier-ignore
   static fromJSON(json: any): IndividualLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
