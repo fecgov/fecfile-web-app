@@ -33,7 +33,7 @@ export class TransactionService implements TableListService<Transaction> {
       );
   }
 
-  public get(transactionId: number): Observable<Transaction> {
+  public get(transactionId: string): Observable<Transaction> {
     return this.schATransactionService.get(transactionId);
   }
 

@@ -19,7 +19,7 @@ import { ReportService } from '../../../shared/services/report.service';
 })
 export class MenuReportComponent implements OnInit, OnDestroy {
   activeReport: Report | null = null;
-  currentReportId: number | undefined;
+  currentReportId: string | undefined;
   currentReportTimestamp: number | null = null;
   items: MenuItem[] = [];
   showMenu = false;
