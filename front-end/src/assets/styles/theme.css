@@ -2706,10 +2706,10 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-radius: 0;
 }
 .p-datatable .p-datatable-header {
-  background: #f1f1f1;
+  background: #FFF;
   color: #212121;
-  border: solid #d6d7d9;
-  border-width: 1px 0 0 0;
+  border: solid #000000;
+  border-width: 2px 0 0 0;
   padding: 1rem 1rem;
   font-weight: 600;
 }
