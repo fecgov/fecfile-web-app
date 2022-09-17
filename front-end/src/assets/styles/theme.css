@@ -805,6 +805,7 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 .p-dropdown .p-dropdown-label {
   background: transparent;
   border: 0 none;
+  line-height: 1.6;
 }
 .p-dropdown .p-dropdown-label.p-placeholder {
   color: #5b616b;
