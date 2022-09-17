@@ -1159,6 +1159,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
   appearance: none;
   border-radius: 4px;
+  height: 3em;
 }
 .p-inputtext:enabled:hover {
   border-color: #d6d7d9;
