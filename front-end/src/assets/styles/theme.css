@@ -1154,8 +1154,8 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   font-size: 1rem;
   color: #5b616b;
   background: #ffffff;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #d6d7d9;
+  padding: 10px 15px;
+  border: 2px solid #aeb0b5;
   transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
   appearance: none;
   border-radius: 4px;
