@@ -3500,26 +3500,26 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .p-paginator .p-paginator-prev,
 .p-paginator .p-paginator-next,
 .p-paginator .p-paginator-last {
-  background-color: #ffffff;
+  background-color: #AEB0B5;
   border: 1px solid #d6d7d9;
-  color: #112e51;
+  color: #212121;
   min-width: 2.357rem;
-  height: 2.357rem;
-  margin: 0 0 0 -1px;
+  height: 2rem;
+  margin: 0 0 0 8px;
   transition: box-shadow 0.15s;
-  border-radius: 0;
+  border-radius: 2px;
 }
 .p-paginator .p-paginator-first:not(.p-disabled):not(.p-highlight):hover,
 .p-paginator .p-paginator-prev:not(.p-disabled):not(.p-highlight):hover,
 .p-paginator .p-paginator-next:not(.p-disabled):not(.p-highlight):hover,
 .p-paginator .p-paginator-last:not(.p-disabled):not(.p-highlight):hover {
   background: #e8e8e8;
-  border-color: #d6d7d9;
+  border-color: #8C8E92;
   color: #112e51;
 }
 .p-paginator .p-paginator-first {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
 }
 .p-paginator .p-paginator-last {
   border-top-right-radius: 0;
@@ -3542,7 +3542,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 .p-paginator .p-paginator-current {
   background-color: #ffffff;
-  border: 1px solid #d6d7d9;
   color: #112e51;
   min-width: 2.357rem;
   height: 2.357rem;
@@ -3554,10 +3553,10 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border: 1px solid #d6d7d9;
   color: #112e51;
   min-width: 2.357rem;
-  height: 2.357rem;
-  margin: 0 0 0 -1px;
+  height: 2rem;
+  margin: 0 0 0 8px;
   transition: box-shadow 0.15s;
-  border-radius: 0;
+  border-radius: 2px;
 }
 .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background: #112e51;
