@@ -51,7 +51,7 @@
 .p-component {
   font-family: "karla", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1rem;
-  font-weight: normal;
+  font-weight: 700;
 }
 
 .p-component-overlay {
@@ -4980,6 +4980,10 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border: 0 none;
   border-radius: 4px;
 }
+.p-menubar .p-menuitem-text {
+  text-transform: uppercase;
+}
+
 .p-menubar .p-menuitem-link {
   padding: 0.75rem 1rem;
   color: #212121;
