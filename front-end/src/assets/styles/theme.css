@@ -4337,8 +4337,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 
 .p-toolbar {
-  background: #f1f1f1;
-  border: 1px solid #d6d7d9;
+  background: #ffffff;
   padding: 1rem 1.25rem;
   border-radius: 4px;
 }
