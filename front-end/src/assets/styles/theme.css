@@ -4993,6 +4993,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-radius: 0;
   transition: box-shadow 0.15s;
   user-select: none;
+  border-bottom: 0px;
 }
 .p-menubar .p-menuitem-link .p-menuitem-text {
   color: #212121;
