@@ -3137,7 +3137,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
 }
 .fc.fc-unthemed .fc-toolbar .fc-button .fc-icon-chevron-left {
-  font-family: primeicons !important;
+  font-family: "PrimeIcons" !important;
   text-indent: 0;
   font-size: 1rem;
 }
@@ -3145,7 +3145,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   content: "\e900";
 }
 .fc.fc-unthemed .fc-toolbar .fc-button .fc-icon-chevron-right {
-  font-family: "primeicons";
+  font-family: "PrimeIcons" !important;
   text-indent: 0;
   font-size: 1rem;
 }
