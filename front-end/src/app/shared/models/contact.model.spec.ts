@@ -19,15 +19,4 @@ describe('Contact', () => {
     expect(contact.occupation).toBe(null);
   });
 
-  it('#fromJSON() should return a populated FecCommitteeLookupData class', () => {
-    const data = {
-      id: 'C123',
-      name: 'foo',
-    };
-    const fecCommitteeLookupData: FecCommitteeLookupData = FecCommitteeLookupData.fromJSON(data);
-    expect(fecCommitteeLookupData).toBeInstanceOf(FecCommitteeLookupData);
-    expect(fecCommitteeLookupData.id).toBe('C123');
-    expect(fecCommitteeLookupData.name).toBe('foo');
-  });
-
 });

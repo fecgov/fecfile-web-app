@@ -211,7 +211,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#onContactLookupSelect should handle null form', () => {
     const testContact = new Contact();
-    testContact.id = 123;
+    testContact.id = '123';
     const testContactSelectItem: SelectItem<Contact> =
     {
       value: testContact,
@@ -241,7 +241,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testPrefix = 'testPrefix';
     const testSuffix = 'testSuffix';
     const testContact = new Contact();
-    testContact.id = 123;
+    testContact.id = '123';
     testContact.last_name = testLastName;
     testContact.first_name = testFirstName;
     testContact.middle_name = testMiddleName;

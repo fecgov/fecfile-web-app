@@ -53,7 +53,7 @@ describe('ContactLookupComponent', () => {
       {
         id: 123,
         name: 'testName'
-      } as FecfileCommitteeLookupData
+      } as unknown as FecfileCommitteeLookupData
     ];
     spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
@@ -91,7 +91,7 @@ describe('ContactLookupComponent', () => {
       {
         id: 123,
         name: 'testName'
-      } as FecfileCommitteeLookupData
+      } as unknown as FecfileCommitteeLookupData
     ];
     spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
@@ -119,7 +119,7 @@ describe('ContactLookupComponent', () => {
         last_name: 'testLastName',
         first_name: 'testFirstName',
         type: ContactTypes.COMMITTEE,
-      } as FecfileIndividualLookupData)
+      } as unknown as FecfileIndividualLookupData)
     ];
     spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
     const testEvent = { query: 'hi' };
