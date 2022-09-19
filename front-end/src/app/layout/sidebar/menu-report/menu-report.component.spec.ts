@@ -41,7 +41,7 @@ describe('MenuReportComponent', () => {
 
   it('should navigate to menu', () => {
     router.navigateByUrl('/transactions/report/999/list');
-    expect(component.activeReport?.id).toBe(999);
+    expect(component.activeReport?.id).toBe('999');
   });
 
   it('should determine an active url', () => {
@@ -55,7 +55,7 @@ describe('MenuReportComponent', () => {
 
   it('should process a NavigationEnd event', () => {
     component.items = [];
-    component.currentReportId = 888;
+    component.currentReportId = '888';
     component.handleNavigationEvent({ url: '/transactions/report/999/list' } as NavigationEnd);
     expect(component.items.length).toBe(3);
   });

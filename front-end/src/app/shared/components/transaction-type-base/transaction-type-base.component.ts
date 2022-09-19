@@ -116,7 +116,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   navigateTo(
     navigateTo: 'list' | 'add another' | 'add-sub-tran' | 'to-parent',
-    transactionId?: number,
+    transactionId?: string,
     transactionTypeToAdd?: string
   ) {
     if (navigateTo === 'add another') {

@@ -159,7 +159,7 @@ export class F3xCoverageDates {
 }
 
 export class F3xSummary extends BaseModel implements Report {
-  id: number | undefined;
+  id: string | undefined;
 
   form_type: F3xFormType = F3xFormTypes.F3XT;
   filer_committee_id_number: string | null = null;

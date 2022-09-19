@@ -340,7 +340,7 @@ export function deleteAllReports() {
 }
 
 //Deletes a single report by its ID
-export function deleteReport(reportID: number, authToken: string | null = null) {
+export function deleteReport(reportID: string, authToken: string | null = null) {
   if (authToken == null) {
     authToken = getAuthToken();
   }

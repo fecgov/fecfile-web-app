@@ -4,7 +4,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { LabelList } from '../utils/label.utils';
 
 export class SchATransaction extends BaseModel implements Transaction {
-  id: number | null = null;
+  id: string | null = null;
 
   form_type: string | null = null;
   filer_committee_id_number: string | null = null;
@@ -53,13 +53,13 @@ export class SchATransaction extends BaseModel implements Transaction {
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | null = null;
   transaction_type_identifier: string | null = null;
 
-  parent_transaction_id: number | null = null; // Foreign key to the SchATransaction model
+  parent_transaction_id: string | null = null; // Foreign key to the SchATransaction model
 
   created: string | null = null;
   updated: string | null = null;
   deleted: string | null = null;
 
-  report_id: number | null = null; // Foreign key to the F3XSummary model
+  report_id: string | null = null; // Foreign key to the F3XSummary model
 
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
