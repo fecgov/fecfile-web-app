@@ -128,11 +128,15 @@ export class CommitteeLookupResponse {
       new FecfileCommitteeLookupData(data).toSelectItem()) || [];
     return [
       {
-        label: 'Select an existing committee contact:',
+        label: (fecfileSelectItems && fecfileSelectItems.length > 0) ?
+          'Select an existing committee contact:' :
+          'There are no matching committees',
         items: fecfileSelectItems,
       },
       {
-        label: 'Create a new contact from list of registered committees:',
+        label: (fecApiSelectItems && fecApiSelectItems.length > 0) ?
+          'Create a new contact from list of registered committees:' :
+          'There are no matching registered committees',
         items: fecApiSelectItems,
       },
     ];
@@ -168,7 +172,9 @@ export class IndividualLookupResponse {
       new FecfileIndividualLookupData(data).toSelectItem()) || [];
     return [
       {
-        label: 'Select an existing individual contact:',
+        label: (fecfileSelectItems && fecfileSelectItems.length > 0) ?
+          'Select an existing individual contact:' :
+          'There are no matching individuals',
         items: fecfileSelectItems,
       },
     ];
