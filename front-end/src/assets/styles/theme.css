@@ -1613,8 +1613,8 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
 }
 
 .p-selectbutton .p-button {
-  background: #5b616b;
-  border: 1px solid #5b616b;
+  background: #AEB0B5;
+  border: 2px solid #5b616b;
   color: #ffffff;
   transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
@@ -2008,7 +2008,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 
 .p-fluid .p-button {
-  width: 100%;
+  min-width: 125px;
 }
 .p-fluid .p-button-icon-only {
   width: 2.357rem;
