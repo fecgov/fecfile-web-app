@@ -30,7 +30,7 @@ export class ReportService implements TableListService<Report> {
     );
   }
 
-  public get(reportId: number): Observable<Report> {
+  public get(reportId: string): Observable<Report> {
     return this.f3xSummaryService.get(reportId);
   }
 
@@ -68,7 +68,7 @@ export class ReportService implements TableListService<Report> {
    * @param reportId
    * @returns Observable<Report>
    */
-  setActiveReportById(reportId: number | undefined): Observable<Report> {
+  setActiveReportById(reportId: string | undefined): Observable<Report> {
     if (!reportId) throw new Error('No Report Id Provided.');
     return this.get(reportId).pipe(
       tap((report) => {

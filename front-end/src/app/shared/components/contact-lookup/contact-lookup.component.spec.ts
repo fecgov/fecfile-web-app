@@ -53,7 +53,7 @@ describe('ContactLookupComponent', () => {
       {
         id: 123,
         name: 'testName'
-      } as FecfileCommitteeLookupData
+      } as unknown as FecfileCommitteeLookupData
     ];
     spyOn(testContactService, 'committeeLookup').and.returnValue(
       of(testCommitteeLookupResponse));
@@ -93,7 +93,7 @@ describe('ContactLookupComponent', () => {
       {
         id: 123,
         name: 'testName'
-      } as FecfileCommitteeLookupData
+      } as unknown as FecfileCommitteeLookupData
     ];
     spyOn(testContactService, 'committeeLookup').and.returnValue(
       of(testCommitteeLookupResponse));
@@ -123,7 +123,7 @@ describe('ContactLookupComponent', () => {
         last_name: 'testLastName',
         first_name: 'testFirstName',
         type: ContactTypes.INDIVIDUAL,
-      } as FecfileIndividualLookupData)
+      } as unknown as FecfileIndividualLookupData)
     ];
     spyOn(testContactService, 'individualLookup').and.returnValue(
       of(testIndividualLookupResponse));

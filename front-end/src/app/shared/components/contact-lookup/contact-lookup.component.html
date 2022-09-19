@@ -25,16 +25,21 @@
           placeholder="Search for a contact"
           [forceSelection]="true"
           (onSelect)="onContactSelect($event)">
-          <ng-template let-contact pTemplate="item">
-            <div>
-              <span [innerHTML]="contact.label | highlightTerms:searchTerm"
-                class="contact-label">
-              </span>
-              <span *ngIf="isContact(contact.value)" 
-                class="in-contacts">
-                In contacts
-              </span>
+          <ng-template let-group pTemplate="group">
+            <div>{{group.label}}</div>
+            <div class="try-another-search-text" 
+              *ngIf="!group.items || !group.items.length">
+              Try another search or create a new contact
             </div>
+          </ng-template>
+          <ng-template let-contact pTemplate="item">
+            <span [innerHTML]="contact.label | highlightTerms:searchTerm"
+              class="contact-label">
+            </span>
+            <span *ngIf="isContact(contact.value)" 
+              class="in-contacts">
+              In contacts
+            </span>
           </ng-template>
         </p-autoComplete>
       </div>
