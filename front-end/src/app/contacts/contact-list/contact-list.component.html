@@ -21,12 +21,6 @@
         (click)="deleteSelectedItems()"
         [disabled]="!selectedItems.length"
       ></button>
-      <app-contact-lookup 
-        [contactTypeOptions]="contactTypeOptions"
-        [maxFecResults]="5"
-        [maxFecfileResults]="5"
-        (contactSelect)="onContactLookupSelect($event)">
-      </app-contact-lookup>
     </ng-template>
 
     <ng-template pTemplate="right">

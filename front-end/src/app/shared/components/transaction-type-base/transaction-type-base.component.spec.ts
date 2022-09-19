@@ -1,14 +1,15 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { Message, MessageService } from 'primeng/api';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { Message, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
@@ -207,4 +208,69 @@ describe('TransactionTypeBaseComponent', () => {
     component.navigateTo('list');
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
+
+  it('#onContactLookupSelect should handle null form', () => {
+    const testContact = new Contact();
+    testContact.id = '123';
+    const testContactSelectItem: SelectItem<Contact> =
+    {
+      value: testContact,
+    }
+    component.form.setControl('entity_type', null);
+    component.onContactLookupSelect(testContactSelectItem);
+    expect(component.form.get(
+      'contributor_last_name')?.value).toBeFalsy();
+
+    component.form.setControl('entity_type',
+      new FormControl(ContactTypes.INDIVIDUAL));
+    component.form.setControl('contributor_last_name', null);
+    component.form.setControl('contributor_first_name', null);
+    component.form.setControl('contributor_middle_name', null);
+    component.form.setControl('contributor_prefix', null);
+    component.form.setControl('contributor_suffix', null);
+    component.onContactLookupSelect(testContactSelectItem);
+    expect(component.form.get(
+      'contributor_last_name')?.value).toBeFalsy();
+  });
+
+  it('#onContactLookupSelect should set contact fields', () => {
+    const testEntityType = ContactTypes.INDIVIDUAL;
+    const testLastName = 'testLastName';
+    const testFirstName = 'testFirstName';
+    const testMiddleName = 'testMiddleName';
+    const testPrefix = 'testPrefix';
+    const testSuffix = 'testSuffix';
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.last_name = testLastName;
+    testContact.first_name = testFirstName;
+    testContact.middle_name = testMiddleName;
+    testContact.prefix = testPrefix;
+    testContact.suffix = testSuffix;
+
+    const testContactSelectItem: SelectItem<Contact> =
+    {
+      value: testContact,
+    }
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.onContactLookupSelect(testContactSelectItem);
+    const lastNameFormControlValue =
+      component.form.get('contributor_last_name')?.value;
+    const firstNameFormControlValue =
+      component.form.get('contributor_first_name')?.value;
+    const middleNameFormControlValue =
+      component.form.get('contributor_middle_name')?.value;
+    const prefixFormControlValue =
+      component.form.get('contributor_prefix')?.value;
+    const suffixFormControlValue =
+      component.form.get('contributor_suffix')?.value;
+
+    expect(lastNameFormControlValue === testLastName).toBeTrue();
+    expect(firstNameFormControlValue === testFirstName).toBeTrue();
+    expect(middleNameFormControlValue === testMiddleName).toBeTrue();
+    expect(prefixFormControlValue === testPrefix).toBeTrue();
+    expect(suffixFormControlValue === testSuffix).toBeTrue();
+  });
+
 });

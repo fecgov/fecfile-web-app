@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { CommitteeLookupResponse, Contact } from '../models/contact.model';
+import { CommitteeLookupResponse, Contact, IndividualLookupResponse } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 
@@ -10,7 +10,7 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class ContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
@@ -47,6 +47,14 @@ export class ContactService implements TableListService<Contact> {
       `&max_fec_results=${maxFecResults}` +
       `&max_fecfile_results=${maxFecfileResults}`).pipe(
         map((response) => CommitteeLookupResponse.fromJSON(response)));
+  }
+
+  public individualLookup(search: string,
+    maxFecfileResults: number): Observable<IndividualLookupResponse> {
+    return this.apiService.get<IndividualLookupResponse>(
+      `/contacts/individual_lookup/?q=${search}` +
+      `&max_fecfile_results=${maxFecfileResults}`).pipe(
+        map((response) => IndividualLookupResponse.fromJSON(response)));
   }
 
 }
