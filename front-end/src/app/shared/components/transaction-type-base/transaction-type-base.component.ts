@@ -37,7 +37,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected validateService: ValidateService,
     protected fb: FormBuilder,
     protected router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
@@ -160,6 +160,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   onContactLookupSelect(selectItem: SelectItem<Contact>) {
+    console.log(selectItem);
     if (selectItem) {
       const value = selectItem.value;
       if (value && value.type === ContactTypes.INDIVIDUAL) {
@@ -171,5 +172,4 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       }
     }
   }
-
 }

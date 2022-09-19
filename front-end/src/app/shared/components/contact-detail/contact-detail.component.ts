@@ -64,6 +64,8 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
     ])
   );
 
+  @Input() onCreationMethod: Function | null = null;
+
   constructor(
     private messageService: MessageService,
     private contactService: ContactService,
@@ -204,6 +206,9 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
           detail: 'Contact Created',
           life: 3000,
         });
+        if (this.onCreationMethod) {
+          this.onCreationMethod(payload);
+        }
       });
     }
     if (closeDetail) {

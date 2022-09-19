@@ -349,12 +349,29 @@
         ></button>
       </div>
       <div class="col-11">
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-primary" (click)="saveItem()"></button>
         <button
-          *ngIf="isNewItem"
+          *ngIf="!onCreationMethod"
+          pButton
+          pRipple
+          label="Save"
+          icon="pi pi-check"
+          class="p-button-primary"
+          (click)="saveItem()"
+        ></button>
+        <button
+          *ngIf="isNewItem && !onCreationMethod"
           pButton
           pRipple
           label="Save & Add More"
+          icon="pi pi-check"
+          class="p-button-info"
+          (click)="saveItem(false)"
+        ></button>
+        <button
+          *ngIf="onCreationMethod"
+          pButton
+          pRipple
+          label="Save & continue"
           icon="pi pi-check"
           class="p-button-info"
           (click)="saveItem(false)"

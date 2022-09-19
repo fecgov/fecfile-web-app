@@ -83,6 +83,5 @@ export class ContactLookupComponent {
     this.item = Contact.fromJSON({});
     this.detailVisible = true;
     this.isNewItem = true;
-    console.log(this.contactTypeOptions);
   }
 }

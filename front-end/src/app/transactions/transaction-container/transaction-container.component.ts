@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../../store/committee-account.selectors';
 import { CommitteeAccount } from '../../shared/models/committee-account.model';
 import { Title } from '@angular/platform-browser';
-import { Contact } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-transaction-container',
