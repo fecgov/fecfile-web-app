@@ -10,18 +10,14 @@ import { ApiService } from './api.service';
 export class MemoTextService {
   constructor(private apiService: ApiService) {}
 
-  public get(id: number): Observable<MemoText> {
-    return this.apiService
-      .get<MemoText>(`/memo-text/${id}`)
-      .pipe(map((response) => MemoText.fromJSON(response)));
+  public get(id: string): Observable<MemoText> {
+    return this.apiService.get<MemoText>(`/memo-text/${id}`).pipe(map((response) => MemoText.fromJSON(response)));
   }
 
-  public getForReportId(reportId: number): Observable<MemoText[]> {
+  public getForReportId(reportId: string): Observable<MemoText[]> {
     return this.apiService
       .get<MemoText[]>(`/memo-text/?report_id=${reportId}`)
-      .pipe(map((response) => response.map(memoText => 
-        MemoText.fromJSON(memoText)))
-      );
+      .pipe(map((response) => response.map((memoText) => MemoText.fromJSON(memoText))));
   }
 
   public create(memoText: MemoText, fieldsToValidate: string[] = []): Observable<MemoText> {
@@ -41,5 +37,4 @@ export class MemoTextService {
   public delete(memoText: MemoText): Observable<null> {
     return this.apiService.delete<null>(`/memo-text/${memoText.id}`);
   }
-  
 }

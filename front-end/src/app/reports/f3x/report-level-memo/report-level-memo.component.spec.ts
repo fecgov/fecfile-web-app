@@ -24,7 +24,7 @@ describe('ReportLevelMemoComponent', () => {
   let testMessageService: MessageService;
   let testRouter: Router;
   const f3x: F3xSummary = F3xSummary.fromJSON({
-    id: 999,
+    id: '999',
     coverage_from_date: '2022-05-25',
     form_type: 'F3XN',
     report_code: 'Q1',
@@ -72,8 +72,8 @@ describe('ReportLevelMemoComponent', () => {
   it('should create', () => {
     const testText4kValue = 'testText4k';
     const testMemoText: MemoText = new MemoText();
-    testMemoText.id = 4;
-    testMemoText.report_id = 123;
+    testMemoText.id = '4';
+    testMemoText.report_id = '123';
     testMemoText.rec_type = 'test_rec_type';
     testMemoText.filer_committee_id_number = 'test_fcin';
     testMemoText.transaction_id_number = 'test_tin';
@@ -97,7 +97,7 @@ describe('ReportLevelMemoComponent', () => {
     const testMemoTextServiceSpy = spyOn(testMemoTextService, 'update').and.returnValue(of(new MemoText()));
     const navigateSpy = spyOn(testRouter, 'navigateByUrl');
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
-    component.assignedMemoText.id = 1;
+    component.assignedMemoText.id = '1';
     component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');

@@ -8,7 +8,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 describe('ReportIsEditableGuard', () => {
   let guard: ReportIsEditableGuard;
   const mockRoute = {
-    paramMap: convertToParamMap({ reportId: 999 }),
+    paramMap: convertToParamMap({ reportId: '999' }),
   } as ActivatedRouteSnapshot;
 
   beforeEach(() => {
