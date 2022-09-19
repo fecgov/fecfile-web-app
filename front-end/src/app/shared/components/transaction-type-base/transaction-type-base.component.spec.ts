@@ -277,7 +277,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#onContactLookupSelect ORG should handle null form', () => {
     const testContact = new Contact();
-    testContact.id = 123;
+    testContact.id = '123';
     testContact.type = ContactTypes.ORGANIZATION;
     const testContactSelectItem: SelectItem<Contact> =
     {
@@ -296,7 +296,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testEntityType = ContactTypes.ORGANIZATION;
     const testOrganizationName = 'testOrganizationName';
     const testContact = new Contact();
-    testContact.id = 123;
+    testContact.id = '123';
     testContact.type = ContactTypes.ORGANIZATION;
     testContact.name = testOrganizationName;
 

@@ -153,7 +153,7 @@ describe('ContactLookupComponent', () => {
         id: 123,
         name: 'testOrgName',
         type: ContactTypes.ORGANIZATION,
-      } as FecfileOrganizationLookupData)
+      } as unknown as FecfileOrganizationLookupData)
     ];
     spyOn(testContactService, 'organizationLookup').and.returnValue(
       of(testOrganizationLookupResponse));
