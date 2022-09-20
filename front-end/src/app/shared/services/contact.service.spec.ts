@@ -1,11 +1,11 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from '../utils/unit-test.utils';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CommitteeLookupResponse, Contact } from '../models/contact.model';
+import { CommitteeLookupResponse, Contact, IndividualLookupResponse } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
+import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 import { ContactService } from './contact.service';
 
@@ -71,7 +71,7 @@ describe('ContactService', () => {
   it('#update() should PUT a payload', () => {
     const mockResponse: Contact = new Contact();
     const contact: Contact = mockResponse;
-    contact.id = 1;
+    contact.id = '1';
 
     service.update(contact).subscribe((response: Contact) => {
       expect(response).toEqual(mockResponse);
@@ -86,7 +86,7 @@ describe('ContactService', () => {
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
     const contact: Contact = new Contact();
-    contact.id = 1;
+    contact.id = '1';
 
     service.delete(contact).subscribe((response: null) => {
       expect(response).toEqual(mockResponse);
@@ -115,4 +115,21 @@ describe('ContactService', () => {
       .subscribe((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
   });
+
+  it('#individualLookup() happy path', () => {
+    const expectedRetval = new IndividualLookupResponse();
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval));
+    const testSearch = 'testSearch';
+    const testMaxFecfileResults = 2;
+
+    const expectedEndpoint =
+      `/contacts/individual_lookup/?q=${testSearch}` +
+      `&max_fecfile_results=${testMaxFecfileResults}`;
+
+    service
+      .individualLookup(testSearch, testMaxFecfileResults)
+      .subscribe((value) => expect(value).toEqual(expectedRetval));
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
+  });
+
 });

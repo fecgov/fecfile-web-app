@@ -13,11 +13,10 @@ export class F3xSummaryService {
   public getF3xCoverageDates(): Observable<F3xCoverageDates[]> {
     return this.apiService
       .get<F3xCoverageDates[]>(`/f3x-summaries/coverage_dates`)
-      .pipe(map((response) => response.map(fx3CoverageDate => 
-        F3xCoverageDates.fromJSON(fx3CoverageDate))));
+      .pipe(map((response) => response.map((fx3CoverageDate) => F3xCoverageDates.fromJSON(fx3CoverageDate))));
   }
 
-  public get(id: number): Observable<F3xSummary> {
+  public get(id: string): Observable<F3xSummary> {
     return this.apiService
       .get<F3xSummary>(`/f3x-summaries/${id}`)
       .pipe(map((response) => F3xSummary.fromJSON(response)));

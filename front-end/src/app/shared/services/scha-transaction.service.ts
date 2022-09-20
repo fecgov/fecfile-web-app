@@ -10,7 +10,7 @@ import { SchATransaction } from '../models/scha-transaction.model';
 export class SchATransactionService {
   constructor(private apiService: ApiService) {}
 
-  public get(id: number): Observable<SchATransaction> {
+  public get(id: string): Observable<SchATransaction> {
     return this.apiService
       .get<SchATransaction>(`/sch-a-transactions/${id}`)
       .pipe(map((response) => SchATransaction.fromJSON(response)));

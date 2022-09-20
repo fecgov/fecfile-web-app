@@ -119,7 +119,7 @@ describe('TransactionGroupBComponent', () => {
 
   it('#save() should update an existing record', () => {
     if (component.transaction) {
-      component.transaction.id = 10;
+      component.transaction.id = '10';
     }
     component.form.patchValue({ ...transaction });
     component.save('add another');

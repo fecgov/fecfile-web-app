@@ -20,7 +20,7 @@ describe('TransactionResolver', () => {
         {
           provide: TransactionService,
           useValue: {
-            get: (transactionId: number) =>
+            get: (transactionId: string) =>
               of(
                 SchATransaction.fromJSON({
                   id: transactionId,

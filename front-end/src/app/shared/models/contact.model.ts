@@ -41,7 +41,7 @@ export const CandidateOfficeTypeLabels = [
 ];
 
 export class Contact extends BaseModel {
-  id: number | undefined;
+  id: string | undefined;
   type: ContactType = ContactTypes.INDIVIDUAL;
   candidate_id: string | undefined;
   committee_id: string | undefined;
@@ -73,41 +73,104 @@ export class Contact extends BaseModel {
   }
 }
 
-export class FecCommitteeLookupData {
+export class FecApiLookupData {}
+export class FecApiCommitteeLookupData extends FecApiLookupData {
   id: string | undefined;
+  is_active: boolean | undefined;
   name: string | undefined;
-  // prettier-ignore
-  static fromJSON(json: any): FecCommitteeLookupData { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(FecCommitteeLookupData, json);
+
+  constructor(data: FecApiCommitteeLookupData) {
+    super();
+    Object.assign(this, data);
   }
-  static toSelectItem(data: FecCommitteeLookupData): SelectItem<string> {
-    return (
-      data && {
-        label: `${data.name} (${data.id})`,
-        value: `${data.id}`,
-      }
-    );
+
+  toSelectItem(): SelectItem<FecApiCommitteeLookupData> {
+    return {
+      label: `${this.name} (${this.id})`,
+      value: this,
+    };
+  }
+}
+
+export class FecfileCommitteeLookupData extends Contact {
+  constructor(data: FecfileCommitteeLookupData) {
+    super();
+    Object.assign(this, data);
+  }
+
+  toSelectItem(): SelectItem<Contact> {
+    return {
+      label: `${this.name} (${this.committee_id})`,
+      value: this,
+    };
   }
 }
 
 export class CommitteeLookupResponse {
-  fec_api_committees: FecCommitteeLookupData[] | undefined;
-  fecfile_committees: FecCommitteeLookupData[] | undefined;
+  fec_api_committees?: FecApiCommitteeLookupData[];
+  fecfile_committees?: FecfileCommitteeLookupData[];
+
   // prettier-ignore
   static fromJSON(json: any): CommitteeLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(CommitteeLookupResponse, json);
   }
+
   toSelectItemGroups(): SelectItemGroup[] {
-    const fecApiSelectItems = this.fec_api_committees?.map((data) => FecCommitteeLookupData.toSelectItem(data)) || [];
-    const fecfileSelectItems = this.fecfile_committees?.map((data) => FecCommitteeLookupData.toSelectItem(data)) || [];
+    const fecApiSelectItems =
+      this.fec_api_committees?.map((data) => new FecApiCommitteeLookupData(data).toSelectItem()) || [];
+    const fecfileSelectItems =
+      this.fecfile_committees?.map((data) => new FecfileCommitteeLookupData(data).toSelectItem()) || [];
     return [
       {
-        label: 'Select an existing committee contact:',
+        label:
+          fecfileSelectItems && fecfileSelectItems.length > 0
+            ? 'Select an existing committee contact:'
+            : 'There are no matching committees',
         items: fecfileSelectItems,
       },
       {
-        label: 'Create a new contact from list of registered committee:',
+        label:
+          fecApiSelectItems && fecApiSelectItems.length > 0
+            ? 'Create a new contact from list of registered committees:'
+            : 'There are no matching registered committees',
         items: fecApiSelectItems,
+      },
+    ];
+  }
+}
+
+export class FecfileIndividualLookupData extends Contact {
+  constructor(data: FecfileIndividualLookupData) {
+    super();
+    Object.assign(this, data);
+  }
+
+  toSelectItem(): SelectItem<Contact> {
+    return {
+      label: `${this.last_name}, ${this.first_name}`,
+      value: this,
+    };
+  }
+}
+
+export class IndividualLookupResponse {
+  fecfile_individuals?: FecfileIndividualLookupData[];
+
+  // prettier-ignore
+  static fromJSON(json: any): IndividualLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(IndividualLookupResponse, json);
+  }
+
+  toSelectItemGroups(): SelectItemGroup[] {
+    const fecfileSelectItems =
+      this.fecfile_individuals?.map((data) => new FecfileIndividualLookupData(data).toSelectItem()) || [];
+    return [
+      {
+        label:
+          fecfileSelectItems && fecfileSelectItems.length > 0
+            ? 'Select an existing individual contact:'
+            : 'There are no matching individuals',
+        items: fecfileSelectItems,
       },
     ];
   }

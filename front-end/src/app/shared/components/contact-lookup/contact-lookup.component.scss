@@ -1,0 +1,22 @@
+::ng-deep .p-autocomplete-dropdown {
+	color: black;
+	background-color: white;
+	border: 1px solid hsl(210, 14%, 83%);
+	border-left: 0px;
+}
+
+.contact-label {
+  float: left;
+  width: 50%;
+  white-space: normal;
+}
+
+.in-contacts {
+  float: right;
+  font-style: italic;
+}
+
+.try-another-search-text {
+  font-weight: lighter;
+  font-style: italic;
+}
