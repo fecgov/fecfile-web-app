@@ -14,7 +14,7 @@ export class CashOnHandGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
     return this.store.select(selectCashOnHand).pipe(
       map((cashOnHand: CashOnHand) => {
-        const reportId = Number(route.paramMap.get('reportId'));
+        const reportId = String(route.paramMap.get('reportId'));
         if (reportId !== null) {
           return reportId === cashOnHand.report_id;
         }

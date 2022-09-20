@@ -49,12 +49,11 @@ describe('ContactLookupComponent', () => {
 
   it('#onDropdownSearch COM undefined fec_api_committees', fakeAsync(() => {
     const testCommitteeLookupResponse = new CommitteeLookupResponse();
-    testCommitteeLookupResponse.fec_api_committees;
     testCommitteeLookupResponse.fecfile_committees = [
       {
         id: 123,
         name: 'testName'
-      } as FecfileCommitteeLookupData
+      } as unknown as FecfileCommitteeLookupData
     ];
     spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
@@ -72,7 +71,6 @@ describe('ContactLookupComponent', () => {
         is_active: true
       } as FecApiCommitteeLookupData
     ];
-    testCommitteeLookupResponse.fecfile_committees;
     spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
     component.contactTypeFormControl.setValue("COM");
@@ -93,7 +91,7 @@ describe('ContactLookupComponent', () => {
       {
         id: 123,
         name: 'testName'
-      } as FecfileCommitteeLookupData
+      } as unknown as FecfileCommitteeLookupData
     ];
     spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
@@ -105,7 +103,6 @@ describe('ContactLookupComponent', () => {
 
   it('#onDropdownSearch IND undefined fecfile_individuals', fakeAsync(() => {
     const testIndividualLookupResponse = new IndividualLookupResponse();
-    testIndividualLookupResponse.fecfile_individuals;
     spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
     const testEvent = { query: 'hi' };
     component.contactTypeFormControl.setValue("IND");
@@ -122,7 +119,7 @@ describe('ContactLookupComponent', () => {
         last_name: 'testLastName',
         first_name: 'testFirstName',
         type: ContactTypes.COMMITTEE,
-      } as FecfileIndividualLookupData)
+      } as unknown as FecfileIndividualLookupData)
     ];
     spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
     const testEvent = { query: 'hi' };

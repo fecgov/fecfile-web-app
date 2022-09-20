@@ -14,11 +14,11 @@ export class WebPrintService {
    *
    * @return     {Observable}  The WebPrint status.
    */
-  public getStatus(reportId: number): void {
+  public getStatus(reportId: string): void {
     this.reportService.setActiveReportById(reportId).subscribe();
   }
 
-  public submitPrintJob(reportId: number): void {
+  public submitPrintJob(reportId: string): void {
     const request = this.apiService.post('/web-services/submit-to-webprint/', {
       report_id: reportId,
     });

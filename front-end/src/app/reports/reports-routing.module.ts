@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ReportListComponent } from './report-list/report-list.component';
 import { CreateF3XStep1Component } from './f3x/create-workflow/create-f3x-step1.component';
-import { CreateF3xStep2Component } from './f3x/create-workflow/create-f3x-step2.component';
 import { ReportSummaryComponent } from './f3x/report-summary/report-summary.component';
 import { ReportDetailedSummaryComponent } from './f3x/report-detailed-summary/report-detailed-summary.component';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
@@ -45,12 +44,6 @@ const routes: Routes = [
     path: 'f3x/create/step1/:reportId',
     title: 'Create a report',
     component: CreateF3XStep1Component,
-    canActivate: [ReportIsEditableGuard],
-  },
-  {
-    path: 'f3x/create/step2/:reportId',
-    title: 'Report Form 3X',
-    component: CreateF3xStep2Component,
     canActivate: [ReportIsEditableGuard],
   },
   {

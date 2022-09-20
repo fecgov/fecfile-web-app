@@ -80,7 +80,7 @@ export function deleteAllContacts() {
 }
 
 //Deletes a single report by its ID
-export function deleteContact(contactID: number, authToken: string | null = null) {
+export function deleteContact(contactID: string, authToken: string | null = null) {
   if (authToken == null) {
     authToken = getAuthToken();
   }

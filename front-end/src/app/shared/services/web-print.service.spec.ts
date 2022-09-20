@@ -31,15 +31,15 @@ describe('WebPrintService', () => {
 
   it('should post as expected', () => {
     const api = spyOn(apiService, 'post');
-    service.submitPrintJob(1);
+    service.submitPrintJob('1');
     expect(api).toHaveBeenCalledWith('/web-services/submit-to-webprint/', {
-      report_id: 1,
+      report_id: '1',
     });
   });
 
   it('should get new reports', () => {
     const reportRequest = spyOn(reportService, 'setActiveReportById').and.returnValue(of(new F3xSummary()));
-    service.getStatus(1);
-    expect(reportRequest).toHaveBeenCalledWith(1);
+    service.getStatus('1');
+    expect(reportRequest).toHaveBeenCalledWith('1');
   });
 });

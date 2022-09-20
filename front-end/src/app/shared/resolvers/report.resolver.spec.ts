@@ -27,9 +27,9 @@ describe('ReportResolver', () => {
   });
 
   it('should return an F3X report', () => {
-    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: 999 });
+    const f3xSummary: F3xSummary = F3xSummary.fromJSON({ id: '999' });
     const route = {
-      paramMap: convertToParamMap({ reportId: 999 }),
+      paramMap: convertToParamMap({ reportId: '999' }),
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Report | undefined) => {

@@ -92,7 +92,7 @@ export const testReportCodes: ReportCodeLabelList = [
 ];
 
 export const testActiveReport: F3xSummary = F3xSummary.fromJSON({
-  id: 999,
+  id: '999',
   coverage_from_date: '2022-05-25',
   form_type: 'F3XN',
   report_code: 'Q1',
@@ -112,7 +112,7 @@ export const testActiveReport: F3xSummary = F3xSummary.fromJSON({
   },
 });
 
-export const testCashOnHand: CashOnHand = { report_id: 999, value: 100.0 };
+export const testCashOnHand: CashOnHand = { report_id: '999', value: 100.0 };
 
 export const testMockStore = {
   initialState: {

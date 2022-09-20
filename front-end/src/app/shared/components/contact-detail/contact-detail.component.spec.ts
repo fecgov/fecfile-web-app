@@ -94,7 +94,7 @@ describe('ContactDetailComponent', () => {
   });
 
   it('#saveItem should update an existing contact record', () => {
-    component.contact.id = 10;
+    component.contact.id = '10';
     component.form.patchValue({ ...contact });
     component.saveItem(true);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts/10/`);

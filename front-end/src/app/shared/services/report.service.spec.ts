@@ -71,7 +71,7 @@ describe('ReportService', () => {
   });
 
   it('should set the COH store values', () => {
-    const reports: Report[] = [{ id: 999 } as Report];
+    const reports: Report[] = [{ id: '999' } as Report];
     const result = service.setStoreCashOnHand(reports);
     expect(result).not.toBeTruthy();
   });

@@ -25,9 +25,9 @@ describe('MemoTextService', () => {
   });
 
   it('#get should return a specific memo text record', () => {
-    const memoText: MemoText = MemoText.fromJSON({ id: 999 });
+    const memoText: MemoText = MemoText.fromJSON({ id: '999' });
 
-    service.get(999).subscribe((response: MemoText) => {
+    service.get('999').subscribe((response: MemoText) => {
       expect(response).toEqual(memoText);
     });
 
@@ -38,9 +38,9 @@ describe('MemoTextService', () => {
   });
 
   it('#getForReportId should return memo texts for report id', () => {
-    const memoTexts: MemoText[] = [MemoText.fromJSON({ id: 999 })];
+    const memoTexts: MemoText[] = [MemoText.fromJSON({ id: '999' })];
 
-    service.getForReportId(1).subscribe((response: MemoText[]) => {
+    service.getForReportId('1').subscribe((response: MemoText[]) => {
       expect(response).toEqual(memoTexts);
     });
 
@@ -64,7 +64,7 @@ describe('MemoTextService', () => {
   });
 
   it('#update() should PUT a payload', () => {
-    const memoText: MemoText = MemoText.fromJSON({ id: 999 });
+    const memoText: MemoText = MemoText.fromJSON({ id: '999' });
 
     service.update(memoText).subscribe((response: MemoText) => {
       expect(response).toEqual(memoText);
@@ -77,7 +77,7 @@ describe('MemoTextService', () => {
   });
 
   it('#delete() should DELETE a record', () => {
-    const memoText: MemoText = MemoText.fromJSON({ id: 999 });
+    const memoText: MemoText = MemoText.fromJSON({ id: '999' });
 
     service.delete(memoText).subscribe((response: null) => {
       expect(response).toBeNull();

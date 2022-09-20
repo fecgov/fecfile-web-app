@@ -33,7 +33,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
   resolve_new_transaction(reportId: string, transactionTypeName: string): Observable<TransactionType | undefined> {
     const transactionType = TransactionTypeUtils.factory(transactionTypeName) as TransactionType;
     transactionType.transaction = transactionType.getNewTransaction();
-    transactionType.transaction.report_id = Number(reportId);
+    transactionType.transaction.report_id = String(reportId);
 
     return of(transactionType);
   }
@@ -43,13 +43,13 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
     transactionTypeName: string
   ): Observable<TransactionType | undefined> {
     const transactionType = TransactionTypeUtils.factory(transactionTypeName) as TransactionType;
-    return this.transactionService.get(Number(parentTransactionId)).pipe(
+    return this.transactionService.get(String(parentTransactionId)).pipe(
       map((transaction: Transaction) => {
         transactionType.transaction = transactionType.getNewTransaction();
 
         transactionType.parent = transaction;
-        transactionType.transaction.parent_transaction_id = Number(parentTransactionId);
-        transactionType.transaction.report_id = Number(transaction.report_id);
+        transactionType.transaction.parent_transaction_id = String(parentTransactionId);
+        transactionType.transaction.report_id = String(transaction.report_id);
 
         return transactionType;
       })
@@ -57,7 +57,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
   }
 
   resolve_existing_transaction(transactionId: string): Observable<TransactionType | undefined> {
-    return this.transactionService.get(Number(transactionId)).pipe(
+    return this.transactionService.get(String(transactionId)).pipe(
       map((transaction: Transaction) => {
         if (transaction.transaction_type_identifier) {
           const transactionType = TransactionTypeUtils.factory(

@@ -71,7 +71,7 @@ describe('ContactService', () => {
   it('#update() should PUT a payload', () => {
     const mockResponse: Contact = new Contact();
     const contact: Contact = mockResponse;
-    contact.id = 1;
+    contact.id = '1';
 
     service.update(contact).subscribe((response: Contact) => {
       expect(response).toEqual(mockResponse);
@@ -86,7 +86,7 @@ describe('ContactService', () => {
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
     const contact: Contact = new Contact();
-    contact.id = 1;
+    contact.id = '1';
 
     service.delete(contact).subscribe((response: null) => {
       expect(response).toEqual(mockResponse);
