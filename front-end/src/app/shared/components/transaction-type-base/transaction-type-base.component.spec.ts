@@ -27,6 +27,8 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
     'contributor_city',
     'contributor_state',
     'contributor_zip',
+    'contributor_employer',
+    'contributor_occupation',
     'contribution_date',
     'contribution_amount',
     'contribution_aggregate',
@@ -225,6 +227,14 @@ describe('TransactionTypeBaseComponent', () => {
     component.form.setControl('contributor_middle_name', null);
     component.form.setControl('contributor_prefix', null);
     component.form.setControl('contributor_suffix', null);
+    component.form.setControl('contributor_employer', null);
+    component.form.setControl('contributor_occupation', null);
+    component.form.setControl('contributor_street_1', null);
+    component.form.setControl('contributor_street_2', null);
+    component.form.setControl('contributor_city', null);
+    component.form.setControl('contributor_state', null);
+    component.form.setControl('contributor_zip', null);
+
     component.onContactLookupSelect(testContactSelectItem);
     expect(component.form.get('contributor_last_name')?.value).toBeFalsy();
   });
@@ -236,6 +246,14 @@ describe('TransactionTypeBaseComponent', () => {
     const testMiddleName = 'testMiddleName';
     const testPrefix = 'testPrefix';
     const testSuffix = 'testSuffix';
+    const testEmployer = 'testEmployer';
+    const testOccupation = 'testOccupation';
+    const testStreet1 = 'testStreet1';
+    const testStreet2 = 'testStreet2';
+    const testCity = 'testCity';
+    const testState = 'testState';
+    const testZip = 'testZip';
+
     const testContact = new Contact();
     testContact.id = '123';
     testContact.last_name = testLastName;
@@ -243,6 +261,13 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.middle_name = testMiddleName;
     testContact.prefix = testPrefix;
     testContact.suffix = testSuffix;
+    testContact.employer = testEmployer;
+    testContact.occupation = testOccupation;
+    testContact.street_1 = testStreet1;
+    testContact.street_2 = testStreet2;
+    testContact.city = testCity;
+    testContact.state = testState;
+    testContact.zip = testZip;
 
     const testContactSelectItem: SelectItem<Contact> = {
       value: testContact,
@@ -255,11 +280,25 @@ describe('TransactionTypeBaseComponent', () => {
     const middleNameFormControlValue = component.form.get('contributor_middle_name')?.value;
     const prefixFormControlValue = component.form.get('contributor_prefix')?.value;
     const suffixFormControlValue = component.form.get('contributor_suffix')?.value;
+    const employerFormControlValue = component.form.get('contributor_employer')?.value;
+    const occupationFormControlValue = component.form.get('contributor_occupation')?.value;
+    const street1FormControlValue = component.form.get('contributor_street_1')?.value;
+    const street2FormControlValue = component.form.get('contributor_street_2')?.value;
+    const cityFormControlValue = component.form.get('contributor_city')?.value;
+    const stateFormControlValue = component.form.get('contributor_state')?.value;
+    const zipFormControlValue = component.form.get('contributor_zip')?.value;
 
     expect(lastNameFormControlValue === testLastName).toBeTrue();
     expect(firstNameFormControlValue === testFirstName).toBeTrue();
     expect(middleNameFormControlValue === testMiddleName).toBeTrue();
     expect(prefixFormControlValue === testPrefix).toBeTrue();
     expect(suffixFormControlValue === testSuffix).toBeTrue();
+    expect(employerFormControlValue === testEmployer).toBeTrue();
+    expect(occupationFormControlValue === testOccupation).toBeTrue();
+    expect(street1FormControlValue === testStreet1).toBeTrue();
+    expect(street2FormControlValue === testStreet2).toBeTrue();
+    expect(cityFormControlValue === testCity).toBeTrue();
+    expect(stateFormControlValue === testState).toBeTrue();
+    expect(zipFormControlValue === testZip).toBeTrue();
   });
 });

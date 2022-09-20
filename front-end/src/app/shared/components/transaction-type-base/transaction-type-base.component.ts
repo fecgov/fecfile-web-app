@@ -168,7 +168,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         this.form.get('contributor_middle_name')?.setValue(value.middle_name);
         this.form.get('contributor_prefix')?.setValue(value.prefix);
         this.form.get('contributor_suffix')?.setValue(value.suffix);
+        this.form.get('contributor_employer')?.setValue(value.employer);
+        this.form.get('contributor_occupation')?.setValue(value.occupation);
       }
+      this.form.get('contributor_street_1')?.setValue(value.street_1);
+      this.form.get('contributor_street_2')?.setValue(value.street_2);
+      this.form.get('contributor_city')?.setValue(value.city);
+      this.form.get('contributor_state')?.setValue(value.state);
+      this.form.get('contributor_zip')?.setValue(value.zip);
     }
   }
 
