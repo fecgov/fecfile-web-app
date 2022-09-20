@@ -8,7 +8,7 @@ export class SchATransaction extends BaseModel implements Transaction {
 
   form_type: string | undefined;
   filer_committee_id_number: string | undefined;
-  transaction_id: string | undefined;
+  transaction_id: string | null = null; // This is a required field and must exist
   back_reference_tran_id_number: string | undefined;
   back_reference_sched_name: string | undefined;
   entity_type: string | undefined;
