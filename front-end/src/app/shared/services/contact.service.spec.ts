@@ -105,15 +105,17 @@ describe('ContactService', () => {
     const testMaxFecResults = 1;
     const testMaxFecfileResults = 2;
 
-    const expectedEndpoint =
-      `/contacts/committee_lookup/?q=${testSearch}` +
-      `&max_fec_results=${testMaxFecResults}` +
-      `&max_fecfile_results=${testMaxFecfileResults}`;
+    const expectedEndpoint = '/contacts/committee_lookup/';
+    const expectedParams = {
+      q: testSearch,
+      max_fec_results: testMaxFecResults,
+      max_fecfile_results: testMaxFecfileResults
+    }
 
     service
       .committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults)
       .subscribe((value) => expect(value).toEqual(expectedRetval));
-    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
   it('#individualLookup() happy path', () => {
@@ -122,14 +124,16 @@ describe('ContactService', () => {
     const testSearch = 'testSearch';
     const testMaxFecfileResults = 2;
 
-    const expectedEndpoint =
-      `/contacts/individual_lookup/?q=${testSearch}` +
-      `&max_fecfile_results=${testMaxFecfileResults}`;
+    const expectedEndpoint = '/contacts/individual_lookup/';
+    const expectedParams = {
+      q: testSearch,
+      max_fecfile_results: testMaxFecfileResults
+    }
 
     service
       .individualLookup(testSearch, testMaxFecfileResults)
       .subscribe((value) => expect(value).toEqual(expectedRetval));
-    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
   it('#organizationLookup() happy path', () => {
@@ -138,14 +142,16 @@ describe('ContactService', () => {
     const testSearch = 'testSearch';
     const testMaxFecfileResults = 2;
 
-    const expectedEndpoint =
-      `/contacts/organization_lookup/?q=${testSearch}` +
-      `&max_fecfile_results=${testMaxFecfileResults}`;
+    const expectedEndpoint = '/contacts/organization_lookup/';
+    const expectedParams = {
+      q: testSearch,
+      max_fecfile_results: testMaxFecfileResults
+    }
 
     service
       .organizationLookup(testSearch, testMaxFecfileResults)
       .subscribe((value) => expect(value).toEqual(expectedRetval));
-    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
 });
