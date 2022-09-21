@@ -1,8 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Contact, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
+import { ValidateService } from 'app/shared/services/validate.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
+import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
+import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
+import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { SelectItem, SelectItemGroup } from 'primeng/api';
 
 @Component({
@@ -38,8 +43,22 @@ export class ContactLookupComponent {
 
   searchTerm = '';
 
+  createContactDialogVisible = false;
+  createContactFormSubmitted = false;
+  createContactForm: FormGroup = this.formBuilder.group(
+    this.validateService.getFormGroupFields([
+      ...new Set([
+        ...this.validateService.getSchemaProperties(contactIndividualSchema),
+        ...this.validateService.getSchemaProperties(contactCandidateSchema),
+        ...this.validateService.getSchemaProperties(contactCommitteeSchema),
+        ...this.validateService.getSchemaProperties(contactOrganizationSchema),
+      ]),
+    ])
+  );
+
   constructor(
     private formBuilder: FormBuilder,
+    private validateService: ValidateService,
     private contactService: ContactService
   ) { }
 
@@ -82,14 +101,63 @@ export class ContactLookupComponent {
     if (event && event.value) {
       if (event.value instanceof Contact) {
         this.fecfileContactSelect.emit(event);
-      } else if (event.value instanceof FecApiLookupData) {
-        this.fecApiLookupSelect.emit(event);
+      } else if (event.value instanceof FecApiCommitteeLookupData) {
+        const value: FecApiCommitteeLookupData = event.value
+        const typeFormControl = this.createContactForm.get('type');
+        typeFormControl?.setValue(ContactTypes.COMMITTEE);
+        typeFormControl?.disable();
+        this.createContactForm.get('committee_id')?.setValue(
+          value.id);
+        this.createContactForm.get('name')?.setValue(
+          value.name);
+        this.openCreateContactDialog();
       }
     }
   }
 
+  createNewContact() {
+    const typeFormControl = this.createContactForm.get('type');
+    typeFormControl?.setValue(this.contactTypeFormControl.value);
+    typeFormControl?.disable();
+    this.openCreateContactDialog();
+  }
+
   isContact(value: Contact | FecApiLookupData) {
     return value instanceof Contact;
+  }
+
+  openCreateContactDialog() {
+    this.createContactDialogVisible = true;
+  }
+
+  closeCreateContactDialog() {
+    this.createContactDialogVisible = false;
+  }
+
+  createContactSave() {
+    this.createContactFormSubmitted = true;
+    if (this.createContactForm.invalid) {
+      return;
+    }
+
+    const createdContact = Contact.fromJSON({
+      ...this.validateService.getFormValues(this.createContactForm)
+    });
+    this.fecfileContactSelect.emit({
+      value: createdContact
+    });
+    this.closeCreateContactDialog();
+  }
+
+  onCreateContactDialogOpen() {
+    console.log('DAH createContact opened');
+  }
+
+  onCreateContactDialogClose() {
+    this.createContactForm.reset();
+    this.createContactFormSubmitted = false;
+    this.createContactDialogVisible = false;
+    console.log('DAH createContact closed');
   }
 
 }
