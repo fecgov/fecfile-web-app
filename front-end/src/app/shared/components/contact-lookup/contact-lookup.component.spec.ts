@@ -102,6 +102,9 @@ describe('ContactLookupComponent', () => {
     component.onDropdownSearch(testEvent);
     expect(JSON.stringify(component.contactLookupList) ===
       JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups())).toBeTrue();
+    expect(JSON.stringify([{ "label": "There are no matching committees", "items": [] },
+    { "label": "There are no matching registered committees", "items": [] }]) ===
+      JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups())).toBeTrue();
   }));
 
   it('#onDropdownSearch IND undefined fecfile_individuals', fakeAsync(() => {
@@ -133,6 +136,11 @@ describe('ContactLookupComponent', () => {
     tick(500);
     expect(JSON.stringify(component.contactLookupList) ===
       JSON.stringify(testIndividualLookupResponse.toSelectItemGroups())).toBeTrue();
+    expect(JSON.stringify([{
+      "label": "There are no matching individuals",
+      "items": []
+    }]) ===
+      JSON.stringify(new IndividualLookupResponse().toSelectItemGroups())).toBeTrue();
   }));
 
   it('#onDropdownSearch ORG undefined fecfile_organizations', fakeAsync(() => {
@@ -163,6 +171,11 @@ describe('ContactLookupComponent', () => {
     tick(500);
     expect(JSON.stringify(component.contactLookupList) ===
       JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups())).toBeTrue();
+    expect(JSON.stringify([{
+      "label": "There are no matching organizations",
+      "items": []
+    }]) ===
+      JSON.stringify(new OrganizationLookupResponse().toSelectItemGroups())).toBeTrue();
   }));
 
   it('#onContactSelect Contact happy path', fakeAsync(() => {
