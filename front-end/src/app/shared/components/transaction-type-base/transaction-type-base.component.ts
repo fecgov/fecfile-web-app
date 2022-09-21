@@ -162,7 +162,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   onContactLookupSelect(selectItem: SelectItem<Contact>) {
     if (selectItem) {
       const value = selectItem.value;
-
       if (value) {
         switch (value.type) {
           case ContactTypes.INDIVIDUAL:
@@ -171,11 +170,18 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             this.form.get('contributor_middle_name')?.setValue(value.middle_name);
             this.form.get('contributor_prefix')?.setValue(value.prefix);
             this.form.get('contributor_suffix')?.setValue(value.suffix);
+            this.form.get('contributor_employer')?.setValue(value.employer);
+            this.form.get('contributor_occupation')?.setValue(value.occupation);
             break;
           case ContactTypes.ORGANIZATION:
             this.form.get('contributor_organization_name')?.setValue(value.name);
             break;
         }
+        this.form.get('contributor_street_1')?.setValue(value.street_1);
+        this.form.get('contributor_street_2')?.setValue(value.street_2);
+        this.form.get('contributor_city')?.setValue(value.city);
+        this.form.get('contributor_state')?.setValue(value.state);
+        this.form.get('contributor_zip')?.setValue(value.zip);
       }
     }
   }
