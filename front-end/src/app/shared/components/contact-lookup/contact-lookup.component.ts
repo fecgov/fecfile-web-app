@@ -62,6 +62,13 @@ export class ContactLookupComponent {
                 response.toSelectItemGroups();
             });
           break;
+        case ContactTypes.ORGANIZATION:
+          this.contactService.organizationLookup(searchTerm,
+            this.maxFecfileResults).subscribe((response) => {
+              this.contactLookupList = response &&
+                response.toSelectItemGroups();
+            });
+          break;
       }
     } else {
       this.contactLookupList = [];

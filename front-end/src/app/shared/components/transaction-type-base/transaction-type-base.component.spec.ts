@@ -211,9 +211,10 @@ describe('TransactionTypeBaseComponent', () => {
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
-  it('#onContactLookupSelect should handle null form', () => {
+  it('#onContactLookupSelect IND should handle null form', () => {
     const testContact = new Contact();
     testContact.id = '123';
+    testContact.type = ContactTypes.INDIVIDUAL;
     const testContactSelectItem: SelectItem<Contact> =
     {
       value: testContact,
@@ -243,7 +244,7 @@ describe('TransactionTypeBaseComponent', () => {
       'contributor_last_name')?.value).toBeFalsy();
   });
 
-  it('#onContactLookupSelect should set contact fields', () => {
+  it('#onContactLookupSelect INDIVIDUAL should set fields', () => {
     const testEntityType = ContactTypes.INDIVIDUAL;
     const testLastName = 'testLastName';
     const testFirstName = 'testFirstName';
@@ -260,6 +261,7 @@ describe('TransactionTypeBaseComponent', () => {
 
     const testContact = new Contact();
     testContact.id = '123';
+    testContact.type = ContactTypes.INDIVIDUAL;
     testContact.last_name = testLastName;
     testContact.first_name = testFirstName;
     testContact.middle_name = testMiddleName;
@@ -317,6 +319,45 @@ describe('TransactionTypeBaseComponent', () => {
     expect(cityFormControlValue === testCity).toBeTrue();
     expect(stateFormControlValue === testState).toBeTrue();
     expect(zipFormControlValue === testZip).toBeTrue();
+  });
+
+  it('#onContactLookupSelect ORG should handle null form', () => {
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.ORGANIZATION;
+    const testContactSelectItem: SelectItem<Contact> =
+    {
+      value: testContact,
+    }
+
+    component.form.setControl('entity_type',
+      new FormControl(ContactTypes.ORGANIZATION));
+    component.form.setControl('contributor_organization_name', null);
+    component.onContactLookupSelect(testContactSelectItem);
+    expect(component.form.get(
+      'contributor_organization_name')?.value).toBeFalsy();
+  });
+
+  it('#onContactLookupSelect ORGANIZATION should set fields', () => {
+    const testEntityType = ContactTypes.ORGANIZATION;
+    const testOrganizationName = 'testOrganizationName';
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.ORGANIZATION;
+    testContact.name = testOrganizationName;
+
+    const testContactSelectItem: SelectItem<Contact> =
+    {
+      value: testContact,
+    }
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.onContactLookupSelect(testContactSelectItem);
+    const organizationNameFormControlValue =
+      component.form.get('contributor_organization_name')?.value;
+
+    expect(organizationNameFormControlValue ===
+      testOrganizationName).toBeTrue();
   });
 
 });

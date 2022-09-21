@@ -5,18 +5,19 @@
   <h3>Contributor</h3>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
-      <div class="col-6">
+      <div class="col-12">
         <div class="field">
           <label for="entity_type">CONTRIBUTOR TYPE</label>
-          <p-dropdown
-            inputId="entity_type"
-            formControlName="entity_type"
-            [options]="contactTypeOptions"
-            optionLabel="name"
-            optionValue="code"
-            [readonly]="true"
-            styleClass="readonly"
-          ></p-dropdown>
+          <app-contact-lookup 
+            contactTypeInputId="entity_type"
+            [contactTypeFormControl]="$any(form).controls['entity_type']"
+            [contactTypeOptions]="contactTypeOptions"
+            [contactTypeReadOnly]="true"
+            contactTypeStyleClass="readonly"
+            [maxFecResults]="10"
+            [maxFecfileResults]="10"
+            (fecfileContactSelect)="onContactLookupSelect($event)">
+          </app-contact-lookup>
         </div>
       </div>
     </div>
