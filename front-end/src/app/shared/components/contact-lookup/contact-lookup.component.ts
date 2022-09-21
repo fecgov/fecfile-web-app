@@ -103,22 +103,12 @@ export class ContactLookupComponent {
         this.fecfileContactSelect.emit(event);
       } else if (event.value instanceof FecApiCommitteeLookupData) {
         const value: FecApiCommitteeLookupData = event.value
-        const typeFormControl = this.createContactForm.get('type');
-        typeFormControl?.setValue(ContactTypes.COMMITTEE);
-        typeFormControl?.disable();
-        this.createContactForm.get('committee_id')?.setValue(
-          value.id);
-        this.createContactForm.get('name')?.setValue(
-          value.name);
-        this.openCreateContactDialog();
+        this.openCreateContactDialog(value);
       }
     }
   }
 
   createNewContact() {
-    const typeFormControl = this.createContactForm.get('type');
-    typeFormControl?.setValue(this.contactTypeFormControl.value);
-    typeFormControl?.disable();
     this.openCreateContactDialog();
   }
 
@@ -126,7 +116,13 @@ export class ContactLookupComponent {
     return value instanceof Contact;
   }
 
-  openCreateContactDialog() {
+  openCreateContactDialog(value?: FecApiLookupData) {
+    if (value && value instanceof FecApiCommitteeLookupData) {
+      this.createContactForm.get('committee_id')?.setValue(
+        value.id);
+      this.createContactForm.get('name')?.setValue(
+        value.name);
+    }
     this.createContactDialogVisible = true;
   }
 
@@ -150,14 +146,16 @@ export class ContactLookupComponent {
   }
 
   onCreateContactDialogOpen() {
-    console.log('DAH createContact opened');
+    this.createContactForm.get('country')?.reset();
+    const typeFormControl = this.createContactForm.get('type');
+    typeFormControl?.setValue(this.contactTypeFormControl.value);
+    typeFormControl?.disable();
   }
 
   onCreateContactDialogClose() {
     this.createContactForm.reset();
     this.createContactFormSubmitted = false;
     this.createContactDialogVisible = false;
-    console.log('DAH createContact closed');
   }
 
 }
