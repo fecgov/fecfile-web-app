@@ -173,6 +173,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             this.form.get('contributor_employer')?.setValue(value.employer);
             this.form.get('contributor_occupation')?.setValue(value.occupation);
             break;
+          case ContactTypes.COMMITTEE:
           case ContactTypes.ORGANIZATION:
             this.form.get('contributor_organization_name')?.setValue(value.name);
             break;

@@ -360,4 +360,26 @@ describe('TransactionTypeBaseComponent', () => {
       testOrganizationName).toBeTrue();
   });
 
+  it('#onContactLookupSelect COMMITTEE should set fields', () => {
+    const testEntityType = ContactTypes.COMMITTEE;
+    const testCommitteeName = 'testCommitteeName';
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.COMMITTEE;
+    testContact.name = testCommitteeName;
+
+    const testContactSelectItem: SelectItem<Contact> =
+    {
+      value: testContact,
+    }
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.onContactLookupSelect(testContactSelectItem);
+    const committeeNameFormControlValue =
+      component.form.get('contributor_organization_name')?.value;
+
+    expect(committeeNameFormControlValue ===
+      testCommitteeName).toBeTrue();
+  });
+
 });
