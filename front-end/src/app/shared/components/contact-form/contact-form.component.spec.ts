@@ -3,10 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { CandidateOfficeTypes, ContactTypes } from 'app/shared/models/contact.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
-import { ContactTypes } from '../../models/contact.model';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactFormComponent } from './contact-form.component';
@@ -17,8 +16,8 @@ describe('ContactFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule,
-        DialogModule, FormsModule, ReactiveFormsModule, DropdownModule],
+      imports: [HttpClientTestingModule, FormsModule,
+        ReactiveFormsModule, DropdownModule],
       declarations: [ContactFormComponent, ErrorMessagesComponent,
         FecInternationalPhoneInputComponent],
       providers: [FormBuilder, provideMockStore(testMockStore)],
@@ -28,7 +27,7 @@ describe('ContactFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContactFormComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    component.ngOnInit();
   });
 
   it('should create', () => {
@@ -42,6 +41,29 @@ describe('ContactFormComponent', () => {
     expect(officeTypes.PRESIDENTIAL).toBe('P');
   });
 
+  it('changing candidate office should set district and state options', () => {
+    component.form.get('type')?.setValue(ContactTypes.CANDIDATE);
+    component.form.get('candidate_office')?.setValue(CandidateOfficeTypes.HOUSE);
+    component.form.get('candidate_state')?.setValue('VA');
+    component.form.get('candidate_district')?.setValue('01');
+    expect(component.form.get('candidate_state')?.value).toBe('VA');
+    expect(component.form.get('candidate_district')?.value).toBe('01');
+
+    component.form.patchValue({
+      candidate_office: CandidateOfficeTypes.PRESIDENTIAL,
+    });
+    expect(component.form.get('candidate_state')?.value).toBe('');
+    expect(component.form.get('candidate_district')?.value).toBe('');
+
+    component.form.get('candidate_office')?.setValue(CandidateOfficeTypes.SENATE);
+    component.form.get('candidate_state')?.setValue('VA');
+    expect(component.form.get('candidate_state')?.value).toBe('VA');
+    expect(component.form.get('candidate_district')?.value).toBe('');
+
+    component.form.get('type')?.setValue(ContactTypes.COMMITTEE);
+  });
+
+
   it('changing country from USA should change state', () => {
     component.form.patchValue({
       country: 'USA',
@@ -49,6 +71,12 @@ describe('ContactFormComponent', () => {
     });
     expect(component.form.get('country')?.value).toBe('USA');
     expect(component.form.get('state')?.value).toBe('VA');
+
+    component.form.patchValue({
+      country: 'CANADA',
+    });
+    expect(component.form.get('country')?.value).toBe('CANADA');
+    expect(component.form.get('state')?.value).toBe('ZZ');
   });
 
   it('#getSchemaByType should return the correct schema', () => {
@@ -57,5 +85,9 @@ describe('ContactFormComponent', () => {
 
     schema = component['getSchemaByType'](ContactTypes.ORGANIZATION);
     expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Organization.json');
+
+    schema = component['getSchemaByType'](ContactTypes.CANDIDATE);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Candidate.json');
   });
+
 });
