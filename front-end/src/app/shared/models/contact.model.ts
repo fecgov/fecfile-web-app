@@ -128,13 +128,13 @@ export class CommitteeLookupResponse {
       new FecfileCommitteeLookupData(data).toSelectItem()) || [];
     return [
       {
-        label: (fecfileSelectItems && fecfileSelectItems.length > 0) ?
+        label: (fecfileSelectItems.length) ?
           'Select an existing committee contact:' :
           'There are no matching committees',
         items: fecfileSelectItems,
       },
       {
-        label: (fecApiSelectItems && fecApiSelectItems.length > 0) ?
+        label: (fecApiSelectItems.length) ?
           'Create a new contact from list of registered committees:' :
           'There are no matching registered committees',
         items: fecApiSelectItems,
@@ -172,11 +172,50 @@ export class IndividualLookupResponse {
       new FecfileIndividualLookupData(data).toSelectItem()) || [];
     return [
       {
-        label: (fecfileSelectItems && fecfileSelectItems.length > 0) ?
+        label: (fecfileSelectItems.length) ?
           'Select an existing individual contact:' :
           'There are no matching individuals',
         items: fecfileSelectItems,
       },
     ];
   }
+}
+
+export class FecfileOrganizationLookupData extends Contact {
+  constructor(data: FecfileOrganizationLookupData) {
+    super();
+    Object.assign(this, data);
+  }
+
+  toSelectItem(): SelectItem<Contact> {
+    return (
+      {
+        label: `${this.name}`,
+        value: this,
+      }
+    );
+  }
+}
+
+export class OrganizationLookupResponse {
+  fecfile_organizations?: FecfileOrganizationLookupData[];
+
+  // prettier-ignore
+  static fromJSON(json: any): OrganizationLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(OrganizationLookupResponse, json);
+  }
+
+  toSelectItemGroups(): SelectItemGroup[] {
+    const fecfileSelectItems = this.fecfile_organizations?.map((data) =>
+      new FecfileOrganizationLookupData(data).toSelectItem()) || [];
+    return [
+      {
+        label: (fecfileSelectItems.length) ?
+          'Select an existing organization contact:' :
+          'There are no matching organizations',
+        items: fecfileSelectItems,
+      },
+    ];
+  }
+
 }

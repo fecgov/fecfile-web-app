@@ -14,11 +14,13 @@ export class ContactLookupComponent {
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() contactTypeInputId = 'entity_type';
   @Input() contactTypeFormControl: FormControl = new FormControl();
-  @Input() contactTypeReadOnly = true;
+  @Input() contactTypeReadOnly = false;
   @Input() contactTypeStyleClass = "";
 
-  @Input() maxFecResults = 10;
-  @Input() maxFecfileResults = 10;
+  @Input() maxFecCommitteeResults = 5;
+  @Input() maxFecfileCommitteeResults = 5;
+  @Input() maxFecfileIndividualResults = 10;
+  @Input() maxFecfileOrganizationResults = 10;
 
   @Output() fecfileContactSelect =
     new EventEmitter<SelectItem<Contact>>();
@@ -49,15 +51,22 @@ export class ContactLookupComponent {
       switch (this.contactTypeFormControl.value) {
         case ContactTypes.COMMITTEE:
           this.contactService.committeeLookup(
-            searchTerm, this.maxFecResults,
-            this.maxFecfileResults).subscribe((response) => {
+            searchTerm, this.maxFecCommitteeResults,
+            this.maxFecfileCommitteeResults).subscribe((response) => {
               this.contactLookupList = response &&
                 response.toSelectItemGroups();
             });
           break;
         case ContactTypes.INDIVIDUAL:
           this.contactService.individualLookup(searchTerm,
-            this.maxFecfileResults).subscribe((response) => {
+            this.maxFecfileIndividualResults).subscribe((response) => {
+              this.contactLookupList = response &&
+                response.toSelectItemGroups();
+            });
+          break;
+        case ContactTypes.ORGANIZATION:
+          this.contactService.organizationLookup(searchTerm,
+            this.maxFecfileOrganizationResults).subscribe((response) => {
               this.contactLookupList = response &&
                 response.toSelectItemGroups();
             });

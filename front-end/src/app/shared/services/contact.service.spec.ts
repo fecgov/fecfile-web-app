@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CommitteeLookupResponse, Contact, IndividualLookupResponse } from '../models/contact.model';
+import { CommitteeLookupResponse, Contact, IndividualLookupResponse, OrganizationLookupResponse } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
@@ -105,15 +105,17 @@ describe('ContactService', () => {
     const testMaxFecResults = 1;
     const testMaxFecfileResults = 2;
 
-    const expectedEndpoint =
-      `/contacts/committee_lookup/?q=${testSearch}` +
-      `&max_fec_results=${testMaxFecResults}` +
-      `&max_fecfile_results=${testMaxFecfileResults}`;
+    const expectedEndpoint = '/contacts/committee_lookup/';
+    const expectedParams = {
+      q: testSearch,
+      max_fec_results: testMaxFecResults,
+      max_fecfile_results: testMaxFecfileResults
+    }
 
     service
       .committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults)
       .subscribe((value) => expect(value).toEqual(expectedRetval));
-    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
   it('#individualLookup() happy path', () => {
@@ -122,14 +124,34 @@ describe('ContactService', () => {
     const testSearch = 'testSearch';
     const testMaxFecfileResults = 2;
 
-    const expectedEndpoint =
-      `/contacts/individual_lookup/?q=${testSearch}` +
-      `&max_fecfile_results=${testMaxFecfileResults}`;
+    const expectedEndpoint = '/contacts/individual_lookup/';
+    const expectedParams = {
+      q: testSearch,
+      max_fecfile_results: testMaxFecfileResults
+    }
 
     service
       .individualLookup(testSearch, testMaxFecfileResults)
       .subscribe((value) => expect(value).toEqual(expectedRetval));
-    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint);
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
+  });
+
+  it('#organizationLookup() happy path', () => {
+    const expectedRetval = new OrganizationLookupResponse();
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval));
+    const testSearch = 'testSearch';
+    const testMaxFecfileResults = 2;
+
+    const expectedEndpoint = '/contacts/organization_lookup/';
+    const expectedParams = {
+      q: testSearch,
+      max_fecfile_results: testMaxFecfileResults
+    }
+
+    service
+      .organizationLookup(testSearch, testMaxFecfileResults)
+      .subscribe((value) => expect(value).toEqual(expectedRetval));
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
 });
