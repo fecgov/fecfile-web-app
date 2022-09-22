@@ -18,13 +18,10 @@
           <div class="col-12">
             <label for="entity_type">CONTRIBUTOR TYPE</label>
             <app-contact-lookup
-              contactTypeInputId="entity_type"
               [contactTypeFormControl]="$any(aForm).controls['entity_type']"
               [contactTypeOptions]="contactTypeOptions"
               [contactTypeReadOnly]="true"
               contactTypeStyleClass="readonly"
-              [maxFecResults]="10"
-              [maxFecfileResults]="10"
               (fecfileContactSelect)="onContactLookupSelect($event)"
             >
             </app-contact-lookup>
