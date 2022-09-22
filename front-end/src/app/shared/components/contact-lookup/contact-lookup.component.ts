@@ -15,33 +15,28 @@ export class ContactLookupComponent {
   @Input() contactTypeInputId = 'entity_type';
   @Input() contactTypeFormControl: FormControl = new FormControl();
   @Input() contactTypeReadOnly = false;
-  @Input() contactTypeStyleClass = "";
+  @Input() contactTypeStyleClass = '';
 
   @Input() maxFecCommitteeResults = 5;
   @Input() maxFecfileCommitteeResults = 5;
   @Input() maxFecfileIndividualResults = 10;
   @Input() maxFecfileOrganizationResults = 10;
 
-  @Output() fecfileContactSelect =
-    new EventEmitter<SelectItem<Contact>>();
-  @Output() fecApiLookupSelect = new EventEmitter<
-    SelectItem<FecApiLookupData>>();
+  @Output() fecfileContactSelect = new EventEmitter<SelectItem<Contact>>();
+  @Output() fecApiLookupSelect = new EventEmitter<SelectItem<FecApiLookupData>>();
 
   selectedContact: FormControl<SelectItem> | null = null;
 
   contactLookupForm: FormGroup = this.formBuilder.group({
     selectedContactType: this.contactTypeFormControl,
-    selectedContact: this.selectedContact
-  })
+    selectedContact: this.selectedContact,
+  });
 
   contactLookupList: SelectItemGroup[] = [];
 
   searchTerm = '';
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private contactService: ContactService
-  ) { }
+  constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onDropdownSearch(event: any) {
@@ -50,25 +45,22 @@ export class ContactLookupComponent {
       this.searchTerm = searchTerm;
       switch (this.contactTypeFormControl.value) {
         case ContactTypes.COMMITTEE:
-          this.contactService.committeeLookup(
-            searchTerm, this.maxFecCommitteeResults,
-            this.maxFecfileCommitteeResults).subscribe((response) => {
-              this.contactLookupList = response &&
-                response.toSelectItemGroups();
+          this.contactService
+            .committeeLookup(searchTerm, this.maxFecCommitteeResults, this.maxFecfileCommitteeResults)
+            .subscribe((response) => {
+              this.contactLookupList = response && response.toSelectItemGroups();
             });
           break;
         case ContactTypes.INDIVIDUAL:
-          this.contactService.individualLookup(searchTerm,
-            this.maxFecfileIndividualResults).subscribe((response) => {
-              this.contactLookupList = response &&
-                response.toSelectItemGroups();
-            });
+          this.contactService.individualLookup(searchTerm, this.maxFecfileIndividualResults).subscribe((response) => {
+            this.contactLookupList = response && response.toSelectItemGroups();
+          });
           break;
         case ContactTypes.ORGANIZATION:
-          this.contactService.organizationLookup(searchTerm,
-            this.maxFecfileOrganizationResults).subscribe((response) => {
-              this.contactLookupList = response &&
-                response.toSelectItemGroups();
+          this.contactService
+            .organizationLookup(searchTerm, this.maxFecfileOrganizationResults)
+            .subscribe((response) => {
+              this.contactLookupList = response && response.toSelectItemGroups();
             });
           break;
       }
@@ -85,11 +77,11 @@ export class ContactLookupComponent {
       } else if (event.value instanceof FecApiLookupData) {
         this.fecApiLookupSelect.emit(event);
       }
+      this.contactLookupForm.patchValue({ selectedContact: '' });
     }
   }
 
   isContact(value: Contact | FecApiLookupData) {
     return value instanceof Contact;
   }
-
 }
