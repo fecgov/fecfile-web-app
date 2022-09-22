@@ -8,7 +8,7 @@ export class EAR_REC implements TransactionType {
   componentGroupId = 'AG';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
-  transaction = undefined;
+  transaction: SchATransaction | undefined = undefined;
   parent = undefined;
 
   contributionPurposeDescripReadonly(): string {

@@ -18,10 +18,14 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { EAR_REC } from '../../shared/models/transaction-types/EAR_REC.model';
 
 describe('TransactionGroupAgComponent', () => {
   let component: TransactionGroupAgComponent;
   let fixture: ComponentFixture<TransactionGroupAgComponent>;
+
+  const earmarkReceipt = new EAR_REC();
+  earmarkReceipt.transaction = earmarkReceipt.getNewTransaction();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -55,6 +59,8 @@ describe('TransactionGroupAgComponent', () => {
   });
 
   it('should create', () => {
+    component.transactionType = earmarkReceipt;
+    component.ngOnInit();
     expect(component).toBeTruthy();
   });
 });
