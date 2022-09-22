@@ -27,6 +27,7 @@ import { TransactionGroupEComponent } from './transaction-group-e/transaction-gr
 import { TransactionGroupFComponent } from './transaction-group-f/transaction-group-f.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent, MemoCodePipe } from './transaction-list/transaction-list.component';
+import { TransactionGroupAgComponent } from './transaction-group-ag/transaction-group-ag.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { TransactionListComponent, MemoCodePipe } from './transaction-list/trans
     TransactionGroupDComponent,
     TransactionGroupEComponent,
     TransactionGroupFComponent,
+    TransactionGroupAgComponent,
   ],
   imports: [
     AccordionModule,

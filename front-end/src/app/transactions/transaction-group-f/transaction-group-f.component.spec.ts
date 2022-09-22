@@ -21,6 +21,8 @@ import { environment } from '../../../environments/environment';
 import { schema as JF_TRAN_PAC_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/JF_TRAN_PAC_MEMO';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ScheduleATransactionTypes } from '../../shared/models/scha-transaction.model';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { Transaction } from 'app/shared/interfaces/transaction.interface';
 
 describe('TransactionGroupFComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -70,8 +72,18 @@ describe('TransactionGroupFComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupFComponent);
     component = fixture.componentInstance;
-    component.schema = JF_TRAN_PAC_MEMO;
-    component.transaction = transaction;
+    component.transactionType = {
+      scheduleId: '',
+      componentGroupId: '',
+      contributionPurposeDescripReadonly: () => '',
+      getNewTransaction: () => {
+        return {} as Transaction;
+      },
+      title: '',
+      parent: undefined,
+      schema: JF_TRAN_PAC_MEMO,
+      transaction: transaction,
+    } as TransactionType;
     fixture.detectChanges();
   });
 
