@@ -1,6 +1,7 @@
 export interface Transaction {
   id: string | null;
   report_id: string | null;
+  contact_id: string | undefined;
   form_type: string | null;
   filer_committee_id_number: string | null;
   transaction_id: string | null;

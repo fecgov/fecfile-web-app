@@ -41,7 +41,7 @@ export const CandidateOfficeTypeLabels = [
 ];
 
 export class Contact extends BaseModel {
-  id: string | null = null;
+  id: string | undefined;
   type: ContactType = ContactTypes.INDIVIDUAL;
   candidate_id: string | null = null;
   committee_id: string | null = null;

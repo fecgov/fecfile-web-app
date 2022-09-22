@@ -211,7 +211,7 @@ describe('TransactionTypeBaseComponent', () => {
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
-  it('#onContactLookupSelect IND should handle null form', () => {
+  it('#onContactLookupSelectExisting IND should handle null form', () => {
     const testContact = new Contact();
     testContact.id = '123';
     testContact.type = ContactTypes.INDIVIDUAL;
@@ -220,7 +220,7 @@ describe('TransactionTypeBaseComponent', () => {
       value: testContact,
     }
     component.form.setControl('entity_type', null);
-    component.onContactLookupSelect(testContactSelectItem);
+    component.onContactLookupSelectExisting(testContactSelectItem);
     expect(component.form.get(
       'contributor_last_name')?.value).toBeFalsy();
 
@@ -239,12 +239,12 @@ describe('TransactionTypeBaseComponent', () => {
     component.form.setControl('contributor_state', null);
     component.form.setControl('contributor_zip', null);
 
-    component.onContactLookupSelect(testContactSelectItem);
+    component.onContactLookupSelectExisting(testContactSelectItem);
     expect(component.form.get(
       'contributor_last_name')?.value).toBeFalsy();
   });
 
-  it('#onContactLookupSelect INDIVIDUAL should set fields', () => {
+  it('#onContactLookupSelectExisting INDIVIDUAL should set fields', () => {
     const testEntityType = ContactTypes.INDIVIDUAL;
     const testLastName = 'testLastName';
     const testFirstName = 'testFirstName';
@@ -281,7 +281,7 @@ describe('TransactionTypeBaseComponent', () => {
     }
 
     component.form.addControl('entity_type', { value: testEntityType });
-    component.onContactLookupSelect(testContactSelectItem);
+    component.onContactLookupSelectExisting(testContactSelectItem);
     const lastNameFormControlValue =
       component.form.get('contributor_last_name')?.value;
     const firstNameFormControlValue =
@@ -321,7 +321,7 @@ describe('TransactionTypeBaseComponent', () => {
     expect(zipFormControlValue === testZip).toBeTrue();
   });
 
-  it('#onContactLookupSelect ORG should handle null form', () => {
+  it('#onContactLookupSelectExisting ORG should handle null form', () => {
     const testContact = new Contact();
     testContact.id = '123';
     testContact.type = ContactTypes.ORGANIZATION;
@@ -333,12 +333,12 @@ describe('TransactionTypeBaseComponent', () => {
     component.form.setControl('entity_type',
       new FormControl(ContactTypes.ORGANIZATION));
     component.form.setControl('contributor_organization_name', null);
-    component.onContactLookupSelect(testContactSelectItem);
+    component.onContactLookupSelectExisting(testContactSelectItem);
     expect(component.form.get(
       'contributor_organization_name')?.value).toBeFalsy();
   });
 
-  it('#onContactLookupSelect ORGANIZATION should set fields', () => {
+  it('#onContactLookupSelectExisting ORGANIZATION should set fields', () => {
     const testEntityType = ContactTypes.ORGANIZATION;
     const testOrganizationName = 'testOrganizationName';
     const testContact = new Contact();
@@ -352,7 +352,7 @@ describe('TransactionTypeBaseComponent', () => {
     }
 
     component.form.addControl('entity_type', { value: testEntityType });
-    component.onContactLookupSelect(testContactSelectItem);
+    component.onContactLookupSelectExisting(testContactSelectItem);
     const organizationNameFormControlValue =
       component.form.get('contributor_organization_name')?.value;
 
@@ -360,7 +360,7 @@ describe('TransactionTypeBaseComponent', () => {
       testOrganizationName).toBeTrue();
   });
 
-  it('#onContactLookupSelect COMMITTEE should set fields', () => {
+  it('#onContactLookupSelectExisting COMMITTEE should set fields', () => {
     const testEntityType = ContactTypes.COMMITTEE;
     const testCommitteeName = 'testCommitteeName';
     const testContact = new Contact();
@@ -374,7 +374,7 @@ describe('TransactionTypeBaseComponent', () => {
     }
 
     component.form.addControl('entity_type', { value: testEntityType });
-    component.onContactLookupSelect(testContactSelectItem);
+    component.onContactLookupSelectExisting(testContactSelectItem);
     const committeeNameFormControlValue =
       component.form.get('contributor_organization_name')?.value;
 

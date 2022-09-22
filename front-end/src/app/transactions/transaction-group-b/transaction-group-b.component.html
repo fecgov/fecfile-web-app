@@ -11,7 +11,7 @@
           <app-contact-lookup 
             [contactTypeFormControl]="$any(form).controls['entity_type']"
             [contactTypeOptions]="contactTypeOptions"
-            (fecfileContactSelect)="onContactLookupSelect($event)">
+            (fecfileContactSelect)="onContactLookupSelectExisting($event)">
           </app-contact-lookup>
         </div>
       </div>
