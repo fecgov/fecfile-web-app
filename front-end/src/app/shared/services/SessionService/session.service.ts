@@ -99,7 +99,6 @@ export class SessionService {
           take(1),
           // prettier-ignore
           switchMap((token: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
-            console.log('token ' + token);
             return token;
           })
         );

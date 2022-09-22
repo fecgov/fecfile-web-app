@@ -8,15 +8,14 @@
       <div class="col-6">
         <div class="field">
           <label for="entity_type">CONTRIBUTOR TYPE</label>
-          <p-dropdown
-            inputId="entity_type"
-            formControlName="entity_type"
-            [options]="contactTypeOptions"
-            optionLabel="name"
-            optionValue="code"
-            [readonly]="true"
-            styleClass="readonly"
-          ></p-dropdown>
+          <app-contact-lookup
+            [contactTypeFormControl]="$any(form).controls['entity_type']"
+            [contactTypeOptions]="contactTypeOptions"
+            [contactTypeReadOnly]="true"
+            contactTypeStyleClass="readonly"
+            (fecfileContactSelect)="onContactLookupSelect($event)"
+          >
+          </app-contact-lookup>
         </div>
       </div>
     </div>
@@ -258,39 +257,19 @@
       <div class="col-2">
         <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="navigateTo('list')"></button>
       </div>
-      <ng-container *ngIf="this.transaction?.id">
-        <div class="col-7"></div>
-        <div class="col-3">
-          <button
-            pButton
-            pRipple
-            label="Save & view all transactions"
-            class="p-button-primary"
-            (click)="save('list')"
-          ></button>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="!this.transaction?.id">
-        <div class="col-4"></div>
-        <div class="col-3">
-          <button
-            pButton
-            pRipple
-            label="Save & view all transactions"
-            class="p-button-primary"
-            (click)="save('list')"
-          ></button>
-        </div>
-        <div class="col-3">
-          <button
-            pButton
-            pRipple
-            label="Save & add another"
-            class="p-button-info"
-            (click)="save('add another')"
-          ></button>
-        </div>
-      </ng-container>
+      <div ng-class="isExisting() ? 'col-7' : 'col-4'"></div>
+      <div class="col-3">
+        <button
+          pButton
+          pRipple
+          label="Save & view all transactions"
+          class="p-button-primary"
+          (click)="save('list')"
+        ></button>
+      </div>
+      <div *ngIf="!isExisting()" class="col-3">
+        <button pButton pRipple label="Save & add another" class="p-button-info" (click)="save('add another')"></button>
+      </div>
     </div>
   </form>
 </div>

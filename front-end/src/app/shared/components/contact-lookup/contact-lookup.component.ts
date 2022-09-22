@@ -77,6 +77,7 @@ export class ContactLookupComponent {
       } else if (event.value instanceof FecApiLookupData) {
         this.fecApiLookupSelect.emit(event);
       }
+      this.contactLookupForm.patchValue({ selectedContact: '' });
     }
   }
 

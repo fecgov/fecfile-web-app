@@ -8,10 +8,11 @@
       <div class="col-12">
         <div class="field">
           <label for="entity_type">CONTRIBUTOR TYPE</label>
-          <app-contact-lookup 
+          <app-contact-lookup
             [contactTypeFormControl]="$any(form).controls['entity_type']"
             [contactTypeOptions]="contactTypeOptions"
-            (fecfileContactSelect)="onContactLookupSelect($event)">
+            (fecfileContactSelect)="onContactLookupSelect($event)"
+          >
           </app-contact-lookup>
         </div>
       </div>
@@ -299,39 +300,19 @@
       <div class="col-2">
         <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="navigateTo('list')"></button>
       </div>
-      <ng-container *ngIf="this.transaction?.id">
-        <div class="col-7"></div>
-        <div class="col-3">
-          <button
-            pButton
-            pRipple
-            label="Save & view all transactions"
-            class="p-button-primary"
-            (click)="save('list')"
-          ></button>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="!this.transaction?.id">
-        <div class="col-4"></div>
-        <div class="col-3">
-          <button
-            pButton
-            pRipple
-            label="Save & view all transactions"
-            class="p-button-primary"
-            (click)="save('list')"
-          ></button>
-        </div>
-        <div class="col-3">
-          <button
-            pButton
-            pRipple
-            label="Save & add another"
-            class="p-button-info"
-            (click)="save('add another')"
-          ></button>
-        </div>
-      </ng-container>
+      <div ng-class="isExisting() ? 'col-7' : 'col-4'"></div>
+      <div class="col-3">
+        <button
+          pButton
+          pRipple
+          label="Save & view all transactions"
+          class="p-button-primary"
+          (click)="save('list')"
+        ></button>
+      </div>
+      <div *ngIf="!isExisting()" class="col-3">
+        <button pButton pRipple label="Save & add another" class="p-button-info" (click)="save('add another')"></button>
+      </div>
     </div>
   </form>
 </div>

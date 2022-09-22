@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -15,10 +16,19 @@ import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.m
   template: '',
 })
 export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy {
-  @Input() title: string | undefined;
-  @Input() schema: JsonSchema | undefined;
-  @Input() transaction: Transaction | undefined;
-  @Input() contributionPurposeDescrip: string | undefined;
+  @Input() transactionType: TransactionType | undefined;
+  get title(): string | undefined {
+    return this.transactionType?.title;
+  }
+  get contributionPurposeDescrip(): string | undefined {
+    return this.transactionType?.contributionPurposeDescripReadonly();
+  }
+  get schema(): JsonSchema | undefined {
+    return this.transactionType?.schema;
+  }
+  get transaction(): Transaction | undefined {
+    return this.transactionType?.transaction;
+  }
 
   abstract formProperties: string[];
 
@@ -37,7 +47,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected validateService: ValidateService,
     protected fb: FormBuilder,
     protected router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
@@ -48,7 +58,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.validateService.formValidatorForm = this.form;
 
     // Intialize form on "Individual" entity type
-    if (this.transaction?.id) {
+    if (this.isExisting()) {
       const txn = { ...this.transaction } as SchATransaction;
       this.form.patchValue({ ...txn });
       this.form.get('entity_type')?.disable();
@@ -174,6 +184,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             this.form.get('contributor_occupation')?.setValue(value.occupation);
             break;
           case ContactTypes.COMMITTEE:
+            this.form.get('donor_committee_fec_id')?.setValue(value.committee_id);
+            this.form.get('contributor_organization_name')?.setValue(value.name);
+            break;
           case ContactTypes.ORGANIZATION:
             this.form.get('contributor_organization_name')?.setValue(value.name);
             break;
@@ -187,4 +200,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
+  isExisting() {
+    return !!this.transaction?.id;
+  }
 }
