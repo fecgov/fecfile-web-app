@@ -20,6 +20,8 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { environment } from '../../../environments/environment';
 import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { Transaction } from 'app/shared/interfaces/transaction.interface';
 
 describe('TransactionGroupBComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -69,8 +71,18 @@ describe('TransactionGroupBComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupBComponent);
     component = fixture.componentInstance;
-    component.schema = OFFSET_TO_OPEX;
-    component.transaction = transaction;
+    component.transactionType = {
+      scheduleId: '',
+      componentGroupId: '',
+      contributionPurposeDescripReadonly: () => '',
+      getNewTransaction: () => {
+        return {} as Transaction;
+      },
+      title: '',
+      parent: undefined,
+      schema: OFFSET_TO_OPEX,
+      transaction: transaction,
+    } as TransactionType;
     fixture.detectChanges();
   });
 

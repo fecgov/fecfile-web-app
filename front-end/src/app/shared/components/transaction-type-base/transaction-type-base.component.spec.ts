@@ -4,6 +4,7 @@ import { FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -89,16 +90,18 @@ describe('TransactionTypeBaseComponent', () => {
     };
     spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transaction = {
-      id: null,
-      report_id: null,
-      form_type: null,
-      filer_committee_id_number: null,
-      transaction_id: null,
-      transaction_type_identifier: 'test',
-      contribution_purpose_descrip: null,
-      parent_transaction_id: null,
-    };
+    component.transactionType = {
+      transaction: {
+        id: null,
+        report_id: null,
+        form_type: null,
+        filer_committee_id_number: null,
+        transaction_id: null,
+        transaction_type_identifier: 'test',
+        contribution_purpose_descrip: null,
+        parent_transaction_id: null,
+      },
+    } as TransactionType;
 
     component.save('list');
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
@@ -117,16 +120,18 @@ describe('TransactionTypeBaseComponent', () => {
     };
     spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction2));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transaction = {
-      id: '123',
-      report_id: null,
-      form_type: null,
-      filer_committee_id_number: null,
-      transaction_id: null,
-      transaction_type_identifier: 'test',
-      contribution_purpose_descrip: null,
-      parent_transaction_id: null,
-    };
+    component.transactionType = {
+      transaction: {
+        id: '123',
+        report_id: null,
+        form_type: null,
+        filer_committee_id_number: null,
+        transaction_id: null,
+        transaction_type_identifier: 'test',
+        contribution_purpose_descrip: null,
+        parent_transaction_id: null,
+      },
+    } as TransactionType;
 
     component.save('list');
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
@@ -148,7 +153,9 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransactionId = '1';
     const testTransactionTypeToAdd = 'testTransactionTypeToAdd';
 
-    component.transaction = testTransaction;
+    component.transactionType = {
+      transaction: testTransaction,
+    } as TransactionType;
 
     const expectedMessage: Message = {
       severity: 'success',
@@ -177,7 +184,9 @@ describe('TransactionTypeBaseComponent', () => {
       contribution_purpose_descrip: null,
       parent_transaction_id: null,
     };
-    component.transaction = testTransaction3;
+    component.transactionType = {
+      transaction: testTransaction3,
+    } as TransactionType;
     const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
@@ -185,7 +194,9 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it("#navigateTo 'add-sub-tran' should navigate", () => {
-    component.transaction = testTransaction;
+    component.transactionType = {
+      transaction: testTransaction,
+    } as TransactionType;
     const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDV_REC';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('add-sub-tran', '123', 'INDV_REC');
@@ -193,8 +204,11 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it("#navigateTo 'to-parent' should navigate", () => {
-    component.transaction = { ...testTransaction };
-    component.transaction.parent_transaction_id = '333';
+    const transaction = { ...testTransaction } as Transaction;
+    transaction.parent_transaction_id = '333';
+    component.transactionType = {
+      transaction: transaction,
+    } as TransactionType;
     const expectedRoute = '/transactions/report/999/list/edit/333';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('to-parent');
@@ -202,7 +216,9 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo default should navigate', () => {
-    component.transaction = testTransaction;
+    component.transactionType = {
+      transaction: testTransaction,
+    } as TransactionType;
     const expectedRoute = '/transactions/report/999/list';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
@@ -212,25 +228,21 @@ describe('TransactionTypeBaseComponent', () => {
   it('#onContactLookupSelect should handle null form', () => {
     const testContact = new Contact();
     testContact.id = '123';
-    const testContactSelectItem: SelectItem<Contact> =
-    {
+    const testContactSelectItem: SelectItem<Contact> = {
       value: testContact,
-    }
+    };
     component.form.setControl('entity_type', null);
     component.onContactLookupSelect(testContactSelectItem);
-    expect(component.form.get(
-      'contributor_last_name')?.value).toBeFalsy();
+    expect(component.form.get('contributor_last_name')?.value).toBeFalsy();
 
-    component.form.setControl('entity_type',
-      new FormControl(ContactTypes.INDIVIDUAL));
+    component.form.setControl('entity_type', new FormControl(ContactTypes.INDIVIDUAL));
     component.form.setControl('contributor_last_name', null);
     component.form.setControl('contributor_first_name', null);
     component.form.setControl('contributor_middle_name', null);
     component.form.setControl('contributor_prefix', null);
     component.form.setControl('contributor_suffix', null);
     component.onContactLookupSelect(testContactSelectItem);
-    expect(component.form.get(
-      'contributor_last_name')?.value).toBeFalsy();
+    expect(component.form.get('contributor_last_name')?.value).toBeFalsy();
   });
 
   it('#onContactLookupSelect should set contact fields', () => {
@@ -248,23 +260,17 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.prefix = testPrefix;
     testContact.suffix = testSuffix;
 
-    const testContactSelectItem: SelectItem<Contact> =
-    {
+    const testContactSelectItem: SelectItem<Contact> = {
       value: testContact,
-    }
+    };
 
     component.form.addControl('entity_type', { value: testEntityType });
     component.onContactLookupSelect(testContactSelectItem);
-    const lastNameFormControlValue =
-      component.form.get('contributor_last_name')?.value;
-    const firstNameFormControlValue =
-      component.form.get('contributor_first_name')?.value;
-    const middleNameFormControlValue =
-      component.form.get('contributor_middle_name')?.value;
-    const prefixFormControlValue =
-      component.form.get('contributor_prefix')?.value;
-    const suffixFormControlValue =
-      component.form.get('contributor_suffix')?.value;
+    const lastNameFormControlValue = component.form.get('contributor_last_name')?.value;
+    const firstNameFormControlValue = component.form.get('contributor_first_name')?.value;
+    const middleNameFormControlValue = component.form.get('contributor_middle_name')?.value;
+    const prefixFormControlValue = component.form.get('contributor_prefix')?.value;
+    const suffixFormControlValue = component.form.get('contributor_suffix')?.value;
 
     expect(lastNameFormControlValue === testLastName).toBeTrue();
     expect(firstNameFormControlValue === testFirstName).toBeTrue();
@@ -272,5 +278,4 @@ describe('TransactionTypeBaseComponent', () => {
     expect(prefixFormControlValue === testPrefix).toBeTrue();
     expect(suffixFormControlValue === testSuffix).toBeTrue();
   });
-
 });
