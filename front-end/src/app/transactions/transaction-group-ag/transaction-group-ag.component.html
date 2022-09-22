@@ -5,7 +5,12 @@
   an earmark memo:
 </p>
 <p-accordion>
-  <p-accordionTab header="STEP ONE">
+  <p-accordionTab>
+    <ng-template pTemplate="header"
+      ><b>STEP ONE:</b>
+      <p style="font-weight: normal">Add receipt and contributor information</p></ng-template
+    >
+
     <div class="p-fluid">
       <h3>Contributor</h3>
       <form id="aForm" [formGroup]="aForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
@@ -310,7 +315,14 @@
     </div>
   </p-accordionTab>
 
-  <p-accordionTab header="STEP TWO"></p-accordionTab>
+  <p-accordionTab>
+    <ng-template pTemplate="header"
+      ><b>STEP TWO:</b>
+      <p style="font-weight: normal">
+        Add earmarked memo and conduit information (REQUIRED FOR EARMARKED RECEIPTS)
+      </p></ng-template
+    >
+  </p-accordionTab>
 </p-accordion>
 
 <div class="grid">
@@ -320,6 +332,7 @@
   <div ng-class="isExisting() ? 'col-7' : 'col-4'"></div>
   <div class="col-3">
     <button
+      disabled
       pButton
       pRipple
       label="Save & view all transactions"

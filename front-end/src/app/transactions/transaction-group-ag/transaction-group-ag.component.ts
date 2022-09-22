@@ -7,7 +7,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { MessageService } from 'primeng/api';
-import { takeUntil, map, concatWith } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-group-ag',
