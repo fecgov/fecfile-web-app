@@ -4,6 +4,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageService } from 'primeng/api';
 import { TransactionGroupAgComponent } from './transaction-group-ag.component';
 import { ToastModule } from 'primeng/toast';
@@ -11,6 +12,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
+import { AccordionModule } from 'primeng/accordion';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
@@ -34,10 +36,12 @@ describe('TransactionGroupAgComponent', () => {
         DropdownModule,
         CalendarModule,
         ButtonModule,
+        AccordionModule,
         CheckboxModule,
         InputTextModule,
         InputTextareaModule,
         InputNumberModule,
+        BrowserAnimationsModule,
       ],
       declarations: [TransactionGroupAgComponent],
       providers: [MessageService, FormBuilder, provideMockStore(testMockStore)],
