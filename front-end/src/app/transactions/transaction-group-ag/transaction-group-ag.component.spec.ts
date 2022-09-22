@@ -63,6 +63,7 @@ describe('TransactionGroupAgComponent', () => {
     component.transactionType = earmarkReceipt;
     component.ngOnInit();
     component.resetEntityFields(component.aForm, ContactTypes.COMMITTEE);
+    component.resetEntityFields(component.aForm, ContactTypes.INDIVIDUAL);
     expect(component).toBeTruthy();
   });
 });
