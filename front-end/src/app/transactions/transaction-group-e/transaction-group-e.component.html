@@ -8,15 +8,14 @@
       <div class="col-6">
         <div class="field">
           <label for="entity_type">CONTRIBUTOR TYPE</label>
-          <p-dropdown
-            inputId="entity_type"
-            formControlName="entity_type"
-            [options]="contactTypeOptions"
-            optionLabel="name"
-            optionValue="code"
-            [readonly]="true"
-            styleClass="readonly"
-          ></p-dropdown>
+          <app-contact-lookup
+            [contactTypeFormControl]="$any(form).controls['entity_type']"
+            [contactTypeOptions]="contactTypeOptions"
+            [contactTypeReadOnly]="true"
+            contactTypeStyleClass="readonly"
+            (fecfileContactSelect)="onContactLookupSelect($event)"
+          >
+          </app-contact-lookup>
         </div>
       </div>
     </div>

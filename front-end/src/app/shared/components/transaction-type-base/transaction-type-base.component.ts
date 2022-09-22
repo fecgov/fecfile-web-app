@@ -37,7 +37,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected validateService: ValidateService,
     protected fb: FormBuilder,
     protected router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
@@ -174,6 +174,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             this.form.get('contributor_occupation')?.setValue(value.occupation);
             break;
           case ContactTypes.COMMITTEE:
+            this.form.get('donor_committee_fec_id')?.setValue(value.committee_id);
+            this.form.get('contributor_organization_name')?.setValue(value.name);
+            break;
           case ContactTypes.ORGANIZATION:
             this.form.get('contributor_organization_name')?.setValue(value.name);
             break;
@@ -186,5 +189,4 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       }
     }
   }
-
 }
