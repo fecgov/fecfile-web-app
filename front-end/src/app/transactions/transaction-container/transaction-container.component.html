@@ -1,48 +1,21 @@
 <ng-container *ngIf="transactionType?.componentGroupId === 'A'">
-  <app-transaction-group-a
-    [title]="transactionType?.title"
-    [schema]="transactionType?.schema"
-    [transaction]="transactionType?.transaction"
-    [contributionPurposeDescrip]="transactionType?.contributionPurposeDescripReadonly()"
-  ></app-transaction-group-a>
+  <app-transaction-group-a [transactionType]="transactionType"></app-transaction-group-a>
 </ng-container>
 <ng-container *ngIf="transactionType?.componentGroupId === 'B'">
-  <app-transaction-group-b
-    [title]="transactionType?.title"
-    [schema]="transactionType?.schema"
-    [transaction]="transactionType?.transaction"
-    [contributionPurposeDescrip]="transactionType?.contributionPurposeDescripReadonly()"
-  ></app-transaction-group-b>
+  <app-transaction-group-b [transactionType]="transactionType"></app-transaction-group-b>
 </ng-container>
 <ng-container *ngIf="transactionType?.componentGroupId === 'C'">
-  <app-transaction-group-c
-    [title]="transactionType?.title"
-    [schema]="transactionType?.schema"
-    [transaction]="transactionType?.transaction"
-    [contributionPurposeDescrip]="transactionType?.contributionPurposeDescripReadonly()"
-  ></app-transaction-group-c>
+  <app-transaction-group-c [transactionType]="transactionType"></app-transaction-group-c>
 </ng-container>
 <ng-container *ngIf="transactionType?.componentGroupId === 'D'">
-  <app-transaction-group-d
-    [title]="transactionType?.title"
-    [schema]="transactionType?.schema"
-    [transaction]="transactionType?.transaction"
-    [contributionPurposeDescrip]="transactionType?.contributionPurposeDescripReadonly()"
-  ></app-transaction-group-d>
+  <app-transaction-group-d [transactionType]="transactionType"></app-transaction-group-d>
 </ng-container>
 <ng-container *ngIf="transactionType?.componentGroupId === 'E'">
-  <app-transaction-group-e
-    [title]="transactionType?.title"
-    [schema]="transactionType?.schema"
-    [transaction]="transactionType?.transaction"
-    [contributionPurposeDescrip]="transactionType?.contributionPurposeDescripReadonly()"
-  ></app-transaction-group-e>
+  <app-transaction-group-e [transactionType]="transactionType"></app-transaction-group-e>
 </ng-container>
 <ng-container *ngIf="transactionType?.componentGroupId === 'F'">
-  <app-transaction-group-f
-    [title]="transactionType?.title"
-    [schema]="transactionType?.schema"
-    [transaction]="transactionType?.transaction"
-    [contributionPurposeDescrip]="transactionType?.contributionPurposeDescripReadonly()"
-  ></app-transaction-group-f>
+  <app-transaction-group-f [transactionType]="transactionType"></app-transaction-group-f>
+</ng-container>
+<ng-container *ngIf="transactionType?.componentGroupId === 'AG'">
+  <app-transaction-group-ag [transactionType]="transactionType"></app-transaction-group-ag>
 </ng-container>
