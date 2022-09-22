@@ -19,6 +19,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { EAR_REC } from '../../shared/models/transaction-types/EAR_REC.model';
+import { ContactTypes } from 'app/shared/models/contact.model';
 
 describe('TransactionGroupAgComponent', () => {
   let component: TransactionGroupAgComponent;
@@ -61,6 +62,7 @@ describe('TransactionGroupAgComponent', () => {
   it('should create', () => {
     component.transactionType = earmarkReceipt;
     component.ngOnInit();
+    component.resetEntityFields(component.aForm, ContactTypes.COMMITTEE);
     expect(component).toBeTruthy();
   });
 });
