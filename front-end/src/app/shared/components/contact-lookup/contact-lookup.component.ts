@@ -20,7 +20,7 @@ export class ContactLookupComponent {
   @Input() contactTypeInputId = 'entity_type';
   @Input() contactTypeFormControl: FormControl = new FormControl();
   @Input() contactTypeReadOnly = false;
-  @Input() contactTypeStyleClass = "";
+  @Input() contactTypeStyleClass = '';
 
   @Input() maxFecCommitteeResults = 5;
   @Input() maxFecfileCommitteeResults = 5;
@@ -33,8 +33,8 @@ export class ContactLookupComponent {
 
   contactLookupForm: FormGroup = this.formBuilder.group({
     selectedContactType: this.contactTypeFormControl,
-    selectedContact: this.selectedContact
-  })
+    selectedContact: this.selectedContact,
+  });
 
   contactLookupList: SelectItemGroup[] = [];
 
@@ -69,25 +69,22 @@ export class ContactLookupComponent {
       this.searchTerm = searchTerm;
       switch (this.contactTypeFormControl.value) {
         case ContactTypes.COMMITTEE:
-          this.contactService.committeeLookup(
-            searchTerm, this.maxFecCommitteeResults,
-            this.maxFecfileCommitteeResults).subscribe((response) => {
-              this.contactLookupList = response &&
-                response.toSelectItemGroups();
+          this.contactService
+            .committeeLookup(searchTerm, this.maxFecCommitteeResults, this.maxFecfileCommitteeResults)
+            .subscribe((response) => {
+              this.contactLookupList = response && response.toSelectItemGroups();
             });
           break;
         case ContactTypes.INDIVIDUAL:
-          this.contactService.individualLookup(searchTerm,
-            this.maxFecfileIndividualResults).subscribe((response) => {
-              this.contactLookupList = response &&
-                response.toSelectItemGroups();
-            });
+          this.contactService.individualLookup(searchTerm, this.maxFecfileIndividualResults).subscribe((response) => {
+            this.contactLookupList = response && response.toSelectItemGroups();
+          });
           break;
         case ContactTypes.ORGANIZATION:
-          this.contactService.organizationLookup(searchTerm,
-            this.maxFecfileOrganizationResults).subscribe((response) => {
-              this.contactLookupList = response &&
-                response.toSelectItemGroups();
+          this.contactService
+            .organizationLookup(searchTerm, this.maxFecfileOrganizationResults)
+            .subscribe((response) => {
+              this.contactLookupList = response && response.toSelectItemGroups();
             });
           break;
       }
@@ -105,6 +102,7 @@ export class ContactLookupComponent {
         const value: FecApiCommitteeLookupData = event.value
         this.openCreateContactDialog(value);
       }
+      this.contactLookupForm.patchValue({ selectedContact: '' });
     }
   }
 

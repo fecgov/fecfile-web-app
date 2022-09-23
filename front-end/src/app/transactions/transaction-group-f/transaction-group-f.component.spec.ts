@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -73,8 +75,19 @@ describe('TransactionGroupFComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupFComponent);
     component = fixture.componentInstance;
-    component.schema = JF_TRAN_PAC_MEMO;
-    component.transaction = transaction;
+    component.transactionType = {
+      scheduleId: '',
+      componentGroupId: '',
+      contact: undefined,
+      contributionPurposeDescripReadonly: () => '',
+      getNewTransaction: () => {
+        return {} as Transaction;
+      },
+      title: '',
+      parent: undefined,
+      schema: JF_TRAN_PAC_MEMO,
+      transaction: transaction,
+    } as TransactionType;
     fixture.detectChanges();
   });
 

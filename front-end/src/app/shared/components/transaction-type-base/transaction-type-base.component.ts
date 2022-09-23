@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -16,11 +17,20 @@ import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.m
   template: '',
 })
 export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy {
-  @Input() title: string | undefined;
-  @Input() schema: JsonSchema | undefined;
-  @Input() transaction: Transaction | undefined;
-  @Input() contributionPurposeDescrip: string | undefined;
   @Input() contact: Contact | undefined;
+  @Input() transactionType: TransactionType | undefined;
+  get title(): string | undefined {
+    return this.transactionType?.title;
+  }
+  get contributionPurposeDescrip(): string | undefined {
+    return this.transactionType?.contributionPurposeDescripReadonly();
+  }
+  get schema(): JsonSchema | undefined {
+    return this.transactionType?.schema;
+  }
+  get transaction(): Transaction | undefined {
+    return this.transactionType?.transaction;
+  }
 
   abstract formProperties: string[];
 
@@ -52,7 +62,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.validateService.formValidatorForm = this.form;
 
     // Intialize form on "Individual" entity type
-    if (this.transaction?.id) {
+    if (this.isExisting()) {
       const txn = { ...this.transaction } as SchATransaction;
       this.form.patchValue({ ...txn });
       this.form.get('entity_type')?.disable();
@@ -272,4 +282,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
+  isExisting() {
+    return !!this.transaction?.id;
+  }
 }

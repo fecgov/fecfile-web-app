@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -78,8 +80,19 @@ describe('TransactionGroupBComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupBComponent);
     component = fixture.componentInstance;
-    component.schema = OFFSET_TO_OPEX;
-    component.transaction = transaction;
+    component.transactionType = {
+      scheduleId: '',
+      componentGroupId: '',
+      contact: undefined,
+      contributionPurposeDescripReadonly: () => '',
+      getNewTransaction: () => {
+        return {} as Transaction;
+      },
+      title: '',
+      parent: undefined,
+      schema: OFFSET_TO_OPEX,
+      transaction: transaction,
+    } as TransactionType;
     fixture.detectChanges();
   });
 

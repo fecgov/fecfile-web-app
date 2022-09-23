@@ -20,14 +20,14 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
     const transactionId = route.paramMap.get('transactionId');
     const parentTransactionId = route.paramMap.get('parentTransactionId');
 
+    if (transactionId) {
+      return this.resolve_existing_transaction(transactionId);
+    }
     if (parentTransactionId && transactionTypeName) {
       return this.resolve_child_transaction(parentTransactionId, transactionTypeName);
     }
     if (reportId && transactionTypeName) {
       return this.resolve_new_transaction(reportId, transactionTypeName);
-    }
-    if (transactionId) {
-      return this.resolve_existing_transaction(transactionId);
     }
     return of(undefined);
   }
