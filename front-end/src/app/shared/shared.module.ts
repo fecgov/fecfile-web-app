@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
@@ -27,6 +28,7 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     InputTextModule,
     FormsModule,
     DialogModule,
+    ConfirmDialogModule,
   ],
   declarations: [
     LabelPipe,

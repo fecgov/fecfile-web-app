@@ -1,16 +1,19 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { provideMockStore } from '@ngrx/store/testing';
+import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
+import { provideMockStore } from '@ngrx/store/testing';
+import { of } from 'rxjs';
 import { TransactionType } from '../interfaces/transaction-type.interface';
-import { TransactionTypeResolver } from './transaction-type.resolver';
+import { Contact } from '../models/contact.model';
+import { SchATransaction } from '../models/scha-transaction.model';
+import { ContactService } from '../services/contact.service';
 import { TransactionService } from '../services/transaction.service';
 import { testMockStore } from '../utils/unit-test.utils';
-import { of } from 'rxjs';
-import { SchATransaction } from '../models/scha-transaction.model';
+import { TransactionTypeResolver } from './transaction-type.resolver';
 
 describe('TransactionResolver', () => {
   let resolver: TransactionTypeResolver;
+  let testContactService: ContactService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -32,6 +35,7 @@ describe('TransactionResolver', () => {
       ],
     });
     resolver = TestBed.inject(TransactionTypeResolver);
+    testContactService = TestBed.inject(ContactService);
   });
 
   it('should be created', () => {
@@ -43,8 +47,12 @@ describe('TransactionResolver', () => {
       paramMap: convertToParamMap({ transactionId: '999' }),
     };
 
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testContactService, 'get').and.returnValue(of(testContact));
+
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionType | undefined) => {
-      expect(response).toBeTruthy();
+      expect(of(response)).toBeTruthy();
       if (response) {
         expect('Offsets to Operating Expenditures').toEqual(response.title);
       }

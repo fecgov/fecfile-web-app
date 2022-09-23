@@ -27,6 +27,7 @@ import { TransactionGroupEComponent } from './transaction-group-e/transaction-gr
 import { TransactionGroupFComponent } from './transaction-group-f/transaction-group-f.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent, MemoCodePipe } from './transaction-list/transaction-list.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { TransactionListComponent, MemoCodePipe } from './transaction-list/trans
     ToolbarModule,
     TableModule,
     SharedModule,
+    ConfirmDialogModule,
   ],
 })
 export class TransactionsModule {}

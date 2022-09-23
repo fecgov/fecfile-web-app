@@ -1,15 +1,16 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { ApiService } from 'app/shared/services/api.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { Message, MessageService, SelectItem } from 'primeng/api';
+import { ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
@@ -41,6 +42,7 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
 const testTransaction = {
   id: '123',
   report_id: '999',
+  contact_id: '333',
   form_type: null,
   filer_committee_id_number: null,
   transaction_id: null,
@@ -55,17 +57,20 @@ describe('TransactionTypeBaseComponent', () => {
   let testMessageService: MessageService;
   let testRouter: Router;
   let testTransactionService: TransactionService;
+  let testApiService: ApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TestTransactionTypeBaseComponent],
       imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [MessageService, FormBuilder, ValidateService, TransactionService, provideMockStore(testMockStore)],
+      providers: [MessageService, FormBuilder, ValidateService, TransactionService,
+        ConfirmationService, provideMockStore(testMockStore)],
     }).compileComponents();
 
     testMessageService = TestBed.inject(MessageService);
     testRouter = TestBed.inject(Router);
     testTransactionService = TestBed.inject(TransactionService);
+    testApiService = TestBed.inject(ApiService);
   });
 
   beforeEach(() => {
@@ -82,6 +87,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction1: Transaction = {
       id: null,
       report_id: null,
+      contact_id: undefined,
       form_type: null,
       filer_committee_id_number: null,
       transaction_id: null,
@@ -89,11 +95,15 @@ describe('TransactionTypeBaseComponent', () => {
       contribution_purpose_descrip: null,
       parent_transaction_id: null,
     };
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testApiService, 'post').and.returnValue(of(testContact));
     spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transaction = {
       id: null,
       report_id: null,
+      contact_id: undefined,
       form_type: null,
       filer_committee_id_number: null,
       transaction_id: null,
@@ -106,10 +116,11 @@ describe('TransactionTypeBaseComponent', () => {
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('#save should navigate for update', () => {
+  it('#save should navigate for update', fakeAsync(() => {
     const testTransaction2: Transaction = {
       id: '123',
       report_id: null,
+      contact_id: undefined,
       form_type: null,
       filer_committee_id_number: null,
       transaction_id: null,
@@ -117,11 +128,15 @@ describe('TransactionTypeBaseComponent', () => {
       contribution_purpose_descrip: null,
       parent_transaction_id: null,
     };
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testApiService, 'post').and.returnValue(of(testContact));
     spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction2));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transaction = {
       id: '123',
       report_id: null,
+      contact_id: undefined,
       form_type: null,
       filer_committee_id_number: null,
       transaction_id: null,
@@ -131,8 +146,9 @@ describe('TransactionTypeBaseComponent', () => {
     };
 
     component.save('list');
+    tick(1000);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
-  });
+  }));
 
   it("#navigateTo 'add another' should show popup", () => {
     const expectedMessage: Message = {
@@ -172,6 +188,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction3: Transaction = {
       id: '123',
       report_id: '99',
+      contact_id: '33',
       form_type: null,
       filer_committee_id_number: null,
       transaction_id: null,
