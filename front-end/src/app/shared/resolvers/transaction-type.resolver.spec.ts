@@ -28,6 +28,7 @@ describe('TransactionResolver', () => {
                 SchATransaction.fromJSON({
                   id: transactionId,
                   transaction_type_identifier: 'OFFSET_TO_OPEX',
+                  contact_id: '123',
                 })
               ),
           },
