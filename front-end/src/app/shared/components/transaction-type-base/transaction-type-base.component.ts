@@ -7,7 +7,7 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { CountryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { firstValueFrom, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
@@ -151,11 +151,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           this.contact.occupation = this.form.get('contributor_occupation')?.value;
           break;
         case ContactTypes.COMMITTEE:
+          this.contact.committee_id = this.form.get('donor_committee_fec_id')?.value;
+          this.contact.name = this.form.get('contributor_organization_name')?.value;
+          break;
         case ContactTypes.ORGANIZATION:
         case ContactTypes.CANDIDATE:
           this.contact.name = this.form.get('contributor_organization_name')?.value;
           break;
       }
+      this.contact.country = CountryCodeLabels[0][0];
       this.contact.street_1 = this.form.get('contributor_street_1')?.value;
       this.contact.street_2 = this.form.get('contributor_street_2')?.value;
       this.contact.city = this.form.get('contributor_city')?.value;
@@ -230,6 +234,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             this.form.get('contributor_occupation')?.setValue(value.occupation);
             break;
           case ContactTypes.COMMITTEE:
+            this.form.get('donor_committee_fec_id')?.setValue(value.committee_id);
+            this.form.get('contributor_organization_name')?.setValue(value.name);
+            break;
           case ContactTypes.ORGANIZATION:
             this.form.get('contributor_organization_name')?.setValue(value.name);
             break;
