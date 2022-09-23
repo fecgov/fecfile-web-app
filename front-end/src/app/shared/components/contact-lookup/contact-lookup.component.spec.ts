@@ -215,4 +215,13 @@ describe('ContactLookupComponent', () => {
     expect(retval).toEqual(expectedRetval);
   });
 
+  it('#createNewContact happy path', () => {
+    component.createNewContact();
+    component.closeCreateContactDialog();
+    component.createContactSave();
+    component.onCreateContactDialogOpen();
+    component.onCreateContactDialogClose();
+    expect(true === true);
+  });
+
 });

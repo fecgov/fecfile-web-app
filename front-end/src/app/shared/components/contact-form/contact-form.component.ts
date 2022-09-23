@@ -93,10 +93,10 @@ export class ContactFormComponent implements OnInit, OnDestroy {
           });
           // ajv does not un-require zip when country is not USA
           this.form.patchValue({ zip: this.form.get('zip')?.value || '' });
-          this.form?.get('state')?.disable();
+          this.form.get('state')?.disable();
         } else {
           this.form.patchValue({ zip: this.form.get('zip')?.value || null });
-          this.form?.get('state')?.enable();
+          this.form.get('state')?.enable();
         }
       });
 
@@ -109,17 +109,17 @@ export class ContactFormComponent implements OnInit, OnDestroy {
             candidate_state: '',
             candidate_district: '',
           });
-          this.form?.get('candidate_state')?.disable();
-          this.form?.get('candidate_district')?.disable();
+          this.form.get('candidate_state')?.disable();
+          this.form.get('candidate_district')?.disable();
         } else if (value === CandidateOfficeTypes.SENATE) {
           this.form.patchValue({
             candidate_district: '',
           });
-          this.form?.get('candidate_state')?.enable();
-          this.form?.get('candidate_district')?.disable();
+          this.form.get('candidate_state')?.enable();
+          this.form.get('candidate_district')?.disable();
         } else {
-          this.form?.get('candidate_state')?.enable();
-          this.form?.get('candidate_district')?.enable();
+          this.form.get('candidate_state')?.enable();
+          this.form.get('candidate_district')?.enable();
         }
       });
 
