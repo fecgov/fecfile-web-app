@@ -1,30 +1,34 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { TransactionGroupBComponent } from './transaction-group-b.component';
-import { ToastModule } from 'primeng/toast';
-import { SharedModule } from '../../shared/shared.module';
-import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
+import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { ContactService } from 'app/shared/services/contact.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { ToastModule } from 'primeng/toast';
+import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { SharedModule } from '../../shared/shared.module';
+import { TransactionGroupBComponent } from './transaction-group-b.component';
 
 describe('TransactionGroupBComponent', () => {
   let httpTestingController: HttpTestingController;
   let component: TransactionGroupBComponent;
   let fixture: ComponentFixture<TransactionGroupBComponent>;
+  let testContactService: ContactService;
 
   const transaction = SchATransaction.fromJSON({
     form_type: 'SA15',
@@ -59,10 +63,13 @@ describe('TransactionGroupBComponent', () => {
         InputNumberModule,
         InputTextModule,
         InputTextareaModule,
+        ConfirmDialogModule,
       ],
       declarations: [TransactionGroupBComponent],
-      providers: [MessageService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [MessageService, ConfirmationService,
+        FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
+    testContactService = TestBed.inject(ContactService);
   });
 
   beforeEach(() => {
@@ -105,6 +112,10 @@ describe('TransactionGroupBComponent', () => {
   });
 
   it('#save() should save a new record', () => {
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testContactService, 'create').and.returnValue(of(testContact));
+
     if (component.transaction) {
       component.transaction.id = null;
     }
@@ -118,6 +129,10 @@ describe('TransactionGroupBComponent', () => {
   });
 
   it('#save() should update an existing record', () => {
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testContactService, 'create').and.returnValue(of(testContact));
+
     if (component.transaction) {
       component.transaction.id = '10';
     }
