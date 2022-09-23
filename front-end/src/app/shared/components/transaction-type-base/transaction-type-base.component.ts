@@ -120,8 +120,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.confirmationService.confirm({
         header: 'Confirm',
         icon: 'pi pi-info-circle',
-        message: `By saving this transaction, you're also creating a new committee ` +
-          `contact for ${confirmationContactTitle}.`,
+        message: `By saving this transaction, you're also creating a new ` +
+          `${confirmationContactTitle}.`,
         acceptLabel: 'Continue',
         rejectLabel: 'Cancel',
         accept: () => { this.doSave(navigateTo, payload, transactionTypeToAdd) },

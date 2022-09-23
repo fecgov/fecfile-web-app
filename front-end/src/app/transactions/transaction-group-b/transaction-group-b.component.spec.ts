@@ -113,7 +113,7 @@ describe('TransactionGroupBComponent', () => {
     expect(component.form.get('contributor_first_name')?.value).toBe(null);
   });
 
-  it('#save() should save a new record', () => {
+  it('#save() should save a new org record', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
@@ -127,7 +127,22 @@ describe('TransactionGroupBComponent', () => {
     if (component.transaction) {
       component.transaction.id = null;
     }
-    component.form.patchValue({ ...transaction });
+    const testTran = SchATransaction.fromJSON({
+      form_type: 'SA15',
+      filer_committee_id_number: 'C00000000',
+      transaction_type_identifier: 'OFFSET_TO_OPEX',
+      transaction_id: 'AAAAAAAAAAAAAAAAAAA',
+      entity_type: ContactTypes.ORGANIZATION,
+      contributor_organization_name: 'org name',
+      contributor_street_1: '123 Main St',
+      contributor_city: 'city',
+      contributor_state: 'VA',
+      contributor_zip: '20001',
+      contribution_date: '2022-08-11',
+      contribution_amount: 1,
+      contribution_aggregate: 2,
+    });
+    component.form.patchValue({ ...testTran });
     component.save('list');
     const req = httpTestingController.expectOne(
       `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPEX&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
@@ -136,7 +151,7 @@ describe('TransactionGroupBComponent', () => {
     httpTestingController.verify();
   });
 
-  it('#save() should update an existing record', () => {
+  it('#save() should update an existing org record', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
@@ -159,6 +174,84 @@ describe('TransactionGroupBComponent', () => {
     httpTestingController.verify();
   });
 
+  it('#save() should save a new ind record', () => {
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testContactService, 'create').and.returnValue(of(testContact));
+    spyOn(testConfirmationService, "confirm")
+      .and.callFake((confirmation: Confirmation) => {
+        if (confirmation.accept) {
+          return confirmation.accept();
+        }
+      });
+
+    if (component.transaction) {
+      component.transaction.id = null;
+    }
+    const testTran = SchATransaction.fromJSON({
+      form_type: 'SA15',
+      filer_committee_id_number: 'C00000000',
+      transaction_type_identifier: 'OFFSET_TO_OPEX',
+      transaction_id: 'AAAAAAAAAAAAAAAAAAA',
+      entity_type: ContactTypes.INDIVIDUAL,
+      contributor_first_name: 'fn',
+      contributor_last_name: 'ln',
+      contributor_street_1: '123 Main St',
+      contributor_city: 'city',
+      contributor_state: 'VA',
+      contributor_zip: '20001',
+      contribution_date: '2022-08-11',
+      contribution_amount: 1,
+      contribution_aggregate: 2,
+    });
+    component.form.patchValue({ ...testTran });
+
+    component.save('list');
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPEX&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
+    );
+    expect(req.request.method).toEqual('POST');
+    httpTestingController.verify();
+  });
+
+  it('#save() should save a new com record', () => {
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testContactService, 'create').and.returnValue(of(testContact));
+    spyOn(testConfirmationService, "confirm")
+      .and.callFake((confirmation: Confirmation) => {
+        if (confirmation.accept) {
+          return confirmation.accept();
+        }
+      });
+
+    if (component.transaction) {
+      component.transaction.id = null;
+    }
+    const testTran = SchATransaction.fromJSON({
+      form_type: 'SA15',
+      filer_committee_id_number: 'C00000000',
+      transaction_type_identifier: 'OFFSET_TO_OPEX',
+      transaction_id: 'AAAAAAAAAAAAAAAAAAA',
+      entity_type: ContactTypes.COMMITTEE,
+      contributor_organization_name: 'org name',
+      contributor_street_1: '123 Main St',
+      contributor_city: 'city',
+      contributor_state: 'VA',
+      contributor_zip: '20001',
+      contribution_date: '2022-08-11',
+      contribution_amount: 1,
+      contribution_aggregate: 2,
+    });
+    component.form.patchValue({ ...testTran });
+    component.save('list');
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPEX&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
+    );
+    expect(req.request.method).toEqual('POST');
+    httpTestingController.verify();
+  });
+
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     component.save('list');
@@ -168,4 +261,38 @@ describe('TransactionGroupBComponent', () => {
     );
     httpTestingController.verify();
   });
+
+  it('#save() should not save an invalid org record', () => {
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    component.contact = testContact;
+    spyOn(testContactService, 'create').and.returnValue(of(testContact));
+    spyOn(testConfirmationService, "confirm")
+      .and.callFake((confirmation: Confirmation) => {
+        if (confirmation.accept) {
+          return confirmation.accept();
+        }
+      });
+
+    if (component.transaction) {
+      component.transaction.id = null;
+    }
+    const testTran = SchATransaction.fromJSON({
+      form_type: 'SA15',
+      filer_committee_id_number: 'C00000000',
+      transaction_type_identifier: 'OFFSET_TO_OPEX',
+      transaction_id: 'AAAAAAAAAAAAAAAAAAA',
+      entity_type: ContactTypes.INDIVIDUAL,
+      contribution_amount: 1,
+      contribution_aggregate: 2,
+    });
+    component.form.patchValue({ ...testTran });
+    component.save('list');
+    expect(component.form.invalid).toBe(true);
+    httpTestingController.expectNone(
+      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPEX&fields_to_validate=`
+    );
+    httpTestingController.verify();
+  });
+
 });
