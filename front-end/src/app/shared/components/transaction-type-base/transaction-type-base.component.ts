@@ -97,22 +97,37 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       ...this.validateService.getFormValues(this.form, this.formProperties),
     });
 
-    this.doSave(navigateTo, payload, transactionTypeToAdd);
-    const payloadContactType = payload.entity_type as ContactTypes;
-    const confirmationContactTitle = payloadContactType === ContactTypes.INDIVIDUAL ?
-      `${this.form.get('contributor_last_name')?.value}, ` +
-      `${this.form.get('contributor_first_name')?.value}` :
-      this.form.get('contributor_organization_name')?.value;
-    this.confirmationService.confirm({
-      header: 'Confirm',
-      icon: 'pi pi-info-circle',
-      message: `By saving this transaction, you're also creating a new committee ` +
-        `contact for ${confirmationContactTitle}.`,
-      acceptLabel: 'Continue',
-      rejectLabel: 'Cancel',
-      accept: () => { this.doSave(navigateTo, payload, transactionTypeToAdd) },
-      reject: () => { return },
-    });
+    if (this.contact?.id) {
+      this.doSave(navigateTo, payload, transactionTypeToAdd);
+    } else {
+      const payloadContactType = payload.entity_type as ContactTypes;
+      let confirmationContactTitle = '';
+      switch (payloadContactType) {
+        case ContactTypes.INDIVIDUAL:
+          confirmationContactTitle = `individual contact for <b>` +
+            `${this.form.get('contributor_last_name')?.value}, ` +
+            `${this.form.get('contributor_first_name')?.value}</b>`;
+          break;
+        case ContactTypes.COMMITTEE:
+          confirmationContactTitle = `committee contact for <b>` +
+            `${this.form.get('contributor_organization_name')?.value}</b>`;
+          break;
+        case ContactTypes.ORGANIZATION:
+          confirmationContactTitle = `organization contact for <b>` +
+            `${this.form.get('contributor_organization_name')?.value}</b>`;
+          break;
+      }
+      this.confirmationService.confirm({
+        header: 'Confirm',
+        icon: 'pi pi-info-circle',
+        message: `By saving this transaction, you're also creating a new committee ` +
+          `contact for ${confirmationContactTitle}.`,
+        acceptLabel: 'Continue',
+        rejectLabel: 'Cancel',
+        accept: () => { this.doSave(navigateTo, payload, transactionTypeToAdd) },
+        reject: () => { return },
+      });
+    }
   }
 
   doSave(navigateTo: 'list' | 'add another' | 'add-sub-tran',
@@ -225,7 +240,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     });
   }
 
-  onContactLookupSelectExisting(selectItem: SelectItem<Contact>) {
+  onContactLookupSelect(selectItem: SelectItem<Contact>) {
     if (selectItem) {
       const value = selectItem.value;
       if (value) {

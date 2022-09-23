@@ -27,10 +27,7 @@ export class ContactLookupComponent {
   @Input() maxFecfileIndividualResults = 10;
   @Input() maxFecfileOrganizationResults = 10;
 
-  @Output() fecfileContactSelect =
-    new EventEmitter<SelectItem<Contact>>();
-  @Output() fecApiLookupSelect = new EventEmitter<
-    SelectItem<FecApiLookupData>>();
+  @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
 
   selectedContact: FormControl<SelectItem> | null = null;
 
@@ -55,6 +52,9 @@ export class ContactLookupComponent {
       ]),
     ])
   );
+
+  workingValidatorSchema = this.validateService.formValidatorSchema;
+  workingValidatorForm = this.validateService.formValidatorForm;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -100,7 +100,7 @@ export class ContactLookupComponent {
   onContactSelect(event: any) {
     if (event && event.value) {
       if (event.value instanceof Contact) {
-        this.fecfileContactSelect.emit(event);
+        this.contactSelect.emit(event);
       } else if (event.value instanceof FecApiCommitteeLookupData) {
         const value: FecApiCommitteeLookupData = event.value
         this.openCreateContactDialog(value);
@@ -117,6 +117,10 @@ export class ContactLookupComponent {
   }
 
   openCreateContactDialog(value?: FecApiLookupData) {
+    // Need these since contact-form sets these for validation
+    this.workingValidatorSchema = this.validateService.formValidatorSchema;
+    this.workingValidatorForm = this.validateService.formValidatorForm;
+
     if (value && value instanceof FecApiCommitteeLookupData) {
       this.createContactForm.get('committee_id')?.setValue(
         value.id);
@@ -127,6 +131,12 @@ export class ContactLookupComponent {
   }
 
   closeCreateContactDialog() {
+    // Need these since contact-form sets these for validation
+    this.validateService.formValidatorSchema =
+      this.workingValidatorSchema;
+    this.validateService.formValidatorForm =
+      this.workingValidatorForm;
+
     this.createContactDialogVisible = false;
   }
 
@@ -139,7 +149,7 @@ export class ContactLookupComponent {
     const createdContact = Contact.fromJSON({
       ...this.validateService.getFormValues(this.createContactForm)
     });
-    this.fecfileContactSelect.emit({
+    this.contactSelect.emit({
       value: createdContact
     });
     this.closeCreateContactDialog();

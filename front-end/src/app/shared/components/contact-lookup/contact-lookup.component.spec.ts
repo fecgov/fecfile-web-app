@@ -182,7 +182,7 @@ describe('ContactLookupComponent', () => {
   }));
 
   it('#onContactSelect Contact happy path', fakeAsync(() => {
-    const eventEmitterEmitSpy = spyOn(component.fecfileContactSelect, 'emit');
+    const eventEmitterEmitSpy = spyOn(component.contactSelect, 'emit');
     const testContact = Contact.fromJSON({
       id: 123,
       last_name: 'testLastName',
