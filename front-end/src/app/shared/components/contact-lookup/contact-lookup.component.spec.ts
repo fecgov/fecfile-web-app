@@ -221,7 +221,6 @@ describe('ContactLookupComponent', () => {
     component.createContactSave();
     component.onCreateContactDialogOpen();
     component.onCreateContactDialogClose();
-    expect(true === true);
   });
 
 });
