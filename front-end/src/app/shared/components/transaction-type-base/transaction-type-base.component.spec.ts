@@ -10,7 +10,7 @@ import { ApiService } from 'app/shared/services/api.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
+import { Confirmation, ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
@@ -58,6 +58,7 @@ describe('TransactionTypeBaseComponent', () => {
   let testRouter: Router;
   let testTransactionService: TransactionService;
   let testApiService: ApiService;
+  let testConfirmationService: ConfirmationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -71,6 +72,7 @@ describe('TransactionTypeBaseComponent', () => {
     testRouter = TestBed.inject(Router);
     testTransactionService = TestBed.inject(TransactionService);
     testApiService = TestBed.inject(ApiService);
+    testConfirmationService = TestBed.inject(ConfirmationService);
   });
 
   beforeEach(() => {
@@ -99,6 +101,13 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.id = 'testId';
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
     spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
+    spyOn(testConfirmationService, "confirm")
+      .and.callFake((confirmation: Confirmation) => {
+        if (confirmation.accept) {
+          return confirmation.accept();
+        }
+      });
+
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transaction = {
       id: null,
@@ -132,6 +141,13 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.id = 'testId';
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
     spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction2));
+    spyOn(testConfirmationService, "confirm")
+      .and.callFake((confirmation: Confirmation) => {
+        if (confirmation.accept) {
+          return confirmation.accept();
+        }
+      });
+
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transaction = {
       id: '123',

@@ -8,7 +8,7 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -29,6 +29,7 @@ describe('TransactionGroupBComponent', () => {
   let component: TransactionGroupBComponent;
   let fixture: ComponentFixture<TransactionGroupBComponent>;
   let testContactService: ContactService;
+  let testConfirmationService: ConfirmationService;
 
   const transaction = SchATransaction.fromJSON({
     form_type: 'SA15',
@@ -70,6 +71,7 @@ describe('TransactionGroupBComponent', () => {
         FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
     testContactService = TestBed.inject(ContactService);
+    testConfirmationService = TestBed.inject(ConfirmationService);
   });
 
   beforeEach(() => {
@@ -115,6 +117,12 @@ describe('TransactionGroupBComponent', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
+    spyOn(testConfirmationService, "confirm")
+      .and.callFake((confirmation: Confirmation) => {
+        if (confirmation.accept) {
+          return confirmation.accept();
+        }
+      });
 
     if (component.transaction) {
       component.transaction.id = null;
@@ -132,6 +140,12 @@ describe('TransactionGroupBComponent', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
+    spyOn(testConfirmationService, "confirm")
+      .and.callFake((confirmation: Confirmation) => {
+        if (confirmation.accept) {
+          return confirmation.accept();
+        }
+      });
 
     if (component.transaction) {
       component.transaction.id = '10';
