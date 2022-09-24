@@ -57,15 +57,15 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     });
   }
 
-  protected override resetForm() {
+  protected override resetForm(form: FormGroup) {
     const memo_item_state = this.memo_checked;
 
     this.formSubmitted = false;
-    this.form.reset();
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
+    form.reset();
+    form.markAsPristine();
+    form.markAsUntouched();
     this.memo_checked = memo_item_state;
-    this.form.patchValue({
+    form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: this.memo_checked,

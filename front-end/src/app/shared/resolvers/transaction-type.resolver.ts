@@ -35,6 +35,10 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
     transactionType.transaction = transactionType.getNewTransaction();
     transactionType.transaction.report_id = String(reportId);
 
+    if (transactionType.childTransactionType) {
+      transactionType.childTransactionType.transaction = transactionType.childTransactionType.getNewTransaction();
+    }
+
     return of(transactionType);
   }
 
@@ -47,7 +51,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
       map((transaction: Transaction) => {
         transactionType.transaction = transactionType.getNewTransaction();
 
-        transactionType.parent = transaction;
+        transactionType.parentTransaction = transaction;
         transactionType.transaction.parent_transaction_id = String(parentTransactionId);
         transactionType.transaction.report_id = String(transaction.report_id);
 
@@ -64,6 +68,12 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
             transaction.transaction_type_identifier
           ) as TransactionType;
           transactionType.transaction = transaction;
+
+          if (transactionType.childTransactionType) {
+            transactionType.childTransactionType.transaction = undefined; // TODO: Need to populate this with what is coming back from the API, ideally it is sending a list of 2 txns
+            transactionType.childTransactionType.parentTransaction = transaction;
+          }
+
           return transactionType;
         } else {
           return undefined;

@@ -63,27 +63,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.form.patchValue({ ...txn });
       this.form.get('entity_type')?.disable();
     } else {
-      this.resetForm();
+      this.resetForm(this.form);
       this.form.get('entity_type')?.enable();
     }
 
     this.form
       ?.get('entity_type')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (value === ContactTypes.INDIVIDUAL || value === ContactTypes.CANDIDATE) {
-          this.form.get('contributor_organization_name')?.reset();
-        }
-        if (value === ContactTypes.ORGANIZATION || value === ContactTypes.COMMITTEE) {
-          this.form.get('contributor_last_name')?.reset();
-          this.form.get('contributor_first_name')?.reset();
-          this.form.get('contributor_middle_name')?.reset();
-          this.form.get('contributor_prefix')?.reset();
-          this.form.get('contributor_suffix')?.reset();
-          this.form.get('contributor_employer')?.reset();
-          this.form.get('contributor_occupation')?.reset();
-        }
-      });
+      .subscribe((entityType: string) => this.resetEntityFields(this.form, entityType));
   }
 
   ngOnDestroy(): void {
@@ -136,7 +123,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         detail: 'Transaction Saved',
         life: 3000,
       });
-      this.resetForm();
+      this.resetForm(this.form);
     } else if (navigateTo === 'add-sub-tran') {
       this.messageService.add({
         severity: 'success',
@@ -156,12 +143,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  protected resetForm() {
+  protected resetForm(form: FormGroup) {
     this.formSubmitted = false;
-    this.form.reset();
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
-    this.form.patchValue({
+    form.reset();
+    form.markAsPristine();
+    form.markAsUntouched();
+    form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: false,
@@ -169,38 +156,56 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     });
   }
 
-  onContactLookupSelect(selectItem: SelectItem<Contact>) {
+  onContactLookupSelect(selectItem: SelectItem<Contact>, form: FormGroup) {
     if (selectItem) {
       const value = selectItem.value;
       if (value) {
         switch (value.type) {
           case ContactTypes.INDIVIDUAL:
-            this.form.get('contributor_last_name')?.setValue(value.last_name);
-            this.form.get('contributor_first_name')?.setValue(value.first_name);
-            this.form.get('contributor_middle_name')?.setValue(value.middle_name);
-            this.form.get('contributor_prefix')?.setValue(value.prefix);
-            this.form.get('contributor_suffix')?.setValue(value.suffix);
-            this.form.get('contributor_employer')?.setValue(value.employer);
-            this.form.get('contributor_occupation')?.setValue(value.occupation);
+            form.get('contributor_last_name')?.setValue(value.last_name);
+            form.get('contributor_first_name')?.setValue(value.first_name);
+            form.get('contributor_middle_name')?.setValue(value.middle_name);
+            form.get('contributor_prefix')?.setValue(value.prefix);
+            form.get('contributor_suffix')?.setValue(value.suffix);
+            form.get('contributor_employer')?.setValue(value.employer);
+            form.get('contributor_occupation')?.setValue(value.occupation);
             break;
           case ContactTypes.COMMITTEE:
-            this.form.get('donor_committee_fec_id')?.setValue(value.committee_id);
-            this.form.get('contributor_organization_name')?.setValue(value.name);
+            form.get('donor_committee_fec_id')?.setValue(value.committee_id);
+            form.get('contributor_organization_name')?.setValue(value.name);
             break;
           case ContactTypes.ORGANIZATION:
-            this.form.get('contributor_organization_name')?.setValue(value.name);
+            form.get('contributor_organization_name')?.setValue(value.name);
             break;
         }
-        this.form.get('contributor_street_1')?.setValue(value.street_1);
-        this.form.get('contributor_street_2')?.setValue(value.street_2);
-        this.form.get('contributor_city')?.setValue(value.city);
-        this.form.get('contributor_state')?.setValue(value.state);
-        this.form.get('contributor_zip')?.setValue(value.zip);
+        form.get('contributor_street_1')?.setValue(value.street_1);
+        form.get('contributor_street_2')?.setValue(value.street_2);
+        form.get('contributor_city')?.setValue(value.city);
+        form.get('contributor_state')?.setValue(value.state);
+        form.get('contributor_zip')?.setValue(value.zip);
       }
     }
   }
 
   isExisting() {
     return !!this.transaction?.id;
+  }
+
+  resetEntityFields(form: FormGroup, entityType: string) {
+    if (entityType === ContactTypes.INDIVIDUAL) {
+      form.get('contributor_organization_name')?.reset();
+    }
+    if (entityType === ContactTypes.COMMITTEE) {
+      const fieldsToReset: string[] = [
+        'contributor_last_name',
+        'contributor_first_name',
+        'contributor_middle_name',
+        'contributor_prefix',
+        'contributor_suffix',
+        'contributor_employer',
+        'contributor_occupation',
+      ];
+      fieldsToReset.forEach((field) => form.get(field)?.reset());
+    }
   }
 }

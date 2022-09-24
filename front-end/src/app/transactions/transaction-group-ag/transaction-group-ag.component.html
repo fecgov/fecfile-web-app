@@ -12,17 +12,18 @@
     >
 
     <div class="p-fluid">
+      <h2>Receipt</h2>
       <h3>Contributor</h3>
-      <form id="aForm" [formGroup]="aForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid">
           <div class="col-12">
             <label for="entity_type">CONTRIBUTOR TYPE</label>
             <app-contact-lookup
-              [contactTypeFormControl]="$any(aForm).controls['entity_type']"
-              [contactTypeOptions]="contactTypeOptions"
+              [contactTypeFormControl]="$any(form).controls['entity_type']"
+              [contactTypeOptions]="childContactTypeOptions"
               [contactTypeReadOnly]="true"
               contactTypeStyleClass="readonly"
-              (fecfileContactSelect)="onContactLookupSelect($event)"
+              (fecfileContactSelect)="onContactLookupSelect($event, form)"
             >
             </app-contact-lookup>
           </div>
@@ -33,7 +34,7 @@
               <label for="contributor_last_name">LAST NAME</label>
               <input type="text" pInputText id="contributor_last_name" formControlName="contributor_last_name" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_last_name"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -44,7 +45,7 @@
               <label for="contributor_first_name">FIRST NAME</label>
               <input type="text" pInputText id="contributor_first_name" formControlName="contributor_first_name" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_first_name"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -55,7 +56,7 @@
               <label for="contributor_middle_name">MIDDLE NAME (OPTIONAL)</label>
               <input type="text" pInputText id="contributor_middle_name" formControlName="contributor_middle_name" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_middle_name"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -68,7 +69,7 @@
               <label for="contributor_prefix">PREFIX (OPTIONAL)</label>
               <input type="text" pInputText id="contributor_prefix" formControlName="contributor_prefix" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_prefix"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -79,7 +80,7 @@
               <label for="contributor_suffix">SUFFIX (OPTIONAL)</label>
               <input type="text" pInputText id="contributor_suffix" formControlName="contributor_suffix" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_suffix"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -95,7 +96,7 @@
               <label for="contributor_street_1">STREET ADDRESS</label>
               <input type="text" pInputText id="contributor_street_1" formControlName="contributor_street_1" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_street_1"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -106,7 +107,7 @@
               <label for="contributor_street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
               <input type="text" pInputText id="contributor_street_2" formControlName="contributor_street_2" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_street_2"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -119,7 +120,7 @@
               <label for="contributor_city">CITY</label>
               <input type="text" pInputText id="contributor_city" formControlName="contributor_city" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_city"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -138,7 +139,7 @@
                 appendTo="body"
               ></p-dropdown>
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_state"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -149,7 +150,7 @@
               <label for="contributor_zip">ZIP/POSTAL CODE</label>
               <input type="text" pInputText id="contributor_zip" formControlName="contributor_zip" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_zip"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -164,7 +165,7 @@
               <label for="contributor_employer">EMPLOYER</label>
               <input type="text" pInputText id="contributor_employer" formControlName="contributor_employer" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_employer"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -175,7 +176,7 @@
               <label for="contributor_occupation">OCCUPATION</label>
               <input type="text" pInputText id="contributor_occupation" formControlName="contributor_occupation" />
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contributor_occupation"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -194,7 +195,7 @@
                 formControlName="contribution_date"
               ></p-calendar>
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contribution_date"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -231,7 +232,7 @@
                 locale="en-US"
               ></p-inputNumber>
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contribution_amount"
                 [formSubmitted]="formSubmitted"
                 patternErrorMessage="This field must be a number"
@@ -252,7 +253,7 @@
                 inputStyleClass="readonly"
               ></p-inputNumber>
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contribution_aggregate"
                 [formSubmitted]="formSubmitted"
                 patternErrorMessage="This field must be a number"
@@ -279,7 +280,7 @@
                 readonly
               ></textarea>
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="contribution_purpose_descrip"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -299,7 +300,7 @@
                 formControlName="memo_text_description"
               ></textarea>
               <app-error-messages
-                [form]="aForm"
+                [form]="form"
                 fieldName="memo_text_description"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -321,16 +322,17 @@
       </p></ng-template
     >
     <div class="p-fluid">
-      <h3>Contributor</h3>
-      <form id="form" [formGroup]="bForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
+      <h2>Earmark memo</h2>
+      <h3>Conduit</h3>
+      <form id="form" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid">
           <div class="col-12">
             <div class="field">
-              <label for="entity_type">CONTRIBUTOR TYPE</label>
+              <label for="entity_type">CONDUIT TYPE</label>
               <app-contact-lookup
                 [contactTypeFormControl]="$any(form).controls['entity_type']"
-                [contactTypeOptions]="contactTypeOptions"
-                (fecfileContactSelect)="onContactLookupSelect($event)"
+                [contactTypeOptions]="childContactTypeOptions"
+                (fecfileContactSelect)="onContactLookupSelect($event, childForm)"
               >
               </app-contact-lookup>
             </div>
@@ -358,7 +360,7 @@
                   formControlName="contributor_organization_name"
                 />
                 <app-error-messages
-                  [form]="bForm"
+                  [form]="childForm"
                   fieldName="contributor_organization_name"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
@@ -384,7 +386,7 @@
                 <label for="contributor_last_name">LAST NAME</label>
                 <input type="text" pInputText id="contributor_last_name" formControlName="contributor_last_name" />
                 <app-error-messages
-                  [form]="bForm"
+                  [form]="childForm"
                   fieldName="contributor_last_name"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
@@ -395,7 +397,7 @@
                 <label for="contributor_first_name">FIRST NAME</label>
                 <input type="text" pInputText id="contributor_first_name" formControlName="contributor_first_name" />
                 <app-error-messages
-                  [form]="bForm"
+                  [form]="childForm"
                   fieldName="contributor_first_name"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
@@ -406,7 +408,7 @@
                 <label for="contributor_middle_name">MIDDLE NAME (OPTIONAL)</label>
                 <input type="text" pInputText id="contributor_middle_name" formControlName="contributor_middle_name" />
                 <app-error-messages
-                  [form]="bForm"
+                  [form]="childForm"
                   fieldName="contributor_middle_name"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
@@ -419,7 +421,7 @@
                 <label for="contributor_prefix">PREFIX (OPTIONAL)</label>
                 <input type="text" pInputText id="contributor_prefix" formControlName="contributor_prefix" />
                 <app-error-messages
-                  [form]="bForm"
+                  [form]="childForm"
                   fieldName="contributor_prefix"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
@@ -430,7 +432,7 @@
                 <label for="contributor_suffix">SUFFIX (OPTIONAL)</label>
                 <input type="text" pInputText id="contributor_suffix" formControlName="contributor_suffix" />
                 <app-error-messages
-                  [form]="bForm"
+                  [form]="childForm"
                   fieldName="contributor_suffix"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
@@ -447,7 +449,7 @@
               <label for="contributor_street_1">STREET ADDRESS</label>
               <input type="text" pInputText id="contributor_street_1" formControlName="contributor_street_1" />
               <app-error-messages
-                [form]="bForm"
+                [form]="childForm"
                 fieldName="contributor_street_1"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -458,7 +460,7 @@
               <label for="contributor_street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
               <input type="text" pInputText id="contributor_street_2" formControlName="contributor_street_2" />
               <app-error-messages
-                [form]="bForm"
+                [form]="childForm"
                 fieldName="contributor_street_2"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -471,7 +473,7 @@
               <label for="contributor_city">CITY</label>
               <input type="text" pInputText id="contributor_city" formControlName="contributor_city" />
               <app-error-messages
-                [form]="bForm"
+                [form]="childForm"
                 fieldName="contributor_city"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -490,7 +492,7 @@
                 appendTo="body"
               ></p-dropdown>
               <app-error-messages
-                [form]="bForm"
+                [form]="childForm"
                 fieldName="contributor_state"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -501,7 +503,7 @@
               <label for="contributor_zip">ZIP/POSTAL CODE</label>
               <input type="text" pInputText id="contributor_zip" formControlName="contributor_zip" />
               <app-error-messages
-                [form]="bForm"
+                [form]="childForm"
                 fieldName="contributor_zip"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -517,7 +519,7 @@
                 <label for="contributor_employer">EMPLOYER</label>
                 <input type="text" pInputText id="contributor_employer" formControlName="contributor_employer" />
                 <app-error-messages
-                  [form]="bForm"
+                  [form]="childForm"
                   fieldName="contributor_employer"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
@@ -528,7 +530,7 @@
                 <label for="contributor_occupation">OCCUPATION</label>
                 <input type="text" pInputText id="contributor_occupation" formControlName="contributor_occupation" />
                 <app-error-messages
-                  [form]="bForm"
+                  [form]="childForm"
                   fieldName="contributor_occupation"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
@@ -548,7 +550,7 @@
                 formControlName="contribution_date"
               ></p-calendar>
               <app-error-messages
-                [form]="bForm"
+                [form]="childForm"
                 fieldName="contribution_date"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -585,7 +587,7 @@
                 locale="en-US"
               ></p-inputNumber>
               <app-error-messages
-                [form]="bForm"
+                [form]="childForm"
                 fieldName="contribution_amount"
                 [formSubmitted]="formSubmitted"
                 patternErrorMessage="This field must be a number"
@@ -606,7 +608,7 @@
                 inputStyleClass="readonly"
               ></p-inputNumber>
               <app-error-messages
-                [form]="bForm"
+                [form]="childForm"
                 fieldName="contribution_aggregate"
                 [formSubmitted]="formSubmitted"
                 patternErrorMessage="This field must be a number"
@@ -632,7 +634,7 @@
                 readonly
               ></textarea>
               <app-error-messages
-                [form]="bForm"
+                [form]="childForm"
                 fieldName="contribution_purpose_descrip"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>
@@ -652,7 +654,7 @@
                 formControlName="memo_text_description"
               ></textarea>
               <app-error-messages
-                [form]="bForm"
+                [form]="childForm"
                 fieldName="memo_text_description"
                 [formSubmitted]="formSubmitted"
               ></app-error-messages>

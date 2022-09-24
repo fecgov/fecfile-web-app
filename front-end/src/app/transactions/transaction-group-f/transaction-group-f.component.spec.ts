@@ -80,7 +80,7 @@ describe('TransactionGroupFComponent', () => {
         return {} as Transaction;
       },
       title: '',
-      parent: undefined,
+      parentTransaction: undefined,
       schema: JF_TRAN_PAC_MEMO,
       transaction: transaction,
     } as TransactionType;

@@ -9,7 +9,8 @@ export class JF_TRAN implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JF_TRANSFER);
   schema = schema;
   transaction = undefined;
-  parent = undefined;
+  parentTransaction = undefined;
+  childTransactionType = undefined;
 
   contributionPurposeDescripReadonly(): string {
     return 'Transfer of JF Proceeds';

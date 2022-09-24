@@ -9,7 +9,8 @@ export class OFFSET_TO_OPEX implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES);
   schema = schema;
   transaction = undefined;
-  parent = undefined;
+  parentTransaction = undefined;
+  childTransactionType = undefined;
 
   contributionPurposeDescripReadonly(): string {
     return '';

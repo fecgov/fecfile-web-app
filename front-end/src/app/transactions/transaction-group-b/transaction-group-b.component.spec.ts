@@ -79,7 +79,7 @@ describe('TransactionGroupBComponent', () => {
         return {} as Transaction;
       },
       title: '',
-      parent: undefined,
+      parentTransaction: undefined,
       schema: OFFSET_TO_OPEX,
       transaction: transaction,
     } as TransactionType;
