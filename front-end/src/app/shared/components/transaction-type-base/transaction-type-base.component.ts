@@ -50,32 +50,41 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   ) {}
 
   ngOnInit(): void {
-    // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
-    this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
-
-    // Initialize validation tracking of current JSON schema and form data
-    this.validateService.formValidatorSchema = this.schema;
-    this.validateService.formValidatorForm = this.form;
-
-    // Intialize form on "Individual" entity type
-    if (this.isExisting()) {
-      const txn = { ...this.transaction } as SchATransaction;
-      this.form.patchValue({ ...txn });
-      this.form.get('entity_type')?.disable();
-    } else {
-      this.resetForm(this.form);
-      this.form.get('entity_type')?.enable();
-    }
-
-    this.form
-      ?.get('entity_type')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((entityType: string) => this.resetEntityFields(this.form, entityType));
+    this.init(this.form, this.formProperties, this.validateService, this.transactionType);
   }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  init(
+    form: FormGroup,
+    formProperties: string[],
+    validateService: ValidateService,
+    transactionType: TransactionType | undefined
+  ) {
+    // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
+    form = this.fb.group(validateService.getFormGroupFields(formProperties));
+
+    // Initialize validation tracking of current JSON schema and form data.
+    validateService.formValidatorSchema = transactionType?.schema;
+    validateService.formValidatorForm = form;
+
+    // Disable entity type form input field when editing a record.
+    if (this.isExisting(transactionType?.transaction)) {
+      const txn = { ...transactionType?.transaction } as SchATransaction;
+      form.patchValue({ ...txn });
+      form.get('entity_type')?.disable();
+    } else {
+      this.resetForm(form);
+      form.get('entity_type')?.enable();
+    }
+
+    form
+      ?.get('entity_type')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((entityType: string) => this.resetEntityFields(form, entityType));
   }
 
   save(navigateTo: 'list' | 'add another' | 'add-sub-tran', transactionTypeToAdd?: string) {
@@ -85,15 +94,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       return;
     }
 
-    const payload: SchATransaction = SchATransaction.fromJSON({
-      ...this.transaction,
-      ...this.validateService.getFormValues(this.form, this.formProperties),
-    });
+    const payload: SchATransaction = this.getPayload(
+      this.form,
+      this.formProperties,
+      this.validateService,
+      this.transactionType
+    ) as SchATransaction;
 
     if (this.transaction?.transaction_type_identifier) {
-      let fieldsToValidate: string[] = this.validateService.getSchemaProperties(this.schema);
-      // Remove properties populated in the back-end from list of properties to validate
-      fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_committee_name');
+      const fieldsToValidate: string[] = this.getFieldsToValidate(this.validateService, this.transactionType);
 
       if (payload.id) {
         this.transactionService
@@ -109,6 +118,24 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           });
       }
     }
+  }
+
+  getPayload(
+    form: FormGroup,
+    formProperties: string[],
+    validateService: ValidateService,
+    transactionType: TransactionType | undefined
+  ): Transaction {
+    return SchATransaction.fromJSON({
+      ...transactionType?.transaction,
+      ...validateService.getFormValues(form, formProperties),
+    }) as Transaction;
+  }
+
+  getFieldsToValidate(validateService: ValidateService, transactionType: TransactionType | undefined): string[] {
+    const fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
+    // Remove properties populated in the back-end from list of properties to validate
+    return fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_committee_name');
   }
 
   navigateTo(
@@ -187,8 +214,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  isExisting() {
-    return !!this.transaction?.id;
+  isExisting(transaction: Transaction | undefined) {
+    return !!transaction?.id;
   }
 
   resetEntityFields(form: FormGroup, entityType: string) {

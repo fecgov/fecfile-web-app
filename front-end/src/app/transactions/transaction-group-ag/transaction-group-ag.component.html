@@ -670,7 +670,7 @@
   <div class="col-2">
     <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="navigateTo('list')"></button>
   </div>
-  <div ng-class="isExisting() ? 'col-7' : 'col-4'"></div>
+  <div ng-class="isExisting(transaction) ? 'col-7' : 'col-4'"></div>
   <div class="col-3">
     <button
       disabled

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
+import { TransactionTypeX2BaseComponent } from 'app/shared/components/transaction-type-x2-base/transaction-type-x2-base.component';
 import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
@@ -12,7 +12,7 @@ import { MessageService } from 'primeng/api';
   selector: 'app-transaction-group-ag',
   templateUrl: './transaction-group-ag.component.html',
 })
-export class TransactionGroupAgComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
+export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
     'entity_type',
     'contributor_last_name',
