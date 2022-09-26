@@ -31,28 +31,8 @@ describe('QA Script 244 (Sprint 8)', () => {
     const report = generateReportObject();
     cy.createReport(report);
 
-    cy.get("p-button[icon='pi pi-pencil']").first().click();
-    cy.shortWait();
-    cy.get("p-radiobutton[formControlName='change_of_address']")
-      .contains('YES')
-      .parent()
-      .find('.p-radiobutton')
-      .click();
-
-    cy.get("button[label='Save']").click();
-    cy.get("button[label='Back']").click();
-    cy.longWait();
-
     //Step 2: Select the edit button for the created report
-    cy.get("p-button[icon='pi pi-pencil']").first().click();
-    cy.medWait();
-    cy.url().then((url: string) => {
-      //Skips over the cash on hand step if it runs into it
-      if (url.includes('cash-on-hand')) {
-        cy.get('button[label="Skip for now"]').click();
-      }
-    });
-    cy.shortWait();
+    cy.navigateToTransactionManagement();
 
     //Step 3: Verify that you are on the "Transactions" page
     cy.get("div[role='toolbar']").contains('Transactions').should('exist');
