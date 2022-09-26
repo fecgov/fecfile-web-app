@@ -1,13 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { UserLoginData } from 'app/shared/models/user.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { selectUserLoginData } from 'app/store/login.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -19,35 +16,19 @@ import { TransactionListComponent, MemoCodePipe } from './transaction-list.compo
 describe('CreateF3xStep4Component', () => {
   let component: TransactionListComponent;
   let fixture: ComponentFixture<TransactionListComponent>;
-  const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({});
 
   beforeEach(async () => {
-    const userLoginData: UserLoginData = {
-      committee_id: 'C00000000',
-      email: 'email@fec.com',
-      is_allowed: true,
-      token: 'jwttokenstring',
-    };
     await TestBed.configureTestingModule({
       imports: [ToolbarModule, TableModule, RouterTestingModule],
       declarations: [TransactionListComponent],
       providers: [
         MessageService,
         ConfirmationService,
-        provideMockStore({
-          initialState: {
-            fecfile_online_committeeAccount: committeeAccount,
-            fecfile_online_userLoginData: userLoginData,
-          },
-          selectors: [
-            { selector: selectCommitteeAccount, value: committeeAccount },
-            { selector: selectUserLoginData, value: userLoginData },
-          ],
-        }),
+        provideMockStore(testMockStore),
         {
           provide: TransactionService,
           useValue: {
-            get: (transactionId: number) =>
+            get: (transactionId: string) =>
               of(
                 SchATransaction.fromJSON({
                   id: transactionId,
@@ -65,7 +46,7 @@ describe('CreateF3xStep4Component', () => {
                 report: F3xSummary.fromJSON({}),
               },
               params: {
-                reportId: 999,
+                reportId: '999',
               },
             },
           },

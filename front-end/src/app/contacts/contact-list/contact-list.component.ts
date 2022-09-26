@@ -18,7 +18,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
 
   // contact lookup
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
+    [ContactTypes.COMMITTEE, ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
   );
 
   constructor(
@@ -55,16 +55,6 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     } else {
       return item.name || '';
     }
-  }
-
-  onContactLookupSelect(id: string) {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Contact selected',
-      detail: 'Selected lookup contact ' + 
-        'with commitee id ' + id,
-      life: 3000,
-    });
   }
 
 }

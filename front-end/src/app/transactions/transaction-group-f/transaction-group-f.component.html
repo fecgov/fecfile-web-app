@@ -8,15 +8,13 @@
       <div class="col-6">
         <div class="field">
           <label for="entity_type">CONTRIBUTOR TYPE</label>
-          <p-dropdown
-            inputId="entity_type"
-            formControlName="entity_type"
-            [options]="contactTypeOptions"
-            optionLabel="name"
-            optionValue="code"
-            [readonly]="true"
-            styleClass="readonly"
-          ></p-dropdown>
+          <app-contact-lookup
+            [contactTypeFormControl]="$any(form).controls['entity_type']"
+            [contactTypeOptions]="contactTypeOptions"
+            [contactTypeReadOnly]="true"
+            contactTypeStyleClass="readonly"
+            (contactSelect)="onContactLookupSelect($event)">
+          </app-contact-lookup>
         </div>
       </div>
     </div>
@@ -243,7 +241,7 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="this.transaction?.id === null">
+    <ng-container *ngIf="!this.transaction?.id">
       <div class="grid">
         <div class="col-3">
           <button
@@ -281,3 +279,5 @@
     </div>
   </form>
 </div>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

@@ -34,7 +34,7 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
 
   report: F3xSummary = new F3xSummary();
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
-  committeeAccountId: string | null = null;
+  committeeAccountId: string | undefined;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   assignedMemoText: MemoText = new MemoText();

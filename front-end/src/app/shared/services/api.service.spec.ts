@@ -1,30 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
 
 describe('ApiService', () => {
   let service: ApiService;
 
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        ApiService,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [ApiService, provideMockStore(testMockStore)],
     });
     service = TestBed.inject(ApiService);
   });
@@ -37,5 +23,4 @@ describe('ApiService', () => {
     const retval = service.isAuthenticated();
     expect(retval).toBeTrue();
   });
-  
 });

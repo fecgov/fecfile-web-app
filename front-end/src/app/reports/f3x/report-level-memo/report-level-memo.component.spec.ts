@@ -4,13 +4,11 @@ import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { selectUserLoginData } from 'app/store/login.selectors';
-import { UserLoginData } from 'app/shared/models/user.model';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { SharedModule } from 'app/shared/shared.module';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { Message, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -26,19 +24,13 @@ describe('ReportLevelMemoComponent', () => {
   let testMessageService: MessageService;
   let testRouter: Router;
   const f3x: F3xSummary = F3xSummary.fromJSON({
-    id: 999,
+    id: '999',
     coverage_from_date: '2022-05-25',
     form_type: 'F3XN',
     report_code: 'Q1',
   });
 
   beforeEach(async () => {
-    const userLoginData: UserLoginData = {
-      committee_id: 'C00000000',
-      email: 'email@fec.com',
-      is_allowed: true,
-      token: 'jwttokenstring',
-    };
     await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -55,12 +47,7 @@ describe('ReportLevelMemoComponent', () => {
         MessageService,
         MemoTextService,
         FormBuilder,
-        provideMockStore({
-          selectors: [
-            { selector: selectReportCodeLabelList, value: {} },
-            { selector: selectUserLoginData, value: userLoginData },
-          ],
-        }),
+        provideMockStore(testMockStore),
         {
           provide: ActivatedRoute,
           useValue: {
@@ -85,8 +72,8 @@ describe('ReportLevelMemoComponent', () => {
   it('should create', () => {
     const testText4kValue = 'testText4k';
     const testMemoText: MemoText = new MemoText();
-    testMemoText.id = 4;
-    testMemoText.report_id = 123;
+    testMemoText.id = '4';
+    testMemoText.report_id = '123';
     testMemoText.rec_type = 'test_rec_type';
     testMemoText.filer_committee_id_number = 'test_fcin';
     testMemoText.transaction_id_number = 'test_tin';
@@ -110,7 +97,7 @@ describe('ReportLevelMemoComponent', () => {
     const testMemoTextServiceSpy = spyOn(testMemoTextService, 'update').and.returnValue(of(new MemoText()));
     const navigateSpy = spyOn(testRouter, 'navigateByUrl');
     const testMessageServiceSpy = spyOn(testMessageService, 'add');
-    component.assignedMemoText.id = 1;
+    component.assignedMemoText.id = '1';
     component.save();
     expect(testMemoTextServiceSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/step1/999');

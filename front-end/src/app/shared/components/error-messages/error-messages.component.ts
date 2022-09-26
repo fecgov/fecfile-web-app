@@ -7,7 +7,7 @@ import { FormGroup } from '@angular/forms';
   templateUrl: './error-messages.component.html',
 })
 export class ErrorMessagesComponent implements OnInit {
-  @Input() form: FormGroup | null = null;
+  @Input() form: FormGroup | undefined;
   @Input() fieldName = '';
   @Input() formSubmitted = false;
   @Input() requiredErrorMessage = 'This is a required field.';
@@ -94,7 +94,7 @@ export class ErrorMessagesComponent implements OnInit {
     return this.control?.errors?.['invaliddate']?.msg;
   }
 
-  control: FormGroup | null = null;
+  control: FormGroup | undefined;
 
   constructor(@Inject(LOCALE_ID) private localeId: string) {}
 

@@ -3,7 +3,7 @@
     <h1>Report level memo</h1>
     <div>
       <strong>FORM 3X:</strong>
-      {{ (this.reportCodeLabelList$ | async | findOnReportCodePipe: report?.report_code)?.label }}
+      {{ (this.reportCodeLabelList$ | async | findOnReportCodePipe: report.report_code)?.label }}
     </div>
   </div>
 

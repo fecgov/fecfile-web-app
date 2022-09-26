@@ -1,11 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
-import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportListComponent } from './report-list.component';
@@ -20,31 +18,10 @@ describe('ReportListComponent', () => {
   let router: Router;
 
   beforeEach(async () => {
-    const userLoginData: UserLoginData = {
-      committee_id: 'C00000000',
-      email: 'email@fec.com',
-      is_allowed: true,
-      token: 'jwttokenstring',
-    };
-
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, TableModule, ToolbarModule, RouterTestingModule.withRoutes([])],
       declarations: [ReportListComponent],
-      providers: [
-        ConfirmationService,
-        MessageService,
-        ApiService,
-        provideMockStore({
-          initialState: {
-            fecfile_online_userLoginData: userLoginData,
-            fecfile_online_cashOnHand: { report_id: null, value: null },
-          },
-          selectors: [
-            { selector: selectUserLoginData, value: userLoginData },
-            { selector: selectCashOnHand, value: { report_id: 999, value: 100.0 } },
-          ],
-        }),
-      ],
+      providers: [ConfirmationService, MessageService, ApiService, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 
@@ -72,10 +49,8 @@ describe('ReportListComponent', () => {
 
   it('#editItem should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.editItem({ id: 999, change_of_address: null } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step2/999');
 
-    component.editItem({ id: 999, change_of_address: true } as F3xSummary);
+    component.editItem({ id: '999' } as F3xSummary);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
   });
 
