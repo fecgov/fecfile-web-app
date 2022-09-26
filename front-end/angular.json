@@ -36,7 +36,10 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeflex/primeflex.css",
-              "node_modules/primeng/resources/themes/bootstrap4-light-blue/theme.css",
+              "src/assets/styles/Fonts.css",
+              "src/assets/styles/typography.css",
+              "src/assets/styles/_variables.scss",
+              "src/assets/styles/theme.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -52,7 +55,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "40kb"
+                  "maximumError": "200kb"
                 }
               ],
               "fileReplacements": [
@@ -73,7 +76,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "40kb"
+                  "maximumError": "200kb"
                 }
               ],
               "fileReplacements": [
@@ -94,7 +97,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "40kb"
+                  "maximumError": "200kb"
                 }
               ],
               "fileReplacements": [
@@ -116,7 +119,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "40kb"
+                  "maximumError": "200kb"
                 }
               ],
               "fileReplacements": [
