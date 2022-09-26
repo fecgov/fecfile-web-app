@@ -9,6 +9,7 @@ export class TRIB_REC implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_RECEIPT);
   schema = schema;
   transaction = undefined;
+  contact = undefined;
   parent = undefined;
 
   contributionPurposeDescripReadonly(): string {

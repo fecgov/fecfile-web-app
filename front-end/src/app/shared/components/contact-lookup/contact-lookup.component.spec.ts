@@ -11,6 +11,7 @@ import { of } from 'rxjs';
 
 import { SelectItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { DialogModule } from 'primeng/dialog';
 import { ContactLookupComponent } from './contact-lookup.component';
 
 describe('ContactLookupComponent', () => {
@@ -22,8 +23,10 @@ describe('ContactLookupComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ContactLookupComponent],
-      imports: [FormsModule, ReactiveFormsModule, HttpClientTestingModule, DropdownModule, AutoCompleteModule],
-      providers: [FormBuilder, ContactService, ContactService, EventEmitter, provideMockStore(testMockStore)],
+      imports: [FormsModule, ReactiveFormsModule, DialogModule,
+        HttpClientTestingModule, DropdownModule, AutoCompleteModule],
+      providers: [FormBuilder, ContactService, ContactService,
+        EventEmitter, provideMockStore(testMockStore)],
     }).compileComponents();
 
     testContactService = TestBed.inject(ContactService);
@@ -179,7 +182,7 @@ describe('ContactLookupComponent', () => {
   }));
 
   it('#onContactSelect Contact happy path', fakeAsync(() => {
-    const eventEmitterEmitSpy = spyOn(component.fecfileContactSelect, 'emit');
+    const eventEmitterEmitSpy = spyOn(component.contactSelect, 'emit');
     const testContact = Contact.fromJSON({
       id: 123,
       last_name: 'testLastName',
@@ -195,15 +198,14 @@ describe('ContactLookupComponent', () => {
   }));
 
   it('#onContactSelect FecApiLookupData happy path', fakeAsync(() => {
-    const eventEmitterEmitSpy = spyOn(component.fecApiLookupSelect, 'emit');
-    const testFecApiLookupData = new FecApiLookupData();
+    const testFecApiLookupData = new FecApiCommitteeLookupData(
+      {} as FecApiCommitteeLookupData);
     const testValue = {
       value: testFecApiLookupData,
     } as SelectItem<FecApiLookupData>;
     component.onContactSelect(testValue);
     tick(500);
-    expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(
-      testValue);
+    expect(component.createContactDialogVisible).toEqual(true);
   }));
 
   it('#isContact happy path', () => {
@@ -211,6 +213,14 @@ describe('ContactLookupComponent', () => {
     const retval = component.isContact(new Contact());
 
     expect(retval).toEqual(expectedRetval);
+  });
+
+  it('#createNewContact happy path', () => {
+    component.createNewContact();
+    component.closeCreateContactDialog();
+    component.createContactSave();
+    component.onCreateContactDialogOpen();
+    component.onCreateContactDialogClose();
   });
 
 });

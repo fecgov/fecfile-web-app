@@ -41,8 +41,53 @@
       </div>
       <p>or</p>
       <div class="col-2">
-        <button pButton pRipple label="Create a new contact" icon="pi pi-plus-circle" class="p-button-info"></button>
+        <button
+          pButton
+          pRipple
+          label="Create a new contact"
+          icon="pi pi-plus-circle"
+          class="p-button-info"
+          (click)="createNewContact()">
+        </button>
       </div>
     </div>
   </form>
+  <p-dialog
+    [(visible)]="createContactDialogVisible"
+    [style]="{ width: '90%' }"
+    header="Create a new contact"
+    [modal]="true"
+    (onShow)="onCreateContactDialogOpen()"
+    (onHide)="onCreateContactDialogClose()">
+    <ng-template pTemplate="content">
+      <app-contact-form 
+        [formSubmitted]="createContactFormSubmitted"
+        [form]="createContactForm">
+      </app-contact-form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <div class="grid">
+        <div class="col-1">
+          <button
+            pButton
+            pRipple
+            label="Cancel"
+            icon="pi pi-times"
+            class="p-button-secondary"
+            (click)="closeCreateContactDialog()"
+          ></button>
+        </div>
+        <div class="col-11">
+          <button 
+            pButton 
+            pRipple 
+            label="Save & continue" 
+            icon="pi pi-check" 
+            class="p-button-info" 
+            (click)="createContactSave()">
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </p-dialog>
 </div>

@@ -1,8 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Contact, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
+import { ValidateService } from 'app/shared/services/validate.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
+import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
+import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
+import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { SelectItem, SelectItemGroup } from 'primeng/api';
 
 @Component({
@@ -22,8 +27,7 @@ export class ContactLookupComponent {
   @Input() maxFecfileIndividualResults = 10;
   @Input() maxFecfileOrganizationResults = 10;
 
-  @Output() fecfileContactSelect = new EventEmitter<SelectItem<Contact>>();
-  @Output() fecApiLookupSelect = new EventEmitter<SelectItem<FecApiLookupData>>();
+  @Output() contactSelect = new EventEmitter<SelectItem<Contact>>();
 
   selectedContact: FormControl<SelectItem> | null = null;
 
@@ -36,7 +40,27 @@ export class ContactLookupComponent {
 
   searchTerm = '';
 
-  constructor(private formBuilder: FormBuilder, private contactService: ContactService) {}
+  createContactDialogVisible = false;
+  createContactFormSubmitted = false;
+  createContactForm: FormGroup = this.formBuilder.group(
+    this.validateService.getFormGroupFields([
+      ...new Set([
+        ...this.validateService.getSchemaProperties(contactIndividualSchema),
+        ...this.validateService.getSchemaProperties(contactCandidateSchema),
+        ...this.validateService.getSchemaProperties(contactCommitteeSchema),
+        ...this.validateService.getSchemaProperties(contactOrganizationSchema),
+      ]),
+    ])
+  );
+
+  workingValidatorSchema = this.validateService.formValidatorSchema;
+  workingValidatorForm = this.validateService.formValidatorForm;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private validateService: ValidateService,
+    private contactService: ContactService
+  ) { }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onDropdownSearch(event: any) {
@@ -73,15 +97,73 @@ export class ContactLookupComponent {
   onContactSelect(event: any) {
     if (event && event.value) {
       if (event.value instanceof Contact) {
-        this.fecfileContactSelect.emit(event);
-      } else if (event.value instanceof FecApiLookupData) {
-        this.fecApiLookupSelect.emit(event);
+        this.contactSelect.emit(event);
+      } else if (event.value instanceof FecApiCommitteeLookupData) {
+        const value: FecApiCommitteeLookupData = event.value
+        this.openCreateContactDialog(value);
       }
       this.contactLookupForm.patchValue({ selectedContact: '' });
     }
   }
 
+  createNewContact() {
+    this.openCreateContactDialog();
+  }
+
   isContact(value: Contact | FecApiLookupData) {
     return value instanceof Contact;
   }
+
+  openCreateContactDialog(value?: FecApiLookupData) {
+    // Need these since contact-form sets these for validation
+    this.workingValidatorSchema = this.validateService.formValidatorSchema;
+    this.workingValidatorForm = this.validateService.formValidatorForm;
+
+    if (value && value instanceof FecApiCommitteeLookupData) {
+      this.createContactForm.get('committee_id')?.setValue(
+        value.id);
+      this.createContactForm.get('name')?.setValue(
+        value.name);
+    }
+    this.createContactDialogVisible = true;
+  }
+
+  closeCreateContactDialog() {
+    // Need these since contact-form sets these for validation
+    this.validateService.formValidatorSchema =
+      this.workingValidatorSchema;
+    this.validateService.formValidatorForm =
+      this.workingValidatorForm;
+
+    this.createContactDialogVisible = false;
+  }
+
+  createContactSave() {
+    this.createContactFormSubmitted = true;
+    if (this.createContactForm.invalid) {
+      return;
+    }
+
+    const createdContact = Contact.fromJSON({
+      ...this.validateService.getFormValues(this.createContactForm)
+    });
+    this.contactSelect.emit({
+      value: createdContact
+    });
+    this.closeCreateContactDialog();
+  }
+
+  onCreateContactDialogOpen() {
+    this.createContactForm.get('country')?.reset();
+    const typeFormControl = this.createContactForm.get('type');
+    typeFormControl?.setValue(this.contactTypeFormControl.value);
+    typeFormControl?.disable();
+  }
+
+  onCreateContactDialogClose() {
+    this.createContactForm.reset();
+    this.createContactFormSubmitted = false;
+    this.createContactDialogVisible = false;
+  }
+
 }

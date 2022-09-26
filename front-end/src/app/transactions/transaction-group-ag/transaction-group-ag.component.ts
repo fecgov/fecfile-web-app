@@ -3,10 +3,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
 import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { takeUntil } from 'rxjs';
 
 @Component({
@@ -44,7 +45,7 @@ export class TransactionGroupAgComponent extends TransactionTypeBaseComponent im
 
   bForm: FormGroup = this.fb.group({});
 
-  bValidateService: ValidateService;
+  // bValidateService: ValidateService;
 
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
@@ -53,17 +54,17 @@ export class TransactionGroupAgComponent extends TransactionTypeBaseComponent im
   constructor(
     protected override messageService: MessageService,
     protected override transactionService: TransactionService,
+    protected override contactService: ContactService,
     protected override validateService: ValidateService,
+    protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router
   ) {
-    super(messageService, transactionService, validateService, fb, router);
-    this.bValidateService = new ValidateService();
+    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router);
   }
 
   override ngOnInit(): void {
     this.aForm = this.fb.group(this.validateService.getFormGroupFields(this.aFormProperties));
-    this.bForm = this.fb.group(this.bValidateService.getFormGroupFields(this.bFormProperties));
 
     this.validateService.formValidatorSchema = this.schema;
     this.validateService.formValidatorForm = this.aForm;

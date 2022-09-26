@@ -24,6 +24,10 @@ export class ContactService implements TableListService<Contact> {
     );
   }
 
+  public get(id: string): Observable<Contact> {
+    return this.apiService.get<Contact>(`/contacts/${id}`).pipe(map((response) => Contact.fromJSON(response)));
+  }
+
   public create(contact: Contact): Observable<Contact> {
     const payload = contact.toJson();
     return this.apiService.post<Contact>(`/contacts/`, payload).pipe(map((response) => Contact.fromJSON(response)));

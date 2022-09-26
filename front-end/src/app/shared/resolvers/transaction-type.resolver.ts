@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable, of, map } from 'rxjs';
-import { Transaction } from '../interfaces/transaction.interface';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import { map, mergeMap, Observable, of } from 'rxjs';
 import { TransactionType } from '../interfaces/transaction-type.interface';
-import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { Transaction } from '../interfaces/transaction.interface';
+import { ContactService } from '../services/contact.service';
 import { TransactionService } from '../services/transaction.service';
+import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransactionTypeResolver implements Resolve<TransactionType | undefined> {
-  constructor(private transactionService: TransactionService) {}
+  constructor(private transactionService: TransactionService,
+    private contactService: ContactService) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<TransactionType | undefined> {
     const reportId = route.paramMap.get('reportId');
@@ -58,15 +60,18 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
 
   resolve_existing_transaction(transactionId: string): Observable<TransactionType | undefined> {
     return this.transactionService.get(String(transactionId)).pipe(
-      map((transaction: Transaction) => {
-        if (transaction.transaction_type_identifier) {
+      mergeMap((transaction: Transaction) => {
+        if (transaction.transaction_type_identifier && transaction.contact_id) {
           const transactionType = TransactionTypeUtils.factory(
             transaction.transaction_type_identifier
           ) as TransactionType;
           transactionType.transaction = transaction;
-          return transactionType;
+          return this.contactService.get(transaction.contact_id).pipe(map((contact) => {
+            transactionType.contact = contact;
+            return transactionType;
+          }));
         } else {
-          return undefined;
+          return of(undefined);
         }
       })
     );

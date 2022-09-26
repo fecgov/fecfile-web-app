@@ -1,25 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MessageService } from 'primeng/api';
-import { TransactionGroupAgComponent } from './transaction-group-ag.component';
-import { ToastModule } from 'primeng/toast';
-import { SharedModule } from '../../shared/shared.module';
-import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
-import { ButtonModule } from 'primeng/button';
+import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { ContactTypes } from 'app/shared/models/contact.model';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { AccordionModule } from 'primeng/accordion';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { ToastModule } from 'primeng/toast';
 import { EAR_REC } from '../../shared/models/transaction-types/EAR_REC.model';
-import { ContactTypes } from 'app/shared/models/contact.model';
+import { SharedModule } from '../../shared/shared.module';
+import { TransactionGroupAgComponent } from './transaction-group-ag.component';
 
 describe('TransactionGroupAgComponent', () => {
   let component: TransactionGroupAgComponent;
@@ -49,7 +49,7 @@ describe('TransactionGroupAgComponent', () => {
         BrowserAnimationsModule,
       ],
       declarations: [TransactionGroupAgComponent],
-      providers: [MessageService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 

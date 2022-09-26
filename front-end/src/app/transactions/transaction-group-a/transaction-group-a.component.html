@@ -12,8 +12,7 @@
           [contactTypeOptions]="contactTypeOptions"
           [contactTypeReadOnly]="true"
           contactTypeStyleClass="readonly"
-          (fecfileContactSelect)="onContactLookupSelect($event)"
-        >
+          (contactSelect)="onContactLookupSelect($event)">
         </app-contact-lookup>
       </div>
     </div>
@@ -316,3 +315,5 @@
     </div>
   </form>
 </div>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

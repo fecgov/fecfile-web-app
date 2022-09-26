@@ -1,7 +1,7 @@
-import { TransactionType } from '../../interfaces/transaction-type.interface';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EAR_REC';
+import { TransactionType } from '../../interfaces/transaction-type.interface';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 
 export class EAR_REC implements TransactionType {
   scheduleId = 'A';
@@ -9,6 +9,7 @@ export class EAR_REC implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
   transaction: SchATransaction | undefined = undefined;
+  contact = undefined;
   parent = undefined;
 
   contributionPurposeDescripReadonly(): string {

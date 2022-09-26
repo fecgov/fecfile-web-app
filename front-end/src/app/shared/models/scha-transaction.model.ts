@@ -1,7 +1,7 @@
-import { BaseModel } from './base.model';
-import { Transaction } from '../interfaces/transaction.interface';
 import { plainToClass, Transform } from 'class-transformer';
+import { Transaction } from '../interfaces/transaction.interface';
 import { LabelList } from '../utils/label.utils';
+import { BaseModel } from './base.model';
 
 export class SchATransaction extends BaseModel implements Transaction {
   id: string | undefined;
@@ -60,6 +60,8 @@ export class SchATransaction extends BaseModel implements Transaction {
   deleted: string | undefined;
 
   report_id: string | undefined; // Foreign key to the F3XSummary model
+
+  contact_id: string | undefined; // Foreign key to the Contact model
 
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
