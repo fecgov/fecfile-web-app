@@ -44,6 +44,9 @@ describe('QA Script 244 (Sprint 8)', () => {
     createTransactionSchA(transaction, false);
     cy.get('button[label="Save & add a Memo"]').click();
     cy.longWait();
+    cy.contains('The dollar amount in a memo item is not incorporated into the total figure for the schedule').should(
+      'exist'
+    );
     cy.longWait();
 
     //Step 5: Open a Memo Transaction and check for the memo checkbox to be pre-selected and disabled
