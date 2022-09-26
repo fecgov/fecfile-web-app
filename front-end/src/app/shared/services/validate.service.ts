@@ -118,7 +118,7 @@ export class ValidateService {
    * ng validator function for reactive forms. Provides validation based on the
    * JSON schema and form in the formValidationSchema and formValidationForm properties
    * @param {string} property - name of form property to validate
-   * @returns {ValidationErrors | null}
+   * @returns {ValidationErrors | undefined}
    */
   formValidator(property: string): ValidatorFn {
     return (): ValidationErrors | null => {
@@ -161,7 +161,8 @@ export class ValidateService {
           if (error.keyword === 'type' && error.params['type'] === 'number') {
             if (
               this.formValidatorForm?.get(error.path)?.value === '' ||
-              this.formValidatorForm?.get(error.path)?.value === null
+              this.formValidatorForm?.get(error.path)?.value === null ||
+              this.formValidatorForm?.get(error.path)?.value === undefined
             ) {
               result['required'] = true;
             } else {

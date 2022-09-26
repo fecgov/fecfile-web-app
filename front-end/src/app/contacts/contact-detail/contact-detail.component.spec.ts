@@ -15,31 +15,31 @@ describe('ContactDetailComponent', () => {
   let fixture: ComponentFixture<ContactDetailComponent>;
 
   const contact: Contact = Contact.fromJSON({
-    id: null,
+    id: undefined,
     type: 'IND',
-    candidate_id: null,
-    committee_id: null,
-    name: null,
+    candidate_id: undefined,
+    committee_id: undefined,
+    name: undefined,
     last_name: 'Smith',
     first_name: 'Jane',
-    middle_name: null,
-    prefix: null,
-    suffix: null,
+    middle_name: undefined,
+    prefix: undefined,
+    suffix: undefined,
     street_1: '123 Main St',
-    street_2: null,
+    street_2: undefined,
     city: 'Anywhere City',
     state: 'VA',
     zip: '22201',
-    employer: null,
-    occupation: null,
-    candidate_office: null,
-    candidate_state: null,
-    candidate_district: null,
-    telephone: null,
+    employer: undefined,
+    occupation: undefined,
+    candidate_office: undefined,
+    candidate_state: undefined,
+    candidate_district: undefined,
+    telephone: undefined,
     country: 'US',
-    created: null,
-    updated: null,
-    deleted: null,
+    created: undefined,
+    updated: undefined,
+    deleted: undefined,
   });
 
   beforeEach(async () => {
@@ -69,7 +69,7 @@ describe('ContactDetailComponent', () => {
   });
 
   it('#onOpenDetail should patch values to the form from the contact object', () => {
-    let name: string | null = component.form.get('name')?.value;
+    let name: string | undefined = component.form.get('name')?.value;
     expect(name).toBe('');
     component.contact.name = 'ABC Inc';
     component.onOpenDetail();

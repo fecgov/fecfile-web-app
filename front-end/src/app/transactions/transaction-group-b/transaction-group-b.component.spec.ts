@@ -69,8 +69,7 @@ describe('TransactionGroupBComponent', () => {
         ConfirmDialogModule,
       ],
       declarations: [TransactionGroupBComponent],
-      providers: [MessageService, ConfirmationService,
-        FormBuilder, provideMockStore(testMockStore)],
+      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
     testContactService = TestBed.inject(ContactService);
     testConfirmationService = TestBed.inject(ConfirmationService);
@@ -130,15 +129,14 @@ describe('TransactionGroupBComponent', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
-    spyOn(testConfirmationService, "confirm")
-      .and.callFake((confirmation: Confirmation) => {
-        if (confirmation.accept) {
-          return confirmation.accept();
-        }
-      });
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
 
     if (component.transaction) {
-      component.transaction.id = null;
+      component.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -168,12 +166,11 @@ describe('TransactionGroupBComponent', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
-    spyOn(testConfirmationService, "confirm")
-      .and.callFake((confirmation: Confirmation) => {
-        if (confirmation.accept) {
-          return confirmation.accept();
-        }
-      });
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
 
     if (component.transaction) {
       component.transaction.id = '10';
@@ -191,15 +188,14 @@ describe('TransactionGroupBComponent', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
-    spyOn(testConfirmationService, "confirm")
-      .and.callFake((confirmation: Confirmation) => {
-        if (confirmation.accept) {
-          return confirmation.accept();
-        }
-      });
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
 
     if (component.transaction) {
-      component.transaction.id = null;
+      component.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -231,15 +227,14 @@ describe('TransactionGroupBComponent', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
-    spyOn(testConfirmationService, "confirm")
-      .and.callFake((confirmation: Confirmation) => {
-        if (confirmation.accept) {
-          return confirmation.accept();
-        }
-      });
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
 
     if (component.transaction) {
-      component.transaction.id = null;
+      component.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -280,15 +275,14 @@ describe('TransactionGroupBComponent', () => {
     testContact.id = 'testId';
     component.contact = testContact;
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
-    spyOn(testConfirmationService, "confirm")
-      .and.callFake((confirmation: Confirmation) => {
-        if (confirmation.accept) {
-          return confirmation.accept();
-        }
-      });
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
 
     if (component.transaction) {
-      component.transaction.id = null;
+      component.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -307,5 +301,4 @@ describe('TransactionGroupBComponent', () => {
     );
     httpTestingController.verify();
   });
-
 });

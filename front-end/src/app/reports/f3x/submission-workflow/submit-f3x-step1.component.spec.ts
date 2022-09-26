@@ -114,12 +114,12 @@ describe('SubmitF3xStep1Component', () => {
     });
     component.setDefaultFormValues(testCommitteeAccount);
     expect(component.form.value['street_1']).toBe('Test Ln');
-    expect(component.form.value['street_2']).toBe(null);
+    expect(component.form.value['street_2']).toBe(undefined);
     expect(component.form.value['state']).toBe('CA');
     expect(component.form.value['city']).toBe('Testopolis');
     expect(component.form.value['zip']).toBe('54321');
     expect(component.form.value['confirmation_email_1']).toBe('test@report.com');
-    expect(component.form.value['confirmation_email_2']).toBe(null);
+    expect(component.form.value['confirmation_email_2']).toBe(undefined);
   });
 
   it('Should build the email validator', () => {
@@ -173,7 +173,6 @@ describe('SubmitF3xStep1Component', () => {
     });
     component.setDefaultFormValues({
       street_1: '3 Oak St',
-      street_2: null,
       city: 'Pheonix',
       state: 'AZ',
       zip: '12345',

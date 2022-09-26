@@ -43,12 +43,12 @@ export class ReportService implements TableListService<Report> {
    * @param reports - List of reports on the current page of the Reports table
    */
   public setStoreCashOnHand(reports: Report[]) {
-    let payload: CashOnHand | null = null;
+    let payload: CashOnHand | undefined;
 
     if (reports.length === 0) {
       payload = {
         report_id: undefined,
-        value: null,
+        value: undefined,
       };
     }
     if (reports.length === 1) {
@@ -82,7 +82,7 @@ export class ReportService implements TableListService<Report> {
    * @param report
    * @returns boolean
    */
-  isEditable(report: Report | null): boolean {
+  isEditable(report: Report | undefined): boolean {
     const uploadSubmission = report?.upload_submission;
     const fecStatus = report?.upload_submission?.fec_status;
     const fecfileTaskState = report?.upload_submission?.fecfile_task_state;

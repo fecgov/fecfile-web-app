@@ -23,7 +23,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   cashOnHand: CashOnHand = {
     report_id: undefined,
-    value: null,
+    value: undefined,
   };
   private destroy$ = new Subject<boolean>();
 

@@ -116,9 +116,9 @@ describe('SubmitF3xStep2Component', () => {
     component.setDefaultFormValues(testCommitteeAccount);
     expect(component.form.value['treasurer_first_name']).toBe('Required');
     expect(component.form.value['treasurer_last_name']).toBe('Fields');
-    expect(component.form.value['treasurer_middle_name']).toBe(null);
-    expect(component.form.value['treasurer_prefix']).toBe(null);
-    expect(component.form.value['treasurer_suffix']).toBe(null);
+    expect(component.form.value['treasurer_middle_name']).toBe(undefined);
+    expect(component.form.value['treasurer_prefix']).toBe(undefined);
+    expect(component.form.value['treasurer_suffix']).toBe(undefined);
   });
 
   it('should catch a change in the Treasurer Name', () => {
@@ -158,7 +158,6 @@ describe('SubmitF3xStep2Component', () => {
     });
     component.setDefaultFormValues({
       street_1: '3 Oak St',
-      street_2: null,
       city: 'Pheonix',
       state: 'AZ',
       zip: '12345',

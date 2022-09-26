@@ -18,9 +18,9 @@ import { ReportService } from '../../../shared/services/report.service';
   styleUrls: ['./menu-report.component.scss'],
 })
 export class MenuReportComponent implements OnInit, OnDestroy {
-  activeReport: Report | null = null;
+  activeReport: Report | undefined;
   currentReportId: string | undefined;
-  currentReportTimestamp: number | null = null;
+  currentReportTimestamp: number | undefined;
   items: MenuItem[] = [];
   showMenu = false;
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
@@ -29,7 +29,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   reportIsEditableFlag = false;
   cashOnHand: CashOnHand = {
     report_id: undefined,
-    value: null,
+    value: undefined,
   };
 
   private destroy$ = new Subject<boolean>();
@@ -60,7 +60,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report: Report | null) => {
+      .subscribe((report: Report | undefined) => {
         this.activeReport = report;
         this.reportIsEditableFlag = this.reportService.isEditable(report);
       });

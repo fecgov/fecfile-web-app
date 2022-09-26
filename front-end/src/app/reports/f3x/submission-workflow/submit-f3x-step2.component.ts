@@ -48,7 +48,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   loading: 0 | 1 | 2 = 0;
   cashOnHand: CashOnHand = {
     report_id: undefined,
-    value: null,
+    value: undefined,
   };
 
   constructor(
