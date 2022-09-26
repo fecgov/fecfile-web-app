@@ -122,31 +122,6 @@ export function createReport(report, save = true) {
   }
 }
 
-function progressReport(address_details = null) {
-  if (address_details == null) {
-    cy.get("p-radiobutton[formControlName='change_of_address']")
-      .contains('p-radiobutton', 'NO')
-      .find('.p-radiobutton-box')
-      .click();
-    cy.shortWait();
-  } else {
-    cy.get("p-radiobutton[formControlName='change_of_address']")
-      .contains('p-radiobutton', 'YES')
-      .find('.p-radiobutton-box')
-      .click();
-    cy.shortWait();
-
-    cy.get("input[formControlName='street_1']").safeType(address_details['street']);
-    cy.get("input[formControlName='street_2']").safeType(address_details['apartment']);
-    cy.get("input[formControlName='city']").safeType(address_details['city']);
-    cy.get("input[formControlName='zip']").safeType(address_details['zip']);
-    cy.dropdownSetValue("p-dropdown[formControlName='state']", address_details['state']);
-  }
-
-  cy.get("button[label='Save and continue']").click();
-  cy.longWait();
-}
-
 type cohDetailType = {
   cashOnHand?: number;
   date?: Date;
@@ -252,10 +227,7 @@ export function navigateToTransactionManagement(
 ) {
   cy.shortWait();
   cy.url().then((url: string) => {
-    if (url.includes('step2')) {
-      cy.then(progressReport);
-      cy.navigateToTransactionManagement(identifyingDetails);
-    } else if (url.includes('cash-on-hand')) {
+    if (url.includes('cash-on-hand')) {
       cy.then(progressCashOnHand);
       cy.navigateToTransactionManagement(identifyingDetails);
     } else if (url.includes('/reports') && !url.includes('list')) {
