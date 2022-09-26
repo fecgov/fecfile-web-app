@@ -118,7 +118,7 @@ describe('TransactionGroupBComponent', () => {
 
   it('#save() should save a new record', () => {
     if (component.transaction) {
-      component.transaction.id = null;
+      component.transaction.id = undefined;
     }
     component.form.patchValue({ ...transaction });
     component.save('list');

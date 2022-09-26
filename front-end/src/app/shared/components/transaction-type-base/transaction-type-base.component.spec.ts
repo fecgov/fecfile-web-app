@@ -42,12 +42,12 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
 const testTransaction = {
   id: '123',
   report_id: '999',
-  form_type: null,
-  filer_committee_id_number: null,
+  form_type: undefined,
+  filer_committee_id_number: undefined,
   transaction_id: null,
   transaction_type_identifier: 'test',
-  contribution_purpose_descrip: null,
-  parent_transaction_id: null,
+  contribution_purpose_descrip: undefined,
+  parent_transaction_id: undefined,
 };
 
 describe('TransactionTypeBaseComponent', () => {
@@ -81,27 +81,27 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#save should navigate for create', () => {
     const testTransaction1: Transaction = {
-      id: null,
-      report_id: null,
-      form_type: null,
-      filer_committee_id_number: null,
+      id: undefined,
+      report_id: undefined,
+      form_type: undefined,
+      filer_committee_id_number: undefined,
       transaction_id: null,
-      transaction_type_identifier: null,
-      contribution_purpose_descrip: null,
-      parent_transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
     };
     spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = {
       transaction: {
-        id: null,
-        report_id: null,
-        form_type: null,
-        filer_committee_id_number: null,
+        id: undefined,
+        report_id: undefined,
+        form_type: undefined,
+        filer_committee_id_number: undefined,
         transaction_id: null,
         transaction_type_identifier: 'test',
-        contribution_purpose_descrip: null,
-        parent_transaction_id: null,
+        contribution_purpose_descrip: undefined,
+        parent_transaction_id: undefined,
       },
     } as TransactionType;
 
@@ -112,26 +112,26 @@ describe('TransactionTypeBaseComponent', () => {
   it('#save should navigate for update', () => {
     const testTransaction2: Transaction = {
       id: '123',
-      report_id: null,
-      form_type: null,
-      filer_committee_id_number: null,
+      report_id: undefined,
+      form_type: undefined,
+      filer_committee_id_number: undefined,
       transaction_id: null,
-      transaction_type_identifier: null,
-      contribution_purpose_descrip: null,
-      parent_transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
     };
     spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction2));
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = {
       transaction: {
         id: '123',
-        report_id: null,
-        form_type: null,
-        filer_committee_id_number: null,
+        report_id: undefined,
+        form_type: undefined,
+        filer_committee_id_number: undefined,
         transaction_id: null,
         transaction_type_identifier: 'test',
-        contribution_purpose_descrip: null,
-        parent_transaction_id: null,
+        contribution_purpose_descrip: undefined,
+        parent_transaction_id: undefined,
       },
     } as TransactionType;
 
@@ -179,12 +179,12 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction3: Transaction = {
       id: '123',
       report_id: '99',
-      form_type: null,
-      filer_committee_id_number: null,
+      form_type: undefined,
+      filer_committee_id_number: undefined,
       transaction_id: null,
-      transaction_type_identifier: null,
-      contribution_purpose_descrip: null,
-      parent_transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
     };
     component.transactionType = {
       transaction: testTransaction3,

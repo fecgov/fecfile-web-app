@@ -71,7 +71,7 @@ describe('LoginService', () => {
   });
 
   it('#logOut login.gov happy path', () => {
-    testUserLoginData.token = null;
+    testUserLoginData.token = '';
     TestBed.resetTestingModule();
 
     spyOn(store, 'dispatch');

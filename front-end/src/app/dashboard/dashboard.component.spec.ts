@@ -42,7 +42,7 @@ describe('DashboardComponent', () => {
     const testCommitteeId = 'testCommitteeId';
     const testEmail = 'testEmail';
     const testIsAllowed = true;
-    const testToken = null;
+    const testToken = '';
 
     const expectedUserLoginData: UserLoginData = {
       committee_id: testCommitteeId,

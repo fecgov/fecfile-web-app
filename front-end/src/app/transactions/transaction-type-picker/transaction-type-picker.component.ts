@@ -19,7 +19,7 @@ import { LabelList } from 'app/shared/utils/label.utils';
 export class TransactionTypePickerComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   scheduleATransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
-  report: Report | null = null;
+  report: Report | undefined;
 
   constructor(private store: Store) {}
 

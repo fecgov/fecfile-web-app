@@ -3,10 +3,10 @@ import { UserLoginData } from 'app/shared/models/user.model';
 import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from './login.actions';
 
 export const initialState: UserLoginData = {
-  committee_id: null,
-  email: null,
+  committee_id: '',
+  email: '',
   is_allowed: false,
-  token: null,
+  token: '',
 };
 
 const _loginReducer = createReducer(

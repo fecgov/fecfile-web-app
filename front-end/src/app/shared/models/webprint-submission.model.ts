@@ -7,16 +7,16 @@ export class WebPrintSubmission {
   fec_image_url = '';
   fec_submission_id = '';
   fec_message = '';
-  fec_status: 'COMPLETED' | 'FAILED' | 'PROCESSING' | null = null;
+  fec_status: 'COMPLETED' | 'FAILED' | 'PROCESSING' | undefined;
   fecfile_error = '';
   fecfile_task_state = '';
   id = 0;
   @Type(() => Date)
   @Transform(BaseModel.dateTransform)
-  created: Date | null = null;
+  created: Date | undefined;
   @Type(() => Date)
   @Transform(BaseModel.dateTransform)
-  updated: Date | null = null;
+  updated: Date | undefined;
 
   // prettier-ignore
   static fromJSON(json: any): WebPrintSubmission { // eslint-disable-line @typescript-eslint/no-explicit-any
