@@ -65,7 +65,6 @@ export class TransactionGroupAgComponent extends TransactionTypeBaseComponent im
 
   override ngOnInit(): void {
     this.aForm = this.fb.group(this.validateService.getFormGroupFields(this.aFormProperties));
-    // this.bForm = this.fb.group(this.bValidateService.getFormGroupFields(this.bFormProperties));
 
     this.validateService.formValidatorSchema = this.schema;
     this.validateService.formValidatorForm = this.aForm;
