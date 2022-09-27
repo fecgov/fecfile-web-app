@@ -4,16 +4,6 @@ import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { createTransactionSchA } from '../../support/transactions.spec';
 
-const columns = [
-  'Transaction type',
-  'Contribution name',
-  'Contribution date',
-  'Memo code',
-  'Contribution amount',
-  'Contribution aggregate',
-  'Actions',
-];
-
 describe('QA Script 244 (Sprint 8)', () => {
   after(() => {
     cy.login();
