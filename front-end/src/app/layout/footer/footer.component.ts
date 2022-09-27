@@ -5,4 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent {}
+export class FooterComponent {
+  RADAnalyst = 'John Doe';
+  RADPhone = '(888) 888-8888';
+}

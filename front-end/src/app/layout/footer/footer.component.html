@@ -1,69 +1,79 @@
 <footer>
-  <div class="grid">
-    <div class="col-1"></div>
-    <div class="col-2">
-      <label>Federal Election Commission</label>
-      <br />
-      <address>
-        1050 First Street NE, Washington DC, 20002
-        <br />
-        <a href="https://fec.gov" draggable="false" target="_blank" rel="noopener">fec.gov</a>
-      </address>
+  <div id="footer-upper">
+    <div class="half-height grid">
+      <div class="col-12">
+        <p class="text-a">
+          <b>Need help? Contact your RAD Analyst</b>
+        </p>
+      </div>
     </div>
-    <div class="col-2">
-      <label>Main Office</label>
-      <br />
-      <address>
-        Toll free: 1-800-424-9530
-        <br />
-        Local: (202)-694-1000
-      </address>
-    </div>
-    <div class="col-2">
-      <label> RAD Analyst, </label>
-      <br />
-      <address>
-        <ng-container> (202)-694-1000 x</ng-container>
-        <br />
-        <ng-container>
-          <a
-            href="https://www.fec.gov/help-candidates-and-committees/question-rad/"
-            draggable="false"
-            target="_blank"
-            rel="noopener"
+    <div class="half-height grid">
+      <div class="col-6">
+        <p class="text-a">
+          <i
+            >{{ RADAnalyst }} <a href="tel:{{ RADPhone }}">{{ RADPhone }}</a></i
           >
-            Find & contact your committee's analyst
+        </p>
+      </div>
+      <div class="col-3">
+        <p class="text-a">
+          <b>Feedback</b>
+        </p>
+      </div>
+      <div class="col-3">
+        <p class="text-a">
+          <b>Legal Disclaimer</b>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div id="footer-lower" class="grid">
+    <div class="col-6">
+      <img id="fec-seal" src="assets/img/fec-seal-inverse.svg" />
+      <p id="fec-title">Federal Election Commission</p>
+      <p id="fec-address">1050 First Street, NE Washington, DC 20463</p>
+    </div>
+    <div class="col-3">
+      <div class="grid">
+        <div class="col-12 footer-item">
+          <a href="https://www.fec.gov/about/privacy-and-security-policy/" target="_blank">
+            Privacy and security policy
           </a>
-        </ng-container>
-      </address>
-    </div>
-    <div class="col-2">
-      <label>Tech Support</label>
-      <br />
-      <address>
-        (202) 694-1307<br />
-        <a href="mailto:eFiletechsupport@fec.gov"> eFiletechsupport@fec.gov </a>
-      </address>
-    </div>
-    <div class="col-2">
-      <button type="button" class="btn btn-link">Legal Disclaimer</button>
-      <ng-template #legalDisclaimer let-d="dismiss">
-        <div class="modal-header">
-          <h4 class="modal-title">Legal Disclaimer</h4>
         </div>
-        <div class="modal-body">
-          <p>
-            Please be advised that knowingly and willfully making any materially false, fictitious, or fraudulent
-            statement or representation to a federal government agency, including the Federal Election Commission, is
-            punishable under the provisions of 18 U.S.C. § 1001. The Commission may report apparent violations to the
-            appropriate law enforcement authorities. 52 U.S.C. § 30107(a)(9).
-          </p>
+        <div class="col-12 footer-item">
+          <a href="https://www.fec.gov/about/plain-language/" target="_blank">Plain language</a>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" (click)="d('Close click')">Close</button>
+        <div class="col-12 footer-item">
+          <a href="https://www.fec.gov/about/no-fear-act/" target="_blank">No FEAR Act</a>
         </div>
-      </ng-template>
+        <div class="col-12 footer-item">
+          <a href="https://www.fec.gov/about/reports-about-fec/strategy-budget-and-performance/" target="_blank">
+            Strategy, budget, and performance
+          </a>
+        </div>
+      </div>
     </div>
-    <div class="col-1"></div>
+    <div class="col-3">
+      <div class="grid">
+        <div class="col-12 footer-item">
+          <a href="https://www.fec.gov/about/open/" target="_blank">Open government</a>
+        </div>
+        <div class="col-12 footer-item">
+          <a
+            href="https://www.fbi.gov/investigate/counterintelligence/foreign-influence/protected-voices"
+            target="_blank"
+          >
+            Protect Voices
+          </a>
+        </div>
+        <div class="col-12 footer-item"><a href="https://www.usa.gov/" target="_blank">USA.gov</a></div>
+        <div class="col-12 footer-item">
+          <a href="https://www.fec.gov/office-inspector-general/" target="_blank">Inspector General</a>
+        </div>
+        <div class="col-12 footer-item">
+          <a href="https://www.fec.gov/freedom-information-act/" target="_blank">FOIA</a>
+        </div>
+      </div>
+    </div>
   </div>
 </footer>
