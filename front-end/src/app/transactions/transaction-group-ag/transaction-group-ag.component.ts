@@ -107,4 +107,17 @@ export class TransactionGroupAgComponent extends TransactionTypeBaseComponent im
       fieldsToReset.forEach((field) => form.get(field)?.reset());
     }
   }
+
+  override resetForm() {
+    this.formSubmitted = false;
+    this.aForm.reset();
+    this.aForm.markAsPristine();
+    this.aForm.markAsUntouched();
+    this.aForm.patchValue({
+      entity_type: this.contactTypeOptions[0]?.code,
+      contribution_aggregate: '0',
+      memo_code: false,
+      contribution_purpose_descrip: this.contributionPurposeDescrip,
+    });
+  }
 }
