@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { CommitteeLookupResponse, Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData, FecfileCommitteeLookupData, FecfileIndividualLookupData, FecfileOrganizationLookupData, IndividualLookupResponse, OrganizationLookupResponse } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -244,8 +244,11 @@ describe('ContactLookupComponent', () => {
   });
 
   it('#onCreateContactDialogOpen null form control', () => {
-    component.createContactForm.removeControl('country');
-    component.createContactForm.removeControl('type');
+    component.createContactForm = new FormGroup({});
+    component.selectedFecCommitteeAccount = {} as CommitteeAccount;
+
+    component.onCreateContactDialogOpen();
+    component.selectedFecCommitteeAccount = undefined;
     component.onCreateContactDialogOpen();
   });
 
@@ -253,6 +256,16 @@ describe('ContactLookupComponent', () => {
     component.createNewContact();
     component.closeCreateContactDialog();
     component.createContactSave();
+    component.selectedFecCommitteeAccount = {
+      committee_id: 'testCommitteeId',
+      name: 'testName',
+      street_1: 'testStreet1',
+      street_2: 'testStreet2',
+      city: 'testCity',
+      state: 'testState',
+      zip: 'testZip',
+      treasurer_phone: 'testTreasPhone'
+    } as CommitteeAccount;
     component.onCreateContactDialogOpen();
     component.onCreateContactDialogClose();
   });

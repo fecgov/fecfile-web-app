@@ -55,6 +55,8 @@ export class ContactLookupComponent {
     ])
   );
 
+  selectedFecCommitteeAccount: CommitteeAccount | undefined = undefined;
+
   workingValidatorSchema = this.validateService.formValidatorSchema;
   workingValidatorForm = this.validateService.formValidatorForm;
 
@@ -123,19 +125,11 @@ export class ContactLookupComponent {
   }
 
   openCreateContactDialog(value?: CommitteeAccount) {
+    this.selectedFecCommitteeAccount = value;
     // Need these since contact-form sets these for validation
     this.workingValidatorSchema = this.validateService.formValidatorSchema;
     this.workingValidatorForm = this.validateService.formValidatorForm;
 
-    if (value) {
-      this.createContactForm.get('committee_id')?.setValue(value.committee_id);
-      this.createContactForm.get('name')?.setValue(value.name);
-      this.createContactForm.get('street_1')?.setValue(value.street_1);
-      this.createContactForm.get('street_2')?.setValue(value.street_2);
-      this.createContactForm.get('city')?.setValue(value.city);
-      this.createContactForm.get('state')?.setValue(value.state);
-      this.createContactForm.get('zip')?.setValue(value.zip);
-    }
     this.createContactDialogVisible = true;
   }
 
@@ -165,13 +159,36 @@ export class ContactLookupComponent {
   }
 
   onCreateContactDialogOpen() {
-    this.createContactForm.get('country')?.reset();
+    this.createContactForm.reset();
+    this.createContactFormSubmitted = false;
     const typeFormControl = this.createContactForm.get('type');
     typeFormControl?.setValue(this.contactTypeFormControl.value);
     typeFormControl?.disable();
+    let phone;
+    if (this.selectedFecCommitteeAccount?.treasurer_phone) {
+      phone = '+1 ' + this.selectedFecCommitteeAccount.treasurer_phone;
+    }
+    if (this.selectedFecCommitteeAccount) {
+      this.createContactForm.get('committee_id')?.setValue(
+        this.selectedFecCommitteeAccount.committee_id);
+      this.createContactForm.get('name')?.setValue(
+        this.selectedFecCommitteeAccount.name);
+      this.createContactForm.get('street_1')?.setValue(
+        this.selectedFecCommitteeAccount.street_1);
+      this.createContactForm.get('street_2')?.setValue(
+        this.selectedFecCommitteeAccount.street_2);
+      this.createContactForm.get('city')?.setValue(
+        this.selectedFecCommitteeAccount.city);
+      this.createContactForm.get('state')?.setValue(
+        this.selectedFecCommitteeAccount.state);
+      this.createContactForm.get('zip')?.setValue(
+        this.selectedFecCommitteeAccount.zip);
+      this.createContactForm.get('telephone')?.setValue(phone);
+    }
   }
 
   onCreateContactDialogClose() {
+    this.selectedFecCommitteeAccount = undefined;
     this.createContactForm.reset();
     this.createContactFormSubmitted = false;
     this.createContactDialogVisible = false;
