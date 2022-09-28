@@ -13,8 +13,8 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root',
 })
 export class ApiService {
-  private token: string | null = null;
-  private loggedInCommitteeId: string | null = null;
+  private token: string | undefined;
+  private loggedInCommitteeId: string | undefined;
 
   constructor(private http: HttpClient, private store: Store, private cookieService: CookieService) {
     this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {

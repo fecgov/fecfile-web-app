@@ -22,7 +22,7 @@ export class ReportWebPrintComponent implements OnInit, OnDestroy {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
 
-  submitDate: Date | null = null;
+  submitDate: Date | undefined;
   downloadURL = '';
   printError = '';
   pollingStatusMessage:

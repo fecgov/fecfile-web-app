@@ -4,7 +4,7 @@ import { setCashOnHandAction } from './cash-on-hand.actions';
 
 export const initialState: CashOnHand = {
   report_id: undefined,
-  value: null,
+  value: undefined,
 };
 
 const _cashOnHandReducer = createReducer<CashOnHand>(

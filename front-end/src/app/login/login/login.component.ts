@@ -21,11 +21,11 @@ export class LoginComponent implements OnInit {
   public committeeIdInputError = false;
   public passwordInputError = false;
   public loginEmailInputError = false;
-  public appTitle: string | null = null;
+  public appTitle: string | undefined;
   public titleF!: string;
   public titleR!: string;
   public show!: boolean;
-  public loginDotGovAuthUrl: string | null = null;
+  public loginDotGovAuthUrl: string | undefined;
   public localLoginAvailable = false;
 
   constructor(

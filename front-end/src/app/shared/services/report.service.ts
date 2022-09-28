@@ -30,7 +30,7 @@ export class ReportService implements TableListService<Report> {
     );
   }
 
-  public get(reportId: number): Observable<Report> {
+  public get(reportId: string): Observable<Report> {
     return this.f3xSummaryService.get(reportId);
   }
 
@@ -43,12 +43,12 @@ export class ReportService implements TableListService<Report> {
    * @param reports - List of reports on the current page of the Reports table
    */
   public setStoreCashOnHand(reports: Report[]) {
-    let payload: CashOnHand | null = null;
+    let payload: CashOnHand | undefined;
 
     if (reports.length === 0) {
       payload = {
         report_id: undefined,
-        value: null,
+        value: undefined,
       };
     }
     if (reports.length === 1) {
@@ -68,7 +68,7 @@ export class ReportService implements TableListService<Report> {
    * @param reportId
    * @returns Observable<Report>
    */
-  setActiveReportById(reportId: number | undefined): Observable<Report> {
+  setActiveReportById(reportId: string | undefined): Observable<Report> {
     if (!reportId) throw new Error('No Report Id Provided.');
     return this.get(reportId).pipe(
       tap((report) => {
@@ -82,7 +82,7 @@ export class ReportService implements TableListService<Report> {
    * @param report
    * @returns boolean
    */
-  isEditable(report: Report | null): boolean {
+  isEditable(report: Report | undefined): boolean {
     const uploadSubmission = report?.upload_submission;
     const fecStatus = report?.upload_submission?.fec_status;
     const fecfileTaskState = report?.upload_submission?.fecfile_task_state;

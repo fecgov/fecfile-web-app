@@ -49,10 +49,8 @@ describe('ReportListComponent', () => {
 
   it('#editItem should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.editItem({ id: 999, change_of_address: null } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step2/999');
 
-    component.editItem({ id: 999, change_of_address: true } as F3xSummary);
+    component.editItem({ id: '999' } as F3xSummary);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
   });
 

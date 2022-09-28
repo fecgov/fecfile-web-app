@@ -1,21 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { RouterTestingModule } from '@angular/router/testing';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { TransactionGroupDComponent } from './transaction-group-d.component';
-import { ToastModule } from 'primeng/toast';
-import { SharedModule } from '../../shared/shared.module';
-import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { ToastModule } from 'primeng/toast';
+import { SharedModule } from '../../shared/shared.module';
+import { TransactionGroupDComponent } from './transaction-group-d.component';
 
 describe('TransactionGroupDComponent', () => {
   let component: TransactionGroupDComponent;
@@ -38,9 +39,11 @@ describe('TransactionGroupDComponent', () => {
         InputTextModule,
         InputTextareaModule,
         InputNumberModule,
+        ConfirmDialogModule,
       ],
       declarations: [TransactionGroupDComponent],
-      providers: [MessageService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [MessageService, ConfirmationService,
+        FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 

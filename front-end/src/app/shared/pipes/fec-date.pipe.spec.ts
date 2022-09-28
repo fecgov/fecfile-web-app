@@ -16,6 +16,6 @@ describe('FecDatePipe', () => {
   });
 
   it('returns empty for missing date', () => {
-    expect(pipe.transform(null)).toBe('');
+    expect(pipe.transform(undefined)).toBe('');
   });
 });

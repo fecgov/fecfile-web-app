@@ -23,7 +23,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   cashOnHand: CashOnHand = {
     report_id: undefined,
-    value: null,
+    value: undefined,
   };
   private destroy$ = new Subject<boolean>();
 
@@ -69,9 +69,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   }
 
   public override editItem(item: Report): void {
-    if ((item as F3xSummary).change_of_address === null) {
-      this.router.navigateByUrl(`/reports/f3x/create/step2/${item.id}`);
-    } else if (!this.itemService.isEditable(item)) {
+    if (!this.itemService.isEditable(item)) {
       this.router.navigateByUrl(`/reports/f3x/submit/status/${item.id}`);
     } else if (item.id === this.cashOnHand.report_id) {
       this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);

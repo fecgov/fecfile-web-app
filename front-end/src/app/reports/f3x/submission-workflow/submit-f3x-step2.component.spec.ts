@@ -53,7 +53,7 @@ describe('SubmitF3xStep2Component', () => {
               data: {
                 report: F3xSummary.fromJSON({
                   report_code: 'Q1',
-                  id: 999,
+                  id: '999',
                 }),
               },
             },
@@ -68,7 +68,7 @@ describe('SubmitF3xStep2Component', () => {
     reportService = TestBed.inject(F3xSummaryService);
     fixture = TestBed.createComponent(SubmitF3xStep2Component);
     component = fixture.componentInstance;
-    spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({ id: 999 })));
+    spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({ id: '999' })));
     fixture.detectChanges();
   });
 
@@ -77,7 +77,7 @@ describe('SubmitF3xStep2Component', () => {
   });
 
   it("should set the default form values with the committee's values", () => {
-    component.report = F3xSummary.fromJSON({ id: 999 });
+    component.report = F3xSummary.fromJSON({ id: '999' });
     const testCommitteeAccount = CommitteeAccount.fromJSON({
       treasurer_name_1: 'Test',
       treasurer_name_2: 'McTest',
@@ -116,9 +116,9 @@ describe('SubmitF3xStep2Component', () => {
     component.setDefaultFormValues(testCommitteeAccount);
     expect(component.form.value['treasurer_first_name']).toBe('Required');
     expect(component.form.value['treasurer_last_name']).toBe('Fields');
-    expect(component.form.value['treasurer_middle_name']).toBe(null);
-    expect(component.form.value['treasurer_prefix']).toBe(null);
-    expect(component.form.value['treasurer_suffix']).toBe(null);
+    expect(component.form.value['treasurer_middle_name']).toBe(undefined);
+    expect(component.form.value['treasurer_prefix']).toBe(undefined);
+    expect(component.form.value['treasurer_suffix']).toBe(undefined);
   });
 
   it('should catch a change in the Treasurer Name', () => {
@@ -134,7 +134,7 @@ describe('SubmitF3xStep2Component', () => {
 
   it("should catch when there's no change in Treasurer Name", () => {
     component.report = F3xSummary.fromJSON({
-      id: 999,
+      id: '999',
       treasurer_last_name: 'McTest',
       treasurer_first_name: 'Test',
     });
@@ -158,7 +158,6 @@ describe('SubmitF3xStep2Component', () => {
     });
     component.setDefaultFormValues({
       street_1: '3 Oak St',
-      street_2: null,
       city: 'Pheonix',
       state: 'AZ',
       zip: '12345',

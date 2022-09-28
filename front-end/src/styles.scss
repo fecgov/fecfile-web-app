@@ -25,6 +25,10 @@ li {
   list-style-type: none;
 }
 
+mark {
+  background-color: lightsteelblue;
+}
+
 .ng-submitted .p-inputtext.ng-invalid,
 .p-inputtext.ng-invalid.ng-touched,
 .ng-submitted p-dropdown.ng-invalid div.p-dropdown,

@@ -1,14 +1,17 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder } from '@angular/forms';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { ApiService } from 'app/shared/services/api.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { Message, MessageService } from 'primeng/api';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { Confirmation, ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
@@ -26,6 +29,8 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
     'contributor_city',
     'contributor_state',
     'contributor_zip',
+    'contributor_employer',
+    'contributor_occupation',
     'contribution_date',
     'contribution_amount',
     'contribution_aggregate',
@@ -36,14 +41,15 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
 }
 
 const testTransaction = {
-  id: 123,
-  report_id: 999,
-  form_type: null,
-  filer_committee_id_number: null,
+  id: '123',
+  report_id: '999',
+  contact_id: '333',
+  form_type: undefined,
+  filer_committee_id_number: undefined,
   transaction_id: null,
   transaction_type_identifier: 'test',
-  contribution_purpose_descrip: null,
-  parent_transaction_id: null,
+  contribution_purpose_descrip: undefined,
+  parent_transaction_id: undefined,
 };
 
 describe('TransactionTypeBaseComponent', () => {
@@ -52,17 +58,28 @@ describe('TransactionTypeBaseComponent', () => {
   let testMessageService: MessageService;
   let testRouter: Router;
   let testTransactionService: TransactionService;
+  let testApiService: ApiService;
+  let testConfirmationService: ConfirmationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TestTransactionTypeBaseComponent],
       imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [MessageService, FormBuilder, ValidateService, TransactionService, provideMockStore(testMockStore)],
+      providers: [
+        MessageService,
+        FormBuilder,
+        ValidateService,
+        TransactionService,
+        ConfirmationService,
+        provideMockStore(testMockStore),
+      ],
     }).compileComponents();
 
     testMessageService = TestBed.inject(MessageService);
     testRouter = TestBed.inject(Router);
     testTransactionService = TestBed.inject(TransactionService);
+    testApiService = TestBed.inject(ApiService);
+    testConfirmationService = TestBed.inject(ConfirmationService);
   });
 
   beforeEach(() => {
@@ -77,59 +94,86 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#save should navigate for create', () => {
     const testTransaction1: Transaction = {
-      id: null,
-      report_id: null,
-      form_type: null,
-      filer_committee_id_number: null,
+      id: undefined,
+      report_id: undefined,
+      contact_id: undefined,
+      form_type: undefined,
+      filer_committee_id_number: undefined,
       transaction_id: null,
-      transaction_type_identifier: null,
-      contribution_purpose_descrip: null,
-      parent_transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
     };
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testApiService, 'post').and.returnValue(of(testContact));
     spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transaction = {
-      id: null,
-      report_id: null,
-      form_type: null,
-      filer_committee_id_number: null,
-      transaction_id: null,
-      transaction_type_identifier: 'test',
-      contribution_purpose_descrip: null,
-      parent_transaction_id: null,
-    };
+    component.transactionType = {
+      transaction: {
+        id: undefined,
+        report_id: undefined,
+        contact_id: undefined,
+        form_type: undefined,
+        filer_committee_id_number: undefined,
+        transaction_id: null,
+        transaction_type_identifier: 'test',
+        contribution_purpose_descrip: undefined,
+        parent_transaction_id: undefined,
+      },
+    } as TransactionType;
 
     component.save('list');
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('#save should navigate for update', () => {
+  it('#save should navigate for update', fakeAsync(() => {
     const testTransaction2: Transaction = {
-      id: 123,
-      report_id: null,
-      form_type: null,
-      filer_committee_id_number: null,
+      id: '123',
+      report_id: undefined,
+      contact_id: undefined,
+      form_type: undefined,
+      filer_committee_id_number: undefined,
       transaction_id: null,
-      transaction_type_identifier: null,
-      contribution_purpose_descrip: null,
-      parent_transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
     };
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testApiService, 'post').and.returnValue(of(testContact));
     spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction2));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transaction = {
-      id: 123,
-      report_id: null,
-      form_type: null,
-      filer_committee_id_number: null,
-      transaction_id: null,
-      transaction_type_identifier: 'test',
-      contribution_purpose_descrip: null,
-      parent_transaction_id: null,
-    };
+    component.transactionType = {
+      transaction: {
+        id: '123',
+        report_id: undefined,
+        contact_id: undefined,
+        form_type: undefined,
+        filer_committee_id_number: undefined,
+        transaction_id: null,
+        transaction_type_identifier: 'test',
+        contribution_purpose_descrip: undefined,
+        parent_transaction_id: undefined,
+      },
+    } as TransactionType;
 
     component.save('list');
+    tick(1000);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
-  });
+  }));
 
   it("#navigateTo 'add another' should show popup", () => {
     const expectedMessage: Message = {
@@ -144,10 +188,12 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it("#navigateTo 'add-sub-tran' should show popup + navigate", () => {
-    const testTransactionId = 1;
+    const testTransactionId = '1';
     const testTransactionTypeToAdd = 'testTransactionTypeToAdd';
 
-    component.transaction = testTransaction;
+    component.transactionType = {
+      transaction: testTransaction,
+    } as TransactionType;
 
     const expectedMessage: Message = {
       severity: 'success',
@@ -167,16 +213,19 @@ describe('TransactionTypeBaseComponent', () => {
 
   it("#navigateTo 'list' should navigate", () => {
     const testTransaction3: Transaction = {
-      id: 123,
-      report_id: 99,
-      form_type: null,
-      filer_committee_id_number: null,
+      id: '123',
+      report_id: '99',
+      contact_id: '33',
+      form_type: undefined,
+      filer_committee_id_number: undefined,
       transaction_id: null,
-      transaction_type_identifier: null,
-      contribution_purpose_descrip: null,
-      parent_transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
     };
-    component.transaction = testTransaction3;
+    component.transactionType = {
+      transaction: testTransaction3,
+    } as TransactionType;
     const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
@@ -184,16 +233,21 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it("#navigateTo 'add-sub-tran' should navigate", () => {
-    component.transaction = testTransaction;
+    component.transactionType = {
+      transaction: testTransaction,
+    } as TransactionType;
     const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDV_REC';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo('add-sub-tran', 123, 'INDV_REC');
+    component.navigateTo('add-sub-tran', '123', 'INDV_REC');
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
   it("#navigateTo 'to-parent' should navigate", () => {
-    component.transaction = { ...testTransaction };
-    component.transaction.parent_transaction_id = 333;
+    const transaction = { ...testTransaction } as Transaction;
+    transaction.parent_transaction_id = '333';
+    component.transactionType = {
+      transaction: transaction,
+    } as TransactionType;
     const expectedRoute = '/transactions/report/999/list/edit/333';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('to-parent');
@@ -201,10 +255,157 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo default should navigate', () => {
-    component.transaction = testTransaction;
+    component.transactionType = {
+      transaction: testTransaction,
+    } as TransactionType;
     const expectedRoute = '/transactions/report/999/list';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
+  });
+
+  it('#onContactLookupSelect IND should handle null form', () => {
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.INDIVIDUAL;
+    const testContactSelectItem: SelectItem<Contact> = {
+      value: testContact,
+    };
+    component.form.setControl('entity_type', null);
+    component.onContactLookupSelect(testContactSelectItem);
+    expect(component.form.get('contributor_last_name')?.value).toBeFalsy();
+
+    component.form.setControl('entity_type', new FormControl(ContactTypes.INDIVIDUAL));
+    component.form.setControl('contributor_last_name', null);
+    component.form.setControl('contributor_first_name', null);
+    component.form.setControl('contributor_middle_name', null);
+    component.form.setControl('contributor_prefix', null);
+    component.form.setControl('contributor_suffix', null);
+    component.form.setControl('contributor_employer', null);
+    component.form.setControl('contributor_occupation', null);
+    component.form.setControl('contributor_street_1', null);
+    component.form.setControl('contributor_street_2', null);
+    component.form.setControl('contributor_city', null);
+    component.form.setControl('contributor_state', null);
+    component.form.setControl('contributor_zip', null);
+
+    component.onContactLookupSelect(testContactSelectItem);
+    expect(component.form.get('contributor_last_name')?.value).toBeFalsy();
+  });
+
+  it('#onContactLookupSelect INDIVIDUAL should set fields', () => {
+    const testEntityType = ContactTypes.INDIVIDUAL;
+    const testLastName = 'testLastName';
+    const testFirstName = 'testFirstName';
+    const testMiddleName = 'testMiddleName';
+    const testPrefix = 'testPrefix';
+    const testSuffix = 'testSuffix';
+    const testEmployer = 'testEmployer';
+    const testOccupation = 'testOccupation';
+    const testStreet1 = 'testStreet1';
+    const testStreet2 = 'testStreet2';
+    const testCity = 'testCity';
+    const testState = 'testState';
+    const testZip = 'testZip';
+
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.INDIVIDUAL;
+    testContact.last_name = testLastName;
+    testContact.first_name = testFirstName;
+    testContact.middle_name = testMiddleName;
+    testContact.prefix = testPrefix;
+    testContact.suffix = testSuffix;
+    testContact.employer = testEmployer;
+    testContact.occupation = testOccupation;
+    testContact.street_1 = testStreet1;
+    testContact.street_2 = testStreet2;
+    testContact.city = testCity;
+    testContact.state = testState;
+    testContact.zip = testZip;
+
+    const testContactSelectItem: SelectItem<Contact> = {
+      value: testContact,
+    };
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.onContactLookupSelect(testContactSelectItem);
+    const lastNameFormControlValue = component.form.get('contributor_last_name')?.value;
+    const firstNameFormControlValue = component.form.get('contributor_first_name')?.value;
+    const middleNameFormControlValue = component.form.get('contributor_middle_name')?.value;
+    const prefixFormControlValue = component.form.get('contributor_prefix')?.value;
+    const suffixFormControlValue = component.form.get('contributor_suffix')?.value;
+    const employerFormControlValue = component.form.get('contributor_employer')?.value;
+    const occupationFormControlValue = component.form.get('contributor_occupation')?.value;
+    const street1FormControlValue = component.form.get('contributor_street_1')?.value;
+    const street2FormControlValue = component.form.get('contributor_street_2')?.value;
+    const cityFormControlValue = component.form.get('contributor_city')?.value;
+    const stateFormControlValue = component.form.get('contributor_state')?.value;
+    const zipFormControlValue = component.form.get('contributor_zip')?.value;
+
+    expect(lastNameFormControlValue === testLastName).toBeTrue();
+    expect(firstNameFormControlValue === testFirstName).toBeTrue();
+    expect(middleNameFormControlValue === testMiddleName).toBeTrue();
+    expect(prefixFormControlValue === testPrefix).toBeTrue();
+    expect(suffixFormControlValue === testSuffix).toBeTrue();
+    expect(employerFormControlValue === testEmployer).toBeTrue();
+    expect(occupationFormControlValue === testOccupation).toBeTrue();
+    expect(street1FormControlValue === testStreet1).toBeTrue();
+    expect(street2FormControlValue === testStreet2).toBeTrue();
+    expect(cityFormControlValue === testCity).toBeTrue();
+    expect(stateFormControlValue === testState).toBeTrue();
+    expect(zipFormControlValue === testZip).toBeTrue();
+  });
+
+  it('#onContactLookupSelect ORG should handle null form', () => {
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.ORGANIZATION;
+    const testContactSelectItem: SelectItem<Contact> = {
+      value: testContact,
+    };
+
+    component.form.setControl('entity_type', new FormControl(ContactTypes.ORGANIZATION));
+    component.form.setControl('contributor_organization_name', null);
+    component.onContactLookupSelect(testContactSelectItem);
+    expect(component.form.get('contributor_organization_name')?.value).toBeFalsy();
+  });
+
+  it('#onContactLookupSelect ORGANIZATION should set fields', () => {
+    const testEntityType = ContactTypes.ORGANIZATION;
+    const testOrganizationName = 'testOrganizationName';
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.ORGANIZATION;
+    testContact.name = testOrganizationName;
+
+    const testContactSelectItem: SelectItem<Contact> = {
+      value: testContact,
+    };
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.onContactLookupSelect(testContactSelectItem);
+    const organizationNameFormControlValue = component.form.get('contributor_organization_name')?.value;
+
+    expect(organizationNameFormControlValue === testOrganizationName).toBeTrue();
+  });
+
+  it('#onContactLookupSelect COMMITTEE should set fields', () => {
+    const testEntityType = ContactTypes.COMMITTEE;
+    const testCommitteeName = 'testCommitteeName';
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.COMMITTEE;
+    testContact.name = testCommitteeName;
+
+    const testContactSelectItem: SelectItem<Contact> = {
+      value: testContact,
+    };
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.onContactLookupSelect(testContactSelectItem);
+    const committeeNameFormControlValue = component.form.get('contributor_organization_name')?.value;
+
+    expect(committeeNameFormControlValue === testCommitteeName).toBeTrue();
   });
 });

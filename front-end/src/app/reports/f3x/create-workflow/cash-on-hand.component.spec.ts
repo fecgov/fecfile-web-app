@@ -55,7 +55,7 @@ describe('CashOnHandComponent', () => {
   });
 
   it('should save', () => {
-    const f3x = F3xSummary.fromJSON({ id: 999 });
+    const f3x = F3xSummary.fromJSON({ id: '999' });
     spyOn(f3xSummaryService, 'update').and.returnValue(of(f3x));
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.report = f3x;

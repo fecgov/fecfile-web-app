@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AbstractControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testMockStore } from '../../../shared/utils/unit-test.utils';
 import { of } from 'rxjs';
 import { F3xReportCodes, F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
@@ -18,14 +18,17 @@ import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-s
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xCoverageDates } from '../../../shared/models/f3x-summary.model';
 import { AppSelectButtonComponent } from '../../../shared/components/app-selectbutton';
+import { ReportService } from '../../../shared/services/report.service';
+import { ListRestResponse } from '../../../shared/models/rest-api.model';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
   let router: Router;
   let fixture: ComponentFixture<CreateF3XStep1Component>;
   let f3xSummaryService: F3xSummaryService;
+  let reportService: ReportService;
   const f3x: F3xSummary = F3xSummary.fromJSON({
-    id: 999,
+    id: '999',
     coverage_from_date: '2022-05-25',
     coverage_through_date: '2022-06-25',
     form_type: 'F3XN',
@@ -50,6 +53,7 @@ describe('CreateF3XStep1Component', () => {
   beforeEach(() => {
     router = TestBed.inject(Router);
     f3xSummaryService = TestBed.inject(F3xSummaryService);
+    reportService = TestBed.inject(ReportService);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -73,8 +77,16 @@ describe('CreateF3XStep1Component', () => {
   });
 
   it('#save should save a new f3x record', () => {
+    const listResponse = {
+      count: 0,
+      next: '/',
+      previous: '/',
+      results: [],
+    } as ListRestResponse;
     spyOn(f3xSummaryService, 'create').and.returnValue(of(f3x));
+    spyOn(reportService, 'getTableData').and.returnValue(of(listResponse));
     const navigateSpy = spyOn(router, 'navigateByUrl');
+
     component.form.patchValue({ ...f3x });
     component.save();
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
@@ -82,7 +94,7 @@ describe('CreateF3XStep1Component', () => {
     navigateSpy.calls.reset();
     component.form.patchValue({ ...f3x });
     component.save('continue');
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step2/999');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
   });
 
   it('#save should not save with invalid f3x record', () => {

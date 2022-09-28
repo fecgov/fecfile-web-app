@@ -1,26 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { TransactionGroupFComponent } from './transaction-group-f.component';
-import { ToastModule } from 'primeng/toast';
-import { SharedModule } from '../../shared/shared.module';
-import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
+import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { ContactTypes } from 'app/shared/models/contact.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { schema as JF_TRAN_PAC_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/JF_TRAN_PAC_MEMO';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { ToastModule } from 'primeng/toast';
 import { environment } from '../../../environments/environment';
-import { schema as JF_TRAN_PAC_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/JF_TRAN_PAC_MEMO';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { ScheduleATransactionTypes } from '../../shared/models/scha-transaction.model';
+import { SharedModule } from '../../shared/shared.module';
+import { TransactionGroupFComponent } from './transaction-group-f.component';
 
 describe('TransactionGroupFComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -60,9 +63,11 @@ describe('TransactionGroupFComponent', () => {
         InputNumberModule,
         InputTextModule,
         InputTextareaModule,
+        ConfirmDialogModule,
       ],
       declarations: [TransactionGroupFComponent],
-      providers: [MessageService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [MessageService, ConfirmationService,
+        FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 
@@ -70,8 +75,19 @@ describe('TransactionGroupFComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupFComponent);
     component = fixture.componentInstance;
-    component.schema = JF_TRAN_PAC_MEMO;
-    component.transaction = transaction;
+    component.transactionType = {
+      scheduleId: '',
+      componentGroupId: '',
+      contact: undefined,
+      contributionPurposeDescripReadonly: () => '',
+      getNewTransaction: () => {
+        return {} as Transaction;
+      },
+      title: '',
+      parent: undefined,
+      schema: JF_TRAN_PAC_MEMO,
+      transaction: transaction,
+    } as TransactionType;
     fixture.detectChanges();
   });
 
