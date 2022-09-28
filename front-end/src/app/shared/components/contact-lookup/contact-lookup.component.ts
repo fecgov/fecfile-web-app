@@ -135,8 +135,8 @@ export class ContactLookupComponent {
       this.createContactForm.get('city')?.setValue(value.city);
       this.createContactForm.get('state')?.setValue(value.state);
       this.createContactForm.get('zip')?.setValue(value.zip);
-      this.createContactDialogVisible = true;
     }
+    this.createContactDialogVisible = true;
   }
 
   closeCreateContactDialog() {
