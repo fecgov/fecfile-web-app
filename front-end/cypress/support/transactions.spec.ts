@@ -93,7 +93,8 @@ function fillFormField(fieldName: string, fieldValue: string, fieldType: string)
       cy.get(`textarea[formControlName=${fieldName}]`).safeType(fieldValue);
       break;
     case 'Dropdown':
-      cy.dropdownSetValue(`p-dropdown[formControlName=${fieldName}]`, fieldValue);
+      if (fieldName === 'entity_type_dropdown') cy.dropdownSetValue(`#${fieldName}`, fieldValue);
+      else cy.dropdownSetValue(`p-dropdown[formControlName=${fieldName}]`, fieldValue);
       break;
     case 'Calendar':
       cy.calendarSetValue(`p-calendar[formControlName=${fieldName}]`, fieldValue);

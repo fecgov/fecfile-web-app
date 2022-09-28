@@ -1,16 +1,8 @@
 // @ts-check
 
 import { generateReportObject } from '../../support/generators/reports.spec';
-
-const columns = [
-  'Transaction type',
-  'Contribution name',
-  'Contribution date',
-  'Memo code',
-  'Contribution amount',
-  'Contribution aggregate',
-  'Actions',
-];
+import { generateTransactionObject } from '../../support/generators/transactions.spec';
+import { createTransactionSchA } from '../../support/transactions.spec';
 
 describe('QA Script 244 (Sprint 8)', () => {
   after(() => {
@@ -37,12 +29,18 @@ describe('QA Script 244 (Sprint 8)', () => {
     //Step 3: Verify that you are on the "Transactions" page
     cy.get("div[role='toolbar']").contains('Transactions').should('exist');
 
-    //Step 4: Verify that the "Transactions during coverage dates" table is displayed
-    cy.get('p-table').contains('Transactions during coverage dates').should('exist');
+    //Step 4: Create a Joint Fundraising Transfer MEMO transaction
+    const transaction = generateTransactionObject({ TRANSFERS: { 'Joint Fundraising Transfer': {} } });
+    createTransactionSchA(transaction, false);
+    cy.get('button[label="Save & add a Memo"]').click();
+    cy.longWait();
+    cy.contains('The dollar amount in a memo item is not incorporated into the total figure for the schedule').should(
+      'exist'
+    );
+    cy.longWait();
 
-    //Step 5: Verify the column labels
-    for (const column of columns) {
-      cy.get('th').contains(column).should('exist');
-    }
+    //Step 5: Open a Memo Transaction and check for the memo checkbox to be pre-selected and disabled
+    cy.get('p-checkbox[formControlName="memo_code"]').find('span').should('have.class', 'pi-check');
+    cy.get('p-checkbox[formControlName="memo_code"]').parent().should('have.class', 'readonly');
   });
 });
