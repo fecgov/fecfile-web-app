@@ -9,6 +9,8 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
 import { of } from 'rxjs';
 
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { FecApiService } from 'app/shared/services/fec-api.service';
 import { SelectItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
@@ -19,17 +21,19 @@ describe('ContactLookupComponent', () => {
   let fixture: ComponentFixture<ContactLookupComponent>;
 
   let testContactService: ContactService;
+  let testFecApiService: FecApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ContactLookupComponent],
       imports: [FormsModule, ReactiveFormsModule, DialogModule,
         HttpClientTestingModule, DropdownModule, AutoCompleteModule],
-      providers: [FormBuilder, ContactService, ContactService,
+      providers: [FormBuilder, ContactService, FecApiService,
         EventEmitter, provideMockStore(testMockStore)],
     }).compileComponents();
 
     testContactService = TestBed.inject(ContactService);
+    testFecApiService = TestBed.inject(FecApiService);
   });
 
   beforeEach(() => {
@@ -197,12 +201,36 @@ describe('ContactLookupComponent', () => {
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testValue);
   }));
 
+  it('#onContactSelect FecApiLookupData createContactForm null vals',
+    fakeAsync(() => {
+      const testFecApiLookupData = new FecApiCommitteeLookupData(
+        { id: 'C12345678', } as FecApiCommitteeLookupData);
+      const testValue = {
+        value: testFecApiLookupData,
+      } as SelectItem<FecApiLookupData>;
+      spyOn(testFecApiService, 'getDetails').and.returnValue(
+        of(new CommitteeAccount()));
+      component.createContactForm.removeControl('committee_id');
+      component.createContactForm.removeControl('name');
+      component.createContactForm.removeControl('street_1');
+      component.createContactForm.removeControl('street_2');
+      component.createContactForm.removeControl('city');
+      component.createContactForm.removeControl('state');
+      component.createContactForm.removeControl('zip');
+      component.onContactSelect(testValue);
+      tick(500);
+      expect(component.createContactDialogVisible).toEqual(true);
+    }));
+
   it('#onContactSelect FecApiLookupData happy path', fakeAsync(() => {
     const testFecApiLookupData = new FecApiCommitteeLookupData(
-      {} as FecApiCommitteeLookupData);
+      { id: 'C12345678', } as FecApiCommitteeLookupData);
     const testValue = {
       value: testFecApiLookupData,
     } as SelectItem<FecApiLookupData>;
+    spyOn(testFecApiService, 'getDetails').and.returnValue(
+      of(new CommitteeAccount()));
+
     component.onContactSelect(testValue);
     tick(500);
     expect(component.createContactDialogVisible).toEqual(true);
@@ -213,6 +241,12 @@ describe('ContactLookupComponent', () => {
     const retval = component.isContact(new Contact());
 
     expect(retval).toEqual(expectedRetval);
+  });
+
+  it('#onCreateContactDialogOpen null form control', () => {
+    component.createContactForm.removeControl('country');
+    component.createContactForm.removeControl('type');
+    component.onCreateContactDialogOpen();
   });
 
   it('#createNewContact happy path', () => {

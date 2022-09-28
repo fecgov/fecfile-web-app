@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
+import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
@@ -59,7 +61,8 @@ export class ContactLookupComponent {
   constructor(
     private formBuilder: FormBuilder,
     private validateService: ValidateService,
-    private contactService: ContactService
+    private contactService: ContactService,
+    private fecApiService: FecApiService,
   ) { }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -100,7 +103,12 @@ export class ContactLookupComponent {
         this.contactSelect.emit(event);
       } else if (event.value instanceof FecApiCommitteeLookupData) {
         const value: FecApiCommitteeLookupData = event.value
-        this.openCreateContactDialog(value);
+        if (value.id) {
+          this.fecApiService.getDetails(value.id)
+            .subscribe((committeeAccount) => {
+              this.openCreateContactDialog(committeeAccount);
+            });
+        }
       }
       this.contactLookupForm.patchValue({ selectedContact: '' });
     }
@@ -114,18 +122,21 @@ export class ContactLookupComponent {
     return value instanceof Contact;
   }
 
-  openCreateContactDialog(value?: FecApiLookupData) {
+  openCreateContactDialog(value?: CommitteeAccount) {
     // Need these since contact-form sets these for validation
     this.workingValidatorSchema = this.validateService.formValidatorSchema;
     this.workingValidatorForm = this.validateService.formValidatorForm;
 
-    if (value && value instanceof FecApiCommitteeLookupData) {
-      this.createContactForm.get('committee_id')?.setValue(
-        value.id);
-      this.createContactForm.get('name')?.setValue(
-        value.name);
+    if (value) {
+      this.createContactForm.get('committee_id')?.setValue(value.committee_id);
+      this.createContactForm.get('name')?.setValue(value.name);
+      this.createContactForm.get('street_1')?.setValue(value.street_1);
+      this.createContactForm.get('street_2')?.setValue(value.street_2);
+      this.createContactForm.get('city')?.setValue(value.city);
+      this.createContactForm.get('state')?.setValue(value.state);
+      this.createContactForm.get('zip')?.setValue(value.zip);
+      this.createContactDialogVisible = true;
     }
-    this.createContactDialogVisible = true;
   }
 
   closeCreateContactDialog() {
