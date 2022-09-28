@@ -10,11 +10,13 @@ footer label {
 #footer-upper {
   height: 80px;
   background-color: #e8e8e8;
+  padding: 5px;
 }
 
 #footer-lower {
   height: 234px;
   background-color: #164f85;
+  padding: 5px;
 }
 
 #fec-seal {
@@ -23,29 +25,29 @@ footer label {
 }
 
 #fec-title {
-  font-family: 'Gandhi Serif';
+  font-family: 'gandhi-bold', serif;
   font-weight: 700;
   font-size: 22pt;
   color: #ffffff;
   margin: 0px;
+  line-height: 2.5rem;
 }
 
 #fec-address {
-  font-family: 'Karla';
   font-weight: 400;
   font-size: 14pt;
   color: #ffffff;
   margin: 0px;
+  line-height: 1.5rem;
 }
 
 .text-a {
   font-size: 18pt;
-  font-family: 'Karla';
   color: #212121;
 }
 
 .footer-item {
-  font-family: 'Karla';
+  font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   font-weight: 400;
   font-size: 16pt;
   color: #ffffff;
@@ -54,4 +56,8 @@ footer label {
 
 .half-height {
   height: 30%;
+}
+
+.font-karla {
+  font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
