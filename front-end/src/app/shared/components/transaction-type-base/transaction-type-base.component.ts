@@ -17,7 +17,6 @@ import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.m
   template: '',
 })
 export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy {
-  @Input() contact: Contact | undefined;
   @Input() transactionType: TransactionType | undefined;
   get title(): string | undefined {
     return this.transactionType?.title;
@@ -30,6 +29,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
   get transaction(): Transaction | undefined {
     return this.transactionType?.transaction;
+  }
+  get contact(): Contact | undefined {
+    return this.transactionType?.contact;
+  }
+  set contact(contact: Contact | undefined) {
+    if (this.transactionType) {
+      this.transactionType.contact = contact;
+    }
   }
 
   abstract formProperties: string[];
@@ -51,7 +58,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected confirmationService: ConfirmationService,
     protected fb: FormBuilder,
     protected router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
@@ -114,34 +121,37 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       let confirmationContactTitle = '';
       switch (payloadContactType) {
         case ContactTypes.INDIVIDUAL:
-          confirmationContactTitle = `individual contact for <b>` +
+          confirmationContactTitle =
+            `individual contact for <b>` +
             `${this.form.get('contributor_last_name')?.value}, ` +
             `${this.form.get('contributor_first_name')?.value}</b>`;
           break;
         case ContactTypes.COMMITTEE:
-          confirmationContactTitle = `committee contact for <b>` +
-            `${this.form.get('contributor_organization_name')?.value}</b>`;
+          confirmationContactTitle =
+            `committee contact for <b>` + `${this.form.get('contributor_organization_name')?.value}</b>`;
           break;
         case ContactTypes.ORGANIZATION:
-          confirmationContactTitle = `organization contact for <b>` +
-            `${this.form.get('contributor_organization_name')?.value}</b>`;
+          confirmationContactTitle =
+            `organization contact for <b>` + `${this.form.get('contributor_organization_name')?.value}</b>`;
           break;
       }
       this.confirmationService.confirm({
         header: 'Confirm',
         icon: 'pi pi-info-circle',
-        message: `By saving this transaction, you're also creating a new ` +
-          `${confirmationContactTitle}.`,
+        message: `By saving this transaction, you're also creating a new ` + `${confirmationContactTitle}.`,
         acceptLabel: 'Continue',
         rejectLabel: 'Cancel',
-        accept: () => { this.doSave(navigateTo, payload, transactionTypeToAdd) },
-        reject: () => { return },
+        accept: () => {
+          this.doSave(navigateTo, payload, transactionTypeToAdd);
+        },
+        reject: () => {
+          return;
+        },
       });
     }
   }
 
-  doSave(navigateTo: 'list' | 'add another' | 'add-sub-tran',
-    payload: SchATransaction, transactionTypeToAdd?: string) {
+  doSave(navigateTo: 'list' | 'add another' | 'add-sub-tran', payload: SchATransaction, transactionTypeToAdd?: string) {
     this.createContactIfNeeded(this.form).subscribe((contact) => {
       this.contact = contact;
       if (this.transaction?.transaction_type_identifier) {

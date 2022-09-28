@@ -1,6 +1,6 @@
 <div class="p-fluid">
   <form [formGroup]="contactLookupForm">
-    <div class="grid">
+    <div class="grid contact-lookup-container">
       <div class="col-2 pl-0 pr-0">
         <p-dropdown
           [inputId]="contactTypeInputId"
@@ -10,15 +10,15 @@
           optionValue="code"
           [readonly]="contactTypeReadOnly"
           [styleClass]="contactTypeStyleClass"
+          [dropdownIcon]="contactTypeOptions.length > 1 ? 'pi pi-chevron-down' : ''"
         >
         </p-dropdown>
       </div>
-      <div class="col-2 pl-0">
+      <div class="col-4 pl-0">
         <p-autoComplete
           [group]="true"
           (completeMethod)="onDropdownSearch($event)"
           field="label"
-          [dropdown]="true"
           dropdownMode="current"
           dropdownIcon="pi pi-search"
           [suggestions]="contactLookupList"
@@ -39,16 +39,12 @@
           </ng-template>
         </p-autoComplete>
       </div>
-      <p>or</p>
-      <div class="col-2">
-        <button
-          pButton
-          pRipple
-          label="Create a new contact"
-          icon="pi pi-plus-circle"
-          class="p-button-info"
-          (click)="createNewContact()">
-        </button>
+      <div class="col">
+        <div class="add-contact-container">
+          or
+          <span class="pi pi-plus-circle"></span>
+          <a (click)="createNewContact()">Create a new contact</a>
+        </div>
       </div>
     </div>
   </form>
@@ -58,12 +54,10 @@
     header="Create a new contact"
     [modal]="true"
     (onShow)="onCreateContactDialogOpen()"
-    (onHide)="onCreateContactDialogClose()">
+    (onHide)="onCreateContactDialogClose()"
+  >
     <ng-template pTemplate="content">
-      <app-contact-form 
-        [formSubmitted]="createContactFormSubmitted"
-        [form]="createContactForm">
-      </app-contact-form>
+      <app-contact-form [formSubmitted]="createContactFormSubmitted" [form]="createContactForm"> </app-contact-form>
     </ng-template>
     <ng-template pTemplate="footer">
       <div class="grid">
@@ -78,14 +72,14 @@
           ></button>
         </div>
         <div class="col-11">
-          <button 
-            pButton 
-            pRipple 
-            label="Save & continue" 
-            icon="pi pi-check" 
-            class="p-button-info" 
-            (click)="createContactSave()">
-          </button>
+          <button
+            pButton
+            pRipple
+            label="Save & continue"
+            icon="pi pi-check"
+            class="p-button-info"
+            (click)="createContactSave()"
+          ></button>
         </div>
       </div>
     </ng-template>

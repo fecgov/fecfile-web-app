@@ -291,7 +291,7 @@ describe('TransactionGroupBComponent', () => {
       transaction_id: 'AAAAAAAAAAAAAAAAAAA',
       entity_type: ContactTypes.INDIVIDUAL,
       contribution_amount: 1,
-      contribution_aggregate: 2,
+      contribution_aggregate: undefined, // This field is required so the txn is invalid
     });
     component.form.patchValue({ ...testTran });
     component.save('list');
