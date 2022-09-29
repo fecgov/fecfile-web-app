@@ -73,7 +73,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
    *  and the information necessary for E2E Tests to fill them out correctly.
    */
   entityType: {
-    fieldName: 'entity_type',
+    fieldName: 'entity_type_dropdown',
     fieldType: 'Dropdown',
     generator: () => {
       return _.sample(['Individual', 'Organization', 'Committee']);
@@ -83,7 +83,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     maxLength: -1,
   },
   entityTypeIndividual: {
-    fieldName: 'entity_type',
+    fieldName: 'entity_type_dropdown',
     fieldType: 'Dropdown',
     generator: () => {
       return 'Individual';
@@ -94,7 +94,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     maxLength: -1,
   },
   entityTypeOrganization: {
-    fieldName: 'entity_type',
+    fieldName: 'entity_type_dropdown',
     fieldType: 'Dropdown',
     generator: () => {
       return 'Organization';
@@ -105,7 +105,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     maxLength: -1,
   },
   entityTypeCommittee: {
-    fieldName: 'entity_type',
+    fieldName: 'entity_type_dropdown',
     fieldType: 'Dropdown',
     generator: () => {
       return 'Committee';

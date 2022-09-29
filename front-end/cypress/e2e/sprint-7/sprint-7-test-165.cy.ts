@@ -54,5 +54,8 @@ describe('QA Test Script #165 (Sprint 7)', () => {
         .find('i')
         .should('have.class', 'pi-sort-amount-down');
     }
+
+    //Bonus Step: Check that the 'Actions' header exists
+    cy.contains('th', 'Actions').should('exist');
   });
 });

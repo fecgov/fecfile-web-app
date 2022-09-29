@@ -53,30 +53,29 @@ function testFields(fields, entityType) {
     }
 
     //Skip if it's the entity_type field
-    if (fieldRules['fieldName'] == 'entity_type') {
+    if (fieldRules['fieldName'] == 'entity_type_dropdown') {
       continue;
     }
 
     const fieldType = fieldRules['fieldType'];
-    let fieldId: string;
+    let selector: string;
     switch (fieldType) {
       case 'Text':
-        fieldId = `input[formControlName=${fieldName}]`;
-        testField(fieldId, fieldRules);
+        selector = `input[formControlName=${fieldName}]`;
+        testField(selector, fieldRules);
         break;
       case 'P-InputNumber':
-        fieldId = `p-inputnumber[formControlName=${fieldName}]`;
-        testField(fieldId, fieldRules, true);
+        selector = `p-inputnumber[formControlName=${fieldName}]`;
+        testField(selector, fieldRules, true);
         break;
       case 'Textarea':
-        fieldId = `textarea[formControlName=${fieldName}]`;
-        testField(fieldId, fieldRules);
+        selector = `textarea[formControlName=${fieldName}]`;
+        testField(selector, fieldRules);
         break;
       case 'Dropdown':
-        cy.get(`p-dropdown[formControlName=${fieldName}`)
-          .parent()
-          .find('app-error-messages')
-          .should('not.have.length', 0);
+        if (fieldName === 'entity_type_dropdown') selector = `#${fieldName}`;
+        else selector = `p-dropdown[formControlName=${fieldName}`;
+        cy.get(selector).parent().find('app-error-messages').should('not.have.length', 0);
     }
   }
 }
@@ -129,7 +128,7 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
         for (let entityType of entityTypes) {
           cy.get('button[label="Save & add another"]').click();
           if (entityTypes.length > 1) {
-            cy.dropdownSetValue('p-dropdown[formcontrolname="entity_type"]', entityType);
+            cy.dropdownSetValue('#entity_type_dropdown', entityType);
             cy.shortWait();
           }
           testFields(fields, entityType);
