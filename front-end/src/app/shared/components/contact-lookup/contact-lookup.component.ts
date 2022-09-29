@@ -55,7 +55,7 @@ export class ContactLookupComponent {
     ])
   );
 
-  selectedFecCommitteeAccount: CommitteeAccount | undefined = undefined;
+  selectedFecCommitteeAccount: CommitteeAccount | undefined;
 
   workingValidatorSchema = this.validateService.formValidatorSchema;
   workingValidatorForm = this.validateService.formValidatorForm;
