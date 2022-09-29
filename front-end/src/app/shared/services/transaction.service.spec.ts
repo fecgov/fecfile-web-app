@@ -65,12 +65,12 @@ describe('TransactionService', () => {
   it('#create() should POST a record', () => {
     const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
 
-    service.create(schATransaction, 'OFFSET_TO_OPEX', ['form_type']).subscribe((response) => {
+    service.create(schATransaction, 'OFFSET_TO_OPERATING_EXPENDITURES', ['form_type']).subscribe((response) => {
       expect(response).toEqual(schATransaction);
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPEX&fields_to_validate=form_type`
+      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type`
     );
     expect(req.request.method).toEqual('POST');
     req.flush(schATransaction);
@@ -80,12 +80,12 @@ describe('TransactionService', () => {
   it('#update() should PUT  a record', () => {
     const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
 
-    service.update(schATransaction, 'OFFSET_TO_OPEX').subscribe((response) => {
+    service.update(schATransaction, 'OFFSET_TO_OPERATING_EXPENDITURES').subscribe((response) => {
       expect(response).toEqual(schATransaction);
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPEX&fields_to_validate=`
+      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=`
     );
     expect(req.request.method).toEqual('PUT');
     req.flush(schATransaction);

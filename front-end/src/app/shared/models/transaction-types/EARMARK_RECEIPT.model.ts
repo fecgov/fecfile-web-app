@@ -1,9 +1,9 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EAR_REC';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_RECEIPT';
 import { TransactionType } from '../../interfaces/transaction-type.interface';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 
-export class EAR_REC implements TransactionType {
+export class EARMARK_RECEIPT implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'AG';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);

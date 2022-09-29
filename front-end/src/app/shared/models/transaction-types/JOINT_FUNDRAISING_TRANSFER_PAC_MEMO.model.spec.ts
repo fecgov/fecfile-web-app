@@ -1,11 +1,11 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { JF_TRAN_PAC_MEMO } from './JF_TRAN_PAC_MEMO.model';
+import { JOINT_FUNDRAISING_TRANSFER_PAC_MEMO } from './JOINT_FUNDRAISING_TRANSFER_PAC_MEMO.model';
 
-describe('JF_TRAN_PAC_MEMO', () => {
-  let transactionType: JF_TRAN_PAC_MEMO;
+describe('JOINT_FUNDRAISING_TRANSFER_PAC_MEMO', () => {
+  let transactionType: JOINT_FUNDRAISING_TRANSFER_PAC_MEMO;
 
   beforeEach(() => {
-    transactionType = new JF_TRAN_PAC_MEMO();
+    transactionType = new JOINT_FUNDRAISING_TRANSFER_PAC_MEMO();
   });
 
   it('should create an instance', () => {
@@ -17,7 +17,7 @@ describe('JF_TRAN_PAC_MEMO', () => {
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA12');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.JF_TRAN_PAC_MEMO);
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER_PAC_MEMO);
   });
 
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {

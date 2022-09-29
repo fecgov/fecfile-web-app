@@ -1,11 +1,11 @@
-import { TRIB_REC } from './TRIB_REC.model';
+import { TRIBAL_RECEIPT } from './TRIBAL_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
-describe('TRIB_REC', () => {
-  let transactionType: TRIB_REC;
+describe('TRIBAL_RECEIPT', () => {
+  let transactionType: TRIBAL_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new TRIB_REC();
+    transactionType = new TRIBAL_RECEIPT();
   });
 
   it('should create an instance', () => {
