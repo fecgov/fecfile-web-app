@@ -22,6 +22,6 @@ describe('JOINT_FUNDRAISING_TRANSFER', () => {
 
   it('#contributionPurposeDescripReadonly() should return constant', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('Transfer of JF Proceeds');
+    expect(descrip).toBe('Transfer of Joint Fundraising Proceeds');
   });
 });
