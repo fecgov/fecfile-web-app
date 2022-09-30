@@ -7,7 +7,7 @@ import { AuthService } from '../../shared/services/AuthService/auth.service';
 import { SessionService } from '../../shared/services/SessionService/session.service';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { Store } from '@ngrx/store';
-import { userLoggedOutAction } from 'app/store/login.actions';
+import { userLoggedOutAction, userLoggedInAction } from 'app/store/login.actions';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
   public titleR!: string;
   public show!: boolean;
   public loginDotGovAuthUrl: string | undefined;
+  public localLoginAvailable = false;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +53,7 @@ export class LoginComponent implements OnInit {
     this.loginService.clearUserLoggedInCookies();
     this.store.dispatch(userLoggedOutAction());
     this.loginDotGovAuthUrl = environment.loginDotGovAuthUrl;
+    this.checkLocalLoginAvailability();
   }
 
   /**
@@ -97,7 +99,8 @@ export class LoginComponent implements OnInit {
       next: (res: UserLoginData) => {
         if (res.token) {
           this.authService.doSignIn(res.token);
-          this.router.navigate(['twoFactLogin']);
+          this.store.dispatch(userLoggedInAction({ payload: res }));
+          this.router.navigate(['dashboard']);
         }
       },
       error: () => {
@@ -113,5 +116,11 @@ export class LoginComponent implements OnInit {
 
   navigateToLoginDotGov() {
     window.location.href = this.loginDotGovAuthUrl || '';
+  }
+
+  checkLocalLoginAvailability() {
+    this.loginService.checkLocalLoginAvailability().subscribe((available) => {
+      this.localLoginAvailable = available;
+    });
   }
 }
