@@ -6,3 +6,58 @@ footer {
 footer label {
   font-weight: bold;
 }
+
+#footer-upper {
+  height: 80px;
+  background-color: #e8e8e8;
+  padding: 5px;
+}
+
+#footer-lower {
+  height: 234px;
+  background-color: #164f85;
+  padding: 5px;
+}
+
+#fec-seal {
+  height: 100px;
+  width: 100px;
+}
+
+#fec-title {
+  font-family: 'gandhi-bold', serif;
+  font-weight: 700;
+  font-size: 22pt;
+  color: #ffffff;
+  margin: 0px;
+  line-height: 2.5rem;
+}
+
+#fec-address {
+  font-weight: 400;
+  font-size: 14pt;
+  color: #ffffff;
+  margin: 0px;
+  line-height: 1.5rem;
+}
+
+.text-a {
+  font-size: 18pt;
+  color: #212121;
+}
+
+.footer-item {
+  font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-weight: 400;
+  font-size: 16pt;
+  color: #ffffff;
+  padding-left: 0px;
+}
+
+.half-height {
+  height: 30%;
+}
+
+.font-karla {
+  font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+}
