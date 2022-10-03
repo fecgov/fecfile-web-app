@@ -14,7 +14,7 @@ export class JOINT_FUNDRAISING_TRANSFER_PAC_MEMO implements TransactionType {
   parent: SchATransaction | undefined;
 
   contributionPurposeDescripReadonly(): string {
-    return `JF Memo: ${this.parent?.contributor_organization_name}`;
+    return `Joint Fundraising Memo: ${this.parent?.contributor_organization_name}`;
   }
 
   getNewTransaction() {

@@ -22,6 +22,6 @@ describe('JOINT_FUNDRAISING_TRANSFER_PAC_MEMO', () => {
 
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe(`JF Memo: ${transactionType.parent?.contributor_organization_name}`);
+    expect(descrip).toBe(`Joint Fundraising Memo: ${transactionType.parent?.contributor_organization_name}`);
   });
 });
