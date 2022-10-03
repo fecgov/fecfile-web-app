@@ -58,7 +58,10 @@
     (onHide)="onCreateContactDialogClose()"
   >
     <ng-template pTemplate="content">
-      <app-contact-form [formSubmitted]="createContactFormSubmitted" [form]="createContactForm"> </app-contact-form>
+      <app-contact-form 
+        [formSubmitted]="createContactFormSubmitted" 
+        [form]="createContactForm">
+      </app-contact-form>
     </ng-template>
     <ng-template pTemplate="footer">
       <div class="grid">
@@ -67,6 +70,7 @@
             pButton
             pRipple
             label="Cancel"
+            type="button"
             icon="pi pi-times"
             class="p-button-secondary"
             (click)="closeCreateContactDialog()"
@@ -76,6 +80,7 @@
           <button
             pButton
             pRipple
+            type="button"
             label="Save & continue"
             icon="pi pi-check"
             class="p-button-info"
