@@ -41,31 +41,31 @@ export const CandidateOfficeTypeLabels = [
 ];
 
 export class Contact extends BaseModel {
-  id: string | null = null;
+  id: string | undefined;
   type: ContactType = ContactTypes.INDIVIDUAL;
-  candidate_id: string | null = null;
-  committee_id: string | null = null;
-  name: string | null = null;
-  last_name: string | null = null;
-  first_name: string | null = null;
-  middle_name: string | null = null;
-  prefix: string | null = null;
-  suffix: string | null = null;
+  candidate_id: string | undefined;
+  committee_id: string | undefined;
+  name: string | undefined;
+  last_name: string | undefined;
+  first_name: string | undefined;
+  middle_name: string | undefined;
+  prefix: string | undefined;
+  suffix: string | undefined;
   street_1 = '';
-  street_2: string | null = null;
+  street_2: string | undefined;
   city = '';
   state = '';
   zip = '';
-  employer: string | null = null;
-  occupation: string | null = null;
-  candidate_office: CandidateOfficeType | null = null;
-  candidate_state: string | null = null;
-  candidate_district: string | null = null;
-  telephone: string | null = null;
+  employer: string | undefined;
+  occupation: string | undefined;
+  candidate_office: CandidateOfficeType | undefined;
+  candidate_state: string | undefined;
+  candidate_district: string | undefined;
+  telephone: string | undefined;
   country = '';
-  created: string | null = null;
-  updated: string | null = null;
-  deleted: string | null = null;
+  created: string | undefined;
+  updated: string | undefined;
+  deleted: string | undefined;
 
   // prettier-ignore
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -73,13 +73,11 @@ export class Contact extends BaseModel {
   }
 }
 
-export class FecApiLookupData {
-
-}
+export class FecApiLookupData {}
 export class FecApiCommitteeLookupData extends FecApiLookupData {
-  id: string | null = null;
-  is_active: boolean | null = null;
-  name: string | null = null;
+  id: string | undefined;
+  is_active: boolean | undefined;
+  name: string | undefined;
 
   constructor(data: FecApiCommitteeLookupData) {
     super();
@@ -87,12 +85,10 @@ export class FecApiCommitteeLookupData extends FecApiLookupData {
   }
 
   toSelectItem(): SelectItem<FecApiCommitteeLookupData> {
-    return (
-      {
-        label: `${this.name} (${this.id})`,
-        value: this,
-      }
-    );
+    return {
+      label: `${this.name} (${this.id})`,
+      value: this,
+    };
   }
 }
 
@@ -103,12 +99,10 @@ export class FecfileCommitteeLookupData extends Contact {
   }
 
   toSelectItem(): SelectItem<Contact> {
-    return (
-      {
-        label: `${this.name} (${this.committee_id})`,
-        value: this,
-      }
-    );
+    return {
+      label: `${this.name} (${this.committee_id})`,
+      value: this,
+    };
   }
 }
 
@@ -122,21 +116,19 @@ export class CommitteeLookupResponse {
   }
 
   toSelectItemGroups(): SelectItemGroup[] {
-    const fecApiSelectItems = this.fec_api_committees?.map((data) =>
-      new FecApiCommitteeLookupData(data).toSelectItem()) || [];
-    const fecfileSelectItems = this.fecfile_committees?.map((data) =>
-      new FecfileCommitteeLookupData(data).toSelectItem()) || [];
+    const fecApiSelectItems =
+      this.fec_api_committees?.map((data) => new FecApiCommitteeLookupData(data).toSelectItem()) || [];
+    const fecfileSelectItems =
+      this.fecfile_committees?.map((data) => new FecfileCommitteeLookupData(data).toSelectItem()) || [];
     return [
       {
-        label: (fecfileSelectItems.length) ?
-          'Select an existing committee contact:' :
-          'There are no matching committees',
+        label: fecfileSelectItems.length ? 'Select an existing committee contact:' : 'There are no matching committees',
         items: fecfileSelectItems,
       },
       {
-        label: (fecApiSelectItems.length) ?
-          'Create a new contact from list of registered committees:' :
-          'There are no matching registered committees',
+        label: fecApiSelectItems.length
+          ? 'Create a new contact from list of registered committees:'
+          : 'There are no matching registered committees',
         items: fecApiSelectItems,
       },
     ];
@@ -150,12 +142,10 @@ export class FecfileIndividualLookupData extends Contact {
   }
 
   toSelectItem(): SelectItem<Contact> {
-    return (
-      {
-        label: `${this.last_name}, ${this.first_name}`,
-        value: this,
-      }
-    );
+    return {
+      label: `${this.last_name}, ${this.first_name}`,
+      value: this,
+    };
   }
 }
 
@@ -168,13 +158,13 @@ export class IndividualLookupResponse {
   }
 
   toSelectItemGroups(): SelectItemGroup[] {
-    const fecfileSelectItems = this.fecfile_individuals?.map((data) =>
-      new FecfileIndividualLookupData(data).toSelectItem()) || [];
+    const fecfileSelectItems =
+      this.fecfile_individuals?.map((data) => new FecfileIndividualLookupData(data).toSelectItem()) || [];
     return [
       {
-        label: (fecfileSelectItems.length) ?
-          'Select an existing individual contact:' :
-          'There are no matching individuals',
+        label: fecfileSelectItems.length
+          ? 'Select an existing individual contact:'
+          : 'There are no matching individuals',
         items: fecfileSelectItems,
       },
     ];
@@ -188,12 +178,10 @@ export class FecfileOrganizationLookupData extends Contact {
   }
 
   toSelectItem(): SelectItem<Contact> {
-    return (
-      {
-        label: `${this.name}`,
-        value: this,
-      }
-    );
+    return {
+      label: `${this.name}`,
+      value: this,
+    };
   }
 }
 
@@ -206,16 +194,15 @@ export class OrganizationLookupResponse {
   }
 
   toSelectItemGroups(): SelectItemGroup[] {
-    const fecfileSelectItems = this.fecfile_organizations?.map((data) =>
-      new FecfileOrganizationLookupData(data).toSelectItem()) || [];
+    const fecfileSelectItems =
+      this.fecfile_organizations?.map((data) => new FecfileOrganizationLookupData(data).toSelectItem()) || [];
     return [
       {
-        label: (fecfileSelectItems.length) ?
-          'Select an existing organization contact:' :
-          'There are no matching organizations',
+        label: fecfileSelectItems.length
+          ? 'Select an existing organization contact:'
+          : 'There are no matching organizations',
         items: fecfileSelectItems,
       },
     ];
   }
-
 }

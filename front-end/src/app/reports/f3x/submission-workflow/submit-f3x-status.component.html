@@ -17,30 +17,30 @@
       <div class="col-12">
         <h5 class="no-vert-margins">YOUR FORM TYPE:</h5>
         <h3 class="no-vert-margins">
-          {{ report?.form_type | label: f3xFormTypeLabels }}
+          {{ report.form_type | label: f3xFormTypeLabels }}
         </h3>
         <br />
       </div>
       <div class="col-12">
         <h5 class="no-vert-margins">YOUR REPORT TYPE:</h5>
         <h3 class="no-vert-margins">
-          {{ report?.report_code | label: f3xReportCodeDetailedLabels }}
+          {{ report.report_code | label: f3xReportCodeDetailedLabels }}
         </h3>
         <br />
       </div>
       <div class="col-12">
         <h5 class="no-vert-margins">YOUR COVERAGE DATES:</h5>
         <h3 class="no-vert-margins no-wrap">
-          {{ report?.coverage_from_date || null | longDate }} — <wbr />
-          {{ report?.coverage_through_date || null | longDate }}
+          {{ report.coverage_from_date || null | longDate }} — <wbr />
+          {{ report.coverage_through_date || null | longDate }}
         </h3>
         <br />
       </div>
       <div class="col-12">
         <h5 class="no-vert-margins word-break">CONFIRMATION EMAILS:</h5>
         <h3 class="no-vert-margins word-break">
-          {{ report?.confirmation_email_1 }} <br />
-          {{ report?.confirmation_email_2 }}
+          {{ report.confirmation_email_1 }} <br />
+          {{ report.confirmation_email_2 }}
         </h3>
         <br />
       </div>
@@ -48,7 +48,7 @@
         <div class="col-12">
           <h5 class="no-vert-margins">FILING ID:</h5>
           <h3 class="no-vert-margins">
-            {{ report?.upload_submission?.fec_report_id }}
+            {{ report.upload_submission?.fec_report_id }}
           </h3>
         </div>
       </ng-container>
@@ -72,7 +72,7 @@
       specifics of the error.
     </p>
     <p *ngIf="report?.upload_submission?.fec_status === 'REJECTED' && report?.upload_submission?.fec_message">
-      FEC Error Message: {{ report?.upload_submission?.fec_message }}
+      FEC Error Message: {{ report.upload_submission?.fec_message }}
     </p>
   </div>
 </div>

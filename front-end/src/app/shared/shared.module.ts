@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { ContactFormComponent } from './components/contact-form/contact-form.component';
 import { ContactLookupComponent } from './components/contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from './components/fec-international-phone-input/fec-international-phone-input.component';
@@ -15,7 +19,17 @@ import { LongDatePipe } from './pipes/long-date.pipe';
 import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
 
 @NgModule({
-  imports: [CommonModule, ReactiveFormsModule, ReactiveFormsModule, ButtonModule, DropdownModule, AutoCompleteModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    DropdownModule,
+    AutoCompleteModule,
+    InputTextModule,
+    FormsModule,
+    DialogModule,
+    ConfirmDialogModule,
+  ],
   declarations: [
     LabelPipe,
     ErrorMessagesComponent,
@@ -26,6 +40,7 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     HighlightTermsPipe,
     FecInternationalPhoneInputComponent,
     ContactLookupComponent,
+    ContactFormComponent,
   ],
   exports: [
     FecDatePipe,
@@ -37,6 +52,7 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     HighlightTermsPipe,
     FecInternationalPhoneInputComponent,
     ContactLookupComponent,
+    ContactFormComponent,
   ],
 })
 export class SharedModule { }

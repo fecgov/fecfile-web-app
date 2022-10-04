@@ -5,11 +5,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
+import { of } from 'rxjs';
+import { LoginService } from '../../shared/services/login.service';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let loginService: LoginService;
 
   beforeEach(async () => {
     window.onbeforeunload = jasmine.createSpy();
@@ -22,6 +25,7 @@ describe('LoginComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
+    loginService = TestBed.inject(LoginService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -33,5 +37,12 @@ describe('LoginComponent', () => {
   xit('navigateToLoginDotGov should href environment location', () => {
     component.navigateToLoginDotGov();
     expect(window.location.href).toEqual(environment.loginDotGovAuthUrl);
+  });
+
+  it('should adjust localLoginAvailable', () => {
+    expect(component.localLoginAvailable).toBe(false);
+    spyOn(loginService, 'checkLocalLoginAvailability').and.returnValue(of(true));
+    component.checkLocalLoginAvailability();
+    expect(component.localLoginAvailable).toBe(true);
   });
 });

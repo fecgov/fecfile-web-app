@@ -11,7 +11,7 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
   item!: T;
   items: T[] = [];
   totalItems = 0;
-  pagerState: LazyLoadEvent | null = null;
+  pagerState: LazyLoadEvent | undefined;
   loading = false;
   selectAll = false;
   selectedItems: T[] = [];

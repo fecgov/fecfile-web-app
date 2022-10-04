@@ -23,7 +23,7 @@
               [contactTypeOptions]="childContactTypeOptions"
               [contactTypeReadOnly]="true"
               contactTypeStyleClass="readonly"
-              (fecfileContactSelect)="onContactLookupSelect($event, form)"
+              (contactSelect)="onContactLookupSelect($event, form)"
             >
             </app-contact-lookup>
           </div>
@@ -332,7 +332,7 @@
               <app-contact-lookup
                 [contactTypeFormControl]="$any(form).controls['entity_type']"
                 [contactTypeOptions]="childContactTypeOptions"
-                (fecfileContactSelect)="onContactLookupSelect($event, childForm)"
+                (contactSelect)="onContactLookupSelect($event, childForm)"
               >
               </app-contact-lookup>
             </div>

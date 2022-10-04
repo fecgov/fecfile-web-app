@@ -181,7 +181,7 @@ jobs:
           no_output_timeout: 15m
           command: pip install -r requirements.txt && invoke deploy --login
 
-  dependendency-check:
+  dependency-check:
     docker:
       - image: cimg/node:16.15-browsers
 
@@ -251,5 +251,8 @@ workflows:
     jobs:
       - lint
       - test
-      - dependendency-check
-      - deploy
+      - dependency-check
+      - deploy:
+          requires:
+            - test
+            - dependency-check

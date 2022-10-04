@@ -6,16 +6,18 @@ import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
 import { SessionService } from './SessionService/session.service';
+
+type EndpointAvailability = { endpoint_available: boolean };
 
 @Injectable({
   providedIn: 'root',
 })
 export class LoginService {
-  private userLoginData: UserLoginData | null = null;
+  private userLoginData: UserLoginData | undefined;
   constructor(
     private store: Store,
     private sessionService: SessionService,
@@ -79,5 +81,13 @@ export class LoginService {
     this.cookieService.delete(environment.ffapiCommitteeIdCookieName);
     this.cookieService.delete(environment.ffapiEmailCookieName);
     this.cookieService.delete(environment.sessionIdCookieName);
+  }
+
+  public checkLocalLoginAvailability(): Observable<boolean> {
+    return this.apiService.get<EndpointAvailability>('/user/login/authenticate').pipe(
+      map((response: EndpointAvailability) => {
+        return response.endpoint_available;
+      })
+    );
   }
 }

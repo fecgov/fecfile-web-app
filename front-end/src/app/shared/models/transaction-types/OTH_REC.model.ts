@@ -9,6 +9,7 @@ export class OTH_REC implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OTHER_RECEIPTS);
   schema = schema;
   transaction = undefined;
+  contact = undefined;
   parentTransaction = undefined;
   childTransactionType = undefined;
 

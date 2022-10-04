@@ -3,10 +3,11 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionTypeX2BaseComponent } from 'app/shared/components/transaction-type-x2-base/transaction-type-x2-base.component';
 import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-transaction-group-ag',
@@ -65,7 +66,9 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
   constructor(
     protected override messageService: MessageService,
     protected override transactionService: TransactionService,
+    protected override contactService: ContactService,
     protected override validateService: ValidateService,
+    protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router
   ) {

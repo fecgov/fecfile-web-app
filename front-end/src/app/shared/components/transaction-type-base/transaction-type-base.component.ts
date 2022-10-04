@@ -5,11 +5,12 @@ import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { MessageService, SelectItem } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { CountryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { of, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
@@ -29,6 +30,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   get transaction(): Transaction | undefined {
     return this.transactionType?.transaction;
   }
+  get contact(): Contact | undefined {
+    return this.transactionType?.contact;
+  }
+  set contact(contact: Contact | undefined) {
+    if (this.transactionType) {
+      this.transactionType.contact = contact;
+    }
+  }
 
   abstract formProperties: string[];
 
@@ -44,7 +53,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   constructor(
     protected messageService: MessageService,
     protected transactionService: TransactionService,
+    protected contactService: ContactService,
     protected validateService: ValidateService,
+    protected confirmationService: ConfirmationService,
     protected fb: FormBuilder,
     protected router: Router
   ) {}
@@ -101,22 +112,40 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.transactionType
     ) as SchATransaction;
 
-    if (this.transaction?.transaction_type_identifier) {
-      const fieldsToValidate: string[] = this.getFieldsToValidate(this.validateService, this.transactionType);
-
-      if (payload.id) {
-        this.transactionService
-          .update(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
-          .subscribe((transaction) => {
-            this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
-          });
-      } else {
-        this.transactionService
-          .create(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
-          .subscribe((transaction) => {
-            this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
-          });
+    if (this.contact?.id) {
+      this.doSave(navigateTo, payload, transactionTypeToAdd);
+    } else {
+      const payloadContactType = payload.entity_type as ContactTypes;
+      let confirmationContactTitle = '';
+      switch (payloadContactType) {
+        case ContactTypes.INDIVIDUAL:
+          confirmationContactTitle =
+            `individual contact for <b>` +
+            `${this.form.get('contributor_last_name')?.value}, ` +
+            `${this.form.get('contributor_first_name')?.value}</b>`;
+          break;
+        case ContactTypes.COMMITTEE:
+          confirmationContactTitle =
+            `committee contact for <b>` + `${this.form.get('contributor_organization_name')?.value}</b>`;
+          break;
+        case ContactTypes.ORGANIZATION:
+          confirmationContactTitle =
+            `organization contact for <b>` + `${this.form.get('contributor_organization_name')?.value}</b>`;
+          break;
       }
+      this.confirmationService.confirm({
+        header: 'Confirm',
+        icon: 'pi pi-info-circle',
+        message: `By saving this transaction, you're also creating a new ` + `${confirmationContactTitle}.`,
+        acceptLabel: 'Continue',
+        rejectLabel: 'Cancel',
+        accept: () => {
+          this.doSave(navigateTo, payload, transactionTypeToAdd);
+        },
+        reject: () => {
+          return;
+        },
+      });
     }
   }
 
@@ -136,6 +165,68 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
     // Remove properties populated in the back-end from list of properties to validate
     return fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_committee_name');
+  }
+
+  doSave(navigateTo: 'list' | 'add another' | 'add-sub-tran', payload: SchATransaction, transactionTypeToAdd?: string) {
+    this.createContactIfNeeded(this.form).subscribe((contact) => {
+      this.contact = contact;
+      if (this.transaction?.transaction_type_identifier) {
+        const fieldsToValidate: string[] = this.getFieldsToValidate(this.validateService, this.transactionType);
+
+        payload.contact_id = this.contact?.id;
+        if (payload.id) {
+          this.transactionService
+            .update(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
+            .subscribe((transaction) => {
+              this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
+            });
+        } else {
+          this.transactionService
+            .create(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
+            .subscribe((transaction) => {
+              this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
+            });
+        }
+      }
+    });
+  }
+
+  createContactIfNeeded(form: FormGroup) {
+    let contact = this.contact;
+    if (!contact) {
+      contact = new Contact();
+      contact.type = form.get('entity_type')?.value;
+      switch (contact.type) {
+        case ContactTypes.INDIVIDUAL:
+          contact.last_name = form.get('contributor_last_name')?.value;
+          contact.first_name = form.get('contributor_first_name')?.value;
+          contact.middle_name = form.get('contributor_middle_name')?.value;
+          contact.prefix = form.get('contributor_prefix')?.value;
+          contact.suffix = form.get('contributor_suffix')?.value;
+          contact.employer = form.get('contributor_employer')?.value;
+          contact.occupation = form.get('contributor_occupation')?.value;
+          break;
+        case ContactTypes.COMMITTEE:
+          contact.committee_id = form.get('donor_committee_fec_id')?.value;
+          contact.name = form.get('contributor_organization_name')?.value;
+          break;
+        case ContactTypes.ORGANIZATION:
+        case ContactTypes.CANDIDATE:
+          contact.name = form.get('contributor_organization_name')?.value;
+          break;
+      }
+      contact.country = CountryCodeLabels[0][0];
+      contact.street_1 = form.get('contributor_street_1')?.value;
+      contact.street_2 = form.get('contributor_street_2')?.value;
+      contact.city = form.get('contributor_city')?.value;
+      contact.state = form.get('contributor_state')?.value;
+      contact.zip = form.get('contributor_zip')?.value;
+    }
+
+    if (!contact.id) {
+      return this.contactService.create(contact);
+    }
+    return of(contact);
   }
 
   navigateTo(
@@ -205,11 +296,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             form.get('contributor_organization_name')?.setValue(value.name);
             break;
         }
-        form.get('contributor_street_1')?.setValue(value.street_1);
-        form.get('contributor_street_2')?.setValue(value.street_2);
-        form.get('contributor_city')?.setValue(value.city);
-        form.get('contributor_state')?.setValue(value.state);
-        form.get('contributor_zip')?.setValue(value.zip);
+        this.form.get('contributor_street_1')?.setValue(value.street_1);
+        this.form.get('contributor_street_2')?.setValue(value.street_2);
+        this.form.get('contributor_city')?.setValue(value.city);
+        this.form.get('contributor_state')?.setValue(value.state);
+        this.form.get('contributor_zip')?.setValue(value.zip);
+        this.contact = value;
       }
     }
   }

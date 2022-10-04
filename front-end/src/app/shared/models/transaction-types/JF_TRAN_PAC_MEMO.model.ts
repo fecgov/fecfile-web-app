@@ -9,6 +9,7 @@ export class JF_TRAN_PAC_MEMO implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JF_TRAN_PAC_MEMO);
   schema = schema;
   transaction = undefined;
+  contact = undefined;
   parentTransaction: SchATransaction | undefined = undefined;
   childTransactionType = undefined;
 

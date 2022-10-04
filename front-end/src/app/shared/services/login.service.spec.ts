@@ -56,6 +56,15 @@ describe('LoginService', () => {
     httpTestingController.verify();
   });
 
+  it('should ping the API when requesting local login availability', () => {
+    const spy = spyOn(apiService, 'get').and.returnValue(of({ endpoint_available: true }));
+    const result$ = service.checkLocalLoginAvailability();
+    expect(spy).toHaveBeenCalledWith('/user/login/authenticate');
+    result$.subscribe((value) => {
+      expect(value).toBe(true);
+    });
+  });
+
   it('#logOut non-login.gov happy path', async () => {
     testUserLoginData.token = 'testVal';
     TestBed.resetTestingModule();
@@ -71,7 +80,7 @@ describe('LoginService', () => {
   });
 
   it('#logOut login.gov happy path', () => {
-    testUserLoginData.token = null;
+    testUserLoginData.token = '';
     TestBed.resetTestingModule();
 
     spyOn(store, 'dispatch');
