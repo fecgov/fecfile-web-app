@@ -10,7 +10,8 @@ export class INDV_REC implements TransactionType {
   schema = schema;
   transaction = undefined;
   contact = undefined;
-  parent = undefined;
+  parentTransaction = undefined;
+  childTransactionType = undefined;
 
   contributionPurposeDescripReadonly(): string {
     return '';

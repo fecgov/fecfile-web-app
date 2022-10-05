@@ -11,8 +11,7 @@ import { TransactionTypeUtils } from '../utils/transaction-type.utils';
   providedIn: 'root',
 })
 export class TransactionTypeResolver implements Resolve<TransactionType | undefined> {
-  constructor(private transactionService: TransactionService,
-    private contactService: ContactService) { }
+  constructor(private transactionService: TransactionService, private contactService: ContactService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<TransactionType | undefined> {
     const reportId = route.paramMap.get('reportId');
@@ -37,6 +36,10 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
     transactionType.transaction = transactionType.getNewTransaction();
     transactionType.transaction.report_id = String(reportId);
 
+    if (transactionType.childTransactionType) {
+      transactionType.childTransactionType.transaction = transactionType.childTransactionType.getNewTransaction();
+    }
+
     return of(transactionType);
   }
 
@@ -49,7 +52,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
       map((transaction: Transaction) => {
         transactionType.transaction = transactionType.getNewTransaction();
 
-        transactionType.parent = transaction;
+        transactionType.parentTransaction = transaction;
         transactionType.transaction.parent_transaction_id = String(parentTransactionId);
         transactionType.transaction.report_id = String(transaction.report_id);
 
@@ -66,10 +69,18 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
             transaction.transaction_type_identifier
           ) as TransactionType;
           transactionType.transaction = transaction;
-          return this.contactService.get(transaction.contact_id).pipe(map((contact) => {
-            transactionType.contact = contact;
-            return transactionType;
-          }));
+
+          if (transactionType.childTransactionType) {
+            transactionType.childTransactionType.transaction = undefined; // TODO: Need to populate this with what is coming back from the API, ideally it is sending a list of 2 txns
+            transactionType.childTransactionType.parentTransaction = transaction;
+          }
+
+          return this.contactService.get(transaction.contact_id).pipe(
+            map((contact) => {
+              transactionType.contact = contact;
+              return transactionType;
+            })
+          );
         } else {
           return of(undefined);
         }

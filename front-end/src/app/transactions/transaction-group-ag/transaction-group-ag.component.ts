@@ -69,7 +69,7 @@ export class TransactionGroupAgComponent extends TransactionTypeBaseComponent im
     this.validateService.formValidatorSchema = this.schema;
     this.validateService.formValidatorForm = this.aForm;
 
-    if (this.isExisting()) {
+    if (this.isExisting(transaction)) {
       //retreive child transaction .../sch-a-transactions/?parent_transaction_id={this.transaction.id}
       //subscribe((child_transaction)=> {setup bForm})
       this.aForm.patchValue({ ...this.transaction });

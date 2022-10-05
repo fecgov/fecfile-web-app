@@ -20,7 +20,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SharedModule } from '../shared/shared.module';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionGroupAComponent } from './transaction-group-a/transaction-group-a.component';
-import { TransactionGroupAgComponent } from './transaction-group-ag/transaction-group-ag.component';
+// import { TransactionGroupAgComponent } from './transaction-group-ag/transaction-group-ag.component';
 import { TransactionGroupBComponent } from './transaction-group-b/transaction-group-b.component';
 import { TransactionGroupCComponent } from './transaction-group-c/transaction-group-c.component';
 import { TransactionGroupDComponent } from './transaction-group-d/transaction-group-d.component';
@@ -42,7 +42,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     TransactionGroupDComponent,
     TransactionGroupEComponent,
     TransactionGroupFComponent,
-    TransactionGroupAgComponent,
+    // TransactionGroupAgComponent,
   ],
   imports: [
     AccordionModule,
@@ -65,4 +65,4 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     ConfirmDialogModule,
   ],
 })
-export class TransactionsModule { }
+export class TransactionsModule {}

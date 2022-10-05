@@ -1,4 +1,5 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EAR_REC';
 import { TransactionType } from '../../interfaces/transaction-type.interface';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
@@ -8,9 +9,10 @@ export class EAR_REC implements TransactionType {
   componentGroupId = 'AG';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
-  transaction: SchATransaction | undefined = undefined;
+  transaction = undefined;
   contact = undefined;
-  parent = undefined;
+  parentTransaction = undefined;
+  childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
 
   contributionPurposeDescripReadonly(): string {
     return '';
