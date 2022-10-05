@@ -15,7 +15,7 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnDes
     separateDialCode: true,
     preferredCountries: ['us'],
   };
-  private countryCode: string | undefined = '';
+  private countryCode: string | undefined;
   private number = '';
 
   constructor(@Optional() @Self() private ngControl: NgControl) {
@@ -28,10 +28,8 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnDes
    * Write form value to the DOM element (model => view)
    */
   writeValue(value: string): void {
-    if (value) {
-      this.intlTelInput?.setNumber(value);
-      this.onChange(value);
-    }
+    this.intlTelInput?.setNumber(value || '');
+    this.onChange(value);
   }
 
   /**
