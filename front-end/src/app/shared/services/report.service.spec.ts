@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { testMockStore } from '../utils/unit-test.utils';
 import { ReportService } from './report.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { F3xSummary } from '../models/f3x-summary.model';
@@ -12,23 +11,11 @@ import { Report } from '../interfaces/report.interface';
 describe('ReportService', () => {
   let service: ReportService;
   let httpTestingController: HttpTestingController;
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        ReportService,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [ReportService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(ReportService);
@@ -84,7 +71,7 @@ describe('ReportService', () => {
   });
 
   it('should set the COH store values', () => {
-    const reports: Report[] = [{ id: 999 } as Report];
+    const reports: Report[] = [{ id: '999' } as Report];
     const result = service.setStoreCashOnHand(reports);
     expect(result).not.toBeTruthy();
   });

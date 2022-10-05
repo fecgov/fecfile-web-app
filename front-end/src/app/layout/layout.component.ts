@@ -10,8 +10,8 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
   templateUrl: './layout.component.html',
 })
 export class LayoutComponent implements OnInit {
-  committeeAccount$: Observable<CommitteeAccount> | null = null;
-  progressBarVisible$: Observable<{ spinnerOn: boolean }> | null = null;
+  committeeAccount$: Observable<CommitteeAccount> | undefined;
+  progressBarVisible$: Observable<{ spinnerOn: boolean }> | undefined;
 
   constructor(private store: Store) {}
 

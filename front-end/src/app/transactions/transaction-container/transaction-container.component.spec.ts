@@ -1,33 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { provideMockStore } from '@ngrx/store/testing';
-import { selectCommitteeAccount } from '../../store/committee-account.selectors';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { TransactionTypeUtils } from '../../shared/utils/transaction-type.utils';
-import { TransactionContainerComponent } from './transaction-container.component';
-import { TransactionGroupBComponent } from '../transaction-group-b/transaction-group-b.component';
-import { MessageService } from 'primeng/api';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ToastModule } from 'primeng/toast';
-import { SharedModule } from '../../shared/shared.module';
-import { DividerModule } from 'primeng/divider';
-import { DropdownModule } from 'primeng/dropdown';
+import { provideMockStore } from '@ngrx/store/testing';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { InputNumberModule } from 'primeng/inputnumber';
+import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
+import { SharedModule } from '../../shared/shared.module';
+import { TransactionTypeUtils } from '../../shared/utils/transaction-type.utils';
+import { TransactionGroupBComponent } from '../transaction-group-b/transaction-group-b.component';
+import { TransactionContainerComponent } from './transaction-container.component';
 
 describe('TransactionContainerComponent', () => {
   let component: TransactionContainerComponent;
   let fixture: ComponentFixture<TransactionContainerComponent>;
-  const committeeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
-    committee_id: 'C00601211',
-  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -51,6 +47,7 @@ describe('TransactionContainerComponent', () => {
       providers: [
         FormBuilder,
         MessageService,
+        ConfirmationService,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -59,10 +56,7 @@ describe('TransactionContainerComponent', () => {
             }),
           },
         },
-        provideMockStore({
-          initialState: { fecfile_online_committeeAccount: committeeAccount },
-          selectors: [{ selector: selectCommitteeAccount, value: committeeAccount }],
-        }),
+        provideMockStore(testMockStore),
       ],
     }).compileComponents();
   });

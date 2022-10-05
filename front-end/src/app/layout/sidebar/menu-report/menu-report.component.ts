@@ -18,9 +18,9 @@ import { ReportService } from '../../../shared/services/report.service';
   styleUrls: ['./menu-report.component.scss'],
 })
 export class MenuReportComponent implements OnInit, OnDestroy {
-  activeReport: Report | null = null;
-  currentReportId: number | undefined;
-  currentReportTimestamp: number | null = null;
+  activeReport: Report | undefined;
+  currentReportId: string | undefined;
+  currentReportTimestamp: number | undefined;
   items: MenuItem[] = [];
   showMenu = false;
   reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
@@ -29,7 +29,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   reportIsEditableFlag = false;
   cashOnHand: CashOnHand = {
     report_id: undefined,
-    value: null,
+    value: undefined,
   };
 
   private destroy$ = new Subject<boolean>();
@@ -38,16 +38,16 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   // because the order determines the expanded menu item group in the panal menu:
   // 'Enter A Transaction', 'Review A Report', and 'Submit Your Report'.
   urlMatch: RegExp[] = [
-    /^\/reports\/f3x\/create\/cash-on-hand\/\d+/, // Enter a transaction group
-    /^\/transactions\/report\/\d+\/list/, // Enter a transaction group
-    /^\/transactions\/report\/\d+\/create/, // Enter a transaction group
-    /^\/reports\/f3x\/summary\/\d+/, // Review a report group
-    /^\/reports\/f3x\/detailed-summary\/\d+/, // Review a report group
-    /^\/reports\/f3x\/web-print\/\d+/, // Review a report group
-    /^\/reports\/f3x\/memo\/\d+/, // Review a report group
-    /^\/reports\/f3x\/submit\/step1\/\d+/, // Submit your report group
-    /^\/reports\/f3x\/submit\/step2\/\d+/, // Submit your report group
-    /^\/reports\/f3x\/submit\/status\/\d+/, // Submit your report group
+    /^\/reports\/f3x\/create\/cash-on-hand\/[\da-z-]+/, // Enter a transaction group
+    /^\/transactions\/report\/[\da-z-]+\/list/, // Enter a transaction group
+    /^\/transactions\/report\/[\da-z-]+\/create/, // Enter a transaction group
+    /^\/reports\/f3x\/summary\/[\da-z-]+/, // Review a report group
+    /^\/reports\/f3x\/detailed-summary\/[\da-z-]+/, // Review a report group
+    /^\/reports\/f3x\/web-print\/[\da-z-]+/, // Review a report group
+    /^\/reports\/f3x\/memo\/[\da-z-]+/, // Review a report group
+    /^\/reports\/f3x\/submit\/step1\/[\da-z-]+/, // Submit your report group
+    /^\/reports\/f3x\/submit\/step2\/[\da-z-]+/, // Submit your report group
+    /^\/reports\/f3x\/submit\/status\/[\da-z-]+/, // Submit your report group
   ];
 
   constructor(private router: Router, private store: Store, private reportService: ReportService) {}
@@ -60,7 +60,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((report: Report | null) => {
+      .subscribe((report: Report | undefined) => {
         this.activeReport = report;
         this.reportIsEditableFlag = this.reportService.isEditable(report);
       });

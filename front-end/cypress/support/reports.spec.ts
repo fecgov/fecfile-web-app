@@ -5,15 +5,15 @@ import { getAuthToken } from './commands';
 import { date } from './generators/generators.spec';
 import { ConfirmationDetails, FilingDetails } from './generators/reports.spec';
 
-export type FilingFrequency = "QUARTERLY" | "MONTHLY";
-export type FilingType = "Election Year" | "Non-Election Year";
+export type FilingFrequency = 'QUARTERLY' | 'MONTHLY';
+export type FilingType = 'Election Year' | 'Non-Election Year';
 export type FilingFrequencyTree = {
   [frequencyKey in FilingFrequency]: {
     [typeKey in FilingType]: {
-      [fieldKey: string] : boolean
-    }
-  }
-}
+      [fieldKey: string]: boolean;
+    };
+  };
+};
 
 export const filingFrequencyTree: FilingFrequencyTree = {
   //Defines the structure of the Report Type radiobuttons and whether or not each button should be connected to the "State" dropdown and "Election On" date picker
@@ -97,7 +97,7 @@ export function createReport(report, save = true) {
   cy.get("p-radiobutton[FormControlName='filing_frequency']").contains(report['filing_frequency']).click();
   cy.shortWait();
 
-  cy.get("p-selectbutton[FormControlName='report_type_category']").contains(report['report_type_category']).click();
+  cy.get("app-select-button[FormControlName='report_type_category']").contains(report['report_type_category']).click();
   cy.shortWait();
 
   cy.get("p-radiobutton[FormControlName='report_code']").contains(report['report_code']).click();
@@ -122,45 +122,20 @@ export function createReport(report, save = true) {
   }
 }
 
-function progressReport(address_details = null) {
-  if (address_details == null) {
-    cy.get("p-radiobutton[formControlName='change_of_address']")
-      .contains('p-radiobutton', 'NO')
-      .find('.p-radiobutton-box')
-      .click();
-    cy.shortWait();
-  } else {
-    cy.get("p-radiobutton[formControlName='change_of_address']")
-      .contains('p-radiobutton', 'YES')
-      .find('.p-radiobutton-box')
-      .click();
-    cy.shortWait();
-
-    cy.get("input[formControlName='street_1']").safeType(address_details['street']);
-    cy.get("input[formControlName='street_2']").safeType(address_details['apartment']);
-    cy.get("input[formControlName='city']").safeType(address_details['city']);
-    cy.get("input[formControlName='zip']").safeType(address_details['zip']);
-    cy.dropdownSetValue("p-dropdown[formControlName='state']", address_details['state']);
-  }
-
-  cy.get("button[label='Save and continue']").click();
-  cy.longWait();
-}
-
 type cohDetailType = {
-  cashOnHand?: number,
-  date?: Date,
-}
+  cashOnHand?: number;
+  date?: Date;
+};
 
-export function enterConfirmationDetails(details: ConfirmationDetails, save=true){
+export function enterConfirmationDetails(details: ConfirmationDetails, save = true) {
   cy.get('input[formControlName="confirmation_email_1"]').overwrite(details.email_1);
 
-  if (details.email_2){
+  if (details.email_2) {
     cy.get('input[formControlName="confirmation_email_2"]').overwrite(details.email_2);
   }
 
-  if (details.street_1){
-    cy.get('p-radiobutton[label="YES"]').find('div').last().click({force: true});
+  if (details.street_1) {
+    cy.get('p-radiobutton[label="YES"]').find('div').last().click({ force: true });
 
     cy.get('input[formControlName="street_1"]').overwrite(details.street_1);
     cy.get('input[formControlName="street_2"]').overwrite(details.street_2);
@@ -170,13 +145,13 @@ export function enterConfirmationDetails(details: ConfirmationDetails, save=true
   }
 
   cy.shortWait();
-  if (save){
+  if (save) {
     cy.get('button[label="Confirm information"]').click();
     cy.medWait();
   }
 }
 
-export function enterFilingDetails(details: FilingDetails, save=true){
+export function enterFilingDetails(details: FilingDetails, save = true) {
   cy.get('input[formControlName="treasurer_first_name"]').overwrite(details.first_name);
   cy.get('input[formControlName="treasurer_last_name"]').overwrite(details.last_name);
   cy.get('input[formControlName="treasurer_middle_name"]').overwrite(details.middle_name);
@@ -184,10 +159,10 @@ export function enterFilingDetails(details: FilingDetails, save=true){
   cy.get('input[formControlName="treasurer_suffix"]').overwrite(details.suffix);
   cy.get('input[formControlName="filing_password"]').overwrite(details.filing_pw);
 
-  cy.get('p-checkbox[formControlName="truth_statement"]').find('div').last().click({force:true});
+  cy.get('p-checkbox[formControlName="truth_statement"]').find('div').last().click({ force: true });
 
   cy.shortWait();
-  if (save){
+  if (save) {
     cy.get('button[label="Submit"]').click();
     cy.shortWait();
     cy.contains('button', 'Yes').click();
@@ -195,46 +170,43 @@ export function enterFilingDetails(details: FilingDetails, save=true){
   }
 }
 
-export function progressCashOnHand(cohDetails: cohDetailType | null = null){
-  if (cohDetails === null){
+export function progressCashOnHand(cohDetails: cohDetailType | null = null) {
+  if (cohDetails === null) {
     cohDetails = {
-      cashOnHand: _.random(1,99999, false),
+      cashOnHand: _.random(1, 99999, false),
       date: date(),
-    }
+    };
   } else {
-    if (!('cashOnHand' in cohDetails)){
-      cohDetails.cashOnHand = _.random(1,99999, false);
+    if (!('cashOnHand' in cohDetails)) {
+      cohDetails.cashOnHand = _.random(1, 99999, false);
     }
-    if (!('date' in cohDetails)){
+    if (!('date' in cohDetails)) {
       cohDetails.date = date();
     }
   }
 
-  cy.get('p-inputnumber[formcontrolname="L6a_cash_on_hand_jan_1_ytd"]')
-    .safeType(cohDetails.cashOnHand);
+  cy.get('p-inputnumber[formcontrolname="L6a_cash_on_hand_jan_1_ytd"]').safeType(cohDetails.cashOnHand);
   cy.calendarSetValue('p-calendar[formcontrolname="cash_on_hand_date"]', cohDetails.date);
   cy.longWait();
-  
+
   cy.get('button[label="Save & continue"]').click();
   cy.longWait();
   cy.longWait();
 }
 
-
-
 /**
  * navigateToTransactionManagement
- * 
+ *
  * Use this method when on the reports management page to select a report and
  * navigate to its transaction management page.  You may provide additional
  * details to aid in choosing a specific report.  The targeted report must be
  * on the page.
- * 
+ *
  * If this method is called on the report creation (step 2) or cash-on-hand pages,
  * it will also navigate to the transaction management page for the active report.
- * 
+ *
  * Otherwise, this function will choose the first report on the list.
- * 
+ *
  * @param identifyingDetails Null or object with the following optional attributes:
  *   - formType: string,
  *   - reportCode: string,
@@ -243,89 +215,81 @@ export function progressCashOnHand(cohDetails: cohDetailType | null = null){
  *   - version: string,
  *   - filed: Date,
  */
-export function navigateToTransactionManagement(identifyingDetails: null | {
-  formType?: string,
-  reportCode?: string,
-  coverageDates?: [Date, Date],
-  status?: string,
-  version?: string,
-  filed?: Date
-} = null) {
-
+export function navigateToTransactionManagement(
+  identifyingDetails: null | {
+    formType?: string;
+    reportCode?: string;
+    coverageDates?: [Date, Date];
+    status?: string;
+    version?: string;
+    filed?: Date;
+  } = null
+) {
   cy.shortWait();
-  cy.url().then((url: string)=>{
-    if (url.includes("step2")){
-      cy.then(progressReport);
-      cy.navigateToTransactionManagement(identifyingDetails);
-    }
-    else if (url.includes("cash-on-hand")){
+  cy.url().then((url: string) => {
+    if (url.includes('cash-on-hand')) {
       cy.then(progressCashOnHand);
       cy.navigateToTransactionManagement(identifyingDetails);
-    }
-    else if (url.includes("/reports") && !url.includes("list")){
+    } else if (url.includes('/reports') && !url.includes('list')) {
       chooseAReport(identifyingDetails);
       cy.navigateToTransactionManagement(identifyingDetails);
     }
-  })
+  });
 }
 
-function chooseAReport(identifyingDetails: null | {
-  formType?: string,
-  reportCode?: string,
-  coverageDates?: [Date, Date],
-  status?: string,
-  version?: string,
-  filed?: Date
-} = null){
+function chooseAReport(
+  identifyingDetails: null | {
+    formType?: string;
+    reportCode?: string;
+    coverageDates?: [Date, Date];
+    status?: string;
+    version?: string;
+    filed?: Date;
+  } = null
+) {
   let reportContains: Partial<any>[] = [];
-  if (identifyingDetails != null){
-    if (identifyingDetails.formType)
-      reportContains = reportContains.concat([identifyingDetails.formType]);
-    if (identifyingDetails.reportCode)
-      reportContains = reportContains.concat([identifyingDetails.reportCode]);
-    if (identifyingDetails.coverageDates){
+  if (identifyingDetails != null) {
+    if (identifyingDetails.formType) reportContains = reportContains.concat([identifyingDetails.formType]);
+    if (identifyingDetails.reportCode) reportContains = reportContains.concat([identifyingDetails.reportCode]);
+    if (identifyingDetails.coverageDates) {
       const dates = identifyingDetails.coverageDates;
       reportContains = reportContains.concat([dateToString(dates[0])]);
       reportContains = reportContains.concat([dateToString(dates[1])]);
     }
-    if (identifyingDetails.status)
-      reportContains = reportContains.concat([identifyingDetails.status]);
-    if (identifyingDetails.version)
-      reportContains = reportContains.concat([identifyingDetails.version]);
-    if (identifyingDetails.filed){
+    if (identifyingDetails.status) reportContains = reportContains.concat([identifyingDetails.status]);
+    if (identifyingDetails.version) reportContains = reportContains.concat([identifyingDetails.version]);
+    if (identifyingDetails.filed) {
       const date = identifyingDetails.filed;
       reportContains = reportContains.concat([dateToString(date)]);
     }
   }
 
-  if (reportContains.length > 0){
-    cy.get('tbody').contains("tr", ...reportContains)
+  if (reportContains.length > 0) {
+    cy.get('tbody')
+      .contains('tr', ...reportContains)
       .first()
       .find('p-button[icon="pi pi-pencil"]')
       .click();
   } else {
     cy.get('tbody').find('tr').first().find('p-button[icon="pi pi-pencil"]').click();
   }
-  
+
   cy.medWait();
 }
 
-export function navigateReportSidebar(type: "Transaction" | "Submit" | "Review", link: string){
+export function navigateReportSidebar(type: 'Transaction' | 'Submit' | 'Review', link: string) {
   //Makes sure that we don't accidentally *close* the accordion we want
-  if (type === "Transaction"){
-    cy.get("p-panelmenu").contains("SUBMIT").click();
+  if (type === 'Transaction') {
+    cy.get('p-panelmenu').contains('SUBMIT').click();
   } else {
-    cy.get("p-panelmenu").contains("TRANSACTION").click();
+    cy.get('p-panelmenu').contains('TRANSACTION').click();
   }
   cy.shortWait();
 
-  cy.get("p-panelmenu")
-    .contains(type.toUpperCase()).click();
-  
+  cy.get('p-panelmenu').contains(type.toUpperCase()).click();
+
   cy.shortWait();
-  cy.get("p-panelmenu")
-    .contains("a", link)
-    .click();
+  cy.get('p-panelmenu').contains('a', link).click();
   cy.medWait();
 }
 
@@ -348,7 +312,7 @@ export function deleteAllReports() {
 }
 
 //Deletes a single report by its ID
-export function deleteReport(reportID: number, authToken: string | null = null) {
+export function deleteReport(reportID: string, authToken: string | null = null) {
   if (authToken == null) {
     authToken = getAuthToken();
   }

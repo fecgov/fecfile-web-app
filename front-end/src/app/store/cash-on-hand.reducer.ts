@@ -2,9 +2,9 @@ import { createReducer, on, Action } from '@ngrx/store';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
 import { setCashOnHandAction } from './cash-on-hand.actions';
 
-const initialState: CashOnHand = {
+export const initialState: CashOnHand = {
   report_id: undefined,
-  value: null,
+  value: undefined,
 };
 
 const _cashOnHandReducer = createReducer<CashOnHand>(

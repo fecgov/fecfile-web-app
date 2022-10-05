@@ -1,3 +1,4 @@
+import { Contact } from '../models/contact.model';
 import { JsonSchema } from './json-schema.interface';
 import { Transaction } from './transaction.interface';
 
@@ -11,6 +12,7 @@ export interface TransactionType {
   title: string;
   schema: JsonSchema;
   transaction: Transaction | undefined;
+  contact: Contact | undefined;
   parent: Transaction | undefined;
   contributionPurposeDescripReadonly(): string;
   getNewTransaction(): Transaction;

@@ -3,20 +3,20 @@ import { WebPrintSubmission } from '../models/webprint-submission.model';
 import { UploadSubmission } from '../models/upload-submission.model';
 
 export interface Report {
-  id: number | undefined;
+  id: string | undefined;
   form_type: string;
-  filer_committee_id_number: string | null;
-  report_code: F3xReportCode | null;
-  coverage_from_date: Date | null;
-  coverage_through_date: Date | null;
-  webprint_submission: WebPrintSubmission | null;
-  upload_submission: UploadSubmission | null;
-  created: Date | null;
-  updated: Date | null;
+  filer_committee_id_number: string | undefined;
+  report_code: F3xReportCode | undefined;
+  coverage_from_date: Date | undefined;
+  coverage_through_date: Date | undefined;
+  webprint_submission: WebPrintSubmission | undefined;
+  upload_submission: UploadSubmission | undefined;
+  created: Date | undefined;
+  updated: Date | undefined;
   calculation_status: string | undefined;
 }
 
 export interface CashOnHand {
-  report_id: number | undefined;
-  value: number | null;
+  report_id: string | undefined;
+  value: number | undefined;
 }

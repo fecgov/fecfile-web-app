@@ -4,7 +4,8 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ContactTypes } from 'app/shared/models/contact.model';
-import { MessageService } from 'primeng/api';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -14,21 +15,12 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
-import { UserLoginData } from '../../shared/models/user.model';
 import { SharedModule } from '../../shared/shared.module';
-import { selectUserLoginData } from '../../store/login.selectors';
 import { TransactionGroupEComponent } from './transaction-group-e.component';
 
 describe('TransactionGroupEComponent', () => {
   let component: TransactionGroupEComponent;
   let fixture: ComponentFixture<TransactionGroupEComponent>;
-
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -49,14 +41,7 @@ describe('TransactionGroupEComponent', () => {
         InputNumberModule,
       ],
       declarations: [TransactionGroupEComponent],
-      providers: [
-        MessageService,
-        FormBuilder,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 

@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { UserLoginData } from 'app/shared/models/user.model';
-import { selectUserLoginData } from 'app/store/login.selectors';
+import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
@@ -11,23 +10,11 @@ import { environment } from '../../../environments/environment';
 describe('TransactionService', () => {
   let service: TransactionService;
   let httpTestingController: HttpTestingController;
-  const userLoginData: UserLoginData = {
-    committee_id: 'C00000000',
-    email: 'email@fec.com',
-    is_allowed: true,
-    token: 'jwttokenstring',
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        TransactionService,
-        provideMockStore({
-          initialState: { fecfile_online_userLoginData: userLoginData },
-          selectors: [{ selector: selectUserLoginData, value: userLoginData }],
-        }),
-      ],
+      providers: [TransactionService, provideMockStore(testMockStore)],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(TransactionService);
@@ -65,7 +52,7 @@ describe('TransactionService', () => {
   it('#get() should GET a record', () => {
     const mockResponse: SchATransaction = SchATransaction.fromJSON({ id: 1 });
 
-    service.get(1).subscribe((response) => {
+    service.get('1').subscribe((response) => {
       expect(response).toEqual(mockResponse);
     });
 
@@ -76,7 +63,7 @@ describe('TransactionService', () => {
   });
 
   it('#create() should POST a record', () => {
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: 1 });
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
 
     service.create(schATransaction, 'OFFSET_TO_OPEX', ['form_type']).subscribe((response) => {
       expect(response).toEqual(schATransaction);
@@ -91,7 +78,7 @@ describe('TransactionService', () => {
   });
 
   it('#update() should PUT  a record', () => {
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: 1 });
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
 
     service.update(schATransaction, 'OFFSET_TO_OPEX').subscribe((response) => {
       expect(response).toEqual(schATransaction);
@@ -107,7 +94,7 @@ describe('TransactionService', () => {
 
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: 1 });
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
 
     service.delete(schATransaction).subscribe((response: null) => {
       expect(response).toEqual(mockResponse);

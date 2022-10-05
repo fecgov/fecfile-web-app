@@ -11,10 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
   // styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  constructor(
-    private store: Store,
-    private cookieService: CookieService
-  ) { }
+  constructor(private store: Store, private cookieService: CookieService) {}
 
   ngOnInit(): void {
     this.dispatchUserLoggedInFromCookies();
@@ -23,15 +20,13 @@ export class DashboardComponent implements OnInit {
   dispatchUserLoggedInFromCookies() {
     if (this.cookieService.check(environment.ffapiCommitteeIdCookieName)) {
       const userLoginData: UserLoginData = {
-        committee_id: this.cookieService.get(
-          environment.ffapiCommitteeIdCookieName),
-        email: this.cookieService.get(
-          environment.ffapiEmailCookieName),
+        committee_id: this.cookieService.get(environment.ffapiCommitteeIdCookieName),
+        email: this.cookieService.get(environment.ffapiEmailCookieName),
         is_allowed: true,
-        token: null
-      }
-      this.cookieService.delete(environment.ffapiCommitteeIdCookieName)
-      this.cookieService.delete(environment.ffapiEmailCookieName)
+        token: '',
+      };
+      this.cookieService.delete(environment.ffapiCommitteeIdCookieName);
+      this.cookieService.delete(environment.ffapiEmailCookieName);
       this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
     }
   }

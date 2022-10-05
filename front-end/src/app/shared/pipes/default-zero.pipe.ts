@@ -4,8 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'defaultZero',
 })
 export class DefaultZeroPipe implements PipeTransform {
-  transform(value: number | null): number {
-    if (value === null) {
+  transform(value: number | undefined): number {
+    if (value === undefined) {
       return 0;
     }
     return value;

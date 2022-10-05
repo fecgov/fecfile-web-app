@@ -8,6 +8,6 @@ export interface AppState {
   spinnerOn: boolean;
   userLoginData: UserLoginData;
   reportCodeLabelList: ReportCodeLabelList;
-  activeReport: Report | null;
+  activeReport: Report | undefined;
   cashOnHand: CashOnHand;
 }

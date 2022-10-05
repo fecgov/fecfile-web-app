@@ -8,26 +8,26 @@ import { LabelUtils } from '../utils/label.utils';
  * after a successful login.
  */
 export type UserLoginData = {
-  committee_id: string | null;
-  email: string | null;
+  committee_id: string;
+  email: string;
   is_allowed: boolean;
-  token: string | null;
+  token: string;
 };
 
 export class CommitteeUser {
-  email: string | null = null;
-  username: string | null = null;
-  first_name: string | null = null;
-  last_name: string | null = null;
-  role: string | null = null;
-  is_active: boolean | null = null;
+  email = '';
+  username = '';
+  first_name = '';
+  last_name = '';
+  role = '';
+  is_active = false;
 
   // prettier-ignore
   static fromJSON(json: any): CommitteeUser { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(CommitteeUser, json);
   }
 
-  public getRoleLabel(): string | null {
+  public getRoleLabel(): string | undefined {
     return LabelUtils.get(RoleLabels, this.role);
   }
 }

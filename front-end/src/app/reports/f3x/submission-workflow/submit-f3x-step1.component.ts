@@ -99,10 +99,9 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     });
 
     this.form.patchValue({
-      change_of_address: this.report?.change_of_address !== null ? this.report?.change_of_address : false,
-      confirmation_email_1:
-        this.report?.confirmation_email_1 !== null ? this.report?.confirmation_email_1 : committeeAccount?.email,
-      confirmation_email_2: this.report?.confirmation_email_2 !== null ? this.report?.confirmation_email_2 : null,
+      change_of_address: this.report?.change_of_address ?? false,
+      confirmation_email_1: this.report?.confirmation_email_1 ?? committeeAccount?.email,
+      confirmation_email_2: this.report?.confirmation_email_2 ?? undefined,
     });
   }
 
@@ -131,7 +130,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     const matches = email?.match(/^\S+@\S+\.\S{2,}/g);
     if (!email || email.length == 0) return false; //An empty email should be caught by the required validator
 
-    return matches == null || matches.length == 0;
+    return matches === null || matches.length == 0;
   }
 
   public checkIdenticalEmails(): boolean {
