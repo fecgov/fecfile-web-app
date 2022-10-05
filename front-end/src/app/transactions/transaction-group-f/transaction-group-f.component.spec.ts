@@ -66,8 +66,7 @@ describe('TransactionGroupFComponent', () => {
         ConfirmDialogModule,
       ],
       declarations: [TransactionGroupFComponent],
-      providers: [MessageService, ConfirmationService,
-        FormBuilder, provideMockStore(testMockStore)],
+      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 
@@ -84,7 +83,8 @@ describe('TransactionGroupFComponent', () => {
         return {} as Transaction;
       },
       title: '',
-      parent: undefined,
+      parentTransaction: undefined,
+      childTransactionType: undefined,
       schema: JF_TRAN_PAC_MEMO,
       transaction: transaction,
     } as TransactionType;

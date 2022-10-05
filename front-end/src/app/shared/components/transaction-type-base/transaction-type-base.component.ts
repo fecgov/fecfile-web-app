@@ -61,18 +61,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   ) {}
 
   ngOnInit(): void {
-    this.init(this.form, this.formProperties, this.validateService, this.transactionType);
+    this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
+    this.init(this.form, this.validateService, this.transactionType);
   }
 
-  init(
-    form: FormGroup,
-    formProperties: string[],
-    validateService: ValidateService,
-    transactionType: TransactionType | undefined
-  ) {
-    // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
-    form = this.fb.group(this.validateService.getFormGroupFields(formProperties));
-
+  init(form: FormGroup, validateService: ValidateService, transactionType: TransactionType | undefined) {
     // Initialize validation tracking of current JSON schema and form data
     validateService.formValidatorSchema = transactionType?.schema;
     validateService.formValidatorForm = form;
