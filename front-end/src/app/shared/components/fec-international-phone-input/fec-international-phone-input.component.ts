@@ -63,7 +63,8 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnDes
   onKey(event: KeyboardEvent) {
     // without type info
     this.number = (event.target as HTMLInputElement).value;
-    this.onChange('+' + this.countryCode + ' ' + this.number);
+    const fullNumber = this.number ? '+' + this.countryCode + ' ' + this.number : '';
+    this.onChange(fullNumber);
   }
 
   ngOnDestroy() {
