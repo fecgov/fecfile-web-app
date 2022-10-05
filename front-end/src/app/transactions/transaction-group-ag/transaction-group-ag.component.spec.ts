@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ContactTypes } from 'app/shared/models/contact.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { AccordionModule } from 'primeng/accordion';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -49,7 +50,7 @@ describe('TransactionGroupAgComponent', () => {
         BrowserAnimationsModule,
       ],
       declarations: [TransactionGroupAgComponent],
-      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
   });
 

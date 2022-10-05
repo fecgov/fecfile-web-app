@@ -7,6 +7,7 @@ import { TransactionType } from 'app/shared/interfaces/transaction-type.interfac
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
@@ -69,7 +70,7 @@ describe('TransactionGroupBComponent', () => {
         ConfirmDialogModule,
       ],
       declarations: [TransactionGroupBComponent],
-      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
     testContactService = TestBed.inject(ContactService);
     testConfirmationService = TestBed.inject(ConfirmationService);
