@@ -7,9 +7,12 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ContactTypeLabels } from '../../models/contact.model';
 import { TransactionTypeBaseComponent } from '../transaction-type-base/transaction-type-base.component';
+import { ContactService } from 'app/shared/services/contact.service';
+import { SelectItem } from 'primeng/api';
+import { Contact } from '../../models/contact.model';
 
 @Component({
   template: '',
@@ -37,11 +40,13 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
   constructor(
     protected override messageService: MessageService,
     protected override transactionService: TransactionService,
+    protected override contactService: ContactService,
     protected override validateService: ValidateService,
+    protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router
   ) {
-    super(messageService, transactionService, validateService, fb, router);
+    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router);
   }
 
   override ngOnInit(): void {
@@ -55,6 +60,10 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
       this.childValidateService,
       this.transactionType?.childTransactionType
     );
+  }
+
+  onContactLookupSelectChild(selectItem: SelectItem<Contact>) {
+    this.updateFormFromContactLookup(selectItem, this.childForm);
   }
 
   override save(navigateTo: 'list' | 'add another' | 'add-sub-tran', transactionTypeToAdd?: string) {

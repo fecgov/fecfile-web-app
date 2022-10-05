@@ -8,6 +8,7 @@ export class EAR_MEMO implements TransactionType {
   title = '';
   schema = schema;
   transaction = undefined;
+  contact = undefined;
   parentTransaction = undefined;
   childTransactionType = undefined;
 

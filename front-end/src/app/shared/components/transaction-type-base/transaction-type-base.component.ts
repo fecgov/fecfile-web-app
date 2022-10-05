@@ -274,7 +274,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     });
   }
 
-  onContactLookupSelect(selectItem: SelectItem<Contact>, form: FormGroup) {
+  onContactLookupSelect(selectItem: SelectItem<Contact>) {
+    this.updateFormFromContactLookup(selectItem, this.form);
+  }
+
+  updateFormFromContactLookup(selectItem: SelectItem<Contact>, form: FormGroup) {
     if (selectItem) {
       const value = selectItem.value;
       if (value) {

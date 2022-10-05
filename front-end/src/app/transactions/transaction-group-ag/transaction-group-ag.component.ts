@@ -72,6 +72,6 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     protected override fb: FormBuilder,
     protected override router: Router
   ) {
-    super(messageService, transactionService, validateService, fb, router);
+    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router);
   }
 }
