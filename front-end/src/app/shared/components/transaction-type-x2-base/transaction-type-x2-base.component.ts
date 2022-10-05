@@ -14,9 +14,19 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { SelectItem } from 'primeng/api';
 import { Contact } from '../../models/contact.model';
 
+/**
+ * This component is to help manage a form that contains 2 transactions that the
+ * user needs to fill out and submit to the back end.
+ *
+ * The primany transaction code is inherited from the TransactionTypeBaseComponent. This
+ * abstract component class adds a child transaction that is defined in the parent
+ * transaction's TransactionType class. (e.g. TransactionType.childTransactionType)
+ *
+ * See the transaction-group-ag component for an example of how to implement a
+ * two-transaction input form.
+ */
 @Component({
   template: '',
-  providers: [{ provide: 'ChildValidateService', useClass: ValidateService }],
 })
 export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   get childContributionPurposeDescrip(): string | undefined {
@@ -27,6 +37,14 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
   }
   get childTransaction(): Transaction | undefined {
     return this.transactionType?.childTransactionType?.transaction;
+  }
+  get childContact(): Contact | undefined {
+    return this.transactionType?.childTransactionType?.contact;
+  }
+  set childContact(contact: Contact | undefined) {
+    if (this.transactionType?.childTransactionType) {
+      this.transactionType.childTransactionType.contact = contact;
+    }
   }
 
   abstract childFormProperties: string[];
@@ -95,17 +113,17 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
       );
 
       if (payload.id) {
-        this.transactionService
-          .update(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
-          .subscribe((transaction) => {
-            this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
-          });
+        // this.transactionService
+        //   .update(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
+        //   .subscribe((transaction) => {
+        //     this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
+        //   });
       } else {
-        this.transactionService
-          .create(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
-          .subscribe((transaction) => {
-            this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
-          });
+        // this.transactionService
+        //   .create(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
+        //   .subscribe((transaction) => {
+        //     this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
+        //   });
       }
     }
   }

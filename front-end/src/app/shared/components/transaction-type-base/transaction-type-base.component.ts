@@ -275,10 +275,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   onContactLookupSelect(selectItem: SelectItem<Contact>) {
-    this.updateFormFromContactLookup(selectItem, this.form);
+    this.updateFormFromContactLookup(selectItem, this.form, this.transactionType?.contact);
   }
 
-  updateFormFromContactLookup(selectItem: SelectItem<Contact>, form: FormGroup) {
+  updateFormFromContactLookup(selectItem: SelectItem<Contact>, form: FormGroup, contact: Contact | undefined) {
     if (selectItem) {
       const value = selectItem.value;
       if (value) {
@@ -300,12 +300,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             form.get('contributor_organization_name')?.setValue(value.name);
             break;
         }
-        this.form.get('contributor_street_1')?.setValue(value.street_1);
-        this.form.get('contributor_street_2')?.setValue(value.street_2);
-        this.form.get('contributor_city')?.setValue(value.city);
-        this.form.get('contributor_state')?.setValue(value.state);
-        this.form.get('contributor_zip')?.setValue(value.zip);
-        this.contact = value;
+        form.get('contributor_street_1')?.setValue(value.street_1);
+        form.get('contributor_street_2')?.setValue(value.street_2);
+        form.get('contributor_city')?.setValue(value.city);
+        form.get('contributor_state')?.setValue(value.state);
+        form.get('contributor_zip')?.setValue(value.zip);
+        if (contact) {
+          contact = value;
+        }
       }
     }
   }
