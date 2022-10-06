@@ -20,7 +20,7 @@
             <label for="entity_type">CONTRIBUTOR TYPE</label>
             <app-contact-lookup
               [contactTypeFormControl]="$any(form).controls['entity_type']"
-              [contactTypeOptions]="childContactTypeOptions"
+              [contactTypeOptions]="contactTypeOptions"
               [contactTypeReadOnly]="true"
               contactTypeStyleClass="readonly"
               (contactSelect)="onContactLookupSelect($event)"
