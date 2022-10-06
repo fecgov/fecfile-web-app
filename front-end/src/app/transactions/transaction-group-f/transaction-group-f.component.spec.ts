@@ -8,7 +8,7 @@ import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { schema as JOINT_FUNDRAISING_TRANSFER_PAC_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/JOINT_FUNDRAISING_TRANSFER_PAC_MEMO';
+import { schema as JF_TRANSFER_PAC_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/JF_TRANSFER_PAC_MEMO';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -33,7 +33,7 @@ describe('TransactionGroupFComponent', () => {
   const transaction = SchATransaction.fromJSON({
     form_type: 'SA11AI',
     filer_committee_id_number: 'C00000000',
-    transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER_PAC_MEMO,
+    transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFER_PAC_MEMO,
     transaction_id: 'AAAAAAAAAAAAAAAAAAA',
     entity_type: ContactTypes.ORGANIZATION,
     contributor_organization_name: 'org name',
@@ -84,7 +84,7 @@ describe('TransactionGroupFComponent', () => {
       },
       title: '',
       parent: undefined,
-      schema: JOINT_FUNDRAISING_TRANSFER_PAC_MEMO,
+      schema: JF_TRANSFER_PAC_MEMO,
       transaction: transaction,
     } as TransactionType;
     fixture.detectChanges();
@@ -99,7 +99,7 @@ describe('TransactionGroupFComponent', () => {
     component.save('list');
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
-      `${environment.apiUrl}/sch-a-transactions/1/?schema=JOINT_FUNDRAISING_TRANSFER_PAC_MEMO&fields_to_validate=`
+      `${environment.apiUrl}/sch-a-transactions/1/?schema=JF_TRANSFER_PAC_MEMO&fields_to_validate=`
     );
     httpTestingController.verify();
   });

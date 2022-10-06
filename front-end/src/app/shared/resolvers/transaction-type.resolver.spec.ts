@@ -85,7 +85,7 @@ describe('TransactionResolver', () => {
 
   it('should return a child transaction', () => {
     const route = {
-      paramMap: convertToParamMap({ parentTransactionId: 1, transactionType: 'JOINT_FUNDRAISING_TRANSFER_PAC_MEMO' }),
+      paramMap: convertToParamMap({ parentTransactionId: 1, transactionType: 'JF_TRANSFER_PAC_MEMO' }),
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionType | undefined) => {
