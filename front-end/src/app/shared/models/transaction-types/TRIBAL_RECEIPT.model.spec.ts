@@ -1,27 +1,27 @@
-import { OTH_REC } from './OTH_REC.model';
+import { TRIBAL_RECEIPT } from './TRIBAL_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
-describe('OTH_REC', () => {
-  let transactionType: OTH_REC;
+describe('TRIBAL_RECEIPT', () => {
+  let transactionType: TRIBAL_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new OTH_REC();
+    transactionType = new TRIBAL_RECEIPT();
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('C');
+    expect(transactionType.componentGroupId).toBe('D');
   });
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA17');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.OTHER_RECEIPTS);
+    expect(txn.form_type).toBe('SA11AI');
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRIBAL_RECEIPT);
   });
 
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('');
+    expect(descrip).toBe('Tribal Receipt');
   });
 });

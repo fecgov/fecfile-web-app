@@ -52,7 +52,7 @@ describe('TransactionContainerComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             data: of({
-              transactionType: TransactionTypeUtils.factory('OFFSET_TO_OPEX'),
+              transactionType: TransactionTypeUtils.factory('OFFSET_TO_OPERATING_EXPENDITURES'),
             }),
           },
         },
