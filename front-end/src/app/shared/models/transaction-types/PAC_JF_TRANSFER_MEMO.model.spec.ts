@@ -1,11 +1,11 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { JF_TRANSFER_PAC_MEMO } from './JF_TRANSFER_PAC_MEMO.model';
+import { PAC_JF_TRANSFER_MEMO } from './PAC_JF_TRANSFER_MEMO.model';
 
-describe('JF_TRANSFER_PAC_MEMO', () => {
-  let transactionType: JF_TRANSFER_PAC_MEMO;
+describe('PAC_JF_TRANSFER_MEMO', () => {
+  let transactionType: PAC_JF_TRANSFER_MEMO;
 
   beforeEach(() => {
-    transactionType = new JF_TRANSFER_PAC_MEMO();
+    transactionType = new PAC_JF_TRANSFER_MEMO();
   });
 
   it('should create an instance', () => {
@@ -17,7 +17,7 @@ describe('JF_TRANSFER_PAC_MEMO', () => {
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA12');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.JF_TRANSFER_PAC_MEMO);
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   });
 
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {

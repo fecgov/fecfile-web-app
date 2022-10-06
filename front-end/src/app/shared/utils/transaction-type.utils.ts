@@ -4,7 +4,7 @@ import { JOINT_FUNDRAISING_TRANSFER } from '../models/transaction-types/JOINT_FU
 import { OFFSET_TO_OPERATING_EXPENDITURES } from '../models/transaction-types/OFFSET_TO_OPERATING_EXPENDITURES.model';
 import { OTHER_RECEIPT } from '../models/transaction-types/OTHER_RECEIPT.model';
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
-import { JF_TRANSFER_PAC_MEMO } from '../models/transaction-types/JF_TRANSFER_PAC_MEMO.model';
+import { PAC_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_JF_TRANSFER_MEMO.model';
 import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
 
 // prettier-ignore
@@ -14,7 +14,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   OFFSET_TO_OPERATING_EXPENDITURES,
   OTHER_RECEIPT,
   TRIBAL_RECEIPT,
-  JF_TRANSFER_PAC_MEMO,
+  PAC_JF_TRANSFER_MEMO,
   EARMARK_RECEIPT,
 }
 
