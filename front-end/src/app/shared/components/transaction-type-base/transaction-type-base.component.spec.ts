@@ -7,6 +7,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ApiService } from 'app/shared/services/api.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
@@ -72,6 +73,7 @@ describe('TransactionTypeBaseComponent', () => {
         TransactionService,
         ConfirmationService,
         provideMockStore(testMockStore),
+        FecDatePipe,
       ],
     }).compileComponents();
 
