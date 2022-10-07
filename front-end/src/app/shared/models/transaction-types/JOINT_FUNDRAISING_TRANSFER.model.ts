@@ -20,6 +20,7 @@ export class JOINT_FUNDRAISING_TRANSFER implements TransactionType {
     return SchATransaction.fromJSON({
       form_type: 'SA12',
       transaction_type_identifier: ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
+      aggregation_group: "General",
     });
   }
 }

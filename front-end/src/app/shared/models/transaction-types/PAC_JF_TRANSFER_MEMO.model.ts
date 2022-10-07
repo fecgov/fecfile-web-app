@@ -22,6 +22,7 @@ export class PAC_JF_TRANSFER_MEMO implements TransactionType {
       form_type: 'SA12',
       transaction_type_identifier: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
       back_reference_sched_name: 'SA12',
+      aggregation_group: "General",
     });
   }
 }

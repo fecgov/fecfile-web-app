@@ -20,6 +20,7 @@ export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
     return SchATransaction.fromJSON({
       form_type: 'SA15',
       transaction_type_identifier: ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES,
+      aggregation_group: "Line 15",
     });
   }
 }

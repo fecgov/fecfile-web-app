@@ -20,6 +20,7 @@ export class EARMARK_RECEIPT implements TransactionType {
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.EARMARK_RECEIPT,
+      aggregation_group: "General",
     });
   }
 }
