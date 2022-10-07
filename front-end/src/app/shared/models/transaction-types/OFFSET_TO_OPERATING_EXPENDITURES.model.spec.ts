@@ -1,23 +1,23 @@
-import { EAR_REC } from './EAR_REC.model';
+import { OFFSET_TO_OPERATING_EXPENDITURES } from './OFFSET_TO_OPERATING_EXPENDITURES.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
-describe('EAR_REC', () => {
-  let transactionType: EAR_REC;
+describe('OFFSET_TO_OPERATING_EXPENDITURES', () => {
+  let transactionType: OFFSET_TO_OPERATING_EXPENDITURES;
 
   beforeEach(() => {
-    transactionType = new EAR_REC();
+    transactionType = new OFFSET_TO_OPERATING_EXPENDITURES();
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('AG');
+    expect(transactionType.componentGroupId).toBe('B');
   });
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA11AI');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_RECEIPT);
+    expect(txn.form_type).toBe('SA15');
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES);
   });
 
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {

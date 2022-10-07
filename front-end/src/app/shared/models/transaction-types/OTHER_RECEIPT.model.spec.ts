@@ -1,23 +1,23 @@
-import { OFFSET_TO_OPEX } from './OFFSET_TO_OPEX.model';
+import { OTHER_RECEIPT } from './OTHER_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
-describe('OFFSET_TO_OPEX', () => {
-  let transactionType: OFFSET_TO_OPEX;
+describe('OTHER_RECEIPT', () => {
+  let transactionType: OTHER_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new OFFSET_TO_OPEX();
+    transactionType = new OTHER_RECEIPT();
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('B');
+    expect(transactionType.componentGroupId).toBe('C');
   });
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA15');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES);
+    expect(txn.form_type).toBe('SA17');
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.OTHER_RECEIPTS);
   });
 
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {

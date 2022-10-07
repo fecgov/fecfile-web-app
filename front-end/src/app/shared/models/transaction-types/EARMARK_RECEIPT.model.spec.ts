@@ -1,27 +1,27 @@
+import { EARMARK_RECEIPT } from './EARMARK_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { JF_TRAN_PAC_MEMO } from './JF_TRAN_PAC_MEMO.model';
 
-describe('JF_TRAN_PAC_MEMO', () => {
-  let transactionType: JF_TRAN_PAC_MEMO;
+describe('EARMARK_RECEIPT', () => {
+  let transactionType: EARMARK_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new JF_TRAN_PAC_MEMO();
+    transactionType = new EARMARK_RECEIPT();
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('F');
+    expect(transactionType.componentGroupId).toBe('AG');
   });
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA12');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.JF_TRAN_PAC_MEMO);
+    expect(txn.form_type).toBe('SA11AI');
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_RECEIPT);
   });
 
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe(`JF Memo: ${transactionType.parentTransaction?.contributor_organization_name}`);
+    expect(descrip).toBe('');
   });
 });

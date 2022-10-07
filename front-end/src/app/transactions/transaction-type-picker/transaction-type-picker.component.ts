@@ -76,7 +76,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
       case ScheduleATransactionGroups.TRANSFERS:
         return [
           ScheduleATransactionTypes.TRANSFERS,
-          ScheduleATransactionTypes.JF_TRANSFER,
+          ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
           ScheduleATransactionTypes.IN_KIND_TRANSFER,
           ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA,
           ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,

@@ -10,7 +10,7 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { schema as OFFSET_TO_OPEX } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPEX';
+import { schema as OFFSET_TO_OPERATING_EXPENDITURES } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPERATING_EXPENDITURES';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -37,7 +37,7 @@ describe('TransactionGroupBComponent', () => {
   const transaction = SchATransaction.fromJSON({
     form_type: 'SA15',
     filer_committee_id_number: 'C00000000',
-    transaction_type_identifier: 'OFFSET_TO_OPEX',
+    transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
     transaction_id: 'AAAAAAAAAAAAAAAAAAA',
     entity_type: ContactTypes.ORGANIZATION,
     contributor_organization_name: 'org name',
@@ -91,7 +91,7 @@ describe('TransactionGroupBComponent', () => {
       title: '',
       parentTransaction: undefined,
       childTransactionType: undefined,
-      schema: OFFSET_TO_OPEX,
+      schema: OFFSET_TO_OPERATING_EXPENDITURES,
       transaction: transaction,
     } as TransactionType;
     fixture.detectChanges();
@@ -143,7 +143,7 @@ describe('TransactionGroupBComponent', () => {
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
       filer_committee_id_number: 'C00000000',
-      transaction_type_identifier: 'OFFSET_TO_OPEX',
+      transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
       transaction_id: 'AAAAAAAAAAAAAAAAAAA',
       entity_type: ContactTypes.ORGANIZATION,
       contributor_organization_name: 'org name',
@@ -158,7 +158,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...testTran });
     component.save('list');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPEX&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
+      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
     );
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -180,7 +180,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...transaction });
     component.save('add another');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/10/?schema=OFFSET_TO_OPEX&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
+      `${environment.apiUrl}/sch-a-transactions/10/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
     );
     expect(req.request.method).toEqual('PUT');
     httpTestingController.verify();
@@ -202,7 +202,7 @@ describe('TransactionGroupBComponent', () => {
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
       filer_committee_id_number: 'C00000000',
-      transaction_type_identifier: 'OFFSET_TO_OPEX',
+      transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
       transaction_id: 'AAAAAAAAAAAAAAAAAAA',
       entity_type: ContactTypes.INDIVIDUAL,
       contributor_first_name: 'fn',
@@ -219,7 +219,7 @@ describe('TransactionGroupBComponent', () => {
 
     component.save('list');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPEX&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
+      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
     );
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -241,7 +241,7 @@ describe('TransactionGroupBComponent', () => {
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
       filer_committee_id_number: 'C00000000',
-      transaction_type_identifier: 'OFFSET_TO_OPEX',
+      transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
       transaction_id: 'AAAAAAAAAAAAAAAAAAA',
       entity_type: ContactTypes.COMMITTEE,
       contributor_organization_name: 'org name',
@@ -256,7 +256,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...testTran });
     component.save('list');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPEX&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
+      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
     );
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -267,7 +267,7 @@ describe('TransactionGroupBComponent', () => {
     component.save('list');
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
-      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPEX&fields_to_validate=`
+      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=`
     );
     httpTestingController.verify();
   });
@@ -289,7 +289,7 @@ describe('TransactionGroupBComponent', () => {
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
       filer_committee_id_number: 'C00000000',
-      transaction_type_identifier: 'OFFSET_TO_OPEX',
+      transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
       transaction_id: 'AAAAAAAAAAAAAAAAAAA',
       entity_type: ContactTypes.INDIVIDUAL,
       contribution_amount: 1,
@@ -299,7 +299,7 @@ describe('TransactionGroupBComponent', () => {
     component.save('list');
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
-      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPEX&fields_to_validate=`
+      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=`
     );
     httpTestingController.verify();
   });

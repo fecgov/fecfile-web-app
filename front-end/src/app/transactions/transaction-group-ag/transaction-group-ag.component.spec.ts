@@ -18,7 +18,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
-import { EAR_REC } from '../../shared/models/transaction-types/EAR_REC.model';
+import { EARMARK_RECEIPT } from '../../shared/models/transaction-types/EARMARK_RECEIPT.model';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupAgComponent } from './transaction-group-ag.component';
 
@@ -26,7 +26,7 @@ describe('TransactionGroupAgComponent', () => {
   let component: TransactionGroupAgComponent;
   let fixture: ComponentFixture<TransactionGroupAgComponent>;
 
-  const earmarkReceipt = new EAR_REC();
+  const earmarkReceipt = new EARMARK_RECEIPT();
   earmarkReceipt.transaction = earmarkReceipt.getNewTransaction();
 
   beforeEach(async () => {
