@@ -10,7 +10,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { of, Subject, takeUntil } from 'rxjs';
+import { of, Subject, takeUntil, Observable, combineLatest, switchMap } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
@@ -94,6 +94,21 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           this.form.get('contributor_employer')?.reset();
           this.form.get('contributor_occupation')?.reset();
         }
+      });
+
+    const contribution_amount$: Observable<any> = this.form?.get('contribution_amount')?.valueChanges || of(undefined);
+    const previous_transaction$: Observable<any> =
+      this.form?.get('contribution_date')?.valueChanges.pipe(
+        switchMap((contribution_date) => {
+          return this.transactionService.getPreviousTransaction(this.contact?.id || '', contribution_date);
+        })
+      ) || of(undefined);
+    combineLatest([contribution_amount$, previous_transaction$])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([contribution_amount, previous_transaction]) => {
+        this.form
+          ?.get('contribution_aggregate')
+          ?.setValue(contribution_amount + +previous_transaction.contribution_aggregate);
       });
   }
 

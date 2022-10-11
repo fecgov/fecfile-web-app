@@ -12,7 +12,14 @@ export class SchATransactionService {
 
   public get(id: string): Observable<SchATransaction> {
     return this.apiService
-      .get<SchATransaction>(`/sch-a-transactions/${id}`)
+      .get<SchATransaction>(`/sch-a-transactions/${id}/`)
+      .pipe(map((response) => SchATransaction.fromJSON(response)));
+  }
+
+  public getPreviousTransaction(contact_id: string, contribution_date: Date): Observable<SchATransaction> {
+    const contributionDateString: string = contribution_date.toISOString().split('T')[0];
+    return this.apiService
+      .get<SchATransaction>(`/sch-a-transactions/previous/`, { contact_id, contribution_date: contributionDateString })
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 

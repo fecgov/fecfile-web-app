@@ -37,6 +37,10 @@ export class TransactionService implements TableListService<Transaction> {
     return this.schATransactionService.get(transactionId);
   }
 
+  public getPreviousTransaction(contact_id: string, contribution_date: Date): Observable<Transaction> {
+    return this.schATransactionService.getPreviousTransaction(contact_id, contribution_date);
+  }
+
   public create(transaction: Transaction, schema: string, fieldsToValidate: string[] = []): Observable<Transaction> {
     return this.schATransactionService.create(transaction as SchATransaction, schema, fieldsToValidate);
   }
