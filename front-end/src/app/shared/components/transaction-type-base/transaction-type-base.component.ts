@@ -156,8 +156,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.contact = contact;
       if (this.transaction?.transaction_type_identifier) {
         let fieldsToValidate: string[] = this.validateService.getSchemaProperties(this.schema);
+        const fieldsToSkip: string[] = ['transaction_id', 'donor_committee_name', 'contribution_aggregate'];
         // Remove properties populated in the back-end from list of properties to validate
-        fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_committee_name');
+        fieldsToValidate = fieldsToValidate.filter((p) => !fieldsToSkip.includes(p));
 
         payload.contact_id = this.contact?.id;
         if (payload.id) {
