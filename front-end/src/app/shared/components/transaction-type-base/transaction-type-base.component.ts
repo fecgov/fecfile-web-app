@@ -196,6 +196,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return `By saving this transaction, you're also creating a new ${confirmationContactTitle}.`
   }
 
+  /**
+   * This method returns the differences between the transaction
+   * form's contact section and its database contact in prose 
+   * for the UI as a string[] (one entry for each change).
+   * @returns string[] containing the changes in prose for the UI.
+   */
   getFormChangesToTransactionContact() {
     const retval: string[] = [];
     if (this.contact) {
