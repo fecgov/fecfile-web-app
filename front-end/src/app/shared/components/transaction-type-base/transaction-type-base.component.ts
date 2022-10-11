@@ -207,40 +207,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.contact) {
       switch (this.contact.type) {
         case ContactTypes.INDIVIDUAL:
-          this.form.get('contributor_last_name')?.value !== this.contact.last_name ?
-            retval.push('Updated last name to ' +
-              this.form.get('contributor_last_name')?.value) : '';
-          this.form.get('contributor_first_name')?.value !== this.contact.first_name ?
-            retval.push('Updated first name to ' +
-              this.form.get('contributor_first_name')?.value) : '';
-          this.form.get('contributor_middle_name')?.value !== this.contact.middle_name ?
-            retval.push('Updated middle name to ' +
-              this.form.get('contributor_middle_name')?.value) : '';
-          this.form.get('contributor_prefix')?.value !== this.contact.prefix ?
-            retval.push('Updated prefix to ' +
-              this.form.get('contributor_prefix')?.value) : '';
-          this.form.get('contributor_suffix')?.value !== this.contact.suffix ?
-            retval.push('Updated suffix to ' +
-              this.form.get('contributor_suffix')?.value) : '';
-          this.form.get('contributor_employer')?.value !== this.contact.employer ?
-            retval.push('Updated employer to ' +
-              this.form.get('contributor_employer')?.value) : '';
-          this.form.get('contributor_occupation')?.value !== this.contact.occupation ?
-            retval.push('Updated occupation to ' +
-              this.form.get('contributor_occupation')?.value) : '';
+          retval.concat(this.getIndFormChangesToTransactionContact());
           break;
         case ContactTypes.COMMITTEE:
-          this.form.get('donor_committee_fec_id')?.value !== this.contact.committee_id ?
-            retval.push('Updated committee id to ' +
-              this.form.get('donor_committee_fec_id')?.value) : '';
-          this.form.get('contributor_organization_name')?.value !== this.contact.name ?
-            retval.push('Updated committee name to ' +
-              this.form.get('contributor_organization_name')?.value) : '';
+          retval.concat(this.getComFormChangesToTransactionContact());
           break;
         case ContactTypes.ORGANIZATION:
-          this.form.get('contributor_organization_name')?.value !== this.contact.name ?
-            retval.push('Updated organization name to ' +
-              this.form.get('contributor_organization_name')?.value) : '';
+          retval.concat(this.getOrgFormChangesToTransactionContact());
           break;
       }
       this.form.get('contributor_street_1')?.value !== this.contact.street_1 ?
@@ -258,6 +231,57 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.form.get('contributor_zip')?.value !== this.contact.zip ?
         retval.push('Updated zip to ' +
           this.form.get('contributor_zip')?.value) : ''
+    }
+    return retval;
+  }
+
+  getIndFormChangesToTransactionContact() {
+    const retval: string[] = [];
+    if (this.contact) {
+      this.form.get('contributor_last_name')?.value !== this.contact.last_name ?
+        retval.push('Updated last name to ' +
+          this.form.get('contributor_last_name')?.value) : '';
+      this.form.get('contributor_first_name')?.value !== this.contact.first_name ?
+        retval.push('Updated first name to ' +
+          this.form.get('contributor_first_name')?.value) : '';
+      this.form.get('contributor_middle_name')?.value !== this.contact.middle_name ?
+        retval.push('Updated middle name to ' +
+          this.form.get('contributor_middle_name')?.value) : '';
+      this.form.get('contributor_prefix')?.value !== this.contact.prefix ?
+        retval.push('Updated prefix to ' +
+          this.form.get('contributor_prefix')?.value) : '';
+      this.form.get('contributor_suffix')?.value !== this.contact.suffix ?
+        retval.push('Updated suffix to ' +
+          this.form.get('contributor_suffix')?.value) : '';
+      this.form.get('contributor_employer')?.value !== this.contact.employer ?
+        retval.push('Updated employer to ' +
+          this.form.get('contributor_employer')?.value) : '';
+      this.form.get('contributor_occupation')?.value !== this.contact.occupation ?
+        retval.push('Updated occupation to ' +
+          this.form.get('contributor_occupation')?.value) : '';
+    }
+    return retval;
+  }
+
+  getComFormChangesToTransactionContact() {
+    const retval: string[] = [];
+    if (this.contact) {
+      this.form.get('donor_committee_fec_id')?.value !== this.contact.committee_id ?
+        retval.push('Updated committee id to ' +
+          this.form.get('donor_committee_fec_id')?.value) : '';
+      this.form.get('contributor_organization_name')?.value !== this.contact.name ?
+        retval.push('Updated committee name to ' +
+          this.form.get('contributor_organization_name')?.value) : '';
+    }
+    return retval;
+  }
+
+  getOrgFormChangesToTransactionContact() {
+    const retval: string[] = [];
+    if (this.contact) {
+      this.form.get('contributor_organization_name')?.value !== this.contact.name ?
+        retval.push('Updated organization name to ' +
+          this.form.get('contributor_organization_name')?.value) : '';
     }
     return retval;
   }
