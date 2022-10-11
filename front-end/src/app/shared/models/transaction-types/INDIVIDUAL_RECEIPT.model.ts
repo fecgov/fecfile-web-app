@@ -1,5 +1,5 @@
 import { TransactionType } from '../../interfaces/transaction-type.interface';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels, AggregationGroups } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECEIPT';
 
@@ -20,7 +20,7 @@ export class INDIVIDUAL_RECEIPT implements TransactionType {
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
-      aggregation_group: "General",
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

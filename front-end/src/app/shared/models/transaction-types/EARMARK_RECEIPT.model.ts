@@ -1,7 +1,7 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_RECEIPT';
 import { TransactionType } from '../../interfaces/transaction-type.interface';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { AggregationGroups, SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 
 export class EARMARK_RECEIPT implements TransactionType {
   scheduleId = 'A';
@@ -20,7 +20,7 @@ export class EARMARK_RECEIPT implements TransactionType {
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.EARMARK_RECEIPT,
-      aggregation_group: "General",
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }
