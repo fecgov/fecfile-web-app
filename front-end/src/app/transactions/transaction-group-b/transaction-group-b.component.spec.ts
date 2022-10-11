@@ -6,7 +6,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { AggregationGroups, SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { schema as OFFSET_TO_OPERATING_EXPENDITURES } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPERATING_EXPENDITURES';
@@ -47,7 +47,7 @@ describe('TransactionGroupBComponent', () => {
     contribution_date: '2022-08-11',
     contribution_amount: 1,
     contribution_aggregate: 2,
-    aggregation_group: "Line 15",
+    aggregation_group: AggregationGroups.LINE_15,
   });
 
   beforeEach(async () => {
@@ -153,7 +153,7 @@ describe('TransactionGroupBComponent', () => {
       contribution_date: '2022-08-11',
       contribution_amount: 1,
       contribution_aggregate: 2,
-      aggregation_group: "Line 15",
+      aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
     component.save('list');
@@ -214,7 +214,7 @@ describe('TransactionGroupBComponent', () => {
       contribution_date: '2022-08-11',
       contribution_amount: 1,
       contribution_aggregate: 2,
-      aggregation_group: "Line 15",
+      aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
 
@@ -253,7 +253,7 @@ describe('TransactionGroupBComponent', () => {
       contribution_date: '2022-08-11',
       contribution_amount: 1,
       contribution_aggregate: 2,
-      aggregation_group: "Line 15",
+      aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
     component.save('list');
@@ -296,7 +296,7 @@ describe('TransactionGroupBComponent', () => {
       entity_type: ContactTypes.INDIVIDUAL,
       contribution_amount: 1,
       contribution_aggregate: undefined, // This field is required so the txn is invalid
-      aggregation_group: "Line 15",
+      aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
     component.save('list');
