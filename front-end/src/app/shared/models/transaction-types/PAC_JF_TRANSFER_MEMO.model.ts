@@ -1,5 +1,5 @@
 import { TransactionType } from '../../interfaces/transaction-type.interface';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels, AggregationGroups } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
 import { Transaction } from '../../interfaces/transaction.interface';
@@ -22,6 +22,7 @@ export class PAC_JF_TRANSFER_MEMO implements TransactionType {
       form_type: 'SA12',
       transaction_type_identifier: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
       back_reference_sched_name: 'SA12',
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }
