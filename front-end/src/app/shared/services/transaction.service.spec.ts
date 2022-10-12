@@ -56,7 +56,7 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/1/`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
@@ -100,7 +100,7 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/1/`);
     expect(req.request.method).toEqual('DELETE');
     req.flush(mockResponse);
     httpTestingController.verify();
