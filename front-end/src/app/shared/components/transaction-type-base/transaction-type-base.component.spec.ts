@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormControl } from '@angular/forms';
@@ -66,6 +67,7 @@ describe('TransactionTypeBaseComponent', () => {
       declarations: [TestTransactionTypeBaseComponent],
       imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [
+        DatePipe,
         MessageService,
         FormBuilder,
         ValidateService,
