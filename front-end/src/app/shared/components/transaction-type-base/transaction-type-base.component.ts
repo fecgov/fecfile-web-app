@@ -100,15 +100,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const previous_transaction$: Observable<any> =
       this.form?.get('contribution_date')?.valueChanges.pipe(
         switchMap((contribution_date) => {
-          return this.transactionService.getPreviousTransaction(this.contact?.id || '', contribution_date);
+          if (this.contact?.id) {
+            return this.transactionService.getPreviousTransaction(this.contact?.id || '', contribution_date);
+          }
+          return of(undefined);
         })
       ) || of(undefined);
     combineLatest([contribution_amount$, previous_transaction$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([contribution_amount, previous_transaction]) => {
-        this.form
-          ?.get('contribution_aggregate')
-          ?.setValue(contribution_amount + +previous_transaction.contribution_aggregate);
+        const previousAggregate = +previous_transaction?.contribution_aggregate || 0;
+        this.form?.get('contribution_aggregate')?.setValue(contribution_amount + previousAggregate);
       });
   }
 
