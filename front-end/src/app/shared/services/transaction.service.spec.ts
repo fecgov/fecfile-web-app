@@ -63,6 +63,19 @@ describe('TransactionService', () => {
     httpTestingController.verify();
   });
 
+  it('#get() should GET previous transaction', () => {
+    const mockResponse: SchATransaction = SchATransaction.fromJSON({ id: 1 });
+
+    service.getPreviousTransaction('1', new Date()).subscribe((response) => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/1/`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(mockResponse);
+    httpTestingController.verify();
+  });
+
   it('#create() should POST a record', () => {
     const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
 
