@@ -10,7 +10,17 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { of, Subject, takeUntil, Observable, combineLatest, switchMap } from 'rxjs';
+import {
+  of,
+  Subject,
+  takeUntil,
+  Observable,
+  combineLatest,
+  switchMap,
+  combineLatestWith,
+  BehaviorSubject,
+  startWith,
+} from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
@@ -45,6 +55,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
+  contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
 
@@ -96,12 +107,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         }
       });
 
-    const contribution_amount$: Observable<any> = this.form?.get('contribution_amount')?.valueChanges || of(undefined);
+    const contribution_amount$: Observable<any> =
+      this.form
+        ?.get('contribution_amount')
+        ?.valueChanges.pipe(startWith(this.form?.get('contribution_amount')?.value)) || of(undefined);
     const previous_transaction$: Observable<any> =
       this.form?.get('contribution_date')?.valueChanges.pipe(
-        switchMap((contribution_date) => {
-          if (this.contact?.id) {
-            return this.transactionService.getPreviousTransaction(this.contact?.id || '', contribution_date);
+        startWith(this.form?.get('contribution_date')?.value),
+        combineLatestWith(this.contactId$),
+        switchMap(([contribution_date, contactId]) => {
+          if (contribution_date && contactId) {
+            return this.transactionService.getPreviousTransaction(contactId, contribution_date);
           }
           return of(undefined);
         })
@@ -110,13 +126,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       .pipe(takeUntil(this.destroy$))
       .subscribe(([contribution_amount, previous_transaction]) => {
         const previousAggregate = +previous_transaction?.contribution_aggregate || 0;
-        this.form?.get('contribution_aggregate')?.setValue(contribution_amount + previousAggregate);
+        this.form?.get('contribution_aggregate')?.setValue(+contribution_amount + previousAggregate);
       });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+    this.contactId$.complete();
   }
 
   save(navigateTo: 'list' | 'add another' | 'add-sub-tran', transactionTypeToAdd?: string) {
@@ -306,6 +323,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         this.form.get('contributor_state')?.setValue(value.state);
         this.form.get('contributor_zip')?.setValue(value.zip);
         this.contact = value;
+        this.contactId$.next(this.contact?.id || '');
       }
     }
   }
