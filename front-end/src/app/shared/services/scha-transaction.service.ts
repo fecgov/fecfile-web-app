@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
+import { DatePipe } from '@angular/common';
 import { SchATransaction } from '../models/scha-transaction.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SchATransactionService {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private datePipe: DatePipe) {}
 
   public get(id: string): Observable<SchATransaction> {
     return this.apiService
@@ -17,7 +18,7 @@ export class SchATransactionService {
   }
 
   public getPreviousTransaction(contact_id: string, contribution_date: Date): Observable<SchATransaction> {
-    const contributionDateString: string = contribution_date.toISOString().split('T')[0];
+    const contributionDateString: string = this.datePipe.transform(contribution_date) || '';
     return this.apiService
       .get<SchATransaction>(`/sch-a-transactions/previous/`, { contact_id, contribution_date: contributionDateString })
       .pipe(map((response) => SchATransaction.fromJSON(response)));
