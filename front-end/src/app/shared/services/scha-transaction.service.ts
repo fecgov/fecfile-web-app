@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ContactSchATransaction, SchATransaction } from '../models/scha-transaction.model';
 import { ApiService } from './api.service';
-import { SchATransaction } from '../models/scha-transaction.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SchATransactionService {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   public get(id: string): Observable<SchATransaction> {
     return this.apiService
@@ -17,11 +17,11 @@ export class SchATransactionService {
   }
 
   public create(
-    schATransaction: SchATransaction,
+    contactSchATransaction: ContactSchATransaction,
     schema: string,
     fieldsToValidate: string[] = []
   ): Observable<SchATransaction> {
-    const payload = schATransaction.toJson();
+    const payload = contactSchATransaction.toJson();
     return this.apiService
       .post<SchATransaction>(`/sch-a-transactions/`, payload, {
         schema: schema,
@@ -31,13 +31,14 @@ export class SchATransactionService {
   }
 
   public update(
-    schATransaction: SchATransaction,
+    contactSchATransaction: ContactSchATransaction,
     schema: string,
     fieldsToValidate: string[] = []
   ): Observable<SchATransaction> {
-    const payload = schATransaction.toJson();
+    const payload = contactSchATransaction.toJson();
     return this.apiService
-      .put<SchATransaction>(`/sch-a-transactions/${schATransaction.id}/`, payload, {
+      .put<SchATransaction>(`/sch-a-transactions/` +
+        `${contactSchATransaction.transaction.id}/`, payload, {
         schema: schema,
         fields_to_validate: fieldsToValidate.join(','),
       })

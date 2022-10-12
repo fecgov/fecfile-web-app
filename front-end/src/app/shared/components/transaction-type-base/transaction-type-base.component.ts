@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { ContactSchATransaction, SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -202,62 +202,77 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return `By saving this transaction, you're also creating a new ${confirmationContactTitle}.`;
   }
 
+  /**
+   * This method returns the differences between the transaction
+   * form's contact section and its database contact in prose
+   * for the UI as a string[] (one entry for each change).
+   * @returns string[] containing the changes in prose for the UI.
+   */
   getFormChangesToTransactionContact() {
     const retval: string[] = [];
     if (this.contact) {
       switch (this.contact.type) {
         case ContactTypes.INDIVIDUAL:
-          this.form.get('contributor_last_name')?.value !== this.contact.last_name
-            ? retval.push('Updated last name to ' + this.form.get('contributor_last_name')?.value)
-            : '';
-          this.form.get('contributor_first_name')?.value !== this.contact.first_name
-            ? retval.push('Updated first name to ' + this.form.get('contributor_first_name')?.value)
-            : '';
-          this.form.get('contributor_middle_name')?.value !== this.contact.middle_name
-            ? retval.push('Updated middle name to ' + this.form.get('contributor_middle_name')?.value)
-            : '';
-          this.form.get('contributor_prefix')?.value !== this.contact.prefix
-            ? retval.push('Updated prefix to ' + this.form.get('contributor_prefix')?.value)
-            : '';
-          this.form.get('contributor_suffix')?.value !== this.contact.suffix
-            ? retval.push('Updated suffix to ' + this.form.get('contributor_suffix')?.value)
-            : '';
-          this.form.get('contributor_employer')?.value !== this.contact.employer
-            ? retval.push('Updated employer to ' + this.form.get('contributor_employer')?.value)
-            : '';
-          this.form.get('contributor_occupation')?.value !== this.contact.occupation
-            ? retval.push('Updated occupation to ' + this.form.get('contributor_occupation')?.value)
-            : '';
+          retval.push(...this.getIndFormChangesToTransactionContact());
           break;
         case ContactTypes.COMMITTEE:
-          this.form.get('donor_committee_fec_id')?.value !== this.contact.committee_id
-            ? retval.push('Updated committee id to ' + this.form.get('donor_committee_fec_id')?.value)
-            : '';
-          this.form.get('contributor_organization_name')?.value !== this.contact.name
-            ? retval.push('Updated committee name to ' + this.form.get('contributor_organization_name')?.value)
-            : '';
+          retval.push(...this.getComFormChangesToTransactionContact());
           break;
         case ContactTypes.ORGANIZATION:
-          this.form.get('contributor_organization_name')?.value !== this.contact.name
-            ? retval.push('Updated organization name to ' + this.form.get('contributor_organization_name')?.value)
-            : '';
+          retval.push(...this.getOrgFormChangesToTransactionContact());
           break;
       }
-      this.form.get('contributor_street_1')?.value !== this.contact.street_1
-        ? retval.push('Updated street address to ' + this.form.get('contributor_street_1')?.value)
-        : '';
-      this.form.get('contributor_street_2')?.value !== this.contact.street_2
-        ? retval.push('Updated apartment, suite, etc. to ' + this.form.get('contributor_street_2')?.value)
-        : '';
-      this.form.get('contributor_city')?.value !== this.contact.city
-        ? retval.push('Updated city to ' + this.form.get('contributor_city')?.value)
-        : '';
-      this.form.get('contributor_state')?.value !== this.contact.state
-        ? retval.push('Updated state to ' + this.form.get('contributor_state')?.value)
-        : '';
-      this.form.get('contributor_zip')?.value !== this.contact.zip
-        ? retval.push('Updated zip to ' + this.form.get('contributor_zip')?.value)
-        : '';
+      if (this.form.get('contributor_street_1')?.value !== this.contact.street_1)
+        retval.push('Updated street address to ' + this.form.get('contributor_street_1')?.value);
+      if (this.form.get('contributor_street_2')?.value !== this.contact.street_2)
+        retval.push('Updated apartment, suite, etc. to ' + this.form.get('contributor_street_2')?.value);
+      if (this.form.get('contributor_city')?.value !== this.contact.city)
+        retval.push('Updated city to ' + this.form.get('contributor_city')?.value);
+      if (this.form.get('contributor_state')?.value !== this.contact.state)
+        retval.push('Updated state to ' + this.form.get('contributor_state')?.value);
+      if (this.form.get('contributor_zip')?.value !== this.contact.zip)
+        retval.push('Updated zip to ' + this.form.get('contributor_zip')?.value);
+    }
+    return retval;
+  }
+
+  getIndFormChangesToTransactionContact() {
+    const retval: string[] = [];
+    if (this.contact) {
+      if (this.form.get('contributor_last_name')?.value !== this.contact.last_name)
+        retval.push('Updated last name to ' + this.form.get('contributor_last_name')?.value);
+      if (this.form.get('contributor_first_name')?.value !== this.contact.first_name)
+        retval.push('Updated first name to ' + this.form.get('contributor_first_name')?.value);
+      if (this.form.get('contributor_middle_name')?.value !== this.contact.middle_name)
+        retval.push('Updated middle name to ' + this.form.get('contributor_middle_name')?.value);
+      if (this.form.get('contributor_prefix')?.value !== this.contact.prefix)
+        retval.push('Updated prefix to ' + this.form.get('contributor_prefix')?.value);
+      if (this.form.get('contributor_suffix')?.value !== this.contact.suffix)
+        retval.push('Updated suffix to ' + this.form.get('contributor_suffix')?.value);
+      if (this.form.get('contributor_employer')?.value !== this.contact.employer)
+        retval.push('Updated employer to ' + this.form.get('contributor_employer')?.value);
+      if (this.form.get('contributor_occupation')?.value !== this.contact.occupation)
+        retval.push('Updated occupation to ' + this.form.get('contributor_occupation')?.value);
+    }
+    return retval;
+  }
+
+  getComFormChangesToTransactionContact() {
+    const retval: string[] = [];
+    if (this.contact) {
+      if (this.form.get('donor_committee_fec_id')?.value !== this.contact.committee_id)
+        retval.push('Updated committee id to ' + this.form.get('donor_committee_fec_id')?.value);
+      if (this.form.get('contributor_organization_name')?.value !== this.contact.name)
+        retval.push('Updated committee name to ' + this.form.get('contributor_organization_name')?.value);
+    }
+    return retval;
+  }
+
+  getOrgFormChangesToTransactionContact() {
+    const retval: string[] = [];
+    if (this.contact) {
+      if (this.form.get('contributor_organization_name')?.value !== this.contact.name)
+        retval.push('Updated organization name to ' + this.form.get('contributor_organization_name')?.value);
     }
     return retval;
   }
@@ -268,15 +283,16 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       // Remove properties populated in the back-end from list of properties to validate
       fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_committee_name');
 
+      const realPayload = new ContactSchATransaction(this.contact, payload);
       if (payload.id) {
         this.transactionService
-          .update(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
+          .update(realPayload, this.transaction.transaction_type_identifier, fieldsToValidate)
           .subscribe((transaction) => {
             this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
           });
       } else {
         this.transactionService
-          .create(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
+          .create(realPayload, this.transaction.transaction_type_identifier, fieldsToValidate)
           .subscribe((transaction) => {
             this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
           });
