@@ -6,6 +6,7 @@ import { TransactionService } from './transaction.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { environment } from '../../../environments/environment';
+import { DatePipe } from '@angular/common';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -14,7 +15,7 @@ describe('TransactionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [TransactionService, provideMockStore(testMockStore)],
+      providers: [TransactionService, provideMockStore(testMockStore), DatePipe],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(TransactionService);

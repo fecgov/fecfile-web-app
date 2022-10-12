@@ -97,7 +97,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         }
       });
 
-    const previous_transaction$: Observable<any> =
+    const previous_transaction$: Observable<Transaction | undefined> =
       this.form.get('contribution_date')?.valueChanges.pipe(
         startWith(this.form.get('contribution_date')?.value),
         combineLatestWith(this.contactId$),
@@ -116,7 +116,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         takeUntil(this.destroy$)
       )
       .subscribe(([contribution_amount, previous_transaction]) => {
-        const previousAggregate = +previous_transaction?.contribution_aggregate || 0;
+        const previousAggregate = +((previous_transaction as SchATransaction)?.contribution_aggregate || 0);
         this.form.get('contribution_aggregate')?.setValue(+contribution_amount + previousAggregate);
       });
   }
