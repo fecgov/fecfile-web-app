@@ -10,17 +10,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import {
-  of,
-  Subject,
-  takeUntil,
-  Observable,
-  combineLatest,
-  switchMap,
-  combineLatestWith,
-  BehaviorSubject,
-  startWith,
-} from 'rxjs';
+import { of, Subject, takeUntil, Observable, switchMap, combineLatestWith, BehaviorSubject, startWith } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
@@ -90,7 +80,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
 
     this.form
-      ?.get('entity_type')
+      .get('entity_type')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
         if (value === ContactTypes.INDIVIDUAL || value === ContactTypes.CANDIDATE) {
@@ -107,13 +97,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         }
       });
 
-    const contribution_amount$: Observable<any> =
-      this.form
-        ?.get('contribution_amount')
-        ?.valueChanges.pipe(startWith(this.form?.get('contribution_amount')?.value)) || of(undefined);
     const previous_transaction$: Observable<any> =
-      this.form?.get('contribution_date')?.valueChanges.pipe(
-        startWith(this.form?.get('contribution_date')?.value),
+      this.form.get('contribution_date')?.valueChanges.pipe(
+        startWith(this.form.get('contribution_date')?.value),
         combineLatestWith(this.contactId$),
         switchMap(([contribution_date, contactId]) => {
           if (contribution_date && contactId) {
@@ -122,11 +108,16 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           return of(undefined);
         })
       ) || of(undefined);
-    combineLatest([contribution_amount$, previous_transaction$])
-      .pipe(takeUntil(this.destroy$))
+    this.form
+      .get('contribution_amount')
+      ?.valueChanges.pipe(
+        startWith(this.form.get('contribution_amount')?.value),
+        combineLatestWith(previous_transaction$),
+        takeUntil(this.destroy$)
+      )
       .subscribe(([contribution_amount, previous_transaction]) => {
         const previousAggregate = +previous_transaction?.contribution_aggregate || 0;
-        this.form?.get('contribution_aggregate')?.setValue(+contribution_amount + previousAggregate);
+        this.form.get('contribution_aggregate')?.setValue(+contribution_amount + previousAggregate);
       });
   }
 
