@@ -242,8 +242,7 @@
         </div>
       </div>
       <div class="grid">
-        <div class="col-3">
-          <label for="sub-transaction">Save & add a Memo</label>
+        <div class="col-2">
           <p-dropdown
             inputId="subTransaction"
             [options]="subTransactions"
@@ -251,7 +250,7 @@
             [autoDisplayFirst]="false"
             (onChange)="createSubTransaction($event)"
             placeholder="Save & add a Memo"
-            dropdownIcon="pi pi-arrow-right"
+            dropdownIcon="pi pi-plus"
             styleClass="sub-transaction-dropdown"
           ></p-dropdown>
         </div>

@@ -34,12 +34,20 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
   ];
   subTransactions = [
     {
+      label: "Individual JF Transfer Memo",
+      value: "INDV_JF_TRANSFER_MEMO",
+    },
+    {
+      label: "Party JF Transfer Memo",
+      value: "PARTY_JF_TRANSFER_MEMO",
+    },
+    {
       label: "PAC JF Transfer Memo",
       value: "PAC_JF_TRANSFER_MEMO",
     },
     {
-      label: "PAC JF Transfer Memo 2",
-      value: "PAC JF Transfer Memo 2",
+      label: "Tribal JF Transfer Memo",
+      value: "TRIBAL_JF_Transfer_Memo",
     }
   ]
 
