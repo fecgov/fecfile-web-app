@@ -1,11 +1,11 @@
-import { OTH_REC } from './OTH_REC.model';
+import { OTHER_RECEIPT } from './OTHER_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
-describe('OTH_REC', () => {
-  let transactionType: OTH_REC;
+describe('OTHER_RECEIPT', () => {
+  let transactionType: OTHER_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new OTH_REC();
+    transactionType = new OTHER_RECEIPT();
   });
 
   it('should create an instance', () => {

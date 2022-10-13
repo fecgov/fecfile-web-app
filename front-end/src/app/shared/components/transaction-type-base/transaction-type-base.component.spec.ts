@@ -236,9 +236,9 @@ describe('TransactionTypeBaseComponent', () => {
     component.transactionType = {
       transaction: testTransaction,
     } as TransactionType;
-    const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDV_REC';
+    const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo('add-sub-tran', '123', 'INDV_REC');
+    component.navigateTo('add-sub-tran', '123', 'INDIVIDUAL_RECEIPT');
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 

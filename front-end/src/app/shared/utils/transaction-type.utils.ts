@@ -1,23 +1,23 @@
 import { TransactionType } from '../interfaces/transaction-type.interface';
-import { INDV_REC } from '../models/transaction-types/INDV_REC.model';
-import { JF_TRAN } from '../models/transaction-types/JF_TRAN.model';
-import { OFFSET_TO_OPEX } from '../models/transaction-types/OFFSET_TO_OPEX.model';
-import { OTH_REC } from '../models/transaction-types/OTH_REC.model';
-import { TRIB_REC } from '../models/transaction-types/TRIB_REC.model';
-import { JF_TRAN_PAC_MEMO } from '../models/transaction-types/JF_TRAN_PAC_MEMO.model';
-import { EAR_REC } from '../models/transaction-types/EAR_REC.model';
-import { EAR_MEMO } from '../models/transaction-types/EAR_MEMO.model';
+import { INDIVIDUAL_RECEIPT } from '../models/transaction-types/INDIVIDUAL_RECEIPT.model';
+import { JOINT_FUNDRAISING_TRANSFER } from '../models/transaction-types/JOINT_FUNDRAISING_TRANSFER.model';
+import { OFFSET_TO_OPERATING_EXPENDITURES } from '../models/transaction-types/OFFSET_TO_OPERATING_EXPENDITURES.model';
+import { OTHER_RECEIPT } from '../models/transaction-types/OTHER_RECEIPT.model';
+import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
+import { PAC_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_JF_TRANSFER_MEMO.model';
+import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
+import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
-  INDV_REC,
-  JF_TRAN,
-  OFFSET_TO_OPEX,
-  OTH_REC,
-  TRIB_REC,
-  JF_TRAN_PAC_MEMO,
-  EAR_REC,
-  EAR_MEMO,
+  INDIVIDUAL_RECEIPT,
+  JOINT_FUNDRAISING_TRANSFER,
+  OFFSET_TO_OPERATING_EXPENDITURES,
+  OTHER_RECEIPT,
+  TRIBAL_RECEIPT,
+  PAC_JF_TRANSFER_MEMO,
+  EARMARK_RECEIPT,
+  EARMARK_MEMO,
 }
 
 export class TransactionTypeUtils {

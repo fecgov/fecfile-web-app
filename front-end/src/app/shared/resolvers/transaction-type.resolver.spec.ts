@@ -27,7 +27,7 @@ describe('TransactionResolver', () => {
               of(
                 SchATransaction.fromJSON({
                   id: transactionId,
-                  transaction_type_identifier: 'OFFSET_TO_OPEX',
+                  transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
                   contact_id: '123',
                 })
               ),
@@ -72,7 +72,7 @@ describe('TransactionResolver', () => {
 
   it('should return an existing transaction', () => {
     const route = {
-      paramMap: convertToParamMap({ reportId: 1, transactionType: 'OFFSET_TO_OPEX' }),
+      paramMap: convertToParamMap({ reportId: 1, transactionType: 'OFFSET_TO_OPERATING_EXPENDITURES' }),
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionType | undefined) => {
@@ -85,7 +85,7 @@ describe('TransactionResolver', () => {
 
   it('should return a child transaction', () => {
     const route = {
-      paramMap: convertToParamMap({ parentTransactionId: 1, transactionType: 'JF_TRAN_PAC_MEMO' }),
+      paramMap: convertToParamMap({ parentTransactionId: 1, transactionType: 'PAC_JF_TRANSFER_MEMO' }),
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionType | undefined) => {

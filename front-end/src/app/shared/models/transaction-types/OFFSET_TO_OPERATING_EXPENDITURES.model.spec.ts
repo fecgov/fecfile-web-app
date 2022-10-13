@@ -1,11 +1,11 @@
-import { OFFSET_TO_OPEX } from './OFFSET_TO_OPEX.model';
+import { OFFSET_TO_OPERATING_EXPENDITURES } from './OFFSET_TO_OPERATING_EXPENDITURES.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
-describe('OFFSET_TO_OPEX', () => {
-  let transactionType: OFFSET_TO_OPEX;
+describe('OFFSET_TO_OPERATING_EXPENDITURES', () => {
+  let transactionType: OFFSET_TO_OPERATING_EXPENDITURES;
 
   beforeEach(() => {
-    transactionType = new OFFSET_TO_OPEX();
+    transactionType = new OFFSET_TO_OPERATING_EXPENDITURES();
   });
 
   it('should create an instance', () => {
