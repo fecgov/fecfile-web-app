@@ -69,6 +69,6 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
 
   createSubTransaction(event: {value: string}){
     this.save('add-sub-tran', event.value);
-    this.form.get("subTransaction")?.reset();
+    this.form.get("subTransaction")?.reset(); // If the save fails, this clears the dropdown
   }
 }
