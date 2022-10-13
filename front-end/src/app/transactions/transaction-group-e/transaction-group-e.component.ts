@@ -65,15 +65,9 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     protected override router: Router
   ) {
     super(messageService, transactionService, contactService, validateService, confirmationService, fb, router);
-
-    setTimeout(()=>{
-      console.log(this.form);
-      console.log(this.form.get("subTransaction"));
-    }, 10000);
   }
 
-  createSubTransaction(event: any){
-    console.log("Hello!");
+  createSubTransaction(event: {value: string}){
     this.save('add-sub-tran', event.value);
     this.form.get("subTransaction")?.reset();
   }
