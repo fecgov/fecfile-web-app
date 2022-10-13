@@ -6,7 +6,7 @@ import { TransactionService } from './transaction.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { environment } from '../../../environments/environment';
-import { DatePipe } from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -63,14 +63,16 @@ describe('TransactionService', () => {
     httpTestingController.verify();
   });
 
-  it('#get() should GET previous transaction', () => {
+  it('#getPreviousTransaction() should GET previous transaction', () => {
     const mockResponse: SchATransaction = SchATransaction.fromJSON({ id: 1 });
 
     service.getPreviousTransaction('1', new Date()).subscribe((response) => {
       expect(response).toEqual(mockResponse);
     });
-
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/1/`);
+    const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/sch-a-transactions/1/previous/?contact_id=1&contribution_date=${formattedDate}`
+    );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();

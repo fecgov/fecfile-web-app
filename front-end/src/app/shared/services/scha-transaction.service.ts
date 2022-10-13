@@ -18,7 +18,7 @@ export class SchATransactionService {
   }
 
   public getPreviousTransaction(contact_id: string, contribution_date: Date): Observable<SchATransaction> {
-    const contributionDateString: string = this.datePipe.transform(contribution_date) || '';
+    const contributionDateString: string = this.datePipe.transform(contribution_date, 'yyyy-MM-dd') || '';
     return this.apiService
       .get<SchATransaction>(`/sch-a-transactions/previous/`, { contact_id, contribution_date: contributionDateString })
       .pipe(map((response) => SchATransaction.fromJSON(response)));
