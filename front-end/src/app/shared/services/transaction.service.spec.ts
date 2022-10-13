@@ -71,7 +71,7 @@ describe('TransactionService', () => {
     });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/1/previous/?contact_id=1&contribution_date=${formattedDate}`
+      `${environment.apiUrl}/sch-a-transactions/previous/?contact_id=1&contribution_date=${formattedDate}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
