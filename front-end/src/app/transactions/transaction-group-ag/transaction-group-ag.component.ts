@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionTypeX2BaseComponent } from 'app/shared/components/transaction-type-x2-base/transaction-type-x2-base.component';
 import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
@@ -70,8 +71,9 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     protected override validateService: ValidateService,
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
-    protected override router: Router
+    protected override router: Router,
+    protected override fecDatePipe: FecDatePipe,
   ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router);
+    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router, fecDatePipe);
   }
 }

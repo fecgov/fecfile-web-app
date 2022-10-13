@@ -7,6 +7,7 @@ import { TransactionType } from 'app/shared/interfaces/transaction-type.interfac
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { schema as PAC_JF_TRANSFER_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -66,7 +67,8 @@ describe('TransactionGroupFComponent', () => {
         ConfirmDialogModule,
       ],
       declarations: [TransactionGroupFComponent],
-      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [MessageService, ConfirmationService,
+        FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
   });
 
