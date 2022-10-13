@@ -1,8 +1,8 @@
 import { TransactionType } from '../../interfaces/transaction-type.interface';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EAR_MEMO';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_MEMO';
 
-export class EAR_MEMO implements TransactionType {
+export class EARMARK_MEMO implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'AG';
   title = '';

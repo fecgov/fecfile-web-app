@@ -81,7 +81,7 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
   }
 
   onContactLookupSelectChild(selectItem: SelectItem<Contact>) {
-    this.updateFormFromContactLookup(selectItem, this.childForm);
+    this.updateFormFromContactLookup(selectItem, this.childForm, this.childContact);
   }
 
   override save(navigateTo: 'list' | 'add another' | 'add-sub-tran', transactionTypeToAdd?: string) {

@@ -146,7 +146,7 @@ export enum ScheduleATransactionTypes {
   EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION = 'EAR_REC_CONVEN_ACC',
   EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION = 'EAR_REC_HQ_ACC',
   // Child transactiion types
-  EARMARK_MEMO = 'EAR_MEMO',
+  EARMARK_MEMO = 'EARMARK_MEMO',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -259,7 +259,6 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
 ];
 
-
 export enum AggregationGroups {
   GENERAL = 'GENERAL',
   LINE_15 = 'LINE_15',
@@ -269,5 +268,5 @@ export enum AggregationGroups {
   NPARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   NONCONTRIBUTION_ACCOUNT = 'NON-CONTRIBUTION_ACCOUNT',
   OTHER_RECEIPTS = 'OTHER_RECEIPTS',
-  RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT'
+  RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
 }

@@ -1,11 +1,11 @@
-import { EAR_MEMO } from './EAR_MEMO.model';
+import { EARMARK_MEMO } from './EARMARK_MEMO.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
-describe('EAR_MEMO', () => {
-  let transactionType: EAR_MEMO;
+describe('EARMARK_MEMO', () => {
+  let transactionType: EARMARK_MEMO;
 
   beforeEach(() => {
-    transactionType = new EAR_MEMO();
+    transactionType = new EARMARK_MEMO();
   });
 
   it('should create an instance', () => {
