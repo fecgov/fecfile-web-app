@@ -17,10 +17,20 @@ export class SchATransactionService {
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 
-  public getPreviousTransaction(contact_id: string, contribution_date: Date): Observable<SchATransaction> {
+  public getPreviousTransaction(
+    transaction_id: string,
+    contact_id: string,
+    contribution_date: Date,
+    aggregation_group: string
+  ): Observable<SchATransaction> {
     const contributionDateString: string = this.datePipe.transform(contribution_date, 'yyyy-MM-dd') || '';
     return this.apiService
-      .get<SchATransaction>(`/sch-a-transactions/previous/`, { contact_id, contribution_date: contributionDateString })
+      .get<SchATransaction>(`/sch-a-transactions/previous/`, {
+        transaction_id,
+        contact_id,
+        contribution_date: contributionDateString,
+        aggregation_group,
+      })
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 

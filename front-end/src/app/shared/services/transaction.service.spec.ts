@@ -66,12 +66,12 @@ describe('TransactionService', () => {
   it('#getPreviousTransaction() should GET previous transaction', () => {
     const mockResponse: SchATransaction = SchATransaction.fromJSON({ id: 1 });
 
-    service.getPreviousTransaction('1', new Date()).subscribe((response) => {
+    service.getPreviousTransaction('abc', '1', new Date(), 'fake_group').subscribe((response) => {
       expect(response).toEqual(mockResponse);
     });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/previous/?contact_id=1&contribution_date=${formattedDate}`
+      `${environment.apiUrl}/sch-a-transactions/previous/?transaction_id=abc&contact_id=1&contribution_date=${formattedDate}&aggregation_group=fake_group`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);

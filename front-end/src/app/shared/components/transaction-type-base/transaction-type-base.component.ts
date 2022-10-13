@@ -30,6 +30,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   get transaction(): Transaction | undefined {
     return this.transactionType?.transaction;
   }
+  get aggregationGroup(): string | undefined {
+    return (this.transactionType?.transaction as SchATransaction).aggregation_group;
+  }
   get contact(): Contact | undefined {
     return this.transactionType?.contact;
   }
@@ -74,9 +77,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       const txn = { ...this.transaction } as SchATransaction;
       this.form.patchValue({ ...txn });
       this.form.get('entity_type')?.disable();
+      this.contactId$.next(txn.contact_id || '');
     } else {
       this.resetForm();
       this.form.get('entity_type')?.enable();
+      this.contactId$.next('');
     }
 
     this.form
@@ -102,8 +107,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         startWith(this.form.get('contribution_date')?.value),
         combineLatestWith(this.contactId$),
         switchMap(([contribution_date, contactId]) => {
-          if (contribution_date && contactId) {
-            return this.transactionService.getPreviousTransaction(contactId, contribution_date);
+          if (contribution_date && contactId && this.aggregationGroup) {
+            return this.transactionService.getPreviousTransaction(
+              this.transaction?.id || '',
+              contactId,
+              contribution_date,
+              this.aggregationGroup
+            );
           }
           return of(undefined);
         })
