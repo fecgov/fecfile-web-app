@@ -12,6 +12,7 @@ import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.mod
 @Component({
   selector: 'app-transaction-group-e',
   templateUrl: './transaction-group-e.component.html',
+  styleUrls: ['./transaction-group-e.component.scss'],
 })
 export class TransactionGroupEComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -29,7 +30,19 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     'donor_committee_fec_id',
     'memo_code',
     'memo_text_description',
+    'subTransaction',
   ];
+  subTransactions = [
+    {
+      label: "PAC JF Transfer Memo",
+      value: "PAC_JF_TRANSFER_MEMO",
+    },
+    {
+      label: "PAC JF Transfer Memo 2",
+      value: "PAC JF Transfer Memo 2",
+    }
+  ]
+
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
@@ -44,5 +57,16 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     protected override router: Router
   ) {
     super(messageService, transactionService, contactService, validateService, confirmationService, fb, router);
+
+    setTimeout(()=>{
+      console.log(this.form);
+      console.log(this.form.get("subTransaction"));
+    }, 10000);
+  }
+
+  createSubTransaction(event: any){
+    console.log("Hello!");
+    this.save('add-sub-tran', event.value);
+    this.form.get("subTransaction")?.reset();
   }
 }
