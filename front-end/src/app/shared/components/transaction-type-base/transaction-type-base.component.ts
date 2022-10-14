@@ -102,6 +102,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         }
       });
 
+    this.form
+      ?.get('contribution_aggregate')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.form.get('contributor_employer')?.updateValueAndValidity();
+        this.form.get('contributor_occupation')?.updateValueAndValidity();
+      });
+
     const previous_transaction$: Observable<Transaction | undefined> =
       this.form.get('contribution_date')?.valueChanges.pipe(
         startWith(this.form.get('contribution_date')?.value),

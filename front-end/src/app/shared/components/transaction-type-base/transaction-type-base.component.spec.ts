@@ -15,6 +15,7 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -196,9 +197,10 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransactionId = '1';
     const testTransactionTypeToAdd = 'testTransactionTypeToAdd';
 
-    component.transactionType = {
-      transaction: testTransaction,
-    } as TransactionType;
+    component.transactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
+    if (component.transactionType) {
+      component.transactionType.transaction = testTransaction;
+    }
 
     const expectedMessage: Message = {
       severity: 'success',
@@ -238,9 +240,10 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it("#navigateTo 'add-sub-tran' should navigate", () => {
-    component.transactionType = {
-      transaction: testTransaction,
-    } as TransactionType;
+    component.transactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
+    if (component.transactionType) {
+      component.transactionType.transaction = testTransaction;
+    }
     const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('add-sub-tran', '123', 'INDIVIDUAL_RECEIPT');
@@ -260,9 +263,10 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo default should navigate', () => {
-    component.transactionType = {
-      transaction: testTransaction,
-    } as TransactionType;
+    component.transactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
+    if (component.transactionType) {
+      component.transactionType.transaction = testTransaction;
+    }
     const expectedRoute = '/transactions/report/999/list';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
