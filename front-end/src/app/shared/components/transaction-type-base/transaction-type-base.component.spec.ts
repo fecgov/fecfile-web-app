@@ -49,6 +49,9 @@ const testTransaction = {
   filer_committee_id_number: undefined,
   transaction_id: null,
   transaction_type_identifier: 'test',
+  aggregation_group: 'GENERAL',
+  contribution_amount: '202.2',
+  contribution_date: '2022-02-02',
   contribution_purpose_descrip: undefined,
   parent_transaction_id: undefined,
 };
@@ -361,34 +364,22 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#onContactLookupSelect INDIVIDUAL should set fields', () => {
     const testEntityType = ContactTypes.INDIVIDUAL;
-    const testLastName = 'testLastName';
-    const testFirstName = 'testFirstName';
-    const testMiddleName = 'testMiddleName';
-    const testPrefix = 'testPrefix';
-    const testSuffix = 'testSuffix';
-    const testEmployer = 'testEmployer';
-    const testOccupation = 'testOccupation';
-    const testStreet1 = 'testStreet1';
-    const testStreet2 = 'testStreet2';
-    const testCity = 'testCity';
-    const testState = 'testState';
-    const testZip = 'testZip';
 
     const testContact = new Contact();
     testContact.id = '123';
     testContact.type = ContactTypes.INDIVIDUAL;
-    testContact.last_name = testLastName;
-    testContact.first_name = testFirstName;
-    testContact.middle_name = testMiddleName;
-    testContact.prefix = testPrefix;
-    testContact.suffix = testSuffix;
-    testContact.employer = testEmployer;
-    testContact.occupation = testOccupation;
-    testContact.street_1 = testStreet1;
-    testContact.street_2 = testStreet2;
-    testContact.city = testCity;
-    testContact.state = testState;
-    testContact.zip = testZip;
+    testContact.last_name = 'testLastName';
+    testContact.first_name = 'testFirstName';
+    testContact.middle_name = 'testMiddleName';
+    testContact.prefix = 'testPrefix';
+    testContact.suffix = 'testSuffix';
+    testContact.employer = 'testEmployer';
+    testContact.occupation = 'testOccupation';
+    testContact.street_1 = 'testStreet1';
+    testContact.street_2 = 'testStreet2';
+    testContact.city = 'testCity';
+    testContact.state = 'testState';
+    testContact.zip = 'testZip';
 
     const testContactSelectItem: SelectItem<Contact> = {
       value: testContact,
@@ -396,8 +387,6 @@ describe('TransactionTypeBaseComponent', () => {
 
     component.form.addControl('entity_type', { value: testEntityType });
     component.onContactLookupSelect(testContactSelectItem);
-    component.form.get('contribution_date')?.setValue('2022-02-02');
-    component.form.get('contribution_amount')?.setValue('202.2');
   });
 
   it('#onContactLookupSelect ORG should handle null form', () => {
