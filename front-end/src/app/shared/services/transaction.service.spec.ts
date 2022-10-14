@@ -6,6 +6,7 @@ import { TransactionService } from './transaction.service';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { environment } from '../../../environments/environment';
+import { DatePipe, formatDate } from '@angular/common';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -14,7 +15,7 @@ describe('TransactionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [TransactionService, provideMockStore(testMockStore)],
+      providers: [TransactionService, provideMockStore(testMockStore), DatePipe],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(TransactionService);
@@ -56,7 +57,22 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/1`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/1/`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(mockResponse);
+    httpTestingController.verify();
+  });
+
+  it('#getPreviousTransaction() should GET previous transaction', () => {
+    const mockResponse: SchATransaction = SchATransaction.fromJSON({ id: 1 });
+
+    service.getPreviousTransaction('abc', '1', new Date(), 'fake_group').subscribe((response) => {
+      expect(response).toEqual(mockResponse);
+    });
+    const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/sch-a-transactions/previous/?transaction_id=abc&contact_id=1&contribution_date=${formattedDate}&aggregation_group=fake_group`
+    );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
