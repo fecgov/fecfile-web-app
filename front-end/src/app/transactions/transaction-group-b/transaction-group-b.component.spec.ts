@@ -157,7 +157,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...testTran });
     component.save('list');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
+      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,aggregation_group,contribution_purpose_descrip,memo_code,memo_text_description`
     );
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -179,7 +179,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...transaction });
     component.save('add another');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/10/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
+      `${environment.apiUrl}/sch-a-transactions/10/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,aggregation_group,contribution_purpose_descrip,memo_code,memo_text_description`
     );
     expect(req.request.method).toEqual('PUT');
     httpTestingController.verify();
@@ -218,7 +218,7 @@ describe('TransactionGroupBComponent', () => {
 
     component.save('list');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
+      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,aggregation_group,contribution_purpose_descrip,memo_code,memo_text_description`
     );
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -255,7 +255,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...testTran });
     component.save('list');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,contribution_purpose_descrip,memo_code,memo_text_description`
+      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,aggregation_group,contribution_purpose_descrip,memo_code,memo_text_description`
     );
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
