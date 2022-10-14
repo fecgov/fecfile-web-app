@@ -13,6 +13,7 @@ import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.mod
 @Component({
   selector: 'app-transaction-group-e',
   templateUrl: './transaction-group-e.component.html',
+  styleUrls: ['./transaction-group-e.component.scss'],
 })
 export class TransactionGroupEComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -30,7 +31,27 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     'donor_committee_fec_id',
     'memo_code',
     'memo_text_description',
+    'subTransaction',
   ];
+  subTransactions = [
+    {
+      label: "Individual JF Transfer Memo",
+      value: "INDV_JF_TRANSFER_MEMO",
+    },
+    {
+      label: "Party JF Transfer Memo",
+      value: "PARTY_JF_TRANSFER_MEMO",
+    },
+    {
+      label: "PAC JF Transfer Memo",
+      value: "PAC_JF_TRANSFER_MEMO",
+    },
+    {
+      label: "Tribal JF Transfer Memo",
+      value: "TRIBAL_JF_Transfer_Memo",
+    }
+  ]
+
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
@@ -46,5 +67,10 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     protected override fecDatePipe: FecDatePipe,
   ) {
     super(messageService, transactionService, contactService, validateService, confirmationService, fb, router, fecDatePipe);
+  }
+
+  createSubTransaction(event: {value: string}){
+    this.save('add-sub-tran', event.value);
+    this.form.get("subTransaction")?.reset(); // If the save fails, this clears the dropdown
   }
 }

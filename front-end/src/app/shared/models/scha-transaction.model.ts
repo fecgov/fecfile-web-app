@@ -29,6 +29,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   @Transform(BaseModel.dateTransform) contribution_date: Date | undefined;
   contribution_amount: number | undefined;
   contribution_aggregate: number | undefined;
+  aggregation_group: AggregationGroups | undefined;
   contribution_purpose_descrip: string | undefined;
   contributor_employer: string | undefined;
   contributor_occupation: string | undefined;
@@ -257,3 +258,15 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Earmark Receipt for Headquarters Account (Contribution)',
   ],
 ];
+
+export enum AggregationGroups {
+  GENERAL = 'GENERAL',
+  LINE_15 = 'LINE_15',
+  LINE_16 = 'LINE_16',
+  NPARTY_CONVENTION = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  NPARTY_HEADQUARTERS = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  NPARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  NON_CONTRIBUTION_ACCOUNT = 'NON_CONTRIBUTION_ACCOUNT',
+  OTHER_RECEIPTS = 'OTHER_RECEIPTS',
+  RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
+}

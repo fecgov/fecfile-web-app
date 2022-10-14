@@ -11,7 +11,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
@@ -31,6 +31,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   get transaction(): Transaction | undefined {
     return this.transactionType?.transaction;
   }
+  get aggregationGroup(): string | undefined {
+    return (this.transactionType?.transaction as SchATransaction).aggregation_group;
+  }
   get contact(): Contact | undefined {
     return this.transactionType?.contact;
   }
@@ -46,6 +49,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
+  contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
 
@@ -75,13 +79,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       const txn = { ...this.transaction } as SchATransaction;
       this.form.patchValue({ ...txn });
       this.form.get('entity_type')?.disable();
+      this.contactId$.next(txn.contact_id || '');
     } else {
       this.resetForm();
       this.form.get('entity_type')?.enable();
+      this.contactId$.next('');
     }
 
     this.form
-      ?.get('entity_type')
+      .get('entity_type')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
         if (value === ContactTypes.INDIVIDUAL || value === ContactTypes.CANDIDATE) {
@@ -97,11 +103,48 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           this.form.get('contributor_occupation')?.reset();
         }
       });
+
+    this.form
+      ?.get('contribution_aggregate')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.form.get('contributor_employer')?.updateValueAndValidity();
+        this.form.get('contributor_occupation')?.updateValueAndValidity();
+      });
+
+    const previous_transaction$: Observable<Transaction | undefined> =
+      this.form.get('contribution_date')?.valueChanges.pipe(
+        startWith(this.form.get('contribution_date')?.value),
+        combineLatestWith(this.contactId$),
+        switchMap(([contribution_date, contactId]) => {
+          if (contribution_date && contactId && this.aggregationGroup) {
+            return this.transactionService.getPreviousTransaction(
+              this.transaction?.id || '',
+              contactId,
+              contribution_date,
+              this.aggregationGroup
+            );
+          }
+          return of(undefined);
+        })
+      ) || of(undefined);
+    this.form
+      .get('contribution_amount')
+      ?.valueChanges.pipe(
+        startWith(this.form.get('contribution_amount')?.value),
+        combineLatestWith(previous_transaction$),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(([contribution_amount, previous_transaction]) => {
+        const previousAggregate = +((previous_transaction as SchATransaction)?.contribution_aggregate || 0);
+        this.form.get('contribution_aggregate')?.setValue(+contribution_amount + previousAggregate);
+      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+    this.contactId$.complete();
   }
 
   save(navigateTo: 'list' | 'add another' | 'add-sub-tran', transactionTypeToAdd?: string) {
@@ -382,6 +425,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         this.form.get('contributor_state')?.setValue(value.state);
         this.form.get('contributor_zip')?.setValue(value.zip);
         this.contact = value;
+        this.contactId$.next(this.contact?.id || '');
       }
     }
   }

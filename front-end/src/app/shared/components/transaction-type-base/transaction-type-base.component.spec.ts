@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -15,6 +16,7 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -49,6 +51,9 @@ const testTransaction = {
   filer_committee_id_number: undefined,
   transaction_id: null,
   transaction_type_identifier: 'test',
+  aggregation_group: 'GENERAL',
+  contribution_amount: '202.2',
+  contribution_date: '2022-02-02',
   contribution_purpose_descrip: undefined,
   parent_transaction_id: undefined,
 };
@@ -67,6 +72,7 @@ describe('TransactionTypeBaseComponent', () => {
       declarations: [TestTransactionTypeBaseComponent],
       imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [
+        DatePipe,
         MessageService,
         FormBuilder,
         ValidateService,
@@ -410,9 +416,10 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransactionId = '1';
     const testTransactionTypeToAdd = 'testTransactionTypeToAdd';
 
-    component.transactionType = {
-      transaction: testTransaction,
-    } as TransactionType;
+    component.transactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
+    if (component.transactionType) {
+      component.transactionType.transaction = testTransaction;
+    }
 
     const expectedMessage: Message = {
       severity: 'success',
@@ -452,9 +459,10 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it("#navigateTo 'add-sub-tran' should navigate", () => {
-    component.transactionType = {
-      transaction: testTransaction,
-    } as TransactionType;
+    component.transactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
+    if (component.transactionType) {
+      component.transactionType.transaction = testTransaction;
+    }
     const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('add-sub-tran', '123', 'INDIVIDUAL_RECEIPT');
@@ -474,9 +482,10 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo default should navigate', () => {
-    component.transactionType = {
-      transaction: testTransaction,
-    } as TransactionType;
+    component.transactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
+    if (component.transactionType) {
+      component.transactionType.transaction = testTransaction;
+    }
     const expectedRoute = '/transactions/report/999/list';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo('list');
@@ -574,6 +583,33 @@ describe('TransactionTypeBaseComponent', () => {
     expect(cityFormControlValue === testCity).toBeTrue();
     expect(stateFormControlValue === testState).toBeTrue();
     expect(zipFormControlValue === testZip).toBeTrue();
+  });
+
+  it('#onContactLookupSelect INDIVIDUAL should set fields', () => {
+    const testEntityType = ContactTypes.INDIVIDUAL;
+
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.INDIVIDUAL;
+    testContact.last_name = 'testLastName';
+    testContact.first_name = 'testFirstName';
+    testContact.middle_name = 'testMiddleName';
+    testContact.prefix = 'testPrefix';
+    testContact.suffix = 'testSuffix';
+    testContact.employer = 'testEmployer';
+    testContact.occupation = 'testOccupation';
+    testContact.street_1 = 'testStreet1';
+    testContact.street_2 = 'testStreet2';
+    testContact.city = 'testCity';
+    testContact.state = 'testState';
+    testContact.zip = 'testZip';
+
+    const testContactSelectItem: SelectItem<Contact> = {
+      value: testContact,
+    };
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.onContactLookupSelect(testContactSelectItem);
   });
 
   it('#onContactLookupSelect ORG should handle null form', () => {
