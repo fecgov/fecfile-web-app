@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ContactSchATransaction, SchATransaction } from '../models/scha-transaction.model';
+import { SchATransaction } from '../models/scha-transaction.model';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -17,11 +17,11 @@ export class SchATransactionService {
   }
 
   public create(
-    contactSchATransaction: ContactSchATransaction,
+    schATransaction: SchATransaction,
     schema: string,
     fieldsToValidate: string[] = []
   ): Observable<SchATransaction> {
-    const payload = contactSchATransaction.toJson();
+    const payload = schATransaction.toJson();
     return this.apiService
       .post<SchATransaction>(`/sch-a-transactions/`, payload, {
         schema: schema,
@@ -31,14 +31,13 @@ export class SchATransactionService {
   }
 
   public update(
-    contactSchATransaction: ContactSchATransaction,
+    schATransaction: SchATransaction,
     schema: string,
     fieldsToValidate: string[] = []
   ): Observable<SchATransaction> {
-    const payload = contactSchATransaction.toJson();
+    const payload = schATransaction.toJson();
     return this.apiService
-      .put<SchATransaction>(`/sch-a-transactions/` +
-        `${contactSchATransaction.transaction.id}/`, payload, {
+      .put<SchATransaction>(`/sch-a-transactions/${schATransaction.id}/`, payload, {
         schema: schema,
         fields_to_validate: fieldsToValidate.join(','),
       })

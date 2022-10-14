@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { ContactTransaction, Transaction } from 'app/shared/interfaces/transaction.interface';
-import { ContactSchATransaction, SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -292,16 +292,16 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       // Remove properties populated in the back-end from list of properties to validate
       fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_committee_name');
 
-      const realPayload = new ContactSchATransaction(this.contact, payload);
+      payload.contact = this.contact;
       if (payload.id) {
         this.transactionService
-          .update(realPayload, this.transaction.transaction_type_identifier, fieldsToValidate)
+          .update(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
           .subscribe((transaction) => {
             this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
           });
       } else {
         this.transactionService
-          .create(realPayload, this.transaction.transaction_type_identifier, fieldsToValidate)
+          .create(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
           .subscribe((transaction) => {
             this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
           });
