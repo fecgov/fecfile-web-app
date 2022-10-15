@@ -242,15 +242,18 @@
         </div>
       </div>
       <div class="grid">
-        <div class="col-3">
-          <button
-            pButton
-            pRipple
-            label="Save & add a Memo"
-            icon="pi pi-plus"
-            class="p-button-warning"
-            (click)="save('add-sub-tran', 'PAC_JF_TRANSFER_MEMO')"
-          ></button>
+        <div class="col-2">
+          <p-dropdown
+            inputId="subTransaction"
+            [options]="subTransactions"
+            formControlName="subTransaction"
+            [autoDisplayFirst]="false"
+            (onChange)="createSubTransaction($event)"
+            placeholder="Save & add a Memo"
+            dropdownIcon="pi pi-plus"
+            styleClass="sub-transaction-dropdown"
+            panelStyleClass="sub-transaction-dropdown-panel"
+          ></p-dropdown>
         </div>
       </div>
     </ng-container>

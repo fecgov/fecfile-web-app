@@ -6,7 +6,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { AggregationGroups, SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -26,7 +26,6 @@ import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupBComponent } from './transaction-group-b.component';
-import { AggregationGroups } from '../../shared/models/scha-transaction.model';
 
 describe('TransactionGroupBComponent', () => {
   let httpTestingController: HttpTestingController;

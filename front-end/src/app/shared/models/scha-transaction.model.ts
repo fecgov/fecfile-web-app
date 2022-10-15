@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { ContactTransaction, Transaction } from '../interfaces/transaction.interface';
+import { Transaction } from '../interfaces/transaction.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { Contact } from './contact.model';
@@ -63,22 +63,13 @@ export class SchATransaction extends BaseModel implements Transaction {
 
   report_id: string | undefined; // Foreign key to the F3XSummary model
 
+  contact: Contact | undefined;
   contact_id: string | undefined; // Foreign key to the Contact model
 
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(SchATransaction, json);
   }
-}
-
-export class ContactSchATransaction extends BaseModel implements ContactTransaction {
-  constructor(contact: Contact | undefined, transaction: Transaction) {
-    super();
-    this.contact = contact;
-    this.transaction = transaction;
-  }
-  contact?: Contact;
-  transaction: Transaction;
 }
 
 export enum ScheduleATransactionGroups {
@@ -277,7 +268,7 @@ export enum AggregationGroups {
   NPARTY_CONVENTION = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
   NPARTY_HEADQUARTERS = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   NPARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
-  NONCONTRIBUTION_ACCOUNT = 'NON-CONTRIBUTION_ACCOUNT',
+  NON_CONTRIBUTION_ACCOUNT = 'NON_CONTRIBUTION_ACCOUNT',
   OTHER_RECEIPTS = 'OTHER_RECEIPTS',
   RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
 }

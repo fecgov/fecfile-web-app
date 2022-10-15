@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -54,5 +54,6 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     ContactLookupComponent,
     ContactFormComponent,
   ],
+  providers: [DatePipe],
 })
-export class SharedModule { }
+export class SharedModule {}
