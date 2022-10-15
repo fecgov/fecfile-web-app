@@ -2,6 +2,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction } from '../interfaces/transaction.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
+import { Contact } from './contact.model';
 
 export class SchATransaction extends BaseModel implements Transaction {
   id: string | undefined;
@@ -62,6 +63,7 @@ export class SchATransaction extends BaseModel implements Transaction {
 
   report_id: string | undefined; // Foreign key to the F3XSummary model
 
+  contact: Contact | undefined;
   contact_id: string | undefined; // Foreign key to the Contact model
 
   // prettier-ignore

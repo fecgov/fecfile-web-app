@@ -1,15 +1,15 @@
+import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiService } from './api.service';
-import { DatePipe } from '@angular/common';
 import { SchATransaction } from '../models/scha-transaction.model';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SchATransactionService {
-  constructor(private apiService: ApiService, private datePipe: DatePipe) {}
+  constructor(private apiService: ApiService, private datePipe: DatePipe) { }
 
   public get(id: string): Observable<SchATransaction> {
     return this.apiService

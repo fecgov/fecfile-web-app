@@ -1,13 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ApiService } from 'app/shared/services/api.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
@@ -45,6 +46,7 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
 const testTransaction = {
   id: '123',
   report_id: '999',
+  contact: undefined,
   contact_id: '333',
   form_type: undefined,
   filer_committee_id_number: undefined,
@@ -78,6 +80,7 @@ describe('TransactionTypeBaseComponent', () => {
         TransactionService,
         ConfirmationService,
         provideMockStore(testMockStore),
+        FecDatePipe,
       ],
     }).compileComponents();
 
@@ -98,10 +101,11 @@ describe('TransactionTypeBaseComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#save should navigate for create', () => {
+  it('#save should update IND contact', () => {
     const testTransaction1: Transaction = {
       id: undefined,
       report_id: undefined,
+      contact: undefined,
       contact_id: undefined,
       form_type: undefined,
       filer_committee_id_number: undefined,
@@ -112,6 +116,77 @@ describe('TransactionTypeBaseComponent', () => {
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
+    testContact.type = ContactTypes.INDIVIDUAL;
+    testContact.last_name = 'testLn1';
+    testContact.first_name = 'testFn1';
+    testContact.middle_name = 'testMn1';
+    testContact.prefix = 'testPrefix1';
+    testContact.suffix = 'testSuffix1';
+    testContact.employer = 'testEmployer1';
+    testContact.occupation = 'testOccupation1';
+    testContact.street_1 = 'testStreet1';
+    testContact.street_2 = 'testStreet2';
+    testContact.city = 'testCity1';
+    testContact.state = 'VA';
+    testContact.zip = '12345';
+
+    spyOn(testApiService, 'post').and.returnValue(of(testContact));
+    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+
+    const componentNavigateToSpy = spyOn(component, 'navigateTo');
+    component.transactionType = {
+      transaction: {
+        id: undefined,
+        report_id: undefined,
+        contact: undefined,
+        contact_id: undefined,
+        form_type: undefined,
+        filer_committee_id_number: undefined,
+        transaction_id: null,
+        transaction_type_identifier: 'test',
+        contribution_purpose_descrip: undefined,
+        parent_transaction_id: undefined,
+      },
+    } as TransactionType;
+
+    component.contact = testContact;
+    component.save('list');
+    component.form = new FormGroup([]);
+    component.save('list');
+    const testContact2 = new Contact();
+    testContact2.type = ContactTypes.INDIVIDUAL;
+    testContact2.id = 'testId';
+    component.contact = testContact2;
+    component.save('list');
+    component.contact = undefined;
+    component.getEditTransactionContactConfirmationMessage([]);
+    expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
+  });
+
+  it('#save should update COM contact', () => {
+    const testTransaction1: Transaction = {
+      id: undefined,
+      report_id: undefined,
+      contact: undefined,
+      contact_id: undefined,
+      form_type: undefined,
+      filer_committee_id_number: undefined,
+      transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
+    };
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    testContact.type = ContactTypes.COMMITTEE;
+    testContact.committee_id = 'C12345679';
+    testContact.name = 'testName1';
+
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
     spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
@@ -135,6 +210,157 @@ describe('TransactionTypeBaseComponent', () => {
       },
     } as TransactionType;
 
+    component.contact = testContact;
+    component.save('list');
+    component.form = new FormGroup([]);
+    component.form.addControl('donor_committee_fec_id', new FormControl('test'));
+    component.save('list');
+    const testContact2 = new Contact();
+    testContact2.type = ContactTypes.COMMITTEE;
+    testContact2.id = 'testId';
+    component.contact = testContact2;
+    component.save('list');
+    expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
+  });
+
+  it('#save should update ORG contact', () => {
+    const testTransaction1: Transaction = {
+      id: undefined,
+      report_id: undefined,
+      contact: undefined,
+      contact_id: undefined,
+      form_type: undefined,
+      filer_committee_id_number: undefined,
+      transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
+    };
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    testContact.type = ContactTypes.ORGANIZATION;
+    testContact.name = 'testName1';
+
+    spyOn(testApiService, 'post').and.returnValue(of(testContact));
+    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+
+    const componentNavigateToSpy = spyOn(component, 'navigateTo');
+    component.transactionType = {
+      transaction: {
+        id: undefined,
+        report_id: undefined,
+        contact_id: undefined,
+        form_type: undefined,
+        filer_committee_id_number: undefined,
+        transaction_id: null,
+        transaction_type_identifier: 'test',
+        contribution_purpose_descrip: undefined,
+        parent_transaction_id: undefined,
+      },
+    } as TransactionType;
+
+    component.contact = testContact;
+    component.save('list');
+    component.form = new FormGroup([]);
+    component.save('list');
+    const testContact2 = new Contact();
+    testContact2.type = ContactTypes.ORGANIZATION;
+    testContact2.id = 'testId';
+    component.contact = testContact2;
+    component.save('list');
+    expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
+  });
+
+  it('#save no contact changes', () => {
+    const testTransaction1: Transaction = {
+      id: undefined,
+      report_id: undefined,
+      contact: undefined,
+      contact_id: undefined,
+      form_type: undefined,
+      filer_committee_id_number: undefined,
+      transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
+    };
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    testContact.type = ContactTypes.ORGANIZATION;
+    testContact.name = 'testName1';
+
+    spyOn(testApiService, 'post').and.returnValue(of(testContact));
+    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+
+    const componentNavigateToSpy = spyOn(component, 'navigateTo');
+    component.transactionType = {
+      transaction: {
+        id: undefined,
+        report_id: undefined,
+        contact_id: undefined,
+        form_type: undefined,
+        filer_committee_id_number: undefined,
+        transaction_id: null,
+        transaction_type_identifier: 'test',
+        contribution_purpose_descrip: undefined,
+        parent_transaction_id: undefined,
+      },
+    } as TransactionType;
+
+    component.contact = undefined;
+    component.save('list');
+    expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('#save should navigate for create', () => {
+    const testTransaction1: Transaction = {
+      id: undefined,
+      report_id: undefined,
+      contact: undefined,
+      contact_id: undefined,
+      form_type: undefined,
+      filer_committee_id_number: undefined,
+      transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
+    };
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testApiService, 'post').and.returnValue(of(testContact));
+    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+
+    const componentNavigateToSpy = spyOn(component, 'navigateTo');
+    component.transactionType = {
+      transaction: {
+        id: undefined,
+        report_id: undefined,
+        contact: undefined,
+        contact_id: undefined,
+        form_type: undefined,
+        filer_committee_id_number: undefined,
+        transaction_id: null,
+        transaction_type_identifier: 'test',
+        contribution_purpose_descrip: undefined,
+        parent_transaction_id: undefined,
+      },
+    } as TransactionType;
+
     component.save('list');
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
@@ -143,6 +369,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction2: Transaction = {
       id: '123',
       report_id: undefined,
+      contact: undefined,
       contact_id: undefined,
       form_type: undefined,
       filer_committee_id_number: undefined,
@@ -166,6 +393,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction: {
         id: '123',
         report_id: undefined,
+        contact: undefined,
         contact_id: undefined,
         form_type: undefined,
         filer_committee_id_number: undefined,
@@ -222,6 +450,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction3: Transaction = {
       id: '123',
       report_id: '99',
+      contact: undefined,
       contact_id: '33',
       form_type: undefined,
       filer_committee_id_number: undefined,

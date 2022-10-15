@@ -1,12 +1,12 @@
-import { TestBed } from '@angular/core/testing';
+import { DatePipe, formatDate } from '@angular/common';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from '../utils/unit-test.utils';
-import { TransactionService } from './transaction.service';
+import { environment } from '../../../environments/environment';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
-import { environment } from '../../../environments/environment';
-import { DatePipe, formatDate } from '@angular/common';
+import { testMockStore } from '../utils/unit-test.utils';
+import { TransactionService } from './transaction.service';
 
 describe('TransactionService', () => {
   let service: TransactionService;

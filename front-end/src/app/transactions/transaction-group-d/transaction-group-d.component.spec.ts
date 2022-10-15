@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -43,7 +44,7 @@ describe('TransactionGroupDComponent', () => {
       ],
       declarations: [TransactionGroupDComponent],
       providers: [MessageService, ConfirmationService,
-        FormBuilder, provideMockStore(testMockStore)],
+        FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
   });
 
