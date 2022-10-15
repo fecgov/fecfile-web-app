@@ -1,9 +1,9 @@
-import { Contact } from "../models/contact.model";
+import { Contact } from '../models/contact.model';
 
 export interface Transaction {
   id: string | undefined;
   report_id: string | undefined;
-  contact?: Contact | undefined
+  contact: Contact | undefined;
   contact_id: string | undefined;
   form_type: string | undefined;
   filer_committee_id_number: string | undefined;
@@ -12,4 +12,3 @@ export interface Transaction {
   contribution_purpose_descrip: string | undefined;
   parent_transaction_id: string | undefined;
 }
-

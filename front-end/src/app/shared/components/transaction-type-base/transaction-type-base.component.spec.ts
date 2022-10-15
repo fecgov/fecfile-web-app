@@ -46,6 +46,7 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
 const testTransaction = {
   id: '123',
   report_id: '999',
+  contact: undefined,
   contact_id: '333',
   form_type: undefined,
   filer_committee_id_number: undefined,
@@ -104,6 +105,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction1: Transaction = {
       id: undefined,
       report_id: undefined,
+      contact: undefined,
       contact_id: undefined,
       form_type: undefined,
       filer_committee_id_number: undefined,
@@ -116,7 +118,7 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.id = 'testId';
     testContact.type = ContactTypes.INDIVIDUAL;
     testContact.last_name = 'testLn1';
-    testContact.first_name = 'testFn1'
+    testContact.first_name = 'testFn1';
     testContact.middle_name = 'testMn1';
     testContact.prefix = 'testPrefix1';
     testContact.suffix = 'testSuffix1';
@@ -141,6 +143,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction: {
         id: undefined,
         report_id: undefined,
+        contact: undefined,
         contact_id: undefined,
         form_type: undefined,
         filer_committee_id_number: undefined,
@@ -169,6 +172,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction1: Transaction = {
       id: undefined,
       report_id: undefined,
+      contact: undefined,
       contact_id: undefined,
       form_type: undefined,
       filer_committee_id_number: undefined,
@@ -209,8 +213,7 @@ describe('TransactionTypeBaseComponent', () => {
     component.contact = testContact;
     component.save('list');
     component.form = new FormGroup([]);
-    component.form.addControl('donor_committee_fec_id',
-      new FormControl('test'));
+    component.form.addControl('donor_committee_fec_id', new FormControl('test'));
     component.save('list');
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.COMMITTEE;
@@ -224,6 +227,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction1: Transaction = {
       id: undefined,
       report_id: undefined,
+      contact: undefined,
       contact_id: undefined,
       form_type: undefined,
       filer_committee_id_number: undefined,
@@ -276,6 +280,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction1: Transaction = {
       id: undefined,
       report_id: undefined,
+      contact: undefined,
       contact_id: undefined,
       form_type: undefined,
       filer_committee_id_number: undefined,
@@ -321,6 +326,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction1: Transaction = {
       id: undefined,
       report_id: undefined,
+      contact: undefined,
       contact_id: undefined,
       form_type: undefined,
       filer_committee_id_number: undefined,
@@ -344,6 +350,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction: {
         id: undefined,
         report_id: undefined,
+        contact: undefined,
         contact_id: undefined,
         form_type: undefined,
         filer_committee_id_number: undefined,
@@ -362,6 +369,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction2: Transaction = {
       id: '123',
       report_id: undefined,
+      contact: undefined,
       contact_id: undefined,
       form_type: undefined,
       filer_committee_id_number: undefined,
@@ -385,6 +393,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction: {
         id: '123',
         report_id: undefined,
+        contact: undefined,
         contact_id: undefined,
         form_type: undefined,
         filer_committee_id_number: undefined,
@@ -441,6 +450,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction3: Transaction = {
       id: '123',
       report_id: '99',
+      contact: undefined,
       contact_id: '33',
       form_type: undefined,
       filer_committee_id_number: undefined,
