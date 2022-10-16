@@ -9,7 +9,7 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class SchATransactionService {
-  constructor(private apiService: ApiService, private datePipe: DatePipe) { }
+  constructor(private apiService: ApiService, private datePipe: DatePipe) {}
 
   public get(id: string): Observable<SchATransaction> {
     return this.apiService
@@ -34,29 +34,21 @@ export class SchATransactionService {
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 
-  public create(
-    schATransaction: SchATransaction,
-    schema: string,
-    fieldsToValidate: string[] = []
-  ): Observable<SchATransaction> {
+  public create(schATransaction: SchATransaction, fieldsToValidate: string[] = []): Observable<SchATransaction> {
     const payload = schATransaction.toJson();
     return this.apiService
       .post<SchATransaction>(`/sch-a-transactions/`, payload, {
-        schema: schema,
+        schema: schATransaction.transaction_type_identifier,
         fields_to_validate: fieldsToValidate.join(','),
       })
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 
-  public update(
-    schATransaction: SchATransaction,
-    schema: string,
-    fieldsToValidate: string[] = []
-  ): Observable<SchATransaction> {
+  public update(schATransaction: SchATransaction, fieldsToValidate: string[] = []): Observable<SchATransaction> {
     const payload = schATransaction.toJson();
     return this.apiService
       .put<SchATransaction>(`/sch-a-transactions/${schATransaction.id}/`, payload, {
-        schema: schema,
+        schema: schATransaction.transaction_type_identifier,
         fields_to_validate: fieldsToValidate.join(','),
       })
       .pipe(map((response) => SchATransaction.fromJSON(response)));

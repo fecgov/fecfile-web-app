@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
-import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
@@ -13,6 +12,7 @@ import { TransactionTypeBaseComponent } from '../transaction-type-base/transacti
 import { ContactService } from 'app/shared/services/contact.service';
 import { SelectItem } from 'primeng/api';
 import { Contact } from '../../models/contact.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -29,31 +29,11 @@ import { Contact } from '../../models/contact.model';
   template: '',
 })
 export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
-  get childContributionPurposeDescrip(): string | undefined {
-    return this.transactionType?.childTransactionType?.contributionPurposeDescripReadonly();
-  }
-  get childSchema(): JsonSchema | undefined {
-    return this.transactionType?.childTransactionType?.schema;
-  }
-  get childTransaction(): Transaction | undefined {
-    return this.transactionType?.childTransactionType?.transaction;
-  }
-  get childContact(): Contact | undefined {
-    return this.transactionType?.childTransactionType?.contact;
-  }
-  set childContact(contact: Contact | undefined) {
-    if (this.transactionType?.childTransactionType) {
-      this.transactionType.childTransactionType.contact = contact;
-    }
-  }
-
   abstract childFormProperties: string[];
-
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-
   childForm: FormGroup = this.fb.group({});
-
   childValidateService: ValidateService = new ValidateService();
+  childContactId$: Subject<string> = new BehaviorSubject<string>('');
 
   constructor(
     protected override messageService: MessageService,
@@ -62,9 +42,19 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
     protected override validateService: ValidateService,
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
-    protected override router: Router
+    protected override router: Router,
+    protected override fecDatePipe: FecDatePipe
   ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router);
+    super(
+      messageService,
+      transactionService,
+      contactService,
+      validateService,
+      confirmationService,
+      fb,
+      router,
+      fecDatePipe
+    );
   }
 
   override ngOnInit(): void {
@@ -72,59 +62,17 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
     super.ngOnInit();
 
     // Initialize child form.
-    this.init(
+    this.childForm = this.fb.group(this.childValidateService.getFormGroupFields(this.childFormProperties));
+    this.doInit(
       this.childForm,
-      this.childFormProperties,
       this.childValidateService,
-      this.transactionType?.childTransactionType
+      this.transactionType?.childTransactionType,
+      this.childContactId$
     );
   }
 
-  onContactLookupSelectChild(selectItem: SelectItem<Contact>) {
-    this.updateFormFromContactLookup(selectItem, this.childForm, this.childContact);
-  }
-
-  override save(navigateTo: 'list' | 'add another' | 'add-sub-tran', transactionTypeToAdd?: string) {
-    this.formSubmitted = true;
-
-    if (this.form.invalid || this.childForm.invalid) {
-      return;
-    }
-
-    const payload: SchATransaction = this.getPayload(
-      this.form,
-      this.formProperties,
-      this.validateService,
-      this.transactionType
-    ) as SchATransaction;
-
-    const childPayload: SchATransaction = this.getPayload(
-      this.childForm,
-      this.childFormProperties,
-      this.childValidateService,
-      this.transactionType?.childTransactionType
-    ) as SchATransaction;
-
-    if (this.transaction?.transaction_type_identifier) {
-      const fieldsToValidate: string[] = this.getFieldsToValidate(this.validateService, this.transactionType);
-      const childFieldsToValidate: string[] = this.getFieldsToValidate(
-        this.childValidateService,
-        this.transactionType?.childTransactionType
-      );
-
-      if (payload.id) {
-        // this.transactionService
-        //   .update(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
-        //   .subscribe((transaction) => {
-        //     this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
-        //   });
-      } else {
-        // this.transactionService
-        //   .create(payload, this.transaction.transaction_type_identifier, fieldsToValidate)
-        //   .subscribe((transaction) => {
-        //     this.navigateTo(navigateTo, transaction.id || undefined, transactionTypeToAdd);
-        //   });
-      }
-    }
+  override ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.childContactId$.complete();
   }
 }

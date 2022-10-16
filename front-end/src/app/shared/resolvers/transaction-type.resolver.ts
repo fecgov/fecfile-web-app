@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { map, mergeMap, Observable, of } from 'rxjs';
 import { TransactionType } from '../interfaces/transaction-type.interface';
 import { Transaction } from '../interfaces/transaction.interface';
+import { Contact } from '../models/contact.model';
 import { ContactService } from '../services/contact.service';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
@@ -76,8 +77,10 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
           }
 
           return this.contactService.get(transaction.contact_id).pipe(
-            map((contact) => {
-              transactionType.contact = contact;
+            map((contact: Contact) => {
+              if (transactionType.transaction) {
+                transactionType.transaction.contact = contact;
+              }
               return transactionType;
             })
           );

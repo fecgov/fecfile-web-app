@@ -12,7 +12,6 @@ export interface TransactionType {
   title: string;
   schema: JsonSchema;
   transaction: Transaction | undefined;
-  contact: Contact | undefined;
   parentTransaction: Transaction | undefined;
   childTransactionType: TransactionType | undefined;
   contributionPurposeDescripReadonly(): string;
