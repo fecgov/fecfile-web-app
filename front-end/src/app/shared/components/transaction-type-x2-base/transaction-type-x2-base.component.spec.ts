@@ -1,17 +1,12 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { Transaction } from 'app/shared/interfaces/transaction.interface';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { Message, MessageService, SelectItem } from 'primeng/api';
-import { of } from 'rxjs';
+import { MessageService } from 'primeng/api';
 import { TransactionTypeX2BaseComponent } from './transaction-type-x2-base.component';
 
 class TestTransactionTypeX2BaseComponent extends TransactionTypeX2BaseComponent {
@@ -62,23 +57,9 @@ class TestTransactionTypeX2BaseComponent extends TransactionTypeX2BaseComponent 
   ];
 }
 
-const testTransaction = {
-  id: '123',
-  report_id: '999',
-  form_type: null,
-  filer_committee_id_number: null,
-  transaction_id: null,
-  transaction_type_identifier: 'test',
-  contribution_purpose_descrip: null,
-  parent_transaction_id: null,
-};
-
 describe('TransactionTypeBaseComponent', () => {
   let component: TestTransactionTypeX2BaseComponent;
   let fixture: ComponentFixture<TestTransactionTypeX2BaseComponent>;
-  let testMessageService: MessageService;
-  let testRouter: Router;
-  let testTransactionService: TransactionService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -86,10 +67,6 @@ describe('TransactionTypeBaseComponent', () => {
       imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [MessageService, FormBuilder, ValidateService, TransactionService, provideMockStore(testMockStore)],
     }).compileComponents();
-
-    testMessageService = TestBed.inject(MessageService);
-    testRouter = TestBed.inject(Router);
-    testTransactionService = TestBed.inject(TransactionService);
   });
 
   beforeEach(() => {
