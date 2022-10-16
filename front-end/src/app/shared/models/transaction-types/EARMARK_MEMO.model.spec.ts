@@ -17,11 +17,11 @@ describe('EARMARK_MEMO', () => {
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA11AI');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_RECEIPT);
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
   });
 
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('');
+    expect(descrip).toBe('Total earmarked through conduit.');
   });
 });

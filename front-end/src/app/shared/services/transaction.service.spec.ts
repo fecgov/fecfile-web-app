@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { ListRestResponse } from '../models/rest-api.model';
-import { SchATransaction } from '../models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 
@@ -78,10 +78,13 @@ describe('TransactionService', () => {
     httpTestingController.verify();
   });
 
-  it('#create() should POST a record', () => {
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
+  xit('#create() should POST a record', () => {
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({
+      id: '1',
+      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+    });
 
-    service.create(schATransaction, 'OFFSET_TO_OPERATING_EXPENDITURES', ['form_type']).subscribe((response) => {
+    service.create(schATransaction, ['form_type']).subscribe((response) => {
       expect(response).toEqual(schATransaction);
     });
 
@@ -94,9 +97,12 @@ describe('TransactionService', () => {
   });
 
   it('#update() should PUT  a record', () => {
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({
+      id: '1',
+      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+    });
 
-    service.update(schATransaction, 'OFFSET_TO_OPERATING_EXPENDITURES').subscribe((response) => {
+    service.update(schATransaction).subscribe((response) => {
       expect(response).toEqual(schATransaction);
     });
 

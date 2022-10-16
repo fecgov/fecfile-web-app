@@ -125,7 +125,7 @@ export enum ScheduleATransactionTypes {
   REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES = 'REF_TO_FED_CAN',
   REFUNDS_OF_CONTRIBUTIONS_TO_UNREGISTERED_COMMITTEES = 'REF_TO_OTH_CMTE',
   // Other
-  OFFSETS_TO_OPERATING_EXPENDITURES = 'OFFSET_TO_OPERATING_EXPENDITURES',
+  OFFSET_TO_OPERATING_EXPENDITURES = 'OFFSET_TO_OPERATING_EXPENDITURES',
   OTHER_RECEIPTS = 'OTHER_RECEIPT',
   IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'IND_REC_NON_CONT_ACC',
   OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'OTH_CMTE_NON_CONT_ACC',
@@ -207,7 +207,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Refunds of Contributions to Unregistered Committees',
   ],
   // Other
-  [ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
+  [ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
   [ScheduleATransactionTypes.OTHER_RECEIPTS, 'Other Receipts'],
   [ScheduleATransactionTypes.IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT, 'Individual Receipt - Non-Contribution Account'],
   [

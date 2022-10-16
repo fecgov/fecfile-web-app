@@ -17,6 +17,7 @@ import { Confirmation, ConfirmationService, Message, MessageService, SelectItem 
 import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
+import { ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -57,6 +58,7 @@ const testTransaction = {
   contribution_date: '2022-02-02',
   contribution_purpose_descrip: undefined,
   parent_transaction_id: undefined,
+  children: undefined,
 };
 
 describe('TransactionTypeBaseComponent', () => {
@@ -113,6 +115,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_type_identifier: undefined,
       contribution_purpose_descrip: undefined,
       parent_transaction_id: undefined,
+      children: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -154,17 +157,23 @@ describe('TransactionTypeBaseComponent', () => {
       },
     } as TransactionType;
 
-    component.contact = testContact;
+    if (component.transactionType.transaction) {
+      component.transactionType.transaction.contact = testContact;
+    }
     component.save('list');
     component.form = new FormGroup([]);
     component.save('list');
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.INDIVIDUAL;
     testContact2.id = 'testId';
-    component.contact = testContact2;
+    if (component.transactionType.transaction) {
+      component.transactionType.transaction.contact = testContact2;
+    }
     component.save('list');
-    component.contact = undefined;
-    component.getEditTransactionContactConfirmationMessage([]);
+    if (component.transactionType.transaction) {
+      component.transactionType.transaction.contact = undefined;
+    }
+    component.getEditTransactionContactConfirmationMessage([], testContact, component.form);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
 
@@ -180,6 +189,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_type_identifier: undefined,
       contribution_purpose_descrip: undefined,
       parent_transaction_id: undefined,
+      children: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -210,7 +220,9 @@ describe('TransactionTypeBaseComponent', () => {
       },
     } as TransactionType;
 
-    component.contact = testContact;
+    if (component.transactionType.transaction) {
+      component.transactionType.transaction.contact = testContact;
+    }
     component.save('list');
     component.form = new FormGroup([]);
     component.form.addControl('donor_committee_fec_id', new FormControl('test'));
@@ -218,7 +230,9 @@ describe('TransactionTypeBaseComponent', () => {
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.COMMITTEE;
     testContact2.id = 'testId';
-    component.contact = testContact2;
+    if (component.transactionType.transaction) {
+      component.transactionType.transaction.contact = testContact2;
+    }
     component.save('list');
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
@@ -235,6 +249,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_type_identifier: undefined,
       contribution_purpose_descrip: undefined,
       parent_transaction_id: undefined,
+      children: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -264,14 +279,18 @@ describe('TransactionTypeBaseComponent', () => {
       },
     } as TransactionType;
 
-    component.contact = testContact;
+    if (component.transactionType.transaction) {
+      component.transactionType.transaction.contact = testContact;
+    }
     component.save('list');
     component.form = new FormGroup([]);
     component.save('list');
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.ORGANIZATION;
     testContact2.id = 'testId';
-    component.contact = testContact2;
+    if (component.transactionType.transaction) {
+      component.transactionType.transaction.contact = testContact2;
+    }
     component.save('list');
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
@@ -288,6 +307,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_type_identifier: undefined,
       contribution_purpose_descrip: undefined,
       parent_transaction_id: undefined,
+      children: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -317,7 +337,9 @@ describe('TransactionTypeBaseComponent', () => {
       },
     } as TransactionType;
 
-    component.contact = undefined;
+    if (component.transactionType.transaction) {
+      component.transactionType.transaction.contact = undefined;
+    }
     component.save('list');
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
@@ -334,6 +356,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_type_identifier: undefined,
       contribution_purpose_descrip: undefined,
       parent_transaction_id: undefined,
+      children: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -377,6 +400,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_type_identifier: undefined,
       contribution_purpose_descrip: undefined,
       parent_transaction_id: undefined,
+      children: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -425,9 +449,10 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransactionId = '1';
     const testTransactionTypeToAdd = 'testTransactionTypeToAdd';
 
-    component.transactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
+    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     if (component.transactionType) {
       component.transactionType.transaction = testTransaction;
+      component.transactionType.transaction.report_id = '999';
     }
 
     const expectedMessage: Message = {
@@ -458,6 +483,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction_type_identifier: undefined,
       contribution_purpose_descrip: undefined,
       parent_transaction_id: undefined,
+      children: undefined,
     };
     component.transactionType = {
       transaction: testTransaction3,

@@ -15,7 +15,7 @@ export class EARMARK_RECEIPT implements TransactionType {
   componentGroupId = 'AG';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
-  transaction = undefined;
+  transaction: SchATransaction | undefined = undefined;
   contact = undefined;
   parentTransaction = undefined;
   childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);

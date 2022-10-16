@@ -138,8 +138,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transaction) {
-      component.transaction.id = undefined;
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -176,8 +176,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transaction) {
-      component.transaction.id = '10';
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = '10';
     }
     component.form.patchValue({ ...transaction });
     component.save('add another');
@@ -198,8 +198,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transaction) {
-      component.transaction.id = undefined;
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -238,8 +238,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transaction) {
-      component.transaction.id = undefined;
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -279,7 +279,9 @@ describe('TransactionGroupBComponent', () => {
   it('#save() should not save an invalid org record', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
-    component.contact = testContact;
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.contact = testContact;
+    }
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) {
@@ -287,8 +289,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transaction) {
-      component.transaction.id = undefined;
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
