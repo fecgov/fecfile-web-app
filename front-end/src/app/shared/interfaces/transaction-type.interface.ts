@@ -1,4 +1,3 @@
-import { Contact } from '../models/contact.model';
 import { JsonSchema } from './json-schema.interface';
 import { Transaction } from './transaction.interface';
 

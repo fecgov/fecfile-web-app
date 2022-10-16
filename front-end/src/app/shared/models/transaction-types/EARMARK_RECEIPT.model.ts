@@ -8,6 +8,7 @@ import {
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
+import { ContactTypes } from '../contact.model';
 
 export class EARMARK_RECEIPT implements TransactionType {
   scheduleId = 'A';
@@ -20,7 +21,12 @@ export class EARMARK_RECEIPT implements TransactionType {
   childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
 
   contributionPurposeDescripReadonly(): string {
-    return '';
+    const transaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
+    const conduit: string =
+      transaction.entity_type === ContactTypes.INDIVIDUAL
+        ? `${transaction.contributor_last_name || ''}, ${transaction.contributor_first_name || ''}`
+        : transaction.contributor_organization_name || '';
+    return `Earmarked through ${conduit} (Committee)`;
   }
 
   getNewTransaction() {

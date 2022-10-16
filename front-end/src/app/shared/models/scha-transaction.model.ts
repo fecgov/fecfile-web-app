@@ -66,6 +66,8 @@ export class SchATransaction extends BaseModel implements Transaction {
   contact: Contact | undefined;
   contact_id: string | undefined; // Foreign key to the Contact model
 
+  children: Transaction[] | undefined;
+
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(SchATransaction, json);

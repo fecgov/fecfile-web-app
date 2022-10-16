@@ -11,4 +11,5 @@ export interface Transaction {
   transaction_type_identifier: string | undefined;
   contribution_purpose_descrip: string | undefined;
   parent_transaction_id: string | undefined;
+  children: Transaction[] | undefined;
 }

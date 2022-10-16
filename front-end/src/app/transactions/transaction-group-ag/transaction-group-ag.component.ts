@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs';
 import { TransactionTypeX2BaseComponent } from 'app/shared/components/transaction-type-x2-base/transaction-type-x2-base.component';
 import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -9,6 +10,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 @Component({
   selector: 'app-transaction-group-ag',
@@ -72,8 +74,53 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router,
-    protected override fecDatePipe: FecDatePipe,
+    protected override fecDatePipe: FecDatePipe
   ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router, fecDatePipe);
+    super(
+      messageService,
+      transactionService,
+      contactService,
+      validateService,
+      confirmationService,
+      fb,
+      router,
+      fecDatePipe
+    );
+  }
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+
+    const updateContributionPurposeDescription = () => {
+      (this.transactionType?.childTransactionType?.transaction as SchATransaction).entity_type =
+        this.childForm.get('entity_type')?.value;
+      this.form.patchValue({
+        contribution_purpose_descrip: this.transactionType?.contributionPurposeDescripReadonly(),
+      });
+    };
+
+    // Group A contribution purpose description updates with Group G contributor updates.
+    this.childForm
+      .get('contributor_organization_name')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        (this.transactionType?.childTransactionType?.transaction as SchATransaction).contributor_organization_name =
+          value;
+        updateContributionPurposeDescription();
+      });
+    this.childForm
+      .get('contributor_first_name')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        (this.transactionType?.childTransactionType?.transaction as SchATransaction).contributor_first_name = value;
+        updateContributionPurposeDescription();
+      });
+    this.childForm
+      .get('contributor_last_name')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        (this.transactionType?.childTransactionType?.transaction as SchATransaction).contributor_last_name = value;
+        updateContributionPurposeDescription();
+      });
   }
 }

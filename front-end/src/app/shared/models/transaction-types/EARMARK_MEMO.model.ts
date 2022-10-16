@@ -13,7 +13,7 @@ export class EARMARK_MEMO implements TransactionType {
   childTransactionType = undefined;
 
   contributionPurposeDescripReadonly(): string {
-    return '';
+    return 'Total earmarked through conduit.';
   }
 
   getNewTransaction() {

@@ -332,7 +332,7 @@
               <app-contact-lookup
                 [contactTypeFormControl]="$any(childForm).controls['entity_type']"
                 [contactTypeOptions]="childContactTypeOptions"
-                (contactSelect)="onContactLookupSelectChild($event)"
+                (contactSelect)="childOnContactLookupSelect($event)"
               >
               </app-contact-lookup>
             </div>
@@ -681,3 +681,5 @@
     ></button>
   </div>
 </div>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>

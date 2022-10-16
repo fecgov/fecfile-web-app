@@ -13,6 +13,8 @@ import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
+export type NavigateToType = 'list' | 'add another' | 'add-sub-tran' | 'to-parent';
+
 @Component({
   template: '',
 })
@@ -131,26 +133,56 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
-  save(navigateTo: 'list' | 'add another' | 'add-sub-tran', transactionTypeToAdd?: string) {
+  save(navigateTo: NavigateToType, transactionTypeToAdd?: string) {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
       return;
     }
 
-    const payload: SchATransaction = SchATransaction.fromJSON({
-      ...this.transactionType?.transaction,
-      ...this.validateService.getFormValues(this.form, this.formProperties),
+    const payload: Transaction = this.getPayloadTransaction(
+      this.transactionType?.transaction,
+      this.validateService,
+      this.form,
+      this.formProperties
+    );
+
+    this.confirmSave(payload, this.form, this.doSave, navigateTo, payload, transactionTypeToAdd);
+  }
+
+  getPayloadTransaction(
+    transaction: Transaction | undefined,
+    validateService: ValidateService,
+    form: FormGroup,
+    formProperties: string[]
+  ) {
+    const payload: Transaction = SchATransaction.fromJSON({
+      ...transaction,
+      ...validateService.getFormValues(form, formProperties),
     });
     payload.contact_id = payload.contact?.id;
+    return payload;
+  }
 
-    if (payload.contact_id && payload.contact) {
-      const transactionContactChanges = this.getFormChangesToTransactionContact(this.form, payload.contact);
+  confirmSave(
+    confirmTransaction: Transaction,
+    form: FormGroup,
+    acceptCallback: (
+      navigateTo: NavigateToType,
+      payload: Transaction,
+      transactionTypeToAdd: string | undefined
+    ) => void,
+    navigateTo: NavigateToType,
+    payload: Transaction,
+    transactionTypeToAdd: string | undefined
+  ) {
+    if (confirmTransaction.contact_id && confirmTransaction.contact) {
+      const transactionContactChanges = this.getFormChangesToTransactionContact(form, confirmTransaction.contact);
       if (transactionContactChanges?.length) {
         const confirmationMessage = this.getEditTransactionContactConfirmationMessage(
           transactionContactChanges,
-          payload.contact,
-          this.form
+          confirmTransaction.contact,
+          form
         );
         this.confirmationService.confirm({
           header: 'Confirm',
@@ -159,19 +191,19 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           acceptLabel: 'Continue',
           rejectLabel: 'Cancel',
           accept: () => {
-            this.doSave(navigateTo, payload, transactionTypeToAdd);
+            acceptCallback.call(this, navigateTo, payload, transactionTypeToAdd);
           },
           reject: () => {
             return;
           },
         });
       } else {
-        this.doSave(navigateTo, payload, transactionTypeToAdd);
+        acceptCallback.call(this, navigateTo, payload, transactionTypeToAdd);
       }
     } else {
       const confirmationMessage = this.getCreateTransactionContactConfirmationMessage(
-        payload.entity_type as ContactTypes,
-        this.form
+        (confirmTransaction as SchATransaction).entity_type as ContactTypes,
+        form
       );
       this.confirmationService.confirm({
         header: 'Confirm',
@@ -180,7 +212,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         acceptLabel: 'Continue',
         rejectLabel: 'Cancel',
         accept: () => {
-          this.doSave(navigateTo, payload, transactionTypeToAdd);
+          acceptCallback.call(this, navigateTo, payload, transactionTypeToAdd);
         },
         reject: () => {
           return;
@@ -309,7 +341,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return retval;
   }
 
-  doSave(navigateTo: 'list' | 'add another' | 'add-sub-tran', payload: Transaction, transactionTypeToAdd?: string) {
+  doSave(navigateTo: NavigateToType, payload: Transaction, transactionTypeToAdd?: string) {
     if (payload.transaction_type_identifier) {
       let fieldsToValidate: string[] = this.validateService.getSchemaProperties(this.transactionType?.schema);
       // Remove properties populated in the back-end from list of properties to validate
@@ -317,21 +349,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
       if (payload.id) {
         this.transactionService.update(payload, fieldsToValidate).subscribe((transaction) => {
-          this.navigateTo(navigateTo, transaction, transactionTypeToAdd);
+          this.navigateTo(navigateTo, transaction.id, transactionTypeToAdd);
         });
       } else {
         this.transactionService.create(payload, fieldsToValidate).subscribe((transaction) => {
-          this.navigateTo(navigateTo, transaction, transactionTypeToAdd);
+          this.navigateTo(navigateTo, transaction.id, transactionTypeToAdd);
         });
       }
     }
   }
 
-  navigateTo(
-    navigateTo: 'list' | 'add another' | 'add-sub-tran' | 'to-parent',
-    transaction?: Transaction,
-    transactionTypeToAdd?: string
-  ) {
+  navigateTo(navigateTo: NavigateToType, transactionId?: string, transactionTypeToAdd?: string) {
     if (navigateTo === 'add another') {
       this.messageService.add({
         severity: 'success',
@@ -348,14 +376,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.router.navigateByUrl(
-        `/transactions/report/${transaction?.report_id}/list/edit/${transaction?.id}/create-sub-transaction/${transactionTypeToAdd}`
+        `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
       );
     } else if (navigateTo === 'to-parent') {
       this.router.navigateByUrl(
-        `/transactions/report/${transaction?.report_id}/list/edit/${transaction?.parent_transaction_id}`
+        `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${this.transactionType?.transaction?.parent_transaction_id}`
       );
     } else {
-      this.router.navigateByUrl(`/transactions/report/${transaction?.report_id}/list`);
+      this.router.navigateByUrl(`/transactions/report/${this.transactionType?.transaction?.report_id}/list`);
     }
   }
 
