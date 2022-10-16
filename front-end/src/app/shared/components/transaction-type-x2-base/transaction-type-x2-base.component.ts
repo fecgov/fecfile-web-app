@@ -5,15 +5,12 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ContactTypeLabels } from '../../models/contact.model';
-import { TransactionTypeBaseComponent } from '../transaction-type-base/transaction-type-base.component';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { Contact, ContactTypeLabels } from '../../models/contact.model';
+import { TransactionTypeBaseComponent, NavigateToType } from '../transaction-type-base/transaction-type-base.component';
 import { ContactService } from 'app/shared/services/contact.service';
-import { SelectItem } from 'primeng/api';
-import { Contact } from '../../models/contact.model';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { NavigateToType } from '../transaction-type-base/transaction-type-base.component';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the

@@ -72,7 +72,6 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
           transactionType.transaction = transaction;
 
           if (transactionType.childTransactionType) {
-            transactionType.childTransactionType.transaction = undefined; // TODO: Need to populate this with what is coming back from the API, ideally it is sending a list of 2 txns
             transactionType.childTransactionType.parentTransaction = transaction;
           }
 
