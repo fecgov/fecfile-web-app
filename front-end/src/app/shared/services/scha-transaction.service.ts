@@ -37,7 +37,7 @@ export class SchATransactionService {
   public create(schATransaction: SchATransaction): Observable<SchATransaction> {
     const payload = schATransaction.toJson();
     return this.apiService
-      .post<SchATransaction>(`/sch-a-transactions/`, payload, { schema: 'INDIVIDUAL_RECEIPT' })
+      .post<SchATransaction>(`/sch-a-transactions/`, payload)
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 
