@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import * as generator from './generators.spec';
 
 export function generateContactObject(contactGiven: object = {}): object {
+  console.log("Called!");
   const contactRandom: object = {
     //fields defined in this object are intentionally not CamelCase as they are intended to mirror the FormControlNames of elements on the Front-End
     //_.sample : standard js object method (hence _.); takes a random element from a given list.  Much more readable than [randomint % list.length] on every list
@@ -59,5 +60,6 @@ export function generateContactObject(contactGiven: object = {}): object {
     contact['candidate_id'] = generator.candidateID(contact['candidate_office']);
   }
 
+  console.log("Return!");
   return contact;
 }

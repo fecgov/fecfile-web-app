@@ -16,15 +16,16 @@ describe('QA Script 347 (Sprint 10)', () => {
     const report = generateReportObject();
     cy.createReport(report);
     cy.shortWait();
-    cy.get('p-button[icon="pi pi-pencil"]').click();
+    cy.get('p-button[icon="pi pi-pencil"]').click({force:true});
     cy.navigateToTransactionManagement();
 
     //Tests the summary page for a report
-    const transactionTree = generateTransactionObject({
+    const [transactionTree, contactObject] = generateTransactionObject({
       TRANSFERS: {
         'Joint Fundraising Transfer': {},
       },
     });
+    console.log("HEY", transactionTree, contactObject);
     createTransactionSchA(transactionTree);
     cy.medWait();
     const parentTransaction = transactionTree['TRANSFERS']['Joint Fundraising Transfer'];

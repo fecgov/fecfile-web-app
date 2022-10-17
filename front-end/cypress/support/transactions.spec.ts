@@ -1,6 +1,9 @@
 import { TransactionTree } from './generators/transactions.spec';
 import { TransactionFields } from './transaction_nav_trees.spec';
+import { Transaction } from './generators/transactions.spec';
+import { generateContactObject } from './generators/contacts.spec';
 import _ from 'lodash';
+import { enterContact } from './contacts.spec';
 
 //Run this on the transaction creation accordion to navigate to the desired transaction
 export function navigateTransactionAccordion(category: string, transactionType: string) {
@@ -40,13 +43,18 @@ export function createTransactionSchA(transactionTree: TransactionTree, save: bo
         } else {
           cy.get('button[label="Save & add another Memo"]').click();
         }
+        cy.shortWait();
+        cy.get('.p-confirm-dialog-accept').click();
         cy.longWait();
         cy.url().should('contain', 'sub-transaction');
         enterTransactionSchA(childTransaction);
       }
     }
     cy.get('button[label="Save & view all transactions"]').click();
+    cy.shortWait();
+    cy.get('.p-confirm-dialog-accept').click();
     cy.medWait();
+
   }
 }
 
@@ -60,6 +68,11 @@ export function enterTransactionSchA(transaction: Transaction) {
         return key.startsWith('entityType');
       })
     ];
+
+  cy.contains('a', 'Create a new contact').click();
+  cy.medWait();
+  const contact = generateContactObject({contact_type: entityType});
+  enterContact(contact, true, true);
 
   for (const field of fields) {
     if (field == 'childTransactions') continue;

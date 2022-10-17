@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { groupANavTree, TransactionCategory, SchATransaction, TransactionFields, TransactionForm } from '../transaction_nav_trees.spec';
+import { generateContactObject } from './contacts.spec';
 
 export type TransactionTree = {
   [accordion in TransactionCategory]?: {
@@ -8,17 +9,7 @@ export type TransactionTree = {
 }
 
 export type Transaction = {
-  entity_type?: 'Individual' | 'Committee' | 'Organization';
-  contributorLastName?: string;
-  contributorFirstName?: string;
-  contributorMiddleName?: string;
-  contributorPrefix?: string;
-  contributorSuffix?: string;
-  contributorOrganizationName?: string;
-  contributorStreet1?: string;
-  contributorStreet2?: string;
-  contributorCity?: string;
-  contributorZip?: string | number;
+  entity_type: 'Individual' | 'Committee' | 'Organization';
   memoTextDescription?: string;
   contributionAmount?: number;
   childTransactions?: Transaction[];
@@ -113,8 +104,8 @@ function genRandomTransaction(transactionForm: TransactionForm): Transaction {
   return outTransaction;
 }
 
-export function generateTransactionObject(transactionGiven: TransactionTree = {}): TransactionTree {
-  
+export function generateTransactionObject(transactionGiven: TransactionTree = {}, contactGiven: object | undefined = undefined): [TransactionTree, object] {
+  console.log("HEY, PLEASE");
   const [accordion, transactionType] = genTransactionNavData(transactionGiven);
   const transactionForm = chooseTransactionForm(accordion, transactionType);
   const newTransaction = genRandomTransaction(transactionForm);
@@ -133,5 +124,17 @@ export function generateTransactionObject(transactionGiven: TransactionTree = {}
   finalTransaction[accordion] = {};
   finalTransaction[accordion][transactionType] = finalFields;
 
-  return finalTransaction;
+  console.log("LISTEN");
+  console.log(finalTransaction);
+  let finalContact: object
+  if (contactGiven){
+    finalContact = contactGiven
+  } else {
+    console.log("None given");
+    const entityType: "Individual" | "Committee" | "Organization" = finalFields[entityType]
+    finalContact = generateContactObject({contact_type: entityType});
+  }
+
+  console.log(finalContact);
+  return [finalTransaction, finalContact];
 }
