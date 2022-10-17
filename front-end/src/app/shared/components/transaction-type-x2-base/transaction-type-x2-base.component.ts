@@ -82,14 +82,14 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
     }
 
     const payload: Transaction = this.getPayloadTransaction(
-      this.transactionType?.transaction,
+      this.transactionType,
       this.validateService,
       this.form,
       this.formProperties
     );
     payload.children = [
       this.getPayloadTransaction(
-        this.transactionType?.childTransactionType?.transaction,
+        this.transactionType?.childTransactionType,
         this.childValidateService,
         this.childForm,
         this.childFormProperties

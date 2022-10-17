@@ -68,6 +68,8 @@ export class SchATransaction extends BaseModel implements Transaction {
 
   children: Transaction[] | undefined;
 
+  fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
+
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(SchATransaction, json);

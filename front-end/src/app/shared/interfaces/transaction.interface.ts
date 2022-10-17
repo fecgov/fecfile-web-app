@@ -12,4 +12,5 @@ export interface Transaction {
   contribution_purpose_descrip: string | undefined;
   parent_transaction_id: string | undefined;
   children: Transaction[] | undefined;
+  fields_to_validate: string[] | undefined;
 }

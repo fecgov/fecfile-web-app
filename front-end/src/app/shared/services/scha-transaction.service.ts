@@ -34,23 +34,17 @@ export class SchATransactionService {
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 
-  public create(schATransaction: SchATransaction, fieldsToValidate: string[] = []): Observable<SchATransaction> {
+  public create(schATransaction: SchATransaction): Observable<SchATransaction> {
     const payload = schATransaction.toJson();
     return this.apiService
-      .post<SchATransaction>(`/sch-a-transactions/`, payload, {
-        schema: schATransaction.transaction_type_identifier,
-        fields_to_validate: fieldsToValidate.join(','),
-      })
+      .post<SchATransaction>(`/sch-a-transactions/`, payload, { schema: 'INDIVIDUAL_RECEIPT' })
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 
-  public update(schATransaction: SchATransaction, fieldsToValidate: string[] = []): Observable<SchATransaction> {
+  public update(schATransaction: SchATransaction): Observable<SchATransaction> {
     const payload = schATransaction.toJson();
     return this.apiService
-      .put<SchATransaction>(`/sch-a-transactions/${schATransaction.id}/`, payload, {
-        schema: schATransaction.transaction_type_identifier,
-        fields_to_validate: fieldsToValidate.join(','),
-      })
+      .put<SchATransaction>(`/sch-a-transactions/${schATransaction.id}/`, payload)
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 

@@ -51,12 +51,12 @@ export class TransactionService implements TableListService<Transaction> {
     );
   }
 
-  public create(transaction: Transaction, fieldsToValidate: string[] = []): Observable<Transaction> {
-    return this.schATransactionService.create(transaction as SchATransaction, fieldsToValidate);
+  public create(transaction: Transaction): Observable<Transaction> {
+    return this.schATransactionService.create(transaction as SchATransaction);
   }
 
-  public update(transaction: Transaction, fieldsToValidate: string[] = []): Observable<Transaction> {
-    return this.schATransactionService.update(transaction as SchATransaction, fieldsToValidate);
+  public update(transaction: Transaction): Observable<Transaction> {
+    return this.schATransactionService.update(transaction as SchATransaction);
   }
 
   public delete(transaction: Transaction): Observable<null> {

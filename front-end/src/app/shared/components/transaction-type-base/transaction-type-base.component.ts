@@ -141,7 +141,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
 
     const payload: Transaction = this.getPayloadTransaction(
-      this.transactionType?.transaction,
+      this.transactionType,
       this.validateService,
       this.form,
       this.formProperties
@@ -151,16 +151,22 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   getPayloadTransaction(
-    transaction: Transaction | undefined,
+    transactionType: TransactionType | undefined,
     validateService: ValidateService,
     form: FormGroup,
     formProperties: string[]
   ) {
     const payload: Transaction = SchATransaction.fromJSON({
-      ...transaction,
+      ...transactionType?.transaction,
       ...validateService.getFormValues(form, formProperties),
     });
     payload.contact_id = payload.contact?.id;
+
+    let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
+    // Remove properties populated in the back-end from list of properties to validate
+    fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_committee_name');
+    payload.fields_to_validate = fieldsToValidate;
+
     return payload;
   }
 
@@ -343,16 +349,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   doSave(navigateTo: NavigateToType, payload: Transaction, transactionTypeToAdd?: string) {
     if (payload.transaction_type_identifier) {
-      let fieldsToValidate: string[] = this.validateService.getSchemaProperties(this.transactionType?.schema);
-      // Remove properties populated in the back-end from list of properties to validate
-      fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_committee_name');
-
       if (payload.id) {
-        this.transactionService.update(payload, fieldsToValidate).subscribe((transaction) => {
+        this.transactionService.update(payload).subscribe((transaction) => {
           this.navigateTo(navigateTo, transaction.id, transactionTypeToAdd);
         });
       } else {
-        this.transactionService.create(payload, fieldsToValidate).subscribe((transaction) => {
+        this.transactionService.create(payload).subscribe((transaction) => {
           this.navigateTo(navigateTo, transaction.id, transactionTypeToAdd);
         });
       }
