@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import * as generator from './generators.spec';
+import { TransactionTree } from './transactions.spec';
 
 
 export type Contact = ContactIndividual | ContactCandidate | 
@@ -81,7 +82,7 @@ type ContactOrganization = {
 } & AddressFields
 
 
-export function generateContactObject(contactGiven: ContactPrototype): Contact {
+export function generateContactObject(contactGiven: ContactPrototype = {}): Contact {
   const type = (
     contactGiven['contact_type'] ??
     _.sample(["Individual","Candidate","Committee","Organization"])
@@ -97,6 +98,21 @@ export function generateContactObject(contactGiven: ContactPrototype): Contact {
     case "Organization":
       return generateContactOrganization(contactGiven);
   }
+}
+
+export function generateContactToFit(transactionTree: TransactionTree): Contact {
+  const transactionType = Object.values(transactionTree)[0];
+  const transaction = Object.values(transactionType)[0];
+
+  const entityTypeFound =
+    transaction[
+      Object.keys(transaction).find((key) => {
+        return key.startsWith('entityType');
+      })
+    ];
+
+  const entityType: ContactType = entityTypeFound ?? "Individual";
+  return generateContactObject({contact_type: entityType});
 }
 
 export function generateContactIndividual(contactGiven: ContactPrototype): ContactIndividual {

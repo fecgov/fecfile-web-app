@@ -13,6 +13,8 @@ export function login() {
   cy.session(`Login Through ${intervalString}`, () => {
     //apiLogin();
     legacyLogin();
+  }, {
+    cacheAcrossSpecs: true
   });
 
   //Retrieve the AUTH TOKEN from the created/restored session
@@ -98,6 +100,7 @@ function legacyLogin() {
   });
 
   cy.visit('/');
+  cy.longWait();
 
   cy.get(fieldEmail).type(email);
   cy.get(fieldCommittee).type(committeeID);
@@ -105,6 +108,7 @@ function legacyLogin() {
 
   cy.wait('@GetCommitteeAccount');
 
+  cy.url().should('contain', '/dashboard');
   cy.longWait();
 }
 

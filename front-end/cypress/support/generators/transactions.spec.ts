@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import { groupANavTree, TransactionCategory, SchATransaction, TransactionFields, TransactionForm } from '../transaction_nav_trees.spec';
-import { generateContactObject } from './contacts.spec';
 
 export type TransactionTree = {
   [accordion in TransactionCategory]?: {
@@ -12,6 +11,7 @@ export type Transaction = {
   entity_type: 'Individual' | 'Committee' | 'Organization';
   memoTextDescription?: string;
   contributionAmount?: number;
+  contributionDate?: Date;
   childTransactions?: Transaction[];
 };
 
@@ -104,8 +104,7 @@ function genRandomTransaction(transactionForm: TransactionForm): Transaction {
   return outTransaction;
 }
 
-export function generateTransactionObject(transactionGiven: TransactionTree = {}, contactGiven: object | undefined = undefined): [TransactionTree, object] {
-  console.log("HEY, PLEASE");
+export function generateTransactionObject(transactionGiven: TransactionTree = {}): TransactionTree {
   const [accordion, transactionType] = genTransactionNavData(transactionGiven);
   const transactionForm = chooseTransactionForm(accordion, transactionType);
   const newTransaction = genRandomTransaction(transactionForm);
@@ -124,17 +123,5 @@ export function generateTransactionObject(transactionGiven: TransactionTree = {}
   finalTransaction[accordion] = {};
   finalTransaction[accordion][transactionType] = finalFields;
 
-  console.log("LISTEN");
-  console.log(finalTransaction);
-  let finalContact: object
-  if (contactGiven){
-    finalContact = contactGiven
-  } else {
-    console.log("None given");
-    const entityType: "Individual" | "Committee" | "Organization" = finalFields[entityType]
-    finalContact = generateContactObject({contact_type: entityType});
-  }
-
-  console.log(finalContact);
-  return [finalTransaction, finalContact];
+  return finalTransaction;
 }

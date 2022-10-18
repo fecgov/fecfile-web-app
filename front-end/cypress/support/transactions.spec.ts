@@ -1,7 +1,7 @@
 import { TransactionTree } from './generators/transactions.spec';
 import { TransactionFields } from './transaction_nav_trees.spec';
 import { Transaction } from './generators/transactions.spec';
-import { generateContactObject } from './generators/contacts.spec';
+import { generateContactObject, Contact } from './generators/contacts.spec';
 import _ from 'lodash';
 import { enterContact } from './contacts.spec';
 
@@ -21,7 +21,11 @@ export function navigateTransactionAccordion(category: string, transactionType: 
  *  @transaction: the Transaction object to be used (see: the Transaction Generator file)
  *  @save: Boolean.  Controls whether or not to save when finished. (Default: True)
  */
-export function createTransactionSchA(transactionTree: TransactionTree, save: boolean = true) {
+export function createTransactionSchA(
+  transactionTree: TransactionTree, 
+  contact: Contact, 
+  save = true
+) {
   const category = Object.keys(transactionTree)[0];
   const transactionType = Object.keys(transactionTree[category])[0];
   const transaction = transactionTree[category][transactionType];
@@ -31,7 +35,7 @@ export function createTransactionSchA(transactionTree: TransactionTree, save: bo
 
   navigateTransactionAccordion(category, transactionType);
   cy.medWait();
-  enterTransactionSchA(transaction);
+  enterTransactionSchA(transaction, contact);
 
   if (save) {
     if (transaction.childTransactions) {
@@ -47,7 +51,7 @@ export function createTransactionSchA(transactionTree: TransactionTree, save: bo
         cy.get('.p-confirm-dialog-accept').click();
         cy.longWait();
         cy.url().should('contain', 'sub-transaction');
-        enterTransactionSchA(childTransaction);
+        enterTransactionSchA(childTransaction, contact);
       }
     }
     cy.get('button[label="Save & view all transactions"]').click();
@@ -58,7 +62,7 @@ export function createTransactionSchA(transactionTree: TransactionTree, save: bo
   }
 }
 
-export function enterTransactionSchA(transaction: Transaction) {
+export function enterTransactionSchA(transaction: Transaction, contact: Contact) {
   const fields = Object.keys(transaction);
 
   //Gets the value of the first field-key in the form that starts with "entityType"
@@ -71,7 +75,6 @@ export function enterTransactionSchA(transaction: Transaction) {
 
   cy.contains('a', 'Create a new contact').click();
   cy.medWait();
-  const contact = generateContactObject({contact_type: entityType});
   enterContact(contact, true, true);
 
   for (const field of fields) {
