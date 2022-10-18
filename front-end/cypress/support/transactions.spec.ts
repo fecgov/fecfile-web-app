@@ -76,6 +76,7 @@ export function enterTransactionSchA(transaction: Transaction, contact: Contact)
   cy.contains('a', 'Create a new contact').click();
   cy.medWait();
   enterContact(contact, true, true);
+  cy.medWait();
 
   for (const field of fields) {
     if (field == 'childTransactions') continue;
