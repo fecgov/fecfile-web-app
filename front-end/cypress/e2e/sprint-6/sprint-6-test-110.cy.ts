@@ -70,7 +70,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
     cy.visit('/dashboard');
   });
 
-  after(() => {
+  after('', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllContacts();

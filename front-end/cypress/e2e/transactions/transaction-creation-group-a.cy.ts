@@ -1,18 +1,16 @@
 // @ts-check
 
+import { generateContactToFit } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { Transaction, generateTransactionObject } from '../../support/generators/transactions.spec';
 import { createTransactionSchA } from '../../support/transactions.spec';
-import { TransactionNavTree, groupANavTree } from '../../support/transaction_nav_trees.spec';
+import { TransactionNavTree, groupANavTree, TransactionForm } from '../../support/transaction_nav_trees.spec';
 
-function testEditTransaction(transactionForm) {
-  const lastName = transactionForm['contributorLastName'];
-  const firstName = transactionForm['contributorFirstName'];
-  const groupName = transactionForm['contributorOrganizationName'];
-
-  let name: string = '';
-  if (lastName && firstName) name = `${lastName}, ${firstName}`;
-  else if (groupName) name = groupName;
+function testEditTransaction(transactionForm: TransactionForm, contact: Contact) {
+  const lastName = contact['contributorLastName'];
+  const firstName = contact['contributorFirstName'];
+  const groupName = contact['contributorOrganizationName'];
+  const name = contact['name']
 
   cy.contains('tr', name).find('a').click();
   cy.shortWait();
@@ -59,6 +57,7 @@ describe('Test saving and editing on all transactions', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();
+    cy.deleteAllContacts();
   });
 
   const navTree = groupANavTree;
@@ -70,11 +69,12 @@ describe('Test saving and editing on all transactions', () => {
 
       it(`Creates a ${transactionName} transaction`, () => {
         const transaction: Transaction = generateTransactionObject(tTree);
-        createTransactionSchA(transaction);
+        const contact = generateContactToFit(transaction);
+        createTransactionSchA(transaction, contact);
         cy.longWait();
 
         const tForm = transaction[category][transactionName];
-        testEditTransaction(tForm);
+        testEditTransaction(tForm, contact);
       });
 
       it(`Creates a ${transactionName} transaction with "Save & add another"`, () => {

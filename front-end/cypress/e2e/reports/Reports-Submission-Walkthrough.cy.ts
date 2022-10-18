@@ -1,5 +1,6 @@
 // @ts-check
 
+import { generateContactToFit } from '../../support/generators/contacts.spec';
 import {
   generateConfirmationDetails,
   generateFilingDetails,
@@ -9,6 +10,8 @@ import { generateTransactionObject } from '../../support/generators/transactions
 
 const report = generateReportObject();
 const transaction = generateTransactionObject();
+const contact = generateContactToFit(transaction);
+console.log(transaction, contact);
 const confirmationDetails = generateConfirmationDetails();
 const filingDetails = generateFilingDetails();
 
@@ -16,6 +19,12 @@ describe('Test creating and submitting a report', () => {
   beforeEach('Logs in', () => {
     cy.login();
   });
+
+  after('', ()=>{
+    cy.login();
+    cy.visit('/dashboard');
+    cy.deleteAllReports();
+  })
 
   it('', () => {
     cy.visit('/dashboard');
@@ -27,7 +36,7 @@ describe('Test creating and submitting a report', () => {
     cy.navigateToTransactionManagement();
 
     //Creates a transaction
-    cy.createTransactionSchA(transaction);
+    cy.createTransactionSchA(transaction, contact);
 
     //Checks pre-existing confirmation details
     cy.navigateReportSidebar('Submit', 'Confirm information');
@@ -86,7 +95,5 @@ describe('Test creating and submitting a report', () => {
       const date = `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
       cy.get('body').should('contain', date);
     }
-
-    cy.deleteAllReports();
   });
 });

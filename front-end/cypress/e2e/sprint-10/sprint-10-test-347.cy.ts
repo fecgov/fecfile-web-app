@@ -1,3 +1,4 @@
+import { generateContactCommittee } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { createTransactionSchA } from '../../support/transactions.spec';
@@ -7,12 +8,18 @@ describe('QA Script 347 (Sprint 10)', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();
+    cy.deleteAllContacts();
   });
+
+  before('', ()=> {
+    cy.login();
+  })
 
   it('', () => {
     //Logs in and creates a dummy report
     cy.login();
     cy.visit('/dashboard');
+    
     const report = generateReportObject();
     cy.createReport(report);
     cy.shortWait();
@@ -20,24 +27,25 @@ describe('QA Script 347 (Sprint 10)', () => {
     cy.navigateToTransactionManagement();
 
     //Tests the summary page for a report
-    const [transactionTree, contactObject] = generateTransactionObject({
+    const contactObject = generateContactCommittee({});
+    const transactionTree = generateTransactionObject({
       TRANSFERS: {
         'Joint Fundraising Transfer': {},
       },
     });
-    console.log("HEY", transactionTree, contactObject);
-    createTransactionSchA(transactionTree);
+    createTransactionSchA(transactionTree, contactObject);
     cy.medWait();
     const parentTransaction = transactionTree['TRANSFERS']['Joint Fundraising Transfer'];
     const childTransaction = parentTransaction['childTransactions'][0];
-    const childName = childTransaction['contributorOrganizationName'];
+    const contribution = childTransaction["contributionAmount"] as number
+    const convContribution = Intl.NumberFormat('en-US').format(Math.floor(contribution))
 
-    cy.contains('tr', parentTransaction['contributorOrganizationName'])
-      .find('>td')
+    cy.contains('tr', 'JOINT_FUNDRAISING_TRANSFER')
+      .find('td')
       .eq(6)
       .then(($td) => {
         const parentId = $td.text();
-        cy.contains('tr', childName).find('td').eq(7).should('have.text', parentId);
+        cy.contains('tr', convContribution).find('td').eq(7).should('have.text', parentId);
       });
   });
 });
