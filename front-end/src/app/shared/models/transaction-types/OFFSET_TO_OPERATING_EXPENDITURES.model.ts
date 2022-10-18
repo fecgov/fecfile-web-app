@@ -11,10 +11,10 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPER
 export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'B';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
   transaction = undefined;
-  contact = undefined;
   parentTransaction = undefined;
   childTransactionType = undefined;
 

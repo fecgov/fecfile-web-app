@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { map, mergeMap, Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { TransactionType } from '../interfaces/transaction-type.interface';
 import { Transaction } from '../interfaces/transaction.interface';
 import { Contact } from '../models/contact.model';
@@ -24,7 +24,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
       return this.resolve_existing_transaction(transactionId);
     }
     if (parentTransactionId && transactionTypeName) {
-      return this.resolve_child_transaction(parentTransactionId, transactionTypeName);
+      return this.resolve_new_child_transaction(parentTransactionId, transactionTypeName);
     }
     if (reportId && transactionTypeName) {
       return this.resolve_new_transaction(reportId, transactionTypeName);
@@ -44,7 +44,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
     return of(transactionType);
   }
 
-  resolve_child_transaction(
+  resolve_new_child_transaction(
     parentTransactionId: string,
     transactionTypeName: string
   ): Observable<TransactionType | undefined> {
@@ -64,28 +64,44 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
 
   resolve_existing_transaction(transactionId: string): Observable<TransactionType | undefined> {
     return this.transactionService.get(String(transactionId)).pipe(
-      mergeMap((transaction: Transaction) => {
+      map((transaction: Transaction) => {
         if (transaction.transaction_type_identifier && transaction.contact_id) {
-          const transactionType = TransactionTypeUtils.factory(
+          let transactionType = TransactionTypeUtils.factory(
             transaction.transaction_type_identifier
           ) as TransactionType;
-          transactionType.transaction = transaction;
 
-          if (transactionType.childTransactionType) {
-            transactionType.childTransactionType.parentTransaction = transaction;
+          if (
+            transactionType.isDependentChild &&
+            transaction.parent_transaction &&
+            transaction.parent_transaction.transaction_type_identifier
+          ) {
+            // Switch to the parent TransactionType
+            transactionType = TransactionTypeUtils.factory(
+              transaction.parent_transaction.transaction_type_identifier
+            ) as TransactionType;
+
+            transactionType.transaction = transaction.parent_transaction;
+            transactionType.transaction.contact = Contact.fromJSON(transaction.parent_transaction.contact);
+            if (transactionType.childTransactionType) {
+              transactionType.childTransactionType.parentTransaction = transaction.parent_transaction;
+              transactionType.childTransactionType.transaction = transaction;
+              transactionType.childTransactionType.transaction.contact = Contact.fromJSON(transaction.contact);
+            }
+          } else {
+            transactionType.transaction = transaction;
+            transactionType.transaction.contact = Contact.fromJSON(transaction.contact);
+
+            if (transactionType.childTransactionType && transaction.children) {
+              transactionType.childTransactionType.parentTransaction = transaction;
+              transactionType.childTransactionType.transaction = transaction.children[0];
+              transactionType.childTransactionType.transaction.contact = Contact.fromJSON(
+                transaction.children[0].contact
+              );
+            }
           }
-
-          return this.contactService.get(transaction.contact_id).pipe(
-            map((contact: Contact) => {
-              if (transactionType.transaction) {
-                transactionType.transaction.contact = contact;
-              }
-              return transactionType;
-            })
-          );
-        } else {
-          return of(undefined);
+          return transactionType;
         }
+        return undefined;
       })
     );
   }

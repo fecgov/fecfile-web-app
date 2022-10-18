@@ -1,15 +1,20 @@
 import { TransactionType } from '../../interfaces/transaction-type.interface';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels, AggregationGroups } from '../scha-transaction.model';
+import {
+  SchATransaction,
+  ScheduleATransactionTypes,
+  ScheduleATransactionTypeLabels,
+  AggregationGroups,
+} from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECEIPT';
 
 export class INDIVIDUAL_RECEIPT implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'A';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
   schema = schema;
   transaction = undefined;
-  contact = undefined;
   parentTransaction = undefined;
   childTransactionType = undefined;
 

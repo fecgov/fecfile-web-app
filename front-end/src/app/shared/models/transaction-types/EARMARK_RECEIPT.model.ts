@@ -13,10 +13,10 @@ import { ContactTypes } from '../contact.model';
 export class EARMARK_RECEIPT implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'AG';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
   transaction: SchATransaction | undefined = undefined;
-  contact = undefined;
   parentTransaction = undefined;
   childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
 

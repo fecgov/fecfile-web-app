@@ -15,6 +15,7 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 @Component({
   selector: 'app-transaction-group-ag',
   templateUrl: './transaction-group-ag.component.html',
+  styleUrls: ['./transaction-group-ag.component.scss'],
 })
 export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -99,7 +100,7 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
       });
     };
 
-    // Group A contribution purpose description updates with Group G contributor updates.
+    // Group A contribution purpose description updates with Group G contributor name updates.
     this.childForm
       .get('contributor_organization_name')
       ?.valueChanges.pipe(takeUntil(this.destroy$))

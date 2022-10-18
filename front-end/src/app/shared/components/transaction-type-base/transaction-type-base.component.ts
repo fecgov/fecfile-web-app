@@ -164,7 +164,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
     // Remove properties populated in the back-end from list of properties to validate
-    fieldsToValidate = fieldsToValidate.filter((p) => p !== 'transaction_id' && p !== 'donor_committee_name');
+    fieldsToValidate = fieldsToValidate.filter(
+      (p) =>
+        p !== 'transaction_id' &&
+        p !== 'donor_committee_name' &&
+        p !== 'back_reference_tran_id_number' &&
+        p !== 'back_reference_sched_name'
+    );
     payload.fields_to_validate = fieldsToValidate;
 
     return payload;
@@ -401,7 +407,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
-      memo_code: false,
+      memo_code: (transactionType?.transaction as SchATransaction).memo_code,
       contribution_purpose_descrip: transactionType?.contributionPurposeDescripReadonly(),
     });
   }

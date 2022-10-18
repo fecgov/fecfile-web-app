@@ -11,10 +11,10 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFE
 export class PAC_JF_TRANSFER_MEMO implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'F';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   schema = schema;
   transaction = undefined;
-  contact = undefined;
   parentTransaction: SchATransaction | undefined = undefined;
   childTransactionType = undefined;
 

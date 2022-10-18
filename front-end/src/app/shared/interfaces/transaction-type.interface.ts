@@ -7,7 +7,8 @@ import { Transaction } from './transaction.interface';
  */
 export interface TransactionType {
   scheduleId: string;
-  componentGroupId: string;
+  componentGroupId: string; // Identifier of transaction component use to render UI form entry page
+  isDependentChild: boolean; // When set to true, the parent transaction is used to generate UI form entry page
   title: string;
   schema: JsonSchema;
   transaction: Transaction | undefined;
