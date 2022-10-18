@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
@@ -252,7 +252,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       return Object.entries(ContactFields)
         .map(([field, label]: string[]) => {
           const contactValue = (this.contact as Contact)[field as keyof typeof this.contact];
-          const formField = this.form.get(`contributor_${field}`);
+          const formField = this.getFormField(field);
+
           if (formField && formField?.value !== contactValue) {
             return `Updated ${label.toLowerCase()} to ${formField.value || ''}`;
           }
@@ -261,6 +262,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         .filter((change) => change);
     }
     return [];
+  }
+
+  getFormField(field: string): AbstractControl | null {
+    if (field == 'committee_id') {
+      return this.form.get('donor_committee_fec_id');
+    }
+    return this.form.get(`contributor_${field}`) || this.form.get(`contributor_organization_${field}`);
   }
 
   doSave(navigateTo: 'list' | 'add another' | 'add-sub-tran', payload: SchATransaction, transactionTypeToAdd?: string) {
