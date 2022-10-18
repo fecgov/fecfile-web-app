@@ -277,21 +277,22 @@ export function occupation(): string {
     'Editor',
     'Interpreter',
     'Chef',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
+  ]) as string;
+}
+
+export function employer(): string {
+  return _.sample([
+    'University of Testopolis',
+    'Testville Mall',
+    'Smith, Smith, and Smith',
+    'Big eCommerce Platform',
+    'Testville Library',
+    'Testville City Hall',
+    'Testopolis District Court',
+    'Testopolis PD',
+    'Testville High',
+    'Jorgensen Deli',
+    'Namebrand Automotive Inc.'
   ]) as string;
 }
 
