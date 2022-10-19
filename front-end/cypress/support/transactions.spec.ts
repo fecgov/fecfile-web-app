@@ -66,12 +66,17 @@ export function enterTransactionSchA(transaction: Transaction, contact: Contact)
   const fields = Object.keys(transaction);
 
   //Gets the value of the first field-key in the form that starts with "entityType"
-  const entityType =
-    transaction[
-      Object.keys(transaction).find((key) => {
-        return key.startsWith('entityType');
-      })
-    ];
+  const entityTypeKey =  
+    Object.keys(transaction).find((key) => {
+      return key.startsWith('entityType');
+    }) as string;
+
+  const entityType = transaction[entityTypeKey];
+  const entityRules = TransactionFields[entityTypeKey];
+  if (entityRules["entities"].length > 1 ){
+    const contactEntity = contact["contact_type"];
+    cy.dropdownSetValue('.p-dropdown', contactEntity);
+  }
 
   cy.contains('a', 'Create a new contact').click();
   cy.medWait();
