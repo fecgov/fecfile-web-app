@@ -361,7 +361,7 @@
                 <label for="donor_committee_fec_id">CONDUIT FEC ID</label>
                 <input type="text" pInputText id="donor_committee_fec_id" formControlName="donor_committee_fec_id" />
                 <app-error-messages
-                  [form]="form"
+                  [form]="childForm"
                   fieldName="donor_committee_fec_id"
                   [formSubmitted]="formSubmitted"
                 ></app-error-messages>
@@ -676,4 +676,5 @@
   </div>
 </div>
 
-<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog key="childDialog" [style]="{ width: '450px' }"></p-confirmDialog>

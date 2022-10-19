@@ -186,7 +186,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     ) => void,
     navigateTo: NavigateToType,
     payload: Transaction,
-    transactionTypeToAdd: string | undefined
+    transactionTypeToAdd: string | undefined,
+    targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (confirmTransaction.contact_id && confirmTransaction.contact) {
       const transactionContactChanges = this.getFormChangesToTransactionContact(form, confirmTransaction.contact);
@@ -197,6 +198,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           form
         );
         this.confirmationService.confirm({
+          key: targetDialog,
           header: 'Confirm',
           icon: 'pi pi-info-circle',
           message: confirmationMessage,

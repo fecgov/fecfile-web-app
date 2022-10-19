@@ -104,7 +104,15 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
   private childConfirmSave(navigateTo: NavigateToType, payload: Transaction, transactionTypeToAdd?: string) {
     if (payload.children?.length === 1) {
       // Confirm transaction from Group G
-      this.confirmSave(payload.children[0], this.childForm, this.doSave, navigateTo, payload, transactionTypeToAdd);
+      this.confirmSave(
+        payload.children[0],
+        this.childForm,
+        this.doSave,
+        navigateTo,
+        payload,
+        transactionTypeToAdd,
+        'childDialog'
+      );
     } else {
       throw new Error('Transaction missing Group G child transaction when trying to confirm save.');
     }
