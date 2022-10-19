@@ -19,6 +19,8 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.medWait();
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.url().should('contain', '/reports');
+    cy.longWait();
+    cy.lighthouse(undefined, {output: "html"});
 
     const report = generateReportObject();
     cy.createReport(report);

@@ -1,3 +1,5 @@
+import "@cypress-audit/lighthouse/commands";
+
 /**
  * login()
  *
