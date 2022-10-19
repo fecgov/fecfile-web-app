@@ -38,7 +38,9 @@ function genTransactionNavData(transactionGiven: TransactionTree = {}):
 
 function chooseTransactionForm(
   accordion: TransactionCategory, 
-  transactionType: SchATransaction): TransactionForm{
+  transactionType: SchATransaction): TransactionForm
+{
+  console.log(accordion, transactionType);
   const transactionForm: TransactionForm | undefined = 
     groupANavTree[accordion][transactionType];
 
