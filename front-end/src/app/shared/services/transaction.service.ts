@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { ListRestResponse } from '../models/rest-api.model';
 import { Transaction } from '../interfaces/transaction.interface';
-import { SchATransactionService } from './scha-transaction.service';
+import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { ApiService } from './api.service';
+import { SchATransactionService } from './scha-transaction.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransactionService implements TableListService<Transaction> {
-  constructor(private apiService: ApiService, private schATransactionService: SchATransactionService) {}
+  constructor(private apiService: ApiService, private schATransactionService: SchATransactionService) { }
 
   public getTableData(
     pageNumber = 1,
@@ -35,6 +35,20 @@ export class TransactionService implements TableListService<Transaction> {
 
   public get(transactionId: string): Observable<Transaction> {
     return this.schATransactionService.get(transactionId);
+  }
+
+  public getPreviousTransaction(
+    transaction_id: string,
+    contact_id: string,
+    contribution_date: Date,
+    aggregation_group: string
+  ): Observable<Transaction> {
+    return this.schATransactionService.getPreviousTransaction(
+      transaction_id,
+      contact_id,
+      contribution_date,
+      aggregation_group
+    );
   }
 
   public create(transaction: Transaction, schema: string, fieldsToValidate: string[] = []): Observable<Transaction> {

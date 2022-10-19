@@ -4,6 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ContactTypes } from 'app/shared/models/contact.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -41,7 +42,7 @@ describe('TransactionGroupEComponent', () => {
         InputNumberModule,
       ],
       declarations: [TransactionGroupEComponent],
-      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore)],
+      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
   });
 
@@ -55,5 +56,12 @@ describe('TransactionGroupEComponent', () => {
     expect(component).toBeTruthy();
     component.ngOnInit();
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.COMMITTEE);
+  });
+
+  it('should reset the subTransaction dropdown', () => {
+    component.form.get("subTransaction")?.setValue("A Value");
+    expect(component.form.get("subTransaction")?.value).toEqual("A Value");
+    component.createSubTransaction({value: "Invalid"});
+    expect(component.form.get("subTransaction")?.value).toBeNull();
   });
 });

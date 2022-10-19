@@ -2,6 +2,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction } from '../interfaces/transaction.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
+import { Contact } from './contact.model';
 
 export class SchATransaction extends BaseModel implements Transaction {
   id: string | undefined;
@@ -62,6 +63,7 @@ export class SchATransaction extends BaseModel implements Transaction {
 
   report_id: string | undefined; // Foreign key to the F3XSummary model
 
+  contact: Contact | undefined;
   contact_id: string | undefined; // Foreign key to the Contact model
 
   // prettier-ignore
@@ -257,7 +259,6 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
 ];
 
-
 export enum AggregationGroups {
   GENERAL = 'GENERAL',
   LINE_15 = 'LINE_15',
@@ -265,7 +266,7 @@ export enum AggregationGroups {
   NPARTY_CONVENTION = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
   NPARTY_HEADQUARTERS = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   NPARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
-  NONCONTRIBUTION_ACCOUNT = 'NON-CONTRIBUTION_ACCOUNT',
+  NON_CONTRIBUTION_ACCOUNT = 'NON_CONTRIBUTION_ACCOUNT',
   OTHER_RECEIPTS = 'OTHER_RECEIPTS',
-  RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT'
+  RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
 }
