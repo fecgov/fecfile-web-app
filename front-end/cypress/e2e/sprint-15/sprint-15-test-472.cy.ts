@@ -53,5 +53,6 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.medWait();
     cy.contains('li', 'In contacts').click({force:true});
     cy.medWait();
+    enterTransactionSchA(transactionA);
   });
 });

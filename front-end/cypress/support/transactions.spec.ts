@@ -42,8 +42,9 @@ export function createTransactionSchA(
       for (let i = 0; i < transaction['childTransactions'].length; i++) {
         const childTransaction = transaction['childTransactions'][i];
 
-        if (i == 0) {
-          cy.get('button[label="Save & add a Memo"]').click();
+        if (i == 0){
+          cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
+          cy.contains('li', 'PAC JF Transfer Memo').click();
         } else {
           cy.get('button[label="Save & add another Memo"]').click();
         }

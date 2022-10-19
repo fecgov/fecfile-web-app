@@ -18,6 +18,8 @@ function testEditTransaction(transactionForm: TransactionForm, contact: Contact)
   cy.get("input[FormControlName='contributor_street_1']").overwrite('100 West Virginia Avenue');
   cy.shortWait();
   cy.get('button[label="Save & view all transactions"]').click();
+  cy.shortWait();
+  cy.get('.p-confirm-dialog-accept').click();
   cy.longWait();
   cy.url().should('contain', 'transactions/report/');
   cy.url().should('contain', 'list');

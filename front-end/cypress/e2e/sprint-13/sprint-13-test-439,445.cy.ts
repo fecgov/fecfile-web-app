@@ -35,7 +35,8 @@ describe('QA Script 244 (Sprint 8)', () => {
     const transaction = generateTransactionObject({ TRANSFERS: { 'Joint Fundraising Transfer': {} } });
     const contact = generateContactToFit(transaction);
     createTransactionSchA(transaction, contact, false);
-    cy.get('button[label="Save & add a Memo"]').click();
+    cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
+    cy.contains('li', 'PAC JF Transfer Memo').click();
     cy.shortWait();
     cy.get('.p-confirm-dialog-accept').click();
     cy.longWait();
