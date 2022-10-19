@@ -84,13 +84,11 @@ describe('TransactionService', () => {
       transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
     });
 
-    service.create(schATransaction, ['form_type']).subscribe((response) => {
+    service.create(schATransaction).subscribe((response) => {
       expect(response).toEqual(schATransaction);
     });
 
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
     expect(req.request.method).toEqual('POST');
     req.flush(schATransaction);
     httpTestingController.verify();
@@ -106,9 +104,7 @@ describe('TransactionService', () => {
       expect(response).toEqual(schATransaction);
     });
 
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/1/`);
     expect(req.request.method).toEqual('PUT');
     req.flush(schATransaction);
     httpTestingController.verify();

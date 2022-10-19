@@ -407,7 +407,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
-      memo_code: (transactionType?.transaction as SchATransaction).memo_code,
+      memo_code: (transactionType?.transaction as SchATransaction)?.memo_code,
       contribution_purpose_descrip: transactionType?.contributionPurposeDescripReadonly(),
     });
   }

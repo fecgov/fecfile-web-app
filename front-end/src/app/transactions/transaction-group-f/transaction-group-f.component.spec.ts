@@ -67,8 +67,7 @@ describe('TransactionGroupFComponent', () => {
         ConfirmDialogModule,
       ],
       declarations: [TransactionGroupFComponent],
-      providers: [MessageService, ConfirmationService,
-        FormBuilder, provideMockStore(testMockStore), FecDatePipe],
+      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
   });
 
@@ -89,6 +88,7 @@ describe('TransactionGroupFComponent', () => {
       schema: PAC_JF_TRANSFER_MEMO,
       transaction: transaction,
       childTransactionType: undefined,
+      isDependentChild: false,
     } as TransactionType;
     fixture.detectChanges();
   });
