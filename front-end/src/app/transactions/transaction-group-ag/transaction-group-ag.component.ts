@@ -63,6 +63,9 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     'memo_code',
     'memo_text_description',
   ];
+  override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
+    [ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
+  );
   override childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.INDIVIDUAL, ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
@@ -91,6 +94,11 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
 
   override ngOnInit(): void {
     super.ngOnInit();
+
+    // Default the Group G entity type to Committee
+    if (!this.transactionType?.childTransactionType?.transaction?.id) {
+      this.childForm.get('entity_type')?.setValue(ContactTypes.COMMITTEE);
+    }
 
     const updateContributionPurposeDescription = () => {
       (this.transactionType?.childTransactionType?.transaction as SchATransaction).entity_type =
@@ -122,6 +130,14 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
       .subscribe((value) => {
         (this.transactionType?.childTransactionType?.transaction as SchATransaction).contributor_last_name = value;
         updateContributionPurposeDescription();
+      });
+
+    // Group B amount must match Group A contribution amount
+    this.form
+      .get('contribution_amount')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.childForm.get('contribution_amount')?.setValue(value);
       });
   }
 }

@@ -21,12 +21,19 @@ export class EARMARK_RECEIPT implements TransactionType {
   childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
 
   contributionPurposeDescripReadonly(): string {
-    const transaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    const conduit: string =
-      transaction.entity_type === ContactTypes.INDIVIDUAL
-        ? `${transaction.contributor_last_name || ''}, ${transaction.contributor_first_name || ''}`
-        : transaction.contributor_organization_name || '';
-    return `Earmarked through ${conduit} (Committee)`;
+    const earmarkMemo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
+    let conduit = earmarkMemo.contributor_organization_name || '';
+    if (
+      earmarkMemo.entity_type === ContactTypes.INDIVIDUAL &&
+      earmarkMemo.contributor_first_name &&
+      earmarkMemo.contributor_last_name
+    ) {
+      conduit = `${earmarkMemo.contributor_first_name || ''} ${earmarkMemo.contributor_last_name || ''}`;
+    }
+    if (conduit) {
+      return `Earmarked through ${conduit}`;
+    }
+    return '';
   }
 
   getNewTransaction() {

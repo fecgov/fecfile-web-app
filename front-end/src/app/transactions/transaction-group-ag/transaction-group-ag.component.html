@@ -20,7 +20,7 @@
             <label for="entity_type">CONTRIBUTOR TYPE</label>
             <app-contact-lookup
               [contactTypeFormControl]="$any(form).controls['entity_type']"
-              [contactTypeOptions]="childContactTypeOptions"
+              [contactTypeOptions]="contactTypeOptions"
               [contactTypeReadOnly]="true"
               contactTypeStyleClass="readonly"
               (contactSelect)="onContactLookupSelect($event)"
@@ -328,7 +328,7 @@
         <div class="grid">
           <div class="col-12">
             <div class="field">
-              <label for="entity_type">CONDUIT TYPE</label>
+              <label for="entity_type">ENTITY TYPE</label>
               <app-contact-lookup
                 [contactTypeFormControl]="$any(childForm).controls['entity_type']"
                 [contactTypeOptions]="childContactTypeOptions"
@@ -338,21 +338,11 @@
             </div>
           </div>
         </div>
-        <ng-container
-          *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(childForm.get('entity_type')?.value)"
-        >
+        <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.COMMITTEE">
           <div class="grid">
             <div class="col-8">
               <div class="field">
-                <label for="contributor_organization_name">
-                  <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.ORGANIZATION"
-                    >ORGANIZATION</ng-container
-                  >
-                  <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.COMMITTEE"
-                    >COMMITTEE</ng-container
-                  >
-                  NAME
-                </label>
+                <label for="contributor_organization_name">CONDUIT NAME</label>
                 <input
                   type="text"
                   pInputText
@@ -368,7 +358,7 @@
             </div>
             <div class="col-4">
               <div class="field">
-                <label for="donor_committee_fec_id">CONTRIBUTOR FEC ID</label>
+                <label for="donor_committee_fec_id">CONDUIT FEC ID</label>
                 <input type="text" pInputText id="donor_committee_fec_id" formControlName="donor_committee_fec_id" />
                 <app-error-messages
                   [form]="form"
@@ -568,7 +558,8 @@
                 ariaLabel="have memo item"
                 [trueValue]="true"
                 [falseValue]="false"
-                [disabled]="true"
+                [readonly]="true"
+                inputStyleClass="readonly"
               ></p-checkbox>
               <div class="memo-checkbox-note">
                 {{ memoItemHelpText }}
@@ -579,13 +570,15 @@
         <div class="grid">
           <div class="col-6">
             <div class="field">
-              <label for="contribution_amount">CONTRIBUTION AMOUNT</label>
+              <label for="contribution_amount">AMOUNT</label>
               <p-inputNumber
                 inputId="contribution_amount"
                 formControlName="contribution_amount"
                 mode="currency"
                 currency="USD"
                 locale="en-US"
+                [readonly]="true"
+                inputStyleClass="readonly"
               ></p-inputNumber>
               <app-error-messages
                 [form]="childForm"
@@ -598,7 +591,7 @@
           </div>
           <div class="col-6">
             <div class="field">
-              <label for="contribution_aggregate">CONTRIBUTION AGGREGATE</label>
+              <label for="contribution_aggregate">AGGREGATE</label>
               <p-inputNumber
                 inputId="contribution_aggregate"
                 formControlName="contribution_aggregate"
