@@ -62,7 +62,7 @@ export function createTransactionSchA(
   }
 }
 
-export function enterTransactionSchA(transaction: Transaction, contact: Contact) {
+export function enterTransactionSchA(transaction: Transaction, contact: Contact | undefined = undefined) {
   const fields = Object.keys(transaction);
 
   //Gets the value of the first field-key in the form that starts with "entityType"
@@ -80,8 +80,10 @@ export function enterTransactionSchA(transaction: Transaction, contact: Contact)
 
   cy.contains('a', 'Create a new contact').click();
   cy.medWait();
-  enterContact(contact, true, true);
-  cy.medWait();
+  if (contact){
+    enterContact(contact, true, true);
+    cy.medWait();
+  }
 
   for (const field of fields) {
     if (field == 'childTransactions') continue;
