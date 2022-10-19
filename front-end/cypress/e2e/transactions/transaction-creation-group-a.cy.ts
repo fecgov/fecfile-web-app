@@ -10,7 +10,7 @@ function testEditTransaction(transactionForm: TransactionForm, contact: Contact)
   const lastName = contact['contributorLastName'];
   const firstName = contact['contributorFirstName'];
   const groupName = contact['contributorOrganizationName'];
-  const name = contact['name']
+  const name = getName(contact);
 
   cy.contains('tr', name).find('a').click();
   cy.shortWait();
@@ -26,9 +26,18 @@ function testEditTransaction(transactionForm: TransactionForm, contact: Contact)
   cy.shortWait();
 
   cy.get("input[FormControlName='contributor_street_1']").should('have.value', '100 West Virginia Avenue');
-
-  cy.get('button[label="Cancel"]').click();
   cy.shortWait();
+}
+
+function getName(contact: Contact): string {
+  switch(contact["contact_type"]){
+    case "Individual":
+    case "Candidate":
+      return `${contact["last_name"]}, ${contact["first_name"]}`;
+    case "Committee":
+    case "Organization":
+      return contact["name"];
+  }
 }
 
 describe('Test saving and editing on all transactions', () => {
@@ -79,14 +88,18 @@ describe('Test saving and editing on all transactions', () => {
 
       it(`Creates a ${transactionName} transaction with "Save & add another"`, () => {
         const transaction: Transaction = generateTransactionObject(tTree);
-        createTransactionSchA(transaction, false);
+        const contact = generateContactToFit(transaction);
+        createTransactionSchA(transaction, contact, false);
         cy.get('button[label="Save & add another"]').click();
-        cy.get('input[FormControlName="contributor_street_1"]').should('have.value', '');
+        cy.shortWait();
+        cy.get('.p-confirm-dialog-accept').click();
+        cy.medWait();
+        cy.get('input[FormControlName="street_1"]').should('have.length', 0);
         cy.longWait();
         cy.get('button[label="Cancel"]').click();
 
         const tForm = transaction[category][transactionName];
-        testEditTransaction(tForm);
+        testEditTransaction(tForm, contact);
       });
     }
   }
