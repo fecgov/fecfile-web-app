@@ -123,12 +123,9 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
         const tTree = {};
         tTree[category]={};
         tTree[category][transactionName]={};
-        console.log("Hey:", tTree);
         const transaction: Transaction = generateTransactionObject(tTree);
         const contact = generateContactToFit(transaction);
 
-        console.log(category, transactionName);
-        console.log(transaction, transaction[category][transactionName]);
         const entityTypeKey =  
           Object.keys(transaction[category][transactionName]).find((key) => {
             return key.startsWith('entityType');
