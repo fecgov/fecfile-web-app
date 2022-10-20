@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { map, Observable, of } from 'rxjs';
+import { map, mergeMap, Observable, of } from 'rxjs';
 import { TransactionType } from '../interfaces/transaction-type.interface';
 import { Transaction } from '../interfaces/transaction.interface';
 import { Contact } from '../models/contact.model';
@@ -63,45 +63,52 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
   }
 
   resolve_existing_transaction(transactionId: string): Observable<TransactionType | undefined> {
+    function buildTransactionType(transaction: Transaction): TransactionType | undefined {
+      if (transaction.transaction_type_identifier && transaction.contact) {
+        const transactionType: TransactionType = TransactionTypeUtils.factory(
+          transaction.transaction_type_identifier
+        ) as TransactionType;
+        transactionType.transaction = transaction;
+        transactionType.transaction.contact = Contact.fromJSON(transaction.contact);
+        transactionType.parentTransaction = transaction.parent_transaction;
+        if (transaction.children?.length) {
+          transactionType.childTransactionType = buildTransactionType(transaction.children[0]);
+        }
+        return transactionType;
+      }
+      return undefined;
+    }
+
     return this.transactionService.get(String(transactionId)).pipe(
-      map((transaction: Transaction) => {
-        if (transaction.transaction_type_identifier && transaction.contact_id) {
-          let transactionType = TransactionTypeUtils.factory(
+      mergeMap((transaction: Transaction) => {
+        if (transaction.transaction_type_identifier && transaction.contact) {
+          const transactionType = TransactionTypeUtils.factory(
             transaction.transaction_type_identifier
           ) as TransactionType;
 
-          if (
-            transactionType.isDependentChild &&
-            transaction.parent_transaction &&
-            transaction.parent_transaction.transaction_type_identifier
-          ) {
-            // Switch to the parent TransactionType
-            transactionType = TransactionTypeUtils.factory(
-              transaction.parent_transaction.transaction_type_identifier
-            ) as TransactionType;
-
-            transactionType.transaction = transaction.parent_transaction;
-            transactionType.transaction.contact = Contact.fromJSON(transaction.parent_transaction.contact);
-            if (transactionType.childTransactionType) {
-              transactionType.childTransactionType.parentTransaction = transaction.parent_transaction;
-              transactionType.childTransactionType.transaction = transaction;
-              transactionType.childTransactionType.transaction.contact = Contact.fromJSON(transaction.contact);
-            }
-          } else {
-            transactionType.transaction = transaction;
-            transactionType.transaction.contact = Contact.fromJSON(transaction.contact);
-
-            if (transactionType.childTransactionType && transaction.children) {
-              transactionType.childTransactionType.parentTransaction = transaction;
-              transactionType.childTransactionType.transaction = transaction.children[0];
-              transactionType.childTransactionType.transaction.contact = Contact.fromJSON(
-                transaction.children[0].contact
+          // Determine if we need to get the parent transaction as the
+          // transaction type requested is a dependent transaction and cannot
+          // be modified directly in a UI form. (e.g. EARMARK_MEMO)
+          if (transactionType.isDependentChild) {
+            // Get parent transaction to ensure we have a full list of children
+            if (transaction?.parent_transaction?.id) {
+              return this.transactionService.get(transaction.parent_transaction.id).pipe(
+                map((transaction: Transaction) => {
+                  return buildTransactionType(transaction);
+                })
+              );
+            } else {
+              throw new Error(
+                `Transaction ${transaction.id} (${transaction.transaction_type_identifier}) is a dependent transaction type but does not have a parent transaction.`
               );
             }
+          } else {
+            return of(buildTransactionType(transaction));
           }
-          return transactionType;
         }
-        return undefined;
+        throw new Error(
+          `Transaction type resolver can't find transaction and/or contact for transaction ID ${transactionId}`
+        );
       })
     );
   }

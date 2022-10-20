@@ -58,7 +58,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     validateService.formValidatorSchema = transactionType?.schema;
     validateService.formValidatorForm = form;
 
-    // Intialize form on "Individual" entity type
+    // Intialize form values
     if (this.isExisting(transactionType?.transaction)) {
       const txn = { ...transactionType?.transaction } as SchATransaction;
       form.patchValue({ ...txn });
@@ -163,7 +163,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     payload.contact_id = payload.contact?.id;
 
     let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
-    // Remove properties populated in the back-end from list of properties to validate
+    // Remove properties that are populated in the back-end from list of properties to validate
     fieldsToValidate = fieldsToValidate.filter(
       (p) =>
         p !== 'transaction_id' &&
@@ -220,6 +220,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         form
       );
       this.confirmationService.confirm({
+        key: targetDialog,
         header: 'Confirm',
         icon: 'pi pi-info-circle',
         message: confirmationMessage,
