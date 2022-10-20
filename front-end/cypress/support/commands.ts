@@ -82,7 +82,6 @@ function legacyLogin() {
   const email = Cypress.env('EMAIL');
   const committeeID = Cypress.env('COMMITTEE_ID');
   const testPassword = Cypress.env('PASSWORD');
-  const testPIN = Cypress.env('PIN');
 
   //login page form-fields' id's (or classes where elements have no id's)
   const fieldEmail = '#login-email-id';
@@ -107,8 +106,6 @@ function legacyLogin() {
   cy.get(fieldPassword).type(testPassword).type('{enter}');
 
   cy.wait('@GetCommitteeAccount');
-
-  //cy.url().should('contain', '/dashboard');
   cy.longWait();
 }
 

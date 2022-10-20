@@ -1,20 +1,8 @@
 import _ from 'lodash';
 import {
-  apartment,
-  city,
-  committeeID,
   contributionAmount,
   date,
-  firstName,
-  groupName,
-  lastName,
-  middleName,
-  prefix,
   randomString,
-  state,
-  street,
-  suffix,
-  zipcode,
 } from './generators/generators.spec';
 
 /*

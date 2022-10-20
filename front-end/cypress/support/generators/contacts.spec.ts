@@ -124,7 +124,7 @@ export function generateContactIndividual(contactGiven: ContactPrototype): Conta
     contact_type: "Individual",
   }
   contact["name"] = `${contact["first_name"]} ${contact["last_name"]}`;
-  return contact as ContactIndividual;
+  return contact;
 }
 
 export function generateContactCandidate(contactGiven: ContactPrototype): ContactCandidate {

@@ -7,9 +7,6 @@ import { createTransactionSchA } from '../../support/transactions.spec';
 import { TransactionNavTree, groupANavTree, TransactionForm } from '../../support/transaction_nav_trees.spec';
 
 function testEditTransaction(transactionForm: TransactionForm, contact: Contact) {
-  const lastName = contact['contributorLastName'];
-  const firstName = contact['contributorFirstName'];
-  const groupName = contact['contributorOrganizationName'];
   const name = getName(contact);
 
   cy.contains('tr', name).find('a').click();

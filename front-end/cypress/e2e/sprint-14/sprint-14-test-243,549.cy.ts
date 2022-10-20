@@ -1,10 +1,9 @@
 // @ts-check
 
 import * as _ from 'lodash';
-import { Contact, generateContactCommittee, generateContactIndividual, generateContactOrganization } from '../../support/generators/contacts.spec';
+import { generateContactCommittee, generateContactIndividual, generateContactOrganization } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
-import { generateTransactionObject, Transaction } from '../../support/generators/transactions.spec';
-import { enterTransactionSchA } from '../../support/transactions.spec';
+import { generateTransactionObject } from '../../support/generators/transactions.spec';
 
 //Contacts
 const contactIndividual = generateContactIndividual({});

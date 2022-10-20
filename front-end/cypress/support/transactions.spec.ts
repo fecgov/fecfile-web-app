@@ -1,8 +1,7 @@
-import { TransactionTree } from './generators/transactions.spec';
-import { TransactionFields } from './transaction_nav_trees.spec';
-import { Transaction } from './generators/transactions.spec';
-import { generateContactObject, Contact } from './generators/contacts.spec';
 import _ from 'lodash';
+import { TransactionTree, Transaction } from './generators/transactions.spec';
+import { TransactionFields } from './transaction_nav_trees.spec';
+import { Contact } from './generators/contacts.spec';
 import { enterContact } from './contacts.spec';
 
 //Run this on the transaction creation accordion to navigate to the desired transaction
