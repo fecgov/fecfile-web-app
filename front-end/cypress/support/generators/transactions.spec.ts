@@ -40,7 +40,6 @@ function chooseTransactionForm(
   accordion: TransactionCategory, 
   transactionType: SchATransaction): TransactionForm
 {
-  console.log(accordion, transactionType);
   const transactionForm: TransactionForm | undefined = 
     groupANavTree[accordion][transactionType];
 
@@ -99,6 +98,7 @@ function genRandomTransaction(transactionForm: TransactionForm): Transaction {
     outTransaction["childTransactions"] = [];
     const childTransactions: TransactionForm[] = transactionForm['childTransactions'];
     for (const childTransactionForm of childTransactions){
+      console.log("Memo form!", childTransactionForm);
       outTransaction["childTransactions"] = [genRandomTransaction(childTransactionForm), ...outTransaction["childTransactions"]];
     }
   }

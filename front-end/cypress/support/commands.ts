@@ -108,7 +108,7 @@ function legacyLogin() {
 
   cy.wait('@GetCommitteeAccount');
 
-  cy.url().should('contain', '/dashboard');
+  //cy.url().should('contain', '/dashboard');
   cy.longWait();
 }
 

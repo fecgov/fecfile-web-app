@@ -74,14 +74,17 @@ export function enterTransactionSchA(transaction: Transaction, contact: Contact 
 
   const entityType = transaction[entityTypeKey];
   const entityRules = TransactionFields[entityTypeKey];
-  if (entityRules["entities"].length > 1 ){
+  console.log("Called");
+  console.log(entityTypeKey, entityRules);
+  console.log(transaction);
+  if (entityRules["entities"]?.length > 1 ){
     const contactEntity = contact["contact_type"];
     cy.dropdownSetValue('.p-dropdown', contactEntity);
   }
 
-  cy.contains('a', 'Create a new contact').click();
-  cy.medWait();
   if (contact){
+    cy.contains('a', 'Create a new contact').click();
+    cy.medWait();
     enterContact(contact, true, true);
     cy.medWait();
   }

@@ -3,6 +3,7 @@ import {
   apartment,
   city,
   committeeID,
+  contributionAmount,
   date,
   firstName,
   groupName,
@@ -123,8 +124,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
   contributionAmount: {
     fieldName: 'contribution_amount',
     fieldType: 'P-InputNumber',
-    generator: _.random,
-    genArgs: [10, 10000, true], //Make a random number between 10 and 10000 and it is *not* a float
+    generator: contributionAmount,
     required: true,
     maxLength: 12,
   },

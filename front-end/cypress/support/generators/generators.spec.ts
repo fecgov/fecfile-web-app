@@ -451,6 +451,10 @@ export function transactionDateReceived(coverageFromDate = '', coverageThroughDa
   return outDate;
 }
 
+export function contributionAmount(){
+  return _.random(1000, 1000000, false) / 100;
+}
+
 export function randomString(
   strLength: number,
   charType: 'special' | 'alphanumeric' | 'alphabet' | 'numeric' | 'symbols' = 'alphanumeric',
