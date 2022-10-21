@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 
 <div class="p-fluid">
-  <h1>{{ title }}</h1>
+  <h1>{{ transactionType?.title }}</h1>
   <h3>Contributor</h3>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="contact">
+    <ng-container *ngIf="transactionType?.transaction?.contact">
       <div class="grid">
         <div class="col-8">
           <div class="field">
@@ -243,7 +243,7 @@
           </div>
         </div>
       </div>
-      <ng-container *ngIf="!this.transaction?.id">
+      <ng-container *ngIf="!this.transactionType?.transaction?.id">
         <div class="grid">
           <div class="col-3">
             <button
@@ -277,11 +277,11 @@
           label="Save & view all transactions"
           class="p-button-primary"
           (click)="save('list')"
-          [disabled]="!contact"
+          [disabled]="!transactionType?.transaction?.contact"
         ></button>
       </div>
     </div>
   </form>
 </div>
 
-<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
