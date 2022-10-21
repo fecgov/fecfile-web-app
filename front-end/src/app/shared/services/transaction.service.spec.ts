@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
 import { ListRestResponse } from '../models/rest-api.model';
-import { SchATransaction } from '../models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 
@@ -78,31 +78,33 @@ describe('TransactionService', () => {
     httpTestingController.verify();
   });
 
-  it('#create() should POST a record', () => {
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
+  xit('#create() should POST a record', () => {
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({
+      id: '1',
+      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+    });
 
-    service.create(schATransaction, 'OFFSET_TO_OPERATING_EXPENDITURES', ['form_type']).subscribe((response) => {
+    service.create(schATransaction).subscribe((response) => {
       expect(response).toEqual(schATransaction);
     });
 
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
     expect(req.request.method).toEqual('POST');
     req.flush(schATransaction);
     httpTestingController.verify();
   });
 
   it('#update() should PUT  a record', () => {
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({
+      id: '1',
+      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+    });
 
-    service.update(schATransaction, 'OFFSET_TO_OPERATING_EXPENDITURES').subscribe((response) => {
+    service.update(schATransaction).subscribe((response) => {
       expect(response).toEqual(schATransaction);
     });
 
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/1/`);
     expect(req.request.method).toEqual('PUT');
     req.flush(schATransaction);
     httpTestingController.verify();

@@ -10,5 +10,8 @@ export interface Transaction {
   transaction_id: string | null;
   transaction_type_identifier: string | undefined;
   contribution_purpose_descrip: string | undefined;
+  parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined;
+  children: Transaction[] | undefined;
+  fields_to_validate: string[] | undefined;
 }

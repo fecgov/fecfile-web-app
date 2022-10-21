@@ -33,6 +33,10 @@ export class TransactionContainerComponent implements OnInit, OnDestroy {
         if (this.transactionType?.transaction) {
           this.transactionType.transaction.filer_committee_id_number = committeeAccount.committee_id;
         }
+        if (this.transactionType?.childTransactionType?.transaction) {
+          this.transactionType.childTransactionType.transaction.filer_committee_id_number =
+            committeeAccount.committee_id;
+        }
       });
   }
 
