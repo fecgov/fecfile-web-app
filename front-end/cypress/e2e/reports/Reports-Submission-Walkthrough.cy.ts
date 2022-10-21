@@ -11,7 +11,6 @@ import { generateTransactionObject } from '../../support/generators/transactions
 const report = generateReportObject();
 const transaction = generateTransactionObject();
 const contact = generateContactToFit(transaction);
-console.log(transaction, contact);
 const confirmationDetails = generateConfirmationDetails();
 const filingDetails = generateFilingDetails();
 

@@ -73,9 +73,6 @@ export function enterTransactionSchA(transaction: Transaction, contact: Contact 
 
   const entityType = transaction[entityTypeKey];
   const entityRules = TransactionFields[entityTypeKey];
-  console.log("Called");
-  console.log(entityTypeKey, entityRules);
-  console.log(transaction);
   if (entityRules["entities"]?.length > 1 ){
     const contactEntity = contact["contact_type"];
     cy.dropdownSetValue('.p-dropdown', contactEntity);
