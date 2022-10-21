@@ -29,6 +29,16 @@ jobs:
           command: ./node_modules/.bin/eslint "src/**/*.ts" --max-warnings=0
           working_directory: ~/project/front-end/
   test:
+    docker:
+      - image: cimg/node:16.13-browsers    
+    steps:
+      - checkout
+      - browser-tools/install-chrome
+      - run: npm install ~/project/front-end/
+      - run: sudo npm install -g @lhci/cli@0.8.x
+      - run: lhci autorun
+
+  test2:
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # A list of available CircleCI Docker convenience images are available here: https://circleci.com/developer/images/image/cimg/python
     docker:
