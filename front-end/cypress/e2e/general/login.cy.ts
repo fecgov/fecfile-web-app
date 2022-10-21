@@ -68,15 +68,13 @@ describe('Testing login', () => {
   });
 
   it('Logs in and checks for Committee Account Details', () => {
-    cy.intercept(
-      "GET", "https://api.open.fec.gov/v1/committee/*/*"
-    ).as("GetCommitteeAccount");
+    cy.intercept('GET', 'https://api.open.fec.gov/v1/committee/*/*').as('GetCommitteeAccount');
 
     login();
 
-    cy.wait("@GetCommitteeAccount");
+    cy.wait('@GetCommitteeAccount');
     cy.url().should('contain', '/dashboard');
-    cy.get(".committee-banner").contains(committeeID).should("exist");
+    cy.get('.committee-banner').contains(committeeID).should('exist');
 
     cy.logout();
   });

@@ -49,7 +49,7 @@ describe('QA Script 125 (Sprint 10)', () => {
       cy.medWait();
       cy.navigateToTransactionManagement();
 
-      const contact = generateContactIndividual({})
+      const contact = generateContactIndividual({});
       const transaction = generateTransactionObject({
         'INDIVIDUALS/PERSONS': {
           'Individual Receipt': {},

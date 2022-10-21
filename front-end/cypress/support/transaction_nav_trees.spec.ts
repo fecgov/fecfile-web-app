@@ -1,9 +1,5 @@
 import _ from 'lodash';
-import {
-  contributionAmount,
-  date,
-  randomString,
-} from './generators/generators.spec';
+import { contributionAmount, date, randomString } from './generators/generators.spec';
 
 /*
  *          Adding support for a new transaction:
@@ -94,7 +90,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     readOnly: true,
     maxLength: -1,
   },
- memoTextDescription: {
+  memoTextDescription: {
     fieldName: 'memo_text_description',
     fieldType: 'Textarea',
     generator: randomString,

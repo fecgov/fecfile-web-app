@@ -19,11 +19,11 @@ describe('Test creating and submitting a report', () => {
     cy.login();
   });
 
-  after('', ()=>{
+  after('', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();
-  })
+  });
 
   it('', () => {
     cy.visit('/dashboard');

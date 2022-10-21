@@ -1,7 +1,11 @@
 // @ts-check
 
 import * as _ from 'lodash';
-import { generateContactCommittee, generateContactIndividual, generateContactOrganization } from '../../support/generators/contacts.spec';
+import {
+  generateContactCommittee,
+  generateContactIndividual,
+  generateContactOrganization,
+} from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 
@@ -12,38 +16,36 @@ const contactCommittee = generateContactCommittee({});
 
 //Individual Transactions
 const indvRecTree = {
-  "INDIVIDUALS/PERSONS":{
-    "Individual Receipt":{
-      "contributionDate": new Date("12/12/2012"),
-      "contributionAmount": _.random(10, 500, false)
-    }
-  }
+  'INDIVIDUALS/PERSONS': {
+    'Individual Receipt': {
+      contributionDate: new Date('12/12/2012'),
+      contributionAmount: _.random(10, 500, false),
+    },
+  },
 };
 const tTreeIndividualA = generateTransactionObject(indvRecTree);
 
-
 //Organization Transactions
 const orgRecTree = {
-  "INDIVIDUALS/PERSONS":{
-    "Tribal Receipt":{
-      "contributionDate": new Date("12/12/2012"),
-      "contributionAmount": _.random(10, 500, false)
-    }
-  }
+  'INDIVIDUALS/PERSONS': {
+    'Tribal Receipt': {
+      contributionDate: new Date('12/12/2012'),
+      contributionAmount: _.random(10, 500, false),
+    },
+  },
 };
 const tTreeOrganizationA = generateTransactionObject(orgRecTree);
 
 //JF Transfer Transfers
 const JFTransTree = {
-  "TRANSFERS":{
-    "Joint Fundraising Transfer":{
-      "contributionDate": new Date("12/12/2012"),
-      "contributionAmount": _.random(10, 250, false)
-    }
-  }
+  TRANSFERS: {
+    'Joint Fundraising Transfer': {
+      contributionDate: new Date('12/12/2012'),
+      contributionAmount: _.random(10, 250, false),
+    },
+  },
 };
 const tTreeJFTransA = generateTransactionObject(JFTransTree);
-
 
 describe('QA Script 244 (Sprint 8)', () => {
   after(() => {
@@ -66,7 +68,7 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.createReport(report);
   });
 
-  it('Tests contact creation', ()=>{
+  it('Tests contact creation', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();

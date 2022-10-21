@@ -10,12 +10,16 @@
 export function login() {
   const sessionDuration = 10; //Login session duration in minutes
   const intervalString = getLoginIntervalString(sessionDuration);
-  cy.session(`Login Through ${intervalString}`, () => {
-    //apiLogin();
-    legacyLogin();
-  }, {
-    cacheAcrossSpecs: true
-  });
+  cy.session(
+    `Login Through ${intervalString}`,
+    () => {
+      //apiLogin();
+      legacyLogin();
+    },
+    {
+      cacheAcrossSpecs: true,
+    }
+  );
 
   //Retrieve the AUTH TOKEN from the created/restored session
   cy.then(() => {

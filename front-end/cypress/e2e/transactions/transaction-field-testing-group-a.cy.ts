@@ -107,9 +107,9 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
     }
   }
 
-  for (let i = 0; i < transactionPairs.length; i+=1){
+  for (let i = 0; i < transactionPairs.length; i += 1) {
     const [tCategory, tName] = transactionPairs[i];
-    context("", (transactionName=tName, category=tCategory)=>{
+    context('', (transactionName = tName, category = tCategory) => {
       it(`Tests the fields of ${transactionName}`, () => {
         cy.login();
         cy.visit('/dashboard');
@@ -121,15 +121,14 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
         cy.medWait();
 
         const tTree = {};
-        tTree[category]={};
-        tTree[category][transactionName]={};
+        tTree[category] = {};
+        tTree[category][transactionName] = {};
         const transaction: Transaction = generateTransactionObject(tTree);
         const contact = generateContactToFit(transaction);
 
-        const entityTypeKey =  
-          Object.keys(transaction[category][transactionName]).find((key) => {
-            return key.startsWith('entityType');
-          }) as string;
+        const entityTypeKey = Object.keys(transaction[category][transactionName]).find((key) => {
+          return key.startsWith('entityType');
+        }) as string;
 
         cy.get('button[label="Add new transaction"]').click();
         cy.shortWait();
@@ -138,8 +137,8 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
         cy.shortWait();
 
         const entityRules = TransactionFields[entityTypeKey];
-        if (entityRules["entities"].length > 1 ){
-          const contactEntity = contact["contact_type"];
+        if (entityRules['entities'].length > 1) {
+          const contactEntity = contact['contact_type'];
           cy.dropdownSetValue('.p-dropdown', contactEntity);
         }
         cy.shortWait();
@@ -147,7 +146,6 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
         cy.medWait();
         enterContact(contact, true, true);
         cy.medWait();
-
 
         const fields = Object.keys(groupANavTree[category][transactionName]);
 

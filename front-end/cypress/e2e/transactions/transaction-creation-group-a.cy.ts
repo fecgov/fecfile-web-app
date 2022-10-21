@@ -29,13 +29,13 @@ function testEditTransaction(transactionForm: TransactionForm, contact: Contact)
 }
 
 function getName(contact: Contact): string {
-  switch(contact["contact_type"]){
-    case "Individual":
-    case "Candidate":
-      return `${contact["last_name"]}, ${contact["first_name"]}`;
-    case "Committee":
-    case "Organization":
-      return contact["name"];
+  switch (contact['contact_type']) {
+    case 'Individual':
+    case 'Candidate':
+      return `${contact['last_name']}, ${contact['first_name']}`;
+    case 'Committee':
+    case 'Organization':
+      return contact['name'];
   }
 }
 

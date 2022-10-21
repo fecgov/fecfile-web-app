@@ -11,19 +11,19 @@ describe('QA Script 347 (Sprint 10)', () => {
     cy.deleteAllContacts();
   });
 
-  before('', ()=> {
+  before('', () => {
     cy.login();
-  })
+  });
 
   it('', () => {
     //Logs in and creates a dummy report
     cy.login();
     cy.visit('/dashboard');
-    
+
     const report = generateReportObject();
     cy.createReport(report);
     cy.shortWait();
-    cy.get('p-button[icon="pi pi-pencil"]').click({force:true});
+    cy.get('p-button[icon="pi pi-pencil"]').click({ force: true });
     cy.navigateToTransactionManagement();
 
     //Tests the summary page for a report
@@ -37,8 +37,8 @@ describe('QA Script 347 (Sprint 10)', () => {
     cy.medWait();
     const parentTransaction = transactionTree['TRANSFERS']['Joint Fundraising Transfer'];
     const childTransaction = parentTransaction['childTransactions'][0];
-    const contribution = childTransaction["contributionAmount"] as number
-    const convContribution = Intl.NumberFormat('en-US').format(Math.floor(contribution))
+    const contribution = childTransaction['contributionAmount'] as number;
+    const convContribution = Intl.NumberFormat('en-US').format(Math.floor(contribution));
 
     cy.contains('tr', 'JOINT_FUNDRAISING_TRANSFER')
       .find('td')

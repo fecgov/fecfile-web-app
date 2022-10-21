@@ -7,14 +7,13 @@ export function createContact(contact: object, save = true) {
   cy.get('#button-contacts-new').click();
   cy.shortWait();
 
-  cy.then(()=>{
-    enterContact(contact, save)
+  cy.then(() => {
+    enterContact(contact, save);
   });
 }
 
-export function enterContact(contact: object, save = true, forTransaction=false) {
-  if (!forTransaction)
-    cy.dropdownSetValue("p-dropdown[formcontrolname='type']", contact['contact_type']);
+export function enterContact(contact: object, save = true, forTransaction = false) {
+  if (!forTransaction) cy.dropdownSetValue("p-dropdown[formcontrolname='type']", contact['contact_type']);
 
   if (contact['contact_type'] == 'Individual' || contact['contact_type'] == 'Candidate') {
     //Contact
@@ -62,10 +61,8 @@ export function enterContact(contact: object, save = true, forTransaction=false)
   }
 
   if (save) {
-    if (!forTransaction)
-      cy.contains('.p-button-primary > .p-button-label', 'Save').click();
-    else
-      cy.contains('button', 'Save & continue').click();
+    if (!forTransaction) cy.contains('.p-button-primary > .p-button-label', 'Save').click();
+    else cy.contains('button', 'Save & continue').click();
   }
 
   cy.longWait(); //Gives the database time to process the request.  It gets a little funky otherwise...

@@ -292,7 +292,7 @@ export function employer(): string {
     'Testopolis PD',
     'Testville High',
     'Jorgensen Deli',
-    'Namebrand Automotive Inc.'
+    'Namebrand Automotive Inc.',
   ]) as string;
 }
 
@@ -315,7 +315,7 @@ export function committeeID(): string {
 }
 
 export function groupName(): string {
-  return `${randomString(6, "alphabet")} for American ${_.sample([
+  return `${randomString(6, 'alphabet')} for American ${_.sample([
     'Happiness',
     'Exceptionalism',
     'Integrity',
@@ -325,23 +325,23 @@ export function groupName(): string {
 }
 
 export function email(): string {
-  if (_.random(100) % 2 == 0){
-    return firstName()+lastName()+`@test${_.random(999)}.com`;
+  if (_.random(100) % 2 == 0) {
+    return firstName() + lastName() + `@test${_.random(999)}.com`;
   } else {
-    return groupName().replaceAll(" ", "_")+'@test.com';
+    return groupName().replaceAll(' ', '_') + '@test.com';
   }
 }
 
 export function fakeFilingPW(): string {
-  let outString: string = randomString(1, "alphabet").toUpperCase();
-  outString += randomString(1, "alphabet").toLowerCase();
-  outString += randomString(1, "numeric");
-  outString += _.sample(['!','@','#','$','%','&','*','(',')']); //The symbols required to be present are more restrictive
+  let outString: string = randomString(1, 'alphabet').toUpperCase();
+  outString += randomString(1, 'alphabet').toLowerCase();
+  outString += randomString(1, 'numeric');
+  outString += _.sample(['!', '@', '#', '$', '%', '&', '*', '(', ')']); //The symbols required to be present are more restrictive
 
   const length = _.random(8, 16);
-  outString += randomString(length-outString.length, "special");
+  outString += randomString(length - outString.length, 'special');
 
-  return outString
+  return outString;
 }
 
 export function date(): Date {
@@ -451,7 +451,7 @@ export function transactionDateReceived(coverageFromDate = '', coverageThroughDa
   return outDate;
 }
 
-export function contributionAmount(){
+export function contributionAmount() {
   return _.random(1000, 1000000, false) / 100;
 }
 
@@ -462,12 +462,12 @@ export function randomString(
 ): string {
   // prettier-ignore
   let symbols: Array<string> = [' ', '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', '|', '~', '`'];
-  if (includeCurlyBraces) symbols = symbols.concat('{','}');
+  if (includeCurlyBraces) symbols = symbols.concat('{', '}');
   // prettier-ignore
   const alphabet: Array<string> =   ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',];
   // prettier-ignore
   const numeric: Array<string> = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-  
+
   const alphanumeric = alphabet.concat(numeric);
   const special = alphanumeric.concat(symbols);
 

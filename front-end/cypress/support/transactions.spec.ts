@@ -20,11 +20,7 @@ export function navigateTransactionAccordion(category: string, transactionType: 
  *  @transaction: the Transaction object to be used (see: the Transaction Generator file)
  *  @save: Boolean.  Controls whether or not to save when finished. (Default: True)
  */
-export function createTransactionSchA(
-  transactionTree: TransactionTree, 
-  contact: Contact, 
-  save = true
-) {
+export function createTransactionSchA(transactionTree: TransactionTree, contact: Contact, save = true) {
   const category = Object.keys(transactionTree)[0];
   const transactionType = Object.keys(transactionTree[category])[0];
   const transaction = transactionTree[category][transactionType];
@@ -41,7 +37,7 @@ export function createTransactionSchA(
       for (let i = 0; i < transaction['childTransactions'].length; i++) {
         const childTransaction = transaction['childTransactions'][i];
 
-        if (i == 0){
+        if (i == 0) {
           cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
           cy.contains('li', 'PAC JF Transfer Memo').click();
         } else {
@@ -58,7 +54,6 @@ export function createTransactionSchA(
     cy.shortWait();
     cy.get('.p-confirm-dialog-accept').click();
     cy.medWait();
-
   }
 }
 
@@ -66,19 +61,18 @@ export function enterTransactionSchA(transaction: Transaction, contact: Contact 
   const fields = Object.keys(transaction);
 
   //Gets the value of the first field-key in the form that starts with "entityType"
-  const entityTypeKey =  
-    Object.keys(transaction).find((key) => {
-      return key.startsWith('entityType');
-    }) as string;
+  const entityTypeKey = Object.keys(transaction).find((key) => {
+    return key.startsWith('entityType');
+  }) as string;
 
   const entityType = transaction[entityTypeKey];
   const entityRules = TransactionFields[entityTypeKey];
-  if (entityRules["entities"]?.length > 1 ){
-    const contactEntity = contact["contact_type"];
+  if (entityRules['entities']?.length > 1) {
+    const contactEntity = contact['contact_type'];
     cy.dropdownSetValue('.p-dropdown', contactEntity);
   }
 
-  if (contact){
+  if (contact) {
     cy.contains('a', 'Create a new contact').click();
     cy.medWait();
     enterContact(contact, true, true);

@@ -41,7 +41,7 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.get('.p-confirm-dialog-accept').click();
     cy.longWait();
 
-    cy.contains("a", "Create a new contact").click();
+    cy.contains('a', 'Create a new contact').click();
     cy.longWait();
     enterContact(contact, true, true);
     cy.medWait();
