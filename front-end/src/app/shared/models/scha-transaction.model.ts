@@ -55,6 +55,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
   transaction_type_identifier: string | undefined;
 
+  parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined; // Foreign key to the SchATransaction model
 
   created: string | undefined;
@@ -65,6 +66,10 @@ export class SchATransaction extends BaseModel implements Transaction {
 
   contact: Contact | undefined;
   contact_id: string | undefined; // Foreign key to the Contact model
+
+  children: Transaction[] | undefined;
+
+  fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
 
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -123,7 +128,7 @@ export enum ScheduleATransactionTypes {
   REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES = 'REF_TO_FED_CAN',
   REFUNDS_OF_CONTRIBUTIONS_TO_UNREGISTERED_COMMITTEES = 'REF_TO_OTH_CMTE',
   // Other
-  OFFSETS_TO_OPERATING_EXPENDITURES = 'OFFSET_TO_OPERATING_EXPENDITURES',
+  OFFSET_TO_OPERATING_EXPENDITURES = 'OFFSET_TO_OPERATING_EXPENDITURES',
   OTHER_RECEIPTS = 'OTHER_RECEIPT',
   IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'IND_REC_NON_CONT_ACC',
   OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'OTH_CMTE_NON_CONT_ACC',
@@ -147,6 +152,8 @@ export enum ScheduleATransactionTypes {
   EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION = 'EAR_REC_RECNT_ACC',
   EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION = 'EAR_REC_CONVEN_ACC',
   EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION = 'EAR_REC_HQ_ACC',
+  // Child transactiion types
+  EARMARK_MEMO = 'EARMARK_MEMO',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -203,7 +210,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Refunds of Contributions to Unregistered Committees',
   ],
   // Other
-  [ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
+  [ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
   [ScheduleATransactionTypes.OTHER_RECEIPTS, 'Other Receipts'],
   [ScheduleATransactionTypes.IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT, 'Individual Receipt - Non-Contribution Account'],
   [
