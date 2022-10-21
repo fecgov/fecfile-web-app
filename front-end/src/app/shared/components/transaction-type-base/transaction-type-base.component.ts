@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
@@ -11,7 +11,7 @@ import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
-import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactFields, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 export type NavigateToType = 'list' | 'add another' | 'add-sub-tran' | 'to-parent';
 
@@ -41,7 +41,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fb: FormBuilder,
     protected router: Router,
     protected fecDatePipe: FecDatePipe
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
@@ -288,72 +288,27 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
    * @returns string[] containing the changes in prose for the UI.
    */
   getFormChangesToTransactionContact(form: FormGroup, contact: Contact | undefined): string[] {
-    const retval: string[] = [];
     if (contact) {
-      switch (contact.type) {
-        case ContactTypes.INDIVIDUAL:
-          retval.push(...this.getIndFormChangesToTransactionContact(form, contact));
-          break;
-        case ContactTypes.COMMITTEE:
-          retval.push(...this.getComFormChangesToTransactionContact(form, contact));
-          break;
-        case ContactTypes.ORGANIZATION:
-          retval.push(...this.getOrgFormChangesToTransactionContact(form, contact));
-          break;
-      }
-      if (form.get('contributor_street_1')?.value !== contact.street_1)
-        retval.push('Updated street address to ' + form.get('contributor_street_1')?.value);
-      if (form.get('contributor_street_2')?.value !== contact.street_2)
-        retval.push('Updated apartment, suite, etc. to ' + form.get('contributor_street_2')?.value);
-      if (form.get('contributor_city')?.value !== contact.city)
-        retval.push('Updated city to ' + form.get('contributor_city')?.value);
-      if (form.get('contributor_state')?.value !== contact.state)
-        retval.push('Updated state to ' + form.get('contributor_state')?.value);
-      if (form.get('contributor_zip')?.value !== contact.zip)
-        retval.push('Updated zip to ' + form.get('contributor_zip')?.value);
+      return Object.entries(ContactFields)
+        .map(([field, label]: string[]) => {
+          const contactValue = (contact)[field as keyof typeof contact];
+          const formField = this.getFormField(field);
+
+          if (formField && formField?.value !== contactValue) {
+            return `Updated ${label.toLowerCase()} to ${formField.value || ''}`;
+          }
+          return '';
+        })
+        .filter((change) => change);
     }
-    return retval;
+    return [];
   }
 
-  getIndFormChangesToTransactionContact(form: FormGroup, contact: Contact | undefined): string[] {
-    const retval: string[] = [];
-    if (contact) {
-      if (form.get('contributor_last_name')?.value !== contact.last_name)
-        retval.push('Updated last name to ' + form.get('contributor_last_name')?.value);
-      if (form.get('contributor_first_name')?.value !== contact.first_name)
-        retval.push('Updated first name to ' + form.get('contributor_first_name')?.value);
-      if (form.get('contributor_middle_name')?.value !== contact.middle_name)
-        retval.push('Updated middle name to ' + form.get('contributor_middle_name')?.value);
-      if (form.get('contributor_prefix')?.value !== contact.prefix)
-        retval.push('Updated prefix to ' + form.get('contributor_prefix')?.value);
-      if (form.get('contributor_suffix')?.value !== contact.suffix)
-        retval.push('Updated suffix to ' + form.get('contributor_suffix')?.value);
-      if (form.get('contributor_employer')?.value !== contact.employer)
-        retval.push('Updated employer to ' + form.get('contributor_employer')?.value);
-      if (form.get('contributor_occupation')?.value !== contact.occupation)
-        retval.push('Updated occupation to ' + form.get('contributor_occupation')?.value);
+  getFormField(field: string): AbstractControl | null {
+    if (field == 'committee_id') {
+      return this.form.get('donor_committee_fec_id');
     }
-    return retval;
-  }
-
-  getComFormChangesToTransactionContact(form: FormGroup, contact: Contact | undefined): string[] {
-    const retval: string[] = [];
-    if (contact) {
-      if (form.get('donor_committee_fec_id')?.value !== contact.committee_id)
-        retval.push('Updated committee id to ' + form.get('donor_committee_fec_id')?.value);
-      if (form.get('contributor_organization_name')?.value !== contact.name)
-        retval.push('Updated committee name to ' + form.get('contributor_organization_name')?.value);
-    }
-    return retval;
-  }
-
-  getOrgFormChangesToTransactionContact(form: FormGroup, contact: Contact | undefined): string[] {
-    const retval: string[] = [];
-    if (contact) {
-      if (form.get('contributor_organization_name')?.value !== contact.name)
-        retval.push('Updated organization name to ' + form.get('contributor_organization_name')?.value);
-    }
-    return retval;
+    return this.form.get(`contributor_${field}`) || this.form.get(`contributor_organization_${field}`);
   }
 
   doSave(navigateTo: NavigateToType, payload: Transaction, transactionTypeToAdd?: string) {
