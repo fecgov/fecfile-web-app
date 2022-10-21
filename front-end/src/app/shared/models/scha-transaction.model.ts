@@ -111,7 +111,7 @@ export enum ScheduleATransactionTypes {
   PAC_CONDUIT_EARMARK_UNDEPOSITED = 'PAC_CONDUIT_EARMARK_UNDEPOSITED',
   RETURNED_BOUNCED_RECEIPT_PAC = 'PAC_RET',
   // Transfers
-  TRANSFERS = 'TRAN',
+  TRANSFER = 'TRANSFER',
   JOINT_FUNDRAISING_TRANSFER = 'JOINT_FUNDRAISING_TRANSFER',
   PAC_JF_TRANSFER_MEMO = 'PAC_JF_TRANSFER_MEMO',
   IN_KIND_TRANSFER = 'IK_TRAN',
@@ -176,7 +176,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED, 'PAC Conduit Earmark (Undeposited)'],
   [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC, 'Returned/Bounced Receipt (PAC)'],
   // Transfers
-  [ScheduleATransactionTypes.TRANSFERS, 'Transfers'],
+  [ScheduleATransactionTypes.TRANSFER, 'Transfer'],
   [ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER, 'Joint Fundraising Transfer'],
   [ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO, 'PAC Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],

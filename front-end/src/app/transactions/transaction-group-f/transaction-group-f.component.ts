@@ -33,47 +33,32 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     'memo_code',
     'memo_text_description',
   ];
-  override form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
   readOnlyMemo = false;
-  memo_checked = false;
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
 
-  constructor(
-    protected override messageService: MessageService,
-    protected override transactionService: TransactionService,
-    protected override contactService: ContactService,
-    protected override validateService: ValidateService,
-    protected override confirmationService: ConfirmationService,
-    protected override fb: FormBuilder,
-    protected override router: Router,
-    protected override fecDatePipe: FecDatePipe,
-    protected activatedRoute: ActivatedRoute,
-  ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router, fecDatePipe);
+  override ngOnInit(): void {
+    super.ngOnInit();
+    const memoCodeConst = this.getMemoCodeConstFromSchema();
+    this.readOnlyMemo = memoCodeConst as boolean;
+    this.form.get('memo_code')?.setValue(memoCodeConst);
+  }
 
-    activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      const transactionType: TransactionType = data['transactionType'];
-      if (Object.keys(transactionType?.schema?.properties['memo_code']).includes('const')) {
-        this.readOnlyMemo = true;
-        this.memo_checked = transactionType.schema.properties['memo_code'].const as boolean;
-      }
-    });
+  protected getMemoCodeConstFromSchema(): boolean | undefined {
+    const memoCodeSchema = this.transactionType?.schema.properties['memo_code'];
+    return memoCodeSchema?.const as boolean;
   }
 
   protected override resetForm() {
-    const memo_item_state = this.memo_checked;
-
     this.formSubmitted = false;
     this.form.reset();
     this.form.markAsPristine();
     this.form.markAsUntouched();
-    this.memo_checked = memo_item_state;
     this.form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
-      memo_code: this.memo_checked,
+      memo_code: this.getMemoCodeConstFromSchema(),
       contribution_purpose_descrip: this.contributionPurposeDescrip,
     });
   }
