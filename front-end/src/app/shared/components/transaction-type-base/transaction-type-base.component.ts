@@ -190,7 +190,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (confirmTransaction.contact_id && confirmTransaction.contact) {
-      const transactionContactChanges = this.setTransactionContactFormChanges(confirmTransaction.contact);
+      const transactionContactChanges = this.setTransactionContactFormChanges(form, confirmTransaction.contact);
       if (transactionContactChanges?.length) {
         const confirmationMessage = this.getEditTransactionContactConfirmationMessage(
           transactionContactChanges,
@@ -288,12 +288,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
    * first setting these values on the Contact object.
    * @returns string[] containing the changes in prose for the UI.
    */
-  setTransactionContactFormChanges(contact: Contact | undefined): string[] {
+  setTransactionContactFormChanges(form: FormGroup, contact: Contact | undefined): string[] {
     if (contact) {
       return Object.entries(ContactFields)
         .map(([field, label]: string[]) => {
           const contactValue = contact[field as keyof typeof contact];
-          const formField = this.getFormField(field);
+          const formField = this.getFormField(form, field);
 
           if (formField && formField?.value !== contactValue) {
             contact[field as keyof typeof contact] = (formField.value || '') as never;
@@ -306,11 +306,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return [];
   }
 
-  getFormField(field: string): AbstractControl | null {
+  getFormField(form: FormGroup, field: string): AbstractControl | null {
     if (field == 'committee_id') {
-      return this.form.get('donor_committee_fec_id');
+      return form.get('donor_committee_fec_id');
     }
-    return this.form.get(`contributor_${field}`) || this.form.get(`contributor_organization_${field}`);
+    return form.get(`contributor_${field}`) || form.get(`contributor_organization_${field}`);
   }
 
   doSave(navigateTo: NavigateToType, payload: Transaction, transactionTypeToAdd?: string) {
