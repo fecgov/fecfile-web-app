@@ -54,6 +54,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
   transaction_type_identifier: string | undefined;
+  itemized: boolean | undefined;
 
   parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined; // Foreign key to the SchATransaction model
