@@ -49,9 +49,18 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     protected override fb: FormBuilder,
     protected override router: Router,
     protected override fecDatePipe: FecDatePipe,
-    protected activatedRoute: ActivatedRoute,
+    protected activatedRoute: ActivatedRoute
   ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router, fecDatePipe);
+    super(
+      messageService,
+      transactionService,
+      contactService,
+      validateService,
+      confirmationService,
+      fb,
+      router,
+      fecDatePipe
+    );
 
     activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       const transactionType: TransactionType = data['transactionType'];
@@ -62,19 +71,19 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     });
   }
 
-  protected override resetForm() {
+  protected override doResetForm(form: FormGroup, transactionType: TransactionType | undefined) {
     const memo_item_state = this.memo_checked;
 
     this.formSubmitted = false;
-    this.form.reset();
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
+    form.reset();
+    form.markAsPristine();
+    form.markAsUntouched();
     this.memo_checked = memo_item_state;
-    this.form.patchValue({
+    form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: this.memo_checked,
-      contribution_purpose_descrip: this.contributionPurposeDescrip,
+      contribution_purpose_descrip: transactionType?.contributionPurposeDescripReadonly(),
     });
   }
 }

@@ -1,16 +1,22 @@
 import { TransactionType } from '../../interfaces/transaction-type.interface';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels, AggregationGroups } from '../scha-transaction.model';
+import {
+  SchATransaction,
+  ScheduleATransactionTypes,
+  ScheduleATransactionTypeLabels,
+  AggregationGroups,
+} from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_RECEIPT';
 
 export class TRIBAL_RECEIPT implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'D';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_RECEIPT);
   schema = schema;
   transaction = undefined;
-  contact = undefined;
-  parent = undefined;
+  parentTransaction = undefined;
+  childTransactionType = undefined;
 
   contributionPurposeDescripReadonly(): string {
     return 'Tribal Receipt';

@@ -9,12 +9,21 @@ import { ApiService } from './api.service';
   providedIn: 'root',
 })
 export class SchATransactionService {
-  constructor(private apiService: ApiService, private datePipe: DatePipe) { }
+  constructor(private apiService: ApiService, private datePipe: DatePipe) {}
 
   public get(id: string): Observable<SchATransaction> {
-    return this.apiService
-      .get<SchATransaction>(`/sch-a-transactions/${id}/`)
-      .pipe(map((response) => SchATransaction.fromJSON(response)));
+    return this.apiService.get<SchATransaction>(`/sch-a-transactions/${id}/`).pipe(
+      map((response) => {
+        const txn = SchATransaction.fromJSON(response);
+
+        // Convert child transactions into SchATransaction objects
+        if (txn.children) {
+          txn.children = txn.children.map((child) => SchATransaction.fromJSON(child));
+        }
+
+        return txn;
+      })
+    );
   }
 
   public getPreviousTransaction(
@@ -34,31 +43,17 @@ export class SchATransactionService {
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 
-  public create(
-    schATransaction: SchATransaction,
-    schema: string,
-    fieldsToValidate: string[] = []
-  ): Observable<SchATransaction> {
+  public create(schATransaction: SchATransaction): Observable<SchATransaction> {
     const payload = schATransaction.toJson();
     return this.apiService
-      .post<SchATransaction>(`/sch-a-transactions/`, payload, {
-        schema: schema,
-        fields_to_validate: fieldsToValidate.join(','),
-      })
+      .post<SchATransaction>(`/sch-a-transactions/`, payload)
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 
-  public update(
-    schATransaction: SchATransaction,
-    schema: string,
-    fieldsToValidate: string[] = []
-  ): Observable<SchATransaction> {
+  public update(schATransaction: SchATransaction): Observable<SchATransaction> {
     const payload = schATransaction.toJson();
     return this.apiService
-      .put<SchATransaction>(`/sch-a-transactions/${schATransaction.id}/`, payload, {
-        schema: schema,
-        fields_to_validate: fieldsToValidate.join(','),
-      })
+      .put<SchATransaction>(`/sch-a-transactions/${schATransaction.id}/`, payload)
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 

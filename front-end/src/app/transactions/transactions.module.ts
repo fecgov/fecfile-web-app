@@ -65,4 +65,4 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     ConfirmDialogModule,
   ],
 })
-export class TransactionsModule { }
+export class TransactionsModule {}
