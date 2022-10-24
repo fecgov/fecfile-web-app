@@ -1,10 +1,12 @@
 // @ts-check
 
+import { generateContactToFit } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 
 const report = generateReportObject();
 const transaction = generateTransactionObject();
+const contact = generateContactToFit(transaction);
 
 describe('Test creating a report and submitting it for web print', () => {
   before('Logs in and clears existing reports', () => {
@@ -24,7 +26,7 @@ describe('Test creating a report and submitting it for web print', () => {
     cy.navigateToTransactionManagement();
 
     //Creates a transaction
-    cy.createTransactionSchA(transaction);
+    cy.createTransactionSchA(transaction, contact);
 
     //Submits the report to web print
     cy.navigateReportSidebar('Review', 'View print preview');

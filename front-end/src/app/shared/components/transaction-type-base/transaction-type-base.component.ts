@@ -41,7 +41,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fb: FormBuilder,
     protected router: Router,
     protected fecDatePipe: FecDatePipe
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
@@ -190,8 +190,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (confirmTransaction.contact_id && confirmTransaction.contact) {
-      const transactionContactChanges =
-        this.setTransactionContactFormChanges(confirmTransaction.contact);
+      const transactionContactChanges = this.setTransactionContactFormChanges(confirmTransaction.contact);
       if (transactionContactChanges?.length) {
         const confirmationMessage = this.getEditTransactionContactConfirmationMessage(
           transactionContactChanges,
@@ -285,7 +284,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   /**
    * This method returns the differences between the transaction
    * form's contact section and its database contact in prose
-   * for the UI as a string[] (one entry for each change) after 
+   * for the UI as a string[] (one entry for each change) after
    * first setting these values on the Contact object.
    * @returns string[] containing the changes in prose for the UI.
    */
@@ -293,11 +292,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (contact) {
       return Object.entries(ContactFields)
         .map(([field, label]: string[]) => {
-          const contactValue = (contact)[field as keyof typeof contact];
+          const contactValue = contact[field as keyof typeof contact];
           const formField = this.getFormField(field);
 
           if (formField && formField?.value !== contactValue) {
-            (contact)[field as keyof typeof contact] = (formField.value || '') as never;
+            contact[field as keyof typeof contact] = (formField.value || '') as never;
             return `Updated ${label.toLowerCase()} to ${formField.value || ''}`;
           }
           return '';
