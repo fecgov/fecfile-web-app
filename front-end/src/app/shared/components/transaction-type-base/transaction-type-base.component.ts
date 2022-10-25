@@ -190,7 +190,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (confirmTransaction.contact_id && confirmTransaction.contact) {
-      const transactionContactChanges = this.getFormChangesToTransactionContact(form, confirmTransaction.contact);
+      const transactionContactChanges = this.setTransactionContactFormChanges(form, confirmTransaction.contact);
       if (transactionContactChanges?.length) {
         const confirmationMessage = this.getEditTransactionContactConfirmationMessage(
           transactionContactChanges,
@@ -284,17 +284,19 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   /**
    * This method returns the differences between the transaction
    * form's contact section and its database contact in prose
-   * for the UI as a string[] (one entry for each change).
+   * for the UI as a string[] (one entry for each change) after
+   * first setting these values on the Contact object.
    * @returns string[] containing the changes in prose for the UI.
    */
-  getFormChangesToTransactionContact(form: FormGroup, contact: Contact) {
+  setTransactionContactFormChanges(form: FormGroup, contact: Contact | undefined): string[] {
     if (contact) {
       return Object.entries(ContactFields)
         .map(([field, label]: string[]) => {
-          const contactValue = (contact as Contact)[field as keyof typeof contact];
-          const formField = this.getFormField(field);
+          const contactValue = contact[field as keyof typeof contact];
+          const formField = this.getFormField(form, field);
 
           if (formField && formField?.value !== contactValue) {
+            contact[field as keyof typeof contact] = (formField.value || '') as never;
             return `Updated ${label.toLowerCase()} to ${formField.value || ''}`;
           }
           return '';
@@ -304,11 +306,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return [];
   }
 
-  getFormField(field: string): AbstractControl | null {
+  getFormField(form: FormGroup, field: string): AbstractControl | null {
     if (field == 'committee_id') {
-      return this.form.get('donor_committee_fec_id');
+      return form.get('donor_committee_fec_id');
     }
-    return this.form.get(`contributor_${field}`) || this.form.get(`contributor_organization_${field}`);
+    return form.get(`contributor_${field}`) || form.get(`contributor_organization_${field}`);
   }
 
   doSave(navigateTo: NavigateToType, payload: Transaction, transactionTypeToAdd?: string) {
