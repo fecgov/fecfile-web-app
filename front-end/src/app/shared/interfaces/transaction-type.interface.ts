@@ -1,4 +1,5 @@
 import { Contact } from '../models/contact.model';
+import { TransactionNavigationControls } from '../models/transaction-navigation-controls.model';
 import { JsonSchema } from './json-schema.interface';
 import { Transaction } from './transaction.interface';
 
@@ -11,9 +12,11 @@ export interface TransactionType {
   componentGroupId: string;
   title: string;
   schema: JsonSchema;
-  transaction: Transaction | undefined;
-  contact: Contact | undefined;
-  parent: Transaction | undefined;
+  transaction?: Transaction;
+  contact?: Contact;
+  parent?: Transaction;
+  navigationControls?: TransactionNavigationControls;
+
   contributionPurposeDescripReadonly(): string;
   getNewTransaction(): Transaction;
 }

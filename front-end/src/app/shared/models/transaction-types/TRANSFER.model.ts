@@ -8,6 +8,11 @@ import {
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRANSFER';
 import { Transaction } from '../../interfaces/transaction.interface';
+import {
+  NavigationControl,
+  NavigationTypes,
+  TransactionNavigationControls,
+} from '../transaction-navigation-controls.model';
 
 export class TRANSFER implements TransactionType {
   scheduleId = 'A';
@@ -17,6 +22,23 @@ export class TRANSFER implements TransactionType {
   transaction: Transaction | undefined;
   contact = undefined;
   parent: SchATransaction | undefined;
+  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+    [
+      new NavigationControl(
+        NavigationTypes.SAVE_ADD_ANOTHER,
+        'Save & add another Memo',
+        'p-button-warning',
+        TRANSFER.isTransactionExisting,
+        'pi pi-plus'
+      ),
+    ],
+    [new NavigationControl(NavigationTypes.CANCEL_LIST, 'Cancel')],
+    [new NavigationControl(NavigationTypes.SAVE_LIST, 'Save & view all transactions')]
+  );
+
+  static isTransactionExisting(transaction?: Transaction): boolean {
+    return !!transaction?.id;
+  }
 
   contributionPurposeDescripReadonly(): string {
     return '';

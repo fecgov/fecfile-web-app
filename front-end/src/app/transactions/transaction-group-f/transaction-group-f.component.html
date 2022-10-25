@@ -242,7 +242,17 @@
           </div>
         </div>
       </div>
-      <ng-container *ngIf="!this.transaction?.id">
+      <div class="grid">
+        <ng-template ngFor let-navigationControl [ngForOf]="transactionType?.navigationControls?.inlineControls">
+          <div class="col-3">
+            <app-navigation-control
+              [navigationControl]="navigationControl"
+              [transaction]="this.transaction"
+            ></app-navigation-control>
+          </div>
+        </ng-template>
+      </div>
+      <ng-container>
         <div class="grid">
           <div class="col-3">
             <button
@@ -259,6 +269,14 @@
     </ng-container>
     <p-divider></p-divider>
     <div class="grid">
+      <ng-template ngFor let-navigationControl [ngForOf]="transactionType?.navigationControls?.cancelControls">
+        <div class="col-2">
+          <app-navigation-control
+            [navigationControl]="navigationControl"
+            [transaction]="this.transaction"
+          ></app-navigation-control>
+        </div>
+      </ng-template>
       <div class="col-2">
         <button
           pButton
@@ -269,6 +287,14 @@
         ></button>
       </div>
       <div class="col-7"></div>
+      <ng-template ngFor let-navigationControl [ngForOf]="transactionType?.navigationControls?.continueControls">
+        <div class="col-3">
+          <app-navigation-control
+            [navigationControl]="navigationControl"
+            [transaction]="this.transaction"
+          ></app-navigation-control>
+        </div>
+      </ng-template>
       <div class="col-3">
         <button
           pButton
