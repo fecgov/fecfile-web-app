@@ -38,7 +38,14 @@ export class PAC_JF_TRANSFER_MEMO implements TransactionType {
         'pi pi-plus'
       ),
     ],
-    [CANCEL_CONTROL],
+    [
+      new NavigationControl(
+        NavigationAction.CANCEL,
+        NavigationDestination.PARENT,
+        'Back to Joint Fundraising Transfer',
+        'p-button-secondary'
+      ),
+    ],
     [SAVE_LIST_CONTROL]
   );
 

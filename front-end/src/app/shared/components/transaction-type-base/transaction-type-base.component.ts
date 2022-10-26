@@ -9,6 +9,7 @@ import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
+  TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -344,6 +345,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
+  getNavigationControls2(): TransactionNavigationControls {
+    return this.transactionType?.navigationControls || new TransactionNavigationControls([], [], []);
+  }
   getNavigationControls(section: 'inline' | 'cancel' | 'continue'): NavigationControl[] {
     let controls: NavigationControl[] = [];
     if (section === 'inline') {
