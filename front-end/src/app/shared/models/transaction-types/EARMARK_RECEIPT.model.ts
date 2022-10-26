@@ -1,7 +1,18 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_RECEIPT';
 import { TransactionType } from '../../interfaces/transaction-type.interface';
-import { AggregationGroups, SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import {
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
+} from '../scha-transaction.model';
+import {
+  NavigationAction,
+  NavigationControl,
+  NavigationDestination,
+  TransactionNavigationControls,
+} from '../transaction-navigation-controls.model';
 
 export class EARMARK_RECEIPT implements TransactionType {
   scheduleId = 'A';
@@ -11,6 +22,11 @@ export class EARMARK_RECEIPT implements TransactionType {
   transaction: SchATransaction | undefined = undefined;
   contact = undefined;
   parent = undefined;
+  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+    [],
+    [new NavigationControl(NavigationAction.CANCEL, NavigationDestination.LIST, 'Cancel')],
+    [new NavigationControl(NavigationAction.SAVE, NavigationDestination.LIST, 'Save & view all transactions')]
+  );
 
   contributionPurposeDescripReadonly(): string {
     return '';

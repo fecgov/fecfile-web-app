@@ -20,3 +20,7 @@ export interface TransactionType {
   contributionPurposeDescripReadonly(): string;
   getNewTransaction(): Transaction;
 }
+
+export function isNewTransaction(transaction?: Transaction): boolean {
+  return !transaction?.id;
+}

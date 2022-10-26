@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
+import { NavigationAction, NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -35,22 +36,22 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
   ];
   subTransactions = [
     {
-      label: "Individual JF Transfer Memo",
-      value: "INDV_JF_TRANSFER_MEMO",
+      label: 'Individual JF Transfer Memo',
+      value: 'INDV_JF_TRANSFER_MEMO',
     },
     {
-      label: "Party JF Transfer Memo",
-      value: "PARTY_JF_TRANSFER_MEMO",
+      label: 'Party JF Transfer Memo',
+      value: 'PARTY_JF_TRANSFER_MEMO',
     },
     {
-      label: "PAC JF Transfer Memo",
-      value: "PAC_JF_TRANSFER_MEMO",
+      label: 'PAC JF Transfer Memo',
+      value: 'PAC_JF_TRANSFER_MEMO',
     },
     {
-      label: "Tribal JF Transfer Memo",
-      value: "TRIBAL_JF_Transfer_Memo",
-    }
-  ]
+      label: 'Tribal JF Transfer Memo',
+      value: 'TRIBAL_JF_Transfer_Memo',
+    },
+  ];
 
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
@@ -64,13 +65,22 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router,
-    protected override fecDatePipe: FecDatePipe,
+    protected override fecDatePipe: FecDatePipe
   ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router, fecDatePipe);
+    super(
+      messageService,
+      transactionService,
+      contactService,
+      validateService,
+      confirmationService,
+      fb,
+      router,
+      fecDatePipe
+    );
   }
 
-  createSubTransaction(event: {value: string}){
-    this.save('add-sub-tran', event.value);
-    this.form.get("subTransaction")?.reset(); // If the save fails, this clears the dropdown
+  createSubTransaction(event: { value: string }) {
+    this.save(NavigationDestination.CHILD, event.value);
+    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }

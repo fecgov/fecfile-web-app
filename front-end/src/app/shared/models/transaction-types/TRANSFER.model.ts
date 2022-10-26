@@ -9,8 +9,9 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRANSFER';
 import { Transaction } from '../../interfaces/transaction.interface';
 import {
+  NavigationAction,
   NavigationControl,
-  NavigationTypes,
+  NavigationDestination,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 
@@ -25,15 +26,16 @@ export class TRANSFER implements TransactionType {
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
-        NavigationTypes.SAVE_ADD_ANOTHER,
+        NavigationAction.SAVE,
+        NavigationDestination.ANOTHER,
         'Save & add another Memo',
         'p-button-warning',
         TRANSFER.isTransactionExisting,
         'pi pi-plus'
       ),
     ],
-    [new NavigationControl(NavigationTypes.CANCEL_LIST, 'Cancel')],
-    [new NavigationControl(NavigationTypes.SAVE_LIST, 'Save & view all transactions')]
+    [new NavigationControl(NavigationAction.CANCEL, NavigationDestination.LIST, 'Cancel')],
+    [new NavigationControl(NavigationAction.SAVE, NavigationDestination.LIST, 'Save & view all transactions')]
   );
 
   static isTransactionExisting(transaction?: Transaction): boolean {
