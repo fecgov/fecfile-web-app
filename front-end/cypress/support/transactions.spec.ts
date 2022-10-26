@@ -81,6 +81,7 @@ export function enterTransactionSchA(transaction: Transaction, contact: Contact 
 
   for (const field of fields) {
     if (field == 'childTransactions') continue;
+    if (field == entityTypeKey && contact) continue;
 
     const fieldRules = TransactionFields[field];
     const fieldName = fieldRules['fieldName'];
