@@ -1,6 +1,5 @@
 // @ts-check
 
-import * as _ from 'lodash';
 import { generateContactToFit } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject, TransactionTree } from '../../support/generators/transactions.spec';
