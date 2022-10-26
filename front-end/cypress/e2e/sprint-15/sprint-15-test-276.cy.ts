@@ -1,9 +1,8 @@
 // @ts-check
 
-import { generateContactIndividual, generateContactToFit } from '../../support/generators/contacts.spec';
+import { generateContactIndividual } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject, TransactionTree } from '../../support/generators/transactions.spec';
-import { enterTransactionSchA } from '../../support/transactions.spec';
 
 const contact = generateContactIndividual({
   employer: '',
