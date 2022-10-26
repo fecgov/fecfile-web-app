@@ -8,9 +8,8 @@ import {
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
 import {
-  NavigationAction,
-  NavigationControl,
-  NavigationDestination,
+  CANCEL_CONTROL,
+  SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 
@@ -24,8 +23,8 @@ export class EARMARK_RECEIPT implements TransactionType {
   parent = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
-    [new NavigationControl(NavigationAction.CANCEL, NavigationDestination.LIST, 'Cancel')],
-    [new NavigationControl(NavigationAction.SAVE, NavigationDestination.LIST, 'Save & view all transactions')]
+    [CANCEL_CONTROL],
+    [SAVE_LIST_CONTROL]
   );
 
   contributionPurposeDescripReadonly(): string {

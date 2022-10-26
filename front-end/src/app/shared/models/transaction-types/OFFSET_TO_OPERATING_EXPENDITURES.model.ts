@@ -1,4 +1,4 @@
-import { TransactionType, isNewTransaction } from '../../interfaces/transaction-type.interface';
+import { TransactionType } from '../../interfaces/transaction-type.interface';
 import {
   SchATransaction,
   ScheduleATransactionTypes,
@@ -8,9 +8,9 @@ import {
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPERATING_EXPENDITURES';
 import {
-  NavigationAction,
-  NavigationControl,
-  NavigationDestination,
+  CANCEL_CONTROL,
+  SAVE_ANOTHER_CONTROL,
+  SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 
@@ -24,22 +24,8 @@ export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
   parent = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
-    [new NavigationControl(NavigationAction.CANCEL, NavigationDestination.LIST, 'Cancel')],
-    [
-      new NavigationControl(
-        NavigationAction.SAVE,
-        NavigationDestination.LIST,
-        'Save & view all transactions',
-        'p-button-primary'
-      ),
-      new NavigationControl(
-        NavigationAction.SAVE,
-        NavigationDestination.ANOTHER,
-        'Save & add another',
-        'p-button-info',
-        isNewTransaction
-      ),
-    ]
+    [CANCEL_CONTROL],
+    [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
   contributionPurposeDescripReadonly(): string {

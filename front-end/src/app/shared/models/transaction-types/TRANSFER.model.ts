@@ -1,4 +1,4 @@
-import { TransactionType } from '../../interfaces/transaction-type.interface';
+import { isNewTransaction, TransactionType } from '../../interfaces/transaction-type.interface';
 import {
   SchATransaction,
   ScheduleATransactionTypes,
@@ -9,9 +9,12 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRANSFER';
 import { Transaction } from '../../interfaces/transaction.interface';
 import {
+  CANCEL_CONTROL,
   NavigationAction,
   NavigationControl,
   NavigationDestination,
+  SAVE_ANOTHER_CONTROL,
+  SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 
@@ -30,17 +33,13 @@ export class TRANSFER implements TransactionType {
         NavigationDestination.ANOTHER,
         'Save & add another Memo',
         'p-button-warning',
-        TRANSFER.isTransactionExisting,
+        isNewTransaction,
         'pi pi-plus'
       ),
     ],
-    [new NavigationControl(NavigationAction.CANCEL, NavigationDestination.LIST, 'Cancel')],
-    [new NavigationControl(NavigationAction.SAVE, NavigationDestination.LIST, 'Save & view all transactions')]
+    [CANCEL_CONTROL],
+    [SAVE_LIST_CONTROL]
   );
-
-  static isTransactionExisting(transaction?: Transaction): boolean {
-    return !!transaction?.id;
-  }
 
   contributionPurposeDescripReadonly(): string {
     return '';
