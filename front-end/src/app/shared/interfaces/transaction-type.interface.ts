@@ -24,3 +24,6 @@ export interface TransactionType {
 export function isNewTransaction(transaction?: Transaction): boolean {
   return !transaction?.id;
 }
+export function hasContact(transaction?: Transaction): boolean {
+  return !transaction?.contact;
+}

@@ -29,7 +29,7 @@ export class NavigationControlBarComponent implements OnInit {
       controls = this.navigationControls.continueControls || [];
     }
     return controls.filter((control: NavigationControl) => {
-      return !control.condition || control.condition(this.transaction);
+      return !control.visibleCondition || control.visibleCondition(this.transaction);
     });
   }
 

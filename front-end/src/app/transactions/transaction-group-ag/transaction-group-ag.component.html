@@ -323,25 +323,8 @@
   </p-accordionTab>
 </p-accordion>
 
-<div class="grid">
-  <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls('cancel')">
-    <div class="col-2">
-      <app-navigation-control
-        [navigationControl]="navigationControl"
-        [transaction]="this.transaction"
-        (navigate)="handleNavigate($event)"
-      ></app-navigation-control>
-    </div>
-  </ng-template>
-  <div class="col-7"></div>
-  <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls('continue')">
-    <div class="col-3">
-      <app-navigation-control
-        [navigationControl]="navigationControl"
-        [transaction]="this.transaction"
-        (navigate)="handleNavigate($event)"
-        [disabled]="!contact"
-      ></app-navigation-control>
-    </div>
-  </ng-template>
-</div>
+<app-navigation-control-bar
+  [navigationControls]="getNavigationControls2()"
+  [transaction]="transaction"
+  (navigate)="handleNavigate($event)"
+></app-navigation-control-bar>

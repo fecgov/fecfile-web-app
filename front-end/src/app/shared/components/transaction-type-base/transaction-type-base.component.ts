@@ -358,7 +358,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       controls = this.transactionType?.navigationControls?.continueControls || [];
     }
     return controls.filter((control: NavigationControl) => {
-      return !control.condition || control.condition(this.transaction);
+      return !control.visibleCondition || control.visibleCondition(this.transaction);
     });
   }
 

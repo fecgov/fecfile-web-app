@@ -1,4 +1,4 @@
-import { isNewTransaction } from '../interfaces/transaction-type.interface';
+import { hasContact as hasNoContact, isNewTransaction } from '../interfaces/transaction-type.interface';
 import { Transaction } from '../interfaces/transaction.interface';
 import { BaseModel } from './base.model';
 
@@ -20,14 +20,20 @@ export class NavigationControl extends BaseModel {
   label: string = 'Cancel';
   icon?: string;
   ngClass?: string;
-  condition?(transaction?: Transaction): boolean;
+  visibleCondition(transaction?: Transaction): boolean {
+    return true;
+  }
+  disabledCondition(transaction?: Transaction): boolean {
+    return true;
+  }
 
   constructor(
     navigationAction: NavigationAction,
     navigationDestination: NavigationDestination,
     label: string,
     ngClass?: string,
-    condition?: (transaction?: Transaction) => boolean,
+    disabledCondition?: (transaction?: Transaction) => boolean,
+    visibleCondition?: (transaction?: Transaction) => boolean,
     icon?: string
   ) {
     super();
@@ -35,7 +41,16 @@ export class NavigationControl extends BaseModel {
     this.navigationDestination = navigationDestination;
     this.label = label;
     this.ngClass = ngClass;
-    this.condition = condition;
+    this.visibleCondition =
+      visibleCondition ||
+      function (transaction?: Transaction): boolean {
+        return true;
+      };
+    this.disabledCondition =
+      disabledCondition ||
+      function (transaction?: Transaction): boolean {
+        return false;
+      };
     this.icon = icon;
   }
 }
@@ -51,7 +66,8 @@ export const SAVE_LIST_CONTROL = new NavigationControl(
   NavigationAction.SAVE,
   NavigationDestination.LIST,
   'Save & view all transactions',
-  'p-button-primary'
+  'p-button-primary',
+  hasNoContact
 );
 
 export const SAVE_ANOTHER_CONTROL = new NavigationControl(
@@ -59,6 +75,7 @@ export const SAVE_ANOTHER_CONTROL = new NavigationControl(
   NavigationDestination.ANOTHER,
   'Save & add another',
   'p-button-info',
+  hasNoContact,
   isNewTransaction
 );
 

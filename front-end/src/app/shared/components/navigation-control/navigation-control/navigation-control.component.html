@@ -5,5 +5,5 @@
   [icon]="navigationControl?.icon || ''"
   [class]="navigationControl?.ngClass || ''"
   (click)="click()"
-  [disabled]="disabled"
+  [disabled]="isDisabled()"
 ></button>

@@ -9,7 +9,6 @@ import { NavigationControl } from 'app/shared/models/transaction-navigation-cont
 export class NavigationControlComponent implements OnInit {
   @Input() navigationControl?: NavigationControl;
   @Input() transaction?: Transaction;
-  @Input() disabled: boolean = false;
   @Output() navigate: EventEmitter<NavigationControl> = new EventEmitter<NavigationControl>();
 
   isVisible: boolean = true;
@@ -17,6 +16,10 @@ export class NavigationControlComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  isDisabled(): boolean {
+    return !!this.navigationControl?.disabledCondition(this.transaction);
+  }
 
   click(): void {
     this.navigate.emit(this.navigationControl);

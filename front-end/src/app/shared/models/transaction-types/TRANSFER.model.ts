@@ -1,4 +1,4 @@
-import { isNewTransaction, TransactionType } from '../../interfaces/transaction-type.interface';
+import { hasContact, isNewTransaction, TransactionType } from '../../interfaces/transaction-type.interface';
 import {
   SchATransaction,
   ScheduleATransactionTypes,
@@ -13,7 +13,6 @@ import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
-  SAVE_ANOTHER_CONTROL,
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
@@ -33,6 +32,7 @@ export class TRANSFER implements TransactionType {
         NavigationDestination.ANOTHER,
         'Save & add another Memo',
         'p-button-warning',
+        hasContact,
         isNewTransaction,
         'pi pi-plus'
       ),

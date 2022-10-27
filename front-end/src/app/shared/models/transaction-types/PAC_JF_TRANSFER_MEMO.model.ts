@@ -1,4 +1,4 @@
-import { isNewTransaction, TransactionType } from '../../interfaces/transaction-type.interface';
+import { hasContact, isNewTransaction, TransactionType } from '../../interfaces/transaction-type.interface';
 import {
   SchATransaction,
   ScheduleATransactionTypes,
@@ -9,11 +9,9 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
 import { Transaction } from '../../interfaces/transaction.interface';
 import {
-  CANCEL_CONTROL,
   NavigationAction,
   NavigationControl,
   NavigationDestination,
-  SAVE_ANOTHER_CONTROL,
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
@@ -34,6 +32,7 @@ export class PAC_JF_TRANSFER_MEMO implements TransactionType {
         NavigationDestination.ANOTHER,
         'Save & add another JF Transfer Memo',
         'p-button-warning',
+        hasContact,
         isNewTransaction,
         'pi pi-plus'
       ),
