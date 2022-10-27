@@ -20,12 +20,8 @@ export class NavigationControl extends BaseModel {
   label = 'Cancel';
   icon?: string;
   ngClass?: string;
-  visibleCondition(): boolean {
-    return true;
-  }
-  disabledCondition(): boolean {
-    return true;
-  }
+  visibleCondition: (transaction?: Transaction) => boolean = () => true;
+  disabledCondition: (transaction?: Transaction) => boolean = () => true;
 
   constructor(
     navigationAction: NavigationAction,

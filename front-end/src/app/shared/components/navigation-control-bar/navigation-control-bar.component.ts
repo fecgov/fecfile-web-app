@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import {
   NavigationControl,
@@ -10,14 +10,10 @@ import {
   templateUrl: './navigation-control-bar.component.html',
   styleUrls: ['./navigation-control-bar.component.scss'],
 })
-export class NavigationControlBarComponent implements OnInit {
+export class NavigationControlBarComponent {
   @Input() navigationControls: TransactionNavigationControls = new TransactionNavigationControls();
   @Input() transaction?: Transaction;
   @Output() navigate: EventEmitter<NavigationControl> = new EventEmitter<NavigationControl>();
-
-  constructor() {}
-
-  ngOnInit(): void {}
 
   getNavigationControls(section: 'inline' | 'cancel' | 'continue'): NavigationControl[] {
     let controls: NavigationControl[] = [];
