@@ -37,16 +37,8 @@ export class NavigationControl extends BaseModel {
     this.navigationDestination = navigationDestination;
     this.label = label;
     this.ngClass = ngClass;
-    this.visibleCondition =
-      visibleCondition ||
-      function (transaction?: Transaction): boolean {
-        return true;
-      };
-    this.disabledCondition =
-      disabledCondition ||
-      function (transaction?: Transaction): boolean {
-        return false;
-      };
+    this.visibleCondition = visibleCondition || (() => true);
+    this.disabledCondition = disabledCondition || (() => true);
     this.icon = icon;
   }
 }

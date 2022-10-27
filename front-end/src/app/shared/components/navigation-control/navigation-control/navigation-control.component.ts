@@ -11,7 +11,7 @@ export class NavigationControlComponent {
   @Input() transaction?: Transaction;
   @Output() navigate: EventEmitter<NavigationControl> = new EventEmitter<NavigationControl>();
 
-  isVisible: boolean = true;
+  isVisible = true;
 
   isDisabled(): boolean {
     return !!this.navigationControl?.disabledCondition(this.transaction);
