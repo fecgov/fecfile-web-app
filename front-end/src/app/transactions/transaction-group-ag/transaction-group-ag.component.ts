@@ -101,8 +101,11 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     }
 
     const updateContributionPurposeDescription = () => {
-      (this.transactionType?.childTransactionType?.transaction as SchATransaction).entity_type =
-        this.childForm.get('entity_type')?.value;
+      const earmarkMemo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
+      if (earmarkMemo) {
+        earmarkMemo.entity_type = this.childForm.get('entity_type')?.value;
+      }
+
       this.form.patchValue({
         contribution_purpose_descrip: this.transactionType?.contributionPurposeDescripReadonly(),
       });
@@ -113,22 +116,30 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
       .get('contributor_organization_name')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        (this.transactionType?.childTransactionType?.transaction as SchATransaction).contributor_organization_name =
-          value;
+        const earmarkMemo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
+        if (earmarkMemo) {
+          earmarkMemo.contributor_organization_name = value;
+        }
         updateContributionPurposeDescription();
       });
     this.childForm
       .get('contributor_first_name')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        (this.transactionType?.childTransactionType?.transaction as SchATransaction).contributor_first_name = value;
+        const earmarkMemo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
+        if (earmarkMemo) {
+          earmarkMemo.contributor_first_name = value;
+        }
         updateContributionPurposeDescription();
       });
     this.childForm
       .get('contributor_last_name')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        (this.transactionType?.childTransactionType?.transaction as SchATransaction).contributor_last_name = value;
+        const earmarkMemo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
+        if (earmarkMemo) {
+          earmarkMemo.contributor_last_name = value;
+        }
         updateContributionPurposeDescription();
       });
 
