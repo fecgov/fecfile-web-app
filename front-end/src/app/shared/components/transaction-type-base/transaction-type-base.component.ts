@@ -110,7 +110,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         combineLatestWith(contactId$),
         switchMap(([contribution_date, contactId]) => {
           const aggregation_group: AggregationGroups | undefined = (transactionType?.transaction as SchATransaction)
-            .aggregation_group;
+            ?.aggregation_group;
           if (contribution_date && contactId && aggregation_group) {
             return this.transactionService.getPreviousTransaction(
               transactionType?.transaction?.id || '',
