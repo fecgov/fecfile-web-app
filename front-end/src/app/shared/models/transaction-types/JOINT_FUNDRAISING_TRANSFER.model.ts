@@ -23,6 +23,12 @@ export class JOINT_FUNDRAISING_TRANSFER implements TransactionType {
   transaction = undefined;
   parentTransaction = undefined;
   childTransactionType = undefined;
+  subTransactionTypes = [
+    ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO,
+  ];
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],

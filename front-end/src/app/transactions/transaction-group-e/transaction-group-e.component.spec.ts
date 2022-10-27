@@ -19,6 +19,7 @@ import { ToastModule } from 'primeng/toast';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupEComponent } from './transaction-group-e.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionGroupEComponent', () => {
   let component: TransactionGroupEComponent;
@@ -63,7 +64,7 @@ describe('TransactionGroupEComponent', () => {
   xit('should reset the subTransaction dropdown', () => {
     component.form.get('subTransaction')?.setValue('A Value');
     expect(component.form.get('subTransaction')?.value).toEqual('A Value');
-    component.createSubTransaction({ value: 'Invalid' });
+    component.createSubTransaction({ value: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT });
     expect(component.form.get('subTransaction')?.value).toBeNull();
   });
 });

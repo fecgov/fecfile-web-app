@@ -3,7 +3,11 @@ import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
-import { AggregationGroups,SchATransaction } from 'app/shared/models/scha-transaction.model';
+import {
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypes,
+} from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
@@ -18,7 +22,6 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactFields, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-
 
 @Component({
   template: '',
@@ -138,7 +141,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
-  save(navigateTo: NavigationDestination, transactionTypeToAdd?: string) {
+  save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleATransactionTypes) {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
@@ -170,7 +173,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
     // Remove properties that are populated in the back-end from list of properties to validate
     fieldsToValidate = fieldsToValidate.filter(
-      (p) => !['transaction_id','donor_committee_name', 'back_reference_tran_id_number', 'back_reference_sched_name'].includes(p)
+      (p) =>
+        ![
+          'transaction_id',
+          'donor_committee_name',
+          'back_reference_tran_id_number',
+          'back_reference_sched_name',
+        ].includes(p)
     );
     payload.fields_to_validate = fieldsToValidate;
 
@@ -183,11 +192,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     acceptCallback: (
       navigateTo: NavigationDestination,
       payload: Transaction,
-      transactionTypeToAdd: string | undefined
+      transactionTypeToAdd?: ScheduleATransactionTypes
     ) => void,
     navigateTo: NavigationDestination,
     payload: Transaction,
-    transactionTypeToAdd: string | undefined,
+    transactionTypeToAdd?: ScheduleATransactionTypes,
     targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (confirmTransaction.contact_id && confirmTransaction.contact) {
@@ -314,7 +323,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return form.get(`contributor_${field}`) || form.get(`contributor_organization_${field}`);
   }
 
-  doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: string) {
+  doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {
     if (payload.transaction_type_identifier) {
       if (payload.id) {
         this.transactionService.update(payload).subscribe((transaction) => {
@@ -353,7 +362,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  navigateTo(navigateTo: NavigationDestination, transactionId?: string, transactionTypeToAdd?: string) {
+  navigateTo(
+    navigateTo: NavigationDestination,
+    transactionId?: string,
+    transactionTypeToAdd?: ScheduleATransactionTypes
+  ) {
     if (navigateTo === NavigationDestination.ANOTHER) {
       this.messageService.add({
         severity: 'success',

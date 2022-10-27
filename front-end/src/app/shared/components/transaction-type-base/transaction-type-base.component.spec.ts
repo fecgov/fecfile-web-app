@@ -475,7 +475,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#navigateTo NavigationDestination.CHILD should show popup + navigate', () => {
     const testTransactionId = '1';
-    const testTransactionTypeToAdd = 'testTransactionTypeToAdd';
+    const testTransactionTypeToAdd = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;
 
     component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     if (component.transactionType) {

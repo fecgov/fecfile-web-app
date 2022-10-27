@@ -1,3 +1,4 @@
+import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { TransactionNavigationControls } from '../models/transaction-navigation-controls.model';
 import { JsonSchema } from './json-schema.interface';
 import { Transaction } from './transaction.interface';
@@ -15,6 +16,7 @@ export interface TransactionType {
   transaction?: Transaction;
   parentTransaction?: Transaction;
   childTransactionType?: TransactionType;
+  subTransactionTypes?: ScheduleATransactionTypes[];
   navigationControls?: TransactionNavigationControls;
   contributionPurposeDescripReadonly(): string; // Dynamically generates the text in the CPD field
   getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
