@@ -337,21 +337,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  getNavigationControls2(): TransactionNavigationControls {
+  getNavigationControls(): TransactionNavigationControls {
     return this.transactionType?.navigationControls || new TransactionNavigationControls([], [], []);
-  }
-  getNavigationControls(section: 'inline' | 'cancel' | 'continue'): NavigationControl[] {
-    let controls: NavigationControl[] = [];
-    if (section === 'inline') {
-      controls = this.transactionType?.navigationControls?.inlineControls || [];
-    } else if (section === 'cancel') {
-      controls = this.transactionType?.navigationControls?.cancelControls || [];
-    } else if (section === 'continue') {
-      controls = this.transactionType?.navigationControls?.continueControls || [];
-    }
-    return controls.filter((control: NavigationControl) => {
-      return !control.visibleCondition || control.visibleCondition(this.transactionType?.transaction);
-    });
   }
 
   handleNavigate(navigationControl: NavigationControl): void {
