@@ -7,10 +7,20 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CalendarModule } from 'primeng/calendar';
 import { ContactFormComponent } from './components/contact-form/contact-form.component';
 import { ContactLookupComponent } from './components/contact-lookup/contact-lookup.component';
 import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from './components/fec-international-phone-input/fec-international-phone-input.component';
+import { AddressInputComponent } from './components/inputs/address-input/address-input.component';
+import { NameInputComponent } from './components/inputs/name-input/name-input.component';
+import { EmployerInputComponent } from './components/inputs/employer-input/employer-input.component';
+import { CommitteeInputComponent } from './components/inputs/committee-input/committee-input.component';
+import { AmountInputComponent } from './components/inputs/amount-input/amount-input.component';
+import { AdditionalInfoInputComponent } from './components/inputs/additional-info-input/additional-info-input.component';
 import { DefaultZeroPipe } from './pipes/default-zero.pipe';
 import { FecDatePipe } from './pipes/fec-date.pipe';
 import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
@@ -26,6 +36,10 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     DropdownModule,
     AutoCompleteModule,
     InputTextModule,
+    InputTextareaModule,
+    CheckboxModule,
+    InputNumberModule,
+    CalendarModule,
     FormsModule,
     DialogModule,
     ConfirmDialogModule,
@@ -41,6 +55,12 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     FecInternationalPhoneInputComponent,
     ContactLookupComponent,
     ContactFormComponent,
+    AddressInputComponent,
+    NameInputComponent,
+    EmployerInputComponent,
+    CommitteeInputComponent,
+    AmountInputComponent,
+    AdditionalInfoInputComponent,
   ],
   exports: [
     FecDatePipe,
@@ -53,6 +73,12 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     FecInternationalPhoneInputComponent,
     ContactLookupComponent,
     ContactFormComponent,
+    AddressInputComponent,
+    NameInputComponent,
+    EmployerInputComponent,
+    CommitteeInputComponent,
+    AmountInputComponent,
+    AdditionalInfoInputComponent,
   ],
   providers: [DatePipe],
 })
