@@ -243,7 +243,7 @@
         </div>
       </div>
       <div class="grid">
-        <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls('inline')">
+        <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls()?.inlineControls">
           <div class="col-3">
             <app-navigation-control
               [navigationControl]="navigationControl"
