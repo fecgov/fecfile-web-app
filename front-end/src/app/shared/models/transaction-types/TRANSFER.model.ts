@@ -20,6 +20,7 @@ import {
 export class TRANSFER implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'F';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRANSFER);
   schema = schema;
   transaction: Transaction | undefined;
