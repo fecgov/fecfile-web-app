@@ -26,6 +26,7 @@ describe('TransactionGroupAgComponent', () => {
   let fixture: ComponentFixture<TransactionGroupAgComponent>;
 
   const earmarkReceipt = new EARMARK_RECEIPT();
+  earmarkReceipt.transaction = earmarkReceipt.getNewTransaction();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
