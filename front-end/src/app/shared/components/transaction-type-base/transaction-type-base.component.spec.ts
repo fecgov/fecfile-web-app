@@ -532,7 +532,7 @@ describe('TransactionTypeBaseComponent', () => {
     }
     const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo(NavigationDestination.CHILD, '123', 'INDIVIDUAL_RECEIPT');
+    component.navigateTo(NavigationDestination.CHILD, '123', ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
