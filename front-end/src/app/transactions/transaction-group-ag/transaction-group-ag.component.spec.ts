@@ -58,7 +58,7 @@ describe('TransactionGroupAgComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     component.transactionType = earmarkReceipt;
     component.ngOnInit();
     expect(component).toBeTruthy();

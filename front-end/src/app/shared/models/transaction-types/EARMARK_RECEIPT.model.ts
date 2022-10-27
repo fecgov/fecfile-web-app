@@ -32,11 +32,11 @@ export class EARMARK_RECEIPT implements TransactionType {
 
   contributionPurposeDescripReadonly(): string {
     const earmarkMemo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    let conduit = earmarkMemo.contributor_organization_name || '';
+    let conduit = earmarkMemo?.contributor_organization_name || '';
     if (
-      earmarkMemo.entity_type === ContactTypes.INDIVIDUAL &&
-      earmarkMemo.contributor_first_name &&
-      earmarkMemo.contributor_last_name
+      earmarkMemo?.entity_type === ContactTypes.INDIVIDUAL &&
+      earmarkMemo?.contributor_first_name &&
+      earmarkMemo?.contributor_last_name
     ) {
       conduit = `${earmarkMemo.contributor_first_name || ''} ${earmarkMemo.contributor_last_name || ''}`;
     }

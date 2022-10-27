@@ -33,7 +33,7 @@ describe('EARMARK_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_RECEIPT);
   });
 
-  xit('#contributionPurposeDescripReadonly() should return an empty string', () => {
+  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
     if (!transactionType) {
       return;
     }
