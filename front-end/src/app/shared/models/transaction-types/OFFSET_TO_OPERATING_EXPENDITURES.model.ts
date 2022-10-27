@@ -17,11 +17,12 @@ import {
 export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'B';
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES);
+  isDependentChild = false;
+  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
   transaction = undefined;
-  contact = undefined;
-  parent = undefined;
+  parentTransaction = undefined;
+  childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
@@ -35,7 +36,7 @@ export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA15',
-      transaction_type_identifier: ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES,
+      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       aggregation_group: AggregationGroups.LINE_15,
     });
   }

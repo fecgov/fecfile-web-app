@@ -20,11 +20,12 @@ import { TRANSFER } from './TRANSFER.model';
 export class PAC_JF_TRANSFER_MEMO implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'F';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   schema = schema;
-  transaction: Transaction | undefined;
-  contact = undefined;
-  parent: SchATransaction | undefined;
+  transaction = undefined;
+  parentTransaction: SchATransaction | undefined = undefined;
+  childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
@@ -49,7 +50,7 @@ export class PAC_JF_TRANSFER_MEMO implements TransactionType {
   );
 
   contributionPurposeDescripReadonly(): string {
-    return `Joint Fundraising Memo: ${this.parent?.contributor_organization_name}`;
+    return `Joint Fundraising Memo: ${this.parentTransaction?.contributor_organization_name}`;
   }
 
   getNewTransaction() {

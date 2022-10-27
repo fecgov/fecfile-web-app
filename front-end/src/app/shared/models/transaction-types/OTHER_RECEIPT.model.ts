@@ -17,11 +17,12 @@ import {
 export class OTHER_RECEIPT implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'C';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OTHER_RECEIPTS);
   schema = schema;
   transaction = undefined;
-  contact = undefined;
-  parent = undefined;
+  parentTransaction = undefined;
+  childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],

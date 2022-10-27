@@ -1,13 +1,13 @@
 <p-toast></p-toast>
 
 <div class="p-fluid">
-  <h1>{{ title }}</h1>
-  <h3>Contributor</h3>
+  <h1>{{ transactionType?.title }}</h1>
+  <h3>Contact</h3>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
       <div class="col-12">
         <div class="field">
-          <label for="entity_type">CONTRIBUTOR TYPE</label>
+          <label for="entity_type">CONTACT TYPE</label>
           <app-contact-lookup
             [contactTypeFormControl]="$any(form).controls['entity_type']"
             [contactTypeOptions]="contactTypeOptions"
@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="contact">
+    <ng-container *ngIf="transactionType?.transaction?.contact">
       <ng-container
         *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(form.get('entity_type')?.value)"
       >
@@ -176,7 +176,7 @@
         </div>
       </div>
       <p-divider></p-divider>
-      <h3>Contribution</h3>
+      <h3>Receipt Information</h3>
       <div class="grid">
         <div class="col-6">
           <div class="field">
@@ -215,7 +215,7 @@
       <div class="grid">
         <div class="col-6">
           <div class="field">
-            <label for="contribution_amount">CONTRIBUTION AMOUNT</label>
+            <label for="contribution_amount">AMOUNT</label>
             <p-inputNumber
               inputId="contribution_amount"
               formControlName="contribution_amount"
@@ -234,7 +234,7 @@
         </div>
         <div class="col-6">
           <div class="field">
-            <label for="contribution_aggregate">CONTRIBUTION AGGREGATE</label>
+            <label for="contribution_aggregate">AGGREGATE</label>
             <p-inputNumber
               inputId="contribution_aggregate"
               formControlName="contribution_aggregate"
@@ -302,10 +302,10 @@
     <p-divider></p-divider>
     <app-navigation-control-bar
       [navigationControls]="getNavigationControls2()"
-      [transaction]="transaction"
+      [transaction]="transactionType?.transaction"
       (navigate)="handleNavigate($event)"
     ></app-navigation-control-bar>
   </form>
 </div>
 
-<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>

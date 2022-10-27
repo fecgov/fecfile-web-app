@@ -90,9 +90,11 @@ describe('TransactionGroupBComponent', () => {
         return {} as Transaction;
       },
       title: '',
-      parent: undefined,
+      parentTransaction: undefined,
       schema: OFFSET_TO_OPERATING_EXPENDITURES,
       transaction: transaction,
+      childTransactionType: undefined,
+      isDependentChild: false,
     } as TransactionType;
     fixture.detectChanges();
   });
@@ -137,8 +139,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transaction) {
-      component.transaction.id = undefined;
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -158,9 +160,7 @@ describe('TransactionGroupBComponent', () => {
     });
     component.form.patchValue({ ...testTran });
     component.save('list');
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,aggregation_group,contribution_purpose_descrip,memo_code,memo_text_description`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
   });
@@ -175,14 +175,12 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transaction) {
-      component.transaction.id = '10';
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = '10';
     }
     component.form.patchValue({ ...transaction });
     component.save('add another');
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/10/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,aggregation_group,contribution_purpose_descrip,memo_code,memo_text_description`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/10/`);
     expect(req.request.method).toEqual('PUT');
     httpTestingController.verify();
   });
@@ -197,8 +195,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transaction) {
-      component.transaction.id = undefined;
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -220,9 +218,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...testTran });
 
     component.save('list');
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,aggregation_group,contribution_purpose_descrip,memo_code,memo_text_description`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
   });
@@ -237,8 +233,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transaction) {
-      component.transaction.id = undefined;
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -258,9 +254,7 @@ describe('TransactionGroupBComponent', () => {
     });
     component.form.patchValue({ ...testTran });
     component.save('list');
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=form_type,filer_committee_id_number,transaction_type_identifier,back_reference_tran_id_number,back_reference_sched_name,entity_type,contributor_organization_name,contributor_last_name,contributor_first_name,contributor_middle_name,contributor_prefix,contributor_suffix,contributor_street_1,contributor_street_2,contributor_city,contributor_state,contributor_zip,contribution_date,contribution_amount,contribution_aggregate,aggregation_group,contribution_purpose_descrip,memo_code,memo_text_description`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
   });
@@ -269,16 +263,16 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     component.save('list');
     expect(component.form.invalid).toBe(true);
-    httpTestingController.expectNone(
-      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=`
-    );
+    httpTestingController.expectNone(`${environment.apiUrl}/sch-a-transactions/1/`);
     httpTestingController.verify();
   });
 
   it('#save() should not save an invalid org record', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
-    component.contact = testContact;
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.contact = testContact;
+    }
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) {
@@ -286,8 +280,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transaction) {
-      component.transaction.id = undefined;
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -302,9 +296,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...testTran });
     component.save('list');
     expect(component.form.invalid).toBe(true);
-    httpTestingController.expectNone(
-      `${environment.apiUrl}/sch-a-transactions/1/?schema=OFFSET_TO_OPERATING_EXPENDITURES&fields_to_validate=`
-    );
+    httpTestingController.expectNone(`${environment.apiUrl}/sch-a-transactions/1/`);
     httpTestingController.verify();
   });
 });

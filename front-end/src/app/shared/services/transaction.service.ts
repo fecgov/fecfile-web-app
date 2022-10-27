@@ -12,7 +12,7 @@ import { SchATransactionService } from './scha-transaction.service';
   providedIn: 'root',
 })
 export class TransactionService implements TableListService<Transaction> {
-  constructor(private apiService: ApiService, private schATransactionService: SchATransactionService) { }
+  constructor(private apiService: ApiService, private schATransactionService: SchATransactionService) {}
 
   public getTableData(
     pageNumber = 1,
@@ -51,12 +51,12 @@ export class TransactionService implements TableListService<Transaction> {
     );
   }
 
-  public create(transaction: Transaction, schema: string, fieldsToValidate: string[] = []): Observable<Transaction> {
-    return this.schATransactionService.create(transaction as SchATransaction, schema, fieldsToValidate);
+  public create(transaction: Transaction): Observable<Transaction> {
+    return this.schATransactionService.create(transaction as SchATransaction);
   }
 
-  public update(transaction: Transaction, schema: string, fieldsToValidate: string[] = []): Observable<Transaction> {
-    return this.schATransactionService.update(transaction as SchATransaction, schema, fieldsToValidate);
+  public update(transaction: Transaction): Observable<Transaction> {
+    return this.schATransactionService.update(transaction as SchATransaction);
   }
 
   public delete(transaction: Transaction): Observable<null> {

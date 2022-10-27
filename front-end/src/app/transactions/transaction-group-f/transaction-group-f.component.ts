@@ -50,16 +50,16 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     return memoCodeSchema?.const as boolean;
   }
 
-  protected override resetForm() {
+  protected override doResetForm(form: FormGroup, transactionType?: TransactionType) {
     this.formSubmitted = false;
-    this.form.reset();
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
-    this.form.patchValue({
+    form.reset();
+    form.markAsPristine();
+    form.markAsUntouched();
+    form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: this.getMemoCodeConstFromSchema(),
-      contribution_purpose_descrip: this.contributionPurposeDescrip,
+      contribution_purpose_descrip: transactionType?.contributionPurposeDescripReadonly(),
     });
   }
 }

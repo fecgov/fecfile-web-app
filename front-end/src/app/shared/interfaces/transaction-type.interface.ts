@@ -9,16 +9,16 @@ import { Transaction } from './transaction.interface';
  */
 export interface TransactionType {
   scheduleId: string;
-  componentGroupId: string;
+  componentGroupId: string; // Identifier of transaction component use to render UI form entry page
+  isDependentChild: boolean; // When set to true, the parent transaction is used to generate UI form entry page
   title: string;
-  schema: JsonSchema;
+  schema: JsonSchema; // FEC validation JSON schema
   transaction?: Transaction;
-  contact?: Contact;
-  parent?: Transaction;
+  parentTransaction?: Transaction;
+  childTransactionType?: TransactionType;
   navigationControls?: TransactionNavigationControls;
-
-  contributionPurposeDescripReadonly(): string;
-  getNewTransaction(): Transaction;
+  contributionPurposeDescripReadonly(): string; // Dynamically generates the text in the CPD field
+  getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 }
 
 export function isNewTransaction(transaction?: Transaction): boolean {

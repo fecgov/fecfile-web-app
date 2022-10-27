@@ -29,6 +29,7 @@ describe('TransactionResolver', () => {
                   id: transactionId,
                   transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
                   contact_id: '123',
+                  contact: Contact.fromJSON({ id: 123 }),
                 })
               ),
           },

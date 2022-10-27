@@ -29,29 +29,29 @@ export function generateReportObject(reportGiven: object = {}): object {
 }
 
 export type ConfirmationDetails = {
-  email_1: string,
-  email_2?: string,
-  street_1?: string,
-  street_2?: string,
-  city?: string,
-  state?: string,
-  zip?: string
-}
-export function generateConfirmationDetails(): ConfirmationDetails{
+  email_1: string;
+  email_2?: string;
+  street_1?: string;
+  street_2?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+};
+export function generateConfirmationDetails(): ConfirmationDetails {
   const details: ConfirmationDetails = {
-    email_1: generator.email()
+    email_1: generator.email(),
   };
 
-  if (_.random(100) % 2 === 0){
+  if (_.random(100) % 2 === 0) {
     details.email_2 = generator.email();
   }
 
-  if (_.random(100) % 4 === 0 ){
+  if (_.random(100) % 4 === 0) {
     details.street_1 = generator.street();
     details.city = generator.city();
     details.state = generator.state(true);
     details.zip = generator.zipcode();
-    if (_.random(100) % 2 === 0){
+    if (_.random(100) % 2 === 0) {
       details.street_2 = generator.apartment();
     }
   }
@@ -60,27 +60,27 @@ export function generateConfirmationDetails(): ConfirmationDetails{
 }
 
 export type FilingDetails = {
-  first_name: string,
-  last_name: string,
-  middle_name?: string,
-  prefix?: string,
-  suffix?: string,
-  filing_pw: string,
-}
-export function generateFilingDetails(): FilingDetails{
+  first_name: string;
+  last_name: string;
+  middle_name?: string;
+  prefix?: string;
+  suffix?: string;
+  filing_pw: string;
+};
+export function generateFilingDetails(): FilingDetails {
   const details: FilingDetails = {
     first_name: generator.firstName(),
     last_name: generator.lastName(),
     filing_pw: generator.fakeFilingPW(),
-  }
+  };
 
-  if (_.random(100) % 2 === 0){
+  if (_.random(100) % 2 === 0) {
     details.middle_name = generator.middleName();
   }
-  if (_.random(100) % 10 === 0){
+  if (_.random(100) % 10 === 0) {
     details.prefix = generator.prefix();
   }
-  if (_.random(100) % 10 === 0){
+  if (_.random(100) % 10 === 0) {
     details.suffix = generator.suffix();
   }
 

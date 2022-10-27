@@ -90,7 +90,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
         ];
       case ScheduleATransactionGroups.OTHER:
         return [
-          ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES,
+          ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
           ScheduleATransactionTypes.OTHER_RECEIPTS,
           ScheduleATransactionTypes.IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
           ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,

@@ -17,11 +17,12 @@ import {
 export class JOINT_FUNDRAISING_TRANSFER implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'E';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
   schema = schema;
   transaction = undefined;
-  contact = undefined;
-  parent = undefined;
+  parentTransaction = undefined;
+  childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],

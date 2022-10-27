@@ -7,6 +7,7 @@ import { OTHER_RECEIPT } from '../models/transaction-types/OTHER_RECEIPT.model';
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
 import { PAC_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_JF_TRANSFER_MEMO.model';
 import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
+import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -18,6 +19,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_RECEIPT,
   PAC_JF_TRANSFER_MEMO,
   EARMARK_RECEIPT,
+  EARMARK_MEMO,
 }
 
 export class TransactionTypeUtils {

@@ -1,0 +1,5 @@
+// The animations in the p-accordian component are reducing the height
+// of the textareas in the accordians to 0. This CSS fixes the heights.
+.p-inputtextarea {
+  height: auto !important;
+}

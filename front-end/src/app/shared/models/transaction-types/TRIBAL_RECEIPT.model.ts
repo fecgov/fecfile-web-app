@@ -17,11 +17,12 @@ import {
 export class TRIBAL_RECEIPT implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'D';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_RECEIPT);
   schema = schema;
   transaction = undefined;
-  contact = undefined;
-  parent = undefined;
+  parentTransaction = undefined;
+  childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
