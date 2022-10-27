@@ -678,6 +678,45 @@ describe('TransactionTypeBaseComponent', () => {
     component.form.addControl('entity_type', { value: testEntityType });
     component.onContactLookupSelect(testContactSelectItem);
   });
+  it('#onContactLookupSelect INDIVIDUAL should calculate aggregate', () => {
+    component.transactionType = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+    ) as TransactionType;
+    component.doInit(component.form, new ValidateService(), component.transactionType, component.contactId$);
+    component.transactionType.transaction = component.transactionType.getNewTransaction();
+
+    const testEntityType = ContactTypes.INDIVIDUAL;
+
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.INDIVIDUAL;
+    testContact.last_name = 'testLastName';
+    testContact.first_name = 'testFirstName';
+    testContact.middle_name = 'testMiddleName';
+    testContact.prefix = 'testPrefix';
+    testContact.suffix = 'testSuffix';
+    testContact.employer = 'testEmployer';
+    testContact.occupation = 'testOccupation';
+    testContact.street_1 = 'testStreet1';
+    testContact.street_2 = 'testStreet2';
+    testContact.city = 'testCity';
+    testContact.state = 'testState';
+    testContact.zip = 'testZip';
+
+    const testContactSelectItem: SelectItem<Contact> = {
+      value: testContact,
+    };
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.form.get('contribution_amount')?.setValue(1111);
+    component.form.get('contribution_date')?.setValue('2022-03-02');
+
+    const getPreviousTransactionSpy = spyOn(testTransactionService, 'getPreviousTransaction').and.returnValue(
+      of(testTransaction)
+    );
+    component.onContactLookupSelect(testContactSelectItem);
+    expect(getPreviousTransactionSpy).toHaveBeenCalledTimes(1);
+  });
 
   it('#onContactLookupSelect ORG should handle null form', () => {
     const testContact = new Contact();
