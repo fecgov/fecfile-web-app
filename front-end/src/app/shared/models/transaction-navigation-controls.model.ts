@@ -17,13 +17,13 @@ export enum NavigationDestination {
 export class NavigationControl extends BaseModel {
   navigationAction: NavigationAction = NavigationAction.CANCEL;
   navigationDestination: NavigationDestination = NavigationDestination.LIST;
-  label: string = 'Cancel';
+  label = 'Cancel';
   icon?: string;
   ngClass?: string;
-  visibleCondition(transaction?: Transaction): boolean {
+  visibleCondition(): boolean {
     return true;
   }
-  disabledCondition(transaction?: Transaction): boolean {
+  disabledCondition(): boolean {
     return true;
   }
 

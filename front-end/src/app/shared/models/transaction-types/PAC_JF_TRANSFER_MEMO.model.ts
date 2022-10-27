@@ -7,7 +7,6 @@ import {
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
-import { Transaction } from '../../interfaces/transaction.interface';
 import {
   NavigationAction,
   NavigationControl,
@@ -15,7 +14,6 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { TRANSFER } from './TRANSFER.model';
 
 export class PAC_JF_TRANSFER_MEMO implements TransactionType {
   scheduleId = 'A';
