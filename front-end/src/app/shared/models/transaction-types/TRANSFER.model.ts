@@ -1,4 +1,3 @@
-import { hasContact, isNewTransaction, TransactionType } from '../../interfaces/transaction-type.interface';
 import {
   SchATransaction,
   ScheduleATransactionTypes,
@@ -7,7 +6,7 @@ import {
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRANSFER';
-import { Transaction } from '../../interfaces/transaction.interface';
+import { hasNoContact, isNewTransaction, Transaction } from '../../interfaces/transaction.interface';
 import {
   CANCEL_CONTROL,
   NavigationAction,
@@ -16,6 +15,7 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
 export class TRANSFER implements TransactionType {
   scheduleId = 'A';
@@ -33,7 +33,7 @@ export class TRANSFER implements TransactionType {
         NavigationDestination.ANOTHER,
         'Save & add another Memo',
         'p-button-warning',
-        hasContact,
+        hasNoContact,
         isNewTransaction,
         'pi pi-plus'
       ),

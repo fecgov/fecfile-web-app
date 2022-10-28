@@ -1,4 +1,3 @@
-import { hasContact, isNewTransaction, TransactionType } from '../../interfaces/transaction-type.interface';
 import {
   SchATransaction,
   ScheduleATransactionTypes,
@@ -14,6 +13,8 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
+import { hasNoContact, isNewTransaction } from 'app/shared/interfaces/transaction.interface';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
 export class PAC_JF_TRANSFER_MEMO implements TransactionType {
   scheduleId = 'A';
@@ -31,7 +32,7 @@ export class PAC_JF_TRANSFER_MEMO implements TransactionType {
         NavigationDestination.ANOTHER,
         'Save & add another JF Transfer Memo',
         'p-button-warning',
-        hasContact,
+        hasNoContact,
         isNewTransaction,
         'pi pi-plus'
       ),

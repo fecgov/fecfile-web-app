@@ -1,6 +1,4 @@
-import { hasContact as hasNoContact, isNewTransaction } from '../interfaces/transaction-type.interface';
-import { Transaction } from '../interfaces/transaction.interface';
-import { BaseModel } from './base.model';
+import { hasNoContact, isNewTransaction, Transaction } from '../interfaces/transaction.interface';
 
 export enum NavigationAction {
   CANCEL,
@@ -14,7 +12,7 @@ export enum NavigationDestination {
   CHILD,
 }
 
-export class NavigationControl extends BaseModel {
+export class NavigationControl {
   navigationAction: NavigationAction = NavigationAction.CANCEL;
   navigationDestination: NavigationDestination = NavigationDestination.LIST;
   label = 'Cancel';
@@ -32,7 +30,6 @@ export class NavigationControl extends BaseModel {
     visibleCondition?: (transaction?: Transaction) => boolean,
     icon?: string
   ) {
-    super();
     this.navigationAction = navigationAction;
     this.navigationDestination = navigationDestination;
     this.label = label;
@@ -67,7 +64,7 @@ export const SAVE_ANOTHER_CONTROL = new NavigationControl(
   isNewTransaction
 );
 
-export class TransactionNavigationControls extends BaseModel {
+export class TransactionNavigationControls {
   inlineControls?: NavigationControl[];
   cancelControls?: NavigationControl[];
   continueControls?: NavigationControl[];
@@ -77,7 +74,6 @@ export class TransactionNavigationControls extends BaseModel {
     cancelControls?: NavigationControl[],
     continueControls?: NavigationControl[]
   ) {
-    super();
     this.inlineControls = inlineControls;
     this.cancelControls = cancelControls;
     this.continueControls = continueControls;
