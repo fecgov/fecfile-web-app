@@ -6,12 +6,9 @@ import {
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRANSFER';
-import { hasNoContact, isNewTransaction, Transaction } from '../../interfaces/transaction.interface';
+import { Transaction } from '../../interfaces/transaction.interface';
 import {
   CANCEL_CONTROL,
-  NavigationAction,
-  NavigationControl,
-  NavigationDestination,
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
