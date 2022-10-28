@@ -101,10 +101,9 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     }
 
     const updateContributionPurposeDescription = () => {
-      const earmarkMemo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
-      if (earmarkMemo) {
-        earmarkMemo.entity_type = this.childForm.get('entity_type')?.value;
-      }
+      const childTransaction: SchATransaction = this.transactionType?.childTransactionType
+        ?.transaction as SchATransaction;
+      childTransaction.entity_type = this.childForm.get('entity_type')?.value;
 
       this.form.patchValue({
         contribution_purpose_descrip: this.transactionType?.contributionPurposeDescripReadonly(),
@@ -116,10 +115,9 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
       .get('contributor_organization_name')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        const earmarkMemo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
-        if (earmarkMemo) {
-          earmarkMemo.contributor_organization_name = value;
-        }
+        const childTransaction: SchATransaction = this.transactionType?.childTransactionType
+          ?.transaction as SchATransaction;
+        childTransaction.contributor_organization_name = value;
         updateContributionPurposeDescription();
       });
     this.childForm

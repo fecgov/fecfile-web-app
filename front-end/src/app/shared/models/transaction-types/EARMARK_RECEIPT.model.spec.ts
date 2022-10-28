@@ -1,7 +1,5 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
-import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { EARMARK_MEMO } from './EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from './EARMARK_RECEIPT.model';
 
