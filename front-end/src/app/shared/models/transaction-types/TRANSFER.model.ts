@@ -27,17 +27,7 @@ export class TRANSFER implements TransactionType {
   contact = undefined;
   parent: SchATransaction | undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
-    [
-      new NavigationControl(
-        NavigationAction.SAVE,
-        NavigationDestination.ANOTHER,
-        'Save & add another Memo',
-        'p-button-warning',
-        hasNoContact,
-        isNewTransaction,
-        'pi pi-plus'
-      ),
-    ],
+    [],
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL]
   );
