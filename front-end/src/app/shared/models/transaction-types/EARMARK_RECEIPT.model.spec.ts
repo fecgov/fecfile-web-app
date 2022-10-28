@@ -3,18 +3,13 @@ import { ContactTypes } from '../contact.model';
 import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { EARMARK_MEMO } from './EARMARK_MEMO.model';
+import { EARMARK_RECEIPT } from './EARMARK_RECEIPT.model';
 
 describe('EARMARK_RECEIPT', () => {
-  let transactionType: TransactionType;
+  let transactionType: EARMARK_RECEIPT;
 
   beforeEach(() => {
-    transactionType = TransactionTypeUtils.factory('EARMARK_RECEIPT') as TransactionType;
-    if (transactionType) {
-      transactionType.transaction = SchATransaction.fromJSON({
-        id: 999,
-        entitiy_type: ContactTypes.INDIVIDUAL,
-      });
-    }
+    transactionType = new EARMARK_RECEIPT();
   });
 
   it('should create an instance', () => {
@@ -37,12 +32,14 @@ describe('EARMARK_RECEIPT', () => {
   });
 
   it('#contributionPurposeDescripReadonly() should reflect child', () => {
-    const childTransactionType: TransactionType = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.EARMARK_MEMO
-    ) as TransactionType;
+    const childTransactionType: EARMARK_MEMO = new EARMARK_MEMO();
     childTransactionType.transaction = childTransactionType.getNewTransaction();
+    childTransactionType.transaction.entity_type = ContactTypes.INDIVIDUAL;
+    childTransactionType.transaction.contributor_first_name = 'Joe';
+    childTransactionType.transaction.contributor_last_name = 'Smith';
+
     transactionType.childTransactionType = childTransactionType;
     const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('');
+    expect(descrip).toBe('Earmarked through Joe Smith');
   });
 });
