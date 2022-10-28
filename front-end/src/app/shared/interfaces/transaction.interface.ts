@@ -1,10 +1,13 @@
 import { Contact } from '../models/contact.model';
+import { MemoText } from '../models/memo-text.model';
 
 export interface Transaction {
   id: string | undefined;
   report_id: string | undefined;
   contact: Contact | undefined;
   contact_id: string | undefined;
+  memo_text: MemoText | undefined;
+  memo_text_id: string | undefined;
   form_type: string | undefined;
   filer_committee_id_number: string | undefined;
   transaction_id: string | null;

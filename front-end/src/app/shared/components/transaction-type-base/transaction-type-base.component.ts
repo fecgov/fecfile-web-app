@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { MemoText } from 'app/shared/models/memo-text.model';
 import { AggregationGroups, SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -62,6 +63,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.isExisting(transactionType?.transaction)) {
       const txn = { ...transactionType?.transaction } as SchATransaction;
       form.patchValue({ ...txn });
+
+      this.patchMemoText(transactionType, form);
+
       form.get('entity_type')?.disable();
       contactId$.next(txn.contact_id || '');
     } else {
@@ -133,6 +137,28 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
+  retrieveMemoText(formValues: any) {
+    const memo_text = MemoText.fromJSON({
+      text4000: formValues['memo_text_description'],
+      report_id: this.transactionType?.transaction?.report_id,
+      rec_type: 'OVRD',
+      filer_committee_id_number: this.transactionType?.transaction?.filer_committee_id_number,
+      transaction_id_number: '',
+      back_reference_sched_form_name: 'SchA',
+    });
+    formValues['memo_text'] = memo_text;
+    delete formValues['memo_text_description'];
+
+    return formValues;
+  }
+
+  patchMemoText(transactionType: TransactionType | undefined, form: FormGroup) {
+    const memo_text = transactionType?.transaction?.memo_text;
+    if (memo_text?.text4000) {
+      form.patchValue({ memo_text_description: memo_text.text4000 });
+    }
+  }
+
   save(navigateTo: NavigateToType, transactionTypeToAdd?: string) {
     this.formSubmitted = true;
 
@@ -156,9 +182,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form: FormGroup,
     formProperties: string[]
   ) {
+    let formValues = validateService.getFormValues(form, formProperties);
+    if (formValues['memo_text_description']?.length > 0) {
+      formValues = this.retrieveMemoText(formValues);
+    }
+
     const payload: Transaction = SchATransaction.fromJSON({
       ...transactionType?.transaction,
-      ...validateService.getFormValues(form, formProperties),
+      ...formValues,
     });
     payload.contact_id = payload.contact?.id;
 

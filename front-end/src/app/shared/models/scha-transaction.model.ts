@@ -3,6 +3,7 @@ import { Transaction } from '../interfaces/transaction.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { Contact } from './contact.model';
+import { MemoText } from './memo-text.model';
 
 export class SchATransaction extends BaseModel implements Transaction {
   id: string | undefined;
@@ -67,6 +68,9 @@ export class SchATransaction extends BaseModel implements Transaction {
 
   contact: Contact | undefined;
   contact_id: string | undefined; // Foreign key to the Contact model
+
+  memo_text: MemoText | undefined;
+  memo_text_id: string | undefined;
 
   children: Transaction[] | undefined;
 
