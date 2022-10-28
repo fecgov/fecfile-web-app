@@ -1,14 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ContactService } from 'app/shared/services/contact.service';
-import { TransactionService } from 'app/shared/services/transaction.service';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { takeUntil } from 'rxjs';
 import { TransactionType } from '../../shared/interfaces/transaction-type.interface';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
@@ -33,56 +26,32 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     'memo_code',
     'memo_text_description',
   ];
-  override form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
   readOnlyMemo = false;
-  memo_checked = false;
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
 
-  constructor(
-    protected override messageService: MessageService,
-    protected override transactionService: TransactionService,
-    protected override contactService: ContactService,
-    protected override validateService: ValidateService,
-    protected override confirmationService: ConfirmationService,
-    protected override fb: FormBuilder,
-    protected override router: Router,
-    protected override fecDatePipe: FecDatePipe,
-    protected activatedRoute: ActivatedRoute
-  ) {
-    super(
-      messageService,
-      transactionService,
-      contactService,
-      validateService,
-      confirmationService,
-      fb,
-      router,
-      fecDatePipe
-    );
-
-    activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      const transactionType: TransactionType = data['transactionType'];
-      if (Object.keys(transactionType?.schema?.properties['memo_code']).includes('const')) {
-        this.readOnlyMemo = true;
-        this.memo_checked = transactionType.schema.properties['memo_code'].const as boolean;
-      }
-    });
+  override ngOnInit(): void {
+    super.ngOnInit();
+    const memoCodeConst = this.getMemoCodeConstFromSchema();
+    this.readOnlyMemo = memoCodeConst as boolean;
+    this.form.get('memo_code')?.setValue(memoCodeConst);
   }
 
-  protected override doResetForm(form: FormGroup, transactionType: TransactionType | undefined) {
-    const memo_item_state = this.memo_checked;
+  protected getMemoCodeConstFromSchema(): boolean | undefined {
+    const memoCodeSchema = this.transactionType?.schema.properties['memo_code'];
+    return memoCodeSchema?.const as boolean;
+  }
 
+  protected override doResetForm(form: FormGroup, transactionType?: TransactionType) {
     this.formSubmitted = false;
     form.reset();
     form.markAsPristine();
     form.markAsUntouched();
-    this.memo_checked = memo_item_state;
     form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
-      memo_code: this.memo_checked,
+      memo_code: this.getMemoCodeConstFromSchema(),
       contribution_purpose_descrip: transactionType?.contributionPurposeDescripReadonly(),
     });
   }

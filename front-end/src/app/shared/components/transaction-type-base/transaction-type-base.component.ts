@@ -3,7 +3,17 @@ import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
-import { AggregationGroups, SchATransaction } from 'app/shared/models/scha-transaction.model';
+import {
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypes,
+} from 'app/shared/models/scha-transaction.model';
+import {
+  NavigationAction,
+  NavigationControl,
+  NavigationDestination,
+  TransactionNavigationControls,
+} from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -12,8 +22,6 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactFields, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-
-export type NavigateToType = 'list' | 'add another' | 'add-sub-tran' | 'to-parent';
 
 @Component({
   template: '',
@@ -102,7 +110,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         combineLatestWith(contactId$),
         switchMap(([contribution_date, contactId]) => {
           const aggregation_group: AggregationGroups | undefined = (transactionType?.transaction as SchATransaction)
-            .aggregation_group;
+            ?.aggregation_group;
           if (contribution_date && contactId && aggregation_group) {
             return this.transactionService.getPreviousTransaction(
               transactionType?.transaction?.id || '',
@@ -133,7 +141,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
-  save(navigateTo: NavigateToType, transactionTypeToAdd?: string) {
+  save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleATransactionTypes) {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
@@ -166,10 +174,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     // Remove properties that are populated in the back-end from list of properties to validate
     fieldsToValidate = fieldsToValidate.filter(
       (p) =>
-        p !== 'transaction_id' &&
-        p !== 'donor_committee_name' &&
-        p !== 'back_reference_tran_id_number' &&
-        p !== 'back_reference_sched_name'
+        ![
+          'transaction_id',
+          'donor_committee_name',
+          'back_reference_tran_id_number',
+          'back_reference_sched_name',
+        ].includes(p)
     );
     payload.fields_to_validate = fieldsToValidate;
 
@@ -180,13 +190,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     confirmTransaction: Transaction,
     form: FormGroup,
     acceptCallback: (
-      navigateTo: NavigateToType,
+      navigateTo: NavigationDestination,
       payload: Transaction,
-      transactionTypeToAdd: string | undefined
+      transactionTypeToAdd?: ScheduleATransactionTypes
     ) => void,
-    navigateTo: NavigateToType,
+    navigateTo: NavigationDestination,
     payload: Transaction,
-    transactionTypeToAdd: string | undefined,
+    transactionTypeToAdd?: ScheduleATransactionTypes,
     targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (confirmTransaction.contact_id && confirmTransaction.contact) {
@@ -313,7 +323,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return form.get(`contributor_${field}`) || form.get(`contributor_organization_${field}`);
   }
 
-  doSave(navigateTo: NavigateToType, payload: Transaction, transactionTypeToAdd?: string) {
+  doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {
     if (payload.transaction_type_identifier) {
       if (payload.id) {
         this.transactionService.update(payload).subscribe((transaction) => {
@@ -327,8 +337,24 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  navigateTo(navigateTo: NavigateToType, transactionId?: string, transactionTypeToAdd?: string) {
-    if (navigateTo === 'add another') {
+  getNavigationControls(): TransactionNavigationControls {
+    return this.transactionType?.navigationControls || new TransactionNavigationControls([], [], []);
+  }
+
+  handleNavigate(navigationControl: NavigationControl): void {
+    if (navigationControl.navigationAction === NavigationAction.SAVE) {
+      this.save(navigationControl.navigationDestination);
+    } else {
+      this.navigateTo(navigationControl.navigationDestination);
+    }
+  }
+
+  navigateTo(
+    navigateTo: NavigationDestination,
+    transactionId?: string,
+    transactionTypeToAdd?: ScheduleATransactionTypes
+  ) {
+    if (navigateTo === NavigationDestination.ANOTHER) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
@@ -336,7 +362,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.resetForm();
-    } else if (navigateTo === 'add-sub-tran') {
+    } else if (navigateTo === NavigationDestination.CHILD) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
@@ -346,7 +372,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.router.navigateByUrl(
         `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
       );
-    } else if (navigateTo === 'to-parent') {
+    } else if (navigateTo === NavigationDestination.PARENT) {
       this.router.navigateByUrl(
         `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${this.transactionType?.transaction?.parent_transaction_id}`
       );

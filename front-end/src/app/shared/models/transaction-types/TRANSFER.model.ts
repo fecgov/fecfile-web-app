@@ -5,57 +5,51 @@ import {
   AggregationGroups,
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRANSFER';
+import { hasNoContact, isNewTransaction, Transaction } from '../../interfaces/transaction.interface';
 import {
+  CANCEL_CONTROL,
   NavigationAction,
   NavigationControl,
   NavigationDestination,
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { hasNoContact, isNewTransaction } from 'app/shared/interfaces/transaction.interface';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
-export class PAC_JF_TRANSFER_MEMO implements TransactionType {
+export class TRANSFER implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'F';
   isDependentChild = false;
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
+  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRANSFER);
   schema = schema;
-  transaction = undefined;
-  parentTransaction: SchATransaction | undefined = undefined;
-  childTransactionType = undefined;
+  transaction: Transaction | undefined;
+  contact = undefined;
+  parent: SchATransaction | undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
         NavigationDestination.ANOTHER,
-        'Save & add another JF Transfer Memo',
+        'Save & add another Memo',
         'p-button-warning',
         hasNoContact,
         isNewTransaction,
         'pi pi-plus'
       ),
     ],
-    [
-      new NavigationControl(
-        NavigationAction.CANCEL,
-        NavigationDestination.PARENT,
-        'Back to Joint Fundraising Transfer',
-        'p-button-secondary'
-      ),
-    ],
+    [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL]
   );
 
   contributionPurposeDescripReadonly(): string {
-    return `Joint Fundraising Memo: ${this.parentTransaction?.contributor_organization_name}`;
+    return '';
   }
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA12',
-      transaction_type_identifier: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
+      transaction_type_identifier: ScheduleATransactionTypes.TRANSFER,
       back_reference_sched_name: 'SA12',
       aggregation_group: AggregationGroups.GENERAL,
     });
