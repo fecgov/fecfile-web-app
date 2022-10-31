@@ -2,12 +2,12 @@
 
 <div class="p-fluid">
   <h1>{{ transactionType?.title }}</h1>
-  <h3>Contributor</h3>
+  <h3>Contact</h3>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
       <div class="col-12">
         <div class="field">
-          <label for="entity_type">CONTRIBUTOR TYPE</label>
+          <label for="entity_type">CONTACT TYPE</label>
           <app-contact-lookup
             [contactTypeFormControl]="$any(form).controls['entity_type']"
             [contactTypeOptions]="contactTypeOptions"
@@ -23,7 +23,7 @@
       <div class="grid">
         <div class="col-8">
           <div class="field">
-            <label for="contributor_organization_name">CONTRIBUTOR COMMITTEE</label>
+            <label for="contributor_organization_name">COMMITTEE NAME</label>
             <input
               type="text"
               pInputText
@@ -39,7 +39,7 @@
         </div>
         <div class="col-4">
           <div class="field">
-            <label for="donor_committee_fec_id">CONTRIBUTOR FEC ID</label>
+            <label for="donor_committee_fec_id">COMMITTEE ID</label>
             <input type="text" pInputText id="donor_committee_fec_id" formControlName="donor_committee_fec_id" />
             <app-error-messages
               [form]="form"
@@ -119,7 +119,7 @@
         </div>
       </div>
       <p-divider></p-divider>
-      <h3>Contribution</h3>
+      <h3>Receipt Information</h3>
       <div class="grid">
         <div class="col-6">
           <div class="field">
@@ -148,7 +148,6 @@
               ariaLabel="have memo item"
               [trueValue]="true"
               [falseValue]="false"
-              [(ngModel)]="memo_checked"
               [readonly]="readOnlyMemo"
             ></p-checkbox>
             <div class="memo-checkbox-note">
@@ -160,7 +159,7 @@
       <div class="grid">
         <div class="col-6">
           <div class="field">
-            <label for="contribution_amount">CONTRIBUTION AMOUNT</label>
+            <label for="contribution_amount">AMOUNT</label>
             <p-inputNumber
               inputId="contribution_amount"
               formControlName="contribution_amount"
@@ -179,7 +178,7 @@
         </div>
         <div class="col-6">
           <div class="field">
-            <label for="contribution_aggregate">CONTRIBUTION AGGREGATE</label>
+            <label for="contribution_aggregate">AGGREGATE</label>
             <p-inputNumber
               inputId="contribution_aggregate"
               formControlName="contribution_aggregate"
@@ -243,44 +242,24 @@
           </div>
         </div>
       </div>
-      <ng-container *ngIf="!this.transactionType?.transaction?.id">
-        <div class="grid">
+      <div class="grid">
+        <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls()?.inlineControls">
           <div class="col-3">
-            <button
-              pButton
-              pRipple
-              label="Save & add another Memo"
-              icon="pi pi-plus"
-              class="p-button-warning"
-              (click)="save('add another')"
-            ></button>
+            <app-navigation-control
+              [navigationControl]="navigationControl"
+              [transaction]="transactionType?.transaction"
+              (navigate)="handleNavigate($event)"
+            ></app-navigation-control>
           </div>
-        </div>
-      </ng-container>
+        </ng-template>
+      </div>
     </ng-container>
     <p-divider></p-divider>
-    <div class="grid">
-      <div class="col-2">
-        <button
-          pButton
-          pRipple
-          label="Back to Joint Fundraising Transfer"
-          class="p-button-secondary"
-          (click)="navigateTo('to-parent')"
-        ></button>
-      </div>
-      <div class="col-7"></div>
-      <div class="col-3">
-        <button
-          pButton
-          pRipple
-          label="Save & view all transactions"
-          class="p-button-primary"
-          (click)="save('list')"
-          [disabled]="!transactionType?.transaction?.contact"
-        ></button>
-      </div>
-    </div>
+    <app-navigation-control-bar
+      [navigationControls]="getNavigationControls()"
+      [transaction]="transactionType?.transaction"
+      (navigate)="handleNavigate($event)"
+    ></app-navigation-control-bar>
   </form>
 </div>
 

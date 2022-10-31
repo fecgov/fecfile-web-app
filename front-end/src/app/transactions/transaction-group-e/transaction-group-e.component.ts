@@ -1,13 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ContactService } from 'app/shared/services/contact.service';
-import { TransactionService } from 'app/shared/services/transaction.service';
-import { ValidateService } from 'app/shared/services/validate.service';
+import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
 @Component({
@@ -33,44 +28,24 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     'memo_text_description',
     'subTransaction',
   ];
-  subTransactions = [
-    {
-      label: "Individual JF Transfer Memo",
-      value: "INDV_JF_TRANSFER_MEMO",
-    },
-    {
-      label: "Party JF Transfer Memo",
-      value: "PARTY_JF_TRANSFER_MEMO",
-    },
-    {
-      label: "PAC JF Transfer Memo",
-      value: "PAC_JF_TRANSFER_MEMO",
-    },
-    {
-      label: "Tribal JF Transfer Memo",
-      value: "TRIBAL_JF_Transfer_Memo",
-    }
-  ]
+  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
 
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
 
-  constructor(
-    protected override messageService: MessageService,
-    protected override transactionService: TransactionService,
-    protected override contactService: ContactService,
-    protected override validateService: ValidateService,
-    protected override confirmationService: ConfirmationService,
-    protected override fb: FormBuilder,
-    protected override router: Router,
-    protected override fecDatePipe: FecDatePipe,
-  ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router, fecDatePipe);
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this.subTransactionOptions = (this.transactionType?.subTransactionTypes || []).map((type) => {
+      return {
+        label: LabelUtils.get(ScheduleATransactionTypeLabels, type),
+        value: type,
+      };
+    });
   }
 
-  createSubTransaction(event: {value: string}){
-    this.save('add-sub-tran', event.value);
-    this.form.get("subTransaction")?.reset(); // If the save fails, this clears the dropdown
+  createSubTransaction(event: { value: ScheduleATransactionTypes }) {
+    this.save(NavigationDestination.CHILD, event.value);
+    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }

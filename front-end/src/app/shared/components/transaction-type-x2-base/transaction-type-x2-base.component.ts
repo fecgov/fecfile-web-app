@@ -7,10 +7,12 @@ import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
-import { TransactionTypeBaseComponent, NavigateToType } from '../transaction-type-base/transaction-type-base.component';
+import { TransactionTypeBaseComponent } from '../transaction-type-base/transaction-type-base.component';
 import { ContactService } from 'app/shared/services/contact.service';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -74,7 +76,7 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
     this.childContactId$.complete();
   }
 
-  override save(navigateTo: NavigateToType, transactionTypeToAdd?: string) {
+  override save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleATransactionTypes) {
     this.formSubmitted = true;
 
     if (this.form.invalid || this.childForm.invalid) {
@@ -101,7 +103,11 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
     this.confirmSave(payload, this.form, this.childConfirmSave, navigateTo, payload, transactionTypeToAdd);
   }
 
-  private childConfirmSave(navigateTo: NavigateToType, payload: Transaction, transactionTypeToAdd?: string) {
+  private childConfirmSave(
+    navigateTo: NavigationDestination,
+    payload: Transaction,
+    transactionTypeToAdd?: ScheduleATransactionTypes
+  ) {
     if (payload.children?.length === 1) {
       // Confirm transaction from Group G
       this.confirmSave(

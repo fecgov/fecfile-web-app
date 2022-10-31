@@ -17,6 +17,8 @@ import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
 import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
+import { NavigationControlComponent } from './components/navigation-control/navigation-control/navigation-control.component';
+import { NavigationControlBarComponent } from './components/navigation-control-bar/navigation-control-bar.component';
 
 @NgModule({
   imports: [
@@ -39,8 +41,12 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     DefaultZeroPipe,
     HighlightTermsPipe,
     FecInternationalPhoneInputComponent,
+    NavigationControlComponent,
+    NavigationControlBarComponent,
     ContactLookupComponent,
     ContactFormComponent,
+    NavigationControlComponent,
+    NavigationControlBarComponent,
   ],
   exports: [
     FecDatePipe,
@@ -51,6 +57,8 @@ import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
     DefaultZeroPipe,
     HighlightTermsPipe,
     FecInternationalPhoneInputComponent,
+    NavigationControlComponent,
+    NavigationControlBarComponent,
     ContactLookupComponent,
     ContactFormComponent,
   ],

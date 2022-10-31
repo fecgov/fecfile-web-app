@@ -5,6 +5,9 @@ import { generateReportObject } from '../../support/generators/reports.spec';
 import { navigateTransactionAccordion } from '../../support/transactions.spec';
 import { groupANavTree, TransactionFields } from '../../support/transaction_nav_trees.spec';
 import { committeeID, randomString } from '../../support/generators/generators.spec';
+import { generateTransactionObject } from '../../support/generators/transactions.spec';
+import { generateContactToFit } from '../../support/generators/contacts.spec';
+import { enterContact } from '../../support/contacts.spec';
 
 function testField(fieldName, fieldRules, number: boolean = false) {
   const fieldLength = fieldRules['maxLength'];
@@ -90,17 +93,6 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
     cy.createReport(report);
   });
 
-  beforeEach(() => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-    cy.shortWait();
-    cy.get('p-button[icon="pi pi-pencil"]').click();
-    cy.shortWait();
-    cy.navigateToTransactionManagement();
-    cy.medWait();
-  });
-
   after('Cleanup', () => {
     cy.login();
     cy.visit('/dashboard');
@@ -108,14 +100,52 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
   });
 
   const navTree = groupANavTree;
-  for (let category of Object.keys(navTree)) {
-    for (let transactionName of Object.keys(navTree[category])) {
+  const transactionPairs = [];
+  for (const tCategory of Object.keys(navTree)) {
+    for (const tName of Object.keys(navTree[tCategory])) {
+      transactionPairs.push([tCategory, tName]);
+    }
+  }
+
+  for (let i = 0; i < transactionPairs.length; i += 1) {
+    const [tCategory, tName] = transactionPairs[i];
+    context('', (transactionName = tName, category = tCategory) => {
       it(`Tests the fields of ${transactionName}`, () => {
+        cy.login();
+        cy.visit('/dashboard');
+        cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
+        cy.shortWait();
+        cy.get('p-button[icon="pi pi-pencil"]').click();
+        cy.shortWait();
+        cy.navigateToTransactionManagement();
+        cy.medWait();
+
+        const tTree = {};
+        tTree[category] = {};
+        tTree[category][transactionName] = {};
+        const transaction: Transaction = generateTransactionObject(tTree);
+        const contact = generateContactToFit(transaction);
+
+        const entityTypeKey = Object.keys(transaction[category][transactionName]).find((key) => {
+          return key.startsWith('entityType');
+        }) as string;
+
         cy.get('button[label="Add new transaction"]').click();
         cy.shortWait();
 
         navigateTransactionAccordion(category, transactionName);
         cy.shortWait();
+
+        const entityRules = TransactionFields[entityTypeKey];
+        if (entityRules['entities'].length > 1) {
+          const contactEntity = contact['contact_type'];
+          cy.dropdownSetValue('.p-dropdown', contactEntity);
+        }
+        cy.shortWait();
+        cy.contains('a', 'Create a new contact').click();
+        cy.medWait();
+        enterContact(contact, true, true);
+        cy.medWait();
 
         const fields = Object.keys(groupANavTree[category][transactionName]);
 
@@ -136,6 +166,6 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
         cy.get('button[label="Cancel"]').click();
         cy.shortWait();
       });
-    }
+    });
   }
 });
