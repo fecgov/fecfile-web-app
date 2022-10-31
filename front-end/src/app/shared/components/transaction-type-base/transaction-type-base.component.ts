@@ -141,11 +141,16 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const memo_text = MemoText.fromJSON({
       text4000: formValues['memo_text_description'],
       report_id: this.transactionType?.transaction?.report_id,
-      rec_type: 'OVRD',
+      rec_type: '',
       filer_committee_id_number: this.transactionType?.transaction?.filer_committee_id_number,
       transaction_id_number: '',
-      back_reference_sched_form_name: 'SchA',
+      back_reference_sched_form_name: '',
     });
+
+    if (this.transactionType?.transaction?.id) {
+      memo_text.transaction_id = this.transactionType.transaction.id;
+    }
+
     formValues['memo_text'] = memo_text;
     delete formValues['memo_text_description'];
 
@@ -183,9 +188,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     formProperties: string[]
   ) {
     let formValues = validateService.getFormValues(form, formProperties);
-    if (formValues['memo_text_description']?.length > 0) {
-      formValues = this.retrieveMemoText(formValues);
-    }
+    formValues = this.retrieveMemoText(formValues);
 
     const payload: Transaction = SchATransaction.fromJSON({
       ...transactionType?.transaction,

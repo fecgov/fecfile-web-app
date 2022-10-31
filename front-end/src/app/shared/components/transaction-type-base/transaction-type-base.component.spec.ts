@@ -62,6 +62,8 @@ const testTransaction = {
   parent_transaction: undefined,
   fields_to_validate: undefined,
   itemized: false,
+  memo_text: undefined,
+  memo_text_id: undefined,
 };
 
 describe('TransactionTypeBaseComponent', () => {
@@ -122,6 +124,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -200,6 +204,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -228,6 +234,8 @@ describe('TransactionTypeBaseComponent', () => {
         contribution_purpose_descrip: undefined,
         parent_transaction_id: undefined,
         itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
       },
     } as TransactionType;
 
@@ -264,6 +272,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -291,6 +301,8 @@ describe('TransactionTypeBaseComponent', () => {
         contribution_purpose_descrip: undefined,
         parent_transaction_id: undefined,
         itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
       },
     } as TransactionType;
 
@@ -326,6 +338,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -353,6 +367,8 @@ describe('TransactionTypeBaseComponent', () => {
         contribution_purpose_descrip: undefined,
         parent_transaction_id: undefined,
         itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
       },
     } as TransactionType;
 
@@ -379,6 +395,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -404,6 +422,8 @@ describe('TransactionTypeBaseComponent', () => {
         contribution_purpose_descrip: undefined,
         parent_transaction_id: undefined,
         itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
       },
     } as TransactionType;
 
@@ -427,6 +447,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -452,6 +474,8 @@ describe('TransactionTypeBaseComponent', () => {
         contribution_purpose_descrip: undefined,
         parent_transaction_id: undefined,
         itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
       },
     } as TransactionType;
 
@@ -514,6 +538,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     component.transactionType = {
       transaction: testTransaction3,
