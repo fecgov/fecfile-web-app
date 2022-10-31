@@ -19,7 +19,7 @@ export class NavigationControl {
   icon?: string;
   ngClass?: string;
   visibleCondition: (transaction?: Transaction) => boolean = () => true;
-  disabledCondition: (transaction?: Transaction) => boolean = () => true;
+  disabledCondition: (transaction?: Transaction) => boolean = () => false;
 
   constructor(
     navigationAction: NavigationAction,
@@ -35,7 +35,7 @@ export class NavigationControl {
     this.label = label;
     this.ngClass = ngClass;
     this.visibleCondition = visibleCondition || (() => true);
-    this.disabledCondition = disabledCondition || (() => true);
+    this.disabledCondition = disabledCondition || (() => false);
     this.icon = icon;
   }
 }

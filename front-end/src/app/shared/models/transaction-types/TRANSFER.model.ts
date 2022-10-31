@@ -6,12 +6,9 @@ import {
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRANSFER';
-import { hasNoContact, isNewTransaction, Transaction } from '../../interfaces/transaction.interface';
+import { Transaction } from '../../interfaces/transaction.interface';
 import {
   CANCEL_CONTROL,
-  NavigationAction,
-  NavigationControl,
-  NavigationDestination,
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
@@ -27,17 +24,7 @@ export class TRANSFER implements TransactionType {
   contact = undefined;
   parent: SchATransaction | undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
-    [
-      new NavigationControl(
-        NavigationAction.SAVE,
-        NavigationDestination.ANOTHER,
-        'Save & add another Memo',
-        'p-button-warning',
-        hasNoContact,
-        isNewTransaction,
-        'pi pi-plus'
-      ),
-    ],
+    [],
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL]
   );
