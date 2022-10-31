@@ -18,6 +18,7 @@ import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
 import { ScheduleATransactionTypes } from '../../models/scha-transaction.model';
+import { MemoText } from 'app/shared/models/memo-text.model';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -62,8 +63,8 @@ const testTransaction = {
   parent_transaction: undefined,
   fields_to_validate: undefined,
   itemized: false,
-  memo_text: undefined,
-  memo_text_id: undefined,
+  memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
+  memo_text_id: 'ID Goes Here',
 };
 
 describe('TransactionTypeBaseComponent', () => {
