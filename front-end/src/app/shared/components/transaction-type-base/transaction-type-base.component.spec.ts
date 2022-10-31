@@ -63,8 +63,8 @@ const testTransaction = {
   parent_transaction: undefined,
   fields_to_validate: undefined,
   itemized: false,
-  memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
-  memo_text_id: 'ID Goes Here',
+  memo_text: undefined,
+  memo_text_id: undefined,
 };
 
 describe('TransactionTypeBaseComponent', () => {
@@ -125,8 +125,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
-      memo_text: undefined,
-      memo_text_id: undefined,
+      memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
+      memo_text_id: 'ID Goes Here',
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
