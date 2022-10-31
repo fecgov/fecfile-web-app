@@ -4,6 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -52,11 +53,12 @@ describe('TransactionContainerComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             data: of({
-              transactionType: TransactionTypeUtils.factory('OFFSET_TO_OPEX'),
+              transactionType: TransactionTypeUtils.factory('OFFSET_TO_OPERATING_EXPENDITURES'),
             }),
           },
         },
         provideMockStore(testMockStore),
+        FecDatePipe,
       ],
     }).compileComponents();
   });

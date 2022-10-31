@@ -58,6 +58,11 @@ label.disabled {
   font-style: italic;
 }
 
+.contact-confirm-dialog li {
+  list-style-type: disc;
+  margin-left: 2rem;
+}
+
 .collapse {
   border-collapse: collapse;
 }
@@ -78,6 +83,14 @@ label.disabled {
   background-color: #aeb0b5;
 }
 
+.font-karla {
+  font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+}
+
+.font-karla-bold {
+  font-family: karla-bold, karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+}
+
 .fec-background-gradient {
   background-image: linear-gradient(to bottom right, #1a4f82, #112e51);
 }
@@ -93,6 +106,10 @@ label.disabled {
 
 .image-max-width {
   max-width: 100%;
+}
+
+.no-padding {
+  padding: 0px;
 }
 
 .no-vert-margins {

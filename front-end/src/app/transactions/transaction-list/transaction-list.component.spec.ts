@@ -32,7 +32,7 @@ describe('CreateF3xStep4Component', () => {
               of(
                 SchATransaction.fromJSON({
                   id: transactionId,
-                  transaction_type_identifier: 'OFFSET_TO_OPEX',
+                  transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
                 })
               ),
             getTableData: () => of([]),

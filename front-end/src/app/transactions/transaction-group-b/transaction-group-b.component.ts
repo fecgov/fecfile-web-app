@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
@@ -45,8 +46,18 @@ export class TransactionGroupBComponent extends TransactionTypeBaseComponent imp
     protected override validateService: ValidateService,
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
-    protected override router: Router
+    protected override router: Router,
+    protected override fecDatePipe: FecDatePipe
   ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router);
+    super(
+      messageService,
+      transactionService,
+      contactService,
+      validateService,
+      confirmationService,
+      fb,
+      router,
+      fecDatePipe
+    );
   }
 }

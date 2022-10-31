@@ -40,6 +40,30 @@ export const CandidateOfficeTypeLabels = [
   [CandidateOfficeTypes.SENATE, 'Senate'],
 ];
 
+export enum ContactFields {
+  type = 'Type',
+  candidate_id = 'Candidate Id',
+  committee_id = 'Committee Id',
+  name = 'Name',
+  last_name = 'Last Name',
+  first_name = 'First Name',
+  middle_name = 'Middle Name',
+  prefix = 'Prefix',
+  suffix = 'Suffix',
+  street_1 = 'Street Address',
+  street_2 = 'Apartment, Suite, Etc.',
+  city = 'City',
+  state = 'State/Province',
+  zip = 'Zip/Postal Code',
+  employer = 'Employer',
+  occupation = 'Occupation',
+  candidate_office = 'Candidate Office',
+  candidate_state = 'Candidate State',
+  candidate_district = 'Candidate District',
+  telephone = 'Telephone',
+  country = 'Country',
+}
+
 export class Contact extends BaseModel {
   id: string | undefined;
   type: ContactType = ContactTypes.INDIVIDUAL;

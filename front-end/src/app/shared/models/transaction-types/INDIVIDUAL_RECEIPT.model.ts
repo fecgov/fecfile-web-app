@@ -1,16 +1,22 @@
 import { TransactionType } from '../../interfaces/transaction-type.interface';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
+import {
+  SchATransaction,
+  ScheduleATransactionTypes,
+  ScheduleATransactionTypeLabels,
+  AggregationGroups,
+} from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDV_REC';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECEIPT';
 
-export class INDV_REC implements TransactionType {
+export class INDIVIDUAL_RECEIPT implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'A';
+  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
   schema = schema;
   transaction = undefined;
-  contact = undefined;
-  parent = undefined;
+  parentTransaction = undefined;
+  childTransactionType = undefined;
 
   contributionPurposeDescripReadonly(): string {
     return '';
@@ -20,6 +26,7 @@ export class INDV_REC implements TransactionType {
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

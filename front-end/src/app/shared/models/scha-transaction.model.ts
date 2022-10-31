@@ -2,6 +2,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction } from '../interfaces/transaction.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
+import { Contact } from './contact.model';
 
 export class SchATransaction extends BaseModel implements Transaction {
   id: string | undefined;
@@ -28,6 +29,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   @Transform(BaseModel.dateTransform) contribution_date: Date | undefined;
   contribution_amount: number | undefined;
   contribution_aggregate: number | undefined;
+  aggregation_group: AggregationGroups | undefined;
   contribution_purpose_descrip: string | undefined;
   contributor_employer: string | undefined;
   contributor_occupation: string | undefined;
@@ -53,6 +55,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
   transaction_type_identifier: string | undefined;
 
+  parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined; // Foreign key to the SchATransaction model
 
   created: string | undefined;
@@ -61,7 +64,12 @@ export class SchATransaction extends BaseModel implements Transaction {
 
   report_id: string | undefined; // Foreign key to the F3XSummary model
 
+  contact: Contact | undefined;
   contact_id: string | undefined; // Foreign key to the Contact model
+
+  children: Transaction[] | undefined;
+
+  fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
 
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -86,13 +94,13 @@ export type ScheduleATransactionGroupsType =
 
 export enum ScheduleATransactionTypes {
   // Contributions from Individuals/Persons
-  INDIVIDUAL_RECEIPT = 'INDV_REC',
-  TRIBAL_RECEIPT = 'TRIB_REC',
+  INDIVIDUAL_RECEIPT = 'INDIVIDUAL_RECEIPT',
+  TRIBAL_RECEIPT = 'TRIBAL_RECEIPT',
   PARTNERSHIP_RECEIPT = 'PARTN_REC',
   REATTRIBUTION = 'REATT_FROM',
   IN_KIND_RECEIPT = 'IK_REC',
   RETURNED_BOUNCED_RECEIPT_INDIVIDUAL = 'RET_REC',
-  EARMARK_RECEIPT = 'EAR_REC',
+  EARMARK_RECEIPT = 'EARMARK_RECEIPT',
   CONDUIT_EARMARK_DEPOSITED = 'CONDUIT_EARMARK_DEPOSITED',
   CONDUIT_EARMARK_UNDEPOSITED = 'CONDUIT_EARMARK_UNDEPOSITED',
   UNREGISTERED_RECEIPT_FROM_PERSON = 'PAC_NON_FED_REC',
@@ -109,8 +117,8 @@ export enum ScheduleATransactionTypes {
   RETURNED_BOUNCED_RECEIPT_PAC = 'PAC_RET',
   // Transfers
   TRANSFERS = 'TRAN',
-  JF_TRANSFER = 'JF_TRAN',
-  JF_TRAN_PAC_MEMO = 'JF_TRAN_PAC_MEMO',
+  JOINT_FUNDRAISING_TRANSFER = 'JOINT_FUNDRAISING_TRANSFER',
+  PAC_JF_TRANSFER_MEMO = 'PAC_JF_TRANSFER_MEMO',
   IN_KIND_TRANSFER = 'IK_TRAN',
   IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRAN_NP_RECNT_ACC',
@@ -120,8 +128,8 @@ export enum ScheduleATransactionTypes {
   REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES = 'REF_TO_FED_CAN',
   REFUNDS_OF_CONTRIBUTIONS_TO_UNREGISTERED_COMMITTEES = 'REF_TO_OTH_CMTE',
   // Other
-  OFFSETS_TO_OPERATING_EXPENDITURES = 'OFFSET_TO_OPEX',
-  OTHER_RECEIPTS = 'OTH_REC',
+  OFFSET_TO_OPERATING_EXPENDITURES = 'OFFSET_TO_OPERATING_EXPENDITURES',
+  OTHER_RECEIPTS = 'OTHER_RECEIPT',
   IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'IND_REC_NON_CONT_ACC',
   OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'OTH_CMTE_NON_CONT_ACC',
   BUSINESS_LABOR_ORG_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'BUS_LAB_NON_CONT_ACC',
@@ -144,6 +152,8 @@ export enum ScheduleATransactionTypes {
   EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION = 'EAR_REC_RECNT_ACC',
   EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION = 'EAR_REC_CONVEN_ACC',
   EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION = 'EAR_REC_HQ_ACC',
+  // Child transactiion types
+  EARMARK_MEMO = 'EARMARK_MEMO',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -174,8 +184,8 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC, 'Returned/Bounced Receipt (PAC)'],
   // Transfers
   [ScheduleATransactionTypes.TRANSFERS, 'Transfers'],
-  [ScheduleATransactionTypes.JF_TRANSFER, 'Joint Fundraising Transfer'],
-  [ScheduleATransactionTypes.JF_TRAN_PAC_MEMO, 'PAC Joint Fundraising Transfer Memo'],
+  [ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER, 'Joint Fundraising Transfer'],
+  [ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO, 'PAC Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer - Federal Election Activity'],
   [
@@ -200,7 +210,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Refunds of Contributions to Unregistered Committees',
   ],
   // Other
-  [ScheduleATransactionTypes.OFFSETS_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
+  [ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
   [ScheduleATransactionTypes.OTHER_RECEIPTS, 'Other Receipts'],
   [ScheduleATransactionTypes.IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT, 'Individual Receipt - Non-Contribution Account'],
   [
@@ -255,3 +265,15 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Earmark Receipt for Headquarters Account (Contribution)',
   ],
 ];
+
+export enum AggregationGroups {
+  GENERAL = 'GENERAL',
+  LINE_15 = 'LINE_15',
+  LINE_16 = 'LINE_16',
+  NPARTY_CONVENTION = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  NPARTY_HEADQUARTERS = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  NPARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  NON_CONTRIBUTION_ACCOUNT = 'NON_CONTRIBUTION_ACCOUNT',
+  OTHER_RECEIPTS = 'OTHER_RECEIPTS',
+  RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
+}

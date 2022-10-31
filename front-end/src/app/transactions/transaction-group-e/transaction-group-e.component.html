@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 
 <div class="p-fluid">
-  <h1>{{ title }}</h1>
+  <h1>{{ transactionType?.title }}</h1>
   <h3>Contributor</h3>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <ng-container *ngIf="contact">
+    <ng-container *ngIf="transactionType?.transaction?.contact">
       <div class="grid">
         <div class="col-4">
           <div class="field">
@@ -242,15 +242,18 @@
         </div>
       </div>
       <div class="grid">
-        <div class="col-3">
-          <button
-            pButton
-            pRipple
-            label="Save & add a Memo"
-            icon="pi pi-plus"
-            class="p-button-warning"
-            (click)="save('add-sub-tran', 'JF_TRAN_PAC_MEMO')"
-          ></button>
+        <div class="col-2">
+          <p-dropdown
+            inputId="subTransaction"
+            [options]="subTransactions"
+            formControlName="subTransaction"
+            [autoDisplayFirst]="false"
+            (onChange)="createSubTransaction($event)"
+            placeholder="Save & add a Memo"
+            dropdownIcon="pi pi-plus"
+            styleClass="sub-transaction-dropdown"
+            panelStyleClass="sub-transaction-dropdown-panel"
+          ></p-dropdown>
         </div>
       </div>
     </ng-container>
@@ -259,7 +262,7 @@
       <div class="col-2">
         <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="navigateTo('list')"></button>
       </div>
-      <div ng-class="isExisting() ? 'col-7' : 'col-4'"></div>
+      <div ng-class="isExisting(transaction) ? 'col-7' : 'col-4'"></div>
       <div class="col-3">
         <button
           pButton
@@ -267,19 +270,21 @@
           label="Save & view all transactions"
           class="p-button-primary"
           (click)="save('list')"
-          [disabled]="!contact"
+          [disabled]="!transactionType?.transaction?.contact"
         ></button>
       </div>
-      <div *ngIf="!isExisting()" class="col-3">
+      <div *ngIf="!isExisting(transactionType?.transaction)" class="col-3">
         <button
           pButton
           pRipple
           label="Save & add another"
           class="p-button-info"
           (click)="save('add another')"
-          [disabled]="!contact"
+          [disabled]="!transactionType?.transaction?.contact"
         ></button>
       </div>
     </div>
   </form>
 </div>
+
+<p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>

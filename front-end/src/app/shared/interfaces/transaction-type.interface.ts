@@ -1,4 +1,3 @@
-import { Contact } from '../models/contact.model';
 import { JsonSchema } from './json-schema.interface';
 import { Transaction } from './transaction.interface';
 
@@ -8,12 +7,13 @@ import { Transaction } from './transaction.interface';
  */
 export interface TransactionType {
   scheduleId: string;
-  componentGroupId: string;
+  componentGroupId: string; // Identifier of transaction component use to render UI form entry page
+  isDependentChild: boolean; // When set to true, the parent transaction is used to generate UI form entry page
   title: string;
-  schema: JsonSchema;
+  schema: JsonSchema; // FEC validation JSON schema
   transaction: Transaction | undefined;
-  contact: Contact | undefined;
-  parent: Transaction | undefined;
-  contributionPurposeDescripReadonly(): string;
-  getNewTransaction(): Transaction;
+  parentTransaction: Transaction | undefined;
+  childTransactionType: TransactionType | undefined;
+  contributionPurposeDescripReadonly(): string; // Dynamically generates the text in the CPD field
+  getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 }

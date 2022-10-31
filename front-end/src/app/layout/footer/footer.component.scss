@@ -6,3 +6,48 @@ footer {
 footer label {
   font-weight: bold;
 }
+
+#footer-upper {
+  height: 80px;
+  background-color: #e8e8e8;
+  padding: 5px;
+}
+
+#footer-lower {
+  height: 234px;
+  background-color: #164f85;
+  padding: 5px;
+}
+
+#fec-seal {
+  height: 100px;
+  width: 100px;
+}
+
+#fec-title {
+  font-family: 'gandhi-bold', serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: #ffffff;
+  margin: 0px;
+  line-height: 2.5rem;
+}
+
+#fec-address {
+  font-weight: 400;
+  font-size: 14px;
+  color: #ffffff;
+  margin: 0px;
+  line-height: 1.5rem;
+}
+
+.footer-upper-text {
+  font-size: 18px;
+  color: #212121;
+}
+
+.footer-item {
+  font-size: 16px;
+  color: #ffffff;
+  padding-left: 0px;
+}
