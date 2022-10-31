@@ -137,7 +137,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
-  retrieveMemoText(formValues: object) {
+  retrieveMemoText(formValues: any) {
     const memo_text = MemoText.fromJSON({
       text4000: formValues['memo_text_description'],
       report_id: this.transactionType?.transaction?.report_id,
