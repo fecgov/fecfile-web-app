@@ -149,10 +149,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     const memo_text = MemoText.fromJSON({
       text4000: formValues['memo_text_description'],
       report_id: this.transactionType?.transaction?.report_id,
-      rec_type: '',
+      rec_type: 'TEXT',
       filer_committee_id_number: this.transactionType?.transaction?.filer_committee_id_number,
       transaction_id_number: '',
-      back_reference_sched_form_name: '',
+      back_reference_sched_form_name: this.transactionType?.transaction?.form_type,
     });
 
     if (this.transactionType?.transaction?.id) {
