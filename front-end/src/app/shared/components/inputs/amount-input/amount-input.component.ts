@@ -4,7 +4,6 @@ import { BaseInputComponent } from '../base-input.component';
 @Component({
   selector: 'app-amount-input',
   templateUrl: './amount-input.component.html',
-  styleUrls: ['./amount-input.component.scss'],
 })
 export class AmountInputComponent extends BaseInputComponent implements OnInit {
   @Input() memoCodeReadOnly = false;
