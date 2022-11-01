@@ -156,7 +156,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     });
 
     if (this.transactionType?.transaction?.id) {
-      memo_text.transaction_id = this.transactionType.transaction.id;
+      memo_text.transaction_uuid = this.transactionType.transaction.id;
     }
 
     formValues['memo_text'] = memo_text;

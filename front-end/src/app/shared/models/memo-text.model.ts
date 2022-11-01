@@ -6,7 +6,7 @@ export class MemoText extends BaseModel {
   rec_type: string | undefined;
   filer_committee_id_number: string | undefined;
   transaction_id_number: string | undefined;
-  transaction_id: string | undefined;
+  transaction_uuid: string | undefined;
   back_reference_tran_id_number: string | undefined;
   back_reference_sched_form_name: string | undefined;
   text4000: string | undefined;
