@@ -19,3 +19,9 @@ export interface Transaction {
   children: Transaction[] | undefined;
   fields_to_validate: string[] | undefined;
 }
+export function isNewTransaction(transaction?: Transaction): boolean {
+  return !transaction?.id;
+}
+export function hasNoContact(transaction?: Transaction): boolean {
+  return !transaction?.contact;
+}

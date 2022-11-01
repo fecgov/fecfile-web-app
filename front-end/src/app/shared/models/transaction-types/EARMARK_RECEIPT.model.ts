@@ -8,6 +8,11 @@ import {
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
+import {
+  CANCEL_CONTROL,
+  SAVE_LIST_CONTROL,
+  TransactionNavigationControls,
+} from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
 
 export class EARMARK_RECEIPT implements TransactionType {
@@ -19,14 +24,19 @@ export class EARMARK_RECEIPT implements TransactionType {
   transaction: SchATransaction | undefined = undefined;
   parentTransaction = undefined;
   childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
+  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+    [],
+    [CANCEL_CONTROL],
+    [SAVE_LIST_CONTROL]
+  );
 
   contributionPurposeDescripReadonly(): string {
     const earmarkMemo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    let conduit = earmarkMemo.contributor_organization_name || '';
+    let conduit = earmarkMemo?.contributor_organization_name || '';
     if (
-      earmarkMemo.entity_type === ContactTypes.INDIVIDUAL &&
-      earmarkMemo.contributor_first_name &&
-      earmarkMemo.contributor_last_name
+      earmarkMemo?.entity_type === ContactTypes.INDIVIDUAL &&
+      earmarkMemo?.contributor_first_name &&
+      earmarkMemo?.contributor_last_name
     ) {
       conduit = `${earmarkMemo.contributor_first_name || ''} ${earmarkMemo.contributor_last_name || ''}`;
     }

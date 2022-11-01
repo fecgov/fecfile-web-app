@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -172,16 +173,16 @@ describe('TransactionTypeBaseComponent', () => {
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact;
     }
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     component.form = new FormGroup([]);
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.INDIVIDUAL;
     testContact2.id = 'testId';
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact2;
     }
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = undefined;
     }
@@ -243,17 +244,17 @@ describe('TransactionTypeBaseComponent', () => {
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact;
     }
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     component.form = new FormGroup([]);
     component.form.addControl('donor_committee_fec_id', new FormControl('test'));
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.COMMITTEE;
     testContact2.id = 'testId';
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact2;
     }
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
 
@@ -310,16 +311,16 @@ describe('TransactionTypeBaseComponent', () => {
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact;
     }
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     component.form = new FormGroup([]);
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.ORGANIZATION;
     testContact2.id = 'testId';
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact2;
     }
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
 
@@ -376,7 +377,7 @@ describe('TransactionTypeBaseComponent', () => {
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = undefined;
     }
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -428,7 +429,7 @@ describe('TransactionTypeBaseComponent', () => {
       },
     } as TransactionType;
 
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -480,12 +481,12 @@ describe('TransactionTypeBaseComponent', () => {
       },
     } as TransactionType;
 
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     tick(1000);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   }));
 
-  it("#navigateTo 'add another' should show popup", () => {
+  it('#navigateTo NavigationDestination.ANOTHER should show popup', () => {
     const expectedMessage: Message = {
       severity: 'success',
       summary: 'Successful',
@@ -493,13 +494,13 @@ describe('TransactionTypeBaseComponent', () => {
       life: 3000,
     };
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
-    component.navigateTo('add another');
+    component.navigateTo(NavigationDestination.ANOTHER);
     expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
-  it("#navigateTo 'add-sub-tran' should show popup + navigate", () => {
+  it('#navigateTo NavigationDestination.CHILD should show popup + navigate', () => {
     const testTransactionId = '1';
-    const testTransactionTypeToAdd = 'testTransactionTypeToAdd';
+    const testTransactionTypeToAdd = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;
 
     component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     if (component.transactionType) {
@@ -518,12 +519,12 @@ describe('TransactionTypeBaseComponent', () => {
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
 
-    component.navigateTo('add-sub-tran', testTransactionId, testTransactionTypeToAdd);
+    component.navigateTo(NavigationDestination.CHILD, testTransactionId, testTransactionTypeToAdd);
     expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
-  it("#navigateTo 'list' should navigate", () => {
+  it('#navigateTo NavigationDestination.LIST should navigate', () => {
     const testTransaction3: Transaction = {
       id: '123',
       report_id: '99',
@@ -547,22 +548,22 @@ describe('TransactionTypeBaseComponent', () => {
     } as TransactionType;
     const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo('list');
+    component.navigateTo(NavigationDestination.LIST);
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
-  it("#navigateTo 'add-sub-tran' should navigate", () => {
+  it('#navigateTo NavigationDestination.CHILD should navigate', () => {
     component.transactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
     if (component.transactionType) {
       component.transactionType.transaction = testTransaction;
     }
     const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo('add-sub-tran', '123', 'INDIVIDUAL_RECEIPT');
+    component.navigateTo(NavigationDestination.CHILD, '123', ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
-  it("#navigateTo 'to-parent' should navigate", () => {
+  it('#navigateTo NavigationDestination.PARENT should navigate', () => {
     const transaction = { ...testTransaction } as Transaction;
     transaction.parent_transaction_id = '333';
     component.transactionType = {
@@ -570,7 +571,7 @@ describe('TransactionTypeBaseComponent', () => {
     } as TransactionType;
     const expectedRoute = '/transactions/report/999/list/edit/333';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo('to-parent');
+    component.navigateTo(NavigationDestination.PARENT);
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
@@ -581,7 +582,7 @@ describe('TransactionTypeBaseComponent', () => {
     }
     const expectedRoute = '/transactions/report/999/list';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo('list');
+    component.navigateTo(NavigationDestination.LIST);
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
@@ -703,6 +704,45 @@ describe('TransactionTypeBaseComponent', () => {
 
     component.form.addControl('entity_type', { value: testEntityType });
     component.onContactLookupSelect(testContactSelectItem);
+  });
+  it('#onContactLookupSelect INDIVIDUAL should calculate aggregate', () => {
+    component.transactionType = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+    ) as TransactionType;
+    component.doInit(component.form, new ValidateService(), component.transactionType, component.contactId$);
+    component.transactionType.transaction = component.transactionType.getNewTransaction();
+
+    const testEntityType = ContactTypes.INDIVIDUAL;
+
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.INDIVIDUAL;
+    testContact.last_name = 'testLastName';
+    testContact.first_name = 'testFirstName';
+    testContact.middle_name = 'testMiddleName';
+    testContact.prefix = 'testPrefix';
+    testContact.suffix = 'testSuffix';
+    testContact.employer = 'testEmployer';
+    testContact.occupation = 'testOccupation';
+    testContact.street_1 = 'testStreet1';
+    testContact.street_2 = 'testStreet2';
+    testContact.city = 'testCity';
+    testContact.state = 'testState';
+    testContact.zip = 'testZip';
+
+    const testContactSelectItem: SelectItem<Contact> = {
+      value: testContact,
+    };
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.form.get('contribution_amount')?.setValue(1111);
+    component.form.get('contribution_date')?.setValue('2022-03-02');
+
+    const getPreviousTransactionSpy = spyOn(testTransactionService, 'getPreviousTransaction').and.returnValue(
+      of(testTransaction)
+    );
+    component.onContactLookupSelect(testContactSelectItem);
+    expect(getPreviousTransactionSpy).toHaveBeenCalledTimes(1);
   });
 
   it('#onContactLookupSelect ORG should handle null form', () => {
