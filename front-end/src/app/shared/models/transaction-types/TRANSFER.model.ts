@@ -9,6 +9,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRANSFER';
 import { Transaction } from '../../interfaces/transaction.interface';
 import {
   CANCEL_CONTROL,
+  SAVE_ANOTHER_CONTROL,
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
@@ -26,7 +27,7 @@ export class TRANSFER implements TransactionType {
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL]
+    [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
   contributionPurposeDescripReadonly(): string {
