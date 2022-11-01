@@ -21,6 +21,7 @@ import { ToastModule } from 'primeng/toast';
 import { EARMARK_RECEIPT } from '../../shared/models/transaction-types/EARMARK_RECEIPT.model';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupAgComponent } from './transaction-group-ag.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 describe('TransactionGroupAgComponent', () => {
   let component: TransactionGroupAgComponent;
@@ -51,6 +52,7 @@ describe('TransactionGroupAgComponent', () => {
         InputTextareaModule,
         InputNumberModule,
         BrowserAnimationsModule,
+        ConfirmDialogModule,
       ],
       declarations: [TransactionGroupAgComponent],
       providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
