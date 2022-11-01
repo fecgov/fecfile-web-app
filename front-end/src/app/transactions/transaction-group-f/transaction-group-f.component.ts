@@ -33,14 +33,16 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
 
   override ngOnInit(): void {
     super.ngOnInit();
-    const memoCodeConst = this.getMemoCodeConstFromSchema();
-    this.readOnlyMemo = memoCodeConst as boolean;
-    this.form.get('memo_code')?.setValue(memoCodeConst);
+    if (this.memoCodeMustBeTrue()) {
+      this.readOnlyMemo = true;
+      this.form.get('memo_code')?.setValue(true);
+    }
   }
 
-  protected getMemoCodeConstFromSchema(): boolean | undefined {
+  protected memoCodeMustBeTrue(): boolean {
+    // Look at validation schema to determine if the memo_code must be true in all cases.
     const memoCodeSchema = this.transactionType?.schema.properties['memo_code'];
-    return memoCodeSchema?.const as boolean;
+    return !!memoCodeSchema?.const;
   }
 
   protected override doResetForm(form: FormGroup, transactionType?: TransactionType) {
@@ -51,7 +53,7 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
-      memo_code: this.getMemoCodeConstFromSchema(),
+      memo_code: this.memoCodeMustBeTrue(),
       contribution_purpose_descrip: transactionType?.contributionPurposeDescripReadonly(),
     });
   }
