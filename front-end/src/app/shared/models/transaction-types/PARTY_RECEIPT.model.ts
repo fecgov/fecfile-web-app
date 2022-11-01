@@ -6,7 +6,13 @@ import {
   AggregationGroups,
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTY_RECEIPT';
+import {
+  CANCEL_CONTROL,
+  SAVE_LIST_CONTROL,
+  SAVE_ANOTHER_CONTROL,
+  TransactionNavigationControls,
+} from '../transaction-navigation-controls.model';
 
 export class PARTY_RECEIPT implements TransactionType {
   scheduleId = 'A';
@@ -15,8 +21,11 @@ export class PARTY_RECEIPT implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_RECEIPT);
   schema = schema;
   transaction = undefined;
-  parentTransaction: SchATransaction | undefined = undefined;
-  childTransactionType = undefined;
+  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+    [],
+    [CANCEL_CONTROL],
+    [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
+  );
 
   contributionPurposeDescripReadonly(): string {
     return '';
