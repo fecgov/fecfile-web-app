@@ -6,23 +6,21 @@ import {
   AggregationGroups,
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPERATING_EXPENDITURES';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTY_RECEIPT';
 import {
   CANCEL_CONTROL,
-  SAVE_ANOTHER_CONTROL,
   SAVE_LIST_CONTROL,
+  SAVE_ANOTHER_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 
-export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
+export class PARTY_RECEIPT implements TransactionType {
   scheduleId = 'A';
-  componentGroupId = 'B';
+  componentGroupId = 'F';
   isDependentChild = false;
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
+  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_RECEIPT);
   schema = schema;
   transaction = undefined;
-  parentTransaction = undefined;
-  childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
@@ -35,9 +33,10 @@ export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA15',
-      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      aggregation_group: AggregationGroups.LINE_15,
+      form_type: 'SA11B',
+      transaction_type_identifier: ScheduleATransactionTypes.PARTY_RECEIPT,
+      back_reference_sched_name: 'SA11B',
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }

@@ -1,19 +1,13 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
-import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { EARMARK_MEMO } from './EARMARK_MEMO.model';
+import { EARMARK_RECEIPT } from './EARMARK_RECEIPT.model';
 
 describe('EARMARK_RECEIPT', () => {
-  let transactionType: TransactionType | undefined;
+  let transactionType: EARMARK_RECEIPT;
 
   beforeEach(() => {
-    transactionType = TransactionTypeUtils.factory('EARMARK_RECEIPT');
-    if (transactionType) {
-      transactionType.transaction = SchATransaction.fromJSON({
-        id: 999,
-        entitiy_type: ContactTypes.INDIVIDUAL,
-      });
-    }
+    transactionType = new EARMARK_RECEIPT();
   });
 
   it('should create an instance', () => {
@@ -25,19 +19,25 @@ describe('EARMARK_RECEIPT', () => {
   });
 
   it('#factory() should return a SchATransaction', () => {
-    if (!transactionType) {
-      return;
-    }
     const txn = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA11AI');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_RECEIPT);
   });
 
-  xit('#contributionPurposeDescripReadonly() should return an empty string', () => {
-    if (!transactionType) {
-      return;
-    }
+  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
     expect(descrip).toBe('');
+  });
+
+  it('#contributionPurposeDescripReadonly() should reflect child', () => {
+    const childTransactionType: EARMARK_MEMO = new EARMARK_MEMO();
+    childTransactionType.transaction = childTransactionType.getNewTransaction();
+    childTransactionType.transaction.entity_type = ContactTypes.INDIVIDUAL;
+    childTransactionType.transaction.contributor_first_name = 'Joe';
+    childTransactionType.transaction.contributor_last_name = 'Smith';
+
+    transactionType.childTransactionType = childTransactionType;
+    const descrip = transactionType.contributionPurposeDescripReadonly();
+    expect(descrip).toBe('Earmarked through Joe Smith');
   });
 });

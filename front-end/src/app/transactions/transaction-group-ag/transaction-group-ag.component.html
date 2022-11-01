@@ -102,21 +102,11 @@
   </p-accordionTab>
 </p-accordion>
 
-<div class="grid">
-  <div class="col-2">
-    <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="navigateTo('list')"></button>
-  </div>
-  <div ng-class="isExisting(transaction) ? 'col-7' : 'col-4'"></div>
-  <div class="col-3">
-    <button
-      pButton
-      pRipple
-      label="Save & view all transactions"
-      class="p-button-primary"
-      (click)="save('list')"
-    ></button>
-  </div>
-</div>
+<app-navigation-control-bar
+  [navigationControls]="getNavigationControls()"
+  [transaction]="transactionType?.transaction"
+  (navigate)="handleNavigate($event)"
+></app-navigation-control-bar>
 
 <p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
 <p-confirmDialog key="childDialog" [style]="{ width: '450px' }"></p-confirmDialog>
