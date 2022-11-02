@@ -9,6 +9,7 @@ import { PAC_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_JF_TRANSFE
 import { PARTY_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTY_JF_TRANSFER_MEMO.model';
 import { PARTY_RECEIPT } from '../models/transaction-types/PARTY_RECEIPT.model';
 import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
+import { PAC_RECEIPT } from '../models/transaction-types/PAC_RECEIPT.model';
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
 
 // prettier-ignore
@@ -21,9 +22,10 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   OFFSET_TO_OPERATING_EXPENDITURES,
   OTHER_RECEIPT,
   PAC_JF_TRANSFER_MEMO,
+  PAC_RECEIPT,
+  PARTY_JF_TRANSFER_MEMO,
   PARTY_RECEIPT,
   TRIBAL_RECEIPT,
-  PARTY_JF_TRANSFER_MEMO,
 }
 
 export class TransactionTypeUtils {
