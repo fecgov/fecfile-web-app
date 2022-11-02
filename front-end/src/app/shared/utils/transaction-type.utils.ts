@@ -1,13 +1,14 @@
 import { TransactionType } from '../interfaces/transaction-type.interface';
-import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
+import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
 import { INDIVIDUAL_RECEIPT } from '../models/transaction-types/INDIVIDUAL_RECEIPT.model';
-import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
 import { JOINT_FUNDRAISING_TRANSFER } from '../models/transaction-types/JOINT_FUNDRAISING_TRANSFER.model';
 import { OFFSET_TO_OPERATING_EXPENDITURES } from '../models/transaction-types/OFFSET_TO_OPERATING_EXPENDITURES.model';
 import { OTHER_RECEIPT } from '../models/transaction-types/OTHER_RECEIPT.model';
 import { PAC_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_JF_TRANSFER_MEMO.model';
+import { PARTY_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTY_JF_TRANSFER_MEMO.model';
 import { PARTY_RECEIPT } from '../models/transaction-types/PARTY_RECEIPT.model';
+import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
 
 // prettier-ignore
@@ -22,6 +23,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PAC_JF_TRANSFER_MEMO,
   PARTY_RECEIPT,
   TRIBAL_RECEIPT,
+  PARTY_JF_TRANSFER_MEMO,
 }
 
 export class TransactionTypeUtils {
