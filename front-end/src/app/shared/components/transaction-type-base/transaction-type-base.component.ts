@@ -146,20 +146,25 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   retrieveMemoText(formValues: any) {
-    const memo_text = MemoText.fromJSON({
-      text4000: formValues['memo_text_description'],
-      report_id: this.transactionType?.transaction?.report_id,
-      rec_type: 'TEXT',
-      filer_committee_id_number: this.transactionType?.transaction?.filer_committee_id_number,
-      transaction_id_number: '',
-      back_reference_sched_form_name: this.transactionType?.transaction?.form_type,
-    });
+    const text = formValues['memo_text_description'];
+    if (text && text.length > 0) {
+      const memo_text = MemoText.fromJSON({
+        text4000: text,
+        report_id: this.transactionType?.transaction?.report_id,
+        rec_type: 'TEXT',
+        filer_committee_id_number: this.transactionType?.transaction?.filer_committee_id_number,
+        transaction_id_number: '',
+        back_reference_sched_form_name: this.transactionType?.transaction?.form_type,
+      });
 
-    if (this.transactionType?.transaction?.id) {
-      memo_text.transaction_uuid = this.transactionType.transaction.id;
+      if (this.transactionType?.transaction?.id) {
+        memo_text.transaction_uuid = this.transactionType.transaction.id;
+      }
+
+      formValues['memo_text'] = memo_text;
+    } else {
+      formValues['memo_text'] = undefined;
     }
-
-    formValues['memo_text'] = memo_text;
     delete formValues['memo_text_description'];
 
     return formValues;
