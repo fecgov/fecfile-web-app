@@ -16,7 +16,7 @@ export class MemoTextService {
 
   public getForReportId(reportId: string): Observable<MemoText[]> {
     return this.apiService
-      .get<MemoText[]>(`/memo-text/?report_id=${reportId}&transaction_id_number=REPORT_MEMO_TEXT_1`)
+      .get<MemoText[]>(`/memo-text/?report_id=${reportId}`)
       .pipe(map((response) => response.map((memoText) => MemoText.fromJSON(memoText))));
   }
 
