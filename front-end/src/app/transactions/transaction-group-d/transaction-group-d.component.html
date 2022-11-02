@@ -128,7 +128,7 @@
       </div>
       <div class="grid">
         <div class="col-12">
-          <div class="field">
+          <div class="field" [ngClass]="{ readonly: readOnlyMemo }">
             <p-checkbox
               [binary]="true"
               inputId="memo_code"
@@ -137,6 +137,7 @@
               ariaLabel="have memo item"
               [trueValue]="true"
               [falseValue]="false"
+              [readonly]="readOnlyMemo"
             ></p-checkbox>
             <div class="memo-checkbox-note">
               {{ memoItemHelpText }}
@@ -229,6 +230,17 @@
             ></app-error-messages>
           </div>
         </div>
+      </div>
+      <div class="grid">
+        <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls().inlineControls">
+          <div class="col-3">
+            <app-navigation-control
+              [navigationControl]="navigationControl"
+              [transaction]="transactionType?.transaction"
+              (navigate)="handleNavigate($event)"
+            ></app-navigation-control>
+          </div>
+        </ng-template>
       </div>
     </ng-container>
     <p-divider></p-divider>
