@@ -397,6 +397,58 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: MemoText.fromJSON({ text4000: 'Memo' }),
+      memo_text_id: undefined,
+    };
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testApiService, 'post').and.returnValue(of(testContact));
+    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+
+    const componentNavigateToSpy = spyOn(component, 'navigateTo');
+    component.transactionType = {
+      transaction: {
+        id: undefined,
+        report_id: undefined,
+        contact: undefined,
+        contact_id: undefined,
+        form_type: undefined,
+        filer_committee_id_number: undefined,
+        transaction_id: null,
+        transaction_type_identifier: 'test',
+        contribution_purpose_descrip: undefined,
+        parent_transaction_id: undefined,
+        itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
+      },
+    } as TransactionType;
+
+    component.save(NavigationDestination.LIST);
+    expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('#save should navigate for create', () => {
+    const testTransaction1: Transaction = {
+      id: undefined,
+      report_id: undefined,
+      contact: undefined,
+      contact_id: undefined,
+      form_type: undefined,
+      filer_committee_id_number: undefined,
+      transaction_id: null,
+      transaction_type_identifier: undefined,
+      contribution_purpose_descrip: undefined,
+      parent_transaction_id: undefined,
+      children: undefined,
+      parent_transaction: undefined,
+      fields_to_validate: undefined,
+      itemized: false,
       memo_text: undefined,
       memo_text_id: undefined,
     };
