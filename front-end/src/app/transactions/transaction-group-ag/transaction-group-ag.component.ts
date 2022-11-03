@@ -15,7 +15,6 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 @Component({
   selector: 'app-transaction-group-ag',
   templateUrl: './transaction-group-ag.component.html',
-  styleUrls: ['./transaction-group-ag.component.scss'],
 })
 export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [

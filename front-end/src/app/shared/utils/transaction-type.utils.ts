@@ -8,6 +8,7 @@ import { OFFSET_TO_OPERATING_EXPENDITURES } from '../models/transaction-types/OF
 import { OTHER_RECEIPT } from '../models/transaction-types/OTHER_RECEIPT.model';
 import { PAC_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_JF_TRANSFER_MEMO.model';
 import { PAC_RECEIPT } from '../models/transaction-types/PAC_RECEIPT.model';
+import { PARTY_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTY_JF_TRANSFER_MEMO.model';
 import { PARTY_RECEIPT } from '../models/transaction-types/PARTY_RECEIPT.model';
 import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
 import { TRIBAL_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_JF_TRANSFER_MEMO.model';
@@ -23,8 +24,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   OFFSET_TO_OPERATING_EXPENDITURES,
   OTHER_RECEIPT,
   PAC_JF_TRANSFER_MEMO,
-  PARTY_RECEIPT,
   PAC_RECEIPT,
+  PARTY_JF_TRANSFER_MEMO,
+  PARTY_RECEIPT,
   TRIBAL_RECEIPT,
   TRIBAL_JF_TRANSFER_MEMO,
   INDIVIDUAL_JF_TRANSFER_MEMO,
