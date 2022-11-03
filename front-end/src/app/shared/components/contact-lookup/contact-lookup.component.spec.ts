@@ -3,7 +3,18 @@ import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { CommitteeLookupResponse, Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData, FecfileCommitteeLookupData, FecfileIndividualLookupData, FecfileOrganizationLookupData, IndividualLookupResponse, OrganizationLookupResponse } from 'app/shared/models/contact.model';
+import {
+  CommitteeLookupResponse,
+  Contact,
+  ContactTypes,
+  FecApiCommitteeLookupData,
+  FecApiLookupData,
+  FecfileCommitteeLookupData,
+  FecfileIndividualLookupData,
+  FecfileOrganizationLookupData,
+  IndividualLookupResponse,
+  OrganizationLookupResponse,
+} from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
@@ -26,10 +37,15 @@ describe('ContactLookupComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ContactLookupComponent],
-      imports: [FormsModule, ReactiveFormsModule, DialogModule,
-        HttpClientTestingModule, DropdownModule, AutoCompleteModule],
-      providers: [FormBuilder, ContactService, FecApiService,
-        EventEmitter, provideMockStore(testMockStore)],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        DialogModule,
+        HttpClientTestingModule,
+        DropdownModule,
+        AutoCompleteModule,
+      ],
+      providers: [FormBuilder, ContactService, FecApiService, EventEmitter, provideMockStore(testMockStore)],
     }).compileComponents();
 
     testContactService = TestBed.inject(ContactService);
@@ -59,13 +75,12 @@ describe('ContactLookupComponent', () => {
     testCommitteeLookupResponse.fecfile_committees = [
       {
         id: 123,
-        name: 'testName'
-      } as unknown as FecfileCommitteeLookupData
+        name: 'testName',
+      } as unknown as FecfileCommitteeLookupData,
     ];
-    spyOn(testContactService, 'committeeLookup').and.returnValue(
-      of(testCommitteeLookupResponse));
+    spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
-    component.contactTypeFormControl.setValue("COM");
+    component.contactTypeFormControl.setValue('COM');
     component.onDropdownSearch(testEvent);
     expect(component.contactLookupList[1].items.length === 0).toBeTrue();
   }));
@@ -76,13 +91,12 @@ describe('ContactLookupComponent', () => {
       {
         id: 'testId',
         name: 'testName',
-        is_active: true
-      } as FecApiCommitteeLookupData
+        is_active: true,
+      } as FecApiCommitteeLookupData,
     ];
-    spyOn(testContactService, 'committeeLookup').and.returnValue(
-      of(testCommitteeLookupResponse));
+    spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
-    component.contactTypeFormControl.setValue("COM");
+    component.contactTypeFormControl.setValue('COM');
     component.onDropdownSearch(testEvent);
     expect(component.contactLookupList[0].items.length === 0).toBeTrue();
   }));
@@ -93,33 +107,35 @@ describe('ContactLookupComponent', () => {
       {
         id: 'testId',
         name: 'testName',
-        is_active: true
-      } as FecApiCommitteeLookupData
+        is_active: true,
+      } as FecApiCommitteeLookupData,
     ];
     testCommitteeLookupResponse.fecfile_committees = [
       {
         id: 123,
-        name: 'testName'
-      } as unknown as FecfileCommitteeLookupData
+        name: 'testName',
+      } as unknown as FecfileCommitteeLookupData,
     ];
-    spyOn(testContactService, 'committeeLookup').and.returnValue(
-      of(testCommitteeLookupResponse));
+    spyOn(testContactService, 'committeeLookup').and.returnValue(of(testCommitteeLookupResponse));
     const testEvent = { query: 'hi' };
-    component.contactTypeFormControl.setValue("COM");
+    component.contactTypeFormControl.setValue('COM');
     component.onDropdownSearch(testEvent);
-    expect(JSON.stringify(component.contactLookupList) ===
-      JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups())).toBeTrue();
-    expect(JSON.stringify([{ "label": "There are no matching committees", "items": [] },
-    { "label": "There are no matching registered committees", "items": [] }]) ===
-      JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups())).toBeTrue();
+    expect(
+      JSON.stringify(component.contactLookupList) === JSON.stringify(testCommitteeLookupResponse.toSelectItemGroups())
+    ).toBeTrue();
+    expect(
+      JSON.stringify([
+        { label: 'There are no matching committees', items: [] },
+        { label: 'There are no matching registered committees', items: [] },
+      ]) === JSON.stringify(new CommitteeLookupResponse().toSelectItemGroups())
+    ).toBeTrue();
   }));
 
   it('#onDropdownSearch IND undefined fecfile_individuals', fakeAsync(() => {
     const testIndividualLookupResponse = new IndividualLookupResponse();
-    spyOn(testContactService, 'individualLookup').and.returnValue(
-      of(testIndividualLookupResponse));
+    spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
     const testEvent = { query: 'hi' };
-    component.contactTypeFormControl.setValue("IND");
+    component.contactTypeFormControl.setValue('IND');
     component.onDropdownSearch(testEvent);
     tick(500);
     expect(component.contactLookupList[0].items.length === 0).toBeTrue();
@@ -133,29 +149,31 @@ describe('ContactLookupComponent', () => {
         last_name: 'testLastName',
         first_name: 'testFirstName',
         type: ContactTypes.INDIVIDUAL,
-      } as unknown as FecfileIndividualLookupData)
+      } as unknown as FecfileIndividualLookupData),
     ];
-    spyOn(testContactService, 'individualLookup').and.returnValue(
-      of(testIndividualLookupResponse));
+    spyOn(testContactService, 'individualLookup').and.returnValue(of(testIndividualLookupResponse));
     const testEvent = { query: 'hi' };
-    component.contactTypeFormControl.setValue("IND");
+    component.contactTypeFormControl.setValue('IND');
     component.onDropdownSearch(testEvent);
     tick(500);
-    expect(JSON.stringify(component.contactLookupList) ===
-      JSON.stringify(testIndividualLookupResponse.toSelectItemGroups())).toBeTrue();
-    expect(JSON.stringify([{
-      "label": "There are no matching individuals",
-      "items": []
-    }]) ===
-      JSON.stringify(new IndividualLookupResponse().toSelectItemGroups())).toBeTrue();
+    expect(
+      JSON.stringify(component.contactLookupList) === JSON.stringify(testIndividualLookupResponse.toSelectItemGroups())
+    ).toBeTrue();
+    expect(
+      JSON.stringify([
+        {
+          label: 'There are no matching individuals',
+          items: [],
+        },
+      ]) === JSON.stringify(new IndividualLookupResponse().toSelectItemGroups())
+    ).toBeTrue();
   }));
 
   it('#onDropdownSearch ORG undefined fecfile_organizations', fakeAsync(() => {
     const testOrganizationLookupResponse = new OrganizationLookupResponse();
-    spyOn(testContactService, 'organizationLookup').and.returnValue(
-      of(testOrganizationLookupResponse));
+    spyOn(testContactService, 'organizationLookup').and.returnValue(of(testOrganizationLookupResponse));
     const testEvent = { query: 'hi' };
-    component.contactTypeFormControl.setValue("ORG");
+    component.contactTypeFormControl.setValue('ORG');
     component.onDropdownSearch(testEvent);
     tick(500);
     expect(component.contactLookupList[0].items.length === 0).toBeTrue();
@@ -168,21 +186,25 @@ describe('ContactLookupComponent', () => {
         id: 123,
         name: 'testOrgName',
         type: ContactTypes.ORGANIZATION,
-      } as unknown as FecfileOrganizationLookupData)
+      } as unknown as FecfileOrganizationLookupData),
     ];
-    spyOn(testContactService, 'organizationLookup').and.returnValue(
-      of(testOrganizationLookupResponse));
+    spyOn(testContactService, 'organizationLookup').and.returnValue(of(testOrganizationLookupResponse));
     const testEvent = { query: 'hi' };
-    component.contactTypeFormControl.setValue("ORG");
+    component.contactTypeFormControl.setValue('ORG');
     component.onDropdownSearch(testEvent);
     tick(500);
-    expect(JSON.stringify(component.contactLookupList) ===
-      JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups())).toBeTrue();
-    expect(JSON.stringify([{
-      "label": "There are no matching organizations",
-      "items": []
-    }]) ===
-      JSON.stringify(new OrganizationLookupResponse().toSelectItemGroups())).toBeTrue();
+    expect(
+      JSON.stringify(component.contactLookupList) ===
+        JSON.stringify(testOrganizationLookupResponse.toSelectItemGroups())
+    ).toBeTrue();
+    expect(
+      JSON.stringify([
+        {
+          label: 'There are no matching organizations',
+          items: [],
+        },
+      ]) === JSON.stringify(new OrganizationLookupResponse().toSelectItemGroups())
+    ).toBeTrue();
   }));
 
   it('#onContactSelect Contact happy path', fakeAsync(() => {
@@ -201,35 +223,30 @@ describe('ContactLookupComponent', () => {
     expect(eventEmitterEmitSpy).toHaveBeenCalledOnceWith(testValue);
   }));
 
-  it('#onContactSelect FecApiLookupData createContactForm null vals',
-    fakeAsync(() => {
-      const testFecApiLookupData = new FecApiCommitteeLookupData(
-        { id: 'C12345678', } as FecApiCommitteeLookupData);
-      const testValue = {
-        value: testFecApiLookupData,
-      } as SelectItem<FecApiLookupData>;
-      spyOn(testFecApiService, 'getDetails').and.returnValue(
-        of(new CommitteeAccount()));
-      component.createContactForm.removeControl('committee_id');
-      component.createContactForm.removeControl('name');
-      component.createContactForm.removeControl('street_1');
-      component.createContactForm.removeControl('street_2');
-      component.createContactForm.removeControl('city');
-      component.createContactForm.removeControl('state');
-      component.createContactForm.removeControl('zip');
-      component.onContactSelect(testValue);
-      tick(500);
-      expect(component.createContactDialogVisible).toEqual(true);
-    }));
-
-  it('#onContactSelect FecApiLookupData happy path', fakeAsync(() => {
-    const testFecApiLookupData = new FecApiCommitteeLookupData(
-      { id: 'C12345678', } as FecApiCommitteeLookupData);
+  it('#onContactSelect FecApiLookupData createContactForm null vals', fakeAsync(() => {
+    const testFecApiLookupData = new FecApiCommitteeLookupData({ id: 'C12345678' } as FecApiCommitteeLookupData);
     const testValue = {
       value: testFecApiLookupData,
     } as SelectItem<FecApiLookupData>;
-    spyOn(testFecApiService, 'getDetails').and.returnValue(
-      of(new CommitteeAccount()));
+    spyOn(testFecApiService, 'getDetails').and.returnValue(of(new CommitteeAccount()));
+    component.createContactForm.removeControl('committee_id');
+    component.createContactForm.removeControl('name');
+    component.createContactForm.removeControl('street_1');
+    component.createContactForm.removeControl('street_2');
+    component.createContactForm.removeControl('city');
+    component.createContactForm.removeControl('state');
+    component.createContactForm.removeControl('zip');
+    component.onContactSelect(testValue);
+    tick(500);
+    expect(component.createContactDialogVisible).toEqual(true);
+  }));
+
+  it('#onContactSelect FecApiLookupData happy path', fakeAsync(() => {
+    const testFecApiLookupData = new FecApiCommitteeLookupData({ id: 'C12345678' } as FecApiCommitteeLookupData);
+    const testValue = {
+      value: testFecApiLookupData,
+    } as SelectItem<FecApiLookupData>;
+    spyOn(testFecApiService, 'getDetails').and.returnValue(of(new CommitteeAccount()));
 
     component.onContactSelect(testValue);
     tick(500);
@@ -248,6 +265,7 @@ describe('ContactLookupComponent', () => {
     component.selectedFecCommitteeAccount = {} as CommitteeAccount;
 
     component.onCreateContactDialogOpen();
+    expect(component.createContactFormSubmitted).toBeFalse();
     component.selectedFecCommitteeAccount = undefined;
     component.onCreateContactDialogOpen();
   });
@@ -264,10 +282,13 @@ describe('ContactLookupComponent', () => {
       city: 'testCity',
       state: 'testState',
       zip: 'testZip',
-      treasurer_phone: 'testTreasPhone'
+      treasurer_phone: 'testTreasPhone',
     } as CommitteeAccount;
     component.onCreateContactDialogOpen();
+    expect(component.createContactForm.get('committee_id')?.value).toBe(
+      component.selectedFecCommitteeAccount.committee_id
+    );
     component.onCreateContactDialogClose();
+    expect(component.createContactFormSubmitted).toBeFalse();
   });
-
 });
