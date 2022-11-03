@@ -20,6 +20,7 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
 import { ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
+import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -112,6 +113,27 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#retrieveMemoText should work', () => {
     if (component.transactionType) component.transactionType.transaction = testTransaction;
+    else
+      component.transactionType = {
+        transaction: testTransaction,
+        scheduleId: 'TEST',
+        componentGroupId: 'TEST',
+        isDependentChild: false,
+        title: 'Title goes here',
+        contributionPurposeDescripReadonly: () => {
+          return '';
+        },
+        getNewTransaction: () => {
+          return testTransaction;
+        },
+        schema: {
+          $id: '10101',
+          $schema: 'string',
+          type: 'string',
+          required: ['string'],
+          properties: {},
+        },
+      };
 
     const formValues = component.retrieveMemoText({ memo_text_description: 'memo' });
     expect(formValues['memo_text']['text4000']).toBe('memo');
