@@ -111,6 +111,8 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#retrieveMemoText should work', () => {
+    if (component.transactionType) component.transactionType.transaction = testTransaction;
+
     const formValues = component.retrieveMemoText({ memo_text_description: 'memo' });
     expect(formValues['memo_text']['text4000']).toBe('memo');
   });
