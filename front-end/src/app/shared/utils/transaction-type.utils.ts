@@ -11,6 +11,7 @@ import { PARTY_RECEIPT } from '../models/transaction-types/PARTY_RECEIPT.model';
 import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
 import { PAC_RECEIPT } from '../models/transaction-types/PAC_RECEIPT.model';
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
+import { TRIBAL_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_JF_TRANSFER_MEMO.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -26,6 +27,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTY_JF_TRANSFER_MEMO,
   PARTY_RECEIPT,
   TRIBAL_RECEIPT,
+  TRIBAL_JF_TRANSFER_MEMO,
 }
 
 export class TransactionTypeUtils {
