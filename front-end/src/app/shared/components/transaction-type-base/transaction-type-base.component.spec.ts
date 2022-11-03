@@ -20,7 +20,6 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
 import { ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
-import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
