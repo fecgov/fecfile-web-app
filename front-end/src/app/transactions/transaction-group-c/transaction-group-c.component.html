@@ -226,7 +226,7 @@
       </div>
       <div class="grid">
         <div class="col-12">
-          <div class="field" [ngClass]="{ readonly: isMemoCodeReadOnly() }">
+          <div class="field" [ngClass]="{ readonly: isMemoCodeReadOnly(transactionType) }">
             <p-checkbox
               [binary]="true"
               inputId="memo_code"
@@ -235,7 +235,7 @@
               ariaLabel="have memo item"
               [trueValue]="true"
               [falseValue]="false"
-              [readonly]="isMemoCodeReadOnly()"
+              [readonly]="isMemoCodeReadOnly(transactionType)"
             ></p-checkbox>
             <div class="memo-checkbox-note">
               {{ memoItemHelpText }}

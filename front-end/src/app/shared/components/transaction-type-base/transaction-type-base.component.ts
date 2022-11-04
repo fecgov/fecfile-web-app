@@ -37,7 +37,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
-  memoCodeConstant?: boolean; // If validation schema defines memo_code to be a constant value, set this to the const true/false value. Otherwise, undefined.
 
   form: FormGroup = this.fb.group({});
 
@@ -66,10 +65,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     // Initialize validation tracking of current JSON schema and form data
     validateService.formValidatorSchema = transactionType?.schema;
     validateService.formValidatorForm = form;
-
-    // Look at validation schema to determine if the memo_code has a constant value.
-    const memoCodeSchema = this.transactionType?.schema.properties['memo_code'];
-    this.memoCodeConstant = memoCodeSchema?.const as boolean | undefined;
 
     // Intialize form values
     if (this.isExisting(transactionType?.transaction)) {
@@ -328,8 +323,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return form.get(`contributor_${field}`) || form.get(`contributor_organization_${field}`);
   }
 
-  isMemoCodeReadOnly(): boolean {
-    return this.memoCodeConstant !== undefined;
+  getMemoCodeConstant(transactionType?: TransactionType): boolean | undefined {
+    /** Look at validation schema to determine if the memo_code has a constant value.
+     * If there is a constant value, return it, otherwise undefined
+     */
+    const memoCodeSchema = transactionType?.schema.properties['memo_code'];
+    return memoCodeSchema?.const as boolean | undefined;
+  }
+
+  public isMemoCodeReadOnly(transactionType?: TransactionType): boolean {
+    // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
+    return this.getMemoCodeConstant(transactionType) !== undefined;
   }
 
   doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {
@@ -402,7 +406,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
-      memo_code: this.memoCodeConstant,
+      memo_code: this.getMemoCodeConstant(transactionType),
       contribution_purpose_descrip: transactionType?.contributionPurposeDescripReadonly(),
     });
   }
