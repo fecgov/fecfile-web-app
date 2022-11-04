@@ -18,7 +18,9 @@ export type Transaction = {
   memoTextDescription?: string;
   contributionAmount?: number;
   contributionDate?: Date;
-  childTransactions?: Transaction[];
+  childTransactions?: {
+    [key: string]: Transaction;
+  };
 };
 
 function genTransactionNavData(transactionGiven: TransactionTree = {}): [TransactionCategory, SchATransaction] {
@@ -100,13 +102,11 @@ function genRandomTransaction(transactionForm: TransactionForm): Transaction {
   }
 
   if (transactionForm['childTransactions']) {
-    outTransaction['childTransactions'] = [];
-    const childTransactions: TransactionForm[] = transactionForm['childTransactions'];
-    for (const childTransactionForm of childTransactions) {
-      outTransaction['childTransactions'] = [
-        genRandomTransaction(childTransactionForm),
-        ...outTransaction['childTransactions'],
-      ];
+    outTransaction['childTransactions'] = {};
+    const childTransactions = transactionForm['childTransactions'];
+    for (const childName of Object.keys(childTransactions)) {
+      const childTransactionForm = childTransactions[childName];
+      outTransaction['childTransactions'][childName] = genRandomTransaction(childTransactionForm);
     }
   }
 

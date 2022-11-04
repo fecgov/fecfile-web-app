@@ -156,14 +156,14 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
         const entityTypes = TransactionFields[transactionEntityTypeKey]['entities'];
 
         for (let entityType of entityTypes) {
-          cy.get('button[label="Save & add another"]').click();
+          cy.contains('button', 'Save & add another').click();
           if (entityTypes.length > 1) {
             cy.dropdownSetValue('#entity_type_dropdown', entityType);
             cy.shortWait();
           }
           testFields(fields, entityType);
         }
-        cy.get('button[label="Cancel"]').click();
+        cy.contains('button', 'Cancel').click();
         cy.shortWait();
       });
     });

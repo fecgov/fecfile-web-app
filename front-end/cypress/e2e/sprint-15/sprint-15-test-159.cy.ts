@@ -70,11 +70,11 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.get('input[formControlName="contributor_suffix"]').overwrite('XI');
     cy.shortWait();
 
-    cy.get('button[label="Save & view all transactions"]').click();
+    cy.contains('button', 'Save & view all transactions').click();
     cy.shortWait();
     cy.get('.p-confirm-dialog-reject').click();
     cy.shortWait();
-    cy.get('button[label="Save & view all transactions"]').click();
+    cy.contains('button', 'Save & view all transactions').click();
 
     cy.contains('.p-confirm-dialog-message', 'XI').should('exist');
     cy.contains('.p-confirm-dialog-message', 'TESTOPOLIS').should('exist');

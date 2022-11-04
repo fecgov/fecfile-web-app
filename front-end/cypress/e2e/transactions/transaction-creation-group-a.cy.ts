@@ -14,7 +14,7 @@ function testEditTransaction(transactionForm: TransactionForm, contact: Contact)
 
   cy.get("input[FormControlName='contributor_street_1']").overwrite('100 West Virginia Avenue');
   cy.shortWait();
-  cy.get('button[label="Save & view all transactions"]').click();
+  cy.contains('button', 'Save & view all transactions').click();
   cy.shortWait();
   cy.get('.p-confirm-dialog-accept').click();
   cy.longWait();
@@ -89,13 +89,13 @@ describe('Test saving and editing on all transactions', () => {
         const transaction: Transaction = generateTransactionObject(tTree);
         const contact = generateContactToFit(transaction);
         createTransactionSchA(transaction, contact, false);
-        cy.get('button[label="Save & add another"]').click();
+        cy.contains('button', 'Save & add another').click();
         cy.shortWait();
         cy.get('.p-confirm-dialog-accept').click();
         cy.medWait();
         cy.get('input[FormControlName="street_1"]').should('have.length', 0);
         cy.longWait();
-        cy.get('button[label="Cancel"]').click();
+        cy.contains('button', 'Cancel').click();
 
         const tForm = transaction[category][transactionName];
         testEditTransaction(tForm, contact);

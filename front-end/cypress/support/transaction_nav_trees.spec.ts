@@ -25,7 +25,9 @@ export type TransactionForm = {
   entity_type?: 'Individual' | 'Committee' | 'Organization';
   memoTextDescription?: TransactionField;
   contributionAmount?: TransactionField;
-  childTransactions?: TransactionForm[];
+  childTransactions?: {
+    [key: string]: TransactionForm;
+  };
 };
 
 export type FieldType = 'Text' | 'Calendar' | 'Dropdown' | 'P-InputNumber' | 'Textarea';
@@ -175,7 +177,9 @@ const JointFundraisingTransfer: TransactionForm = {
   ...entityCommittee,
   ...memoFields,
   ...contributionFields,
-  childTransactions: [JointFundraisingTransferMemo],
+  childTransactions: {
+    'PAC Joint Fundraising Transfer Memo': JointFundraisingTransferMemo,
+  },
 };
 
 const offsetToOpex: TransactionForm = {
