@@ -145,7 +145,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
-  retrieveMemoText(formValues: any) {
+  // prettier-ignore
+  retrieveMemoText(formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
     const text = formValues['memo_text_description'];
     if (text && text.length > 0) {
       const memo_text = MemoText.fromJSON({
