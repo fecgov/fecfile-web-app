@@ -34,23 +34,23 @@ export function createTransactionSchA(transactionTree: TransactionTree, contact:
 
   if (save) {
     if (transaction.childTransactions) {
-      for (let i = 0; i < transaction['childTransactions'].length; i++) {
-        const childTransaction = transaction['childTransactions'][i];
+      for (const childName of Object.keys(transaction['childTransactions'])) {
+        const childTransaction = transaction['childTransactions'][childName];
 
-        if (i == 0) {
-          cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
-          cy.contains('li', 'PAC JF Transfer Memo').click();
-        } else {
-          cy.get('button[label="Save & add another Memo"]').click();
-        }
+        cy.contains('button', 'Save & view all transactions').click();
         cy.shortWait();
         cy.get('.p-confirm-dialog-accept').click();
-        cy.longWait();
+        cy.medWait();
+        cy.contains('tr', contact.name).find('a').click();
+        cy.medWait();
+        cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
+        cy.contains('li', childName).click();
+        cy.medWait();
         cy.url().should('contain', 'sub-transaction');
         enterTransactionSchA(childTransaction, contact);
       }
     }
-    cy.get('button[label="Save & view all transactions"]').click();
+    cy.contains('button', 'Save & view all transactions').click();
     cy.shortWait();
     cy.get('.p-confirm-dialog-accept').click();
     cy.medWait();

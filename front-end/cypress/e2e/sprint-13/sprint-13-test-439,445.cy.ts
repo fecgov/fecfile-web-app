@@ -36,7 +36,7 @@ describe('QA Script 244 (Sprint 8)', () => {
     const contact = generateContactToFit(transaction);
     createTransactionSchA(transaction, contact, false);
     cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
-    cy.contains('li', 'PAC JF Transfer Memo').click();
+    cy.contains('li', 'PAC Joint Fundraising Transfer Memo').click();
     cy.shortWait();
     cy.get('.p-confirm-dialog-accept').click();
     cy.longWait();
