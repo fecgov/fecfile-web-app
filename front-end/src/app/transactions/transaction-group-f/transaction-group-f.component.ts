@@ -26,24 +26,9 @@ export class TransactionGroupFComponent extends TransactionTypeBaseComponent imp
     'memo_code',
     'memo_text_description',
   ];
-  readOnlyMemo = false;
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
   );
-
-  override ngOnInit(): void {
-    super.ngOnInit();
-    if (this.memoCodeMustBeTrue()) {
-      this.readOnlyMemo = true;
-      this.form.get('memo_code')?.setValue(true);
-    }
-  }
-
-  protected memoCodeMustBeTrue(): boolean {
-    // Look at validation schema to determine if the memo_code must be true in all cases.
-    const memoCodeSchema = this.transactionType?.schema.properties['memo_code'];
-    return !!memoCodeSchema?.const;
-  }
 
   protected override doResetForm(form: FormGroup, transactionType?: TransactionType) {
     this.formSubmitted = false;
