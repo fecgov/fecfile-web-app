@@ -35,7 +35,6 @@ export class PAC_RECEIPT implements TransactionType {
     return SchATransaction.fromJSON({
       form_type: 'SA11C',
       transaction_type_identifier: ScheduleATransactionTypes.PAC_RECEIPT,
-      back_reference_sched_name: 'SA11C',
       aggregation_group: AggregationGroups.GENERAL,
     });
   }

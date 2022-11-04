@@ -323,6 +323,19 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return form.get(`contributor_${field}`) || form.get(`contributor_organization_${field}`);
   }
 
+  getMemoCodeConstant(transactionType?: TransactionType): boolean | undefined {
+    /** Look at validation schema to determine if the memo_code has a constant value.
+     * If there is a constant value, return it, otherwise undefined
+     */
+    const memoCodeSchema = transactionType?.schema.properties['memo_code'];
+    return memoCodeSchema?.const as boolean | undefined;
+  }
+
+  public isMemoCodeReadOnly(transactionType?: TransactionType): boolean {
+    // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
+    return this.getMemoCodeConstant(transactionType) !== undefined;
+  }
+
   doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {
     if (payload.transaction_type_identifier) {
       if (payload.id) {
@@ -393,7 +406,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
-      memo_code: (transactionType?.transaction as SchATransaction)?.memo_code,
+      memo_code: this.getMemoCodeConstant(transactionType),
       contribution_purpose_descrip: transactionType?.contributionPurposeDescripReadonly(),
     });
   }

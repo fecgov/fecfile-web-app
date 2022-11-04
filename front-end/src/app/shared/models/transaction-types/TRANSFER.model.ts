@@ -38,7 +38,6 @@ export class TRANSFER implements TransactionType {
     return SchATransaction.fromJSON({
       form_type: 'SA12',
       transaction_type_identifier: ScheduleATransactionTypes.TRANSFER,
-      back_reference_sched_name: 'SA12',
       aggregation_group: AggregationGroups.GENERAL,
     });
   }
