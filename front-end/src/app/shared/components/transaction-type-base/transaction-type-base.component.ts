@@ -37,7 +37,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
-  memoCodeConstant?: boolean;
+  memoCodeConstant?: boolean; // If validation schema defines memo_code to be a constant value, set this to the const true/false value. Otherwise, undefined.
 
   form: FormGroup = this.fb.group({});
 
@@ -329,7 +329,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   isMemoCodeReadOnly(): boolean {
-    return this.memoCodeConstant != undefined;
+    return this.memoCodeConstant !== undefined;
   }
 
   doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {

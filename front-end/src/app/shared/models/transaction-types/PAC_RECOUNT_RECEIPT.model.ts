@@ -39,7 +39,7 @@ export class PAC_RECOUNT_RECEIPT implements TransactionType {
       form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT,
       back_reference_sched_name: 'SA17',
-      aggregation_group: AggregationGroups.GENERAL,
+      aggregation_group: AggregationGroups.RECOUNT_ACCOUNT,
     });
   }
 }
