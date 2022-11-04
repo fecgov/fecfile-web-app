@@ -14,6 +14,8 @@ export type SchATransaction =
   | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
   | 'Other Receipts'
+  | 'Party Receipt'
+  | 'PAC Receipt'
   | 'Transfer';
 
 export type TransactionNavTree = {
@@ -201,6 +203,18 @@ const transfer: TransactionForm = {
   ...contributionFields,
 };
 
+const partyReceipt: TransactionForm = {
+  ...entityCommittee,
+  ...memoFields,
+  ...contributionFields,
+};
+
+const pacReceipt: TransactionForm = {
+  ...entityCommittee,
+  ...memoFields,
+  ...contributionFields,
+};
+
 /*
  *          Group A Transaction Navigation Tree
  * Every entry in this object represents a path that an E2E test
@@ -214,7 +228,10 @@ export const groupANavTree: TransactionNavTree = {
     'Individual Receipt': individualReceipt,
     'Tribal Receipt': tribalReceipt,
   },
-  //"REGISTERED FILERS":{},
+  'REGISTERED FILERS': {
+    'Party Receipt': partyReceipt,
+    'PAC Receipt': pacReceipt,
+  },
   TRANSFERS: {
     Transfer: transfer,
     'Joint Fundraising Transfer': jointFundraisingTransfer,
