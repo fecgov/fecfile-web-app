@@ -36,7 +36,7 @@ describe('QA Script 347 (Sprint 10)', () => {
     createTransactionSchA(transactionTree, contactObject);
     cy.medWait();
     const parentTransaction = transactionTree['TRANSFERS']['Joint Fundraising Transfer'];
-    const childTransaction = Object.values(parentTransaction['childTransactions'])[0];
+    const childTransaction = parentTransaction['childTransactions'][0];
     const contribution = childTransaction['contributionAmount'] as number;
     const convContribution = Intl.NumberFormat('en-US').format(Math.floor(contribution));
 

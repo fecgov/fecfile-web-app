@@ -36,7 +36,7 @@ function test_employer_fields(transaction: TransactionTree) {
     cy.get('input[formControlName="contributor_occupation"]').parent().find('.p-error').should('not.exist');
   }
 
-  cy.contains('button', 'Cancel').click();
+  cy.get('button[label="Cancel"]').click();
   cy.shortWait();
 }
 

@@ -28,7 +28,7 @@ const accordion = {
     'Returned/Bounced Receipt (PAC)',
   ],
   TRANSFERS: [
-    'Transfer',
+    'Transfers',
     'Joint Fundraising Transfer',
     'In-Kind Transfer',
     'In-Kind Transfer - Federal Election Activity',

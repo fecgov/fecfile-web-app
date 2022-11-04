@@ -71,13 +71,13 @@ const transactionJFC = tTreeJFTransC['TRANSFERS']['Joint Fundraising Transfer'];
 transactionJFC['contributionDate'] = new Date('12/12/2013');
 
 //JF Transfer Memos
-const JFMemoA = Object.values(transactionJFA['childTransactions'])[0];
+const JFMemoA = transactionJFA['childTransactions'][0];
 JFMemoA['contributionDate'] = new Date('12/12/2012');
 JFMemoA['contributionAmount'] = _.random(10, 200, false);
-const JFMemoB = Object.values(transactionJFB['childTransactions'])[0];
+const JFMemoB = transactionJFB['childTransactions'][0];
 JFMemoB['contributionDate'] = new Date('12/12/2012');
 JFMemoB['contributionAmount'] = _.random(10, 200, false);
-const JFMemoC = Object.values(transactionJFC['childTransactions'])[0];
+const JFMemoC = transactionJFC['childTransactions'][0];
 JFMemoC['contributionDate'] = new Date('12/12/2013');
 JFMemoC['contributionAmount'] = _.random(10, 500, false);
 
@@ -98,7 +98,7 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
   cy.medWait();
   enterTransactionSchA(transactions[0]);
   cy.shortWait();
-  cy.contains('button', 'Save & add another').click();
+  cy.get('button[label="Save & add another"]').click();
   cy.shortWait();
 
   cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
@@ -112,7 +112,7 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
   const aggregate = transactions[0]['contributionAmount'] + transactions[1]['contributionAmount'];
   cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]').find('input').should('contain.value', aggregate);
 
-  cy.contains('button', 'Save & add another').click();
+  cy.get('button[label="Save & add another"]').click();
   cy.shortWait();
 
   cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
@@ -195,7 +195,7 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.medWait();
     cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
     cy.shortWait();
-    cy.contains('li', 'PAC Joint Fundraising Transfer Memo').click();
+    cy.contains('li', 'PAC JF Transfer Memo').click();
     cy.longWait();
 
     const contact = contactCommittee;
@@ -206,7 +206,7 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.medWait();
     enterTransactionSchA(transactions[0]);
     cy.shortWait();
-    cy.contains('button', 'Save & add another').click();
+    cy.get('button[label="Save & add another Memo"]').click();
     cy.shortWait();
 
     cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
@@ -224,7 +224,7 @@ describe('QA Script 244 (Sprint 8)', () => {
       transactionJFB['contributionAmount'];
     cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]').find('input').should('contain.value', aggregate);
 
-    cy.contains('button', 'Save & add another').click();
+    cy.get('button[label="Save & add another Memo"]').click();
     cy.shortWait();
 
     cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
