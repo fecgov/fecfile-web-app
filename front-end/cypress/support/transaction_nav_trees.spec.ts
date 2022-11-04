@@ -170,8 +170,26 @@ const tribalReceipt: TransactionForm = {
   ...contributionFields,
 };
 
-const JointFundraisingTransferMemo: TransactionForm = {
+const pacJointFundraisingTransferMemo: TransactionForm = {
   ...entityCommittee,
+  ...memoFields,
+  ...contributionFields,
+};
+
+const partyJointFundraisingTransferMemo: TransactionForm = {
+  ...entityCommittee,
+  ...memoFields,
+  ...contributionFields,
+};
+
+const individualJointFundraisingTransferMemo: TransactionForm = {
+  ...entityIndividual,
+  ...memoFields,
+  ...contributionFields,
+};
+
+const tribalJointFundraisingTransferMemo: TransactionForm = {
+  ...entityOrganization,
   ...memoFields,
   ...contributionFields,
 };
@@ -181,7 +199,10 @@ const jointFundraisingTransfer: TransactionForm = {
   ...memoFields,
   ...contributionFields,
   childTransactions: {
-    'PAC Joint Fundraising Transfer Memo': JointFundraisingTransferMemo,
+    'PAC Joint Fundraising Transfer Memo': pacJointFundraisingTransferMemo,
+    'Individual Joint Fundraising Transfer Memo': individualJointFundraisingTransferMemo,
+    'Tribal Joint Fundraising Transfer Memo': tribalJointFundraisingTransferMemo,
+    'Party Joint Fundraising Transfer Memo': partyJointFundraisingTransferMemo,
   },
 };
 

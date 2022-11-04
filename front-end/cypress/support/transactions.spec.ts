@@ -34,20 +34,25 @@ export function createTransactionSchA(transactionTree: TransactionTree, contact:
 
   if (save) {
     if (transaction.childTransactions) {
-      for (const childName of Object.keys(transaction['childTransactions'])) {
+      for (let i = 0; i < Object.keys(transaction['childTransactions']).length; i++) {
+        const childName = Object.keys(transaction['childTransactions'])[i];
         const childTransaction = transaction['childTransactions'][childName];
 
-        cy.contains('button', 'Save & view all transactions').click();
-        cy.shortWait();
-        cy.get('.p-confirm-dialog-accept').click();
-        cy.medWait();
-        cy.contains('tr', contact.name).find('a').click();
-        cy.medWait();
         cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
         cy.contains('li', childName).click();
+        if (i == 0) {
+          cy.get('.p-confirm-dialog-accept').click();
+          cy.shortWait();
+        }
+        enterTransactionSchA(childTransaction, contact);
+        cy.contains('button', 'Save & add another').click();
+        cy.shortWait();
+        cy.get('.p-confirm-dialog-accept').click();
+        cy.shortWait();
+        cy.contains('button', 'Back to').click();
+        cy.shortWait();
         cy.medWait();
         cy.url().should('contain', 'sub-transaction');
-        enterTransactionSchA(childTransaction, contact);
       }
     }
     cy.contains('button', 'Save & view all transactions').click();
