@@ -6,6 +6,7 @@ import {
   TransactionFields,
   TransactionForm,
 } from '../transaction_nav_trees.spec';
+import { Contact } from './contacts.spec';
 
 export type TransactionTree = {
   [accordion in TransactionCategory]?: {
@@ -22,6 +23,40 @@ export type Transaction = {
     [key: string]: Transaction;
   };
 };
+
+export function transaction_matches_contact(
+  transactionGiven: TransactionTree | Transaction,
+  contactGiven: Contact
+): boolean {
+  let t: Transaction;
+  if (Object.keys(transactionGiven).includes('contributionAmount')) {
+    t = transactionGiven;
+  } else {
+    t = Object.values(transactionGiven)[0];
+  }
+
+  console.log('Matching:', t);
+  console.log(contactGiven);
+
+  if (Object.values(t).includes('Individual')) {
+    const bool = contactGiven.contact_type === 'Individual';
+    console.log('Matched:', bool);
+    return bool;
+  }
+  if (Object.values(t).includes('Committee')) {
+    const bool = contactGiven.contact_type === 'Committee';
+    console.log('Matched:', bool);
+    return bool;
+  }
+  if (Object.values(t).includes('Organization')) {
+    const bool = contactGiven.contact_type === 'Organization';
+    console.log('Matched:', bool);
+    return bool;
+  }
+
+  console.log('Failed to match!');
+  return false;
+}
 
 function genTransactionNavData(transactionGiven: TransactionTree = {}): [TransactionCategory, SchATransaction] {
   let accordion: TransactionCategory;
