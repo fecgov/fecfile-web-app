@@ -38,7 +38,7 @@ function test_itemization(transaction: TransactionTree) {
   else cy.contains('tr', getName(contact)).should('not.contain.text', 'Unitemized');
 }
 
-describe('QA Script 244 (Sprint 8)', () => {
+describe('QA Script 172 (Sprint 15)', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');

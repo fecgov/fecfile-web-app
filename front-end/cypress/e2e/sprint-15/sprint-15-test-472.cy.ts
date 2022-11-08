@@ -128,7 +128,7 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
     .should('contain.value', transactions[2]['contributionAmount']);
 }
 
-describe('QA Script 244 (Sprint 8)', () => {
+describe('QA Script 472 (Sprint 15)', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');

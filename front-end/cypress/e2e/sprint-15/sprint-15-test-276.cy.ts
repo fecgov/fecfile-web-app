@@ -40,7 +40,7 @@ function test_employer_fields(transaction: TransactionTree) {
   cy.shortWait();
 }
 
-describe('QA Script 244 (Sprint 8)', () => {
+describe('QA Script 276 (Sprint 15)', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
