@@ -1,5 +1,10 @@
 import _ from 'lodash';
-import { TransactionTree, Transaction, transaction_matches_contact } from './generators/transactions.spec';
+import {
+  TransactionTree,
+  Transaction,
+  transaction_matches_contact,
+  wrap_transaction_with_tree,
+} from './generators/transactions.spec';
 import { TransactionFields } from './transaction_nav_trees.spec';
 import { Contact, generateContactToFit } from './generators/contacts.spec';
 import { enterContact } from './contacts.spec';
@@ -46,15 +51,11 @@ export function createTransactionSchA(transactionTree: TransactionTree, contact:
         cy.longWait();
         if (!transaction_matches_contact(childTransaction, contact)) {
           cy.then(() => {
-            const newContact = generateContactToFit(childTransaction);
-            console.log('New Contact!', childTransaction);
-            console.log(newContact);
+            const newContact = generateContactToFit(wrap_transaction_with_tree(childTransaction));
             enterTransactionSchA(childTransaction, newContact);
           });
         } else {
           cy.then(() => {
-            console.log('Passed Contact!', childTransaction);
-            console.log(contact);
             enterTransactionSchA(childTransaction, contact);
           });
         }
@@ -66,11 +67,14 @@ export function createTransactionSchA(transactionTree: TransactionTree, contact:
         cy.shortWait();
         cy.medWait();
       }
+      cy.contains('button', 'Cancel').click();
+      cy.medWait();
+    } else {
+      cy.contains('button', 'Save & view all transactions').click();
+      cy.shortWait();
+      cy.get('.p-confirm-dialog-accept').click();
+      cy.medWait();
     }
-    cy.contains('button', 'Save & view all transactions').click();
-    cy.shortWait();
-    cy.get('.p-confirm-dialog-accept').click();
-    cy.medWait();
   }
 }
 

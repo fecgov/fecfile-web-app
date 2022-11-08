@@ -35,27 +35,25 @@ export function transaction_matches_contact(
     t = Object.values(transactionGiven)[0];
   }
 
-  console.log('Matching:', t);
-  console.log(contactGiven);
-
   if (Object.values(t).includes('Individual')) {
-    const bool = contactGiven.contact_type === 'Individual';
-    console.log('Matched:', bool);
-    return bool;
+    return contactGiven.contact_type === 'Individual';
   }
   if (Object.values(t).includes('Committee')) {
-    const bool = contactGiven.contact_type === 'Committee';
-    console.log('Matched:', bool);
-    return bool;
+    return contactGiven.contact_type === 'Committee';
   }
   if (Object.values(t).includes('Organization')) {
-    const bool = contactGiven.contact_type === 'Organization';
-    console.log('Matched:', bool);
-    return bool;
+    return contactGiven.contact_type === 'Organization';
   }
 
-  console.log('Failed to match!');
   return false;
+}
+
+export function wrap_transaction_with_tree(transaction: Transaction) {
+  return {
+    OTHER: {
+      Other: transaction,
+    },
+  };
 }
 
 function genTransactionNavData(transactionGiven: TransactionTree = {}): [TransactionCategory, SchATransaction] {
