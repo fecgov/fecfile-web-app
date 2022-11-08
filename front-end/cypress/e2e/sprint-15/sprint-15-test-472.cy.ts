@@ -55,6 +55,14 @@ const orgRecTree = {
     },
   },
 };
+const otherRecTree = {
+  OTHER: {
+    'Other Receipts': {
+      contributionDate: new Date('12/12/2012'),
+      contributionAmount: _.random(10, 500, false),
+    },
+  },
+};
 const tTreeOrganizationA = generateTransactionObject(orgRecTree);
 const tTreeOrganizationB = generateTransactionObject(orgRecTree);
 const transactionOrgA = tTreeOrganizationA['INDIVIDUALS/PERSONS']['Tribal Receipt'];
@@ -63,6 +71,9 @@ const transactionOrgB = tTreeOrganizationB['INDIVIDUALS/PERSONS']['Tribal Receip
 const tTreeOrganizationC = generateTransactionObject(orgRecTree);
 const transactionOrgC = tTreeOrganizationC['INDIVIDUALS/PERSONS']['Tribal Receipt'];
 transactionOrgC['contributionDate'] = new Date('12/12/2013');
+
+const tTreeOrganizationD = generateTransactionObject(otherRecTree);
+const transactionOrgD = tTreeOrganizationD['OTHER']['Other Receipts'];
 
 //JF Transfer Transfers
 const JFTransTree = {
@@ -185,7 +196,7 @@ describe('QA Script 472 (Sprint 15)', () => {
     testAggregation(
       contactOrganization,
       ['INDIVIDUALS/PERSONS', 'Tribal Receipt'],
-      [transactionOrgA, transactionOrgB, transactionOrgC]
+      [transactionOrgA, transactionOrgB, transactionOrgC, transactionIndvD]
     );
 
     testAggregation(
