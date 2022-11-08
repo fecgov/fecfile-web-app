@@ -25,6 +25,15 @@ const indvRecTree = {
     },
   },
 };
+const offsetToOpexTree = {
+  OTHER: {
+    'Offsets to Operating Expenditures': {
+      contributionDate: new Date('12/12/2012'),
+      contributionAmount: _.random(10, 500, false),
+    },
+  },
+};
+
 const tTreeIndividualA = generateTransactionObject(indvRecTree);
 const tTreeIndividualB = generateTransactionObject(indvRecTree);
 const transactionIndvA = tTreeIndividualA['INDIVIDUALS/PERSONS']['Individual Receipt'];
@@ -33,6 +42,9 @@ const transactionIndvB = tTreeIndividualB['INDIVIDUALS/PERSONS']['Individual Rec
 const tTreeIndividualC = generateTransactionObject(indvRecTree);
 const transactionIndvC = tTreeIndividualC['INDIVIDUALS/PERSONS']['Individual Receipt'];
 transactionIndvC['contributionDate'] = new Date('12/12/2013');
+
+const tTreeIndividualD = generateTransactionObject(offsetToOpexTree);
+const transactionIndvD = tTreeIndividualD['OTHER']['Offsets to Operating Expenditures'];
 
 //Organization Transactions
 const orgRecTree = {
@@ -167,7 +179,7 @@ describe('QA Script 472 (Sprint 15)', () => {
     testAggregation(
       contactIndividual,
       ['INDIVIDUALS/PERSONS', 'Individual Receipt'],
-      [transactionIndvA, transactionIndvB, transactionIndvC]
+      [transactionIndvA, transactionIndvB, transactionIndvC, transactionIndvD]
     );
 
     testAggregation(
