@@ -81,15 +81,11 @@ function createSingleTransaction(transaction: Transaction, save = true) {
 }
 
 function createPairedTransaction(transaction: PairedTransaction, save = true) {
-  console.log(transaction.transactionA);
-  console.log(transaction.transactionB);
-
   cy.contains('p-accordiontab', 'STEP ONE').click();
   enterTransactionSchA(transaction.transactionA);
   cy.shortWait();
 
   cy.contains('p-accordiontab', 'STEP TWO').click();
-  console.log('Earmark:', transaction);
   enterTransactionSchA(transaction.transactionB);
   cy.shortWait();
 

@@ -54,7 +54,7 @@ export type PairedTransaction = {
   transactionB: Transaction;
 };
 
-export function getTransactionFormByName(transaction_name: string): TransactionForm | undefined {
+export function getTransactionFormByName(transaction_name: string): TransactionForm | ChildTransactionForm | undefined {
   for (const category of Object.keys(groupANavTree)) {
     for (const tForm of Object.values(groupANavTree[category])) {
       if (tForm['transaction_name'] && tForm['transaction_name'] === transaction_name) {
@@ -67,7 +67,7 @@ export function getTransactionFormByName(transaction_name: string): TransactionF
     const childTransactions = Object.keys(childTransactionTree[parentName]);
     console.log(childTransactions);
     if (childTransactions.includes(transaction_name)) {
-      return childTransactions[transaction_name];
+      return childTransactionTree[parentName][transaction_name];
     }
   }
   console.log('Form Retrieval Missed Name!', transaction_name);
