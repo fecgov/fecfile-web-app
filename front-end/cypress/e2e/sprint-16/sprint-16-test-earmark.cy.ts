@@ -1,22 +1,15 @@
 // @ts-check
 
 import * as _ from 'lodash';
-import { generateContactIndividual } from '../../support/generators/contacts.spec';
+import { generateContactCommittee, generateContactIndividual } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { enterTransactionSchA } from '../../support/transactions.spec';
 
 const contactIndividual = generateContactIndividual({});
-const indvRecTree = {
-  'INDIVIDUALS/PERSONS': {
-    'Individual Receipt': {
-      contributionDate: new Date('12/12/2012'),
-      contributionAmount: _.random(10, 500, false),
-    },
-  },
-};
-const tTreeIndividual = generateTransactionObject(indvRecTree);
-const transactionIndv = tTreeIndividual['INDIVIDUALS/PERSONS']['Individual Receipt'];
+const contactCommittee = generateContactCommittee({});
+const tTree = generateTransactionObject({ transaction_name: 'Individual Receipt' });
+console.log(tTree);
 
 describe('QA Script 159 (Sprint 15)', () => {
   after(() => {
