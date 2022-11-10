@@ -38,6 +38,7 @@ const transactionIndvA = generateTransactionObject(indvRecTree);
 const transactionIndvB = generateTransactionObject(indvRecTree);
 const transactionIndvC = generateTransactionObject(indvRecTree);
 transactionIndvC.fields['contributionDate'] = new Date('12/12/2013');
+console.log(transactionIndvA);
 
 const transactionIndvD = generateTransactionObject(offsetToOpexTree);
 

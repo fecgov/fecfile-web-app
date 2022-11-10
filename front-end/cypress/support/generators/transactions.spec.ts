@@ -172,6 +172,7 @@ function generateSingleTransactionFromForm(
   if (transaction['contact']) {
     transaction['entity_type'] = transaction['contact'].contact_type;
     transaction['isNewContact'] = transactionGiven?.isNewContact ?? true;
+    console.log('New Contact:', transactionGiven?.isNewContact);
   } else {
     const eType = transaction['entity_type'];
     if (eType === 'Committee') transaction['contact'] = generateContactCommittee({});
