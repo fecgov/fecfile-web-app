@@ -170,6 +170,7 @@ function generateSingleTransactionFromForm(
   // Generate the Contact and check whether or not it has already been made
   transaction['contact'] = retrieveContact(transactionForm, transactionGiven);
   if (transaction['contact']) {
+    transaction['entity_type'] = transaction['contact'].contact_type;
     transaction['isNewContact'] = transactionGiven?.isNewContact ?? true;
   } else {
     const eType = transaction['entity_type'];

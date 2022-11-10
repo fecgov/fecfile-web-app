@@ -7,16 +7,11 @@ import { generateTransactionObject } from '../../support/generators/transactions
 import { enterTransactionSchA } from '../../support/transactions.spec';
 
 const contactIndividual = generateContactIndividual({});
-const indvRecTree = {
-  'INDIVIDUALS/PERSONS': {
-    'Individual Receipt': {
-      contributionDate: new Date('12/12/2012'),
-      contributionAmount: _.random(10, 500, false),
-    },
-  },
-};
-const tTreeIndividual = generateTransactionObject(indvRecTree);
-const transactionIndv = tTreeIndividual['INDIVIDUALS/PERSONS']['Individual Receipt'];
+const transactionIndv = generateTransactionObject({
+  transaction_name: 'Individual Receipt',
+  contact: contactIndividual,
+  isNewContact: false,
+});
 
 describe('QA Script 159 (Sprint 15)', () => {
   after(() => {
@@ -27,7 +22,7 @@ describe('QA Script 159 (Sprint 15)', () => {
   });
 
   before('', () => {
-    //Step 1: Log in, navigate to the contacts page and create individual, organization, and committee contacts
+    //Step 1: Log in, navigate to the contacts page and creates the individual contact
     cy.login();
     cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');

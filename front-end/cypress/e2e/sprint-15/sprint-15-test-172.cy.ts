@@ -1,18 +1,42 @@
 // @ts-check
 
-import { generateContactToFit } from '../../support/generators/contacts.spec';
+import { Contact, generateContactToFit } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
-import { generateTransactionObject, TransactionTree } from '../../support/generators/transactions.spec';
+import { generateTransactionObject } from '../../support/generators/transactions.spec';
 
 const transactions = [
-  generateTransactionObject({ 'INDIVIDUALS/PERSONS': { 'Individual Receipt': { contributionAmount: 199.99 } } }),
-  generateTransactionObject({ 'INDIVIDUALS/PERSONS': { 'Individual Receipt': { contributionAmount: 200.01 } } }),
-  generateTransactionObject({ 'INDIVIDUALS/PERSONS': { 'Tribal Receipt': { contributionAmount: 199.99 } } }),
-  generateTransactionObject({ 'INDIVIDUALS/PERSONS': { 'Tribal Receipt': { contributionAmount: 200.01 } } }),
-  generateTransactionObject({ OTHER: { 'Offsets to Operating Expenditures': { contributionAmount: 199.99 } } }),
-  generateTransactionObject({ OTHER: { 'Offsets to Operating Expenditures': { contributionAmount: 200.01 } } }),
-  generateTransactionObject({ OTHER: { 'Other Receipts': { contributionAmount: 199.99 } } }),
-  generateTransactionObject({ OTHER: { 'Other Receipts': { contributionAmount: 200.01 } } }),
+  generateTransactionObject({
+    transaction_name: 'Individual Receipt',
+    fields: { contributionAmount: 199.99 },
+  }),
+  generateTransactionObject({
+    transaction_name: 'Individual Receipt',
+    fields: { contributionAmount: 200.01 },
+  }),
+  generateTransactionObject({
+    transaction_name: 'Tribal Receipt',
+    fields: { contributionAmount: 199.99 },
+  }),
+  generateTransactionObject({
+    transaction_name: 'Tribal Receipt',
+    fields: { contributionAmount: 200.01 },
+  }),
+  generateTransactionObject({
+    transaction_name: 'Offsets to Operating Expenditures',
+    fields: { contributionAmount: 199.99 },
+  }),
+  generateTransactionObject({
+    transaction_name: 'Offsets to Operating Expenditures',
+    fields: { contributionAmount: 200.01 },
+  }),
+  generateTransactionObject({
+    transaction_name: 'Other Receipts',
+    fields: { contributionAmount: 199.99 },
+  }),
+  generateTransactionObject({
+    transaction_name: 'Other Receipts',
+    fields: { contributionAmount: 200.01 },
+  }),
 ];
 
 function getName(contact: Contact): string {
@@ -26,13 +50,13 @@ function getName(contact: Contact): string {
   }
 }
 
-function test_itemization(transaction: TransactionTree) {
-  const contact = generateContactToFit(transaction);
-  const accordion = Object.keys(transaction)[0];
-  const receipt = Object.keys(transaction[accordion])[0];
-  const contribution = transaction[accordion][receipt]['contributionAmount'];
+function test_itemization(transaction: Transaction) {
+  const contact = transaction.contact;
+  const accordion = transaction.transaction_category;
+  const receipt = transaction.transaction_name;
+  const contribution = transaction.fields['contributionAmount'];
   const itemized = contribution > 200;
-  cy.createTransactionSchA(transaction, contact);
+  cy.createTransactionSchA(transaction);
 
   if (!itemized) cy.contains('tr', getName(contact)).should('contain.text', 'Unitemized');
   else cy.contains('tr', getName(contact)).should('not.contain.text', 'Unitemized');

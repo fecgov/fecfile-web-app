@@ -2,26 +2,42 @@
 
 import { generateContactIndividual } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
-import { generateTransactionObject, TransactionTree } from '../../support/generators/transactions.spec';
+import { generateTransactionObject, Transaction, TransactionTree } from '../../support/generators/transactions.spec';
 
 const contact = generateContactIndividual({
   employer: '',
   occupation: '',
 });
 const transactions = [
-  generateTransactionObject({ 'INDIVIDUALS/PERSONS': { 'Individual Receipt': { contributionAmount: 199.99 } } }),
-  generateTransactionObject({ 'INDIVIDUALS/PERSONS': { 'Individual Receipt': { contributionAmount: 200.01 } } }),
-  generateTransactionObject({ OTHER: { 'Other Receipts': { contributionAmount: 199.99 } } }),
-  generateTransactionObject({ OTHER: { 'Other Receipts': { contributionAmount: 200.01 } } }),
+  generateTransactionObject({
+    transaction_name: 'Individual Receipt',
+    fields: { contributionAmount: 199.99 },
+    contact: contact,
+  }),
+  generateTransactionObject({
+    transaction_name: 'Individual Receipt',
+    fields: { contributionAmount: 200.01 },
+    contact: contact,
+  }),
+  generateTransactionObject({
+    transaction_name: 'Other Receipts',
+    fields: { contributionAmount: 199.99 },
+    contact: contact,
+  }),
+  generateTransactionObject({
+    transaction_name: 'Other Receipts',
+    fields: { contributionAmount: 200.01 },
+    contact: contact,
+  }),
 ];
 
-function test_employer_fields(transaction: TransactionTree) {
-  const accordion = Object.keys(transaction)[0];
-  const receipt = Object.keys(transaction[accordion])[0];
-  const contribution = transaction[accordion][receipt]['contributionAmount'];
+function test_employer_fields(transaction: Transaction) {
+  const accordion = transaction.transaction_category;
+  const receipt = transaction.transaction_name;
+  const contribution = transaction.fields['contributionAmount'] as number;
   const required = contribution > 200;
 
-  cy.createTransactionSchA(transaction, contact, false);
+  cy.createTransactionSchA(transaction, false);
   cy.shortWait();
   cy.get('input[formControlName="contributor_employer"]').click();
   cy.get('input[formControlName="contributor_occupation"]').click();
