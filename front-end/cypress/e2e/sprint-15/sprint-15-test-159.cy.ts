@@ -54,10 +54,6 @@ describe('QA Script 159 (Sprint 15)', () => {
     cy.shortWait();
     cy.navigateTransactionAccordion('INDIVIDUALS/PERSONS', 'Individual Receipt');
 
-    cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contactIndividual['name']);
-    cy.medWait();
-    cy.contains('li', 'In contacts').click({ force: true });
-    cy.medWait();
     enterTransactionSchA(transactionIndv);
     cy.shortWait();
 
