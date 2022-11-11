@@ -79,7 +79,7 @@ const JFTransTree = {
 const transactionPartyA = generateTransactionObject(JFTransTree);
 const transactionPartyB = generateTransactionObject(JFTransTree);
 const transactionPartyC = generateTransactionObject(JFTransTree);
-transactionPartyC['contributionDate'] = new Date('12/12/2013');
+transactionPartyC.fields['contributionDate'] = new Date('12/12/2013');
 
 function testAggregation(contact: Contact, navigation: [string, string], transactions: Transaction[]) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
@@ -118,6 +118,20 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
   cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]')
     .find('input')
     .should('contain.value', transactions[2].fields['contributionAmount']);
+
+  if (transactions[3]) {
+    cy.contains('button', 'Cancel').click();
+    cy.medWait();
+    cy.get('button[label="Add new transaction"]').click();
+    cy.navigateTransactionAccordion(transactions[3].transaction_category, transactions[3].transaction_name);
+
+    enterTransactionSchA(transactions[3]);
+    cy.contains('Additional Information').click(); // Field loses focus refreshing the value of contribution aggregate
+    cy.shortWait();
+    cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]')
+      .find('input')
+      .should('contain.value', transactions[3].fields['contributionAmount']);
+  }
 }
 
 describe('QA Script 472 (Sprint 15)', () => {
@@ -174,63 +188,4 @@ describe('QA Script 472 (Sprint 15)', () => {
       [transactionPartyA, transactionPartyB, transactionPartyC]
     );
   });
-
-  /*
-  it('Tests Memo aggregations', () => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-    cy.medWait();
-
-    cy.navigateToTransactionManagement();
-    cy.longWait();
-    cy.contains('a', 'JOINT_FUNDRAISING_TRANSFER').click();
-    cy.medWait();
-    cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
-    cy.shortWait();
-    cy.contains('li', 'PAC Joint Fundraising Transfer Memo').click();
-    cy.longWait();
-
-    const contact = contactCommittee;
-    const transactions = [JFMemoA, JFMemoB, JFMemoC];
-    cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
-    cy.medWait();
-    cy.contains('li', 'In contacts').click({ force: true });
-    cy.medWait();
-    enterTransactionSchA(transactions[0]);
-    cy.shortWait();
-    cy.contains('button', 'Save & add another').click();
-    cy.shortWait();
-
-    cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
-    cy.medWait();
-    cy.contains('li', 'In contacts').click({ force: true });
-    cy.medWait();
-    enterTransactionSchA(transactions[1]);
-    cy.longWait();
-    cy.contains('Additional Information').click(); // Field loses focus refreshing the value of contribution aggregate
-    cy.shortWait();
-    const aggregate =
-      transactions[0]['contributionAmount'] +
-      transactions[1]['contributionAmount'] +
-      transactionJFA['contributionAmount'] +
-      transactionJFB['contributionAmount'];
-    cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]').find('input').should('contain.value', aggregate);
-
-    cy.contains('button', 'Save & add another').click();
-    cy.shortWait();
-
-    cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
-    cy.medWait();
-    cy.contains('li', 'In contacts').click({ force: true });
-    cy.medWait();
-    enterTransactionSchA(transactions[2]);
-    cy.longWait();
-    cy.contains('Additional Information').click(); // Field loses focus refreshing the value of contribution aggregate
-    cy.shortWait();
-    cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]')
-      .find('input')
-      .should('contain.value', transactions[2]['contributionAmount']);
-  });
-  */
 });
