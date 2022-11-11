@@ -110,7 +110,7 @@ export function enterTransactionSchA(transaction: Transaction) {
   const entityType = transaction.entity_type;
   const tForm = getTransactionFormByName(transaction.transaction_name);
   if (tForm?.entity_type?.entities?.length > 1) {
-    cy.dropdownSetValue('.p-dropdown', transaction.entity_type);
+    cy.dropdownSetValue('.p-dropdown:visible:first', transaction.entity_type);
   }
 
   if (transaction.isNewContact === false) {

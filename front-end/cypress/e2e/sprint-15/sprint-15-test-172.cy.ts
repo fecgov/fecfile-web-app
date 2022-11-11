@@ -37,6 +37,11 @@ const transactions = [
     transaction_name: 'Other Receipts',
     fields: { contributionAmount: 200.01 },
   }),
+  generateTransactionObject({
+    transaction_name: 'Joint Fundraising Transfer',
+    fields: { contributionAmount: 100.0 },
+    childTransactions: [],
+  }),
 ];
 
 function getName(contact: Contact): string {
@@ -52,10 +57,10 @@ function getName(contact: Contact): string {
 
 function test_itemization(transaction: Transaction) {
   const contact = transaction.contact;
-  const accordion = transaction.transaction_category;
-  const receipt = transaction.transaction_name;
   const contribution = transaction.fields['contributionAmount'];
-  const itemized = contribution > 200;
+  let itemized = contribution > 200;
+  if (transaction.transaction_name === 'Joint Fundraising Transfer') itemized = true;
+
   cy.createTransactionSchA(transaction);
 
   if (!itemized) cy.contains('tr', getName(contact)).should('contain.text', 'Unitemized');

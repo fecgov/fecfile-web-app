@@ -24,6 +24,7 @@ const indvRecTree = {
     contributionAmount: _.random(10, 500, false),
   },
   contact: contactIndividual,
+  isNewContact: false,
 };
 const offsetToOpexTree = {
   transaction_name: 'Offsets to Operating Expenditures',
@@ -32,6 +33,7 @@ const offsetToOpexTree = {
     contributionAmount: _.random(10, 500, false),
   },
   contact: contactIndividual,
+  isNewContact: false,
 };
 
 const transactionIndvA = generateTransactionObject(indvRecTree);
