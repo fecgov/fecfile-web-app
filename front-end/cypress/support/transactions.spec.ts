@@ -93,11 +93,11 @@ function createPairedTransaction(transaction: PairedTransaction, save = true) {
     cy.contains('button', 'Save & view all transactions').click();
     if (transaction.transactionA.isNewContact) {
       cy.shortWait();
-      cy.get('.p-confirm-dialog-accept').first().click();
+      cy.get('.p-confirm-dialog-accept:visible').click({ force: true });
     }
     if (transaction.transactionB.isNewContact) {
       cy.shortWait();
-      cy.get('.p-confirm-dialog-accept').first().click();
+      cy.get('.p-confirm-dialog-accept:visible').click({ force: true });
     }
     cy.longWait();
   }
