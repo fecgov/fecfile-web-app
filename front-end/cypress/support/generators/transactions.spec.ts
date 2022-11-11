@@ -169,9 +169,10 @@ function generateSingleTransactionFromForm(
 
   // Generate the Contact and check whether or not it has already been made
   transaction['contact'] = retrieveContact(transactionForm, transactionGiven);
+  transaction['isNewContact'] = true;
   if (transaction['contact']) {
     transaction['entity_type'] = transaction['contact'].contact_type;
-    if (transactionGiven?.isNewContact) transaction['isNewContact'] = transactionGiven.isNewContact;
+    if (transactionGiven?.isNewContact != undefined) transaction['isNewContact'] = transactionGiven.isNewContact;
   } else {
     const eType = transaction['entity_type'];
     if (eType === 'Committee') transaction['contact'] = generateContactCommittee({});

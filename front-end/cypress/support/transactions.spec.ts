@@ -113,15 +113,15 @@ export function enterTransactionSchA(transaction: Transaction) {
     cy.dropdownSetValue('.p-dropdown', transaction.entity_type);
   }
 
-  if (transaction.isNewContact) {
-    cy.contains('a:visible', 'Create a new contact').click();
-    cy.medWait();
-    enterContact(contact, true, true);
-    cy.medWait();
-  } else {
+  if (transaction.isNewContact === false) {
     cy.get('p-autocomplete:visible[formcontrolname="selectedContact"]').safeType(contact['name']);
     cy.medWait();
     cy.contains('li', 'In contacts').click({ force: true });
+    cy.medWait();
+  } else {
+    cy.contains('a:visible', 'Create a new contact').click();
+    cy.medWait();
+    enterContact(contact, true, true);
     cy.medWait();
   }
 
