@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { navigateTransactionAccordion } from '../../support/transactions.spec';
-import { groupANavTree, TransactionFields, TransactionForm } from '../../support/transaction_nav_trees.spec';
+import { groupANavTree, TransactionFields } from '../../support/transaction_nav_trees.spec';
 import { committeeID, randomString } from '../../support/generators/generators.spec';
 import {
   generateTransactionObject,
@@ -11,7 +11,6 @@ import {
   PairedTransaction,
   Transaction,
 } from '../../support/generators/transactions.spec';
-import { generateContactToFit } from '../../support/generators/contacts.spec';
 import { enterContact } from '../../support/contacts.spec';
 
 function testField(fieldName, fieldRules, number: boolean = false) {

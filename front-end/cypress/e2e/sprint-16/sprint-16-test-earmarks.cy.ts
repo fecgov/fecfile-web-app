@@ -2,7 +2,7 @@
 
 import { generateContactIndividual } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
-import { generateTransactionObject, PairedTransaction, Transaction } from '../../support/generators/transactions.spec';
+import { generateTransactionObject, PairedTransaction } from '../../support/generators/transactions.spec';
 
 const indvContact = generateContactIndividual({
   employer: '',

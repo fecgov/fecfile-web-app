@@ -1,4 +1,3 @@
-import { generateContactCommittee } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { createTransactionSchA } from '../../support/transactions.spec';

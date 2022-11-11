@@ -1,13 +1,6 @@
 import _ from 'lodash';
-import {
-  TransactionTree,
-  Transaction,
-  transaction_matches_contact,
-  wrap_transaction_with_tree,
-  getTransactionFormByName,
-} from './generators/transactions.spec';
-import { PairedTransactionForm, TransactionFields } from './transaction_nav_trees.spec';
-import { Contact, generateContactToFit } from './generators/contacts.spec';
+import { Transaction, getTransactionFormByName } from './generators/transactions.spec';
+import { TransactionFields } from './transaction_nav_trees.spec';
 import { enterContact } from './contacts.spec';
 import { PairedTransaction } from './generators/transactions.spec';
 

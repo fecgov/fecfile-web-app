@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Contact, generateContactToFit } from '../../support/generators/contacts.spec';
+import { Contact } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 
