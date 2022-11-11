@@ -38,8 +38,6 @@ const transactionIndvA = generateTransactionObject(indvRecTree);
 const transactionIndvB = generateTransactionObject(indvRecTree);
 const transactionIndvC = generateTransactionObject(indvRecTree);
 transactionIndvC.fields['contributionDate'] = new Date('12/12/2013');
-console.log(transactionIndvA);
-
 const transactionIndvD = generateTransactionObject(offsetToOpexTree);
 
 //Organization Transactions
@@ -65,7 +63,6 @@ const transactionOrgA = generateTransactionObject(orgRecTree);
 const transactionOrgB = generateTransactionObject(orgRecTree);
 const transactionOrgC = generateTransactionObject(orgRecTree);
 transactionOrgC.fields['contributionDate'] = new Date('12/12/2013');
-
 const transactionOrgD = generateTransactionObject(otherRecTree);
 
 //JF Transfer Transfers
@@ -81,7 +78,6 @@ const JFTransTree = {
 
 const transactionPartyA = generateTransactionObject(JFTransTree);
 const transactionPartyB = generateTransactionObject(JFTransTree);
-
 const transactionPartyC = generateTransactionObject(JFTransTree);
 transactionPartyC['contributionDate'] = new Date('12/12/2013');
 
@@ -96,24 +92,16 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
   cy.shortWait();
   cy.navigateTransactionAccordion(navigation[0], navigation[1]);
 
-  cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
-  cy.medWait();
-  cy.contains('li', 'In contacts').click({ force: true });
-  cy.medWait();
   enterTransactionSchA(transactions[0]);
   cy.shortWait();
   cy.contains('button', 'Save & add another').click();
   cy.shortWait();
 
-  cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
-  cy.medWait();
-  cy.contains('li', 'In contacts').click({ force: true });
-  cy.medWait();
   enterTransactionSchA(transactions[1]);
   cy.longWait();
   cy.contains('Additional Information').click(); // Field loses focus refreshing the value of contribution aggregate
   cy.shortWait();
-  const aggregate = transactions[0]['contributionAmount'] + transactions[1]['contributionAmount'];
+  const aggregate = transactions[0].fields['contributionAmount'] + transactions[1].fields['contributionAmount'];
   cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]').find('input').should('contain.value', aggregate);
 
   cy.contains('button', 'Save & add another').click();
@@ -129,7 +117,7 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
   cy.shortWait();
   cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]')
     .find('input')
-    .should('contain.value', transactions[2]['contributionAmount']);
+    .should('contain.value', transactions[2].fields['contributionAmount']);
 }
 
 describe('QA Script 472 (Sprint 15)', () => {
@@ -182,7 +170,7 @@ describe('QA Script 472 (Sprint 15)', () => {
 
     testAggregation(
       contactCommittee,
-      ['TRANSFERS', 'Party Receipt'],
+      ['REGISTERED FILERS', 'Party Receipt'],
       [transactionPartyA, transactionPartyB, transactionPartyC]
     );
   });

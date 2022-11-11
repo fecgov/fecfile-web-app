@@ -118,6 +118,11 @@ export function enterTransactionSchA(transaction: Transaction) {
     cy.medWait();
     enterContact(contact, true, true);
     cy.medWait();
+  } else {
+    cy.get('p-autocomplete:visible[formcontrolname="selectedContact"]').safeType(contact['name']);
+    cy.medWait();
+    cy.contains('li', 'In contacts').click({ force: true });
+    cy.medWait();
   }
 
   for (const field of fields) {
