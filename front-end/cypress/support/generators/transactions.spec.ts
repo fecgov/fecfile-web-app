@@ -81,7 +81,7 @@ function getTransactionFormByCategory(transaction_category: string): Transaction
 function getTransactionFormAtRandom(): TransactionForm {
   let forms: TransactionForm[] = [];
   for (const category of Object.keys(groupANavTree)) {
-    forms = [...forms, ...(Object.values(groupANavTree[category]) as TransactionForm[])];
+    forms = [...forms, ...Object.values(groupANavTree[category])];
   }
 
   return _.sample(forms) as TransactionForm;
@@ -111,7 +111,7 @@ function genEntityType(
   if (transactionGiven?.entity_type) {
     const entities = transactionForm.entity_type.entities;
     if (entities && entities.includes(transactionGiven.entity_type)) {
-      return transactionGiven.entity_type as TransactionEntityType;
+      return transactionGiven.entity_type;
     }
   }
   if (!transactionForm.entity_type) console.log('Missing entity_type!', transactionForm);

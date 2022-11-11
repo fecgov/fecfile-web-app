@@ -1,8 +1,6 @@
-import _ from 'lodash';
-import { Transaction, getTransactionFormByName } from './generators/transactions.spec';
+import { Transaction, getTransactionFormByName, PairedTransaction } from './generators/transactions.spec';
 import { TransactionFields } from './transaction_nav_trees.spec';
 import { enterContact } from './contacts.spec';
-import { PairedTransaction } from './generators/transactions.spec';
 
 //Run this on the transaction creation accordion to navigate to the desired transaction
 export function navigateTransactionAccordion(category: string, transactionType: string) {

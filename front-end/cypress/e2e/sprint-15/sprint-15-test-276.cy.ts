@@ -32,8 +32,6 @@ const transactions = [
 ];
 
 function test_employer_fields(transaction: Transaction) {
-  const accordion = transaction.transaction_category;
-  const receipt = transaction.transaction_name;
   const contribution = transaction.fields['contributionAmount'] as number;
   const required = contribution > 200;
 
