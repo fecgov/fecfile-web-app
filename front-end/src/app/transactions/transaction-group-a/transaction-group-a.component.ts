@@ -48,8 +48,17 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router,
-    protected override fecDatePipe: FecDatePipe,
+    protected override fecDatePipe: FecDatePipe
   ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router, fecDatePipe);
+    super(
+      messageService,
+      transactionService,
+      contactService,
+      validateService,
+      confirmationService,
+      fb,
+      router,
+      fecDatePipe
+    );
   }
 }

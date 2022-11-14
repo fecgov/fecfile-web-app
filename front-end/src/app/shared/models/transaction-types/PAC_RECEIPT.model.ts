@@ -1,3 +1,4 @@
+import { TransactionType } from '../../interfaces/transaction-type.interface';
 import {
   SchATransaction,
   ScheduleATransactionTypes,
@@ -5,25 +6,21 @@ import {
   AggregationGroups,
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRANSFER';
-import { Transaction } from '../../interfaces/transaction.interface';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_RECEIPT';
 import {
   CANCEL_CONTROL,
-  SAVE_ANOTHER_CONTROL,
   SAVE_LIST_CONTROL,
+  SAVE_ANOTHER_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
-export class TRANSFER implements TransactionType {
+export class PAC_RECEIPT implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'F';
   isDependentChild = false;
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRANSFER);
+  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RECEIPT);
   schema = schema;
-  transaction: Transaction | undefined;
-  contact = undefined;
-  parent: SchATransaction | undefined;
+  transaction = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
@@ -36,8 +33,8 @@ export class TRANSFER implements TransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA12',
-      transaction_type_identifier: ScheduleATransactionTypes.TRANSFER,
+      form_type: 'SA11C',
+      transaction_type_identifier: ScheduleATransactionTypes.PAC_RECEIPT,
       aggregation_group: AggregationGroups.GENERAL,
     });
   }

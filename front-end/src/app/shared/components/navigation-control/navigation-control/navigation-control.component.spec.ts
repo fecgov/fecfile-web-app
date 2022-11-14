@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
 
 describe('NavigationControlComponent', () => {
@@ -8,9 +8,9 @@ describe('NavigationControlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NavigationControlComponent ]
-    })
-    .compileComponents();
+      imports: [ButtonModule],
+      declarations: [NavigationControlComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(NavigationControlComponent);
     component = fixture.componentInstance;
