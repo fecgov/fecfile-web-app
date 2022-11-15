@@ -147,7 +147,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   // prettier-ignore
   retrieveMemoText(transactionType: TransactionType, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const text = formValues['memo_text_description'];
+    const text = this.form.get('memo_text_input')?.value;
     if (text && text.length > 0) {
       const memo_text = MemoText.fromJSON({
         text4000: text,
@@ -166,7 +166,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     } else {
       formValues['memo_text'] = undefined;
     }
-    delete formValues['memo_text_description'];
 
     return formValues;
   }
@@ -174,7 +173,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   patchMemoText(transactionType: TransactionType | undefined, form: FormGroup) {
     const memo_text = transactionType?.transaction?.memo_text;
     if (memo_text?.text4000) {
-      form.patchValue({ memo_text_description: memo_text.text4000 });
+      form.patchValue({ memo_text_input: memo_text.text4000 });
     }
   }
 

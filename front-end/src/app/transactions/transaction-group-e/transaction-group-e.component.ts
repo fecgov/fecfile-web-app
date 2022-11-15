@@ -25,7 +25,7 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     'contribution_purpose_descrip',
     'donor_committee_fec_id',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
     'subTransaction',
   ];
   subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];

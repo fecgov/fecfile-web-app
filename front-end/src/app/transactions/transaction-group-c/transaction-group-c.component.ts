@@ -35,7 +35,7 @@ export class TransactionGroupCComponent extends TransactionTypeBaseComponent imp
     'contributor_employer',
     'contributor_occupation',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
@@ -49,8 +49,17 @@ export class TransactionGroupCComponent extends TransactionTypeBaseComponent imp
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router,
-    protected override fecDatePipe: FecDatePipe,
+    protected override fecDatePipe: FecDatePipe
   ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router, fecDatePipe);
+    super(
+      messageService,
+      transactionService,
+      contactService,
+      validateService,
+      confirmationService,
+      fb,
+      router,
+      fecDatePipe
+    );
   }
 }
