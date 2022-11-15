@@ -1,0 +1,82 @@
+<div [formGroup]="form">
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="contribution_date">DATE RECEIVED</label>
+        <p-calendar
+          inputId="contribution_date"
+          name="contribution_date"
+          formControlName="contribution_date"
+        ></p-calendar>
+        <app-error-messages
+          [form]="form"
+          fieldName="contribution_date"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <div class="field">
+        <p-checkbox
+          [binary]="true"
+          inputId="memo_code"
+          formControlName="memo_code"
+          label="MEMO ITEM"
+          ariaLabel="have memo item"
+          [trueValue]="true"
+          [falseValue]="false"
+          [readonly]="memoCodeReadOnly"
+        ></p-checkbox>
+        <div class="memo-checkbox-note">
+          {{ memoItemHelpText }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="contribution_amount">AMOUNT</label>
+        <p-inputNumber
+          inputId="contribution_amount"
+          formControlName="contribution_amount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          [readonly]="contributionAmountReadOnly"
+          inputStyleClass="{{ contributionAmountInputStyleClass }}"
+        ></p-inputNumber>
+        <app-error-messages
+          [form]="form"
+          fieldName="contribution_amount"
+          [formSubmitted]="formSubmitted"
+          patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The amount can be 12 digits max"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="field">
+        <label for="contribution_aggregate">AGGREGATE</label>
+        <p-inputNumber
+          inputId="contribution_aggregate"
+          formControlName="contribution_aggregate"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          [readonly]="true"
+          inputStyleClass="readonly"
+        ></p-inputNumber>
+        <app-error-messages
+          [form]="form"
+          fieldName="contribution_aggregate"
+          [formSubmitted]="formSubmitted"
+          patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The aggregate can be 12 digits max"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+</div>

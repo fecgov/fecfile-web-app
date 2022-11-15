@@ -7,6 +7,7 @@ import { TransactionType } from 'app/shared/interfaces/transaction-type.interfac
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { AggregationGroups, SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -159,7 +160,7 @@ describe('TransactionGroupBComponent', () => {
       aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -179,7 +180,7 @@ describe('TransactionGroupBComponent', () => {
       component.transactionType.transaction.id = '10';
     }
     component.form.patchValue({ ...transaction });
-    component.save('add another');
+    component.save(NavigationDestination.ANOTHER);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/10/`);
     expect(req.request.method).toEqual('PUT');
     httpTestingController.verify();
@@ -217,7 +218,7 @@ describe('TransactionGroupBComponent', () => {
     });
     component.form.patchValue({ ...testTran });
 
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -253,7 +254,7 @@ describe('TransactionGroupBComponent', () => {
       aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -261,7 +262,7 @@ describe('TransactionGroupBComponent', () => {
 
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(`${environment.apiUrl}/sch-a-transactions/1/`);
     httpTestingController.verify();
@@ -294,7 +295,7 @@ describe('TransactionGroupBComponent', () => {
       aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(`${environment.apiUrl}/sch-a-transactions/1/`);
     httpTestingController.verify();

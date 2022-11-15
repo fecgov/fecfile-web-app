@@ -9,9 +9,16 @@ export interface Transaction {
   filer_committee_id_number: string | undefined;
   transaction_id: string | null;
   transaction_type_identifier: string | undefined;
+  itemized: boolean | undefined;
   contribution_purpose_descrip: string | undefined;
   parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined;
   children: Transaction[] | undefined;
   fields_to_validate: string[] | undefined;
+}
+export function isNewTransaction(transaction?: Transaction): boolean {
+  return !transaction?.id;
+}
+export function hasNoContact(transaction?: Transaction): boolean {
+  return !transaction?.contact;
 }

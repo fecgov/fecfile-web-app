@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -99,7 +100,7 @@ describe('TransactionGroupFComponent', () => {
 
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    component.save('list');
+    component.save(NavigationDestination.LIST);
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
       `${environment.apiUrl}/sch-a-transactions/1/?schema=PAC_JF_TRANSFER_MEMO&fields_to_validate=`

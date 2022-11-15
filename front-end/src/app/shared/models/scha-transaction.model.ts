@@ -54,6 +54,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
   transaction_type_identifier: string | undefined;
+  itemized: boolean | undefined;
 
   parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined; // Foreign key to the SchATransaction model
@@ -106,19 +107,18 @@ export enum ScheduleATransactionTypes {
   UNREGISTERED_RECEIPT_FROM_PERSON = 'PAC_NON_FED_REC',
   UNREGISTERED_RECEIPT_FROM_PERSON_RETURNED_BOUNCED_RECEIPT = 'PAC_NON_FED_RET',
   // Contributions from Registered Filers
-  PARTY_RECEIPT = 'PARTY_REC',
+  PARTY_RECEIPT = 'PARTY_RECEIPT',
   PARTY_IN_KIND = 'PARTY_IK_REC',
   RETURNED_BOUNCED_RECEIPT_PARTY = 'PARTY_RET',
-  PAC_RECEIPT = 'PAC_REC',
+  PAC_RECEIPT = 'PAC_RECEIPT',
   PAC_IN_KIND = 'PAC_IK_REC',
   PAC_EARMARK_RECEIPT = 'PAC_EAR_REC',
   PAC_CONDUIT_EARMARK_DEPOSITED = 'PAC_CONDUIT_EARMARK_DEPOSITED',
   PAC_CONDUIT_EARMARK_UNDEPOSITED = 'PAC_CONDUIT_EARMARK_UNDEPOSITED',
   RETURNED_BOUNCED_RECEIPT_PAC = 'PAC_RET',
   // Transfers
-  TRANSFERS = 'TRAN',
+  TRANSFER = 'TRANSFER',
   JOINT_FUNDRAISING_TRANSFER = 'JOINT_FUNDRAISING_TRANSFER',
-  PAC_JF_TRANSFER_MEMO = 'PAC_JF_TRANSFER_MEMO',
   IN_KIND_TRANSFER = 'IK_TRAN',
   IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRAN_NP_RECNT_ACC',
@@ -154,6 +154,10 @@ export enum ScheduleATransactionTypes {
   EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION = 'EAR_REC_HQ_ACC',
   // Child transactiion types
   EARMARK_MEMO = 'EARMARK_MEMO',
+  PAC_JF_TRANSFER_MEMO = 'PAC_JF_TRANSFER_MEMO',
+  INDIVIDUAL_JF_TRANSFER_MEMO = 'INDIVIDUAL_JF_TRANSFER_MEMO',
+  PARTY_JF_TRANSFER_MEMO = 'PARTY_JF_TRANSFER_MEMO',
+  TRIBAL_JF_TRANSFER_MEMO = 'TRIBAL_JF_TRANSFER_MEMO',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -183,9 +187,12 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED, 'PAC Conduit Earmark (Undeposited)'],
   [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC, 'Returned/Bounced Receipt (PAC)'],
   // Transfers
-  [ScheduleATransactionTypes.TRANSFERS, 'Transfers'],
+  [ScheduleATransactionTypes.TRANSFER, 'Transfer'],
   [ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER, 'Joint Fundraising Transfer'],
+  [ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO, 'Individual Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO, 'PAC Joint Fundraising Transfer Memo'],
+  [ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO, 'Party Joint Fundraising Transfer Memo'],
+  [ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO, 'Tribal Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer - Federal Election Activity'],
   [

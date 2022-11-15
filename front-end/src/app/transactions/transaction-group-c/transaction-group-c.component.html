@@ -2,12 +2,12 @@
 
 <div class="p-fluid">
   <h1>{{ transactionType?.title }}</h1>
-  <h3>Contributor</h3>
+  <h3>Contact</h3>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid">
       <div class="col-12">
         <div class="field">
-          <label for="entity_type">CONTRIBUTOR TYPE</label>
+          <label for="entity_type">CONTACT TYPE</label>
           <app-contact-lookup
             [contactTypeFormControl]="$any(form).controls['entity_type']"
             [contactTypeOptions]="contactTypeOptions"
@@ -206,7 +206,7 @@
         </div>
         <p-divider></p-divider>
       </ng-container>
-      <h3>Contribution</h3>
+      <h3>Receipt Information</h3>
       <div class="grid">
         <div class="col-6">
           <div class="field">
@@ -245,7 +245,7 @@
       <div class="grid">
         <div class="col-6">
           <div class="field">
-            <label for="contribution_amount">CONTRIBUTION AMOUNT</label>
+            <label for="contribution_amount">AMOUNT</label>
             <p-inputNumber
               inputId="contribution_amount"
               formControlName="contribution_amount"
@@ -264,7 +264,7 @@
         </div>
         <div class="col-6">
           <div class="field">
-            <label for="contribution_aggregate">CONTRIBUTION AGGREGATE</label>
+            <label for="contribution_aggregate">AGGREGATE</label>
             <p-inputNumber
               inputId="contribution_aggregate"
               formControlName="contribution_aggregate"
@@ -330,32 +330,11 @@
       </div>
     </ng-container>
     <p-divider></p-divider>
-    <div class="grid">
-      <div class="col-2">
-        <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="navigateTo('list')"></button>
-      </div>
-      <div ng-class="isExisting(transaction) ? 'col-7' : 'col-4'"></div>
-      <div class="col-3">
-        <button
-          pButton
-          pRipple
-          label="Save & view all transactions"
-          class="p-button-primary"
-          (click)="save('list')"
-          [disabled]="!transactionType?.transaction?.contact"
-        ></button>
-      </div>
-      <div *ngIf="!isExisting(transactionType?.transaction)" class="col-3">
-        <button
-          pButton
-          pRipple
-          label="Save & add another"
-          class="p-button-info"
-          (click)="save('add another')"
-          [disabled]="!transactionType?.transaction?.contact"
-        ></button>
-      </div>
-    </div>
+    <app-navigation-control-bar
+      [navigationControls]="getNavigationControls()"
+      [transaction]="transactionType?.transaction"
+      (navigate)="handleNavigate($event)"
+    ></app-navigation-control-bar>
   </form>
 </div>
 

@@ -1,3 +1,5 @@
+import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
+import { TransactionNavigationControls } from '../models/transaction-navigation-controls.model';
 import { JsonSchema } from './json-schema.interface';
 import { Transaction } from './transaction.interface';
 
@@ -11,9 +13,11 @@ export interface TransactionType {
   isDependentChild: boolean; // When set to true, the parent transaction is used to generate UI form entry page
   title: string;
   schema: JsonSchema; // FEC validation JSON schema
-  transaction: Transaction | undefined;
-  parentTransaction: Transaction | undefined;
-  childTransactionType: TransactionType | undefined;
+  transaction?: Transaction;
+  parentTransaction?: Transaction;
+  childTransactionType?: TransactionType;
+  subTransactionTypes?: ScheduleATransactionTypes[]; // TransactionTypes to choose from when creating a sub transaction
+  navigationControls?: TransactionNavigationControls;
   contributionPurposeDescripReadonly(): string; // Dynamically generates the text in the CPD field
   getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 }
