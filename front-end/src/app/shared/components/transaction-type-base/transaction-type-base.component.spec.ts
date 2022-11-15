@@ -137,7 +137,7 @@ describe('TransactionTypeBaseComponent', () => {
     component.form = new FormGroup({
       memo_text_input: new FormControl('memo'),
     });
-    const formValues = component.retrieveMemoText(component.transactionType, {});
+    const formValues = component.retrieveMemoText(component.transactionType, component.form, {});
     expect(formValues['memo_text']['text4000']).toBe('memo');
   });
 
