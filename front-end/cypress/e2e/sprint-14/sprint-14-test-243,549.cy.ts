@@ -1,6 +1,5 @@
 // @ts-check
 
-import * as _ from 'lodash';
 import {
   generateContactCommittee,
   generateContactIndividual,
@@ -15,37 +14,22 @@ const contactOrganization = generateContactOrganization({});
 const contactCommittee = generateContactCommittee({});
 
 //Individual Transactions
-const indvRecTree = {
-  'INDIVIDUALS/PERSONS': {
-    'Individual Receipt': {
-      contributionDate: new Date('12/12/2012'),
-      contributionAmount: _.random(10, 500, false),
-    },
-  },
-};
-const tTreeIndividualA = generateTransactionObject(indvRecTree);
+const transactionIndividual = generateTransactionObject({
+  transaction_name: 'Individual Receipt',
+  contact: contactIndividual,
+});
 
 //Organization Transactions
-const orgRecTree = {
-  'INDIVIDUALS/PERSONS': {
-    'Tribal Receipt': {
-      contributionDate: new Date('12/12/2012'),
-      contributionAmount: _.random(10, 500, false),
-    },
-  },
-};
-const tTreeOrganizationA = generateTransactionObject(orgRecTree);
+const transactionOrganization = generateTransactionObject({
+  transaction_name: 'Tribal Receipt',
+  contact: contactOrganization,
+});
 
 //JF Transfer Transfers
-const JFTransTree = {
-  TRANSFERS: {
-    'Joint Fundraising Transfer': {
-      contributionDate: new Date('12/12/2012'),
-      contributionAmount: _.random(10, 250, false),
-    },
-  },
-};
-const tTreeJFTransA = generateTransactionObject(JFTransTree);
+const transactionCommittee = generateTransactionObject({
+  transaction_name: 'Party Receipt',
+  contact: contactCommittee,
+});
 
 describe('QA Script 244 (Sprint 8)', () => {
   after(() => {
@@ -75,11 +59,11 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.medWait();
     cy.navigateToTransactionManagement();
     cy.medWait();
-    cy.createTransactionSchA(tTreeIndividualA, contactIndividual);
+    cy.createTransactionSchA(transactionIndividual);
     cy.medWait();
-    cy.createTransactionSchA(tTreeOrganizationA, contactOrganization);
+    cy.createTransactionSchA(transactionOrganization);
     cy.medWait();
-    cy.createTransactionSchA(tTreeJFTransA, contactCommittee);
+    cy.createTransactionSchA(transactionCommittee);
     cy.medWait();
 
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();

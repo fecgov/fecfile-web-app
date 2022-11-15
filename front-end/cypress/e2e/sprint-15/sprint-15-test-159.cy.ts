@@ -1,24 +1,18 @@
 // @ts-check
 
-import * as _ from 'lodash';
 import { generateContactIndividual } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { enterTransactionSchA } from '../../support/transactions.spec';
 
 const contactIndividual = generateContactIndividual({});
-const indvRecTree = {
-  'INDIVIDUALS/PERSONS': {
-    'Individual Receipt': {
-      contributionDate: new Date('12/12/2012'),
-      contributionAmount: _.random(10, 500, false),
-    },
-  },
-};
-const tTreeIndividual = generateTransactionObject(indvRecTree);
-const transactionIndv = tTreeIndividual['INDIVIDUALS/PERSONS']['Individual Receipt'];
+const transactionIndv = generateTransactionObject({
+  transaction_name: 'Individual Receipt',
+  contact: contactIndividual,
+  isNewContact: false,
+});
 
-describe('QA Script 244 (Sprint 8)', () => {
+describe('QA Script 159 (Sprint 15)', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
@@ -27,7 +21,7 @@ describe('QA Script 244 (Sprint 8)', () => {
   });
 
   before('', () => {
-    //Step 1: Log in, navigate to the contacts page and create individual, organization, and committee contacts
+    //Step 1: Log in, navigate to the contacts page and creates the individual contact
     cy.login();
     cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
@@ -59,10 +53,6 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.shortWait();
     cy.navigateTransactionAccordion('INDIVIDUALS/PERSONS', 'Individual Receipt');
 
-    cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contactIndividual['name']);
-    cy.medWait();
-    cy.contains('li', 'In contacts').click({ force: true });
-    cy.medWait();
     enterTransactionSchA(transactionIndv);
     cy.shortWait();
 
@@ -70,11 +60,11 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.get('input[formControlName="contributor_suffix"]').overwrite('XI');
     cy.shortWait();
 
-    cy.get('button[label="Save & view all transactions"]').click();
+    cy.contains('button', 'Save & view all transactions').click();
     cy.shortWait();
     cy.get('.p-confirm-dialog-reject').click();
     cy.shortWait();
-    cy.get('button[label="Save & view all transactions"]').click();
+    cy.contains('button', 'Save & view all transactions').click();
 
     cy.contains('.p-confirm-dialog-message', 'XI').should('exist');
     cy.contains('.p-confirm-dialog-message', 'TESTOPOLIS').should('exist');

@@ -7,25 +7,59 @@ import { contributionAmount, date, randomString } from './generators/generators.
  *  2. Create a new Transaction Form object for it
  *  3. Add it to the SchA Nav Tree
  */
+export type TransactionEntityType = 'Committee' | 'Individual' | 'Organization';
 export type TransactionCategory = 'INDIVIDUALS/PERSONS' | 'REGISTERED FILERS' | 'TRANSFERS' | 'REFUNDS' | 'OTHER';
-export type SchATransaction =
+export type SchATransactionName =
   | 'Individual Receipt'
   | 'Tribal Receipt'
   | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
-  | 'Other Receipts';
+  | 'Other Receipts'
+  | 'Party Receipt'
+  | 'PAC Receipt'
+  | 'Transfer'
+  | 'Earmark Receipt';
+
+export type ChildTransactionName =
+  | 'PAC Joint Fundraising Transfer Memo'
+  | 'Party Joint Fundraising Transfer Memo'
+  | 'Individual Joint Fundraising Transfer Memo'
+  | 'Tribal Joint Fundraising Transfer Memo'
+  | 'Earmark Receipt Step';
 
 export type TransactionNavTree = {
   [category in TransactionCategory]?: {
-    [transactionName in SchATransaction]?: TransactionForm;
+    [transactionName in SchATransactionName]?: TransactionForm | PairedTransactionForm;
   };
 };
 
+export type PairedTransactionForm = {
+  transaction_name: SchATransactionName;
+  transaction_category: TransactionCategory;
+  transactionA: ChildTransactionForm;
+  transactionB: ChildTransactionForm;
+};
+
 export type TransactionForm = {
-  entity_type?: 'Individual' | 'Committee' | 'Organization';
-  memoTextDescription?: TransactionField;
-  contributionAmount?: TransactionField;
-  childTransactions?: TransactionForm[];
+  entity_type: TransactionField;
+  transaction_name: SchATransactionName;
+  transaction_category: TransactionCategory;
+  fields: {
+    [fieldName: string]: TransactionField;
+  };
+  childTransactions?: ChildTransactionForm[];
+};
+
+export type ChildTransactionForm = {
+  entity_type: TransactionField;
+  transaction_name: ChildTransactionName;
+  fields: {
+    [fieldName: string]: TransactionField;
+  };
+  childOf: SchATransactionName;
+  childTransactions?: {
+    [childName: string]: ChildTransactionForm;
+  };
 };
 
 export type FieldType = 'Text' | 'Calendar' | 'Dropdown' | 'P-InputNumber' | 'Textarea';
@@ -37,7 +71,7 @@ export type TransactionField = {
   fieldType: FieldType;
   required: boolean; //Denotes whether or not the field is required
   readOnly?: boolean; //Denotes whether or not the field is read only (Assumes False)
-  entities?: Array<string>; //If a field only appears on one or more entity types
+  entities?: TransactionEntityType[]; //If a field only appears on one or more entity types
   maxLength: number; //The max number of characters that may be entered (-1 for N/A)
 };
 
@@ -90,6 +124,17 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     readOnly: true,
     maxLength: -1,
   },
+  entityTypeIndvOrComm: {
+    fieldName: 'entity_type_dropdown',
+    fieldType: 'Dropdown',
+    generator: () => {
+      return _.sample(['Individual', 'Committee']);
+    },
+    required: true,
+    entities: ['Individual', 'Committee'],
+    readOnly: false,
+    maxLength: -1,
+  },
   memoTextDescription: {
     fieldName: 'memo_text_description',
     fieldType: 'Textarea',
@@ -122,19 +167,23 @@ export const TransactionFields: { [key: string]: TransactionField } = {
  */
 
 const entityAny = {
-  entityType: TransactionFields['entityType'],
+  entity_type: TransactionFields['entityType'],
 };
 
 const entityIndividual = {
-  entityTypeIndividual: TransactionFields['entityTypeIndividual'],
+  entity_type: TransactionFields['entityTypeIndividual'],
 };
 
 const entityOrganization = {
-  entityTypeOrganization: TransactionFields['entityTypeOrganization'],
+  entity_type: TransactionFields['entityTypeOrganization'],
 };
 
 const entityCommittee = {
-  entityTypeCommittee: TransactionFields['entityTypeCommittee'],
+  entity_type: TransactionFields['entityTypeCommittee'],
+};
+
+const entityIndvOrComm = {
+  entity_type: TransactionFields['entityTypeIndvOrComm'],
 };
 
 const memoFields: { [key: string]: TransactionField } = {
@@ -154,40 +203,155 @@ const contributionFields: { [key: string]: TransactionField } = {
  */
 
 const individualReceipt: TransactionForm = {
+  transaction_name: 'Individual Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
   ...entityIndividual,
-  ...memoFields,
-  ...contributionFields,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
 };
 
 const tribalReceipt: TransactionForm = {
+  transaction_name: 'Tribal Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
   ...entityOrganization,
-  ...memoFields,
-  ...contributionFields,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
 };
 
-const JointFundraisingTransferMemo: TransactionForm = {
+const pacJointFundraisingTransferMemo: ChildTransactionForm = {
+  transaction_name: 'PAC Joint Fundraising Transfer Memo',
   ...entityCommittee,
-  ...memoFields,
-  ...contributionFields,
+  childOf: 'Joint Fundraising Transfer',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
 };
 
-const JointFundraisingTransfer: TransactionForm = {
+const partyJointFundraisingTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Party Joint Fundraising Transfer Memo',
   ...entityCommittee,
-  ...memoFields,
-  ...contributionFields,
-  childTransactions: [JointFundraisingTransferMemo],
+  childOf: 'Joint Fundraising Transfer',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const individualJointFundraisingTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Individual Joint Fundraising Transfer Memo',
+  ...entityIndividual,
+  childOf: 'Joint Fundraising Transfer',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalJointFundraisingTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Tribal Joint Fundraising Transfer Memo',
+  ...entityOrganization,
+  childOf: 'Joint Fundraising Transfer',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const jointFundraisingTransfer: TransactionForm = {
+  transaction_name: 'Joint Fundraising Transfer',
+  transaction_category: 'TRANSFERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childTransactions: [
+    pacJointFundraisingTransferMemo,
+    individualJointFundraisingTransferMemo,
+    tribalJointFundraisingTransferMemo,
+    partyJointFundraisingTransferMemo,
+  ],
 };
 
 const offsetToOpex: TransactionForm = {
+  transaction_name: 'Offsets to Operating Expenditures',
+  transaction_category: 'OTHER',
   ...entityAny,
-  ...memoFields,
-  ...contributionFields,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
 };
 
 const otherReceipt: TransactionForm = {
+  transaction_name: 'Other Receipts',
+  transaction_category: 'OTHER',
   ...entityAny,
-  ...memoFields,
-  ...contributionFields,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const transfer: TransactionForm = {
+  transaction_name: 'Transfer',
+  transaction_category: 'TRANSFERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const partyReceipt: TransactionForm = {
+  transaction_name: 'Party Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const pacReceipt: TransactionForm = {
+  transaction_name: 'PAC Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const earmarkReceiptStepOne: ChildTransactionForm = {
+  transaction_name: 'Earmark Receipt Step One',
+  ...entityIndividual,
+  childOf: 'Earmark Receipt',
+  fields: {
+    ...contributionFields,
+    ...memoFields,
+  },
+};
+const earmarkReceiptStepTwo: ChildTransactionForm = {
+  transaction_name: 'Earmark Receipt Step Two',
+  ...entityIndvOrComm,
+  childOf: 'Earmark Receipt',
+  fields: {
+    contributionDate: TransactionFields['contributionDate'],
+    ...memoFields,
+  },
+};
+
+const earmarkReceipt: PairedTransactionForm = {
+  transaction_name: 'Earmark Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
+  transactionA: earmarkReceiptStepOne,
+  transactionB: earmarkReceiptStepTwo,
 };
 
 /*
@@ -202,14 +366,32 @@ export const groupANavTree: TransactionNavTree = {
   'INDIVIDUALS/PERSONS': {
     'Individual Receipt': individualReceipt,
     'Tribal Receipt': tribalReceipt,
+    'Earmark Receipt': earmarkReceipt,
   },
-  //"REGISTERED FILERS":{},
+  'REGISTERED FILERS': {
+    'Party Receipt': partyReceipt,
+    'PAC Receipt': pacReceipt,
+  },
   TRANSFERS: {
-    'Joint Fundraising Transfer': JointFundraisingTransfer,
+    Transfer: transfer,
+    'Joint Fundraising Transfer': jointFundraisingTransfer,
   },
   //"REFUNDS":{},
   OTHER: {
     'Offsets to Operating Expenditures': offsetToOpex,
     'Other Receipts': otherReceipt,
+  },
+};
+
+export const childTransactionTree = {
+  'Earmark Receipt': {
+    'Earmark Receipt Step One': earmarkReceiptStepOne,
+    'Earmark Receipt Step Two': earmarkReceiptStepTwo,
+  },
+  'Joint Fundraising Transfer': {
+    'Tribal Joint Fundraising Transfer Memo': tribalJointFundraisingTransferMemo,
+    'PAC Joint Fundraising Transfer Memo': pacJointFundraisingTransferMemo,
+    'Party Joint Fundraising Transfer Memo': partyJointFundraisingTransferMemo,
+    'Individual Joint Fundraising Transfer Memo': individualJointFundraisingTransferMemo,
   },
 };
