@@ -42,7 +42,7 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
 }
 
@@ -134,7 +134,10 @@ describe('TransactionTypeBaseComponent', () => {
         },
       };
 
-    const formValues = component.retrieveMemoText(component.transactionType, { memo_text_description: 'memo' });
+    component.form = new FormGroup({
+      memo_text_input: new FormControl('memo'),
+    });
+    const formValues = component.retrieveMemoText(component.transactionType, {});
     expect(formValues['memo_text']['text4000']).toBe('memo');
   });
 

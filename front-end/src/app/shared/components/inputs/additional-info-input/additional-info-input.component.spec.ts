@@ -19,7 +19,7 @@ describe('AdditionalInfoInputComponent', () => {
     component = fixture.componentInstance;
     component.form = new FormGroup({
       contribution_purpose_descrip: new FormControl(''),
-      memo_text_description: new FormControl(''),
+      memo_text_input: new FormControl(''),
     });
     fixture.detectChanges();
   });
