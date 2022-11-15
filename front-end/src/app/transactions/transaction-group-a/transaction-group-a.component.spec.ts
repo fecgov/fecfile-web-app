@@ -67,8 +67,7 @@ describe('TransactionGroupAComponent', () => {
         ConfirmDialogModule,
       ],
       declarations: [TransactionGroupAComponent],
-      providers: [MessageService, ConfirmationService,
-        FormBuilder, provideMockStore(testMockStore), FecDatePipe],
+      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
   });
 
@@ -85,7 +84,6 @@ describe('TransactionGroupAComponent', () => {
         return {} as Transaction;
       },
       title: '',
-      parentTransaction: undefined,
       schema: INDIVIDUAL_JF_TRANSFER_MEMO,
       transaction: transaction,
       childTransactionType: undefined,

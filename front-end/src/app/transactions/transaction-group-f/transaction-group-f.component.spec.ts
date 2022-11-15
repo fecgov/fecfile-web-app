@@ -85,7 +85,6 @@ describe('TransactionGroupFComponent', () => {
         return {} as Transaction;
       },
       title: '',
-      parentTransaction: undefined,
       schema: PAC_JF_TRANSFER_MEMO,
       transaction: transaction,
       childTransactionType: undefined,

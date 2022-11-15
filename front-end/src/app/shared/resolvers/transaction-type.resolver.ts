@@ -53,7 +53,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
       map((transaction: Transaction) => {
         transactionType.transaction = transactionType.getNewTransaction();
 
-        transactionType.parentTransaction = transaction;
+        transactionType.transaction.parent_transaction = transaction;
         transactionType.transaction.parent_transaction_id = String(parentTransactionId);
         transactionType.transaction.report_id = String(transaction.report_id);
 
@@ -70,7 +70,6 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
         ) as TransactionType;
         transactionType.transaction = transaction;
         transactionType.transaction.contact = Contact.fromJSON(transaction.contact);
-        transactionType.parentTransaction = transaction.parent_transaction;
         if (transaction.children?.length) {
           transactionType.childTransactionType = buildTransactionType(transaction.children[0]);
         }

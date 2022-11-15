@@ -22,7 +22,6 @@ export class EARMARK_RECEIPT implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
   transaction: SchATransaction | undefined = undefined;
-  parentTransaction = undefined;
   childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],

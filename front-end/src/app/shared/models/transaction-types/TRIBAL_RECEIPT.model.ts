@@ -21,7 +21,6 @@ export class TRIBAL_RECEIPT implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_RECEIPT);
   schema = schema;
   transaction = undefined;
-  parentTransaction = undefined;
   childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],

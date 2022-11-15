@@ -1,5 +1,5 @@
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { hasNoContact, isNewTransaction } from 'app/shared/interfaces/transaction.interface';
+import { hasNoContact, isNewTransaction, Transaction } from 'app/shared/interfaces/transaction.interface';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_JF_TRANSFER_MEMO';
 import {
@@ -22,8 +22,7 @@ export class TRIBAL_JF_TRANSFER_MEMO implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO);
   schema = schema;
-  transaction = undefined;
-  parentTransaction: SchATransaction | undefined = undefined;
+  transaction?: Transaction;
   childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [
@@ -49,7 +48,7 @@ export class TRIBAL_JF_TRANSFER_MEMO implements TransactionType {
   );
 
   contributionPurposeDescripReadonly(): string {
-    return `JF Memo: ${this.parentTransaction?.contributor_organization_name}`;
+    return `JF Memo: ${(this.transaction?.parent_transaction as SchATransaction).contributor_organization_name}`;
   }
 
   getNewTransaction() {

@@ -21,7 +21,6 @@ export class JOINT_FUNDRAISING_TRANSFER implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
   schema = schema;
   transaction = undefined;
-  parentTransaction = undefined;
   childTransactionType = undefined;
   subTransactionTypes = [
     ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,

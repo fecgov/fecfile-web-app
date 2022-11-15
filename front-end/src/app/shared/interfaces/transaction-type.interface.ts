@@ -14,7 +14,6 @@ export interface TransactionType {
   title: string;
   schema: JsonSchema; // FEC validation JSON schema
   transaction?: Transaction;
-  parentTransaction?: Transaction;
   childTransactionType?: TransactionType;
   subTransactionTypes?: ScheduleATransactionTypes[]; // TransactionTypes to choose from when creating a sub transaction
   navigationControls?: TransactionNavigationControls;

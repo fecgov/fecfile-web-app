@@ -9,7 +9,6 @@ export class EARMARK_MEMO implements TransactionType {
   title = '';
   schema = schema;
   transaction?: SchATransaction = undefined;
-  parentTransaction = undefined;
   childTransactionType = undefined;
 
   contributionPurposeDescripReadonly(): string {

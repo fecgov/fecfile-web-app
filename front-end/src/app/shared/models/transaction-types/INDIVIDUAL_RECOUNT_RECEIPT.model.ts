@@ -1,16 +1,18 @@
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECOUNT_RECEIPT';
 import {
   AggregationGroups,
   SchATransaction,
   ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes
+  ScheduleATransactionTypes,
 } from '../scha-transaction.model';
 import {
-  CANCEL_CONTROL, SAVE_ANOTHER_CONTROL,
+  CANCEL_CONTROL,
+  SAVE_ANOTHER_CONTROL,
   SAVE_LIST_CONTROL,
-  TransactionNavigationControls
+  TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 
 export class INDIVIDUAL_RECOUNT_RECEIPT implements TransactionType {
@@ -19,8 +21,7 @@ export class INDIVIDUAL_RECOUNT_RECEIPT implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT);
   schema = schema;
-  transaction = undefined;
-  parentTransaction = undefined;
+  transaction?: Transaction;
   childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],

@@ -13,7 +13,7 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { hasNoContact, isNewTransaction } from 'app/shared/interfaces/transaction.interface';
+import { hasNoContact, isNewTransaction, Transaction } from 'app/shared/interfaces/transaction.interface';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
 export class PAC_JF_TRANSFER_MEMO implements TransactionType {
@@ -22,8 +22,7 @@ export class PAC_JF_TRANSFER_MEMO implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   schema = schema;
-  transaction = undefined;
-  parentTransaction: SchATransaction | undefined = undefined;
+  transaction?: Transaction;
   childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [
@@ -49,7 +48,9 @@ export class PAC_JF_TRANSFER_MEMO implements TransactionType {
   );
 
   contributionPurposeDescripReadonly(): string {
-    return `Joint Fundraising Memo: ${this.parentTransaction?.contributor_organization_name}`;
+    return `Joint Fundraising Memo: ${
+      (this.transaction?.parent_transaction as SchATransaction).contributor_organization_name
+    }`;
   }
 
   getNewTransaction() {

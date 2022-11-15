@@ -21,7 +21,6 @@ export class OTHER_RECEIPT implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OTHER_RECEIPTS);
   schema = schema;
   transaction = undefined;
-  parentTransaction = undefined;
   childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],

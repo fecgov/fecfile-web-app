@@ -21,7 +21,6 @@ export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
   transaction = undefined;
-  parentTransaction = undefined;
   childTransactionType = undefined;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
