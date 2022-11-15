@@ -146,8 +146,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   // prettier-ignore
-  retrieveMemoText(transactionType: TransactionType, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const text = this.form.get('memo_text_input')?.value;
+  retrieveMemoText(transactionType: TransactionType, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const text = form.get('memo_text_input')?.value;
     if (text && text.length > 0) {
       const memo_text = MemoText.fromJSON({
         text4000: text,
@@ -201,7 +201,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     formProperties: string[]
   ) {
     let formValues = validateService.getFormValues(form, formProperties);
-    if (transactionType) formValues = this.retrieveMemoText(transactionType, formValues);
+    if (transactionType) formValues = this.retrieveMemoText(transactionType, form, formValues);
 
     const payload: Transaction = SchATransaction.fromJSON({
       ...transactionType?.transaction,
