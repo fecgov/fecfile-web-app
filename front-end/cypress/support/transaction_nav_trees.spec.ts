@@ -19,14 +19,15 @@ export type SchATransactionName =
   | 'PAC Receipt'
   | 'Transfer'
   | 'Earmark Receipt'
-  | 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account';
+  | 'Joint Fundraising Transfer - National Party Recount Account';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
   | 'Party Joint Fundraising Transfer Memo'
   | 'Individual Joint Fundraising Transfer Memo'
   | 'Tribal Joint Fundraising Transfer Memo'
-  | 'Earmark Receipt Step';
+  | 'Earmark Receipt Step One'
+  | 'Earmark Receipt Step Two';
 
 export type TransactionNavTree = {
   [category in TransactionCategory]?: {
