@@ -18,7 +18,8 @@ export type SchATransactionName =
   | 'Party Receipt'
   | 'PAC Receipt'
   | 'Transfer'
-  | 'Earmark Receipt';
+  | 'Earmark Receipt'
+  | 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -278,6 +279,16 @@ const jointFundraisingTransfer: TransactionForm = {
   ],
 };
 
+const jointFundraisingTransferNationalPartyRecount: TransactionForm = {
+  transaction_name: 'Joint Fundraising Transfer - National Party Recount Account',
+  transaction_category: 'TRANSFERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const offsetToOpex: TransactionForm = {
   transaction_name: 'Offsets to Operating Expenditures',
   transaction_category: 'OTHER',
@@ -375,6 +386,7 @@ export const groupANavTree: TransactionNavTree = {
   TRANSFERS: {
     Transfer: transfer,
     'Joint Fundraising Transfer': jointFundraisingTransfer,
+    'Joint Fundraising Transfer - National Party Recount Account': jointFundraisingTransferNationalPartyRecount,
   },
   //"REFUNDS":{},
   OTHER: {
