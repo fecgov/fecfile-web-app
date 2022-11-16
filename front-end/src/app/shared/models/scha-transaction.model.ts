@@ -274,6 +274,18 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
     'Earmark Receipt for Headquarters Account (Contribution)',
   ],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'Individual National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'PAC National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ],
 ];
 
 export enum AggregationGroups {
