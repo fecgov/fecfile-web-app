@@ -27,7 +27,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT implements TransactionTy
   parentTransaction = undefined;
   childTransactionType = undefined;
   subTransactionTypes = [
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
   ];
