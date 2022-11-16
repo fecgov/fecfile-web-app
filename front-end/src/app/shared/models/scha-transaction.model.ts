@@ -122,7 +122,8 @@ export enum ScheduleATransactionTypes {
   IN_KIND_TRANSFER = 'IK_TRAN',
   IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRAN_NP_RECNT_ACC',
-  JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'JF_TRAN_NP_CONVEN_ACC',
+  JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT = 
+    'JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT',
   JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'JF_TRAN_NP_HQ_ACC',
   // Refunds
   REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES = 'REF_TO_FED_CAN',
@@ -158,6 +159,14 @@ export enum ScheduleATransactionTypes {
   INDIVIDUAL_JF_TRANSFER_MEMO = 'INDIVIDUAL_JF_TRANSFER_MEMO',
   PARTY_JF_TRANSFER_MEMO = 'PARTY_JF_TRANSFER_MEMO',
   TRIBAL_JF_TRANSFER_MEMO = 'TRIBAL_JF_TRANSFER_MEMO',
+  INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 
+    'INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
+  PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 
+    'PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
+  TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 
+    'TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
+  PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 
+    'PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -201,11 +210,27 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    'Joint Fundraising Transfer - National Party Convention Account',
+    'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
   ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Joint Fundraising Transfer - National Party Headquarters Account',
+  ],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    'Individual National Party Pres. Nominating Convention Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    'PAC National Party Pres. Nominating Convention Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',
   ],
   // Refunds
   [
