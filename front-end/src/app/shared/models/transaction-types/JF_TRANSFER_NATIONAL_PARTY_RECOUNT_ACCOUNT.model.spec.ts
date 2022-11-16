@@ -1,11 +1,11 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { JOINT_FUNDRAISING_TRANSFER } from './JOINT_FUNDRAISING_TRANSFER.model';
+import { JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT } from './JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 
-describe('JOINT_FUNDRAISING_TRANSFER', () => {
-  let transactionType: JOINT_FUNDRAISING_TRANSFER;
+describe('JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
+  let transactionType: JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new JOINT_FUNDRAISING_TRANSFER();
+    transactionType = new JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT();
   });
 
   it('should create an instance', () => {
@@ -16,12 +16,12 @@ describe('JOINT_FUNDRAISING_TRANSFER', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA12');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
+    expect(txn.form_type).toBe('SA17');
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT);
   });
 
   it('#contributionPurposeDescripReadonly() should return constant', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('Transfer of Joint Fundraising Proceeds');
+    expect(descrip).toBe('Recount/Legal Proceedings Account Transfer of JF Proceeds');
   });
 });
