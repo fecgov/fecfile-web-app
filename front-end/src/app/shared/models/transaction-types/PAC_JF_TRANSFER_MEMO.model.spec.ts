@@ -23,7 +23,9 @@ describe('PAC_JF_TRANSFER_MEMO', () => {
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
     expect(descrip).toBe(
-      `Joint Fundraising Memo: ${transactionType.transaction.parent_transaction?.contributor_organization_name}`
+      `Joint Fundraising Memo: ${
+        (transactionType.transaction?.parent_transaction as SchATransaction).contributor_organization_name
+      }`
     );
   });
 });

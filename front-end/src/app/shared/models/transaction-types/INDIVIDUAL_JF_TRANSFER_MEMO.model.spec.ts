@@ -22,6 +22,8 @@ describe('INDIVIDUAL_JF_TRANSFER_MEMO', () => {
 
   it('#contributionPurposeDescripReadonly() should return appropriate retval', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe(`JF Memo: ${transactionType.transaction?.parent_transaction?.contributor_organization_name}`);
+    expect(descrip).toBe(
+      `JF Memo: ${(transactionType.transaction?.parent_transaction as SchATransaction).contributor_organization_name}`
+    );
   });
 });
