@@ -1,4 +1,5 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { JOINT_FUNDRAISING_TRANSFER } from './JOINT_FUNDRAISING_TRANSFER.model';
 import { TRIBAL_JF_TRANSFER_MEMO } from './TRIBAL_JF_TRANSFER_MEMO.model';
 
 describe('TRIBAL_JF_TRANSFER_MEMO', () => {
@@ -6,6 +7,9 @@ describe('TRIBAL_JF_TRANSFER_MEMO', () => {
 
   beforeEach(() => {
     transactionType = new TRIBAL_JF_TRANSFER_MEMO();
+    transactionType.transaction = transactionType.getNewTransaction();
+    transactionType.transaction.parent_transaction = new JOINT_FUNDRAISING_TRANSFER().getNewTransaction();
+    (transactionType.transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
 
   it('should create an instance', () => {
@@ -22,8 +26,6 @@ describe('TRIBAL_JF_TRANSFER_MEMO', () => {
 
   it('#contributionPurposeDescripReadonly() should return appropriate retval', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe(
-      `JF Memo: ${(transactionType.transaction?.parent_transaction as SchATransaction).contributor_organization_name}`
-    );
+    expect(descrip).toBe(`JF Memo: Test Org`);
   });
 });
