@@ -18,7 +18,8 @@ export type SchATransactionName =
   | 'Party Receipt'
   | 'PAC Receipt'
   | 'Transfer'
-  | 'Earmark Receipt';
+  | 'Earmark Receipt'
+  | 'Business/Labor Organization Receipt - Non-Contribution Account';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -222,6 +223,16 @@ const tribalReceipt: TransactionForm = {
   },
 };
 
+const businessLaborNonContribution: TransactionForm = {
+  transaction_name: 'Business/Labor Organization Receipt - Non-Contribution Account',
+  transaction_category: 'OTHER',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const pacJointFundraisingTransferMemo: ChildTransactionForm = {
   transaction_name: 'PAC Joint Fundraising Transfer Memo',
   ...entityCommittee,
@@ -380,6 +391,7 @@ export const groupANavTree: TransactionNavTree = {
   OTHER: {
     'Offsets to Operating Expenditures': offsetToOpex,
     'Other Receipts': otherReceipt,
+    'Business/Labor Organization Receipt - Non-Contribution Account': businessLaborNonContribution,
   },
 };
 
