@@ -1,5 +1,4 @@
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTY_RECOUNT_RECEIPT';
 import {
@@ -21,9 +20,8 @@ export class PARTY_RECOUNT_RECEIPT implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT);
   schema = schema;
-  transaction?: Transaction;
-  childTransactionType = undefined;
-  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+  transaction?: SchATransaction;
+  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]

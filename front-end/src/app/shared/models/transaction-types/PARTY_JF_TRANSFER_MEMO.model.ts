@@ -1,5 +1,5 @@
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { hasNoContact, isNewTransaction, Transaction } from 'app/shared/interfaces/transaction.interface';
+import { hasNoContact, isNewTransaction } from 'app/shared/interfaces/transaction.interface';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTY_JF_TRANSFER_MEMO';
 import {
@@ -22,9 +22,8 @@ export class PARTY_JF_TRANSFER_MEMO implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO);
   schema = schema;
-  transaction?: Transaction;
-  childTransactionType = undefined;
-  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+  transaction?: SchATransaction;
+  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,

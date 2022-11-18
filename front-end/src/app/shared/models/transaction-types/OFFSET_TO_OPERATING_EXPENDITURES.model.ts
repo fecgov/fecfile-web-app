@@ -20,9 +20,8 @@ export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
-  transaction = undefined;
-  childTransactionType = undefined;
-  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+  transaction?: SchATransaction;
+  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]

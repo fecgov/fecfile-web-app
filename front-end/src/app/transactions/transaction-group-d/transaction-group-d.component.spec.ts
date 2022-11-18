@@ -85,7 +85,6 @@ describe('TransactionGroupDComponent', () => {
       title: '',
       schema: TRIBAL_JF_TRANSFER_MEMO,
       transaction: transaction,
-      childTransactionType: undefined,
       isDependentChild: false,
     } as TransactionType;
     fixture.detectChanges();

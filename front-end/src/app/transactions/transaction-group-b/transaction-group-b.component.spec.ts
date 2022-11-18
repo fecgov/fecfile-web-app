@@ -93,7 +93,6 @@ describe('TransactionGroupBComponent', () => {
       title: '',
       schema: OFFSET_TO_OPERATING_EXPENDITURES,
       transaction: transaction,
-      childTransactionType: undefined,
       isDependentChild: false,
     } as TransactionType;
     fixture.detectChanges();
