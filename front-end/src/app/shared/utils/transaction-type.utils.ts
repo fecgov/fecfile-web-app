@@ -4,12 +4,13 @@ import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.mod
 import { INDIVIDUAL_JF_TRANSFER_MEMO } from '../models/transaction-types/INDIVIDUAL_JF_TRANSFER_MEMO.model';
 import { INDIVIDUAL_RECEIPT } from '../models/transaction-types/INDIVIDUAL_RECEIPT.model';
 import { INDIVIDUAL_RECOUNT_RECEIPT } from '../models/transaction-types/INDIVIDUAL_RECOUNT_RECEIPT.model';
+import { JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { JOINT_FUNDRAISING_TRANSFER } from '../models/transaction-types/JOINT_FUNDRAISING_TRANSFER.model';
 import { OFFSET_TO_OPERATING_EXPENDITURES } from '../models/transaction-types/OFFSET_TO_OPERATING_EXPENDITURES.model';
 import { OTHER_RECEIPT } from '../models/transaction-types/OTHER_RECEIPT.model';
 import { PAC_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_JF_TRANSFER_MEMO.model';
-import { PAC_RECOUNT_RECEIPT } from '../models/transaction-types/PAC_RECOUNT_RECEIPT.model';
 import { PAC_RECEIPT } from '../models/transaction-types/PAC_RECEIPT.model';
+import { PAC_RECOUNT_RECEIPT } from '../models/transaction-types/PAC_RECOUNT_RECEIPT.model';
 import { PARTY_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTY_JF_TRANSFER_MEMO.model';
 import { PARTY_RECEIPT } from '../models/transaction-types/PARTY_RECEIPT.model';
 import { PARTY_RECOUNT_RECEIPT } from '../models/transaction-types/PARTY_RECOUNT_RECEIPT.model';
@@ -17,6 +18,11 @@ import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
 import { TRIBAL_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_JF_TRANSFER_MEMO.model';
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
 import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOUNT_RECEIPT.model';
+import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
+import { JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
+import { PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
+import { TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
+import { INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -25,6 +31,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   INDIVIDUAL_JF_TRANSFER_MEMO,
   INDIVIDUAL_RECEIPT,
   INDIVIDUAL_RECOUNT_RECEIPT,
+  JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
   JOINT_FUNDRAISING_TRANSFER,
   OFFSET_TO_OPERATING_EXPENDITURES,
   OTHER_RECEIPT,
@@ -38,6 +45,11 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_JF_TRANSFER_MEMO,
   TRIBAL_RECEIPT,
   TRIBAL_RECOUNT_RECEIPT,
+  BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
+  JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+  PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+  TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+  INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
 }
 
 export class TransactionTypeUtils {
