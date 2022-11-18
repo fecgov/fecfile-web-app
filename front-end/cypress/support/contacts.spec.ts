@@ -13,6 +13,7 @@ export function createContact(contact: object, save = true) {
 }
 
 export function enterContact(contact: object, save = true, forTransaction = false) {
+  console.log('Contact:', contact);
   if (!forTransaction) cy.dropdownSetValue("p-dropdown[formcontrolname='type']", contact['contact_type']);
 
   if (contact['contact_type'] == 'Individual' || contact['contact_type'] == 'Candidate') {
