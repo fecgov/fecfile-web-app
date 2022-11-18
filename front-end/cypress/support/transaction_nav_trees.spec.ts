@@ -313,6 +313,7 @@ const pacNPRJFTransMemo: ChildTransactionForm = {
   },
 };
 
+/* TODO: Uncomment as implemented
 const indvNPPNCAJFTransMemo: ChildTransactionForm = {
   transaction_name: 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo',
   ...entityCommittee,
@@ -352,6 +353,7 @@ const partnershipNPPNCAJFTransMemo: ChildTransactionForm = {
     ...contributionFields,
   },
 };
+*/
 
 const jointFundraisingTransfer: TransactionForm = {
   transaction_name: 'Joint Fundraising Transfer',
@@ -388,7 +390,7 @@ const jointFundraisingTransferNationalPartyPresNominatingConventionAccount: Tran
     ...memoFields,
     ...contributionFields,
   },
-  /* uncomment as children implemented
+  /* TODO: uncomment as children implemented
   childTransactions: [indvNPPNCAJFTransMemo, pacNPPNCAJFTransMemo, 
     tribalNPPNCAJFTransMemo, partnershipNPPNCAJFTransMemo],
   */
