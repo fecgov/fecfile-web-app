@@ -66,8 +66,7 @@ describe('TransactionGroupDComponent', () => {
         ConfirmDialogModule,
       ],
       declarations: [TransactionGroupDComponent],
-      providers: [MessageService, ConfirmationService,
-        FormBuilder, provideMockStore(testMockStore), FecDatePipe],
+      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
   });
 
@@ -84,10 +83,8 @@ describe('TransactionGroupDComponent', () => {
         return {} as Transaction;
       },
       title: '',
-      parentTransaction: undefined,
       schema: TRIBAL_JF_TRANSFER_MEMO,
       transaction: transaction,
-      childTransactionType: undefined,
       isDependentChild: false,
     } as TransactionType;
     fixture.detectChanges();
@@ -106,5 +103,4 @@ describe('TransactionGroupDComponent', () => {
     );
     httpTestingController.verify();
   });
-
 });
