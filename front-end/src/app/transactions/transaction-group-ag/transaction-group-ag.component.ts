@@ -36,7 +36,7 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     'contributor_employer',
     'contributor_occupation',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
 
   childFormProperties: string[] = [
@@ -60,7 +60,7 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     'contributor_occupation',
     'donor_committee_fec_id',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)

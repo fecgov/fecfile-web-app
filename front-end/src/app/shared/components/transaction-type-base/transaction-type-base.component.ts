@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { MemoText } from 'app/shared/models/memo-text.model';
 import {
   AggregationGroups,
   SchATransaction,
@@ -70,6 +71,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.isExisting(transactionType?.transaction)) {
       const txn = { ...transactionType?.transaction } as SchATransaction;
       form.patchValue({ ...txn });
+
+      this.patchMemoText(transactionType, form);
+
       form.get('entity_type')?.disable();
       contactId$.next(txn.contact_id || '');
     } else {
@@ -141,6 +145,38 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
+  // prettier-ignore
+  retrieveMemoText(transactionType: TransactionType, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const text = form.get('memo_text_input')?.value;
+    if (text && text.length > 0) {
+      const memo_text = MemoText.fromJSON({
+        text4000: text,
+        report_id: this.transactionType?.transaction?.report_id,
+        rec_type: 'TEXT',
+        filer_committee_id_number: this.transactionType?.transaction?.filer_committee_id_number,
+        transaction_id_number: '',
+        back_reference_sched_form_name: this.transactionType?.transaction?.form_type,
+      });
+
+      if (transactionType.transaction?.id) {
+        memo_text.transaction_uuid = transactionType.transaction.id;
+      }
+
+      formValues['memo_text'] = memo_text;
+    } else {
+      formValues['memo_text'] = undefined;
+    }
+
+    return formValues;
+  }
+
+  patchMemoText(transactionType: TransactionType | undefined, form: FormGroup) {
+    const memo_text = transactionType?.transaction?.memo_text;
+    if (memo_text?.text4000) {
+      form.patchValue({ memo_text_input: memo_text.text4000 });
+    }
+  }
+
   save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleATransactionTypes) {
     this.formSubmitted = true;
 
@@ -164,9 +200,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form: FormGroup,
     formProperties: string[]
   ) {
+    let formValues = validateService.getFormValues(form, formProperties);
+    if (transactionType) formValues = this.retrieveMemoText(transactionType, form, formValues);
+
     const payload: Transaction = SchATransaction.fromJSON({
       ...transactionType?.transaction,
-      ...validateService.getFormValues(form, formProperties),
+      ...formValues,
     });
     payload.contact_id = payload.contact?.id;
 
