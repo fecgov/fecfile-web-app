@@ -313,48 +313,6 @@ const pacNPRJFTransMemo: ChildTransactionForm = {
   },
 };
 
-/* TODO: Uncomment as implemented
-const indvNPPNCAJFTransMemo: ChildTransactionForm = {
-  transaction_name: 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo',
-  ...entityCommittee,
-  childOf: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
-  fields: {
-    ...memoFields,
-    ...contributionFields,
-  },
-};
-
-const pacNPPNCAJFTransMemo: ChildTransactionForm = {
-  transaction_name: 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo',
-  ...entityCommittee,
-  childOf: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
-  fields: {
-    ...memoFields,
-    ...contributionFields,
-  },
-};
-
-const tribalNPPNCAJFTransMemo: ChildTransactionForm = {
-  transaction_name: 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo',
-  ...entityCommittee,
-  childOf: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
-  fields: {
-    ...memoFields,
-    ...contributionFields,
-  },
-};
-
-const partnershipNPPNCAJFTransMemo: ChildTransactionForm = {
-  transaction_name: 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',
-  ...entityCommittee,
-  childOf: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
-  fields: {
-    ...memoFields,
-    ...contributionFields,
-  },
-};
-*/
-
 const jointFundraisingTransfer: TransactionForm = {
   transaction_name: 'Joint Fundraising Transfer',
   transaction_category: 'TRANSFERS',
@@ -390,10 +348,6 @@ const jointFundraisingTransferNationalPartyPresNominatingConventionAccount: Tran
     ...memoFields,
     ...contributionFields,
   },
-  /* TODO: uncomment as children implemented
-  childTransactions: [indvNPPNCAJFTransMemo, pacNPPNCAJFTransMemo, 
-    tribalNPPNCAJFTransMemo, partnershipNPPNCAJFTransMemo],
-  */
 };
 
 const offsetToOpex: TransactionForm = {
