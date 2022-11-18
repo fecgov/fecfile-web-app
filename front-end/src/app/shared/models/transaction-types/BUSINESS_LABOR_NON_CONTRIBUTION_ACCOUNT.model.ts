@@ -23,8 +23,7 @@ export class BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT implements TransactionType 
     ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT
   );
   schema = schema;
-  transaction = undefined;
-  childTransactionType = undefined;
+  transaction?: SchATransaction;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
