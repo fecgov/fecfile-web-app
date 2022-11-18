@@ -26,6 +26,9 @@ export type ChildTransactionName =
   | 'Party Joint Fundraising Transfer Memo'
   | 'Individual Joint Fundraising Transfer Memo'
   | 'Tribal Joint Fundraising Transfer Memo'
+  | 'PAC National Party Recount/Legal Proceedings Account JF Transfer Memo'
+  | 'Individual National Party Recount/Legal Proceedings Account JF Transfer Memo'
+  | 'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo'
   | 'Earmark Receipt Step One'
   | 'Earmark Receipt Step Two';
 
@@ -264,6 +267,36 @@ const tribalJointFundraisingTransferMemo: ChildTransactionForm = {
   },
 };
 
+const indvNPRJFTransMemo: ChildTransactionForm = {
+  transaction_name: 'Individual National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ...entityIndividual,
+  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalNPRJFTransMemo: ChildTransactionForm = {
+  transaction_name: 'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ...entityOrganization,
+  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const pacNPRJFTransMemo: ChildTransactionForm = {
+  transaction_name: 'PAC National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ...entityCommittee,
+  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const jointFundraisingTransfer: TransactionForm = {
   transaction_name: 'Joint Fundraising Transfer',
   transaction_category: 'TRANSFERS',
@@ -288,6 +321,7 @@ const jointFundraisingTransferNationalPartyRecount: TransactionForm = {
     ...memoFields,
     ...contributionFields,
   },
+  childTransactions: [pacNPRJFTransMemo, indvNPRJFTransMemo, tribalNPRJFTransMemo],
 };
 
 const offsetToOpex: TransactionForm = {
