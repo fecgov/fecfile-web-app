@@ -388,8 +388,10 @@ const jointFundraisingTransferNationalPartyPresNominatingConventionAccount: Tran
     ...memoFields,
     ...contributionFields,
   },
+  /* uncomment as children implemented
   childTransactions: [indvNPPNCAJFTransMemo, pacNPPNCAJFTransMemo, 
     tribalNPPNCAJFTransMemo, partnershipNPPNCAJFTransMemo],
+  */
 };
 
 const offsetToOpex: TransactionForm = {
