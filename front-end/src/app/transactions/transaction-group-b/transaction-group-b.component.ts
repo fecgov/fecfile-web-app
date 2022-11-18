@@ -33,7 +33,7 @@ export class TransactionGroupBComponent extends TransactionTypeBaseComponent imp
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(option.code as ContactTypes)

@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import * as generator from './generators.spec';
-import { TransactionTree } from './transactions.spec';
 
 export type Contact = ContactIndividual | ContactCandidate | ContactCommittee | ContactOrganization;
 
@@ -110,6 +109,7 @@ export function generateContactToFit(transactionTree: TransactionTree): Contact 
       })
     ];
 
+  console.log(entityTypeFound, transactionTree);
   const entityType: ContactType = entityTypeFound ?? 'Individual';
   return generateContactObject({ contact_type: entityType });
 }

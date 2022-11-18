@@ -1,4 +1,3 @@
-import { generateContactCommittee } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { createTransactionSchA } from '../../support/transactions.spec';
@@ -27,17 +26,14 @@ describe('QA Script 347 (Sprint 10)', () => {
     cy.navigateToTransactionManagement();
 
     //Tests the summary page for a report
-    const contactObject = generateContactCommittee({});
-    const transactionTree = generateTransactionObject({
-      TRANSFERS: {
-        'Joint Fundraising Transfer': {},
-      },
+    const transaction = generateTransactionObject({
+      transaction_name: 'Joint Fundraising Transfer',
     });
-    createTransactionSchA(transactionTree, contactObject);
+
+    createTransactionSchA(transaction);
     cy.medWait();
-    const parentTransaction = transactionTree['TRANSFERS']['Joint Fundraising Transfer'];
-    const childTransaction = parentTransaction['childTransactions'][0];
-    const contribution = childTransaction['contributionAmount'] as number;
+    const childTransaction = transaction.childTransactions[0];
+    const contribution = childTransaction.fields['contributionAmount'] as number;
     const convContribution = Intl.NumberFormat('en-US').format(Math.floor(contribution));
 
     cy.contains('tr', 'JOINT_FUNDRAISING_TRANSFER')

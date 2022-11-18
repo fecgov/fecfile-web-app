@@ -3,6 +3,7 @@ import { Transaction } from '../interfaces/transaction.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { Contact } from './contact.model';
+import { MemoText } from './memo-text.model';
 
 export class SchATransaction extends BaseModel implements Transaction {
   id: string | undefined;
@@ -68,6 +69,9 @@ export class SchATransaction extends BaseModel implements Transaction {
   contact: Contact | undefined;
   contact_id: string | undefined; // Foreign key to the Contact model
 
+  memo_text: MemoText | undefined;
+  memo_text_id: string | undefined;
+
   children: Transaction[] | undefined;
 
   fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
@@ -121,9 +125,9 @@ export enum ScheduleATransactionTypes {
   JOINT_FUNDRAISING_TRANSFER = 'JOINT_FUNDRAISING_TRANSFER',
   IN_KIND_TRANSFER = 'IK_TRAN',
   IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
-  JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRAN_NP_RECNT_ACC',
   JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT = 
     'JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'JF_TRAN_NP_HQ_ACC',
   // Refunds
   REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES = 'REF_TO_FED_CAN',
@@ -133,7 +137,7 @@ export enum ScheduleATransactionTypes {
   OTHER_RECEIPTS = 'OTHER_RECEIPT',
   IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'IND_REC_NON_CONT_ACC',
   OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'OTH_CMTE_NON_CONT_ACC',
-  BUSINESS_LABOR_ORG_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'BUS_LAB_NON_CONT_ACC',
+  BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT = 'BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT',
   INDIVIDUAL_RECOUNT_RECEIPT = 'INDIVIDUAL_RECOUNT_RECEIPT',
   PARTY_RECOUNT_RECEIPT = 'PARTY_RECOUNT_RECEIPT',
   PAC_RECOUNT_RECEIPT = 'PAC_RECOUNT_RECEIPT',
@@ -167,6 +171,9 @@ export enum ScheduleATransactionTypes {
     'TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
   PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 
     'PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
+  INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
+  PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
+  TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -250,7 +257,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Other Committee Receipt - Non-Contribution Account',
   ],
   [
-    ScheduleATransactionTypes.BUSINESS_LABOR_ORG_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+    ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
     'Business/Labor Organization Receipt - Non-Contribution Account',
   ],
   [ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT, 'Individual Recount Receipt'],
@@ -295,6 +302,18 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
     'Earmark Receipt for Headquarters Account (Contribution)',
+  ],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'Individual National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'PAC National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo',
   ],
 ];
 

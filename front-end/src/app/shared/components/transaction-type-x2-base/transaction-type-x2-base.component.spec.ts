@@ -30,7 +30,7 @@ class TestTransactionTypeX2BaseComponent extends TransactionTypeX2BaseComponent 
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
 
   childFormProperties: string[] = [
@@ -53,7 +53,7 @@ class TestTransactionTypeX2BaseComponent extends TransactionTypeX2BaseComponent 
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
 }
 

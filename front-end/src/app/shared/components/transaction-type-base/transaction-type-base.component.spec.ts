@@ -19,6 +19,7 @@ import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
 import { ScheduleATransactionTypes } from '../../models/scha-transaction.model';
+import { MemoText } from 'app/shared/models/memo-text.model';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -41,7 +42,7 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
 }
 
@@ -63,6 +64,8 @@ const testTransaction = {
   parent_transaction: undefined,
   fields_to_validate: undefined,
   itemized: false,
+  memo_text: undefined,
+  memo_text_id: undefined,
 };
 
 describe('TransactionTypeBaseComponent', () => {
@@ -107,6 +110,37 @@ describe('TransactionTypeBaseComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('#retrieveMemoText should work', () => {
+    if (component.transactionType) component.transactionType.transaction = testTransaction;
+    else
+      component.transactionType = {
+        transaction: testTransaction,
+        scheduleId: 'TEST',
+        componentGroupId: 'TEST',
+        isDependentChild: false,
+        title: 'Title goes here',
+        contributionPurposeDescripReadonly: () => {
+          return '';
+        },
+        getNewTransaction: () => {
+          return testTransaction;
+        },
+        schema: {
+          $id: '10101',
+          $schema: 'string',
+          type: 'string',
+          required: ['string'],
+          properties: {},
+        },
+      };
+
+    component.form = new FormGroup({
+      memo_text_input: new FormControl('memo'),
+    });
+    const formValues = component.retrieveMemoText(component.transactionType, component.form, {});
+    expect(formValues['memo_text']['text4000']).toBe('memo');
+  });
+
   it('#save should update IND contact', () => {
     const testTransaction1: Transaction = {
       id: undefined,
@@ -123,6 +157,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
+      memo_text_id: 'ID Goes Here',
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -201,6 +237,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -229,6 +267,8 @@ describe('TransactionTypeBaseComponent', () => {
         contribution_purpose_descrip: undefined,
         parent_transaction_id: undefined,
         itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
       },
     } as TransactionType;
 
@@ -265,6 +305,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -292,6 +334,8 @@ describe('TransactionTypeBaseComponent', () => {
         contribution_purpose_descrip: undefined,
         parent_transaction_id: undefined,
         itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
       },
     } as TransactionType;
 
@@ -327,6 +371,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -354,6 +400,8 @@ describe('TransactionTypeBaseComponent', () => {
         contribution_purpose_descrip: undefined,
         parent_transaction_id: undefined,
         itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
       },
     } as TransactionType;
 
@@ -380,6 +428,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -405,6 +455,8 @@ describe('TransactionTypeBaseComponent', () => {
         contribution_purpose_descrip: undefined,
         parent_transaction_id: undefined,
         itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
       },
     } as TransactionType;
 
@@ -428,6 +480,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
@@ -453,6 +507,8 @@ describe('TransactionTypeBaseComponent', () => {
         contribution_purpose_descrip: undefined,
         parent_transaction_id: undefined,
         itemized: false,
+        memo_text: undefined,
+        memo_text_id: undefined,
       },
     } as TransactionType;
 
@@ -515,6 +571,8 @@ describe('TransactionTypeBaseComponent', () => {
       parent_transaction: undefined,
       fields_to_validate: undefined,
       itemized: false,
+      memo_text: undefined,
+      memo_text_id: undefined,
     };
     component.transactionType = {
       transaction: testTransaction3,
