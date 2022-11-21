@@ -20,6 +20,7 @@ export type SchATransactionName =
   | 'Transfer'
   | 'Earmark Receipt'
   | 'Business/Labor Organization Receipt - Non-Contribution Account'
+  | 'Individual Receipt - Non-Contribution Account'
   | 'Joint Fundraising Transfer - National Party Recount Account'
   | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account';
 
@@ -237,6 +238,16 @@ const businessLaborNonContribution: TransactionForm = {
   transaction_name: 'Business/Labor Organization Receipt - Non-Contribution Account',
   transaction_category: 'OTHER',
   ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const individualNonContribution: TransactionForm = {
+  transaction_name: 'Individual Receipt - Non-Contribution Account',
+  transaction_category: 'OTHER',
+  ...entityIndividual,
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -491,6 +502,7 @@ export const groupANavTree: TransactionNavTree = {
     'Offsets to Operating Expenditures': offsetToOpex,
     'Other Receipts': otherReceipt,
     'Business/Labor Organization Receipt - Non-Contribution Account': businessLaborNonContribution,
+    'Individual Receipt - Non-Contribution Account': individualNonContribution,
   },
 };
 
