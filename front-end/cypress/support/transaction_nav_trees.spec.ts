@@ -21,7 +21,8 @@ export type SchATransactionName =
   | 'Earmark Receipt'
   | 'Business/Labor Organization Receipt - Non-Contribution Account'
   | 'Joint Fundraising Transfer - National Party Recount Account'
-  | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account';
+  | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account'
+  | 'Joint Fundraising Transfer - National Party Headquarters Buildings Account';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -350,6 +351,16 @@ const jointFundraisingTransferNationalPartyPresNominatingConventionAccount: Tran
   },
 };
 
+const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
+  transaction_name: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
+  transaction_category: 'TRANSFERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const offsetToOpex: TransactionForm = {
   transaction_name: 'Offsets to Operating Expenditures',
   transaction_category: 'OTHER',
@@ -449,6 +460,7 @@ export const groupANavTree: TransactionNavTree = {
     'Joint Fundraising Transfer': jointFundraisingTransfer,
     'Joint Fundraising Transfer - National Party Recount Account': jointFundraisingTransferNationalPartyRecount,
     'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account': jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
+    'Joint Fundraising Transfer - National Party Headquarters Buildings Account': jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount,
   },
   //"REFUNDS":{},
   OTHER: {
