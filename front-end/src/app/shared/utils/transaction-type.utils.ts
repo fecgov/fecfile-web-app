@@ -23,6 +23,7 @@ import { JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transactio
 import { PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 import { INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
+import { OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -34,6 +35,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
   JOINT_FUNDRAISING_TRANSFER,
   OFFSET_TO_OPERATING_EXPENDITURES,
+  OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT,
   OTHER_RECEIPT,
   PAC_JF_TRANSFER_MEMO,
   PAC_RECEIPT,
