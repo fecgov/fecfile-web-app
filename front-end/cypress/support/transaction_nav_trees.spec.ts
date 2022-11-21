@@ -1,20 +1,5 @@
 import _ from 'lodash';
-import {
-  apartment,
-  city,
-  committeeID,
-  date,
-  firstName,
-  groupName,
-  lastName,
-  middleName,
-  prefix,
-  randomString,
-  state,
-  street,
-  suffix,
-  zipcode,
-} from './generators/generators.spec';
+import { contributionAmount, date, randomString } from './generators/generators.spec';
 
 /*
  *          Adding support for a new transaction:
@@ -22,35 +7,70 @@ import {
  *  2. Create a new Transaction Form object for it
  *  3. Add it to the SchA Nav Tree
  */
+export type TransactionEntityType = 'Committee' | 'Individual' | 'Organization';
 export type TransactionCategory = 'INDIVIDUALS/PERSONS' | 'REGISTERED FILERS' | 'TRANSFERS' | 'REFUNDS' | 'OTHER';
-export type SchATransaction =
+export type SchATransactionName =
   | 'Individual Receipt'
   | 'Tribal Receipt'
   | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
-  | 'Other Receipts';
+  | 'Other Receipts'
+  | 'Party Receipt'
+  | 'PAC Receipt'
+  | 'Transfer'
+  | 'Earmark Receipt'
+  | 'Business/Labor Organization Receipt - Non-Contribution Account'
+  | 'Joint Fundraising Transfer - National Party Recount Account'
+  | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account';
+
+export type ChildTransactionName =
+  | 'PAC Joint Fundraising Transfer Memo'
+  | 'Party Joint Fundraising Transfer Memo'
+  | 'Individual Joint Fundraising Transfer Memo'
+  | 'Tribal Joint Fundraising Transfer Memo'
+  | 'PAC National Party Recount/Legal Proceedings Account JF Transfer Memo'
+  | 'Individual National Party Recount/Legal Proceedings Account JF Transfer Memo'
+  | 'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo'
+  | 'Earmark Receipt Step One'
+  | 'Earmark Receipt Step Two'
+  | 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo'
+  | 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo'
+  | 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo'
+  | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo';
 
 export type TransactionNavTree = {
   [category in TransactionCategory]?: {
-    [transactionName in SchATransaction]?: TransactionForm;
+    [transactionName in SchATransactionName]?: TransactionForm | PairedTransactionForm;
   };
 };
 
+export type PairedTransactionForm = {
+  transaction_name: SchATransactionName;
+  transaction_category: TransactionCategory;
+  transactionA: ChildTransactionForm;
+  transactionB: ChildTransactionForm;
+};
+
 export type TransactionForm = {
-  entity_type?: 'Individual' | 'Committee' | 'Organization';
-  contributorLastName?: TransactionField;
-  contributorFirstName?: TransactionField;
-  contributorMiddleName?: TransactionField;
-  contributorPrefix?: TransactionField;
-  contributorSuffix?: TransactionField;
-  contributorOrganizationName?: TransactionField;
-  contributorStreet1?: TransactionField;
-  contributorStreet2?: TransactionField;
-  contributorCity?: TransactionField;
-  contributorZip?: TransactionField;
-  memoTextDescription?: TransactionField;
-  contributionAmount?: TransactionField;
-  childTransactions?: TransactionForm[];
+  entity_type: TransactionField;
+  transaction_name: SchATransactionName;
+  transaction_category: TransactionCategory;
+  fields: {
+    [fieldName: string]: TransactionField;
+  };
+  childTransactions?: ChildTransactionForm[];
+};
+
+export type ChildTransactionForm = {
+  entity_type: TransactionField;
+  transaction_name: ChildTransactionName;
+  fields: {
+    [fieldName: string]: TransactionField;
+  };
+  childOf: SchATransactionName;
+  childTransactions?: {
+    [childName: string]: ChildTransactionForm;
+  };
 };
 
 export type FieldType = 'Text' | 'Calendar' | 'Dropdown' | 'P-InputNumber' | 'Textarea';
@@ -62,7 +82,7 @@ export type TransactionField = {
   fieldType: FieldType;
   required: boolean; //Denotes whether or not the field is required
   readOnly?: boolean; //Denotes whether or not the field is read only (Assumes False)
-  entities?: Array<string>; //If a field only appears on one or more entity types
+  entities?: TransactionEntityType[]; //If a field only appears on one or more entity types
   maxLength: number; //The max number of characters that may be entered (-1 for N/A)
 };
 
@@ -115,116 +135,16 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     readOnly: true,
     maxLength: -1,
   },
-  contributorLastName: {
-    fieldName: 'contributor_last_name',
-    fieldType: 'Text',
-    generator: lastName,
-    required: true,
-    entities: ['Individual'],
-    maxLength: 30,
-  },
-  contributorFirstName: {
-    fieldName: 'contributor_first_name',
-    fieldType: 'Text',
-    generator: firstName,
-    required: true,
-    entities: ['Individual'],
-    maxLength: 20,
-  },
-  contributorMiddleName: {
-    fieldName: 'contributor_middle_name',
-    fieldType: 'Text',
-    generator: middleName,
-    required: false,
-    entities: ['Individual'],
-    maxLength: 20,
-  },
-  contributorPrefix: {
-    fieldName: 'contributor_prefix',
-    fieldType: 'Text',
-    generator: prefix,
-    required: false,
-    entities: ['Individual'],
-    maxLength: 10,
-  },
-  contributorSuffix: {
-    fieldName: 'contributor_suffix',
-    fieldType: 'Text',
-    generator: suffix,
-    required: false,
-    entities: ['Individual'],
-    maxLength: 10,
-  },
-  contributorEmployer: {
-    fieldName: 'contributor_employer',
-    fieldType: 'Text',
-    generator: () => {
-      return 'Bob Rohrman';
-    },
-    required: false,
-    entities: ['Individual'],
-    maxLength: 38,
-  },
-  contributorOccupation: {
-    fieldName: 'contributor_occupation',
-    fieldType: 'Text',
-    generator: () => {
-      return 'Car Salesperson';
-    },
-    required: false,
-    entities: ['Individual'],
-    maxLength: 38,
-  },
-  contributorOrganizationName: {
-    fieldName: 'contributor_organization_name',
-    fieldType: 'Text',
-    generator: groupName,
-    required: true,
-    entities: ['Organization', 'Committee'],
-    maxLength: 200,
-  },
-  donorCommitteeFECId: {
-    fieldName: 'donor_committee_fec_id',
-    fieldType: 'Text',
-    generator: committeeID,
-    required: true,
-    entities: ['Committee'],
-    maxLength: 9,
-  },
-  contributorStreet1: {
-    fieldName: 'contributor_street_1',
-    fieldType: 'Text',
-    generator: street,
-    required: true,
-    maxLength: 34,
-  },
-  contributorStreet2: {
-    fieldName: 'contributor_street_2',
-    fieldType: 'Text',
-    generator: apartment,
-    required: false,
-    maxLength: 34,
-  },
-  contributorCity: {
-    fieldName: 'contributor_city',
-    fieldType: 'Text',
-    generator: city,
-    required: true,
-    maxLength: 30,
-  },
-  contributorState: {
-    fieldName: 'contributor_state',
+  entityTypeIndvOrComm: {
+    fieldName: 'entity_type_dropdown',
     fieldType: 'Dropdown',
-    generator: state,
+    generator: () => {
+      return _.sample(['Individual', 'Committee']);
+    },
     required: true,
+    entities: ['Individual', 'Committee'],
+    readOnly: false,
     maxLength: -1,
-  },
-  contributorZip: {
-    fieldName: 'contributor_zip',
-    fieldType: 'Text',
-    generator: zipcode,
-    required: true,
-    maxLength: 9,
   },
   memoTextDescription: {
     fieldName: 'memo_text_description',
@@ -244,8 +164,7 @@ export const TransactionFields: { [key: string]: TransactionField } = {
   contributionAmount: {
     fieldName: 'contribution_amount',
     fieldType: 'P-InputNumber',
-    generator: _.random,
-    genArgs: [10, 10000, true], //Make a random number between 10 and 10000 and it is *not* a float
+    generator: contributionAmount,
     required: true,
     maxLength: 12,
   },
@@ -259,48 +178,23 @@ export const TransactionFields: { [key: string]: TransactionField } = {
  */
 
 const entityAny = {
-  entityType: TransactionFields['entityType'],
+  entity_type: TransactionFields['entityType'],
 };
 
 const entityIndividual = {
-  entityTypeIndividual: TransactionFields['entityTypeIndividual'],
+  entity_type: TransactionFields['entityTypeIndividual'],
 };
 
 const entityOrganization = {
-  entityTypeOrganization: TransactionFields['entityTypeOrganization'],
+  entity_type: TransactionFields['entityTypeOrganization'],
 };
 
 const entityCommittee = {
-  entityTypeCommittee: TransactionFields['entityTypeCommittee'],
+  entity_type: TransactionFields['entityTypeCommittee'],
 };
 
-const donorCommitteeFECId = {
-  donorCommitteeFECId: TransactionFields['donorCommitteeFECId'],
-};
-
-const personNameFields: { [key: string]: TransactionField } = {
-  contributorLastName: TransactionFields['contributorLastName'],
-  contributorFirstName: TransactionFields['contributorFirstName'],
-  contributorMiddleName: TransactionFields['contributorMiddleName'],
-  contributorPrefix: TransactionFields['contributorPrefix'],
-  contributorSuffix: TransactionFields['contributorSuffix'],
-};
-
-const jobFields: { [key: string]: TransactionField } = {
-  contributorEmployer: TransactionFields['contributorEmployer'],
-  contributorOccupation: TransactionFields['contributorOccupation'],
-};
-
-const groupNameFields: { [key: string]: TransactionField } = {
-  contributorOrganizationName: TransactionFields['contributorOrganizationName'],
-};
-
-const addressFields: { [key: string]: TransactionField } = {
-  contributorStreet1: TransactionFields['contributorStreet1'],
-  contributorStreet2: TransactionFields['contributorStreet2'],
-  contributorCity: TransactionFields['contributorCity'],
-  contributorState: TransactionFields['contributorState'],
-  contributorZip: TransactionFields['contributorZip'],
+const entityIndvOrComm = {
+  entity_type: TransactionFields['entityTypeIndvOrComm'],
 };
 
 const memoFields: { [key: string]: TransactionField } = {
@@ -320,58 +214,216 @@ const contributionFields: { [key: string]: TransactionField } = {
  */
 
 const individualReceipt: TransactionForm = {
+  transaction_name: 'Individual Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
   ...entityIndividual,
-  ...personNameFields,
-  ...addressFields,
-  ...jobFields,
-  ...memoFields,
-  ...contributionFields,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
 };
 
 const tribalReceipt: TransactionForm = {
+  transaction_name: 'Tribal Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
   ...entityOrganization,
-  ...groupNameFields,
-  ...addressFields,
-  ...memoFields,
-  ...contributionFields,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
 };
 
-const JointFundraisingTransferMemo: TransactionForm = {
-  ...entityCommittee,
-  ...donorCommitteeFECId,
-  ...groupNameFields,
-  ...addressFields,
-  ...memoFields,
-  ...contributionFields,
+const businessLaborNonContribution: TransactionForm = {
+  transaction_name: 'Business/Labor Organization Receipt - Non-Contribution Account',
+  transaction_category: 'OTHER',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
 };
 
-const JointFundraisingTransfer: TransactionForm = {
+const pacJointFundraisingTransferMemo: ChildTransactionForm = {
+  transaction_name: 'PAC Joint Fundraising Transfer Memo',
   ...entityCommittee,
-  ...donorCommitteeFECId,
-  ...groupNameFields,
-  ...addressFields,
-  ...memoFields,
-  ...contributionFields,
-  childTransactions: [JointFundraisingTransferMemo],
+  childOf: 'Joint Fundraising Transfer',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const partyJointFundraisingTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Party Joint Fundraising Transfer Memo',
+  ...entityCommittee,
+  childOf: 'Joint Fundraising Transfer',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const individualJointFundraisingTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Individual Joint Fundraising Transfer Memo',
+  ...entityIndividual,
+  childOf: 'Joint Fundraising Transfer',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalJointFundraisingTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Tribal Joint Fundraising Transfer Memo',
+  ...entityOrganization,
+  childOf: 'Joint Fundraising Transfer',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const indvNPRJFTransMemo: ChildTransactionForm = {
+  transaction_name: 'Individual National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ...entityIndividual,
+  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalNPRJFTransMemo: ChildTransactionForm = {
+  transaction_name: 'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ...entityOrganization,
+  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const pacNPRJFTransMemo: ChildTransactionForm = {
+  transaction_name: 'PAC National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ...entityCommittee,
+  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const jointFundraisingTransfer: TransactionForm = {
+  transaction_name: 'Joint Fundraising Transfer',
+  transaction_category: 'TRANSFERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childTransactions: [
+    pacJointFundraisingTransferMemo,
+    individualJointFundraisingTransferMemo,
+    tribalJointFundraisingTransferMemo,
+    partyJointFundraisingTransferMemo,
+  ],
+};
+
+const jointFundraisingTransferNationalPartyRecount: TransactionForm = {
+  transaction_name: 'Joint Fundraising Transfer - National Party Recount Account',
+  transaction_category: 'TRANSFERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childTransactions: [pacNPRJFTransMemo, indvNPRJFTransMemo, tribalNPRJFTransMemo],
+};
+
+const jointFundraisingTransferNationalPartyPresNominatingConventionAccount: TransactionForm = {
+  transaction_name: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
+  transaction_category: 'TRANSFERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
 };
 
 const offsetToOpex: TransactionForm = {
+  transaction_name: 'Offsets to Operating Expenditures',
+  transaction_category: 'OTHER',
   ...entityAny,
-  ...personNameFields,
-  ...groupNameFields,
-  ...addressFields,
-  ...memoFields,
-  ...contributionFields,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
 };
 
 const otherReceipt: TransactionForm = {
+  transaction_name: 'Other Receipts',
+  transaction_category: 'OTHER',
   ...entityAny,
-  ...personNameFields,
-  ...groupNameFields,
-  ...addressFields,
-  ...jobFields,
-  ...memoFields,
-  ...contributionFields,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const transfer: TransactionForm = {
+  transaction_name: 'Transfer',
+  transaction_category: 'TRANSFERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const partyReceipt: TransactionForm = {
+  transaction_name: 'Party Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const pacReceipt: TransactionForm = {
+  transaction_name: 'PAC Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const earmarkReceiptStepOne: ChildTransactionForm = {
+  transaction_name: 'Earmark Receipt Step One',
+  ...entityIndividual,
+  childOf: 'Earmark Receipt',
+  fields: {
+    ...contributionFields,
+    ...memoFields,
+  },
+};
+const earmarkReceiptStepTwo: ChildTransactionForm = {
+  transaction_name: 'Earmark Receipt Step Two',
+  ...entityIndvOrComm,
+  childOf: 'Earmark Receipt',
+  fields: {
+    contributionDate: TransactionFields['contributionDate'],
+    ...memoFields,
+  },
+};
+
+const earmarkReceipt: PairedTransactionForm = {
+  transaction_name: 'Earmark Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
+  transactionA: earmarkReceiptStepOne,
+  transactionB: earmarkReceiptStepTwo,
 };
 
 /*
@@ -386,14 +438,35 @@ export const groupANavTree: TransactionNavTree = {
   'INDIVIDUALS/PERSONS': {
     'Individual Receipt': individualReceipt,
     'Tribal Receipt': tribalReceipt,
+    'Earmark Receipt': earmarkReceipt,
   },
-  //"REGISTERED FILERS":{},
+  'REGISTERED FILERS': {
+    'Party Receipt': partyReceipt,
+    'PAC Receipt': pacReceipt,
+  },
   TRANSFERS: {
-    'Joint Fundraising Transfer': JointFundraisingTransfer,
+    Transfer: transfer,
+    'Joint Fundraising Transfer': jointFundraisingTransfer,
+    'Joint Fundraising Transfer - National Party Recount Account': jointFundraisingTransferNationalPartyRecount,
+    'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account': jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
   },
   //"REFUNDS":{},
   OTHER: {
     'Offsets to Operating Expenditures': offsetToOpex,
     'Other Receipts': otherReceipt,
+    'Business/Labor Organization Receipt - Non-Contribution Account': businessLaborNonContribution,
+  },
+};
+
+export const childTransactionTree = {
+  'Earmark Receipt': {
+    'Earmark Receipt Step One': earmarkReceiptStepOne,
+    'Earmark Receipt Step Two': earmarkReceiptStepTwo,
+  },
+  'Joint Fundraising Transfer': {
+    'Tribal Joint Fundraising Transfer Memo': tribalJointFundraisingTransferMemo,
+    'PAC Joint Fundraising Transfer Memo': pacJointFundraisingTransferMemo,
+    'Party Joint Fundraising Transfer Memo': partyJointFundraisingTransferMemo,
+    'Individual Joint Fundraising Transfer Memo': individualJointFundraisingTransferMemo,
   },
 };

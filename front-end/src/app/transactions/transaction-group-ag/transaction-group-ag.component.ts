@@ -15,7 +15,6 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 @Component({
   selector: 'app-transaction-group-ag',
   templateUrl: './transaction-group-ag.component.html',
-  styleUrls: ['./transaction-group-ag.component.scss'],
 })
 export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -37,7 +36,7 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     'contributor_employer',
     'contributor_occupation',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
 
   childFormProperties: string[] = [
@@ -61,7 +60,7 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     'contributor_occupation',
     'donor_committee_fec_id',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
@@ -101,8 +100,10 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     }
 
     const updateContributionPurposeDescription = () => {
-      (this.transactionType?.childTransactionType?.transaction as SchATransaction).entity_type =
-        this.childForm.get('entity_type')?.value;
+      const childTransaction: SchATransaction = this.transactionType?.childTransactionType
+        ?.transaction as SchATransaction;
+      childTransaction.entity_type = this.childForm.get('entity_type')?.value;
+
       this.form.patchValue({
         contribution_purpose_descrip: this.transactionType?.contributionPurposeDescripReadonly(),
       });
@@ -113,22 +114,29 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
       .get('contributor_organization_name')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        (this.transactionType?.childTransactionType?.transaction as SchATransaction).contributor_organization_name =
-          value;
+        const childTransaction: SchATransaction = this.transactionType?.childTransactionType
+          ?.transaction as SchATransaction;
+        childTransaction.contributor_organization_name = value;
         updateContributionPurposeDescription();
       });
     this.childForm
       .get('contributor_first_name')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        (this.transactionType?.childTransactionType?.transaction as SchATransaction).contributor_first_name = value;
+        const earmarkMemo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
+        if (earmarkMemo) {
+          earmarkMemo.contributor_first_name = value;
+        }
         updateContributionPurposeDescription();
       });
     this.childForm
       .get('contributor_last_name')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        (this.transactionType?.childTransactionType?.transaction as SchATransaction).contributor_last_name = value;
+        const earmarkMemo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
+        if (earmarkMemo) {
+          earmarkMemo.contributor_last_name = value;
+        }
         updateContributionPurposeDescription();
       });
 

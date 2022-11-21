@@ -1,25 +1,27 @@
 // @ts-check
 
+import { Contact } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
-import { Transaction, generateTransactionObject } from '../../support/generators/transactions.spec';
+import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { createTransactionSchA } from '../../support/transactions.spec';
-import { TransactionNavTree, groupANavTree } from '../../support/transaction_nav_trees.spec';
+import { groupANavTree, SchATransactionName } from '../../support/transaction_nav_trees.spec';
 
-function testEditTransaction(transactionForm) {
-  const lastName = transactionForm['contributorLastName'];
-  const firstName = transactionForm['contributorFirstName'];
-  const groupName = transactionForm['contributorOrganizationName'];
-
-  let name: string = '';
-  if (lastName && firstName) name = `${lastName}, ${firstName}`;
-  else if (groupName) name = groupName;
+function testEditTransaction(contact: Contact, isPairedTransaction = false) {
+  const name = getName(contact);
 
   cy.contains('tr', name).find('a').click();
   cy.shortWait();
 
-  cy.get("input[FormControlName='contributor_street_1']").overwrite('100 West Virginia Avenue');
+  if (isPairedTransaction) {
+    cy.contains('p-accordiontab', 'STEP ONE').click();
+    cy.shortWait();
+  }
+
+  cy.get("input:visible[FormControlName='contributor_street_1']").overwrite('100 West Virginia Avenue');
   cy.shortWait();
-  cy.get('button[label="Save & view all transactions"]').click();
+  cy.contains('button', 'Save & view all transactions').click();
+  cy.shortWait();
+  cy.get('.p-confirm-dialog-accept').click();
   cy.longWait();
   cy.url().should('contain', 'transactions/report/');
   cy.url().should('contain', 'list');
@@ -27,10 +29,24 @@ function testEditTransaction(transactionForm) {
   cy.contains('tr', name).find('a').click();
   cy.shortWait();
 
-  cy.get("input[FormControlName='contributor_street_1']").should('have.value', '100 West Virginia Avenue');
+  if (isPairedTransaction) {
+    cy.contains('p-accordiontab', 'STEP ONE').click();
+    cy.shortWait();
+  }
 
-  cy.get('button[label="Cancel"]').click();
+  cy.get("input:visible[FormControlName='contributor_street_1']").should('have.value', '100 West Virginia Avenue');
   cy.shortWait();
+}
+
+function getName(contact: Contact): string {
+  switch (contact['contact_type']) {
+    case 'Individual':
+    case 'Candidate':
+      return `${contact['last_name']}, ${contact['first_name']}`;
+    case 'Committee':
+    case 'Organization':
+      return contact['name'];
+  }
 }
 
 describe('Test saving and editing on all transactions', () => {
@@ -39,7 +55,6 @@ describe('Test saving and editing on all transactions', () => {
     cy.visit('/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.shortWait();
-
     const report = generateReportObject();
     cy.createReport(report);
   });
@@ -59,35 +74,44 @@ describe('Test saving and editing on all transactions', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();
+    cy.deleteAllContacts();
   });
 
   const navTree = groupANavTree;
-  for (let category of Object.keys(navTree)) {
-    for (let transactionName of Object.keys(navTree[category])) {
-      const tTree: TransactionNavTree = {};
-      tTree[category] = {};
-      tTree[category][transactionName] = {};
-
+  for (const category of Object.keys(navTree)) {
+    for (const transactionName of Object.keys(navTree[category])) {
       it(`Creates a ${transactionName} transaction`, () => {
-        const transaction: Transaction = generateTransactionObject(tTree);
+        const transaction = generateTransactionObject({ transaction_name: transactionName as SchATransactionName });
         createTransactionSchA(transaction);
         cy.longWait();
 
-        const tForm = transaction[category][transactionName];
-        testEditTransaction(tForm);
+        if (transaction.contact) {
+          testEditTransaction(transaction.contact);
+        } else if (transaction.transactionA?.contact) {
+          testEditTransaction(transaction.transactionA.contact, true);
+        }
       });
 
-      it(`Creates a ${transactionName} transaction with "Save & add another"`, () => {
-        const transaction: Transaction = generateTransactionObject(tTree);
-        createTransactionSchA(transaction, false);
-        cy.get('button[label="Save & add another"]').click();
-        cy.get('input[FormControlName="contributor_street_1"]').should('have.value', '');
-        cy.longWait();
-        cy.get('button[label="Cancel"]').click();
+      const noSaveAndAddAnother = ['Earmark Receipt'];
+      if (!noSaveAndAddAnother.includes(transactionName)) {
+        it(`Creates a ${transactionName} transaction with "Save & add another"`, () => {
+          const transaction = generateTransactionObject({ transaction_name: transactionName as SchATransactionName });
+          createTransactionSchA(transaction, false);
+          cy.contains('button', 'Save & add another').click();
+          cy.shortWait();
+          cy.get('.p-confirm-dialog-accept').click();
+          cy.medWait();
+          cy.get('input:visible[FormControlName="street_1"]').should('have.length', 0);
+          cy.longWait();
+          cy.contains('button', 'Cancel').click();
 
-        const tForm = transaction[category][transactionName];
-        testEditTransaction(tForm);
-      });
+          if (transaction.contact) {
+            testEditTransaction(transaction.contact);
+          } else if (transaction.transactionA?.contact) {
+            testEditTransaction(transaction.transactionA.contact, true);
+          }
+        });
+      }
     }
   }
 });

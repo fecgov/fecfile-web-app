@@ -15,16 +15,6 @@ const errorEmail = '.error__email-id';
 const errorCommitteeID = '.error__committee-id';
 const errorPassword = '.error__password-error';
 
-//two-factor authentication page form-fields' ids
-const fieldTwoFactorEmail = '#email';
-const fieldTwoFactorPhoneText = '#phone_number_text';
-const fieldTwoFactorPhoneCall = '#phone_number_call';
-const fieldTwoFactorSubmit = '.action__btn.next';
-
-//security code page form-fields' ids
-const fieldSecurityCodeText = '.form-control';
-const fieldSecurityCodeNext = '.action__btn.next';
-
 /*
 
     Supporting Functions
@@ -39,17 +29,9 @@ function fillLoginForm() {
 }
 
 //Logs in without entering anything for Two Factor Authentication
-function loginNoTwoFactor() {
+function login() {
   fillLoginForm();
   cy.get(fieldPassword).safeType('{enter}');
-}
-
-//Logs in and requests Two Factor Authentication via Email
-function loginRequestTwoFactorAuth() {
-  loginNoTwoFactor();
-
-  cy.get(fieldTwoFactorEmail).check();
-  cy.get(fieldTwoFactorSubmit).click();
 }
 
 /*
@@ -75,71 +57,24 @@ describe('Testing login', () => {
     fillLoginForm();
 
     cy.get(fieldPassword).safeType('{enter}');
-    cy.url().should('contain', '/twoFactLogin');
+    cy.url().should('contain', '/dashboard');
   });
 
   it('Submits Email/committee ID/password with a click', () => {
     fillLoginForm();
 
     cy.get(fieldLoginButton).click();
-    cy.url().should('contain', '/twoFactLogin');
-  });
-
-  it('Submits Two Factor Auth via Email', () => {
-    loginNoTwoFactor();
-
-    cy.get(fieldTwoFactorEmail).check();
-    cy.get(fieldTwoFactorSubmit).click();
-    cy.url().should('contain', '/confirm-2f');
-  });
-
-  it('Submits Two Factor Auth via phone, text', () => {
-    loginNoTwoFactor();
-
-    cy.get(fieldTwoFactorPhoneText).check();
-    cy.get(fieldTwoFactorSubmit).click();
-    cy.url().should('contain', '/confirm-2f');
-  });
-
-  it('Submits Two Factor Auth via phone, call', () => {
-    loginNoTwoFactor();
-
-    cy.get(fieldTwoFactorPhoneCall).check();
-    cy.get(fieldTwoFactorSubmit).click();
-    cy.url().should('contain', '/confirm-2f');
-  });
-
-  it('Fully logs in through Two Factor Authentication with {enter}', () => {
-    loginRequestTwoFactorAuth();
-
-    cy.get(fieldSecurityCodeText).safeType(testPIN).safeType('{enter}');
     cy.url().should('contain', '/dashboard');
-    cy.logout();
-  });
-
-  it('Fully logs in through Two Factor Authentication with a click', () => {
-    loginRequestTwoFactorAuth();
-
-    cy.get(fieldSecurityCodeText).safeType(testPIN);
-    cy.get(fieldSecurityCodeNext).click();
-    cy.url().should('contain', '/dashboard');
-    cy.logout();
   });
 
   it('Logs in and checks for Committee Account Details', () => {
-    loginRequestTwoFactorAuth();
+    cy.intercept('GET', 'https://api.open.fec.gov/v1/committee/*/*').as('GetCommitteeAccount');
 
-    cy.get(fieldSecurityCodeText).safeType(testPIN);
+    login();
 
-    cy.intercept(
-      "GET", "https://api.open.fec.gov/v1/committee/*/*"
-    ).as("GetCommitteeAccount");
-
-    cy.get(fieldSecurityCodeNext).click();
-
-    cy.wait("@GetCommitteeAccount");
+    cy.wait('@GetCommitteeAccount');
     cy.url().should('contain', '/dashboard');
-    cy.get(".committee-banner").contains(committeeID).should("exist");
+    cy.get('.committee-banner').contains(committeeID).should('exist');
 
     cy.logout();
   });

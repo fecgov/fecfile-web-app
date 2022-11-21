@@ -1,9 +1,20 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
-import { AggregationGroups, SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { MemoText } from 'app/shared/models/memo-text.model';
+import {
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypes,
+} from 'app/shared/models/scha-transaction.model';
+import {
+  NavigationAction,
+  NavigationControl,
+  NavigationDestination,
+  TransactionNavigationControls,
+} from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -11,9 +22,7 @@ import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
-import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-
-export type NavigateToType = 'list' | 'add another' | 'add-sub-tran' | 'to-parent';
+import { Contact, ContactFields, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
   template: '',
@@ -62,6 +71,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (this.isExisting(transactionType?.transaction)) {
       const txn = { ...transactionType?.transaction } as SchATransaction;
       form.patchValue({ ...txn });
+
+      this.patchMemoText(transactionType, form);
+
       form.get('entity_type')?.disable();
       contactId$.next(txn.contact_id || '');
     } else {
@@ -102,7 +114,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         combineLatestWith(contactId$),
         switchMap(([contribution_date, contactId]) => {
           const aggregation_group: AggregationGroups | undefined = (transactionType?.transaction as SchATransaction)
-            .aggregation_group;
+            ?.aggregation_group;
           if (contribution_date && contactId && aggregation_group) {
             return this.transactionService.getPreviousTransaction(
               transactionType?.transaction?.id || '',
@@ -133,7 +145,39 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
-  save(navigateTo: NavigateToType, transactionTypeToAdd?: string) {
+  // prettier-ignore
+  retrieveMemoText(transactionType: TransactionType, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const text = form.get('memo_text_input')?.value;
+    if (text && text.length > 0) {
+      const memo_text = MemoText.fromJSON({
+        text4000: text,
+        report_id: this.transactionType?.transaction?.report_id,
+        rec_type: 'TEXT',
+        filer_committee_id_number: this.transactionType?.transaction?.filer_committee_id_number,
+        transaction_id_number: '',
+        back_reference_sched_form_name: this.transactionType?.transaction?.form_type,
+      });
+
+      if (transactionType.transaction?.id) {
+        memo_text.transaction_uuid = transactionType.transaction.id;
+      }
+
+      formValues['memo_text'] = memo_text;
+    } else {
+      formValues['memo_text'] = undefined;
+    }
+
+    return formValues;
+  }
+
+  patchMemoText(transactionType: TransactionType | undefined, form: FormGroup) {
+    const memo_text = transactionType?.transaction?.memo_text;
+    if (memo_text?.text4000) {
+      form.patchValue({ memo_text_input: memo_text.text4000 });
+    }
+  }
+
+  save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleATransactionTypes) {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
@@ -156,9 +200,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form: FormGroup,
     formProperties: string[]
   ) {
+    let formValues = validateService.getFormValues(form, formProperties);
+    if (transactionType) formValues = this.retrieveMemoText(transactionType, form, formValues);
+
     const payload: Transaction = SchATransaction.fromJSON({
       ...transactionType?.transaction,
-      ...validateService.getFormValues(form, formProperties),
+      ...formValues,
     });
     payload.contact_id = payload.contact?.id;
 
@@ -166,10 +213,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     // Remove properties that are populated in the back-end from list of properties to validate
     fieldsToValidate = fieldsToValidate.filter(
       (p) =>
-        p !== 'transaction_id' &&
-        p !== 'donor_committee_name' &&
-        p !== 'back_reference_tran_id_number' &&
-        p !== 'back_reference_sched_name'
+        ![
+          'transaction_id',
+          'donor_committee_name',
+          'back_reference_tran_id_number',
+          'back_reference_sched_name',
+        ].includes(p)
     );
     payload.fields_to_validate = fieldsToValidate;
 
@@ -180,17 +229,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     confirmTransaction: Transaction,
     form: FormGroup,
     acceptCallback: (
-      navigateTo: NavigateToType,
+      navigateTo: NavigationDestination,
       payload: Transaction,
-      transactionTypeToAdd: string | undefined
+      transactionTypeToAdd?: ScheduleATransactionTypes
     ) => void,
-    navigateTo: NavigateToType,
+    navigateTo: NavigationDestination,
     payload: Transaction,
-    transactionTypeToAdd: string | undefined,
+    transactionTypeToAdd?: ScheduleATransactionTypes,
     targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (confirmTransaction.contact_id && confirmTransaction.contact) {
-      const transactionContactChanges = this.getFormChangesToTransactionContact(form, confirmTransaction.contact);
+      const transactionContactChanges = this.setTransactionContactFormChanges(form, confirmTransaction.contact);
       if (transactionContactChanges?.length) {
         const confirmationMessage = this.getEditTransactionContactConfirmationMessage(
           transactionContactChanges,
@@ -284,79 +333,49 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   /**
    * This method returns the differences between the transaction
    * form's contact section and its database contact in prose
-   * for the UI as a string[] (one entry for each change).
+   * for the UI as a string[] (one entry for each change) after
+   * first setting these values on the Contact object.
    * @returns string[] containing the changes in prose for the UI.
    */
-  getFormChangesToTransactionContact(form: FormGroup, contact: Contact | undefined): string[] {
-    const retval: string[] = [];
+  setTransactionContactFormChanges(form: FormGroup, contact: Contact | undefined): string[] {
     if (contact) {
-      switch (contact.type) {
-        case ContactTypes.INDIVIDUAL:
-          retval.push(...this.getIndFormChangesToTransactionContact(form, contact));
-          break;
-        case ContactTypes.COMMITTEE:
-          retval.push(...this.getComFormChangesToTransactionContact(form, contact));
-          break;
-        case ContactTypes.ORGANIZATION:
-          retval.push(...this.getOrgFormChangesToTransactionContact(form, contact));
-          break;
-      }
-      if (form.get('contributor_street_1')?.value !== contact.street_1)
-        retval.push('Updated street address to ' + form.get('contributor_street_1')?.value);
-      if (form.get('contributor_street_2')?.value !== contact.street_2)
-        retval.push('Updated apartment, suite, etc. to ' + form.get('contributor_street_2')?.value);
-      if (form.get('contributor_city')?.value !== contact.city)
-        retval.push('Updated city to ' + form.get('contributor_city')?.value);
-      if (form.get('contributor_state')?.value !== contact.state)
-        retval.push('Updated state to ' + form.get('contributor_state')?.value);
-      if (form.get('contributor_zip')?.value !== contact.zip)
-        retval.push('Updated zip to ' + form.get('contributor_zip')?.value);
+      return Object.entries(ContactFields)
+        .map(([field, label]: string[]) => {
+          const contactValue = contact[field as keyof typeof contact];
+          const formField = this.getFormField(form, field);
+
+          if (formField && formField?.value !== contactValue) {
+            contact[field as keyof typeof contact] = (formField.value || '') as never;
+            return `Updated ${label.toLowerCase()} to ${formField.value || ''}`;
+          }
+          return '';
+        })
+        .filter((change) => change);
     }
-    return retval;
+    return [];
   }
 
-  getIndFormChangesToTransactionContact(form: FormGroup, contact: Contact | undefined): string[] {
-    const retval: string[] = [];
-    if (contact) {
-      if (form.get('contributor_last_name')?.value !== contact.last_name)
-        retval.push('Updated last name to ' + form.get('contributor_last_name')?.value);
-      if (form.get('contributor_first_name')?.value !== contact.first_name)
-        retval.push('Updated first name to ' + form.get('contributor_first_name')?.value);
-      if (form.get('contributor_middle_name')?.value !== contact.middle_name)
-        retval.push('Updated middle name to ' + form.get('contributor_middle_name')?.value);
-      if (form.get('contributor_prefix')?.value !== contact.prefix)
-        retval.push('Updated prefix to ' + form.get('contributor_prefix')?.value);
-      if (form.get('contributor_suffix')?.value !== contact.suffix)
-        retval.push('Updated suffix to ' + form.get('contributor_suffix')?.value);
-      if (form.get('contributor_employer')?.value !== contact.employer)
-        retval.push('Updated employer to ' + form.get('contributor_employer')?.value);
-      if (form.get('contributor_occupation')?.value !== contact.occupation)
-        retval.push('Updated occupation to ' + form.get('contributor_occupation')?.value);
+  getFormField(form: FormGroup, field: string): AbstractControl | null {
+    if (field == 'committee_id') {
+      return form.get('donor_committee_fec_id');
     }
-    return retval;
+    return form.get(`contributor_${field}`) || form.get(`contributor_organization_${field}`);
   }
 
-  getComFormChangesToTransactionContact(form: FormGroup, contact: Contact | undefined): string[] {
-    const retval: string[] = [];
-    if (contact) {
-      if (form.get('donor_committee_fec_id')?.value !== contact.committee_id)
-        retval.push('Updated committee id to ' + form.get('donor_committee_fec_id')?.value);
-      if (form.get('contributor_organization_name')?.value !== contact.name)
-        retval.push('Updated committee name to ' + form.get('contributor_organization_name')?.value);
-    }
-    return retval;
+  getMemoCodeConstant(transactionType?: TransactionType): boolean | undefined {
+    /** Look at validation schema to determine if the memo_code has a constant value.
+     * If there is a constant value, return it, otherwise undefined
+     */
+    const memoCodeSchema = transactionType?.schema.properties['memo_code'];
+    return memoCodeSchema?.const as boolean | undefined;
   }
 
-  getOrgFormChangesToTransactionContact(form: FormGroup, contact: Contact | undefined): string[] {
-    const retval: string[] = [];
-    if (contact) {
-      if (form.get('contributor_organization_name')?.value !== contact.name)
-        retval.push('Updated organization name to ' + form.get('contributor_organization_name')?.value);
-    }
-    return retval;
+  public isMemoCodeReadOnly(transactionType?: TransactionType): boolean {
+    // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
+    return this.getMemoCodeConstant(transactionType) !== undefined;
   }
 
-  doSave(navigateTo: NavigateToType, payload: Transaction, transactionTypeToAdd?: string) {
+  doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {
     if (payload.transaction_type_identifier) {
       if (payload.id) {
         this.transactionService.update(payload).subscribe((transaction) => {
@@ -370,8 +389,24 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  navigateTo(navigateTo: NavigateToType, transactionId?: string, transactionTypeToAdd?: string) {
-    if (navigateTo === 'add another') {
+  getNavigationControls(): TransactionNavigationControls {
+    return this.transactionType?.navigationControls || new TransactionNavigationControls([], [], []);
+  }
+
+  handleNavigate(navigationControl: NavigationControl): void {
+    if (navigationControl.navigationAction === NavigationAction.SAVE) {
+      this.save(navigationControl.navigationDestination);
+    } else {
+      this.navigateTo(navigationControl.navigationDestination);
+    }
+  }
+
+  navigateTo(
+    navigateTo: NavigationDestination,
+    transactionId?: string,
+    transactionTypeToAdd?: ScheduleATransactionTypes
+  ) {
+    if (navigateTo === NavigationDestination.ANOTHER) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
@@ -379,7 +414,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.resetForm();
-    } else if (navigateTo === 'add-sub-tran') {
+    } else if (navigateTo === NavigationDestination.CHILD) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
@@ -389,7 +424,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.router.navigateByUrl(
         `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
       );
-    } else if (navigateTo === 'to-parent') {
+    } else if (navigateTo === NavigationDestination.PARENT) {
       this.router.navigateByUrl(
         `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${this.transactionType?.transaction?.parent_transaction_id}`
       );
@@ -410,7 +445,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
-      memo_code: (transactionType?.transaction as SchATransaction)?.memo_code,
+      memo_code: this.getMemoCodeConstant(transactionType),
       contribution_purpose_descrip: transactionType?.contributionPurposeDescripReadonly(),
     });
   }

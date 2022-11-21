@@ -62,6 +62,7 @@
       <tr role="row">
         <td>
           <a [routerLink]="['edit', item?.id]">{{ item.transaction_type_identifier }}</a>
+          <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>
           {{ item.contributor_organization_name || item.contributor_last_name + ', ' + item.contributor_first_name }}

@@ -1,3 +1,4 @@
+import { generateContactIndividual } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 
@@ -48,10 +49,10 @@ describe('QA Script 125 (Sprint 10)', () => {
       cy.medWait();
       cy.navigateToTransactionManagement();
 
+      const contact = generateContactIndividual({});
       const transaction = generateTransactionObject({
-        'INDIVIDUALS/PERSONS': {
-          'Individual Receipt': {},
-        },
+        transaction_name: 'Individual Receipt',
+        contact: contact,
       });
       cy.createTransactionSchA(transaction);
       cy.medWait();

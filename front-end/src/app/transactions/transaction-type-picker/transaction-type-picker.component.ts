@@ -75,7 +75,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
         ];
       case ScheduleATransactionGroups.TRANSFERS:
         return [
-          ScheduleATransactionTypes.TRANSFERS,
+          ScheduleATransactionTypes.TRANSFER,
           ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
           ScheduleATransactionTypes.IN_KIND_TRANSFER,
           ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA,
@@ -94,7 +94,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.OTHER_RECEIPTS,
           ScheduleATransactionTypes.IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
           ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
-          ScheduleATransactionTypes.BUSINESS_LABOR_ORG_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+          ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
           ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT,
           ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
           ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT,

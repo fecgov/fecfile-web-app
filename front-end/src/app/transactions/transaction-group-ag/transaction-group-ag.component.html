@@ -10,14 +10,13 @@
       <strong>STEP ONE:</strong>
       <p style="font-weight: normal">Add receipt and contributor information</p></ng-template
     >
-
     <div class="p-fluid">
       <h2>Receipt</h2>
-      <h3>Contributor</h3>
+      <h3>Contact</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid">
           <div class="col-12">
-            <label for="entity_type">CONTRIBUTOR TYPE</label>
+            <label for="entity_type">CONTACT TYPE</label>
             <app-contact-lookup
               [contactTypeFormControl]="$any(form).controls['entity_type']"
               [contactTypeOptions]="contactTypeOptions"
@@ -28,288 +27,25 @@
             </app-contact-lookup>
           </div>
         </div>
-        <div class="grid">
-          <div class="col-4">
-            <div class="field">
-              <label for="contributor_last_name">LAST NAME</label>
-              <input type="text" pInputText id="contributor_last_name" formControlName="contributor_last_name" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_last_name"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="field">
-              <label for="contributor_first_name">FIRST NAME</label>
-              <input type="text" pInputText id="contributor_first_name" formControlName="contributor_first_name" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_first_name"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="field">
-              <label for="contributor_middle_name">MIDDLE NAME (OPTIONAL)</label>
-              <input type="text" pInputText id="contributor_middle_name" formControlName="contributor_middle_name" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_middle_name"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-3">
-            <div class="field">
-              <label for="contributor_prefix">PREFIX (OPTIONAL)</label>
-              <input type="text" pInputText id="contributor_prefix" formControlName="contributor_prefix" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_prefix"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="field">
-              <label for="contributor_suffix">SUFFIX (OPTIONAL)</label>
-              <input type="text" pInputText id="contributor_suffix" formControlName="contributor_suffix" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_suffix"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-6"></div>
-        </div>
-        <p-divider></p-divider>
-        <h3>Address</h3>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="contributor_street_1">STREET ADDRESS</label>
-              <input type="text" pInputText id="contributor_street_1" formControlName="contributor_street_1" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_street_1"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="field">
-              <label for="contributor_street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-              <input type="text" pInputText id="contributor_street_2" formControlName="contributor_street_2" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_street_2"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="contributor_city">CITY</label>
-              <input type="text" pInputText id="contributor_city" formControlName="contributor_city" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_city"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="field">
-              <label for="contributor_state">STATE/PROVINCE</label>
-              <p-dropdown
-                inputId="contributor_state"
-                formControlName="contributor_state"
-                [options]="stateOptions"
-                optionLabel="name"
-                optionValue="code"
-                [autoDisplayFirst]="false"
-                appendTo="body"
-              ></p-dropdown>
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_state"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="field">
-              <label for="contributor_zip">ZIP/POSTAL CODE</label>
-              <input type="text" pInputText id="contributor_zip" formControlName="contributor_zip" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_zip"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <p-divider></p-divider>
-        <h3>Employer</h3>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="contributor_employer">EMPLOYER</label>
-              <input type="text" pInputText id="contributor_employer" formControlName="contributor_employer" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_employer"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="field">
-              <label for="contributor_occupation">OCCUPATION</label>
-              <input type="text" pInputText id="contributor_occupation" formControlName="contributor_occupation" />
-              <app-error-messages
-                [form]="form"
-                fieldName="contributor_occupation"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <p-divider></p-divider>
-        <h3>Contribution</h3>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="contribution_date">DATE RECEIVED</label>
-              <p-calendar
-                inputId="contribution_date"
-                name="contribution_date"
-                formControlName="contribution_date"
-              ></p-calendar>
-              <app-error-messages
-                [form]="form"
-                fieldName="contribution_date"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-12">
-            <div class="field">
-              <p-checkbox
-                [binary]="true"
-                inputId="memo_code"
-                formControlName="memo_code"
-                label="MEMO ITEM"
-                ariaLabel="have memo item"
-                [trueValue]="true"
-                [falseValue]="false"
-              ></p-checkbox>
-              <div class="memo-checkbox-note">
-                {{ memoItemHelpText }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="contribution_amount">CONTRIBUTION AMOUNT</label>
-              <p-inputNumber
-                inputId="contribution_amount"
-                formControlName="contribution_amount"
-                mode="currency"
-                currency="USD"
-                locale="en-US"
-              ></p-inputNumber>
-              <app-error-messages
-                [form]="form"
-                fieldName="contribution_amount"
-                [formSubmitted]="formSubmitted"
-                patternErrorMessage="This field must be a number"
-                maxLengthErrorMessage="The amount can be 12 digits max"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="field">
-              <label for="contribution_aggregate">CONTRIBUTION AGGREGATE</label>
-              <p-inputNumber
-                inputId="contribution_aggregate"
-                formControlName="contribution_aggregate"
-                mode="currency"
-                currency="USD"
-                locale="en-US"
-                [readonly]="true"
-                inputStyleClass="readonly"
-              ></p-inputNumber>
-              <app-error-messages
-                [form]="form"
-                fieldName="contribution_aggregate"
-                [formSubmitted]="formSubmitted"
-                patternErrorMessage="This field must be a number"
-                maxLengthErrorMessage="The aggregate can be 12 digits max"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <p-divider></p-divider>
-        <h3>Additional Information</h3>
-        <div class="grid">
-          <div class="col-12">
-            <label for="contribution_purpose_descrip">CONTRIBUTION PURPOSE DESCRIPTION (SYSTEM-GENERATED)</label>
-            <div>
-              <textarea
-                id="contribution_purpose_descrip"
-                [rows]="4"
-                [cols]="30"
-                pInputTextarea
-                [disabled]="true"
-                [autoResize]="true"
-                formControlName="contribution_purpose_descrip"
-                class="readonly"
-                readonly
-              ></textarea>
-              <app-error-messages
-                [form]="form"
-                fieldName="contribution_purpose_descrip"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-12">
-            <label for="memo_text_description">NOTE OR MEMO TEXT (OPTIONAL)</label>
-            <div>
-              <textarea
-                id="memo_text_description"
-                [rows]="5"
-                [cols]="30"
-                pInputTextarea
-                [autoResize]="true"
-                formControlName="memo_text_description"
-              ></textarea>
-              <app-error-messages
-                [form]="form"
-                fieldName="memo_text_description"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <div class="grid" style="flex-direction: row-reverse">
-          <p style="font-style: italic">This type of receipt requires a memo transaction</p>
-        </div>
+        <ng-container *ngIf="transactionType?.transaction?.contact">
+          <app-name-input [form]="form" [formSubmitted]="formSubmitted"></app-name-input>
+          <p-divider></p-divider>
+          <h3>Address</h3>
+          <app-address-input [form]="form" [formSubmitted]="formSubmitted"></app-address-input>
+          <p-divider></p-divider>
+          <h3>Employer</h3>
+          <app-employer-input [form]="form" [formSubmitted]="formSubmitted"></app-employer-input>
+          <p-divider></p-divider>
+          <h3>Receipt Information</h3>
+          <app-amount-input
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType)"
+          ></app-amount-input>
+          <p-divider></p-divider>
+          <h3>Additional Information</h3>
+          <app-additional-info-input [form]="form" [formSubmitted]="formSubmitted"></app-additional-info-input>
+        </ng-container>
       </form>
     </div>
   </p-accordionTab>
@@ -338,343 +74,47 @@
             </div>
           </div>
         </div>
-        <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.COMMITTEE">
-          <div class="grid">
-            <div class="col-8">
-              <div class="field">
-                <label for="contributor_organization_name">CONDUIT NAME</label>
-                <input
-                  type="text"
-                  pInputText
-                  id="contributor_organization_name"
-                  formControlName="contributor_organization_name"
-                />
-                <app-error-messages
-                  [form]="childForm"
-                  fieldName="contributor_organization_name"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="field">
-                <label for="donor_committee_fec_id">CONDUIT FEC ID</label>
-                <input type="text" pInputText id="donor_committee_fec_id" formControlName="donor_committee_fec_id" />
-                <app-error-messages
-                  [form]="childForm"
-                  fieldName="donor_committee_fec_id"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
-          <div class="grid">
-            <div class="col-4">
-              <div class="field">
-                <label for="contributor_last_name">LAST NAME</label>
-                <input type="text" pInputText id="contributor_last_name" formControlName="contributor_last_name" />
-                <app-error-messages
-                  [form]="childForm"
-                  fieldName="contributor_last_name"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="field">
-                <label for="contributor_first_name">FIRST NAME</label>
-                <input type="text" pInputText id="contributor_first_name" formControlName="contributor_first_name" />
-                <app-error-messages
-                  [form]="childForm"
-                  fieldName="contributor_first_name"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-4">
-              <div class="field">
-                <label for="contributor_middle_name">MIDDLE NAME (OPTIONAL)</label>
-                <input type="text" pInputText id="contributor_middle_name" formControlName="contributor_middle_name" />
-                <app-error-messages
-                  [form]="childForm"
-                  fieldName="contributor_middle_name"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-          </div>
-          <div class="grid">
-            <div class="col-3">
-              <div class="field">
-                <label for="contributor_prefix">PREFIX (OPTIONAL)</label>
-                <input type="text" pInputText id="contributor_prefix" formControlName="contributor_prefix" />
-                <app-error-messages
-                  [form]="childForm"
-                  fieldName="contributor_prefix"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="field">
-                <label for="contributor_suffix">SUFFIX (OPTIONAL)</label>
-                <input type="text" pInputText id="contributor_suffix" formControlName="contributor_suffix" />
-                <app-error-messages
-                  [form]="childForm"
-                  fieldName="contributor_suffix"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-6"></div>
-          </div>
-        </ng-container>
-        <p-divider></p-divider>
-        <h3>Address</h3>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="contributor_street_1">STREET ADDRESS</label>
-              <input type="text" pInputText id="contributor_street_1" formControlName="contributor_street_1" />
-              <app-error-messages
-                [form]="childForm"
-                fieldName="contributor_street_1"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="field">
-              <label for="contributor_street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-              <input type="text" pInputText id="contributor_street_2" formControlName="contributor_street_2" />
-              <app-error-messages
-                [form]="childForm"
-                fieldName="contributor_street_2"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="contributor_city">CITY</label>
-              <input type="text" pInputText id="contributor_city" formControlName="contributor_city" />
-              <app-error-messages
-                [form]="childForm"
-                fieldName="contributor_city"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="field">
-              <label for="contributor_state">STATE/PROVINCE</label>
-              <p-dropdown
-                inputId="contributor_state"
-                formControlName="contributor_state"
-                [options]="stateOptions"
-                optionLabel="name"
-                optionValue="code"
-                [autoDisplayFirst]="false"
-                appendTo="body"
-              ></p-dropdown>
-              <app-error-messages
-                [form]="childForm"
-                fieldName="contributor_state"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="field">
-              <label for="contributor_zip">ZIP/POSTAL CODE</label>
-              <input type="text" pInputText id="contributor_zip" formControlName="contributor_zip" />
-              <app-error-messages
-                [form]="childForm"
-                fieldName="contributor_zip"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <p-divider></p-divider>
-        <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
-          <h3>Employer</h3>
-          <div class="grid">
-            <div class="col-6">
-              <div class="field">
-                <label for="contributor_employer">EMPLOYER</label>
-                <input type="text" pInputText id="contributor_employer" formControlName="contributor_employer" />
-                <app-error-messages
-                  [form]="childForm"
-                  fieldName="contributor_employer"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="field">
-                <label for="contributor_occupation">OCCUPATION</label>
-                <input type="text" pInputText id="contributor_occupation" formControlName="contributor_occupation" />
-                <app-error-messages
-                  [form]="childForm"
-                  fieldName="contributor_occupation"
-                  [formSubmitted]="formSubmitted"
-                ></app-error-messages>
-              </div>
-            </div>
-          </div>
+        <ng-container *ngIf="transactionType?.childTransactionType?.transaction?.contact">
+          <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.COMMITTEE">
+            <app-committee-input [form]="childForm" [formSubmitted]="formSubmitted"></app-committee-input>
+          </ng-container>
+          <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
+            <app-name-input [form]="childForm" [formSubmitted]="formSubmitted"></app-name-input>
+          </ng-container>
           <p-divider></p-divider>
+          <h3>Address</h3>
+          <app-address-input
+            [form]="childForm"
+            [formSubmitted]="formSubmitted"
+            [stateOptions]="stateOptions"
+          ></app-address-input>
+          <p-divider></p-divider>
+          <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
+            <h3>Employer</h3>
+            <app-employer-input [form]="childForm" [formSubmitted]="formSubmitted"></app-employer-input>
+            <p-divider></p-divider>
+          </ng-container>
+          <h3>Receipt Information</h3>
+          <app-amount-input
+            [form]="childForm"
+            [formSubmitted]="formSubmitted"
+            [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType?.childTransactionType)"
+            [contributionAmountReadOnly]="true"
+          ></app-amount-input>
+          <p-divider></p-divider>
+          <h3>Additional Information</h3>
+          <app-additional-info-input [form]="childForm" [formSubmitted]="formSubmitted"></app-additional-info-input>
         </ng-container>
-        <h3>Contribution</h3>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="contribution_date">DATE RECEIVED</label>
-              <p-calendar
-                inputId="contribution_date"
-                name="contribution_date"
-                formControlName="contribution_date"
-              ></p-calendar>
-              <app-error-messages
-                [form]="childForm"
-                fieldName="contribution_date"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-12">
-            <div class="field">
-              <p-checkbox
-                [binary]="true"
-                inputId="memo_code"
-                formControlName="memo_code"
-                label="MEMO ITEM"
-                ariaLabel="have memo item"
-                [trueValue]="true"
-                [falseValue]="false"
-                [readonly]="true"
-                inputStyleClass="readonly"
-              ></p-checkbox>
-              <div class="memo-checkbox-note">
-                {{ memoItemHelpText }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-6">
-            <div class="field">
-              <label for="contribution_amount">AMOUNT</label>
-              <p-inputNumber
-                inputId="contribution_amount"
-                formControlName="contribution_amount"
-                mode="currency"
-                currency="USD"
-                locale="en-US"
-                [readonly]="true"
-                inputStyleClass="readonly"
-              ></p-inputNumber>
-              <app-error-messages
-                [form]="childForm"
-                fieldName="contribution_amount"
-                [formSubmitted]="formSubmitted"
-                patternErrorMessage="This field must be a number"
-                maxLengthErrorMessage="The amount can be 12 digits max"
-              ></app-error-messages>
-            </div>
-          </div>
-          <div class="col-6">
-            <div class="field">
-              <label for="contribution_aggregate">AGGREGATE</label>
-              <p-inputNumber
-                inputId="contribution_aggregate"
-                formControlName="contribution_aggregate"
-                mode="currency"
-                currency="USD"
-                locale="en-US"
-                [readonly]="true"
-                inputStyleClass="readonly"
-              ></p-inputNumber>
-              <app-error-messages
-                [form]="childForm"
-                fieldName="contribution_aggregate"
-                [formSubmitted]="formSubmitted"
-                patternErrorMessage="This field must be a number"
-                maxLengthErrorMessage="The aggregate can be 12 digits max"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <p-divider></p-divider>
-        <h3>Additional Information</h3>
-        <div class="grid">
-          <div class="col-12">
-            <label for="contribution_purpose_descrip">CONTRIBUTION PURPOSE DESCRIPTION (OPTIONAL)</label>
-            <div>
-              <textarea
-                id="contribution_purpose_descrip"
-                [rows]="4"
-                [cols]="30"
-                pInputTextarea
-                [autoResize]="true"
-                formControlName="contribution_purpose_descrip"
-                class="readonly"
-                readonly
-              ></textarea>
-              <app-error-messages
-                [form]="childForm"
-                fieldName="contribution_purpose_descrip"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="col-12">
-            <label for="memo_text_description">NOTE OR MEMO TEXT (OPTIONAL)</label>
-            <div>
-              <textarea
-                id="memo_text_description"
-                [rows]="5"
-                [cols]="30"
-                pInputTextarea
-                [autoResize]="true"
-                formControlName="memo_text_description"
-              ></textarea>
-              <app-error-messages
-                [form]="childForm"
-                fieldName="memo_text_description"
-                [formSubmitted]="formSubmitted"
-              ></app-error-messages>
-            </div>
-          </div>
-        </div>
       </form>
     </div>
   </p-accordionTab>
 </p-accordion>
 
-<div class="grid">
-  <div class="col-2">
-    <button pButton pRipple label="Cancel" class="p-button-secondary" (click)="navigateTo('list')"></button>
-  </div>
-  <div ng-class="isExisting(transaction) ? 'col-7' : 'col-4'"></div>
-  <div class="col-3">
-    <button
-      pButton
-      pRipple
-      label="Save & view all transactions"
-      class="p-button-primary"
-      (click)="save('list')"
-    ></button>
-  </div>
-</div>
+<app-navigation-control-bar
+  [navigationControls]="getNavigationControls()"
+  [transaction]="transactionType?.transaction"
+  (navigate)="handleNavigate($event)"
+></app-navigation-control-bar>
 
 <p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
 <p-confirmDialog key="childDialog" [style]="{ width: '450px' }"></p-confirmDialog>

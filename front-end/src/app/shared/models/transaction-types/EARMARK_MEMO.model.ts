@@ -8,9 +8,7 @@ export class EARMARK_MEMO implements TransactionType {
   isDependentChild = true;
   title = '';
   schema = schema;
-  transaction = undefined;
-  parentTransaction = undefined;
-  childTransactionType = undefined;
+  transaction?: SchATransaction;
 
   contributionPurposeDescripReadonly(): string {
     return 'Total earmarked through conduit.';

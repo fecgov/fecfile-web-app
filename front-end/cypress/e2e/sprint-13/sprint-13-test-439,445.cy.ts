@@ -1,5 +1,6 @@
 // @ts-check
 
+import { enterContact } from '../../support/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { createTransactionSchA } from '../../support/transactions.spec';
@@ -43,10 +44,19 @@ describe('QA Script 244 (Sprint 8)', () => {
     cy.get("div[role='toolbar']").contains('Transactions').should('exist');
 
     //Step 4: Create a Joint Fundraising Transfer MEMO transaction
-    const transaction = generateTransactionObject({ TRANSFERS: { 'Joint Fundraising Transfer': {} } });
+    const transaction = generateTransactionObject({ transaction_name: 'Joint Fundraising Transfer' });
     createTransactionSchA(transaction, false);
-    cy.get('button[label="Save & add a Memo"]').click();
+    cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
+    cy.contains('li', 'PAC Joint Fundraising Transfer Memo').click();
+    cy.shortWait();
+    cy.get('.p-confirm-dialog-accept').click();
     cy.longWait();
+
+    cy.contains('a', 'Create a new contact').click();
+    cy.longWait();
+    enterContact(transaction.contact, true, true);
+    cy.medWait();
+
     cy.contains('The dollar amount in a memo item is not incorporated into the total figure for the schedule').should(
       'exist'
     );

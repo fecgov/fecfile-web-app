@@ -7,6 +7,12 @@ import {
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
+import {
+  CANCEL_CONTROL,
+  SAVE_ANOTHER_CONTROL,
+  SAVE_LIST_CONTROL,
+  TransactionNavigationControls,
+} from '../transaction-navigation-controls.model';
 
 export class JOINT_FUNDRAISING_TRANSFER implements TransactionType {
   scheduleId = 'A';
@@ -14,9 +20,18 @@ export class JOINT_FUNDRAISING_TRANSFER implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
   schema = schema;
-  transaction = undefined;
-  parentTransaction = undefined;
-  childTransactionType = undefined;
+  transaction?: SchATransaction;
+  subTransactionTypes = [
+    ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO,
+  ];
+  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
+    [],
+    [CANCEL_CONTROL],
+    [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
+  );
 
   contributionPurposeDescripReadonly(): string {
     return 'Transfer of Joint Fundraising Proceeds';
