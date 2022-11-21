@@ -23,9 +23,7 @@ export class INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT implements TransactionT
     ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT
   );
   schema = schema;
-  transaction = undefined;
-  parentTransaction = undefined;
-  childTransactionType = undefined;
+  transaction?: SchATransaction;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
