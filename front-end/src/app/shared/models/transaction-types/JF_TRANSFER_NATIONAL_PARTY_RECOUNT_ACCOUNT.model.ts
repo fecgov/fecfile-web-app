@@ -23,9 +23,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT implements TransactionTy
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT
   );
   schema = schema;
-  transaction = undefined;
-  parentTransaction = undefined;
-  childTransactionType = undefined;
+  transaction?: SchATransaction;
   subTransactionTypes = [
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,

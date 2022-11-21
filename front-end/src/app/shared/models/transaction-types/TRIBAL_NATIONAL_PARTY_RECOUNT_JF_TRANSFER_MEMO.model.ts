@@ -25,9 +25,7 @@ export class TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements Transacti
     ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO
   );
   schema = schema;
-  transaction = undefined;
-  parentTransaction: SchATransaction | undefined = undefined;
-  childTransactionType = undefined;
+  transaction?: SchATransaction;
   navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
@@ -52,7 +50,9 @@ export class TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements Transacti
   );
 
   contributionPurposeDescripReadonly(): string {
-    return `Recount/Legal Proceedings Account JF Memo: ${this.parentTransaction?.contributor_organization_name}`;
+    return `Recount/Legal Proceedings Account JF Memo: ${
+      (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
+    }`;
   }
 
   getNewTransaction() {
