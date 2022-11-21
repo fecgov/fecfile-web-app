@@ -50,7 +50,7 @@ export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements TransactionT
   );
 
   contributionPurposeDescripReadonly(): string {
-    return `Recount/Legal Proceedings Account JF Memo: ${
+    return `Pres. Nominating Convention Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;
   }
@@ -60,7 +60,7 @@ export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements TransactionT
       form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
       back_reference_sched_name: 'SA17',
-      aggregation_group: AggregationGroups.NPARTY_RECOUNT_ACCOUNT,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
     });
   }
 }
