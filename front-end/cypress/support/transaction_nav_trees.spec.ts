@@ -147,8 +147,8 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     readOnly: false,
     maxLength: -1,
   },
-  memoTextDescription: {
-    fieldName: 'memo_text_description',
+  memoTextInput: {
+    fieldName: 'memo_text_input',
     fieldType: 'Textarea',
     generator: randomString,
     genArgs: [100, 'special'],
@@ -199,7 +199,7 @@ const entityIndvOrComm = {
 };
 
 const memoFields: { [key: string]: TransactionField } = {
-  memoTextDescription: TransactionFields['memoTextDescription'],
+  memoTextInput: TransactionFields['memoTextInput'],
 };
 
 const contributionFields: { [key: string]: TransactionField } = {
