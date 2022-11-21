@@ -33,7 +33,7 @@ export class INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT implements TransactionT
   );
 
   contributionPurposeDescripReadonly(): string {
-    return '';
+    return 'Non-contribution Account Receipt';
   }
 
   getNewTransaction() {

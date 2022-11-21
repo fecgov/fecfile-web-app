@@ -22,6 +22,6 @@ describe('INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT', () => {
 
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('');
+    expect(descrip).toBe('Non-contribution Account Receipt');
   });
 });
