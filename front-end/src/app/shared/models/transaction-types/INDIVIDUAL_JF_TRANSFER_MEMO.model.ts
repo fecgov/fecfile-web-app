@@ -3,14 +3,17 @@ import { hasNoContact, isNewTransaction } from 'app/shared/interfaces/transactio
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_JF_TRANSFER_MEMO';
 import {
-  AggregationGroups, SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
 } from '../scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
   SAVE_LIST_CONTROL,
-  TransactionNavigationControls
+  TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 
 export class INDIVIDUAL_JF_TRANSFER_MEMO implements TransactionType {
@@ -19,10 +22,8 @@ export class INDIVIDUAL_JF_TRANSFER_MEMO implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO);
   schema = schema;
-  transaction = undefined;
-  parentTransaction: SchATransaction | undefined = undefined;
-  childTransactionType = undefined;
-  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+  transaction?: SchATransaction;
+  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
@@ -46,7 +47,7 @@ export class INDIVIDUAL_JF_TRANSFER_MEMO implements TransactionType {
   );
 
   contributionPurposeDescripReadonly(): string {
-    return `JF Memo: ${this.parentTransaction?.contributor_organization_name}`;
+    return `JF Memo: ${(this.transaction?.parent_transaction as SchATransaction).contributor_organization_name}`;
   }
 
   getNewTransaction() {

@@ -6,7 +6,6 @@ import {
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRANSFER';
-import { Transaction } from '../../interfaces/transaction.interface';
 import {
   CANCEL_CONTROL,
   SAVE_ANOTHER_CONTROL,
@@ -21,10 +20,8 @@ export class TRANSFER implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRANSFER);
   schema = schema;
-  transaction: Transaction | undefined;
-  contact = undefined;
-  parent: SchATransaction | undefined;
-  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+  transaction?: SchATransaction;
+  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]

@@ -22,10 +22,8 @@ export class PAC_JF_TRANSFER_MEMO implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   schema = schema;
-  transaction = undefined;
-  parentTransaction: SchATransaction | undefined = undefined;
-  childTransactionType = undefined;
-  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+  transaction?: SchATransaction;
+  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
@@ -49,7 +47,9 @@ export class PAC_JF_TRANSFER_MEMO implements TransactionType {
   );
 
   contributionPurposeDescripReadonly(): string {
-    return `Joint Fundraising Memo: ${this.parentTransaction?.contributor_organization_name}`;
+    return `Joint Fundraising Memo: ${
+      (this.transaction?.parent_transaction as SchATransaction).contributor_organization_name
+    }`;
   }
 
   getNewTransaction() {

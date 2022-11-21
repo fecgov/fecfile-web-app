@@ -21,7 +21,8 @@ export type SchATransactionName =
   | 'Earmark Receipt'
   | 'Business/Labor Organization Receipt - Non-Contribution Account'
   | 'Individual Receipt - Non-Contribution Account'
-  | 'Joint Fundraising Transfer - National Party Recount Account';
+  | 'Joint Fundraising Transfer - National Party Recount Account'
+  | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -32,7 +33,11 @@ export type ChildTransactionName =
   | 'Individual National Party Recount/Legal Proceedings Account JF Transfer Memo'
   | 'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo'
   | 'Earmark Receipt Step One'
-  | 'Earmark Receipt Step Two';
+  | 'Earmark Receipt Step Two'
+  | 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo'
+  | 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo'
+  | 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo'
+  | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo';
 
 export type TransactionNavTree = {
   [category in TransactionCategory]?: {
@@ -346,6 +351,16 @@ const jointFundraisingTransferNationalPartyRecount: TransactionForm = {
   childTransactions: [pacNPRJFTransMemo, indvNPRJFTransMemo, tribalNPRJFTransMemo],
 };
 
+const jointFundraisingTransferNationalPartyPresNominatingConventionAccount: TransactionForm = {
+  transaction_name: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
+  transaction_category: 'TRANSFERS',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const offsetToOpex: TransactionForm = {
   transaction_name: 'Offsets to Operating Expenditures',
   transaction_category: 'OTHER',
@@ -444,6 +459,7 @@ export const groupANavTree: TransactionNavTree = {
     Transfer: transfer,
     'Joint Fundraising Transfer': jointFundraisingTransfer,
     'Joint Fundraising Transfer - National Party Recount Account': jointFundraisingTransferNationalPartyRecount,
+    'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account': jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
   },
   //"REFUNDS":{},
   OTHER: {
