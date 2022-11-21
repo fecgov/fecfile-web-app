@@ -1,11 +1,11 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from './PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
+import { PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from './PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
 
-describe('PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
-  let transactionType: PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO;
+describe('PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
+  let transactionType: PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO;
 
   beforeEach(() => {
-    transactionType = new PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO();
+    transactionType = new PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO();
   });
 
   it('should create an instance', () => {
@@ -17,7 +17,9 @@ describe('PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA17');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO);
+    expect(txn.transaction_type_identifier).toBe(
+      ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
+    );
   });
 
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {
