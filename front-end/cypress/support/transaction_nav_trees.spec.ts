@@ -313,6 +313,36 @@ const pacNPRJFTransMemo: ChildTransactionForm = {
   },
 };
 
+const pacNationalPartyConventionJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo',
+  ...entityCommittee,
+  childOf: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const individualNationalPartyConventionJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo',
+  ...entityCommittee,
+  childOf: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalNationalPartyConventionJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo',
+  ...entityCommittee,
+  childOf: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const jointFundraisingTransfer: TransactionForm = {
   transaction_name: 'Joint Fundraising Transfer',
   transaction_category: 'TRANSFERS',
@@ -348,6 +378,11 @@ const jointFundraisingTransferNationalPartyPresNominatingConventionAccount: Tran
     ...memoFields,
     ...contributionFields,
   },
+  childTransactions: [
+    pacNationalPartyConventionJFTransferMemo,
+    individualNationalPartyConventionJFTransferMemo,
+    tribalNationalPartyConventionJFTransferMemo,
+  ],
 };
 
 const offsetToOpex: TransactionForm = {
@@ -448,7 +483,8 @@ export const groupANavTree: TransactionNavTree = {
     Transfer: transfer,
     'Joint Fundraising Transfer': jointFundraisingTransfer,
     'Joint Fundraising Transfer - National Party Recount Account': jointFundraisingTransferNationalPartyRecount,
-    'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account': jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
+    'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account':
+      jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
   },
   //"REFUNDS":{},
   OTHER: {
