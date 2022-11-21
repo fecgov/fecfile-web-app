@@ -18,7 +18,7 @@ import { TransactionType } from 'app/shared/interfaces/transaction-type.interfac
 
 export class TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO implements TransactionType {
   scheduleId = 'A';
-  componentGroupId = 'A';
+  componentGroupId = 'D';
   isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,

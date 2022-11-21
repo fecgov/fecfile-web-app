@@ -23,7 +23,7 @@ describe('PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
   it('#contributionPurposeDescripReadonly() should return an empty string', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
     expect(descrip).toBe(
-      `Recount/Legal Proceedings Account JF Memo: ${
+      `Pres. Nominating Convention Account JF Memo: ${
         (transactionType.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
       }`
     );
