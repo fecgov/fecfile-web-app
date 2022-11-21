@@ -14,6 +14,7 @@ export type SchATransactionName =
   | 'Tribal Receipt'
   | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
+  | 'Other Committee Receipt - Non-Contribution Account'
   | 'Other Receipts'
   | 'Party Receipt'
   | 'PAC Receipt'
@@ -406,6 +407,16 @@ const offsetToOpex: TransactionForm = {
   },
 };
 
+const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
+  transaction_name: 'Other Committee Receipt - Non-Contribution Account',
+  transaction_category: 'OTHER',
+  ...entityAny,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const otherReceipt: TransactionForm = {
   transaction_name: 'Other Receipts',
   transaction_category: 'OTHER',
@@ -500,6 +511,7 @@ export const groupANavTree: TransactionNavTree = {
   //"REFUNDS":{},
   OTHER: {
     'Offsets to Operating Expenditures': offsetToOpex,
+    'Other Committee Receipt - Non-Contribution Account': otherCommitteeReceiptNonContributionAccount,
     'Other Receipts': otherReceipt,
     'Business/Labor Organization Receipt - Non-Contribution Account': businessLaborNonContribution,
     'Individual Receipt - Non-Contribution Account': individualNonContribution,
