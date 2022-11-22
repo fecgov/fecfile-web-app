@@ -5,7 +5,7 @@ import {
   AggregationGroups,
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO';
 import {
   NavigationAction,
   NavigationControl,
@@ -16,13 +16,13 @@ import {
 import { hasNoContact, isNewTransaction } from 'app/shared/interfaces/transaction.interface';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
-export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements TransactionType {
+export class PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO implements TransactionType {
   scheduleId = 'A';
-  componentGroupId = 'A';
+  componentGroupId = 'F';
   isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
   );
   schema = schema;
   transaction?: SchATransaction;
@@ -50,7 +50,7 @@ export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements Trans
   );
 
   contributionPurposeDescripReadonly(): string {
-    return `Recount/Legal Proceedings Account JF Memo: ${
+    return `Pres. Nominating Convention Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;
   }
@@ -58,9 +58,9 @@ export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements Trans
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+      transaction_type_identifier: ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
       back_reference_sched_name: 'SA17',
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });
   }
 }

@@ -221,7 +221,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         ].includes(p)
     );
     payload.fields_to_validate = fieldsToValidate;
-
+    function addFieldsToValidate(transaction: Transaction) {
+      transaction.fields_to_validate = fieldsToValidate;
+      if (transaction.children) {
+        transaction.children.forEach((transaction) => addFieldsToValidate(transaction));
+      }
+    }
+    addFieldsToValidate(payload);
     return payload;
   }
 
