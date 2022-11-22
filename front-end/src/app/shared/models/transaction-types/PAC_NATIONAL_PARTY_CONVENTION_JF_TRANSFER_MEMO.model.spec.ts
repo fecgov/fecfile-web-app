@@ -22,7 +22,7 @@ describe('PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
     );
   });
 
-  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
+  it('#contributionPurposeDescripReadonly() should return correct description', () => {
     const descrip = transactionType.contributionPurposeDescripReadonly();
     expect(descrip).toBe(
       `Pres. Nominating Convention Account JF Memo: ${
