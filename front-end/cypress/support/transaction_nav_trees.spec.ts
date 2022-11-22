@@ -337,7 +337,7 @@ const pacNationalPartyConventionJFTransferMemo: ChildTransactionForm = {
 
 const individualNationalPartyConventionJFTransferMemo: ChildTransactionForm = {
   transaction_name: 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo',
-  ...entityCommittee,
+  ...entityIndividual,
   childOf: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
   fields: {
     ...memoFields,
@@ -347,7 +347,7 @@ const individualNationalPartyConventionJFTransferMemo: ChildTransactionForm = {
 
 const tribalNationalPartyConventionJFTransferMemo: ChildTransactionForm = {
   transaction_name: 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo',
-  ...entityCommittee,
+  ...entityOrganization,
   childOf: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
   fields: {
     ...memoFields,
@@ -410,7 +410,7 @@ const offsetToOpex: TransactionForm = {
 const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
   transaction_name: 'Other Committee Receipt - Non-Contribution Account',
   transaction_category: 'OTHER',
-  ...entityAny,
+  ...entityCommittee,
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -420,7 +420,7 @@ const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
 const otherReceipt: TransactionForm = {
   transaction_name: 'Other Receipts',
   transaction_category: 'OTHER',
-  ...entityCommittee,
+  ...entityAny,
   fields: {
     ...memoFields,
     ...contributionFields,
