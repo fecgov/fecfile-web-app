@@ -420,7 +420,7 @@ const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
 const otherReceipt: TransactionForm = {
   transaction_name: 'Other Receipts',
   transaction_category: 'OTHER',
-  ...entityAny,
+  ...entityCommittee,
   fields: {
     ...memoFields,
     ...contributionFields,
