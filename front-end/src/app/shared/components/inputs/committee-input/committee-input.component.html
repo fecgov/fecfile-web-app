@@ -16,7 +16,7 @@
         ></app-error-messages>
       </div>
     </div>
-    <div class="col-4">
+    <ng-container class="col-4" *ngIf="includeFecId">
       <div class="field">
         <label for="donor_committee_fec_id">{{ entityRole }} FEC ID</label>
         <input type="text" pInputText id="donor_committee_fec_id" formControlName="donor_committee_fec_id" />
@@ -26,6 +26,6 @@
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
-    </div>
+    </ng-container>
   </div>
 </div>

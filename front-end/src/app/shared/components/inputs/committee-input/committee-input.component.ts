@@ -7,4 +7,5 @@ import { BaseInputComponent } from '../base-input.component';
 })
 export class CommitteeInputComponent extends BaseInputComponent {
   @Input() entityRole = 'CONTACT';
+  @Input() includeFecId = false;
 }

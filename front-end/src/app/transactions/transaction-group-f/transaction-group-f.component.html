@@ -20,7 +20,12 @@
       </div>
     </div>
     <ng-container *ngIf="transactionType?.transaction?.contact">
-      <app-committee-input [form]="form" [formSubmitted]="formSubmitted" entityRole="COMMITTEE"></app-committee-input>
+      <app-committee-input
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        entityRole="COMMITTEE"
+        [includeFecId]="true"
+      ></app-committee-input>
       <p-divider></p-divider>
       <h3>Address</h3>
       <app-address-input [form]="form" [formSubmitted]="formSubmitted"></app-address-input>
