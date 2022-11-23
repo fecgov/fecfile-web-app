@@ -14,8 +14,8 @@
           [disabled]="true"
           [autoResize]="true"
           formControlName="contribution_purpose_descrip"
-          class="readonly"
-          readonly
+          [ngClass]="{ readonly: descriptionIsSystemGenerated }"
+          [readonly]="descriptionIsSystemGenerated"
         ></textarea>
         <app-error-messages
           [form]="form"
