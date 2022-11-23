@@ -20,8 +20,8 @@ describe('INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT);
   });
 
-  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+  it('#generateContributionPurposeDescription() should generate a string', () => {
+    const descrip = transactionType.generateContributionPurposeDescription();
     expect(descrip).toBe('Non-contribution Account Receipt');
   });
 });

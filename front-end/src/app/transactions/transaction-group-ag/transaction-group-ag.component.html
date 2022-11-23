@@ -79,7 +79,11 @@
         </div>
         <ng-container *ngIf="transactionType?.childTransactionType?.transaction?.contact">
           <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.COMMITTEE">
-            <app-committee-input [form]="childForm" [formSubmitted]="formSubmitted"></app-committee-input>
+            <app-committee-input
+              [form]="childForm"
+              [formSubmitted]="formSubmitted"
+              entityRole="CONDUIT"
+            ></app-committee-input>
           </ng-container>
           <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
             <app-name-input [form]="childForm" [formSubmitted]="formSubmitted"></app-name-input>

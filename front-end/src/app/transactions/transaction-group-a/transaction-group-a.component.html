@@ -34,7 +34,11 @@
       ></app-amount-input>
       <p-divider></p-divider>
       <h3>Additional Information</h3>
-      <app-additional-info-input [form]="form" [formSubmitted]="formSubmitted"></app-additional-info-input>
+      <app-additional-info-input
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
+      ></app-additional-info-input>
       <div class="grid">
         <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls().inlineControls">
           <div class="col-3">

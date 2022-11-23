@@ -30,7 +30,7 @@ export class INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT implements TransactionT
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  contributionPurposeDescripReadonly(): string {
+  generateContributionPurposeDescription(): string {
     return 'Non-contribution Account Receipt';
   }
 
