@@ -7,5 +7,5 @@ import { BaseInputComponent } from '../base-input.component';
   styleUrls: ['./additional-info-input.component.scss'],
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent {
-  @Input() descriptionIsSystemGenerated: boolean = false;
+  @Input() descriptionIsSystemGenerated = false;
 }
