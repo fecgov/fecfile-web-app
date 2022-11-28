@@ -16,36 +16,36 @@ function getToTransactionsPage() {
 }
 
 describe('Generates lighthouse reports for every page', () => {
-  it('Login page', () => {
+  xit('Login page', () => {
     cy.visit('/');
     cy.runLighthouse('other', 'login');
   });
 
-  it('Dashboard', () => {
+  xit('Dashboard', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.runLighthouse('other', 'dashboard');
   });
 
-  it('Account Profile', () => {
+  xit('Account Profile', () => {
     cy.login();
     cy.visit('/profile/account');
     cy.runLighthouse('other', 'account-info');
   });
 
-  it('User Management', () => {
+  xit('User Management', () => {
     cy.login();
     cy.visit('/committee/users');
     cy.runLighthouse('other', 'user-management');
   });
 
-  it('Contact Management', () => {
+  xit('Contact Management', () => {
     cy.login();
     cy.visit('/contacts');
     cy.runLighthouse('contacts', 'contact-management');
   });
 
-  it('Contact Creation', () => {
+  xit('Contact Creation', () => {
     cy.login();
     cy.visit('/contacts');
     cy.medWait();
@@ -69,13 +69,13 @@ describe('Generates lighthouse reports for every page', () => {
     cy.runLighthouse('contacts', 'contact-form-organization');
   });
 
-  it('Report Management', () => {
+  xit('Report Management', () => {
     cy.login();
     cy.visit('/reports');
     cy.runLighthouse('reports', 'report-management');
   });
 
-  it('Report Creation', () => {
+  xit('Report Creation', () => {
     cy.login();
     cy.deleteAllReports();
     cy.visit('/reports');
@@ -84,7 +84,7 @@ describe('Generates lighthouse reports for every page', () => {
     cy.runLighthouse('reports', 'report-creation');
   });
 
-  it('Date Picker', () => {
+  xit('Date Picker', () => {
     cy.login();
     cy.visit('/reports');
     cy.deleteAllReports();
@@ -95,7 +95,7 @@ describe('Generates lighthouse reports for every page', () => {
     cy.runLighthouse('other', 'date-picker');
   });
 
-  it('Cash on Hand', () => {
+  xit('Cash on Hand', () => {
     cy.login();
     cy.deleteAllReports();
     cy.visit('/reports');
@@ -108,7 +108,7 @@ describe('Generates lighthouse reports for every page', () => {
     cy.navigateToTransactionManagement();
   });
 
-  it('Summary page', () => {
+  xit('Summary page', () => {
     cy.login();
     getToTransactionsPage();
 
@@ -121,7 +121,7 @@ describe('Generates lighthouse reports for every page', () => {
     cy.runLighthouse('reports', 'summary-page');
   });
 
-  it('Detailed summary page', () => {
+  xit('Detailed summary page', () => {
     cy.login();
     getToTransactionsPage();
 
@@ -134,7 +134,7 @@ describe('Generates lighthouse reports for every page', () => {
     cy.runLighthouse('reports', 'detailed-summary-page');
   });
 
-  it('Print preview', () => {
+  xit('Print preview', () => {
     cy.login();
     getToTransactionsPage();
 
@@ -147,7 +147,7 @@ describe('Generates lighthouse reports for every page', () => {
     cy.runLighthouse('reports', 'print-preview');
   });
 
-  it('Report memo', () => {
+  xit('Report memo', () => {
     cy.login();
     getToTransactionsPage();
 
@@ -160,7 +160,7 @@ describe('Generates lighthouse reports for every page', () => {
     cy.runLighthouse('reports', 'report-memo');
   });
 
-  it('Report confirm information', () => {
+  xit('Report confirm information', () => {
     cy.login();
     getToTransactionsPage();
 
@@ -173,7 +173,7 @@ describe('Generates lighthouse reports for every page', () => {
     cy.runLighthouse('reports', 'submission-confirm-information');
   });
 
-  it('Report submission', () => {
+  xit('Report submission', () => {
     cy.login();
     getToTransactionsPage();
 
@@ -186,7 +186,7 @@ describe('Generates lighthouse reports for every page', () => {
     cy.runLighthouse('reports', 'submission');
   });
 
-  it('Report status', () => {
+  xit('Report status', () => {
     cy.login();
     getToTransactionsPage();
 
@@ -199,13 +199,13 @@ describe('Generates lighthouse reports for every page', () => {
     cy.runLighthouse('reports', 'submission-status');
   });
 
-  it('Transactions management', () => {
+  xit('Transactions management', () => {
     cy.login();
     getToTransactionsPage();
     cy.runLighthouse('transactions', 'transaction-management');
   });
 
-  it('Transaction accordion', () => {
+  xit('Transaction accordion', () => {
     cy.login();
     getToTransactionsPage();
     cy.contains('button', 'Add new transaction').click();
@@ -219,12 +219,16 @@ describe('Generates lighthouse reports for every page', () => {
     const forms = getTransactionFormsByTransactionGroup(group);
     if (forms.length > 0) {
       const form = _.sample(forms);
-      const transaction = generateTransactionObject({ transaction_name: form?.transaction_name });
+      const transaction = generateTransactionObject({
+        transaction_name: form?.transaction_name,
+        childTransactions: [],
+      });
 
       it(`Transaction creation - group ${group}`, () => {
         cy.login();
         getToTransactionsPage();
-        cy.createTransactionSchA(transaction, false);
+        cy.createTransactionSchA(transaction);
+        cy.get('tr.ng-star-inserted > :nth-child(1) > a').first().click();
         cy.runLighthouse('transactions', `transaction-creation-group-${group}`);
       });
     }
