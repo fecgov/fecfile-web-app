@@ -12,6 +12,9 @@ export default defineConfig({
   trashAssetsBeforeRuns: false,
   videoUploadOnPasses: false,
   chromeWebSecurity: false,
+  lighthouse: {
+    options: ['--chrome-flags="--no-sandbox --headless --disable-gpu"'],
+  },
   retries: {
     runMode: 2,
     openMode: 2,

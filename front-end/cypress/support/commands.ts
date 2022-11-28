@@ -217,6 +217,14 @@ export function runLighthouse(directory: string, filename: string) {
     },
     {
       output: 'html',
+      formFactor: 'desktop',
+      screenEmulation: {
+        mobile: false,
+        disable: false,
+        width: Cypress.config('viewportWidth'),
+        height: Cypress.config('viewportHeight'),
+        deviceScaleRatio: 1,
+      },
     }
   ).then(() => {
     cy.exec(`mv lighthouse.html cypress/lighthouse/${directory}/${filename}.html`);
