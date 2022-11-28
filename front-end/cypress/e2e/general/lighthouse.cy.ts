@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import { generateContactObject } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import {
   generateTransactionObject,
