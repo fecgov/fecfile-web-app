@@ -110,7 +110,7 @@ jobs:
 
       - run:
           name: run e2e tests
-          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e
+          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --headless
           working_directory: ~/project/front-end/
 
   deploy:
@@ -246,8 +246,15 @@ jobs:
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+parameters:
+  is-nightly-run:
+    type: boolean
+    default: false
+
 workflows:
   test:
+    when:
+      not: << pipeline.parameters.is-nightly-run >>
     jobs:
       - lint
       - test
@@ -256,3 +263,8 @@ workflows:
           requires:
             - test
             - dependency-check
+
+  e2e-test:
+    when: << pipeline.parameters.is-nightly-run >>
+    jobs:
+      - e2e-test
