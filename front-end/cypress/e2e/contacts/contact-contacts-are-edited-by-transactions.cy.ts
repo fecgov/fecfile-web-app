@@ -12,7 +12,7 @@ const transactionIndv = generateTransactionObject({
   isNewContact: false,
 });
 
-describe('QA Script 159 (Sprint 15)', () => {
+describe('Tests that contacts are edited by transactions', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');

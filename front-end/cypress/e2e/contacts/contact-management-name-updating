@@ -4,8 +4,8 @@ import { generateContactObject } from '../../support/generators/contacts.spec';
 
 const contactTypes: Array<string> = ['Individual', 'Candidate', 'Committee', 'Organization'];
 
-describe('QA Test Script #189, #245, #246, #247 (Sprint 7)', () => {
-  after(() => {
+describe('Tests that the names on the contact management page update when edited', () => {
+  after('Cleanup', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllContacts();

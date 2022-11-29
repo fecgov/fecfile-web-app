@@ -107,7 +107,7 @@ function testField(cType, field) {
 let contactType: string;
 const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
-describe('QA Test Scripts #192, #248, #249, & #250 (Sprint 7)', () => {
+describe('Tests the maximum length and required/not-required for each field', () => {
   for (contactType of Object.keys(contacts)) {
     it(`${contactType} - Check every field for required/optional and maximum length`, () => {
       cy.visit('/dashboard');

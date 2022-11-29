@@ -74,7 +74,7 @@ function checkEveryStateThenSelectWestVirgia() {
   cy.get(fieldCandidateState).should('contain', 'West Virginia');
 }
 
-describe('QA Test Script #119 (Sprint 7)', () => {
+describe('Counts the number of districts associated with each state', () => {
   it('', () => {
     //Step 1: Navigate to contacts page
     cy.visit('/dashboard');

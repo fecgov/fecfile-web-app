@@ -3,7 +3,7 @@ import { generateContactObject } from '../../support/generators/contacts.spec';
 
 const candidateTypes: string[] = ['Presidential', 'House', 'Senate'];
 
-describe('QA Test Script #206 (Sprint 8)', () => {
+describe('Tests candidate ID field for different candidate types', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
@@ -11,7 +11,7 @@ describe('QA Test Script #206 (Sprint 8)', () => {
   });
 
   for (const candidateType of candidateTypes) {
-    it(`Tests the ${candidateType} candidate type`, () => {
+    it(`Tests the candidate ID for ${candidateType} candidates`, () => {
       const contact = generateContactObject({
         contact_type: 'Candidate',
         candidate_office: candidateType,

@@ -31,7 +31,7 @@ const transactionCommittee = generateTransactionObject({
   contact: contactCommittee,
 });
 
-describe('QA Script 244 (Sprint 8)', () => {
+describe('Tests that contacts are created by transactions', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
