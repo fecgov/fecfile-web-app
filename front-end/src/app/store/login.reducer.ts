@@ -9,13 +9,9 @@ export const initialState: UserLoginData = {
   token: '',
 };
 
-const _loginReducer = createReducer(
+export const loginReducer = createReducer(
   initialState,
   on(userLoggedInAction, (_state, update) => update.payload),
   on(userLoggedOutAction, () => initialState),
   on(userLoggedOutForLoginDotGovAction, () => initialState)
 );
-
-export function loginReducer(state: UserLoginData | undefined, action: Action) {
-  return _loginReducer(state, action);
-}
