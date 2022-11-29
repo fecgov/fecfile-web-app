@@ -49,7 +49,7 @@ export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements TransactionT
     [SAVE_LIST_CONTROL]
   );
 
-  contributionPurposeDescripReadonly(): string {
+  generateContributionPurposeDescription(): string {
     return `Recount/Legal Proceedings Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;
