@@ -64,13 +64,13 @@ function testSavedProperly(contact, cType) {
 let contactType: string;
 const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
-describe('QA Test Script #110 (Sprint 6)', () => {
+describe('Contact Creation', () => {
   beforeEach('Logs in', () => {
     cy.login();
     cy.visit('/dashboard');
   });
 
-  after('', () => {
+  after('Cleans up', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllContacts();
@@ -79,7 +79,7 @@ describe('QA Test Script #110 (Sprint 6)', () => {
   for (contactType of Object.keys(contacts)) {
     contacts[contactType] = generateContactObject({ contact_type: contactType });
 
-    context(`QA Script #110 - ${contactType}`, (cType = contactType) => {
+    context(`Creating - ${contactType}`, (cType = contactType) => {
       it('Steps 1-5: Test "Save"', () => {
         cy.get('.p-menubar').contains('.p-menuitem-link', 'Contacts').click();
         cy.url().should('contain', '/contacts');

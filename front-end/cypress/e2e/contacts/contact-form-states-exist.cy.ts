@@ -4,7 +4,7 @@ import * as generator from '../../support/generators/generators.spec';
 
 const states: Array<string> = generator.states.concat(generator.territories);
 
-describe('QA Test Script #182 (Sprint 6)', () => {
+describe('Checks that all states are present as options within the contact form', () => {
   it('Step 1: Navigate to contacts page', () => {
     cy.login();
     cy.visit('/dashboard');
