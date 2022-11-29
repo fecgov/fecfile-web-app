@@ -22,7 +22,7 @@ export type SchATransactionName =
   | 'Earmark Receipt'
   | 'Business/Labor Organization Receipt - Non-Contribution Account'
   | 'Individual Receipt - Non-Contribution Account'
-  | 'Joint Fundraising Transfer - National Party Recount Account'
+  | 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account'
   | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account';
 
 export type ChildTransactionName =
