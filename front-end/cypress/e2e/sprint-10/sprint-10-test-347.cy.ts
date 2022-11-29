@@ -36,7 +36,7 @@ describe('QA Script 347 (Sprint 10)', () => {
     const contribution = childTransaction.fields['contributionAmount'] as number;
     const convContribution = Intl.NumberFormat('en-US').format(Math.floor(contribution));
 
-    cy.contains('tr', 'JOINT_FUNDRAISING_TRANSFER')
+    cy.contains('tr', 'Joint Fundraising Transfer')
       .find('td')
       .eq(6)
       .then(($td) => {

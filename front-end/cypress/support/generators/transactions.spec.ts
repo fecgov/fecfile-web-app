@@ -9,6 +9,8 @@ import {
   ChildTransactionName,
   PairedTransactionForm,
   childTransactionTree,
+  TransactionGroup,
+  AggregationGroup,
 } from '../transaction_nav_trees.spec';
 import {
   Contact,
@@ -76,6 +78,28 @@ function getTransactionFormByCategory(transaction_category: string): Transaction
     const forms = Object.values(groupANavTree[transaction_category]);
     return _.sample(forms) as TransactionForm;
   }
+}
+
+export function getTransactionFormsByTransactionGroup(group: TransactionGroup): TransactionForm[] {
+  let forms: TransactionForm[] = [];
+  for (const category of Object.keys(groupANavTree)) {
+    for (const form of Object.values(groupANavTree[category]) as TransactionForm[]) {
+      if (form.transaction_group == group) forms = [form, ...forms];
+    }
+  }
+
+  return forms;
+}
+
+export function getTransactionFormsByAggregationGroup(group: AggregationGroup): TransactionForm[] {
+  let forms: TransactionForm[] = [];
+  for (const category of Object.keys(groupANavTree)) {
+    for (const form of Object.values(groupANavTree[category]) as TransactionForm[]) {
+      if (form.aggregation_group == group) forms = [form, ...forms];
+    }
+  }
+
+  return forms;
 }
 
 function getTransactionFormAtRandom(): TransactionForm {
