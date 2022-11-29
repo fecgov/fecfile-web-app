@@ -4,14 +4,14 @@ import { date } from '../../support/generators/generators.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { dateToString } from '../../support/reports.spec';
 
-describe('QA Test Script #165 (Sprint 7)', () => {
+describe('Tests that the reports table sorting buttons work', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();
   });
 
-  it('', () => {
+  it('Tests that the reports table sorting buttons work', () => {
     //Step 1: Navigate to the reports page and populate it with three reports
     cy.login();
     cy.visit('/dashboard');

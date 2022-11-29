@@ -1,7 +1,7 @@
 import { getAuthToken } from '../../support/commands';
 import { generateReportObject } from '../../support/generators/reports.spec';
 
-describe('Sprint 9 QA Script 98', () => {
+describe('Tests that TER reports have the F3XT form type', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');

@@ -27,7 +27,7 @@ function testReportType(frequency: FilingFrequency, type: FilingType, reportCode
   }
 }
 
-describe('QA Script 344 (Sprint 10)', () => {
+describe('Tests the view summary page for each possible filing frequency', () => {
   after('Cleanup', () => {
     cy.login();
     cy.visit('/dashboard');

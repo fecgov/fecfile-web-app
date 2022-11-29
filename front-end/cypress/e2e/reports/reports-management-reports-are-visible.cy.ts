@@ -1,14 +1,14 @@
 // @ts-check
 import { generateReportObject } from '../../support/generators/reports.spec';
 
-describe('QA Test Script #138 (Sprint 8)', () => {
+describe('Tests that reports are visible within the report management table', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();
   });
 
-  it('', () => {
+  it('Tests that reports are visible within the report management table', () => {
     //Step 1: Navigate to reports page
     cy.login();
     cy.visit('/dashboard');

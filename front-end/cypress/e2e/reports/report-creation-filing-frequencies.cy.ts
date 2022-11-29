@@ -22,7 +22,7 @@ function testRadioButtons(filingFrequency: 'MONTHLY' | 'QUARTERLY', timePeriod: 
   }
 }
 
-describe('QA Test Scripts #257, 258, 260 & 261 (Sprint 7)', () => {
+describe('Tests the radio buttons and fields related to the various filing frequencies and report codes', () => {
   const filingFrequencies = ['QUARTERLY', 'MONTHLY'];
   for (const filingFrequency of filingFrequencies) {
     context(`Testing interactivity under ${filingFrequency}`, () => {
