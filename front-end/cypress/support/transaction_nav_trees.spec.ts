@@ -23,7 +23,8 @@ export type SchATransactionName =
   | 'Business/Labor Organization Receipt - Non-Contribution Account'
   | 'Individual Receipt - Non-Contribution Account'
   | 'Joint Fundraising Transfer - National Party Recount Account'
-  | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account';
+  | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account'
+  | 'PAC National Party Recount/Legal Proceedings Account';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -554,6 +555,16 @@ const earmarkReceipt: PairedTransactionForm = {
   transactionB: earmarkReceiptStepTwo,
 };
 
+const pacNationalPartyRecountAccount: TransactionForm = {
+  transaction_name: 'PAC National Party Recount/Legal Proceedings Account',
+  transaction_category: 'OTHER',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 /*
  *          Group A Transaction Navigation Tree
  * Every entry in this object represents a path that an E2E test
@@ -586,6 +597,7 @@ export const groupANavTree: TransactionNavTree = {
     'Other Receipts': otherReceipt,
     'Business/Labor Organization Receipt - Non-Contribution Account': businessLaborNonContribution,
     'Individual Receipt - Non-Contribution Account': individualNonContribution,
+    'PAC National Party Recount/Legal Proceedings Account': pacNationalPartyRecountAccount,
   },
 };
 
