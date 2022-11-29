@@ -78,7 +78,7 @@ describe('TransactionGroupDComponent', () => {
       scheduleId: '',
       componentGroupId: '',
       contact: undefined,
-      contributionPurposeDescripReadonly: () => '',
+      generateContributionPurposeDescription: () => 'test description',
       getNewTransaction: () => {
         return {} as Transaction;
       },

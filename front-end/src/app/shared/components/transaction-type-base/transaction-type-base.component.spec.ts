@@ -119,9 +119,6 @@ describe('TransactionTypeBaseComponent', () => {
         componentGroupId: 'TEST',
         isDependentChild: false,
         title: 'Title goes here',
-        contributionPurposeDescripReadonly: () => {
-          return '';
-        },
         getNewTransaction: () => {
           return testTransaction;
         },

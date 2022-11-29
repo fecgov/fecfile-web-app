@@ -20,8 +20,8 @@ describe('PARTY_RECOUNT_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT);
   });
 
-  it('#contributionPurposeDescripReadonly() should return appropriate retval', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+  it('#generateContributionPurposeDescription() should return appropriate retval', () => {
+    const descrip = transactionType.generateContributionPurposeDescription();
     expect(descrip).toBe(`Recount Account`);
   });
 });
