@@ -2,7 +2,7 @@ import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { createTransactionSchA } from '../../support/transactions.spec';
 
-describe('QA Script 347 (Sprint 10)', () => {
+describe("Tests that child transactions have their parents' ids in the transaction management table", () => {
   after('Cleanup', () => {
     cy.login();
     cy.visit('/dashboard');
@@ -14,7 +14,7 @@ describe('QA Script 347 (Sprint 10)', () => {
     cy.login();
   });
 
-  it('', () => {
+  it("Tests that child transactions have their parents' ids in the transaction management table", () => {
     //Logs in and creates a dummy report
     cy.login();
     cy.visit('/dashboard');
@@ -25,7 +25,6 @@ describe('QA Script 347 (Sprint 10)', () => {
     cy.get('p-button[icon="pi pi-pencil"]').click({ force: true });
     cy.navigateToTransactionManagement();
 
-    //Tests the summary page for a report
     const transaction = generateTransactionObject({
       transaction_name: 'Joint Fundraising Transfer',
     });

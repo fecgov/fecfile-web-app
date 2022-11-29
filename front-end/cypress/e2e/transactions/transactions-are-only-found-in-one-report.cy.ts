@@ -10,7 +10,7 @@ describe('QA Script 125 (Sprint 10)', () => {
     coverage_from_date: '01/01/2011',
   });
 
-  before('Logs in and creates a dummy report', () => {
+  before('Tests that transactions only appear inside the report they were created in', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();
@@ -34,7 +34,7 @@ describe('QA Script 125 (Sprint 10)', () => {
     cy.deleteAllReports();
   });
 
-  it('', () => {
+  it('Tests that transactions only appear inside the report they were created in', () => {
     //Enters transactions
     cy.login();
     cy.visit('/dashboard');

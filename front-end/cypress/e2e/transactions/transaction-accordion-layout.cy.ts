@@ -65,14 +65,14 @@ const accordion = {
   ],
 };
 
-describe('QA Script 228 (Sprint 8)', () => {
+describe("Tests the transaction accordion's layout", () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();
   });
 
-  it('', () => {
+  it("Tests the transaction accordion's layout", () => {
     //Step 1: Log in, navigate to the reports page, create a report, and set it up to be ready for transactions
     cy.login();
     cy.visit('/dashboard');

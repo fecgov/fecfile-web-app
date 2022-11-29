@@ -62,7 +62,7 @@ function test_employer_fields(pairedTransaction: PairedTransaction) {
   cy.shortWait();
 }
 
-describe('QA Script 621 (Sprint 16)', () => {
+describe('Tests earmark receipt creation and itemization', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
