@@ -606,8 +606,6 @@ export const groupANavTree: TransactionNavTree = {
       jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
     'Joint Fundraising Transfer - National Party Headquarters Buildings Account':
       jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount,
-    'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account':
-      jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
   },
   //"REFUNDS":{},
   OTHER: {
