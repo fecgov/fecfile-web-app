@@ -1,17 +1,14 @@
 import { selectUserLoginData } from 'app/store/login.selectors';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { initialState as initUserLoginData } from 'app/store/login.reducer';
-import { initialState as initReportCodeLabelList } from 'app/store/label-lookup.reducer';
 import { initialState as initActiveReport } from 'app/store/active-report.reducer';
 import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
 import { initialState as initCashOnHand } from 'app/store/cash-on-hand.reducer';
 import { UserLoginData } from '../models/user.model';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { F3xSummary } from '../models/f3x-summary.model';
-import { ReportCodeLabelList } from './reportCodeLabels.utils';
 import { UploadSubmission } from '../models/upload-submission.model';
 import { CashOnHand } from '../interfaces/report.interface';
 
@@ -84,13 +81,6 @@ export const testUserLoginData: UserLoginData = {
   token: 'jwttokenstring',
 };
 
-export const testReportCodes: ReportCodeLabelList = [
-  {
-    report_code: 'Q1',
-    label: 'Test Label',
-  },
-];
-
 export const testActiveReport: F3xSummary = F3xSummary.fromJSON({
   id: '999',
   coverage_from_date: '2022-05-25',
@@ -118,14 +108,12 @@ export const testMockStore = {
   initialState: {
     fecfile_online_committeeAccount: initCommitteeAccount,
     fecfile_online_userLoginData: initUserLoginData,
-    fecfile_online_reportCodeLabelList: initReportCodeLabelList,
     fecfile_online_activeReport: initActiveReport,
     fecfile_online_cashOnHand: initCashOnHand,
   },
   selectors: [
     { selector: selectCommitteeAccount, value: testCommitteeAccount },
     { selector: selectUserLoginData, value: testUserLoginData },
-    { selector: selectReportCodeLabelList, value: testReportCodes },
     { selector: selectActiveReport, value: testActiveReport },
     { selector: selectCashOnHand, value: testCashOnHand },
   ],

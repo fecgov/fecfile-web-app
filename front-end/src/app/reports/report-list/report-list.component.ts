@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -9,7 +9,6 @@ import { LabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
 import { F3xSummary, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/f3x-summary.model';
 import { Router } from '@angular/router';
-import { updateLabelLookupAction } from '../../store/label-lookup.actions';
 
 @Component({
   selector: 'app-report-list',
@@ -38,8 +37,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
-
-    this.store.dispatch(updateLabelLookupAction());
 
     this.store
       .select(selectCashOnHand)

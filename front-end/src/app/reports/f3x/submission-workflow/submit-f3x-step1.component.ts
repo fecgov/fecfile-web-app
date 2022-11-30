@@ -12,7 +12,6 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { updateLabelLookupAction } from '../../../store/label-lookup.actions';
 import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
 
 @Component({
@@ -63,8 +62,6 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
-
-    this.store.dispatch(updateLabelLookupAction());
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
