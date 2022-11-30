@@ -14,9 +14,7 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 import { updateLabelLookupAction } from '../../../store/label-lookup.actions';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from '../../../shared/services/report.service';
@@ -42,7 +40,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
-  reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
   f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
   loading: 0 | 1 | 2 = 0;
@@ -82,10 +79,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       .select(selectCashOnHand)
       .pipe(takeUntil(this.destroy$))
       .subscribe((cashOnHand: CashOnHand) => (this.cashOnHand = cashOnHand));
-
-    this.reportCodeLabelList$ = this.store
-      .select<ReportCodeLabelList>(selectReportCodeLabelList)
-      .pipe(takeUntil(this.destroy$));
 
     this.store.dispatch(updateLabelLookupAction());
 
