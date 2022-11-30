@@ -20,8 +20,8 @@ describe('PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT);
   });
 
-  it('#contributionPurposeDescripReadonly() should return constant', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+  it('#generateContributionPurposeDescription() should return constant', () => {
+    const descrip = transactionType.generateContributionPurposeDescription();
     expect(descrip).toBe('Recount/Legal Proceedings Account');
   });
 });
