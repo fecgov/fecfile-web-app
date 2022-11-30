@@ -21,7 +21,7 @@ describe('PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   });
 
   it('#contributionPurposeDescripReadonly() should return constant', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+    const descrip = transactionType.generateContributionPurposeDescription();
     expect(descrip).toBe('Recount/Legal Proceedings Account');
   });
 });
