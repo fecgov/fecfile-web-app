@@ -49,7 +49,7 @@ const accordion = {
     'Tribal Recount Receipt',
     'Individual National Party Recount Account',
     'Party National Party Recount Account',
-    'PAC National Party Recount Account',
+    'PAC National Party Recount/Legal Proceedings Account',
     'Tribal National Party Recount Account',
     'Individual National Party Headquarters Buildings Account',
     'Party National Party Headquarters Buildings Account',

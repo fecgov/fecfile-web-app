@@ -193,7 +193,7 @@ describe('Generates lighthouse reports for every page', () => {
         cy.login();
         getToTransactionsPage();
         cy.createTransactionSchA(transaction);
-        cy.get('tr.ng-star-inserted > :nth-child(1) > a').first().click();
+        cy.get('tr.ng-star-inserted > :nth-child(1) > a').last().click();
         cy.runLighthouse('transactions', `transaction-creation-group-${group}`);
       });
     }

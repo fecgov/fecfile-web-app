@@ -35,7 +35,8 @@ describe("Tests that child transactions have their parents' ids in the transacti
     const contribution = childTransaction.fields['contributionAmount'] as number;
     const convContribution = Intl.NumberFormat('en-US').format(Math.floor(contribution));
 
-    cy.contains('tr', 'Joint Fundraising Transfer')
+    cy.get('tr')
+      .last()
       .find('td')
       .eq(6)
       .then(($td) => {
