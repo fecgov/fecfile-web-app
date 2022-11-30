@@ -1,7 +1,7 @@
 import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { TransactionNavigationControls } from '../models/transaction-navigation-controls.model';
 import { JsonSchema } from './json-schema.interface';
-import { Transaction } from './transaction.interface';
+import { Transaction } from '../models/transaction.model';
 
 /**
  * Interface that defines the meta data associated with a transaction type.

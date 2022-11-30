@@ -4,7 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';

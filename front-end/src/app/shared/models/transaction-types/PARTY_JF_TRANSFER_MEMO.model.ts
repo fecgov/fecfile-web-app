@@ -1,5 +1,5 @@
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { hasNoContact, isNewTransaction } from 'app/shared/interfaces/transaction.interface';
+import { hasNoContact, isNewTransaction } from 'app/shared/models/transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTY_JF_TRANSFER_MEMO';
 import {

@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';

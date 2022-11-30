@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { Transaction } from '../interfaces/transaction.interface';
+import { Transaction } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { ApiService } from './api.service';

@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import {
   AggregationGroups,
