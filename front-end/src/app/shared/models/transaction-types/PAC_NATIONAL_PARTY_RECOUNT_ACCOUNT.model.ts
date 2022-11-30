@@ -27,7 +27,7 @@ export class PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT implements TransactionType {
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  contributionPurposeDescripReadonly(): string {
+  generateContributionPurposeDescription(): string {
     return 'Recount/Legal Proceedings Account';
   }
 
