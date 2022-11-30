@@ -221,7 +221,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         ].includes(p)
     );
     payload.fields_to_validate = fieldsToValidate;
-
+    function addFieldsToValidate(transaction: Transaction) {
+      transaction.fields_to_validate = fieldsToValidate;
+      if (transaction.children) {
+        transaction.children.forEach((transaction) => addFieldsToValidate(transaction));
+      }
+    }
+    addFieldsToValidate(payload);
     return payload;
   }
 
@@ -375,6 +381,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return this.getMemoCodeConstant(transactionType) !== undefined;
   }
 
+  public isDescriptionSystemGenerated(transactionType?: TransactionType): boolean {
+    // Description is system generated if there is a defined function.  Otherwise, it's mutable
+    return transactionType?.generateContributionPurposeDescription !== undefined;
+  }
+
   doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {
     if (payload.transaction_type_identifier) {
       if (payload.id) {
@@ -442,11 +453,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     form.reset();
     form.markAsPristine();
     form.markAsUntouched();
+
     form.patchValue({
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: this.getMemoCodeConstant(transactionType),
-      contribution_purpose_descrip: transactionType?.contributionPurposeDescripReadonly(),
+      contribution_purpose_descrip: transactionType?.generateContributionPurposeDescription?.() || '',
     });
   }
 
@@ -496,5 +508,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   isExisting(transaction: Transaction | undefined) {
     return !!transaction?.id;
+  }
+
+  getEntityType(): string {
+    return this.form.get('entity_type')?.value || '';
   }
 }

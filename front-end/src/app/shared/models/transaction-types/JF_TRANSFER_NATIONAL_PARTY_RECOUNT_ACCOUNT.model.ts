@@ -35,7 +35,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT implements TransactionTy
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  contributionPurposeDescripReadonly(): string {
+  generateContributionPurposeDescription(): string {
     return 'Recount/Legal Proceedings Account Transfer of JF Proceeds';
   }
 
@@ -43,7 +43,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT implements TransactionTy
     return SchATransaction.fromJSON({
       form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-      aggregation_group: AggregationGroups.NPARTY_RECOUNT_ACCOUNT,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
     });
   }
 }

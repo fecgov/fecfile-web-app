@@ -46,7 +46,7 @@ export class PARTY_JF_TRANSFER_MEMO implements TransactionType {
     [SAVE_LIST_CONTROL]
   );
 
-  contributionPurposeDescripReadonly(): string {
+  generateContributionPurposeDescription(): string {
     return `JF Memo: ${(this.transaction?.parent_transaction as SchATransaction).contributor_organization_name}`;
   }
 

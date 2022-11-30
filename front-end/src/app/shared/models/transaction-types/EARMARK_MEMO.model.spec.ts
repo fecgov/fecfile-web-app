@@ -20,8 +20,8 @@ describe('EARMARK_MEMO', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
   });
 
-  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+  it('#generateContributionPurposeDescription() should generate a string', () => {
+    const descrip = transactionType.generateContributionPurposeDescription();
     expect(descrip).toBe('Total earmarked through conduit.');
   });
 });

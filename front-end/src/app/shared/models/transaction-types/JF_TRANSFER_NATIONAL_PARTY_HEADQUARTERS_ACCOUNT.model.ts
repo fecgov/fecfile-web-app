@@ -18,7 +18,10 @@ export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT implements Transact
   scheduleId = 'A';
   componentGroupId = 'E';
   isDependentChild = false;
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT);
+  title = LabelUtils.get(
+    ScheduleATransactionTypeLabels,
+    ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT
+  );
   schema = schema;
   transaction?: SchATransaction;
   subTransactionTypes = [
@@ -33,7 +36,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT implements Transact
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  contributionPurposeDescripReadonly(): string {
+  generateContributionPurposeDescription(): string {
     return 'Headquarters Buildings Account Transfer of JF Proceeds';
   }
 
@@ -41,7 +44,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT implements Transact
     return SchATransaction.fromJSON({
       form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
-      aggregation_group: AggregationGroups.NPARTY_HEADQUARTERS,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     });
   }
 }

@@ -1,3 +1,5 @@
+import '@cypress-audit/lighthouse/commands';
+
 /**
  * login()
  *
@@ -170,7 +172,7 @@ export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   cy.shortWait();
 
   //    Choose the year
-  cy.get('.p-datepicker-year').click();
+  cy.get('.p-datepicker-year').click({ force: true });
   cy.shortWait();
 
   const year: number = dateObj.getFullYear();
@@ -179,29 +181,54 @@ export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   const decadeEnd: number = decadeStart + 9;
   if (year < decadeStart) {
     for (let i = 0; i < decadeStart - year; i += 10) {
-      cy.get('.p-datepicker-prev').click();
+      cy.get('.p-datepicker-prev').click({ force: true });
       cy.shortWait();
     }
   }
   if (year > decadeEnd) {
     for (let i = 0; i < year - decadeEnd; i += 10) {
-      cy.get('.p-datepicker-next').click();
+      cy.get('.p-datepicker-next').click({ force: true });
       cy.shortWait();
     }
   }
-  cy.get('.p-yearpicker-year').contains(year.toString()).click();
+  cy.get('.p-yearpicker-year').contains(year.toString()).click({ force: true });
   cy.shortWait();
 
   //    Choose the month
   const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const Month: string = Months[dateObj.getMonth()];
-  cy.get('.p-monthpicker-month').contains(Month).click();
+  cy.get('.p-monthpicker-month').contains(Month).click({ force: true });
   cy.shortWait();
 
   //    Choose the day
   const Day: string = dateObj.getDate().toString();
-  cy.get('td').find('span').not('.p-disabled').parent().contains(Day).click();
+  cy.get('td').find('span').not('.p-disabled').parent().contains(Day).click({ force: true });
   cy.shortWait();
+}
+
+export function runLighthouse(directory: string, filename: string) {
+  cy.lighthouse(
+    {
+      performance: 0,
+      accessibility: 90,
+      'best-practices': 0,
+      seo: 0,
+      pwa: 0,
+    },
+    {
+      output: 'html',
+      formFactor: 'desktop',
+      screenEmulation: {
+        mobile: false,
+        disable: false,
+        width: Cypress.config('viewportWidth'),
+        height: Cypress.config('viewportHeight'),
+        deviceScaleRatio: 1,
+      },
+    }
+  ).then(() => {
+    cy.exec(`mv lighthouse.html cypress/lighthouse/${directory}/${filename}.html`);
+  });
 }
 
 // shortWait() is appropriate for waiting for the UI to update after changing a field

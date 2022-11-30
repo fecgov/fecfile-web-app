@@ -39,7 +39,7 @@
           Transaction type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
         </th>
         <th pSortableColumn="contributor_name" id="contributor--name-column" role="columnheader">
-          Contribution name <p-sortIcon field="contributor_name"></p-sortIcon>
+          Name <p-sortIcon field="contributor_name"></p-sortIcon>
         </th>
         <th pSortableColumn="contribution_date" id="contribution-date-column" role="columnheader">
           Contribution date <p-sortIcon field="contribution_date"></p-sortIcon>
@@ -48,10 +48,10 @@
           Memo code <p-sortIcon field="memo_code"></p-sortIcon>
         </th>
         <th pSortableColumn="contribution_amount" id="contribution-amount-column" role="columnheader">
-          Contribution amount <p-sortIcon field="contribution_amount"></p-sortIcon>
+          Amount <p-sortIcon field="contribution_amount"></p-sortIcon>
         </th>
         <th pSortableColumn="contribution_aggregate" id="contribution-aggregate-column" role="columnheader">
-          Contribution aggregate <p-sortIcon field="contribution_aggregate"></p-sortIcon>
+          Aggregate <p-sortIcon field="contribution_aggregate"></p-sortIcon>
         </th>
         <th id="transaction_id" role="columnheader">Transaction ID</th>
         <th id="transaction_parent" role="columnheader">Associated With</th>
@@ -61,7 +61,9 @@
     <ng-template pTemplate="body" let-item>
       <tr role="row">
         <td>
-          <a [routerLink]="['edit', item?.id]">{{ item.transaction_type_identifier }}</a>
+          <a [routerLink]="['edit', item?.id]">{{
+            item.transaction_type_identifier | label: scheduleATransactionTypeLabels
+          }}</a>
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>

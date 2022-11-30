@@ -36,7 +36,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT implements Transactio
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  contributionPurposeDescripReadonly(): string {
+  generateContributionPurposeDescription(): string {
     return `Pres. Nominating Convention Account Transfer of JF Proceeds`;
   }
 
@@ -44,7 +44,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT implements Transactio
     return SchATransaction.fromJSON({
       form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      aggregation_group: AggregationGroups.NPARTY_CONVENTION,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });
   }
 }
