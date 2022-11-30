@@ -136,7 +136,7 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
   }
 }
 
-describe('QA Script 472 (Sprint 15)', () => {
+describe('Tests aggregations', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');

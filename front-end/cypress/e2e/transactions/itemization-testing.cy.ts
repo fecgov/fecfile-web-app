@@ -67,7 +67,7 @@ function test_itemization(transaction: Transaction) {
   else cy.contains('tr', getName(contact)).should('not.contain.text', 'Unitemized');
 }
 
-describe('QA Script 172 (Sprint 15)', () => {
+describe('Tests itemization', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
@@ -90,7 +90,7 @@ describe('QA Script 172 (Sprint 15)', () => {
     cy.createReport(report);
   });
 
-  it('Tests contact editing within a transaction', () => {
+  it('Tests itemization', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();

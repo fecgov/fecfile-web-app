@@ -54,7 +54,7 @@ function test_employer_fields(transaction: Transaction) {
   cy.shortWait();
 }
 
-describe('QA Script 276 (Sprint 15)', () => {
+describe('Tests that the employer fields are required if the aggregate goes over $200', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
@@ -77,7 +77,7 @@ describe('QA Script 276 (Sprint 15)', () => {
     cy.createReport(report);
   });
 
-  it('Tests contact editing within a transaction', () => {
+  it('Tests that the employer fields are required if the aggregate goes over $200', () => {
     cy.login();
     cy.visit('/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();

@@ -5,14 +5,14 @@ import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { createTransactionSchA } from '../../support/transactions.spec';
 
-describe('QA Script 244 (Sprint 8)', () => {
+describe('Tests that memos have the memo_code checkbox checked', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
     cy.deleteAllReports();
   });
 
-  it('', () => {
+  it('Tests that memos have the memo_code checkbox checked', () => {
     //Step 1: Log in, navigate to the reports page, create a report, and set it up to be ready for transactions
     cy.login();
     cy.visit('/dashboard');
