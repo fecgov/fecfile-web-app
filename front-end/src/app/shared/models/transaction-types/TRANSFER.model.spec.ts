@@ -1,3 +1,4 @@
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TRANSFER } from './TRANSFER.model';
 
@@ -20,8 +21,7 @@ describe('TRANSFER', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRANSFER);
   });
 
-  it('#contributionPurposeDescripReadonly() should return constant', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('');
+  it('#generateContributionPurposeDescription() should not be defined', () => {
+    expect((transactionType as TransactionType).generateContributionPurposeDescription).toBe(undefined);
   });
 });

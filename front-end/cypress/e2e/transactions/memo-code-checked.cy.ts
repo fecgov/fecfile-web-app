@@ -20,6 +20,7 @@ describe('Tests that memos have the memo_code checkbox checked', () => {
     cy.medWait();
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.url().should('contain', '/reports');
+    cy.longWait();
 
     const report = generateReportObject();
     cy.createReport(report);

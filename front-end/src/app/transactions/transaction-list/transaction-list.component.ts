@@ -8,6 +8,8 @@ import { TableListBaseComponent } from 'app/shared/components/table-list-base/ta
 import { Transaction } from 'app/shared/interfaces/transaction.interface';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from 'app/shared/services/transaction.service';
+import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
+import { LabelList } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-transaction-list',
@@ -16,6 +18,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 export class TransactionListComponent extends TableListBaseComponent<Transaction> implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   report: F3xSummary | undefined;
+  scheduleATransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
 
   constructor(
     protected override messageService: MessageService,

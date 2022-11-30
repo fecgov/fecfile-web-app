@@ -33,7 +33,7 @@ const accordion = {
     'In-Kind Transfer',
     'In-Kind Transfer - Federal Election Activity',
     'Joint Fundraising Transfer - National Party Recount Account',
-    'Joint Fundraising Transfer - National Party Convention Account',
+    'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
     'Joint Fundraising Transfer - National Party Headquarters Account',
   ],
   REFUNDS: ['Refunds of Contributions to Registered Committees', 'Refunds of Contributions to Unregistered Committees'],

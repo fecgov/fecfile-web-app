@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 
 @Component({
@@ -6,4 +6,6 @@ import { BaseInputComponent } from '../base-input.component';
   templateUrl: './additional-info-input.component.html',
   styleUrls: ['./additional-info-input.component.scss'],
 })
-export class AdditionalInfoInputComponent extends BaseInputComponent {}
+export class AdditionalInfoInputComponent extends BaseInputComponent {
+  @Input() descriptionIsSystemGenerated = false;
+}

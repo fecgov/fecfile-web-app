@@ -1,3 +1,4 @@
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { PARTY_RECEIPT } from './PARTY_RECEIPT.model';
 
@@ -20,8 +21,7 @@ describe('PARTY_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTY_RECEIPT);
   });
 
-  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('');
+  it('#generateContributionPurposeDescription() should not be defined', () => {
+    expect((transactionType as TransactionType).generateContributionPurposeDescription).toBe(undefined);
   });
 });
