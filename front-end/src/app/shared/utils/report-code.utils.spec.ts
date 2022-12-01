@@ -48,7 +48,7 @@ describe('ReportCodeUtils', () => {
   describe('getReportCodeLabel', () => {
     it('should get label for report code', () => {
       expect(getReportCodeLabel(F3xReportCodes.YE)).toEqual('JANUARY 31 YEAR-END (YE)');
-      expect(getReportCodeLabel(undefined)).toEqual(undefined);
+      expect(getReportCodeLabel()).toEqual(undefined);
     });
   });
 });
