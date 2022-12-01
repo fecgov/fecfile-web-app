@@ -52,7 +52,7 @@ function createCoverageFunction(
   endMonth: number,
   endDate: number
 ): (year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date] {
-  return (year: number, _isElectionYear: boolean, _filingFrequency: string) => {
+  return (year: number) => {
     return [new Date(year, startMonth, startDate), new Date(year, endMonth, endDate)];
   };
 }
