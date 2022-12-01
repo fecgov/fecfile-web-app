@@ -48,6 +48,12 @@ export class SchATransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
+  override apiEndpoint = '/sch-a-transactions';
+  // prettier-ignore
+  override getJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return SchATransaction.fromJSON(json);
+  }
+
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(SchATransaction, json);

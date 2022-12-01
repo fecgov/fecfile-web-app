@@ -46,6 +46,12 @@ export class SchBTransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
+  override apiEndpoint = '/sch-b-transactions';
+  // prettier-ignore
+  override getJSON(json: any): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return SchBTransaction.fromJSON(json);
+  }
+
   // prettier-ignore
   static fromJSON(json: any): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(SchBTransaction, json);

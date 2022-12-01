@@ -34,6 +34,10 @@ export abstract class Transaction extends BaseModel {
   children: Transaction[] | undefined;
 
   fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
+
+  abstract apiEndpoint: string; // Root URL for API endpoint
+
+  abstract getJSON(json: any): Transaction; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export function isNewTransaction(transaction?: Transaction): boolean {
