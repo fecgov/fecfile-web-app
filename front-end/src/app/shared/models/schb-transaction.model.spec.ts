@@ -9,8 +9,8 @@ describe('SchBTransaction', () => {
     const data = {
       id: '999',
       form_type: 'SA11Ai',
-      contributor_organization_name: 'foo',
-      contribution_date: undefined,
+      payee_organization_name: 'foo',
+      expenditure_date: undefined,
     };
     const transaction: SchBTransaction = SchBTransaction.fromJSON(data);
     expect(transaction).toBeInstanceOf(SchBTransaction);

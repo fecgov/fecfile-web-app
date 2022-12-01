@@ -18,8 +18,9 @@ import { Confirmation, ConfirmationService, Message, MessageService, SelectItem 
 import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
-import { ScheduleATransactionTypes } from '../../models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
+import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -46,7 +47,7 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   ];
 }
 
-const testTransaction = {
+const testTransaction = SchATransaction.fromJSON({
   id: '123',
   report_id: '999',
   contact: undefined,
@@ -66,7 +67,29 @@ const testTransaction = {
   itemized: false,
   memo_text: undefined,
   memo_text_id: undefined,
-};
+});
+
+const testTransactionType = {
+  scheduleId: 'A',
+  componentGroupId: 'A',
+  isDependentChild: false,
+  title: '',
+  schema: { properties: {} } as JsonSchema,
+  getNewTransaction: () => SchATransaction.fromJSON({}),
+  transaction: SchATransaction.fromJSON({
+    id: undefined,
+    report_id: undefined,
+    contact: undefined,
+    contact_id: undefined,
+    form_type: undefined,
+    filer_committee_id_number: undefined,
+    transaction_id: null,
+    transaction_type_identifier: 'test',
+    contribution_purpose_descrip: undefined,
+    parent_transaction_id: undefined,
+    itemized: false,
+  }),
+} as TransactionType;
 
 describe('TransactionTypeBaseComponent', () => {
   let component: TestTransactionTypeBaseComponent;
@@ -139,7 +162,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should update IND contact', () => {
-    const testTransaction1: Transaction = {
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON({
       id: undefined,
       report_id: undefined,
       contact: undefined,
@@ -156,7 +179,7 @@ describe('TransactionTypeBaseComponent', () => {
       itemized: false,
       memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
       memo_text_id: 'ID Goes Here',
-    };
+    });
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     testContact.type = ContactTypes.INDIVIDUAL;
@@ -182,21 +205,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = {
-      transaction: {
-        id: undefined,
-        report_id: undefined,
-        contact: undefined,
-        contact_id: undefined,
-        form_type: undefined,
-        filer_committee_id_number: undefined,
-        transaction_id: null,
-        transaction_type_identifier: 'test',
-        contribution_purpose_descrip: undefined,
-        parent_transaction_id: undefined,
-        itemized: false,
-      },
-    } as TransactionType;
+    component.transactionType = testTransactionType;
 
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact;
@@ -219,7 +228,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should update COM contact', () => {
-    const testTransaction1: Transaction = {
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON({
       id: undefined,
       report_id: undefined,
       contact: undefined,
@@ -236,7 +245,7 @@ describe('TransactionTypeBaseComponent', () => {
       itemized: false,
       memo_text: undefined,
       memo_text_id: undefined,
-    };
+    });
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     testContact.type = ContactTypes.COMMITTEE;
@@ -252,22 +261,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = {
-      transaction: {
-        id: undefined,
-        report_id: undefined,
-        contact_id: undefined,
-        form_type: undefined,
-        filer_committee_id_number: undefined,
-        transaction_id: null,
-        transaction_type_identifier: 'test',
-        contribution_purpose_descrip: undefined,
-        parent_transaction_id: undefined,
-        itemized: false,
-        memo_text: undefined,
-        memo_text_id: undefined,
-      },
-    } as TransactionType;
+    component.transactionType = testTransactionType;
 
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact;
@@ -287,7 +281,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should update ORG contact', () => {
-    const testTransaction1: Transaction = {
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON({
       id: undefined,
       report_id: undefined,
       contact: undefined,
@@ -304,7 +298,7 @@ describe('TransactionTypeBaseComponent', () => {
       itemized: false,
       memo_text: undefined,
       memo_text_id: undefined,
-    };
+    });
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     testContact.type = ContactTypes.ORGANIZATION;
@@ -319,22 +313,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = {
-      transaction: {
-        id: undefined,
-        report_id: undefined,
-        contact_id: undefined,
-        form_type: undefined,
-        filer_committee_id_number: undefined,
-        transaction_id: null,
-        transaction_type_identifier: 'test',
-        contribution_purpose_descrip: undefined,
-        parent_transaction_id: undefined,
-        itemized: false,
-        memo_text: undefined,
-        memo_text_id: undefined,
-      },
-    } as TransactionType;
+    component.transactionType = testTransactionType;
 
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact;
@@ -353,7 +332,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save no contact changes', () => {
-    const testTransaction1: Transaction = {
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON({
       id: undefined,
       report_id: undefined,
       contact: undefined,
@@ -370,7 +349,7 @@ describe('TransactionTypeBaseComponent', () => {
       itemized: false,
       memo_text: undefined,
       memo_text_id: undefined,
-    };
+    });
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     testContact.type = ContactTypes.ORGANIZATION;
@@ -385,22 +364,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = {
-      transaction: {
-        id: undefined,
-        report_id: undefined,
-        contact_id: undefined,
-        form_type: undefined,
-        filer_committee_id_number: undefined,
-        transaction_id: null,
-        transaction_type_identifier: 'test',
-        contribution_purpose_descrip: undefined,
-        parent_transaction_id: undefined,
-        itemized: false,
-        memo_text: undefined,
-        memo_text_id: undefined,
-      },
-    } as TransactionType;
+    component.transactionType = testTransactionType;
 
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = undefined;
@@ -410,7 +374,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should navigate for create', () => {
-    const testTransaction1: Transaction = {
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON({
       id: undefined,
       report_id: undefined,
       contact: undefined,
@@ -427,7 +391,7 @@ describe('TransactionTypeBaseComponent', () => {
       itemized: false,
       memo_text: undefined,
       memo_text_id: undefined,
-    };
+    });
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
@@ -439,30 +403,14 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = {
-      transaction: {
-        id: undefined,
-        report_id: undefined,
-        contact: undefined,
-        contact_id: undefined,
-        form_type: undefined,
-        filer_committee_id_number: undefined,
-        transaction_id: null,
-        transaction_type_identifier: 'test',
-        contribution_purpose_descrip: undefined,
-        parent_transaction_id: undefined,
-        itemized: false,
-        memo_text: undefined,
-        memo_text_id: undefined,
-      },
-    } as TransactionType;
+    component.transactionType = testTransactionType;
 
     component.save(NavigationDestination.LIST);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 
   it('#save should navigate for update', fakeAsync(() => {
-    const testTransaction2: Transaction = {
+    const testTransaction2: Transaction = SchATransaction.fromJSON({
       id: '123',
       report_id: undefined,
       contact: undefined,
@@ -479,7 +427,7 @@ describe('TransactionTypeBaseComponent', () => {
       itemized: false,
       memo_text: undefined,
       memo_text_id: undefined,
-    };
+    });
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
@@ -491,23 +439,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = {
-      transaction: {
-        id: '123',
-        report_id: undefined,
-        contact: undefined,
-        contact_id: undefined,
-        form_type: undefined,
-        filer_committee_id_number: undefined,
-        transaction_id: null,
-        transaction_type_identifier: 'test',
-        contribution_purpose_descrip: undefined,
-        parent_transaction_id: undefined,
-        itemized: false,
-        memo_text: undefined,
-        memo_text_id: undefined,
-      },
-    } as TransactionType;
+    component.transactionType = testTransactionType;
 
     component.save(NavigationDestination.LIST);
     tick(1000);
@@ -553,7 +485,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo NavigationDestination.LIST should navigate', () => {
-    const testTransaction3: Transaction = {
+    const testTransaction3: SchATransaction = SchATransaction.fromJSON({
       id: '123',
       report_id: '99',
       contact: undefined,
@@ -570,8 +502,14 @@ describe('TransactionTypeBaseComponent', () => {
       itemized: false,
       memo_text: undefined,
       memo_text_id: undefined,
-    };
+    });
     component.transactionType = {
+      scheduleId: 'A',
+      componentGroupId: 'A',
+      isDependentChild: false,
+      title: '',
+      schema: { properties: {} } as JsonSchema,
+      getNewTransaction: () => SchATransaction.fromJSON({}),
       transaction: testTransaction3,
     } as TransactionType;
     const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
@@ -592,9 +530,15 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo NavigationDestination.PARENT should navigate', () => {
-    const transaction = { ...testTransaction } as Transaction;
+    const transaction = { ...testTransaction } as SchATransaction;
     transaction.parent_transaction_id = '333';
     component.transactionType = {
+      scheduleId: 'A',
+      componentGroupId: 'A',
+      isDependentChild: false,
+      title: '',
+      schema: { properties: {} } as JsonSchema,
+      getNewTransaction: () => SchATransaction.fromJSON({}),
       transaction: transaction,
     } as TransactionType;
     const expectedRoute = '/transactions/report/999/list/edit/333';
