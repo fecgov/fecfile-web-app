@@ -3,7 +3,7 @@ import { F3xReportCode, F3xReportCodes, F3X_REPORT_CODE_MAP, getReportCodeLabel 
 describe('ReportCodeUtils', () => {
   describe('F3xReportCode', () => {
     it('should carry properties', () => {
-      const coverageDateFunction = (year: number, _isElectionYear: boolean, _filingFrequency: string): [Date, Date] => {
+      const coverageDateFunction = (year: number): [Date, Date] => {
         return [new Date(year, 0, 1), new Date(year, 0, 2)];
       };
       const f3xReportCode = new F3xReportCode('MY', 'label for MY', coverageDateFunction);
