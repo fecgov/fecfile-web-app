@@ -6,7 +6,6 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
-import { getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 
 @Component({
   selector: 'app-report-summary',
@@ -16,7 +15,6 @@ export class ReportSubmissionStatusComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   report: F3xSummary = new F3xSummary();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  getReportCodeLabel = getReportCodeLabel;
 
   constructor(private store: Store, public router: Router) {}
 

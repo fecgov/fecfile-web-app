@@ -8,7 +8,6 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
-import { F3xReportCodes, getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
@@ -33,8 +32,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     'truth_statement',
   ];
   report?: F3xSummary;
-  report_code?: F3xReportCodes;
-  getReportCodeLabel = getReportCodeLabel;
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
@@ -68,7 +65,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report as F3xSummary;
-        this.report_code = this.report?.report_code;
       });
     this.store
       .select(selectCommitteeAccount)

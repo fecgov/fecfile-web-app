@@ -3,7 +3,7 @@
     <h1>Detailed summary page</h1>
     <div>
       <strong>FORM 3X:</strong>
-      {{ getReportCodeLabel(report.report_code) }}
+      {{ report.report_code | reportCodeLabel }}
     </div>
   </div>
   <div *ngIf="(calculationFinished$ | async) === false">

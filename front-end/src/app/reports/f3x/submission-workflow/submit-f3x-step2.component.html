@@ -3,7 +3,7 @@
 <div class="p-fluid">
   <p-card>
     <h1>Submit report</h1>
-    <h5><strong>Form 3X:</strong> {{ getReportCodeLabel(report_code) }}</h5>
+    <h5><strong>Form 3X:</strong> {{ report?.report_code | reportCodeLabel }}</h5>
     <p-divider></p-divider>
     <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
       <div class="grid">

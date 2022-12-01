@@ -9,7 +9,6 @@ import { Report, CashOnHand } from '../../../shared/interfaces/report.interface'
 import { LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
 import { ReportService } from '../../../shared/services/report.service';
-import { getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 
 @Component({
   selector: 'app-menu-report',
@@ -23,7 +22,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   items: MenuItem[] = [];
   showMenu = false;
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  getReportCodeLabel = getReportCodeLabel;
   reportIsEditableFlag = false;
   cashOnHand: CashOnHand = {
     report_id: undefined,

@@ -51,8 +51,6 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   public f3xCoverageDatesList: F3xCoverageDates[] | undefined;
 
-  getReportCodeLabel = getReportCodeLabel;
-
   constructor(
     private store: Store,
     private validateService: ValidateService,

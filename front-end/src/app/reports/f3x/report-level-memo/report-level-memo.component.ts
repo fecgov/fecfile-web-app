@@ -11,7 +11,6 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
-import { getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 
 @Component({
   selector: 'app-report-level-memo',
@@ -36,7 +35,6 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   assignedMemoText: MemoText = new MemoText();
-  getReportCodeLabel = getReportCodeLabel;
 
   formSubmitted = false;
   form: FormGroup = this.fb.group({});

@@ -1,3 +1,5 @@
+import { Pipe, PipeTransform } from '@angular/core';
+
 export enum F3xReportCodes {
   Q1 = 'Q1',
   Q2 = 'Q2',
@@ -145,6 +147,15 @@ export const F3X_REPORT_CODE_MAP = new Map<F3xReportCodes, F3xReportCode>([
 export function getReportCodeLabel(reportCode?: F3xReportCodes): string | undefined {
   if (reportCode) return F3X_REPORT_CODE_MAP.get(reportCode)?.label;
   else return undefined;
+}
+
+@Pipe({
+  name: 'reportCodeLabel',
+})
+export class ReportCodeLabelPipe implements PipeTransform {
+  transform(reportCode: F3xReportCodes | undefined): string {
+    return getReportCodeLabel(reportCode) || '';
+  }
 }
 
 export const monthlyElectionYearReportCodes: F3xReportCodes[] = [

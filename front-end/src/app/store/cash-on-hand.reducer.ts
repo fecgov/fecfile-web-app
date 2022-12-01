@@ -1,4 +1,4 @@
-import { createReducer, on, Action } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
 import { setCashOnHandAction } from './cash-on-hand.actions';
 

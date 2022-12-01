@@ -6,7 +6,7 @@
 <div class="grid">
   <div class="col-12">
     <h3 class="no-vert-margins">
-      {{ report.form_type | label: f3xFormTypeLabels }}: {{ getReportCodeLabel(report.report_code) }}
+      {{ report.form_type | label: f3xFormTypeLabels }}: {{ report.report_code | reportCodeLabel }}
     </h3>
     <br />
   </div>

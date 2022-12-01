@@ -1,4 +1,4 @@
-import { createReducer, on, Action } from '@ngrx/store';
+import { createReducer, on } from '@ngrx/store';
 import { setCommitteeAccountDetailsAction } from './committee-account.actions';
 import { CommitteeAccount } from '../shared/models/committee-account.model';
 
