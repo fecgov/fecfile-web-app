@@ -27,7 +27,7 @@ export class PAC_RECOUNT_RECEIPT implements TransactionType {
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     return 'Recount Account';
   }
 

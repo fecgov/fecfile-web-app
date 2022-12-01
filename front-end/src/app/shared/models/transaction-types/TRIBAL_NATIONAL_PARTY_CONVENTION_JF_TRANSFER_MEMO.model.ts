@@ -49,7 +49,7 @@ export class TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO implements Transa
     [SAVE_LIST_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     return `Pres. Nominating Convention Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;

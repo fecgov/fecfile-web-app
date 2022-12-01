@@ -383,7 +383,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   public isDescriptionSystemGenerated(transactionType?: TransactionType): boolean {
     // Description is system generated if there is a defined function.  Otherwise, it's mutable
-    return transactionType?.generateContributionPurposeDescription !== undefined;
+    return transactionType?.generatePurposeDescription !== undefined;
   }
 
   doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {
@@ -458,7 +458,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: this.getMemoCodeConstant(transactionType),
-      contribution_purpose_descrip: transactionType?.generateContributionPurposeDescription?.() || '',
+      contribution_purpose_descrip: transactionType?.generatePurposeDescription?.() || '',
     });
   }
 

@@ -46,7 +46,7 @@ export class TRIBAL_JF_TRANSFER_MEMO implements TransactionType {
     [SAVE_LIST_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     return `JF Memo: ${(this.transaction?.parent_transaction as SchATransaction).contributor_organization_name}`;
   }
 

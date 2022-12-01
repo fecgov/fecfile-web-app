@@ -1,4 +1,5 @@
 import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
+import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 import { TransactionNavigationControls } from '../models/transaction-navigation-controls.model';
 import { JsonSchema } from './json-schema.interface';
 import { Transaction } from '../models/transaction.model';
@@ -15,8 +16,8 @@ export interface TransactionType {
   schema: JsonSchema; // FEC validation JSON schema
   transaction?: Transaction;
   childTransactionType?: TransactionType;
-  subTransactionTypes?: ScheduleATransactionTypes[]; // TransactionTypes to choose from when creating a sub transaction
+  subTransactionTypes?: ScheduleATransactionTypes[] | ScheduleBTransactionTypes[]; // TransactionTypes to choose from when creating a sub transaction
   navigationControls?: TransactionNavigationControls;
-  generateContributionPurposeDescription?(): string; // Dynamically generates the text in the CPD field
+  generatePurposeDescription?(): string; // Dynamically generates the text in the CPD or EPD field
   getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 }
