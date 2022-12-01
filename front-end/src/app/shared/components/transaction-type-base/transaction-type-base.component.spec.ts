@@ -47,6 +47,25 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   ];
 }
 
+const initTransactionData = {
+  id: undefined,
+  report_id: undefined,
+  contact: undefined,
+  contact_id: undefined,
+  form_type: undefined,
+  filer_committee_id_number: undefined,
+  transaction_id: null,
+  transaction_type_identifier: undefined,
+  contribution_purpose_descrip: undefined,
+  parent_transaction_id: undefined,
+  children: undefined,
+  parent_transaction: undefined,
+  fields_to_validate: undefined,
+  itemized: false,
+  memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
+  memo_text_id: 'ID Goes Here',
+};
+
 const testTransaction = SchATransaction.fromJSON({
   id: '123',
   report_id: '999',
@@ -162,24 +181,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should update IND contact', () => {
-    const testTransaction1: SchATransaction = SchATransaction.fromJSON({
-      id: undefined,
-      report_id: undefined,
-      contact: undefined,
-      contact_id: undefined,
-      form_type: undefined,
-      filer_committee_id_number: undefined,
-      transaction_id: null,
-      transaction_type_identifier: undefined,
-      contribution_purpose_descrip: undefined,
-      parent_transaction_id: undefined,
-      children: undefined,
-      parent_transaction: undefined,
-      fields_to_validate: undefined,
-      itemized: false,
-      memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
-      memo_text_id: 'ID Goes Here',
-    });
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     testContact.type = ContactTypes.INDIVIDUAL;
@@ -228,24 +230,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should update COM contact', () => {
-    const testTransaction1: SchATransaction = SchATransaction.fromJSON({
-      id: undefined,
-      report_id: undefined,
-      contact: undefined,
-      contact_id: undefined,
-      form_type: undefined,
-      filer_committee_id_number: undefined,
-      transaction_id: null,
-      transaction_type_identifier: undefined,
-      contribution_purpose_descrip: undefined,
-      parent_transaction_id: undefined,
-      children: undefined,
-      parent_transaction: undefined,
-      fields_to_validate: undefined,
-      itemized: false,
-      memo_text: undefined,
-      memo_text_id: undefined,
-    });
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     testContact.type = ContactTypes.COMMITTEE;
@@ -281,24 +266,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should update ORG contact', () => {
-    const testTransaction1: SchATransaction = SchATransaction.fromJSON({
-      id: undefined,
-      report_id: undefined,
-      contact: undefined,
-      contact_id: undefined,
-      form_type: undefined,
-      filer_committee_id_number: undefined,
-      transaction_id: null,
-      transaction_type_identifier: undefined,
-      contribution_purpose_descrip: undefined,
-      parent_transaction_id: undefined,
-      children: undefined,
-      parent_transaction: undefined,
-      fields_to_validate: undefined,
-      itemized: false,
-      memo_text: undefined,
-      memo_text_id: undefined,
-    });
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     testContact.type = ContactTypes.ORGANIZATION;
@@ -332,24 +300,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save no contact changes', () => {
-    const testTransaction1: SchATransaction = SchATransaction.fromJSON({
-      id: undefined,
-      report_id: undefined,
-      contact: undefined,
-      contact_id: undefined,
-      form_type: undefined,
-      filer_committee_id_number: undefined,
-      transaction_id: null,
-      transaction_type_identifier: undefined,
-      contribution_purpose_descrip: undefined,
-      parent_transaction_id: undefined,
-      children: undefined,
-      parent_transaction: undefined,
-      fields_to_validate: undefined,
-      itemized: false,
-      memo_text: undefined,
-      memo_text_id: undefined,
-    });
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     testContact.type = ContactTypes.ORGANIZATION;
@@ -374,24 +325,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should navigate for create', () => {
-    const testTransaction1: SchATransaction = SchATransaction.fromJSON({
-      id: undefined,
-      report_id: undefined,
-      contact: undefined,
-      contact_id: undefined,
-      form_type: undefined,
-      filer_committee_id_number: undefined,
-      transaction_id: null,
-      transaction_type_identifier: undefined,
-      contribution_purpose_descrip: undefined,
-      parent_transaction_id: undefined,
-      children: undefined,
-      parent_transaction: undefined,
-      fields_to_validate: undefined,
-      itemized: false,
-      memo_text: undefined,
-      memo_text_id: undefined,
-    });
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
@@ -410,24 +344,8 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should navigate for update', fakeAsync(() => {
-    const testTransaction2: Transaction = SchATransaction.fromJSON({
-      id: '123',
-      report_id: undefined,
-      contact: undefined,
-      contact_id: undefined,
-      form_type: undefined,
-      filer_committee_id_number: undefined,
-      transaction_id: null,
-      transaction_type_identifier: undefined,
-      contribution_purpose_descrip: undefined,
-      parent_transaction_id: undefined,
-      children: undefined,
-      parent_transaction: undefined,
-      fields_to_validate: undefined,
-      itemized: false,
-      memo_text: undefined,
-      memo_text_id: undefined,
-    });
+    const testTransaction2: Transaction = SchATransaction.fromJSON(initTransactionData);
+    testTransaction2.id = '123';
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
@@ -485,24 +403,10 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo NavigationDestination.LIST should navigate', () => {
-    const testTransaction3: SchATransaction = SchATransaction.fromJSON({
-      id: '123',
-      report_id: '99',
-      contact: undefined,
-      contact_id: '33',
-      form_type: undefined,
-      filer_committee_id_number: undefined,
-      transaction_id: null,
-      transaction_type_identifier: undefined,
-      contribution_purpose_descrip: undefined,
-      parent_transaction_id: undefined,
-      children: undefined,
-      parent_transaction: undefined,
-      fields_to_validate: undefined,
-      itemized: false,
-      memo_text: undefined,
-      memo_text_id: undefined,
-    });
+    const testTransaction3: SchATransaction = SchATransaction.fromJSON(initTransactionData);
+    testTransaction3.id = '123';
+    testTransaction3.report_id = '99';
+    testTransaction3.contact_id = '33';
     component.transactionType = {
       scheduleId: 'A',
       componentGroupId: 'A',
