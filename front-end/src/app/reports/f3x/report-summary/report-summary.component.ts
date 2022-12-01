@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { f3xReportCodeDetailedLabels, LabelList } from 'app/shared/utils/label.utils';
+import { getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 
 @Component({
   selector: 'app-report-summary',
@@ -14,7 +14,7 @@ import { f3xReportCodeDetailedLabels, LabelList } from 'app/shared/utils/label.u
 export class ReportSummaryComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   report: F3xSummary = new F3xSummary();
-  f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
+  getReportCodeLabel = getReportCodeLabel;
 
   constructor(private store: Store, public router: Router) {}
 

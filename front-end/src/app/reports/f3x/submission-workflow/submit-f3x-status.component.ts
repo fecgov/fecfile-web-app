@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
+import { LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
+import { getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 
 @Component({
   selector: 'app-report-summary',
@@ -15,7 +16,7 @@ export class ReportSubmissionStatusComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   report: F3xSummary = new F3xSummary();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
+  getReportCodeLabel = getReportCodeLabel;
 
   constructor(private store: Store, public router: Router) {}
 

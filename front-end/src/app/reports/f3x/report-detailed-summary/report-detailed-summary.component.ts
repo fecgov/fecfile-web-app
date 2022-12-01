@@ -6,7 +6,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { f3xReportCodeDetailedLabels, LabelList } from 'app/shared/utils/label.utils';
+import { getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 
 @Component({
   selector: 'app-report-detailed-summary',
@@ -17,8 +17,7 @@ export class ReportDetailedSummaryComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   protected calculationFinished$ = new BehaviorSubject<boolean>(false);
   report: F3xSummary = new F3xSummary();
-
-  f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
+  getReportCodeLabel = getReportCodeLabel;
 
   constructor(
     private store: Store,

@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
+import { LabelList } from '../../../shared/utils/label.utils';
+import { getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 import { F3xFormTypeLabels, F3xSummary } from '../../../shared/models/f3x-summary.model';
 import { WebPrintService } from '../../../shared/services/web-print.service';
 import { Report } from '../../../shared/interfaces/report.interface';
@@ -17,7 +18,7 @@ export class ReportWebPrintComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   report: F3xSummary = new F3xSummary();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
+  getReportCodeLabel = getReportCodeLabel;
 
   submitDate: Date | undefined;
   downloadURL = '';

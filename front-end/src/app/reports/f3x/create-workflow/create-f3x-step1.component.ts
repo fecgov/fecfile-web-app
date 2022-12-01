@@ -2,31 +2,29 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import {
-  electionReportCodes,
-  F3xCoverageDates,
-  F3xFormTypes,
-  F3xReportCode,
-  F3xReportCodes,
-  F3xSummary,
-  monthlyElectionYearReportCodes,
-  monthlyNonElectionYearReportCodes,
-  quarterlyElectionYearReportCodes,
-  quarterlyNonElectionYearReportCodes,
-} from 'app/shared/models/f3x-summary.model';
+import { F3xCoverageDates, F3xFormTypes, F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { f3xReportCodeDetailedLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
+import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { Subject, switchMap, of, takeUntil, zip, map } from 'rxjs';
-import { LabelList } from '../../../shared/utils/label.utils';
+import { Subject, switchMap, of, takeUntil, zip, map, combineLatest, startWith } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
+import {
+  electionReportCodes,
+  F3xReportCodes,
+  F3X_REPORT_CODE_MAP,
+  getReportCodeLabel,
+  monthlyElectionYearReportCodes,
+  monthlyNonElectionYearReportCodes,
+  quarterlyElectionYearReportCodes,
+  quarterlyNonElectionYearReportCodes,
+} from 'app/shared/utils/report-code.utils';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -53,7 +51,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   public f3xCoverageDatesList: F3xCoverageDates[] | undefined;
 
-  public f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
+  getReportCodeLabel = getReportCodeLabel;
 
   constructor(
     private store: Store,
@@ -113,6 +111,27 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     });
     this.form.controls['coverage_from_date'].addValidators([Validators.required]);
     this.form.controls['coverage_through_date'].addValidators([Validators.required]);
+
+    // Prepopulate coverage dates if the report code has rules to do so
+    combineLatest([
+      this.form.controls['report_code'].valueChanges.pipe(startWith(this.form.controls['report_code'].value)),
+      this.form.controls['filing_frequency'].valueChanges.pipe(startWith(this.form.controls['filing_frequency'].value)),
+      this.form.controls['report_type_category'].valueChanges.pipe(
+        startWith(this.form.controls['report_type_category'].value)
+      ),
+    ]).subscribe(([reportCode, filingFrequency, reportTypeCategory]) => {
+      const coverageDatesFunction = F3X_REPORT_CODE_MAP.get(reportCode)?.coverageDatesFunction;
+      if (coverageDatesFunction) {
+        const year = new Date().getFullYear();
+        const isElectionYear = F3xReportTypeCategories.ELECTION_YEAR === reportTypeCategory;
+        const [coverage_from_date, coverage_through_date] = coverageDatesFunction(
+          year,
+          isElectionYear,
+          filingFrequency
+        );
+        this.form.patchValue({ coverage_from_date, coverage_through_date });
+      }
+    });
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;
@@ -179,15 +198,14 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   }
 
   setCoverageOverlapError(formValue: AbstractControl, overlap: F3xCoverageDates) {
-    const f3xReportCodeLabel = f3xReportCodeDetailedLabels.find((label) => label[0] === overlap.report_code);
-    const reportCodeLabel = f3xReportCodeLabel ? f3xReportCodeLabel[1] || overlap.report_code?.valueOf : 'invalid name';
+    const overlapLabel = getReportCodeLabel(overlap.report_code);
     const overlapFromDate = this.fecDatePipe.transform(overlap.coverage_from_date);
     const overlapThroughDate = this.fecDatePipe.transform(overlap.coverage_through_date);
-    const errors = formValue.errors ? formValue.errors : {};
+    const errors = formValue.errors || {};
     errors['invaliddate'] = {
       msg:
         `You have entered coverage dates that overlap ` +
-        `the coverage dates of the following report: ${reportCodeLabel} ` +
+        `the coverage dates of the following report: ${overlapLabel} ` +
         ` ${overlapFromDate} - ${overlapThroughDate}`,
     };
     formValue.setErrors(errors);
@@ -202,7 +220,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     return [F3xReportTypeCategories.ELECTION_YEAR, F3xReportTypeCategories.NON_ELECTION_YEAR];
   }
 
-  public getReportCodes(): F3xReportCode[] {
+  public getReportCodes(): F3xReportCodes[] {
     const isMonthly = this.form?.get('filing_frequency')?.value === 'M';
     switch (this.form.get('report_type_category')?.value) {
       case F3xReportTypeCategories.ELECTION_YEAR:

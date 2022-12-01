@@ -3,7 +3,7 @@
     <h1>Report level memo</h1>
     <div>
       <strong>FORM 3X:</strong>
-      {{ report.report_code | label: f3xReportCodeDetailedLabels }}
+      {{ getReportCodeLabel(report.report_code) }}
     </div>
   </div>
 

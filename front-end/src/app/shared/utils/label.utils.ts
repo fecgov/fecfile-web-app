@@ -1,5 +1,3 @@
-import { F3xReportCodes } from 'app/shared/models/f3x-summary.model';
-
 export type LabelList = string[][];
 export type PrimeOptions = { name: string; code: string }[];
 
@@ -202,35 +200,3 @@ const CongressionalDistricts: Record<string, number> = {
   WI: 8,
   WY: 1,
 };
-
-/*
- *  These long-form labels include more detailed descriptions than the labels provided
- *  by the API and are used when creating a report and during the submission process.
- */
-export const f3xReportCodeDetailedLabels: LabelList = [
-  [F3xReportCodes.Q1, 'APRIL 15 QUARTERLY REPORT (Q1)'],
-  [F3xReportCodes.Q2, 'JULY 15 QUARTERLY REPORT (Q2)'],
-  [F3xReportCodes.Q3, 'OCTOBER 15 QUARTERLY REPORT(Q3)'],
-  [F3xReportCodes.YE, 'JANUARY 31 YEAR-END (YE)'],
-  [F3xReportCodes.TER, 'TERMINATION REPORT (TER)'],
-  [F3xReportCodes.MY, 'JULY 31 MID-YEAR REPORT (MY)'],
-  [F3xReportCodes.TwelveG, '12-DAY PRE-GENERAL (12G)'],
-  [F3xReportCodes.TwelveP, '12-DAY PRE-PRIMARY (12P)'],
-  [F3xReportCodes.TwelveR, '12-DAY PRE-RUNOFF (12R)'],
-  [F3xReportCodes.TwelveS, '12-DAY PRE-SPECIAL (12S)'],
-  [F3xReportCodes.TwelveC, '12-DAY PRE-CONVENTION (12C)'],
-  [F3xReportCodes.ThirtyG, '30-DAY POST-GENERAL (30G)'],
-  [F3xReportCodes.ThirtyR, '30-DAY POST-RUNOFF (30R)'],
-  [F3xReportCodes.ThirtyS, '30-DAY POST-SPECIAL (30S)'],
-  [F3xReportCodes.M2, 'FEBRUARY 20 MONTHLY REPORT (M2)'],
-  [F3xReportCodes.M3, 'MARCH 20 MONTHLY REPORT (M3)'],
-  [F3xReportCodes.M4, 'APRIL 20 MONTHLY REPORT (M4)'],
-  [F3xReportCodes.M5, 'MAY 20 MONTHLY REPORT (M5)'],
-  [F3xReportCodes.M6, 'JUNE 20 MONTHLY REPORT (M6)'],
-  [F3xReportCodes.M7, 'JULY 20 MONTHLY REPORT (M7)'],
-  [F3xReportCodes.M8, 'AUGUST 20 MONTHLY REPORT (M8)'],
-  [F3xReportCodes.M9, 'SEPTEMBER 20 MONTHLY REPORT (M9)'],
-  [F3xReportCodes.M10, 'OCTOBER 20 MONTHLY REPORT (M10)'],
-  [F3xReportCodes.M11, 'NOVEMBER 20 MONTHLY REPORT (M11)'],
-  [F3xReportCodes.M12, 'DECEMBER 20 MONTHLY REPORT (M12)'],
-];

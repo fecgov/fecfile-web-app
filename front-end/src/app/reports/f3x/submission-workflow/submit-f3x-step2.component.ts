@@ -8,13 +8,13 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
+import { F3xReportCodes, getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from '../../../shared/services/report.service';
 
@@ -32,15 +32,15 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     'filing_password',
     'truth_statement',
   ];
-  report: F3xSummary | undefined;
-  report_code = '';
+  report?: F3xSummary;
+  report_code?: F3xReportCodes;
+  getReportCodeLabel = getReportCodeLabel;
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
-  f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
   loading: 0 | 1 | 2 = 0;
   cashOnHand: CashOnHand = {
     report_id: undefined,
@@ -68,7 +68,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report as F3xSummary;
-        this.report_code = this.report?.report_code || '';
+        this.report_code = this.report?.report_code;
       });
     this.store
       .select(selectCommitteeAccount)

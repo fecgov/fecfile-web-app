@@ -12,7 +12,7 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
+import { F3xReportCodes, getReportCodeLabel } from 'app/shared/utils/report-code.utils';
 
 @Component({
   selector: 'app-submit-f3x-step1',
@@ -29,15 +29,15 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     'state',
     'zip',
   ];
-  report: F3xSummary | undefined;
-  report_code = '';
+  report?: F3xSummary;
+  report_code?: F3xReportCodes;
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
-  f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
+  getReportCodeLabel = getReportCodeLabel;
 
   constructor(
     public router: Router,
@@ -56,7 +56,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report as F3xSummary;
-        this.report_code = this.report?.report_code || '';
+        this.report_code = this.report?.report_code;
       });
     this.store
       .select(selectCommitteeAccount)
