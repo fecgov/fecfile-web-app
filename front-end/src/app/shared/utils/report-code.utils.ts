@@ -48,12 +48,12 @@ export class F3xReportCode {
 
 function createCoverageFunction(
   startMonth: number,
-  startDate: number,
+  startDayOfMonth: number,
   endMonth: number,
-  endDate: number
+  endDayOfMonth: number
 ): (year: number, isElectionYear: boolean, filingFrequency: string) => [Date, Date] {
   return (year: number) => {
-    return [new Date(year, startMonth, startDate), new Date(year, endMonth, endDate)];
+    return [new Date(year, startMonth, startDayOfMonth), new Date(year, endMonth, endDayOfMonth)];
   };
 }
 
