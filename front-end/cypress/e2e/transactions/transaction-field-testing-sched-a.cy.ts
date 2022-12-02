@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { navigateTransactionAccordion } from '../../support/transactions.spec';
-import { groupANavTree, TransactionFields } from '../../support/transaction_nav_trees.spec';
+import { schedANavTree, TransactionFields } from '../../support/transaction_nav_trees.spec';
 import { committeeID, randomString } from '../../support/generators/generators.spec';
 import {
   generateTransactionObject,
@@ -151,7 +151,7 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
     cy.deleteAllReports();
   });
 
-  const navTree = groupANavTree;
+  const navTree = schedANavTree;
   const transactionPairs = [];
   for (const tCategory of Object.keys(navTree)) {
     for (const tName of Object.keys(navTree[tCategory])) {

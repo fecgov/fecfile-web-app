@@ -639,7 +639,7 @@ const pacNationalPartyRecountAccount: TransactionForm = {
  *
  */
 
-export const groupANavTree: TransactionNavTree = {
+export const schedANavTree: TransactionNavTree = {
   //Commented out lines are branches that have not yet been implemented
   'INDIVIDUALS/PERSONS': {
     'Individual Receipt': individualReceipt,

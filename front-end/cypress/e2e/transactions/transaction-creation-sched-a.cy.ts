@@ -4,7 +4,7 @@ import { Contact } from '../../support/generators/contacts.spec';
 import { generateReportObject } from '../../support/generators/reports.spec';
 import { generateTransactionObject } from '../../support/generators/transactions.spec';
 import { createTransactionSchA } from '../../support/transactions.spec';
-import { groupANavTree, SchATransactionName } from '../../support/transaction_nav_trees.spec';
+import { schedANavTree, SchATransactionName } from '../../support/transaction_nav_trees.spec';
 
 function testEditTransaction(contact: Contact, isPairedTransaction = false) {
   const name = getName(contact);
@@ -77,7 +77,7 @@ describe('Test saving and editing on all transactions', () => {
     cy.deleteAllContacts();
   });
 
-  const navTree = groupANavTree;
+  const navTree = schedANavTree;
   for (const category of Object.keys(navTree)) {
     for (const transactionName of Object.keys(navTree[category])) {
       it(`Creates a ${transactionName} transaction`, () => {
