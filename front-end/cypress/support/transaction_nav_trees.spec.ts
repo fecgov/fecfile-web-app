@@ -28,6 +28,7 @@ export type SchATransactionName =
   | 'Individual Receipt - Non-Contribution Account'
   | 'Joint Fundraising Transfer - National Party Recount Account'
   | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account'
+  | 'Joint Fundraising Transfer - National Party Headquarters Buildings Account'
   | 'PAC National Party Recount/Legal Proceedings Account';
 
 export type ChildTransactionName =
@@ -515,6 +516,18 @@ const offsetToOpex: TransactionForm = {
   },
 };
 
+const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
+  transaction_name: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
+  transaction_category: 'TRANSFERS',
+  transaction_group: 'E',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
   transaction_name: 'Other Committee Receipt - Non-Contribution Account',
   transaction_category: 'OTHER',
@@ -610,6 +623,8 @@ const earmarkReceipt: PairedTransactionForm = {
 const pacNationalPartyRecountAccount: TransactionForm = {
   transaction_name: 'PAC National Party Recount/Legal Proceedings Account',
   transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityCommittee,
   fields: {
     ...memoFields,
@@ -641,6 +656,8 @@ export const groupANavTree: TransactionNavTree = {
     'Joint Fundraising Transfer - National Party Recount Account': jointFundraisingTransferNationalPartyRecount,
     'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account':
       jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
+    'Joint Fundraising Transfer - National Party Headquarters Buildings Account':
+      jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount,
   },
   //"REFUNDS":{},
   OTHER: {
