@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../../../shared/utils/unit-test.utils';
 import { of } from 'rxjs';
-import { F3xReportCodes, F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
 import { SharedModule } from 'app/shared/shared.module';
@@ -20,6 +20,7 @@ import { F3xCoverageDates } from '../../../shared/models/f3x-summary.model';
 import { AppSelectButtonComponent } from '../../../shared/components/app-selectbutton';
 import { ReportService } from '../../../shared/services/report.service';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
+import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;

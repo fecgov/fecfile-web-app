@@ -1,6 +1,7 @@
 import { plainToClass, Transform, Type } from 'class-transformer';
 import { Report } from '../interfaces/report.interface';
 import { LabelList } from '../utils/label.utils';
+import { F3xReportCodes } from '../utils/report-code.utils';
 import { BaseModel } from './base.model';
 import { UploadSubmission } from './upload-submission.model';
 import { WebPrintSubmission } from './webprint-submission.model';
@@ -25,129 +26,6 @@ export const F3xFormVersionLabels: LabelList = [
   [F3xFormTypes.F3XT, 'Termination'],
 ];
 
-export enum F3xReportCodes {
-  Q1 = 'Q1',
-  Q2 = 'Q2',
-  Q3 = 'Q3',
-  YE = 'YE',
-  TER = 'TER',
-  MY = 'MY',
-  TwelveG = '12G',
-  TwelveP = '12P',
-  TwelveR = '12R',
-  TwelveS = '12S',
-  TwelveC = '12C',
-  ThirtyG = '30G',
-  ThirtyR = '30R',
-  ThirtyS = '30S',
-  M2 = 'M2',
-  M3 = 'M3',
-  M4 = 'M4',
-  M5 = 'M5',
-  M6 = 'M6',
-  M7 = 'M7',
-  M8 = 'M8',
-  M9 = 'M9',
-  M10 = 'M10',
-  M11 = 'M11',
-  M12 = 'M12',
-}
-
-export type F3xReportCode =
-  | F3xReportCodes.Q1
-  | F3xReportCodes.Q2
-  | F3xReportCodes.Q3
-  | F3xReportCodes.YE
-  | F3xReportCodes.TER
-  | F3xReportCodes.MY
-  | F3xReportCodes.TwelveG
-  | F3xReportCodes.TwelveP
-  | F3xReportCodes.TwelveR
-  | F3xReportCodes.TwelveS
-  | F3xReportCodes.TwelveC
-  | F3xReportCodes.ThirtyG
-  | F3xReportCodes.ThirtyR
-  | F3xReportCodes.ThirtyS
-  | F3xReportCodes.M2
-  | F3xReportCodes.M3
-  | F3xReportCodes.M4
-  | F3xReportCodes.M5
-  | F3xReportCodes.M6
-  | F3xReportCodes.M7
-  | F3xReportCodes.M8
-  | F3xReportCodes.M9
-  | F3xReportCodes.M10
-  | F3xReportCodes.M11
-  | F3xReportCodes.M12;
-
-export const monthlyElectionYearReportCodes: F3xReportCode[] = [
-  F3xReportCodes.M2,
-  F3xReportCodes.M3,
-  F3xReportCodes.M4,
-  F3xReportCodes.M5,
-  F3xReportCodes.M6,
-  F3xReportCodes.M7,
-  F3xReportCodes.M8,
-  F3xReportCodes.M9,
-  F3xReportCodes.M10,
-  F3xReportCodes.TwelveG,
-  F3xReportCodes.ThirtyG,
-  F3xReportCodes.YE,
-  F3xReportCodes.TER,
-];
-export const monthlyNonElectionYearReportCodes: F3xReportCode[] = [
-  F3xReportCodes.M2,
-  F3xReportCodes.M3,
-  F3xReportCodes.M4,
-  F3xReportCodes.M5,
-  F3xReportCodes.M6,
-  F3xReportCodes.M7,
-  F3xReportCodes.M8,
-  F3xReportCodes.M9,
-  F3xReportCodes.M10,
-  F3xReportCodes.M11,
-  F3xReportCodes.M12,
-  F3xReportCodes.YE,
-  F3xReportCodes.TER,
-];
-export const quarterlyElectionYearReportCodes: F3xReportCode[] = [
-  F3xReportCodes.Q1,
-  F3xReportCodes.Q2,
-  F3xReportCodes.Q3,
-  F3xReportCodes.TwelveG,
-  F3xReportCodes.ThirtyG,
-  F3xReportCodes.YE,
-  F3xReportCodes.TwelveP,
-  F3xReportCodes.TwelveR,
-  F3xReportCodes.TwelveS,
-  F3xReportCodes.TwelveC,
-  F3xReportCodes.ThirtyR,
-  F3xReportCodes.ThirtyS,
-  F3xReportCodes.TER,
-];
-export const quarterlyNonElectionYearReportCodes: F3xReportCode[] = [
-  F3xReportCodes.MY,
-  F3xReportCodes.YE,
-  F3xReportCodes.TwelveP,
-  F3xReportCodes.TwelveR,
-  F3xReportCodes.TwelveS,
-  F3xReportCodes.TwelveC,
-  F3xReportCodes.ThirtyR,
-  F3xReportCodes.ThirtyS,
-  F3xReportCodes.TER,
-];
-
-export const electionReportCodes: F3xReportCode[] = [
-  F3xReportCodes.ThirtyG,
-  F3xReportCodes.ThirtyR,
-  F3xReportCodes.ThirtyS,
-  F3xReportCodes.TwelveC,
-  F3xReportCodes.TwelveG,
-  F3xReportCodes.TwelveP,
-  F3xReportCodes.TwelveR,
-  F3xReportCodes.TwelveS,
-];
-
 export class F3xCoverageDates {
   @Transform(BaseModel.dateTransform) coverage_from_date: Date | undefined;
   @Transform(BaseModel.dateTransform) coverage_through_date: Date | undefined;
@@ -170,7 +48,7 @@ export class F3xSummary extends BaseModel implements Report {
   city: string | undefined;
   state: string | undefined;
   zip: string | undefined;
-  report_code: F3xReportCode | undefined;
+  report_code: F3xReportCodes | undefined;
   election_code: string | undefined;
   @Transform(BaseModel.dateTransform) date_of_election: Date | undefined;
   state_of_election: string | undefined;

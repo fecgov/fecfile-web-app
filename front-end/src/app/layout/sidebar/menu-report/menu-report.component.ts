@@ -1,14 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, Event } from '@angular/router';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { selectActiveReport } from '../../../store/active-report.selectors';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import { Report, CashOnHand } from '../../../shared/interfaces/report.interface';
-import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
-import { f3xReportCodeDetailedLabels, LabelList } from '../../../shared/utils/label.utils';
+import { LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
 import { ReportService } from '../../../shared/services/report.service';
 
@@ -23,9 +21,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   currentReportTimestamp: number | undefined;
   items: MenuItem[] = [];
   showMenu = false;
-  reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  f3xReportCodeDetailedLabels: LabelList = f3xReportCodeDetailedLabels;
   reportIsEditableFlag = false;
   cashOnHand: CashOnHand = {
     report_id: undefined,
@@ -53,10 +49,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private store: Store, private reportService: ReportService) {}
 
   ngOnInit(): void {
-    this.reportCodeLabelList$ = this.store
-      .select<ReportCodeLabelList>(selectReportCodeLabelList)
-      .pipe(takeUntil(this.destroy$));
-
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
