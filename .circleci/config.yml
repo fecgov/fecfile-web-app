@@ -95,6 +95,38 @@ jobs:
           paths:
             - /tmp/cache/scanner
 
+  api-e2e-init:
+    docker:
+      - image: cimg/node:16.15-browsers
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: init fecfile-web-api
+          command: |
+            cd ~
+            rm -rf .git fecfile-web-api
+            git clone https://github.com/fecgov/fecfile-web-api.git
+            cd fecfile-web-api
+            git checkout feature/761-nightly-cypress-e2e-tests
+            sudo docker-compose down
+            sudo DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} docker-compose up -d
+            sudo docker container run --network container:fecfile-api \
+              docker.io/jwilder/dockerize \
+              -wait http://localhost:8080/api/v1/ \
+              -wait-retry-interval 2s \
+              -timeout 20s; \
+            sudo docker container run --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
+              export CYPRESS_EMAIL=${E2E_CYPRESS_EMAIL}; \
+              export CYPRESS_COMMITTEE_ID=${E2E_CYPRESS_COMMITTEE_ID}; \
+              export CYPRESS_PASSWORD=${E2E_CYPRESS_PD}; \
+              cd ~; \
+              git clone https://github.com/fecgov/fecfile-web-app.git; \
+              cd fecfile-web-app/front-end; \
+              npm install; \
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --headless --browser chrome; \
+              sleep 500s; '\
+
   e2e-test:
     docker:
       - image: cimg/node:16.15-browsers
@@ -256,6 +288,8 @@ workflows:
     when:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
+      - api-e2e-init
+      - e2e-test
       - lint
       - test
       - dependency-check
@@ -264,7 +298,8 @@ workflows:
             - test
             - dependency-check
 
-  e2e-test:
+  dah-e2e-test:
     when: << pipeline.parameters.is-nightly-run >>
     jobs:
+      - api-e2e-init
       - e2e-test
