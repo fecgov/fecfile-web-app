@@ -20,8 +20,8 @@ describe('JOINT_FUNDRAISING_TRANSFER', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
   });
 
-  it('#contributionPurposeDescripReadonly() should return constant', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+  it('#generateContributionPurposeDescription() should return constant', () => {
+    const descrip = transactionType.generateContributionPurposeDescription();
     expect(descrip).toBe('Transfer of Joint Fundraising Proceeds');
   });
 });

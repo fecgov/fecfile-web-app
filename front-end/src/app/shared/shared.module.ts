@@ -24,9 +24,9 @@ import { AdditionalInfoInputComponent } from './components/inputs/additional-inf
 import { DefaultZeroPipe } from './pipes/default-zero.pipe';
 import { FecDatePipe } from './pipes/fec-date.pipe';
 import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
+import { ReportCodeLabelPipe } from './utils/report-code.utils';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
-import { FindOnReportCodePipe } from './pipes/report-code-label-list.pipe';
 import { NavigationControlComponent } from './components/navigation-control/navigation-control/navigation-control.component';
 import { NavigationControlBarComponent } from './components/navigation-control-bar/navigation-control-bar.component';
 
@@ -51,9 +51,9 @@ import { NavigationControlBarComponent } from './components/navigation-control-b
     ErrorMessagesComponent,
     FecDatePipe,
     LongDatePipe,
-    FindOnReportCodePipe,
     DefaultZeroPipe,
     HighlightTermsPipe,
+    ReportCodeLabelPipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,
@@ -73,9 +73,9 @@ import { NavigationControlBarComponent } from './components/navigation-control-b
     LongDatePipe,
     LabelPipe,
     ErrorMessagesComponent,
-    FindOnReportCodePipe,
     DefaultZeroPipe,
     HighlightTermsPipe,
+    ReportCodeLabelPipe,
     FecInternationalPhoneInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,

@@ -24,8 +24,8 @@ describe('INDIVIDUAL_JF_TRANSFER_MEMO', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO);
   });
 
-  it('#contributionPurposeDescripReadonly() should return appropriate retval', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+  it('#generateContributionPurposeDescription() should return appropriate retval', () => {
+    const descrip = transactionType.generateContributionPurposeDescription();
     expect(descrip).toBe(`JF Memo: Test Org`);
   });
 });
