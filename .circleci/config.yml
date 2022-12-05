@@ -115,7 +115,7 @@ jobs:
               docker.io/jwilder/dockerize \
               -wait http://localhost:8080/api/v1/ \
               -wait-retry-interval 2s \
-              -timeout 20s; \
+              -timeout 60s; \
             docker container run -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
               cd ~; \
               git clone https://github.com/fecgov/fecfile-web-app.git; \
