@@ -108,7 +108,7 @@ jobs:
             rm -rf .git fecfile-web-api
             git clone https://github.com/fecgov/fecfile-web-api.git
             cd fecfile-web-api
-            git checkout feature/761-nightly-cypress-e2e-tests
+            git checkout feature/${E2E_BRANCH_NAME}
             docker-compose down
             DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} docker-compose up -d
             docker container run --network container:fecfile-api \
@@ -120,7 +120,7 @@ jobs:
               cd ~; \
               git clone https://github.com/fecgov/fecfile-web-app.git; \
               cd fecfile-web-app/front-end; \
-              git checkout feature/761-nightly-cypress-e2e-tests; \
+              git checkout feature/${E2E_BRANCH_NAME}; \
               npm install; \
               node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --headless --watch=false --browser chrome;'\ 
 
@@ -267,7 +267,6 @@ workflows:
     when:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
-      - e2e-test
       - lint
       - test
       - dependency-check
