@@ -95,7 +95,7 @@ jobs:
           paths:
             - /tmp/cache/scanner
 
-  api-e2e-init:
+  e2e-test:
     docker:
       - image: cimg/node:16.15-browsers
     steps:
@@ -116,34 +116,13 @@ jobs:
               -wait http://localhost:8080/api/v1/ \
               -wait-retry-interval 2s \
               -timeout 20s; \
-            docker container run --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
-              export CYPRESS_EMAIL=${E2E_CYPRESS_EMAIL}; \
-              export CYPRESS_COMMITTEE_ID=${E2E_CYPRESS_COMMITTEE_ID}; \
-              export CYPRESS_PASSWORD=${E2E_CYPRESS_PD}; \
+            docker container run -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
               cd ~; \
               git clone https://github.com/fecgov/fecfile-web-app.git; \
               cd fecfile-web-app/front-end; \
+              git checkout feature/761-nightly-cypress-e2e-tests; \
               npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --headless --browser chrome; \
-              sleep 500s; '\
-
-  e2e-test:
-    docker:
-      - image: cimg/node:16.15-browsers
-    steps:
-      - checkout
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-
-      #install-packages documentation: https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
-      - node/install-packages:
-          override-ci-command: npm install
-          app-dir: ~/project/front-end/
-
-      - run:
-          name: run e2e tests
-          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --headless
-          working_directory: ~/project/front-end/
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --headless --watch=false --browser chrome;'\ 
 
   deploy:
     docker:
@@ -288,7 +267,6 @@ workflows:
     when:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
-      - api-e2e-init
       - e2e-test
       - lint
       - test
@@ -298,8 +276,7 @@ workflows:
             - test
             - dependency-check
 
-  dah-e2e-test:
+  nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
     jobs:
-      - api-e2e-init
       - e2e-test
