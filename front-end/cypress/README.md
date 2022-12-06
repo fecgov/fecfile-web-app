@@ -7,7 +7,7 @@ Running the End-to-End tests requires a little pre-configuration for both the ba
 First, the back-end needs to be set up. The back-end must be instructed to use the test db, and you do so with an environment variable:
 
 ```
-export DOCKERFILE="Dockerfile-e2e"
+export DB_DOCKERFILE="Dockerfile-e2e"
 ```
 
 Then start the back-end normally with `docker-compose up` and run migrations as usual
