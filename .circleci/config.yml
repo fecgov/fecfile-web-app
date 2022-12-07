@@ -100,29 +100,35 @@ jobs:
       - image: cimg/node:16.15-browsers
     steps:
       - setup_remote_docker:
-          docker_layer_caching: true
+          docker_layer_caching: false
       - run:
-          name: init fecfile-web-api
+          name: clone fecfile-web-api
           command: |
-            cd ~
             rm -rf .git fecfile-web-api
             git clone https://github.com/fecgov/fecfile-web-api.git
-            cd fecfile-web-api
-            git checkout feature/${E2E_BRANCH_NAME}
+          working_directory: ~
+      - run:
+          name: start fecfile-web-api
+          command: |
+            git checkout ${E2E_BRANCH_NAME}
             docker-compose down
-            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} docker-compose up -d
+            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} docker-compose up --build -d
             docker container run --network container:fecfile-api \
               docker.io/jwilder/dockerize \
               -wait http://localhost:8080/api/v1/ \
               -wait-retry-interval 2s \
               -timeout 60s; \
+          working_directory: ~/project/fecfile-web-api
+      - run:
+          name: execute e2e tests
+          command: |
             docker container run -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
               cd ~; \
               git clone https://github.com/fecgov/fecfile-web-app.git; \
               cd fecfile-web-app/front-end; \
-              git checkout feature/${E2E_BRANCH_NAME}; \
+              git checkout ${E2E_BRANCH_NAME}; \
               npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --headless --watch=false --browser chrome;'\ 
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --headless --watch=false --browser chrome;'\
 
   deploy:
     docker:
@@ -267,6 +273,7 @@ workflows:
     when:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
+      - e2e-test
       - lint
       - test
       - dependency-check
