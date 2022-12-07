@@ -273,7 +273,6 @@ workflows:
     when:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
-      - e2e-test
       - lint
       - test
       - dependency-check
