@@ -44,6 +44,12 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     this.isNewItem = false;
   }
 
+  public override deleteItem(item: Contact): void {
+    if (this.canDeleteContact(item)) {
+      super.deleteItem(item);
+    }
+  }
+
   /**
    * Get the display name for the contact to show in the table column.
    * @param item
@@ -57,4 +63,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     }
   }
 
+  public canDeleteContact(item: Contact): boolean {
+    return !item?.transaction_count || item.transaction_count < 1;
+  }
 }

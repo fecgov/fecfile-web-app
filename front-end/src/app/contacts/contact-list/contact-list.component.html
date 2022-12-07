@@ -85,25 +85,15 @@
         <td>
           <p-tableCheckbox [value]="item" [ariaLabel]="'select ' + displayName(item)"></p-tableCheckbox>
         </td>
-        <td>{{ displayName(item) }}</td>
-        <td>{{ item.type | label: contactTypeLabels }}</td>
+        <td>
+          <a (click)="editItem(item)">{{ displayName(item) }}</a>
+        </td>
+        <td>{{ item.type | label : contactTypeLabels }}</td>
         <td>{{ item.employer }}</td>
         <td>{{ item.occupation }}</td>
         <td>
-          <p-button
-            pRipple
-            icon="pi pi-pencil"
-            styleClass="p-button-rounded p-button-success mr-2"
-            (click)="editItem(item)"
-            [ariaLabel]="'edit ' + displayName(item)"
-          ></p-button>
-          <p-button
-            pRipple
-            icon="pi pi-trash"
-            styleClass="p-button-rounded p-button-warning"
-            (click)="deleteItem(item)"
-            [ariaLabel]="'delete ' + displayName(item)"
-          ></p-button>
+          {{ canDeleteContact(item) }}
+          <i class="pi pi-trash" [ngClass]="{ disabled: canDeleteContact(item) }" (click)="deleteItem(item)"></i>
         </td>
       </tr>
     </ng-template>
