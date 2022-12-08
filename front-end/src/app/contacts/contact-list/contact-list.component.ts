@@ -57,7 +57,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     }
   }
 
-  public canDeleteContact(item: Contact): boolean {
+  public canDeleteItem(item: Contact): boolean {
     return !item?.transaction_count || item.transaction_count < 1;
   }
 }

@@ -142,6 +142,7 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
       accept: () => {
         this.itemService.delete(item).subscribe(() => {
           this.item = this.getEmptyItem();
+          this.loadTableItems({} as LazyLoadEvent); // Refresh table list
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });
       },

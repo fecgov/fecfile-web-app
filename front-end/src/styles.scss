@@ -263,3 +263,9 @@ label.disabled {
 .pi-trash.disabled {
   opacity: 30%;
 }
+
+.p-tooltip .p-tooltip-text {
+  background: white;
+  color: black;
+  border: 1px solid black;
+}
