@@ -92,8 +92,12 @@
         <td>{{ item.employer }}</td>
         <td>{{ item.occupation }}</td>
         <td>
-          {{ canDeleteContact(item) }}
-          <i class="pi pi-trash" [ngClass]="{ disabled: canDeleteContact(item) }" (click)="deleteItem(item)"></i>
+          <em *ngIf="canDeleteContact(item)" class="pi pi-trash" (click)="deleteItem(item)"></em>
+          <em
+            *ngIf="!canDeleteContact(item)"
+            class="pi pi-trash disabled"
+            pTooltip="This contact can not be deleted because it has associated transactions."
+          ></em>
         </td>
       </tr>
     </ng-template>
