@@ -83,7 +83,11 @@
     <ng-template pTemplate="body" let-item>
       <tr role="row">
         <td>
-          <p-tableCheckbox [value]="item" [ariaLabel]="'select ' + displayName(item)"></p-tableCheckbox>
+          <p-tableCheckbox
+            [value]="item"
+            [disabled]="!canDeleteItem(item)"
+            [ariaLabel]="'select ' + displayName(item)"
+          ></p-tableCheckbox>
         </td>
         <td>
           <a (click)="editItem(item)">{{ displayName(item) }}</a>

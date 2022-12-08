@@ -5,6 +5,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 import { ContactService } from '../../shared/services/contact.service';
+import { ListRestResponse } from 'app/shared/models/rest-api.model';
 
 @Component({
   selector: 'app-contact-list',
@@ -58,6 +59,20 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   public canDeleteItem(item: Contact): boolean {
-    return !item?.transaction_count || item.transaction_count < 1;
+    return item.transaction_count === 0;
+  }
+
+  public override onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {
+    const checked: boolean = event.checked;
+
+    if (checked) {
+      this.itemService.getTableData(1).subscribe((response: ListRestResponse) => {
+        this.selectedItems = response.results.filter((item: Contact) => this.canDeleteItem(item)) || [];
+        this.selectAll = true;
+      });
+    } else {
+      this.selectedItems = [];
+      this.selectAll = false;
+    }
   }
 }

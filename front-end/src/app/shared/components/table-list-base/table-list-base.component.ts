@@ -154,7 +154,7 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
       message: 'Are you sure you want to delete the selected items?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
-      accept: this.deleteSelectedItemsAccept,
+      accept: this.deleteSelectedItemsAccept.bind(this),
     });
   }
 
@@ -166,6 +166,7 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
     forkJoin(obs).subscribe(() => {
       this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
       this.selectedItems = [];
+      this.loadTableItems({} as LazyLoadEvent); // Refresh table list
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     });
   }
