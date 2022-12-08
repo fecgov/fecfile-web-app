@@ -36,7 +36,7 @@ export class LoginService {
    * @param      {String}  username  The username
    * @param      {String}  password  The password
    *
-   * @return     {Observable}  The JSON web token response.
+   * @return     {Observable}  The JSON response.
    */
   public signIn(email: string, cmteId: string, password: string): Observable<UserLoginData> {
     // Django uses cmteId+email as unique username
@@ -50,14 +50,12 @@ export class LoginService {
 
   public validateCode(code: string) {
     const payload = { code: code.toString() };
-    const token: string = this.sessionService.getToken();
     const headers = {
       'Content-Type': 'application/json',
-      token: token,
     };
     return this.http.post<UserLoginData>(`${environment.apiUrl}/user/login/verify`, payload, { headers: headers }).pipe(
       tap((userLoginData: UserLoginData) => {
-        if (userLoginData.token) {
+        if (userLoginData.is_allowed) {
           this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
         }
       })
@@ -66,7 +64,7 @@ export class LoginService {
 
   public logOut() {
     this.cookieService.delete('csrftoken');
-    if (this.userLoginData && this.userLoginData.token) {
+    if (this.userLoginData && this.userLoginData.is_allowed) {
       // Non-login.gov auth
       this.store.dispatch(userLoggedOutAction());
     } else {

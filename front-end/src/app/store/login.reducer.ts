@@ -6,7 +6,6 @@ export const initialState: UserLoginData = {
   committee_id: '',
   email: '',
   is_allowed: false,
-  token: '',
 };
 
 export const loginReducer = createReducer(

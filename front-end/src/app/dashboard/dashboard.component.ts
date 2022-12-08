@@ -23,7 +23,6 @@ export class DashboardComponent implements OnInit {
         committee_id: this.cookieService.get(environment.ffapiCommitteeIdCookieName),
         email: this.cookieService.get(environment.ffapiEmailCookieName),
         is_allowed: true,
-        token: '',
       };
       this.cookieService.delete(environment.ffapiCommitteeIdCookieName);
       this.cookieService.delete(environment.ffapiEmailCookieName);

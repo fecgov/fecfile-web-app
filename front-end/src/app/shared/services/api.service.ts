@@ -13,12 +13,10 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root',
 })
 export class ApiService {
-  private token: string | undefined;
   private loggedInCommitteeId: string | undefined;
 
   constructor(private http: HttpClient, private store: Store, private cookieService: CookieService) {
     this.store.select(selectUserLoginData).subscribe((userLoginData: UserLoginData) => {
-      this.token = userLoginData.token;
       this.loggedInCommitteeId = userLoginData.committee_id;
     });
   }
@@ -27,7 +25,6 @@ export class ApiService {
     const csrfToken = `${this.cookieService.get('csrftoken')}`;
     const baseHeaders = {
       'Content-Type': 'application/json',
-      ...(this.token && { Authorization: `JWT ${this.token}` }),
       ...(csrfToken && { 'x-csrftoken': `${csrfToken}` }),
     };
     return { ...baseHeaders, ...headersToAdd };

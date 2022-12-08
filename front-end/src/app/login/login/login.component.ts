@@ -97,8 +97,8 @@ export class LoginComponent implements OnInit {
 
     this.loginService.signIn(email, committeeId, password).subscribe({
       next: (res: UserLoginData) => {
-        if (res.token) {
-          this.authService.doSignIn(res.token);
+        if (res.is_allowed) {
+          //this.authService.doSignIn(res.token);
           this.store.dispatch(userLoggedInAction({ payload: res }));
           this.router.navigate(['dashboard']);
         }
