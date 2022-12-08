@@ -64,7 +64,7 @@ export class LoginService {
 
   public logOut() {
     this.cookieService.delete('csrftoken');
-    if (this.userLoginData && this.userLoginData.is_allowed) {
+    if (this.userLoginData && !this.userLoginData.login_dot_gov) {
       // Non-login.gov auth
       this.store.dispatch(userLoggedOutAction());
     } else {
@@ -79,6 +79,7 @@ export class LoginService {
     this.cookieService.delete(environment.ffapiCommitteeIdCookieName);
     this.cookieService.delete(environment.ffapiEmailCookieName);
     this.cookieService.delete(environment.sessionIdCookieName);
+    this.cookieService.delete(environment.ffapiLoginDotGovCookieName);
   }
 
   public checkLocalLoginAvailability(): Observable<boolean> {
