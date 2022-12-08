@@ -89,6 +89,6 @@ describe('ContactListComponent', () => {
 
     item.transaction_count = undefined;
     status = component.canDeleteItem(item);
-    expect(status).toBeTrue();
+    expect(status).toBeFalse();
   });
 });
