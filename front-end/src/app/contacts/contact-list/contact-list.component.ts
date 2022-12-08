@@ -26,7 +26,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
-    protected override itemService: ContactService
+    public override itemService: ContactService
   ) {
     super(messageService, confirmationService, elementRef);
   }
