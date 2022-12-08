@@ -77,7 +77,7 @@
         <th pSortableColumn="occupation" id="occupation-column" role="columnheader">
           Occupation <p-sortIcon field="occupation"></p-sortIcon>
         </th>
-        <th id="buttons" role="columnheader"></th>
+        <th id="buttons" role="columnheader" style="text-align: center">Delete</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
@@ -91,7 +91,7 @@
         <td>{{ item.type | label : contactTypeLabels }}</td>
         <td>{{ item.employer }}</td>
         <td>{{ item.occupation }}</td>
-        <td>
+        <td style="text-align: center">
           <em *ngIf="canDeleteContact(item)" class="pi pi-trash" (click)="deleteItem(item)"></em>
           <em
             *ngIf="!canDeleteContact(item)"

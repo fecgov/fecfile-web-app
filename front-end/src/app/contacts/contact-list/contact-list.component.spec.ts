@@ -76,4 +76,19 @@ describe('ContactListComponent', () => {
     expect(name).toBe('');
   });
 
+  it('#canDeleteContact returns boolean status', () => {
+    const item: Contact = Contact.fromJSON({
+      transaction_count: 0,
+    });
+    let status: boolean = component.canDeleteContact(item);
+    expect(status).toBeTrue();
+
+    item.transaction_count = 2;
+    status = component.canDeleteContact(item);
+    expect(status).toBeFalse();
+
+    item.transaction_count = undefined;
+    status = component.canDeleteContact(item);
+    expect(status).toBeTrue();
+  });
 });
