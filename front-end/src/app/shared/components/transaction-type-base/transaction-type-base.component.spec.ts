@@ -7,7 +7,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
-import { Transaction } from 'app/shared/models/transaction.model';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ApiService } from 'app/shared/services/api.service';
