@@ -1,18 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, takeUntil, Observable } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
-import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
 
 @Component({
   selector: 'app-report-level-memo',
@@ -33,7 +31,6 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
   ];
 
   report: F3xSummary = new F3xSummary();
-  reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   committeeAccountId: string | undefined;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -62,10 +59,6 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = textSchema;
     this.validateService.formValidatorForm = this.form;
-
-    this.reportCodeLabelList$ = this.store
-      .select<ReportCodeLabelList>(selectReportCodeLabelList)
-      .pipe(takeUntil(this.destroy$));
 
     this.store
       .select(selectCommitteeAccount)

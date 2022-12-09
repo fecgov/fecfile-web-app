@@ -19,6 +19,10 @@ export type SchATransactionName =
   | 'Party Receipt'
   | 'PAC Receipt'
   | 'Transfer'
+  | 'Individual Recount Receipt'
+  | 'Tribal Recount Receipt'
+  | 'PAC Recount Receipt'
+  | 'Party Recount Receipt'
   | 'Earmark Receipt'
   | 'Business/Labor Organization Receipt - Non-Contribution Account'
   | 'Individual Receipt - Non-Contribution Account'
@@ -404,6 +408,54 @@ const tribalNationalPartyConventionJFTransferMemo: ChildTransactionForm = {
   },
 };
 
+const individualRecountReceipt: TransactionForm = {
+  transaction_name: 'Individual Recount Receipt',
+  transaction_category: 'OTHER',
+  transaction_group: 'A',
+  aggregation_group: 'RECOUNT_ACCOUNT',
+  ...entityIndividual,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalRecountReceipt: TransactionForm = {
+  transaction_name: 'Tribal Recount Receipt',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'RECOUNT_ACCOUNT',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const PACRecountReceipt: TransactionForm = {
+  transaction_name: 'PAC Recount Receipt',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'RECOUNT_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const partyRecountReceipt: TransactionForm = {
+  transaction_name: 'Party Recount Receipt',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'RECOUNT_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const jointFundraisingTransfer: TransactionForm = {
   transaction_name: 'Joint Fundraising Transfer',
   transaction_category: 'TRANSFERS',
@@ -587,7 +639,7 @@ const pacNationalPartyRecountAccount: TransactionForm = {
  *
  */
 
-export const groupANavTree: TransactionNavTree = {
+export const schedANavTree: TransactionNavTree = {
   //Commented out lines are branches that have not yet been implemented
   'INDIVIDUALS/PERSONS': {
     'Individual Receipt': individualReceipt,
@@ -612,6 +664,10 @@ export const groupANavTree: TransactionNavTree = {
     'Offsets to Operating Expenditures': offsetToOpex,
     'Other Committee Receipt - Non-Contribution Account': otherCommitteeReceiptNonContributionAccount,
     'Other Receipts': otherReceipt,
+    'Individual Recount Receipt': individualRecountReceipt,
+    'Tribal Recount Receipt': tribalRecountReceipt,
+    'PAC Recount Receipt': PACRecountReceipt,
+    'Party Recount Receipt': partyRecountReceipt,
     'Business/Labor Organization Receipt - Non-Contribution Account': businessLaborNonContribution,
     'Individual Receipt - Non-Contribution Account': individualNonContribution,
     'PAC National Party Recount/Legal Proceedings Account': pacNationalPartyRecountAccount,
