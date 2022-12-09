@@ -17,7 +17,6 @@ import { ContactListComponent } from './contact-list.component';
 import { ListRestResponse } from '../../shared/models/rest-api.model';
 import { Observable, of } from 'rxjs';
 import { ContactService } from 'app/shared/services/contact.service';
-import { ApiService } from 'app/shared/services/api.service';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
