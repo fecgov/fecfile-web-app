@@ -344,7 +344,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#save should navigate for update', fakeAsync(() => {
-    const testTransaction2: Transaction = SchATransaction.fromJSON(initTransactionData);
+    const testTransaction2: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     testTransaction2.id = '123';
     const testContact: Contact = new Contact();
     testContact.id = 'testId';

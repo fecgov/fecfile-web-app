@@ -8,17 +8,21 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
+import { TransactionType } from '../interfaces/transaction-type.interface';
 
-function getScheduleClass(scheduleId: string): Transaction {
-  switch (scheduleId) {
-    case 'A': {
-      return new SchATransaction();
-    }
-    case 'B': {
-      return new SchBTransaction();
-    }
+/**
+ * Given the API endpoint, return the class of the relevent schedule.
+ * @param key URL of root API endpoint
+ * @returns Transaction subclass
+ */
+function getScheduleClass(apiEndpoint: string) {
+  switch (apiEndpoint) {
+    case '/sch-a-transactions':
+      return SchATransaction;
+    case '/sch-b-transactions':
+      return SchBTransaction;
   }
-  throw new Error(`Class transaction for Schedule '${scheduleId}' not found`);
+  throw new Error(`Class transaction for API endpoint '${apiEndpoint}' not found`);
 }
 
 @Injectable({
@@ -46,15 +50,14 @@ export class TransactionService implements TableListService<Transaction> {
       );
   }
 
-  public get(id: string, scheduleId: string): Observable<Transaction> {
-    const txnClass = getScheduleClass(scheduleId);
-    return this.apiService.get<typeof txnClass>(`${txnClass.apiEndpoint}/${id}/`).pipe(
+  public get(id: string): Observable<SchATransaction> {
+    return this.apiService.get<SchATransaction>(`/sch-a-transactions/${id}/`).pipe(
       map((response) => {
-        const txn = txnClass.getJSON(response);
+        const txn = SchATransaction.fromJSON(response);
 
-        // Convert child JSON transaction objects into class transaction objects
+        // Convert child transactions into SchATransaction objects
         if (txn.children) {
-          txn.children = txn.children.map((child: Transaction) => txnClass.getJSON(child));
+          txn.children = txn.children.map((child) => SchATransaction.fromJSON(child));
         }
 
         return txn;
@@ -63,37 +66,42 @@ export class TransactionService implements TableListService<Transaction> {
   }
 
   public getPreviousTransaction(
-    transaction_id: string,
+    transactionType: TransactionType,
     contact_id: string,
     contribution_date: Date,
     aggregation_group: string
-  ): Observable<SchATransaction> {
+  ): Observable<Transaction> {
     const contributionDateString: string = this.datePipe.transform(contribution_date, 'yyyy-MM-dd') || '';
+    const transaction_id: string = transactionType?.transaction?.id || '';
+    const apiEndpoint: string = transactionType?.transaction?.apiEndpoint || '';
+    const scheduleClass = getScheduleClass(apiEndpoint);
     return this.apiService
-      .get<SchATransaction>(`/sch-a-transactions/previous/`, {
+      .get<Transaction>(`${apiEndpoint}/previous/`, {
         transaction_id,
         contact_id,
         contribution_date: contributionDateString,
         aggregation_group,
       })
-      .pipe(map((response) => SchATransaction.fromJSON(response)));
+      .pipe(map((response) => scheduleClass.fromJSON(response)));
   }
 
-  public create(schATransaction: SchATransaction): Observable<SchATransaction> {
-    const payload = schATransaction.toJson();
+  public create(transaction: Transaction): Observable<Transaction> {
+    const payload = transaction.toJson();
+    const scheduleClass = getScheduleClass(transaction.apiEndpoint);
     return this.apiService
-      .post<SchATransaction>(`/sch-a-transactions/`, payload)
-      .pipe(map((response) => SchATransaction.fromJSON(response)));
+      .post<Transaction>(`${transaction.apiEndpoint}/`, payload)
+      .pipe(map((response) => scheduleClass.fromJSON(response)));
   }
 
-  public update(schATransaction: SchATransaction): Observable<SchATransaction> {
-    const payload = schATransaction.toJson();
+  public update(transaction: Transaction): Observable<Transaction> {
+    const payload = transaction.toJson();
+    const scheduleClass = getScheduleClass(transaction.apiEndpoint);
     return this.apiService
-      .put<SchATransaction>(`/sch-a-transactions/${schATransaction.id}/`, payload)
-      .pipe(map((response) => SchATransaction.fromJSON(response)));
+      .put<Transaction>(`${transaction.apiEndpoint}/${transaction.id}/`, payload)
+      .pipe(map((response) => scheduleClass.fromJSON(response)));
   }
 
-  public delete(schATransaction: SchATransaction): Observable<null> {
-    return this.apiService.delete<null>(`/sch-a-transactions/${schATransaction.id}`);
+  public delete(transaction: Transaction): Observable<null> {
+    return this.apiService.delete<null>(`${transaction.apiEndpoint}/${transaction.id}`);
   }
 }

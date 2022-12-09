@@ -49,7 +49,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
     transactionTypeName: string
   ): Observable<TransactionType | undefined> {
     const transactionType = TransactionTypeUtils.factory(transactionTypeName) as TransactionType;
-    return this.transactionService.get(String(parentTransactionId), transactionType.scheduleId).pipe(
+    return this.transactionService.get(String(parentTransactionId)).pipe(
       map((transaction: Transaction) => {
         transactionType.transaction = transactionType.getNewTransaction();
 
@@ -78,8 +78,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
       return undefined;
     }
 
-    // Get from the API a schedule A transaction until we can refactor the router to provide the correct value.
-    return this.transactionService.get(String(transactionId), 'A').pipe(
+    return this.transactionService.get(String(transactionId)).pipe(
       mergeMap((transaction: Transaction) => {
         if (transaction.transaction_type_identifier && transaction.contact) {
           const transactionType = TransactionTypeUtils.factory(
@@ -92,7 +91,7 @@ export class TransactionTypeResolver implements Resolve<TransactionType | undefi
           if (transactionType.isDependentChild) {
             // Get parent transaction to ensure we have a full list of children
             if (transaction?.parent_transaction?.id) {
-              return this.transactionService.get(transaction.parent_transaction.id, transactionType.scheduleId).pipe(
+              return this.transactionService.get(transaction.parent_transaction.id).pipe(
                 map((transaction: Transaction) => {
                   return buildTransactionType(transaction);
                 })
