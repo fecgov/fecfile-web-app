@@ -14,9 +14,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { Contact, ContactTypes } from '../../shared/models/contact.model';
 import { ContactDetailComponent } from '../contact-detail/contact-detail.component';
 import { ContactListComponent } from './contact-list.component';
-import { ListRestResponse } from '../../shared/models/rest-api.model';
-import { Observable, of } from 'rxjs';
-import { ContactService } from 'app/shared/services/contact.service';
+import { of } from 'rxjs';
 
 describe('ContactListComponent', () => {
   let component: ContactListComponent;
@@ -26,18 +24,6 @@ describe('ContactListComponent', () => {
   contact.first_name = 'Jane';
   contact.last_name = 'Smith';
   contact.name = 'ABC Inc';
-
-  class TestContactService extends ContactService {
-    public override getTableData(pageNumber: number): Observable<ListRestResponse> {
-      return of({
-        count: 2,
-        pageNumber: pageNumber,
-        next: 'https://next',
-        previous: 'https://previous',
-        results: [Contact.fromJSON({ id: 1, transaction_count: 0 }), Contact.fromJSON({ id: 2, transaction_count: 5 })],
-      });
-    }
-  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
