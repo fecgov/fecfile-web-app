@@ -31,7 +31,7 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO implements Transac
   );
 
   generateContributionPurposeDescription(): string {
-    return `Headquarters Account JF Memo: ${
+    return `Headquarters Buildings Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction).contributor_organization_name
     }`;
   }
@@ -39,8 +39,8 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO implements Transac
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
+      transaction_type_identifier: ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     });
   }
 }

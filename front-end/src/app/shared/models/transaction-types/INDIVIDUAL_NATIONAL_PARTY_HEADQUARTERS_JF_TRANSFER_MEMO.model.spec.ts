@@ -28,6 +28,6 @@ describe('INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
 
   it('#generateContributionPurposeDescription() should generate a string', () => {
     const descrip = transactionType.generateContributionPurposeDescription();
-    expect(descrip).toBe(`Headquarters Account JF Memo: Test Org`);
+    expect(descrip).toBe(`Headquarters Buildings Account JF Memo: Test Org`);
   });
 });
