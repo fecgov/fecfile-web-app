@@ -6,7 +6,7 @@ import {
   AggregationGroups,
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT';
 import {
   CANCEL_CONTROL,
   SAVE_ANOTHER_CONTROL,
@@ -14,13 +14,13 @@ import {
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 
-export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT implements TransactionType {
+export class TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'D';
   isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT
   );
   schema = schema;
   transaction?: SchATransaction;
@@ -31,14 +31,14 @@ export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT implements Tra
   );
 
   generateContributionPurposeDescription(): string {
-    return 'Headquarters Buildings Account';
+    return 'Pres. Nominating Convention Account';
   }
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });
   }
 }
