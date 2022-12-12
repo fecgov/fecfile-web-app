@@ -29,7 +29,9 @@ export type SchATransactionName =
   | 'Joint Fundraising Transfer - National Party Recount Account'
   | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account'
   | 'Joint Fundraising Transfer - National Party Headquarters Buildings Account'
-  | 'PAC National Party Recount/Legal Proceedings Account';
+  | 'PAC National Party Recount/Legal Proceedings Account'
+  | 'Tribal National Party Headquarters Buildings Account'
+  | 'Tribal National Party Convention Account';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -632,6 +634,30 @@ const pacNationalPartyRecountAccount: TransactionForm = {
   },
 };
 
+const tribalNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
+  transaction_name: 'Tribal National Party Headquarters Buildings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalNationalPartyPresNominatingConventionAccount: TransactionForm = {
+  transaction_name: 'Tribal National Party Convention Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 /*
  *          Group A Transaction Navigation Tree
  * Every entry in this object represents a path that an E2E test
@@ -671,6 +697,8 @@ export const schedANavTree: TransactionNavTree = {
     'Business/Labor Organization Receipt - Non-Contribution Account': businessLaborNonContribution,
     'Individual Receipt - Non-Contribution Account': individualNonContribution,
     'PAC National Party Recount/Legal Proceedings Account': pacNationalPartyRecountAccount,
+    'Tribal National Party Headquarters Buildings Account': tribalNationalPartyHeadquartersBuildingsAccount,
+    'Tribal National Party Convention Account': tribalNationalPartyPresNominatingConventionAccount,
   },
 };
 
