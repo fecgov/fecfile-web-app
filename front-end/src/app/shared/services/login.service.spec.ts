@@ -45,17 +45,6 @@ describe('LoginService', () => {
     httpTestingController.verify();
   });
 
-  it('#validateCode should verify code in the back end', () => {
-    service.validateCode('jwttokenstring').subscribe((response: UserLoginData) => {
-      expect(response).toEqual(testUserLoginData);
-    });
-
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/user/login/verify`);
-    expect(req.request.method).toEqual('POST');
-    req.flush(testUserLoginData);
-    httpTestingController.verify();
-  });
-
   it('should ping the API when requesting local login availability', () => {
     const spy = spyOn(apiService, 'get').and.returnValue(of({ endpoint_available: true }));
     const result$ = service.checkLocalLoginAvailability();

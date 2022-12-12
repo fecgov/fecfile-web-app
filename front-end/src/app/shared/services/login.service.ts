@@ -1,15 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoggedInAction, userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
+import { userLoggedOutAction, userLoggedOutForLoginDotGovAction } from 'app/store/login.actions';
 import { selectUserLoginData } from 'app/store/login.selectors';
 import { environment } from 'environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { UserLoginData } from '../models/user.model';
 import { ApiService } from './api.service';
-import { SessionService } from './SessionService/session.service';
 
 type EndpointAvailability = { endpoint_available: boolean };
 
@@ -20,7 +19,6 @@ export class LoginService {
   private userLoginData: UserLoginData | undefined;
   constructor(
     private store: Store,
-    private sessionService: SessionService,
     private http: HttpClient,
     private apiService: ApiService,
     private cookieService: CookieService
@@ -38,7 +36,7 @@ export class LoginService {
    *
    * @return     {Observable}  The JSON response.
    */
-  public signIn(email: string, cmteId: string, password: string): Observable<UserLoginData> {
+  public logIn(email: string, cmteId: string, password: string): Observable<UserLoginData> {
     // Django uses cmteId+email as unique username
     const username = cmteId + email;
 
@@ -46,20 +44,6 @@ export class LoginService {
       username,
       password,
     });
-  }
-
-  public validateCode(code: string) {
-    const payload = { code: code.toString() };
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-    return this.http.post<UserLoginData>(`${environment.apiUrl}/user/login/verify`, payload, { headers: headers }).pipe(
-      tap((userLoginData: UserLoginData) => {
-        if (userLoginData.is_allowed) {
-          this.store.dispatch(userLoggedInAction({ payload: userLoginData }));
-        }
-      })
-    );
   }
 
   public logOut() {
