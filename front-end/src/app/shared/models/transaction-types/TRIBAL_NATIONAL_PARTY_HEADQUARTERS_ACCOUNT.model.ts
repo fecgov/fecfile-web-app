@@ -14,13 +14,13 @@ import {
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 
-export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT implements TransactionType {
+export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT implements TransactionType {
   scheduleId = 'A';
   componentGroupId = 'D';
   isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT
   );
   schema = schema;
   transaction?: SchATransaction;
@@ -37,7 +37,7 @@ export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT implements Tra
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
+      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     });
   }

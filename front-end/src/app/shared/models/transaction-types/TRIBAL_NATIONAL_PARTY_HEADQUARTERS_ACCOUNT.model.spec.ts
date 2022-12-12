@@ -1,11 +1,11 @@
-import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT } from './TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT.model';
+import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from './TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
 describe('TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT', () => {
-  let transactionType: TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT;
+  let transactionType: TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT();
+    transactionType = new TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT();
   });
 
   it('should create an instance', () => {
@@ -17,9 +17,7 @@ describe('TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT', () => {
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA17');
-    expect(txn.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT
-    );
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT);
   });
 
   it('#generateContributionPurposeDescription() should generate a string', () => {
