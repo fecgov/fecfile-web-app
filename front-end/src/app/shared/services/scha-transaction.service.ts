@@ -12,7 +12,7 @@ export class SchATransactionService {
   constructor(private apiService: ApiService, private datePipe: DatePipe) {}
 
   public get(id: string): Observable<SchATransaction> {
-    return this.apiService.get<SchATransaction>(`/sch-a-transactions/${id}/`).pipe(
+    return this.apiService.get<SchATransaction>(`/transactions/schedule-a/${id}/`).pipe(
       map((response) => {
         const txn = SchATransaction.fromJSON(response);
 
@@ -34,7 +34,7 @@ export class SchATransactionService {
   ): Observable<SchATransaction> {
     const contributionDateString: string = this.datePipe.transform(contribution_date, 'yyyy-MM-dd') || '';
     return this.apiService
-      .get<SchATransaction>(`/sch-a-transactions/previous/`, {
+      .get<SchATransaction>(`/transactions/schedule-a/previous/`, {
         transaction_id,
         contact_id,
         contribution_date: contributionDateString,
@@ -46,18 +46,18 @@ export class SchATransactionService {
   public create(schATransaction: SchATransaction): Observable<SchATransaction> {
     const payload = schATransaction.toJson();
     return this.apiService
-      .post<SchATransaction>(`/sch-a-transactions/`, payload)
+      .post<SchATransaction>(`/transactions/schedule-a/`, payload)
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 
   public update(schATransaction: SchATransaction): Observable<SchATransaction> {
     const payload = schATransaction.toJson();
     return this.apiService
-      .put<SchATransaction>(`/sch-a-transactions/${schATransaction.id}/`, payload)
+      .put<SchATransaction>(`/transactions/schedule-a/${schATransaction.id}/`, payload)
       .pipe(map((response) => SchATransaction.fromJSON(response)));
   }
 
   public delete(schATransaction: SchATransaction): Observable<null> {
-    return this.apiService.delete<null>(`/sch-a-transactions/${schATransaction.id}`);
+    return this.apiService.delete<null>(`/transactions/schedule-a/${schATransaction.id}`);
   }
 }

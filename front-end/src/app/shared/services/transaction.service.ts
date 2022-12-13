@@ -24,7 +24,7 @@ export class TransactionService implements TableListService<Transaction> {
     }
     // Pull list from Sch A Transactions until we have more report models built
     return this.apiService
-      .get<ListRestResponse>(`/sch-a-transactions/?page=${pageNumber}&ordering=${ordering}`, params)
+      .get<ListRestResponse>(`/transactions/schedule-a/?page=${pageNumber}&ordering=${ordering}`, params)
       .pipe(
         map((response: ListRestResponse) => {
           response.results = response.results.map((item) => SchATransaction.fromJSON(item));

@@ -10,7 +10,7 @@ export class SchATransaction extends BaseModel implements Transaction {
 
   form_type: string | undefined;
   filer_committee_id_number: string | undefined;
-  transaction_id: string | null = null; // This is a required field and must exist
+  transaction_id: string | undefined;
   back_reference_tran_id_number: string | undefined;
   back_reference_sched_name: string | undefined;
   entity_type: string | undefined;
@@ -58,7 +58,7 @@ export class SchATransaction extends BaseModel implements Transaction {
   itemized: boolean | undefined;
 
   parent_transaction: Transaction | undefined;
-  parent_transaction_id: string | undefined; // Foreign key to the SchATransaction model
+  parent_transaction_object_id: string | undefined; // Foreign key to the SchATransaction model
 
   created: string | undefined;
   updated: string | undefined;

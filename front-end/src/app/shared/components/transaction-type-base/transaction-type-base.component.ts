@@ -437,7 +437,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       );
     } else if (navigateTo === NavigationDestination.PARENT) {
       this.router.navigateByUrl(
-        `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${this.transactionType?.transaction?.parent_transaction_id}`
+        `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${this.transactionType?.transaction?.parent_transaction_object_id}`
       );
     } else {
       this.router.navigateByUrl(`/transactions/report/${this.transactionType?.transaction?.report_id}/list`);

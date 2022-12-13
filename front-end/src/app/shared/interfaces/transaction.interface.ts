@@ -10,12 +10,12 @@ export interface Transaction {
   memo_text_id: string | undefined;
   form_type: string | undefined;
   filer_committee_id_number: string | undefined;
-  transaction_id: string | null;
+  transaction_id: string | undefined;
   transaction_type_identifier: string | undefined;
   itemized: boolean | undefined;
   contribution_purpose_descrip: string | undefined;
   parent_transaction: Transaction | undefined;
-  parent_transaction_id: string | undefined;
+  parent_transaction_object_id: string | undefined;
   children: Transaction[] | undefined;
   fields_to_validate: string[] | undefined;
 }
