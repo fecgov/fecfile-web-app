@@ -30,6 +30,7 @@ import { JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/trans
 import { OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT.model';
 import { INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT.model';
 import { PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
+import { INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -63,7 +64,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
   TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
   INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
-  INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT
+  INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+  INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT
 }
 
 export class TransactionTypeUtils {
