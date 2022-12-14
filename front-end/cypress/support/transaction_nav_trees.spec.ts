@@ -46,7 +46,9 @@ export type ChildTransactionName =
   | 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo'
-  | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo';
+  | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo'
+  | 'Individual National Party Headquarters JF Transfer Memo'
+  | 'PAC National Party Headquarters JF Transfer Memo';
 
 export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG';
 
@@ -518,6 +520,30 @@ const offsetToOpex: TransactionForm = {
   },
 };
 
+const indvNationalPartyHeadQuartersJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Individual National Party Headquarters JF Transfer Memo',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityIndividual,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childOf: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
+};
+
+const pacNationalPartyHeadQuartersJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'PAC National Party Headquarters JF Transfer Memo',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childOf: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
+};
+
 const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
   transaction_name: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
   transaction_category: 'TRANSFERS',
@@ -528,6 +554,7 @@ const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: Transac
     ...memoFields,
     ...contributionFields,
   },
+  childTransactions: [indvNationalPartyHeadQuartersJFTransferMemo, pacNationalPartyHeadQuartersJFTransferMemo],
 };
 
 const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
