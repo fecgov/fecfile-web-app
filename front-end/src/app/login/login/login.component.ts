@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { LoginService } from '../../shared/services/login.service';
-import { AuthService } from '../../shared/services/AuthService/auth.service';
-import { SessionService } from '../../shared/services/SessionService/session.service';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { Store } from '@ngrx/store';
 import { userLoggedOutAction, userLoggedInAction } from 'app/store/login.actions';
@@ -31,10 +29,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
-    private authService: AuthService,
     private router: Router,
-    private store: Store,
-    private sessionService: SessionService
+    private store: Store
   ) {
     this.frm = this.fb.group({
       commiteeId: ['', Validators.required],
@@ -45,7 +41,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sessionService.destroy();
     localStorage.clear();
     this.appTitle = environment.appTitle;
     this.titleF = this.appTitle.substring(0, 3);
@@ -95,10 +90,9 @@ export class LoginComponent implements OnInit {
     const password: string = this.frm.get('loginPassword')?.value;
     const email: string = this.frm.get('emailId')?.value;
 
-    this.loginService.signIn(email, committeeId, password).subscribe({
+    this.loginService.logIn(email, committeeId, password).subscribe({
       next: (res: UserLoginData) => {
-        if (res.token) {
-          this.authService.doSignIn(res.token);
+        if (res.is_allowed) {
           this.store.dispatch(userLoggedInAction({ payload: res }));
           this.router.navigate(['dashboard']);
         }
