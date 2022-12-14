@@ -1,5 +1,6 @@
 import { OTHER_RECEIPT } from './OTHER_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
 describe('OTHER_RECEIPT', () => {
   let transactionType: OTHER_RECEIPT;
@@ -19,9 +20,7 @@ describe('OTHER_RECEIPT', () => {
     expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.OTHER_RECEIPTS);
   });
-
-  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('');
+  it('#generateContributionPurposeDescription() should not be defined', () => {
+    expect((transactionType as TransactionType).generateContributionPurposeDescription).toBe(undefined);
   });
 });

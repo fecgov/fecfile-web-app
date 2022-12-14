@@ -36,7 +36,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT implements Transactio
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  contributionPurposeDescripReadonly(): string {
+  generateContributionPurposeDescription(): string {
     return `Pres. Nominating Convention Account Transfer of JF Proceeds`;
   }
 

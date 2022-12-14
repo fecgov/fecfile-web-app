@@ -11,6 +11,7 @@ import {
   calendarSetValue,
   login,
   logout,
+  runLighthouse,
   shortWait,
   medWait,
   longWait,
@@ -21,6 +22,7 @@ Cypress.Commands.add('dropdownSetValue', dropdownSetValue);
 Cypress.Commands.add('calendarSetValue', calendarSetValue);
 Cypress.Commands.add('login', login);
 Cypress.Commands.add('logout', logout);
+Cypress.Commands.add('runLighthouse', runLighthouse);
 Cypress.Commands.add('shortWait', shortWait);
 Cypress.Commands.add('medWait', medWait);
 Cypress.Commands.add('longWait', longWait);

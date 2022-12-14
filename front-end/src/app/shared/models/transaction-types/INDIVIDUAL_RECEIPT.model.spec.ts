@@ -1,5 +1,6 @@
 import { INDIVIDUAL_RECEIPT } from './INDIVIDUAL_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
 describe('INDIVIDUAL_RECEIPT', () => {
   let transactionType: INDIVIDUAL_RECEIPT;
@@ -20,8 +21,7 @@ describe('INDIVIDUAL_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
   });
 
-  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('');
+  it('#generateContributionPurposeDescription() should not be defined', () => {
+    expect((transactionType as TransactionType).generateContributionPurposeDescription).toBe(undefined);
   });
 });

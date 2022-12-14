@@ -12,10 +12,6 @@ import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { ReportCodeLabelList } from '../../../shared/utils/reportCodeLabels.utils';
-import { updateLabelLookupAction } from '../../../store/label-lookup.actions';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
-import { f3xReportCodeDetailedLabels } from '../../../shared/utils/label.utils';
 
 @Component({
   selector: 'app-submit-f3x-step1',
@@ -32,16 +28,13 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     'state',
     'zip',
   ];
-  report: F3xSummary | undefined;
-  report_code = '';
+  report?: F3xSummary;
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
-  reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
-  f3xReportCodeDetailedLabels = f3xReportCodeDetailedLabels;
 
   constructor(
     public router: Router,
@@ -60,18 +53,11 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report as F3xSummary;
-        this.report_code = this.report?.report_code || '';
       });
     this.store
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
-
-    this.reportCodeLabelList$ = this.store
-      .select<ReportCodeLabelList>(selectReportCodeLabelList)
-      .pipe(takeUntil(this.destroy$));
-
-    this.store.dispatch(updateLabelLookupAction());
 
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = f3xSchema;

@@ -15,8 +15,6 @@ import { spinnerReducer } from './store/spinner.reducer';
 import { CommitteeAccountEffects } from './store/committee-account.effects';
 import { LoginEffects } from './store/login.effects';
 import { AppState } from './store/app-state.model';
-import { labelLookupReducer } from './store/label-lookup.reducer';
-import { LabelLookupEffects } from './store/label-lookup.effects';
 import { activeReportReducer } from './store/active-report.reducer';
 import { cashOnHandReducer } from './store/cash-on-hand.reducer';
 
@@ -51,7 +49,7 @@ import { MenuReportComponent } from './layout/sidebar/menu-report/menu-report.co
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
-    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'reportCodeLabelList', 'activeReport', 'cashOnHand'],
+    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'activeReport', 'cashOnHand'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
@@ -84,13 +82,12 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         committeeAccount: committeeAccountReducer,
         spinnerOn: spinnerReducer,
         userLoginData: loginReducer,
-        reportCodeLabelList: labelLookupReducer,
         activeReport: activeReportReducer,
         cashOnHand: cashOnHandReducer,
       },
       { metaReducers }
     ),
-    EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects, LabelLookupEffects]),
+    EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
     MenubarModule,
     PanelMenuModule,
     PanelModule,

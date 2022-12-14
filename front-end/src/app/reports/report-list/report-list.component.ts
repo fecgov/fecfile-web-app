@@ -1,17 +1,14 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report, CashOnHand } from '../../shared/interfaces/report.interface';
 import { LabelList } from '../../shared/utils/label.utils';
-import { ReportCodeLabelList } from '../../shared/utils/reportCodeLabels.utils';
 import { ReportService } from '../../shared/services/report.service';
 import { F3xSummary, F3xFormTypeLabels, F3xFormVersionLabels } from 'app/shared/models/f3x-summary.model';
 import { Router } from '@angular/router';
-import { selectReportCodeLabelList } from 'app/store/label-lookup.selectors';
-import { updateLabelLookupAction } from '../../store/label-lookup.actions';
 
 @Component({
   selector: 'app-report-list',
@@ -20,7 +17,6 @@ import { updateLabelLookupAction } from '../../store/label-lookup.actions';
 export class ReportListComponent extends TableListBaseComponent<Report> implements OnInit, OnDestroy {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   f3xFormVerionLabels: LabelList = F3xFormVersionLabels;
-  reportCodeLabelList$: Observable<ReportCodeLabelList> = new Observable<ReportCodeLabelList>();
   cashOnHand: CashOnHand = {
     report_id: undefined,
     value: undefined,
@@ -41,11 +37,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   override ngOnInit() {
     this.loading = true;
     this.loadItemService(this.itemService);
-    this.reportCodeLabelList$ = this.store
-      .select<ReportCodeLabelList>(selectReportCodeLabelList)
-      .pipe(takeUntil(this.destroy$));
-
-    this.store.dispatch(updateLabelLookupAction());
 
     this.store
       .select(selectCashOnHand)

@@ -1,12 +1,12 @@
-import { F3xReportCode } from '../models/f3x-summary.model';
 import { WebPrintSubmission } from '../models/webprint-submission.model';
 import { UploadSubmission } from '../models/upload-submission.model';
+import { F3xReportCodes } from '../utils/report-code.utils';
 
 export interface Report {
   id: string | undefined;
   form_type: string;
   filer_committee_id_number: string | undefined;
-  report_code: F3xReportCode | undefined;
+  report_code: F3xReportCodes | undefined;
   coverage_from_date: Date | undefined;
   coverage_through_date: Date | undefined;
   webprint_submission: WebPrintSubmission | undefined;

@@ -27,10 +27,6 @@ export class PAC_RECEIPT implements TransactionType {
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  contributionPurposeDescripReadonly(): string {
-    return '';
-  }
-
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11C',

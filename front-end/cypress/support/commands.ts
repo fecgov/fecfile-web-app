@@ -1,3 +1,5 @@
+import '@cypress-audit/lighthouse/commands';
+
 /**
  * login()
  *
@@ -202,6 +204,31 @@ export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   const Day: string = dateObj.getDate().toString();
   cy.get('td').find('span').not('.p-disabled').parent().contains(Day).click({ force: true });
   cy.shortWait();
+}
+
+export function runLighthouse(directory: string, filename: string) {
+  cy.lighthouse(
+    {
+      performance: 0,
+      accessibility: 90,
+      'best-practices': 0,
+      seo: 0,
+      pwa: 0,
+    },
+    {
+      output: 'html',
+      formFactor: 'desktop',
+      screenEmulation: {
+        mobile: false,
+        disable: false,
+        width: Cypress.config('viewportWidth'),
+        height: Cypress.config('viewportHeight'),
+        deviceScaleRatio: 1,
+      },
+    }
+  ).then(() => {
+    cy.exec(`mv lighthouse.html cypress/lighthouse/${directory}/${filename}.html`);
+  });
 }
 
 // shortWait() is appropriate for waiting for the UI to update after changing a field

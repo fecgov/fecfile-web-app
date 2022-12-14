@@ -18,11 +18,12 @@ describe('JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT);
+      ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT
+    );
   });
 
-  it('#contributionPurposeDescripReadonly() should return appropriate retval', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+  it('#generateContributionPurposeDescription() should return appropriate retval', () => {
+    const descrip = transactionType.generateContributionPurposeDescription();
     expect(descrip).toBe(`Pres. Nominating Convention Account Transfer of JF Proceeds`);
   });
 });
