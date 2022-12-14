@@ -145,12 +145,9 @@ export enum ScheduleATransactionTypes {
   PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PARTY_NP_RECNT_ACC',
   PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'TRIB_NP_RECNT_ACC',
-  INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT = 'IND_NP_HQ_ACC',
+  INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
-  TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT = 'TRIB_NP_HQ_ACC',
-  PARTY_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT = 'PARTY_NP_HQ_ACC',
-  PAC_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT = 'PAC_NP_HQ_ACC',
   TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'IND_NP_CONVEN_ACC',
   PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'PARTY_NP_CONVEN_ACC',
@@ -215,7 +212,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer - Federal Election Activity'],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    'Joint Fundraising Transfer - National Party Recount Account',
+    'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
@@ -269,15 +266,24 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT, 'Party Recount Receipt'],
   [ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT, 'PAC Recount Receipt'],
   [ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT, 'Tribal Recount Receipt'],
-  [ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT, 'Individual National Party Recount Account'],
-  [ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT, 'Party National Party Recount Account'],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'Individual National Party Recount/Legal Proceedings Account',
+  ],
+  [
+    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'Party National Party Recount/Legal Proceedings Account',
+  ],
   [
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'PAC National Party Recount/Legal Proceedings Account',
   ],
-  [ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT, 'Tribal National Party Recount Account'],
   [
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'Tribal National Party Recount/Legal Proceedings Account',
+  ],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Individual National Party Headquarters Buildings Account',
   ],
   [
