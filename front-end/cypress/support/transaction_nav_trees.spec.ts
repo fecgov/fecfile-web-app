@@ -31,7 +31,9 @@ export type SchATransactionName =
   | 'Joint Fundraising Transfer - National Party Headquarters Buildings Account'
   | 'PAC National Party Recount/Legal Proceedings Account'
   | 'PAC National Party Headquarters Buildings Account'
-  | 'Party National Party Headquarters Buildings Account';
+  | 'Party National Party Headquarters Buildings Account'
+  | 'Tribal National Party Headquarters Buildings Account'
+  | 'Tribal National Party Convention Account';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -46,7 +48,9 @@ export type ChildTransactionName =
   | 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo'
-  | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo';
+  | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo'
+  | 'Individual National Party Headquarters JF Transfer Memo'
+  | 'PAC National Party Headquarters JF Transfer Memo';
 
 export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG';
 
@@ -518,6 +522,30 @@ const offsetToOpex: TransactionForm = {
   },
 };
 
+const indvNationalPartyHeadQuartersJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Individual National Party Headquarters JF Transfer Memo',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityIndividual,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childOf: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
+};
+
+const pacNationalPartyHeadQuartersJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'PAC National Party Headquarters JF Transfer Memo',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childOf: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
+};
+
 const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
   transaction_name: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
   transaction_category: 'TRANSFERS',
@@ -528,6 +556,7 @@ const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: Transac
     ...memoFields,
     ...contributionFields,
   },
+  childTransactions: [indvNationalPartyHeadQuartersJFTransferMemo, pacNationalPartyHeadQuartersJFTransferMemo],
 };
 
 const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
@@ -646,12 +675,36 @@ const pacNationalPartyHeadquartersReceipt: TransactionForm = {
   },
 };
 
+const tribalNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
+  transaction_name: 'Tribal National Party Headquarters Buildings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const partyNationalPartyHeadquartersReceipt: TransactionForm = {
   transaction_name: 'Party National Party Headquarters Buildings Account',
   transaction_category: 'OTHER',
   transaction_group: 'F',
   aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalNationalPartyPresNominatingConventionAccount: TransactionForm = {
+  transaction_name: 'Tribal National Party Convention Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  ...entityOrganization,
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -699,6 +752,8 @@ export const schedANavTree: TransactionNavTree = {
     'PAC National Party Recount/Legal Proceedings Account': pacNationalPartyRecountAccount,
     'PAC National Party Headquarters Buildings Account': pacNationalPartyHeadquartersReceipt,
     'Party National Party Headquarters Buildings Account': partyNationalPartyHeadquartersReceipt,
+    'Tribal National Party Headquarters Buildings Account': tribalNationalPartyHeadquartersBuildingsAccount,
+    'Tribal National Party Convention Account': tribalNationalPartyPresNominatingConventionAccount,
   },
 };
 
