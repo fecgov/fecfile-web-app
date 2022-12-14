@@ -26,7 +26,7 @@ export type SchATransactionName =
   | 'Earmark Receipt'
   | 'Business/Labor Organization Receipt - Non-Contribution Account'
   | 'Individual Receipt - Non-Contribution Account'
-  | 'Joint Fundraising Transfer - National Party Recount Account'
+  | 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account'
   | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account'
   | 'Joint Fundraising Transfer - National Party Headquarters Buildings Account'
   | 'PAC National Party Recount/Legal Proceedings Account'
@@ -348,7 +348,7 @@ const indvNPRJFTransMemo: ChildTransactionForm = {
   transaction_group: 'A',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityIndividual,
-  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  childOf: 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -360,7 +360,7 @@ const tribalNPRJFTransMemo: ChildTransactionForm = {
   transaction_group: 'D',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityOrganization,
-  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  childOf: 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -372,7 +372,7 @@ const pacNPRJFTransMemo: ChildTransactionForm = {
   transaction_group: 'F',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityCommittee,
-  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  childOf: 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -482,7 +482,7 @@ const jointFundraisingTransfer: TransactionForm = {
 };
 
 const jointFundraisingTransferNationalPartyRecount: TransactionForm = {
-  transaction_name: 'Joint Fundraising Transfer - National Party Recount Account',
+  transaction_name: 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   transaction_category: 'TRANSFERS',
   transaction_group: 'E',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
@@ -745,7 +745,8 @@ export const schedANavTree: TransactionNavTree = {
   TRANSFERS: {
     Transfer: transfer,
     'Joint Fundraising Transfer': jointFundraisingTransfer,
-    'Joint Fundraising Transfer - National Party Recount Account': jointFundraisingTransferNationalPartyRecount,
+    'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account':
+      jointFundraisingTransferNationalPartyRecount,
     'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account':
       jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
     'Joint Fundraising Transfer - National Party Headquarters Buildings Account':
