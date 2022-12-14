@@ -260,6 +260,10 @@ label.disabled {
   border-bottom-left-radius: 0;
 }
 
+.pi-trash {
+  cursor: pointer;
+}
+
 .pi-trash.disabled {
   opacity: 30%;
 }
