@@ -34,9 +34,8 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
     'contributor_employer',
     'contributor_occupation',
     'memo_code',
-    'memo_text_description',
+    'memo_text_input',
   ];
-  readOnlyMemo = false;
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
   );
@@ -49,22 +48,17 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router,
-    protected override fecDatePipe: FecDatePipe,
+    protected override fecDatePipe: FecDatePipe
   ) {
-    super(messageService, transactionService, contactService, validateService, confirmationService, fb, router, fecDatePipe);
-  }
-
-  override ngOnInit(): void {
-    super.ngOnInit();
-    if (this.memoCodeMustBeTrue()) {
-      this.readOnlyMemo = true;
-      this.form.get('memo_code')?.setValue(true);
-    }
-  }
-
-  protected memoCodeMustBeTrue(): boolean {
-    // Look at validation schema to determine if the memo_code must be true in all cases.
-    const memoCodeSchema = this.transactionType?.schema.properties['memo_code'];
-    return !!memoCodeSchema?.const;
+    super(
+      messageService,
+      transactionService,
+      contactService,
+      validateService,
+      confirmationService,
+      fb,
+      router,
+      fecDatePipe
+    );
   }
 }

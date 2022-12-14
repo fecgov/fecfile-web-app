@@ -51,11 +51,10 @@ describe('QA Script 125 (Sprint 10)', () => {
 
       const contact = generateContactIndividual({});
       const transaction = generateTransactionObject({
-        'INDIVIDUALS/PERSONS': {
-          'Individual Receipt': {},
-        },
+        transaction_name: 'Individual Receipt',
+        contact: contact,
       });
-      cy.createTransactionSchA(transaction, contact);
+      cy.createTransactionSchA(transaction);
       cy.medWait();
     }
 

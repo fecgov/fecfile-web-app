@@ -3,6 +3,7 @@ import { Transaction } from '../interfaces/transaction.interface';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { Contact } from './contact.model';
+import { MemoText } from './memo-text.model';
 
 export class SchATransaction extends BaseModel implements Transaction {
   id: string | undefined;
@@ -68,6 +69,9 @@ export class SchATransaction extends BaseModel implements Transaction {
   contact: Contact | undefined;
   contact_id: string | undefined; // Foreign key to the Contact model
 
+  memo_text: MemoText | undefined;
+  memo_text_id: string | undefined;
+
   children: Transaction[] | undefined;
 
   fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
@@ -121,8 +125,8 @@ export enum ScheduleATransactionTypes {
   JOINT_FUNDRAISING_TRANSFER = 'JOINT_FUNDRAISING_TRANSFER',
   IN_KIND_TRANSFER = 'IK_TRAN',
   IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
-  JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRAN_NP_RECNT_ACC',
-  JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'JF_TRAN_NP_CONVEN_ACC',
+  JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'JF_TRAN_NP_HQ_ACC',
   // Refunds
   REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES = 'REF_TO_FED_CAN',
@@ -130,13 +134,13 @@ export enum ScheduleATransactionTypes {
   // Other
   OFFSET_TO_OPERATING_EXPENDITURES = 'OFFSET_TO_OPERATING_EXPENDITURES',
   OTHER_RECEIPTS = 'OTHER_RECEIPT',
-  IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'IND_REC_NON_CONT_ACC',
-  OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'OTH_CMTE_NON_CONT_ACC',
-  BUSINESS_LABOR_ORG_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'BUS_LAB_NON_CONT_ACC',
-  INDIVIDUAL_RECOUNT_RECEIPT = 'IND_RECNT_REC',
-  PARTY_RECOUNT_RECEIPT = 'PARTY_RECNT_REC',
-  PAC_RECOUNT_RECEIPT = 'PAC_RECNT_REC',
-  TRIBAL_RECOUNT_RECEIPT = 'TRIB_RECNT_REC',
+  INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT',
+  OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT = 'OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT',
+  BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT = 'BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT',
+  INDIVIDUAL_RECOUNT_RECEIPT = 'INDIVIDUAL_RECOUNT_RECEIPT',
+  PARTY_RECOUNT_RECEIPT = 'PARTY_RECOUNT_RECEIPT',
+  PAC_RECOUNT_RECEIPT = 'PAC_RECOUNT_RECEIPT',
+  TRIBAL_RECOUNT_RECEIPT = 'TRIBAL_RECOUNT_RECEIPT',
   INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'IND_NP_RECNT_ACC',
   PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PARTY_NP_RECNT_ACC',
   PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PAC_NP_RECNT_ACC',
@@ -158,6 +162,13 @@ export enum ScheduleATransactionTypes {
   INDIVIDUAL_JF_TRANSFER_MEMO = 'INDIVIDUAL_JF_TRANSFER_MEMO',
   PARTY_JF_TRANSFER_MEMO = 'PARTY_JF_TRANSFER_MEMO',
   TRIBAL_JF_TRANSFER_MEMO = 'TRIBAL_JF_TRANSFER_MEMO',
+  INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
+  PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
+  TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
+  PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
+  INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
+  PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
+  TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -197,15 +208,31 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer - Federal Election Activity'],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    'Joint Fundraising Transfer - National Party Recount Account',
+    'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    'Joint Fundraising Transfer - National Party Convention Account',
+    'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
   ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Joint Fundraising Transfer - National Party Headquarters Account',
+  ],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    'Individual National Party Pres. Nominating Convention Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    'PAC National Party Pres. Nominating Convention Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',
   ],
   // Refunds
   [
@@ -219,23 +246,38 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   // Other
   [ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
   [ScheduleATransactionTypes.OTHER_RECEIPTS, 'Other Receipts'],
-  [ScheduleATransactionTypes.IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT, 'Individual Receipt - Non-Contribution Account'],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+    'Individual Receipt - Non-Contribution Account',
+  ],
   [
     ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
     'Other Committee Receipt - Non-Contribution Account',
   ],
   [
-    ScheduleATransactionTypes.BUSINESS_LABOR_ORG_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+    ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
     'Business/Labor Organization Receipt - Non-Contribution Account',
   ],
   [ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT, 'Individual Recount Receipt'],
   [ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT, 'Party Recount Receipt'],
   [ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT, 'PAC Recount Receipt'],
   [ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT, 'Tribal Recount Receipt'],
-  [ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT, 'Individual National Party Recount Account'],
-  [ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT, 'Party National Party Recount Account'],
-  [ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT, 'PAC National Party Recount Account'],
-  [ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT, 'Tribal National Party Recount Account'],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'Individual National Party Recount/Legal Proceedings Account',
+  ],
+  [
+    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'Party National Party Recount/Legal Proceedings Account',
+  ],
+  [
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'PAC National Party Recount/Legal Proceedings Account',
+  ],
+  [
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'Tribal National Party Recount/Legal Proceedings Account',
+  ],
   [
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
     'Individual National Party Headquarters Buildings Account',
@@ -271,15 +313,27 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
     'Earmark Receipt for Headquarters Account (Contribution)',
   ],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'Individual National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'PAC National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ],
+  [
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo',
+  ],
 ];
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',
   LINE_15 = 'LINE_15',
   LINE_16 = 'LINE_16',
-  NPARTY_CONVENTION = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
-  NPARTY_HEADQUARTERS = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
-  NPARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  NATIONAL_PARTY_CONVENTION_ACCOUNT = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  NATIONAL_PARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   NON_CONTRIBUTION_ACCOUNT = 'NON_CONTRIBUTION_ACCOUNT',
   OTHER_RECEIPTS = 'OTHER_RECEIPTS',
   RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',

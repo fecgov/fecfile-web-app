@@ -92,9 +92,9 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
         return [
           ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
           ScheduleATransactionTypes.OTHER_RECEIPTS,
-          ScheduleATransactionTypes.IND_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+          ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
           ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
-          ScheduleATransactionTypes.BUSINESS_LABOR_ORG_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
+          ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
           ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT,
           ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
           ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT,

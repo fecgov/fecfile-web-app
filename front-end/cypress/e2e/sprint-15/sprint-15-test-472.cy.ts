@@ -18,68 +18,70 @@ const contactCommittee = generateContactCommittee({});
 
 //Individual Transactions
 const indvRecTree = {
-  'INDIVIDUALS/PERSONS': {
-    'Individual Receipt': {
-      contributionDate: new Date('12/12/2012'),
-      contributionAmount: _.random(10, 500, false),
-    },
+  transaction_name: 'Individual Receipt',
+  fields: {
+    contributionDate: new Date('12/12/2012'),
+    contributionAmount: _.random(10, 500, false),
   },
+  contact: contactIndividual,
+  isNewContact: false,
 };
-const tTreeIndividualA = generateTransactionObject(indvRecTree);
-const tTreeIndividualB = generateTransactionObject(indvRecTree);
-const transactionIndvA = tTreeIndividualA['INDIVIDUALS/PERSONS']['Individual Receipt'];
-const transactionIndvB = tTreeIndividualB['INDIVIDUALS/PERSONS']['Individual Receipt'];
+const offsetToOpexTree = {
+  transaction_name: 'Offsets to Operating Expenditures',
+  fields: {
+    contributionDate: new Date('12/12/2012'),
+    contributionAmount: _.random(10, 500, false),
+  },
+  contact: contactIndividual,
+  isNewContact: false,
+};
 
-const tTreeIndividualC = generateTransactionObject(indvRecTree);
-const transactionIndvC = tTreeIndividualC['INDIVIDUALS/PERSONS']['Individual Receipt'];
-transactionIndvC['contributionDate'] = new Date('12/12/2013');
+const transactionIndvA = generateTransactionObject(indvRecTree);
+const transactionIndvB = generateTransactionObject(indvRecTree);
+const transactionIndvC = generateTransactionObject(indvRecTree);
+transactionIndvC.fields['contributionDate'] = new Date('12/12/2013');
+const transactionIndvD = generateTransactionObject(offsetToOpexTree);
 
 //Organization Transactions
 const orgRecTree = {
-  'INDIVIDUALS/PERSONS': {
-    'Tribal Receipt': {
-      contributionDate: new Date('12/12/2012'),
-      contributionAmount: _.random(10, 500, false),
-    },
+  transaction_name: 'Tribal Receipt',
+  fields: {
+    contributionDate: new Date('12/12/2012'),
+    contributionAmount: _.random(10, 500, false),
   },
+  contact: contactOrganization,
+  isNewContact: false,
 };
-const tTreeOrganizationA = generateTransactionObject(orgRecTree);
-const tTreeOrganizationB = generateTransactionObject(orgRecTree);
-const transactionOrgA = tTreeOrganizationA['INDIVIDUALS/PERSONS']['Tribal Receipt'];
-const transactionOrgB = tTreeOrganizationB['INDIVIDUALS/PERSONS']['Tribal Receipt'];
-
-const tTreeOrganizationC = generateTransactionObject(orgRecTree);
-const transactionOrgC = tTreeOrganizationC['INDIVIDUALS/PERSONS']['Tribal Receipt'];
-transactionOrgC['contributionDate'] = new Date('12/12/2013');
+const otherRecTree = {
+  transaction_name: 'Other Receipts',
+  fields: {
+    contributionDate: new Date('12/12/2012'),
+    contributionAmount: _.random(10, 500, false),
+  },
+  contact: contactOrganization,
+  isNewContact: false,
+};
+const transactionOrgA = generateTransactionObject(orgRecTree);
+const transactionOrgB = generateTransactionObject(orgRecTree);
+const transactionOrgC = generateTransactionObject(orgRecTree);
+transactionOrgC.fields['contributionDate'] = new Date('12/12/2013');
+const transactionOrgD = generateTransactionObject(otherRecTree);
 
 //JF Transfer Transfers
 const JFTransTree = {
-  TRANSFERS: {
-    'Joint Fundraising Transfer': {
-      contributionDate: new Date('12/12/2012'),
-      contributionAmount: _.random(10, 250, false),
-    },
+  transaction_name: 'Party Receipt',
+  fields: {
+    contributionDate: new Date('12/12/2012'),
+    contributionAmount: _.random(10, 250, false),
   },
+  contact: contactCommittee,
+  isNewContact: false,
 };
-const tTreeJFTransA = generateTransactionObject(JFTransTree);
-const tTreeJFTransB = generateTransactionObject(JFTransTree);
-const transactionJFA = tTreeJFTransA['TRANSFERS']['Joint Fundraising Transfer'];
-const transactionJFB = tTreeJFTransB['TRANSFERS']['Joint Fundraising Transfer'];
 
-const tTreeJFTransC = generateTransactionObject(JFTransTree);
-const transactionJFC = tTreeJFTransC['TRANSFERS']['Joint Fundraising Transfer'];
-transactionJFC['contributionDate'] = new Date('12/12/2013');
-
-//JF Transfer Memos
-const JFMemoA = transactionJFA['childTransactions'][0];
-JFMemoA['contributionDate'] = new Date('12/12/2012');
-JFMemoA['contributionAmount'] = _.random(10, 200, false);
-const JFMemoB = transactionJFB['childTransactions'][0];
-JFMemoB['contributionDate'] = new Date('12/12/2012');
-JFMemoB['contributionAmount'] = _.random(10, 200, false);
-const JFMemoC = transactionJFC['childTransactions'][0];
-JFMemoC['contributionDate'] = new Date('12/12/2013');
-JFMemoC['contributionAmount'] = _.random(10, 500, false);
+const transactionPartyA = generateTransactionObject(JFTransTree);
+const transactionPartyB = generateTransactionObject(JFTransTree);
+const transactionPartyC = generateTransactionObject(JFTransTree);
+transactionPartyC.fields['contributionDate'] = new Date('12/12/2013');
 
 function testAggregation(contact: Contact, navigation: [string, string], transactions: Transaction[]) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
@@ -92,27 +94,19 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
   cy.shortWait();
   cy.navigateTransactionAccordion(navigation[0], navigation[1]);
 
-  cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
-  cy.medWait();
-  cy.contains('li', 'In contacts').click({ force: true });
-  cy.medWait();
   enterTransactionSchA(transactions[0]);
   cy.shortWait();
-  cy.get('button[label="Save & add another"]').click();
+  cy.contains('button', 'Save & add another').click();
   cy.shortWait();
 
-  cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
-  cy.medWait();
-  cy.contains('li', 'In contacts').click({ force: true });
-  cy.medWait();
   enterTransactionSchA(transactions[1]);
   cy.longWait();
   cy.contains('Additional Information').click(); // Field loses focus refreshing the value of contribution aggregate
   cy.shortWait();
-  const aggregate = transactions[0]['contributionAmount'] + transactions[1]['contributionAmount'];
+  const aggregate = transactions[0].fields['contributionAmount'] + transactions[1].fields['contributionAmount'];
   cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]').find('input').should('contain.value', aggregate);
 
-  cy.get('button[label="Save & add another"]').click();
+  cy.contains('button', 'Save & add another').click();
   cy.shortWait();
 
   cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
@@ -125,10 +119,24 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
   cy.shortWait();
   cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]')
     .find('input')
-    .should('contain.value', transactions[2]['contributionAmount']);
+    .should('contain.value', transactions[2].fields['contributionAmount']);
+
+  if (transactions[3]) {
+    cy.contains('button', 'Cancel').click();
+    cy.medWait();
+    cy.get('button[label="Add new transaction"]').click();
+    cy.navigateTransactionAccordion(transactions[3].transaction_category, transactions[3].transaction_name);
+
+    enterTransactionSchA(transactions[3]);
+    cy.contains('Additional Information').click(); // Field loses focus refreshing the value of contribution aggregate
+    cy.shortWait();
+    cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]')
+      .find('input')
+      .should('contain.value', transactions[3].fields['contributionAmount']);
+  }
 }
 
-describe('QA Script 244 (Sprint 8)', () => {
+describe('QA Script 472 (Sprint 15)', () => {
   after(() => {
     cy.login();
     cy.visit('/dashboard');
@@ -167,76 +175,19 @@ describe('QA Script 244 (Sprint 8)', () => {
     testAggregation(
       contactIndividual,
       ['INDIVIDUALS/PERSONS', 'Individual Receipt'],
-      [transactionIndvA, transactionIndvB, transactionIndvC]
+      [transactionIndvA, transactionIndvB, transactionIndvC, transactionIndvD]
     );
 
     testAggregation(
       contactOrganization,
       ['INDIVIDUALS/PERSONS', 'Tribal Receipt'],
-      [transactionOrgA, transactionOrgB, transactionOrgC]
+      [transactionOrgA, transactionOrgB, transactionOrgC, transactionIndvD]
     );
 
     testAggregation(
       contactCommittee,
-      ['TRANSFERS', 'Joint Fundraising Transfer'],
-      [transactionJFA, transactionJFB, transactionJFC]
+      ['REGISTERED FILERS', 'Party Receipt'],
+      [transactionPartyA, transactionPartyB, transactionPartyC]
     );
-  });
-
-  it('Tests Memo aggregations', () => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-    cy.medWait();
-
-    cy.navigateToTransactionManagement();
-    cy.longWait();
-    cy.contains('a', 'JOINT_FUNDRAISING_TRANSFER').click();
-    cy.medWait();
-    cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
-    cy.shortWait();
-    cy.contains('li', 'PAC JF Transfer Memo').click();
-    cy.longWait();
-
-    const contact = contactCommittee;
-    const transactions = [JFMemoA, JFMemoB, JFMemoC];
-    cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
-    cy.medWait();
-    cy.contains('li', 'In contacts').click({ force: true });
-    cy.medWait();
-    enterTransactionSchA(transactions[0]);
-    cy.shortWait();
-    cy.get('button[label="Save & add another Memo"]').click();
-    cy.shortWait();
-
-    cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
-    cy.medWait();
-    cy.contains('li', 'In contacts').click({ force: true });
-    cy.medWait();
-    enterTransactionSchA(transactions[1]);
-    cy.longWait();
-    cy.contains('Additional Information').click(); // Field loses focus refreshing the value of contribution aggregate
-    cy.shortWait();
-    const aggregate =
-      transactions[0]['contributionAmount'] +
-      transactions[1]['contributionAmount'] +
-      transactionJFA['contributionAmount'] +
-      transactionJFB['contributionAmount'];
-    cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]').find('input').should('contain.value', aggregate);
-
-    cy.get('button[label="Save & add another Memo"]').click();
-    cy.shortWait();
-
-    cy.get('p-autocomplete[formcontrolname="selectedContact"]').safeType(contact['name']);
-    cy.medWait();
-    cy.contains('li', 'In contacts').click({ force: true });
-    cy.medWait();
-    enterTransactionSchA(transactions[2]);
-    cy.longWait();
-    cy.contains('Additional Information').click(); // Field loses focus refreshing the value of contribution aggregate
-    cy.shortWait();
-    cy.get('p-inputnumber[formcontrolname="contribution_aggregate"]')
-      .find('input')
-      .should('contain.value', transactions[2]['contributionAmount']);
   });
 });
