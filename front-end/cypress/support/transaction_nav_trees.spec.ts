@@ -30,6 +30,8 @@ export type SchATransactionName =
   | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account'
   | 'Joint Fundraising Transfer - National Party Headquarters Buildings Account'
   | 'PAC National Party Recount/Legal Proceedings Account'
+  | 'PAC National Party Headquarters Buildings Account'
+  | 'Party National Party Headquarters Buildings Account'
   | 'Tribal National Party Headquarters Buildings Account'
   | 'Tribal National Party Convention Account';
 
@@ -661,12 +663,36 @@ const pacNationalPartyRecountAccount: TransactionForm = {
   },
 };
 
+const pacNationalPartyHeadquartersReceipt: TransactionForm = {
+  transaction_name: 'PAC National Party Headquarters Buildings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const tribalNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
   transaction_name: 'Tribal National Party Headquarters Buildings Account',
   transaction_category: 'OTHER',
   transaction_group: 'D',
   aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const partyNationalPartyHeadquartersReceipt: TransactionForm = {
+  transaction_name: 'Party National Party Headquarters Buildings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityCommittee,
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -724,6 +750,8 @@ export const schedANavTree: TransactionNavTree = {
     'Business/Labor Organization Receipt - Non-Contribution Account': businessLaborNonContribution,
     'Individual Receipt - Non-Contribution Account': individualNonContribution,
     'PAC National Party Recount/Legal Proceedings Account': pacNationalPartyRecountAccount,
+    'PAC National Party Headquarters Buildings Account': pacNationalPartyHeadquartersReceipt,
+    'Party National Party Headquarters Buildings Account': partyNationalPartyHeadquartersReceipt,
     'Tribal National Party Headquarters Buildings Account': tribalNationalPartyHeadquartersBuildingsAccount,
     'Tribal National Party Convention Account': tribalNationalPartyPresNominatingConventionAccount,
   },
