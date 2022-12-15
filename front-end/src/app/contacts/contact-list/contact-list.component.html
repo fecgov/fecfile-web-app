@@ -77,33 +77,32 @@
         <th pSortableColumn="occupation" id="occupation-column" role="columnheader">
           Occupation <p-sortIcon field="occupation"></p-sortIcon>
         </th>
-        <th id="buttons" role="columnheader"></th>
+        <th id="buttons" role="columnheader" style="text-align: center">Delete</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
         <td>
-          <p-tableCheckbox [value]="item" [ariaLabel]="'select ' + displayName(item)"></p-tableCheckbox>
+          <p-tableCheckbox
+            [value]="item"
+            [disabled]="!canDeleteItem(item)"
+            [ariaLabel]="'select ' + displayName(item)"
+          ></p-tableCheckbox>
         </td>
-        <td>{{ displayName(item) }}</td>
-        <td>{{ item.type | label: contactTypeLabels }}</td>
+        <td>
+          <a (click)="editItem(item)">{{ displayName(item) }}</a>
+        </td>
+        <td>{{ item.type | label : contactTypeLabels }}</td>
         <td>{{ item.employer }}</td>
         <td>{{ item.occupation }}</td>
-        <td>
-          <p-button
-            pRipple
-            icon="pi pi-pencil"
-            styleClass="p-button-rounded p-button-success mr-2"
-            (click)="editItem(item)"
-            [ariaLabel]="'edit ' + displayName(item)"
-          ></p-button>
-          <p-button
-            pRipple
-            icon="pi pi-trash"
-            styleClass="p-button-rounded p-button-warning"
-            (click)="deleteItem(item)"
-            [ariaLabel]="'delete ' + displayName(item)"
-          ></p-button>
+        <td style="text-align: center">
+          <em
+            class="pi pi-trash"
+            [ngClass]="{ disabled: !canDeleteItem(item) }"
+            pTooltip="This contact can not be deleted because it has associated transactions."
+            [tooltipDisabled]="canDeleteItem(item)"
+            (click)="canDeleteItem(item) && deleteItem(item)"
+          ></em>
         </td>
       </tr>
     </ng-template>

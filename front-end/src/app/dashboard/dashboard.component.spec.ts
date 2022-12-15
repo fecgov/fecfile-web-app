@@ -42,13 +42,13 @@ describe('DashboardComponent', () => {
     const testCommitteeId = 'testCommitteeId';
     const testEmail = 'testEmail';
     const testIsAllowed = true;
-    const testToken = '';
+    const testLoginDotGov = false;
 
     const expectedUserLoginData: UserLoginData = {
       committee_id: testCommitteeId,
       email: testEmail,
       is_allowed: testIsAllowed,
-      token: testToken,
+      login_dot_gov: testLoginDotGov,
     };
     spyOn(cookieService, 'check').and.returnValue(true);
     spyOn(cookieService, 'get').and.callFake((name: string) => {
@@ -57,6 +57,9 @@ describe('DashboardComponent', () => {
       }
       if (name === environment.ffapiEmailCookieName) {
         return testEmail;
+      }
+      if (name === environment.ffapiLoginDotGovCookieName) {
+        return testLoginDotGov.toString();
       }
       throw Error('fail!');
     });

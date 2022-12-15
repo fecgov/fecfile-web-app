@@ -16,13 +16,15 @@ class TestTableListBaseComponent extends TableListBaseComponent<string> {
 }
 
 class TestTableListService implements TableListService<string> {
+  tableResults: string[] = ['abc', 'def'];
+
   getTableData(pageNumber: number): Observable<ListRestResponse> {
     return of({
       count: 2,
       pageNumber: pageNumber,
       next: 'https://next',
       previous: 'https://previous',
-      results: ['abc', 'def'],
+      results: this.tableResults,
     });
   }
   create(item: string): Observable<string> {
@@ -103,6 +105,7 @@ describe('TableListBaseComponent', () => {
     component.loadTableItems({ first: 0, rows: 2 });
     component.selectedItems = ['abc'];
     component.deleteSelectedItems();
+    testTableListService.tableResults = ['def'];
     component.deleteSelectedItemsAccept();
     expect(component.items.length).toBe(1);
   });

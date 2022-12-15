@@ -39,8 +39,6 @@ import { HeaderComponent } from './layout/header/header.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { LoginComponent } from './login/login/login.component';
-import { TwoFactorLoginComponent } from './login/two-factor-login/two-factor-login.component';
-import { ConfirmTwoFactorComponent } from './login/confirm-two-factor/confirm-two-factor.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
@@ -64,8 +62,6 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     SidebarComponent,
     FooterComponent,
     LoginComponent,
-    TwoFactorLoginComponent,
-    ConfirmTwoFactorComponent,
     DashboardComponent,
     MenuReportComponent,
   ],
