@@ -13,7 +13,7 @@ import { userLoggedOutAction, userLoggedInAction } from 'app/store/login.actions
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  public frm!: FormGroup;
+  public form!: FormGroup;
   public isBusy = false;
   public hasFailed = false;
   public committeeIdInputError = false;
@@ -32,8 +32,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private store: Store
   ) {
-    this.frm = this.fb.group({
-      commiteeId: ['', Validators.required],
+    this.form = this.fb.group({
+      committeeId: ['', Validators.required],
       loginPassword: ['', Validators.required],
       emailId: ['', [Validators.required, Validators.email]],
     });
@@ -56,15 +56,15 @@ export class LoginComponent implements OnInit {
    *
    */
   public updateStatus(): void {
-    if (this.frm.get('commiteeId')?.valid) {
+    if (this.form.get('committeeId')?.valid) {
       this.committeeIdInputError = false;
     }
 
-    if (this.frm.get('loginPassword')?.valid) {
+    if (this.form.get('loginPassword')?.valid) {
       this.passwordInputError = false;
     }
 
-    if (this.frm.get('emailId')?.valid) {
+    if (this.form.get('emailId')?.valid) {
       this.loginEmailInputError = false;
     }
   }
@@ -74,21 +74,21 @@ export class LoginComponent implements OnInit {
    *
    */
   public doSignIn(): void {
-    if (this.frm.invalid) {
-      this.committeeIdInputError = this.frm.get('commiteeId')?.invalid ? true : false;
+    if (this.form.invalid) {
+      this.committeeIdInputError = this.form.get('committeeId')?.invalid ? true : false;
 
-      this.passwordInputError = this.frm.get('loginPassword')?.invalid ? true : false;
+      this.passwordInputError = this.form.get('loginPassword')?.invalid ? true : false;
 
-      this.loginEmailInputError = this.frm.get('emailId')?.invalid ? true : false;
+      this.loginEmailInputError = this.form.get('emailId')?.invalid ? true : false;
       return;
     }
 
     this.isBusy = true;
     this.hasFailed = false;
 
-    const committeeId: string = this.frm.get('commiteeId')?.value;
-    const password: string = this.frm.get('loginPassword')?.value;
-    const email: string = this.frm.get('emailId')?.value;
+    const committeeId: string = this.form.get('committeeId')?.value;
+    const password: string = this.form.get('loginPassword')?.value;
+    const email: string = this.form.get('emailId')?.value;
 
     this.loginService.logIn(email, committeeId, password).subscribe({
       next: (res: UserLoginData) => {

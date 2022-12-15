@@ -34,6 +34,22 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('updateStatus should set flags', () => {
+    component.committeeIdInputError = true;
+    component.passwordInputError = true;
+    component.loginEmailInputError = true;
+    component.form.patchValue({
+      committeeId: 'C0000009',
+      loginPassword: 'foo',
+      emailId: 'aaa@aaa.com',
+    });
+    console.log('=======', component.form.get('committeeId')?.value);
+    component.updateStatus();
+    expect(component.committeeIdInputError).toBeFalse();
+    expect(component.passwordInputError).toBeFalse();
+    expect(component.loginEmailInputError).toBeFalse();
+  });
+
   xit('navigateToLoginDotGov should href environment location', () => {
     component.navigateToLoginDotGov();
     expect(window.location.href).toEqual(environment.loginDotGovAuthUrl);
