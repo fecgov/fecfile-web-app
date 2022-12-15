@@ -38,12 +38,15 @@ describe('LoginComponent', () => {
     component.committeeIdInputError = true;
     component.passwordInputError = true;
     component.loginEmailInputError = true;
+    component.updateStatus();
+    expect(component.committeeIdInputError).toBeTrue();
+    expect(component.passwordInputError).toBeTrue();
+    expect(component.loginEmailInputError).toBeTrue();
     component.form.patchValue({
       committeeId: 'C0000009',
       loginPassword: 'foo',
       emailId: 'aaa@aaa.com',
     });
-    console.log('=======', component.form.get('committeeId')?.value);
     component.updateStatus();
     expect(component.committeeIdInputError).toBeFalse();
     expect(component.passwordInputError).toBeFalse();
@@ -53,6 +56,27 @@ describe('LoginComponent', () => {
   xit('navigateToLoginDotGov should href environment location', () => {
     component.navigateToLoginDotGov();
     expect(window.location.href).toEqual(environment.loginDotGovAuthUrl);
+  });
+
+  it('should doSignIn', () => {
+    component.hasFailed = true;
+    component.doSignIn();
+    expect(component.isBusy).toBeFalse();
+    expect(component.hasFailed).toBeTrue();
+    component.form.patchValue({
+      committeeId: 'C0000009',
+      loginPassword: 'foo',
+      emailId: 'aaa@aaa.com',
+    });
+    component.doSignIn();
+    expect(component.isBusy).toBeTrue();
+    expect(component.hasFailed).toBeFalse();
+  });
+
+  it('should toggle show flag', () => {
+    expect(component.show).toBeFalse();
+    component.showPassword();
+    expect(component.show).toBeTrue();
   });
 
   it('should adjust localLoginAvailable', () => {
