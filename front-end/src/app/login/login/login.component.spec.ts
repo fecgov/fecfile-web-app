@@ -9,6 +9,7 @@ import { environment } from 'environments/environment';
 import { of } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
 import { LoginComponent } from './login.component';
+import { throwError } from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -59,7 +60,7 @@ describe('LoginComponent', () => {
     expect(window.location.href).toEqual(environment.loginDotGovAuthUrl);
   });
 
-  it('should doSignIn', () => {
+  it('should doSignIn success', () => {
     spyOn(loginService, 'logIn').and.returnValue(of({ is_allowed: true } as UserLoginData));
     component.hasFailed = true;
     component.doSignIn();
@@ -73,6 +74,18 @@ describe('LoginComponent', () => {
     component.doSignIn();
     expect(component.isBusy).toBeTrue();
     expect(component.hasFailed).toBeFalse();
+  });
+
+  it('should doSignIn fail', () => {
+    spyOn(loginService, 'logIn').and.returnValue(throwError(() => new Error('test')));
+    component.form.patchValue({
+      committeeId: 'C0000009',
+      loginPassword: 'foo',
+      emailId: 'aaa@aaa.com',
+    });
+    component.doSignIn();
+    expect(component.isBusy).toBeFalse();
+    expect(component.hasFailed).toBeTrue();
   });
 
   it('should toggle show flag', () => {

@@ -75,11 +75,11 @@ export class LoginComponent implements OnInit {
    */
   public doSignIn(): void {
     if (this.form.invalid) {
-      this.committeeIdInputError = this.form.get('committeeId')?.invalid ? true : false;
+      this.committeeIdInputError = !!this.form.get('committeeId')?.invalid;
 
-      this.passwordInputError = this.form.get('loginPassword')?.invalid ? true : false;
+      this.passwordInputError = !!this.form.get('loginPassword')?.invalid;
 
-      this.loginEmailInputError = this.form.get('emailId')?.invalid ? true : false;
+      this.loginEmailInputError = !!this.form.get('emailId')?.invalid;
       return;
     }
 
