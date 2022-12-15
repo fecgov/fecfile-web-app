@@ -98,6 +98,10 @@ jobs:
   e2e-test:
     docker:
       - image: cimg/node:16.15-browsers
+    parameters: # parameters are at the job level
+      specs-to-run:
+        type: string
+        default: "cypress/e2e/**/*"
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -128,7 +132,7 @@ jobs:
               cd fecfile-web-app/front-end; \
               git checkout ${E2E_BRANCH_NAME}; \
               npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --headless --watch=false --browser chrome;'\
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "<< parameters.specs-to-run >>" --headless --watch=false --browser chrome;'\
 
   deploy:
     docker:
@@ -284,4 +288,5 @@ workflows:
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
     jobs:
-      - e2e-test
+      - e2e-test:
+          specs-to-run: "cypress/e2e/reports/**/*"

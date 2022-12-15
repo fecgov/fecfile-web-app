@@ -56,7 +56,7 @@ CYPRESS_PASSWORD (password of the e2e account for login)
 
 Finally, a CircleCI Trigger was added to [schedule a nightly job](https://circleci.com/docs/set-a-nightly-scheduled-pipeline/) to kick off the E2E tests (and any other nightly jobs we might want in the future).
 
-To run locally (you may need to add e2e-test to all workflow jobs in app circleci config.yml first, or circleci will complain about not being able to find it):
+To run locally (you may need to add e2e-test to all workflow jobs in app circleci config.yml first, or circleci will complain about not being able to find it.  Also, you also may need to add 'sudo' in front of the docker commands (otherwise it will complain about not being able to find Docker Daemon listening):
 
 ```
 export E2E_BRANCH_NAME=''
