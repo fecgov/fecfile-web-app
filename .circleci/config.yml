@@ -291,6 +291,8 @@ workflows:
       - e2e-test:
           specs-to-run: "cypress/e2e/contacts/**/*"
       - e2e-test:
+          specs-to-run: "cypress/e2e/long-running/**/*"
+      - e2e-test:
           specs-to-run: "cypress/e2e/other/**/*"
       - e2e-test:
           specs-to-run: "cypress/e2e/reports/**/*"
