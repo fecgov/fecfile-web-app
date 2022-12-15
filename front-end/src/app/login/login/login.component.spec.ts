@@ -6,10 +6,9 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
 import { LoginComponent } from './login.component';
-import { throwError } from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
