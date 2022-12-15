@@ -304,7 +304,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   [ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT, 'Party National Party Convention Account'],
   [ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT, 'PAC National Party Convention Account'],
-  [ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT, 'Tribal National Party Convention Account'],
+  [
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    'Tribal National Party Pres. Nominating Convention Account',
+  ],
   [
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
     'Earmark Receipt for Recount Account (Contribution)',
