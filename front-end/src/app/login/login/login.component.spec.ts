@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { UserLoginData } from 'app/shared/models/user.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
 import { of } from 'rxjs';
@@ -59,6 +60,7 @@ describe('LoginComponent', () => {
   });
 
   it('should doSignIn', () => {
+    spyOn(loginService, 'logIn').and.returnValue(of({ is_allowed: true } as UserLoginData));
     component.hasFailed = true;
     component.doSignIn();
     expect(component.isBusy).toBeFalse();
