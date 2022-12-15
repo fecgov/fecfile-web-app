@@ -289,4 +289,10 @@ workflows:
     when: << pipeline.parameters.is-nightly-run >>
     jobs:
       - e2e-test:
+          specs-to-run: "cypress/e2e/contacts/**/*"
+      - e2e-test:
+          specs-to-run: "cypress/e2e/other/**/*"
+      - e2e-test:
           specs-to-run: "cypress/e2e/reports/**/*"
+      - e2e-test:
+          specs-to-run: "cypress/e2e/transactions/**/*"
