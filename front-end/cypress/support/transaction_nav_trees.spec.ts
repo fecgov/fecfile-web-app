@@ -32,6 +32,7 @@ export type SchATransactionName =
   | 'PAC National Party Recount/Legal Proceedings Account'
   | 'Individual National Party Headquarters Buildings Account'
   | 'PAC National Party Headquarters Buildings Account'
+  | 'PAC National Party Pres. Nominating Convention Account'
   | 'Party National Party Headquarters Buildings Account'
   | 'Tribal National Party Headquarters Buildings Account'
   | 'Tribal National Party Pres. Nominating Convention Account';
@@ -676,6 +677,18 @@ const pacNationalPartyRecountAccount: TransactionForm = {
   },
 };
 
+const pacNationalPartyConventionAccount: TransactionForm = {
+  transaction_name: 'PAC National Party Pres. Nominating Convention Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const pacNationalPartyHeadquartersReceipt: TransactionForm = {
   transaction_name: 'PAC National Party Headquarters Buildings Account',
   transaction_category: 'OTHER',
@@ -766,6 +779,7 @@ export const schedANavTree: TransactionNavTree = {
     'PAC National Party Recount/Legal Proceedings Account': pacNationalPartyRecountAccount,
     'Individual National Party Headquarters Buildings Account': individualNationalPartyHeadquartersBuildingsAccount,
     'PAC National Party Headquarters Buildings Account': pacNationalPartyHeadquartersReceipt,
+    'PAC National Party Pres. Nominating Convention Account': pacNationalPartyConventionAccount,
     'Party National Party Headquarters Buildings Account': partyNationalPartyHeadquartersReceipt,
     'Tribal National Party Headquarters Buildings Account': tribalNationalPartyHeadquartersBuildingsAccount,
     'Tribal National Party Pres. Nominating Convention Account': tribalNationalPartyPresNominatingConventionAccount,
