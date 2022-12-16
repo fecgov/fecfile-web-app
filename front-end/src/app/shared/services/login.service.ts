@@ -50,7 +50,6 @@ export class LoginService {
     this.cookieService.delete('csrftoken');
     if (this.userLoginData && !this.userLoginData.login_dot_gov) {
       // Non-login.gov auth
-      this.apiService.get('/auth/logout').subscribe();
       this.store.dispatch(userLoggedOutAction());
     } else {
       this.store.dispatch(userLoggedOutForLoginDotGovAction());
