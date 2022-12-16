@@ -3,16 +3,20 @@ import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs/operators';
 import { userLoggedOutAction } from './login.actions';
+import { ApiService } from 'app/shared/services/api.service';
 
 @Injectable()
 export class LoginEffects {
-  constructor(private actions$: Actions, private router: Router) {}
+  constructor(private actions$: Actions, private router: Router, private apiService: ApiService) {}
 
   userLoggedOut$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(userLoggedOutAction.type),
-        tap(() => this.router.navigate(['/']))
+        tap(() => {
+          this.apiService.get('/auth/logout').subscribe();
+          this.router.navigate(['/']);
+        })
       ),
     { dispatch: false }
   );
