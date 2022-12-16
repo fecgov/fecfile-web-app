@@ -1,4 +1,3 @@
-import { getAuthToken } from './commands';
 
 export function createContact(contact: object, save = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
@@ -71,33 +70,32 @@ export function enterContact(contact: object, save = true, forTransaction = fals
 
 //Deletes all reports belonging to the logged-in committee
 export function deleteAllContacts() {
-  const authToken: string = getAuthToken();
-  cy.request({
-    method: 'GET',
-    url: 'http://localhost:8080/api/v1/contacts/',
-    headers: {
-      Authorization: authToken,
-    },
-  }).then((resp) => {
-    const contacts = resp.body.results;
-    for (const contact of contacts) {
-      deleteContact(contact.id, authToken);
-    }
-    cy.longWait();
+  cy.getCookie('csrftoken').then(cookie => {
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:8080/api/v1/contacts/',
+      headers: {
+        'x-csrftoken': cookie?.value,
+      },
+    }).then((resp) => {
+      const contacts = resp.body.results;
+      for (const contact of contacts) {
+        deleteContact(contact.id);
+      }
+      cy.longWait();
+    });
   });
 }
 
 //Deletes a single report by its ID
-export function deleteContact(contactID: string, authToken: string | null = null) {
-  if (authToken == null) {
-    authToken = getAuthToken();
-  }
-
-  cy.request({
-    method: 'DELETE',
-    url: `http://localhost:8080/api/v1/contacts/${contactID}/`,
-    headers: {
-      Authorization: authToken,
-    },
+export function deleteContact(contactID: string) {
+  cy.getCookie('csrftoken').then(cookie => {
+    cy.request({
+      method: 'DELETE',
+      url: `http://localhost:8080/api/v1/contacts/${contactID}/`,
+      headers: {
+        'x-csrftoken': cookie?.value,
+      },
+    });
   });
 }

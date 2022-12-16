@@ -34,7 +34,7 @@ const accordion = {
     'In-Kind Transfer - Federal Election Activity',
     'Joint Fundraising Transfer - National Party Recount Account',
     'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
-    'Joint Fundraising Transfer - National Party Headquarters Account',
+    'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
   ],
   REFUNDS: ['Refunds of Contributions to Registered Committees', 'Refunds of Contributions to Unregistered Committees'],
   OTHER: [
@@ -58,7 +58,7 @@ const accordion = {
     'Individual National Party Convention Account',
     'Party National Party Convention Account',
     'PAC National Party Convention Account',
-    'Tribal National Party Convention Account',
+    'Tribal National Party Pres. Nominating Convention Account',
     'Earmark Receipt for Recount Account (Contribution)',
     'Earmark Receipt for Convention Account (Contribution)',
     'Earmark Receipt for Headquarters Account (Contribution)',

@@ -41,6 +41,7 @@ export class TestDotFecComponent implements OnInit, OnDestroy {
       .get(`${environment.apiUrl}/web-services/dot-fec/${this.report?.id}/`, {
         headers: this.apiService.getHeaders(),
         responseType: 'text',
+        withCredentials: true,
       })
       .subscribe((dotFEC: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
         const newBlob = new Blob([dotFEC], { type: 'application/text' });

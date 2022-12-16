@@ -1,7 +1,6 @@
 // @ts-check
 
 import * as _ from 'lodash';
-import { getAuthToken } from './commands';
 import { date } from './generators/generators.spec';
 import { ConfirmationDetails, FilingDetails } from './generators/reports.spec';
 
@@ -295,33 +294,32 @@ export function navigateReportSidebar(type: 'Transaction' | 'Submit' | 'Review',
 
 //Deletes all reports belonging to the logged-in committee
 export function deleteAllReports() {
-  const authToken: string = getAuthToken();
-  cy.request({
-    method: 'GET',
-    url: 'http://localhost:8080/api/v1/f3x-summaries/',
-    headers: {
-      Authorization: authToken,
-    },
-  }).then((resp) => {
-    const reports = resp.body.results;
-    for (const report of reports) {
-      deleteReport(report.id, authToken);
-    }
-    cy.longWait();
+  cy.getCookie('csrftoken').then(cookie => {
+    cy.request({
+      method: 'GET',
+      url: 'http://localhost:8080/api/v1/f3x-summaries/',
+      headers: {
+        'x-csrftoken': cookie?.value,
+      },
+    }).then((resp) => {
+      const reports = resp.body.results;
+      for (const report of reports) {
+        deleteReport(report.id);
+      }
+      cy.longWait();
+    });
   });
 }
 
 //Deletes a single report by its ID
-export function deleteReport(reportID: string, authToken: string | null = null) {
-  if (authToken == null) {
-    authToken = getAuthToken();
-  }
-
-  cy.request({
-    method: 'DELETE',
-    url: `http://localhost:8080/api/v1/f3x-summaries/${reportID}/`,
-    headers: {
-      Authorization: authToken,
-    },
+export function deleteReport(reportID: string) {
+  cy.getCookie('csrftoken').then(cookie => {
+    cy.request({
+      method: 'DELETE',
+      url: `http://localhost:8080/api/v1/f3x-summaries/${reportID}/`,
+      headers: {
+        'x-csrftoken': cookie?.value,
+      },
+    });
   });
 }

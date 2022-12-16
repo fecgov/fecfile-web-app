@@ -11,7 +11,7 @@ export type UserLoginData = {
   committee_id: string;
   email: string;
   is_allowed: boolean;
-  token: string;
+  login_dot_gov: boolean;
 };
 
 export class CommitteeUser {

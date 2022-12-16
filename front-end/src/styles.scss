@@ -88,7 +88,8 @@ label.disabled {
 }
 
 .font-karla-bold {
-  font-family: karla-bold, karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-family: karla-bold, karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol;
 }
 
 .fec-background-gradient {
@@ -257,4 +258,18 @@ label.disabled {
 .p-panelmenu .p-panelmenu-panel:last-child .p-panelmenu-content {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+}
+
+.pi-trash {
+  cursor: pointer;
+}
+
+.pi-trash.disabled {
+  opacity: 30%;
+}
+
+.p-tooltip .p-tooltip-text {
+  background: white;
+  color: black;
+  border: 1px solid black;
 }
