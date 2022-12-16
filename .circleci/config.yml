@@ -119,7 +119,7 @@ jobs:
             DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} docker-compose up --build -d
             docker container run --network container:fecfile-api \
               docker.io/jwilder/dockerize \
-              -wait http://localhost:8080/api/v1/ \
+              -wait http://localhost:8080/api/v1/user/login/authenticate \
               -wait-retry-interval 2s \
               -timeout 60s; \
           working_directory: ~/project/fecfile-web-api
