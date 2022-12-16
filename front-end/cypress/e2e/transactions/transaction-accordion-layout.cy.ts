@@ -58,7 +58,7 @@ const accordion = {
     'Individual National Party Convention Account',
     'Party National Party Convention Account',
     'PAC National Party Convention Account',
-    'Tribal National Party Convention Account',
+    'Tribal National Party Pres. Nominating Convention Account',
     'Earmark Receipt for Recount Account (Contribution)',
     'Earmark Receipt for Convention Account (Contribution)',
     'Earmark Receipt for Headquarters Account (Contribution)',

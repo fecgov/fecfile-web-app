@@ -15,7 +15,7 @@
       </div>
     </ng-container>
     <ng-container *ngIf="localLoginAvailable">
-      <form [formGroup]="frm" (ngSubmit)="doSignIn()">
+      <form [formGroup]="form" (ngSubmit)="doSignIn()">
         <div class="grid-row">
           <div class="grid-row__col grid-row__col--12">
             <div class="text-error" *ngIf="hasFailed">Invalid email, committee id or password.</div>
@@ -34,17 +34,19 @@
               formControlName="emailId"
               (keyup)="updateStatus()"
               [ngClass]="{
-                '': (!frm.get('emailId')?.invalid && frm.get('emailId')?.touched) || !loginEmailInputError,
+                '': (!form.get('emailId')?.invalid && form.get('emailId')?.touched) || !loginEmailInputError,
                 'login-input-error':
-                  (frm.get('emailId')?.invalid && frm.get('emailId')?.touched) || loginEmailInputError
+                  (form.get('emailId')?.invalid && form.get('emailId')?.touched) || loginEmailInputError
               }"
             />
             <div
               class="error"
-              *ngIf="(frm.get('emailId')?.invalid && frm.get('emailId')?.touched) || loginEmailInputError"
+              *ngIf="(form.get('emailId')?.invalid && form.get('emailId')?.touched) || loginEmailInputError"
             >
-              <div class="error__email-id" *ngIf="frm.get('emailId')?.hasError('required')">Please enter Email ID.</div>
-              <div class="error__email-id" *ngIf="frm.get('emailId')?.hasError('email')">Invalid Email Format.</div>
+              <div class="error__email-id" *ngIf="form.get('emailId')?.hasError('required')">
+                Please enter Email ID.
+              </div>
+              <div class="error__email-id" *ngIf="form.get('emailId')?.hasError('email')">Invalid Email Format.</div>
             </div>
           </div>
         </div>
@@ -60,19 +62,19 @@
               class="login-committee-id login-input"
               id="login-committee-id"
               placeholder="Enter Committee ID"
-              formControlName="commiteeId"
+              formControlName="committeeId"
               (keyup)="updateStatus()"
               [ngClass]="{
-                '': (!frm.get('commiteeId')?.invalid && frm.get('commiteeId')?.touched) || !committeeIdInputError,
+                '': (!form.get('committeeId')?.invalid && form.get('committeeId')?.touched) || !committeeIdInputError,
                 'login-input-error':
-                  (frm.get('commiteeId')?.invalid && frm.get('commiteeId')?.touched) || committeeIdInputError
+                  (form.get('committeeId')?.invalid && form.get('committeeId')?.touched) || committeeIdInputError
               }"
             />
             <div
               class="error"
-              *ngIf="(frm.get('commiteeId')?.invalid && frm.get('commiteeId')?.touched) || committeeIdInputError"
+              *ngIf="(form.get('committeeId')?.invalid && form.get('committeeId')?.touched) || committeeIdInputError"
             >
-              <div class="error__committee-id" *ngIf="frm.get('commiteeId')?.hasError('required')">
+              <div class="error__committee-id" *ngIf="form.get('committeeId')?.hasError('required')">
                 Please enter Committee ID.
               </div>
             </div>
@@ -93,18 +95,18 @@
               formControlName="loginPassword"
               (keyup)="updateStatus()"
               [ngClass]="{
-                '': (!frm.get('loginPassword')?.invalid && frm.get('loginPassword')?.touched) || !passwordInputError,
+                '': (!form.get('loginPassword')?.invalid && form.get('loginPassword')?.touched) || !passwordInputError,
                 'login-input-error':
-                  (frm.get('loginPassword')?.invalid && frm.get('loginPassword')?.touched) || passwordInputError
+                  (form.get('loginPassword')?.invalid && form.get('loginPassword')?.touched) || passwordInputError
               }"
               autocomplete
             />
 
             <div
               class="error"
-              *ngIf="(frm.get('loginPassword')?.invalid && frm.get('loginPassword')?.touched) || passwordInputError"
+              *ngIf="(form.get('loginPassword')?.invalid && form.get('loginPassword')?.touched) || passwordInputError"
             >
-              <div class="error__password-error" *ngIf="frm.get('loginPassword')?.hasError('required')">
+              <div class="error__password-error" *ngIf="form.get('loginPassword')?.hasError('required')">
                 Please enter your password.
               </div>
             </div>

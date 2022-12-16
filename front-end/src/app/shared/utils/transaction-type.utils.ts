@@ -38,6 +38,8 @@ import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transactio
 import { INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
 import { PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
 import { INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
+import { PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
+import { TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -80,6 +82,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+  PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+  TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
 }
 
 export class TransactionTypeUtils {
