@@ -35,7 +35,10 @@ export type SchATransactionName =
   | 'PAC National Party Pres. Nominating Convention Account'
   | 'Party National Party Headquarters Buildings Account'
   | 'Tribal National Party Headquarters Buildings Account'
-  | 'Tribal National Party Pres. Nominating Convention Account';
+  | 'Individual National Party Convention Account'
+  | 'Tribal National Party Pres. Nominating Convention Account'
+  | 'Party National Party Convention Account'
+  | 'Tribal National Party Recount/Legal Proceedings Account';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -350,6 +353,18 @@ const indvNPRJFTransMemo: ChildTransactionForm = {
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityIndividual,
   childOf: 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalNationalPartyRecountAccount: TransactionForm = {
+  transaction_name: 'Tribal National Party Recount/Legal Proceedings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  ...entityOrganization,
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -725,6 +740,31 @@ const partyNationalPartyHeadquartersReceipt: TransactionForm = {
   },
 };
 
+const individualNationalPartyConventionAccount: TransactionForm = {
+  transaction_name: 'Individual National Party Convention Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  ...entityIndividual,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+
+const partyNationalPartyConventionAccount: TransactionForm = {
+  transaction_name: 'Party National Party Convention Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const tribalNationalPartyPresNominatingConventionAccount: TransactionForm = {
   transaction_name: 'Tribal National Party Pres. Nominating Convention Account',
   transaction_category: 'OTHER',
@@ -782,7 +822,10 @@ export const schedANavTree: TransactionNavTree = {
     'PAC National Party Pres. Nominating Convention Account': pacNationalPartyConventionAccount,
     'Party National Party Headquarters Buildings Account': partyNationalPartyHeadquartersReceipt,
     'Tribal National Party Headquarters Buildings Account': tribalNationalPartyHeadquartersBuildingsAccount,
+    'Individual National Party Convention Account': individualNationalPartyConventionAccount,
     'Tribal National Party Pres. Nominating Convention Account': tribalNationalPartyPresNominatingConventionAccount,
+    'Party National Party Convention Account': partyNationalPartyConventionAccount,
+    'Tribal National Party Recount/Legal Proceedings Account': tribalNationalPartyRecountAccount,
   },
 };
 
