@@ -30,7 +30,7 @@ export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT implements TransactionTyp
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  generateContributionPurposeDescription() {
+  generatePurposeDescription() {
     return 'Recount/Legal Proceedings Account';
   }
 

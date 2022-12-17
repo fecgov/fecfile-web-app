@@ -9,7 +9,7 @@ export abstract class Transaction extends BaseModel {
 
   form_type: string | undefined;
   filer_committee_id_number: string | undefined;
-  transaction_id: string | null = null; // This is a required field and must exist
+  transaction_id: string | undefined;
 
   // FECFile Online custom properties
 
