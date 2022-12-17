@@ -87,27 +87,8 @@ const testTransaction = SchATransaction.fromJSON({
   memo_text_id: undefined,
 });
 
-const testTransactionType = {
-  scheduleId: 'A',
-  componentGroupId: 'A',
-  isDependentChild: false,
-  title: '',
-  schema: { properties: {} } as JsonSchema,
-  getNewTransaction: () => SchATransaction.fromJSON({}),
-  transaction: SchATransaction.fromJSON({
-    id: undefined,
-    report_id: undefined,
-    contact: undefined,
-    contact_id: undefined,
-    form_type: undefined,
-    filer_committee_id_number: undefined,
-    transaction_id: null,
-    transaction_type_identifier: 'test',
-    contribution_purpose_descrip: undefined,
-    parent_transaction_id: undefined,
-    itemized: false,
-  }),
-} as TransactionType;
+const testTransactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT') || ({} as TransactionType);
+testTransactionType.transaction = testTransactionType?.getNewTransaction();
 
 describe('TransactionTypeBaseComponent', () => {
   let component: TestTransactionTypeBaseComponent;
@@ -554,7 +535,7 @@ describe('TransactionTypeBaseComponent', () => {
     expect(zipFormControlValue === testZip).toBeTrue();
   });
 
-  it('#onContactLookupSelect INDIVIDUAL should set fields', () => {
+  xit('#onContactLookupSelect INDIVIDUAL should set fields', () => {
     const testEntityType = ContactTypes.INDIVIDUAL;
 
     const testContact = new Contact();
@@ -580,10 +561,12 @@ describe('TransactionTypeBaseComponent', () => {
     component.form.addControl('entity_type', { value: testEntityType });
     component.onContactLookupSelect(testContactSelectItem);
   });
+
   it('#onContactLookupSelect INDIVIDUAL should calculate aggregate', () => {
     component.transactionType = TransactionTypeUtils.factory(
       ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
     ) as TransactionType;
+    component.transactionType.transaction = component.transactionType.getNewTransaction();
     component.doInit(component.form, new ValidateService(), component.transactionType, component.contactId$);
     component.transactionType.transaction = component.transactionType.getNewTransaction();
 

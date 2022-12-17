@@ -9,6 +9,7 @@ import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-trans
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { AggregationGroups } from '../models/scha-transaction.model';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -66,17 +67,21 @@ describe('TransactionService', () => {
   });
 
   it('#getPreviousTransaction() should GET previous transaction', () => {
-    const mockResponse: SchATransaction = SchATransaction.fromJSON({ id: 1 });
+    const mockResponse: SchATransaction = SchATransaction.fromJSON({
+      id: 1,
+      aggregation_group: AggregationGroups.GENERAL,
+    });
     const mockTransactionType: TransactionType | undefined = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
     if (mockTransactionType) {
+      mockTransactionType.transaction = mockResponse;
       mockTransactionType.transaction = SchATransaction.fromJSON({ id: 'abc' });
-      service.getPreviousTransaction(mockTransactionType, '1', new Date(), 'fake_group').subscribe((response) => {
+      service.getPreviousTransaction(mockTransactionType, '1', new Date()).subscribe((response) => {
         expect(response).toEqual(mockResponse);
       });
     }
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/sch-a-transactions/previous/?transaction_id=abc&contact_id=1&contribution_date=${formattedDate}&aggregation_group=fake_group`
+      `${environment.apiUrl}/sch-a-transactions/previous/?transaction_id=abc&contact_id=1&contribution_date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);

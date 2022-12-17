@@ -42,7 +42,7 @@ describe('TransactionGroupAComponent', () => {
     contributor_city: 'city',
     contributor_state: 'VA',
     contributor_zip: '20001',
-    contribution_date: '20220811',
+    contribution_date: '2022-08-11',
     contribution_amount: 1,
     contribution_aggregate: 2,
   });

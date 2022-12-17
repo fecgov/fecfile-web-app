@@ -20,6 +20,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupEComponent } from './transaction-group-e.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 
 describe('TransactionGroupEComponent', () => {
   let component: TransactionGroupEComponent;
@@ -52,6 +53,9 @@ describe('TransactionGroupEComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionGroupEComponent);
     component = fixture.componentInstance;
+    component.transactionType = TransactionTypeUtils.factory('JOINT_FUNDRAISING_TRANSFER');
+    if (component.transactionType)
+      component.transactionType.transaction = component.transactionType?.getNewTransaction();
     fixture.detectChanges();
   });
 

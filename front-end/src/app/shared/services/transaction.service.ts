@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { Transaction } from '../models/transaction.model';
@@ -9,6 +9,7 @@ import { ApiService } from './api.service';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { TransactionType } from '../interfaces/transaction-type.interface';
+import { AggregationGroups } from '../models/scha-transaction.model';
 
 /**
  * Given the API endpoint, return the class of the relevent schedule.
@@ -66,23 +67,28 @@ export class TransactionService implements TableListService<Transaction> {
   }
 
   public getPreviousTransaction(
-    transactionType: TransactionType,
+    transactionType: TransactionType | undefined,
     contact_id: string,
-    contribution_date: Date,
-    aggregation_group: string
-  ): Observable<Transaction> {
+    contribution_date: Date
+  ): Observable<Transaction | undefined> {
     const contributionDateString: string = this.datePipe.transform(contribution_date, 'yyyy-MM-dd') || '';
     const transaction_id: string = transactionType?.transaction?.id || '';
+    const aggregation_group: AggregationGroups | undefined =
+      (transactionType?.transaction as SchATransaction)?.aggregation_group || AggregationGroups.GENERAL;
     const apiEndpoint: string = transactionType?.transaction?.apiEndpoint || '';
     const scheduleClass = getScheduleClass(apiEndpoint);
-    return this.apiService
-      .get<Transaction>(`${apiEndpoint}/previous/`, {
-        transaction_id,
-        contact_id,
-        contribution_date: contributionDateString,
-        aggregation_group,
-      })
-      .pipe(map((response) => scheduleClass.fromJSON(response)));
+
+    if (transactionType && contribution_date && contact_id && aggregation_group) {
+      return this.apiService
+        .get<Transaction>(`${apiEndpoint}/previous/`, {
+          transaction_id,
+          contact_id,
+          contribution_date: contributionDateString,
+          aggregation_group,
+        })
+        .pipe(map((response) => scheduleClass.fromJSON(response)));
+    }
+    return of(undefined);
   }
 
   public create(transaction: Transaction): Observable<Transaction> {
