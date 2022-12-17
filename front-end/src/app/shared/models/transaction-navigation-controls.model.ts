@@ -1,4 +1,4 @@
-import { hasNoContact, isNewTransaction, Transaction } from '../interfaces/transaction.interface';
+import { hasNoContact, isNewTransaction, Transaction } from './transaction.model';
 
 export enum NavigationAction {
   CANCEL,

@@ -30,7 +30,7 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO implements Transac
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     return `Headquarters Buildings Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction).contributor_organization_name
     }`;

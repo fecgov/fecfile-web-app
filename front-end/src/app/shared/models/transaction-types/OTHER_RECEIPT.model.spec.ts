@@ -20,7 +20,7 @@ describe('OTHER_RECEIPT', () => {
     expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.OTHER_RECEIPTS);
   });
-  it('#generateContributionPurposeDescription() should not be defined', () => {
-    expect((transactionType as TransactionType).generateContributionPurposeDescription).toBe(undefined);
+  it('#generatePurposeDescription() should not be defined', () => {
+    expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
   });
 });

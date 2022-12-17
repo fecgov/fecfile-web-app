@@ -13,7 +13,7 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { hasNoContact, isNewTransaction } from 'app/shared/interfaces/transaction.interface';
+import { hasNoContact, isNewTransaction } from 'app/shared/models/transaction.model';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
 export class INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO implements TransactionType {
@@ -49,7 +49,7 @@ export class INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO implements Tr
     [SAVE_LIST_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     return `Pres. Nominating Convention Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;

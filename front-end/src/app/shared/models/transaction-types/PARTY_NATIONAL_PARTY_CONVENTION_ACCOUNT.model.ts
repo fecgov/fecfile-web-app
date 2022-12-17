@@ -30,7 +30,7 @@ export class PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT implements TransactionType 
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     return 'Pres. Nominating Convention Account';
   }
 

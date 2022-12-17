@@ -20,7 +20,7 @@ describe('INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT);
   });
 
-  it('#generateContributionPurposeDescription()', () => {
-    expect(transactionType.generateContributionPurposeDescription()).toBe('Recount/Legal Proceedings Account');
+  it('#generatePurposeDescription()', () => {
+    expect(transactionType.generatePurposeDescription()).toBe('Recount/Legal Proceedings Account');
   });
 });

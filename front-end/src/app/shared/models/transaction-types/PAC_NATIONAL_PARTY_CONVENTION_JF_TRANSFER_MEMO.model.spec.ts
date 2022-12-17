@@ -22,8 +22,8 @@ describe('PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
     );
   });
 
-  it('#generateContributionPurposeDescription() should generate a string', () => {
-    const descrip = transactionType.generateContributionPurposeDescription();
+  it('#generatePurposeDescription() should generate a string', () => {
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe(
       `Pres. Nominating Convention Account JF Memo: ${
         (transactionType.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name

@@ -30,7 +30,7 @@ export class PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT implements TransactionTyp
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     return 'Headquarters Buildings Account';
   }
 
