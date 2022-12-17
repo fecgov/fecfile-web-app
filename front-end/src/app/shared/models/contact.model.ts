@@ -90,6 +90,7 @@ export class Contact extends BaseModel {
   created: string | undefined;
   updated: string | undefined;
   deleted: string | undefined;
+  transaction_count: number | undefined; // The number of transactions linked to this contact. Read-only from the database.
 
   // prettier-ignore
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any

@@ -14,6 +14,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { TooltipModule } from 'primeng/tooltip';
 
 // App
 import { SharedModule } from '../shared/shared.module';
@@ -39,6 +40,7 @@ import { ContactDetailComponent } from './contact-detail/contact-detail.componen
     DialogModule,
     InputTextModule,
     SharedModule,
+    TooltipModule,
   ],
 })
 export class ContactsModule {}
