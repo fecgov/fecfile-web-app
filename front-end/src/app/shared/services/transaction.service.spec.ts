@@ -71,7 +71,9 @@ describe('TransactionService', () => {
       id: 1,
       aggregation_group: AggregationGroups.GENERAL,
     });
-    const mockTransactionType: TransactionType | undefined = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
+    const mockTransactionType: TransactionType | undefined = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+    );
     if (mockTransactionType) {
       mockTransactionType.transaction = mockResponse;
       mockTransactionType.transaction = SchATransaction.fromJSON({ id: 'abc' });

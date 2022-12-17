@@ -87,7 +87,8 @@ const testTransaction = SchATransaction.fromJSON({
   memo_text_id: undefined,
 });
 
-const testTransactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT') || ({} as TransactionType);
+const testTransactionType =
+  TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) || ({} as TransactionType);
 testTransactionType.transaction = testTransactionType?.getNewTransaction();
 
 describe('TransactionTypeBaseComponent', () => {
@@ -403,7 +404,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo NavigationDestination.CHILD should navigate', () => {
-    component.transactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
+    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     if (component.transactionType) {
       component.transactionType.transaction = testTransaction;
     }
@@ -432,7 +433,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo default should navigate', () => {
-    component.transactionType = TransactionTypeUtils.factory('INDIVIDUAL_RECEIPT');
+    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     if (component.transactionType) {
       component.transactionType.transaction = testTransaction;
     }
