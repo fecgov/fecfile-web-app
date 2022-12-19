@@ -2,13 +2,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
-import {
-  AggregationGroups,
-  SchATransaction,
-  ScheduleATransactionTypes,
-} from 'app/shared/models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
@@ -115,17 +111,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         startWith(form.get('contribution_date')?.value),
         combineLatestWith(contactId$),
         switchMap(([contribution_date, contactId]) => {
-          const aggregation_group: AggregationGroups | undefined = (transactionType?.transaction as SchATransaction)
-            ?.aggregation_group;
-          if (contribution_date && contactId && aggregation_group) {
-            return this.transactionService.getPreviousTransaction(
-              transactionType?.transaction?.id || '',
-              contactId,
-              contribution_date,
-              aggregation_group
-            );
-          }
-          return of(undefined);
+          return this.transactionService.getPreviousTransaction(transactionType, contactId, contribution_date);
         })
       ) || of(undefined);
     form
@@ -399,7 +385,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   public isDescriptionSystemGenerated(transactionType?: TransactionType): boolean {
     // Description is system generated if there is a defined function.  Otherwise, it's mutable
-    return transactionType?.generateContributionPurposeDescription !== undefined;
+    return transactionType?.generatePurposeDescription !== undefined;
   }
 
   doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {
@@ -474,7 +460,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       entity_type: this.contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: this.getMemoCodeConstant(transactionType),
-      contribution_purpose_descrip: transactionType?.generateContributionPurposeDescription?.() || '',
+      contribution_purpose_descrip: transactionType?.generatePurposeDescription?.() || '',
     });
   }
 

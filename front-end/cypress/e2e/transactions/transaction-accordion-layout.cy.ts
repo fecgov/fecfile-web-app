@@ -54,6 +54,7 @@ const accordion = {
     'Individual National Party Headquarters Buildings Account',
     'Party National Party Headquarters Buildings Account',
     'PAC National Party Headquarters Buildings Account',
+    'PAC National Party Pres. Nominating Convention Account',
     'Tribal National Party Headquarters Buildings Account',
     'Individual National Party Convention Account',
     'Party National Party Convention Account',

@@ -36,7 +36,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT implements Transact
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     return 'Headquarters Buildings Account Transfer of JF Proceeds';
   }
 

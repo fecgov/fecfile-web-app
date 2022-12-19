@@ -22,8 +22,8 @@ describe('OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT', () => {
     );
   });
 
-  it('#generateContributionPurposeDescription() should return constant', () => {
-    const descrip = transactionType.generateContributionPurposeDescription();
+  it('#generatePurposeDescription() should return constant', () => {
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Non-contribution Account Receipt');
   });
 });
