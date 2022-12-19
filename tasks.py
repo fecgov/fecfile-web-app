@@ -57,7 +57,7 @@ def _detect_branch(repo):
 DEPLOY_RULES = (
     ("prod", lambda _, branch: branch == "main"),
     ("stage", lambda _, branch: branch.startswith("release")),
-    ("dev", lambda _, branch: branch == "login-dot-gov-logout-is-authenticated-fix"),
+    ("dev", lambda _, branch: branch == "develop"),
 )
 
 
