@@ -23,6 +23,8 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactFields, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { TransactionTypeResolver } from '../../../shared/resolvers/transaction-type.resolver';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 
 @Component({
   template: '',
@@ -182,6 +184,20 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     if (this.form.invalid) {
       return;
+    }
+
+    console.log(this.transactionType);
+    const transaction = this.transactionType?.transaction;
+    if (transaction && transaction.children) {
+      for (const child of transaction.children) {
+        console.log('Child:', child);
+        if (child.transaction_type_identifier) {
+          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier) as TransactionType;
+          if (transactionType.generateContributionPurposeDescription) {
+            const newDescrip = transactionType.generateContributionPurposeDescription();
+          }
+        }
+      }
     }
 
     const payload: Transaction = this.getPayloadTransaction(
