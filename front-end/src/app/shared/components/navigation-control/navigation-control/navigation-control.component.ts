@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { NavigationControl } from 'app/shared/models/transaction-navigation-controls.model';
 
 @Component({

@@ -1,4 +1,3 @@
-import { getAuthToken } from '../../support/commands';
 import { generateReportObject } from '../../support/generators/reports.spec';
 
 describe('Tests that TER reports have the F3XT form type', () => {
@@ -27,18 +26,19 @@ describe('Tests that TER reports have the F3XT form type', () => {
       cy.get('tr').contains('Termination').should('exist');
 
       cy.then(() => {
-        const authToken: string = getAuthToken();
-        cy.request({
-          method: 'GET',
-          url: 'http://localhost:8080/api/v1/f3x-summaries/',
-          headers: {
-            Authorization: authToken,
-          },
-        }).then((resp) => {
-          const reports = resp.body.results;
-          for (const report of reports) {
-            cy.expect(report.form_type).to.eq('F3XT');
-          }
+        cy.getCookie('csrftoken').then(cookie => {
+          cy.request({
+            method: 'GET',
+            url: 'http://localhost:8080/api/v1/f3x-summaries/',
+            headers: {
+              'x-csrftoken': cookie?.value,
+            },
+          }).then((resp) => {
+            const reports = resp.body.results;
+            for (const report of reports) {
+              cy.expect(report.form_type).to.eq('F3XT');
+            }
+          });
         });
       });
     });

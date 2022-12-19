@@ -78,7 +78,7 @@ export const testUserLoginData: UserLoginData = {
   committee_id: 'C00000000',
   email: 'email@fec.com',
   is_allowed: true,
-  token: 'jwttokenstring',
+  login_dot_gov: false,
 };
 
 export const testActiveReport: F3xSummary = F3xSummary.fromJSON({

@@ -3,10 +3,12 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
+import { TransactionType } from '../interfaces/transaction-type.interface';
 import { ListRestResponse } from '../models/rest-api.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes, AggregationGroups } from '../models/scha-transaction.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
+import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -66,14 +68,23 @@ describe('TransactionService', () => {
   });
 
   it('#getPreviousTransaction() should GET previous transaction', () => {
-    const mockResponse: SchATransaction = SchATransaction.fromJSON({ id: 1 });
-
-    service.getPreviousTransaction('abc', '1', new Date(), 'fake_group').subscribe((response) => {
-      expect(response).toEqual(mockResponse);
+    const mockResponse: SchATransaction = SchATransaction.fromJSON({
+      id: 1,
+      aggregation_group: AggregationGroups.GENERAL,
     });
+    const mockTransactionType: TransactionType | undefined = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+    );
+    if (mockTransactionType) {
+      mockTransactionType.transaction = mockResponse;
+      mockTransactionType.transaction = SchATransaction.fromJSON({ id: 'abc' });
+      service.getPreviousTransaction(mockTransactionType, '1', new Date()).subscribe((response) => {
+        expect(response).toEqual(mockResponse);
+      });
+    }
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/transactions/schedule-a/previous/?transaction_id=abc&contact_id=1&contribution_date=${formattedDate}&aggregation_group=fake_group`
+      `${environment.apiUrl}/transactions/schedule-a/previous/?transaction_id=abc&contact_id=1&contribution_date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);

@@ -26,10 +26,20 @@ export type SchATransactionName =
   | 'Earmark Receipt'
   | 'Business/Labor Organization Receipt - Non-Contribution Account'
   | 'Individual Receipt - Non-Contribution Account'
-  | 'Joint Fundraising Transfer - National Party Recount Account'
+  | 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account'
   | 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account'
   | 'Joint Fundraising Transfer - National Party Headquarters Buildings Account'
-  | 'PAC National Party Recount/Legal Proceedings Account';
+  | 'PAC National Party Recount/Legal Proceedings Account'
+  | 'Individual National Party Headquarters Buildings Account'
+  | 'PAC National Party Headquarters Buildings Account'
+  | 'PAC National Party Pres. Nominating Convention Account'
+  | 'Party National Party Headquarters Buildings Account'
+  | 'Tribal National Party Headquarters Buildings Account'
+  | 'Tribal National Party Pres. Nominating Convention Account'
+  | 'Individual National Party Recount/Legal Proceedings Account'
+  | 'Individual National Party Convention Account'
+  | 'Party National Party Convention Account'
+  | 'Tribal National Party Recount/Legal Proceedings Account';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -44,7 +54,9 @@ export type ChildTransactionName =
   | 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo'
-  | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo';
+  | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo'
+  | 'Individual National Party Headquarters JF Transfer Memo'
+  | 'PAC National Party Headquarters JF Transfer Memo';
 
 export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG';
 
@@ -341,7 +353,19 @@ const indvNPRJFTransMemo: ChildTransactionForm = {
   transaction_group: 'A',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityIndividual,
-  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  childOf: 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalNationalPartyRecountAccount: TransactionForm = {
+  transaction_name: 'Tribal National Party Recount/Legal Proceedings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  ...entityOrganization,
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -353,7 +377,7 @@ const tribalNPRJFTransMemo: ChildTransactionForm = {
   transaction_group: 'D',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityOrganization,
-  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  childOf: 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -365,7 +389,7 @@ const pacNPRJFTransMemo: ChildTransactionForm = {
   transaction_group: 'F',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityCommittee,
-  childOf: 'Joint Fundraising Transfer - National Party Recount Account',
+  childOf: 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -402,6 +426,18 @@ const tribalNationalPartyConventionJFTransferMemo: ChildTransactionForm = {
   aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
   ...entityOrganization,
   childOf: 'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const individualNationalPartyRecountAccount: TransactionForm = {
+  transaction_name: 'Individual National Party Recount/Legal Proceedings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  ...entityIndividual,
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -475,7 +511,7 @@ const jointFundraisingTransfer: TransactionForm = {
 };
 
 const jointFundraisingTransferNationalPartyRecount: TransactionForm = {
-  transaction_name: 'Joint Fundraising Transfer - National Party Recount Account',
+  transaction_name: 'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   transaction_category: 'TRANSFERS',
   transaction_group: 'E',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
@@ -516,6 +552,42 @@ const offsetToOpex: TransactionForm = {
   },
 };
 
+const individualNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
+  transaction_name: 'Individual National Party Headquarters Buildings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityIndividual,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const indvNationalPartyHeadquartersJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Individual National Party Headquarters JF Transfer Memo',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityIndividual,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childOf: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
+};
+
+const pacNationalPartyHeadquartersJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Individual National Party Headquarters JF Transfer Memo',
+  transaction_group: 'E',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childOf: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
+};
+
 const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
   transaction_name: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
   transaction_category: 'TRANSFERS',
@@ -526,6 +598,7 @@ const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: Transac
     ...memoFields,
     ...contributionFields,
   },
+  childTransactions: [indvNationalPartyHeadquartersJFTransferMemo, pacNationalPartyHeadquartersJFTransferMemo],
 };
 
 const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
@@ -632,6 +705,91 @@ const pacNationalPartyRecountAccount: TransactionForm = {
   },
 };
 
+const pacNationalPartyConventionAccount: TransactionForm = {
+  transaction_name: 'PAC National Party Pres. Nominating Convention Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const pacNationalPartyHeadquartersReceipt: TransactionForm = {
+  transaction_name: 'PAC National Party Headquarters Buildings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
+  transaction_name: 'Tribal National Party Headquarters Buildings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const partyNationalPartyHeadquartersReceipt: TransactionForm = {
+  transaction_name: 'Party National Party Headquarters Buildings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const individualNationalPartyConventionAccount: TransactionForm = {
+  transaction_name: 'Individual National Party Convention Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  ...entityIndividual,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+
+const partyNationalPartyConventionAccount: TransactionForm = {
+  transaction_name: 'Party National Party Convention Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const tribalNationalPartyPresNominatingConventionAccount: TransactionForm = {
+  transaction_name: 'Tribal National Party Pres. Nominating Convention Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 /*
  *          Group A Transaction Navigation Tree
  * Every entry in this object represents a path that an E2E test
@@ -653,7 +811,8 @@ export const schedANavTree: TransactionNavTree = {
   TRANSFERS: {
     Transfer: transfer,
     'Joint Fundraising Transfer': jointFundraisingTransfer,
-    'Joint Fundraising Transfer - National Party Recount Account': jointFundraisingTransferNationalPartyRecount,
+    'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account':
+      jointFundraisingTransferNationalPartyRecount,
     'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account':
       jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
     'Joint Fundraising Transfer - National Party Headquarters Buildings Account':
@@ -671,6 +830,16 @@ export const schedANavTree: TransactionNavTree = {
     'Business/Labor Organization Receipt - Non-Contribution Account': businessLaborNonContribution,
     'Individual Receipt - Non-Contribution Account': individualNonContribution,
     'PAC National Party Recount/Legal Proceedings Account': pacNationalPartyRecountAccount,
+    'Individual National Party Headquarters Buildings Account': individualNationalPartyHeadquartersBuildingsAccount,
+    'PAC National Party Headquarters Buildings Account': pacNationalPartyHeadquartersReceipt,
+    'PAC National Party Pres. Nominating Convention Account': pacNationalPartyConventionAccount,
+    'Party National Party Headquarters Buildings Account': partyNationalPartyHeadquartersReceipt,
+    'Tribal National Party Headquarters Buildings Account': tribalNationalPartyHeadquartersBuildingsAccount,
+    'Individual National Party Convention Account': individualNationalPartyConventionAccount,
+    'Tribal National Party Pres. Nominating Convention Account': tribalNationalPartyPresNominatingConventionAccount,
+    'Individual National Party Recount/Legal Proceedings Account': individualNationalPartyRecountAccount,
+    'Party National Party Convention Account': partyNationalPartyConventionAccount,
+    'Tribal National Party Recount/Legal Proceedings Account': tribalNationalPartyRecountAccount,
   },
 };
 

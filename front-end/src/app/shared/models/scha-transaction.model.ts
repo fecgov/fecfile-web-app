@@ -1,16 +1,9 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Transaction } from '../interfaces/transaction.interface';
+import { Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { Contact } from './contact.model';
-import { MemoText } from './memo-text.model';
 
-export class SchATransaction extends BaseModel implements Transaction {
-  id: string | undefined;
-
-  form_type: string | undefined;
-  filer_committee_id_number: string | undefined;
-  transaction_id: string | undefined;
+export class SchATransaction extends Transaction {
   back_reference_tran_id_number: string | undefined;
   back_reference_sched_name: string | undefined;
   entity_type: string | undefined;
@@ -54,27 +47,8 @@ export class SchATransaction extends BaseModel implements Transaction {
   memo_code: boolean | undefined;
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
-  transaction_type_identifier: string | undefined;
-  itemized: boolean | undefined;
 
-  parent_transaction: Transaction | undefined;
-  parent_transaction_object_id: string | undefined; // Foreign key to the SchATransaction model
-
-  created: string | undefined;
-  updated: string | undefined;
-  deleted: string | undefined;
-
-  report_id: string | undefined; // Foreign key to the F3XSummary model
-
-  contact: Contact | undefined;
-  contact_id: string | undefined; // Foreign key to the Contact model
-
-  memo_text: MemoText | undefined;
-  memo_text_id: string | undefined;
-
-  children: Transaction[] | undefined;
-
-  fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
+  override apiEndpoint = '/transactions/schedule-a';
 
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -141,18 +115,18 @@ export enum ScheduleATransactionTypes {
   PARTY_RECOUNT_RECEIPT = 'PARTY_RECOUNT_RECEIPT',
   PAC_RECOUNT_RECEIPT = 'PAC_RECOUNT_RECEIPT',
   TRIBAL_RECOUNT_RECEIPT = 'TRIBAL_RECOUNT_RECEIPT',
-  INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'IND_NP_RECNT_ACC',
+  INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PARTY_NP_RECNT_ACC',
   PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT',
-  TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'TRIB_NP_RECNT_ACC',
-  INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT = 'IND_NP_HQ_ACC',
-  PARTY_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT = 'PARTY_NP_HQ_ACC',
-  PAC_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT = 'PAC_NP_HQ_ACC',
-  TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT = 'TRIB_NP_HQ_ACC',
-  INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'IND_NP_CONVEN_ACC',
-  PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'PARTY_NP_CONVEN_ACC',
-  PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'PAC_NP_CONVEN_ACC',
-  TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'TRIB_NP_CONVEN_ACC',
+  TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT',
   EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION = 'EAR_REC_RECNT_ACC',
   EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION = 'EAR_REC_CONVEN_ACC',
   EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION = 'EAR_REC_HQ_ACC',
@@ -212,7 +186,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer - Federal Election Activity'],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    'Joint Fundraising Transfer - National Party Recount Account',
+    'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
   ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
@@ -266,27 +240,36 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT, 'Party Recount Receipt'],
   [ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT, 'PAC Recount Receipt'],
   [ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT, 'Tribal Recount Receipt'],
-  [ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT, 'Individual National Party Recount Account'],
-  [ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT, 'Party National Party Recount Account'],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'Individual National Party Recount/Legal Proceedings Account',
+  ],
+  [
+    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'Party National Party Recount/Legal Proceedings Account',
+  ],
   [
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'PAC National Party Recount/Legal Proceedings Account',
   ],
-  [ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT, 'Tribal National Party Recount Account'],
   [
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'Tribal National Party Recount/Legal Proceedings Account',
+  ],
+  [
+    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Individual National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
+    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Party National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'PAC National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT,
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Tribal National Party Headquarters Buildings Account',
   ],
   [
@@ -294,8 +277,14 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Individual National Party Convention Account',
   ],
   [ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT, 'Party National Party Convention Account'],
-  [ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT, 'PAC National Party Convention Account'],
-  [ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT, 'Tribal National Party Convention Account'],
+  [
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    'PAC National Party Pres. Nominating Convention Account',
+  ],
+  [
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    'Tribal National Party Pres. Nominating Convention Account',
+  ],
   [
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
     'Earmark Receipt for Recount Account (Contribution)',

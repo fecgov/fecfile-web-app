@@ -30,7 +30,7 @@ export class BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT implements TransactionType 
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     return 'Non-contribution Account Receipt';
   }
 
