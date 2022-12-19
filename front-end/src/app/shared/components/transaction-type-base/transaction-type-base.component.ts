@@ -172,20 +172,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       return;
     }
 
-    console.log(this.transactionType);
-    const transaction = this.transactionType?.transaction;
-    if (transaction && transaction.children) {
-      for (const child of transaction.children) {
-        console.log('Child:', child);
-        if (child.transaction_type_identifier) {
-          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier) as TransactionType;
-          if (transactionType.generateContributionPurposeDescription) {
-            const newDescrip = transactionType.generateContributionPurposeDescription();
-          }
-        }
-      }
-    }
-
     const payload: Transaction = this.getPayloadTransaction(
       this.transactionType,
       this.validateService,
@@ -210,6 +196,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       ...formValues,
     });
     payload.contact_id = payload.contact?.id;
+
+    if (payload.children) {
+      payload.children = this.updateChildren(payload);
+    }
 
     let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
     // Remove properties that are populated in the back-end from list of properties to validate
@@ -386,6 +376,30 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   public isDescriptionSystemGenerated(transactionType?: TransactionType): boolean {
     // Description is system generated if there is a defined function.  Otherwise, it's mutable
     return transactionType?.generatePurposeDescription !== undefined;
+  }
+
+  updateChildren(payload: SchATransaction): Transaction[] {
+    console.log(payload);
+    if (payload.children) {
+      for (const child of payload.children as SchATransaction[]) {
+        console.log('Child:', child);
+        if (child.transaction_type_identifier) {
+          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier) as TransactionType;
+          transactionType.transaction = child;
+          if (transactionType.transaction.parent_transaction)
+            transactionType.transaction.parent_transaction.contributor_organization_name =
+              payload.contributor_organization_name;
+          if (transactionType.generatePurposeDescription) {
+            const newDescrip = transactionType.generatePurposeDescription();
+            child.contribution_purpose_descrip = newDescrip;
+          }
+        }
+      }
+      console.log('Result:', payload.children);
+      return payload.children;
+    }
+
+    return [];
   }
 
   doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {
