@@ -198,7 +198,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     payload.contact_id = payload.contact?.id;
 
     if (payload.children) {
-      payload.children = this.updateChildren(payload);
+      payload.children = this.updateChildren(payload as SchATransaction);
     }
 
     let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
@@ -387,8 +387,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier) as TransactionType;
           transactionType.transaction = child;
           if (transactionType.transaction.parent_transaction)
-            transactionType.transaction.parent_transaction.contributor_organization_name =
-              payload.contributor_organization_name;
+            transactionType.transaction.parent_transaction = {
+              id: payload.id,
+              contributor_organization_name: payload.contributor_organization_name,
+            } as SchATransaction;
           if (transactionType.generatePurposeDescription) {
             const newDescrip = transactionType.generatePurposeDescription();
             child.contribution_purpose_descrip = newDescrip;
