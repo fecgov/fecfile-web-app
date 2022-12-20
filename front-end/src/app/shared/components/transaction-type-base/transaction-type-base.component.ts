@@ -198,7 +198,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     payload.contact_id = payload.contact?.id;
 
     if (payload.children) {
-      payload.children = this.updateChildren(payload as SchATransaction);
+      payload.children = this.updateChildPurposeDescriptions(payload as SchATransaction);
     }
 
     let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
@@ -378,27 +378,51 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return transactionType?.generatePurposeDescription !== undefined;
   }
 
-  updateChildren(payload: SchATransaction): Transaction[] {
+  /**
+   *
+   * @param payload
+   *    Takes a SchATransaction because a Transaction does not have the
+   *    contributor_organization_name or contribution_purpose_description
+   *    fields.
+   * @returns
+   *    An array of Transaction objects whose contribution_purpose_descriptions
+   *    have been re-generated to account for changes to their parent
+   */
+  updateChildPurposeDescriptions(payload: SchATransaction): Transaction[] {
+    const children: Transaction[] = [];
+
     if (payload.children) {
+      /* We treat the parent's children as SchATransaction objects in order
+      to access fields exclusive to the SchATransaction model */
       for (const child of payload.children as SchATransaction[]) {
         if (child.transaction_type_identifier) {
+          // Instantiate a TransactionType object in order to access the purpose description generator
           const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier) as TransactionType;
+
+          // Prep the TransactionType by setting fields it will need when generating a purpose description
           transactionType.transaction = child;
+
+          /* Make a new object to represent the parent within the TransactionType
+          because setting the parent equal to the payload causes an infinite loop */
           if (transactionType.transaction.parent_transaction)
             transactionType.transaction.parent_transaction = {
               id: payload.id,
               contributor_organization_name: payload.contributor_organization_name,
             } as SchATransaction;
+
+          // Modify the payload to reflect the changes to child transactions
           if (transactionType.generatePurposeDescription) {
             const newDescrip = transactionType.generatePurposeDescription();
             child.contribution_purpose_descrip = newDescrip;
           }
         }
+
+        // Always add the child into the array or else it will be lost
+        children.push(child);
       }
-      return payload.children;
     }
 
-    return [];
+    return children;
   }
 
   doSave(navigateTo: NavigationDestination, payload: Transaction, transactionTypeToAdd?: ScheduleATransactionTypes) {
