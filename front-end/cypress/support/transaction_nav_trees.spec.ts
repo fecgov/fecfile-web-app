@@ -53,6 +53,7 @@ export type ChildTransactionName =
   | 'Earmark Receipt Step Two'
   | 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo'
+  | 'Tribal National Party Headquarters Buildings Account JF Transfer Memo'
   | 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo'
   | 'Individual National Party Headquarters JF Transfer Memo'
@@ -564,6 +565,18 @@ const individualNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
   },
 };
 
+const tribalNationalPartyHeadquartersJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Tribal National Party Headquarters Buildings Account JF Transfer Memo',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityIndividual,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childOf: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
+};
+
 const indvNationalPartyHeadquartersJFTransferMemo: ChildTransactionForm = {
   transaction_name: 'Individual National Party Headquarters JF Transfer Memo',
   transaction_group: 'A',
@@ -598,7 +611,8 @@ const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: Transac
     ...memoFields,
     ...contributionFields,
   },
-  childTransactions: [indvNationalPartyHeadquartersJFTransferMemo, pacNationalPartyHeadquartersJFTransferMemo],
+  childTransactions: [tribalNationalPartyHeadquartersJFTransferMemo, 
+    indvNationalPartyHeadquartersJFTransferMemo, pacNationalPartyHeadquartersJFTransferMemo],
 };
 
 const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
