@@ -379,10 +379,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   updateChildren(payload: SchATransaction): Transaction[] {
-    console.log(payload);
     if (payload.children) {
       for (const child of payload.children as SchATransaction[]) {
-        console.log('Child:', child);
         if (child.transaction_type_identifier) {
           const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier) as TransactionType;
           transactionType.transaction = child;
@@ -397,7 +395,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           }
         }
       }
-      console.log('Result:', payload.children);
       return payload.children;
     }
 
