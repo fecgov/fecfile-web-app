@@ -32,7 +32,7 @@ export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO implements Tran
 
   generatePurposeDescription(): string {
     return `Headquarters Buildings Account JF Memo: ${
-      (this.transaction?.parent_transaction as SchATransaction).contributor_organization_name
+      (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;
   }
 
