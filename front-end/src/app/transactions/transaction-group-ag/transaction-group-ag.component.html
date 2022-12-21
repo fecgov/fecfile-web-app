@@ -48,6 +48,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
+            [descriptionRequiresUserInput]="transactionType?.purposeDescriptionUserInputRequired"
           ></app-additional-info-input>
           <div class="grid" style="flex-direction: row-reverse">
             <p style="font-style: italic">This type of receipt requires a memo transaction</p>
@@ -119,6 +120,7 @@
             [form]="childForm"
             [formSubmitted]="formSubmitted"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
+            [descriptionRequiresUserInput]="transactionType?.purposeDescriptionUserInputRequired"
           ></app-additional-info-input>
         </ng-container>
       </form>

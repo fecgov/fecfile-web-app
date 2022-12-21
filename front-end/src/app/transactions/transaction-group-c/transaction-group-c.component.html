@@ -50,6 +50,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
+        [descriptionRequiresUserInput]="transactionType?.purposeDescriptionUserInputRequired"
       ></app-additional-info-input>
     </ng-container>
     <p-divider></p-divider>

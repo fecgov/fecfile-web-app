@@ -19,5 +19,6 @@ export interface TransactionType {
   subTransactionTypes?: ScheduleATransactionTypes[] | ScheduleBTransactionTypes[]; // TransactionTypes to choose from when creating a sub transaction
   navigationControls?: TransactionNavigationControls;
   generatePurposeDescription?(): string; // Dynamically generates the text in the CPD or EPD field
+  purposeDescriptionUserInputRequired?: boolean;
   getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 }

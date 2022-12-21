@@ -3,7 +3,8 @@
     <div class="col-12">
       <label for="contribution_purpose_descrip"
         >CONTRIBUTION PURPOSE DESCRIPTION
-        {{ descriptionIsSystemGenerated ? '(SYSTEM-GENERATED)' : '(OPTIONAL)' }}</label
+        {{ descriptionIsSystemGenerated ? '(SYSTEM-GENERATED)' : 
+          descriptionRequiresUserInput ? '' : '(OPTIONAL)' }}</label
       >
       <div>
         <textarea
