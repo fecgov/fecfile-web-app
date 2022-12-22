@@ -35,7 +35,8 @@ describe('Tests candidate ID field for different candidate types', () => {
       cy.createContact(contact);
 
       //Steps 7-9: Edit the created contact's Candidate ID
-      cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
+      // Click on contact's name link in the table.
+      cy.contains('a', contact['name']).click();
 
       cy.shortWait();
       cy.get("input[formControlName='candidate_id']").overwrite(c_id);
@@ -49,7 +50,7 @@ describe('Tests candidate ID field for different candidate types', () => {
       cy.contains('.p-menuitem-link', 'Contacts').click();
       cy.shortWait();
 
-      cy.contains('tr', contact['name']).find("p-button[icon='pi pi-pencil']").click();
+      cy.contains('a', contact['name']).click();
       cy.shortWait();
       cy.get("input[formControlName='candidate_id']").should('have.value', c_id);
       cy.get("button[label='Cancel']").click();
