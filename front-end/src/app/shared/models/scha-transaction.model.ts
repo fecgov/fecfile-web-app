@@ -39,8 +39,8 @@ export class SchATransaction extends Transaction {
   donor_candidate_state: string | undefined;
   donor_candidate_district: string | undefined;
   conduit_name: string | undefined;
-  conduit_street1: string | undefined;
-  conduit_street2: string | undefined;
+  conduit_street_1: string | undefined;
+  conduit_street_2: string | undefined;
   conduit_city: string | undefined;
   conduit_state: string | undefined;
   conduit_zip: string | undefined;
