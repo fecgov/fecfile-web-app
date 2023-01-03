@@ -18,7 +18,7 @@ import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
-import { Contact, ContactFields, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactFields, ContactType, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
   template: '',
@@ -62,6 +62,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     // Initialize validation tracking of current JSON schema and form data
     validateService.formValidatorSchema = transactionType?.schema;
     validateService.formValidatorForm = form;
+
+    // Override contact type options if transactionType defines them
+    if (transactionType && transactionType.contactTypeOptions) {
+      this.contactTypeOptions = this.getContactTypeOptions(transactionType.contactTypeOptions);
+    }
 
     // Intialize form values
     if (this.isExisting(transactionType?.transaction)) {
@@ -352,6 +357,22 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       return form.get('donor_committee_fec_id');
     }
     return form.get(`contributor_${field}`) || form.get(`contributor_organization_${field}`);
+  }
+
+  getContactTypeOptions(contactTypes: ContactType[]): PrimeOptions {
+    const options: PrimeOptions = [];
+    for (const contactType of contactTypes) {
+      const labelArray = ContactTypeLabels.filter((value) => {
+        return value[0] === contactType;
+      });
+
+      options.push({
+        code: contactType,
+        name: labelArray[0][1],
+      });
+    }
+
+    return options;
   }
 
   getMemoCodeConstant(transactionType?: TransactionType): boolean | undefined {

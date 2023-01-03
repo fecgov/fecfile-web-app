@@ -13,6 +13,7 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
+import { ContactTypeLabels, ContactTypes } from '../contact.model';
 
 export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
   scheduleId = 'A';
@@ -20,6 +21,7 @@ export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
   isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
+  contactTypeOptions = [ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE, ContactTypes.INDIVIDUAL];
   transaction?: SchATransaction;
   navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [],
