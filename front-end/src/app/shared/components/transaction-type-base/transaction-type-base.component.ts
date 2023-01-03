@@ -63,7 +63,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     validateService.formValidatorSchema = transactionType?.schema;
     validateService.formValidatorForm = form;
 
-    // Override contact type options if transactionType defines them
+    // Override contact type options if present in transactionType
     if (transactionType && transactionType.contactTypeOptions) {
       this.contactTypeOptions = this.getContactTypeOptions(transactionType.contactTypeOptions);
     }
