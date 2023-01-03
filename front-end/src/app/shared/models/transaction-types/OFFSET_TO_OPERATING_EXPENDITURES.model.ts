@@ -13,7 +13,7 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { ContactTypeLabels, ContactTypes } from '../contact.model';
+import { ContactTypes } from '../contact.model';
 
 export class OFFSET_TO_OPERATING_EXPENDITURES implements TransactionType {
   scheduleId = 'A';
