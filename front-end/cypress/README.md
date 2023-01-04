@@ -28,6 +28,7 @@ export CYPRESS_EMAIL=''
 export CYPRESS_COMMITTEE_ID=''
 export CYPRESS_PASSWORD=''
 export CYPRESS_PIN=''
+export CELERY_WORKER_STORAGE="local"
 ```
 
 ## Running the E2E tests
@@ -36,16 +37,19 @@ With the environment variables set, run `ng e2e` to execute the end-to-end tests
 
 To run in headless mode, run the command: ng e2e --headless
 
+## Running Lighthouse
+
+If running Lighthouse in headless mode, you must add the switch: --browser chrome
+
 ## E2E tests in CircleCI
 
-A new job was added to the CircleCI fecfile-web-app configuration to run the E2E test suite nightly.  This job uses CircleCI's [Docker executor](https://circleci.com/docs/building-docker-images/#run-docker-commands-using-the-docker-executor
-) to spin up an instance of the fecfile-web-api using Docker Compose in an isolated remote docker instance.  
+A new job was added to the CircleCI fecfile-web-app configuration to run the E2E test suite nightly. This job uses CircleCI's [Docker executor](https://circleci.com/docs/building-docker-images/#run-docker-commands-using-the-docker-executor) to spin up an instance of the fecfile-web-api using Docker Compose in an isolated remote docker instance.
 
-For security reasons, CircleCI's remote docker [does not allow mounting volumes](https://circleci.com/docs/building-docker-images/#mounting-folders), and thus our compose ```volumes``` commands fail.  To get around this, we had to create two new E2E Dockerfiles for the API/Worker to add these filesystem resources to the images directly.
+For security reasons, CircleCI's remote docker [does not allow mounting volumes](https://circleci.com/docs/building-docker-images/#mounting-folders), and thus our compose `volumes` commands fail. To get around this, we had to create two new E2E Dockerfiles for the API/Worker to add these filesystem resources to the images directly.
 
-Once the CircleCI E2E job spins up fecfile-web-api in the remote docker, it then creates a new ephemeral container (networked to interact with fecfile-api [per CircleCI instructions](https://circleci.com/docs/building-docker-images/#accessing-services)) to run the E2E tests and finally executes them. 
+Once the CircleCI E2E job spins up fecfile-web-api in the remote docker, it then creates a new ephemeral container (networked to interact with fecfile-api [per CircleCI instructions](https://circleci.com/docs/building-docker-images/#accessing-services)) to run the E2E tests and finally executes them.
 
-There are a number of environment variables that are required by the CircleCI E2E job.  These are currently set within the CircleCI fecfile-web-app project and include:
+There are a number of environment variables that are required by the CircleCI E2E job. These are currently set within the CircleCI fecfile-web-app project and include:
 
 E2E_BRANCH_NAME (fecfile-web-api and fecfile-web-app branch to checkout for the E2E test execution)
 E2E_DJANGO_SECRET_KEY (The Django secret key used to spin up the api)
@@ -56,7 +60,7 @@ CYPRESS_PASSWORD (password of the e2e account for login)
 
 Finally, a CircleCI Trigger was added to [schedule a nightly job](https://circleci.com/docs/set-a-nightly-scheduled-pipeline/) to kick off the E2E tests (and any other nightly jobs we might want in the future).
 
-To run locally (you may need to add e2e-test to all workflow jobs in app circleci config.yml first, or circleci will complain about not being able to find it.  Also, you also may need to add 'sudo' in front of the docker commands (otherwise it will complain about not being able to find Docker Daemon listening):
+To run locally (you may need to add e2e-test to all workflow jobs in app circleci config.yml first, or circleci will complain about not being able to find it. Also, you also may need to add 'sudo' in front of the docker commands (otherwise it will complain about not being able to find Docker Daemon listening):
 
 ```
 export E2E_BRANCH_NAME=''
