@@ -3,7 +3,6 @@ import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 import { TransactionNavigationControls } from '../models/transaction-navigation-controls.model';
 import { JsonSchema } from './json-schema.interface';
 import { Transaction } from '../models/transaction.model';
-import { ContactType } from '../models/contact.model';
 
 /**
  * Interface that defines the meta data associated with a transaction type.
@@ -15,7 +14,6 @@ export interface TransactionType {
   isDependentChild: boolean; // When set to true, the parent transaction is used to generate UI form entry page
   title: string;
   schema: JsonSchema; // FEC validation JSON schema
-  contactTypeOptions?: ContactType[];
   transaction?: Transaction;
   childTransactionType?: TransactionType;
   subTransactionTypes?: ScheduleATransactionTypes[] | ScheduleBTransactionTypes[]; // TransactionTypes to choose from when creating a sub transaction
