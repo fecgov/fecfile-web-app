@@ -18,7 +18,7 @@ import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
-import { Contact, ContactFields, ContactType, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactFields, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 
 @Component({
   template: '',
