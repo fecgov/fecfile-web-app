@@ -65,7 +65,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     // Override contact type options if present in transactionType
     if (transactionType && transactionType.contactTypeOptions) {
-      this.contactTypeOptions = this.getContactTypeOptions(transactionType.contactTypeOptions);
+      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, transactionType.contactTypeOptions);
     }
 
     // Intialize form values
@@ -357,22 +357,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       return form.get('donor_committee_fec_id');
     }
     return form.get(`contributor_${field}`) || form.get(`contributor_organization_${field}`);
-  }
-
-  getContactTypeOptions(contactTypes: ContactType[]): PrimeOptions {
-    const options: PrimeOptions = [];
-    for (const contactType of contactTypes) {
-      const labelArray = ContactTypeLabels.filter((value) => {
-        return value[0] === contactType;
-      });
-
-      options.push({
-        code: contactType,
-        name: labelArray[0][1],
-      });
-    }
-
-    return options;
   }
 
   getMemoCodeConstant(transactionType?: TransactionType): boolean | undefined {
