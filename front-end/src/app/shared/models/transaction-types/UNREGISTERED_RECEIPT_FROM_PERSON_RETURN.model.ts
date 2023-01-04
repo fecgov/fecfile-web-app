@@ -34,7 +34,7 @@ export class UNREGISTERED_RECEIPT_FROM_PERSON_RETURN implements TransactionType 
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
-      aggregation_group: AggregationGroups.LINE_15,
+      aggregation_group: AggregationGroups.GENERAL,
     });
   }
 }
