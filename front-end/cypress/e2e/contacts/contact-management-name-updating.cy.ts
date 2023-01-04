@@ -40,7 +40,7 @@ describe('Tests that the names on the contact management page update when edited
         .should('exist');
 
       //Step 4: Open the "Edit Contact" form
-      cy.contains('tr', 'Test Edit').find("p-button[icon='pi pi-pencil']").click();
+      cy.contains('a', 'Test Edit').click();
       cy.contains('div', 'Edit Contact').should('exist');
 
       //Steps 5 & 6: Set the contact\'s name to "First Last"

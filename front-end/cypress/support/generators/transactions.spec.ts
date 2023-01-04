@@ -217,7 +217,7 @@ function generateSingleTransactionFromForm(
   }
 
   // Generate child transactions
-  if (transactionForm['childTransactions']) {
+  if (generateAllChildren && transactionForm['childTransactions']) {
     transaction['childTransactions'] = [];
     for (const childTransactionForm of transactionForm['childTransactions']) {
       transaction['childTransactions'] = [

@@ -274,9 +274,12 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    'Individual National Party Convention Account',
+    'Individual National Party Pres. Nominating Convention Account',
   ],
-  [ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT, 'Party National Party Convention Account'],
+  [
+    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    'Party National Party Pres. Nominating Convention Account',
+  ],
   [
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT,
     'PAC National Party Pres. Nominating Convention Account',
