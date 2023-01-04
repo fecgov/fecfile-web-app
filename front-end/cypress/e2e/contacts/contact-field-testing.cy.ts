@@ -108,6 +108,11 @@ let contactType: string;
 const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organization: {} };
 
 describe('Tests the maximum length and required/not-required for each field', () => {
+  beforeEach('Logs in', () => {
+    cy.login();
+    cy.visit('/dashboard');
+  });
+
   for (contactType of Object.keys(contacts)) {
     it(`${contactType} - Check every field for required/optional and maximum length`, () => {
       cy.visit('/dashboard');

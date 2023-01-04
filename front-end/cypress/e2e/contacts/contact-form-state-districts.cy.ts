@@ -75,6 +75,11 @@ function checkEveryStateThenSelectWestVirgia() {
 }
 
 describe('Counts the number of districts associated with each state', () => {
+  beforeEach('Logs in', () => {
+    cy.login();
+    cy.visit('/dashboard');
+  });
+
   it('', () => {
     //Step 1: Navigate to contacts page
     cy.visit('/dashboard');
