@@ -21,7 +21,7 @@ describe('TRANSFER', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRANSFER);
   });
 
-  it('#generateContributionPurposeDescription() should not be defined', () => {
-    expect((transactionType as TransactionType).generateContributionPurposeDescription).toBe(undefined);
+  it('#generatePurposeDescription() should not be defined', () => {
+    expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
   });
 });

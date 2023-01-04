@@ -207,8 +207,8 @@
           "builder": "@cypress/schematic:cypress",
           "options": {
             "devServerTarget": "fecfile-web:serve",
-            "watch": false,
-            "headless": true
+            "watch": true,
+            "headless": false
           },
           "configurations": {
             "production": {

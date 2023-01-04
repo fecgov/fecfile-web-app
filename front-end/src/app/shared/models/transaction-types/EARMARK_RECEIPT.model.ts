@@ -29,7 +29,7 @@ export class EARMARK_RECEIPT implements TransactionType {
     [SAVE_LIST_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     const earmarkMemo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
     let conduit = earmarkMemo?.contributor_organization_name || '';
     if (

@@ -37,11 +37,14 @@ const transactions = [
     transaction_name: 'Other Receipts',
     fields: { contributionAmount: 200.01 },
   }),
-  generateTransactionObject({
-    transaction_name: 'Joint Fundraising Transfer',
-    fields: { contributionAmount: 100.0 },
-    childTransactions: [],
-  }),
+  generateTransactionObject(
+    {
+      transaction_name: 'Joint Fundraising Transfer',
+      fields: { contributionAmount: 100.0 },
+      childTransactions: [],
+    },
+    false
+  ),
 ];
 
 function getName(contact: Contact): string {

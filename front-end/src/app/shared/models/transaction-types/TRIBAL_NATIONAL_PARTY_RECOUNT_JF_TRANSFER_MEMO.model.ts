@@ -13,7 +13,7 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { hasNoContact, isNewTransaction } from 'app/shared/interfaces/transaction.interface';
+import { hasNoContact, isNewTransaction } from 'app/shared/models/transaction.model';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
 export class TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements TransactionType {
@@ -49,7 +49,7 @@ export class TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements Transacti
     [SAVE_LIST_CONTROL]
   );
 
-  generateContributionPurposeDescription(): string {
+  generatePurposeDescription(): string {
     return `Recount/Legal Proceedings Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;
