@@ -41,7 +41,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
-        [descriptionRequiresUserInput]="transactionType?.purposeDescriptionUserInputRequired"
+        [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
       ></app-additional-info-input>
       <div class="grid">
         <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls().inlineControls">

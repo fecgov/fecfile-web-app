@@ -8,5 +8,5 @@ import { BaseInputComponent } from '../base-input.component';
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent {
   @Input() descriptionIsSystemGenerated = false;
-  @Input() descriptionRequiresUserInput: boolean | undefined = false;
+  @Input() contributionPurposeDescriptionLabel = '';
 }

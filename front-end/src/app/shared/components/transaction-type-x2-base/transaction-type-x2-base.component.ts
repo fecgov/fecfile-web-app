@@ -1,18 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
-import { TransactionTypeBaseComponent } from '../transaction-type-base/transaction-type-base.component';
-import { ContactService } from 'app/shared/services/contact.service';
-import { Transaction } from 'app/shared/models/transaction.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { SchaGroupTransactionBaseComponent } from '../scha-group-transaction-base/scha-group-transaction-base.component';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -28,7 +28,7 @@ import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.mo
 @Component({
   template: '',
 })
-export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
+export abstract class TransactionTypeX2BaseComponent extends SchaGroupTransactionBaseComponent implements OnInit, OnDestroy {
   abstract childFormProperties: string[];
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
+import { SchaGroupTransactionBaseComponent } from 'app/shared/components/scha-group-transaction-base/scha-group-transaction-base.component';
 import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -10,7 +10,7 @@ import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.mod
   templateUrl: './transaction-group-e.component.html',
   styleUrls: ['./transaction-group-e.component.scss'],
 })
-export class TransactionGroupEComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
+export class TransactionGroupEComponent extends SchaGroupTransactionBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
