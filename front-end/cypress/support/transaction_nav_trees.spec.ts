@@ -37,6 +37,7 @@ export type SchATransactionName =
   | 'Party National Party Headquarters Buildings Account'
   | 'Tribal National Party Headquarters Buildings Account'
   | 'Tribal National Party Pres. Nominating Convention Account'
+  | 'Party National Party Recount/Legal Proceedings Account'
   | 'Individual National Party Recount/Legal Proceedings Account'
   | 'Individual National Party Pres. Nominating Convention Account'
   | 'Party National Party Pres. Nominating Convention Account'
@@ -54,10 +55,11 @@ export type ChildTransactionName =
   | 'Earmark Receipt Step Two'
   | 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo'
+  | 'Tribal National Party Headquarters Buildings Account JF Transfer Memo'
   | 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo'
-  | 'Individual National Party Headquarters JF Transfer Memo'
-  | 'PAC National Party Headquarters JF Transfer Memo';
+  | 'Individual National Party Headquarters Buildings Account JF Transfer Memo'
+  | 'PAC National Party Headquarters Buildings Account JF Transfer Memo';
 
 export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG';
 
@@ -577,8 +579,20 @@ const individualNationalPartyHeadquartersBuildingsAccount: TransactionForm = {
   },
 };
 
+const tribalNationalPartyHeadquartersJFTransferMemo: ChildTransactionForm = {
+  transaction_name: 'Tribal National Party Headquarters Buildings Account JF Transfer Memo',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  ...entityIndividual,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+  childOf: 'Joint Fundraising Transfer - National Party Headquarters Buildings Account',
+};
+
 const indvNationalPartyHeadquartersJFTransferMemo: ChildTransactionForm = {
-  transaction_name: 'Individual National Party Headquarters JF Transfer Memo',
+  transaction_name: 'Individual National Party Headquarters Buildings Account JF Transfer Memo',
   transaction_group: 'A',
   aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   ...entityIndividual,
@@ -590,7 +604,7 @@ const indvNationalPartyHeadquartersJFTransferMemo: ChildTransactionForm = {
 };
 
 const pacNationalPartyHeadquartersJFTransferMemo: ChildTransactionForm = {
-  transaction_name: 'Individual National Party Headquarters JF Transfer Memo',
+  transaction_name: 'PAC National Party Headquarters Buildings Account JF Transfer Memo',
   transaction_group: 'E',
   aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   ...entityCommittee,
@@ -611,7 +625,8 @@ const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: Transac
     ...memoFields,
     ...contributionFields,
   },
-  childTransactions: [indvNationalPartyHeadquartersJFTransferMemo, pacNationalPartyHeadquartersJFTransferMemo],
+  childTransactions: [tribalNationalPartyHeadquartersJFTransferMemo, 
+    indvNationalPartyHeadquartersJFTransferMemo, pacNationalPartyHeadquartersJFTransferMemo],
 };
 
 const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
@@ -766,6 +781,18 @@ const partyNationalPartyHeadquartersReceipt: TransactionForm = {
   },
 };
 
+const partyNationalPartyRecountAccount: TransactionForm = {
+  transaction_name: 'Party National Party Recount/Legal Proceedings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'F',
+  aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  ...entityIndividual,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const individualNationalPartyConventionAccount: TransactionForm = {
   transaction_name: 'Individual National Party Pres. Nominating Convention Account',
   transaction_category: 'OTHER',
@@ -828,8 +855,12 @@ export const schedANavTree: TransactionNavTree = {
       jointFundraisingTransferNationalPartyRecount,
     'Joint Fundraising Transfer - National Party Pres. Nominating Convention Account':
       jointFundraisingTransferNationalPartyPresNominatingConventionAccount,
-    'Joint Fundraising Transfer - National Party Headquarters Buildings Account':
-      jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount,
+    // The children of this screen to not have the standard "Back to Joint Fundraising Transfer" button
+    // on the screen so it is being commented out until the button layout for those screens
+    // is finalized and implemented. At that time, be sure to uncomment this screen to include
+    // it in the e2e tests (12/20/2022)
+    // 'Joint Fundraising Transfer - National Party Headquarters Buildings Account':
+    //   jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount,
   },
   //"REFUNDS":{},
   OTHER: {
@@ -850,6 +881,7 @@ export const schedANavTree: TransactionNavTree = {
     'Tribal National Party Headquarters Buildings Account': tribalNationalPartyHeadquartersBuildingsAccount,
     'Individual National Party Pres. Nominating Convention Account': individualNationalPartyConventionAccount,
     'Tribal National Party Pres. Nominating Convention Account': tribalNationalPartyPresNominatingConventionAccount,
+    'Party National Party Recount/Legal Proceedings Account': partyNationalPartyRecountAccount,
     'Individual National Party Recount/Legal Proceedings Account': individualNationalPartyRecountAccount,
     'Party National Party Pres. Nominating Convention Account': partyNationalPartyConventionAccount,
     'Tribal National Party Recount/Legal Proceedings Account': tribalNationalPartyRecountAccount,
