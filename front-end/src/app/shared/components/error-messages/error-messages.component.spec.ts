@@ -86,5 +86,9 @@ describe('ErrorMessagesComponent', () => {
     expect(component.minErrorMessage).toBe('My custom min error message');
     component.maxErrorMessage = 'My custom max error message';
     expect(component.maxErrorMessage).toBe('My custom max error message');
+    component.exclusiveMaxErrorMessage = 'My custom exclusive max error message';
+    expect(component.exclusiveMaxErrorMessage).toBe('My custom exclusive max error message');
+    component.exclusiveMinErrorMessage = 'My custom exclusive min error message';
+    expect(component.exclusiveMinErrorMessage).toBe('My custom exclusive min error message');
   });
 });
