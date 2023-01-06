@@ -98,20 +98,41 @@ jobs:
   e2e-test:
     docker:
       - image: cimg/node:16.15-browsers
+    parameters: # parameters are at the job level
+      specs-to-run:
+        type: string
+        default: "cypress/e2e/**/*"
     steps:
-      - checkout
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-
-      #install-packages documentation: https://circleci.com/developer/orbs/orb/circleci/node#commands-install-packages
-      - node/install-packages:
-          override-ci-command: npm install
-          app-dir: ~/project/front-end/
-
+      - setup_remote_docker:
+          docker_layer_caching: false
       - run:
-          name: run e2e tests
-          command: node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e
-          working_directory: ~/project/front-end/
+          name: clone fecfile-web-api
+          command: |
+            rm -rf .git fecfile-web-api
+            git clone https://github.com/fecgov/fecfile-web-api.git
+          working_directory: ~
+      - run:
+          name: start fecfile-web-api
+          command: |
+            git checkout ${E2E_BRANCH_NAME}
+            docker-compose down
+            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} docker-compose up --build -d
+            docker container run --network container:fecfile-api \
+              docker.io/jwilder/dockerize \
+              -wait http://localhost:8080/api/v1/user/login/authenticate \
+              -wait-retry-interval 2s \
+              -timeout 60s; \
+          working_directory: ~/project/fecfile-web-api
+      - run:
+          name: execute e2e tests
+          command: |
+            docker container run -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
+              cd ~; \
+              git clone https://github.com/fecgov/fecfile-web-app.git; \
+              cd fecfile-web-app/front-end; \
+              git checkout ${E2E_BRANCH_NAME}; \
+              npm install; \
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "<< parameters.specs-to-run >>" --headless --watch=false --browser chrome;'\
 
   deploy:
     docker:
@@ -246,8 +267,15 @@ jobs:
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+parameters:
+  is-nightly-run:
+    type: boolean
+    default: false
+
 workflows:
   test:
+    when:
+      not: << pipeline.parameters.is-nightly-run >>
     jobs:
       - lint
       - test
@@ -256,3 +284,17 @@ workflows:
           requires:
             - test
             - dependency-check
+
+  nightly-run:
+    when: << pipeline.parameters.is-nightly-run >>
+    jobs:
+      - e2e-test:
+          specs-to-run: "cypress/e2e/contacts/**/*"
+      - e2e-test:
+          specs-to-run: "cypress/e2e/long-running/**/*"
+      - e2e-test:
+          specs-to-run: "cypress/e2e/other/**/*"
+      - e2e-test:
+          specs-to-run: "cypress/e2e/reports/**/*"
+      - e2e-test:
+          specs-to-run: "cypress/e2e/transactions/**/*"

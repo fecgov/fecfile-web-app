@@ -10,7 +10,7 @@ export class EARMARK_MEMO implements TransactionType {
   schema = schema;
   transaction?: SchATransaction;
 
-  contributionPurposeDescripReadonly(): string {
+  generatePurposeDescription(): string {
     return 'Total earmarked through conduit.';
   }
 

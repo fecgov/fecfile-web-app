@@ -24,8 +24,8 @@ describe('PAC_JF_TRANSFER_MEMO', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   });
 
-  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+  it('#generatePurposeDescription() should generate a string', () => {
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe(`Joint Fundraising Memo: Test Org`);
   });
 });

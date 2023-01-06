@@ -18,7 +18,10 @@ export class OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT implements TransactionType
   scheduleId = 'A';
   componentGroupId = 'F';
   isDependentChild = false;
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT);
+  title = LabelUtils.get(
+    ScheduleATransactionTypeLabels,
+    ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT
+  );
   schema = schema;
   transaction?: SchATransaction;
   navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
@@ -27,7 +30,7 @@ export class OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT implements TransactionType
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
 
-  contributionPurposeDescripReadonly(): string {
+  generatePurposeDescription(): string {
     return 'Non-contribution Account Receipt';
   }
 

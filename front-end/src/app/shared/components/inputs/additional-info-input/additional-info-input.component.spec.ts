@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 
@@ -21,10 +22,23 @@ describe('AdditionalInfoInputComponent', () => {
       contribution_purpose_descrip: new FormControl(''),
       memo_text_input: new FormControl(''),
     });
+    component.descriptionIsSystemGenerated = true;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have a read-only cpd if system generated', () => {
+    const cpd = fixture.debugElement.query(By.css('#contribution_purpose_descrip'));
+    expect(cpd.classes['readonly']).toBeTruthy();
+  });
+
+  it('should have a mutable cpd if not system generated', () => {
+    component.descriptionIsSystemGenerated = false;
+    const cpd = fixture.debugElement.query(By.css('#contribution_purpose_descrip'));
+    fixture.detectChanges();
+    expect(cpd.classes['readonly']).toBeFalsy();
   });
 });

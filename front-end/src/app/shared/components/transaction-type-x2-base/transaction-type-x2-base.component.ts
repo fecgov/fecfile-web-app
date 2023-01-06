@@ -9,7 +9,7 @@ import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionTypeBaseComponent } from '../transaction-type-base/transaction-type-base.component';
 import { ContactService } from 'app/shared/services/contact.service';
-import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';

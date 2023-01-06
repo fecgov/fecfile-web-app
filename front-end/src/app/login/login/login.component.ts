@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { LoginService } from '../../shared/services/login.service';
-import { AuthService } from '../../shared/services/AuthService/auth.service';
-import { SessionService } from '../../shared/services/SessionService/session.service';
 import { UserLoginData } from 'app/shared/models/user.model';
 import { Store } from '@ngrx/store';
 import { userLoggedOutAction, userLoggedInAction } from 'app/store/login.actions';
@@ -15,7 +13,7 @@ import { userLoggedOutAction, userLoggedInAction } from 'app/store/login.actions
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  public frm!: FormGroup;
+  public form!: FormGroup;
   public isBusy = false;
   public hasFailed = false;
   public committeeIdInputError = false;
@@ -31,13 +29,11 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
-    private authService: AuthService,
     private router: Router,
-    private store: Store,
-    private sessionService: SessionService
+    private store: Store
   ) {
-    this.frm = this.fb.group({
-      commiteeId: ['', Validators.required],
+    this.form = this.fb.group({
+      committeeId: ['', Validators.required],
       loginPassword: ['', Validators.required],
       emailId: ['', [Validators.required, Validators.email]],
     });
@@ -45,7 +41,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.sessionService.destroy();
     localStorage.clear();
     this.appTitle = environment.appTitle;
     this.titleF = this.appTitle.substring(0, 3);
@@ -61,15 +56,15 @@ export class LoginComponent implements OnInit {
    *
    */
   public updateStatus(): void {
-    if (this.frm.get('commiteeId')?.valid) {
+    if (this.form.get('committeeId')?.valid) {
       this.committeeIdInputError = false;
     }
 
-    if (this.frm.get('loginPassword')?.valid) {
+    if (this.form.get('loginPassword')?.valid) {
       this.passwordInputError = false;
     }
 
-    if (this.frm.get('emailId')?.valid) {
+    if (this.form.get('emailId')?.valid) {
       this.loginEmailInputError = false;
     }
   }
@@ -79,26 +74,25 @@ export class LoginComponent implements OnInit {
    *
    */
   public doSignIn(): void {
-    if (this.frm.invalid) {
-      this.committeeIdInputError = this.frm.get('commiteeId')?.invalid ? true : false;
+    if (this.form.invalid) {
+      this.committeeIdInputError = !!this.form.get('committeeId')?.invalid;
 
-      this.passwordInputError = this.frm.get('loginPassword')?.invalid ? true : false;
+      this.passwordInputError = !!this.form.get('loginPassword')?.invalid;
 
-      this.loginEmailInputError = this.frm.get('emailId')?.invalid ? true : false;
+      this.loginEmailInputError = !!this.form.get('emailId')?.invalid;
       return;
     }
 
     this.isBusy = true;
     this.hasFailed = false;
 
-    const committeeId: string = this.frm.get('commiteeId')?.value;
-    const password: string = this.frm.get('loginPassword')?.value;
-    const email: string = this.frm.get('emailId')?.value;
+    const committeeId: string = this.form.get('committeeId')?.value;
+    const password: string = this.form.get('loginPassword')?.value;
+    const email: string = this.form.get('emailId')?.value;
 
-    this.loginService.signIn(email, committeeId, password).subscribe({
+    this.loginService.logIn(email, committeeId, password).subscribe({
       next: (res: UserLoginData) => {
-        if (res.token) {
-          this.authService.doSignIn(res.token);
+        if (res.is_allowed) {
           this.store.dispatch(userLoggedInAction({ payload: res }));
           this.router.navigate(['dashboard']);
         }

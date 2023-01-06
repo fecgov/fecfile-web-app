@@ -20,8 +20,8 @@ describe('TRIBAL_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRIBAL_RECEIPT);
   });
 
-  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+  it('#generatePurposeDescription() should generate a string', () => {
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Tribal Receipt');
   });
 });

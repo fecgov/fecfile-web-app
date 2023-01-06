@@ -1,7 +1,10 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-12">
-      <label for="contribution_purpose_descrip">CONTRIBUTION PURPOSE DESCRIPTION (SYSTEM-GENERATED)</label>
+      <label for="contribution_purpose_descrip"
+        >CONTRIBUTION PURPOSE DESCRIPTION
+        {{ descriptionIsSystemGenerated ? '(SYSTEM-GENERATED)' : '(OPTIONAL)' }}</label
+      >
       <div>
         <textarea
           id="contribution_purpose_descrip"
@@ -11,8 +14,8 @@
           [disabled]="true"
           [autoResize]="true"
           formControlName="contribution_purpose_descrip"
-          class="readonly"
-          readonly
+          [ngClass]="{ readonly: descriptionIsSystemGenerated }"
+          [readonly]="descriptionIsSystemGenerated"
         ></textarea>
         <app-error-messages
           [form]="form"
@@ -41,8 +44,5 @@
         ></app-error-messages>
       </div>
     </div>
-  </div>
-  <div class="grid" style="flex-direction: row-reverse">
-    <p style="font-style: italic">This type of receipt requires a memo transaction</p>
   </div>
 </div>

@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import {
-  groupANavTree,
+  schedANavTree,
   TransactionCategory,
   SchATransactionName,
   TransactionForm,
@@ -9,6 +9,8 @@ import {
   ChildTransactionName,
   PairedTransactionForm,
   childTransactionTree,
+  TransactionGroup,
+  AggregationGroup,
 } from '../transaction_nav_trees.spec';
 import {
   Contact,
@@ -53,8 +55,8 @@ export type PairedTransaction = {
 };
 
 export function getTransactionFormByName(transaction_name: string): TransactionForm | ChildTransactionForm | undefined {
-  for (const category of Object.keys(groupANavTree)) {
-    for (const tForm of Object.values(groupANavTree[category])) {
+  for (const category of Object.keys(schedANavTree)) {
+    for (const tForm of Object.values(schedANavTree[category])) {
       if (tForm['transaction_name'] && tForm['transaction_name'] === transaction_name) {
         return tForm as TransactionForm;
       }
@@ -72,16 +74,38 @@ export function getTransactionFormByName(transaction_name: string): TransactionF
 }
 
 function getTransactionFormByCategory(transaction_category: string): TransactionForm | undefined {
-  if (Object.keys(groupANavTree).includes(transaction_category)) {
-    const forms = Object.values(groupANavTree[transaction_category]);
+  if (Object.keys(schedANavTree).includes(transaction_category)) {
+    const forms = Object.values(schedANavTree[transaction_category]);
     return _.sample(forms) as TransactionForm;
   }
 }
 
+export function getTransactionFormsByTransactionGroup(group: TransactionGroup): TransactionForm[] {
+  let forms: TransactionForm[] = [];
+  for (const category of Object.keys(schedANavTree)) {
+    for (const form of Object.values(schedANavTree[category]) as TransactionForm[]) {
+      if (form.transaction_group == group) forms = [form, ...forms];
+    }
+  }
+
+  return forms;
+}
+
+export function getTransactionFormsByAggregationGroup(group: AggregationGroup): TransactionForm[] {
+  let forms: TransactionForm[] = [];
+  for (const category of Object.keys(schedANavTree)) {
+    for (const form of Object.values(schedANavTree[category]) as TransactionForm[]) {
+      if (form.aggregation_group == group) forms = [form, ...forms];
+    }
+  }
+
+  return forms;
+}
+
 function getTransactionFormAtRandom(): TransactionForm {
   let forms: TransactionForm[] = [];
-  for (const category of Object.keys(groupANavTree)) {
-    forms = [...forms, ...Object.values(groupANavTree[category])];
+  for (const category of Object.keys(schedANavTree)) {
+    forms = [...forms, ...Object.values(schedANavTree[category])];
   }
 
   return _.sample(forms) as TransactionForm;

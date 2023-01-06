@@ -4,7 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { Transaction } from 'app/shared/interfaces/transaction.interface';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
@@ -43,7 +43,7 @@ describe('TransactionGroupFComponent', () => {
     contributor_city: 'city',
     contributor_state: 'VA',
     contributor_zip: '20001',
-    contribution_date: '20220811',
+    contribution_date: '2022-08-11',
     contribution_amount: 1,
     contribution_aggregate: 2,
   });
@@ -80,7 +80,7 @@ describe('TransactionGroupFComponent', () => {
       scheduleId: '',
       componentGroupId: '',
       contact: undefined,
-      contributionPurposeDescripReadonly: () => '',
+      generatePurposeDescription: () => 'test description',
       getNewTransaction: () => {
         return {} as Transaction;
       },

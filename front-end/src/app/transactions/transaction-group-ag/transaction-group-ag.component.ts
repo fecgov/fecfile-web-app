@@ -104,9 +104,11 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
         ?.transaction as SchATransaction;
       childTransaction.entity_type = this.childForm.get('entity_type')?.value;
 
-      this.form.patchValue({
-        contribution_purpose_descrip: this.transactionType?.contributionPurposeDescripReadonly(),
-      });
+      if (this.transactionType?.generatePurposeDescription) {
+        this.form.patchValue({
+          contribution_purpose_descrip: this.transactionType.generatePurposeDescription(),
+        });
+      }
     };
 
     // Group A contribution purpose description updates with Group G contributor name updates.

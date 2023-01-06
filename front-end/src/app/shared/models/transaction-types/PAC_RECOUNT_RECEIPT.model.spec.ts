@@ -20,8 +20,8 @@ describe('PAC_RECOUNT_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
   });
 
-  it('#contributionPurposeDescripReadonly() should return constant', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
+  it('#generatePurposeDescription() should return constant', () => {
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Recount Account');
   });
 });

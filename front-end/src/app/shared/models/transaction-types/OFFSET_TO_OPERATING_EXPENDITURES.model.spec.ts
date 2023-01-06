@@ -1,5 +1,6 @@
 import { OFFSET_TO_OPERATING_EXPENDITURES } from './OFFSET_TO_OPERATING_EXPENDITURES.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
 describe('OFFSET_TO_OPERATING_EXPENDITURES', () => {
   let transactionType: OFFSET_TO_OPERATING_EXPENDITURES;
@@ -20,8 +21,7 @@ describe('OFFSET_TO_OPERATING_EXPENDITURES', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   });
 
-  it('#contributionPurposeDescripReadonly() should return an empty string', () => {
-    const descrip = transactionType.contributionPurposeDescripReadonly();
-    expect(descrip).toBe('');
+  it('#generatePurposeDescription() should not be defined', () => {
+    expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
   });
 });
