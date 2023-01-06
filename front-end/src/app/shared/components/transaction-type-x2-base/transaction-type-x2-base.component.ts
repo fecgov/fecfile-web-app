@@ -12,7 +12,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
-import { SchaGroupTransactionBaseComponent } from '../scha-group-transaction-base/scha-group-transaction-base.component';
+import { TransactionTypeBaseComponent } from '../transaction-type-base/transaction-type-base.component';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -28,7 +28,7 @@ import { SchaGroupTransactionBaseComponent } from '../scha-group-transaction-bas
 @Component({
   template: '',
 })
-export abstract class TransactionTypeX2BaseComponent extends SchaGroupTransactionBaseComponent implements OnInit, OnDestroy {
+export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   abstract childFormProperties: string[];
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});

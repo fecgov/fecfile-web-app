@@ -1,22 +1,19 @@
-import {
-  SchATransaction,
-  ScheduleATransactionTypes,
-  ScheduleATransactionTypeLabels,
-  AggregationGroups,
-} from '../scha-transaction.model';
+import { hasNoContact, isNewTransaction } from 'app/shared/models/transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO';
+import {
+  AggregationGroups, SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes
+} from '../scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
   SAVE_LIST_CONTROL,
-  TransactionNavigationControls,
+  TransactionNavigationControls
 } from '../transaction-navigation-controls.model';
-import { hasNoContact, isNewTransaction } from 'app/shared/models/transaction.model';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { SchaTransactionType } from './SchaTransactionType.model';
 
-export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements TransactionType {
+export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchaTransactionType {
   scheduleId = 'A';
   componentGroupId = 'F';
   isDependentChild = false;
@@ -25,8 +22,8 @@ export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements TransactionT
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO
   );
   schema = schema;
-  transaction?: SchATransaction;
-  navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
+  override transaction?: SchATransaction;
+  override navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
@@ -49,7 +46,7 @@ export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements TransactionT
     [SAVE_LIST_CONTROL]
   );
 
-  generatePurposeDescription(): string {
+  override generatePurposeDescription(): string {
     return `Recount/Legal Proceedings Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;

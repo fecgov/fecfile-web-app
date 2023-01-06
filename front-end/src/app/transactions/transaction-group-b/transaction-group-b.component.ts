@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SchaGroupTransactionBaseComponent } from 'app/shared/components/scha-group-transaction-base/scha-group-transaction-base.component';
+import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -14,7 +14,7 @@ import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.mod
   selector: 'app-transaction-group-b',
   templateUrl: './transaction-group-b.component.html',
 })
-export class TransactionGroupBComponent extends SchaGroupTransactionBaseComponent implements OnInit, OnDestroy {
+export class TransactionGroupBComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',

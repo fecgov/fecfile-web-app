@@ -13,8 +13,9 @@ import {
   SAVE_ANOTHER_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
+import { SchaTransactionType } from './SchaTransactionType.model';
 
-export class PARTY_RECEIPT implements TransactionType {
+export class PARTY_RECEIPT implements SchaTransactionType {
   scheduleId = 'A';
   componentGroupId = 'F';
   isDependentChild = false;
