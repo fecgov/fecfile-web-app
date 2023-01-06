@@ -24,7 +24,6 @@ export class UNREGISTERED_RECEIPT_FROM_PERSON extends SchaTransactionType {
     [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
   );
-  override purposeDescriptionUserInputRequired = true;
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',

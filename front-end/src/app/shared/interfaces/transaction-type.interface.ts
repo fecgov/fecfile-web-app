@@ -1,8 +1,8 @@
 import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 import { TransactionNavigationControls } from '../models/transaction-navigation-controls.model';
-import { JsonSchema } from './json-schema.interface';
 import { Transaction } from '../models/transaction.model';
+import { JsonSchema } from './json-schema.interface';
 
 /**
  * Interface that defines the meta data associated with a transaction type.
@@ -20,6 +20,5 @@ export abstract class TransactionType {
   navigationControls?: TransactionNavigationControls;
   generatePurposeDescription?(): string; // Dynamically generates the text in the CPD or EPD field
   generatePurposeDescriptionLabel?(): string; // Get the CPD or EPD field label
-  purposeDescriptionUserInputRequired?: boolean;
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 }
