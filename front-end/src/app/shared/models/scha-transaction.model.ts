@@ -115,8 +115,8 @@ export enum ScheduleATransactionTypes {
   PARTY_RECOUNT_RECEIPT = 'PARTY_RECOUNT_RECEIPT',
   PAC_RECOUNT_RECEIPT = 'PAC_RECOUNT_RECEIPT',
   TRIBAL_RECOUNT_RECEIPT = 'TRIBAL_RECOUNT_RECEIPT',
+  PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT',
-  PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PARTY_NP_RECNT_ACC',
   PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
@@ -274,12 +274,15 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
-    'Individual National Party Convention Account',
+    'Individual National Party Pres. Nominating Convention Account',
   ],
-  [ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT, 'Party National Party Convention Account'],
   [
-    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT, 
-    'PAC National Party Pres. Nominating Convention Account'
+    ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    'Party National Party Pres. Nominating Convention Account',
+  ],
+  [
+    ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+    'PAC National Party Pres. Nominating Convention Account',
   ],
   [
     ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,

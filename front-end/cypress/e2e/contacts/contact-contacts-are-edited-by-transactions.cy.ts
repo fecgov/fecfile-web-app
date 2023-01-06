@@ -74,7 +74,8 @@ describe('Tests that contacts are edited by transactions', () => {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
     cy.medWait();
 
-    cy.contains('tr', contactIndividual['name']).get('p-button[icon="pi pi-pencil"]').click();
+    // Click on contact name link in table.
+    cy.contains('a', contactIndividual['name']).click();
     cy.shortWait();
 
     cy.get('input[formControlName="city"]').should('have.value', 'TESTOPOLIS');

@@ -1,3 +1,4 @@
+import { TransactionType } from '../../interfaces/transaction-type.interface';
 import {
   SchATransaction,
   ScheduleATransactionTypes,
@@ -5,24 +6,23 @@ import {
   AggregationGroups,
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO';
 import { TransactionNavigationControls, JF_TRANSFER_MEMO_CONTROLS } from '../transaction-navigation-controls.model';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
-export class INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO implements TransactionType {
+export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO implements TransactionType {
   scheduleId = 'A';
-  componentGroupId = 'A';
+  componentGroupId = 'D';
   isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
   );
   schema = schema;
   transaction?: SchATransaction;
   navigationControls?: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
 
   generatePurposeDescription(): string {
-    return `Pres. Nominating Convention Account JF Memo: ${
+    return `Headquarters Buildings Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;
   }
@@ -30,9 +30,8 @@ export class INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO implements Tr
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',
-      transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
-      back_reference_sched_name: 'SA17',
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
+      transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     });
   }
 }
