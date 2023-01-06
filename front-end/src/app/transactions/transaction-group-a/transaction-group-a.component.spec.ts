@@ -100,7 +100,7 @@ describe('TransactionGroupAComponent', () => {
     component.save(NavigationDestination.LIST);
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
-      `${environment.apiUrl}/sch-a-transactions/1/?schema=INDIVIDUAL_JF_TRANSFER_MEMO&fields_to_validate=`
+      `${environment.apiUrl}/transactions/schedule-a/1/?schema=INDIVIDUAL_JF_TRANSFER_MEMO&fields_to_validate=`
     );
     httpTestingController.verify();
   });
