@@ -41,7 +41,7 @@
         "intl-tel-input": "^17.0.18",
         "jwt-decode": "^3.1.2",
         "lodash": "^4.17.21",
-        "luxon": "^2.3.2",
+        "luxon": "^2.5.2",
         "ngrx-store-localstorage": "^14.0.0",
         "ngx-cookie-service": "^14.0.1",
         "ngx-logger": "^5.0.7",
