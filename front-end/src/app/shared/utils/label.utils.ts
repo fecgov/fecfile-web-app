@@ -46,12 +46,10 @@ export class LabelUtils {
         code: type,
       }));
     } else {
-      return (
-        labelArrays.map((item: string[]) => ({
-          name: item[1],
-          code: item[0],
-        })) || []
-      );
+      return labelArrays.map((item: string[]) => ({
+        name: item[1],
+        code: item[0],
+      }));
     }
   }
 
