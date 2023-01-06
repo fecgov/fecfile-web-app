@@ -280,22 +280,6 @@ describe('TransactionTypeBaseComponent', () => {
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
 
-  it('Updates the purpose description of a child transaction', () => {
-    const testTransaction1 = SchATransaction.fromJSON(initTransactionData);
-    const testTransaction2 = SchATransaction.fromJSON(initTransactionData);
-
-    testTransaction2.transaction_type_identifier =
-      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO;
-    testTransaction2.parent_transaction = testTransaction1;
-    testTransaction1.contributor_organization_name = 'Test Committee';
-    testTransaction1.children = [testTransaction2];
-
-    const updatedChildren = component.updateChildPurposeDescriptions(testTransaction1);
-    const child = updatedChildren[0] as SchATransaction;
-    console.log(updatedChildren, child);
-    expect(child.contribution_purpose_descrip).toContain(testTransaction1.contributor_organization_name);
-  });
-
   it('#save no contact changes', () => {
     const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();

@@ -19,7 +19,6 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { Contact, ContactFields, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 
 @Component({
   template: '',
