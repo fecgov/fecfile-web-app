@@ -26,6 +26,11 @@ describe('ErrorMessagesComponent', () => {
         minimum: 0,
         maximum: 10,
       },
+      exclusive_low_high: {
+        type: 'number',
+        exclusiveMinimum: 0,
+        exclusiveMaximum: 100,
+      },
     },
   };
 
@@ -51,7 +56,9 @@ describe('ErrorMessagesComponent', () => {
   it('should provide default error messages', () => {
     validateService.formValidatorSchema = testSchema;
     const fb: FormBuilder = new FormBuilder();
-    validateService.formValidatorForm = fb.group(validateService.getFormGroupFields(['in_between', 'low_high']));
+    validateService.formValidatorForm = fb.group(
+      validateService.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high'])
+    );
     component.form = validateService.formValidatorForm;
     component.fieldName = 'in_between';
     component.ngOnInit();
@@ -67,6 +74,12 @@ describe('ErrorMessagesComponent', () => {
     expect(component.minErrorMessage).toBe('This field must be greater than or equal to $0.00.');
     component.form.patchValue({ low_high: 100 });
     expect(component.maxErrorMessage).toBe('This field must be less than or equal to $10.00.');
+    component.fieldName = 'exclusive_low_high';
+    component.ngOnInit();
+    component.form.patchValue({ exclusive_low_high: 0 });
+    expect(component.exclusiveMinErrorMessage).toBe('This field must be greater than $0.00.');
+    component.form.patchValue({ exclusive_low_high: 100 });
+    expect(component.exclusiveMaxErrorMessage).toBe('This field must be less than $100.00.');
   });
 
   it('should let us override the error messages', () => {

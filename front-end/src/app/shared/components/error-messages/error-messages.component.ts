@@ -76,8 +76,8 @@ export class ErrorMessagesComponent implements OnInit {
     if (this._exclusiveMinErrorMessage) {
       return this._exclusiveMinErrorMessage;
     }
-    return `This field must be less than ${formatCurrency(
-      this.control?.errors?.['exclusiveMin']?.exclusiveMax,
+    return `This field must be greater than ${formatCurrency(
+      this.control?.errors?.['exclusiveMin']?.exclusiveMin,
       this.localeId,
       '$'
     )}.`;
@@ -106,6 +106,7 @@ export class ErrorMessagesComponent implements OnInit {
     if (this._exclusiveMaxErrorMessage) {
       return this._exclusiveMaxErrorMessage;
     }
+    console.log(this.control?.errors);
     return `This field must be less than ${formatCurrency(
       this.control?.errors?.['exclusiveMax']?.exclusiveMax,
       this.localeId,
