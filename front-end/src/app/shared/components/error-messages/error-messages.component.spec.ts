@@ -31,6 +31,10 @@ describe('ErrorMessagesComponent', () => {
         exclusiveMinimum: 0,
         exclusiveMaximum: 100,
       },
+      exclusive_negative_amount: {
+        type: 'number',
+        exclusiveMaximum: 0,
+      },
     },
   };
 
@@ -57,7 +61,7 @@ describe('ErrorMessagesComponent', () => {
     validateService.formValidatorSchema = testSchema;
     const fb: FormBuilder = new FormBuilder();
     validateService.formValidatorForm = fb.group(
-      validateService.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high'])
+      validateService.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount'])
     );
     component.form = validateService.formValidatorForm;
     component.fieldName = 'in_between';
@@ -80,6 +84,19 @@ describe('ErrorMessagesComponent', () => {
     expect(component.exclusiveMinErrorMessage).toBe('This field must be greater than $0.00.');
     component.form.patchValue({ exclusive_low_high: 100 });
     expect(component.exclusiveMaxErrorMessage).toBe('This field must be less than $100.00.');
+  });
+
+  it('should present a unique error message when a negative contribution amount is required', () => {
+    //This has to be done separately because a new exclusiveMaxErrorMessage has to be generated
+    validateService.formValidatorSchema = testSchema;
+    const fb: FormBuilder = new FormBuilder();
+    validateService.formValidatorForm = fb.group(validateService.getFormGroupFields(['exclusive_negative_amount']));
+    component.form = validateService.formValidatorForm;
+    component.fieldName = 'exclusive_negative_amount';
+    component.ngOnInit();
+    console.log('TEST');
+    component.form.patchValue({ exclusive_negative_amount: 1 });
+    expect(component.exclusiveMaxErrorMessage).toBe('Amount must be negative (example: -$20.00)');
   });
 
   it('should let us override the error messages', () => {

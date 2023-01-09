@@ -106,7 +106,11 @@ export class ErrorMessagesComponent implements OnInit {
     if (this._exclusiveMaxErrorMessage) {
       return this._exclusiveMaxErrorMessage;
     }
-    console.log(this.control?.errors);
+
+    if (this.control?.errors?.['exclusiveMax']?.exclusiveMax === 0) {
+      return 'Amount must be negative (example: -$20.00)';
+    }
+
     return `This field must be less than ${formatCurrency(
       this.control?.errors?.['exclusiveMax']?.exclusiveMax,
       this.localeId,
