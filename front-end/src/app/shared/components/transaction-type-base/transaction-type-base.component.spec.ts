@@ -655,4 +655,40 @@ describe('TransactionTypeBaseComponent', () => {
 
     expect(committeeNameFormControlValue === testCommitteeName).toBeTrue();
   });
+
+  xit('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
+    component.ngOnInit();
+    component.transactionType = {
+      transaction: testTransaction,
+      scheduleId: 'TEST',
+      componentGroupId: 'TEST',
+      isDependentChild: false,
+      title: 'Title goes here',
+      getNewTransaction: () => {
+        return testTransaction;
+      },
+      schema: {
+        $id: '10101',
+        $schema: 'string',
+        type: 'string',
+        required: [],
+        properties: {
+          contribution_amount: {
+            type: 'number',
+            exclusiveMaximum: 0,
+          },
+        },
+      },
+    };
+
+    const getPreviousTransactionSpy = spyOn(testTransactionService, 'getPreviousTransaction').and.returnValue(
+      of(testTransaction)
+    );
+    console.log('Yo');
+    component.doInit(component.form, new ValidateService(), component.transactionType, component.contactId$);
+    console.log('Where you at');
+    component.form.patchValue({ contribution_amount: 2 });
+    console.log(component.form);
+    expect(component.form.value.contribution_amount).toBe(-2);
+  });
 });
