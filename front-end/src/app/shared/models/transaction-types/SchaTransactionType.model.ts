@@ -5,7 +5,7 @@ export abstract class SchaTransactionType extends TransactionType {
     if (this.generatePurposeDescription !== undefined) {
       return '(SYSTEM-GENERATED)';
     } else if (this.schema.required.includes('contribution_purpose_descrip')) {
-      return '';
+      return '(REQUIRED)';
     }
     return '(OPTIONAL)';
   }
