@@ -114,9 +114,9 @@ jobs:
           name: start fecfile-web-api
           command: |
             git checkout ${E2E_BRANCH_NAME}
-            docker-compose down
-            DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} docker-compose up --build -d
-            docker container run --network container:fecfile-api \
+            sudo docker-compose down
+            sudo DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} docker-compose up --build -d
+            sudo docker container run --network container:fecfile-api \
               docker.io/jwilder/dockerize \
               -wait http://localhost:8080/api/v1/user/login/authenticate \
               -wait-retry-interval 2s \
@@ -125,7 +125,7 @@ jobs:
       - run:
           name: execute e2e tests and push results to git
           command: |
-            docker container run -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
+            sudo docker container run -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
               cd ~; \
               git clone https://github.com/fecgov/fecfile-web-app.git; \
               cd fecfile-web-app/front-end; \
@@ -133,7 +133,8 @@ jobs:
               npm install; \
               node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec cypress/e2e"<< parameters.e2e-specs-dir-to-run >>"/**/* --headless --watch=false --browser chrome;'\
               rm -r cypress/results"<< parameters.e2e-specs-dir-to-run >>"
-              mv /tmp/cypress-run cypress/results"<< parameters.e2e-specs-dir-to-run >>"
+              ls -la /tmp
+              mv /tmp/cypress-run/ cypress/results"<< parameters.e2e-specs-dir-to-run >>"
               git add cypress/results
               git add cypress/lighthouse
               git commit -m "Added test results for << parameters.e2e-specs-dir-to-run >>"
@@ -278,27 +279,6 @@ parameters:
 
 workflows:
   test:
-    when:
-      not: << pipeline.parameters.is-nightly-run >>
-    jobs:
-      - lint
-      - test
-      - dependency-check
-      - deploy:
-          requires:
-            - test
-            - dependency-check
-
-  nightly-run:
-    when: << pipeline.parameters.is-nightly-run >>
     jobs:
       - e2e-test:
           e2e-specs-dir-to-run: "/contacts"
-      - e2e-test:
-          e2e-specs-dir-to-run: "/long-running"
-      - e2e-test:
-          e2e-specs-dir-to-run: "/other"
-      - e2e-test:
-          e2e-specs-dir-to-run: "/reports"
-      - e2e-test:
-          e2e-specs-dir-to-run: "/transactions"
