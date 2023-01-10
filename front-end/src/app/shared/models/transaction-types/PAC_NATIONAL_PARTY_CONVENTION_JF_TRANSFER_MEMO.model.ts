@@ -19,7 +19,7 @@ export class PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO implements Transacti
   );
   schema = schema;
   transaction?: SchATransaction;
-  navigationControls?: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
+  navigationControls: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
 
   generatePurposeDescription(): string {
     return `Pres. Nominating Convention Account JF Memo: ${

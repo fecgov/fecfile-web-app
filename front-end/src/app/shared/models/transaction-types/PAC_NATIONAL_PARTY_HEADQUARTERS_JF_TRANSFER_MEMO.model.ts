@@ -19,7 +19,7 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO implements Transac
   );
   schema = schema;
   transaction?: SchATransaction;
-  navigationControls?: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
+  navigationControls: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
 
   generatePurposeDescription(): string {
     return `Headquarters Buildings Account JF Memo: ${

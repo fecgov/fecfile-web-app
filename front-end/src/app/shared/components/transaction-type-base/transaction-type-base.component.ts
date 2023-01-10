@@ -128,6 +128,18 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         const previousAggregate = +((previous_transaction as SchATransaction)?.contribution_aggregate || 0);
         form.get('contribution_aggregate')?.setValue(+contribution_amount + previousAggregate);
       });
+
+    const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
+    if (contribution_amount_schema?.exclusiveMaximum === 0) {
+      form
+        .get('contribution_amount')
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((contribution_amount) => {
+          if (typeof contribution_amount === 'number' && contribution_amount > 0) {
+            form.patchValue({ contribution_amount: -1 * contribution_amount });
+          }
+        });
+    }
   }
 
   ngOnDestroy(): void {
