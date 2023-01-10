@@ -12,6 +12,14 @@ export default defineConfig({
   trashAssetsBeforeRuns: false,
   videoUploadOnPasses: false,
   chromeWebSecurity: false,
+  reporter: 'mochawesome',
+  reporterOptions: {
+    reportDir: '/tmp/cypress-run',
+    reportFilename: "[status]_[datetime]-[name]",
+    overwrite: false,
+    html: true,
+    json: false
+  },
   lighthouse: {
     options: ['--chrome-flags="--no-sandbox --headless --disable-gpu"'],
   },

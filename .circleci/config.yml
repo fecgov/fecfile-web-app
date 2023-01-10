@@ -99,9 +99,8 @@ jobs:
     docker:
       - image: cimg/node:16.15-browsers
     parameters: # parameters are at the job level
-      specs-to-run:
+      e2e-specs-dir-to-run:
         type: string
-        default: "cypress/e2e/**/*"
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -124,7 +123,7 @@ jobs:
               -timeout 60s; \
           working_directory: ~/project/fecfile-web-api
       - run:
-          name: execute e2e tests
+          name: execute e2e tests and push results to git
           command: |
             docker container run -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
               cd ~; \
@@ -132,8 +131,13 @@ jobs:
               cd fecfile-web-app/front-end; \
               git checkout ${E2E_BRANCH_NAME}; \
               npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "<< parameters.specs-to-run >>" --headless --watch=false --browser chrome;'\
-
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec cypress/e2e"<< parameters.e2e-specs-dir-to-run >>"/**/* --headless --watch=false --browser chrome;'\
+              rm -r cypress/results"<< parameters.e2e-specs-dir-to-run >>"
+              mv /tmp/cypress-run cypress/results"<< parameters.e2e-specs-dir-to-run >>"
+              git add cypress/results
+              git add cypress/lighthouse
+              git commit -m "Added test results for << parameters.e2e-specs-dir-to-run >>"
+              git push -q origin ${E2E_BRANCH_NAME}
   deploy:
     docker:
       - image: cimg/node:16.15-browsers
@@ -289,12 +293,12 @@ workflows:
     when: << pipeline.parameters.is-nightly-run >>
     jobs:
       - e2e-test:
-          specs-to-run: "cypress/e2e/contacts/**/*"
+          e2e-specs-dir-to-run: "/contacts"
       - e2e-test:
-          specs-to-run: "cypress/e2e/long-running/**/*"
+          e2e-specs-dir-to-run: "/long-running"
       - e2e-test:
-          specs-to-run: "cypress/e2e/other/**/*"
+          e2e-specs-dir-to-run: "/other"
       - e2e-test:
-          specs-to-run: "cypress/e2e/reports/**/*"
+          e2e-specs-dir-to-run: "/reports"
       - e2e-test:
-          specs-to-run: "cypress/e2e/transactions/**/*"
+          e2e-specs-dir-to-run: "/transactions"
