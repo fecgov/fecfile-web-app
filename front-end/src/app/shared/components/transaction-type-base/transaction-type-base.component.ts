@@ -194,11 +194,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     let formValues = validateService.getFormValues(form, formProperties);
     if (transactionType) formValues = this.retrieveMemoText(transactionType, form, formValues);
 
-    const payload: Transaction = SchATransaction.fromJSON({
+    const payload: SchATransaction = SchATransaction.fromJSON({
       ...transactionType?.transaction,
       ...formValues,
     });
     payload.contact_id = payload.contact?.id;
+
+    if (payload.children) {
+      payload.children = payload.updateChildren();
+    }
 
     let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
     // Remove properties that are populated in the back-end from list of properties to validate

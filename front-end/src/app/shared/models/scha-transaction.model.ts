@@ -2,6 +2,8 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
+import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { TransactionType } from '../interfaces/transaction-type.interface';
 
 export class SchATransaction extends Transaction {
   back_reference_tran_id_number: string | undefined;
@@ -53,6 +55,50 @@ export class SchATransaction extends Transaction {
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(SchATransaction, json);
+  }
+
+  /**
+   * updateChildren()
+   * @returns
+   *    An array of Transaction objects whose contribution_purpose_descriptions
+   *    have been re-generated to account for changes to their parent
+   *
+   */
+  updateChildren(): Transaction[] {
+    const outChildren: Transaction[] = [];
+
+    if (this.children) {
+      /* We treat the parent's children as SchATransaction objects in order
+      to access fields exclusive to the SchATransaction model */
+      for (const child of this.children as SchATransaction[]) {
+        if (child.transaction_type_identifier) {
+          // Instantiate a TransactionType object in order to access the purpose description generator
+          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier) as TransactionType;
+
+          // Prep the TransactionType by setting fields it will need when generating a purpose description
+          transactionType.transaction = child;
+
+          /* Make a new object to represent the parent within the TransactionType
+          because setting the parent equal to the this causes an infinite loop */
+          if (transactionType.transaction.parent_transaction)
+            transactionType.transaction.parent_transaction = {
+              id: this.id,
+              contributor_organization_name: this.contributor_organization_name,
+            } as SchATransaction;
+
+          // Modify the this to reflect the changes to child transactions
+          if (transactionType.generatePurposeDescription) {
+            const newDescrip = transactionType.generatePurposeDescription();
+            child.contribution_purpose_descrip = newDescrip;
+          }
+        }
+
+        // Always add the child into the array or else it will be lost
+        outChildren.push(child);
+      }
+    }
+
+    return outChildren;
   }
 }
 
