@@ -536,7 +536,7 @@ describe('TransactionTypeBaseComponent', () => {
     expect(zipFormControlValue === testZip).toBeTrue();
   });
 
-  xit('#onContactLookupSelect INDIVIDUAL should set fields', () => {
+  it('#onContactLookupSelect INDIVIDUAL should set fields', () => {
     const testEntityType = ContactTypes.INDIVIDUAL;
 
     const testContact = new Contact();
@@ -563,7 +563,7 @@ describe('TransactionTypeBaseComponent', () => {
     component.onContactLookupSelect(testContactSelectItem);
   });
 
-  xit('#onContactLookupSelect INDIVIDUAL should calculate aggregate', () => {
+  it('#onContactLookupSelect INDIVIDUAL should calculate aggregate', () => {
     component.transactionType = TransactionTypeUtils.factory(
       ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
     ) as TransactionType;
