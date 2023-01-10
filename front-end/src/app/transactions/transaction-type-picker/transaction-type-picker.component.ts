@@ -71,7 +71,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
           ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED,
           ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED,
-          ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC,
+          ScheduleATransactionTypes.PAC_RETURN,
         ];
       case ScheduleATransactionGroups.TRANSFERS:
         return [
