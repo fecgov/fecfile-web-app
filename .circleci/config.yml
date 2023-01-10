@@ -131,14 +131,14 @@ jobs:
               cd fecfile-web-app/front-end; \
               git checkout ${E2E_BRANCH_NAME}; \
               npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec cypress/e2e"<< parameters.e2e-specs-dir-to-run >>"/**/* --headless --watch=false --browser chrome;'\
-              rm -r cypress/results"<< parameters.e2e-specs-dir-to-run >>"
-              ls -la /tmp
-              mv /tmp/cypress-run/ cypress/results"<< parameters.e2e-specs-dir-to-run >>"
-              git add cypress/results
-              git add cypress/lighthouse
-              git commit -m "Added test results for << parameters.e2e-specs-dir-to-run >>"
-              git push -q origin ${E2E_BRANCH_NAME}
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec cypress/e2e"<< parameters.e2e-specs-dir-to-run >>"/**/* --headless --watch=false --browser chrome; \
+              rm -r cypress/results"<< parameters.e2e-specs-dir-to-run >>"; \
+              ls -la /tmp; \
+              mv /tmp/cypress-run cypress/results"<< parameters.e2e-specs-dir-to-run >>"; \
+              git add cypress/results; \
+              git add cypress/lighthouse; \
+              git commit -m "Added test results for << parameters.e2e-specs-dir-to-run >>"; \
+              git push -q origin ${E2E_BRANCH_NAME};'\
   deploy:
     docker:
       - image: cimg/node:16.15-browsers
