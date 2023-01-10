@@ -63,6 +63,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     validateService.formValidatorSchema = transactionType?.schema;
     validateService.formValidatorForm = form;
 
+    // Override contact type options if present in transactionType
+    if (transactionType && transactionType.contactTypeOptions) {
+      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, transactionType.contactTypeOptions);
+    }
+
     // Intialize form values
     if (this.isExisting(transactionType?.transaction)) {
       const txn = { ...transactionType?.transaction } as SchATransaction;
@@ -201,11 +206,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     let formValues = validateService.getFormValues(form, formProperties);
     if (transactionType) formValues = this.retrieveMemoText(transactionType, form, formValues);
 
-    const payload: Transaction = SchATransaction.fromJSON({
+    const payload: SchATransaction = SchATransaction.fromJSON({
       ...transactionType?.transaction,
       ...formValues,
     });
     payload.contact_id = payload.contact?.id;
+
+    if (payload.children) {
+      payload.children = payload.updateChildren();
+    }
 
     let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
     // Remove properties that are populated in the back-end from list of properties to validate
@@ -435,7 +444,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       );
     } else if (navigateTo === NavigationDestination.PARENT) {
       this.router.navigateByUrl(
-        `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${this.transactionType?.transaction?.parent_transaction_id}`
+        `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${this.transactionType?.transaction?.parent_transaction_object_id}`
       );
     } else {
       this.router.navigateByUrl(`/transactions/report/${this.transactionType?.transaction?.report_id}/list`);

@@ -85,7 +85,7 @@
           {{ item.transaction_id }}
         </td>
         <td>
-          {{ item.back_reference_tran_id_number }}
+          {{ item.parent_transaction?.transaction_id }}
         </td>
         <td>
           <p-button pRipple icon="pi pi-ellipsis-v" styleClass="p-button-text" ariaLabel="action"></p-button>
