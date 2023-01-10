@@ -6,12 +6,7 @@ import {
 } from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_RECOUNT_RECEIPT';
-import {
-  CANCEL_CONTROL,
-  SAVE_ANOTHER_CONTROL,
-  SAVE_LIST_CONTROL,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 
 export class PAC_RECOUNT_RECEIPT implements TransactionType {
@@ -21,11 +16,7 @@ export class PAC_RECOUNT_RECEIPT implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
   schema = schema;
   transaction?: SchATransaction;
-  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
-    [],
-    [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
-  );
+  navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   generatePurposeDescription(): string {
     return 'Recount Account';

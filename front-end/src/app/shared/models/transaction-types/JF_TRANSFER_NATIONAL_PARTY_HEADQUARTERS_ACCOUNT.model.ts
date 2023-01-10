@@ -7,12 +7,7 @@ import {
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
-import {
-  CANCEL_CONTROL,
-  SAVE_ANOTHER_CONTROL,
-  SAVE_LIST_CONTROL,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
 export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT implements TransactionType {
   scheduleId = 'A';
@@ -30,11 +25,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT implements Transact
     ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   ];
-  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
-    [],
-    [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
-  );
+  navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   generatePurposeDescription(): string {
     return 'Headquarters Buildings Account Transfer of JF Proceeds';
