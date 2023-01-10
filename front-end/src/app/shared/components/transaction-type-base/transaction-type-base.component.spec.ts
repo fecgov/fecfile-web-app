@@ -657,7 +657,6 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
-    component.ngOnInit();
     component.transactionType = {
       transaction: testTransaction,
       scheduleId: 'TEST',
@@ -681,7 +680,6 @@ describe('TransactionTypeBaseComponent', () => {
       },
     };
 
-    spyOn(testTransactionService, 'getPreviousTransaction').and.returnValue(of(undefined));
     component.doInit(component.form, new ValidateService(), component.transactionType, component.contactId$);
     component.form.patchValue({ contribution_amount: 2 });
     expect(component.form.value.contribution_amount).toBe(-2);
