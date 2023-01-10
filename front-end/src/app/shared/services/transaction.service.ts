@@ -17,9 +17,9 @@ import { TransactionType } from '../interfaces/transaction-type.interface';
  */
 function getScheduleClass(apiEndpoint: string) {
   switch (apiEndpoint) {
-    case '/sch-a-transactions':
+    case '/transactions/schedule-a':
       return SchATransaction;
-    case '/sch-b-transactions':
+    case '/transactions/schedule-b':
       return SchBTransaction;
   }
   throw new Error(`Class transaction for API endpoint '${apiEndpoint}' not found`);
@@ -41,7 +41,7 @@ export class TransactionService implements TableListService<Transaction> {
     }
     // Pull list from Sch A Transactions until we have an endpoint that pulls transactions from the different schedule types
     return this.apiService
-      .get<ListRestResponse>(`/sch-a-transactions/?page=${pageNumber}&ordering=${ordering}`, params)
+      .get<ListRestResponse>(`/transactions/schedule-a/?page=${pageNumber}&ordering=${ordering}`, params)
       .pipe(
         map((response: ListRestResponse) => {
           response.results = response.results.map((item) => SchATransaction.fromJSON(item));
@@ -51,7 +51,7 @@ export class TransactionService implements TableListService<Transaction> {
   }
 
   public get(id: string): Observable<SchATransaction> {
-    return this.apiService.get<SchATransaction>(`/sch-a-transactions/${id}/`).pipe(
+    return this.apiService.get<SchATransaction>(`/transactions/schedule-a/${id}/`).pipe(
       map((response) => {
         const txn = SchATransaction.fromJSON(response);
 
