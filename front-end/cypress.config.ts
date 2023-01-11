@@ -14,7 +14,7 @@ export default defineConfig({
   chromeWebSecurity: false,
   reporter: 'mochawesome',
   reporterOptions: {
-    reportDir: '/tmp/cypress-run',
+    reportDir: 'cypress/results',
     reportFilename: "[status]_[datetime]-[name]",
     overwrite: false,
     html: true,
