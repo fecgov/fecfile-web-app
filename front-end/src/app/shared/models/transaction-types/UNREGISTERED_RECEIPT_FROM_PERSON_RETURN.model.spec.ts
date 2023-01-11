@@ -1,6 +1,6 @@
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from './UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 
 describe('UNREGISTERED_RECEIPT_FROM_PERSON_RETURN', () => {
   let transactionType: UNREGISTERED_RECEIPT_FROM_PERSON_RETURN;

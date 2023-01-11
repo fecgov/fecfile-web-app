@@ -1,7 +1,7 @@
-import { TransactionType } from '../../interfaces/transaction-type.interface';
+import { TransactionType } from './transaction-type.model';
 
 export abstract class SchaTransactionType extends TransactionType {
-  override generatePurposeDescriptionLabel?(): string {
+  override generatePurposeDescriptionLabel(): string {
     if (this.generatePurposeDescription !== undefined) {
       return '(SYSTEM-GENERATED)';
     } else if (this.schema.required.includes('contribution_purpose_descrip')) {

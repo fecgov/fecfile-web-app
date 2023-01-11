@@ -1,4 +1,4 @@
-import { TransactionType } from '../interfaces/transaction-type.interface';
+import { TransactionType } from '../models/transaction-types/transaction-type.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
 import { INDIVIDUAL_JF_TRANSFER_MEMO } from '../models/transaction-types/INDIVIDUAL_JF_TRANSFER_MEMO.model';

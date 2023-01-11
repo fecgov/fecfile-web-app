@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';

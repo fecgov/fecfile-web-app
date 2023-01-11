@@ -1,14 +1,14 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
-  TransactionNavigationControls
+  TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
@@ -47,14 +47,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fb: FormBuilder,
     protected router: Router,
     protected fecDatePipe: FecDatePipe
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
     this.doInit(this.form, this.validateService, this.transactionType, this.contactId$);
     if (this.transactionType?.generatePurposeDescriptionLabel) {
-      this.contributionPurposeDescriptionLabel =
-        this.transactionType.generatePurposeDescriptionLabel();
+      this.contributionPurposeDescriptionLabel = this.transactionType.generatePurposeDescriptionLabel();
     }
   }
 

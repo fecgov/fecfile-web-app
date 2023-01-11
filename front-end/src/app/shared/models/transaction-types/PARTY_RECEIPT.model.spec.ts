@@ -1,4 +1,4 @@
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { PARTY_RECEIPT } from './PARTY_RECEIPT.model';
 

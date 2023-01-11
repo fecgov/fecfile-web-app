@@ -1,12 +1,12 @@
-import { ScheduleATransactionTypes } from '../models/scha-transaction.model';
-import { ScheduleBTransactionTypes } from '../models/schb-transaction.model';
-import { TransactionNavigationControls } from '../models/transaction-navigation-controls.model';
-import { Transaction } from '../models/transaction.model';
-import { JsonSchema } from './json-schema.interface';
-import { ContactType } from '../models/contact.model';
+import { ScheduleATransactionTypes } from '../scha-transaction.model';
+import { ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { Transaction } from '../transaction.model';
+import { JsonSchema } from '../../interfaces/json-schema.interface';
+import { ContactType } from '../contact.model';
 
 /**
- * Interface that defines the meta data associated with a transaction type.
+ * Class that defines the meta data associated with a transaction type.
  * Populated and used by the transaction resovler for use in the transaction components.
  */
 export abstract class TransactionType {
