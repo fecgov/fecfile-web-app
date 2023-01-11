@@ -7,12 +7,7 @@ import {
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
-import {
-  CANCEL_CONTROL,
-  SAVE_ANOTHER_CONTROL,
-  SAVE_LIST_CONTROL,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
 export class PARTY_RECOUNT_RECEIPT implements TransactionType {
   scheduleId = 'A';
@@ -21,11 +16,7 @@ export class PARTY_RECOUNT_RECEIPT implements TransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT);
   schema = schema;
   transaction?: SchATransaction;
-  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
-    [],
-    [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
-  );
+  navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   generatePurposeDescription(): string {
     return `Recount Account`;

@@ -68,6 +68,21 @@ export class ErrorMessagesComponent implements OnInit {
     )}.`;
   }
 
+  private _exclusiveMinErrorMessage = '';
+  @Input() set exclusiveMinErrorMessage(value: string) {
+    this._exclusiveMinErrorMessage = value;
+  }
+  get exclusiveMinErrorMessage(): string {
+    if (this._exclusiveMinErrorMessage) {
+      return this._exclusiveMinErrorMessage;
+    }
+    return `This field must be greater than ${formatCurrency(
+      this.control?.errors?.['exclusiveMin']?.exclusiveMin,
+      this.localeId,
+      '$'
+    )}.`;
+  }
+
   private _maxErrorMessage = '';
   @Input() set maxErrorMessage(value: string) {
     this._maxErrorMessage = value;
@@ -78,6 +93,26 @@ export class ErrorMessagesComponent implements OnInit {
     }
     return `This field must be less than or equal to ${formatCurrency(
       this.control?.errors?.['max']?.max,
+      this.localeId,
+      '$'
+    )}.`;
+  }
+
+  private _exclusiveMaxErrorMessage = '';
+  @Input() set exclusiveMaxErrorMessage(value: string) {
+    this._exclusiveMaxErrorMessage = value;
+  }
+  get exclusiveMaxErrorMessage(): string {
+    if (this._exclusiveMaxErrorMessage) {
+      return this._exclusiveMaxErrorMessage;
+    }
+
+    if (this.control?.errors?.['exclusiveMax']?.exclusiveMax === 0) {
+      return 'Amount must be negative (example: -$20.00)';
+    }
+
+    return `This field must be less than ${formatCurrency(
+      this.control?.errors?.['exclusiveMax']?.exclusiveMax,
       this.localeId,
       '$'
     )}.`;

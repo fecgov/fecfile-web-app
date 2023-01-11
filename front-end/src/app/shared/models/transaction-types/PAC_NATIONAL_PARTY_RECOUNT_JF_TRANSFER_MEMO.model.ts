@@ -19,7 +19,7 @@ export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO implements TransactionT
   );
   schema = schema;
   transaction?: SchATransaction;
-  navigationControls?: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
+  navigationControls: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
 
   generatePurposeDescription(): string {
     return `Recount/Legal Proceedings Account JF Memo: ${

@@ -7,12 +7,7 @@ import {
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
-import {
-  CANCEL_CONTROL,
-  SAVE_ANOTHER_CONTROL,
-  SAVE_LIST_CONTROL,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
 export class JOINT_FUNDRAISING_TRANSFER implements TransactionType {
   scheduleId = 'A';
@@ -27,11 +22,7 @@ export class JOINT_FUNDRAISING_TRANSFER implements TransactionType {
     ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO,
   ];
-  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
-    [],
-    [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
-  );
+  navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   generatePurposeDescription(): string {
     return 'Transfer of Joint Fundraising Proceeds';
