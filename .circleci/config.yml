@@ -288,6 +288,19 @@ parameters:
 
 workflows:
   test:
+    when:
+      not: << pipeline.parameters.is-nightly-run >>
+    jobs:
+      - lint
+      - test
+      - dependency-check
+      - deploy:
+          requires:
+            - test
+            - dependency-check
+
+  nightly-run:
+    when: << pipeline.parameters.is-nightly-run >>
     jobs:
       - e2e-test:
           e2e-specs-dir-to-run: "/contacts"
