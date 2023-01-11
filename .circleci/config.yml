@@ -138,8 +138,8 @@ jobs:
             rm -rf /tmp/cypress
             mkdir -p /tmp/cypress/results<< parameters.e2e-specs-dir-to-run >>
             mkdir -p /tmp/cypress/lighthouse
-            docker cp fecfile-web-app-e2e:/root/project/front-end/cypress/results /tmp/cypress/results/<< parameters.e2e-specs-dir-to-run >>
-            docker cp fecfile-web-app-e2e:/root/project/front-end/cypress/lighthouse /tmp/cypress/lighthouse
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results /tmp/cypress/results/<< parameters.e2e-specs-dir-to-run >>
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/lighthouse /tmp/cypress/lighthouse
             docker rm fecfile-web-app-e2e
       - store_artifacts:
           path: /tmp/cypress/results<< parameters.e2e-specs-dir-to-run >>
