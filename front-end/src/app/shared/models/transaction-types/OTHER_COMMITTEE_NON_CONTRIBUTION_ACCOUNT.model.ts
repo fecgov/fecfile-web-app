@@ -1,27 +1,24 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT';
-import { TransactionType } from '../../interfaces/transaction-type.interface';
 import {
   AggregationGroups,
   SchATransaction,
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
+import { SchaTransactionType } from './SchaTransactionType.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
-export class OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT implements TransactionType {
-  scheduleId = 'A';
+export class OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT extends SchaTransactionType {
   componentGroupId = 'F';
-  isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT
   );
   schema = schema;
-  transaction?: SchATransaction;
-  navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  generatePurposeDescription(): string {
+  override generatePurposeDescription(): string {
     return 'Non-contribution Account Receipt';
   }
 

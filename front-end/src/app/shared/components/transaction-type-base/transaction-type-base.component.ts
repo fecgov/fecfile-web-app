@@ -1,8 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
@@ -11,6 +10,7 @@ import {
   NavigationDestination,
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -34,6 +34,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
+  contributionPurposeDescriptionLabel = '';
 
   form: FormGroup = this.fb.group({});
 
@@ -51,6 +52,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   ngOnInit(): void {
     this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
     this.doInit(this.form, this.validateService, this.transactionType, this.contactId$);
+    if (this.transactionType?.generatePurposeDescriptionLabel) {
+      this.contributionPurposeDescriptionLabel = this.transactionType.generatePurposeDescriptionLabel();
+    }
   }
 
   doInit(

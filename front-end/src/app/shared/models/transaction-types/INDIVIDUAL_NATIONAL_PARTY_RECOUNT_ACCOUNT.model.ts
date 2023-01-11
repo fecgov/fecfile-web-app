@@ -1,27 +1,24 @@
-import { TransactionType } from '../../interfaces/transaction-type.interface';
-import {
-  SchATransaction,
-  ScheduleATransactionTypes,
-  ScheduleATransactionTypeLabels,
-  AggregationGroups,
-} from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT';
+import {
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
+} from '../scha-transaction.model';
+import { SchaTransactionType } from './SchaTransactionType.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
-export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT implements TransactionType {
-  scheduleId = 'A';
+export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionType {
   componentGroupId = 'A';
-  isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT
   );
   schema = schema;
-  transaction?: SchATransaction;
-  navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  generatePurposeDescription() {
+  override generatePurposeDescription() {
     return 'Recount/Legal Proceedings Account';
   }
 

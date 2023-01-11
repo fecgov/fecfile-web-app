@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
-import { TransactionType } from '../interfaces/transaction-type.interface';
+import { TransactionType } from '../models/transaction-types/transaction-type.model';
 import { Contact } from '../models/contact.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { ContactService } from '../services/contact.service';

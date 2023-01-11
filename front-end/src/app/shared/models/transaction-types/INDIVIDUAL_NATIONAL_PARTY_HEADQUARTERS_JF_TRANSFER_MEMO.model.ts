@@ -1,27 +1,24 @@
-import { TransactionType } from '../../interfaces/transaction-type.interface';
-import {
-  SchATransaction,
-  ScheduleATransactionTypes,
-  ScheduleATransactionTypeLabels,
-  AggregationGroups,
-} from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO';
+import {
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
+} from '../scha-transaction.model';
+import { SchaTransactionType } from './SchaTransactionType.model';
 import { TransactionNavigationControls, JF_TRANSFER_MEMO_CONTROLS } from '../transaction-navigation-controls.model';
 
-export class INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO implements TransactionType {
-  scheduleId = 'A';
+export class INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchaTransactionType {
   componentGroupId = 'A';
-  isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
   );
   schema = schema;
-  transaction?: SchATransaction;
-  navigationControls: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
+  override navigationControls: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
 
-  generatePurposeDescription(): string {
+  override generatePurposeDescription(): string {
     return `Headquarters Buildings Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction).contributor_organization_name
     }`;

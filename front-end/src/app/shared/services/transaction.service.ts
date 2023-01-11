@@ -8,7 +8,7 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 import { SchATransaction, AggregationGroups } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
-import { TransactionType } from '../interfaces/transaction-type.interface';
+import { TransactionType } from '../models/transaction-types/transaction-type.model';
 
 /**
  * Given the API endpoint, return the class of the relevent schedule.
