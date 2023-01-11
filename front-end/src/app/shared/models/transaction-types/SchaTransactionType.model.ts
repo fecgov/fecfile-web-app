@@ -1,6 +1,10 @@
 import { TransactionType } from './transaction-type.model';
+import { SchATransaction } from '../scha-transaction.model';
 
 export abstract class SchaTransactionType extends TransactionType {
+  scheduleId = 'A';
+  override transaction?: SchATransaction;
+
   override generatePurposeDescriptionLabel(): string {
     if (this.generatePurposeDescription !== undefined) {
       return '(SYSTEM-GENERATED)';

@@ -12,9 +12,9 @@ import { ContactType } from '../contact.model';
 export abstract class TransactionType {
   abstract scheduleId: string;
   abstract componentGroupId: string; // Identifier of transaction component use to render UI form entry page
-  abstract isDependentChild: boolean; // When set to true, the parent transaction is used to generate UI form entry page
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
+  isDependentChild = false; // When set to true, the parent transaction is used to generate UI form entry page
   contactTypeOptions?: ContactType[];
   transaction?: Transaction;
   childTransactionType?: TransactionType;

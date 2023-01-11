@@ -11,13 +11,10 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { ContactTypes } from '../contact.model';
 
 export class OFFSET_TO_OPERATING_EXPENDITURES extends SchaTransactionType {
-  scheduleId = 'A';
   componentGroupId = 'B';
-  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
   override contactTypeOptions = [ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE, ContactTypes.INDIVIDUAL];
-  override transaction?: SchATransaction;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

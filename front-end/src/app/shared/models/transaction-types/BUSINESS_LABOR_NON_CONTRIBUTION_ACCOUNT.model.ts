@@ -10,15 +10,12 @@ import { SchaTransactionType } from './SchaTransactionType.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
 export class BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT extends SchaTransactionType {
-  scheduleId = 'A';
   componentGroupId = 'D';
-  isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT
   );
   schema = schema;
-  override transaction?: SchATransaction;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override generatePurposeDescription(): string {

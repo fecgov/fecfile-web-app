@@ -10,12 +10,9 @@ import { SchaTransactionType } from './SchaTransactionType.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
 export class PAC_RECOUNT_RECEIPT extends SchaTransactionType {
-  scheduleId = 'A';
   componentGroupId = 'F';
-  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
   schema = schema;
-  override transaction?: SchATransaction;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override generatePurposeDescription(): string {

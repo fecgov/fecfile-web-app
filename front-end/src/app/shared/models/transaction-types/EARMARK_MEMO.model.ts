@@ -3,12 +3,10 @@ import { AggregationGroups, SchATransaction, ScheduleATransactionTypes } from '.
 import { SchaTransactionType } from './SchaTransactionType.model';
 
 export class EARMARK_MEMO extends SchaTransactionType {
-  scheduleId = 'A';
   componentGroupId = 'AG';
-  isDependentChild = true;
+  override isDependentChild = true;
   title = '';
   schema = schema;
-  override transaction?: SchATransaction;
 
   override generatePurposeDescription(): string {
     return 'Total earmarked through conduit.';

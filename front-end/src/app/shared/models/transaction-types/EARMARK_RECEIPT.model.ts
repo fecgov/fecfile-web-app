@@ -6,22 +6,19 @@ import {
   AggregationGroups,
   SchATransaction,
   ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes
+  ScheduleATransactionTypes,
 } from '../scha-transaction.model';
 import {
   CANCEL_CONTROL,
   SAVE_LIST_CONTROL,
-  TransactionNavigationControls
+  TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
 export class EARMARK_RECEIPT extends SchaTransactionType {
-  scheduleId = 'A';
   componentGroupId = 'AG';
-  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
-  override transaction?: SchATransaction;
   override childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [],

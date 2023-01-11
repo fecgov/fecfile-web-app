@@ -10,12 +10,9 @@ import { SchaTransactionType } from './SchaTransactionType.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
 export class JOINT_FUNDRAISING_TRANSFER extends SchaTransactionType {
-  scheduleId = 'A';
   componentGroupId = 'E';
-  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
   schema = schema;
-  override transaction?: SchATransaction;
   override subTransactionTypes = [
     ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO,

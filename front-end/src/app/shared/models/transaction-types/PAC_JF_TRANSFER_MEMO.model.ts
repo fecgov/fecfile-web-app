@@ -2,24 +2,24 @@ import { hasNoContact, isNewTransaction } from 'app/shared/models/transaction.mo
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
 import {
-  AggregationGroups, SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
 } from '../scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
   SAVE_LIST_CONTROL,
-  TransactionNavigationControls
+  TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
 export class PAC_JF_TRANSFER_MEMO extends SchaTransactionType {
-  scheduleId = 'A';
   componentGroupId = 'F';
-  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   schema = schema;
-  override transaction?: SchATransaction;
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(

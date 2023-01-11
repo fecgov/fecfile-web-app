@@ -5,24 +5,21 @@ import {
   AggregationGroups,
   SchATransaction,
   ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes
+  ScheduleATransactionTypes,
 } from '../scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
   SAVE_LIST_CONTROL,
-  TransactionNavigationControls
+  TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
 export class TRIBAL_JF_TRANSFER_MEMO extends SchaTransactionType {
-  scheduleId = 'A';
   componentGroupId = 'D';
-  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO);
   schema = schema;
-  override transaction?: SchATransaction;
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(

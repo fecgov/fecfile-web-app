@@ -10,15 +10,12 @@ import { SchaTransactionType } from './SchaTransactionType.model';
 import { TransactionNavigationControls, JF_TRANSFER_MEMO_CONTROLS } from '../transaction-navigation-controls.model';
 
 export class PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchaTransactionType {
-  scheduleId = 'A';
   componentGroupId = 'F';
-  isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
   );
   schema = schema;
-  override transaction?: SchATransaction;
   override navigationControls: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
 
   override generatePurposeDescription(): string {
