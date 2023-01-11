@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { contributionAmount, date, randomString } from './generators/generators.spec';
+import { contributionAmount, contributionAmountNegative, date, randomString } from './generators/generators.spec';
 
 /*
  *          Adding support for a new transaction:
@@ -41,7 +41,8 @@ export type SchATransactionName =
   | 'Individual National Party Recount/Legal Proceedings Account'
   | 'Individual National Party Pres. Nominating Convention Account'
   | 'Party National Party Pres. Nominating Convention Account'
-  | 'Tribal National Party Recount/Legal Proceedings Account';
+  | 'Tribal National Party Recount/Legal Proceedings Account'
+  | 'Unregistered Receipt from Person - Returned/Bounced Receipt';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -210,6 +211,21 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     required: true,
     maxLength: 12,
   },
+  contributionAmountNegative: {
+    fieldName: 'contribution_amount',
+    fieldType: 'P-InputNumber',
+    generator: contributionAmountNegative,
+    required: true,
+    maxLength: 12,
+  },
+  contributionPurposeDescriptionRequired: {
+    fieldName: 'contribution_purpose_descrip',
+    fieldType: 'Textarea',
+    generator: randomString,
+    genArgs: [100, 'special'],
+    required: true,
+    maxLength: 100,
+  },
 };
 
 /*
@@ -243,9 +259,18 @@ const memoFields: { [key: string]: TransactionField } = {
   memoTextInput: TransactionFields['memoTextInput'],
 };
 
+const purposeDescriptionFieldsRequired: { [key: string]: TransactionField } = {
+  contributionPurposeDescriptionRequired: TransactionFields['contributionPurposeDescriptionRequired'],
+};
+
 const contributionFields: { [key: string]: TransactionField } = {
   contributionDate: TransactionFields['contributionDate'],
   contributionAmount: TransactionFields['contributionAmount'],
+};
+
+const contributionFieldsNegative: { [key: string]: TransactionField } = {
+  contributionDate: TransactionFields['contributionDate'],
+  contributionAmount: TransactionFields['contributionAmountNegative'],
 };
 
 /*
@@ -625,8 +650,11 @@ const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: Transac
     ...memoFields,
     ...contributionFields,
   },
-  childTransactions: [tribalNationalPartyHeadquartersJFTransferMemo, 
-    indvNationalPartyHeadquartersJFTransferMemo, pacNationalPartyHeadquartersJFTransferMemo],
+  childTransactions: [
+    tribalNationalPartyHeadquartersJFTransferMemo,
+    indvNationalPartyHeadquartersJFTransferMemo,
+    pacNationalPartyHeadquartersJFTransferMemo,
+  ],
 };
 
 const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
@@ -829,6 +857,19 @@ const tribalNationalPartyPresNominatingConventionAccount: TransactionForm = {
   },
 };
 
+const unregisteredReceiptFromPersonReturn: TransactionForm = {
+  transaction_name: 'Unregistered Receipt from Person - Returned/Bounced Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
+  transaction_group: 'D',
+  aggregation_group: 'GENERAL',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
 /*
  *          Group A Transaction Navigation Tree
  * Every entry in this object represents a path that an E2E test
@@ -843,6 +884,7 @@ export const schedANavTree: TransactionNavTree = {
     'Tribal Receipt': tribalReceipt,
     'Earmark Receipt': earmarkReceipt,
     'Unregistered Receipt from Person': unregisteredReceiptFromPerson,
+    'Unregistered Receipt from Person - Returned/Bounced Receipt': unregisteredReceiptFromPersonReturn,
   },
   'REGISTERED FILERS': {
     'Party Receipt': partyReceipt,

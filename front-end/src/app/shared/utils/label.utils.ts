@@ -39,10 +39,18 @@ export class LabelUtils {
    * @param {LabelList} labelArrays
    * @returns {PrimeOptions}
    */
-  public static getPrimeOptions(labelArrays: LabelList): PrimeOptions {
-    let options: PrimeOptions = [];
-    options = labelArrays.map((item: string[]) => ({ name: item[1], code: item[0] }));
-    return options;
+  public static getPrimeOptions(labelArrays: LabelList, values?: string[]): PrimeOptions {
+    if (values) {
+      return values.map((type: string) => ({
+        name: LabelUtils.get(labelArrays, type),
+        code: type,
+      }));
+    } else {
+      return labelArrays.map((item: string[]) => ({
+        name: item[1],
+        code: item[0],
+      }));
+    }
   }
 
   /**

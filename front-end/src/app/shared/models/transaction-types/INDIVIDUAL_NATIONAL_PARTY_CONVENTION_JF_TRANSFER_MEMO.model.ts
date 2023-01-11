@@ -1,17 +1,13 @@
-import { hasNoContact, isNewTransaction } from 'app/shared/models/transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO';
 import {
-  AggregationGroups, SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
 } from '../scha-transaction.model';
-import {
-  NavigationAction,
-  NavigationControl,
-  NavigationDestination,
-  SAVE_LIST_CONTROL,
-  TransactionNavigationControls
-} from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
+import { TransactionNavigationControls, JF_TRANSFER_MEMO_CONTROLS } from '../transaction-navigation-controls.model';
 
 export class INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchaTransactionType {
   scheduleId = 'A';
@@ -23,28 +19,7 @@ export class INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchaT
   );
   schema = schema;
   override transaction?: SchATransaction;
-  override navigationControls?: TransactionNavigationControls = new TransactionNavigationControls(
-    [
-      new NavigationControl(
-        NavigationAction.SAVE,
-        NavigationDestination.ANOTHER,
-        'Save & add another Memo',
-        'p-button-warning',
-        hasNoContact,
-        isNewTransaction,
-        'pi pi-plus'
-      ),
-    ],
-    [
-      new NavigationControl(
-        NavigationAction.CANCEL,
-        NavigationDestination.PARENT,
-        'Back to Joint Fundraising Transfer',
-        'p-button-secondary'
-      ),
-    ],
-    [SAVE_LIST_CONTROL]
-  );
+  override navigationControls: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
 
   override generatePurposeDescription(): string {
     return `Pres. Nominating Convention Account JF Memo: ${

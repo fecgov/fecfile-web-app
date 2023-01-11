@@ -59,7 +59,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.CONDUIT_EARMARK_DEPOSITED,
           ScheduleATransactionTypes.CONDUIT_EARMARK_UNDEPOSITED,
           ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON,
-          ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURNED_BOUNCED_RECEIPT,
+          ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
         ];
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS:
         return [

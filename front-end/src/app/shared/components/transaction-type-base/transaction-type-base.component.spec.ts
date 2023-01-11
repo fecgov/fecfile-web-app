@@ -56,7 +56,7 @@ const initTransactionData = {
   transaction_id: null,
   transaction_type_identifier: undefined,
   contribution_purpose_descrip: undefined,
-  parent_transaction_id: undefined,
+  parent_transaction_object_id: undefined,
   children: undefined,
   parent_transaction: undefined,
   fields_to_validate: undefined,
@@ -78,7 +78,7 @@ const testTransaction = SchATransaction.fromJSON({
   contribution_amount: '202.2',
   contribution_date: '2022-02-02',
   contribution_purpose_descrip: undefined,
-  parent_transaction_id: undefined,
+  parent_transaction_object_id: undefined,
   children: undefined,
   parent_transaction: undefined,
   fields_to_validate: undefined,
@@ -416,7 +416,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#navigateTo NavigationDestination.PARENT should navigate', () => {
     const transaction = { ...testTransaction } as SchATransaction;
-    transaction.parent_transaction_id = '333';
+    transaction.parent_transaction_object_id = '333';
     component.transactionType = {
       scheduleId: 'A',
       componentGroupId: 'A',
@@ -536,7 +536,7 @@ describe('TransactionTypeBaseComponent', () => {
     expect(zipFormControlValue === testZip).toBeTrue();
   });
 
-  xit('#onContactLookupSelect INDIVIDUAL should set fields', () => {
+  it('#onContactLookupSelect INDIVIDUAL should set fields', () => {
     const testEntityType = ContactTypes.INDIVIDUAL;
 
     const testContact = new Contact();
@@ -654,5 +654,34 @@ describe('TransactionTypeBaseComponent', () => {
     const committeeNameFormControlValue = component.form.get('contributor_organization_name')?.value;
 
     expect(committeeNameFormControlValue === testCommitteeName).toBeTrue();
+  });
+
+  it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
+    component.transactionType = {
+      transaction: testTransaction,
+      scheduleId: 'TEST',
+      componentGroupId: 'TEST',
+      isDependentChild: false,
+      title: 'Title goes here',
+      getNewTransaction: () => {
+        return testTransaction;
+      },
+      schema: {
+        $id: '10101',
+        $schema: 'string',
+        type: 'string',
+        required: [],
+        properties: {
+          contribution_amount: {
+            type: 'number',
+            exclusiveMaximum: 0,
+          },
+        },
+      },
+    };
+
+    component.doInit(component.form, new ValidateService(), component.transactionType, component.contactId$);
+    component.form.patchValue({ contribution_amount: 2 });
+    expect(component.form.value.contribution_amount).toBe(-2);
   });
 });
