@@ -125,7 +125,6 @@ jobs:
       - run:
           name: execute e2e tests
           command: |
-            docker rm fecfile-web-app-e2e
             docker container run --name fecfile-web-app-e2e -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
               cd ~; \
               git clone https://github.com/fecgov/fecfile-web-app.git; \
