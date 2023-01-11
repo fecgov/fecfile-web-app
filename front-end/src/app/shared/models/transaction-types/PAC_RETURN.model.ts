@@ -29,7 +29,7 @@ export class PAC_RETURN implements TransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11C',
+      form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.PAC_RETURN,
       aggregation_group: AggregationGroups.GENERAL,
     });
