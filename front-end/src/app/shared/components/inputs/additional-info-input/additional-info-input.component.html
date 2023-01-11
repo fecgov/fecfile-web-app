@@ -1,10 +1,9 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-12">
-      <label for="contribution_purpose_descrip"
-        >CONTRIBUTION PURPOSE DESCRIPTION
-        {{ descriptionIsSystemGenerated ? '(SYSTEM-GENERATED)' : '(OPTIONAL)' }}</label
-      >
+      <label for="contribution_purpose_descrip">
+        CONTRIBUTION PURPOSE DESCRIPTION {{ contributionPurposeDescriptionLabel }}
+      </label>
       <div>
         <textarea
           id="contribution_purpose_descrip"

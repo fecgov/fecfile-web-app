@@ -12,6 +12,7 @@ export type TransactionCategory = 'INDIVIDUALS/PERSONS' | 'REGISTERED FILERS' | 
 export type SchATransactionName =
   | 'Individual Receipt'
   | 'Tribal Receipt'
+  | 'Unregistered Receipt from Person'
   | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
   | 'Other Committee Receipt - Non-Contribution Account'
@@ -294,6 +295,18 @@ const individualReceipt: TransactionForm = {
 
 const tribalReceipt: TransactionForm = {
   transaction_name: 'Tribal Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
+  transaction_group: 'D',
+  aggregation_group: 'GENERAL',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const unregisteredReceiptFromPerson: TransactionForm = {
+  transaction_name: 'Unregistered Receipt from Person',
   transaction_category: 'INDIVIDUALS/PERSONS',
   transaction_group: 'D',
   aggregation_group: 'GENERAL',
@@ -884,6 +897,7 @@ export const schedANavTree: TransactionNavTree = {
     'Individual Receipt': individualReceipt,
     'Tribal Receipt': tribalReceipt,
     'Earmark Receipt': earmarkReceipt,
+    'Unregistered Receipt from Person': unregisteredReceiptFromPerson,
     'Unregistered Receipt from Person - Returned/Bounced Receipt': unregisteredReceiptFromPersonReturn,
   },
   'REGISTERED FILERS': {

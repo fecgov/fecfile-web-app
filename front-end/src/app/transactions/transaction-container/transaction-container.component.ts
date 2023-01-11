@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { TransactionType } from '../../shared/interfaces/transaction-type.interface';
+import { TransactionType } from '../../shared/models/transaction-types/transaction-type.model';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../../store/committee-account.selectors';
 import { CommitteeAccount } from '../../shared/models/committee-account.model';
