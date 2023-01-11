@@ -134,6 +134,7 @@ jobs:
               node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec cypress/e2e"<< parameters.e2e-specs-dir-to-run >>"/**/* --headless --watch=false --browser chrome;'\
       - run:
           name: stage test result artifacts
+          when: always
           command: |
             rm -rf /tmp/cypress
             mkdir -p /tmp/cypress/results<< parameters.e2e-specs-dir-to-run >>
