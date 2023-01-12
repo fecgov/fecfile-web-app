@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs';
@@ -77,7 +77,8 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router,
-    protected override fecDatePipe: FecDatePipe
+    protected override fecDatePipe: FecDatePipe,
+    protected override elementRef: ElementRef
   ) {
     super(
       messageService,
@@ -87,7 +88,8 @@ export class TransactionGroupAgComponent extends TransactionTypeX2BaseComponent 
       confirmationService,
       fb,
       router,
-      fecDatePipe
+      fecDatePipe,
+      elementRef
     );
   }
 

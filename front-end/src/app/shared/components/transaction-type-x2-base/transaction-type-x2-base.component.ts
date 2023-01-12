@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
@@ -43,7 +43,8 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router,
-    protected override fecDatePipe: FecDatePipe
+    protected override fecDatePipe: FecDatePipe,
+    protected override elementRef: ElementRef
   ) {
     super(
       messageService,
@@ -53,7 +54,8 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
       confirmationService,
       fb,
       router,
-      fecDatePipe
+      fecDatePipe,
+      elementRef
     );
   }
 

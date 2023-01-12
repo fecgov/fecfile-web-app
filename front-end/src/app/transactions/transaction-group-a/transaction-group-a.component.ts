@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
@@ -48,7 +48,8 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
     protected override confirmationService: ConfirmationService,
     protected override fb: FormBuilder,
     protected override router: Router,
-    protected override fecDatePipe: FecDatePipe
+    protected override fecDatePipe: FecDatePipe,
+    protected override elementRef: ElementRef
   ) {
     super(
       messageService,
@@ -58,7 +59,8 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
       confirmationService,
       fb,
       router,
-      fecDatePipe
+      fecDatePipe,
+      elementRef
     );
   }
 }

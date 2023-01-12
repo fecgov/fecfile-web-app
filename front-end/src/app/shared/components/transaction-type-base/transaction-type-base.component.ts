@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
@@ -46,7 +46,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected confirmationService: ConfirmationService,
     protected fb: FormBuilder,
     protected router: Router,
-    protected fecDatePipe: FecDatePipe
+    protected fecDatePipe: FecDatePipe,
+    protected elementRef: ElementRef
   ) {}
 
   ngOnInit(): void {
@@ -135,6 +136,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
     if (contribution_amount_schema?.exclusiveMaximum === 0) {
+      //OnAmountUpdate
       form
         .get('contribution_amount')
         ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -143,6 +145,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             form.patchValue({ contribution_amount: -1 * contribution_amount });
           }
         });
+    }
+  }
+
+  ngAfterViewInit(): void {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
+
+    const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
+    if (contribution_amount_schema?.exclusiveMaximum === 0) {
+      //OnKeyStroke
+      const amountField = (<HTMLElement>this.elementRef.nativeElement).querySelector('.');
     }
   }
 
