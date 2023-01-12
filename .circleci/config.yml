@@ -143,11 +143,11 @@ jobs:
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/lighthouse/. /tmp/cypress/lighthouse
             docker rm fecfile-web-app-e2e
       - store_artifacts:
-          path: /tmp/cypress/results<< parameters.e2e-specs-dir-to-run >>
-          destination: cypress/results<< parameters.e2e-specs-dir-to-run >>
+          path: /tmp/cypress/results
+          destination: cypress/results
       - store_artifacts:
-          path: /tmp/cypress/lighthouse<< parameters.e2e-specs-dir-to-run >>
-          destination: cypress/lighthouse<< parameters.e2e-specs-dir-to-run >>
+          path: /tmp/cypress/lighthouse
+          destination: cypress/lighthouse
   deploy:
     docker:
       - image: cimg/node:16.15-browsers
