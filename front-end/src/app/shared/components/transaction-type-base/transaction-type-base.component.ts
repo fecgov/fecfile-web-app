@@ -35,6 +35,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   contributionPurposeDescriptionLabel = '';
+  negativeAmountValueOnly = false;
 
   form: FormGroup = this.fb.group({});
 
@@ -135,6 +136,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
     if (contribution_amount_schema?.exclusiveMaximum === 0) {
+      this.negativeAmountValueOnly = true;
       form
         .get('contribution_amount')
         ?.valueChanges.pipe(takeUntil(this.destroy$))

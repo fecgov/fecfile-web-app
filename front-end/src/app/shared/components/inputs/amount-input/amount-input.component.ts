@@ -11,7 +11,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
     'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
-  @Input() negativeAmountValueOnly = true;
+  @Input() negativeAmountValueOnly = false;
 
   @ViewChild('amountInput') amountInput!: InputNumber;
 
