@@ -154,8 +154,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
     if (contribution_amount_schema?.exclusiveMaximum === 0) {
-      //OnKeyStroke
-      const amountField = (<HTMLElement>this.elementRef.nativeElement).querySelector('.');
+      (<HTMLElement>this.elementRef.nativeElement).querySelector('[formControlName="contribution_amount"]');
+      setInterval(() => {
+        //OnKeyStroke
+        const amountField = (<HTMLElement>this.elementRef.nativeElement).querySelector(
+          '[formControlName="contribution_amount"]'
+        );
+        console.log(amountField);
+      }, 5000);
     }
   }
 
