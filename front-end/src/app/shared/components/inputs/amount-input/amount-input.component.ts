@@ -23,8 +23,10 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
     }
   }
 
-  onInputAmount($event: KeyboardEvent) {
+  // prettier-ignore
+  onInputAmount($event: KeyboardEvent) { // eslint-disable-line @typescript-eslint/no-unused-vars
     if (this.negativeAmountValueOnly) {
+      // Automatically convert the amount value to a negative dollar amount.
       const inputValue = this.amountInput.input.nativeElement.value;
       if (inputValue.startsWith('$')) {
         const value = Number(parseInt(inputValue.slice(1)).toFixed(2));
