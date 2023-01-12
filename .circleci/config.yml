@@ -305,4 +305,10 @@ workflows:
       - e2e-test:
           e2e-specs-dir-to-run: "/contacts"
       - e2e-test:
+          e2e-specs-dir-to-run: "/long-running"
+      - e2e-test:
           e2e-specs-dir-to-run: "/other"
+      - e2e-test:
+          e2e-specs-dir-to-run: "/reports"
+      - e2e-test:
+          e2e-specs-dir-to-run: "/transactions"
