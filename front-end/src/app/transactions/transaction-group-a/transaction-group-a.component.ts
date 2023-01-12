@@ -63,15 +63,4 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
       fecDatePipe
     );
   }
-
-  override doInit(
-    form: FormGroup<any>,
-    validateService: ValidateService,
-    transactionType: TransactionType | undefined,
-    contactId$: Subject<string>
-  ): void {
-    super.doInit(form, validateService, transactionType, contactId$);
-
-    this.form.controls['contribution_amount'];
-  }
 }
