@@ -11,6 +11,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
     'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
+  @Input() negativeAmountValueOnly = false;
+
   @ViewChild('amountInput') amountInput!: InputNumber;
 
   contributionAmountInputStyleClass = '';
@@ -22,10 +24,12 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   }
 
   onInputAmount($event: KeyboardEvent) {
-    const inputValue = this.amountInput.input.nativeElement.value;
-    if (inputValue.startsWith('$')) {
-      const value = Number(parseFloat(inputValue.slice(1)).toFixed(2));
-      this.amountInput.updateModel({}, -1 * value);
+    if (this.negativeAmountValueOnly) {
+      const inputValue = this.amountInput.input.nativeElement.value;
+      if (inputValue.startsWith('$')) {
+        const value = Number(parseFloat(inputValue.slice(1)).toFixed(2));
+        this.amountInput.updateModel({}, -1 * value);
+      }
     }
   }
 }
