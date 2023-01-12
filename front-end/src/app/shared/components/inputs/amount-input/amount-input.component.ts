@@ -28,7 +28,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
       const inputValue = this.amountInput.input.nativeElement.value;
       if (inputValue.startsWith('$')) {
         const value = Number(parseInt(inputValue.slice(1)).toFixed(2));
-        this.amountInput.updateInput(-1 * value, undefined, undefined, undefined);
+        this.amountInput.updateInput(-1 * value, undefined, 'insert', undefined);
       }
     }
   }

@@ -1,13 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Subject } from 'rxjs';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
 @Component({
@@ -60,5 +62,16 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
       router,
       fecDatePipe
     );
+  }
+
+  override doInit(
+    form: FormGroup<any>,
+    validateService: ValidateService,
+    transactionType: TransactionType | undefined,
+    contactId$: Subject<string>
+  ): void {
+    super.doInit(form, validateService, transactionType, contactId$);
+
+    this.form.controls['contribution_amount'];
   }
 }
