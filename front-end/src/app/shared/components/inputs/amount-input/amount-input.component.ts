@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
+import { InputNumber } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-amount-input',
@@ -10,12 +11,21 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
     'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
+  @ViewChild('amountInput') amountInput!: InputNumber;
 
   contributionAmountInputStyleClass = '';
 
   ngOnInit(): void {
     if (this.contributionAmountReadOnly) {
       this.contributionAmountInputStyleClass = 'readonly';
+    }
+  }
+
+  onInputAmount($event: KeyboardEvent) {
+    const inputValue = this.amountInput.input.nativeElement.value;
+    if (inputValue.startsWith('$')) {
+      const value = Number(parseFloat(inputValue.slice(1)).toFixed(2));
+      this.amountInput.updateModel({}, -1 * value);
     }
   }
 }
