@@ -1,5 +1,6 @@
-import { LabelUtils } from 'app/shared/utils/label.utils';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/RETURN_RECEIPT';
+import { ContactTypeLabels, ContactTypes } from '../contact.model';
 import {
   AggregationGroups,
   SchATransaction,
@@ -13,6 +14,7 @@ export class RETURN_RECEIPT extends SchaTransactionType {
   componentGroupId = 'C';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
   schema = schema;
+  override contactTypeOptions = [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {
