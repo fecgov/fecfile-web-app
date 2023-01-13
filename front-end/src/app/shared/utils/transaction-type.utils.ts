@@ -46,6 +46,7 @@ import { TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-typ
 import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
 import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
+import { PAC_EARMARK_RECEIPT } from '../models/transaction-types/PAC_EARMARK_RECEIPT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -64,6 +65,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PAC_JF_TRANSFER_MEMO,
   PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
   PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+  PAC_EARMARK_RECEIPT,
   PAC_RECEIPT,
   PAC_RECOUNT_RECEIPT,
   PARTY_JF_TRANSFER_MEMO,
