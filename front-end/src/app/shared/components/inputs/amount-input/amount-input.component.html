@@ -40,6 +40,7 @@
       <div class="field">
         <label for="contribution_amount">AMOUNT</label>
         <p-inputNumber
+          #amountInput
           inputId="contribution_amount"
           formControlName="contribution_amount"
           mode="currency"
@@ -47,6 +48,7 @@
           locale="en-US"
           [readonly]="contributionAmountReadOnly"
           inputStyleClass="{{ contributionAmountInputStyleClass }}"
+          (onInput)="onInputAmount($event)"
         ></p-inputNumber>
         <app-error-messages
           [form]="form"
