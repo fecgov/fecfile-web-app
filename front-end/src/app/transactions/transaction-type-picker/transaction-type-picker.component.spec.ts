@@ -9,6 +9,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
+import { of } from 'rxjs';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;
@@ -27,6 +28,9 @@ describe('TransactionTypePickerComponent', () => {
                 report: F3xSummary.fromJSON({}),
               },
             },
+            params: of({
+              catalog: 'receipt',
+            }),
           },
         },
         provideMockStore(testMockStore),
