@@ -43,7 +43,7 @@ export type SchATransactionName =
   | 'Party National Party Pres. Nominating Convention Account'
   | 'Tribal National Party Recount/Legal Proceedings Account'
   | 'Unregistered Receipt from Person - Returned/Bounced Receipt'
-  | 'Returned/Bounced Receipt (Party)';
+  | 'Party Returned/Bounced Receipt';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -872,7 +872,7 @@ const unregisteredReceiptFromPersonReturn: TransactionForm = {
 };
 
 const partyReturn: TransactionForm = {
-  transaction_name: 'Returned/Bounced Receipt (Party)',
+  transaction_name: 'Party Returned/Bounced Receipt',
   transaction_category: 'REGISTERED FILERS',
   transaction_group: 'F',
   aggregation_group: 'GENERAL',
@@ -903,7 +903,7 @@ export const schedANavTree: TransactionNavTree = {
   'REGISTERED FILERS': {
     'Party Receipt': partyReceipt,
     'PAC Receipt': pacReceipt,
-    'Returned/Bounced Receipt (Party)': partyReceipt,
+    'Party Returned/Bounced Receipt': partyReceipt,
   },
   TRANSFERS: {
     Transfer: transfer,

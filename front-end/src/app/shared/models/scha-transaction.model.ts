@@ -214,7 +214,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   // Contributions from Registered Filers
   [ScheduleATransactionTypes.PARTY_RECEIPT, 'Party Receipt'],
   [ScheduleATransactionTypes.PARTY_IN_KIND, 'Party In-Kind'],
-  [ScheduleATransactionTypes.PARTY_RETURN, 'Returned/Bounced Receipt (Party)'],
+  [ScheduleATransactionTypes.PARTY_RETURN, 'Party Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.PAC_RECEIPT, 'PAC Receipt'],
   [ScheduleATransactionTypes.PAC_IN_KIND, 'PAC In-Kind'],
   [ScheduleATransactionTypes.PAC_EARMARK_RECEIPT, 'PAC Earmark Receipt'],
