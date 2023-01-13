@@ -1,11 +1,11 @@
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/RETURN_RECEIPT';
-import { ContactTypeLabels, ContactTypes } from '../contact.model';
+import { ContactTypes } from '../contact.model';
 import {
   AggregationGroups,
   SchATransaction,
   ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes,
+  ScheduleATransactionTypes
 } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
