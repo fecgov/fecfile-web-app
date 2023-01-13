@@ -47,8 +47,6 @@ describe('TransactionTypePickerComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    component.category = 'disbursement';
-    fixture.detectChanges();
   });
 
   it('should change for disbursement category', () => {
