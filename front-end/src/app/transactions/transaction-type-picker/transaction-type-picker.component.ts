@@ -93,7 +93,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
         return [
           ScheduleATransactionTypes.PARTY_RECEIPT,
           ScheduleATransactionTypes.PARTY_IN_KIND,
-          ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PARTY,
+          ScheduleATransactionTypes.PARTY_RETURN,
           ScheduleATransactionTypes.PAC_RECEIPT,
           ScheduleATransactionTypes.PAC_IN_KIND,
           ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
