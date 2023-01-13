@@ -139,7 +139,7 @@ export enum ScheduleATransactionTypes {
   PAC_EARMARK_RECEIPT = 'PAC_EAR_REC',
   PAC_CONDUIT_EARMARK_DEPOSITED = 'PAC_CONDUIT_EARMARK_DEPOSITED',
   PAC_CONDUIT_EARMARK_UNDEPOSITED = 'PAC_CONDUIT_EARMARK_UNDEPOSITED',
-  RETURNED_BOUNCED_RECEIPT_PAC = 'PAC_RET',
+  PAC_RETURN = 'PAC_RETURN',
   // Transfers
   TRANSFER = 'TRANSFER',
   JOINT_FUNDRAISING_TRANSFER = 'JOINT_FUNDRAISING_TRANSFER',
@@ -220,7 +220,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PAC_EARMARK_RECEIPT, 'PAC Earmark Receipt'],
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED, 'PAC Conduit Earmark (Deposited)'],
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED, 'PAC Conduit Earmark (Undeposited)'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC, 'Returned/Bounced Receipt (PAC)'],
+  [ScheduleATransactionTypes.PAC_RETURN, 'PAC Returned/Bounced Receipt'],
   // Transfers
   [ScheduleATransactionTypes.TRANSFER, 'Transfer'],
   [ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER, 'Joint Fundraising Transfer'],
