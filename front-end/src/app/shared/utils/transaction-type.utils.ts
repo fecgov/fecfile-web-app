@@ -47,6 +47,7 @@ import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UN
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
 import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
 import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
+import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -98,6 +99,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   UNREGISTERED_RECEIPT_FROM_PERSON,
   UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
   PAC_RETURN,
+  PARTY_RETURN,
 }
 
 export class TransactionTypeUtils {

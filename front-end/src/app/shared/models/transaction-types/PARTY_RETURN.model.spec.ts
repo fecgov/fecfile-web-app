@@ -1,12 +1,12 @@
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { PAC_RETURN } from './PAC_RETURN.model';
+import { PARTY_RETURN } from './PARTY_RETURN.model';
 
-describe('PAC_RETURN', () => {
-  let transactionType: PAC_RETURN;
+describe('PARTY_RETURN', () => {
+  let transactionType: PARTY_RETURN;
 
   beforeEach(() => {
-    transactionType = new PAC_RETURN();
+    transactionType = new PARTY_RETURN();
   });
 
   it('should create an instance', () => {
@@ -17,10 +17,11 @@ describe('PAC_RETURN', () => {
 
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA11C');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_RETURN);
+    expect(txn.form_type).toBe('SA11B');
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTY_RETURN);
   });
+
   it('#generatePurposeDescription() should not be defined', () => {
-    expect((transactionType as SchaTransactionType).generatePurposeDescription).toBe(undefined);
+    expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
   });
 });
