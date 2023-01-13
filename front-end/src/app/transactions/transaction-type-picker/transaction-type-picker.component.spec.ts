@@ -10,6 +10,7 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
 import { of } from 'rxjs';
+import { ScheduleBTransactionGroups } from 'app/shared/models/schb-transaction.model';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;
@@ -46,5 +47,14 @@ describe('TransactionTypePickerComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    component.category = 'disbursement';
+    fixture.detectChanges();
+  });
+
+  it('should change for disbursement category', () => {
+    component.category = 'disbursement';
+    fixture.detectChanges();
+    const groups = component.getTransactionGroups();
+    expect(groups[0]).toBe(ScheduleBTransactionGroups.OPERATING_EXPENDITURES);
   });
 });
