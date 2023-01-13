@@ -9,6 +9,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 
 import { TransactionTypePickerComponent } from './transaction-type-picker.component';
+import { of } from 'rxjs';
+import { ScheduleBTransactionGroups } from 'app/shared/models/schb-transaction.model';
 
 describe('TransactionTypePickerComponent', () => {
   let component: TransactionTypePickerComponent;
@@ -27,6 +29,9 @@ describe('TransactionTypePickerComponent', () => {
                 report: F3xSummary.fromJSON({}),
               },
             },
+            params: of({
+              catalog: 'receipt',
+            }),
           },
         },
         provideMockStore(testMockStore),
@@ -42,5 +47,12 @@ describe('TransactionTypePickerComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should change for disbursement category', () => {
+    component.category = 'disbursement';
+    fixture.detectChanges();
+    const groups = component.getTransactionGroups();
+    expect(groups[0]).toBe(ScheduleBTransactionGroups.OPERATING_EXPENDITURES);
   });
 });
