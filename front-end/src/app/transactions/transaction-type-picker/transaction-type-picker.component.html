@@ -1,4 +1,4 @@
-<h1>Receipts</h1>
+<h1>Add a {{ category }}</h1>
 <p-accordion muiltiple="false">
   <p-accordionTab *ngFor="let transactionGroup of getTransactionGroups()" [header]="transactionGroup">
     <div class="grid">
@@ -6,7 +6,7 @@
         *ngFor="let transactionType of getTransactionTypes(transactionGroup)"
         class="col-12"
         routerLink="/transactions/report/{{ report?.id }}/create/{{ transactionType }}"
-        >{{ transactionType | label: scheduleATransactionTypeLabels }}</a
+        >{{ transactionType | label : transactionTypeLabels }}</a
       >
     </div>
   </p-accordionTab>
