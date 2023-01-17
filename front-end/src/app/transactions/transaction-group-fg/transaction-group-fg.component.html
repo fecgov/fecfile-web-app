@@ -28,13 +28,15 @@
           </div>
         </div>
         <ng-container *ngIf="transactionType?.transaction?.contact">
-          <app-name-input [form]="form" [formSubmitted]="formSubmitted"></app-name-input>
+          <app-committee-input
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            entityRole="COMMITTEE"
+            [includeFecId]="true">
+          </app-committee-input>
           <p-divider></p-divider>
           <h3>Address</h3>
           <app-address-input [form]="form" [formSubmitted]="formSubmitted"></app-address-input>
-          <p-divider></p-divider>
-          <h3>Employer</h3>
-          <app-employer-input [form]="form" [formSubmitted]="formSubmitted"></app-employer-input>
           <p-divider></p-divider>
           <h3>Receipt Information</h3>
           <app-amount-input

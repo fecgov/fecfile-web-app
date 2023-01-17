@@ -4,6 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { PAC_EARMARK_MEMO } from 'app/shared/models/transaction-types/PAC_EARMARK_MEMO.model';
 import { PAC_EARMARK_RECEIPT } from 'app/shared/models/transaction-types/PAC_EARMARK_RECEIPT.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -28,9 +29,9 @@ describe('TransactionGroupFgComponent', () => {
 
   const pacEarmarkReceipt = new PAC_EARMARK_RECEIPT();
   pacEarmarkReceipt.transaction = pacEarmarkReceipt.getNewTransaction();
-  // const pacEarmarkMemo = new PAC_EARMARK_MEMO(); TODO: uncomment after memo added
-  // pacEarmarkMemo.transaction = pacEarmarkMemo.getNewTransaction(); TODO: uncomment after memo added
-  // pacEarmarkReceipt.childTransactionType = pacEarmarkMemo; TODO: uncomment after memo added
+  const pacEarmarkMemo = new PAC_EARMARK_MEMO();
+  pacEarmarkMemo.transaction = pacEarmarkMemo.getNewTransaction();
+  pacEarmarkReceipt.childTransactionType = pacEarmarkMemo;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
