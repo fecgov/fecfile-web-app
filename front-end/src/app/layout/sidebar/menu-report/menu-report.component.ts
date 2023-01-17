@@ -107,7 +107,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
                 visible: this.reportIsEditableFlag,
               },
               {
-                label: 'Add a disbursements',
+                label: 'Add a disbursement',
                 routerLink: [`/transactions/report/${this.currentReportId}/select/disbursement`],
                 visible: this.reportIsEditableFlag,
               },
