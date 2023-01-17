@@ -12,6 +12,7 @@ export type TransactionCategory = 'INDIVIDUALS/PERSONS' | 'REGISTERED FILERS' | 
 export type SchATransactionName =
   | 'Individual Receipt'
   | 'Tribal Receipt'
+  | 'Returned/Bounced Receipt'
   | 'Unregistered Receipt from Person'
   | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
@@ -43,7 +44,9 @@ export type SchATransactionName =
   | 'Individual National Party Pres. Nominating Convention Account'
   | 'Party National Party Pres. Nominating Convention Account'
   | 'Tribal National Party Recount/Legal Proceedings Account'
-  | 'Unregistered Receipt from Person - Returned/Bounced Receipt';
+  | 'Unregistered Receipt from Person - Returned/Bounced Receipt'
+  | 'PAC Returned/Bounced Receipt'
+  | 'Party Returned/Bounced Receipt';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -302,6 +305,19 @@ const tribalReceipt: TransactionForm = {
   fields: {
     ...memoFields,
     ...contributionFields,
+  },
+};
+
+const returnedBouncedReceiptIndividual: TransactionForm = {
+  transaction_name: 'Returned/Bounced Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
+  transaction_group: 'C',
+  aggregation_group: 'GENERAL',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
   },
 };
 
@@ -903,6 +919,32 @@ const unregisteredReceiptFromPersonReturn: TransactionForm = {
   },
 };
 
+const pacReturn: TransactionForm = {
+  transaction_name: 'PAC Returned/Bounced Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  transaction_group: 'F',
+  aggregation_group: 'GENERAL',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
+const partyReturn: TransactionForm = {
+  transaction_name: 'Party Returned/Bounced Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  transaction_group: 'F',
+  aggregation_group: 'GENERAL',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
 /*
  *          Group A Transaction Navigation Tree
  * Every entry in this object represents a path that an E2E test
@@ -915,6 +957,7 @@ export const schedANavTree: TransactionNavTree = {
   'INDIVIDUALS/PERSONS': {
     'Individual Receipt': individualReceipt,
     'Tribal Receipt': tribalReceipt,
+    'Returned/Bounced Receipt': returnedBouncedReceiptIndividual,
     'Earmark Receipt': earmarkReceipt,
     'Unregistered Receipt from Person': unregisteredReceiptFromPerson,
     'Unregistered Receipt from Person - Returned/Bounced Receipt': unregisteredReceiptFromPersonReturn,
@@ -923,6 +966,8 @@ export const schedANavTree: TransactionNavTree = {
     'Party Receipt': partyReceipt,
     'PAC Receipt': pacReceipt,
     'Earmark Receipt': pacEarmarkReceipt,
+    'PAC Returned/Bounced Receipt': pacReturn,
+    'Party Returned/Bounced Receipt': partyReturn,
   },
   TRANSFERS: {
     Transfer: transfer,

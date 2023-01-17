@@ -19,7 +19,7 @@ const accordion = {
   'CONTRIBUTIONS FROM REGISTERED': [
     'Party Receipt',
     'Party In-Kind',
-    'Returned/Bounced Receipt (Party)',
+    'Party Returned/Bounced Receipt',
     'PAC Receipt',
     'PAC In-Kind',
     'PAC Earmark Receipt',
