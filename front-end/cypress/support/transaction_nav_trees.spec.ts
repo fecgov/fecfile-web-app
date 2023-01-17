@@ -58,6 +58,8 @@ export type ChildTransactionName =
   | 'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo'
   | 'Earmark Receipt Step One'
   | 'Earmark Receipt Step Two'
+  | 'PAC Earmark Receipt Step One'
+  | 'PAC Earmark Receipt Step Two'
   | 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'Tribal National Party Headquarters Buildings Account JF Transfer Memo'
@@ -735,22 +737,22 @@ const pacReceipt: TransactionForm = {
 };
 
 const pacEarmarkReceiptStepOne: ChildTransactionForm = {
-  transaction_name: 'Earmark Receipt Step One',
-  transaction_group: 'AG',
+  transaction_name: 'PAC Earmark Receipt Step One',
+  transaction_group: 'FG',
   aggregation_group: 'GENERAL',
   ...entityIndividual,
-  childOf: 'Earmark Receipt',
+  childOf: 'PAC Earmark Receipt',
   fields: {
     ...contributionFields,
     ...memoFields,
   },
 };
 const pacEarmarkReceiptStepTwo: ChildTransactionForm = {
-  transaction_name: 'Earmark Receipt Step Two',
-  transaction_group: 'AG',
+  transaction_name: 'PAC Earmark Receipt Step Two',
+  transaction_group: 'FG',
   aggregation_group: 'GENERAL',
   ...entityIndvOrComm,
-  childOf: 'Earmark Receipt',
+  childOf: 'PAC Earmark Receipt',
   fields: {
     contributionDate: TransactionFields['contributionDate'],
     ...memoFields,
@@ -1013,6 +1015,10 @@ export const childTransactionTree = {
   'Earmark Receipt': {
     'Earmark Receipt Step One': earmarkReceiptStepOne,
     'Earmark Receipt Step Two': earmarkReceiptStepTwo,
+  },
+  'PAC Earmark Receipt': {
+    'PAC Earmark Receipt Step One': pacEarmarkReceiptStepOne,
+    'PAC Earmark Receipt Step Two': pacEarmarkReceiptStepTwo,
   },
   'Joint Fundraising Transfer': {
     'Tribal Joint Fundraising Transfer Memo': tribalJointFundraisingTransferMemo,

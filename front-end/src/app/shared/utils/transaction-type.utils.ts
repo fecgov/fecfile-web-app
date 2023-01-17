@@ -18,6 +18,7 @@ import { JOINT_FUNDRAISING_TRANSFER } from '../models/transaction-types/JOINT_FU
 import { OFFSET_TO_OPERATING_EXPENDITURES } from '../models/transaction-types/OFFSET_TO_OPERATING_EXPENDITURES.model';
 import { OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT.model';
 import { OTHER_RECEIPT } from '../models/transaction-types/OTHER_RECEIPT.model';
+import { PAC_EARMARK_MEMO } from '../models/transaction-types/PAC_EARMARK_MEMO.model';
 import { PAC_EARMARK_RECEIPT } from '../models/transaction-types/PAC_EARMARK_RECEIPT.model';
 import { PAC_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_JF_TRANSFER_MEMO.model';
 import { PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
@@ -69,6 +70,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
   PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   PAC_EARMARK_RECEIPT,
+  PAC_EARMARK_MEMO,
   PAC_RECEIPT,
   PAC_RECOUNT_RECEIPT,
   PARTY_JF_TRANSFER_MEMO,
