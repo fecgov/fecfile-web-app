@@ -6,7 +6,7 @@ import {
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
 export class PARTNERSHIP_MEMO extends SchaTransactionType {
@@ -14,7 +14,10 @@ export class PARTNERSHIP_MEMO extends SchaTransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_MEMO);
   schema = schema;
   override subTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_MEMO];
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
+    LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECEIPT)
+  );
+
   override generatePurposeDescription(): string {
     return 'Partnership Attribution';
   }

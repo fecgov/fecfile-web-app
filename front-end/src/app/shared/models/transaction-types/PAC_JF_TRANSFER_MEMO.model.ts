@@ -1,4 +1,3 @@
-import { hasNoContact, isNewTransaction } from 'app/shared/models/transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
 import {
@@ -7,40 +6,15 @@ import {
   ScheduleATransactionTypeLabels,
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
-import {
-  NavigationAction,
-  NavigationControl,
-  NavigationDestination,
-  SAVE_LIST_CONTROL,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
+import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
 export class PAC_JF_TRANSFER_MEMO extends SchaTransactionType {
   componentGroupId = 'F';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   schema = schema;
-  override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
-    [
-      new NavigationControl(
-        NavigationAction.SAVE,
-        NavigationDestination.ANOTHER,
-        'Save & add another JF Transfer Memo',
-        'p-button-warning',
-        hasNoContact,
-        isNewTransaction,
-        'pi pi-plus'
-      ),
-    ],
-    [
-      new NavigationControl(
-        NavigationAction.CANCEL,
-        NavigationDestination.PARENT,
-        'Back to Joint Fundraising Transfer',
-        'p-button-secondary'
-      ),
-    ],
-    [SAVE_LIST_CONTROL]
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
+    LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
   );
 
   override generatePurposeDescription(): string {

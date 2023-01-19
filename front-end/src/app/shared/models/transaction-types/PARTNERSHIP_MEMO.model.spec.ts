@@ -11,7 +11,7 @@ describe('PARTNERSHIP_MEMO', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transactionType.componentGroupId).toBe('A');
   });
 
   it('#factory() should return a SchATransaction', () => {
