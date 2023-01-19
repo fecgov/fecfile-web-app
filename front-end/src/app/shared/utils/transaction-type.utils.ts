@@ -48,6 +48,9 @@ import { TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-typ
 import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
 import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
+import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model';
+import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
+import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -73,6 +76,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTY_JF_TRANSFER_MEMO,
   PARTY_RECEIPT,
   PARTY_RECOUNT_RECEIPT,
+  RETURN_RECEIPT,
   TRANSFER,
   TRIBAL_JF_TRANSFER_MEMO,
   TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
@@ -100,6 +104,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   UNREGISTERED_RECEIPT_FROM_PERSON,
   UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
+  PAC_RETURN,
+  PARTY_RETURN,
 }
 
 export class TransactionTypeUtils {

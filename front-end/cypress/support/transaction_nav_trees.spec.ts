@@ -12,6 +12,7 @@ export type TransactionCategory = 'INDIVIDUALS/PERSONS' | 'REGISTERED FILERS' | 
 export type SchATransactionName =
   | 'Individual Receipt'
   | 'Tribal Receipt'
+  | 'Returned/Bounced Receipt'
   | 'Unregistered Receipt from Person'
   | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
@@ -43,7 +44,9 @@ export type SchATransactionName =
   | 'Party National Party Pres. Nominating Convention Account'
   | 'Tribal National Party Recount/Legal Proceedings Account'
   | 'Unregistered Receipt from Person - Returned/Bounced Receipt'
-  | 'Partnership Receipt';
+  | 'Partnership Receipt'
+  | 'PAC Returned/Bounced Receipt'
+  | 'Party Returned/Bounced Receipt';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -303,6 +306,19 @@ const tribalReceipt: TransactionForm = {
   fields: {
     ...memoFields,
     ...contributionFields,
+  },
+};
+
+const returnedBouncedReceiptIndividual: TransactionForm = {
+  transaction_name: 'Returned/Bounced Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
+  transaction_group: 'C',
+  aggregation_group: 'GENERAL',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
   },
 };
 
@@ -884,6 +900,19 @@ const partnershipReceipt: TransactionForm = {
   },
 };
 
+const pacReturn: TransactionForm = {
+  transaction_name: 'PAC Returned/Bounced Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  transaction_group: 'F',
+  aggregation_group: 'GENERAL',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
 const partnershipMemo: ChildTransactionForm = {
   transaction_name: 'Partnership Memo',
   transaction_group: 'A',
@@ -893,6 +922,19 @@ const partnershipMemo: ChildTransactionForm = {
   fields: {
     ...memoFields,
     ...contributionFields,
+  },
+};
+
+const partyReturn: TransactionForm = {
+  transaction_name: 'Party Returned/Bounced Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  transaction_group: 'F',
+  aggregation_group: 'GENERAL',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
   },
 };
 
@@ -909,6 +951,7 @@ export const schedANavTree: TransactionNavTree = {
     'Individual Receipt': individualReceipt,
     'Tribal Receipt': tribalReceipt,
     'Partnership Receipt': partnershipReceipt,
+    'Returned/Bounced Receipt': returnedBouncedReceiptIndividual,
     'Earmark Receipt': earmarkReceipt,
     'Unregistered Receipt from Person': unregisteredReceiptFromPerson,
     'Unregistered Receipt from Person - Returned/Bounced Receipt': unregisteredReceiptFromPersonReturn,
@@ -916,6 +959,8 @@ export const schedANavTree: TransactionNavTree = {
   'REGISTERED FILERS': {
     'Party Receipt': partyReceipt,
     'PAC Receipt': pacReceipt,
+    'PAC Returned/Bounced Receipt': pacReturn,
+    'Party Returned/Bounced Receipt': partyReturn,
   },
   TRANSFERS: {
     Transfer: transfer,

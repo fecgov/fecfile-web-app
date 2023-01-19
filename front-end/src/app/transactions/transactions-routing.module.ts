@@ -22,8 +22,7 @@ const routes: Routes = [
     resolve: { report: ReportResolver },
   },
   {
-    path: 'report/:reportId/create',
-    title: 'Add a receipt',
+    path: 'report/:reportId/select/:category',
     component: TransactionTypePickerComponent,
     canActivate: [ReportIsEditableGuard],
   },
