@@ -4,6 +4,7 @@
       <label for="contribution_purpose_descrip">
         CONTRIBUTION PURPOSE DESCRIPTION {{ contributionPurposeDescriptionLabel }}
       </label>
+      <em *ngIf="purposeDescriptionLabelNotice">{{ purposeDescriptionLabelNotice }}</em>
       <div>
         <textarea
           id="contribution_purpose_descrip"

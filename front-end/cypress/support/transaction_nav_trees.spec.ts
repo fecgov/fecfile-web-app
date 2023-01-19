@@ -61,7 +61,8 @@ export type ChildTransactionName =
   | 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo'
   | 'Individual National Party Headquarters Buildings Account JF Transfer Memo'
-  | 'PAC National Party Headquarters Buildings Account JF Transfer Memo';
+  | 'PAC National Party Headquarters Buildings Account JF Transfer Memo'
+  | 'Partnership Memo';
 
 export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG';
 
@@ -883,6 +884,18 @@ const partnershipReceipt: TransactionForm = {
   },
 };
 
+const partnershipMemo: ChildTransactionForm = {
+  transaction_name: 'Partnership Memo',
+  transaction_group: 'A',
+  aggregation_group: 'GENERAL',
+  ...entityIndividual,
+  childOf: 'Partnership Receipt',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 /*
  *          Group A Transaction Navigation Tree
  * Every entry in this object represents a path that an E2E test
@@ -954,5 +967,8 @@ export const childTransactionTree = {
     'PAC Joint Fundraising Transfer Memo': pacJointFundraisingTransferMemo,
     'Party Joint Fundraising Transfer Memo': partyJointFundraisingTransferMemo,
     'Individual Joint Fundraising Transfer Memo': individualJointFundraisingTransferMemo,
+  },
+  'Partnership Receipt': {
+    'Partnership Memo': partnershipMemo,
   },
 };

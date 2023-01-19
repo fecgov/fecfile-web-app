@@ -1,18 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ContactService } from 'app/shared/services/contact.service';
-import { TransactionService } from 'app/shared/services/transaction.service';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-transaction-group-d',
   templateUrl: './transaction-group-d.component.html',
+  styleUrls: ['../transaction.scss'],
 })
 export class TransactionGroupDComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -29,30 +23,10 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
     'contribution_purpose_descrip',
     'memo_code',
     'memo_text_input',
+    'subTransaction',
   ];
+
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
   );
-
-  constructor(
-    protected override messageService: MessageService,
-    protected override transactionService: TransactionService,
-    protected override contactService: ContactService,
-    protected override validateService: ValidateService,
-    protected override confirmationService: ConfirmationService,
-    protected override fb: FormBuilder,
-    protected override router: Router,
-    protected override fecDatePipe: FecDatePipe
-  ) {
-    super(
-      messageService,
-      transactionService,
-      contactService,
-      validateService,
-      confirmationService,
-      fb,
-      router,
-      fecDatePipe
-    );
-  }
 }

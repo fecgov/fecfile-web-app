@@ -193,6 +193,7 @@ export enum ScheduleATransactionTypes {
   PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
   TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
   PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
+  PARTNERSHIP_MEMO = 'PARTNERSHIP_MEMO',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -374,6 +375,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     'Partnership Receipt Headquarters Buildings Account JF Transfer Memo',
   ],
+  [ScheduleATransactionTypes.PARTNERSHIP_MEMO, 'Partnership Memo'],
 ];
 
 export enum AggregationGroups {

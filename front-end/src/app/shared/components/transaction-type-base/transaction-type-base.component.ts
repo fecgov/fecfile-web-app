@@ -3,7 +3,11 @@ import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import {
+  SchATransaction,
+  ScheduleATransactionTypes,
+  ScheduleATransactionTypeLabels,
+} from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
@@ -35,6 +39,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   contributionPurposeDescriptionLabel = '';
+  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
 
   form: FormGroup = this.fb.group({});
 
@@ -144,6 +149,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           }
         });
     }
+
+    this.subTransactionOptions = (this.transactionType?.subTransactionTypes || []).map((type) => {
+      return {
+        label: LabelUtils.get(ScheduleATransactionTypeLabels, type),
+        value: type,
+      };
+    });
   }
 
   ngOnDestroy(): void {
@@ -523,5 +535,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   getEntityType(): string {
     return this.form.get('entity_type')?.value || '';
+  }
+
+  createSubTransaction(event: { value: ScheduleATransactionTypes }) {
+    this.save(NavigationDestination.CHILD, event.value);
+    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }
