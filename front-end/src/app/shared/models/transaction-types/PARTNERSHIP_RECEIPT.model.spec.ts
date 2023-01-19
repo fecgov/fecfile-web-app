@@ -27,6 +27,6 @@ describe('PARTNERSHIP_RECEIPT', () => {
 
     transactionType.transaction.children = [transactionType.getNewTransaction()];
     descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('See Partnership Attribution below');
+    expect(descrip).toBe('See Partnership Attribution(s) below');
   });
 });
