@@ -114,7 +114,7 @@
             [formSubmitted]="formSubmitted"
             [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType?.childTransactionType)"
             [contributionAmountReadOnly]="true"
-            [negativeAmountValueOnly]="negativeAmountValueOnly"
+            [negativeAmountValueOnly]="childNegativeAmountValueOnly"
           ></app-amount-input>
           <p-divider></p-divider>
           <h3>Additional Information</h3>
@@ -122,7 +122,7 @@
             [form]="childForm"
             [formSubmitted]="formSubmitted"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
-            [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
+            [contributionPurposeDescriptionLabel]="this.childContributionPurposeDescriptionLabel"
           ></app-additional-info-input>
         </ng-container>
       </form>

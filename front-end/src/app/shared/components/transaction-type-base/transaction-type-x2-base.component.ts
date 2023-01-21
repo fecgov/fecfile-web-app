@@ -1,18 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ContactService } from 'app/shared/services/contact.service';
-import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
+import { SelectItem } from 'primeng/api';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionTypeBaseComponent } from '../transaction-type-base/transaction-type-base.component';
+import { FormBehaviors } from './form.behaviors';
+import { ContactBehaviors } from './contact.behaviors';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -34,28 +32,8 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
   childForm: FormGroup = this.fb.group({});
   childValidateService: ValidateService = new ValidateService();
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
-
-  constructor(
-    protected override messageService: MessageService,
-    protected override transactionService: TransactionService,
-    protected override contactService: ContactService,
-    protected override validateService: ValidateService,
-    protected override confirmationService: ConfirmationService,
-    protected override fb: FormBuilder,
-    protected override router: Router,
-    protected override fecDatePipe: FecDatePipe
-  ) {
-    super(
-      messageService,
-      transactionService,
-      contactService,
-      validateService,
-      confirmationService,
-      fb,
-      router,
-      fecDatePipe
-    );
-  }
+  childContributionPurposeDescriptionLabel = '';
+  childNegativeAmountValueOnly = false;
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -63,11 +41,12 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
 
     // Initialize child form.
     this.childForm = this.fb.group(this.childValidateService.getFormGroupFields(this.childFormProperties));
-    this.doInit(
+    FormBehaviors.onInit(
       this.childForm,
       this.childValidateService,
       this.transactionType?.childTransactionType,
-      this.childContactId$
+      this.childContactId$,
+      this.childContributionPurposeDescriptionLabel
     );
   }
 
@@ -83,14 +62,14 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
       return;
     }
 
-    const payload: Transaction = this.getPayloadTransaction(
+    const payload: Transaction = FormBehaviors.getPayloadTransaction(
       this.transactionType,
       this.validateService,
       this.form,
       this.formProperties
     );
     payload.children = [
-      this.getPayloadTransaction(
+      FormBehaviors.getPayloadTransaction(
         this.transactionType?.childTransactionType,
         this.childValidateService,
         this.childForm,
@@ -109,7 +88,6 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
     transactionTypeToAdd?: ScheduleATransactionTypes
   ) {
     if (payload.children?.length === 1) {
-      // Confirm transaction from Group G
       this.confirmSave(
         payload.children[0],
         this.childForm,
@@ -120,17 +98,17 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
         'childDialog'
       );
     } else {
-      throw new Error('Transaction missing Group G child transaction when trying to confirm save.');
+      throw new Error('Parent transaction missing child transaction when trying to confirm save.');
     }
   }
 
   protected override resetForm() {
-    this.doResetForm(this.form, this.transactionType);
-    this.doResetForm(this.childForm, this.transactionType?.childTransactionType);
+    FormBehaviors.resetForm(this.form, this.transactionType);
+    FormBehaviors.resetForm(this.childForm, this.transactionType?.childTransactionType);
   }
 
   childOnContactLookupSelect(selectItem: SelectItem<Contact>) {
-    this.doContactLookupSelect(
+    ContactBehaviors.onContactLookupSelect(
       selectItem,
       this.childForm,
       this.transactionType?.childTransactionType,

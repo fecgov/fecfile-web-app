@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs';
-import { TransactionTypeX2BaseComponent } from 'app/shared/components/transaction-type-x2-base/transaction-type-x2-base.component';
+import { TransactionTypeX2BaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-x2-base.component';
 import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
