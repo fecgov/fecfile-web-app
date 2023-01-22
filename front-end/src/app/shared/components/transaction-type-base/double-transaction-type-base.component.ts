@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
-import { BehaviorSubject, Subject } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -48,7 +47,6 @@ export abstract class DoubleTransactionTypeBaseComponent
     TransactionFormUtils.onInit(
       this,
       this.childForm,
-      this.childContactTypeOptions,
       this.childValidateService,
       this.transactionType?.childTransactionType,
       this.childContactId$
@@ -58,6 +56,14 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   childOnInit() {
+    // Override contact type options if present in transactionType
+    if (this.transactionType?.childTransactionType && this.transactionType.childTransactionType.contactTypeOptions) {
+      this.childContactTypeOptions = LabelUtils.getPrimeOptions(
+        ContactTypeLabels,
+        this.transactionType.childTransactionType.contactTypeOptions
+      );
+    }
+
     const contribution_amount_schema =
       this.transactionType?.childTransactionType?.schema.properties['contribution_amount'];
     if (contribution_amount_schema?.exclusiveMaximum === 0) {

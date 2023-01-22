@@ -53,18 +53,16 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   ngOnInit(): void {
     this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
-    TransactionFormUtils.onInit(
-      this,
-      this.form,
-      this.contactTypeOptions,
-      this.validateService,
-      this.transactionType,
-      this.contactId$
-    );
+    TransactionFormUtils.onInit(this, this.form, this.validateService, this.transactionType, this.contactId$);
     this.parentOnInit();
   }
 
   parentOnInit() {
+    // Override contact type options if present in transactionType
+    if (this.transactionType && this.transactionType.contactTypeOptions) {
+      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, this.transactionType.contactTypeOptions);
+    }
+
     const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
     if (contribution_amount_schema?.exclusiveMaximum === 0) {
       this.negativeAmountValueOnly = true;

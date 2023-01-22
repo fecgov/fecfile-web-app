@@ -576,7 +576,6 @@ describe('TransactionTypeBaseComponent', () => {
     TransactionFormUtils.onInit(
       component,
       component.form,
-      component.contactTypeOptions,
       new ValidateService(),
       component.transactionType,
       component.contactId$

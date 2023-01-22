@@ -26,7 +26,6 @@ export class TransactionFormUtils {
   static onInit(
     component: TransactionTypeBaseComponent | DoubleTransactionTypeBaseComponent,
     form: FormGroup,
-    contactTypeOptions: PrimeOptions,
     validateService: ValidateService,
     transactionType: TransactionType | undefined,
     contactId$: Subject<string>
@@ -34,11 +33,6 @@ export class TransactionFormUtils {
     // Initialize validation tracking of current JSON schema and form data
     validateService.formValidatorSchema = transactionType?.schema;
     validateService.formValidatorForm = form;
-
-    // Override contact type options if present in transactionType
-    if (transactionType && transactionType.contactTypeOptions) {
-      contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, transactionType.contactTypeOptions);
-    }
 
     // Intialize form values
     function isExisting(transaction: Transaction | undefined) {
