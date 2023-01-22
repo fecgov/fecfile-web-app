@@ -121,7 +121,7 @@
           <app-additional-info-input
             [form]="childForm"
             [formSubmitted]="formSubmitted"
-            [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
+            [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType?.childTransactionType)"
             [contributionPurposeDescriptionLabel]="this.childContributionPurposeDescriptionLabel"
           ></app-additional-info-input>
         </ng-container>

@@ -1,8 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { MemoText } from 'app/shared/models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
@@ -17,11 +16,10 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
-import { Contact, ContactFields, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-import { FormBehaviors } from './form.behaviors';
-import { ContactBehaviors } from './contact.behaviors';
-import { MemoBehaviors } from './memo.behaviors';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { TransactionFormUtils } from './transaction-form.utils';
+import { TransactionContactUtils } from './transaction-contact.utils';
 
 @Component({
   template: '',
@@ -44,7 +42,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   constructor(
     protected messageService: MessageService,
-    protected transactionService: TransactionService,
+    public transactionService: TransactionService,
     protected contactService: ContactService,
     protected validateService: ValidateService,
     protected confirmationService: ConfirmationService,
@@ -55,13 +53,31 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   ngOnInit(): void {
     this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
-    FormBehaviors.onInit(
+    TransactionFormUtils.onInit(
+      this,
       this.form,
+      this.contactTypeOptions,
       this.validateService,
       this.transactionType,
-      this.contactId$,
-      this.contributionPurposeDescriptionLabel
+      this.contactId$
     );
+
+    const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
+    if (contribution_amount_schema?.exclusiveMaximum === 0) {
+      this.negativeAmountValueOnly = true;
+      this.form
+        .get('contribution_amount')
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((contribution_amount) => {
+          if (typeof contribution_amount === 'number' && contribution_amount > 0) {
+            this.form.patchValue({ contribution_amount: -1 * contribution_amount });
+          }
+        });
+    }
+
+    if (this.transactionType?.generatePurposeDescriptionLabel) {
+      this.contributionPurposeDescriptionLabel = this.transactionType.generatePurposeDescriptionLabel();
+    }
   }
 
   ngOnDestroy(): void {
@@ -77,7 +93,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       return;
     }
 
-    const payload: Transaction = FormBehaviors.getPayloadTransaction(
+    const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transactionType,
       this.validateService,
       this.form,
@@ -101,12 +117,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (confirmTransaction.contact_id && confirmTransaction.contact) {
-      const transactionContactChanges = ContactBehaviors.setTransactionContactFormChanges(
+      const transactionContactChanges = TransactionContactUtils.setTransactionContactFormChanges(
         form,
         confirmTransaction.contact
       );
       if (transactionContactChanges?.length) {
-        const confirmationMessage = ContactBehaviors.getEditTransactionContactConfirmationMessage(
+        const confirmationMessage = TransactionContactUtils.getEditTransactionContactConfirmationMessage(
           transactionContactChanges,
           confirmTransaction.contact,
           form,
@@ -130,7 +146,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         acceptCallback.call(this, navigateTo, payload, transactionTypeToAdd);
       }
     } else {
-      const confirmationMessage = ContactBehaviors.getCreateTransactionContactConfirmationMessage(
+      const confirmationMessage = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
         (confirmTransaction as SchATransaction).entity_type as ContactTypes,
         form
       );
@@ -213,13 +229,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  protected resetForm() {
-    FormBehaviors.resetForm(this.form, this.transactionType);
+  resetForm() {
+    this.formSubmitted = false;
+    TransactionFormUtils.resetForm(this.form, this.transactionType, this.contactTypeOptions);
   }
 
   isMemoCodeReadOnly(transactionType?: TransactionType): boolean {
     // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
-    return FormBehaviors.getMemoCodeConstant(transactionType) !== undefined;
+    return TransactionFormUtils.getMemoCodeConstant(transactionType) !== undefined;
   }
 
   isDescriptionSystemGenerated(transactionType?: TransactionType): boolean {
@@ -228,7 +245,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   onContactLookupSelect(selectItem: SelectItem<Contact>) {
-    ContactBehaviors.onContactLookupSelect(selectItem, this.form, this.transactionType, this.contactId$);
+    TransactionContactUtils.onContactLookupSelect(selectItem, this.form, this.transactionType, this.contactId$);
   }
 
   getEntityType(): string {

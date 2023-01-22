@@ -1,33 +1,35 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { MemoText } from 'app/shared/models/memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import {
-  NavigationAction,
-  NavigationControl,
-  NavigationDestination,
-  TransactionNavigationControls,
-} from 'app/shared/models/transaction-navigation-controls.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ContactService } from 'app/shared/services/contact.service';
-import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { BehaviorSubject, combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
-import { Contact, ContactFields, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-import { MemoBehaviors } from './memo.behaviors';
+import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
+import { ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { TransactionMemoUtils } from './transaction-memo.utils';
+import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 
-export class FormBehaviors {
+export class TransactionFormUtils {
+  /**
+   * The parameters after the "component" parameter need to be set to either the primary (parent)
+   * component values or, if they are the second transaction type of a "double" transaction
+   * input screen, those parameters need to be set to the "child" properties of the
+   * child transaction type defined in the DoubleTransactionTypeBase class.
+   * @param component
+   * @param form - parent or child (i.e. form or childForm)
+   * @param contactTypeOptions - parent or child (i.e. contactTypeOptions or childContactTypeOptions)
+   * @param validateService - parent or child (i.e. validateService or childValidateService)
+   * @param transactionType - parent or child (i.e. transactionType or transactionType?.childTransactionType)
+   * @param contactId$ - parent or child (i.e. contactId$ or childContactId$)
+   */
   static onInit(
+    component: TransactionTypeBaseComponent | DoubleTransactionTypeBaseComponent,
     form: FormGroup,
+    contactTypeOptions: PrimeOptions,
     validateService: ValidateService,
     transactionType: TransactionType | undefined,
-    contactId$: Subject<string>,
-    contributionPurposeDescriptionLabel: string
+    contactId$: Subject<string>
   ): void {
     // Initialize validation tracking of current JSON schema and form data
     validateService.formValidatorSchema = transactionType?.schema;
@@ -35,7 +37,7 @@ export class FormBehaviors {
 
     // Override contact type options if present in transactionType
     if (transactionType && transactionType.contactTypeOptions) {
-      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, transactionType.contactTypeOptions);
+      contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, transactionType.contactTypeOptions);
     }
 
     // Intialize form values
@@ -47,19 +49,19 @@ export class FormBehaviors {
       const txn = { ...transactionType?.transaction } as SchATransaction;
       form.patchValue({ ...txn });
 
-      MemoBehaviors.patchMemoText(transactionType, form);
+      TransactionMemoUtils.patchMemoText(transactionType, form);
 
       form.get('entity_type')?.disable();
       contactId$.next(txn.contact_id || '');
     } else {
-      this.resetForm();
+      component.resetForm();
       form.get('entity_type')?.enable();
-      this.contactId$.next('');
+      contactId$.next('');
     }
 
     form
       .get('entity_type')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      ?.valueChanges.pipe(takeUntil(component.destroy$))
       .subscribe((value: string) => {
         if (value === ContactTypes.INDIVIDUAL || value === ContactTypes.CANDIDATE) {
           form.get('contributor_organization_name')?.reset();
@@ -77,7 +79,7 @@ export class FormBehaviors {
 
     form
       ?.get('contribution_aggregate')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      ?.valueChanges.pipe(takeUntil(component.destroy$))
       .subscribe(() => {
         form.get('contributor_employer')?.updateValueAndValidity();
         form.get('contributor_occupation')?.updateValueAndValidity();
@@ -88,7 +90,7 @@ export class FormBehaviors {
         startWith(form.get('contribution_date')?.value),
         combineLatestWith(contactId$),
         switchMap(([contribution_date, contactId]) => {
-          return this.transactionService.getPreviousTransaction(transactionType, contactId, contribution_date);
+          return component.transactionService.getPreviousTransaction(transactionType, contactId, contribution_date);
         })
       ) || of(undefined);
     form
@@ -96,29 +98,12 @@ export class FormBehaviors {
       ?.valueChanges.pipe(
         startWith(form.get('contribution_amount')?.value),
         combineLatestWith(previous_transaction$),
-        takeUntil(this.destroy$)
+        takeUntil(component.destroy$)
       )
       .subscribe(([contribution_amount, previous_transaction]) => {
         const previousAggregate = +((previous_transaction as SchATransaction)?.contribution_aggregate || 0);
         form.get('contribution_aggregate')?.setValue(+contribution_amount + previousAggregate);
       });
-
-    const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
-    if (contribution_amount_schema?.exclusiveMaximum === 0) {
-      this.negativeAmountValueOnly = true;
-      form
-        .get('contribution_amount')
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((contribution_amount) => {
-          if (typeof contribution_amount === 'number' && contribution_amount > 0) {
-            form.patchValue({ contribution_amount: -1 * contribution_amount });
-          }
-        });
-    }
-
-    if (this.transactionType?.generatePurposeDescriptionLabel) {
-      this.contributionPurposeDescriptionLabel = this.transactionType.generatePurposeDescriptionLabel();
-    }
   }
 
   static getPayloadTransaction(
@@ -128,7 +113,7 @@ export class FormBehaviors {
     formProperties: string[]
   ) {
     let formValues = validateService.getFormValues(form, formProperties);
-    if (transactionType) formValues = MemoBehaviors.retrieveMemoText(transactionType, form, formValues);
+    if (transactionType) formValues = TransactionMemoUtils.retrieveMemoText(transactionType, form, formValues);
 
     const payload: SchATransaction = SchATransaction.fromJSON({
       ...transactionType?.transaction,
@@ -162,14 +147,13 @@ export class FormBehaviors {
     return payload;
   }
 
-  static resetForm(form: FormGroup, transactionType: TransactionType | undefined) {
-    this.formSubmitted = false;
+  static resetForm(form: FormGroup, transactionType: TransactionType | undefined, contactTypeOptions: PrimeOptions) {
     form.reset();
     form.markAsPristine();
     form.markAsUntouched();
 
     form.patchValue({
-      entity_type: this.contactTypeOptions[0]?.code,
+      entity_type: contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: this.getMemoCodeConstant(transactionType),
       contribution_purpose_descrip: transactionType?.generatePurposeDescription?.() || '',

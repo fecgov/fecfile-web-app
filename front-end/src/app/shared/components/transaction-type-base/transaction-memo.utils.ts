@@ -2,7 +2,7 @@ import { FormGroup } from '@angular/forms';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 
-export class MemoBehaviors {
+export class TransactionMemoUtils {
   // prettier-ignore
   static retrieveMemoText(transactionType: TransactionType, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       const text = form.get('memo_text_input')?.value;

@@ -5,7 +5,7 @@ import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { Contact, ContactFields, ContactTypes } from '../../models/contact.model';
 
-export class ContactBehaviors {
+export class TransactionContactUtils {
   static getEditTransactionContactConfirmationMessage(
     contactChanges: string[],
     contact: Contact | undefined,

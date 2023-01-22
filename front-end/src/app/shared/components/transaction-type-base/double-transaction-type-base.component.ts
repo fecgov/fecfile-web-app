@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { takeUntil } from 'rxjs';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { Transaction } from 'app/shared/models/transaction.model';
@@ -8,9 +9,9 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
-import { TransactionTypeBaseComponent } from '../transaction-type-base/transaction-type-base.component';
-import { FormBehaviors } from './form.behaviors';
-import { ContactBehaviors } from './contact.behaviors';
+import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { TransactionFormUtils } from './transaction-form.utils';
+import { TransactionContactUtils } from './transaction-contact.utils';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -26,7 +27,10 @@ import { ContactBehaviors } from './contact.behaviors';
 @Component({
   template: '',
 })
-export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
+export abstract class DoubleTransactionTypeBaseComponent
+  extends TransactionTypeBaseComponent
+  implements OnInit, OnDestroy
+{
   abstract childFormProperties: string[];
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
@@ -41,13 +45,33 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
 
     // Initialize child form.
     this.childForm = this.fb.group(this.childValidateService.getFormGroupFields(this.childFormProperties));
-    FormBehaviors.onInit(
+    TransactionFormUtils.onInit(
+      this,
       this.childForm,
+      this.childContactTypeOptions,
       this.childValidateService,
       this.transactionType?.childTransactionType,
-      this.childContactId$,
-      this.childContributionPurposeDescriptionLabel
+      this.childContactId$
     );
+
+    const contribution_amount_schema =
+      this.transactionType?.childTransactionType?.schema.properties['contribution_amount'];
+    if (contribution_amount_schema?.exclusiveMaximum === 0) {
+      this.childNegativeAmountValueOnly = true;
+      this.childForm
+        .get('contribution_amount')
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((contribution_amount) => {
+          if (typeof contribution_amount === 'number' && contribution_amount > 0) {
+            this.childForm.patchValue({ contribution_amount: -1 * contribution_amount });
+          }
+        });
+    }
+
+    if (this.transactionType?.childTransactionType?.generatePurposeDescriptionLabel) {
+      this.childContributionPurposeDescriptionLabel =
+        this.transactionType.childTransactionType.generatePurposeDescriptionLabel();
+    }
   }
 
   override ngOnDestroy(): void {
@@ -62,14 +86,14 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
       return;
     }
 
-    const payload: Transaction = FormBehaviors.getPayloadTransaction(
+    const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transactionType,
       this.validateService,
       this.form,
       this.formProperties
     );
     payload.children = [
-      FormBehaviors.getPayloadTransaction(
+      TransactionFormUtils.getPayloadTransaction(
         this.transactionType?.childTransactionType,
         this.childValidateService,
         this.childForm,
@@ -102,13 +126,18 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
     }
   }
 
-  protected override resetForm() {
-    FormBehaviors.resetForm(this.form, this.transactionType);
-    FormBehaviors.resetForm(this.childForm, this.transactionType?.childTransactionType);
+  override resetForm() {
+    this.formSubmitted = false;
+    TransactionFormUtils.resetForm(this.form, this.transactionType, this.contactTypeOptions);
+    TransactionFormUtils.resetForm(
+      this.childForm,
+      this.transactionType?.childTransactionType,
+      this.childContactTypeOptions
+    );
   }
 
   childOnContactLookupSelect(selectItem: SelectItem<Contact>) {
-    ContactBehaviors.onContactLookupSelect(
+    TransactionContactUtils.onContactLookupSelect(
       selectItem,
       this.childForm,
       this.transactionType?.childTransactionType,
