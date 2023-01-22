@@ -1,13 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ContactService } from 'app/shared/services/contact.service';
-import { TransactionService } from 'app/shared/services/transaction.service';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
 @Component({
