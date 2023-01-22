@@ -3,9 +3,9 @@ import { TransactionType } from 'app/shared/models/transaction-types/transaction
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
-import { ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { ContactTypes } from '../../models/contact.model';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
