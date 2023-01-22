@@ -61,7 +61,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.transactionType,
       this.contactId$
     );
+    this.parentOnInit();
+  }
 
+  parentOnInit() {
     const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
     if (contribution_amount_schema?.exclusiveMaximum === 0) {
       this.negativeAmountValueOnly = true;

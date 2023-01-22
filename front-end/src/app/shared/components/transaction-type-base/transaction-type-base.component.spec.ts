@@ -20,6 +20,9 @@ import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { TransactionMemoUtils } from './transaction-memo.utils';
+import { TransactionContactUtils } from './transaction-contact.utils';
+import { TransactionFormUtils } from './transaction-form.utils';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -99,6 +102,7 @@ describe('TransactionTypeBaseComponent', () => {
   let testTransactionService: TransactionService;
   let testApiService: ApiService;
   let testConfirmationService: ConfirmationService;
+  let fecDatePipe: FecDatePipe;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -121,6 +125,7 @@ describe('TransactionTypeBaseComponent', () => {
     testTransactionService = TestBed.inject(TransactionService);
     testApiService = TestBed.inject(ApiService);
     testConfirmationService = TestBed.inject(ConfirmationService);
+    fecDatePipe = TestBed.inject(FecDatePipe);
   });
 
   beforeEach(() => {
@@ -157,7 +162,7 @@ describe('TransactionTypeBaseComponent', () => {
     component.form = new FormGroup({
       memo_text_input: new FormControl('memo'),
     });
-    const formValues = component.retrieveMemoText(component.transactionType, component.form, {});
+    const formValues = TransactionMemoUtils.retrieveMemoText(component.transactionType, component.form, {});
     expect(formValues['memo_text']['text4000']).toBe('memo');
   });
 
@@ -206,7 +211,7 @@ describe('TransactionTypeBaseComponent', () => {
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = undefined;
     }
-    component.getEditTransactionContactConfirmationMessage([], testContact, component.form);
+    TransactionContactUtils.getEditTransactionContactConfirmationMessage([], testContact, component.form, fecDatePipe);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
 
@@ -568,7 +573,14 @@ describe('TransactionTypeBaseComponent', () => {
       ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
     ) as TransactionType;
     component.transactionType.transaction = component.transactionType.getNewTransaction();
-    component.doInit(component.form, new ValidateService(), component.transactionType, component.contactId$);
+    TransactionFormUtils.onInit(
+      component,
+      component.form,
+      component.contactTypeOptions,
+      new ValidateService(),
+      component.transactionType,
+      component.contactId$
+    );
     component.transactionType.transaction = component.transactionType.getNewTransaction();
 
     const testEntityType = ContactTypes.INDIVIDUAL;
@@ -680,7 +692,7 @@ describe('TransactionTypeBaseComponent', () => {
       },
     };
 
-    component.doInit(component.form, new ValidateService(), component.transactionType, component.contactId$);
+    component.parentOnInit();
     component.form.patchValue({ contribution_amount: 2 });
     expect(component.form.value.contribution_amount).toBe(-2);
   });

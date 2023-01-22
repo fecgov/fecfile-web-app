@@ -54,6 +54,10 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childContactId$
     );
 
+    this.childOnInit();
+  }
+
+  childOnInit() {
     const contribution_amount_schema =
       this.transactionType?.childTransactionType?.schema.properties['contribution_amount'];
     if (contribution_amount_schema?.exclusiveMaximum === 0) {

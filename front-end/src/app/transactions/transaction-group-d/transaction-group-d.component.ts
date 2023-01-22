@@ -33,26 +33,4 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
   );
-
-  constructor(
-    protected override messageService: MessageService,
-    protected override transactionService: TransactionService,
-    protected override contactService: ContactService,
-    protected override validateService: ValidateService,
-    protected override confirmationService: ConfirmationService,
-    protected override fb: FormBuilder,
-    protected override router: Router,
-    protected override fecDatePipe: FecDatePipe
-  ) {
-    super(
-      messageService,
-      transactionService,
-      contactService,
-      validateService,
-      confirmationService,
-      fb,
-      router,
-      fecDatePipe
-    );
-  }
 }
