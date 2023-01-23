@@ -20,6 +20,7 @@ export type SchATransactionName =
   | 'Other Receipts'
   | 'Party Receipt'
   | 'PAC Receipt'
+  | 'PAC Earmark Receipt'
   | 'Transfer'
   | 'Individual Recount Receipt'
   | 'Tribal Recount Receipt'
@@ -58,6 +59,8 @@ export type ChildTransactionName =
   | 'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo'
   | 'Earmark Receipt Step One'
   | 'Earmark Receipt Step Two'
+  | 'PAC Earmark Receipt Step One'
+  | 'PAC Earmark Receipt Step Two'
   | 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'Tribal National Party Headquarters Buildings Account JF Transfer Memo'
@@ -67,7 +70,7 @@ export type ChildTransactionName =
   | 'PAC National Party Headquarters Buildings Account JF Transfer Memo'
   | 'Partnership Memo';
 
-export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG';
+export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG' | 'FG';
 
 export type AggregationGroup =
   | 'GENERAL'
@@ -735,6 +738,38 @@ const pacReceipt: TransactionForm = {
   },
 };
 
+const pacEarmarkReceiptStepOne: ChildTransactionForm = {
+  transaction_name: 'PAC Earmark Receipt Step One',
+  transaction_group: 'FG',
+  aggregation_group: 'GENERAL',
+  ...entityIndividual,
+  childOf: 'PAC Earmark Receipt',
+  fields: {
+    ...contributionFields,
+    ...memoFields,
+  },
+};
+const pacEarmarkReceiptStepTwo: ChildTransactionForm = {
+  transaction_name: 'PAC Earmark Receipt Step Two',
+  transaction_group: 'FG',
+  aggregation_group: 'GENERAL',
+  ...entityIndvOrComm,
+  childOf: 'PAC Earmark Receipt',
+  fields: {
+    contributionDate: TransactionFields['contributionDate'],
+    ...memoFields,
+  },
+};
+
+const pacEarmarkReceipt: PairedTransactionForm = {
+  transaction_name: 'PAC Earmark Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  transaction_group: 'FG',
+  aggregation_group: 'GENERAL',
+  transactionA: pacEarmarkReceiptStepOne,
+  transactionB: pacEarmarkReceiptStepTwo,
+};
+
 const earmarkReceiptStepOne: ChildTransactionForm = {
   transaction_name: 'Earmark Receipt Step One',
   transaction_group: 'AG',
@@ -959,6 +994,7 @@ export const schedANavTree: TransactionNavTree = {
   'REGISTERED FILERS': {
     'Party Receipt': partyReceipt,
     'PAC Receipt': pacReceipt,
+    'Earmark Receipt': pacEarmarkReceipt,
     'PAC Returned/Bounced Receipt': pacReturn,
     'Party Returned/Bounced Receipt': partyReturn,
   },
@@ -1006,6 +1042,10 @@ export const childTransactionTree = {
   'Earmark Receipt': {
     'Earmark Receipt Step One': earmarkReceiptStepOne,
     'Earmark Receipt Step Two': earmarkReceiptStepTwo,
+  },
+  'PAC Earmark Receipt': {
+    'PAC Earmark Receipt Step One': pacEarmarkReceiptStepOne,
+    'PAC Earmark Receipt Step Two': pacEarmarkReceiptStepTwo,
   },
   'Joint Fundraising Transfer': {
     'Tribal Joint Fundraising Transfer Memo': tribalJointFundraisingTransferMemo,

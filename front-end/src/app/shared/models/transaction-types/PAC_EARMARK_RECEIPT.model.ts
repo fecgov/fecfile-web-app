@@ -1,6 +1,6 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_RECEIPT';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_RECEIPT';
 import { ContactTypes } from '../contact.model';
 import {
   AggregationGroups,
@@ -11,11 +11,11 @@ import {
 import { STANDARD_CONTROLS_MINIMAL, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
-export class EARMARK_RECEIPT extends SchaTransactionType {
-  componentGroupId = 'AG';
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
+export class PAC_EARMARK_RECEIPT extends SchaTransactionType {
+  componentGroupId = 'FG';
+  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
   schema = schema;
-  override childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
+  override childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.PAC_EARMARK_MEMO);
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS_MINIMAL;
 
   override generatePurposeDescription(): string {
@@ -36,8 +36,8 @@ export class EARMARK_RECEIPT extends SchaTransactionType {
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11AI',
-      transaction_type_identifier: ScheduleATransactionTypes.EARMARK_RECEIPT,
+      form_type: 'SA11C',
+      transaction_type_identifier: ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
       aggregation_group: AggregationGroups.GENERAL,
     });
   }
