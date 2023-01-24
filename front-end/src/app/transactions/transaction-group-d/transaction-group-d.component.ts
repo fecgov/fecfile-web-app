@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
+import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -13,6 +15,7 @@ import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.mod
 @Component({
   selector: 'app-transaction-group-d',
   templateUrl: './transaction-group-d.component.html',
+  styleUrls: ['./transaction-group-d.component.scss'],
 })
 export class TransactionGroupDComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -29,7 +32,10 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
     'contribution_purpose_descrip',
     'memo_code',
     'memo_text_input',
+    'subTransaction',
   ];
+  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
+  
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
   );
@@ -54,5 +60,20 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
       router,
       fecDatePipe
     );
+  }
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this.subTransactionOptions = (this.transactionType?.subTransactionTypes || []).map((type) => {
+      return {
+        label: LabelUtils.get(ScheduleATransactionTypeLabels, type),
+        value: type,
+      };
+    });
+  }
+
+  createSubTransaction(event: { value: ScheduleATransactionTypes }) {
+    this.save(NavigationDestination.CHILD, event.value);
+    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }

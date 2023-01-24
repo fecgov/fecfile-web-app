@@ -49,6 +49,7 @@ import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/t
 import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model';
 import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
 import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
+import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -93,6 +94,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
   INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+  PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
