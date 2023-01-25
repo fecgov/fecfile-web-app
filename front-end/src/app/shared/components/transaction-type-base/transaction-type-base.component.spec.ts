@@ -595,7 +595,7 @@ describe('TransactionTypeBaseComponent', () => {
 
     component.form.addControl('entity_type', { value: testEntityType });
     component.form.get('contribution_amount')?.setValue(1111);
-    component.form.get('action_date')?.setValue('2022-03-02');
+    component.form.get('contribution_date')?.setValue('2022-03-02');
 
     const getPreviousTransactionSpy = spyOn(testTransactionService, 'getPreviousTransaction').and.returnValue(
       of(testTransaction)
