@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { contributionAmount, date, randomString } from './generators/generators.spec';
+import { contributionAmount, contributionAmountNegative, date, randomString } from './generators/generators.spec';
 
 /*
  *          Adding support for a new transaction:
@@ -12,12 +12,15 @@ export type TransactionCategory = 'INDIVIDUALS/PERSONS' | 'REGISTERED FILERS' | 
 export type SchATransactionName =
   | 'Individual Receipt'
   | 'Tribal Receipt'
+  | 'Returned/Bounced Receipt'
+  | 'Unregistered Receipt from Person'
   | 'Joint Fundraising Transfer'
   | 'Offsets to Operating Expenditures'
   | 'Other Committee Receipt - Non-Contribution Account'
   | 'Other Receipts'
   | 'Party Receipt'
   | 'PAC Receipt'
+  | 'PAC Earmark Receipt'
   | 'Transfer'
   | 'Individual Recount Receipt'
   | 'Tribal Recount Receipt'
@@ -40,7 +43,10 @@ export type SchATransactionName =
   | 'Individual National Party Recount/Legal Proceedings Account'
   | 'Individual National Party Pres. Nominating Convention Account'
   | 'Party National Party Pres. Nominating Convention Account'
-  | 'Tribal National Party Recount/Legal Proceedings Account';
+  | 'Tribal National Party Recount/Legal Proceedings Account'
+  | 'Unregistered Receipt from Person - Returned/Bounced Receipt'
+  | 'PAC Returned/Bounced Receipt'
+  | 'Party Returned/Bounced Receipt';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -52,6 +58,8 @@ export type ChildTransactionName =
   | 'Tribal National Party Recount/Legal Proceedings Account JF Transfer Memo'
   | 'Earmark Receipt Step One'
   | 'Earmark Receipt Step Two'
+  | 'PAC Earmark Receipt Step One'
+  | 'PAC Earmark Receipt Step Two'
   | 'Individual National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'PAC National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'Tribal National Party Headquarters Buildings Account JF Transfer Memo'
@@ -60,7 +68,7 @@ export type ChildTransactionName =
   | 'Individual National Party Headquarters Buildings Account JF Transfer Memo'
   | 'PAC National Party Headquarters Buildings Account JF Transfer Memo';
 
-export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG';
+export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG' | 'FG';
 
 export type AggregationGroup =
   | 'GENERAL'
@@ -209,6 +217,21 @@ export const TransactionFields: { [key: string]: TransactionField } = {
     required: true,
     maxLength: 12,
   },
+  contributionAmountNegative: {
+    fieldName: 'contribution_amount',
+    fieldType: 'P-InputNumber',
+    generator: contributionAmountNegative,
+    required: true,
+    maxLength: 12,
+  },
+  contributionPurposeDescriptionRequired: {
+    fieldName: 'contribution_purpose_descrip',
+    fieldType: 'Textarea',
+    generator: randomString,
+    genArgs: [100, 'special'],
+    required: true,
+    maxLength: 100,
+  },
 };
 
 /*
@@ -242,9 +265,18 @@ const memoFields: { [key: string]: TransactionField } = {
   memoTextInput: TransactionFields['memoTextInput'],
 };
 
+const purposeDescriptionFieldsRequired: { [key: string]: TransactionField } = {
+  contributionPurposeDescriptionRequired: TransactionFields['contributionPurposeDescriptionRequired'],
+};
+
 const contributionFields: { [key: string]: TransactionField } = {
   contributionDate: TransactionFields['contributionDate'],
   contributionAmount: TransactionFields['contributionAmount'],
+};
+
+const contributionFieldsNegative: { [key: string]: TransactionField } = {
+  contributionDate: TransactionFields['contributionDate'],
+  contributionAmount: TransactionFields['contributionAmountNegative'],
 };
 
 /*
@@ -268,6 +300,31 @@ const individualReceipt: TransactionForm = {
 
 const tribalReceipt: TransactionForm = {
   transaction_name: 'Tribal Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
+  transaction_group: 'D',
+  aggregation_group: 'GENERAL',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const returnedBouncedReceiptIndividual: TransactionForm = {
+  transaction_name: 'Returned/Bounced Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
+  transaction_group: 'C',
+  aggregation_group: 'GENERAL',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
+const unregisteredReceiptFromPerson: TransactionForm = {
+  transaction_name: 'Unregistered Receipt from Person',
   transaction_category: 'INDIVIDUALS/PERSONS',
   transaction_group: 'D',
   aggregation_group: 'GENERAL',
@@ -612,8 +669,11 @@ const jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount: Transac
     ...memoFields,
     ...contributionFields,
   },
-  childTransactions: [tribalNationalPartyHeadquartersJFTransferMemo, 
-    indvNationalPartyHeadquartersJFTransferMemo, pacNationalPartyHeadquartersJFTransferMemo],
+  childTransactions: [
+    tribalNationalPartyHeadquartersJFTransferMemo,
+    indvNationalPartyHeadquartersJFTransferMemo,
+    pacNationalPartyHeadquartersJFTransferMemo,
+  ],
 };
 
 const otherCommitteeReceiptNonContributionAccount: TransactionForm = {
@@ -674,6 +734,38 @@ const pacReceipt: TransactionForm = {
     ...memoFields,
     ...contributionFields,
   },
+};
+
+const pacEarmarkReceiptStepOne: ChildTransactionForm = {
+  transaction_name: 'PAC Earmark Receipt Step One',
+  transaction_group: 'FG',
+  aggregation_group: 'GENERAL',
+  ...entityIndividual,
+  childOf: 'PAC Earmark Receipt',
+  fields: {
+    ...contributionFields,
+    ...memoFields,
+  },
+};
+const pacEarmarkReceiptStepTwo: ChildTransactionForm = {
+  transaction_name: 'PAC Earmark Receipt Step Two',
+  transaction_group: 'FG',
+  aggregation_group: 'GENERAL',
+  ...entityIndvOrComm,
+  childOf: 'PAC Earmark Receipt',
+  fields: {
+    contributionDate: TransactionFields['contributionDate'],
+    ...memoFields,
+  },
+};
+
+const pacEarmarkReceipt: PairedTransactionForm = {
+  transaction_name: 'PAC Earmark Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  transaction_group: 'FG',
+  aggregation_group: 'GENERAL',
+  transactionA: pacEarmarkReceiptStepOne,
+  transactionB: pacEarmarkReceiptStepTwo,
 };
 
 const earmarkReceiptStepOne: ChildTransactionForm = {
@@ -816,6 +908,45 @@ const tribalNationalPartyPresNominatingConventionAccount: TransactionForm = {
   },
 };
 
+const unregisteredReceiptFromPersonReturn: TransactionForm = {
+  transaction_name: 'Unregistered Receipt from Person - Returned/Bounced Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
+  transaction_group: 'D',
+  aggregation_group: 'GENERAL',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
+const pacReturn: TransactionForm = {
+  transaction_name: 'PAC Returned/Bounced Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  transaction_group: 'F',
+  aggregation_group: 'GENERAL',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
+const partyReturn: TransactionForm = {
+  transaction_name: 'Party Returned/Bounced Receipt',
+  transaction_category: 'REGISTERED FILERS',
+  transaction_group: 'F',
+  aggregation_group: 'GENERAL',
+  ...entityCommittee,
+  fields: {
+    ...memoFields,
+    ...contributionFieldsNegative,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
 /*
  *          Group A Transaction Navigation Tree
  * Every entry in this object represents a path that an E2E test
@@ -828,11 +959,17 @@ export const schedANavTree: TransactionNavTree = {
   'INDIVIDUALS/PERSONS': {
     'Individual Receipt': individualReceipt,
     'Tribal Receipt': tribalReceipt,
+    'Returned/Bounced Receipt': returnedBouncedReceiptIndividual,
     'Earmark Receipt': earmarkReceipt,
+    'Unregistered Receipt from Person': unregisteredReceiptFromPerson,
+    'Unregistered Receipt from Person - Returned/Bounced Receipt': unregisteredReceiptFromPersonReturn,
   },
   'REGISTERED FILERS': {
     'Party Receipt': partyReceipt,
     'PAC Receipt': pacReceipt,
+    'Earmark Receipt': pacEarmarkReceipt,
+    'PAC Returned/Bounced Receipt': pacReturn,
+    'Party Returned/Bounced Receipt': partyReturn,
   },
   TRANSFERS: {
     Transfer: transfer,
@@ -878,6 +1015,10 @@ export const childTransactionTree = {
   'Earmark Receipt': {
     'Earmark Receipt Step One': earmarkReceiptStepOne,
     'Earmark Receipt Step Two': earmarkReceiptStepTwo,
+  },
+  'PAC Earmark Receipt': {
+    'PAC Earmark Receipt Step One': pacEarmarkReceiptStepOne,
+    'PAC Earmark Receipt Step Two': pacEarmarkReceiptStepTwo,
   },
   'Joint Fundraising Transfer': {
     'Tribal Joint Fundraising Transfer Memo': tribalJointFundraisingTransferMemo,

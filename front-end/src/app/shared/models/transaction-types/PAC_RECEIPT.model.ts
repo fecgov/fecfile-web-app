@@ -1,31 +1,19 @@
-import { TransactionType } from '../../interfaces/transaction-type.interface';
-import {
-  SchATransaction,
-  ScheduleATransactionTypes,
-  ScheduleATransactionTypeLabels,
-  AggregationGroups,
-} from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_RECEIPT';
 import {
-  CANCEL_CONTROL,
-  SAVE_LIST_CONTROL,
-  SAVE_ANOTHER_CONTROL,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
+} from '../scha-transaction.model';
+import { SchaTransactionType } from './SchaTransactionType.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
-export class PAC_RECEIPT implements TransactionType {
-  scheduleId = 'A';
+export class PAC_RECEIPT extends SchaTransactionType {
   componentGroupId = 'F';
-  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RECEIPT);
   schema = schema;
-  transaction?: SchATransaction;
-  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
-    [],
-    [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
-  );
+  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

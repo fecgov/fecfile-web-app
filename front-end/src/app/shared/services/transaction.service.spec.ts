@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
-import { TransactionType } from '../interfaces/transaction-type.interface';
+import { TransactionType } from '../models/transaction-types/transaction-type.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction, ScheduleATransactionTypes, AggregationGroups } from '../models/scha-transaction.model';
 import { testMockStore } from '../utils/unit-test.utils';

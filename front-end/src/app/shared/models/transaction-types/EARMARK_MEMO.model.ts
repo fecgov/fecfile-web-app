@@ -1,16 +1,14 @@
-import { TransactionType } from '../../interfaces/transaction-type.interface';
-import { SchATransaction, ScheduleATransactionTypes, AggregationGroups } from '../scha-transaction.model';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_MEMO';
+import { AggregationGroups, SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchaTransactionType } from './SchaTransactionType.model';
 
-export class EARMARK_MEMO implements TransactionType {
-  scheduleId = 'A';
+export class EARMARK_MEMO extends SchaTransactionType {
   componentGroupId = 'AG';
-  isDependentChild = true;
+  override isDependentChild = true;
   title = '';
   schema = schema;
-  transaction?: SchATransaction;
 
-  generatePurposeDescription(): string {
+  override generatePurposeDescription(): string {
     return 'Total earmarked through conduit.';
   }
 

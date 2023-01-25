@@ -3,7 +3,7 @@ import { Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { TransactionType } from '../interfaces/transaction-type.interface';
+import { TransactionType } from '../models/transaction-types/transaction-type.model';
 
 export class SchATransaction extends Transaction {
   back_reference_tran_id_number: string | undefined;
@@ -124,22 +124,22 @@ export enum ScheduleATransactionTypes {
   PARTNERSHIP_RECEIPT = 'PARTN_REC',
   REATTRIBUTION = 'REATT_FROM',
   IN_KIND_RECEIPT = 'IK_REC',
-  RETURNED_BOUNCED_RECEIPT_INDIVIDUAL = 'RET_REC',
+  RETURNED_BOUNCED_RECEIPT_INDIVIDUAL = 'RETURN_RECEIPT',
   EARMARK_RECEIPT = 'EARMARK_RECEIPT',
   CONDUIT_EARMARK_DEPOSITED = 'CONDUIT_EARMARK_DEPOSITED',
   CONDUIT_EARMARK_UNDEPOSITED = 'CONDUIT_EARMARK_UNDEPOSITED',
-  UNREGISTERED_RECEIPT_FROM_PERSON = 'PAC_NON_FED_REC',
-  UNREGISTERED_RECEIPT_FROM_PERSON_RETURNED_BOUNCED_RECEIPT = 'PAC_NON_FED_RET',
+  UNREGISTERED_RECEIPT_FROM_PERSON = 'UNREGISTERED_RECEIPT_FROM_PERSON',
+  UNREGISTERED_RECEIPT_FROM_PERSON_RETURN = 'UNREGISTERED_RECEIPT_FROM_PERSON_RETURN',
   // Contributions from Registered Filers
   PARTY_RECEIPT = 'PARTY_RECEIPT',
   PARTY_IN_KIND = 'PARTY_IK_REC',
-  RETURNED_BOUNCED_RECEIPT_PARTY = 'PARTY_RET',
+  PARTY_RETURN = 'PARTY_RETURN',
   PAC_RECEIPT = 'PAC_RECEIPT',
   PAC_IN_KIND = 'PAC_IK_REC',
-  PAC_EARMARK_RECEIPT = 'PAC_EAR_REC',
+  PAC_EARMARK_RECEIPT = 'PAC_EARMARK_RECEIPT',
   PAC_CONDUIT_EARMARK_DEPOSITED = 'PAC_CONDUIT_EARMARK_DEPOSITED',
   PAC_CONDUIT_EARMARK_UNDEPOSITED = 'PAC_CONDUIT_EARMARK_UNDEPOSITED',
-  RETURNED_BOUNCED_RECEIPT_PAC = 'PAC_RET',
+  PAC_RETURN = 'PAC_RETURN',
   // Transfers
   TRANSFER = 'TRANSFER',
   JOINT_FUNDRAISING_TRANSFER = 'JOINT_FUNDRAISING_TRANSFER',
@@ -177,6 +177,7 @@ export enum ScheduleATransactionTypes {
   EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION = 'EAR_REC_CONVEN_ACC',
   EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION = 'EAR_REC_HQ_ACC',
   // Child transactiion types
+  PAC_EARMARK_MEMO = 'PAC_EARMARK_MEMO',
   EARMARK_MEMO = 'EARMARK_MEMO',
   PAC_JF_TRANSFER_MEMO = 'PAC_JF_TRANSFER_MEMO',
   INDIVIDUAL_JF_TRANSFER_MEMO = 'INDIVIDUAL_JF_TRANSFER_MEMO',
@@ -202,25 +203,25 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PARTNERSHIP_RECEIPT, 'Partnership Receipt'],
   [ScheduleATransactionTypes.REATTRIBUTION, 'Reattribution'],
   [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-Kind Receipt'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt (Individual)'],
+  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.EARMARK_RECEIPT, 'Earmark Receipt'],
   [ScheduleATransactionTypes.CONDUIT_EARMARK_DEPOSITED, 'Conduit Earmark (Deposited)'],
   [ScheduleATransactionTypes.CONDUIT_EARMARK_UNDEPOSITED, 'Conduit Earmark (Undeposited)'],
   [ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON, 'Unregistered Receipt from Person'],
   [
-    ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURNED_BOUNCED_RECEIPT,
+    ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
     'Unregistered Receipt from Person - Returned/Bounced Receipt',
   ],
   // Contributions from Registered Filers
   [ScheduleATransactionTypes.PARTY_RECEIPT, 'Party Receipt'],
   [ScheduleATransactionTypes.PARTY_IN_KIND, 'Party In-Kind'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PARTY, 'Returned/Bounced Receipt (Party)'],
+  [ScheduleATransactionTypes.PARTY_RETURN, 'Party Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.PAC_RECEIPT, 'PAC Receipt'],
   [ScheduleATransactionTypes.PAC_IN_KIND, 'PAC In-Kind'],
   [ScheduleATransactionTypes.PAC_EARMARK_RECEIPT, 'PAC Earmark Receipt'],
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED, 'PAC Conduit Earmark (Deposited)'],
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED, 'PAC Conduit Earmark (Undeposited)'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC, 'Returned/Bounced Receipt (PAC)'],
+  [ScheduleATransactionTypes.PAC_RETURN, 'PAC Returned/Bounced Receipt'],
   // Transfers
   [ScheduleATransactionTypes.TRANSFER, 'Transfer'],
   [ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER, 'Joint Fundraising Transfer'],

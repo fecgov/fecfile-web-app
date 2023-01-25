@@ -149,8 +149,14 @@ export class ValidateService {
           if (error.keyword === 'minimum') {
             result['min'] = { min: error.params['limit'] };
           }
+          if (error.keyword === 'exclusiveMinimum') {
+            result['exclusiveMin'] = { exclusiveMin: error.params['limit'] };
+          }
           if (error.keyword === 'maximum') {
             result['max'] = { max: error.params['limit'] };
+          }
+          if (error.keyword === 'exclusiveMaximum') {
+            result['exclusiveMax'] = { exclusiveMax: error.params['limit'] };
           }
           if (error.keyword === 'pattern') {
             result['pattern'] = { requiredPattern: error.params['pattern'] };
