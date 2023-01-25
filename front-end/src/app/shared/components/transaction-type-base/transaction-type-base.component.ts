@@ -36,6 +36,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   contributionPurposeDescriptionLabel = '';
   negativeAmountValueOnly = false;
+  fieldsUsedByCPDGeneration: string[] = [];
 
   form: FormGroup = this.fb.group({});
 
@@ -145,6 +146,16 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             form.patchValue({ contribution_amount: -1 * contribution_amount });
           }
         });
+    }
+
+    //Update Contribution Purpose Description when provided fields are updated
+    for (const field_name of this.fieldsUsedByCPDGeneration) {
+      const field = this.form.get(field_name);
+      field?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+        if (this.transactionType?.generatePurposeDescription) {
+          this.transactionType.generatePurposeDescription();
+        }
+      });
     }
   }
 

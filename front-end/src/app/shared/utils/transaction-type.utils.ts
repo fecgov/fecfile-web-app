@@ -49,6 +49,9 @@ import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/t
 import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model';
 import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
 import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
+import { EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION } from '../models/transaction-types/EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION.model';
+import { EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION } from '../models/transaction-types/EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION.model';
+import { EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION } from '../models/transaction-types/EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -102,6 +105,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
   PAC_RETURN,
   PARTY_RETURN,
+  EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
+  EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
+  EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
 }
 
 export class TransactionTypeUtils {

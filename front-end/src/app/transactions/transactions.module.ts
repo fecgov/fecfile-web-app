@@ -26,6 +26,7 @@ import { TransactionGroupCComponent } from './transaction-group-c/transaction-gr
 import { TransactionGroupDComponent } from './transaction-group-d/transaction-group-d.component';
 import { TransactionGroupEComponent } from './transaction-group-e/transaction-group-e.component';
 import { TransactionGroupFComponent } from './transaction-group-f/transaction-group-f.component';
+import { TransactionGroupGComponent } from './transaction-group-g/transaction-group-g.component';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list/transaction-list.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
@@ -42,6 +43,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     TransactionGroupDComponent,
     TransactionGroupEComponent,
     TransactionGroupFComponent,
+    TransactionGroupGComponent,
     TransactionGroupAgComponent,
   ],
   imports: [
