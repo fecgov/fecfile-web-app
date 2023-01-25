@@ -33,7 +33,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionT
   override generatePurposeDescription(): string {
     const account = 'Recount/Legal Proceedings Account';
     const memo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    if (memo && memo.entity_type) {
+    if (memo && memo.form_type) {
       return account + ' (See Partnership Attribution(s) below)'
     }
     return account + ' (Partnership attributions do not require itemization)';

@@ -20,7 +20,8 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   it('#factory() should return a SchATransaction', () => {
     const txn = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA17');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_RECEIPT);
+    expect(txn.transaction_type_identifier).toBe(
+      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT);
   });
 
   it('#generatePurposeDescription() should generate expected retval', () => {
