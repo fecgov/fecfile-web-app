@@ -56,7 +56,7 @@ const initTransactionData = {
   transaction_id: null,
   transaction_type_identifier: undefined,
   contribution_purpose_descrip: undefined,
-  parent_transaction_object_id: undefined,
+  parent_transaction_id: undefined,
   children: undefined,
   parent_transaction: undefined,
   fields_to_validate: undefined,
@@ -78,7 +78,7 @@ const testTransaction = SchATransaction.fromJSON({
   contribution_amount: '202.2',
   contribution_date: '2022-02-02',
   contribution_purpose_descrip: undefined,
-  parent_transaction_object_id: undefined,
+  parent_transaction_id: undefined,
   children: undefined,
   parent_transaction: undefined,
   fields_to_validate: undefined,
@@ -416,7 +416,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#navigateTo NavigationDestination.PARENT should navigate', () => {
     const transaction = { ...testTransaction } as SchATransaction;
-    transaction.parent_transaction_object_id = '333';
+    transaction.parent_transaction_id = '333';
     component.transactionType = {
       scheduleId: 'A',
       componentGroupId: 'A',
