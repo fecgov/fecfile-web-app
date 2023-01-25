@@ -1,4 +1,5 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_NATIONAL_PARTY_RECEIPTS';
 import {
   AggregationGroups,
@@ -18,8 +19,11 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionT
   title = LabelUtils.get(ScheduleATransactionTypeLabels, 
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT);
   schema = schema;
-//  override childTransactionType = TransactionTypeUtils.factory(
-//    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO);
+  override subTransactionTypes = [
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
+  ];
+  override childTransactionType = TransactionTypeUtils.factory(
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO);
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
@@ -29,7 +33,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionT
   override generatePurposeDescription(): string {
     const account = 'Recount/Legal Proceedings Account';
     const memo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    if (memo) {
+    if (memo && memo.entity_type) {
       return account + ' (See Partnership Attribution(s) below)'
     }
     return account + ' (Partnership attributions do not require itemization)';

@@ -1,6 +1,6 @@
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
-//import { EARMARK_MEMO } from './EARMARK_MEMO.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from './PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
+import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO } from './PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO.model';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   let transactionType: PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT;
@@ -29,18 +29,21 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
       '(Partnership attributions do not require itemization)');
   });
 
-  /*
+  
   it('#generatePurposeDescription() should reflect child', () => {
-    const childTransactionType: EARMARK_MEMO = new EARMARK_MEMO();
+    const childTransactionType: PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO = 
+      new PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO();
     childTransactionType.transaction = childTransactionType.getNewTransaction();
-    childTransactionType.transaction.entity_type = ContactTypes.INDIVIDUAL;
-    childTransactionType.transaction.contributor_first_name = 'Joe';
-    childTransactionType.transaction.contributor_last_name = 'Smith';
-
     transactionType.childTransactionType = childTransactionType;
-    const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Earmarked through Joe Smith');
+    const descripwithChildren = transactionType.generatePurposeDescription();
+    expect(descripwithChildren).toBe('Recount/Legal Proceedings Account ' + 
+      '(See Partnership Attribution(s) below)');
+
+    transactionType.childTransactionType = undefined;
+    const descripwithNoChildren = transactionType.generatePurposeDescription();
+    expect(descripwithNoChildren).toBe('Recount/Legal Proceedings Account ' + 
+      '(Partnership attributions do not require itemization)');
   });
-  */
+  
   
 });

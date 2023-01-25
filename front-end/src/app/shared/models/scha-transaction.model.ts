@@ -381,6 +381,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     'Partnership Receipt Headquarters Buildings Account JF Transfer Memo',
   ],
+  [
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
+    'Partnership National Party Recount/Legal Proceedings Account Memo',
+  ],
 ];
 
 export enum AggregationGroups {
