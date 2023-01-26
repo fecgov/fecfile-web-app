@@ -15,7 +15,7 @@ import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.mod
 @Component({
   selector: 'app-transaction-group-d',
   templateUrl: './transaction-group-d.component.html',
-  styleUrls: ['./transaction-group-d.component.scss'],
+  styleUrls: ['../transaction.scss'],
 })
 export class TransactionGroupDComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -34,7 +34,7 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
     'memo_text_input',
     'subTransaction',
   ];
-  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
+  override subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
   
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
@@ -72,7 +72,7 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
     });
   }
 
-  createSubTransaction(event: { value: ScheduleATransactionTypes }) {
+  override createSubTransaction(event: { value: ScheduleATransactionTypes }) {
     this.save(NavigationDestination.CHILD, event.value);
     this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }

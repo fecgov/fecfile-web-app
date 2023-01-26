@@ -22,5 +22,6 @@ export abstract class TransactionType {
   navigationControls?: TransactionNavigationControls;
   generatePurposeDescription?(): string; // Dynamically generates the text in the CPD or EPD field
   generatePurposeDescriptionLabel?(): string; // Get the CPD or EPD field label
+  purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 }

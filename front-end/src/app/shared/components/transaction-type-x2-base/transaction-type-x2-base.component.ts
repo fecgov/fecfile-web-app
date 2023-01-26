@@ -94,7 +94,7 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
     this.childContactId$.complete();
   }
 
-  updateContributionPurposeDescription() {
+  private updateContributionPurposeDescription() {
     const childTransaction: SchATransaction = this.transactionType?.childTransactionType
       ?.transaction as SchATransaction;
     childTransaction.entity_type = this.childForm.get('entity_type')?.value;

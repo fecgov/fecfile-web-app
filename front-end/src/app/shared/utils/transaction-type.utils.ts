@@ -29,6 +29,8 @@ import { PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/
 import { PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 import { PAC_RECEIPT } from '../models/transaction-types/PAC_RECEIPT.model';
 import { PAC_RECOUNT_RECEIPT } from '../models/transaction-types/PAC_RECOUNT_RECEIPT.model';
+import { PARTNERSHIP_MEMO } from '../models/transaction-types/PARTNERSHIP_MEMO.model';
+import { PARTNERSHIP_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECEIPT.model';
 import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO.model';
@@ -75,6 +77,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PAC_EARMARK_MEMO,
   PAC_RECEIPT,
   PAC_RECOUNT_RECEIPT,
+  PARTNERSHIP_MEMO,
+  PARTNERSHIP_RECEIPT,
   PARTY_JF_TRANSFER_MEMO,
   PARTY_RECEIPT,
   PARTY_RECOUNT_RECEIPT,

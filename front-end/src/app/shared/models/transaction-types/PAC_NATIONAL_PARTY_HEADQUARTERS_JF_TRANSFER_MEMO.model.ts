@@ -7,7 +7,7 @@ import {
   ScheduleATransactionTypes,
 } from '../scha-transaction.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
-import { TransactionNavigationControls, JF_TRANSFER_MEMO_CONTROLS } from '../transaction-navigation-controls.model';
+import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
 
 export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchaTransactionType {
   componentGroupId = 'F';
@@ -16,7 +16,9 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchaTransa
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
+    LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
+  );
 
   override generatePurposeDescription(): string {
     return `Headquarters Buildings Account JF Memo: ${
