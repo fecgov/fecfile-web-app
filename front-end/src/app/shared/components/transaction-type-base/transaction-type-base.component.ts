@@ -117,48 +117,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.confirmSave(payload, this.form, this.doSave, navigateTo, payload, transactionTypeToAdd);
   }
 
-  getPayloadTransaction(
-    transactionType: TransactionType | undefined,
-    validateService: ValidateService,
-    form: FormGroup,
-    formProperties: string[]
-  ) {
-    let formValues = validateService.getFormValues(form, formProperties);
-    if (transactionType) formValues = this.retrieveMemoText(transactionType, form, formValues);
-
-    const payload: SchATransaction = SchATransaction.fromJSON({
-      ...transactionType?.transaction,
-      ...formValues,
-    });
-    payload.contact_id = payload.contact?.id;
-
-    if (payload.children) {
-      payload.children = payload.updateChildren();
-    }
-
-    let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
-    // Remove properties that are populated in the back-end from list of properties to validate
-    fieldsToValidate = fieldsToValidate.filter(
-      (p) =>
-        ![
-          'transaction_id',
-          'donor_committee_name',
-          'back_reference_tran_id_number',
-          'back_reference_sched_name',
-        ].includes(p)
-    );
-    payload.fields_to_validate = fieldsToValidate;
-    function addFieldsToValidate(transaction: Transaction) {
-      transaction.fields_to_validate = fieldsToValidate;
-      if (transaction.children) {
-        transaction.children.forEach((transaction) => addFieldsToValidate(transaction));
-      }
-    }
-    addFieldsToValidate(payload);
-    payload.schema_name = transactionType?.schema?.$id?.split('/').pop()?.split('.')[0];
-    return payload;
-  }
-
   protected confirmSave(
     confirmTransaction: Transaction,
     form: FormGroup,
