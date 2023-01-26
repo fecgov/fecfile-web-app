@@ -138,6 +138,7 @@ export class TransactionFormUtils {
       }
     }
     addFieldsToValidate(payload);
+    payload.schema_name = transactionType?.schema?.$id?.split('/').pop()?.split('.')[0];
     return payload;
   }
 
