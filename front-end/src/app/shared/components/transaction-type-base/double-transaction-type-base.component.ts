@@ -1,14 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { takeUntil, BehaviorSubject, Subject } from 'rxjs';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
-import { Contact, ContactTypes, ContactTypeLabels } from '../../models/contact.model';
-import { TransactionTypeBaseComponent } from '../transaction-type-base/transaction-type-base.component';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { TransactionFormUtils } from './transaction-form.utils';
+import { TransactionContactUtils } from './transaction-contact.utils';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -24,12 +26,17 @@ import { TransactionTypeBaseComponent } from '../transaction-type-base/transacti
 @Component({
   template: '',
 })
-export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
+export abstract class DoubleTransactionTypeBaseComponent
+  extends TransactionTypeBaseComponent
+  implements OnInit, OnDestroy
+{
   abstract childFormProperties: string[];
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
   childValidateService: ValidateService = new ValidateService();
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
+  childContributionPurposeDescriptionLabel = '';
+  childNegativeAmountValueOnly = false;
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -37,12 +44,44 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
 
     // Initialize child form.
     this.childForm = this.fb.group(this.childValidateService.getFormGroupFields(this.childFormProperties));
-    this.doInit(
+    TransactionFormUtils.onInit(
+      this,
       this.childForm,
       this.childValidateService,
       this.transactionType?.childTransactionType,
       this.childContactId$
     );
+
+    this.childOnInit();
+  }
+
+  childOnInit() {
+    // Override contact type options if present in transactionType
+    if (this.transactionType?.childTransactionType && this.transactionType.childTransactionType.contactTypeOptions) {
+      this.childContactTypeOptions = LabelUtils.getPrimeOptions(
+        ContactTypeLabels,
+        this.transactionType.childTransactionType.contactTypeOptions
+      );
+    }
+
+    const contribution_amount_schema =
+      this.transactionType?.childTransactionType?.schema.properties['contribution_amount'];
+    if (contribution_amount_schema?.exclusiveMaximum === 0) {
+      this.childNegativeAmountValueOnly = true;
+      this.childForm
+        .get('contribution_amount')
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((contribution_amount) => {
+          if (typeof contribution_amount === 'number' && contribution_amount > 0) {
+            this.childForm.patchValue({ contribution_amount: -1 * contribution_amount });
+          }
+        });
+    }
+
+    if (this.transactionType?.childTransactionType?.generatePurposeDescriptionLabel) {
+      this.childContributionPurposeDescriptionLabel =
+        this.transactionType.childTransactionType.generatePurposeDescriptionLabel();
+    }
 
     // Default the child entity type to Committee
     if (!this.transactionType?.childTransactionType?.transaction?.id) {
@@ -113,14 +152,14 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
       return;
     }
 
-    const payload: Transaction = this.getPayloadTransaction(
+    const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transactionType,
       this.validateService,
       this.form,
       this.formProperties
     );
     payload.children = [
-      this.getPayloadTransaction(
+      TransactionFormUtils.getPayloadTransaction(
         this.transactionType?.childTransactionType,
         this.childValidateService,
         this.childForm,
@@ -139,7 +178,6 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
     transactionTypeToAdd?: ScheduleATransactionTypes
   ) {
     if (payload.children?.length === 1) {
-      // Confirm transaction from Group G
       this.confirmSave(
         payload.children[0],
         this.childForm,
@@ -150,17 +188,22 @@ export abstract class TransactionTypeX2BaseComponent extends TransactionTypeBase
         'childDialog'
       );
     } else {
-      throw new Error('Transaction missing child transaction when trying to confirm save.');
+      throw new Error('Parent transaction missing child transaction when trying to confirm save.');
     }
   }
 
-  protected override resetForm() {
-    this.doResetForm(this.form, this.transactionType);
-    this.doResetForm(this.childForm, this.transactionType?.childTransactionType);
+  override resetForm() {
+    this.formSubmitted = false;
+    TransactionFormUtils.resetForm(this.form, this.transactionType, this.contactTypeOptions);
+    TransactionFormUtils.resetForm(
+      this.childForm,
+      this.transactionType?.childTransactionType,
+      this.childContactTypeOptions
+    );
   }
 
   childOnContactLookupSelect(selectItem: SelectItem<Contact>) {
-    this.doContactLookupSelect(
+    TransactionContactUtils.onContactLookupSelect(
       selectItem,
       this.childForm,
       this.transactionType?.childTransactionType,
