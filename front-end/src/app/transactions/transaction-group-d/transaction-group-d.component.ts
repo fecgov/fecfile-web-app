@@ -42,7 +42,7 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
 
   constructor(
     protected override messageService: MessageService,
-    protected override transactionService: TransactionService,
+    public override transactionService: TransactionService,
     protected override contactService: ContactService,
     protected override validateService: ValidateService,
     protected override confirmationService: ConfirmationService,

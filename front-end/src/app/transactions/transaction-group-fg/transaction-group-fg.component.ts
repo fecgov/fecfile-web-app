@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TransactionTypeX2BaseComponent } from 'app/shared/components/transaction-type-x2-base/transaction-type-x2-base.component';
+import { DoubleTransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/double-transaction-type-base.component';
 import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 
@@ -7,7 +7,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
   selector: 'app-transaction-group-fg',
   templateUrl: './transaction-group-fg.component.html',
 })
-export class TransactionGroupFgComponent extends TransactionTypeX2BaseComponent implements OnInit, OnDestroy {
+export class TransactionGroupFgComponent extends DoubleTransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
