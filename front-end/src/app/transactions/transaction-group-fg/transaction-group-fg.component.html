@@ -1,8 +1,8 @@
 <p-toast></p-toast>
 <h1>{{ transactionType?.title }}</h1>
 <p>
-  This receipt type requires a memo transaction. Follow this two-step process to create both an earmark receipt and
-  an earmark memo:
+  This receipt type requires a memo transaction. Follow this two-step process to create both an earmark receipt and an
+  earmark memo:
 </p>
 <p-accordion>
   <p-accordionTab>
@@ -32,7 +32,8 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             entityRole="COMMITTEE"
-            [includeFecId]="true">
+            [includeFecId]="true"
+          >
           </app-committee-input>
           <p-divider></p-divider>
           <h3>Address</h3>
@@ -116,15 +117,15 @@
             [formSubmitted]="formSubmitted"
             [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType?.childTransactionType)"
             [contributionAmountReadOnly]="true"
-            [negativeAmountValueOnly]="negativeAmountValueOnly"
+            [negativeAmountValueOnly]="childNegativeAmountValueOnly"
           ></app-amount-input>
           <p-divider></p-divider>
           <h3>Additional Information</h3>
           <app-additional-info-input
             [form]="childForm"
             [formSubmitted]="formSubmitted"
-            [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
-            [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
+            [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType?.childTransactionType)"
+            [contributionPurposeDescriptionLabel]="this.childContributionPurposeDescriptionLabel"
           ></app-additional-info-input>
         </ng-container>
       </form>
