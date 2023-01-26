@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
-import { Contact, ContactTypeLabels } from '../../models/contact.model';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionContactUtils } from './transaction-contact.utils';
@@ -82,11 +82,67 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childContributionPurposeDescriptionLabel =
         this.transactionType.childTransactionType.generatePurposeDescriptionLabel();
     }
+
+    // Default the child entity type to Committee
+    if (!this.transactionType?.childTransactionType?.transaction?.id) {
+      this.childForm.get('entity_type')?.setValue(ContactTypes.COMMITTEE);
+    }
+
+    // Parent contribution purpose description updates with child contributor name updates.
+    this.childForm
+      .get('contributor_organization_name')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        const childTransaction: SchATransaction = this.transactionType?.childTransactionType
+          ?.transaction as SchATransaction;
+        childTransaction.contributor_organization_name = value;
+        this.updateContributionPurposeDescription();
+      });
+    this.childForm
+      .get('contributor_first_name')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        const memo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
+        if (memo) {
+          memo.contributor_first_name = value;
+        }
+        this.updateContributionPurposeDescription();
+      });
+    this.childForm
+      .get('contributor_last_name')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        const memo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
+        if (memo) {
+          memo.contributor_last_name = value;
+        }
+        this.updateContributionPurposeDescription();
+      });
+
+    // Child amount must match parent contribution amount
+    this.form
+      .get('contribution_amount')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.childForm.get('contribution_amount')?.setValue(value);
+      });
   }
 
   override ngOnDestroy(): void {
     super.ngOnDestroy();
     this.childContactId$.complete();
+  }
+
+  updateContributionPurposeDescription() {
+    const childTransaction: SchATransaction = this.transactionType?.childTransactionType
+      ?.transaction as SchATransaction;
+    childTransaction.entity_type = this.childForm.get('entity_type')?.value;
+
+    if (this.transactionType?.generatePurposeDescription) {
+      this.form.patchValue({
+        contribution_purpose_descrip: this.transactionType.generatePurposeDescription(),
+      });
+    }
   }
 
   override save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleATransactionTypes) {

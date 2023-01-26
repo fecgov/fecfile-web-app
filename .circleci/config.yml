@@ -99,9 +99,8 @@ jobs:
     docker:
       - image: cimg/node:16.15-browsers
     parameters: # parameters are at the job level
-      specs-to-run:
+      e2e-specs-dir-to-run:
         type: string
-        default: "cypress/e2e/**/*"
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -126,14 +125,29 @@ jobs:
       - run:
           name: execute e2e tests
           command: |
-            docker container run -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
+            docker container run --name fecfile-web-app-e2e -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
               cd ~; \
               git clone https://github.com/fecgov/fecfile-web-app.git; \
               cd fecfile-web-app/front-end; \
               git checkout ${E2E_BRANCH_NAME}; \
               npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "<< parameters.specs-to-run >>" --headless --watch=false --browser chrome;'\
-
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec cypress/e2e"<< parameters.e2e-specs-dir-to-run >>"/**/* --headless --watch=false --browser chrome;'\
+      - run:
+          name: stage test result artifacts
+          when: always
+          command: |
+            rm -rf /tmp/cypress
+            mkdir -p /tmp/cypress/results<< parameters.e2e-specs-dir-to-run >>
+            mkdir -p /tmp/cypress/lighthouse
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results/<< parameters.e2e-specs-dir-to-run >>
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/lighthouse/. /tmp/cypress/lighthouse
+            docker rm fecfile-web-app-e2e
+      - store_artifacts:
+          path: /tmp/cypress/results
+          destination: cypress/results
+      - store_artifacts:
+          path: /tmp/cypress/lighthouse
+          destination: cypress/lighthouse
   deploy:
     docker:
       - image: cimg/node:16.15-browsers
@@ -289,12 +303,14 @@ workflows:
     when: << pipeline.parameters.is-nightly-run >>
     jobs:
       - e2e-test:
-          specs-to-run: "cypress/e2e/contacts/**/*"
+          e2e-specs-dir-to-run: "/contacts"
       - e2e-test:
-          specs-to-run: "cypress/e2e/long-running/**/*"
+          e2e-specs-dir-to-run: "/long-running1"
       - e2e-test:
-          specs-to-run: "cypress/e2e/other/**/*"
+          e2e-specs-dir-to-run: "/long-running2"
       - e2e-test:
-          specs-to-run: "cypress/e2e/reports/**/*"
+          e2e-specs-dir-to-run: "/other"
       - e2e-test:
-          specs-to-run: "cypress/e2e/transactions/**/*"
+          e2e-specs-dir-to-run: "/reports"
+      - e2e-test:
+          e2e-specs-dir-to-run: "/transactions"
