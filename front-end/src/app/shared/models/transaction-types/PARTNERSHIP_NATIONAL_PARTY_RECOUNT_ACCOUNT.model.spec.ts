@@ -35,6 +35,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     const childTransactionType: PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO = 
       new PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO();
     childTransactionType.transaction = childTransactionType.getNewTransaction();
+    childTransactionType.transaction.contributor_last_name = 'test';
     transactionType.childTransactionType = childTransactionType;
     const descripwithChildren = transactionType.generatePurposeDescription();
     expect(descripwithChildren).toBe('Recount/Legal Proceedings Account ' + 
