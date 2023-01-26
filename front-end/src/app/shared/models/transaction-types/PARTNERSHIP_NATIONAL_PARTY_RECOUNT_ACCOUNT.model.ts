@@ -8,8 +8,7 @@ import {
   ScheduleATransactionTypes
 } from '../scha-transaction.model';
 import {
-  CANCEL_CONTROL,
-  SAVE_LIST_CONTROL,
+  STANDARD_CONTROLS,
   TransactionNavigationControls
 } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
@@ -24,11 +23,9 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionT
   ];
   override childTransactionType = TransactionTypeUtils.factory(
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO);
-  override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
-    [],
-    [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL]
-  );
+  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override purposeDescriptionLabelNotice =
+    'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not require itemization". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
 
   override generatePurposeDescription(): string {
     const account = 'Recount/Legal Proceedings Account';

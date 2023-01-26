@@ -7,8 +7,7 @@ import {
   ScheduleATransactionTypes
 } from '../scha-transaction.model';
 import {
-  STANDARD_CONTROLS,
-  TransactionNavigationControls
+  getChildNavigationControls, TransactionNavigationControls
 } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
@@ -16,7 +15,10 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO extends SchaTransac
   componentGroupId = 'A';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO);
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
+    LabelUtils.get(ScheduleATransactionTypeLabels,
+      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT)
+  );
 
   override generatePurposeDescription(): string {
     return 'Recount/Legal Proceedings Account Partnership Attribution';
