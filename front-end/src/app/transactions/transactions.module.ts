@@ -20,13 +20,14 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SharedModule } from '../shared/shared.module';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionGroupAComponent } from './transaction-group-a/transaction-group-a.component';
-import { TransactionGroupAgComponent } from './transaction-group-ag/transaction-group-ag.component';
 import { TransactionGroupBComponent } from './transaction-group-b/transaction-group-b.component';
 import { TransactionGroupCComponent } from './transaction-group-c/transaction-group-c.component';
 import { TransactionGroupDComponent } from './transaction-group-d/transaction-group-d.component';
 import { TransactionGroupEComponent } from './transaction-group-e/transaction-group-e.component';
 import { TransactionGroupFComponent } from './transaction-group-f/transaction-group-f.component';
 import { TransactionGroupGComponent } from './transaction-group-g/transaction-group-g.component';
+import { TransactionGroupAgComponent } from './transaction-group-ag/transaction-group-ag.component';
+import { TransactionGroupGgComponent } from './transaction-group-gg/transaction-group-gg.component';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list/transaction-list.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
@@ -45,6 +46,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     TransactionGroupFComponent,
     TransactionGroupGComponent,
     TransactionGroupAgComponent,
+    TransactionGroupGgComponent,
   ],
   imports: [
     AccordionModule,

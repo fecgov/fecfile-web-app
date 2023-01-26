@@ -22,3 +22,6 @@
 <ng-container *ngIf="transactionType?.componentGroupId === 'AG'">
   <app-transaction-group-ag [transactionType]="transactionType"></app-transaction-group-ag>
 </ng-container>
+<ng-container *ngIf="transactionType?.componentGroupId === 'GG'">
+  <app-transaction-group-gg [transactionType]="transactionType"></app-transaction-group-gg>
+</ng-container>
