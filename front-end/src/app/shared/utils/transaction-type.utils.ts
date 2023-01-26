@@ -56,8 +56,11 @@ import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model
 import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
 import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
 import { EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT.model';
-import { EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION } from '../models/transaction-types/EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION.model';
-import { EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION } from '../models/transaction-types/EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION.model';
+import { EARMARK_RECEIPT_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_RECOUNT_ACCOUNT.model';
+import { EARMARK_RECEIPT_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_CONVENTION_ACCOUNT.model';
+import { EARMARK_MEMO_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_HEADQUARTERS_ACCOUNT.model';
+import { EARMARK_MEMO_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_CONVENTION_ACCOUNT.model';
+import { EARMARK_MEMO_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_RECOUNT_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -118,8 +121,11 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PAC_RETURN,
   PARTY_RETURN,
   EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT,
-  EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
-  EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
+  EARMARK_RECEIPT_RECOUNT_ACCOUNT,
+  EARMARK_RECEIPT_CONVENTION_ACCOUNT,
+  EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
+  EARMARK_MEMO_CONVENTION_ACCOUNT,
+  EARMARK_MEMO_RECOUNT_ACCOUNT,
 }
 
 export class TransactionTypeUtils {

@@ -1,5 +1,7 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_EARMARK_RECEIPTS';
+import { ContactTypes } from '../contact.model';
 import {
   AggregationGroups,
   SchATransaction,
@@ -13,13 +15,14 @@ import {
 } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
-export class EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION extends SchaTransactionType {
-  componentGroupId = 'G';
+export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchaTransactionType {
+  componentGroupId = 'GG';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION
   );
   schema = schema;
+  override childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT);
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
@@ -27,16 +30,19 @@ export class EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION extends SchaTransa
   );
 
   override generatePurposeDescription(): string {
-    let name;
-    if (this.transaction?.contact?.type === 'COM') {
-      name = this.transaction?.contributor_organization_name || this.transaction?.contact?.name;
-    } else {
-      name = `${this.transaction?.contributor_first_name || this.transaction?.contact?.first_name} ${
-        this.transaction?.contributor_last_name || this.transaction?.contact?.last_name
-      }`;
+    const subTransaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
+    let conduit = subTransaction?.contributor_organization_name || '';
+    if (
+      subTransaction?.entity_type === ContactTypes.INDIVIDUAL &&
+      subTransaction?.contributor_first_name &&
+      subTransaction?.contributor_last_name
+    ) {
+      conduit = `${subTransaction.contributor_first_name || ''} ${subTransaction.contributor_last_name || ''}`;
     }
-    console.log('Called!', this, name);
-    return `Recount/Legal Proceedings Account - Earmarked Through ${name}`;
+    if (conduit) {
+      return `Recount/Legal Proceedings Account - Earmarked through ${conduit}`;
+    }
+    return '';
   }
 
   getNewTransaction() {

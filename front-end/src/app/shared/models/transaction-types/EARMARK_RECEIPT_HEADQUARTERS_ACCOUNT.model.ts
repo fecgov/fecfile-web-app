@@ -22,7 +22,9 @@ export class EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT extends SchaTransactionType {
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION
   );
   schema = schema;
-  override childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
+  override childTransactionType = TransactionTypeUtils.factory(
+    ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT
+  );
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
@@ -30,14 +32,14 @@ export class EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT extends SchaTransactionType {
   );
 
   override generatePurposeDescription(): string {
-    const earmarkMemo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    let conduit = earmarkMemo?.contributor_organization_name || '';
+    const subTransaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
+    let conduit = subTransaction?.contributor_organization_name || '';
     if (
-      earmarkMemo?.entity_type === ContactTypes.INDIVIDUAL &&
-      earmarkMemo?.contributor_first_name &&
-      earmarkMemo?.contributor_last_name
+      subTransaction?.entity_type === ContactTypes.INDIVIDUAL &&
+      subTransaction?.contributor_first_name &&
+      subTransaction?.contributor_last_name
     ) {
-      conduit = `${earmarkMemo.contributor_first_name || ''} ${earmarkMemo.contributor_last_name || ''}`;
+      conduit = `${subTransaction.contributor_first_name || ''} ${subTransaction.contributor_last_name || ''}`;
     }
     if (conduit) {
       return `Headquarters Buildings Account - Earmarked through ${conduit}`;
