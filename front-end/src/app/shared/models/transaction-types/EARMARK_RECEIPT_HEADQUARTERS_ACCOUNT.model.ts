@@ -15,7 +15,7 @@ import {
 } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
-export class EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION extends SchaTransactionType {
+export class EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT extends SchaTransactionType {
   componentGroupId = 'GG';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
