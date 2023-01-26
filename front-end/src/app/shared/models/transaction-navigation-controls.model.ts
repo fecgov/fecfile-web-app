@@ -90,27 +90,34 @@ export const STANDARD_CONTROLS = new TransactionNavigationControls(
 );
 
 /**
+ * Standard set of form buttons used for double-transaction-entry screens.
+ */
+export const STANDARD_CONTROLS_MINIMAL = new TransactionNavigationControls([], [CANCEL_CONTROL], [SAVE_LIST_CONTROL]);
+
+/**
  * Standard set of form buttons used across all child JF Transfer Memo transaction type screens.
  */
-export const JF_TRANSFER_MEMO_CONTROLS = new TransactionNavigationControls(
-  [
-    new NavigationControl(
-      NavigationAction.SAVE,
-      NavigationDestination.ANOTHER,
-      'Save & add another Memo',
-      'p-button-warning',
-      hasNoContact,
-      isNewTransaction,
-      'pi pi-plus'
-    ),
-  ],
-  [
-    new NavigationControl(
-      NavigationAction.CANCEL,
-      NavigationDestination.PARENT,
-      'Back to Joint Fundraising Transfer',
-      'p-button-secondary'
-    ),
-  ],
-  [SAVE_LIST_CONTROL]
-);
+export function getChildNavigationControls(parentTransactionTypeLabel: string): TransactionNavigationControls {
+  return new TransactionNavigationControls(
+    [
+      new NavigationControl(
+        NavigationAction.SAVE,
+        NavigationDestination.ANOTHER,
+        'Save & add another Memo',
+        'p-button-warning',
+        hasNoContact,
+        isNewTransaction,
+        'pi pi-plus'
+      ),
+    ],
+    [
+      new NavigationControl(
+        NavigationAction.CANCEL,
+        NavigationDestination.PARENT,
+        `Back to ${parentTransactionTypeLabel}`,
+        'p-button-secondary'
+      ),
+    ],
+    [SAVE_LIST_CONTROL]
+  );
+}

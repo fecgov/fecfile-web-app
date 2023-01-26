@@ -3,7 +3,11 @@ import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import {
+  SchATransaction,
+  ScheduleATransactionTypes,
+  ScheduleATransactionTypeLabels,
+} from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
@@ -35,6 +39,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   contributionPurposeDescriptionLabel = '';
+  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
   negativeAmountValueOnly = false;
   fieldsUsedByCPDGeneration: string[] = [];
 
@@ -148,15 +153,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         });
     }
 
-    //Update Contribution Purpose Description when provided fields are updated
-    for (const field_name of this.fieldsUsedByCPDGeneration) {
-      const field = this.form.get(field_name);
-      field?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-        if (this.transactionType?.generatePurposeDescription) {
-          this.transactionType.generatePurposeDescription();
-        }
-      });
-    }
+    this.subTransactionOptions = (this.transactionType?.subTransactionTypes || []).map((type) => {
+      return {
+        label: LabelUtils.get(ScheduleATransactionTypeLabels, type),
+        value: type,
+      };
+    });
   }
 
   ngOnDestroy(): void {
@@ -252,6 +254,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       }
     }
     addFieldsToValidate(payload);
+    payload.schema_name = transactionType?.schema?.$id?.split(
+      '/').pop()?.split('.')[0];
     return payload;
   }
 
@@ -536,5 +540,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   getEntityType(): string {
     return this.form.get('entity_type')?.value || '';
+  }
+
+  createSubTransaction(event: { value: ScheduleATransactionTypes }) {
+    this.save(NavigationDestination.CHILD, event.value);
+    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }

@@ -35,6 +35,8 @@ export abstract class Transaction extends BaseModel {
 
   fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
 
+  schema_name: string | undefined;
+
   abstract apiEndpoint: string; // Root URL for API endpoint
 }
 
