@@ -1,13 +1,13 @@
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
-import { EARMARK_MEMO_HEADQUARTERS_ACCOUNT } from './EARMARK_MEMO_HEADQUARTERS_ACCOUNT.model';
-import { EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT } from './EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT.model';
+import { EARMARK_MEMO_RECOUNT_ACCOUNT } from './EARMARK_MEMO_RECOUNT_ACCOUNT.model';
+import { EARMARK_RECEIPT_RECOUNT_ACCOUNT } from './EARMARK_RECEIPT_RECOUNT_ACCOUNT.model';
 
-describe('EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT', () => {
-  let transactionType: EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT;
+describe('EARMARK_RECEIPT_RECOUNT_ACCOUNT', () => {
+  let transactionType: EARMARK_RECEIPT_RECOUNT_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT();
+    transactionType = new EARMARK_RECEIPT_RECOUNT_ACCOUNT();
   });
 
   it('should create an instance', () => {
@@ -22,7 +22,7 @@ describe('EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT', () => {
     const txn = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION
+      ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION
     );
   });
 
@@ -32,7 +32,7 @@ describe('EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT', () => {
   });
 
   it('#generatePurposeDescription() should reflect child', () => {
-    const childTransactionType: EARMARK_MEMO_HEADQUARTERS_ACCOUNT = new EARMARK_MEMO_HEADQUARTERS_ACCOUNT();
+    const childTransactionType: EARMARK_MEMO_RECOUNT_ACCOUNT = new EARMARK_MEMO_RECOUNT_ACCOUNT();
     childTransactionType.transaction = childTransactionType.getNewTransaction();
     childTransactionType.transaction.entity_type = ContactTypes.INDIVIDUAL;
     childTransactionType.transaction.contributor_first_name = 'Joe';
@@ -40,6 +40,6 @@ describe('EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT', () => {
 
     transactionType.childTransactionType = childTransactionType;
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Headquarters Buildings Account - Earmarked through Joe Smith');
+    expect(descrip).toBe('Recount/Legal Proceedings Account - Earmarked through Joe Smith');
   });
 });
