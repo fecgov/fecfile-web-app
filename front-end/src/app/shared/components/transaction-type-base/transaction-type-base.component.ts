@@ -1,18 +1,17 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import {
   SchATransaction,
-  ScheduleATransactionTypes,
-  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes
 } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
-  TransactionNavigationControls,
+  TransactionNavigationControls
 } from 'app/shared/models/transaction-navigation-controls.model';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -22,8 +21,8 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionContactUtils } from './transaction-contact.utils';
+import { TransactionFormUtils } from './transaction-form.utils';
 
 @Component({
   template: '',
@@ -81,14 +80,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           }
         });
     }
-
-    this.subTransactionOptions = (this.transactionType?.subTransactionTypes || []).map((type) => {
-      return {
-        label: LabelUtils.get(ScheduleATransactionTypeLabels, type),
-        value: type,
-      };
-    });
-
+    
     if (this.transactionType?.generatePurposeDescriptionLabel) {
       this.contributionPurposeDescriptionLabel = this.transactionType.generatePurposeDescriptionLabel();
     }
