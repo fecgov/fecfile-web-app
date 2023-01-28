@@ -1,15 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
 import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
-import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { ContactService } from 'app/shared/services/contact.service';
-import { TransactionService } from 'app/shared/services/transaction.service';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
 @Component({
@@ -32,39 +25,17 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
     'contribution_purpose_descrip',
     'memo_code',
     'memo_text_input',
-    'subTransaction',
+    'childTransaction',
   ];
-  override subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
-  
+  override childTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
+
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
   );
 
-  constructor(
-    protected override messageService: MessageService,
-    public override transactionService: TransactionService,
-    protected override contactService: ContactService,
-    protected override validateService: ValidateService,
-    protected override confirmationService: ConfirmationService,
-    protected override fb: FormBuilder,
-    protected override router: Router,
-    protected override fecDatePipe: FecDatePipe
-  ) {
-    super(
-      messageService,
-      transactionService,
-      contactService,
-      validateService,
-      confirmationService,
-      fb,
-      router,
-      fecDatePipe
-    );
-  }
-
   override ngOnInit(): void {
     super.ngOnInit();
-    this.subTransactionOptions = (this.transactionType?.subTransactionTypes || []).map((type) => {
+    this.childTransactionOptions = (this.transactionType?.childTransactionTypes || []).map((type) => {
       return {
         label: LabelUtils.get(ScheduleATransactionTypeLabels, type),
         value: type,
@@ -74,6 +45,6 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
 
   override createSubTransaction(event: { value: ScheduleATransactionTypes }) {
     this.save(NavigationDestination.CHILD, event.value);
-    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
+    this.form.get('childTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }

@@ -9,6 +9,7 @@ import { ContactTypes } from '../../models/contact.model';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 
 export class TransactionFormUtils {
   /**
@@ -105,7 +106,7 @@ export class TransactionFormUtils {
     validateService: ValidateService,
     form: FormGroup,
     formProperties: string[]
-  ) {
+  ): SchATransaction {
     let formValues = validateService.getFormValues(form, formProperties);
     if (transactionType) formValues = TransactionMemoUtils.retrieveMemoText(transactionType, form, formValues);
 
@@ -114,6 +115,7 @@ export class TransactionFormUtils {
       ...formValues,
     });
     payload.contact_id = payload.contact?.id;
+    payload.schema_name = transactionType?.getSchemaName();
 
     if (payload.children) {
       payload.children = payload.updateChildren();

@@ -1,6 +1,8 @@
 import { BaseModel } from './base.model';
 import { Contact } from './contact.model';
 import { MemoText } from './memo-text.model';
+// import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
+// import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -38,6 +40,8 @@ export abstract class Transaction extends BaseModel {
   schema_name: string | undefined;
 
   abstract apiEndpoint: string; // Root URL for API endpoint
+
+  abstract updateParent(): Transaction; // Method to handle save when child must update parent properties
 }
 
 export function isNewTransaction(transaction?: Transaction): boolean {
@@ -46,3 +50,7 @@ export function isNewTransaction(transaction?: Transaction): boolean {
 export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact;
 }
+
+// export type ScheduleTransaction = Transaction | SchATransaction | SchBTransaction;
+
+// export type ScheduleTransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;

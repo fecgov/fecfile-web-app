@@ -24,7 +24,7 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     'donor_committee_fec_id',
     'memo_code',
     'memo_text_input',
-    'subTransaction',
+    'childTransaction',
   ];
 
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>

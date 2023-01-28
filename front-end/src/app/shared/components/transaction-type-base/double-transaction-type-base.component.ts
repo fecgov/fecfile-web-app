@@ -168,7 +168,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     ];
     payload.children[0].report_id = payload.report_id;
 
-    // Confirm transaction from Group A
+    // Confirm save for parent transaction
     this.confirmSave(payload, this.form, this.childConfirmSave, navigateTo, payload, transactionTypeToAdd);
   }
 

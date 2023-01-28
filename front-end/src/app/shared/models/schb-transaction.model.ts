@@ -52,6 +52,10 @@ export class SchBTransaction extends Transaction {
   static fromJSON(json: any): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(SchBTransaction, json);
   }
+
+  updateParent(): Transaction {
+    throw new Error('Tried to call updateParent on SchBTransaction and it should not');
+  }
 }
 
 export enum ScheduleBTransactionGroups {

@@ -13,7 +13,7 @@ export class JOINT_FUNDRAISING_TRANSFER extends SchaTransactionType {
   componentGroupId = 'E';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
   schema = schema;
-  override subTransactionTypes = [
+  override childTransactionTypes = [
     ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
