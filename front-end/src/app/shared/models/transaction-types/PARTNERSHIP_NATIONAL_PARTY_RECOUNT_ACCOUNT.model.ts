@@ -26,12 +26,10 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionT
     'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not require itemization". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
 
   override generatePurposeDescription(): string {
-    const account = 'Recount/Legal Proceedings Account';
-    const childTransaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    if (childTransaction && childTransaction.contributor_last_name) {
-      return account + ' (See Partnership Attribution(s) below)';
+    if (this.transaction?.children && this.transaction?.children.length > 0) {
+      return 'Recount/Legal Proceedings Account (See Partnership Attribution(s) below)';
     }
-    return account + ' (Partnership attributions do not require itemization)';
+    return 'Recount/Legal Proceedings Account (Partnership attributions do not require itemization)';
   }
 
   getNewTransaction() {

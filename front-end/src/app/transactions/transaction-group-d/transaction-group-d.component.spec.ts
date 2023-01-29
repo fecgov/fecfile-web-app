@@ -98,13 +98,13 @@ describe('TransactionGroupDComponent', () => {
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
   });
 
-  it('should reset the childTransaction dropdown', () => {
-    component.form.get('childTransaction')?.setValue('A Value');
-    expect(component.form.get('childTransaction')?.value).toEqual('A Value');
+  it('should reset the subTransaction dropdown', () => {
+    component.form.get('subTransaction')?.setValue('A Value');
+    expect(component.form.get('subTransaction')?.value).toEqual('A Value');
     component.createSubTransaction({
       value: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     });
-    expect(component.form.get('childTransaction')?.value).toBeNull();
+    expect(component.form.get('subTransaction')?.value).toBeNull();
   });
 
   it('#save() should not save an invalid record', () => {
