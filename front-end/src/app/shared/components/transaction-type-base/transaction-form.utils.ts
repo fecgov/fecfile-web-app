@@ -105,7 +105,7 @@ export class TransactionFormUtils {
     validateService: ValidateService,
     form: FormGroup,
     formProperties: string[]
-  ) {
+  ): SchATransaction {
     let formValues = validateService.getFormValues(form, formProperties);
     if (transactionType) formValues = TransactionMemoUtils.retrieveMemoText(transactionType, form, formValues);
 
@@ -113,31 +113,10 @@ export class TransactionFormUtils {
       ...transactionType?.transaction,
       ...formValues,
     });
-    payload.contact_id = payload.contact?.id;
-
     if (payload.children) {
       payload.children = payload.updateChildren();
     }
 
-    let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
-    // Remove properties that are populated in the back-end from list of properties to validate
-    fieldsToValidate = fieldsToValidate.filter(
-      (p) =>
-        ![
-          'transaction_id',
-          'donor_committee_name',
-          'back_reference_tran_id_number',
-          'back_reference_sched_name',
-        ].includes(p)
-    );
-    payload.fields_to_validate = fieldsToValidate;
-    function addFieldsToValidate(transaction: Transaction) {
-      transaction.fields_to_validate = fieldsToValidate;
-      if (transaction.children) {
-        transaction.children.forEach((transaction) => addFieldsToValidate(transaction));
-      }
-    }
-    addFieldsToValidate(payload);
     return payload;
   }
 

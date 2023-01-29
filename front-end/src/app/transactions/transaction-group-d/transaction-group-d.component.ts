@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
+import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-transaction-group-d',
   templateUrl: './transaction-group-d.component.html',
+  styleUrls: ['../transaction.scss'],
 })
 export class TransactionGroupDComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -22,8 +24,21 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
     'contribution_purpose_descrip',
     'memo_code',
     'memo_text_input',
+    'subTransaction',
   ];
+  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
+
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
   );
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this.subTransactionOptions = (this.transactionType?.subTransactionTypes || []).map((type) => {
+      return {
+        label: LabelUtils.get(ScheduleATransactionTypeLabels, type),
+        value: type,
+      };
+    });
+  }
 }

@@ -3,7 +3,6 @@ import { Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { TransactionType } from '../models/transaction-types/transaction-type.model';
 
 export class SchATransaction extends Transaction {
   back_reference_tran_id_number: string | undefined;
@@ -52,9 +51,32 @@ export class SchATransaction extends Transaction {
 
   override apiEndpoint = '/transactions/schedule-a';
 
+  override getFieldsNotToValidate(): string[] {
+    return [
+      'donor_committee_name',
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      ...super.getFieldsNotToValidate(),
+    ];
+  }
+
   // prettier-ignore
-  static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(SchATransaction, json);
+  static fromJSON(json: any, depth = 2): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const transaction = plainToClass(SchATransaction, json);
+    if (transaction.transaction_type_identifier) {
+      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
+      transaction.setMetaProperties(transactionType);
+    }
+    // else {
+    //   throw new Error("Can't find transaction_type_identifier when creating class from JSON");
+    // }
+    if (depth > 0 && transaction.parent_transaction) {
+      transaction.parent_transaction = SchATransaction.fromJSON(transaction.parent_transaction, depth-1);
+    }
+    if (depth > 0 && transaction.children) {
+      transaction.children = transaction.children.map(function(child) { return SchATransaction.fromJSON(child, depth-1) });
+    }
+    return transaction;
   }
 
   /**
@@ -73,7 +95,7 @@ export class SchATransaction extends Transaction {
       for (const child of this.children as SchATransaction[]) {
         if (child.transaction_type_identifier) {
           // Instantiate a TransactionType object in order to access the purpose description generator
-          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier) as TransactionType;
+          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier);
 
           // Prep the TransactionType by setting fields it will need when generating a purpose description
           transactionType.transaction = child;
@@ -100,6 +122,40 @@ export class SchATransaction extends Transaction {
 
     return outChildren;
   }
+
+  /**
+   * Returns a transaction payload with the parent of the original payload
+   * swapped in as the main payload and the original main payload is a child
+   * @returns
+   */
+  getUpdatedParent(childDeleted = false): SchATransaction {
+    if (!this.parent_transaction?.transaction_type_identifier) {
+      throw new Error(
+        `Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
+      );
+    }
+
+    // The parent is the new payload
+    const payload = this.parent_transaction as SchATransaction;
+
+    // Attach the original payload to the parent as a child, replacing an
+    // existing version if needed
+    if (this.id && this.parent_transaction) {
+      payload.children = this.parent_transaction.children?.filter((c) => c.id !== this.id);
+    }
+    if (!childDeleted) {
+      payload.children?.push(this);
+    }
+    payload.children = payload.updateChildren();
+
+    // Update the CPD
+    if (payload?.transactionType?.generatePurposeDescription) {
+      payload.transactionType.transaction = payload;
+      payload.contribution_purpose_descrip = payload.transactionType.generatePurposeDescription();
+    }
+
+    return payload;
+  }
 }
 
 export enum ScheduleATransactionGroups {
@@ -121,7 +177,7 @@ export enum ScheduleATransactionTypes {
   // Contributions from Individuals/Persons
   INDIVIDUAL_RECEIPT = 'INDIVIDUAL_RECEIPT',
   TRIBAL_RECEIPT = 'TRIBAL_RECEIPT',
-  PARTNERSHIP_RECEIPT = 'PARTN_REC',
+  PARTNERSHIP_RECEIPT = 'PARTNERSHIP_RECEIPT',
   REATTRIBUTION = 'REATT_FROM',
   IN_KIND_RECEIPT = 'IK_REC',
   RETURNED_BOUNCED_RECEIPT_INDIVIDUAL = 'RETURN_RECEIPT',
@@ -176,6 +232,7 @@ export enum ScheduleATransactionTypes {
   EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION = 'EAR_REC_RECNT_ACC',
   EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION = 'EAR_REC_CONVEN_ACC',
   EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION = 'EAR_REC_HQ_ACC',
+  PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   // Child transactiion types
   PAC_EARMARK_MEMO = 'PAC_EARMARK_MEMO',
   EARMARK_MEMO = 'EARMARK_MEMO',
@@ -194,6 +251,8 @@ export enum ScheduleATransactionTypes {
   PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
   TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
   PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
+  PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO',
+  PARTNERSHIP_MEMO = 'PARTNERSHIP_MEMO',
 }
 
 export const ScheduleATransactionTypeLabels: LabelList = [
@@ -348,6 +407,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Earmark Receipt for Headquarters Account (Contribution)',
   ],
   [
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    'Partnership National Party Recount/Legal Proceedings Account',
+  ],
+  [
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     'Individual National Party Recount/Legal Proceedings Account JF Transfer Memo',
   ],
@@ -375,6 +438,11 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     'Partnership Receipt Headquarters Buildings Account JF Transfer Memo',
   ],
+  [
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
+    'Partnership National Party Recount/Legal Proceedings Account Memo',
+  ],
+  [ScheduleATransactionTypes.PARTNERSHIP_MEMO, 'Partnership Memo'],
 ];
 
 export enum AggregationGroups {

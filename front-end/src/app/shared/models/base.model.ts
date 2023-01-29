@@ -3,7 +3,7 @@ import { DateUtils } from '../utils/date.utils';
 
 export abstract class BaseModel {
   toJson() {
-    return instanceToPlain(this);
+    return instanceToPlain(this, { enableCircularCheck: true });
   }
 
   /**

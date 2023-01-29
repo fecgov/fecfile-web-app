@@ -44,7 +44,9 @@ export type SchATransactionName =
   | 'Individual National Party Pres. Nominating Convention Account'
   | 'Party National Party Pres. Nominating Convention Account'
   | 'Tribal National Party Recount/Legal Proceedings Account'
+  | 'Partnership National Party Recount/Legal Proceedings Account'
   | 'Unregistered Receipt from Person - Returned/Bounced Receipt'
+  | 'Partnership Receipt'
   | 'PAC Returned/Bounced Receipt'
   | 'Party Returned/Bounced Receipt';
 
@@ -66,7 +68,9 @@ export type ChildTransactionName =
   | 'Tribal National Party Pres. Nominating Convention Account JF Transfer Memo'
   | 'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo'
   | 'Individual National Party Headquarters Buildings Account JF Transfer Memo'
-  | 'PAC National Party Headquarters Buildings Account JF Transfer Memo';
+  | 'PAC National Party Headquarters Buildings Account JF Transfer Memo'
+  | 'Partnership Memo'
+  | 'Partnership National Party Recount/Legal Proceedings Account Memo';
 
 export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG' | 'FG';
 
@@ -425,6 +429,30 @@ const tribalNationalPartyRecountAccount: TransactionForm = {
   transaction_group: 'D',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
+const partnershipNationalPartyRecountAccount: TransactionForm = {
+  transaction_name: 'Partnership National Party Recount/Legal Proceedings Account',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
+const partnershipNationalPartyRecountAccountMemo: ChildTransactionForm = {
+  transaction_name: 'Partnership National Party Recount/Legal Proceedings Account Memo',
+  transaction_group: 'A',
+  aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  ...entityIndividual,
+  childOf: 'Partnership National Party Recount/Legal Proceedings Account',
   fields: {
     ...memoFields,
     ...contributionFields,
@@ -921,6 +949,18 @@ const unregisteredReceiptFromPersonReturn: TransactionForm = {
   },
 };
 
+const partnershipReceipt: TransactionForm = {
+  transaction_name: 'Partnership Receipt',
+  transaction_category: 'INDIVIDUALS/PERSONS',
+  transaction_group: 'D',
+  aggregation_group: 'GENERAL',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
 const pacReturn: TransactionForm = {
   transaction_name: 'PAC Returned/Bounced Receipt',
   transaction_category: 'REGISTERED FILERS',
@@ -931,6 +971,18 @@ const pacReturn: TransactionForm = {
     ...memoFields,
     ...contributionFieldsNegative,
     ...purposeDescriptionFieldsRequired,
+  },
+};
+
+const partnershipMemo: ChildTransactionForm = {
+  transaction_name: 'Partnership Memo',
+  transaction_group: 'A',
+  aggregation_group: 'GENERAL',
+  ...entityIndividual,
+  childOf: 'Partnership Receipt',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
   },
 };
 
@@ -959,6 +1011,7 @@ export const schedANavTree: TransactionNavTree = {
   'INDIVIDUALS/PERSONS': {
     'Individual Receipt': individualReceipt,
     'Tribal Receipt': tribalReceipt,
+    'Partnership Receipt': partnershipReceipt,
     'Returned/Bounced Receipt': returnedBouncedReceiptIndividual,
     'Earmark Receipt': earmarkReceipt,
     'Unregistered Receipt from Person': unregisteredReceiptFromPerson,
@@ -1008,6 +1061,7 @@ export const schedANavTree: TransactionNavTree = {
     'Individual National Party Recount/Legal Proceedings Account': individualNationalPartyRecountAccount,
     'Party National Party Pres. Nominating Convention Account': partyNationalPartyConventionAccount,
     'Tribal National Party Recount/Legal Proceedings Account': tribalNationalPartyRecountAccount,
+    'Partnership National Party Recount/Legal Proceedings Account' : partnershipNationalPartyRecountAccount,
   },
 };
 
@@ -1025,5 +1079,11 @@ export const childTransactionTree = {
     'PAC Joint Fundraising Transfer Memo': pacJointFundraisingTransferMemo,
     'Party Joint Fundraising Transfer Memo': partyJointFundraisingTransferMemo,
     'Individual Joint Fundraising Transfer Memo': individualJointFundraisingTransferMemo,
+  },
+  'Partnership Receipt': {
+    'Partnership Memo': partnershipMemo,
+  },
+  'Partnership National Party Recount/Legal Proceedings Account': {
+    'Partnership National Party Recount/Legal Proceedings Account Memo': partnershipNationalPartyRecountAccountMemo,
   },
 };

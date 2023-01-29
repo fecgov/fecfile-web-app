@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
@@ -9,17 +8,19 @@ import {
   NavigationDestination,
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionContactUtils } from './transaction-contact.utils';
+import { TransactionFormUtils } from './transaction-form.utils';
 
 @Component({
   template: '',
@@ -36,6 +37,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   contributionPurposeDescriptionLabel = '';
+  childTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
   negativeAmountValueOnly = false;
 
   form: FormGroup = this.fb.group({});
@@ -174,6 +176,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     transactionTypeToAdd?: ScheduleATransactionTypes
   ) {
     if (payload.transaction_type_identifier) {
+      // Reorganize the payload if this transaction type can update its parent transaction
+      const transactionType = TransactionTypeUtils.factory(payload.transaction_type_identifier);
+      if (transactionType.updateParentOnSave) {
+        payload = payload.getUpdatedParent();
+      }
+
       if (payload.id) {
         this.transactionService.update(payload).subscribe((transaction) => {
           this.navigateTo(navigateTo, transaction.id, transactionTypeToAdd);
@@ -251,5 +259,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   getEntityType(): string {
     return this.form.get('entity_type')?.value || '';
+  }
+
+  createSubTransaction(event: { value: ScheduleATransactionTypes }) {
+    this.save(NavigationDestination.CHILD, event.value);
+    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }

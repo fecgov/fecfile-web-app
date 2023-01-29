@@ -9,7 +9,7 @@ const initTransactionData = {
   form_type: undefined,
   filer_committee_id_number: undefined,
   transaction_id: null,
-  transaction_type_identifier: undefined,
+  transaction_type_identifier: 'INDIVIDUAL_RECEIPT',
   contribution_purpose_descrip: undefined,
   parent_transaction_id: undefined,
   children: undefined,
@@ -28,6 +28,7 @@ describe('SchATransaction', () => {
   it('#fromJSON() should return a populated SchATransaction instance', () => {
     const data = {
       id: '999',
+      transaction_type_identifier: 'INDIVIDUAL_RECEIPT',
       form_type: 'SA11Ai',
       contributor_organization_name: 'foo',
       contribution_date: undefined,
@@ -52,7 +53,6 @@ describe('SchATransaction', () => {
 
     const updatedChildren = testTransaction1.updateChildren();
     const child = updatedChildren[0] as SchATransaction;
-    console.log(updatedChildren, child);
     expect(child.contribution_purpose_descrip).toContain(testTransaction1.contributor_organization_name);
   });
 });

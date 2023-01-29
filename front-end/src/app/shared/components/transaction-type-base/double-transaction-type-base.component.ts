@@ -133,7 +133,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.childContactId$.complete();
   }
 
-  updateContributionPurposeDescription() {
+  private updateContributionPurposeDescription() {
     const childTransaction: SchATransaction = this.transactionType?.childTransactionType
       ?.transaction as SchATransaction;
     childTransaction.entity_type = this.childForm.get('entity_type')?.value;
@@ -168,7 +168,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     ];
     payload.children[0].report_id = payload.report_id;
 
-    // Confirm transaction from Group A
+    // Confirm save for parent transaction
     this.confirmSave(payload, this.form, this.childConfirmSave, navigateTo, payload, transactionTypeToAdd);
   }
 
