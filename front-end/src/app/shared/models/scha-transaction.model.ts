@@ -3,7 +3,6 @@ import { Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { TransactionType } from './transaction-types/transaction-type.model';
 
 export class SchATransaction extends Transaction {
   back_reference_tran_id_number: string | undefined;
