@@ -3,7 +3,7 @@ import { Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { TransactionType } from '../models/transaction-types/transaction-type.model';
+import { TransactionType } from './transaction-types/transaction-type.model';
 
 export class SchATransaction extends Transaction {
   back_reference_tran_id_number: string | undefined;
@@ -52,9 +52,32 @@ export class SchATransaction extends Transaction {
 
   override apiEndpoint = '/transactions/schedule-a';
 
+  override getFieldsNotToValidate(): string[] {
+    return [
+      'donor_committee_name',
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      ...super.getFieldsNotToValidate(),
+    ];
+  }
+
   // prettier-ignore
-  static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(SchATransaction, json);
+  static fromJSON(json: any, depth = 2): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const transaction = plainToClass(SchATransaction, json);
+    if (transaction.transaction_type_identifier) {
+      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
+      transaction.setMetaProperties(transactionType);
+    }
+    else {
+      throw new Error("Can't find transaction_type_identifier when creating class from JSON");
+    }
+    if (depth > 0 && transaction.parent_transaction) {
+      transaction.parent_transaction = SchATransaction.fromJSON(transaction.parent_transaction, depth-1);
+    }
+    if (depth > 0 && transaction.children) {
+      transaction.children = transaction.children.map(function(child) { return SchATransaction.fromJSON(child, depth-1) });
+    }
+    return transaction;
   }
 
   /**
@@ -64,8 +87,8 @@ export class SchATransaction extends Transaction {
    *    have been re-generated to account for changes to their parent
    *
    */
-  updateChildren(): SchATransaction[] {
-    const outChildren: SchATransaction[] = [];
+  updateChildren(): Transaction[] {
+    const outChildren: Transaction[] = [];
 
     if (this.children) {
       /* We treat the parent's children as SchATransaction objects in order
@@ -77,7 +100,6 @@ export class SchATransaction extends Transaction {
 
           // Prep the TransactionType by setting fields it will need when generating a purpose description
           transactionType.transaction = child;
-          child.schema_name = transactionType?.getSchemaName();
 
           /* Make a new object to represent the parent within the TransactionType
           because setting the parent equal to the this causes an infinite loop */
@@ -107,7 +129,7 @@ export class SchATransaction extends Transaction {
    * swapped in as the main payload and the original main payload is a child
    * @returns
    */
-  updateParent(): SchATransaction {
+  getUpdatedParent(childDeleted = false): SchATransaction {
     if (!this.parent_transaction?.transaction_type_identifier) {
       throw new Error(
         `Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
@@ -115,23 +137,23 @@ export class SchATransaction extends Transaction {
     }
 
     // The parent is the new payload
-    const payload = SchATransaction.fromJSON(this.parent_transaction);
-    payload.updateChildren();
-
-    // Get the parent schema_name and, if needed, the CPD
-    const transactionType = TransactionTypeUtils.factory(this.parent_transaction.transaction_type_identifier);
-    payload.schema_name = transactionType.getSchemaName();
-    transactionType.transaction = payload;
-    if (transactionType.generatePurposeDescription) {
-      payload.contribution_purpose_descrip = transactionType.generatePurposeDescription();
-    }
+    const payload = this.parent_transaction as SchATransaction;
 
     // Attach the original payload to the parent as a child, replacing an
     // existing version if needed
-    if (this.id) {
+    if (this.id && this.parent_transaction) {
       payload.children = this.parent_transaction.children?.filter((c) => c.id !== this.id);
     }
-    payload.children?.push(this);
+    if (!childDeleted) {
+      payload.children?.push(this);
+    }
+    payload.children = payload.updateChildren();
+
+    // Update the CPD
+    if (payload?.transactionType?.generatePurposeDescription) {
+      payload.transactionType.transaction = payload;
+      payload.contribution_purpose_descrip = payload.transactionType.generatePurposeDescription();
+    }
 
     return payload;
   }

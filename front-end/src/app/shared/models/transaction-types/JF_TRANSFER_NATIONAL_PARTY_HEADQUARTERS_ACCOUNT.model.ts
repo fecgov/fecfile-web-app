@@ -16,7 +16,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchaTransac
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT
   );
   schema = schema;
-  override childTransactionTypes = [
+  override subTransactionTypes = [
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
 import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
@@ -25,9 +24,9 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
     'contribution_purpose_descrip',
     'memo_code',
     'memo_text_input',
-    'childTransaction',
+    'subTransaction',
   ];
-  override childTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
+  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
 
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
     [ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
@@ -35,16 +34,11 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.childTransactionOptions = (this.transactionType?.childTransactionTypes || []).map((type) => {
+    this.subTransactionOptions = (this.transactionType?.subTransactionTypes || []).map((type) => {
       return {
         label: LabelUtils.get(ScheduleATransactionTypeLabels, type),
         value: type,
       };
     });
-  }
-
-  override createSubTransaction(event: { value: ScheduleATransactionTypes }) {
-    this.save(NavigationDestination.CHILD, event.value);
-    this.form.get('childTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }

@@ -176,9 +176,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     transactionTypeToAdd?: ScheduleATransactionTypes
   ) {
     if (payload.transaction_type_identifier) {
+      // Reorganize the payload if this transaction type can update its parent transaction
       const transactionType = TransactionTypeUtils.factory(payload.transaction_type_identifier);
       if (transactionType.updateParentOnSave) {
-        payload = payload.updateParent();
+        payload = payload.getUpdatedParent();
       }
 
       if (payload.id) {
@@ -262,6 +263,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   createSubTransaction(event: { value: ScheduleATransactionTypes }) {
     this.save(NavigationDestination.CHILD, event.value);
-    this.form.get('childTransaction')?.reset(); // If the save fails, this clears the dropdown
+    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }

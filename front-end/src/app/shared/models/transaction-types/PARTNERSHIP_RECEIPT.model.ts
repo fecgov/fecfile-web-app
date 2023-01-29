@@ -13,7 +13,7 @@ export class PARTNERSHIP_RECEIPT extends SchaTransactionType {
   componentGroupId = 'D';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
   schema = schema;
-  override childTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_MEMO];
+  override subTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_MEMO];
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionLabelNotice =
     'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not require itemization". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';

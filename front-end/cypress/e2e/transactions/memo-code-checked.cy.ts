@@ -34,7 +34,7 @@ describe('Tests that memos have the memo_code checkbox checked', () => {
     //Step 4: Create a Joint Fundraising Transfer MEMO transaction
     const transaction = generateTransactionObject({ transaction_name: 'Joint Fundraising Transfer' });
     createTransactionSchA(transaction, false);
-    cy.get('p-dropdown[formcontrolname="childTransaction"]').click();
+    cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
     cy.contains('li', 'PAC Joint Fundraising Transfer Memo').click();
     cy.shortWait();
     cy.get('.p-confirm-dialog-accept').click();

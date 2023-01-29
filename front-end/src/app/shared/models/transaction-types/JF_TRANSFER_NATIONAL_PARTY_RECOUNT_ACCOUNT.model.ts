@@ -16,7 +16,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionT
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT
   );
   schema = schema;
-  override childTransactionTypes = [
+  override subTransactionTypes = [
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,

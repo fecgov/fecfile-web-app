@@ -17,7 +17,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionT
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT
   );
   schema = schema;
-  override childTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO];
+  override subTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO];
   override childTransactionType = TransactionTypeUtils.factory(
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO
   );
@@ -27,8 +27,8 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionT
 
   override generatePurposeDescription(): string {
     const account = 'Recount/Legal Proceedings Account';
-    const memo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    if (memo && memo.contributor_last_name) {
+    const childTransaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
+    if (childTransaction && childTransaction.contributor_last_name) {
       return account + ' (See Partnership Attribution(s) below)';
     }
     return account + ' (Partnership attributions do not require itemization)';

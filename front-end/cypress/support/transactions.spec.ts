@@ -44,7 +44,7 @@ function createSingleTransaction(transaction: Transaction, save = true) {
         const childTransaction = transaction.childTransactions[i];
         const childName = childTransaction.transaction_name;
 
-        cy.get('p-dropdown[formcontrolname="childTransaction"]').click();
+        cy.get('p-dropdown[formcontrolname="subTransaction"]').click();
         cy.contains('li', childName).click();
         if (i == 0) {
           cy.get('.p-confirm-dialog-accept').click();

@@ -56,12 +56,12 @@
           </div>
         </ng-template>
       </div>
-      <div class="grid" *ngIf="childTransactionOptions.length > 0">
+      <div class="grid" *ngIf="subTransactionOptions.length > 0">
         <div class="col-2">
           <p-dropdown
-            inputId="childTransaction"
-            [options]="childTransactionOptions"
-            formControlName="childTransaction"
+            inputId="subTransaction"
+            [options]="subTransactionOptions"
+            formControlName="subTransaction"
             [autoDisplayFirst]="false"
             (onChange)="createSubTransaction($event)"
             placeholder="Save & add a Memo"
