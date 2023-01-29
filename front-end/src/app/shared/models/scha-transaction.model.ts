@@ -96,7 +96,7 @@ export class SchATransaction extends Transaction {
       for (const child of this.children as SchATransaction[]) {
         if (child.transaction_type_identifier) {
           // Instantiate a TransactionType object in order to access the purpose description generator
-          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier) as TransactionType;
+          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier);
 
           // Prep the TransactionType by setting fields it will need when generating a purpose description
           transactionType.transaction = child;

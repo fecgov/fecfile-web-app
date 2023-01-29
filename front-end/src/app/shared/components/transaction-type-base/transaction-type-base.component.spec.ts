@@ -575,9 +575,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#onContactLookupSelect INDIVIDUAL should calculate aggregate', () => {
-    component.transactionType = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
-    ) as TransactionType;
+    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     component.transactionType.transaction = component.transactionType.getNewTransaction();
     TransactionFormUtils.onInit(
       component,
