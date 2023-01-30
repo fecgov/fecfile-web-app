@@ -87,6 +87,8 @@ describe('TransactionGroupAComponent', () => {
       schema: INDIVIDUAL_JF_TRANSFER_MEMO,
       transaction: transaction,
       isDependentChild: false,
+      updateParentOnSave: false,
+      getSchemaName: () => 'foo',
     } as TransactionType;
     fixture.detectChanges();
   });

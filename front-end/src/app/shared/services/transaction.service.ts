@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { Transaction } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
@@ -107,6 +107,17 @@ export class TransactionService implements TableListService<Transaction> {
   }
 
   public delete(transaction: Transaction): Observable<null> {
-    return this.apiService.delete<null>(`${transaction.apiEndpoint}/${transaction.id}`);
+    return this.apiService.delete<null>(`${transaction.apiEndpoint}/${transaction.id}`).pipe(
+      tap(() => {
+        if (transaction.transactionType?.updateParentOnSave && transaction.parent_transaction?.children) {
+          // Remove deleted transaction from parent's list of children
+          transaction.parent_transaction.children = transaction.parent_transaction.children.filter(
+            (child) => child.id !== transaction.id
+          );
+          const parentTransactionPayload = transaction.getUpdatedParent(true);
+          this.update(parentTransactionPayload).subscribe();
+        }
+      })
+    );
   }
 }

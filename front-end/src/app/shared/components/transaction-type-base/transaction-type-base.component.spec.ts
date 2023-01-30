@@ -57,7 +57,7 @@ const initTransactionData = {
   form_type: undefined,
   filer_committee_id_number: undefined,
   transaction_id: null,
-  transaction_type_identifier: undefined,
+  transaction_type_identifier: 'INDIVIDUAL_RECEIPT',
   contribution_purpose_descrip: undefined,
   parent_transaction_id: undefined,
   children: undefined,
@@ -76,7 +76,7 @@ const testTransaction = SchATransaction.fromJSON({
   form_type: undefined,
   filer_committee_id_number: undefined,
   transaction_id: null,
-  transaction_type_identifier: 'test',
+  transaction_type_identifier: 'INDIVIDUAL_RECEIPT',
   aggregation_group: 'GENERAL',
   contribution_amount: '202.2',
   contribution_date: '2022-02-02',
@@ -157,6 +157,8 @@ describe('TransactionTypeBaseComponent', () => {
           required: ['string'],
           properties: {},
         },
+        updateParentOnSave: false,
+        getSchemaName: () => 'foo',
       };
 
     component.form = new FormGroup({
@@ -401,6 +403,8 @@ describe('TransactionTypeBaseComponent', () => {
       schema: { properties: {} } as JsonSchema,
       getNewTransaction: () => SchATransaction.fromJSON({}),
       transaction: testTransaction3,
+      updateParentOnSave: false,
+      getSchemaName: () => 'foo',
     } as TransactionType;
     const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
@@ -430,6 +434,8 @@ describe('TransactionTypeBaseComponent', () => {
       schema: { properties: {} } as JsonSchema,
       getNewTransaction: () => SchATransaction.fromJSON({}),
       transaction: transaction,
+      updateParentOnSave: false,
+      getSchemaName: () => 'foo',
     } as TransactionType;
     const expectedRoute = '/transactions/report/999/list/edit/333';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
@@ -569,9 +575,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#onContactLookupSelect INDIVIDUAL should calculate aggregate', () => {
-    component.transactionType = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
-    ) as TransactionType;
+    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     component.transactionType.transaction = component.transactionType.getNewTransaction();
     TransactionFormUtils.onInit(
       component,
@@ -689,6 +693,8 @@ describe('TransactionTypeBaseComponent', () => {
           },
         },
       },
+      updateParentOnSave: false,
+      getSchemaName: () => 'foo',
     };
 
     component.parentOnInit();

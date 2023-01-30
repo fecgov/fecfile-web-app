@@ -4,20 +4,21 @@ import {
   AggregationGroups,
   SchATransaction,
   ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes
+  ScheduleATransactionTypes,
 } from '../scha-transaction.model';
-import {
-  getChildNavigationControls, TransactionNavigationControls
-} from '../transaction-navigation-controls.model';
+import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
 export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO extends SchaTransactionType {
   componentGroupId = 'A';
-  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO);
+  title = LabelUtils.get(
+    ScheduleATransactionTypeLabels,
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO
+  );
   schema = schema;
+  override updateParentOnSave = true;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls(
-    LabelUtils.get(ScheduleATransactionTypeLabels,
-      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT)
+    LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT)
   );
 
   override generatePurposeDescription(): string {

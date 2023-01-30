@@ -35,9 +35,11 @@ describe('TransactionService', () => {
       results: [
         SchATransaction.fromJSON({
           id: 1,
+          transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
         }),
         SchATransaction.fromJSON({
           id: 2,
+          transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
         }),
       ],
     };
@@ -55,7 +57,10 @@ describe('TransactionService', () => {
   });
 
   it('#get() should GET a record', () => {
-    const mockResponse: SchATransaction = SchATransaction.fromJSON({ id: 1 });
+    const mockResponse: SchATransaction = SchATransaction.fromJSON({
+      id: 1,
+      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+    });
 
     service.get('1').subscribe((response) => {
       expect(response).toEqual(mockResponse);
@@ -70,6 +75,7 @@ describe('TransactionService', () => {
   it('#getPreviousTransaction() should GET previous transaction', () => {
     const mockResponse: SchATransaction = SchATransaction.fromJSON({
       id: 1,
+      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       aggregation_group: AggregationGroups.GENERAL,
     });
     const mockTransactionType: TransactionType | undefined = TransactionTypeUtils.factory(
@@ -77,7 +83,10 @@ describe('TransactionService', () => {
     );
     if (mockTransactionType) {
       mockTransactionType.transaction = mockResponse;
-      mockTransactionType.transaction = SchATransaction.fromJSON({ id: 'abc' });
+      mockTransactionType.transaction = SchATransaction.fromJSON({
+        id: 'abc',
+        transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+      });
       service.getPreviousTransaction(mockTransactionType, '1', new Date()).subscribe((response) => {
         expect(response).toEqual(mockResponse);
       });
@@ -125,7 +134,10 @@ describe('TransactionService', () => {
 
   it('#delete() should DELETE a record', () => {
     const mockResponse = null;
-    const schATransaction: SchATransaction = SchATransaction.fromJSON({ id: '1' });
+    const schATransaction: SchATransaction = SchATransaction.fromJSON({
+      id: '1',
+      transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+    });
 
     service.delete(schATransaction).subscribe((response: null) => {
       expect(response).toEqual(mockResponse);

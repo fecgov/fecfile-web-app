@@ -129,7 +129,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
 }
 
 export class TransactionTypeUtils {
-  static factory(transactionTypeIdentifier: string): TransactionType | undefined {
+  static factory(transactionTypeIdentifier: string): TransactionType {
     if (
       transactionTypeClasses[transactionTypeIdentifier] === undefined ||
       transactionTypeClasses[transactionTypeIdentifier] === null
