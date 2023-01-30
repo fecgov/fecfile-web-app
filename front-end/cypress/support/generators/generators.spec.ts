@@ -368,7 +368,8 @@ export function f3xFilingFrequency(): string {
   return _.sample(['MONTHLY', 'QUARTERLY']) as string;
 }
 
-export const f3xReportCategories: object = {
+export const f3xReportCategories: any = {
+  // eslint-disable-line @typescript-eslint/no-explicit-any
   QUARTERLY: ['Non-Election Year', 'Election Year'],
   MONTHLY: ['Non-Election Year', 'Election Year'],
 };
@@ -378,7 +379,8 @@ export function f3xReportCategory(filingFrequency: string): string {
   else return `Invalid Filing Frequency: ${filingFrequency}`;
 }
 
-export const f3xReportCodes: object = {
+export const f3xReportCodes: any = {
+  // eslint-disable-line @typescript-eslint/no-explicit-any
   MONTHLY: {
     'Non-Election Year': ['M1', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'YE', '(TER)'],
     'Election Year': ['M1', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', '12G', '30G', 'YE', '(TER)'],
