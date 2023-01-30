@@ -30,7 +30,7 @@
             <app-committee-input
               [form]="form"
               [formSubmitted]="formSubmitted"
-              entityRole="CONDUIT"
+              [entityRole]="'COMMITTEE'"
               [includeFecId]="true"
             ></app-committee-input>
           </ng-container>
@@ -125,7 +125,7 @@
             [formSubmitted]="formSubmitted"
             [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType?.childTransactionType)"
             [contributionAmountReadOnly]="true"
-            [negativeAmountValueOnly]="negativeAmountValueOnly"
+            [negativeAmountValueOnly]="childNegativeAmountValueOnly"
           ></app-amount-input>
           <p-divider></p-divider>
           <h3>Additional Information</h3>
