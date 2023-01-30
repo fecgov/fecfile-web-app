@@ -39,7 +39,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   contributionPurposeDescriptionLabel = '';
   childTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
   negativeAmountValueOnly = false;
-  fieldsUsedByCPDGeneration: string[] = [];
 
   form: FormGroup = this.fb.group({});
 
@@ -78,7 +77,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           }
         });
     }
-    
+
     if (this.transactionType?.generatePurposeDescriptionLabel) {
       this.contributionPurposeDescriptionLabel = this.transactionType.generatePurposeDescriptionLabel();
     }
