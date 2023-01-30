@@ -37,8 +37,8 @@ export class SchBTransaction extends Transaction {
   beneficiary_candidate_state: string | undefined;
   beneficiary_candidate_district: string | undefined;
   conduit_name: string | undefined;
-  conduit_street1: string | undefined;
-  conduit_street2: string | undefined;
+  conduit_street_1: string | undefined;
+  conduit_street_2: string | undefined;
   conduit_city: string | undefined;
   conduit_state: string | undefined;
   conduit_zip: string | undefined;
@@ -53,6 +53,21 @@ export class SchBTransaction extends Transaction {
     return plainToClass(SchBTransaction, json);
   }
 }
+
+export enum ScheduleBTransactionGroups {
+  OPERATING_EXPENDITURES = 'OPERATING EXPENDITURES',
+  CONTRIBUTIONS_EXPENDITURES_TO_REGULAR_FILERS = 'CONTRIBUTIONS/EXPENDITURES TO REGULAR FILERS',
+  OTHER_EXPENDITURES = 'OTHER EXPENDITURES',
+  REFUND = 'REFUND',
+  FEDERAL_ELECTION_ACTIVITY_EXPENDITURES = 'FEDERAL ELECTION ACTIVITY EXPENDITURES',
+}
+
+export type ScheduleBTransactionGroupsType =
+  | ScheduleBTransactionGroups.OPERATING_EXPENDITURES
+  | ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGULAR_FILERS
+  | ScheduleBTransactionGroups.OTHER_EXPENDITURES
+  | ScheduleBTransactionGroups.REFUND
+  | ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES;
 
 export enum ScheduleBTransactionTypes {
   OPERATING_EXPENDITURE = 'OPERATING_EXPENDITURE',

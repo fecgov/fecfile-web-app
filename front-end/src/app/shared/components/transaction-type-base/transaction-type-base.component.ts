@@ -1,8 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
@@ -11,6 +10,7 @@ import {
   NavigationDestination,
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -34,6 +34,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
+  contributionPurposeDescriptionLabel = '';
+  negativeAmountValueOnly = false;
 
   form: FormGroup = this.fb.group({});
 
@@ -51,6 +53,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   ngOnInit(): void {
     this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
     this.doInit(this.form, this.validateService, this.transactionType, this.contactId$);
+    if (this.transactionType?.generatePurposeDescriptionLabel) {
+      this.contributionPurposeDescriptionLabel = this.transactionType.generatePurposeDescriptionLabel();
+    }
   }
 
   doInit(
@@ -62,6 +67,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     // Initialize validation tracking of current JSON schema and form data
     validateService.formValidatorSchema = transactionType?.schema;
     validateService.formValidatorForm = form;
+
+    // Override contact type options if present in transactionType
+    if (transactionType && transactionType.contactTypeOptions) {
+      this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, transactionType.contactTypeOptions);
+    }
 
     // Intialize form values
     if (this.isExisting(transactionType?.transaction)) {
@@ -123,6 +133,19 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         const previousAggregate = +((previous_transaction as SchATransaction)?.contribution_aggregate || 0);
         form.get('contribution_aggregate')?.setValue(+contribution_amount + previousAggregate);
       });
+
+    const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
+    if (contribution_amount_schema?.exclusiveMaximum === 0) {
+      this.negativeAmountValueOnly = true;
+      form
+        .get('contribution_amount')
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((contribution_amount) => {
+          if (typeof contribution_amount === 'number' && contribution_amount > 0) {
+            form.patchValue({ contribution_amount: -1 * contribution_amount });
+          }
+        });
+    }
   }
 
   ngOnDestroy(): void {
@@ -189,11 +212,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     let formValues = validateService.getFormValues(form, formProperties);
     if (transactionType) formValues = this.retrieveMemoText(transactionType, form, formValues);
 
-    const payload: Transaction = SchATransaction.fromJSON({
+    const payload: SchATransaction = SchATransaction.fromJSON({
       ...transactionType?.transaction,
       ...formValues,
     });
     payload.contact_id = payload.contact?.id;
+
+    if (payload.children) {
+      payload.children = payload.updateChildren();
+    }
 
     let fieldsToValidate: string[] = validateService.getSchemaProperties(transactionType?.schema);
     // Remove properties that are populated in the back-end from list of properties to validate
@@ -423,7 +450,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       );
     } else if (navigateTo === NavigationDestination.PARENT) {
       this.router.navigateByUrl(
-        `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${this.transactionType?.transaction?.parent_transaction_id}`
+        `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${this.transactionType?.transaction?.parent_transaction_object_id}`
       );
     } else {
       this.router.navigateByUrl(`/transactions/report/${this.transactionType?.transaction?.report_id}/list`);

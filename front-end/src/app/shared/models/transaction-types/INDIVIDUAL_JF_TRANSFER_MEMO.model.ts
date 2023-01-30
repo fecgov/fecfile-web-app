@@ -1,4 +1,3 @@
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
 import { hasNoContact, isNewTransaction } from 'app/shared/models/transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_JF_TRANSFER_MEMO';
@@ -15,15 +14,13 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
+import { SchaTransactionType } from './SchaTransactionType.model';
 
-export class INDIVIDUAL_JF_TRANSFER_MEMO implements TransactionType {
-  scheduleId = 'A';
+export class INDIVIDUAL_JF_TRANSFER_MEMO extends SchaTransactionType {
   componentGroupId = 'A';
-  isDependentChild = false;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO);
   schema = schema;
-  transaction?: SchATransaction;
-  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
+  override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
@@ -46,7 +43,7 @@ export class INDIVIDUAL_JF_TRANSFER_MEMO implements TransactionType {
     [SAVE_LIST_CONTROL]
   );
 
-  generatePurposeDescription(): string {
+  override generatePurposeDescription(): string {
     return `JF Memo: ${(this.transaction?.parent_transaction as SchATransaction).contributor_organization_name}`;
   }
 

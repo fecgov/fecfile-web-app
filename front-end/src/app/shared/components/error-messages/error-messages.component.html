@@ -6,6 +6,8 @@
   }}</small>
   <small class="p-error" *ngIf="control?.hasError('min')">{{ minErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('max')">{{ maxErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('exclusiveMax')">{{ exclusiveMaxErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('exclusiveMin')">{{ exclusiveMinErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('invaliddate')">{{ invalidDateErrorMessage }}</small>
   <small
     class="p-error"
@@ -19,6 +21,8 @@
       !control?.hasError('maxlength') &&
       !control?.hasError('min') &&
       !control?.hasError('max') &&
+      !control?.hasError('exclusiveMax') &&
+      !control?.hasError('exclusiveMin') &&
       !control?.hasError('invaliddate') &&
       control?.hasError('pattern')
     "

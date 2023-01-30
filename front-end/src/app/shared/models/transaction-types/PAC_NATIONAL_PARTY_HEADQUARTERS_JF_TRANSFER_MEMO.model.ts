@@ -1,36 +1,24 @@
-import { TransactionType } from '../../interfaces/transaction-type.interface';
-import {
-  SchATransaction,
-  ScheduleATransactionTypes,
-  ScheduleATransactionTypeLabels,
-  AggregationGroups,
-} from '../scha-transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO';
 import {
-  CANCEL_CONTROL,
-  SAVE_ANOTHER_CONTROL,
-  SAVE_LIST_CONTROL,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
+  AggregationGroups,
+  SchATransaction,
+  ScheduleATransactionTypeLabels,
+  ScheduleATransactionTypes,
+} from '../scha-transaction.model';
+import { SchaTransactionType } from './SchaTransactionType.model';
+import { TransactionNavigationControls, JF_TRANSFER_MEMO_CONTROLS } from '../transaction-navigation-controls.model';
 
-export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO implements TransactionType {
-  scheduleId = 'A';
+export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchaTransactionType {
   componentGroupId = 'F';
-  isDependentChild = false;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
   );
   schema = schema;
-  transaction?: SchATransaction;
-  navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
-    [],
-    [CANCEL_CONTROL],
-    [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
-  );
+  override navigationControls: TransactionNavigationControls = JF_TRANSFER_MEMO_CONTROLS;
 
-  generatePurposeDescription(): string {
+  override generatePurposeDescription(): string {
     return `Headquarters Buildings Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction).contributor_organization_name
     }`;

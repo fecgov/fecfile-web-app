@@ -30,6 +30,7 @@ describe('Tests the radio buttons and fields related to the various filing frequ
       for (const timePeriod of timePeriods) {
         it(`--->       ${timePeriod}`, () => {
           //Step 1: Navigate to reports page
+          cy.login();
           cy.visit('/dashboard');
           cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
 

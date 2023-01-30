@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { AggregationGroups, SchATransaction } from 'app/shared/models/scha-transaction.model';
@@ -159,7 +159,7 @@ describe('TransactionGroupBComponent', () => {
     });
     component.form.patchValue({ ...testTran });
     component.save(NavigationDestination.LIST);
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
   });
@@ -179,7 +179,7 @@ describe('TransactionGroupBComponent', () => {
     }
     component.form.patchValue({ ...transaction });
     component.save(NavigationDestination.ANOTHER);
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/10/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/10/`);
     expect(req.request.method).toEqual('PUT');
     httpTestingController.verify();
   });
@@ -217,7 +217,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...testTran });
 
     component.save(NavigationDestination.LIST);
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
   });
@@ -253,7 +253,7 @@ describe('TransactionGroupBComponent', () => {
     });
     component.form.patchValue({ ...testTran });
     component.save(NavigationDestination.LIST);
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/sch-a-transactions/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
   });
@@ -262,7 +262,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     component.save(NavigationDestination.LIST);
     expect(component.form.invalid).toBe(true);
-    httpTestingController.expectNone(`${environment.apiUrl}/sch-a-transactions/1/`);
+    httpTestingController.expectNone(`${environment.apiUrl}/transactions/schedule-a/1/`);
     httpTestingController.verify();
   });
 
@@ -295,7 +295,7 @@ describe('TransactionGroupBComponent', () => {
     component.form.patchValue({ ...testTran });
     component.save(NavigationDestination.LIST);
     expect(component.form.invalid).toBe(true);
-    httpTestingController.expectNone(`${environment.apiUrl}/sch-a-transactions/1/`);
+    httpTestingController.expectNone(`${environment.apiUrl}/transactions/schedule-a/1/`);
     httpTestingController.verify();
   });
 });

@@ -2,6 +2,8 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
+import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { TransactionType } from '../models/transaction-types/transaction-type.model';
 
 export class SchATransaction extends Transaction {
   back_reference_tran_id_number: string | undefined;
@@ -39,8 +41,8 @@ export class SchATransaction extends Transaction {
   donor_candidate_state: string | undefined;
   donor_candidate_district: string | undefined;
   conduit_name: string | undefined;
-  conduit_street1: string | undefined;
-  conduit_street2: string | undefined;
+  conduit_street_1: string | undefined;
+  conduit_street_2: string | undefined;
   conduit_city: string | undefined;
   conduit_state: string | undefined;
   conduit_zip: string | undefined;
@@ -48,11 +50,55 @@ export class SchATransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
-  override apiEndpoint = '/sch-a-transactions';
+  override apiEndpoint = '/transactions/schedule-a';
 
   // prettier-ignore
   static fromJSON(json: any): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(SchATransaction, json);
+  }
+
+  /**
+   * updateChildren()
+   * @returns
+   *    An array of Transaction objects whose contribution_purpose_descriptions
+   *    have been re-generated to account for changes to their parent
+   *
+   */
+  updateChildren(): Transaction[] {
+    const outChildren: Transaction[] = [];
+
+    if (this.children) {
+      /* We treat the parent's children as SchATransaction objects in order
+      to access fields exclusive to the SchATransaction model */
+      for (const child of this.children as SchATransaction[]) {
+        if (child.transaction_type_identifier) {
+          // Instantiate a TransactionType object in order to access the purpose description generator
+          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier) as TransactionType;
+
+          // Prep the TransactionType by setting fields it will need when generating a purpose description
+          transactionType.transaction = child;
+
+          /* Make a new object to represent the parent within the TransactionType
+          because setting the parent equal to the this causes an infinite loop */
+          if (transactionType.transaction.parent_transaction)
+            transactionType.transaction.parent_transaction = {
+              id: this.id,
+              contributor_organization_name: this.contributor_organization_name,
+            } as SchATransaction;
+
+          // Modify the this to reflect the changes to child transactions
+          if (transactionType.generatePurposeDescription) {
+            const newDescrip = transactionType.generatePurposeDescription();
+            child.contribution_purpose_descrip = newDescrip;
+          }
+        }
+
+        // Always add the child into the array or else it will be lost
+        outChildren.push(child);
+      }
+    }
+
+    return outChildren;
   }
 }
 
@@ -78,22 +124,22 @@ export enum ScheduleATransactionTypes {
   PARTNERSHIP_RECEIPT = 'PARTN_REC',
   REATTRIBUTION = 'REATT_FROM',
   IN_KIND_RECEIPT = 'IK_REC',
-  RETURNED_BOUNCED_RECEIPT_INDIVIDUAL = 'RET_REC',
+  RETURNED_BOUNCED_RECEIPT_INDIVIDUAL = 'RETURN_RECEIPT',
   EARMARK_RECEIPT = 'EARMARK_RECEIPT',
   CONDUIT_EARMARK_DEPOSITED = 'CONDUIT_EARMARK_DEPOSITED',
   CONDUIT_EARMARK_UNDEPOSITED = 'CONDUIT_EARMARK_UNDEPOSITED',
-  UNREGISTERED_RECEIPT_FROM_PERSON = 'PAC_NON_FED_REC',
-  UNREGISTERED_RECEIPT_FROM_PERSON_RETURNED_BOUNCED_RECEIPT = 'PAC_NON_FED_RET',
+  UNREGISTERED_RECEIPT_FROM_PERSON = 'UNREGISTERED_RECEIPT_FROM_PERSON',
+  UNREGISTERED_RECEIPT_FROM_PERSON_RETURN = 'UNREGISTERED_RECEIPT_FROM_PERSON_RETURN',
   // Contributions from Registered Filers
   PARTY_RECEIPT = 'PARTY_RECEIPT',
   PARTY_IN_KIND = 'PARTY_IK_REC',
-  RETURNED_BOUNCED_RECEIPT_PARTY = 'PARTY_RET',
+  PARTY_RETURN = 'PARTY_RETURN',
   PAC_RECEIPT = 'PAC_RECEIPT',
   PAC_IN_KIND = 'PAC_IK_REC',
   PAC_EARMARK_RECEIPT = 'PAC_EAR_REC',
   PAC_CONDUIT_EARMARK_DEPOSITED = 'PAC_CONDUIT_EARMARK_DEPOSITED',
   PAC_CONDUIT_EARMARK_UNDEPOSITED = 'PAC_CONDUIT_EARMARK_UNDEPOSITED',
-  RETURNED_BOUNCED_RECEIPT_PAC = 'PAC_RET',
+  PAC_RETURN = 'PAC_RETURN',
   // Transfers
   TRANSFER = 'TRANSFER',
   JOINT_FUNDRAISING_TRANSFER = 'JOINT_FUNDRAISING_TRANSFER',
@@ -115,8 +161,8 @@ export enum ScheduleATransactionTypes {
   PARTY_RECOUNT_RECEIPT = 'PARTY_RECOUNT_RECEIPT',
   PAC_RECOUNT_RECEIPT = 'PAC_RECOUNT_RECEIPT',
   TRIBAL_RECOUNT_RECEIPT = 'TRIBAL_RECOUNT_RECEIPT',
+  PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT',
-  PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PARTY_NP_RECNT_ACC',
   PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
@@ -156,25 +202,25 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PARTNERSHIP_RECEIPT, 'Partnership Receipt'],
   [ScheduleATransactionTypes.REATTRIBUTION, 'Reattribution'],
   [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-Kind Receipt'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt (Individual)'],
+  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.EARMARK_RECEIPT, 'Earmark Receipt'],
   [ScheduleATransactionTypes.CONDUIT_EARMARK_DEPOSITED, 'Conduit Earmark (Deposited)'],
   [ScheduleATransactionTypes.CONDUIT_EARMARK_UNDEPOSITED, 'Conduit Earmark (Undeposited)'],
   [ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON, 'Unregistered Receipt from Person'],
   [
-    ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURNED_BOUNCED_RECEIPT,
+    ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
     'Unregistered Receipt from Person - Returned/Bounced Receipt',
   ],
   // Contributions from Registered Filers
   [ScheduleATransactionTypes.PARTY_RECEIPT, 'Party Receipt'],
   [ScheduleATransactionTypes.PARTY_IN_KIND, 'Party In-Kind'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PARTY, 'Returned/Bounced Receipt (Party)'],
+  [ScheduleATransactionTypes.PARTY_RETURN, 'Party Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.PAC_RECEIPT, 'PAC Receipt'],
   [ScheduleATransactionTypes.PAC_IN_KIND, 'PAC In-Kind'],
   [ScheduleATransactionTypes.PAC_EARMARK_RECEIPT, 'PAC Earmark Receipt'],
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED, 'PAC Conduit Earmark (Deposited)'],
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED, 'PAC Conduit Earmark (Undeposited)'],
-  [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_PAC, 'Returned/Bounced Receipt (PAC)'],
+  [ScheduleATransactionTypes.PAC_RETURN, 'PAC Returned/Bounced Receipt'],
   // Transfers
   [ScheduleATransactionTypes.TRANSFER, 'Transfer'],
   [ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER, 'Joint Fundraising Transfer'],

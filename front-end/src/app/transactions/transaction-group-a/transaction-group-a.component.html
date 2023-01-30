@@ -31,6 +31,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType)"
+        [negativeAmountValueOnly]="negativeAmountValueOnly"
       ></app-amount-input>
       <p-divider></p-divider>
       <h3>Additional Information</h3>
@@ -38,6 +39,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
+        [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
       ></app-additional-info-input>
       <div class="grid">
         <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls().inlineControls">

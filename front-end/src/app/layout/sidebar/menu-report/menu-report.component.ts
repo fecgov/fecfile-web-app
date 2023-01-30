@@ -36,7 +36,8 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   urlMatch: RegExp[] = [
     /^\/reports\/f3x\/create\/cash-on-hand\/[\da-z-]+/, // Enter a transaction group
     /^\/transactions\/report\/[\da-z-]+\/list/, // Enter a transaction group
-    /^\/transactions\/report\/[\da-z-]+\/create/, // Enter a transaction group
+    /^\/transactions\/report\/[\da-z-]+\/select/, // Select a transaction category
+    /^\/transactions\/report\/[\da-z-]+\/create/, // Enter a transaction type
     /^\/reports\/f3x\/summary\/[\da-z-]+/, // Review a report group
     /^\/reports\/f3x\/detailed-summary\/[\da-z-]+/, // Review a report group
     /^\/reports\/f3x\/web-print\/[\da-z-]+/, // Review a report group
@@ -102,10 +103,14 @@ export class MenuReportComponent implements OnInit, OnDestroy {
               },
               {
                 label: 'Add a receipt',
-                routerLink: [`/transactions/report/${this.currentReportId}/create`],
+                routerLink: [`/transactions/report/${this.currentReportId}/select/receipt`],
                 visible: this.reportIsEditableFlag,
               },
-              { label: 'Add a disbursements', styleClass: 'menu-item-disabled' },
+              {
+                label: 'Add a disbursement',
+                routerLink: [`/transactions/report/${this.currentReportId}/select/disbursement`],
+                visible: this.reportIsEditableFlag,
+              },
               { label: 'Add loans and debts', styleClass: 'menu-item-disabled' },
               { label: 'Add other transactions', styleClass: 'menu-item-disabled' },
             ],

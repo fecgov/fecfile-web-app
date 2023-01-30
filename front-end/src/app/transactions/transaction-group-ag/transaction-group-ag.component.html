@@ -41,6 +41,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType)"
+            [negativeAmountValueOnly]="negativeAmountValueOnly"
           ></app-amount-input>
           <p-divider></p-divider>
           <h3>Additional Information</h3>
@@ -48,6 +49,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
+            [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
           ></app-additional-info-input>
           <div class="grid" style="flex-direction: row-reverse">
             <p style="font-style: italic">This type of receipt requires a memo transaction</p>
@@ -112,6 +114,7 @@
             [formSubmitted]="formSubmitted"
             [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType?.childTransactionType)"
             [contributionAmountReadOnly]="true"
+            [negativeAmountValueOnly]="negativeAmountValueOnly"
           ></app-amount-input>
           <p-divider></p-divider>
           <h3>Additional Information</h3>
@@ -119,6 +122,7 @@
             [form]="childForm"
             [formSubmitted]="formSubmitted"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
+            [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
           ></app-additional-info-input>
         </ng-container>
       </form>

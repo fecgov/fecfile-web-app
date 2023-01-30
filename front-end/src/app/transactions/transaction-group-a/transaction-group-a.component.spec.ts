@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/interfaces/transaction-type.interface';
+import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
@@ -100,7 +100,7 @@ describe('TransactionGroupAComponent', () => {
     component.save(NavigationDestination.LIST);
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
-      `${environment.apiUrl}/sch-a-transactions/1/?schema=INDIVIDUAL_JF_TRANSFER_MEMO&fields_to_validate=`
+      `${environment.apiUrl}/transactions/schedule-a/1/?schema=INDIVIDUAL_JF_TRANSFER_MEMO&fields_to_validate=`
     );
     httpTestingController.verify();
   });
