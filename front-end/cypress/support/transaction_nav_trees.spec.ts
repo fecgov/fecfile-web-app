@@ -49,9 +49,9 @@ export type SchATransactionName =
   | 'Partnership Receipt'
   | 'PAC Returned/Bounced Receipt'
   | 'Party Returned/Bounced Receipt'
-  | 'Earmark Receipt for Recount Account (Contribution)'
-  | 'Earmark Receipt for Convention Account (Contribution)'
-  | 'Earmark Receipt for Headquarters Account (Contribution)';
+  | 'Earmark Receipt for Recount/Legal Proceedings Account (Contribution)'
+  | 'Earmark Receipt for Pres. Nominating Convention Account (Contribution)'
+  | 'Earmark Receipt for Headquarters Buildings Account (Contribution)';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -1010,7 +1010,7 @@ const earmarkHeadquartersReceiptStepOne: ChildTransactionForm = {
   transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   ...entityIndividual,
-  childOf: 'Earmark Receipt for Headquarters Account (Contribution)',
+  childOf: 'Earmark Receipt for Headquarters Buildings Account (Contribution)',
   fields: {
     ...contributionFields,
     ...memoFields,
@@ -1021,7 +1021,7 @@ const earmarkHeadquartersReceiptStepTwo: ChildTransactionForm = {
   transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   ...entityIndvOrComm,
-  childOf: 'Earmark Receipt for Headquarters Account (Contribution)',
+  childOf: 'Earmark Receipt for Headquarters Buildings Account (Contribution)',
   fields: {
     contributionDate: TransactionFields['contributionDate'],
     ...memoFields,
@@ -1029,7 +1029,7 @@ const earmarkHeadquartersReceiptStepTwo: ChildTransactionForm = {
 };
 
 const earmarkHeadquartersReceipt: PairedTransactionForm = {
-  transaction_name: 'Earmark Receipt for Headquarters Account (Contribution)',
+  transaction_name: 'Earmark Receipt for Headquarters Buildings Account (Contribution)',
   transaction_category: 'OTHER',
   transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
@@ -1042,7 +1042,7 @@ const earmarkConventionReceiptStepOne: ChildTransactionForm = {
   transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
   ...entityIndividual,
-  childOf: 'Earmark Receipt for Convention Account (Contribution)',
+  childOf: 'Earmark Receipt for Pres. Nominating Convention Account (Contribution)',
   fields: {
     ...contributionFields,
     ...memoFields,
@@ -1053,7 +1053,7 @@ const earmarkConventionReceiptStepTwo: ChildTransactionForm = {
   transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
   ...entityIndvOrComm,
-  childOf: 'Earmark Receipt for Convention Account (Contribution)',
+  childOf: 'Earmark Receipt for Pres. Nominating Convention Account (Contribution)',
   fields: {
     contributionDate: TransactionFields['contributionDate'],
     ...memoFields,
@@ -1061,7 +1061,7 @@ const earmarkConventionReceiptStepTwo: ChildTransactionForm = {
 };
 
 const earmarkConventionReceipt: PairedTransactionForm = {
-  transaction_name: 'Earmark Receipt for Convention Account (Contribution)',
+  transaction_name: 'Earmark Receipt for Pres. Nominating Convention Account (Contribution)',
   transaction_category: 'OTHER',
   transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
@@ -1074,7 +1074,7 @@ const earmarkRecountReceiptStepOne: ChildTransactionForm = {
   transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityIndividual,
-  childOf: 'Earmark Receipt for Recount Account (Contribution)',
+  childOf: 'Earmark Receipt for Recount/Legal Proceedings Account (Contribution)',
   fields: {
     ...contributionFields,
     ...memoFields,
@@ -1085,7 +1085,7 @@ const earmarkRecountReceiptStepTwo: ChildTransactionForm = {
   transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityIndvOrComm,
-  childOf: 'Earmark Receipt for Recount Account (Contribution)',
+  childOf: 'Earmark Receipt for Recount/Legal Proceedings Account (Contribution)',
   fields: {
     contributionDate: TransactionFields['contributionDate'],
     ...memoFields,
@@ -1093,7 +1093,7 @@ const earmarkRecountReceiptStepTwo: ChildTransactionForm = {
 };
 
 const earmarkRecountReceipt: PairedTransactionForm = {
-  transaction_name: 'Earmark Receipt for Recount Account (Contribution)',
+  transaction_name: 'Earmark Receipt for Recount/Legal Proceedings Account (Contribution)',
   transaction_category: 'OTHER',
   transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
@@ -1164,9 +1164,9 @@ export const schedANavTree: TransactionNavTree = {
     'Party National Party Pres. Nominating Convention Account': partyNationalPartyConventionAccount,
     'Tribal National Party Recount/Legal Proceedings Account': tribalNationalPartyRecountAccount,
     'Partnership National Party Recount/Legal Proceedings Account': partnershipNationalPartyRecountAccount,
-    'Earmark Receipt for Recount Account (Contribution)': earmarkRecountReceipt,
-    'Earmark Receipt for Convention Account (Contribution)': earmarkConventionReceipt,
-    'Earmark Receipt for Headquarters Account (Contribution)': earmarkHeadquartersReceipt,
+    'Earmark Receipt for Recount/Legal Proceedings Account (Contribution)': earmarkRecountReceipt,
+    'Earmark Receipt for Pres. Nominating Convention Account (Contribution)': earmarkConventionReceipt,
+    'Earmark Receipt for Headquarters Buildings Account (Contribution)': earmarkHeadquartersReceipt,
   },
 };
 
