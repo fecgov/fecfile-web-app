@@ -78,7 +78,7 @@ export type ChildTransactionName =
   | 'Earmark Memo for Convention Account (Contribution)'
   | 'Earmark Memo for Headquarters Account (Contribution)';
 
-export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG' | 'FG' | 'GG';
+export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG' | 'FG';
 
 export type AggregationGroup =
   | 'GENERAL'

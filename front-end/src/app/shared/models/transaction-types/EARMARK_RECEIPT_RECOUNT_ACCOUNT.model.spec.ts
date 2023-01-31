@@ -40,6 +40,6 @@ describe('EARMARK_RECEIPT_RECOUNT_ACCOUNT', () => {
 
     transactionType.childTransactionType = childTransactionType;
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Recount/Legal Proceedings Account - Earmarked through Joe Smith');
+    expect(descrip).toBe('Recount/Legal Proceedings Account - Earmarked Through Joe Smith');
   });
 });

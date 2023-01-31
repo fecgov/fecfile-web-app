@@ -31,7 +31,7 @@ export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchaTransactionType {
 
   override generatePurposeDescription(): string {
     const subTransaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    let conduit = '';
+    let conduit = subTransaction?.contributor_organization_name || '';
     if (
       subTransaction?.entity_type === ContactTypes.INDIVIDUAL &&
       subTransaction?.contributor_first_name &&
@@ -40,7 +40,7 @@ export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchaTransactionType {
       conduit = `${subTransaction.contributor_first_name || ''} ${subTransaction.contributor_last_name || ''}`;
     }
     if (conduit) {
-      return `Recount/Legal Proceedings Account - Earmarked through ${conduit}`;
+      return `Recount/Legal Proceedings Account - Earmarked Through ${conduit}`;
     }
     return '';
   }

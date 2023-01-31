@@ -40,6 +40,6 @@ describe('EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT', () => {
 
     transactionType.childTransactionType = childTransactionType;
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Headquarters Buildings Account - Earmarked through Joe Smith');
+    expect(descrip).toBe('Headquarters Buildings Account - Earmarked Through Joe Smith');
   });
 });

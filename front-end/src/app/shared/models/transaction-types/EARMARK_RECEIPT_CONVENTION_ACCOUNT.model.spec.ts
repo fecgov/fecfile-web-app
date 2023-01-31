@@ -40,6 +40,6 @@ describe('EARMARK_RECEIPT_CONVENTION_ACCOUNT', () => {
 
     transactionType.childTransactionType = childTransactionType;
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Pres. Nominating Convention Account - Earmarked through Joe Smith');
+    expect(descrip).toBe('Pres. Nominating Convention Account - Earmarked Through Joe Smith');
   });
 });
