@@ -16,7 +16,7 @@ import {
 import { SchaTransactionType } from './SchaTransactionType.model';
 
 export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchaTransactionType {
-  componentGroupId = 'GG';
+  componentGroupId = 'AG';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION
@@ -31,7 +31,7 @@ export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchaTransactionType {
 
   override generatePurposeDescription(): string {
     const subTransaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    let conduit = subTransaction?.contributor_organization_name || '';
+    let conduit = '';
     if (
       subTransaction?.entity_type === ContactTypes.INDIVIDUAL &&
       subTransaction?.contributor_first_name &&

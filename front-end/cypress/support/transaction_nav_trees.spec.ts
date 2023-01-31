@@ -1007,9 +1007,9 @@ const partyReturn: TransactionForm = {
 
 const earmarkHeadquartersReceiptStepOne: ChildTransactionForm = {
   transaction_name: 'Earmark Memo for Headquarters Account (Contribution)',
-  transaction_group: 'GG',
+  transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
-  ...entityIndvOrComm,
+  ...entityIndividual,
   childOf: 'Earmark Receipt for Headquarters Account (Contribution)',
   fields: {
     ...contributionFields,
@@ -1018,7 +1018,7 @@ const earmarkHeadquartersReceiptStepOne: ChildTransactionForm = {
 };
 const earmarkHeadquartersReceiptStepTwo: ChildTransactionForm = {
   transaction_name: 'Earmark Memo for Headquarters Account (Contribution)',
-  transaction_group: 'GG',
+  transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   ...entityIndvOrComm,
   childOf: 'Earmark Receipt for Headquarters Account (Contribution)',
@@ -1031,7 +1031,7 @@ const earmarkHeadquartersReceiptStepTwo: ChildTransactionForm = {
 const earmarkHeadquartersReceipt: PairedTransactionForm = {
   transaction_name: 'Earmark Receipt for Headquarters Account (Contribution)',
   transaction_category: 'OTHER',
-  transaction_group: 'GG',
+  transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   transactionA: earmarkHeadquartersReceiptStepOne,
   transactionB: earmarkHeadquartersReceiptStepTwo,
@@ -1039,9 +1039,9 @@ const earmarkHeadquartersReceipt: PairedTransactionForm = {
 
 const earmarkConventionReceiptStepOne: ChildTransactionForm = {
   transaction_name: 'Earmark Memo for Convention Account (Contribution)',
-  transaction_group: 'GG',
+  transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
-  ...entityIndvOrComm,
+  ...entityIndividual,
   childOf: 'Earmark Receipt for Convention Account (Contribution)',
   fields: {
     ...contributionFields,
@@ -1050,7 +1050,7 @@ const earmarkConventionReceiptStepOne: ChildTransactionForm = {
 };
 const earmarkConventionReceiptStepTwo: ChildTransactionForm = {
   transaction_name: 'Earmark Memo for Convention Account (Contribution)',
-  transaction_group: 'GG',
+  transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
   ...entityIndvOrComm,
   childOf: 'Earmark Receipt for Convention Account (Contribution)',
@@ -1063,7 +1063,7 @@ const earmarkConventionReceiptStepTwo: ChildTransactionForm = {
 const earmarkConventionReceipt: PairedTransactionForm = {
   transaction_name: 'Earmark Receipt for Convention Account (Contribution)',
   transaction_category: 'OTHER',
-  transaction_group: 'GG',
+  transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
   transactionA: earmarkConventionReceiptStepOne,
   transactionB: earmarkConventionReceiptStepTwo,
@@ -1071,9 +1071,9 @@ const earmarkConventionReceipt: PairedTransactionForm = {
 
 const earmarkRecountReceiptStepOne: ChildTransactionForm = {
   transaction_name: 'Earmark Memo for Recount Account (Contribution)',
-  transaction_group: 'GG',
+  transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
-  ...entityIndvOrComm,
+  ...entityIndividual,
   childOf: 'Earmark Receipt for Recount Account (Contribution)',
   fields: {
     ...contributionFields,
@@ -1082,7 +1082,7 @@ const earmarkRecountReceiptStepOne: ChildTransactionForm = {
 };
 const earmarkRecountReceiptStepTwo: ChildTransactionForm = {
   transaction_name: 'Earmark Memo for Recount Account (Contribution)',
-  transaction_group: 'GG',
+  transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   ...entityIndvOrComm,
   childOf: 'Earmark Receipt for Recount Account (Contribution)',
@@ -1095,7 +1095,7 @@ const earmarkRecountReceiptStepTwo: ChildTransactionForm = {
 const earmarkRecountReceipt: PairedTransactionForm = {
   transaction_name: 'Earmark Receipt for Recount Account (Contribution)',
   transaction_category: 'OTHER',
-  transaction_group: 'GG',
+  transaction_group: 'AG',
   aggregation_group: 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
   transactionA: earmarkRecountReceiptStepOne,
   transactionB: earmarkRecountReceiptStepTwo,

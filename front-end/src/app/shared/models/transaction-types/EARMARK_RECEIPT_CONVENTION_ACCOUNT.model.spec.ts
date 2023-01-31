@@ -14,7 +14,7 @@ describe('EARMARK_RECEIPT_CONVENTION_ACCOUNT', () => {
     expect(transactionType).toBeTruthy();
     if (transactionType) {
       expect(transactionType.scheduleId).toBe('A');
-      expect(transactionType.componentGroupId).toBe('GG');
+      expect(transactionType.componentGroupId).toBe('AG');
     }
   });
 
