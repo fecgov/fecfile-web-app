@@ -399,19 +399,28 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
-    'Earmark Receipt for Recount Account (Contribution)',
+    'Earmark Receipt for Recount/Legal Proceedings Account (Contribution)',
   ],
   [
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
-    'Earmark Receipt for Convention Account (Contribution)',
+    'Earmark Receipt for Pres. Nominating Convention Account (Contribution)',
   ],
   [
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
-    'Earmark Receipt for Headquarters Account (Contribution)',
+    'Earmark Receipt for Headquarters Buildings Account (Contribution)',
   ],
-  [ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT, 'Earmark Memo for Recount Account (Contribution)'],
-  [ScheduleATransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT, 'Earmark Memo for Convention Account (Contribution)'],
-  [ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT, 'Earmark Memo for Headquarters Account (Contribution)'],
+  [
+    ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT,
+    'Earmark Memo for Recount/Legal Proceedings Account (Contribution)',
+  ],
+  [
+    ScheduleATransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT,
+    'Earmark Memo for Pres. Nominating Convention Account (Contribution)',
+  ],
+  [
+    ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
+    'Earmark Memo for Headquarters Buildings Account (Contribution)',
+  ],
   [
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'Partnership National Party Recount/Legal Proceedings Account',
