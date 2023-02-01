@@ -160,7 +160,7 @@ export function overwrite(prevSubject: any, stringVal: string | number) {
 export function dropdownSetValue(dropdown: string, value: string, wait: boolean = true) {
   cy.get(dropdown).click();
   cy.contains('p-dropdownitem', value).should('be.visible');
-  cy.contains('p-dropdownitem', value).click();
+  cy.contains('p-dropdownitem', value).click({ scrollBehavior: 'top' });
   if (wait) {
     cy.shortWait();
   }
