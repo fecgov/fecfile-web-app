@@ -159,6 +159,7 @@ describe('TransactionTypeBaseComponent', () => {
         },
         updateParentOnSave: false,
         getSchemaName: () => 'foo',
+        generatePurposeDescription: () => 'bar',
       };
 
     component.form = new FormGroup({
@@ -405,6 +406,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction: testTransaction3,
       updateParentOnSave: false,
       getSchemaName: () => 'foo',
+      generatePurposeDescription: () => 'bar',
     } as TransactionType;
     const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
@@ -436,6 +438,7 @@ describe('TransactionTypeBaseComponent', () => {
       transaction: transaction,
       updateParentOnSave: false,
       getSchemaName: () => 'foo',
+      generatePurposeDescription: () => 'bar',
     } as TransactionType;
     const expectedRoute = '/transactions/report/999/list/edit/333';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
@@ -695,6 +698,7 @@ describe('TransactionTypeBaseComponent', () => {
       },
       updateParentOnSave: false,
       getSchemaName: () => 'foo',
+      generatePurposeDescription: () => 'bar',
     };
 
     component.parentOnInit();
