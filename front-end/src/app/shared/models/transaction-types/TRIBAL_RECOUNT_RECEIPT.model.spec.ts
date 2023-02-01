@@ -20,7 +20,7 @@ describe('TRIBAL_RECOUNT_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT);
   });
 
-  it('#purposeDescriptionGenerator() should return constant', () => {
+  it('#generatePurposeDescription() should return constant', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Recount Account');
   });

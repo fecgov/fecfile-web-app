@@ -20,7 +20,7 @@ describe('UNREGISTERED_RECEIPT_FROM_PERSON', () => {
     expect(txn.form_type).toBe('SA11AI');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON);
   });
-  it('#purposeDescriptionGenerator() should not be defined', () => {
+  it('#generatePurposeDescription() should not be defined', () => {
     expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
   });
 });

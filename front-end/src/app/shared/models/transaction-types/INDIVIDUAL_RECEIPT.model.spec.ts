@@ -21,7 +21,7 @@ describe('INDIVIDUAL_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
   });
 
-  it('#purposeDescriptionGenerator() should not be defined', () => {
+  it('#generatePurposeDescription() should not be defined', () => {
     expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
   });
 });

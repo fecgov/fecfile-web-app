@@ -20,7 +20,7 @@ describe('PAC_RECEIPT', () => {
     expect(txn.form_type).toBe('SA11C');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_RECEIPT);
   });
-  it('#purposeDescriptionGenerator() should not be defined', () => {
+  it('#generatePurposeDescription() should not be defined', () => {
     expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
   });
 });

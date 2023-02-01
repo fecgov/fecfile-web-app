@@ -20,7 +20,7 @@ describe('PARTNERSHIP_MEMO', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_MEMO);
   });
 
-  it('#purposeDescriptionGenerator() should generate a string', () => {
+  it('#generatePurposeDescription() should generate a string', () => {
     transactionType.transaction = transactionType.getNewTransaction();
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Partnership Attribution');

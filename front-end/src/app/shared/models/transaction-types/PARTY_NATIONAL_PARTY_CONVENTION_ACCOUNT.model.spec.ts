@@ -20,7 +20,7 @@ describe('PARTY_NATIONAL_PARTY_CONVENTION_BUILDINGS_ACCOUNT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT);
   });
 
-  it('#purposeDescriptionGenerator() should generate a string', () => {
+  it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Pres. Nominating Convention Account');
   });

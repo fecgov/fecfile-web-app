@@ -22,12 +22,12 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT);
   });
 
-  it('#purposeDescriptionGenerator() should generate expected retval', () => {
+  it('#generatePurposeDescription() should generate expected retval', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Recount/Legal Proceedings Account (Partnership attributions do not require itemization)');
   });
 
-  it('#purposeDescriptionGenerator() should generate a string', () => {
+  it('#generatePurposeDescription() should generate a string', () => {
     transactionType.transaction = transactionType.getNewTransaction();
     let descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Recount/Legal Proceedings Account (Partnership attributions do not require itemization)');

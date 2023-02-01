@@ -24,12 +24,12 @@ describe('EARMARK_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_RECEIPT);
   });
 
-  it('#purposeDescriptionGenerator() should generate empty string', () => {
+  it('#generatePurposeDescription() should generate empty string', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('');
   });
 
-  it('#purposeDescriptionGenerator() should reflect child', () => {
+  it('#generatePurposeDescription() should reflect child', () => {
     const childTransactionType: EARMARK_MEMO = new EARMARK_MEMO();
     childTransactionType.transaction = childTransactionType.getNewTransaction();
     childTransactionType.transaction.entity_type = ContactTypes.INDIVIDUAL;

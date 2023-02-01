@@ -20,7 +20,7 @@ describe('EARMARK_MEMO_HEADQUARTERS_ACCOUNT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT);
   });
 
-  it('#purposeDescriptionGenerator() should generate a string', () => {
+  it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Total earmarked through conduit.');
   });

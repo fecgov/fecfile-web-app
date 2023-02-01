@@ -20,7 +20,7 @@ describe('TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT);
   });
 
-  it('#purposeDescriptionGenerator() should generate a string', () => {
+  it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Recount/Legal Proceedings Account');
   });

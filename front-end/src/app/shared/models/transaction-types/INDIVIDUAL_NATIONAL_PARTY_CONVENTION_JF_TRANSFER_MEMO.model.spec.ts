@@ -22,7 +22,7 @@ describe('INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
     );
   });
 
-  it('#purposeDescriptionGenerator() should generate a string', () => {
+  it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe(
       `Pres. Nominating Convention Account JF Memo: ${

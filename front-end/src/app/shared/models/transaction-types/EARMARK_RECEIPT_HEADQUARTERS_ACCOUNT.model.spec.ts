@@ -26,12 +26,12 @@ describe('EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT', () => {
     );
   });
 
-  it('#purposeDescriptionGenerator() should generate empty string', () => {
+  it('#generatePurposeDescription() should generate empty string', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('');
   });
 
-  it('#purposeDescriptionGenerator() should reflect child', () => {
+  it('#generatePurposeDescription() should reflect child', () => {
     const childTransactionType: EARMARK_MEMO_HEADQUARTERS_ACCOUNT = new EARMARK_MEMO_HEADQUARTERS_ACCOUNT();
     childTransactionType.transaction = childTransactionType.getNewTransaction();
     childTransactionType.transaction.entity_type = ContactTypes.INDIVIDUAL;
