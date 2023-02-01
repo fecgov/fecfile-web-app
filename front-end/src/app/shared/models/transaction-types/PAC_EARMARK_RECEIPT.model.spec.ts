@@ -24,12 +24,12 @@ describe('PAC_EARMARK_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
   });
 
-  it('#generatePurposeDescription() should generate empty string', () => {
-    const descrip = transactionType.generatePurposeDescription();
+  it('#purposeDescriptionGenerator() should generate empty string', () => {
+    const descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe('');
   });
 
-  it('#generatePurposeDescription() should reflect child', () => {
+  it('#purposeDescriptionGenerator() should reflect child', () => {
     const childTransactionType: PAC_EARMARK_MEMO = new PAC_EARMARK_MEMO();
     childTransactionType.transaction = childTransactionType.getNewTransaction();
     childTransactionType.transaction.entity_type = ContactTypes.INDIVIDUAL;
@@ -37,7 +37,7 @@ describe('PAC_EARMARK_RECEIPT', () => {
     childTransactionType.transaction.contributor_last_name = 'Smith';
 
     transactionType.childTransactionType = childTransactionType;
-    const descrip = transactionType.generatePurposeDescription();
+    const descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe('Earmarked through Joe Smith');
   });
 });

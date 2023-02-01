@@ -20,8 +20,8 @@ describe('INDIVIDUAL_RECOUNT_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT);
   });
 
-  it('#generatePurposeDescription() should return appropriate retval', () => {
-    const descrip = transactionType.generatePurposeDescription();
+  it('#purposeDescriptionGenerator() should return appropriate retval', () => {
+    const descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe(`Recount Account`);
   });
 });

@@ -26,12 +26,12 @@ describe('EARMARK_RECEIPT_RECOUNT_ACCOUNT', () => {
     );
   });
 
-  it('#generatePurposeDescription() should generate empty string', () => {
-    const descrip = transactionType.generatePurposeDescription();
+  it('#purposeDescriptionGenerator() should generate empty string', () => {
+    const descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe('');
   });
 
-  it('#generatePurposeDescription() should reflect child', () => {
+  it('#purposeDescriptionGenerator() should reflect child', () => {
     const childTransactionType: EARMARK_MEMO_RECOUNT_ACCOUNT = new EARMARK_MEMO_RECOUNT_ACCOUNT();
     childTransactionType.transaction = childTransactionType.getNewTransaction();
     childTransactionType.transaction.entity_type = ContactTypes.INDIVIDUAL;
@@ -39,7 +39,7 @@ describe('EARMARK_RECEIPT_RECOUNT_ACCOUNT', () => {
     childTransactionType.transaction.contributor_last_name = 'Smith';
 
     transactionType.childTransactionType = childTransactionType;
-    const descrip = transactionType.generatePurposeDescription();
+    const descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe('Recount/Legal Proceedings Account - Earmarked Through Joe Smith');
   });
 });

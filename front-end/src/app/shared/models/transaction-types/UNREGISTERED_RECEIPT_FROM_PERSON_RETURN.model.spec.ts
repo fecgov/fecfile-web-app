@@ -21,7 +21,7 @@ describe('UNREGISTERED_RECEIPT_FROM_PERSON_RETURN', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN);
   });
 
-  it('#generatePurposeDescription() should not be defined', () => {
-    expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
+  it('#purposeDescriptionGenerator() should not be defined', () => {
+    expect((transactionType as TransactionType).purposeDescriptionGenerator).toBe(undefined);
   });
 });

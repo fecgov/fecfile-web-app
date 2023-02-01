@@ -8,7 +8,7 @@ export class PAC_EARMARK_MEMO extends SchaTransactionType {
   title = '';
   schema = schema;
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return 'Total earmarked through conduit.';
   }
 

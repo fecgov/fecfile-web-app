@@ -21,7 +21,7 @@ describe('PARTY_RETURN', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTY_RETURN);
   });
 
-  it('#generatePurposeDescription() should not be defined', () => {
-    expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
+  it('#purposeDescriptionGenerator() should not be defined', () => {
+    expect((transactionType as TransactionType).purposeDescriptionGenerator).toBe(undefined);
   });
 });

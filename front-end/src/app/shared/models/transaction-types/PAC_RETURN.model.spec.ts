@@ -20,7 +20,7 @@ describe('PAC_RETURN', () => {
     expect(txn.form_type).toBe('SA11C');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_RETURN);
   });
-  it('#generatePurposeDescription() should not be defined', () => {
-    expect((transactionType as SchaTransactionType).generatePurposeDescription).toBe(undefined);
+  it('#purposeDescriptionGenerator() should not be defined', () => {
+    expect((transactionType as SchaTransactionType).purposeDescriptionGenerator).toBe(undefined);
   });
 });

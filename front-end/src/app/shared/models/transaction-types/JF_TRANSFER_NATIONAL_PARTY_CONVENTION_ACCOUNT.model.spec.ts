@@ -22,8 +22,8 @@ describe('JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT', () => {
     );
   });
 
-  it('#generatePurposeDescription() should return appropriate retval', () => {
-    const descrip = transactionType.generatePurposeDescription();
+  it('#purposeDescriptionGenerator() should return appropriate retval', () => {
+    const descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe(`Pres. Nominating Convention Account Transfer of JF Proceeds`);
   });
 });

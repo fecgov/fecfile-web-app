@@ -29,7 +29,7 @@ export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchaTransactionType {
     [SAVE_LIST_CONTROL]
   );
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     const subTransaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
     let conduit = subTransaction?.contributor_organization_name || '';
     if (

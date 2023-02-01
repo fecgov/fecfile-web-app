@@ -15,7 +15,7 @@ export class TRIBAL_RECEIPT extends SchaTransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return 'Tribal Receipt';
   }
 

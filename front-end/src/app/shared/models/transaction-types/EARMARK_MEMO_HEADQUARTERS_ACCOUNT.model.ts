@@ -8,7 +8,7 @@ export class EARMARK_MEMO_HEADQUARTERS_ACCOUNT extends SchaTransactionType {
   title = '';
   schema = schema;
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return 'Total earmarked through conduit.';
   }
 

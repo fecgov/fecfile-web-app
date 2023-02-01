@@ -20,8 +20,8 @@ describe('TRIBAL_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT);
   });
 
-  it('#generatePurposeDescription() should generate a string', () => {
-    const descrip = transactionType.generatePurposeDescription();
+  it('#purposeDescriptionGenerator() should generate a string', () => {
+    const descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe('Non-contribution Account Receipt');
   });
 });

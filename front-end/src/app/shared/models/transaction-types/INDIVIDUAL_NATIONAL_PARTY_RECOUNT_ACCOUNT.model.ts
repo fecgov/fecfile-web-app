@@ -18,7 +18,7 @@ export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionTy
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override generatePurposeDescription() {
+  override purposeDescriptionGenerator() {
     return 'Recount/Legal Proceedings Account';
   }
 

@@ -15,7 +15,7 @@ export class PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return 'Recount/Legal Proceedings Account';
   }
 

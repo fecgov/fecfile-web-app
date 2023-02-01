@@ -18,7 +18,7 @@ export class INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT extends SchaTransaction
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return 'Non-contribution Account Receipt';
   }
 

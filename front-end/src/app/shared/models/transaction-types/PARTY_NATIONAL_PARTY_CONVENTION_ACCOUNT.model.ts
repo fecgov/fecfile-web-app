@@ -18,7 +18,7 @@ export class PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchaTransactionType
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return 'Pres. Nominating Convention Account';
   }
 

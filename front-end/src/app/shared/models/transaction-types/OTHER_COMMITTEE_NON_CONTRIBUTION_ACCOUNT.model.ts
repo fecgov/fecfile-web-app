@@ -18,7 +18,7 @@ export class OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT extends SchaTransactionTyp
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return 'Non-contribution Account Receipt';
   }
 

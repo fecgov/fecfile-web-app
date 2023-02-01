@@ -18,7 +18,7 @@ export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchaTransactionT
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return 'Headquarters Buildings Account';
   }
 

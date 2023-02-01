@@ -20,7 +20,7 @@ describe('RETURN_RECEIPT', () => {
     expect(txn.form_type).toBe('SA11AI');
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
   });
-  it('#generatePurposeDescription() should not be defined', () => {
-    expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
+  it('#purposeDescriptionGenerator() should not be defined', () => {
+    expect((transactionType as TransactionType).purposeDescriptionGenerator).toBe(undefined);
   });
 });

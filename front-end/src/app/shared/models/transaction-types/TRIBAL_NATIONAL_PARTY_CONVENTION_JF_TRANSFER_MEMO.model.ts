@@ -20,7 +20,7 @@ export class TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchaTrans
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
   );
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return `Pres. Nominating Convention Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;

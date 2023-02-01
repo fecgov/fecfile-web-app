@@ -19,7 +19,7 @@ export class PARTNERSHIP_MEMO extends SchaTransactionType {
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECEIPT)
   );
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return 'Partnership Attribution';
   }
 

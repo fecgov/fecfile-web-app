@@ -20,8 +20,8 @@ describe('TRIBAL_RECOUNT_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT);
   });
 
-  it('#generatePurposeDescription() should return constant', () => {
-    const descrip = transactionType.generatePurposeDescription();
+  it('#purposeDescriptionGenerator() should return constant', () => {
+    const descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe('Recount Account');
   });
 });

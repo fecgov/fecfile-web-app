@@ -23,7 +23,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionT
   ];
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return 'Recount/Legal Proceedings Account Transfer of JF Proceeds';
   }
 

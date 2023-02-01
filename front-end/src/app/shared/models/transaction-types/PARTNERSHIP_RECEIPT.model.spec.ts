@@ -20,13 +20,13 @@ describe('PARTNERSHIP_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
   });
 
-  it('#generatePurposeDescription() should generate a string', () => {
+  it('#purposeDescriptionGenerator() should generate a string', () => {
     transactionType.transaction = transactionType.getNewTransaction();
-    let descrip = transactionType.generatePurposeDescription();
+    let descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe('Partnership attributions do not require itemization');
 
     transactionType.transaction.children = [transactionType.getNewTransaction()];
-    descrip = transactionType.generatePurposeDescription();
+    descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe('See Partnership Attribution(s) below');
   });
 });

@@ -22,8 +22,8 @@ describe('JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {
     );
   });
 
-  it('#generatePurposeDescription() should return constant', () => {
-    const descrip = transactionType.generatePurposeDescription();
+  it('#purposeDescriptionGenerator() should return constant', () => {
+    const descrip = transactionType.purposeDescriptionGenerator();
     expect(descrip).toBe('Headquarters Buildings Account Transfer of JF Proceeds');
   });
 });

@@ -20,7 +20,7 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchaTransa
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
   );
 
-  override generatePurposeDescription(): string {
+  override purposeDescriptionGenerator(): string {
     return `Headquarters Buildings Account JF Memo: ${
       (this.transaction?.parent_transaction as SchATransaction).contributor_organization_name
     }`;
