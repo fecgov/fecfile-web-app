@@ -30,12 +30,11 @@ describe("Tests that child transactions have their parents' ids in the transacti
     });
 
     createTransactionSchA(transaction);
-    cy.medWait();
     const childTransaction = transaction.childTransactions[0];
     const contribution = childTransaction.fields['contributionAmount'] as number;
     const convContribution = Intl.NumberFormat('en-US').format(Math.floor(contribution));
 
-    cy.get('tr')
+    cy.get('tbody tr')
       .last()
       .find('td')
       .eq(6)
