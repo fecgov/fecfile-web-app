@@ -250,7 +250,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   isDescriptionSystemGenerated(transactionType?: TransactionType): boolean {
     // Description is system generated if there is a defined function.  Otherwise, it's mutable
-    return transactionType?.generatePurposeDescriptionWrapper !== undefined;
+    return transactionType?.generatePurposeDescription !== undefined;
   }
 
   onContactLookupSelect(selectItem: SelectItem<Contact>) {
