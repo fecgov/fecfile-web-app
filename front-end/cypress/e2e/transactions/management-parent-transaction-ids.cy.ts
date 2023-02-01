@@ -22,7 +22,6 @@ describe("Tests that child transactions have their parents' ids in the transacti
     const report = generateReportObject();
     cy.createReport(report);
     cy.shortWait();
-    cy.get('p-button[icon="pi pi-pencil"]').click({ force: true });
     cy.navigateToTransactionManagement();
 
     const transaction = generateTransactionObject({
