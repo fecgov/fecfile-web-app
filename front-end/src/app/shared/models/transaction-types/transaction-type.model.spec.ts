@@ -6,21 +6,6 @@ import { schema as TRIBAL_JF_TRANSFER_MEMO } from 'fecfile-validate/fecfile_vali
 import { EARMARK_RECEIPT_RECOUNT_ACCOUNT } from './EARMARK_RECEIPT_RECOUNT_ACCOUNT.model';
 
 describe('Transaction Type Model', () => {
-  const transaction = SchATransaction.fromJSON({
-    form_type: 'SA12',
-    transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO,
-    transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-    entity_type: ContactTypes.ORGANIZATION,
-    contributor_organization_name: 'org name',
-    contributor_street_1: '123 Main St',
-    contributor_city: 'city',
-    contributor_state: 'VA',
-    contributor_zip: '20001',
-    contribution_date: '2022-08-11',
-    contribution_amount: 1,
-    contribution_aggregate: 2,
-  });
-
   it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
     const transactionType = new EARMARK_RECEIPT_RECOUNT_ACCOUNT();
     const spy = spyOn(transactionType, 'generatePurposeDescription');
