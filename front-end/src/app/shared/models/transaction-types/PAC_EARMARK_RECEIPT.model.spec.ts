@@ -25,7 +25,7 @@ describe('PAC_EARMARK_RECEIPT', () => {
   });
 
   it('#purposeDescriptionGenerator() should generate empty string', () => {
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('');
   });
 
@@ -37,7 +37,7 @@ describe('PAC_EARMARK_RECEIPT', () => {
     childTransactionType.transaction.contributor_last_name = 'Smith';
 
     transactionType.childTransactionType = childTransactionType;
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Earmarked through Joe Smith');
   });
 });

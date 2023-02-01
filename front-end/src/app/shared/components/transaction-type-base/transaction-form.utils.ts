@@ -129,7 +129,7 @@ export class TransactionFormUtils {
       entity_type: contactTypeOptions[0]?.code,
       contribution_aggregate: '0',
       memo_code: this.getMemoCodeConstant(transactionType),
-      contribution_purpose_descrip: transactionType?.generatePurposeDescription?.() || '',
+      contribution_purpose_descrip: transactionType?.generatePurposeDescriptionWrapper?.() || '',
     });
   }
 

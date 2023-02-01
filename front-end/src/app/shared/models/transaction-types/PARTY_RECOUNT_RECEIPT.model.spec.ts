@@ -21,7 +21,7 @@ describe('PARTY_RECOUNT_RECEIPT', () => {
   });
 
   it('#purposeDescriptionGenerator() should return appropriate retval', () => {
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe(`Recount Account`);
   });
 });

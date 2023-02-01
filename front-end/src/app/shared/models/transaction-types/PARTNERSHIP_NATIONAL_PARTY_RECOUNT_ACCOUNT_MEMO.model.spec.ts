@@ -28,7 +28,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO', () => {
   });
 
   it('#purposeDescriptionGenerator() should generate a string', () => {
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe(`Recount/Legal Proceedings Account Partnership Attribution`);
   });
 });

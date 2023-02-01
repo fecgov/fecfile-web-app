@@ -21,7 +21,7 @@ describe('TRIBAL_RECOUNT_RECEIPT', () => {
   });
 
   it('#purposeDescriptionGenerator() should return constant', () => {
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Recount Account');
   });
 });

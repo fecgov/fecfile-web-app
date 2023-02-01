@@ -18,7 +18,7 @@ export class EARMARK_RECEIPT extends SchaTransactionType {
   override childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS_MINIMAL;
 
-  override purposeDescriptionGenerator(): string {
+  override generatePurposeDescription(): string {
     const earmarkMemo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
     let conduit = earmarkMemo?.contributor_organization_name || '';
     if (

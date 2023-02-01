@@ -25,7 +25,7 @@ describe('INDIVIDUAL_JF_TRANSFER_MEMO', () => {
   });
 
   it('#purposeDescriptionGenerator() should return appropriate retval', () => {
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe(`JF Memo: Test Org`);
   });
 });

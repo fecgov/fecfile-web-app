@@ -109,8 +109,8 @@ export class SchATransaction extends Transaction {
             } as SchATransaction;
 
           // Modify the this to reflect the changes to child transactions
-          if (transactionType.generatePurposeDescription) {
-            const newDescrip = transactionType.generatePurposeDescription();
+          if (transactionType.generatePurposeDescriptionWrapper) {
+            const newDescrip = transactionType.generatePurposeDescriptionWrapper();
             child.contribution_purpose_descrip = newDescrip;
           }
         }
@@ -149,9 +149,9 @@ export class SchATransaction extends Transaction {
     payload.children = payload.updateChildren();
 
     // Update the CPD
-    if (payload?.transactionType?.generatePurposeDescription) {
+    if (payload?.transactionType?.generatePurposeDescriptionWrapper) {
       payload.transactionType.transaction = payload;
-      payload.contribution_purpose_descrip = payload.transactionType.generatePurposeDescription();
+      payload.contribution_purpose_descrip = payload.transactionType.generatePurposeDescriptionWrapper();
     }
 
     return payload;

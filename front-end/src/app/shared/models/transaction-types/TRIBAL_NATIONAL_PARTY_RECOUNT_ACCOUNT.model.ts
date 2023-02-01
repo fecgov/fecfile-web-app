@@ -18,7 +18,7 @@ export class TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionType {
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
-  override purposeDescriptionGenerator(): string {
+  override generatePurposeDescription(): string {
     return 'Recount/Legal Proceedings Account';
   }
 

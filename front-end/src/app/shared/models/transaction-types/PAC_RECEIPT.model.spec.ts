@@ -21,6 +21,6 @@ describe('PAC_RECEIPT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_RECEIPT);
   });
   it('#purposeDescriptionGenerator() should not be defined', () => {
-    expect((transactionType as TransactionType).purposeDescriptionGenerator).toBe(undefined);
+    expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
   });
 });

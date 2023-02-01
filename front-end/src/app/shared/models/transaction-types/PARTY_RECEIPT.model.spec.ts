@@ -22,6 +22,6 @@ describe('PARTY_RECEIPT', () => {
   });
 
   it('#purposeDescriptionGenerator() should not be defined', () => {
-    expect((transactionType as TransactionType).purposeDescriptionGenerator).toBe(undefined);
+    expect((transactionType as TransactionType).generatePurposeDescription).toBe(undefined);
   });
 });

@@ -21,6 +21,6 @@ describe('INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   });
 
   it('#purposeDescriptionGenerator()', () => {
-    expect(transactionType.purposeDescriptionGenerator()).toBe('Recount/Legal Proceedings Account');
+    expect(transactionType.generatePurposeDescription()).toBe('Recount/Legal Proceedings Account');
   });
 });

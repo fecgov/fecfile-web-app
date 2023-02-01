@@ -27,7 +27,7 @@ describe('EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT', () => {
   });
 
   it('#purposeDescriptionGenerator() should generate empty string', () => {
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('');
   });
 
@@ -39,7 +39,7 @@ describe('EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT', () => {
     childTransactionType.transaction.contributor_last_name = 'Smith';
 
     transactionType.childTransactionType = childTransactionType;
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Headquarters Buildings Account - Earmarked Through Joe Smith');
   });
 });

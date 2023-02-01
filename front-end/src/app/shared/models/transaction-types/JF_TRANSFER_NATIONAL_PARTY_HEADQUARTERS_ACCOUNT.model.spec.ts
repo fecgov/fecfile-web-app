@@ -23,7 +23,7 @@ describe('JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {
   });
 
   it('#purposeDescriptionGenerator() should return constant', () => {
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Headquarters Buildings Account Transfer of JF Proceeds');
   });
 });

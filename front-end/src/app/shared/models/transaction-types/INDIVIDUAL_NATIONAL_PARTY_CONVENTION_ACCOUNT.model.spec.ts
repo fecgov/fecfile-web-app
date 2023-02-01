@@ -23,6 +23,6 @@ describe('INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT', () => {
   });
 
   it('#purposeDescriptionGenerator()', () => {
-    expect(transactionType.purposeDescriptionGenerator()).toBe('Pres. Nominating Convention Account');
+    expect(transactionType.generatePurposeDescription()).toBe('Pres. Nominating Convention Account');
   });
 });

@@ -21,7 +21,7 @@ describe('JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   });
 
   it('#purposeDescriptionGenerator() should return constant', () => {
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Recount/Legal Proceedings Account Transfer of JF Proceeds');
   });
 });

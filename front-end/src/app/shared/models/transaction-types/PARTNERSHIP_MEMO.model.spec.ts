@@ -22,7 +22,7 @@ describe('PARTNERSHIP_MEMO', () => {
 
   it('#purposeDescriptionGenerator() should generate a string', () => {
     transactionType.transaction = transactionType.getNewTransaction();
-    const descrip = transactionType.purposeDescriptionGenerator();
+    const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Partnership Attribution');
   });
 });
