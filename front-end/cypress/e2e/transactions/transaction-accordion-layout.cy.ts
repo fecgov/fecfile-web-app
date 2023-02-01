@@ -9,7 +9,7 @@ const accordion = {
     'Partnership Receipt',
     'Reattribution',
     'In-Kind Receipt',
-    'Returned/Bounced Receipt (Individual)',
+    'Returned/Bounced Receipt',
     'Earmark Receipt',
     'Conduit Earmark (Deposited)',
     'Conduit Earmark (Undeposited)',
