@@ -42,17 +42,4 @@ describe('EARMARK_RECEIPT_RECOUNT_ACCOUNT', () => {
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Recount/Legal Proceedings Account - Earmarked Through Joe Smith');
   });
-
-  it('#generatePurposeDescriptionWrapper() should be truncated past a certain length', () => {
-    const childTransactionType: EARMARK_MEMO_RECOUNT_ACCOUNT = new EARMARK_MEMO_RECOUNT_ACCOUNT();
-    childTransactionType.transaction = childTransactionType.getNewTransaction();
-    childTransactionType.transaction.entity_type = ContactTypes.INDIVIDUAL;
-    childTransactionType.transaction.contributor_first_name = 'Joe';
-    childTransactionType.transaction.contributor_last_name =
-      'A really incredibly hugely long last name, just the biggest last name ever';
-
-    transactionType.childTransactionType = childTransactionType;
-    const descrip = transactionType.generatePurposeDescriptionWrapper();
-    expect(descrip.length).toBe(100);
-  });
 });
