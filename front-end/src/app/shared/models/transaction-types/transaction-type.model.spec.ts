@@ -1,8 +1,3 @@
-import { ContactTypes } from '../contact.model';
-import { Transaction } from '../transaction.model';
-import { TransactionType } from './transaction-type.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { schema as TRIBAL_JF_TRANSFER_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_JF_TRANSFER_MEMO';
 import { EARMARK_RECEIPT_RECOUNT_ACCOUNT } from './EARMARK_RECEIPT_RECOUNT_ACCOUNT.model';
 
 describe('Transaction Type Model', () => {
