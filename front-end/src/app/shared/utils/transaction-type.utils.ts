@@ -31,7 +31,6 @@ import { PAC_RECEIPT } from '../models/transaction-types/PAC_RECEIPT.model';
 import { PAC_RECOUNT_RECEIPT } from '../models/transaction-types/PAC_RECOUNT_RECEIPT.model';
 import { PARTNERSHIP_MEMO } from '../models/transaction-types/PARTNERSHIP_MEMO.model';
 import { PARTNERSHIP_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECEIPT.model';
-import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO.model';
 import { PARTY_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTY_JF_TRANSFER_MEMO.model';
@@ -40,21 +39,28 @@ import { PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction
 import { PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { PARTY_RECEIPT } from '../models/transaction-types/PARTY_RECEIPT.model';
 import { PARTY_RECOUNT_RECEIPT } from '../models/transaction-types/PARTY_RECOUNT_RECEIPT.model';
-import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
-import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model';
 import { TransactionType } from '../models/transaction-types/transaction-type.model';
 import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
 import { TRIBAL_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
-import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
 import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOUNT_RECEIPT.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
+import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
+import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model';
+import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
+import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
+import { EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT.model';
+import { EARMARK_RECEIPT_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_RECOUNT_ACCOUNT.model';
+import { EARMARK_RECEIPT_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_CONVENTION_ACCOUNT.model';
+import { EARMARK_MEMO_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_HEADQUARTERS_ACCOUNT.model';
+import { EARMARK_MEMO_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_CONVENTION_ACCOUNT.model';
+import { EARMARK_MEMO_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_RECOUNT_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -114,6 +120,12 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
   PAC_RETURN,
   PARTY_RETURN,
+  EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT,
+  EARMARK_RECEIPT_RECOUNT_ACCOUNT,
+  EARMARK_RECEIPT_CONVENTION_ACCOUNT,
+  EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
+  EARMARK_MEMO_CONVENTION_ACCOUNT,
+  EARMARK_MEMO_RECOUNT_ACCOUNT,
 }
 
 export class TransactionTypeUtils {
