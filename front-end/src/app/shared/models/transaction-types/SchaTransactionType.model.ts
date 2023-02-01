@@ -6,7 +6,7 @@ export abstract class SchaTransactionType extends TransactionType {
   override transaction?: SchATransaction;
 
   override generatePurposeDescriptionLabel(): string {
-    if (this.generatePurposeDescriptionWrapper !== undefined) {
+    if (this.generatePurposeDescription !== undefined) {
       return '(SYSTEM-GENERATED)';
     } else if (this.schema.required.includes('contribution_purpose_descrip')) {
       return '(REQUIRED)';
