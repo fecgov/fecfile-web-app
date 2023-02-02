@@ -9,7 +9,7 @@ const accordion = {
     'Partnership Receipt',
     'Reattribution',
     'In-Kind Receipt',
-    'Returned/Bounced Receipt (Individual)',
+    'Returned/Bounced Receipt',
     'Earmark Receipt',
     'Conduit Earmark (Deposited)',
     'Conduit Earmark (Undeposited)',
@@ -25,7 +25,7 @@ const accordion = {
     'PAC Earmark Receipt',
     'PAC Conduit Earmark (Deposited)',
     'PAC Conduit Earmark (Undeposited)',
-    'Returned/Bounced Receipt (PAC)',
+    'PAC Returned/Bounced Receipt',
   ],
   TRANSFERS: [
     'Transfer',

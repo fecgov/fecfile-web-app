@@ -22,7 +22,6 @@ describe("Tests that child transactions have their parents' ids in the transacti
     const report = generateReportObject();
     cy.createReport(report);
     cy.shortWait();
-    cy.get('p-button[icon="pi pi-pencil"]').click({ force: true });
     cy.navigateToTransactionManagement();
 
     const transaction = generateTransactionObject({
@@ -30,12 +29,11 @@ describe("Tests that child transactions have their parents' ids in the transacti
     });
 
     createTransactionSchA(transaction);
-    cy.medWait();
     const childTransaction = transaction.childTransactions[0];
     const contribution = childTransaction.fields['contributionAmount'] as number;
     const convContribution = Intl.NumberFormat('en-US').format(Math.floor(contribution));
 
-    cy.get('tr')
+    cy.get('tbody tr')
       .last()
       .find('td')
       .eq(6)

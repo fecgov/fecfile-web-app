@@ -189,8 +189,7 @@ export function progressCashOnHand(cohDetails: cohDetailType | null = null) {
   cy.longWait();
 
   cy.get('button[label="Save & continue"]').click();
-  cy.longWait();
-  cy.longWait();
+  cy.contains('BEGINNING CASH ON HAND', { timeout: 1000 }).should('not.exist');
 }
 
 /**
@@ -228,9 +227,9 @@ export function navigateToTransactionManagement(
   cy.url().then((url: string) => {
     if (url.includes('cash-on-hand')) {
       cy.then(progressCashOnHand);
-      cy.navigateToTransactionManagement(identifyingDetails);
     } else if (url.includes('/reports') && !url.includes('list')) {
       chooseAReport(identifyingDetails);
+      cy.contains('Recent reports').should('not.exist');
       cy.navigateToTransactionManagement(identifyingDetails);
     }
   });
@@ -294,7 +293,7 @@ export function navigateReportSidebar(type: 'Transaction' | 'Submit' | 'Review',
 
 //Deletes all reports belonging to the logged-in committee
 export function deleteAllReports() {
-  cy.getCookie('csrftoken').then(cookie => {
+  cy.getCookie('csrftoken').then((cookie) => {
     cy.request({
       method: 'GET',
       url: 'http://localhost:8080/api/v1/f3x-summaries/',
@@ -313,7 +312,7 @@ export function deleteAllReports() {
 
 //Deletes a single report by its ID
 export function deleteReport(reportID: string) {
-  cy.getCookie('csrftoken').then(cookie => {
+  cy.getCookie('csrftoken').then((cookie) => {
     cy.request({
       method: 'DELETE',
       url: `http://localhost:8080/api/v1/f3x-summaries/${reportID}/`,
