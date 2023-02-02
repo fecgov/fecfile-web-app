@@ -147,7 +147,7 @@ export abstract class DoubleTransactionTypeBaseComponent
 
     if (this.transactionType?.generatePurposeDescription) {
       this.form.patchValue({
-        contribution_purpose_descrip: this.transactionType.generatePurposeDescription(),
+        contribution_purpose_descrip: this.transactionType.generatePurposeDescriptionWrapper(),
       });
     }
   }

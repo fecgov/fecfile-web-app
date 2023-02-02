@@ -61,9 +61,7 @@ describe('QA Script 125 (Sprint 10)', () => {
     //Should find only one transaction in each report
     for (let i = 0; i < 2; i++) {
       cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
-      cy.medWait();
-      cy.contains('th', 'Coverage dates').click();
-      cy.shortWait();
+      cy.get('tbody tr');
       cy.get('p-button[icon="pi pi-pencil"]').eq(i)
         .click(); //prettier-ignore
       cy.medWait();

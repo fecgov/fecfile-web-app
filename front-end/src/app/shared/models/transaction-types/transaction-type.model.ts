@@ -32,4 +32,15 @@ export abstract class TransactionType {
     }
     return schema_name;
   }
+
+  public generatePurposeDescriptionWrapper(): string {
+    const purpose = this.generatePurposeDescription?.();
+    if (purpose) {
+      if (purpose.length > 100) {
+        return purpose.slice(0, 97) + '...';
+      }
+      return purpose;
+    }
+    return '';
+  }
 }

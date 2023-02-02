@@ -49,7 +49,7 @@ function createSingleTransaction(transaction: Transaction, save = true) {
         if (i == 0) {
           cy.get('.p-confirm-dialog-accept').click();
         }
-        cy.longWait();
+        cy.get('#contribution_amount').should('not.exist');
         enterTransactionSchA(childTransaction);
 
         cy.contains('button', 'Save & add another').click();
