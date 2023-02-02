@@ -1,4 +1,5 @@
 import { hasNoContact, isNewTransaction, Transaction } from './transaction.model';
+import { ScheduleTransactionTypes } from 'app/shared/models/transaction.model';
 
 export enum NavigationAction {
   CANCEL,
@@ -10,6 +11,25 @@ export enum NavigationDestination {
   PARENT,
   ANOTHER,
   CHILD,
+}
+
+export class NavigationEvent {
+  action: NavigationAction;
+  destination: NavigationDestination;
+  transaction?: Transaction;
+  destinationTransactionType?: ScheduleTransactionTypes;
+
+  constructor(
+    action?: NavigationAction,
+    destination?: NavigationDestination,
+    transaction?: Transaction,
+    destinationTransactionType?: ScheduleTransactionTypes
+  ) {
+    this.action = action || NavigationAction.CANCEL;
+    this.destination = destination || NavigationDestination.LIST;
+    this.transaction = transaction;
+    this.destinationTransactionType = destinationTransactionType;
+  }
 }
 
 export class NavigationControl {

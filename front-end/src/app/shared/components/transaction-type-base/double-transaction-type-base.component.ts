@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
+import { NavigationDestination, NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
@@ -145,7 +145,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
   }
 
-  override save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleATransactionTypes) {
+  override save(navigationEvent: NavigationEvent) {
     this.formSubmitted = true;
 
     if (this.form.invalid || this.childForm.invalid) {
@@ -169,24 +169,12 @@ export abstract class DoubleTransactionTypeBaseComponent
     payload.children[0].report_id = payload.report_id;
 
     // Confirm save for parent transaction
-    this.confirmSave(payload, this.form, this.childConfirmSave, navigateTo, payload, transactionTypeToAdd);
+    this.confirmSave(payload, this.form, this.childConfirmSave, navigationEvent, payload);
   }
 
-  private childConfirmSave(
-    navigateTo: NavigationDestination,
-    payload: Transaction,
-    transactionTypeToAdd?: ScheduleATransactionTypes
-  ) {
+  private childConfirmSave(navigationEvent: NavigationEvent, payload: Transaction) {
     if (payload.children?.length === 1) {
-      this.confirmSave(
-        payload.children[0],
-        this.childForm,
-        this.doSave,
-        navigateTo,
-        payload,
-        transactionTypeToAdd,
-        'childDialog'
-      );
+      this.confirmSave(payload.children[0], this.childForm, this.doSave, navigationEvent, payload, 'childDialog');
     } else {
       throw new Error('Parent transaction missing child transaction when trying to confirm save.');
     }

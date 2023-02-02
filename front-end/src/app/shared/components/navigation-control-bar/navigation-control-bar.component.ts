@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Transaction } from 'app/shared/models/transaction.model';
 import {
   NavigationControl,
+  NavigationEvent,
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 
@@ -13,7 +14,7 @@ import {
 export class NavigationControlBarComponent {
   @Input() navigationControls: TransactionNavigationControls = new TransactionNavigationControls();
   @Input() transaction?: Transaction;
-  @Output() navigate: EventEmitter<NavigationControl> = new EventEmitter<NavigationControl>();
+  @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
 
   getNavigationControls(section: 'inline' | 'cancel' | 'continue'): NavigationControl[] {
     let controls: NavigationControl[] = [];
@@ -29,7 +30,7 @@ export class NavigationControlBarComponent {
     });
   }
 
-  handleNavigate(navigationControl: NavigationControl): void {
-    this.navigate.emit(navigationControl);
+  handleNavigate(navigationEvent: NavigationEvent): void {
+    this.navigate.emit(navigationEvent);
   }
 }
