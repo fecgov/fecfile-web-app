@@ -143,6 +143,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
           ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
           ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+          ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
         ];
       case ScheduleBTransactionGroups.OPERATING_EXPENDITURES:
         return [

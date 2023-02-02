@@ -61,6 +61,8 @@ import { EARMARK_RECEIPT_CONVENTION_ACCOUNT } from '../models/transaction-types/
 import { EARMARK_MEMO_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_HEADQUARTERS_ACCOUNT.model';
 import { EARMARK_MEMO_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_CONVENTION_ACCOUNT.model';
 import { EARMARK_MEMO_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_RECOUNT_ACCOUNT.model';
+import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT.model';
+import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -126,6 +128,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
   EARMARK_MEMO_CONVENTION_ACCOUNT,
   EARMARK_MEMO_RECOUNT_ACCOUNT,
+  PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
+  PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
 }
 
 export class TransactionTypeUtils {
