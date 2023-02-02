@@ -17,17 +17,7 @@ export class NavigationControlBarComponent {
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
 
   getNavigationControls(section: 'inline' | 'cancel' | 'continue'): NavigationControl[] {
-    let controls: NavigationControl[] = [];
-    if (section === 'inline') {
-      controls = this.navigationControls.inlineControls || [];
-    } else if (section === 'cancel') {
-      controls = this.navigationControls.cancelControls || [];
-    } else if (section === 'continue') {
-      controls = this.navigationControls.continueControls || [];
-    }
-    return controls.filter((control: NavigationControl) => {
-      return !control.visibleCondition || control.visibleCondition(this.transaction);
-    });
+    return this.navigationControls.getNavigationControls(section, this.transaction);
   }
 
   handleNavigate(navigationEvent: NavigationEvent): void {

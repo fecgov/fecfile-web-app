@@ -98,6 +98,20 @@ export class TransactionNavigationControls {
     this.cancelControls = cancelControls;
     this.continueControls = continueControls;
   }
+
+  getNavigationControls(section: 'inline' | 'cancel' | 'continue', transaction?: Transaction): NavigationControl[] {
+    let controls: NavigationControl[] = [];
+    if (section === 'inline') {
+      controls = this.inlineControls || [];
+    } else if (section === 'cancel') {
+      controls = this.cancelControls || [];
+    } else if (section === 'continue') {
+      controls = this.continueControls || [];
+    }
+    return controls.filter((control: NavigationControl) => {
+      return !control.visibleCondition || control.visibleCondition(transaction);
+    });
+  }
 }
 
 /**

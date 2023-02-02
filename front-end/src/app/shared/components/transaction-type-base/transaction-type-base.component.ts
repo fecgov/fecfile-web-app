@@ -197,6 +197,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return this.transactionType?.navigationControls || new TransactionNavigationControls([], [], []);
   }
 
+  getInlineControls(): NavigationControl[] {
+    return this.getNavigationControls().getNavigationControls('inline', this.transactionType?.transaction);
+  }
+
   handleNavigate(navigationEvent: NavigationEvent): void {
     if (navigationEvent.action === NavigationAction.SAVE) {
       this.save(navigationEvent);
@@ -206,7 +210,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   navigateTo(event: NavigationEvent) {
-    this.resetForm();
     let reportPath = `/transactions/report/${event.transaction?.report_id}`;
     if (event.destination === NavigationDestination.ANOTHER) {
       this.messageService.add({
@@ -215,7 +218,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         detail: 'Transaction Saved',
         life: 3000,
       });
-      this.router.navigateByUrl(`${reportPath}/create/${event.transaction?.transaction_type_identifier}`);
+      this.resetForm();
     } else if (event.destination === NavigationDestination.CHILD) {
       this.messageService.add({
         severity: 'success',
