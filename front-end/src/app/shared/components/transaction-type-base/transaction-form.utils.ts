@@ -125,8 +125,15 @@ export class TransactionFormUtils {
     form.markAsPristine();
     form.markAsUntouched();
 
+    // Override the default entity_type value if called for by the defaultContactTypeOption
+    // in the TransactionType
+    let defaultContactTypeOption: string = contactTypeOptions[0]?.code;
+    if (transactionType?.defaultContactTypeOption) {
+      defaultContactTypeOption = transactionType.defaultContactTypeOption;
+    }
+
     form.patchValue({
-      entity_type: contactTypeOptions[0]?.code,
+      entity_type: defaultContactTypeOption,
       contribution_aggregate: '0',
       memo_code: this.getMemoCodeConstant(transactionType),
       contribution_purpose_descrip: transactionType?.generatePurposeDescription?.() || '',

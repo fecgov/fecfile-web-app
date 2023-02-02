@@ -1,3 +1,4 @@
+// Schedule A /////////////////////////////////////////////////////
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
@@ -62,8 +63,12 @@ import { EARMARK_MEMO_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/E
 import { EARMARK_MEMO_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_CONVENTION_ACCOUNT.model';
 import { EARMARK_MEMO_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_RECOUNT_ACCOUNT.model';
 
+// Schedule B /////////////////////////////////////////////////////
+import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
+
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
+  // Schedule A /////////////////////////////////////////////////////
   EARMARK_RECEIPT,
   EARMARK_MEMO,
   INDIVIDUAL_JF_TRANSFER_MEMO,
@@ -126,6 +131,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
   EARMARK_MEMO_CONVENTION_ACCOUNT,
   EARMARK_MEMO_RECOUNT_ACCOUNT,
+  // Schedule B /////////////////////////////////////////////////////
+  OPERATING_EXPENDITURE,
 }
 
 export class TransactionTypeUtils {

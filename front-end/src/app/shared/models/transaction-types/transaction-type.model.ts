@@ -14,7 +14,8 @@ export abstract class TransactionType {
   abstract schema: JsonSchema; // FEC validation JSON schema
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
-  contactTypeOptions?: ContactType[];
+  contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
+  defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
   transaction?: Transaction;
   childTransactionType?: TransactionType;
   subTransactionTypes?: ScheduleTransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction

@@ -10,7 +10,7 @@ export class OPERATING_EXPENDITURE extends SchbTransactionType {
   componentGroupId = 'B';
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.OPERATING_EXPENDITURE);
   schema = schema;
-  override contactTypeOptions = [ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE, ContactTypes.INDIVIDUAL];
+  override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

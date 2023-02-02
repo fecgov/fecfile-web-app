@@ -10,7 +10,7 @@ export class OFFSET_TO_OPERATING_EXPENDITURES extends SchaTransactionType {
   componentGroupId = 'B';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
-  override contactTypeOptions = [ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE, ContactTypes.INDIVIDUAL];
+  override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

@@ -3,6 +3,7 @@ import { Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { AggregationGroups } from './transaction.model';
 
 export class SchBTransaction extends Transaction {
   back_reference_tran_id_number: string | undefined;
@@ -23,6 +24,8 @@ export class SchBTransaction extends Transaction {
   election_other_description: string | undefined;
   @Transform(BaseModel.dateTransform) expenditure_date: Date | undefined;
   expenditure_amount: number | undefined;
+  aggregate_amount: number | undefined;
+  aggregation_group: AggregationGroups | undefined;
   semi_annual_refunded_bundled_amt: number | undefined;
   expenditure_purpose_descrip: string | undefined;
   category_code: string | undefined;
