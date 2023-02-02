@@ -1,9 +1,8 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Transaction } from './transaction.model';
+import { Transaction, AggregationGroups, ScheduleTemplateMapType } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { AggregationGroups } from './transaction.model';
 
 export class SchBTransaction extends Transaction {
   back_reference_tran_id_number: string | undefined;
@@ -276,3 +275,28 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo'],
   [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID, 'Void of 100% Federal Election Activity'],
 ];
+
+// Mapping of schedule fields to the group input component form templates
+export const ScheduleBFormTemplateMap: ScheduleTemplateMapType = {
+  last_name: 'payee_last_name',
+  first_name: 'payee_first_name',
+  middle_name: 'payee_middle_name',
+  prefix: 'payee_prefix',
+  suffix: 'payee_suffix',
+  street_1: 'payee_street_1',
+  street_2: 'payee_street_2',
+  city: 'payee_city',
+  state: 'payee_state',
+  zip: 'payee_zip',
+  employer: '',
+  occupation: '',
+  organization_name: 'payee_organization_name',
+  committee_fec_id: 'beneficiary_committee_fec_id',
+  date: 'expenditure_date',
+  memo_code: 'memo_code',
+  amount: 'expenditure_amount',
+  aggregate: 'aggregate_amount',
+  purpose_descrip: 'expenditure_purpose_descrip',
+  purposeDescripLabel: 'EXPENDITURE PURPOSE DESCRIPTION',
+  memo_text_input: 'memo_text_input',
+};

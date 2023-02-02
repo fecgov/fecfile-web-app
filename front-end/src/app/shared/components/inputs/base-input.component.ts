@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ScheduleTemplateMapType } from '../../models/transaction.model';
+import { ScheduleAFormTemplateMap } from 'app/shared/models/scha-transaction.model';
 
 @Component({
   template: '',
@@ -7,4 +9,5 @@ import { FormGroup } from '@angular/forms';
 export abstract class BaseInputComponent {
   @Input() form: FormGroup = new FormGroup([]);
   @Input() formSubmitted = false;
+  @Input() formTemplateMap: ScheduleTemplateMapType = ScheduleAFormTemplateMap;
 }

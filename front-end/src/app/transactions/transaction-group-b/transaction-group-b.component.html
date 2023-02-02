@@ -24,20 +24,30 @@
         <app-committee-input
           [form]="form"
           [formSubmitted]="formSubmitted"
+          [formTemplateMap]="formTemplateMap"
           [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
         ></app-committee-input>
       </ng-container>
       <ng-container *ngIf="form.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
-        <app-name-input [form]="form" [formSubmitted]="formSubmitted"></app-name-input>
+        <app-name-input
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [formTemplateMap]="formTemplateMap"
+        ></app-name-input>
       </ng-container>
       <p-divider></p-divider>
       <h3>Address</h3>
-      <app-address-input [form]="form" [formSubmitted]="formSubmitted"></app-address-input>
+      <app-address-input
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        [formTemplateMap]="formTemplateMap"
+      ></app-address-input>
       <p-divider></p-divider>
       <h3>Receipt Information</h3>
       <app-amount-input
         [form]="form"
         [formSubmitted]="formSubmitted"
+        [formTemplateMap]="formTemplateMap"
         [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType)"
         [negativeAmountValueOnly]="negativeAmountValueOnly"
       ></app-amount-input>
@@ -46,8 +56,9 @@
       <app-additional-info-input
         [form]="form"
         [formSubmitted]="formSubmitted"
+        [formTemplateMap]="formTemplateMap"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
-        [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
+        [purposeDescriptionLabel]="this.purposeDescriptionLabel"
       ></app-additional-info-input>
     </ng-container>
     <p-divider></p-divider>

@@ -1,9 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
+import {
+  ScheduleATransactionTypes,
+  SchATransaction,
+  ScheduleAFormTemplateMap,
+} from 'app/shared/models/scha-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleTemplateMapType } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
@@ -37,6 +41,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
   childContributionPurposeDescriptionLabel = '';
   childNegativeAmountValueOnly = false;
+  childFormTemplateMap: ScheduleTemplateMapType = ScheduleAFormTemplateMap; // Text strings and fields specific to a particular schedule to map into the transaction input form templates
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -56,6 +61,8 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   childOnInit() {
+    this.childFormTemplateMap = Transaction.getFormTemplateMap(this.transactionType?.childTransactionType);
+
     // Override contact type options if present in transactionType
     if (this.transactionType?.childTransactionType && this.transactionType.childTransactionType.contactTypeOptions) {
       this.childContactTypeOptions = LabelUtils.getPrimeOptions(

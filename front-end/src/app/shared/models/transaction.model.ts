@@ -1,8 +1,8 @@
 import { BaseModel } from './base.model';
 import { Contact } from './contact.model';
 import { MemoText } from './memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes, ScheduleAFormTemplateMap } from './scha-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBFormTemplateMap } from './schb-transaction.model';
 import { ValidateUtils } from '../utils/validate.utils';
 import { TransactionType } from './transaction-types/transaction-type.model';
 import { Type } from 'class-transformer';
@@ -71,6 +71,13 @@ export abstract class Transaction extends BaseModel {
       throw new Error('No TRANSACTION_TYPE_IDENTIFIER found when setting Meta Properties');
     }
   }
+
+  static getFormTemplateMap(transactionType: TransactionType | undefined): ScheduleTemplateMapType {
+    if (!transactionType) throw new Error('getFormTemplateMap() missing transaction type');
+    if (transactionType.scheduleId === 'A') return ScheduleAFormTemplateMap;
+    if (transactionType.scheduleId === 'B') return ScheduleBFormTemplateMap;
+    throw new Error(`Missing form template map for ${transactionType.transaction?.transaction_type_identifier}`);
+  }
 }
 
 export function isNewTransaction(transaction?: Transaction): boolean {
@@ -82,6 +89,30 @@ export function hasNoContact(transaction?: Transaction): boolean {
 
 export type ScheduleTransaction = SchATransaction | SchBTransaction;
 export type ScheduleTransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
+
+export type ScheduleTemplateMapType = {
+  last_name: string;
+  first_name: string;
+  middle_name: string;
+  prefix: string;
+  suffix: string;
+  street_1: string;
+  street_2: string;
+  city: string;
+  state: string;
+  zip: string;
+  employer: string;
+  occupation: string;
+  organization_name: string;
+  committee_fec_id: string;
+  date: string;
+  memo_code: string;
+  amount: string;
+  aggregate: string;
+  purpose_descrip: string;
+  purposeDescripLabel: string;
+  memo_text_input: string;
+};
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',

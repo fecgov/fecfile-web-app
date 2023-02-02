@@ -31,18 +31,24 @@
           <app-committee-input
             [form]="form"
             [formSubmitted]="formSubmitted"
+            [formTemplateMap]="formTemplateMap"
             entityRole="COMMITTEE"
             [includeFecId]="true"
           >
           </app-committee-input>
           <p-divider></p-divider>
           <h3>Address</h3>
-          <app-address-input [form]="form" [formSubmitted]="formSubmitted"></app-address-input>
+          <app-address-input
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [formTemplateMap]="formTemplateMap"
+          ></app-address-input>
           <p-divider></p-divider>
           <h3>Receipt Information</h3>
           <app-amount-input
             [form]="form"
             [formSubmitted]="formSubmitted"
+            [formTemplateMap]="formTemplateMap"
             [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType)"
             [negativeAmountValueOnly]="negativeAmountValueOnly"
           ></app-amount-input>
@@ -51,8 +57,9 @@
           <app-additional-info-input
             [form]="form"
             [formSubmitted]="formSubmitted"
+            [formTemplateMap]="formTemplateMap"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
-            [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
+            [purposeDescriptionLabel]="this.purposeDescriptionLabel"
           ></app-additional-info-input>
           <div class="grid" style="flex-direction: row-reverse">
             <p style="font-style: italic">This type of receipt requires a memo transaction</p>
@@ -91,30 +98,41 @@
             <app-committee-input
               [form]="childForm"
               [formSubmitted]="formSubmitted"
+              [formTemplateMap]="childFormTemplateMap"
               entityRole="CONDUIT"
               [includeFecId]="true"
             ></app-committee-input>
           </ng-container>
           <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
-            <app-name-input [form]="childForm" [formSubmitted]="formSubmitted"></app-name-input>
+            <app-name-input
+              [form]="childForm"
+              [formSubmitted]="formSubmitted"
+              [formTemplateMap]="childFormTemplateMap"
+            ></app-name-input>
           </ng-container>
           <p-divider></p-divider>
           <h3>Address</h3>
           <app-address-input
             [form]="childForm"
             [formSubmitted]="formSubmitted"
+            [formTemplateMap]="childFormTemplateMap"
             [stateOptions]="stateOptions"
           ></app-address-input>
           <p-divider></p-divider>
           <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
             <h3>Employer</h3>
-            <app-employer-input [form]="childForm" [formSubmitted]="formSubmitted"></app-employer-input>
+            <app-employer-input
+              [form]="childForm"
+              [formSubmitted]="formSubmitted"
+              [formTemplateMap]="childFormTemplateMap"
+            ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
           <h3>Receipt Information</h3>
           <app-amount-input
             [form]="childForm"
             [formSubmitted]="formSubmitted"
+            [formTemplateMap]="childFormTemplateMap"
             [memoCodeReadOnly]="isMemoCodeReadOnly(transactionType?.childTransactionType)"
             [contributionAmountReadOnly]="true"
             [negativeAmountValueOnly]="childNegativeAmountValueOnly"
@@ -124,8 +142,9 @@
           <app-additional-info-input
             [form]="childForm"
             [formSubmitted]="formSubmitted"
+            [formTemplateMap]="childFormTemplateMap"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType?.childTransactionType)"
-            [contributionPurposeDescriptionLabel]="this.childContributionPurposeDescriptionLabel"
+            [purposeDescriptionLabel]="this.childContributionPurposeDescriptionLabel"
           ></app-additional-info-input>
         </ng-container>
       </form>

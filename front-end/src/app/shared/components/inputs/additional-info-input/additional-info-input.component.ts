@@ -8,6 +8,6 @@ import { BaseInputComponent } from '../base-input.component';
 })
 export class AdditionalInfoInputComponent extends BaseInputComponent {
   @Input() descriptionIsSystemGenerated = false;
-  @Input() contributionPurposeDescriptionLabel = '';
+  @Input() purposeDescriptionLabel = '';
   @Input() purposeDescriptionLabelNotice?: string;
 }

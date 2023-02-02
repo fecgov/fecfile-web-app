@@ -1,7 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import {
+  SchATransaction,
+  ScheduleATransactionTypes,
+  ScheduleAFormTemplateMap,
+} from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
@@ -9,7 +13,7 @@ import {
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleTemplateMapType } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -36,9 +40,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
-  contributionPurposeDescriptionLabel = '';
+  purposeDescriptionLabel = '';
   childTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
   negativeAmountValueOnly = false;
+  formTemplateMap: ScheduleTemplateMapType = ScheduleAFormTemplateMap; // Text strings and fields specific to a particular schedule to map into the transaction input form templates
 
   form: FormGroup = this.fb.group({});
 
@@ -60,6 +65,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   parentOnInit() {
+    this.formTemplateMap = Transaction.getFormTemplateMap(this.transactionType);
+
     // Override contact type options if present in transactionType
     if (this.transactionType && this.transactionType.contactTypeOptions) {
       this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, this.transactionType.contactTypeOptions);
@@ -79,7 +86,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
 
     if (this.transactionType?.generatePurposeDescriptionLabel) {
-      this.contributionPurposeDescriptionLabel = this.transactionType.generatePurposeDescriptionLabel();
+      this.purposeDescriptionLabel = this.transactionType.generatePurposeDescriptionLabel();
     }
   }
 

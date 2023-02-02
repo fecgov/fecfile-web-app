@@ -2,33 +2,33 @@
   <div class="grid">
     <div class="col-4">
       <div class="field">
-        <label for="contributor_last_name">LAST NAME</label>
-        <input type="text" pInputText id="contributor_last_name" formControlName="contributor_last_name" />
+        <label for="last_name">LAST NAME</label>
+        <input type="text" pInputText id="last_name" [formControlName]="formTemplateMap['last_name']" />
         <app-error-messages
           [form]="form"
-          fieldName="contributor_last_name"
+          [fieldName]="formTemplateMap['last_name']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-4">
       <div class="field">
-        <label for="contributor_first_name">FIRST NAME</label>
-        <input type="text" pInputText id="contributor_first_name" formControlName="contributor_first_name" />
+        <label for="first_name">FIRST NAME</label>
+        <input type="text" pInputText id="first_name" [formControlName]="formTemplateMap['first_name']" />
         <app-error-messages
           [form]="form"
-          fieldName="contributor_first_name"
+          [fieldName]="formTemplateMap['first_name']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-4">
       <div class="field">
-        <label for="contributor_middle_name">MIDDLE NAME (OPTIONAL)</label>
-        <input type="text" pInputText id="contributor_middle_name" formControlName="contributor_middle_name" />
+        <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
+        <input type="text" pInputText id="middle_name" [formControlName]="formTemplateMap['middle_name']" />
         <app-error-messages
           [form]="form"
-          fieldName="contributor_middle_name"
+          [fieldName]="formTemplateMap['middle_name']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -37,22 +37,22 @@
   <div class="grid">
     <div class="col-3">
       <div class="field">
-        <label for="contributor_prefix">PREFIX (OPTIONAL)</label>
-        <input type="text" pInputText id="contributor_prefix" formControlName="contributor_prefix" />
+        <label for="prefix">PREFIX (OPTIONAL)</label>
+        <input type="text" pInputText id="prefix" [formControlName]="formTemplateMap['prefix']" />
         <app-error-messages
           [form]="form"
-          fieldName="contributor_prefix"
+          [fieldName]="formTemplateMap['prefix']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-3">
       <div class="field">
-        <label for="contributor_suffix">SUFFIX (OPTIONAL)</label>
-        <input type="text" pInputText id="contributor_suffix" formControlName="contributor_suffix" />
+        <label for="suffix">SUFFIX (OPTIONAL)</label>
+        <input type="text" pInputText id="suffix" [formControlName]="formTemplateMap['suffix']" />
         <app-error-messages
           [form]="form"
-          fieldName="contributor_suffix"
+          [fieldName]="formTemplateMap['suffix']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
