@@ -26,6 +26,7 @@ import { TransactionGroupDComponent } from './transaction-group-d/transaction-gr
 import { TransactionGroupEComponent } from './transaction-group-e/transaction-group-e.component';
 import { TransactionGroupFComponent } from './transaction-group-f/transaction-group-f.component';
 import { TransactionGroupGComponent } from './transaction-group-g/transaction-group-g.component';
+import { TransactionGroupHComponent } from './transaction-group-h/transaction-group-h.component';
 import { TransactionGroupAgComponent } from './transaction-group-ag/transaction-group-ag.component';
 import { TransactionGroupGgComponent } from './transaction-group-gg/transaction-group-gg.component';
 import { TransactionGroupFgComponent } from './transaction-group-fg/transaction-group-fg.component';
@@ -46,6 +47,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     TransactionGroupEComponent,
     TransactionGroupFComponent,
     TransactionGroupGComponent,
+    TransactionGroupHComponent,
     TransactionGroupAgComponent,
     TransactionGroupGgComponent,
     TransactionGroupFgComponent,

@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { Transaction } from '../models/transaction.model';
+import { Transaction, AggregationGroups } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { SchATransaction, AggregationGroups } from '../models/scha-transaction.model';
+import { SchATransaction } from '../models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
 import { TransactionType } from '../models/transaction-types/transaction-type.model';
 

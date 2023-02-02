@@ -6,8 +6,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { AggregationGroups } from 'app/shared/models/transaction.model';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -27,16 +27,16 @@ import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { SharedModule } from '../../shared/shared.module';
-import { TransactionGroupBComponent } from './transaction-group-b.component';
+import { TransactionGroupHComponent } from './transaction-group-h.component';
 
-describe('TransactionGroupBComponent', () => {
+describe('TransactionGroupHComponent', () => {
   let httpTestingController: HttpTestingController;
-  let component: TransactionGroupBComponent;
-  let fixture: ComponentFixture<TransactionGroupBComponent>;
+  let component: TransactionGroupHComponent;
+  let fixture: ComponentFixture<TransactionGroupHComponent>;
   let testContactService: ContactService;
   let testConfirmationService: ConfirmationService;
 
-  const transaction = SchATransaction.fromJSON({
+  const transaction = SchBTransaction.fromJSON({
     form_type: 'SA15',
     filer_committee_id_number: 'C00000000',
     transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
@@ -72,7 +72,7 @@ describe('TransactionGroupBComponent', () => {
         InputTextareaModule,
         ConfirmDialogModule,
       ],
-      declarations: [TransactionGroupBComponent],
+      declarations: [TransactionGroupHComponent],
       providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
     testContactService = TestBed.inject(ContactService);
@@ -81,7 +81,7 @@ describe('TransactionGroupBComponent', () => {
 
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);
-    fixture = TestBed.createComponent(TransactionGroupBComponent);
+    fixture = TestBed.createComponent(TransactionGroupHComponent);
     component = fixture.componentInstance;
     component.transactionType = {
       scheduleId: '',
@@ -144,7 +144,7 @@ describe('TransactionGroupBComponent', () => {
     if (component.transactionType?.transaction) {
       component.transactionType.transaction.id = undefined;
     }
-    const testTran = SchATransaction.fromJSON({
+    const testTran = SchBTransaction.fromJSON({
       form_type: 'SA15',
       filer_committee_id_number: 'C00000000',
       transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
@@ -200,7 +200,7 @@ describe('TransactionGroupBComponent', () => {
     if (component.transactionType?.transaction) {
       component.transactionType.transaction.id = undefined;
     }
-    const testTran = SchATransaction.fromJSON({
+    const testTran = SchBTransaction.fromJSON({
       form_type: 'SA15',
       filer_committee_id_number: 'C00000000',
       transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
@@ -238,7 +238,7 @@ describe('TransactionGroupBComponent', () => {
     if (component.transactionType?.transaction) {
       component.transactionType.transaction.id = undefined;
     }
-    const testTran = SchATransaction.fromJSON({
+    const testTran = SchBTransaction.fromJSON({
       form_type: 'SA15',
       filer_committee_id_number: 'C00000000',
       transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
@@ -285,7 +285,7 @@ describe('TransactionGroupBComponent', () => {
     if (component.transactionType?.transaction) {
       component.transactionType.transaction.id = undefined;
     }
-    const testTran = SchATransaction.fromJSON({
+    const testTran = SchBTransaction.fromJSON({
       form_type: 'SA15',
       filer_committee_id_number: 'C00000000',
       transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',

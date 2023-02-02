@@ -82,3 +82,16 @@ export function hasNoContact(transaction?: Transaction): boolean {
 
 export type ScheduleTransaction = SchATransaction | SchBTransaction;
 export type ScheduleTransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
+
+export enum AggregationGroups {
+  GENERAL = 'GENERAL',
+  LINE_15 = 'LINE_15',
+  LINE_16 = 'LINE_16',
+  NATIONAL_PARTY_CONVENTION_ACCOUNT = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  NATIONAL_PARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  NON_CONTRIBUTION_ACCOUNT = 'NON_CONTRIBUTION_ACCOUNT',
+  OTHER_RECEIPTS = 'OTHER_RECEIPTS',
+  RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
+  GENERAL_DISBURSEMENT = 'GENERAL_DISBURSEMENT',
+}
