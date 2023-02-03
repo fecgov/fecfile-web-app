@@ -41,11 +41,13 @@ describe('TransactionGroupFComponent', () => {
   let testContactService: ContactService;
 
   const transaction = SchATransaction.fromJSON({
-    form_type: 'SA11AI',
+    form_type: 'SA15',
     filer_committee_id_number: 'C00000000',
-    transaction_type_identifier: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
+    transaction_type_identifier: 'PAC_JF_TRANSFER_MEMO',
     transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-    entity_type: ContactTypes.ORGANIZATION,
+    back_reference_tran_id_number: 'AAAAAAAAAAAAAAAAAAA',
+    back_reference_sched_name: 'SA12',
+    entity_type: ContactTypes.COMMITTEE,
     contributor_organization_name: 'org name',
     contributor_street_1: '123 Main St',
     contributor_city: 'city',
@@ -54,6 +56,10 @@ describe('TransactionGroupFComponent', () => {
     contribution_date: '2022-08-11',
     contribution_amount: 1,
     contribution_aggregate: 2,
+    contribution_purpose_descrip: 'Joint Fundraising Memo: test',
+    aggregation_group: AggregationGroups.GENERAL,
+    memo_code: true,
+    donor_committee_fec_id: 'C00000000',
   });
 
   beforeEach(async () => {
@@ -121,25 +127,7 @@ describe('TransactionGroupFComponent', () => {
       component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
-      form_type: 'SA15',
-      filer_committee_id_number: 'C00000000',
-      transaction_type_identifier: 'PAC_JF_TRANSFER_MEMO',
-      transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-      back_reference_tran_id_number: 'AAAAAAAAAAAAAAAAAAA',
-      back_reference_sched_name: 'SA12',
-      entity_type: ContactTypes.COMMITTEE,
-      contributor_organization_name: 'org name',
-      contributor_street_1: '123 Main St',
-      contributor_city: 'city',
-      contributor_state: 'VA',
-      contributor_zip: '20001',
-      contribution_date: '2022-08-11',
-      contribution_amount: 1,
-      contribution_aggregate: 2,
-      contribution_purpose_descrip: 'Joint Fundraising Memo: test',
-      aggregation_group: AggregationGroups.GENERAL,
-      memo_code: true,
-      donor_committee_fec_id: 'C00000000',
+      ...transaction,
       contact: new Contact(),
     });
     component.form.patchValue({ ...testTran });
@@ -149,6 +137,27 @@ describe('TransactionGroupFComponent', () => {
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
   });
+
+  it('#save() should update an existing contact', () => {
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testContactService, 'create').and.returnValue(of(testContact));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = '10';
+    }
+    component.form.patchValue({ ...transaction });
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.ANOTHER, transaction));
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/10/`);
+    expect(req.request.method).toEqual('PUT');
+    httpTestingController.verify();
+  });
+
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));

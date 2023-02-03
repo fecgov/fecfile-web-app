@@ -353,7 +353,8 @@ describe('TransactionTypeBaseComponent', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction2));
+    const updateSpy = spyOn(testTransactionService, 'update');
+    updateSpy.and.returnValue(of(testTransaction2));
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) {
         return confirmation.accept();
@@ -361,11 +362,14 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = testTransactionType;
+    component.transactionType =
+      TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) || ({} as TransactionType);
+    component.transactionType.transaction = testTransaction;
 
     component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction2));
     tick(1000);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
+    expect(updateSpy).toHaveBeenCalled();
   }));
 
   it('#navigateTo NavigationDestination.ANOTHER should show popup', () => {
