@@ -235,6 +235,16 @@ describe('TransactionTypeBaseComponent', () => {
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
 
+  function spyOnServices(contact: Contact, transaction: SchATransaction) {
+    spyOn(testApiService, 'post').and.returnValue(of(contact));
+    spyOn(testTransactionService, 'create').and.returnValue(of(transaction));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+  }
+
   it('#save should update COM contact', () => {
     const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();
@@ -243,13 +253,7 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.committee_id = 'C12345679';
     testContact.name = 'testName1';
 
-    spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
-      }
-    });
+    spyOnServices(testContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
@@ -277,13 +281,7 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.type = ContactTypes.ORGANIZATION;
     testContact.name = 'testName1';
 
-    spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
-      }
-    });
+    spyOnServices(testContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
@@ -310,13 +308,7 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.type = ContactTypes.ORGANIZATION;
     testContact.name = 'testName1';
 
-    spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
-      }
-    });
+    spyOnServices(testContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
@@ -332,13 +324,8 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
-    spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
-      }
-    });
+
+    spyOnServices(testContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
