@@ -122,13 +122,14 @@ describe('TransactionGroupFComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
-      component.transactionType.transaction.id = undefined;
-    }
     const testTran = SchATransaction.fromJSON({
       ...transaction,
       contact: new Contact(),
     });
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = undefined;
+      component.transactionType.transaction = testTran;
+    }
     component.form.patchValue({ ...testTran });
     component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     expect(component.form.invalid).toBe(false);
