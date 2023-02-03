@@ -130,12 +130,14 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
 
 export class TransactionTypeUtils {
   static factory(transactionTypeIdentifier: string): TransactionType {
-    if (
-      transactionTypeClasses[transactionTypeIdentifier] === undefined ||
-      transactionTypeClasses[transactionTypeIdentifier] === null
-    ) {
+    const transactionType = getTransactionTypeClass(transactionTypeIdentifier);
+    if (!transactionType) {
       throw new Error(`Class transaction type of '${transactionTypeIdentifier}' is not found`);
     }
-    return new transactionTypeClasses[transactionTypeIdentifier]();
+    return new transactionType();
   }
+}
+
+export function getTransactionTypeClass(transactionTypeIdentifier: string): any {
+  return transactionTypeClasses[transactionTypeIdentifier];
 }
