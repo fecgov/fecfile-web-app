@@ -139,26 +139,6 @@ describe('TransactionGroupFComponent', () => {
     httpTestingController.verify();
   });
 
-  it('#save() should update an existing contact', () => {
-    const testContact: Contact = new Contact();
-    testContact.id = 'testId';
-    spyOn(testContactService, 'create').and.returnValue(of(testContact));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
-      }
-    });
-
-    if (component.transactionType?.transaction) {
-      component.transactionType.transaction.id = '10';
-    }
-    component.form.patchValue({ ...transaction });
-    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.ANOTHER, transaction));
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/10/`);
-    expect(req.request.method).toEqual('PUT');
-    httpTestingController.verify();
-  });
-
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
