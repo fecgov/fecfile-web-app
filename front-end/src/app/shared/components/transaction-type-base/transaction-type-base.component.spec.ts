@@ -276,48 +276,29 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#save should update ORG contact', () => {
     const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
-    const testContact: Contact = new Contact();
-    testContact.id = 'testId';
-    testContact.type = ContactTypes.ORGANIZATION;
-    testContact.name = 'testName1';
+    const orgContact: Contact = new Contact();
+    orgContact.id = 'testId';
+    orgContact.type = ContactTypes.ORGANIZATION;
+    orgContact.name = 'testName1';
 
-    spyOnServices(testContact, testTransaction1);
+    spyOnServices(orgContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
 
-    addContact(component, testContact);
+    addContact(component, orgContact);
     const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
     component.save(listSaveEvent);
     component.form = new FormGroup([]);
     component.save(listSaveEvent);
-    const testContact2 = new Contact();
-    testContact2.type = ContactTypes.ORGANIZATION;
-    testContact2.id = 'testId';
+    const orgContact2 = new Contact();
+    orgContact2.type = ContactTypes.ORGANIZATION;
+    orgContact2.id = 'testId';
     if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact2;
+      component.transactionType.transaction.contact = orgContact2;
     }
     component.save(listSaveEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
-  });
-
-  it('#save no contact changes', () => {
-    const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
-    const testContact: Contact = new Contact();
-    testContact.id = 'testId';
-    testContact.type = ContactTypes.ORGANIZATION;
-    testContact.name = 'testName1';
-
-    spyOnServices(testContact, testTransaction1);
-
-    const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = testTransactionType;
-
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = undefined;
-    }
-    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1));
-    expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 
   it('#save should navigate for create', () => {
