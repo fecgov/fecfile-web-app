@@ -199,9 +199,11 @@ describe('TransactionTypeBaseComponent', () => {
 
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
     spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
+    const confirmSpy = spyOn(testConfirmationService, 'confirm');
+    // test reject
+    confirmSpy.and.callFake((confirmation: Confirmation) => {
+      if (confirmation.reject) {
+        return confirmation.reject();
       }
     });
 
@@ -210,6 +212,12 @@ describe('TransactionTypeBaseComponent', () => {
 
     addContact(component, testContact);
     const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
+    component.save(listSaveEvent);
+    confirmSpy.and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
     component.save(listSaveEvent);
     component.form = new FormGroup([]);
     component.save(listSaveEvent);
