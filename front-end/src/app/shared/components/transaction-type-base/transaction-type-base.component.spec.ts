@@ -173,6 +173,12 @@ describe('TransactionTypeBaseComponent', () => {
     expect(formValues['memo_text']['text4000']).toBe('memo');
   });
 
+  function addContact(component: TestTransactionTypeBaseComponent, contact: Contact) {
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.contact = contact;
+    }
+  }
+
   it('#save should update IND contact', () => {
     const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();
@@ -202,9 +208,7 @@ describe('TransactionTypeBaseComponent', () => {
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
 
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact;
-    }
+    addContact(component, testContact);
     const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
     component.save(listSaveEvent);
     component.form = new FormGroup([]);
@@ -242,9 +246,7 @@ describe('TransactionTypeBaseComponent', () => {
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
 
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact;
-    }
+    addContact(component, testContact);
     const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
     component.save(listSaveEvent);
     component.form = new FormGroup([]);
@@ -278,9 +280,7 @@ describe('TransactionTypeBaseComponent', () => {
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
 
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact;
-    }
+    addContact(component, testContact);
     const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
     component.save(listSaveEvent);
     component.form = new FormGroup([]);

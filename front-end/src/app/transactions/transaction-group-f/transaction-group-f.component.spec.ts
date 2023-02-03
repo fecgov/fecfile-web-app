@@ -10,12 +10,12 @@ import {
   NavigationDestination,
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
-import { ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { AggregationGroups, SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { schema as PAC_JF_TRANSFER_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -30,11 +30,15 @@ import { environment } from '../../../environments/environment';
 import { ScheduleATransactionTypes } from '../../shared/models/scha-transaction.model';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupFComponent } from './transaction-group-f.component';
+import { ContactService } from 'app/shared/services/contact.service';
+import { of } from 'rxjs';
 
 describe('TransactionGroupFComponent', () => {
   let httpTestingController: HttpTestingController;
   let component: TransactionGroupFComponent;
   let fixture: ComponentFixture<TransactionGroupFComponent>;
+  let testConfirmationService: ConfirmationService;
+  let testContactService: ContactService;
 
   const transaction = SchATransaction.fromJSON({
     form_type: 'SA11AI',
@@ -74,6 +78,8 @@ describe('TransactionGroupFComponent', () => {
       declarations: [TransactionGroupFComponent],
       providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
+    testContactService = TestBed.inject(ContactService);
+    testConfirmationService = TestBed.inject(ConfirmationService);
   });
 
   beforeEach(() => {
@@ -101,7 +107,47 @@ describe('TransactionGroupFComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('#save() should save a new com record', () => {
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    spyOn(testContactService, 'create').and.returnValue(of(testContact));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
 
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.id = undefined;
+    }
+    const testTran = SchATransaction.fromJSON({
+      form_type: 'SA15',
+      filer_committee_id_number: 'C00000000',
+      transaction_type_identifier: 'PAC_JF_TRANSFER_MEMO',
+      transaction_id: 'AAAAAAAAAAAAAAAAAAA',
+      back_reference_tran_id_number: 'AAAAAAAAAAAAAAAAAAA',
+      back_reference_sched_name: 'SA12',
+      entity_type: ContactTypes.COMMITTEE,
+      contributor_organization_name: 'org name',
+      contributor_street_1: '123 Main St',
+      contributor_city: 'city',
+      contributor_state: 'VA',
+      contributor_zip: '20001',
+      contribution_date: '2022-08-11',
+      contribution_amount: 1,
+      contribution_aggregate: 2,
+      contribution_purpose_descrip: 'Joint Fundraising Memo: test',
+      aggregation_group: AggregationGroups.GENERAL,
+      memo_code: true,
+      donor_committee_fec_id: 'C00000000',
+    });
+    component.form.patchValue({ ...testTran });
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
+    expect(component.form.invalid).toBe(false);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
+    expect(req.request.method).toEqual('POST');
+    httpTestingController.verify();
+  });
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
