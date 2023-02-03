@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 
 @Component({
@@ -6,7 +6,7 @@ import { BaseInputComponent } from '../base-input.component';
   templateUrl: './additional-info-input.component.html',
   styleUrls: ['./additional-info-input.component.scss'],
 })
-export class AdditionalInfoInputComponent extends BaseInputComponent {
+export class AdditionalInfoInputComponent extends BaseInputComponent implements OnInit {
   @Input() descriptionIsSystemGenerated = false;
   @Input() contributionPurposeDescriptionLabel = '';
   @Input() purposeDescriptionLabelNotice?: string;
