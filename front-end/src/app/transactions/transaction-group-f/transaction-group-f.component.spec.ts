@@ -27,7 +27,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { environment } from '../../../environments/environment';
-import { ScheduleATransactionTypes } from '../../shared/models/scha-transaction.model';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupFComponent } from './transaction-group-f.component';
 import { ContactService } from 'app/shared/services/contact.service';
