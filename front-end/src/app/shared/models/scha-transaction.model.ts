@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Transaction, AggregationGroups, ScheduleTemplateMapType } from './transaction.model';
+import { Transaction, AggregationGroups, ScheduleFormTemplateMapType } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
@@ -463,7 +463,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
 ];
 
 // Mapping of schedule fields to the group input component form templates
-export const ScheduleAFormTemplateMap: ScheduleTemplateMapType = {
+export const ScheduleAFormTemplateMap: ScheduleFormTemplateMapType = {
   last_name: 'contributor_last_name',
   first_name: 'contributor_first_name',
   middle_name: 'contributor_middle_name',

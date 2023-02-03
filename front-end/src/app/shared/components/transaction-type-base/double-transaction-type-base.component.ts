@@ -7,7 +7,7 @@ import {
   ScheduleAFormTemplateMap,
 } from 'app/shared/models/scha-transaction.model';
 import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
-import { Transaction, ScheduleTemplateMapType } from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleFormTemplateMapType } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
@@ -41,7 +41,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
   childContributionPurposeDescriptionLabel = '';
   childNegativeAmountValueOnly = false;
-  childFormTemplateMap: ScheduleTemplateMapType = ScheduleAFormTemplateMap; // Text strings and fields specific to a particular schedule to map into the transaction input form templates
+  childFormTemplateMap: ScheduleFormTemplateMapType = ScheduleAFormTemplateMap; // Text strings and fields specific to a particular schedule to map into the transaction input form templates
 
   override ngOnInit(): void {
     // Initialize primary form.

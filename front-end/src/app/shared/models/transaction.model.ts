@@ -2,10 +2,41 @@ import { BaseModel } from './base.model';
 import { Contact } from './contact.model';
 import { MemoText } from './memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleAFormTemplateMap } from './scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBFormTemplateMap } from './schb-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
 import { ValidateUtils } from '../utils/validate.utils';
 import { TransactionType } from './transaction-types/transaction-type.model';
 import { Type } from 'class-transformer';
+
+/**
+ * This is a copy of the same map from the schb-transaction.model.ts file.
+ * There is currently a initialization bug when importing this map
+ * from the other file. Looking to see if it clears up when the transaction
+ * tree is refactored to place TransactionType on the transaction rather
+ * than the current viceversa
+ */
+const ScheduleBFormTemplateMap: ScheduleFormTemplateMapType = {
+  last_name: 'payee_last_name',
+  first_name: 'payee_first_name',
+  middle_name: 'payee_middle_name',
+  prefix: 'payee_prefix',
+  suffix: 'payee_suffix',
+  street_1: 'payee_street_1',
+  street_2: 'payee_street_2',
+  city: 'payee_city',
+  state: 'payee_state',
+  zip: 'payee_zip',
+  employer: '',
+  occupation: '',
+  organization_name: 'payee_organization_name',
+  committee_fec_id: 'beneficiary_committee_fec_id',
+  date: 'expenditure_date',
+  memo_code: 'memo_code',
+  amount: 'expenditure_amount',
+  aggregate: 'aggregate_amount',
+  purpose_descrip: 'expenditure_purpose_descrip',
+  purposeDescripLabel: 'EXPENDITURE PURPOSE DESCRIPTION',
+  memo_text_input: 'memo_text_input',
+};
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -72,11 +103,11 @@ export abstract class Transaction extends BaseModel {
     }
   }
 
-  static getFormTemplateMap(transactionType: TransactionType | undefined): ScheduleTemplateMapType {
+  static getFormTemplateMap(transactionType: TransactionType | undefined): ScheduleFormTemplateMapType {
     if (!transactionType) throw new Error('getFormTemplateMap() missing transaction type');
     if (transactionType.scheduleId === 'A') return ScheduleAFormTemplateMap;
     if (transactionType.scheduleId === 'B') return ScheduleBFormTemplateMap;
-    throw new Error(`Missing form template map for ${transactionType.transaction?.transaction_type_identifier}`);
+    throw new Error(`Missing form template map for ${transactionType?.transaction?.transaction_type_identifier}`);
   }
 }
 
@@ -90,7 +121,7 @@ export function hasNoContact(transaction?: Transaction): boolean {
 export type ScheduleTransaction = SchATransaction | SchBTransaction;
 export type ScheduleTransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
 
-export type ScheduleTemplateMapType = {
+export type ScheduleFormTemplateMapType = {
   last_name: string;
   first_name: string;
   middle_name: string;

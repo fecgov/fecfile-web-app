@@ -13,7 +13,7 @@ import {
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction, ScheduleTemplateMapType } from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleFormTemplateMapType } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -43,7 +43,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   purposeDescriptionLabel = '';
   childTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
   negativeAmountValueOnly = false;
-  formTemplateMap: ScheduleTemplateMapType = ScheduleAFormTemplateMap; // Text strings and fields specific to a particular schedule to map into the transaction input form templates
+  formTemplateMap: ScheduleFormTemplateMapType = ScheduleAFormTemplateMap; // Text strings and fields specific to a particular schedule to map into the transaction input form templates
 
   form: FormGroup = this.fb.group({});
 

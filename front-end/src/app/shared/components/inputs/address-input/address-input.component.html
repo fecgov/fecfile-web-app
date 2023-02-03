@@ -57,7 +57,7 @@
     <div class="col-3">
       <div class="field">
         <label for="zip">ZIP/POSTAL CODE</label>
-        <input type="text" pInputText id="zip" formControlName="formTemplateMap['zip']" />
+        <input type="text" pInputText id="zip" [formControlName]="formTemplateMap['zip']" />
         <app-error-messages
           [form]="form"
           [fieldName]="formTemplateMap['zip']"
