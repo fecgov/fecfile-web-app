@@ -11,7 +11,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
   @Input() contributionPurposeDescriptionLabel = '';
   @Input() purposeDescriptionLabelNotice?: string;
   @Input() purposeFieldTitle?: string; //Specifies a specific title for the CPD field
-  @Input() schedule?: 'A' | 'B'; //Specifies a schedule so that a default CPD title can be used
+  @Input() schedule?: string; //Specifies a schedule so that a default CPD title can be used
 
   ngOnInit(): void {
     if (!this.purposeFieldTitle) {
@@ -19,7 +19,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
     }
   }
 
-  public getPurposeFieldTitle() {
+  public getPurposeFieldTitle(): string {
     //This is a switch because there will *eventually* be many more cases
     switch (this.schedule) {
       case 'A':

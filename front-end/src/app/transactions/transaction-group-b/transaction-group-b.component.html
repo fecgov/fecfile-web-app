@@ -48,7 +48,7 @@
         [formSubmitted]="formSubmitted"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
         [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
-        [schedule]="'A'"
+        [schedule]="this.transactionType?.scheduleId"
       ></app-additional-info-input>
     </ng-container>
     <p-divider></p-divider>

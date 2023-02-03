@@ -127,7 +127,7 @@
             [formSubmitted]="formSubmitted"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType?.childTransactionType)"
             [contributionPurposeDescriptionLabel]="this.childContributionPurposeDescriptionLabel"
-            [schedule]="'A'"
+            [schedule]="this.transactionType?.scheduleId"
           ></app-additional-info-input>
         </ng-container>
       </form>

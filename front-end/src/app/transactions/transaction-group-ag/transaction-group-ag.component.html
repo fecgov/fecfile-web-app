@@ -50,7 +50,7 @@
             [formSubmitted]="formSubmitted"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
             [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
-            [schedule]="'A'"
+            [schedule]="this.transactionType?.scheduleId"
           ></app-additional-info-input>
           <div class="grid" style="flex-direction: row-reverse">
             <p style="font-style: italic">This type of receipt requires a memo transaction</p>
@@ -124,7 +124,7 @@
             [formSubmitted]="formSubmitted"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType?.childTransactionType)"
             [contributionPurposeDescriptionLabel]="this.childContributionPurposeDescriptionLabel"
-            [schedule]="'A'"
+            [schedule]="this.transactionType?.scheduleId"
           ></app-additional-info-input>
         </ng-container>
       </form>

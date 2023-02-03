@@ -44,7 +44,7 @@
         [formSubmitted]="formSubmitted"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
         [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
-        [schedule]="'A'"
+        [schedule]="this.transactionType?.scheduleId"
       ></app-additional-info-input>
       <div class="grid">
         <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls().inlineControls">

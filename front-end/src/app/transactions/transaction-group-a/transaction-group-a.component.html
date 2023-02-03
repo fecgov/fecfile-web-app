@@ -39,7 +39,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transactionType)"
-        [schedule]="'A'"
+        [schedule]="this.transactionType?.scheduleId"
         [contributionPurposeDescriptionLabel]="this.contributionPurposeDescriptionLabel"
       ></app-additional-info-input>
       <div class="grid">
