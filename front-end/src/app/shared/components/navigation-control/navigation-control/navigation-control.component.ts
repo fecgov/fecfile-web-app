@@ -18,7 +18,7 @@ export class NavigationControlComponent {
   }
 
   click(): void {
-    let navigationEvent = new NavigationEvent(
+    const navigationEvent = new NavigationEvent(
       this.navigationControl?.navigationAction,
       this.navigationControl?.navigationDestination,
       this.transaction

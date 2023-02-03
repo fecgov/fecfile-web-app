@@ -205,7 +205,7 @@ describe('TransactionTypeBaseComponent', () => {
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact;
     }
-    let listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
+    const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
     component.save(listSaveEvent);
     component.form = new FormGroup([]);
     component.save(listSaveEvent);
@@ -245,7 +245,7 @@ describe('TransactionTypeBaseComponent', () => {
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact;
     }
-    let listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
+    const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
     component.save(listSaveEvent);
     component.form = new FormGroup([]);
     component.form.addControl('donor_committee_fec_id', new FormControl('test'));
@@ -281,7 +281,7 @@ describe('TransactionTypeBaseComponent', () => {
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact;
     }
-    let listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
+    const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
     component.save(listSaveEvent);
     component.form = new FormGroup([]);
     component.save(listSaveEvent);

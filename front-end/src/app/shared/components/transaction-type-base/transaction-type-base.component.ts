@@ -168,7 +168,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   protected doSave(navigationEvent: NavigationEvent, payload: Transaction) {
     if (payload.transaction_type_identifier) {
-      let originalTransaction = payload;
+      const originalTransaction = payload;
       // Reorganize the payload if this transaction type can update its parent transaction
       // This will break the scenario where the user creates a grandparent, then child, then tries
       // to create a grandchild transaction because we won't know which child transaction of the grandparent
@@ -210,7 +210,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   navigateTo(event: NavigationEvent) {
-    let reportPath = `/transactions/report/${event.transaction?.report_id}`;
+    const reportPath = `/transactions/report/${event.transaction?.report_id}`;
     if (event.destination === NavigationDestination.ANOTHER) {
       this.messageService.add({
         severity: 'success',
