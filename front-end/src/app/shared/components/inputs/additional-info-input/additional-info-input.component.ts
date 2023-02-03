@@ -20,6 +20,7 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
   }
 
   public getPurposeFieldTitle() {
+    //This is a switch because there will *eventually* be many more cases
     switch (this.schedule) {
       case 'A':
         return 'Purpose of Receipt';
