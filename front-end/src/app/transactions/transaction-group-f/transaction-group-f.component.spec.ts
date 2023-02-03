@@ -140,9 +140,10 @@ describe('TransactionGroupFComponent', () => {
       aggregation_group: AggregationGroups.GENERAL,
       memo_code: true,
       donor_committee_fec_id: 'C00000000',
+      contact: new Contact(),
     });
     component.form.patchValue({ ...testTran });
-    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
+    component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     expect(component.form.invalid).toBe(false);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
     expect(req.request.method).toEqual('POST');
