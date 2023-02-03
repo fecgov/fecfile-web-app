@@ -41,4 +41,10 @@ describe('AdditionalInfoInputComponent', () => {
     fixture.detectChanges();
     expect(cpd.classes['readonly']).toBeFalsy();
   });
+
+  it('should set the purpose field title based on schedule', () => {
+    expect(component.getPurposeFieldTitle()).toEqual('Contribution Purpose Description');
+    component.schedule = 'A';
+    expect(component.getPurposeFieldTitle()).toEqual('Purpose of Receipt');
+  });
 });
