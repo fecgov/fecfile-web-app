@@ -124,13 +124,14 @@ describe('TransactionGroupFComponent', () => {
 
     const testTran = SchATransaction.fromJSON({
       ...transaction,
-      contact: new Contact(),
     });
     if (component.transactionType?.transaction) {
-      component.transactionType.transaction.id = undefined;
       component.transactionType.transaction = testTran;
+      component.transactionType.transaction.id = undefined;
+      component.transactionType.transaction.contact = testContact;
     }
     component.form.patchValue({ ...testTran });
+    expect(fixture.nativeElement.querySelector('app-committee-input')).toBeDefined();
     component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     expect(component.form.invalid).toBe(false);
     const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
