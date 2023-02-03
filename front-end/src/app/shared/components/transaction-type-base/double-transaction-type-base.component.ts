@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ScheduleATransactionTypes, SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { NavigationDestination, NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';

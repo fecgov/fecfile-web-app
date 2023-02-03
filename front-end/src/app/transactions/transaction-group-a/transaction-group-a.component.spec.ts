@@ -7,7 +7,11 @@ import { TransactionType } from 'app/shared/models/transaction-types/transaction
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
+import {
+  NavigationAction,
+  NavigationDestination,
+  NavigationEvent,
+} from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
@@ -99,7 +103,7 @@ describe('TransactionGroupAComponent', () => {
 
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
       `${environment.apiUrl}/transactions/schedule-a/1/?schema=INDIVIDUAL_JF_TRANSFER_MEMO&fields_to_validate=`
