@@ -27,7 +27,7 @@
           [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
         ></app-committee-input>
       </ng-container>
-      <ng-container *ngIf="form.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
+      <ng-container *ngIf="getEntityType() === ContactTypes.INDIVIDUAL">
         <app-name-input [form]="form" [formSubmitted]="formSubmitted"></app-name-input>
       </ng-container>
       <p-divider></p-divider>
