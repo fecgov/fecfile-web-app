@@ -138,6 +138,7 @@ export class TransactionTypeUtils {
   }
 }
 
-export function getTransactionTypeClass(transactionTypeIdentifier: string): any {
+// prettier-ignore
+export function getTransactionTypeClass(transactionTypeIdentifier: string): any { // eslint-disable-line @typescript-eslint/no-explicit-any
   return transactionTypeClasses[transactionTypeIdentifier];
 }
