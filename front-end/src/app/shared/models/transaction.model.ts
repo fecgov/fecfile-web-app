@@ -103,6 +103,20 @@ export abstract class Transaction extends BaseModel {
     }
   }
 
+  /**
+   * updateChildren()
+   * @returns
+   *    An array of Transaction objects whose contribution_purpose_descriptions
+   *    have been re-generated to account for changes to their parent
+   *
+   */
+  updateChildren(): Transaction[] {
+    if (this.children) {
+      return this.children;
+    }
+    return [];
+  }
+
   static getFormTemplateMap(transactionType: TransactionType | undefined): ScheduleFormTemplateMapType {
     if (!transactionType) throw new Error('getFormTemplateMap() missing transaction type');
     if (transactionType.scheduleId === 'A') return ScheduleAFormTemplateMap;
@@ -118,6 +132,7 @@ export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact;
 }
 
+// export type ScheduleTransactionKeys = SchATransaction & SchBTransaction;
 export type ScheduleTransaction = SchATransaction | SchBTransaction;
 export type ScheduleTransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
 

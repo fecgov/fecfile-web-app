@@ -86,7 +86,7 @@ export class SchATransaction extends Transaction {
    *    have been re-generated to account for changes to their parent
    *
    */
-  updateChildren(): Transaction[] {
+  override updateChildren(): Transaction[] {
     const outChildren: Transaction[] = [];
 
     if (this.children) {

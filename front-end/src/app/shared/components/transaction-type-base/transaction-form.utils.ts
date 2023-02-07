@@ -1,7 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleTransaction, ScheduleFormTemplateMapType } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
@@ -9,6 +8,8 @@ import { ContactTypes } from '../../models/contact.model';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
 
 export class TransactionFormUtils {
   /**
@@ -28,7 +29,8 @@ export class TransactionFormUtils {
     form: FormGroup,
     validateService: ValidateService,
     transactionType: TransactionType | undefined,
-    contactId$: Subject<string>
+    contactId$: Subject<string>,
+    formTemplateMap: ScheduleFormTemplateMapType
   ): void {
     // Initialize validation tracking of current JSON schema and form data
     validateService.formValidatorSchema = transactionType?.schema;
@@ -40,7 +42,7 @@ export class TransactionFormUtils {
     }
 
     if (isExisting(transactionType?.transaction)) {
-      const txn = { ...transactionType?.transaction } as SchATransaction;
+      const txn = { ...transactionType?.transaction } as Transaction;
       form.patchValue({ ...txn });
 
       TransactionMemoUtils.patchMemoText(transactionType, form);
@@ -58,45 +60,46 @@ export class TransactionFormUtils {
       ?.valueChanges.pipe(takeUntil(component.destroy$))
       .subscribe((value: string) => {
         if (value === ContactTypes.INDIVIDUAL || value === ContactTypes.CANDIDATE) {
-          form.get('contributor_organization_name')?.reset();
+          form.get(formTemplateMap.organization_name)?.reset();
         }
         if (value === ContactTypes.ORGANIZATION || value === ContactTypes.COMMITTEE) {
-          form.get('contributor_last_name')?.reset();
-          form.get('contributor_first_name')?.reset();
-          form.get('contributor_middle_name')?.reset();
-          form.get('contributor_prefix')?.reset();
-          form.get('contributor_suffix')?.reset();
-          form.get('contributor_employer')?.reset();
-          form.get('contributor_occupation')?.reset();
+          form.get(formTemplateMap.last_name)?.reset();
+          form.get(formTemplateMap.first_name)?.reset();
+          form.get(formTemplateMap.middle_name)?.reset();
+          form.get(formTemplateMap.prefix)?.reset();
+          form.get(formTemplateMap.suffix)?.reset();
+          form.get(formTemplateMap.employer)?.reset();
+          form.get(formTemplateMap.occupation)?.reset();
         }
       });
 
     form
-      ?.get('contribution_aggregate')
+      ?.get(formTemplateMap.aggregate)
       ?.valueChanges.pipe(takeUntil(component.destroy$))
       .subscribe(() => {
-        form.get('contributor_employer')?.updateValueAndValidity();
-        form.get('contributor_occupation')?.updateValueAndValidity();
+        form.get(formTemplateMap.employer)?.updateValueAndValidity();
+        form.get(formTemplateMap.occupation)?.updateValueAndValidity();
       });
 
     const previous_transaction$: Observable<Transaction | undefined> =
-      form.get('contribution_date')?.valueChanges.pipe(
-        startWith(form.get('contribution_date')?.value),
+      form.get(formTemplateMap.date)?.valueChanges.pipe(
+        startWith(form.get(formTemplateMap.date)?.value),
         combineLatestWith(contactId$),
         switchMap(([contribution_date, contactId]) => {
           return component.transactionService.getPreviousTransaction(transactionType, contactId, contribution_date);
         })
       ) || of(undefined);
     form
-      .get('contribution_amount')
+      .get(formTemplateMap.amount)
       ?.valueChanges.pipe(
-        startWith(form.get('contribution_amount')?.value),
+        startWith(form.get(formTemplateMap.amount)?.value),
         combineLatestWith(previous_transaction$),
         takeUntil(component.destroy$)
       )
-      .subscribe(([contribution_amount, previous_transaction]) => {
-        const previousAggregate = +((previous_transaction as SchATransaction)?.contribution_aggregate || 0);
-        form.get('contribution_aggregate')?.setValue(+contribution_amount + previousAggregate);
+      .subscribe(([amount, previous_transaction]) => {
+        const key = formTemplateMap.aggregate as keyof ScheduleTransaction;
+        const previousAggregate = previous_transaction ? +((previous_transaction as ScheduleTransaction)[key] || 0) : 0;
+        form.get(formTemplateMap.aggregate)?.setValue(+amount + previousAggregate);
       });
   }
 
@@ -105,11 +108,22 @@ export class TransactionFormUtils {
     validateService: ValidateService,
     form: FormGroup,
     formProperties: string[]
-  ): SchATransaction {
+  ): Transaction {
     let formValues = validateService.getFormValues(form, formProperties);
     if (transactionType) formValues = TransactionMemoUtils.retrieveMemoText(transactionType, form, formValues);
 
-    const payload: SchATransaction = SchATransaction.fromJSON({
+    if (!transactionType?.transaction) {
+      throw new Error('Payload transaction not found');
+    }
+
+    // prettier-ignore
+    function fromJSON(transactionType: TransactionType, json: any, depth = 2): ScheduleTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+    if (transactionType.scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
+    throw new Error('Missing  transaction type schedule declaration when generating schedule JSON payload');
+  }
+
+    const payload: ScheduleTransaction = fromJSON(transactionType, {
       ...transactionType?.transaction,
       ...formValues,
     });

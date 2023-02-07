@@ -49,7 +49,7 @@ export class SchBTransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
-  override apiEndpoint = '/sch-b-transactions';
+  override apiEndpoint = '/transactions/schedule-a';
 
   // prettier-ignore
   static fromJSON(json: any, depth = 2): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any

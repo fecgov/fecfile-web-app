@@ -13,7 +13,11 @@ import {
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction, ScheduleFormTemplateMapType } from 'app/shared/models/transaction.model';
+import {
+  Transaction,
+  ScheduleFormTemplateMapType,
+  ScheduleTransactionTypes,
+} from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -60,27 +64,33 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   ngOnInit(): void {
     this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
-    TransactionFormUtils.onInit(this, this.form, this.validateService, this.transactionType, this.contactId$);
+    this.formTemplateMap = Transaction.getFormTemplateMap(this.transactionType);
+    TransactionFormUtils.onInit(
+      this,
+      this.form,
+      this.validateService,
+      this.transactionType,
+      this.contactId$,
+      this.formTemplateMap
+    );
     this.parentOnInit();
   }
 
   parentOnInit() {
-    this.formTemplateMap = Transaction.getFormTemplateMap(this.transactionType);
-
     // Override contact type options if present in transactionType
     if (this.transactionType && this.transactionType.contactTypeOptions) {
       this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, this.transactionType.contactTypeOptions);
     }
 
-    const contribution_amount_schema = this.transactionType?.schema.properties['contribution_amount'];
-    if (contribution_amount_schema?.exclusiveMaximum === 0) {
+    const amount_schema = this.transactionType?.schema.properties[this.formTemplateMap.amount];
+    if (amount_schema?.exclusiveMaximum === 0) {
       this.negativeAmountValueOnly = true;
       this.form
-        .get('contribution_amount')
+        .get(this.formTemplateMap.amount)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((contribution_amount) => {
-          if (typeof contribution_amount === 'number' && contribution_amount > 0) {
-            this.form.patchValue({ contribution_amount: -1 * contribution_amount });
+        .subscribe((amount) => {
+          if (typeof amount === 'number' && amount > 0) {
+            this.form.patchValue({ amount: -1 * amount });
           }
         });
     }
@@ -96,7 +106,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
-  save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleATransactionTypes) {
+  save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleTransactionTypes) {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
@@ -119,24 +129,26 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     acceptCallback: (
       navigateTo: NavigationDestination,
       payload: Transaction,
-      transactionTypeToAdd?: ScheduleATransactionTypes
+      transactionTypeToAdd?: ScheduleTransactionTypes
     ) => void,
     navigateTo: NavigationDestination,
     payload: Transaction,
-    transactionTypeToAdd?: ScheduleATransactionTypes,
+    transactionTypeToAdd?: ScheduleTransactionTypes,
     targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (confirmTransaction.contact_id && confirmTransaction.contact) {
       const transactionContactChanges = TransactionContactUtils.setTransactionContactFormChanges(
         form,
-        confirmTransaction.contact
+        confirmTransaction.contact,
+        this.formTemplateMap
       );
       if (transactionContactChanges?.length) {
         const confirmationMessage = TransactionContactUtils.getEditTransactionContactConfirmationMessage(
           transactionContactChanges,
           confirmTransaction.contact,
           form,
-          this.fecDatePipe
+          this.fecDatePipe,
+          this.formTemplateMap
         );
         this.confirmationService.confirm({
           key: targetDialog,
@@ -158,7 +170,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     } else {
       const confirmationMessage = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
         (confirmTransaction as SchATransaction).entity_type as ContactTypes,
-        form
+        form,
+        this.formTemplateMap
       );
       this.confirmationService.confirm({
         key: targetDialog,
@@ -180,7 +193,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   protected doSave(
     navigateTo: NavigationDestination,
     payload: Transaction,
-    transactionTypeToAdd?: ScheduleATransactionTypes
+    transactionTypeToAdd?: ScheduleTransactionTypes
   ) {
     if (payload.transaction_type_identifier) {
       // Reorganize the payload if this transaction type can update its parent transaction
@@ -216,7 +229,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   navigateTo(
     navigateTo: NavigationDestination,
     transactionId?: string,
-    transactionTypeToAdd?: ScheduleATransactionTypes
+    transactionTypeToAdd?: ScheduleTransactionTypes
   ) {
     if (navigateTo === NavigationDestination.ANOTHER) {
       this.messageService.add({
@@ -261,7 +274,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   onContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onContactLookupSelect(selectItem, this.form, this.transactionType, this.contactId$);
+    TransactionContactUtils.onContactLookupSelect(
+      selectItem,
+      this.form,
+      this.transactionType,
+      this.contactId$,
+      this.formTemplateMap
+    );
   }
 
   getEntityType(): string {
