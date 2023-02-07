@@ -3,7 +3,7 @@ import { Contact } from './contact.model';
 import { MemoText } from './memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleAFormTemplateMap } from './scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
-import { ValidateUtils } from '../utils/validate.utils';
+import { ValidateService } from '../services/validate.service';
 import { TransactionType } from './transaction-types/transaction-type.model';
 import { Type } from 'class-transformer';
 
@@ -96,7 +96,7 @@ export abstract class Transaction extends BaseModel {
     if (this?.transaction_type_identifier) {
       this.transactionType = transactionType;
       this.schema_name = transactionType.getSchemaName();
-      const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
+      const fieldsToValidate: string[] = ValidateService.getSchemaProperties(transactionType.schema);
       const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
       this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
     } else {

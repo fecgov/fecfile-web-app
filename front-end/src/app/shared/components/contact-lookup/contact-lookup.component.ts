@@ -47,10 +47,10 @@ export class ContactLookupComponent {
   createContactForm: FormGroup = this.formBuilder.group(
     this.validateService.getFormGroupFields([
       ...new Set([
-        ...this.validateService.getSchemaProperties(contactIndividualSchema),
-        ...this.validateService.getSchemaProperties(contactCandidateSchema),
-        ...this.validateService.getSchemaProperties(contactCommitteeSchema),
-        ...this.validateService.getSchemaProperties(contactOrganizationSchema),
+        ...ValidateService.getSchemaProperties(contactIndividualSchema),
+        ...ValidateService.getSchemaProperties(contactCandidateSchema),
+        ...ValidateService.getSchemaProperties(contactCommitteeSchema),
+        ...ValidateService.getSchemaProperties(contactOrganizationSchema),
       ]),
     ])
   );
@@ -64,8 +64,8 @@ export class ContactLookupComponent {
     private formBuilder: FormBuilder,
     private validateService: ValidateService,
     private contactService: ContactService,
-    private fecApiService: FecApiService,
-  ) { }
+    private fecApiService: FecApiService
+  ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onDropdownSearch(event: any) {
@@ -104,12 +104,11 @@ export class ContactLookupComponent {
       if (event.value instanceof Contact) {
         this.contactSelect.emit(event);
       } else if (event.value instanceof FecApiCommitteeLookupData) {
-        const value: FecApiCommitteeLookupData = event.value
+        const value: FecApiCommitteeLookupData = event.value;
         if (value.id) {
-          this.fecApiService.getDetails(value.id)
-            .subscribe((committeeAccount) => {
-              this.openCreateContactDialog(committeeAccount);
-            });
+          this.fecApiService.getDetails(value.id).subscribe((committeeAccount) => {
+            this.openCreateContactDialog(committeeAccount);
+          });
         }
       }
       this.contactLookupForm.patchValue({ selectedContact: '' });
@@ -135,10 +134,8 @@ export class ContactLookupComponent {
 
   closeCreateContactDialog() {
     // Need these since contact-form sets these for validation
-    this.validateService.formValidatorSchema =
-      this.workingValidatorSchema;
-    this.validateService.formValidatorForm =
-      this.workingValidatorForm;
+    this.validateService.formValidatorSchema = this.workingValidatorSchema;
+    this.validateService.formValidatorForm = this.workingValidatorForm;
 
     this.createContactDialogVisible = false;
   }
@@ -150,10 +147,10 @@ export class ContactLookupComponent {
     }
 
     const createdContact = Contact.fromJSON({
-      ...this.validateService.getFormValues(this.createContactForm)
+      ...this.validateService.getFormValues(this.createContactForm),
     });
     this.contactSelect.emit({
-      value: createdContact
+      value: createdContact,
     });
     this.closeCreateContactDialog();
   }
@@ -169,20 +166,13 @@ export class ContactLookupComponent {
       phone = '+1 ' + this.selectedFecCommitteeAccount.treasurer_phone;
     }
     if (this.selectedFecCommitteeAccount) {
-      this.createContactForm.get('committee_id')?.setValue(
-        this.selectedFecCommitteeAccount.committee_id);
-      this.createContactForm.get('name')?.setValue(
-        this.selectedFecCommitteeAccount.name);
-      this.createContactForm.get('street_1')?.setValue(
-        this.selectedFecCommitteeAccount.street_1);
-      this.createContactForm.get('street_2')?.setValue(
-        this.selectedFecCommitteeAccount.street_2);
-      this.createContactForm.get('city')?.setValue(
-        this.selectedFecCommitteeAccount.city);
-      this.createContactForm.get('state')?.setValue(
-        this.selectedFecCommitteeAccount.state);
-      this.createContactForm.get('zip')?.setValue(
-        this.selectedFecCommitteeAccount.zip);
+      this.createContactForm.get('committee_id')?.setValue(this.selectedFecCommitteeAccount.committee_id);
+      this.createContactForm.get('name')?.setValue(this.selectedFecCommitteeAccount.name);
+      this.createContactForm.get('street_1')?.setValue(this.selectedFecCommitteeAccount.street_1);
+      this.createContactForm.get('street_2')?.setValue(this.selectedFecCommitteeAccount.street_2);
+      this.createContactForm.get('city')?.setValue(this.selectedFecCommitteeAccount.city);
+      this.createContactForm.get('state')?.setValue(this.selectedFecCommitteeAccount.state);
+      this.createContactForm.get('zip')?.setValue(this.selectedFecCommitteeAccount.zip);
       this.createContactForm.get('telephone')?.setValue(phone);
     }
   }
@@ -193,5 +183,4 @@ export class ContactLookupComponent {
     this.createContactFormSubmitted = false;
     this.createContactDialogVisible = false;
   }
-
 }
