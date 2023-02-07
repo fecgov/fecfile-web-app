@@ -5,7 +5,8 @@
       <a
         *ngFor="let transactionType of getTransactionTypes(transactionGroup)"
         class="col-12"
-        routerLink="/transactions/report/{{ report?.id }}/create/{{ transactionType }}"
+        [class.disabled]="isTransactionDisabled(transactionType)"
+        [routerLink]="getRouterLink(transactionType)"
         >{{ transactionType | label : transactionTypeLabels }}</a
       >
     </div>

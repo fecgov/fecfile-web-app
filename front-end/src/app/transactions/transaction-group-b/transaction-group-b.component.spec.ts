@@ -4,11 +4,14 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction, AggregationGroups } from 'app/shared/models/transaction.model';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { AggregationGroups } from 'app/shared/models/transaction.model';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
+import {
+  NavigationAction,
+  NavigationDestination,
+  NavigationEvent,
+} from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -161,7 +164,7 @@ describe('TransactionGroupBComponent', () => {
       aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -181,7 +184,7 @@ describe('TransactionGroupBComponent', () => {
       component.transactionType.transaction.id = '10';
     }
     component.form.patchValue({ ...transaction });
-    component.save(NavigationDestination.ANOTHER);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.ANOTHER, transaction));
     const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/10/`);
     expect(req.request.method).toEqual('PUT');
     httpTestingController.verify();
@@ -219,7 +222,7 @@ describe('TransactionGroupBComponent', () => {
     });
     component.form.patchValue({ ...testTran });
 
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -255,7 +258,7 @@ describe('TransactionGroupBComponent', () => {
       aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -263,7 +266,7 @@ describe('TransactionGroupBComponent', () => {
 
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(`${environment.apiUrl}/transactions/schedule-a/1/`);
     httpTestingController.verify();
@@ -296,7 +299,7 @@ describe('TransactionGroupBComponent', () => {
       aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(`${environment.apiUrl}/transactions/schedule-a/1/`);
     httpTestingController.verify();

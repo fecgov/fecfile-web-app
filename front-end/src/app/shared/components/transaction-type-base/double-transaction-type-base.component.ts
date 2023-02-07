@@ -1,14 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { ScheduleAFormTemplateMap } from 'app/shared/models/scha-transaction.model';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
-import {
-  Transaction,
-  ScheduleTransaction,
-  ScheduleFormTemplateMapType,
-  ScheduleTransactionTypes,
-} from 'app/shared/models/transaction.model';
+import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
+import { Transaction, ScheduleTransaction, ScheduleFormTemplateMapType } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
@@ -16,6 +10,7 @@ import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.m
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionContactUtils } from './transaction-contact.utils';
+import { ScheduleAFormTemplateMap } from 'app/shared/models/scha-transaction.model';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -154,7 +149,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
   }
 
-  override save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleTransactionTypes) {
+  override save(navigationEvent: NavigationEvent) {
     this.formSubmitted = true;
 
     if (this.form.invalid || this.childForm.invalid) {
@@ -178,24 +173,12 @@ export abstract class DoubleTransactionTypeBaseComponent
     payload.children[0].report_id = payload.report_id;
 
     // Confirm save for parent transaction
-    this.confirmSave(payload, this.form, this.childConfirmSave, navigateTo, payload, transactionTypeToAdd);
+    this.confirmSave(payload, this.form, this.childConfirmSave, navigationEvent, payload);
   }
 
-  private childConfirmSave(
-    navigateTo: NavigationDestination,
-    payload: Transaction,
-    transactionTypeToAdd?: ScheduleTransactionTypes
-  ) {
+  private childConfirmSave(navigationEvent: NavigationEvent, payload: Transaction) {
     if (payload.children?.length === 1) {
-      this.confirmSave(
-        payload.children[0],
-        this.childForm,
-        this.doSave,
-        navigateTo,
-        payload,
-        transactionTypeToAdd,
-        'childDialog'
-      );
+      this.confirmSave(payload.children[0], this.childForm, this.doSave, navigationEvent, payload, 'childDialog');
     } else {
       throw new Error('Parent transaction missing child transaction when trying to confirm save.');
     }

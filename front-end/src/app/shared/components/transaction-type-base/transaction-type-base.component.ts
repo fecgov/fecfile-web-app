@@ -10,14 +10,11 @@ import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
+  NavigationEvent,
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import {
-  Transaction,
-  ScheduleFormTemplateMapType,
-  ScheduleTransactionTypes,
-} from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleFormTemplateMapType } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -106,7 +103,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactId$.complete();
   }
 
-  save(navigateTo: NavigationDestination, transactionTypeToAdd?: ScheduleTransactionTypes) {
+  save(navigationEvent: NavigationEvent) {
     this.formSubmitted = true;
 
     if (this.form.invalid) {
@@ -120,20 +117,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       this.formProperties
     );
 
-    this.confirmSave(payload, this.form, this.doSave, navigateTo, payload, transactionTypeToAdd);
+    this.confirmSave(payload, this.form, this.doSave, navigationEvent, payload);
   }
 
   protected confirmSave(
     confirmTransaction: Transaction,
     form: FormGroup,
-    acceptCallback: (
-      navigateTo: NavigationDestination,
-      payload: Transaction,
-      transactionTypeToAdd?: ScheduleTransactionTypes
-    ) => void,
-    navigateTo: NavigationDestination,
+    acceptCallback: (navigationEvent: NavigationEvent, payload: Transaction) => void,
+    navigationEvent: NavigationEvent,
     payload: Transaction,
-    transactionTypeToAdd?: ScheduleTransactionTypes,
     targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (confirmTransaction.contact_id && confirmTransaction.contact) {
@@ -158,14 +150,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           acceptLabel: 'Continue',
           rejectLabel: 'Cancel',
           accept: () => {
-            acceptCallback.call(this, navigateTo, payload, transactionTypeToAdd);
+            acceptCallback.call(this, navigationEvent, payload);
           },
           reject: () => {
             return;
           },
         });
       } else {
-        acceptCallback.call(this, navigateTo, payload, transactionTypeToAdd);
+        acceptCallback.call(this, navigationEvent, payload);
       }
     } else {
       const confirmationMessage = TransactionContactUtils.getCreateTransactionContactConfirmationMessage(
@@ -181,7 +173,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         acceptLabel: 'Continue',
         rejectLabel: 'Cancel',
         accept: () => {
-          acceptCallback.call(this, navigateTo, payload, transactionTypeToAdd);
+          acceptCallback.call(this, navigationEvent, payload);
         },
         reject: () => {
           return;
@@ -190,13 +182,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
   }
 
-  protected doSave(
-    navigateTo: NavigationDestination,
-    payload: Transaction,
-    transactionTypeToAdd?: ScheduleTransactionTypes
-  ) {
+  protected doSave(navigationEvent: NavigationEvent, payload: Transaction) {
     if (payload.transaction_type_identifier) {
+      const originalTransaction = payload;
       // Reorganize the payload if this transaction type can update its parent transaction
+      // This will break the scenario where the user creates a grandparent, then child, then tries
+      // to create a grandchild transaction because we won't know which child transaction of the grandparent
+      // was the original transaction it's id was generated on the api.  the middle child's
+      // id is necessary to generate the url for creating the grandchild.
       const transactionType = TransactionTypeUtils.factory(payload.transaction_type_identifier);
       if (transactionType.updateParentOnSave) {
         payload = payload.getUpdatedParent();
@@ -204,11 +197,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
       if (payload.id) {
         this.transactionService.update(payload).subscribe((transaction) => {
-          this.navigateTo(navigateTo, transaction.id, transactionTypeToAdd);
+          navigationEvent.transaction = !transactionType.updateParentOnSave ? transaction : originalTransaction;
+          this.navigateTo(navigationEvent);
         });
       } else {
         this.transactionService.create(payload).subscribe((transaction) => {
-          this.navigateTo(navigateTo, transaction.id, transactionTypeToAdd);
+          navigationEvent.transaction = !transactionType.updateParentOnSave ? transaction : originalTransaction;
+          this.navigateTo(navigationEvent);
         });
       }
     }
@@ -218,20 +213,21 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return this.transactionType?.navigationControls || new TransactionNavigationControls([], [], []);
   }
 
-  handleNavigate(navigationControl: NavigationControl): void {
-    if (navigationControl.navigationAction === NavigationAction.SAVE) {
-      this.save(navigationControl.navigationDestination);
+  getInlineControls(): NavigationControl[] {
+    return this.getNavigationControls().getNavigationControls('inline', this.transactionType?.transaction);
+  }
+
+  handleNavigate(navigationEvent: NavigationEvent): void {
+    if (navigationEvent.action === NavigationAction.SAVE) {
+      this.save(navigationEvent);
     } else {
-      this.navigateTo(navigationControl.navigationDestination);
+      this.navigateTo(navigationEvent);
     }
   }
 
-  navigateTo(
-    navigateTo: NavigationDestination,
-    transactionId?: string,
-    transactionTypeToAdd?: ScheduleTransactionTypes
-  ) {
-    if (navigateTo === NavigationDestination.ANOTHER) {
+  navigateTo(event: NavigationEvent) {
+    const reportPath = `/transactions/report/${event.transaction?.report_id}`;
+    if (event.destination === NavigationDestination.ANOTHER) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
@@ -239,7 +235,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.resetForm();
-    } else if (navigateTo === NavigationDestination.CHILD) {
+    } else if (event.destination === NavigationDestination.CHILD) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
@@ -247,14 +243,12 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.router.navigateByUrl(
-        `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${transactionId}/create-sub-transaction/${transactionTypeToAdd}`
+        `${reportPath}/list/edit/${event.transaction?.id}/create-sub-transaction/${event.destinationTransactionType}`
       );
-    } else if (navigateTo === NavigationDestination.PARENT) {
-      this.router.navigateByUrl(
-        `/transactions/report/${this.transactionType?.transaction?.report_id}/list/edit/${this.transactionType?.transaction?.parent_transaction_id}`
-      );
+    } else if (event.destination === NavigationDestination.PARENT) {
+      this.router.navigateByUrl(`${reportPath}/list/edit/${event.transaction?.parent_transaction_id}`);
     } else {
-      this.router.navigateByUrl(`/transactions/report/${this.transactionType?.transaction?.report_id}/list`);
+      this.router.navigateByUrl(`${reportPath}/list`);
     }
   }
 
@@ -288,7 +282,14 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   createSubTransaction(event: { value: ScheduleATransactionTypes }) {
-    this.save(NavigationDestination.CHILD, event.value);
+    this.save(
+      new NavigationEvent(
+        NavigationAction.SAVE,
+        NavigationDestination.CHILD,
+        this.transactionType?.transaction,
+        event.value
+      )
+    );
     this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }

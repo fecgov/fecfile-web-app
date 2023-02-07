@@ -6,7 +6,11 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
+import {
+  NavigationAction,
+  NavigationDestination,
+  NavigationEvent,
+} from 'app/shared/models/transaction-navigation-controls.model';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ApiService } from 'app/shared/services/api.service';
@@ -169,6 +173,12 @@ describe('TransactionTypeBaseComponent', () => {
     expect(formValues['memo_text']['text4000']).toBe('memo');
   });
 
+  function addContact(component: TestTransactionTypeBaseComponent, contact: Contact) {
+    if (component.transactionType?.transaction) {
+      component.transactionType.transaction.contact = contact;
+    }
+  }
+
   it('#save should update IND contact', () => {
     const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();
@@ -189,34 +199,51 @@ describe('TransactionTypeBaseComponent', () => {
 
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
     spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
+    const confirmSpy = spyOn(testConfirmationService, 'confirm');
+    // test reject
+    confirmSpy.and.callFake((confirmation: Confirmation) => {
+      if (confirmation.reject) {
+        return confirmation.reject();
       }
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
 
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact;
-    }
-    component.save(NavigationDestination.LIST);
+    addContact(component, testContact);
+    const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
+    component.save(listSaveEvent);
+    confirmSpy.and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+    component.save(listSaveEvent);
     component.form = new FormGroup([]);
-    component.save(NavigationDestination.LIST);
+    component.save(listSaveEvent);
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.INDIVIDUAL;
     testContact2.id = 'testId';
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact2;
     }
-    component.save(NavigationDestination.LIST);
+    component.save(listSaveEvent);
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = undefined;
     }
     TransactionContactUtils.getEditTransactionContactConfirmationMessage([], testContact, component.form, fecDatePipe);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
+
+  function spyOnServices(contact: Contact, transaction: SchATransaction) {
+    spyOn(testApiService, 'post').and.returnValue(of(contact));
+    spyOn(testTransactionService, 'create').and.returnValue(of(transaction));
+    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+  }
 
   it('#save should update COM contact', () => {
     const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
@@ -226,109 +253,65 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.committee_id = 'C12345679';
     testContact.name = 'testName1';
 
-    spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
-      }
-    });
+    spyOnServices(testContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
 
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact;
-    }
-    component.save(NavigationDestination.LIST);
+    addContact(component, testContact);
+    const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
+    component.save(listSaveEvent);
     component.form = new FormGroup([]);
     component.form.addControl('donor_committee_fec_id', new FormControl('test'));
-    component.save(NavigationDestination.LIST);
+    component.save(listSaveEvent);
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.COMMITTEE;
     testContact2.id = 'testId';
     if (component.transactionType.transaction) {
       component.transactionType.transaction.contact = testContact2;
     }
-    component.save(NavigationDestination.LIST);
+    component.save(listSaveEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
 
   it('#save should update ORG contact', () => {
     const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
-    const testContact: Contact = new Contact();
-    testContact.id = 'testId';
-    testContact.type = ContactTypes.ORGANIZATION;
-    testContact.name = 'testName1';
+    const orgContact: Contact = new Contact();
+    orgContact.id = 'testId';
+    orgContact.type = ContactTypes.ORGANIZATION;
+    orgContact.name = 'testName1';
 
-    spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
-      }
-    });
+    spyOnServices(orgContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
 
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact;
-    }
-    component.save(NavigationDestination.LIST);
+    addContact(component, orgContact);
+    const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
+    component.save(listSaveEvent);
     component.form = new FormGroup([]);
-    component.save(NavigationDestination.LIST);
-    const testContact2 = new Contact();
-    testContact2.type = ContactTypes.ORGANIZATION;
-    testContact2.id = 'testId';
+    component.save(listSaveEvent);
+    const orgContact2 = new Contact();
+    orgContact2.type = ContactTypes.ORGANIZATION;
+    orgContact2.id = 'testId';
     if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact2;
+      component.transactionType.transaction.contact = orgContact2;
     }
-    component.save(NavigationDestination.LIST);
+    component.save(listSaveEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
-  });
-
-  it('#save no contact changes', () => {
-    const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
-    const testContact: Contact = new Contact();
-    testContact.id = 'testId';
-    testContact.type = ContactTypes.ORGANIZATION;
-    testContact.name = 'testName1';
-
-    spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
-      }
-    });
-
-    const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = testTransactionType;
-
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = undefined;
-    }
-    component.save(NavigationDestination.LIST);
-    expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 
   it('#save should navigate for create', () => {
     const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
-    spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
-    spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
-      if (confirmation.accept) {
-        return confirmation.accept();
-      }
-    });
+
+    spyOnServices(testContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType = testTransactionType;
 
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1));
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -338,7 +321,8 @@ describe('TransactionTypeBaseComponent', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction2));
+    const updateSpy = spyOn(testTransactionService, 'update');
+    updateSpy.and.returnValue(of(testTransaction2));
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) {
         return confirmation.accept();
@@ -346,11 +330,14 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = testTransactionType;
+    component.transactionType =
+      TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) || ({} as TransactionType);
+    component.transactionType.transaction = testTransaction;
 
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction2));
     tick(1000);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
+    expect(updateSpy).toHaveBeenCalled();
   }));
 
   it('#navigateTo NavigationDestination.ANOTHER should show popup', () => {
@@ -361,12 +348,12 @@ describe('TransactionTypeBaseComponent', () => {
       life: 3000,
     };
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
-    component.navigateTo(NavigationDestination.ANOTHER);
+    component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.ANOTHER));
     expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
   it('#navigateTo NavigationDestination.CHILD should show popup + navigate', () => {
-    const testTransactionId = '1';
+    const testTransactionId = '123';
     const testTransactionTypeToAdd = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;
 
     component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
@@ -386,7 +373,9 @@ describe('TransactionTypeBaseComponent', () => {
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
 
-    component.navigateTo(NavigationDestination.CHILD, testTransactionId, testTransactionTypeToAdd);
+    component.navigateTo(
+      new NavigationEvent(NavigationAction.SAVE, NavigationDestination.CHILD, testTransaction, testTransactionTypeToAdd)
+    );
     expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
@@ -410,7 +399,7 @@ describe('TransactionTypeBaseComponent', () => {
     } as TransactionType;
     const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo(NavigationDestination.LIST);
+    component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction3));
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
@@ -421,7 +410,14 @@ describe('TransactionTypeBaseComponent', () => {
     }
     const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo(NavigationDestination.CHILD, '123', ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
+    component.navigateTo(
+      new NavigationEvent(
+        NavigationAction.SAVE,
+        NavigationDestination.CHILD,
+        testTransaction,
+        ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+      )
+    );
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
@@ -442,7 +438,7 @@ describe('TransactionTypeBaseComponent', () => {
     } as TransactionType;
     const expectedRoute = '/transactions/report/999/list/edit/333';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo(NavigationDestination.PARENT);
+    component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.PARENT, transaction));
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 
@@ -453,7 +449,7 @@ describe('TransactionTypeBaseComponent', () => {
     }
     const expectedRoute = '/transactions/report/999/list';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
-    component.navigateTo(NavigationDestination.LIST);
+    component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction));
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);
   });
 

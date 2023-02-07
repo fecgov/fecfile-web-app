@@ -56,7 +56,7 @@
         [purposeDescriptionLabel]="this.purposeDescriptionLabel"
       ></app-additional-info-input>
       <div class="grid">
-        <ng-template ngFor let-navigationControl [ngForOf]="getNavigationControls().inlineControls">
+        <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
           <div class="col-3">
             <app-navigation-control
               [navigationControl]="navigationControl"
