@@ -2,13 +2,16 @@
 <p-accordion muiltiple="false">
   <p-accordionTab *ngFor="let transactionGroup of getTransactionGroups()" [header]="transactionGroup">
     <div class="grid">
-      <a
-        *ngFor="let transactionType of getTransactionTypes(transactionGroup)"
-        class="col-12"
-        [class.disabled]="isTransactionDisabled(transactionType)"
-        [routerLink]="getRouterLink(transactionType)"
-        >{{ transactionType | label : transactionTypeLabels }}</a
-      >
+      <div class="col-12" *ngFor="let transactionType of getTransactionTypes(transactionGroup)">
+        <a
+          *ngIf="!isTransactionDisabled(transactionType); else elseBlock"
+          [routerLink]="getRouterLink(transactionType)"
+          >{{ transactionType | label : transactionTypeLabels }}</a
+        >
+        <ng-template #elseBlock>
+          <div class="disabled">{{ transactionType | label : transactionTypeLabels }}</div></ng-template
+        >
+      </div>
     </div>
   </p-accordionTab>
 </p-accordion>
