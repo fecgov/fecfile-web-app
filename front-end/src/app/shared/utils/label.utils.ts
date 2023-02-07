@@ -208,3 +208,17 @@ const CongressionalDistricts: Record<string, number> = {
   WI: 8,
   WY: 1,
 };
+
+export const CategoryCodeLabels: LabelList = [
+  ['001', 'Administrative/Salary/Overhead Expenses'],
+  ['002', 'Travel Expenses - including travel reimbursement expenses'],
+  ['003', 'Solicitation and Fundraising Expenses'],
+  ['004', 'Advertising Expenses -including general public political advertising'],
+  ['005', 'Polling Expenses'],
+  ['006', 'Campaign Materials'],
+  ['007', 'Campaign Event Expenses'],
+  ['008', 'Transfers'],
+  ['009', 'Loan Repayments'],
+  ['011', 'Political Contributions'],
+  ['012', 'Donations'],
+];

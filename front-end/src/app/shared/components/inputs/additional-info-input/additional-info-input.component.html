@@ -43,4 +43,25 @@
       </div>
     </div>
   </div>
+  <div class="grid" *ngIf="formTemplateMap['category_code']">
+    <div class="col-6">
+      <div class="field">
+        <label for="category_code">CATEGORY CODE (OPTIONAL)</label>
+        <p-dropdown
+          inputId="category_code"
+          [formControlName]="formTemplateMap['category_code']"
+          [options]="categoryCodeOptions"
+          optionLabel="name"
+          optionValue="code"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-dropdown>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="formTemplateMap['category_code']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
 </div>

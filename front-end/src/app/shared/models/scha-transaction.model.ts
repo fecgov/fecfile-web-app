@@ -485,4 +485,5 @@ export const ScheduleAFormTemplateMap: ScheduleFormTemplateMapType = {
   purpose_descrip: 'contribution_purpose_descrip',
   purposeDescripLabel: 'CONTRIBUTION PURPOSE DESCRIPTION',
   memo_text_input: 'memo_text_input',
+  category_code: '',
 };

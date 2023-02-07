@@ -36,6 +36,7 @@ const ScheduleBFormTemplateMap: ScheduleFormTemplateMapType = {
   purpose_descrip: 'expenditure_purpose_descrip',
   purposeDescripLabel: 'EXPENDITURE PURPOSE DESCRIPTION',
   memo_text_input: 'memo_text_input',
+  category_code: 'category_code',
 };
 
 export abstract class Transaction extends BaseModel {
@@ -158,6 +159,7 @@ export type ScheduleFormTemplateMapType = {
   purpose_descrip: string;
   purposeDescripLabel: string;
   memo_text_input: string;
+  category_code: string;
 };
 
 export enum AggregationGroups {

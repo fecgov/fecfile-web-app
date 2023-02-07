@@ -49,7 +49,7 @@ export class SchBTransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
-  override apiEndpoint = '/transactions/schedule-a';
+  override apiEndpoint = '/transactions/schedule-b';
 
   // prettier-ignore
   static fromJSON(json: any, depth = 2): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -277,26 +277,27 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
 ];
 
 // Mapping of schedule fields to the group input component form templates
-export const ScheduleBFormTemplateMap: ScheduleFormTemplateMapType = {
-  last_name: 'payee_last_name',
-  first_name: 'payee_first_name',
-  middle_name: 'payee_middle_name',
-  prefix: 'payee_prefix',
-  suffix: 'payee_suffix',
-  street_1: 'payee_street_1',
-  street_2: 'payee_street_2',
-  city: 'payee_city',
-  state: 'payee_state',
-  zip: 'payee_zip',
-  employer: '',
-  occupation: '',
-  organization_name: 'payee_organization_name',
-  committee_fec_id: 'beneficiary_committee_fec_id',
-  date: 'expenditure_date',
-  memo_code: 'memo_code',
-  amount: 'expenditure_amount',
-  aggregate: 'aggregate_amount',
-  purpose_descrip: 'expenditure_purpose_descrip',
-  purposeDescripLabel: 'EXPENDITURE PURPOSE DESCRIPTION',
-  memo_text_input: 'memo_text_input',
-};
+// export const ScheduleBFormTemplateMap: ScheduleFormTemplateMapType = {
+//   last_name: 'payee_last_name',
+//   first_name: 'payee_first_name',
+//   middle_name: 'payee_middle_name',
+//   prefix: 'payee_prefix',
+//   suffix: 'payee_suffix',
+//   street_1: 'payee_street_1',
+//   street_2: 'payee_street_2',
+//   city: 'payee_city',
+//   state: 'payee_state',
+//   zip: 'payee_zip',
+//   employer: '',
+//   occupation: '',
+//   organization_name: 'payee_organization_name',
+//   committee_fec_id: 'beneficiary_committee_fec_id',
+//   date: 'expenditure_date',
+//   memo_code: 'memo_code',
+//   amount: 'expenditure_amount',
+//   aggregate: 'aggregate_amount',
+//   purpose_descrip: 'expenditure_purpose_descrip',
+//   purposeDescripLabel: 'EXPENDITURE PURPOSE DESCRIPTION',
+//   memo_text_input: 'memo_text_input',
+//   category_code: 'category_code',
+// };

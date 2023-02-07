@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
+import { LabelUtils, PrimeOptions, CategoryCodeLabels } from 'app/shared/utils/label.utils';
 
 @Component({
   selector: 'app-additional-info-input',
@@ -10,4 +11,5 @@ export class AdditionalInfoInputComponent extends BaseInputComponent {
   @Input() descriptionIsSystemGenerated = false;
   @Input() purposeDescriptionLabel = '';
   @Input() purposeDescriptionLabelNotice?: string;
+  categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
 }
