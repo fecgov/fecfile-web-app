@@ -126,7 +126,7 @@ describe('TransactionGroupFComponent', () => {
       ...transaction,
     });
     component.form.patchValue({ ...testTran });
-    if (component.transactionType?.transaction) {
+    if (component.transaction) {
       component.transactionType.transaction = testTran;
       component.transactionType.transaction.id = undefined;
       component.transactionType.transaction.contact = testContact;

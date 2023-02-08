@@ -3,10 +3,10 @@
     <div class="col-4">
       <div class="field">
         <label for="last_name">LAST NAME</label>
-        <input type="text" pInputText id="last_name" [formControlName]="formTemplateMap['last_name']" />
+        <input type="text" pInputText id="last_name" [formControlName]="templateMap['last_name']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['last_name']"
+          [fieldName]="templateMap['last_name']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -14,10 +14,10 @@
     <div class="col-4">
       <div class="field">
         <label for="first_name">FIRST NAME</label>
-        <input type="text" pInputText id="first_name" [formControlName]="formTemplateMap['first_name']" />
+        <input type="text" pInputText id="first_name" [formControlName]="templateMap['first_name']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['first_name']"
+          [fieldName]="templateMap['first_name']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -25,10 +25,10 @@
     <div class="col-4">
       <div class="field">
         <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
-        <input type="text" pInputText id="middle_name" [formControlName]="formTemplateMap['middle_name']" />
+        <input type="text" pInputText id="middle_name" [formControlName]="templateMap['middle_name']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['middle_name']"
+          [fieldName]="templateMap['middle_name']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -38,10 +38,10 @@
     <div class="col-3">
       <div class="field">
         <label for="prefix">PREFIX (OPTIONAL)</label>
-        <input type="text" pInputText id="prefix" [formControlName]="formTemplateMap['prefix']" />
+        <input type="text" pInputText id="prefix" [formControlName]="templateMap['prefix']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['prefix']"
+          [fieldName]="templateMap['prefix']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -49,10 +49,10 @@
     <div class="col-3">
       <div class="field">
         <label for="suffix">SUFFIX (OPTIONAL)</label>
-        <input type="text" pInputText id="suffix" [formControlName]="formTemplateMap['suffix']" />
+        <input type="text" pInputText id="suffix" [formControlName]="templateMap['suffix']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['suffix']"
+          [fieldName]="templateMap['suffix']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

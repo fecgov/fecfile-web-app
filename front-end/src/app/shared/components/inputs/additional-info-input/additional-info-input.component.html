@@ -1,7 +1,7 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-12">
-      <label for="purpose_descrip"> {{ formTemplateMap['purposeDescripLabel'] }} {{ purposeDescriptionLabel }} </label>
+      <label for="purpose_descrip"> {{ templateMap['purposeDescripLabel'] }} {{ purposeDescriptionLabel }} </label>
       <em *ngIf="purposeDescriptionLabelNotice">{{ purposeDescriptionLabelNotice }}</em>
       <div>
         <textarea
@@ -11,13 +11,13 @@
           pInputTextarea
           [disabled]="true"
           [autoResize]="true"
-          [formControlName]="formTemplateMap['purpose_descrip']"
+          [formControlName]="templateMap['purpose_descrip']"
           [ngClass]="{ readonly: descriptionIsSystemGenerated }"
           [readonly]="descriptionIsSystemGenerated"
         ></textarea>
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['purpose_descrip']"
+          [fieldName]="templateMap['purpose_descrip']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -33,23 +33,23 @@
           [cols]="30"
           pInputTextarea
           [autoResize]="true"
-          [formControlName]="formTemplateMap['memo_text_input']"
+          [formControlName]="templateMap['memo_text_input']"
         ></textarea>
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['memo_text_input']"
+          [fieldName]="templateMap['memo_text_input']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
     </div>
   </div>
-  <div class="grid" *ngIf="formTemplateMap['category_code']">
+  <div class="grid" *ngIf="templateMap['category_code']">
     <div class="col-6">
       <div class="field">
         <label for="category_code">CATEGORY CODE (OPTIONAL)</label>
         <p-dropdown
           inputId="category_code"
-          [formControlName]="formTemplateMap['category_code']"
+          [formControlName]="templateMap['category_code']"
           [options]="categoryCodeOptions"
           optionLabel="name"
           optionValue="code"
@@ -58,7 +58,7 @@
         ></p-dropdown>
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['category_code']"
+          [fieldName]="templateMap['category_code']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
-import { Transaction, ScheduleTransaction, ScheduleFormTemplateMapType } from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleTransaction } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
@@ -10,7 +10,7 @@ import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.m
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionContactUtils } from './transaction-contact.utils';
-import { ScheduleAFormTemplateMap } from 'app/shared/models/scha-transaction.model';
+import { TransactionTemplateMapType } from 'app/shared/models/transaction-types/transaction-type.model';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -31,13 +31,14 @@ export abstract class DoubleTransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
   abstract childFormProperties: string[];
+  childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
   childValidateService: ValidateService = new ValidateService();
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
   childContributionPurposeDescriptionLabel = '';
   childNegativeAmountValueOnly = false;
-  childFormTemplateMap: ScheduleFormTemplateMapType = ScheduleAFormTemplateMap; // Text strings and fields specific to a particular schedule to map into the transaction input form templates
+  childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -45,91 +46,100 @@ export abstract class DoubleTransactionTypeBaseComponent
 
     // Initialize child form.
     this.childForm = this.fb.group(this.childValidateService.getFormGroupFields(this.childFormProperties));
-    this.childFormTemplateMap = Transaction.getFormTemplateMap(this.transactionType?.childTransactionType);
-    TransactionFormUtils.onInit(
-      this,
-      this.childForm,
-      this.childValidateService,
-      this.transactionType?.childTransactionType,
-      this.childContactId$,
-      this.childFormTemplateMap
-    );
-
-    this.childOnInit();
+    if (this.transaction?.children) {
+      this.childTransaction = this.transaction?.children[0];
+      if (this.childTransaction.transactionType?.templateMap) {
+        this.childTemplateMap = this.childTransaction.transactionType.templateMap;
+      }
+      TransactionFormUtils.onInit(
+        this,
+        this.childForm,
+        this.childValidateService,
+        this.childTransaction,
+        this.childContactId$
+      );
+      this.childOnInit();
+    }
   }
 
   childOnInit() {
     // Override contact type options if present in transactionType
-    if (this.transactionType?.childTransactionType && this.transactionType.childTransactionType.contactTypeOptions) {
-      this.childContactTypeOptions = LabelUtils.getPrimeOptions(
-        ContactTypeLabels,
-        this.transactionType.childTransactionType.contactTypeOptions
-      );
+    this.childContactTypeOptions = LabelUtils.getPrimeOptions(
+      ContactTypeLabels,
+      this.childTransaction?.transactionType?.contactTypeOptions
+    );
+
+    if (this.childTemplateMap) {
+      const amountProperty = this.childTemplateMap.amount;
+      const amount_schema = this.childTransaction?.transactionType?.schema.properties[amountProperty];
+      if (amount_schema?.exclusiveMaximum === 0) {
+        this.childNegativeAmountValueOnly = true;
+        this.childForm
+          .get(amountProperty)
+          ?.valueChanges.pipe(takeUntil(this.destroy$))
+          .subscribe((amount) => {
+            if (typeof amount === 'number' && amount > 0) {
+              this.childForm.patchValue({ amount: -1 * amount });
+            }
+          });
+      }
     }
 
-    const amountProperty = this.childFormTemplateMap.amount;
-    const amount_schema = this.transactionType?.childTransactionType?.schema.properties[amountProperty];
-    if (amount_schema?.exclusiveMaximum === 0) {
-      this.childNegativeAmountValueOnly = true;
-      this.childForm
-        .get(amountProperty)
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((amount) => {
-          if (typeof amount === 'number' && amount > 0) {
-            this.childForm.patchValue({ amount: -1 * amount });
-          }
-        });
-    }
-
-    if (this.transactionType?.childTransactionType?.generatePurposeDescriptionLabel) {
+    if (this.childTransaction?.transactionType?.generatePurposeDescriptionLabel) {
       this.childContributionPurposeDescriptionLabel =
-        this.transactionType.childTransactionType.generatePurposeDescriptionLabel();
+        this.childTransaction.transactionType.generatePurposeDescriptionLabel();
     }
 
     // Default the child entity type to Committee
-    if (!this.transactionType?.childTransactionType?.transaction?.id) {
+    if (!this.childTransaction?.id) {
       this.childForm.get('entity_type')?.setValue(ContactTypes.COMMITTEE);
     }
 
     // Parent contribution purpose description updates with child contributor name updates.
-    this.childForm
-      .get(this.childFormTemplateMap.organization_name)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (this.transactionType?.childTransactionType?.transaction) {
-          const key = this.childFormTemplateMap.organization_name as keyof ScheduleTransaction;
-          ((this.transactionType.childTransactionType.transaction as ScheduleTransaction)[key] as string) = value;
-        }
-        this.updatePurposeDescription();
-      });
-    this.childForm
-      .get(this.childFormTemplateMap.first_name)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (this.transactionType?.childTransactionType?.transaction) {
-          const key = this.childFormTemplateMap.first_name as keyof ScheduleTransaction;
-          ((this.transactionType.childTransactionType.transaction as ScheduleTransaction)[key] as string) = value;
-        }
-        this.updatePurposeDescription();
-      });
-    this.childForm
-      .get(this.childFormTemplateMap.last_name)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        if (this.transactionType?.childTransactionType?.transaction) {
-          const key = this.childFormTemplateMap.last_name as keyof ScheduleTransaction;
-          ((this.transactionType.childTransactionType.transaction as ScheduleTransaction)[key] as string) = value;
-        }
-        this.updatePurposeDescription();
-      });
+    if (this.childTemplateMap) {
+      this.childForm
+        .get(this.childTemplateMap.organization_name)
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (this.childTransaction && this.childTemplateMap) {
+            const key = this.childTemplateMap.organization_name as keyof ScheduleTransaction;
+            ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
+          }
+          this.updatePurposeDescription();
+        });
+      this.childForm
+        .get(this.childTemplateMap.first_name)
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (this.childTransaction && this.childTemplateMap) {
+            const key = this.childTemplateMap.first_name as keyof ScheduleTransaction;
+            ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
+          }
+          this.updatePurposeDescription();
+        });
+      this.childForm
+        .get(this.childTemplateMap.last_name)
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (this.childTransaction && this.childTemplateMap) {
+            const key = this.childTemplateMap.last_name as keyof ScheduleTransaction;
+            ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
+          }
+          this.updatePurposeDescription();
+        });
+    }
 
     // Child amount must match parent contribution amount
-    this.form
-      .get(this.childFormTemplateMap.amount)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.childForm.get(this.childFormTemplateMap.amount)?.setValue(value);
-      });
+    if (this.templateMap) {
+      this.form
+        .get(this.templateMap.amount)
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          if (this.childTemplateMap) {
+            this.childForm.get(this.childTemplateMap.amount)?.setValue(value);
+          }
+        });
+    }
   }
 
   override ngOnDestroy(): void {
@@ -138,14 +148,15 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   private updatePurposeDescription() {
-    const childTransaction: ScheduleTransaction = this.transactionType?.childTransactionType
-      ?.transaction as ScheduleTransaction;
-    childTransaction.entity_type = this.childForm.get('entity_type')?.value;
+    if (this.childTransaction && this.childTemplateMap) {
+      (this.childTransaction as ScheduleTransaction).entity_type = this.childForm.get('entity_type')?.value;
 
-    if (this.transactionType?.generatePurposeDescription) {
-      this.form.patchValue({
-        [this.childFormTemplateMap.purpose_descrip]: this.transactionType.generatePurposeDescriptionWrapper(),
-      });
+      if (this.childTransaction.transactionType?.generatePurposeDescription) {
+        this.form.patchValue({
+          [this.childTemplateMap.purpose_descrip]:
+            this.childTransaction.transactionType.generatePurposeDescriptionWrapper(this.childTransaction),
+        });
+      }
     }
   }
 
@@ -157,14 +168,14 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
-      this.transactionType,
+      this.transaction,
       this.validateService,
       this.form,
       this.formProperties
     );
     payload.children = [
       TransactionFormUtils.getPayloadTransaction(
-        this.transactionType?.childTransactionType,
+        this.childTransaction,
         this.childValidateService,
         this.childForm,
         this.childFormProperties
@@ -186,21 +197,16 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override resetForm() {
     this.formSubmitted = false;
-    TransactionFormUtils.resetForm(this.form, this.transactionType, this.contactTypeOptions);
-    TransactionFormUtils.resetForm(
-      this.childForm,
-      this.transactionType?.childTransactionType,
-      this.childContactTypeOptions
-    );
+    TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions);
+    TransactionFormUtils.resetForm(this.childForm, this.childTransaction, this.childContactTypeOptions);
   }
 
   childOnContactLookupSelect(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.onContactLookupSelect(
       selectItem,
       this.childForm,
-      this.transactionType?.childTransactionType,
-      this.childContactId$,
-      this.childFormTemplateMap
+      this.childTransaction,
+      this.childContactId$
     );
   }
 }

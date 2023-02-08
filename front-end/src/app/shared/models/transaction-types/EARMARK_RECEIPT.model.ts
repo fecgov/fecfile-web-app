@@ -11,11 +11,12 @@ export class EARMARK_RECEIPT extends SchaTransactionType {
   componentGroupId = 'AG';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
-  override childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
+  override dependentChildTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS_MINIMAL;
 
-  override generatePurposeDescription(): string {
-    const earmarkMemo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    if (!transaction.children) return '';
+    const earmarkMemo: SchATransaction = transaction.children[0] as SchATransaction;
     let conduit = earmarkMemo?.contributor_organization_name || '';
     if (
       earmarkMemo?.entity_type === ContactTypes.INDIVIDUAL &&

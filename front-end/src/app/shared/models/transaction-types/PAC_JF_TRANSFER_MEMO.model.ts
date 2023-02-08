@@ -13,9 +13,9 @@ export class PAC_JF_TRANSFER_MEMO extends SchaTransactionType {
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
   );
 
-  override generatePurposeDescription(): string {
+  override generatePurposeDescription(transaction: SchATransaction): string {
     return `Joint Fundraising Memo: ${
-      (this.transaction?.parent_transaction as SchATransaction).contributor_organization_name
+      (transaction?.parent_transaction as SchATransaction).contributor_organization_name
     }`;
   }
 

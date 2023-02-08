@@ -14,15 +14,15 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionT
   );
   schema = schema;
   override subTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO];
-  override childTransactionType = TransactionTypeUtils.factory(
+  override dependentChildTransactionType = TransactionTypeUtils.factory(
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO
   );
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionLabelNotice =
     'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not require itemization". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
 
-  override generatePurposeDescription(): string {
-    if (this.transaction?.children && this.transaction?.children.length > 0) {
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    if (transaction?.children && transaction?.children.length > 0) {
       return 'Recount/Legal Proceedings Account (See Partnership Attribution(s) below)';
     }
     return 'Recount/Legal Proceedings Account (Partnership attributions do not require itemization)';

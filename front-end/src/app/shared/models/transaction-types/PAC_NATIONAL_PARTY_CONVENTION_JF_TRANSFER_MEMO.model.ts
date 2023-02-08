@@ -16,9 +16,9 @@ export class PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchaTransact
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
   );
 
-  override generatePurposeDescription(): string {
+  override generatePurposeDescription(transaction: SchATransaction): string {
     return `Pres. Nominating Convention Account JF Memo: ${
-      (this.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
+      (transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;
   }
 

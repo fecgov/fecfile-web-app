@@ -18,7 +18,7 @@ export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchaTransactionType {
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION
   );
   schema = schema;
-  override childTransactionType = TransactionTypeUtils.factory(
+  override dependentChildTransactionType = TransactionTypeUtils.factory(
     ScheduleATransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT
   );
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
@@ -27,8 +27,9 @@ export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchaTransactionType {
     [SAVE_LIST_CONTROL]
   );
 
-  override generatePurposeDescription(): string {
-    const subTransaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    if (!transaction.children) return '';
+    const subTransaction: SchATransaction = transaction.children[0] as SchATransaction;
     let conduit = subTransaction?.contributor_organization_name || '';
     if (
       subTransaction?.entity_type === ContactTypes.INDIVIDUAL &&

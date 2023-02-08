@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Transaction, AggregationGroups, ScheduleFormTemplateMapType } from './transaction.model';
+import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
@@ -61,7 +61,7 @@ export class SchATransaction extends Transaction {
   }
 
   // prettier-ignore
-  static fromJSON(json: any, depth = 2): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static overridefromJSON(json: any, depth = 2): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     const transaction = plainToClass(SchATransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
@@ -93,27 +93,27 @@ export class SchATransaction extends Transaction {
       /* We treat the parent's children as SchATransaction objects in order
       to access fields exclusive to the SchATransaction model */
       for (const child of this.children as SchATransaction[]) {
-        if (child.transaction_type_identifier) {
-          // Instantiate a TransactionType object in order to access the purpose description generator
-          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier);
+        // if (child.transaction_type_identifier) {
+        // Instantiate a TransactionType object in order to access the purpose description generator
+        // const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier);
 
-          // Prep the TransactionType by setting fields it will need when generating a purpose description
-          transactionType.transaction = child;
+        // Prep the TransactionType by setting fields it will need when generating a purpose description
+        // transactionType.transaction = child;
 
-          /* Make a new object to represent the parent within the TransactionType
+        /* Make a new object to represent the parent within the TransactionType
           because setting the parent equal to the this causes an infinite loop */
-          if (transactionType.transaction.parent_transaction)
-            transactionType.transaction.parent_transaction = {
-              id: this.id,
-              contributor_organization_name: this.contributor_organization_name,
-            } as SchATransaction;
+        // if (child.parent_transaction)
+        //   transactionType.transaction.parent_transaction = {
+        //     id: this.id,
+        //     contributor_organization_name: this.contributor_organization_name,
+        //   } as SchATransaction;
 
-          // Modify the purpose description this to reflect the changes to child transactions
-          if (transactionType.generatePurposeDescription) {
-            const newDescrip = transactionType.generatePurposeDescriptionWrapper();
-            child.contribution_purpose_descrip = newDescrip;
-          }
+        // Modify the purpose description this to reflect the changes to child transactions
+        if (child?.transactionType?.generatePurposeDescription) {
+          const newDescrip = child.transactionType.generatePurposeDescriptionWrapper(child);
+          child.contribution_purpose_descrip = newDescrip;
         }
+        // }
 
         // Always add the child into the array or else it will be lost
         outChildren.push(child);
@@ -150,8 +150,7 @@ export class SchATransaction extends Transaction {
 
     // Update the CPD
     if (payload?.transactionType?.generatePurposeDescription) {
-      payload.transactionType.transaction = payload;
-      payload.contribution_purpose_descrip = payload.transactionType.generatePurposeDescriptionWrapper();
+      payload.contribution_purpose_descrip = payload.transactionType.generatePurposeDescriptionWrapper(payload);
     }
 
     return payload;
@@ -461,29 +460,3 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   [ScheduleATransactionTypes.PARTNERSHIP_MEMO, 'Partnership Memo'],
 ];
-
-// Mapping of schedule fields to the group input component form templates
-export const ScheduleAFormTemplateMap: ScheduleFormTemplateMapType = {
-  last_name: 'contributor_last_name',
-  first_name: 'contributor_first_name',
-  middle_name: 'contributor_middle_name',
-  prefix: 'contributor_prefix',
-  suffix: 'contributor_suffix',
-  street_1: 'contributor_street_1',
-  street_2: 'contributor_street_2',
-  city: 'contributor_city',
-  state: 'contributor_state',
-  zip: 'contributor_zip',
-  employer: 'contributor_employer',
-  occupation: 'contributor_occupation',
-  organization_name: 'contributor_organization_name',
-  committee_fec_id: 'donor_committee_fec_id',
-  date: 'contribution_date',
-  memo_code: 'memo_code',
-  amount: 'contribution_amount',
-  aggregate: 'contribution_aggregate',
-  purpose_descrip: 'contribution_purpose_descrip',
-  purposeDescripLabel: 'CONTRIBUTION PURPOSE DESCRIPTION',
-  memo_text_input: 'memo_text_input',
-  category_code: '',
-};

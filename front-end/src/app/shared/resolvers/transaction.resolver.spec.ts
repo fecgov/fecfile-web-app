@@ -9,10 +9,10 @@ import { SchATransaction } from '../models/scha-transaction.model';
 import { ContactService } from '../services/contact.service';
 import { TransactionService } from '../services/transaction.service';
 import { testMockStore } from '../utils/unit-test.utils';
-import { TransactionTypeResolver } from './transaction-type.resolver';
+import { TransactionResolver } from './transaction.resolver';
 
 describe('TransactionResolver', () => {
-  let resolver: TransactionTypeResolver;
+  let resolver: TransactionResolver;
   let testContactService: ContactService;
 
   beforeEach(() => {
@@ -36,7 +36,7 @@ describe('TransactionResolver', () => {
         },
       ],
     });
-    resolver = TestBed.inject(TransactionTypeResolver);
+    resolver = TestBed.inject(TransactionResolver);
     testContactService = TestBed.inject(ContactService);
   });
 

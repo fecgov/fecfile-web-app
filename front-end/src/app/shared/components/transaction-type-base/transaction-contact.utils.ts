@@ -1,10 +1,10 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { ScheduleFormTemplateMapType } from 'app/shared/models/transaction.model';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
+import { TransactionTemplateMapType } from 'app/shared/models/transaction-types/transaction-type.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { Contact, ContactFields, ContactTypes } from '../../models/contact.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 export class TransactionContactUtils {
   static getEditTransactionContactConfirmationMessage(
@@ -12,7 +12,7 @@ export class TransactionContactUtils {
     contact: Contact | undefined,
     form: FormGroup,
     fecDatePipe: FecDatePipe,
-    formTemplateMap: ScheduleFormTemplateMapType
+    templateMap: TransactionTemplateMapType
   ): string | undefined {
     if (contact) {
       const changesMessage = 'Change(s): <ul class="contact-confirm-dialog">'.concat(
@@ -23,7 +23,7 @@ export class TransactionContactUtils {
         contactName = `${contact.last_name}, ${contact.first_name}`;
         contactName += contact.middle_name ? ' ' + contact.middle_name : '';
       }
-      const dateReceived = fecDatePipe.transform(form.get(formTemplateMap.date)?.value);
+      const dateReceived = fecDatePipe.transform(form.get(templateMap.date)?.value);
       return (
         `By saving this transaction, you are also updating the contact for ` +
         `<b>${contactName}</b>. This change will only affect transactions with ` +
@@ -36,23 +36,23 @@ export class TransactionContactUtils {
   static getCreateTransactionContactConfirmationMessage(
     contactType: ContactTypes,
     form: FormGroup,
-    formTemplateMap: ScheduleFormTemplateMapType
+    templateMap: TransactionTemplateMapType
   ): string {
     let confirmationContactTitle = '';
     switch (contactType) {
       case ContactTypes.INDIVIDUAL:
         confirmationContactTitle =
           `individual contact for <b>` +
-          `${form.get(formTemplateMap.last_name)?.value}, ` +
-          `${form.get(formTemplateMap.first_name)?.value}</b>`;
+          `${form.get(templateMap.last_name)?.value}, ` +
+          `${form.get(templateMap.first_name)?.value}</b>`;
         break;
       case ContactTypes.COMMITTEE:
         confirmationContactTitle =
-          `committee contact for <b>` + `${form.get(formTemplateMap.organization_name)?.value}</b>`;
+          `committee contact for <b>` + `${form.get(templateMap.organization_name)?.value}</b>`;
         break;
       case ContactTypes.ORGANIZATION:
         confirmationContactTitle =
-          `organization contact for <b>` + `${form.get(formTemplateMap.organization_name)?.value}</b>`;
+          `organization contact for <b>` + `${form.get(templateMap.organization_name)?.value}</b>`;
         break;
     }
     return `By saving this transaction, you're also creating a new ${confirmationContactTitle}.`;
@@ -68,27 +68,27 @@ export class TransactionContactUtils {
   static setTransactionContactFormChanges(
     form: FormGroup,
     contact: Contact | undefined,
-    formTemplateMap: ScheduleFormTemplateMapType
+    templateMap: TransactionTemplateMapType
   ): string[] {
     function getFormField(
       form: FormGroup,
       field: string,
-      formTemplateMap: ScheduleFormTemplateMapType
+      templateMap: TransactionTemplateMapType
     ): AbstractControl | null {
       if (field == 'committee_id') {
-        return form.get(formTemplateMap.committee_fec_id);
+        return form.get(templateMap.committee_fec_id);
       }
       if (field == 'name') {
-        return form.get(formTemplateMap.organization_name);
+        return form.get(templateMap.organization_name);
       }
-      return form.get(formTemplateMap[field as keyof ScheduleFormTemplateMapType]);
+      return form.get(templateMap[field as keyof TransactionTemplateMapType]);
     }
 
     if (contact) {
       return Object.entries(ContactFields)
         .map(([field, label]: string[]) => {
           const contactValue = contact[field as keyof typeof contact];
-          const formField = getFormField(form, field, formTemplateMap);
+          const formField = getFormField(form, field, templateMap);
 
           if (formField && formField?.value !== contactValue) {
             contact[field as keyof typeof contact] = (formField.value || '') as never;
@@ -104,38 +104,38 @@ export class TransactionContactUtils {
   static onContactLookupSelect(
     selectItem: SelectItem<Contact>,
     form: FormGroup,
-    transactionType: TransactionType | undefined,
-    contactId$: Subject<string>,
-    formTemplateMap: ScheduleFormTemplateMapType
+    transaction: Transaction | undefined,
+    contactId$: Subject<string>
   ) {
     if (selectItem) {
       const contact: Contact = selectItem.value;
-      if (contact) {
+      const templateMap = transaction?.transactionType?.templateMap;
+      if (contact && templateMap) {
         switch (contact.type) {
           case ContactTypes.INDIVIDUAL:
-            form.get(formTemplateMap.last_name)?.setValue(contact.last_name);
-            form.get(formTemplateMap.first_name)?.setValue(contact.first_name);
-            form.get(formTemplateMap.middle_name)?.setValue(contact.middle_name);
-            form.get(formTemplateMap.prefix)?.setValue(contact.prefix);
-            form.get(formTemplateMap.suffix)?.setValue(contact.suffix);
-            form.get(formTemplateMap.employer)?.setValue(contact.employer);
-            form.get(formTemplateMap.occupation)?.setValue(contact.occupation);
+            form.get(templateMap.last_name)?.setValue(contact.last_name);
+            form.get(templateMap.first_name)?.setValue(contact.first_name);
+            form.get(templateMap.middle_name)?.setValue(contact.middle_name);
+            form.get(templateMap.prefix)?.setValue(contact.prefix);
+            form.get(templateMap.suffix)?.setValue(contact.suffix);
+            form.get(templateMap.employer)?.setValue(contact.employer);
+            form.get(templateMap.occupation)?.setValue(contact.occupation);
             break;
           case ContactTypes.COMMITTEE:
-            form.get(formTemplateMap.committee_fec_id)?.setValue(contact.committee_id);
-            form.get(formTemplateMap.organization_name)?.setValue(contact.name);
+            form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
+            form.get(templateMap.organization_name)?.setValue(contact.name);
             break;
           case ContactTypes.ORGANIZATION:
-            form.get(formTemplateMap.organization_name)?.setValue(contact.name);
+            form.get(templateMap.organization_name)?.setValue(contact.name);
             break;
         }
-        form.get(formTemplateMap.street_1)?.setValue(contact.street_1);
-        form.get(formTemplateMap.street_2)?.setValue(contact.street_2);
-        form.get(formTemplateMap.city)?.setValue(contact.city);
-        form.get(formTemplateMap.state)?.setValue(contact.state);
-        form.get(formTemplateMap.zip)?.setValue(contact.zip);
-        if (transactionType?.transaction) {
-          transactionType.transaction.contact = contact;
+        form.get(templateMap.street_1)?.setValue(contact.street_1);
+        form.get(templateMap.street_2)?.setValue(contact.street_2);
+        form.get(templateMap.city)?.setValue(contact.city);
+        form.get(templateMap.state)?.setValue(contact.state);
+        form.get(templateMap.zip)?.setValue(contact.zip);
+        if (transaction) {
+          transaction.contact = contact;
         }
         contactId$.next(contact.id || '');
       }

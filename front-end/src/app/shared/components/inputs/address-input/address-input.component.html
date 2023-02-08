@@ -3,10 +3,10 @@
     <div class="col-6">
       <div class="field">
         <label for="street_1">STREET ADDRESS</label>
-        <input type="text" pInputText id="street_1" [formControlName]="formTemplateMap['street_1']" />
+        <input type="text" pInputText id="street_1" [formControlName]="templateMap['street_1']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['street_1']"
+          [fieldName]="templateMap['street_1']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -14,10 +14,10 @@
     <div class="col-6">
       <div class="field">
         <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-        <input type="text" pInputText id="street_2" [formControlName]="formTemplateMap['street_2']" />
+        <input type="text" pInputText id="street_2" [formControlName]="templateMap['street_2']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['street_2']"
+          [fieldName]="templateMap['street_2']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -27,10 +27,10 @@
     <div class="col-6">
       <div class="field">
         <label for="city">CITY</label>
-        <input type="text" pInputText id="city" [formControlName]="formTemplateMap['city']" />
+        <input type="text" pInputText id="city" [formControlName]="templateMap['city']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['city']"
+          [fieldName]="templateMap['city']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -40,7 +40,7 @@
         <label for="state">STATE/PROVINCE</label>
         <p-dropdown
           inputId="state"
-          [formControlName]="formTemplateMap['state']"
+          [formControlName]="templateMap['state']"
           [options]="stateOptions"
           optionLabel="name"
           optionValue="code"
@@ -49,7 +49,7 @@
         ></p-dropdown>
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['state']"
+          [fieldName]="templateMap['state']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -57,10 +57,10 @@
     <div class="col-3">
       <div class="field">
         <label for="zip">ZIP/POSTAL CODE</label>
-        <input type="text" pInputText id="zip" [formControlName]="formTemplateMap['zip']" />
+        <input type="text" pInputText id="zip" [formControlName]="templateMap['zip']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['zip']"
+          [fieldName]="templateMap['zip']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

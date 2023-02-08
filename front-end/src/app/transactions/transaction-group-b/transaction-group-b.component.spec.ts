@@ -144,7 +144,7 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
+    if (component.transaction) {
       component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
@@ -180,7 +180,7 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
+    if (component.transaction) {
       component.transactionType.transaction.id = '10';
     }
     component.form.patchValue({ ...transaction });
@@ -200,7 +200,7 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
+    if (component.transaction) {
       component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
@@ -238,7 +238,7 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
+    if (component.transaction) {
       component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
@@ -275,7 +275,7 @@ describe('TransactionGroupBComponent', () => {
   it('#save() should not save an invalid org record', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
-    if (component.transactionType?.transaction) {
+    if (component.transaction) {
       component.transactionType.transaction.contact = testContact;
     }
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
@@ -285,7 +285,7 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
+    if (component.transaction) {
       component.transactionType.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({

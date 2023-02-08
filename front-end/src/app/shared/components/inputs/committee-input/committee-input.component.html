@@ -3,10 +3,10 @@
     <div class="col-8">
       <div class="field">
         <label for="organization_name">{{ entityRole }} NAME</label>
-        <input type="text" pInputText id="organization_name" [formControlName]="formTemplateMap['organization_name']" />
+        <input type="text" pInputText id="organization_name" [formControlName]="templateMap['organization_name']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['organization_name']"
+          [fieldName]="templateMap['organization_name']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -14,10 +14,10 @@
     <ng-container class="col-4" *ngIf="includeFecId">
       <div class="field">
         <label for="committee_fec_id">{{ entityRole }} FEC ID</label>
-        <input type="text" pInputText id="committee_fec_id" [formControlName]="formTemplateMap['committee_fec_id']" />
+        <input type="text" pInputText id="committee_fec_id" [formControlName]="templateMap['committee_fec_id']" />
         <app-error-messages
           [form]="form"
-          [fieldName]="formTemplateMap['committee_fec_id']"
+          [fieldName]="templateMap['committee_fec_id']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

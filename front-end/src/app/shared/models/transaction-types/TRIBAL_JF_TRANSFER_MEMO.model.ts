@@ -13,8 +13,8 @@ export class TRIBAL_JF_TRANSFER_MEMO extends SchaTransactionType {
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
   );
 
-  override generatePurposeDescription(): string {
-    return `JF Memo: ${(this.transaction?.parent_transaction as SchATransaction).contributor_organization_name}`;
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    return `JF Memo: ${(transaction?.parent_transaction as SchATransaction).contributor_organization_name}`;
   }
 
   getNewTransaction() {
