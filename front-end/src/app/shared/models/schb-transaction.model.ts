@@ -58,9 +58,6 @@ export class SchBTransaction extends Transaction {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
     }
-    else {
-      throw new Error("Can't find transaction_type_identifier when creating class from JSON");
-    }
     if (depth > 0 && transaction.parent_transaction) {
       transaction.parent_transaction = SchBTransaction.fromJSON(transaction.parent_transaction, depth-1);
     }

@@ -9,6 +9,7 @@ import { Type } from 'class-transformer';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
+
   @Type(() => TransactionType)
   transactionType: TransactionType | undefined;
 
@@ -62,15 +63,11 @@ export abstract class Transaction extends BaseModel {
    */
   setMetaProperties(transactionType: TransactionType): void {
     this.contact_id = this.contact?.id;
-    if (this?.transaction_type_identifier) {
-      this.transactionType = transactionType;
-      this.schema_name = transactionType.getSchemaName();
-      const fieldsToValidate: string[] = ValidateService.getSchemaProperties(transactionType.schema);
-      const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
-      this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
-    } else {
-      throw new Error('No TRANSACTION_TYPE_IDENTIFIER found when setting Meta Properties');
-    }
+    this.transactionType = transactionType;
+    this.schema_name = transactionType.getSchemaName();
+    const fieldsToValidate: string[] = ValidateService.getSchemaProperties(transactionType.schema);
+    const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
+    this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
   }
 
   /**

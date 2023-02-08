@@ -4,7 +4,7 @@ import { AggregationGroups } from '../transaction.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
 export class EARMARK_MEMO_HEADQUARTERS_ACCOUNT extends SchaTransactionType {
-  componentGroupId = 'GG';
+  componentGroupId = 'AG';
   override isDependentChild = true;
   title = '';
   schema = schema;

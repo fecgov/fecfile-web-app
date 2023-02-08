@@ -4,7 +4,7 @@ import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.
 import { SchaTransactionType } from './SchaTransactionType.model';
 
 export class EARMARK_MEMO_CONVENTION_ACCOUNT extends SchaTransactionType {
-  componentGroupId = 'GG';
+  componentGroupId = 'AG';
   override isDependentChild = true;
   title = '';
   schema = schema;
