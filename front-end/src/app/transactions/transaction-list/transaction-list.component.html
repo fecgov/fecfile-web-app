@@ -62,24 +62,29 @@
       <tr role="row">
         <td>
           <a [routerLink]="['edit', item?.id]">{{
-            item.transaction_type_identifier | label : scheduleATransactionTypeLabels
+            item.transaction_type_identifier | label : scheduleTransactionTypeLabels
           }}</a>
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>
-          {{ item.contributor_organization_name || item.contributor_last_name + ', ' + item.contributor_first_name }}
+          {{
+            item[item.transactionType.templateMap.organization_name] ||
+              item[item.transactionType.templateMap.last_name] +
+                ', ' +
+                item[item.transactionType.templateMap.first_name]
+          }}
         </td>
         <td>
-          {{ item.contribution_date | fecDate }}
+          {{ item[item.transactionType.templateMap.date] | fecDate }}
         </td>
         <td>
           {{ item.memo_code | memoCode }}
         </td>
         <td>
-          {{ item.contribution_amount | currency }}
+          {{ item[item.transactionType.templateMap.amount] | currency }}
         </td>
         <td>
-          {{ item.contribution_aggregate | currency }}
+          {{ item[item.transactionType.templateMap.aggregate] | currency }}
         </td>
         <td>
           {{ item.transaction_id }}
