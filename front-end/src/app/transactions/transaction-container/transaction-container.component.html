@@ -16,17 +16,11 @@
 <ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'F'">
   <app-transaction-group-f [transaction]="transaction"></app-transaction-group-f>
 </ng-container>
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'G'">
-  <app-transaction-group-g [transaction]="transaction"></app-transaction-group-g>
-</ng-container>
 <ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'AG'">
   <app-transaction-group-ag [transaction]="transaction"></app-transaction-group-ag>
 </ng-container>
 <ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'FG'">
   <app-transaction-group-fg [transaction]="transaction"></app-transaction-group-fg>
-</ng-container>
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'GG'">
-  <app-transaction-group-gg [transaction]="transaction"></app-transaction-group-gg>
 </ng-container>
 <ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'H'">
   <app-transaction-group-h [transaction]="transaction"></app-transaction-group-h>
