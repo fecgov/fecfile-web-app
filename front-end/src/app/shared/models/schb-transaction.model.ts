@@ -52,7 +52,7 @@ export class SchBTransaction extends Transaction {
   override apiEndpoint = '/transactions/schedule-b';
 
   // prettier-ignore
-  static override fromJSON(json: any, depth = 2): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: any, depth = 2): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     const transaction = plainToClass(SchBTransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);

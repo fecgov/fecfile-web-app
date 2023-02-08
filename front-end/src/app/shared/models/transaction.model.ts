@@ -9,6 +9,7 @@ import { Type } from 'class-transformer';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
+  @Type(() => TransactionType)
   transactionType: TransactionType | undefined;
 
   // FECFile spec properties
@@ -84,14 +85,6 @@ export abstract class Transaction extends BaseModel {
       return this.children;
     }
     return [];
-  }
-
-  // prettier-ignore
-  static fromJSON(json: any, depth = 2): ScheduleTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
-    const scheduleId: string = json?.transactionType?.scheduleId;
-    if (scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
-    if (scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
-    throw new Error('Missing  transaction type schedule declaration when generating schedule JSON payload');
   }
 }
 

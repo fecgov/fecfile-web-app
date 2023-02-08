@@ -9,6 +9,7 @@ import { ApiService } from './api.service';
 // import { SchATransaction } from '../models/scha-transaction.model';
 // import { SchBTransaction } from '../models/schb-transaction.model';
 import { ScheduleTransaction } from '../models/transaction.model';
+import { getFromJSON } from '../utils/transaction-type.utils';
 
 /**
  * Given the API endpoint, return the class of the relevent schedule.
@@ -41,7 +42,7 @@ export class TransactionService implements TableListService<Transaction> {
     }
     return this.apiService.get<ListRestResponse>(`/transactions/?page=${pageNumber}&ordering=${ordering}`, params).pipe(
       map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => Transaction.fromJSON(item));
+        response.results = response.results.map((item) => getFromJSON(item));
         return response;
       })
     );
@@ -50,7 +51,7 @@ export class TransactionService implements TableListService<Transaction> {
   public get(id: string): Observable<ScheduleTransaction> {
     return this.apiService.get<ScheduleTransaction>(`/transactions/${id}/`).pipe(
       map((response) => {
-        return Transaction.fromJSON(response);
+        return getFromJSON(response);
       })
     );
   }
@@ -75,7 +76,7 @@ export class TransactionService implements TableListService<Transaction> {
           action_date: actionDateString,
           aggregation_group,
         })
-        .pipe(map((response) => Transaction.fromJSON(response)));
+        .pipe(map((response) => getFromJSON(response)));
     }
     return of(undefined);
   }
@@ -85,7 +86,7 @@ export class TransactionService implements TableListService<Transaction> {
     // const scheduleClass = getScheduleClass(transaction.apiEndpoint);
     return this.apiService
       .post<Transaction>(`${transaction.apiEndpoint}/`, payload)
-      .pipe(map((response) => Transaction.fromJSON(response)));
+      .pipe(map((response) => getFromJSON(response)));
   }
 
   public update(transaction: Transaction): Observable<Transaction> {
@@ -93,7 +94,7 @@ export class TransactionService implements TableListService<Transaction> {
     // const scheduleClass = getScheduleClass(transaction.apiEndpoint);
     return this.apiService
       .put<Transaction>(`${transaction.apiEndpoint}/${transaction.id}/`, payload)
-      .pipe(map((response) => Transaction.fromJSON(response)));
+      .pipe(map((response) => getFromJSON(response)));
   }
 
   public delete(transaction: Transaction): Observable<null> {

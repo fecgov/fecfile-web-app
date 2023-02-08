@@ -8,6 +8,7 @@ import { ContactTypes } from '../../models/contact.model';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 
 export class TransactionFormUtils {
   /**
@@ -17,9 +18,8 @@ export class TransactionFormUtils {
    * child transaction type defined in the DoubleTransactionTypeBase class.
    * @param component
    * @param form - parent or child (i.e. form or childForm)
-   * @param contactTypeOptions - parent or child (i.e. contactTypeOptions or childContactTypeOptions)
    * @param validateService - parent or child (i.e. validateService or childValidateService)
-   * @param transactionType - parent or child (i.e. transactionType or transactionType?.childTransactionType)
+   * @param transaction - parent or child
    * @param contactId$ - parent or child (i.e. contactId$ or childContactId$)
    */
   static onInit(
@@ -118,7 +118,7 @@ export class TransactionFormUtils {
     let formValues = validateService.getFormValues(form, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
 
-    const payload: ScheduleTransaction = Transaction.fromJSON({
+    const payload: ScheduleTransaction = getFromJSON({
       ...transaction,
       ...formValues,
     });

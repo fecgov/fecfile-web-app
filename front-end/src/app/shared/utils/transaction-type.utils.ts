@@ -1,3 +1,7 @@
+import { ScheduleTransaction } from '../models/transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchBTransaction } from '../models/schb-transaction.model';
+
 // Schedule A /////////////////////////////////////////////////////
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
@@ -148,4 +152,22 @@ export class TransactionTypeUtils {
 // prettier-ignore
 export function getTransactionTypeClass(transactionTypeIdentifier: string): any { // eslint-disable-line @typescript-eslint/no-explicit-any
   return transactionTypeClasses[transactionTypeIdentifier];
+}
+
+// prettier-ignore
+/**
+ * Returns a schedule object of the correct class as discovered by examining
+ * the scheduleId of the transaction type.
+ *
+ * This function is in this file because there is a REFERENCEERROR when it
+ * is included in the transaction.model.ts file
+ * @param json
+ * @param depth
+ * @returns
+ */
+export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+  const scheduleId: string = json?.transactionType?.scheduleId;
+  if (scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
+  if (scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
+  throw new Error('Missing  transaction type schedule declaration when generating schedule JSON payload');
 }

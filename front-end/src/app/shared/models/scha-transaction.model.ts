@@ -61,7 +61,7 @@ export class SchATransaction extends Transaction {
   }
 
   // prettier-ignore
-  static overridefromJSON(json: any, depth = 2): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: any, depth = 2): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     const transaction = plainToClass(SchATransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
