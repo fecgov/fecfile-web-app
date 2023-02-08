@@ -68,21 +68,21 @@ export class TransactionService implements TableListService<Transaction> {
   public getPreviousTransaction(
     transactionType: TransactionType | undefined,
     contact_id: string,
-    action_date: Date
+    date: Date
   ): Observable<Transaction | undefined> {
-    const actionDateString: string = this.datePipe.transform(action_date, 'yyyy-MM-dd') || '';
+    const actionDateString: string = this.datePipe.transform(date, 'yyyy-MM-dd') || '';
     const transaction_id: string = transactionType?.transaction?.id || '';
     const aggregation_group: AggregationGroups | undefined =
       (transactionType?.transaction as SchATransaction)?.aggregation_group || AggregationGroups.GENERAL;
     const apiEndpoint: string = transactionType?.transaction?.apiEndpoint || '';
     const scheduleClass = getScheduleClass(apiEndpoint);
 
-    if (transactionType && action_date && contact_id && aggregation_group) {
+    if (transactionType && date && contact_id && aggregation_group) {
       return this.apiService
         .get<Transaction>(`${apiEndpoint}/previous/`, {
           transaction_id,
           contact_id,
-          action_date: actionDateString,
+          date: actionDateString,
           aggregation_group,
         })
         .pipe(map((response) => scheduleClass.fromJSON(response)));
