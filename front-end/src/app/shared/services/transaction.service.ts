@@ -6,25 +6,8 @@ import { TableListService } from '../interfaces/table-list-service.interface';
 import { Transaction, AggregationGroups } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-// import { SchATransaction } from '../models/scha-transaction.model';
-// import { SchBTransaction } from '../models/schb-transaction.model';
 import { ScheduleTransaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
-
-/**
- * Given the API endpoint, return the class of the relevent schedule.
- * @param key URL of root API endpoint
- * @returns Transaction subclass
- */
-// function getScheduleClass(apiEndpoint: string) {
-//   switch (apiEndpoint) {
-//     case '/transactions/schedule-a':
-//       return SchATransaction;
-//     case '/transactions/schedule-b':
-//       return SchBTransaction;
-//   }
-//   throw new Error(`Class transaction for API endpoint '${apiEndpoint}' not found`);
-// }
 
 @Injectable({
   providedIn: 'root',

@@ -166,8 +166,10 @@ export function getTransactionTypeClass(transactionTypeIdentifier: string): any 
  * @returns
  */
 export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
-  const scheduleId: string = json?.transactionType?.scheduleId;
-  if (scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
-  if (scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
-  throw new Error('Missing  transaction type schedule declaration when generating schedule JSON payload');
+  if (json.transaction_type_identifier) {
+    const transactionType = TransactionTypeUtils.factory(json.transaction_type_identifier);
+    if (transactionType.scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
+  }
+  throw new Error('Missing transaction type identifier when creating a transaction object from a JSON record');
 }
