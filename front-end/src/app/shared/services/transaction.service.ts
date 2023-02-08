@@ -6,7 +6,7 @@ import { TableListService } from '../interfaces/table-list-service.interface';
 import { Transaction, AggregationGroups } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { SchATransaction } from '../models/scha-transaction.model';
+// import { SchATransaction } from '../models/scha-transaction.model';
 // import { SchBTransaction } from '../models/schb-transaction.model';
 import { ScheduleTransaction } from '../models/transaction.model';
 
@@ -63,7 +63,7 @@ export class TransactionService implements TableListService<Transaction> {
     const actionDateString: string = this.datePipe.transform(action_date, 'yyyy-MM-dd') || '';
     const transaction_id: string = transaction?.id || '';
     const aggregation_group: AggregationGroups | undefined =
-      (transaction as SchATransaction)?.aggregation_group || AggregationGroups.GENERAL;
+      (transaction as ScheduleTransaction)?.aggregation_group || AggregationGroups.GENERAL;
     const apiEndpoint: string = transaction?.apiEndpoint || '';
     // const scheduleClass = getScheduleClass(apiEndpoint);
 
