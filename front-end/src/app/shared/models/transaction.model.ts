@@ -106,19 +106,20 @@ export abstract class Transaction extends BaseModel {
 
     // The parent is the new payload
     const payload = this.parent_transaction as Transaction;
+    if (!payload.children) payload.children = [];
 
     // Attach the original payload to the parent as a child, replacing an
     // existing version if needed
-    if (this.id && this.parent_transaction) {
-      payload.children = this.parent_transaction.children?.filter((c) => c.id !== this.id);
+    if (this.id) {
+      payload.children = payload.children.filter((c) => c.id !== this.id);
     }
     if (!childDeleted) {
-      payload.children?.push(this);
+      payload.children.push(this);
     }
     payload.children = payload.updateChildren();
 
-    // Update the CPD
-    if (payload?.transactionType?.generatePurposeDescription) {
+    // Update the purpose description
+    if (payload.transactionType?.generatePurposeDescription) {
       const key = payload.transactionType.templateMap.purpose_descrip as keyof ScheduleTransaction;
       ((payload as ScheduleTransaction)[key] as string) =
         payload.transactionType.generatePurposeDescriptionWrapper(payload);

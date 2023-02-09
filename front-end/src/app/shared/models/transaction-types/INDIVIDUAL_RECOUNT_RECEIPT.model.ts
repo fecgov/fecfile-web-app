@@ -12,7 +12,7 @@ export class INDIVIDUAL_RECOUNT_RECEIPT extends SchaTransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override generatePurposeDescription(): string {
-    return `Recount Account`;
+    return 'Recount Account';
   }
 
   getNewTransaction() {

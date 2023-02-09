@@ -196,19 +196,22 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       // to create a grandchild transaction because we won't know which child transaction of the grandparent
       // was the original transaction it's id was generated on the api.  the middle child's
       // id is necessary to generate the url for creating the grandchild.
-      const transactionType = TransactionTypeUtils.factory(payload.transaction_type_identifier);
-      if (transactionType.updateParentOnSave) {
+      if (payload.transactionType?.updateParentOnSave) {
         payload = payload.getUpdatedParent();
       }
 
       if (payload.id) {
         this.transactionService.update(payload).subscribe((transaction) => {
-          navigationEvent.transaction = !transactionType.updateParentOnSave ? transaction : originalTransaction;
+          navigationEvent.transaction = originalTransaction.transactionType?.updateParentOnSave
+            ? transaction
+            : originalTransaction;
           this.navigateTo(navigationEvent);
         });
       } else {
         this.transactionService.create(payload).subscribe((transaction) => {
-          navigationEvent.transaction = !transactionType.updateParentOnSave ? transaction : originalTransaction;
+          navigationEvent.transaction = originalTransaction.transactionType?.updateParentOnSave
+            ? transaction
+            : originalTransaction;
           this.navigateTo(navigationEvent);
         });
       }
