@@ -171,5 +171,6 @@ export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // esli
     if (transactionType.scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
     if (transactionType.scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
   }
-  throw new Error('Missing transaction type identifier when creating a transaction object from a JSON record');
+  return SchATransaction.fromJSON(json, depth); // Until 404 resolved
+  // throw new Error('Missing transaction type identifier when creating a transaction object from a JSON record');
 }

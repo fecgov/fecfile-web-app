@@ -66,10 +66,6 @@ export class SchBTransaction extends Transaction {
     }
     return transaction;
   }
-
-  getUpdatedParent(): Transaction {
-    throw new Error('Tried to call updateParent on SchBTransaction and there is no update code');
-  }
 }
 
 export enum ScheduleBTransactionGroups {

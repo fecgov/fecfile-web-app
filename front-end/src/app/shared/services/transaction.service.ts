@@ -49,9 +49,9 @@ export class TransactionService implements TableListService<Transaction> {
     const aggregation_group: AggregationGroups | undefined =
       (transaction as ScheduleTransaction)?.aggregation_group || AggregationGroups.GENERAL;
     const apiEndpoint: string = transaction?.apiEndpoint || '';
-    // const scheduleClass = getScheduleClass(apiEndpoint);
 
     if (transaction && action_date && contact_id && aggregation_group) {
+      // Need 404 handler
       return this.apiService
         .get<Transaction>(`${apiEndpoint}/previous/`, {
           transaction_id,
@@ -66,7 +66,6 @@ export class TransactionService implements TableListService<Transaction> {
 
   public create(transaction: Transaction): Observable<Transaction> {
     const payload = transaction.toJson();
-    // const scheduleClass = getScheduleClass(transaction.apiEndpoint);
     return this.apiService
       .post<Transaction>(`${transaction.apiEndpoint}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
@@ -74,7 +73,6 @@ export class TransactionService implements TableListService<Transaction> {
 
   public update(transaction: Transaction): Observable<Transaction> {
     const payload = transaction.toJson();
-    // const scheduleClass = getScheduleClass(transaction.apiEndpoint);
     return this.apiService
       .put<Transaction>(`${transaction.apiEndpoint}/${transaction.id}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
