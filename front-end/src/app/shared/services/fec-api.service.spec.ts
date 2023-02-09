@@ -69,7 +69,6 @@ describe('FecApiService', () => {
   });
 
   it('should return most recent filing from nightly endpoint', () => {
-    const f1Filing: FecFiling = FecFiling.fromJSON({ form_type: 'F1N', pdf_url: 'go here' });
     const f2Filing: FecFiling = FecFiling.fromJSON({ form_type: 'F2', pdf_url: 'dont go here' });
 
     service.getCommitteeRecentFiling('C00601211').subscribe((mostRecentFiling) => {
