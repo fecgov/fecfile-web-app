@@ -135,7 +135,6 @@ export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact;
 }
 
-// export type ScheduleTransactionKeys = SchATransaction & SchBTransaction;
 export type ScheduleTransaction = SchATransaction | SchBTransaction;
 export type ScheduleTransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
 

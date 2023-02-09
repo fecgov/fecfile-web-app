@@ -48,15 +48,14 @@ export class TransactionService implements TableListService<Transaction> {
     const transaction_id: string = transaction?.id || '';
     const aggregation_group: AggregationGroups | undefined =
       (transaction as ScheduleTransaction)?.aggregation_group || AggregationGroups.GENERAL;
-    const apiEndpoint: string = transaction?.apiEndpoint || '';
 
     if (transaction && action_date && contact_id && aggregation_group) {
       // Need 404 handler
       return this.apiService
-        .get<Transaction>(`${apiEndpoint}/previous/`, {
+        .get<Transaction>('/transactions/previous/', {
           transaction_id,
           contact_id,
-          action_date: actionDateString,
+          date: actionDateString,
           aggregation_group,
         })
         .pipe(map((response) => getFromJSON(response)));

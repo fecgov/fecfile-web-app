@@ -11,13 +11,13 @@ describe('OPERATING_EXPENDITURE', () => {
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
-    expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('B');
+    expect(transactionType.scheduleId).toBe('B');
+    expect(transactionType.componentGroupId).toBe('H');
   });
 
-  it('#factory() should return a SchATransaction', () => {
+  it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA15');
+    expect(txn.form_type).toBe('SB21b');
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.OPERATING_EXPENDITURE);
   });
 

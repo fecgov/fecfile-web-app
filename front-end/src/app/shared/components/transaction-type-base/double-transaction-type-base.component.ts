@@ -105,7 +105,7 @@ export abstract class DoubleTransactionTypeBaseComponent
             const key = this.childTemplateMap.organization_name as keyof ScheduleTransaction;
             ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
           }
-          this.updatePurposeDescription();
+          this.updateParentPurposeDescription();
         });
       this.childForm
         .get(this.childTemplateMap.first_name)
@@ -115,7 +115,7 @@ export abstract class DoubleTransactionTypeBaseComponent
             const key = this.childTemplateMap.first_name as keyof ScheduleTransaction;
             ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
           }
-          this.updatePurposeDescription();
+          this.updateParentPurposeDescription();
         });
       this.childForm
         .get(this.childTemplateMap.last_name)
@@ -125,7 +125,7 @@ export abstract class DoubleTransactionTypeBaseComponent
             const key = this.childTemplateMap.last_name as keyof ScheduleTransaction;
             ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
           }
-          this.updatePurposeDescription();
+          this.updateParentPurposeDescription();
         });
     }
 
@@ -147,14 +147,15 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.childContactId$.complete();
   }
 
-  private updatePurposeDescription() {
+  private updateParentPurposeDescription() {
     if (this.childTransaction && this.childTemplateMap) {
       (this.childTransaction as ScheduleTransaction).entity_type = this.childForm.get('entity_type')?.value;
 
-      if (this.childTransaction.transactionType?.generatePurposeDescription) {
+      if (this.transaction?.transactionType?.generatePurposeDescription) {
         this.form.patchValue({
-          [this.childTemplateMap.purpose_descrip]:
-            this.childTransaction.transactionType.generatePurposeDescriptionWrapper(this.childTransaction),
+          [this.templateMap.purpose_descrip]: this.transaction.transactionType.generatePurposeDescriptionWrapper(
+            this.transaction
+          ),
         });
       }
     }
