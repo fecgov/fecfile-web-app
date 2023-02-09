@@ -18,7 +18,6 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
@@ -203,15 +202,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       if (payload.id) {
         this.transactionService.update(payload).subscribe((transaction) => {
           navigationEvent.transaction = originalTransaction.transactionType?.updateParentOnSave
-            ? transaction
-            : originalTransaction;
+            ? originalTransaction
+            : transaction;
           this.navigateTo(navigationEvent);
         });
       } else {
         this.transactionService.create(payload).subscribe((transaction) => {
           navigationEvent.transaction = originalTransaction.transactionType?.updateParentOnSave
-            ? transaction
-            : originalTransaction;
+            ? originalTransaction
+            : transaction;
           this.navigateTo(navigationEvent);
         });
       }
