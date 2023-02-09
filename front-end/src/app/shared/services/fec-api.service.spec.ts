@@ -43,7 +43,7 @@ describe('FecApiService', () => {
       });
 
       const req = httpTestingController.expectOne(
-        `https://localhost/api/v1/mock_openfec/committee/C00601211/`
+        `https://localhost/api/v1/openfec/C00601211/committee/`
       );
 
       expect(req.request.method).toEqual('GET');
@@ -60,7 +60,7 @@ describe('FecApiService', () => {
       });
 
       const req = httpTestingController.expectOne(
-        `https://localhost/api/v1/mock_openfec/filings/C00601211/`
+        `https://localhost/api/v1/openfec/C00601211/filings/`
       );
 
       expect(req.request.method).toEqual('GET');
@@ -76,7 +76,7 @@ describe('FecApiService', () => {
     });
 
     const realtimeReq = httpTestingController.expectOne(
-      `https://localhost/api/v1/mock_openfec/filings/C00601211/`
+      `https://localhost/api/v1/openfec/C00601211/filings/`
     );
     expect(realtimeReq.request.method).toEqual('GET');
     realtimeReq.flush(f2Filing);

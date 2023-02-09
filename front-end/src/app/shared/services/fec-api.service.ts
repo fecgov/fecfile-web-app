@@ -41,7 +41,7 @@ export class FecApiService {
     }
 
     return this.apiService.get<FecApiPaginatedResponse>(
-      `/mock_openfec/committee/${committeeId}/`).pipe(map(
+      `/openfec/${committeeId}/committee/`).pipe(map(
         (response) => response.results[0] as CommitteeAccount));
   }
 
@@ -61,7 +61,7 @@ export class FecApiService {
     }
 
     return this.apiService.get<FecFiling>(
-      `/mock_openfec/filings/${committeeId}/`).pipe(map(
+      `/openfec/${committeeId}/filings/`).pipe(map(
         (response) => FecFiling.fromJSON(response)));
   }
 }
