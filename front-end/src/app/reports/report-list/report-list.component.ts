@@ -55,10 +55,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     return new F3xSummary();
   }
 
-  public override addItem(): void {
-    this.router.navigateByUrl('/reports/f3x/create/step1');
-  }
-
   public override editItem(item: Report): void {
     if (!this.itemService.isEditable(item)) {
       this.router.navigateByUrl(`/reports/f3x/submit/status/${item.id}`);
