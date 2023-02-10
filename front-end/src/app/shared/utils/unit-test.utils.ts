@@ -16,6 +16,7 @@ import { SchBTransaction } from '../models/schb-transaction.model';
 import { ContactTypes } from '../models/contact.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
+import { Transaction } from '../models/transaction.model';
 
 export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
   affiliated_committee_name: 'NONE',
@@ -171,4 +172,5 @@ export function getTestTransactionByType(
   if (parentTransactionType) {
     transaction.parent_transaction = TransactionTypeUtils.factory(parentTransactionType).getNewTransaction();
   }
+  return transaction;
 }

@@ -3,8 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
@@ -16,7 +14,6 @@ import {
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { schema as OFFSET_TO_OPERATING_EXPENDITURES } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPERATING_EXPENDITURES';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
