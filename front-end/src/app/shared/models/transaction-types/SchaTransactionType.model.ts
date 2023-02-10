@@ -20,6 +20,7 @@ export abstract class SchaTransactionType extends TransactionType {
     organization_name: 'contributor_organization_name',
     committee_fec_id: 'donor_committee_fec_id',
     date: 'contribution_date',
+    dateLabel: 'DATE RECEIVED',
     memo_code: 'memo_code',
     amount: 'contribution_amount',
     aggregate: 'contribution_aggregate',

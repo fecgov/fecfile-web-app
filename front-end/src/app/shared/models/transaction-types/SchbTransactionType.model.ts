@@ -20,11 +20,12 @@ export abstract class SchbTransactionType extends TransactionType {
     organization_name: 'payee_organization_name',
     committee_fec_id: 'beneficiary_committee_fec_id',
     date: 'expenditure_date',
+    dateLabel: 'DATE',
     memo_code: 'memo_code',
     amount: 'expenditure_amount',
     aggregate: 'aggregate_amount',
     purpose_descrip: 'expenditure_purpose_descrip',
-    purposeDescripLabel: 'EXPENDITURE PURPOSE DESCRIPTION',
+    purposeDescripLabel: 'PURPOSE OF DISBURSEMENT',
     memo_text_input: 'memo_text_input',
     category_code: 'category_code',
   };

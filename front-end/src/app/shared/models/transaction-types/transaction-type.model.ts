@@ -61,6 +61,7 @@ export type TransactionTemplateMapType = {
   organization_name: string;
   committee_fec_id: string;
   date: string;
+  dateLabel: string;
   memo_code: string;
   amount: string;
   aggregate: string;

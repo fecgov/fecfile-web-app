@@ -210,15 +210,16 @@ const CongressionalDistricts: Record<string, number> = {
 };
 
 export const CategoryCodeLabels: LabelList = [
-  ['001', 'Administrative/Salary/Overhead Expenses'],
-  ['002', 'Travel Expenses - including travel reimbursement expenses'],
-  ['003', 'Solicitation and Fundraising Expenses'],
-  ['004', 'Advertising Expenses -including general public political advertising'],
-  ['005', 'Polling Expenses'],
-  ['006', 'Campaign Materials'],
-  ['007', 'Campaign Event Expenses'],
-  ['008', 'Transfers'],
-  ['009', 'Loan Repayments'],
-  ['011', 'Political Contributions'],
-  ['012', 'Donations'],
+  ['001', '001 Administrative/Salary/Overhead Expenses'],
+  ['002', '002 Travel Expenses - including travel reimbursement expenses'],
+  ['003', '003 Solicitation and Fundraising Expenses'],
+  ['004', '004 Advertising Expenses -including general public political advertising'],
+  ['005', '005 Polling Expenses'],
+  ['006', '006 Campaign Materials'],
+  ['007', '007 Campaign Event Expenses'],
+  ['008', '008 Transfers'],
+  ['009', '009 Loan Repayments'],
+  ['010', '010 Refunds of Contributions'],
+  ['011', '011 Political Contributions'],
+  ['012', '012 Donations'],
 ];
