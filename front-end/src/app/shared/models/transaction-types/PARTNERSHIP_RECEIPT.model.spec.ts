@@ -1,32 +1,32 @@
-import { PARTNERSHIP_RECEIPT } from './PARTNERSHIP_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 
 describe('PARTNERSHIP_RECEIPT', () => {
-  let transactionType: PARTNERSHIP_RECEIPT;
+  let transaction: SchATransaction;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_RECEIPT();
+    transaction = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.PARTNERSHIP_RECEIPT
+    ).getNewTransaction() as SchATransaction;
   });
 
   it('should create an instance', () => {
-    expect(transactionType).toBeTruthy();
-    expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transaction.transactionType).toBeTruthy();
+    expect(transaction.transactionType?.scheduleId).toBe('A');
+    expect(transaction.transactionType?.componentGroupId).toBe('D');
   });
 
   it('#factory() should return a SchATransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA11AI');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
+    expect(transaction.form_type).toBe('SA11AI');
+    expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
-    transactionType.transaction = transactionType.getNewTransaction();
-    let descrip = transactionType.generatePurposeDescription();
+    let descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Partnership attributions do not require itemization');
 
-    transactionType.transaction.children = [transactionType.getNewTransaction()];
-    descrip = transactionType.generatePurposeDescription();
+    transaction.children = [{ ...transaction } as SchATransaction];
+    descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('See Partnership Attribution(s) below');
   });
 });

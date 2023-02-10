@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, convertToParamMap } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
-import { TransactionType } from '../models/transaction-types/transaction-type.model';
+import { Transaction } from '../models/transaction.model';
 import { Contact } from '../models/contact.model';
 import { SchATransaction } from '../models/scha-transaction.model';
 import { ContactService } from '../services/contact.service';
@@ -53,10 +53,10 @@ describe('TransactionResolver', () => {
     testContact.id = 'testId';
     spyOn(testContactService, 'get').and.returnValue(of(testContact));
 
-    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionType | undefined) => {
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
       expect(of(response)).toBeTruthy();
       if (response) {
-        expect('Offsets to Operating Expenditures').toEqual(response.title);
+        expect('Offsets to Operating Expenditures').toEqual(response.transactionType?.title || '');
       }
     });
   });
@@ -66,7 +66,7 @@ describe('TransactionResolver', () => {
       paramMap: convertToParamMap({ transactionId: undefined }),
     };
 
-    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionType | undefined) => {
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
       expect(response).toEqual(undefined);
     });
   });
@@ -76,10 +76,10 @@ describe('TransactionResolver', () => {
       paramMap: convertToParamMap({ reportId: 1, transactionType: 'OFFSET_TO_OPERATING_EXPENDITURES' }),
     };
 
-    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionType | undefined) => {
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
       expect(response).toBeTruthy();
       if (response) {
-        expect(response.title).toEqual('Offsets to Operating Expenditures');
+        expect(response.transactionType?.title).toEqual('Offsets to Operating Expenditures');
       }
     });
   });
@@ -89,10 +89,10 @@ describe('TransactionResolver', () => {
       paramMap: convertToParamMap({ parentTransactionId: 1, transactionType: 'PAC_JF_TRANSFER_MEMO' }),
     };
 
-    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: TransactionType | undefined) => {
+    resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
       expect(response).toBeTruthy();
       if (response) {
-        expect(response.title).toEqual('PAC Joint Fundraising Transfer Memo');
+        expect(response.transactionType?.title).toEqual('PAC Joint Fundraising Transfer Memo');
       }
     });
   });

@@ -3,18 +3,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { AggregationGroups, SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { Contact } from 'app/shared/models/contact.model';
+import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { schema as PAC_JF_TRANSFER_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -31,6 +28,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupFComponent } from './transaction-group-f.component';
 import { ContactService } from 'app/shared/services/contact.service';
 import { of } from 'rxjs';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
+import { testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 
 describe('TransactionGroupFComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -39,27 +38,7 @@ describe('TransactionGroupFComponent', () => {
   let testConfirmationService: ConfirmationService;
   let testContactService: ContactService;
 
-  const transaction = SchATransaction.fromJSON({
-    form_type: 'SA15',
-    filer_committee_id_number: 'C00000000',
-    transaction_type_identifier: 'PAC_JF_TRANSFER_MEMO',
-    transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-    back_reference_tran_id_number: 'AAAAAAAAAAAAAAAAAAA',
-    back_reference_sched_name: 'SA12',
-    entity_type: ContactTypes.COMMITTEE,
-    contributor_organization_name: 'org name',
-    contributor_street_1: '123 Main St',
-    contributor_city: 'city',
-    contributor_state: 'VA',
-    contributor_zip: '20001',
-    contribution_date: '2022-08-11',
-    contribution_amount: 1,
-    contribution_aggregate: 2,
-    contribution_purpose_descrip: 'Joint Fundraising Memo: test',
-    aggregation_group: AggregationGroups.GENERAL,
-    memo_code: true,
-    donor_committee_fec_id: 'C00000000',
-  });
+  const transaction = testScheduleATransaction;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -91,21 +70,9 @@ describe('TransactionGroupFComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupFComponent);
     component = fixture.componentInstance;
-    component.transactionType = {
-      scheduleId: '',
-      componentGroupId: '',
-      contact: undefined,
-      generatePurposeDescriptionWrapper: () => 'test description',
-      getNewTransaction: () => {
-        return {} as Transaction;
-      },
-      title: '',
-      schema: PAC_JF_TRANSFER_MEMO,
-      transaction: transaction,
-      isDependentChild: false,
-      updateParentOnSave: false,
-      getSchemaName: () => 'foo',
-    } as TransactionType;
+    component.transaction = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO
+    ).getNewTransaction();
     fixture.detectChanges();
   });
 
@@ -127,9 +94,9 @@ describe('TransactionGroupFComponent', () => {
     });
     component.form.patchValue({ ...testTran });
     if (component.transaction) {
-      component.transactionType.transaction = testTran;
-      component.transactionType.transaction.id = undefined;
-      component.transactionType.transaction.contact = testContact;
+      component.transaction = testTran;
+      component.transaction.id = undefined;
+      component.transaction.contact = testContact;
     }
     fixture.detectChanges();
     component.handleNavigate(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));

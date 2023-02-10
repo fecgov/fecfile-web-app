@@ -8,7 +8,11 @@ import { Transaction } from 'app/shared/models/transaction.model';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { SchBTransaction } from 'app/shared/models/schb-transaction.model';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
+import {
+  NavigationAction,
+  NavigationDestination,
+  NavigationEvent,
+} from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -28,6 +32,7 @@ import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupHComponent } from './transaction-group-h.component';
+import { testScheduleBTransaction } from '../../shared/utils/unit-test.utils';
 
 describe('TransactionGroupHComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -83,21 +88,6 @@ describe('TransactionGroupHComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupHComponent);
     component = fixture.componentInstance;
-    component.transactionType = {
-      scheduleId: '',
-      componentGroupId: '',
-      contact: undefined,
-      generatePurposeDescription: () => 'test description',
-      getNewTransaction: () => {
-        return {} as Transaction;
-      },
-      title: '',
-      schema: OFFSET_TO_OPERATING_EXPENDITURES,
-      transaction: transaction,
-      isDependentChild: false,
-      updateParentOnSave: false,
-      getSchemaName: () => 'foo',
-    } as TransactionType;
     fixture.detectChanges();
   });
 
@@ -142,26 +132,11 @@ describe('TransactionGroupHComponent', () => {
     });
 
     if (component.transaction) {
-      component.transactionType.transaction.id = undefined;
+      component.transaction.id = undefined;
     }
-    const testTran = SchBTransaction.fromJSON({
-      form_type: 'SA15',
-      filer_committee_id_number: 'C00000000',
-      transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
-      transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-      entity_type: ContactTypes.ORGANIZATION,
-      contributor_organization_name: 'org name',
-      contributor_street_1: '123 Main St',
-      contributor_city: 'city',
-      contributor_state: 'VA',
-      contributor_zip: '20001',
-      contribution_date: '2022-08-11',
-      contribution_amount: 1,
-      contribution_aggregate: 2,
-      aggregation_group: AggregationGroups.LINE_15,
-    });
+    const testTran = testScheduleBTransaction;
     component.form.patchValue({ ...testTran });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -178,10 +153,10 @@ describe('TransactionGroupHComponent', () => {
     });
 
     if (component.transaction) {
-      component.transactionType.transaction.id = '10';
+      component.transaction.id = '10';
     }
     component.form.patchValue({ ...transaction });
-    component.save(NavigationDestination.ANOTHER);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.ANOTHER, transaction));
     const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/10/`);
     expect(req.request.method).toEqual('PUT');
     httpTestingController.verify();
@@ -198,7 +173,7 @@ describe('TransactionGroupHComponent', () => {
     });
 
     if (component.transaction) {
-      component.transactionType.transaction.id = undefined;
+      component.transaction.id = undefined;
     }
     const testTran = SchBTransaction.fromJSON({
       form_type: 'SA15',
@@ -219,7 +194,7 @@ describe('TransactionGroupHComponent', () => {
     });
     component.form.patchValue({ ...testTran });
 
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -236,7 +211,7 @@ describe('TransactionGroupHComponent', () => {
     });
 
     if (component.transaction) {
-      component.transactionType.transaction.id = undefined;
+      component.transaction.id = undefined;
     }
     const testTran = SchBTransaction.fromJSON({
       form_type: 'SA15',
@@ -255,7 +230,7 @@ describe('TransactionGroupHComponent', () => {
       aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/`);
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
@@ -263,7 +238,7 @@ describe('TransactionGroupHComponent', () => {
 
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(`${environment.apiUrl}/transactions/schedule-a/1/`);
     httpTestingController.verify();
@@ -273,7 +248,7 @@ describe('TransactionGroupHComponent', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
     if (component.transaction) {
-      component.transactionType.transaction.contact = testContact;
+      component.transaction.contact = testContact;
     }
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
@@ -283,7 +258,7 @@ describe('TransactionGroupHComponent', () => {
     });
 
     if (component.transaction) {
-      component.transactionType.transaction.id = undefined;
+      component.transaction.id = undefined;
     }
     const testTran = SchBTransaction.fromJSON({
       form_type: 'SA15',
@@ -296,7 +271,7 @@ describe('TransactionGroupHComponent', () => {
       aggregation_group: AggregationGroups.LINE_15,
     });
     component.form.patchValue({ ...testTran });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTran));
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(`${environment.apiUrl}/transactions/schedule-a/1/`);
     httpTestingController.verify();

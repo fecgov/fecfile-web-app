@@ -1,16 +1,18 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from './PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO } from './PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO.model';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO', () => {
-  let transactionType: PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO;
+  let transaction: SchATransaction;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO();
-    transactionType.transaction = transactionType.getNewTransaction();
-    transactionType.transaction.parent_transaction =
-      new PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT().getNewTransaction();
-    (transactionType.transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
+    transaction = getTestTransactionByType(
+      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
+      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT
+    );
+    (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
 
   it('should create an instance', () => {

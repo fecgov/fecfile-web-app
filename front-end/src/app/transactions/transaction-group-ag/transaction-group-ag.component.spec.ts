@@ -18,20 +18,17 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
-import { EARMARK_RECEIPT } from '../../shared/models/transaction-types/EARMARK_RECEIPT.model';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupAgComponent } from './transaction-group-ag.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionGroupAgComponent', () => {
   let component: TransactionGroupAgComponent;
   let fixture: ComponentFixture<TransactionGroupAgComponent>;
 
-  const earmarkReceipt = new EARMARK_RECEIPT();
-  earmarkReceipt.transaction = earmarkReceipt.getNewTransaction();
-  const earmarkMemo = new EARMARK_MEMO();
-  earmarkMemo.transaction = earmarkMemo.getNewTransaction();
-  earmarkReceipt.childTransactionType = earmarkMemo;
+  const earmarkReceipt = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_RECEIPT).getNewTransaction();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -66,7 +63,7 @@ describe('TransactionGroupAgComponent', () => {
   });
 
   it('should create', () => {
-    component.transactionType = earmarkReceipt;
+    component.transaction = earmarkReceipt;
     component.ngOnInit();
     expect(component).toBeTruthy();
   });

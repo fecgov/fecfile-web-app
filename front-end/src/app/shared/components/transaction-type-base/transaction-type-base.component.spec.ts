@@ -143,7 +143,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#retrieveMemoText should work', () => {
-    if (component.transactionType) component.transactionType.transaction = testTransaction;
+    if (component.transactionType) component.transaction = testTransaction;
     else
       component.transactionType = {
         transaction: testTransaction,
@@ -175,7 +175,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   function addContact(component: TestTransactionTypeBaseComponent, contact: Contact) {
     if (component.transactionType?.transaction) {
-      component.transactionType.transaction.contact = contact;
+      component.transaction.contact = contact;
     }
   }
 
@@ -224,12 +224,12 @@ describe('TransactionTypeBaseComponent', () => {
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.INDIVIDUAL;
     testContact2.id = 'testId';
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact2;
+    if (component.transaction) {
+      component.transaction.contact = testContact2;
     }
     component.save(listSaveEvent);
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = undefined;
+    if (component.transaction) {
+      component.transaction.contact = undefined;
     }
     TransactionContactUtils.getEditTransactionContactConfirmationMessage([], testContact, component.form, fecDatePipe);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
@@ -267,8 +267,8 @@ describe('TransactionTypeBaseComponent', () => {
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.COMMITTEE;
     testContact2.id = 'testId';
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact2;
+    if (component.transaction) {
+      component.transaction.contact = testContact2;
     }
     component.save(listSaveEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
@@ -294,8 +294,8 @@ describe('TransactionTypeBaseComponent', () => {
     const orgContact2 = new Contact();
     orgContact2.type = ContactTypes.ORGANIZATION;
     orgContact2.id = 'testId';
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = orgContact2;
+    if (component.transaction) {
+      component.transaction.contact = orgContact2;
     }
     component.save(listSaveEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
@@ -332,7 +332,7 @@ describe('TransactionTypeBaseComponent', () => {
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
     component.transactionType =
       TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) || ({} as TransactionType);
-    component.transactionType.transaction = testTransaction;
+    component.transaction = testTransaction;
 
     component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction2));
     tick(1000);
@@ -358,8 +358,8 @@ describe('TransactionTypeBaseComponent', () => {
 
     component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     if (component.transactionType) {
-      component.transactionType.transaction = testTransaction;
-      component.transactionType.transaction.report_id = '999';
+      component.transaction = testTransaction;
+      component.transaction.report_id = '999';
     }
 
     const expectedMessage: Message = {
@@ -406,7 +406,7 @@ describe('TransactionTypeBaseComponent', () => {
   it('#navigateTo NavigationDestination.CHILD should navigate', () => {
     component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     if (component.transactionType) {
-      component.transactionType.transaction = testTransaction;
+      component.transaction = testTransaction;
     }
     const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
@@ -445,7 +445,7 @@ describe('TransactionTypeBaseComponent', () => {
   it('#navigateTo default should navigate', () => {
     component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
     if (component.transactionType) {
-      component.transactionType.transaction = testTransaction;
+      component.transaction = testTransaction;
     }
     const expectedRoute = '/transactions/report/999/list';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
@@ -575,7 +575,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#onContactLookupSelect INDIVIDUAL should calculate aggregate', () => {
     component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
-    component.transactionType.transaction = component.transactionType.getNewTransaction();
+    component.transaction = component.transactionType.getNewTransaction();
     TransactionFormUtils.onInit(
       component,
       component.form,
@@ -583,7 +583,7 @@ describe('TransactionTypeBaseComponent', () => {
       component.transactionType,
       component.contactId$
     );
-    component.transactionType.transaction = component.transactionType.getNewTransaction();
+    component.transaction = component.transactionType.getNewTransaction();
 
     const testEntityType = ContactTypes.INDIVIDUAL;
 

@@ -11,6 +11,11 @@ import { CommitteeAccount } from '../models/committee-account.model';
 import { F3xSummary } from '../models/f3x-summary.model';
 import { UploadSubmission } from '../models/upload-submission.model';
 import { CashOnHand } from '../interfaces/report.interface';
+import { AggregationGroups, ScheduleTransactionTypes } from '../models/transaction.model';
+import { SchBTransaction } from '../models/schb-transaction.model';
+import { ContactTypes } from '../models/contact.model';
+import { SchATransaction } from '../models/scha-transaction.model';
+import { TransactionTypeUtils } from './transaction-type.utils';
 
 export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
   affiliated_committee_name: 'NONE',
@@ -118,3 +123,52 @@ export const testMockStore = {
     { selector: selectCashOnHand, value: testCashOnHand },
   ],
 };
+
+export const testScheduleATransaction = SchATransaction.fromJSON({
+  form_type: 'SA15',
+  filer_committee_id_number: 'C00000000',
+  transaction_type_identifier: 'PAC_JF_TRANSFER_MEMO',
+  transaction_id: 'AAAAAAAAAAAAAAAAAAA',
+  back_reference_tran_id_number: 'AAAAAAAAAAAAAAAAAAA',
+  back_reference_sched_name: 'SA12',
+  entity_type: ContactTypes.COMMITTEE,
+  contributor_organization_name: 'org name',
+  contributor_street_1: '123 Main St',
+  contributor_city: 'city',
+  contributor_state: 'VA',
+  contributor_zip: '20001',
+  contribution_date: '2022-08-11',
+  contribution_amount: 1,
+  contribution_aggregate: 2,
+  contribution_purpose_descrip: 'Joint Fundraising Memo: test',
+  aggregation_group: AggregationGroups.GENERAL,
+  memo_code: true,
+  donor_committee_fec_id: 'C00000000',
+});
+
+export const testScheduleBTransaction = SchBTransaction.fromJSON({
+  form_type: 'SB21b',
+  filer_committee_id_number: 'C00000000',
+  transaction_type_identifier: 'OPERATING_EXPENDITURE',
+  transaction_id: 'AAAAAAAAAAAAAAAAAAA',
+  entity_type: ContactTypes.ORGANIZATION,
+  contributor_organization_name: 'org name',
+  contributor_street_1: '123 Main St',
+  contributor_city: 'city',
+  contributor_state: 'VA',
+  contributor_zip: '20001',
+  contribution_date: '2022-08-11',
+  contribution_amount: 1,
+  contribution_aggregate: 2,
+  aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
+});
+
+export function getTestTransactionByType(
+  transactionType: ScheduleTransactionTypes,
+  parentTransactionType?: ScheduleTransactionTypes
+): Transaction {
+  const transaction = TransactionTypeUtils.factory(transactionType).getNewTransaction();
+  if (parentTransactionType) {
+    transaction.parent_transaction = TransactionTypeUtils.factory(parentTransactionType).getNewTransaction();
+  }
+}

@@ -3,7 +3,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
-import { TransactionType } from '../models/transaction-types/transaction-type.model';
+import { Transaction } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { AggregationGroups } from '../models/transaction.model';
@@ -79,19 +79,13 @@ describe('TransactionService', () => {
       transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       aggregation_group: AggregationGroups.GENERAL,
     });
-    const mockTransactionType: TransactionType | undefined = TransactionTypeUtils.factory(
+    const mockTransaction: Transaction = TransactionTypeUtils.factory(
       ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
-    );
-    if (mockTransactionType) {
-      mockTransactionType.transaction = mockResponse;
-      mockTransactionType.transaction = SchATransaction.fromJSON({
-        id: 'abc',
-        transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      });
-      service.getPreviousTransaction(mockTransactionType, '1', new Date()).subscribe((response) => {
-        expect(response).toEqual(mockResponse);
-      });
-    }
+    ).getNewTransaction();
+    mockTransaction.id = 'abc';
+    service.getPreviousTransaction(mockTransaction, '1', new Date()).subscribe((response) => {
+      expect(response).toEqual(mockResponse);
+    });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
       `${environment.apiUrl}/transactions/schedule-a/previous/?transaction_id=abc&contact_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`

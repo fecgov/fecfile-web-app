@@ -29,6 +29,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupDComponent } from './transaction-group-d.component';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 
 describe('TransactionGroupDComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -78,21 +79,9 @@ describe('TransactionGroupDComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupDComponent);
     component = fixture.componentInstance;
-    component.transactionType = {
-      scheduleId: '',
-      componentGroupId: '',
-      contact: undefined,
-      generatePurposeDescriptionWrapper: () => 'test description',
-      getNewTransaction: () => {
-        return {} as Transaction;
-      },
-      title: '',
-      schema: TRIBAL_JF_TRANSFER_MEMO,
-      transaction: transaction,
-      isDependentChild: false,
-      updateParentOnSave: false,
-      getSchemaName: () => 'foo',
-    } as TransactionType;
+    component.transaction = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO
+    ).getNewTransaction();
     fixture.detectChanges();
   });
 

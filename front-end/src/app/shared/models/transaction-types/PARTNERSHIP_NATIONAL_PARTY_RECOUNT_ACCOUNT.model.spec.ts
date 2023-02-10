@@ -23,17 +23,18 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   });
 
   it('#generatePurposeDescription() should generate expected retval', () => {
-    const descrip = transactionType.generatePurposeDescription();
+    const txn = transactionType.getNewTransaction();
+    const descrip = transactionType.generatePurposeDescription(txn);
     expect(descrip).toBe('Recount/Legal Proceedings Account (Partnership attributions do not require itemization)');
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
-    transactionType.transaction = transactionType.getNewTransaction();
-    let descrip = transactionType.generatePurposeDescription();
+    const txn = transactionType.getNewTransaction();
+    let descrip = transactionType.generatePurposeDescription(txn);
     expect(descrip).toBe('Recount/Legal Proceedings Account (Partnership attributions do not require itemization)');
 
-    transactionType.transaction.children = [transactionType.getNewTransaction()];
-    descrip = transactionType.generatePurposeDescription();
+    txn.children = [transactionType.getNewTransaction()];
+    descrip = transactionType.generatePurposeDescription(txn);
     expect(descrip).toBe('Recount/Legal Proceedings Account (See Partnership Attribution(s) below)');
   });
 });

@@ -3,8 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
@@ -13,9 +11,8 @@ import {
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
-import { schema as INDIVIDUAL_JF_TRANSFER_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_JF_TRANSFER_MEMO';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -79,21 +76,7 @@ describe('TransactionGroupAComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupAComponent);
     component = fixture.componentInstance;
-    component.transactionType = {
-      scheduleId: '',
-      componentGroupId: '',
-      contact: undefined,
-      generatePurposeDescriptionWrapper: () => 'test description',
-      getNewTransaction: () => {
-        return {} as Transaction;
-      },
-      title: '',
-      schema: INDIVIDUAL_JF_TRANSFER_MEMO,
-      transaction: transaction,
-      isDependentChild: false,
-      updateParentOnSave: false,
-      getSchemaName: () => 'foo',
-    } as TransactionType;
+    component.transaction = testScheduleATransaction;
     fixture.detectChanges();
   });
 
