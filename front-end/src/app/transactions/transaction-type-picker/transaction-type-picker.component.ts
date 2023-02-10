@@ -217,7 +217,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
 
   getRouterLink(transactionType: string): string | undefined {
     if (this.report && !this.isTransactionDisabled(transactionType)) {
-      return `/transactions/report/${this.report?.id}}/create/${transactionType}`;
+      return `/transactions/report/${this.report?.id}/create/${transactionType}`;
     }
     return undefined;
   }
