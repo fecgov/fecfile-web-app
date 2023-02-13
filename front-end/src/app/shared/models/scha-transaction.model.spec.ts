@@ -1,3 +1,4 @@
+import { getTestTransactionByType } from '../utils/unit-test.utils';
 import { MemoText } from './memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
 
@@ -42,17 +43,15 @@ describe('SchATransaction', () => {
   });
 
   it('Updates the purpose description of a child transaction', () => {
-    const testTransaction1 = SchATransaction.fromJSON(initTransactionData);
-    const testTransaction2 = SchATransaction.fromJSON(initTransactionData);
-
-    testTransaction2.transaction_type_identifier =
-      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO;
-    testTransaction2.parent_transaction = testTransaction1;
-    testTransaction1.contributor_organization_name = 'Test Committee';
-    testTransaction1.children = [testTransaction2];
-
-    const updatedChildren = testTransaction1.updateChildren();
-    const child = updatedChildren[0] as SchATransaction;
-    expect(child.contribution_purpose_descrip).toContain(testTransaction1.contributor_organization_name);
+    const parentTransaction = getTestTransactionByType(
+      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT
+    ) as SchATransaction;
+    const childTransaction = getTestTransactionByType(
+      ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
+    ) as SchATransaction;
+    parentTransaction.children = [childTransaction];
+    parentTransaction.contributor_organization_name = 'Test Committee';
+    parentTransaction.updateChildren();
+    expect(childTransaction.contribution_purpose_descrip).toContain('Test Committee');
   });
 });

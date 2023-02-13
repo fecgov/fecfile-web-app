@@ -1,15 +1,11 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { Transaction } from '../transaction.model';
-import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 
 describe('TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
-  let transaction: Transaction;
-
-  beforeEach(() => {
-    transaction = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
-    ).getNewTransaction();
-  });
+  const transaction: Transaction = getTestTransactionByType(
+    ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
+  );
 
   it('should create an instance', () => {
     expect(transaction.transactionType).toBeTruthy();
@@ -25,11 +21,10 @@ describe('TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
+    transaction.parent_transaction = {
+      contributor_organization_name: 'ABC',
+    } as SchATransaction;
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe(
-      `Headquarters Buildings Account JF Memo: ${
-        (transaction.parent_transaction as SchATransaction)?.contributor_organization_name
-      }`
-    );
+    expect(descrip).toBe('Headquarters Buildings Account JF Memo: ABC');
   });
 });

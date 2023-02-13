@@ -292,11 +292,11 @@ workflows:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
       - lint
-      # - test
+      - test
       - dependency-check
       - deploy:
           requires:
-            # - test
+            - test
             - dependency-check
 
   nightly-run:

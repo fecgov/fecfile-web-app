@@ -1,14 +1,12 @@
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { Transaction } from '../transaction.model';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 
 describe('TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
   let transaction: Transaction;
 
   beforeEach(() => {
-    transaction = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO
-    ).getNewTransaction();
+    transaction = getTestTransactionByType(ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO);
   });
 
   it('should create an instance', () => {
@@ -32,11 +30,7 @@ describe('TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
     transaction.parent_transaction = {
       contributor_organization_name: 'ABC',
     } as SchATransaction;
-    const descrip: string = transaction.transactionType?.generatePurposeDescription?.(transaction) || '';
-    expect(descrip).toBe(
-      `Recount/Legal Proceedings Account JF Memo: ${
-        (transaction.parent_transaction as SchATransaction)?.contributor_organization_name
-      }`
-    );
+    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
+    expect(descrip).toBe('Recount/Legal Proceedings Account JF Memo: ABC');
   });
 });

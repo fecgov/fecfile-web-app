@@ -8,7 +8,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO', () => {
     transaction = getTestTransactionByType(
       ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
       ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT
-    );
+    ) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
 
@@ -27,6 +27,6 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO', () => {
 
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe(`Recount/Legal Proceedings Account Partnership Attribution`);
+    expect(descrip).toBe('Recount/Legal Proceedings Account Partnership Attribution');
   });
 });

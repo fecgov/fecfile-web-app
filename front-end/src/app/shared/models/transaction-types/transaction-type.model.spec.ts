@@ -1,20 +1,12 @@
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
-import { EARMARK_RECEIPT_RECOUNT_ACCOUNT } from './EARMARK_RECEIPT_RECOUNT_ACCOUNT.model';
-import { Transaction } from '../transaction.model';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { TransactionType } from './transaction-type.model';
 
 describe('Transaction Type Model', () => {
-  let transaction: Transaction;
-
-  beforeEach(() => {
-    transaction = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION
-    ).getNewTransaction();
-  });
-
   it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
-    const transactionType = new EARMARK_RECEIPT_RECOUNT_ACCOUNT();
-    const spy = spyOn(transactionType, 'generatePurposeDescription');
+    const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
+    if (!transaction.transactionType) throw new Error('transactionType method does not exist');
+    const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription');
     spy.and.returnValue('A short response');
 
     const originalDescrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
@@ -23,8 +15,9 @@ describe('Transaction Type Model', () => {
   });
 
   it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
-    const transactionType = new EARMARK_RECEIPT_RECOUNT_ACCOUNT();
-    const spy = spyOn(transactionType, 'generatePurposeDescription');
+    const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
+    if (!transaction.transactionType) throw new Error('transactionType method does not exist');
+    const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription');
     spy.and.returnValue(
       'An absurdly long response' +
         'Just the biggest; no corners cut.' +
@@ -33,8 +26,8 @@ describe('Transaction Type Model', () => {
     );
 
     const originalDescrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    const modifiedDescrip = transaction.transactionType?.generatePurposeDescriptionWrapper(transaction) || '';
+    const modifiedDescrip = transaction.transactionType?.generatePurposeDescriptionWrapper(transaction);
     expect(originalDescrip).not.toEqual(modifiedDescrip);
-    expect(modifiedDescrip.length).toEqual(100);
+    expect(modifiedDescrip?.length).toEqual(100);
   });
 });

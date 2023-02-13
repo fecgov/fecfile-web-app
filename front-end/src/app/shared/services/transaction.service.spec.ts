@@ -49,9 +49,7 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/transactions/schedule-a/?page=1&ordering=form_type`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/?page=1&ordering=form_type`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
@@ -67,7 +65,7 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/1/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1/`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
@@ -88,7 +86,7 @@ describe('TransactionService', () => {
     });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/transactions/schedule-a/previous/?transaction_id=abc&contact_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
+      `${environment.apiUrl}/transactions/previous/?transaction_id=abc&contact_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);

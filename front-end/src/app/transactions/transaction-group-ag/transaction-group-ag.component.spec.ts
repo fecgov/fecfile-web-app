@@ -58,6 +58,7 @@ describe('TransactionGroupAgComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionGroupAgComponent);
     component = fixture.componentInstance;
+    component.transaction = earmarkReceipt;
     fixture.detectChanges();
   });
 

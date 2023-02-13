@@ -4,8 +4,9 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AccordionModule } from 'primeng/accordion';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -54,11 +55,14 @@ describe('TransactionGroupFgComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionGroupFgComponent);
     component = fixture.componentInstance;
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
+    component.templateMap = testTemplateMap;
+    component.childTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO);
+    component.childTemplateMap = testTemplateMap;
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    component.ngOnInit();
     expect(component).toBeTruthy();
   });
 });

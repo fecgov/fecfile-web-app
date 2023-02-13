@@ -39,7 +39,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   purposeDescriptionLabel = '';
-  // childTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
   negativeAmountValueOnly = false;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
 
@@ -74,6 +73,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       );
     }
 
+    // Determine if amount should always be negative and then force it to be so if needed
     if (this.templateMap?.amount) {
       const amount_schema = this.transaction?.transactionType?.schema.properties[this.templateMap.amount];
       if (amount_schema?.exclusiveMaximum === 0) {
@@ -83,7 +83,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           ?.valueChanges.pipe(takeUntil(this.destroy$))
           .subscribe((amount) => {
             if (typeof amount === 'number' && amount > 0) {
-              this.form.patchValue({ amount: -1 * amount });
+              this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
             }
           });
       }

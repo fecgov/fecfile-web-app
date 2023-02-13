@@ -12,11 +12,14 @@ import { F3xSummary } from '../models/f3x-summary.model';
 import { UploadSubmission } from '../models/upload-submission.model';
 import { CashOnHand } from '../interfaces/report.interface';
 import { AggregationGroups, ScheduleTransactionTypes } from '../models/transaction.model';
-import { SchBTransaction } from '../models/schb-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 import { ContactTypes } from '../models/contact.model';
-import { SchATransaction } from '../models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
 import { Transaction } from '../models/transaction.model';
+import { TransactionTemplateMapType } from '../models/transaction-types/transaction-type.model';
+import { MemoText } from '../models/memo-text.model';
+import { Contact } from '../models/contact.model';
 
 export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
   affiliated_committee_name: 'NONE',
@@ -125,6 +128,38 @@ export const testMockStore = {
   ],
 };
 
+export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
+  id: '123',
+  transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
+  report_id: '999',
+  contribution_amount: '202.2',
+  contribution_date: '2022-02-02',
+  entity_type: ContactTypes.ORGANIZATION,
+  contributor_organization_name: 'org name',
+  contributor_street_1: '123 Main St',
+  contributor_city: 'city',
+  contributor_state: 'VA',
+  contributor_zip: '20001',
+  memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
+  contact_id: '456',
+  contact: Contact.fromJSON({
+    id: 'testId',
+    type: ContactTypes.INDIVIDUAL,
+    last_name: 'testLn1',
+    first_name: 'testFn1',
+    middle_name: 'testMn1',
+    prefix: 'testPrefix1',
+    suffix: 'testSuffix1',
+    employer: 'testEmployer1',
+    occupation: 'testOccupation1',
+    street_1: 'testStreet1',
+    street_2: 'testStreet2',
+    city: 'testCity1',
+    state: 'VA',
+    zip: '12345',
+  }),
+});
+
 export const testScheduleATransaction = SchATransaction.fromJSON({
   form_type: 'SA15',
   filer_committee_id_number: 'C00000000',
@@ -150,7 +185,7 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
 export const testScheduleBTransaction = SchBTransaction.fromJSON({
   form_type: 'SB21b',
   filer_committee_id_number: 'C00000000',
-  transaction_type_identifier: 'OPERATING_EXPENDITURE',
+  transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
   entity_type: ContactTypes.ORGANIZATION,
   contributor_organization_name: 'org name',
@@ -174,3 +209,29 @@ export function getTestTransactionByType(
   }
   return transaction;
 }
+
+export const testTemplateMap: TransactionTemplateMapType = {
+  last_name: 'contributor_last_name',
+  first_name: 'contributor_first_name',
+  middle_name: 'contributor_middle_name',
+  prefix: 'contributor_prefix',
+  suffix: 'contributor_suffix',
+  street_1: 'contributor_street_1',
+  street_2: 'contributor_street_2',
+  city: 'contributor_city',
+  state: 'contributor_state',
+  zip: 'contributor_zip',
+  employer: 'contributor_employer',
+  occupation: 'contributor_occupation',
+  organization_name: 'contributor_organization_name',
+  committee_fec_id: 'donor_committee_fec_id',
+  date: 'contribution_date',
+  dateLabel: 'DATE RECEIVED',
+  memo_code: 'memo_code',
+  amount: 'contribution_amount',
+  aggregate: 'contribution_aggregate',
+  purpose_descrip: 'contribution_purpose_descrip',
+  purposeDescripLabel: 'CONTRIBUTION PURPOSE DESCRIPTION',
+  memo_text_input: 'memo_text_input',
+  category_code: '',
+};

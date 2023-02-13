@@ -70,9 +70,7 @@ describe('TransactionGroupFComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupFComponent);
     component = fixture.componentInstance;
-    component.transaction = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO
-    ).getNewTransaction();
+    component.transaction = TransactionTypeUtils.factory(ScheduleATransactionTypes.TRANSFER).getNewTransaction();
     fixture.detectChanges();
   });
 

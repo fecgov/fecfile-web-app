@@ -1,16 +1,14 @@
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 
 describe('TRIBAL_JF_TRANSFER_MEMO', () => {
   let transaction: SchATransaction;
 
   beforeEach(() => {
-    transaction = TransactionTypeUtils.factory(
-      ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO
-    ).getNewTransaction() as SchATransaction;
-    transaction.parent_transaction = TransactionTypeUtils.factory(
+    transaction = getTestTransactionByType(
+      ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO,
       ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
-    ).getNewTransaction() as SchATransaction;
+    ) as SchATransaction;
     (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
 

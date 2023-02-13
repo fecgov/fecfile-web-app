@@ -11,7 +11,7 @@ describe('EARMARK_MEMO_HEADQUARTERS_ACCOUNT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('GG');
+    expect(transactionType.componentGroupId).toBe('AG');
   });
 
   it('#factory() should return a SchATransaction', () => {
