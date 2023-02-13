@@ -105,7 +105,7 @@ export abstract class Transaction extends BaseModel {
     }
 
     // The parent is the new payload
-    const payload = this.parent_transaction as Transaction;
+    const payload = this.parent_transaction;
     if (!payload.children) payload.children = [];
 
     // Attach the original payload to the parent as a child, replacing an

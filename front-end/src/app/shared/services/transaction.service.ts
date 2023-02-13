@@ -3,10 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { Transaction, AggregationGroups } from '../models/transaction.model';
+import { Transaction, AggregationGroups, ScheduleTransaction } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { ScheduleTransaction } from '../models/transaction.model';
 import { getFromJSON } from '../utils/transaction-type.utils';
 
 @Injectable({

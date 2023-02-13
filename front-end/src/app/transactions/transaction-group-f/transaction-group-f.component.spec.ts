@@ -11,7 +11,7 @@ import {
 import { Contact } from 'app/shared/models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { testMockStore, testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -29,7 +29,6 @@ import { TransactionGroupFComponent } from './transaction-group-f.component';
 import { ContactService } from 'app/shared/services/contact.service';
 import { of } from 'rxjs';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
-import { testScheduleATransaction } from 'app/shared/utils/unit-test.utils';
 
 describe('TransactionGroupFComponent', () => {
   let httpTestingController: HttpTestingController;

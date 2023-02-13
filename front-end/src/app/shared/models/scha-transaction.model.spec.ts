@@ -1,25 +1,5 @@
 import { getTestTransactionByType } from '../utils/unit-test.utils';
-import { MemoText } from './memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
-
-const initTransactionData = {
-  id: undefined,
-  report_id: undefined,
-  contact: undefined,
-  contact_id: undefined,
-  form_type: undefined,
-  filer_committee_id_number: undefined,
-  transaction_id: null,
-  transaction_type_identifier: 'INDIVIDUAL_RECEIPT',
-  contribution_purpose_descrip: undefined,
-  parent_transaction_id: undefined,
-  children: undefined,
-  parent_transaction: undefined,
-  fields_to_validate: undefined,
-  itemized: false,
-  memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
-  memo_text_id: 'ID Goes Here',
-};
 
 describe('SchATransaction', () => {
   it('should create an instance', () => {

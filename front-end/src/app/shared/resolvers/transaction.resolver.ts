@@ -32,7 +32,7 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
   }
 
   resolve_new_transaction(reportId: string, transactionTypeName: string): Observable<Transaction | undefined> {
-    const transactionType = TransactionTypeUtils.factory(transactionTypeName) as TransactionType;
+    const transactionType = TransactionTypeUtils.factory(transactionTypeName);
     const transaction: Transaction = transactionType.getNewTransaction();
     transaction.report_id = String(reportId);
 
@@ -49,7 +49,7 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
   ): Observable<Transaction | undefined> {
     return this.transactionService.get(String(parentTransactionId)).pipe(
       map((parentTransaction: Transaction) => {
-        const childTransactionType = TransactionTypeUtils.factory(childTransactionTypeName) as TransactionType;
+        const childTransactionType = TransactionTypeUtils.factory(childTransactionTypeName);
         const childTransaction = childTransactionType.getNewTransaction();
         childTransaction.parent_transaction = parentTransaction;
         childTransaction.parent_transaction_id = String(parentTransactionId);

@@ -6,7 +6,8 @@ describe('Transaction Type Model', () => {
   it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
     const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
     if (!transaction.transactionType) throw new Error('transactionType method does not exist');
-    const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription');
+    // prettier-ignore
+    const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
     spy.and.returnValue('A short response');
 
     const originalDescrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
@@ -17,7 +18,8 @@ describe('Transaction Type Model', () => {
   it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
     const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
     if (!transaction.transactionType) throw new Error('transactionType method does not exist');
-    const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription');
+    // prettier-ignore
+    const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
     spy.and.returnValue(
       'An absurdly long response' +
         'Just the biggest; no corners cut.' +

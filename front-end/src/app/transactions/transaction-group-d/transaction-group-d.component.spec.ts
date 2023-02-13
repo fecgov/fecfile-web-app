@@ -4,7 +4,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationDestination,
   NavigationAction,
@@ -26,7 +26,6 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupDComponent } from './transaction-group-d.component';
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 
 describe('TransactionGroupDComponent', () => {
   let httpTestingController: HttpTestingController;
