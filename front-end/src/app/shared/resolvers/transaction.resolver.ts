@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { map, Observable, of, mergeMap } from 'rxjs';
-import { TransactionType } from '../models/transaction-types/transaction-type.model';
 import { Transaction } from '../models/transaction.model';
 import { ContactService } from '../services/contact.service';
 import { TransactionService } from '../services/transaction.service';
