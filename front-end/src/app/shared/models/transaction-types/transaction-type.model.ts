@@ -20,7 +20,6 @@ export abstract class TransactionType {
   subTransactionTypes?: ScheduleTransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction
   navigationControls?: TransactionNavigationControls;
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
-  generatePurposeDescriptionLabel?(): string; // Get the CPD or EPD field label
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
@@ -31,6 +30,15 @@ export abstract class TransactionType {
       throw new Error('Schema name for transaction type not found.');
     }
     return schema_name;
+  }
+
+  generatePurposeDescriptionLabel(): string {
+    if (this.generatePurposeDescription !== undefined) {
+      return '(SYSTEM-GENERATED)';
+    } else if (this.schema.required.includes(this.templateMap.purpose_description)) {
+      return '(REQUIRED)';
+    }
+    return '(OPTIONAL)';
   }
 
   public generatePurposeDescriptionWrapper(transaction: Transaction): string {
@@ -65,7 +73,7 @@ export type TransactionTemplateMapType = {
   memo_code: string;
   amount: string;
   aggregate: string;
-  purpose_descrip: string;
+  purpose_description: string;
   purposeDescripLabel: string;
   memo_text_input: string;
   category_code: string;

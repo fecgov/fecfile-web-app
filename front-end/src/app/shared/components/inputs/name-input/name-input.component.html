@@ -2,8 +2,8 @@
   <div class="grid">
     <div class="col-4">
       <div class="field">
-        <label for="last_name">LAST NAME</label>
-        <input type="text" pInputText id="last_name" [formControlName]="templateMap['last_name']" />
+        <label for="templateMap['last_name']">LAST NAME</label>
+        <input type="text" pInputText id="templateMap['last_name']" [formControlName]="templateMap['last_name']" />
         <app-error-messages
           [form]="form"
           [fieldName]="templateMap['last_name']"

@@ -24,18 +24,9 @@ export abstract class SchaTransactionType extends TransactionType {
     memo_code: 'memo_code',
     amount: 'contribution_amount',
     aggregate: 'contribution_aggregate',
-    purpose_descrip: 'contribution_purpose_descrip',
+    purpose_description: 'contribution_purpose_descrip',
     purposeDescripLabel: 'CONTRIBUTION PURPOSE DESCRIPTION',
     memo_text_input: 'memo_text_input',
     category_code: '',
   };
-
-  override generatePurposeDescriptionLabel(): string {
-    if (this.generatePurposeDescription !== undefined) {
-      return '(SYSTEM-GENERATED)';
-    } else if (this.schema.required.includes('contribution_purpose_descrip')) {
-      return '(REQUIRED)';
-    }
-    return '(OPTIONAL)';
-  }
 }

@@ -1,23 +1,23 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-12">
-      <label for="purpose_descrip"> {{ templateMap['purposeDescripLabel'] }} {{ purposeDescriptionLabel }} </label>
+      <label for="purpose_description"> {{ templateMap['purposeDescripLabel'] }} {{ purposeDescriptionLabel }} </label>
       <em *ngIf="purposeDescriptionLabelNotice">{{ purposeDescriptionLabelNotice }}</em>
       <div>
         <textarea
-          id="purpose_descrip"
+          id="purpose_description"
           [rows]="4"
           [cols]="30"
           pInputTextarea
           [disabled]="true"
           [autoResize]="true"
-          [formControlName]="templateMap['purpose_descrip']"
+          [formControlName]="templateMap['purpose_description']"
           [ngClass]="{ readonly: descriptionIsSystemGenerated }"
           [readonly]="descriptionIsSystemGenerated"
         ></textarea>
         <app-error-messages
           [form]="form"
-          [fieldName]="templateMap['purpose_descrip']"
+          [fieldName]="templateMap['purpose_description']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

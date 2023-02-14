@@ -228,7 +228,7 @@ export const testTemplateMap: TransactionTemplateMapType = {
   memo_code: 'memo_code',
   amount: 'contribution_amount',
   aggregate: 'contribution_aggregate',
-  purpose_descrip: 'contribution_purpose_descrip',
+  purpose_description: 'contribution_purpose_descrip',
   purposeDescripLabel: 'CONTRIBUTION PURPOSE DESCRIPTION',
   memo_text_input: 'memo_text_input',
   category_code: '',

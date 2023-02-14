@@ -32,13 +32,13 @@ describe('AdditionalInfoInputComponent', () => {
   });
 
   it('should have a read-only cpd if system generated', () => {
-    const cpd = fixture.debugElement.query(By.css('#purpose_descrip'));
+    const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     expect(cpd.classes['readonly']).toBeTruthy();
   });
 
   it('should have a mutable cpd if not system generated', () => {
     component.descriptionIsSystemGenerated = false;
-    const cpd = fixture.debugElement.query(By.css('#purpose_descrip'));
+    const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     fixture.detectChanges();
     expect(cpd.classes['readonly']).toBeFalsy();
   });

@@ -83,7 +83,7 @@ export abstract class Transaction extends BaseModel {
         if (child?.transactionType?.generatePurposeDescription) {
           child.parent_transaction = this;
           const newDescrip = child.transactionType.generatePurposeDescriptionWrapper(child);
-          const key = child.transactionType.templateMap.purpose_descrip as keyof ScheduleTransaction;
+          const key = child.transactionType.templateMap.purpose_description as keyof ScheduleTransaction;
           ((child as ScheduleTransaction)[key] as string) = newDescrip;
         }
         outChildren.push(child);
@@ -120,7 +120,7 @@ export abstract class Transaction extends BaseModel {
 
     // Update the purpose description
     if (payload.transactionType?.generatePurposeDescription) {
-      const key = payload.transactionType.templateMap.purpose_descrip as keyof ScheduleTransaction;
+      const key = payload.transactionType.templateMap.purpose_description as keyof ScheduleTransaction;
       ((payload as ScheduleTransaction)[key] as string) =
         payload.transactionType.generatePurposeDescriptionWrapper(payload);
     }

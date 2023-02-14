@@ -146,7 +146,7 @@ export class TransactionFormUtils {
         entity_type: defaultContactTypeOption,
         [transaction.transactionType.templateMap.aggregate]: '0',
         memo_code: this.getMemoCodeConstant(transaction?.transactionType),
-        [transaction.transactionType.templateMap.purpose_descrip]:
+        [transaction.transactionType.templateMap.purpose_description]:
           transaction?.transactionType?.generatePurposeDescriptionWrapper(transaction),
       });
     }

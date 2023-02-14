@@ -24,18 +24,9 @@ export abstract class SchbTransactionType extends TransactionType {
     memo_code: 'memo_code',
     amount: 'expenditure_amount',
     aggregate: 'aggregate_amount',
-    purpose_descrip: 'expenditure_purpose_descrip',
+    purpose_description: 'expenditure_purpose_descrip',
     purposeDescripLabel: 'PURPOSE OF DISBURSEMENT',
     memo_text_input: 'memo_text_input',
     category_code: 'category_code',
   };
-
-  override generatePurposeDescriptionLabel(): string {
-    if (this.generatePurposeDescription !== undefined) {
-      return '(SYSTEM-GENERATED)';
-    } else if (this.schema.required.includes('expenditure_purpose_descrip')) {
-      return '(REQUIRED)';
-    }
-    return '(OPTIONAL)';
-  }
 }
