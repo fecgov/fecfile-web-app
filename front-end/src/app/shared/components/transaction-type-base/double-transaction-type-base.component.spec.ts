@@ -7,9 +7,9 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { MessageService } from 'primeng/api';
-import { TransactionTypeX2BaseComponent } from './transaction-type-x2-base.component';
+import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 
-class TestTransactionTypeX2BaseComponent extends TransactionTypeX2BaseComponent {
+class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
@@ -58,19 +58,19 @@ class TestTransactionTypeX2BaseComponent extends TransactionTypeX2BaseComponent 
 }
 
 describe('TransactionTypeBaseComponent', () => {
-  let component: TestTransactionTypeX2BaseComponent;
-  let fixture: ComponentFixture<TestTransactionTypeX2BaseComponent>;
+  let component: TestDoubleTransactionTypeBaseComponent;
+  let fixture: ComponentFixture<TestDoubleTransactionTypeBaseComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestTransactionTypeX2BaseComponent],
+      declarations: [TestDoubleTransactionTypeBaseComponent],
       imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [MessageService, FormBuilder, ValidateService, TransactionService, provideMockStore(testMockStore)],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TestTransactionTypeX2BaseComponent);
+    fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

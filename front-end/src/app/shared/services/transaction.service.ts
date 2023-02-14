@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import { Transaction } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
@@ -68,21 +68,21 @@ export class TransactionService implements TableListService<Transaction> {
   public getPreviousTransaction(
     transactionType: TransactionType | undefined,
     contact_id: string,
-    contribution_date: Date
+    action_date: Date
   ): Observable<Transaction | undefined> {
-    const contributionDateString: string = this.datePipe.transform(contribution_date, 'yyyy-MM-dd') || '';
+    const actionDateString: string = this.datePipe.transform(action_date, 'yyyy-MM-dd') || '';
     const transaction_id: string = transactionType?.transaction?.id || '';
     const aggregation_group: AggregationGroups | undefined =
       (transactionType?.transaction as SchATransaction)?.aggregation_group || AggregationGroups.GENERAL;
     const apiEndpoint: string = transactionType?.transaction?.apiEndpoint || '';
     const scheduleClass = getScheduleClass(apiEndpoint);
 
-    if (transactionType && contribution_date && contact_id && aggregation_group) {
+    if (transactionType && action_date && contact_id && aggregation_group) {
       return this.apiService
         .get<Transaction>(`${apiEndpoint}/previous/`, {
           transaction_id,
           contact_id,
-          contribution_date: contributionDateString,
+          action_date: actionDateString,
           aggregation_group,
         })
         .pipe(map((response) => scheduleClass.fromJSON(response)));
@@ -107,6 +107,17 @@ export class TransactionService implements TableListService<Transaction> {
   }
 
   public delete(transaction: Transaction): Observable<null> {
-    return this.apiService.delete<null>(`${transaction.apiEndpoint}/${transaction.id}`);
+    return this.apiService.delete<null>(`${transaction.apiEndpoint}/${transaction.id}`).pipe(
+      tap(() => {
+        if (transaction.transactionType?.updateParentOnSave && transaction.parent_transaction?.children) {
+          // Remove deleted transaction from parent's list of children
+          transaction.parent_transaction.children = transaction.parent_transaction.children.filter(
+            (child) => child.id !== transaction.id
+          );
+          const parentTransactionPayload = transaction.getUpdatedParent(true);
+          this.update(parentTransactionPayload).subscribe();
+        }
+      })
+    );
   }
 }

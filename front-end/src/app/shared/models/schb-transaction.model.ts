@@ -2,6 +2,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
+import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchBTransaction extends Transaction {
   back_reference_tran_id_number: string | undefined;
@@ -49,8 +50,26 @@ export class SchBTransaction extends Transaction {
   override apiEndpoint = '/sch-b-transactions';
 
   // prettier-ignore
-  static fromJSON(json: any): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
-    return plainToClass(SchBTransaction, json);
+  static fromJSON(json: any, depth = 2): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+    const transaction = plainToClass(SchBTransaction, json);
+    if (transaction.transaction_type_identifier) {
+      const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
+      transaction.setMetaProperties(transactionType);
+    }
+    else {
+      throw new Error("Can't find transaction_type_identifier when creating class from JSON");
+    }
+    if (depth > 0 && transaction.parent_transaction) {
+      transaction.parent_transaction = SchBTransaction.fromJSON(transaction.parent_transaction, depth-1);
+    }
+    if (depth > 0 && transaction.children) {
+      transaction.children = transaction.children.map(function(child) { return SchBTransaction.fromJSON(child, depth-1) });
+    }
+    return transaction;
+  }
+
+  getUpdatedParent(): Transaction {
+    throw new Error('Tried to call updateParent on SchBTransaction and there is no update code');
   }
 }
 

@@ -40,6 +40,8 @@ describe('Tests that memos have the memo_code checkbox checked', () => {
     cy.get('.p-confirm-dialog-accept').click();
     cy.longWait();
 
+    // ensure we're on the next transaction form
+    cy.get('#contribution_amount').should('not.exist');
     cy.contains('a', 'Create a new contact').click();
     cy.longWait();
     enterContact(transaction.contact, true, true);

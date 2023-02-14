@@ -18,6 +18,7 @@ import {
   ScheduleBTransactionTypes,
 } from 'app/shared/models/schb-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
+import { getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
 
 type Categories = 'receipt' | 'disbursement';
 type GroupsTypes = ScheduleATransactionGroupsType | ScheduleBTransactionGroupsType;
@@ -142,6 +143,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION,
           ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
           ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
+          ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
         ];
       case ScheduleBTransactionGroups.OPERATING_EXPENDITURES:
         return [
@@ -207,5 +209,16 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
       default:
         return [];
     }
+  }
+
+  isTransactionDisabled(transactionTypeIdentifier: string): boolean {
+    return !getTransactionTypeClass(transactionTypeIdentifier);
+  }
+
+  getRouterLink(transactionType: string): string | undefined {
+    if (this.report && !this.isTransactionDisabled(transactionType)) {
+      return `/transactions/report/${this.report?.id}}/create/${transactionType}`;
+    }
+    return undefined;
   }
 }

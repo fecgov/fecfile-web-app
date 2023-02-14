@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { NavigationControl } from 'app/shared/models/transaction-navigation-controls.model';
+import { NavigationControl, NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 
 @Component({
   selector: 'app-navigation-control',
@@ -9,7 +9,7 @@ import { NavigationControl } from 'app/shared/models/transaction-navigation-cont
 export class NavigationControlComponent {
   @Input() navigationControl?: NavigationControl;
   @Input() transaction?: Transaction;
-  @Output() navigate: EventEmitter<NavigationControl> = new EventEmitter<NavigationControl>();
+  @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
 
   isVisible = true;
 
@@ -18,6 +18,11 @@ export class NavigationControlComponent {
   }
 
   click(): void {
-    this.navigate.emit(this.navigationControl);
+    const navigationEvent = new NavigationEvent(
+      this.navigationControl?.navigationAction,
+      this.navigationControl?.navigationDestination,
+      this.transaction
+    );
+    this.navigate.emit(navigationEvent);
   }
 }

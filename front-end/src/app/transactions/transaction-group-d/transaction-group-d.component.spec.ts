@@ -7,7 +7,11 @@ import { TransactionType } from 'app/shared/models/transaction-types/transaction
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
+import {
+  NavigationDestination,
+  NavigationAction,
+  NavigationEvent,
+} from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
@@ -78,7 +82,7 @@ describe('TransactionGroupDComponent', () => {
       scheduleId: '',
       componentGroupId: '',
       contact: undefined,
-      generatePurposeDescription: () => 'test description',
+      generatePurposeDescriptionWrapper: () => 'test description',
       getNewTransaction: () => {
         return {} as Transaction;
       },
@@ -86,17 +90,30 @@ describe('TransactionGroupDComponent', () => {
       schema: TRIBAL_JF_TRANSFER_MEMO,
       transaction: transaction,
       isDependentChild: false,
+      updateParentOnSave: false,
+      getSchemaName: () => 'foo',
     } as TransactionType;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    component.ngOnInit();
+    expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
+  });
+
+  it('should reset the subTransaction dropdown', () => {
+    component.form.get('subTransaction')?.setValue('A Value');
+    expect(component.form.get('subTransaction')?.value).toEqual('A Value');
+    component.createSubTransaction({
+      value: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+    });
+    expect(component.form.get('subTransaction')?.value).toBeNull();
   });
 
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
       `${environment.apiUrl}/transactions/schedule-a/1/?schema=TRIBAL_JF_TRANSFER_MEMO&fields_to_validate=`

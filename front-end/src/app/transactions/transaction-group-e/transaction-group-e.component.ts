@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
 import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-transaction-group-e',
   templateUrl: './transaction-group-e.component.html',
-  styleUrls: ['./transaction-group-e.component.scss'],
+  styleUrls: ['../transaction.scss'],
 })
 export class TransactionGroupEComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -42,10 +41,5 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
         value: type,
       };
     });
-  }
-
-  createSubTransaction(event: { value: ScheduleATransactionTypes }) {
-    this.save(NavigationDestination.CHILD, event.value);
-    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }

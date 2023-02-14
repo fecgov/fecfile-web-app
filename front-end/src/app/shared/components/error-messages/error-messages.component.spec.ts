@@ -94,7 +94,6 @@ describe('ErrorMessagesComponent', () => {
     component.form = validateService.formValidatorForm;
     component.fieldName = 'exclusive_negative_amount';
     component.ngOnInit();
-    console.log('TEST');
     component.form.patchValue({ exclusive_negative_amount: 1 });
     expect(component.exclusiveMaxErrorMessage).toBe('Amount must be negative (example: -$20.00)');
   });
