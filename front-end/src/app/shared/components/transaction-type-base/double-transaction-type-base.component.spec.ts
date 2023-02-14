@@ -1,7 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -11,9 +10,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { DatePipe } from '@angular/common';
-import { ApiService } from 'app/shared/services/api.service';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { transactionDateReceived } from '../../../../../cypress/support/generators/generators.spec';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -66,12 +63,6 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
 describe('DoubleTransactionTypeBaseComponent', () => {
   let component: TestDoubleTransactionTypeBaseComponent;
   let fixture: ComponentFixture<TestDoubleTransactionTypeBaseComponent>;
-  let testMessageService: MessageService;
-  let testRouter: Router;
-  let testTransactionService: TransactionService;
-  let testApiService: ApiService;
-  let testConfirmationService: ConfirmationService;
-  let fecDatePipe: FecDatePipe;
   let testTransaction: SchATransaction;
 
   beforeEach(async () => {
@@ -89,13 +80,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         FecDatePipe,
       ],
     }).compileComponents();
-
-    testMessageService = TestBed.inject(MessageService);
-    testRouter = TestBed.inject(Router);
-    testTransactionService = TestBed.inject(TransactionService);
-    testApiService = TestBed.inject(ApiService);
-    testConfirmationService = TestBed.inject(ConfirmationService);
-    fecDatePipe = TestBed.inject(FecDatePipe);
   });
 
   beforeEach(() => {
