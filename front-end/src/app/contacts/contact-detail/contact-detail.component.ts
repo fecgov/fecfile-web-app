@@ -7,9 +7,7 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-import {
-  Contact
-} from '../../shared/models/contact.model';
+import { Contact } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-contact-detail',
@@ -40,10 +38,10 @@ export class ContactDetailComponent {
   form: FormGroup = this.fb.group(
     this.validateService.getFormGroupFields([
       ...new Set([
-        ...this.validateService.getSchemaProperties(contactIndividualSchema),
-        ...this.validateService.getSchemaProperties(contactCandidateSchema),
-        ...this.validateService.getSchemaProperties(contactCommitteeSchema),
-        ...this.validateService.getSchemaProperties(contactOrganizationSchema),
+        ...ValidateService.getSchemaProperties(contactIndividualSchema),
+        ...ValidateService.getSchemaProperties(contactCandidateSchema),
+        ...ValidateService.getSchemaProperties(contactCommitteeSchema),
+        ...ValidateService.getSchemaProperties(contactOrganizationSchema),
       ]),
     ])
   );
@@ -53,7 +51,7 @@ export class ContactDetailComponent {
     private contactService: ContactService,
     private validateService: ValidateService,
     private fb: FormBuilder
-  ) { }
+  ) {}
 
   public onOpenDetail() {
     this.resetForm();
@@ -105,5 +103,4 @@ export class ContactDetailComponent {
     this.form.reset();
     this.formSubmitted = false;
   }
-
 }

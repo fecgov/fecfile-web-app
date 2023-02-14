@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Transaction } from './transaction.model';
+import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
@@ -23,6 +23,8 @@ export class SchBTransaction extends Transaction {
   election_other_description: string | undefined;
   @Transform(BaseModel.dateTransform) expenditure_date: Date | undefined;
   expenditure_amount: number | undefined;
+  aggregate_amount: number | undefined;
+  aggregation_group: AggregationGroups | undefined;
   semi_annual_refunded_bundled_amt: number | undefined;
   expenditure_purpose_descrip: string | undefined;
   category_code: string | undefined;
@@ -47,7 +49,7 @@ export class SchBTransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
-  override apiEndpoint = '/sch-b-transactions';
+  override apiEndpoint = '/transactions/schedule-b';
 
   // prettier-ignore
   static fromJSON(json: any, depth = 2): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -56,9 +58,6 @@ export class SchBTransaction extends Transaction {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
     }
-    else {
-      throw new Error("Can't find transaction_type_identifier when creating class from JSON");
-    }
     if (depth > 0 && transaction.parent_transaction) {
       transaction.parent_transaction = SchBTransaction.fromJSON(transaction.parent_transaction, depth-1);
     }
@@ -66,10 +65,6 @@ export class SchBTransaction extends Transaction {
       transaction.children = transaction.children.map(function(child) { return SchBTransaction.fromJSON(child, depth-1) });
     }
     return transaction;
-  }
-
-  getUpdatedParent(): Transaction {
-    throw new Error('Tried to call updateParent on SchBTransaction and there is no update code');
   }
 }
 

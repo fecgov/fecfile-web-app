@@ -2,12 +2,8 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_RECEIPT';
 import { ContactTypes } from '../contact.model';
-import {
-  AggregationGroups,
-  SchATransaction,
-  ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes,
-} from '../scha-transaction.model';
+import { AggregationGroups } from '../transaction.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS_MINIMAL, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
@@ -15,11 +11,12 @@ export class PAC_EARMARK_RECEIPT extends SchaTransactionType {
   componentGroupId = 'FG';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
   schema = schema;
-  override childTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.PAC_EARMARK_MEMO);
+  override dependentChildTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.PAC_EARMARK_MEMO);
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS_MINIMAL;
 
-  override generatePurposeDescription(): string {
-    const earmarkMemo: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    if (!transaction.children) return '';
+    const earmarkMemo: SchATransaction = transaction.children[0] as SchATransaction;
     let conduit = earmarkMemo?.contributor_organization_name || '';
     if (
       earmarkMemo?.entity_type === ContactTypes.INDIVIDUAL &&
