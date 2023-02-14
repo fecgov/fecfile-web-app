@@ -36,7 +36,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childForm: FormGroup = this.fb.group({});
   childValidateService: ValidateService = new ValidateService();
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
-  childContributionPurposeDescriptionLabel = '';
+  childPurposeDescriptionLabel = '';
   childNegativeAmountValueOnly = false;
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
 
@@ -86,8 +86,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
 
     if (this.childTransaction?.transactionType?.generatePurposeDescriptionLabel) {
-      this.childContributionPurposeDescriptionLabel =
-        this.childTransaction.transactionType.generatePurposeDescriptionLabel();
+      this.childPurposeDescriptionLabel = this.childTransaction.transactionType.generatePurposeDescriptionLabel();
     }
 
     // Default the child entity type to Committee
