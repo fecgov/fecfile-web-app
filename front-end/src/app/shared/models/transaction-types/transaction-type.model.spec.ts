@@ -5,7 +5,7 @@ import { TransactionType } from './transaction-type.model';
 describe('Transaction Type Model', () => {
   it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
     const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
-    if (!transaction.transactionType) throw new Error('transactionType method does not exist');
+    if (!transaction.transactionType) throw new Error('Fecfile: transactionType method does not exist');
     // prettier-ignore
     const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
     spy.and.returnValue('A short response');
@@ -17,7 +17,7 @@ describe('Transaction Type Model', () => {
 
   it('#generatePurposeDescriptionWrapper() should not truncate short purpose descriptions', () => {
     const transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT);
-    if (!transaction.transactionType) throw new Error('transactionType method does not exist');
+    if (!transaction.transactionType) throw new Error('Fecfile: transactionType method does not exist');
     // prettier-ignore
     const spy = spyOn<TransactionType, any>(transaction.transactionType, 'generatePurposeDescription'); // eslint-disable-line @typescript-eslint/no-explicit-any
     spy.and.returnValue(

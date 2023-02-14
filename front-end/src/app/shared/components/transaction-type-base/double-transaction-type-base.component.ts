@@ -50,6 +50,8 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childTransaction = this.transaction?.children[0];
       if (this.childTransaction.transactionType?.templateMap) {
         this.childTemplateMap = this.childTransaction.transactionType.templateMap;
+      } else {
+        throw new Error('Fecfile: Template map not found for double transaction component');
       }
       TransactionFormUtils.onInit(
         this,
@@ -69,20 +71,18 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childTransaction?.transactionType?.contactTypeOptions
     );
 
-    if (this.childTemplateMap) {
-      const amountProperty = this.childTemplateMap.amount;
-      const amount_schema = this.childTransaction?.transactionType?.schema.properties[amountProperty];
-      if (amount_schema?.exclusiveMaximum === 0) {
-        this.childNegativeAmountValueOnly = true;
-        this.childForm
-          .get(amountProperty)
-          ?.valueChanges.pipe(takeUntil(this.destroy$))
-          .subscribe((amount) => {
-            if (typeof amount === 'number' && amount > 0) {
-              this.childForm.patchValue({ amount: -1 * amount });
-            }
-          });
-      }
+    const amountProperty = this.childTemplateMap.amount;
+    const amount_schema = this.childTransaction?.transactionType?.schema.properties[amountProperty];
+    if (amount_schema?.exclusiveMaximum === 0) {
+      this.childNegativeAmountValueOnly = true;
+      this.childForm
+        .get(amountProperty)
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((amount) => {
+          if (+amount > 0) {
+            this.childForm.patchValue({ amount: -1 * amount });
+          }
+        });
     }
 
     if (this.childTransaction?.transactionType?.generatePurposeDescriptionLabel) {
@@ -95,50 +95,38 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
 
     // Parent contribution purpose description updates with child contributor name updates.
-    if (this.childTemplateMap) {
-      this.childForm
-        .get(this.childTemplateMap.organization_name)
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          if (this.childTransaction && this.childTemplateMap) {
-            const key = this.childTemplateMap.organization_name as keyof ScheduleTransaction;
-            ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
-          }
-          this.updateParentPurposeDescription();
-        });
-      this.childForm
-        .get(this.childTemplateMap.first_name)
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          if (this.childTransaction && this.childTemplateMap) {
-            const key = this.childTemplateMap.first_name as keyof ScheduleTransaction;
-            ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
-          }
-          this.updateParentPurposeDescription();
-        });
-      this.childForm
-        .get(this.childTemplateMap.last_name)
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          if (this.childTransaction && this.childTemplateMap) {
-            const key = this.childTemplateMap.last_name as keyof ScheduleTransaction;
-            ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
-          }
-          this.updateParentPurposeDescription();
-        });
-    }
+    this.childForm
+      .get(this.childTemplateMap.organization_name)
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        const key = this.childTemplateMap.organization_name as keyof ScheduleTransaction;
+        ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
+        this.updateParentPurposeDescription();
+      });
+    this.childForm
+      .get(this.childTemplateMap.first_name)
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        const key = this.childTemplateMap.first_name as keyof ScheduleTransaction;
+        ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
+        this.updateParentPurposeDescription();
+      });
+    this.childForm
+      .get(this.childTemplateMap.last_name)
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        const key = this.childTemplateMap.last_name as keyof ScheduleTransaction;
+        ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
+        this.updateParentPurposeDescription();
+      });
 
     // Child amount must match parent contribution amount
-    if (this.templateMap) {
-      this.form
-        .get(this.templateMap.amount)
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          if (this.childTemplateMap) {
-            this.childForm.get(this.childTemplateMap.amount)?.setValue(value);
-          }
-        });
-    }
+    this.form
+      .get(this.templateMap.amount)
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((value) => {
+        this.childForm.get(this.childTemplateMap.amount)?.setValue(value);
+      });
   }
 
   override ngOnDestroy(): void {
@@ -147,16 +135,14 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   private updateParentPurposeDescription() {
-    if (this.childTransaction && this.childTemplateMap) {
-      (this.childTransaction as ScheduleTransaction).entity_type = this.childForm.get('entity_type')?.value;
+    (this.childTransaction as ScheduleTransaction).entity_type = this.childForm.get('entity_type')?.value;
 
-      if (this.transaction?.transactionType?.generatePurposeDescription) {
-        this.form.patchValue({
-          [this.templateMap.purpose_description]: this.transaction.transactionType.generatePurposeDescriptionWrapper(
-            this.transaction
-          ),
-        });
-      }
+    if (this.transaction?.transactionType?.generatePurposeDescription) {
+      this.form.patchValue({
+        [this.templateMap.purpose_description]: this.transaction.transactionType.generatePurposeDescriptionWrapper(
+          this.transaction
+        ),
+      });
     }
   }
 
@@ -191,7 +177,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (payload.children?.length === 1) {
       this.confirmSave(payload.children[0], this.childForm, this.doSave, navigationEvent, payload, 'childDialog');
     } else {
-      throw new Error('Parent transaction missing child transaction when trying to confirm save.');
+      throw new Error('Fecfile: Parent transaction missing child transaction when trying to confirm save.');
     }
   }
 

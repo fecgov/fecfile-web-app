@@ -59,6 +59,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
     if (this.transaction?.transactionType?.templateMap) {
       this.templateMap = this.transaction.transactionType.templateMap;
+    } else {
+      throw new Error('Fecfile: Template map not found for transaction component');
     }
     TransactionFormUtils.onInit(this, this.form, this.validateService, this.transaction, this.contactId$);
     this.parentOnInit();
@@ -182,7 +184,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           },
         });
       } else {
-        throw new Error('Cannot find template map when confirming transaction');
+        throw new Error('Fecfile: Cannot find template map when confirming transaction');
       }
     }
   }

@@ -69,7 +69,7 @@ export class ReportService implements TableListService<Report> {
    * @returns Observable<Report>
    */
   setActiveReportById(reportId: string | undefined): Observable<Report> {
-    if (!reportId) throw new Error('No Report Id Provided.');
+    if (!reportId) throw new Error('Fecfile: No Report Id Provided.');
     return this.get(reportId).pipe(
       tap((report) => {
         return this.store.dispatch(setActiveReportAction({ payload: report || new F3xSummary() }));

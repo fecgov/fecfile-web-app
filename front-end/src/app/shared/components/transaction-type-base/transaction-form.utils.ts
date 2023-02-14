@@ -54,7 +54,7 @@ export class TransactionFormUtils {
 
     const templateMap = transaction?.transactionType?.templateMap;
     if (!templateMap) {
-      throw new Error('Cannot find template map when initializing transaction form');
+      throw new Error('Fecfile: Cannot find template map when initializing transaction form');
     }
 
     form
@@ -112,7 +112,7 @@ export class TransactionFormUtils {
     formProperties: string[]
   ): Transaction {
     if (!transaction) {
-      throw new Error('Payload transaction not found');
+      throw new Error('Fecfile: Payload transaction not found');
     }
 
     let formValues = validateService.getFormValues(form, formProperties);

@@ -117,7 +117,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#retrieveMemoText should work', () => {
-    if (!component.transaction) throw new Error('transaction does not exist');
+    if (!component.transaction) throw new Error('Fecfile: transaction does not exist');
     component.form = new FormGroup({
       memo_text_input: new FormControl('memo'),
     });
