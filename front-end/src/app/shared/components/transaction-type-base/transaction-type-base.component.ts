@@ -82,7 +82,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
           .get(this.templateMap.amount)
           ?.valueChanges.pipe(takeUntil(this.destroy$))
           .subscribe((amount) => {
-            if (typeof amount === 'number' && amount > 0) {
+            if (+amount > 0) {
               this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
             }
           });
