@@ -19,7 +19,6 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { SharedModule } from '../../shared/shared.module';
-import { TransactionTypeUtils } from '../../shared/utils/transaction-type.utils';
 import { TransactionGroupBComponent } from '../transaction-group-b/transaction-group-b.component';
 import { TransactionContainerComponent } from './transaction-container.component';
 
@@ -54,7 +53,9 @@ describe('TransactionContainerComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             data: of({
-              transactionType: TransactionTypeUtils.factory('OFFSET_TO_OPERATING_EXPENDITURES'),
+              transaction: getTestTransactionByType(
+                ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES
+              ) as SchATransaction,
             }),
           },
         },
@@ -67,9 +68,6 @@ describe('TransactionContainerComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionContainerComponent);
     component = fixture.componentInstance;
-    component.transaction = getTestTransactionByType(
-      ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES
-    ) as SchATransaction;
     fixture.detectChanges();
   });
 
