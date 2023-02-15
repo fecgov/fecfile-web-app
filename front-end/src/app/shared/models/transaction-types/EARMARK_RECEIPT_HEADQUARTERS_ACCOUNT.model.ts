@@ -2,12 +2,8 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_EARMARK_RECEIPTS';
 import { ContactTypes } from '../contact.model';
-import {
-  AggregationGroups,
-  SchATransaction,
-  ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes,
-} from '../scha-transaction.model';
+import { AggregationGroups } from '../transaction.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import {
   CANCEL_CONTROL,
   SAVE_LIST_CONTROL,
@@ -22,7 +18,7 @@ export class EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT extends SchaTransactionType {
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION
   );
   schema = schema;
-  override childTransactionType = TransactionTypeUtils.factory(
+  override dependentChildTransactionType = TransactionTypeUtils.factory(
     ScheduleATransactionTypes.EARMARK_MEMO_HEADQUARTERS_ACCOUNT
   );
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
@@ -31,8 +27,9 @@ export class EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT extends SchaTransactionType {
     [SAVE_LIST_CONTROL]
   );
 
-  override generatePurposeDescription(): string {
-    const subTransaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    if (!transaction.children) return '';
+    const subTransaction: SchATransaction = transaction.children[0] as SchATransaction;
     let conduit = subTransaction?.contributor_organization_name || '';
     if (
       subTransaction?.entity_type === ContactTypes.INDIVIDUAL &&

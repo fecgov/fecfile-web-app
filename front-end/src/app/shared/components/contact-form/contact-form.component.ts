@@ -10,8 +10,9 @@ import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_va
 import { Subject, takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypeLabels,
-  CandidateOfficeTypes, ContactTypeLabels,
-  ContactTypes
+  CandidateOfficeTypes,
+  ContactTypeLabels,
+  ContactTypes,
 } from '../../models/contact.model';
 
 @Component({
@@ -22,10 +23,10 @@ export class ContactFormComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup = this.fb.group(
     this.validateService.getFormGroupFields([
       ...new Set([
-        ...this.validateService.getSchemaProperties(contactIndividualSchema),
-        ...this.validateService.getSchemaProperties(contactCandidateSchema),
-        ...this.validateService.getSchemaProperties(contactCommitteeSchema),
-        ...this.validateService.getSchemaProperties(contactOrganizationSchema),
+        ...ValidateService.getSchemaProperties(contactIndividualSchema),
+        ...ValidateService.getSchemaProperties(contactCandidateSchema),
+        ...ValidateService.getSchemaProperties(contactCommitteeSchema),
+        ...ValidateService.getSchemaProperties(contactOrganizationSchema),
       ]),
     ])
   );
@@ -41,10 +42,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
 
-  constructor(
-    private validateService: ValidateService,
-    private fb: FormBuilder
-  ) { }
+  constructor(private validateService: ValidateService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
@@ -66,7 +64,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
         // Clear out non-schema form values
         const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-        const schemaProperties: string[] = this.validateService.getSchemaProperties(
+        const schemaProperties: string[] = ValidateService.getSchemaProperties(
           this.validateService.formValidatorSchema
         );
         Object.keys(this.form.controls).forEach((property: string) => {
@@ -165,5 +163,4 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     }
     return schema;
   }
-
 }

@@ -3,27 +3,10 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { Transaction } from '../models/transaction.model';
+import { Transaction, AggregationGroups, ScheduleTransaction } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { SchATransaction, AggregationGroups } from '../models/scha-transaction.model';
-import { SchBTransaction } from '../models/schb-transaction.model';
-import { TransactionType } from '../models/transaction-types/transaction-type.model';
-
-/**
- * Given the API endpoint, return the class of the relevent schedule.
- * @param key URL of root API endpoint
- * @returns Transaction subclass
- */
-function getScheduleClass(apiEndpoint: string) {
-  switch (apiEndpoint) {
-    case '/transactions/schedule-a':
-      return SchATransaction;
-    case '/transactions/schedule-b':
-      return SchBTransaction;
-  }
-  throw new Error(`Class transaction for API endpoint '${apiEndpoint}' not found`);
-}
+import { getFromJSON } from '../utils/transaction-type.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -39,71 +22,58 @@ export class TransactionService implements TableListService<Transaction> {
     if (!ordering) {
       ordering = 'form_type';
     }
-    // Pull list from Sch A Transactions until we have an endpoint that pulls transactions from the different schedule types
-    return this.apiService
-      .get<ListRestResponse>(`/transactions/schedule-a/?page=${pageNumber}&ordering=${ordering}`, params)
-      .pipe(
-        map((response: ListRestResponse) => {
-          response.results = response.results.map((item) => SchATransaction.fromJSON(item));
-          return response;
-        })
-      );
+    return this.apiService.get<ListRestResponse>(`/transactions/?page=${pageNumber}&ordering=${ordering}`, params).pipe(
+      map((response: ListRestResponse) => {
+        response.results = response.results.map((item) => getFromJSON(item));
+        return response;
+      })
+    );
   }
 
-  public get(id: string): Observable<SchATransaction> {
-    return this.apiService.get<SchATransaction>(`/transactions/schedule-a/${id}/`).pipe(
+  public get(id: string): Observable<ScheduleTransaction> {
+    return this.apiService.get<ScheduleTransaction>(`/transactions/${id}/`).pipe(
       map((response) => {
-        const txn = SchATransaction.fromJSON(response);
-
-        // Convert child transactions into SchATransaction objects
-        if (txn.children) {
-          txn.children = txn.children.map((child) => SchATransaction.fromJSON(child));
-        }
-
-        return txn;
+        return getFromJSON(response);
       })
     );
   }
 
   public getPreviousTransaction(
-    transactionType: TransactionType | undefined,
+    transaction: Transaction | undefined,
     contact_id: string,
     action_date: Date
   ): Observable<Transaction | undefined> {
     const actionDateString: string = this.datePipe.transform(action_date, 'yyyy-MM-dd') || '';
-    const transaction_id: string = transactionType?.transaction?.id || '';
+    const transaction_id: string = transaction?.id || '';
     const aggregation_group: AggregationGroups | undefined =
-      (transactionType?.transaction as SchATransaction)?.aggregation_group || AggregationGroups.GENERAL;
-    const apiEndpoint: string = transactionType?.transaction?.apiEndpoint || '';
-    const scheduleClass = getScheduleClass(apiEndpoint);
+      (transaction as ScheduleTransaction)?.aggregation_group || AggregationGroups.GENERAL;
 
-    if (transactionType && action_date && contact_id && aggregation_group) {
+    if (transaction && action_date && contact_id && aggregation_group) {
+      // Need 404 handler
       return this.apiService
-        .get<Transaction>(`${apiEndpoint}/previous/`, {
+        .get<Transaction>('/transactions/previous/', {
           transaction_id,
           contact_id,
-          action_date: actionDateString,
+          date: actionDateString,
           aggregation_group,
         })
-        .pipe(map((response) => scheduleClass.fromJSON(response)));
+        .pipe(map((response) => getFromJSON(response)));
     }
     return of(undefined);
   }
 
   public create(transaction: Transaction): Observable<Transaction> {
     const payload = transaction.toJson();
-    const scheduleClass = getScheduleClass(transaction.apiEndpoint);
     return this.apiService
       .post<Transaction>(`${transaction.apiEndpoint}/`, payload)
-      .pipe(map((response) => scheduleClass.fromJSON(response)));
+      .pipe(map((response) => getFromJSON(response)));
   }
 
   public update(transaction: Transaction): Observable<Transaction> {
     const payload = transaction.toJson();
-    const scheduleClass = getScheduleClass(transaction.apiEndpoint);
     return this.apiService
       .put<Transaction>(`${transaction.apiEndpoint}/${transaction.id}/`, payload)
-      .pipe(map((response) => scheduleClass.fromJSON(response)));
+      .pipe(map((response) => getFromJSON(response)));
   }
 
   public delete(transaction: Transaction): Observable<null> {

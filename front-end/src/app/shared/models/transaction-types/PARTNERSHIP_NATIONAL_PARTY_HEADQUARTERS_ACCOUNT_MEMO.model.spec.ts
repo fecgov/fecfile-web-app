@@ -7,10 +7,6 @@ describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO', () => {
 
   beforeEach(() => {
     transactionType = new PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO();
-    transactionType.transaction = transactionType.getNewTransaction();
-    transactionType.transaction.parent_transaction =
-      new PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT().getNewTransaction();
-    (transactionType.transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
 
   it('should create an instance', () => {

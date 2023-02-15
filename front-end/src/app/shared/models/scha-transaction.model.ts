@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Transaction } from './transaction.model';
+import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
@@ -67,9 +67,6 @@ export class SchATransaction extends Transaction {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
     }
-    // else {
-    //   throw new Error("Can't find transaction_type_identifier when creating class from JSON");
-    // }
     if (depth > 0 && transaction.parent_transaction) {
       transaction.parent_transaction = SchATransaction.fromJSON(transaction.parent_transaction, depth-1);
     }
@@ -77,84 +74,6 @@ export class SchATransaction extends Transaction {
       transaction.children = transaction.children.map(function(child) { return SchATransaction.fromJSON(child, depth-1) });
     }
     return transaction;
-  }
-
-  /**
-   * updateChildren()
-   * @returns
-   *    An array of Transaction objects whose contribution_purpose_descriptions
-   *    have been re-generated to account for changes to their parent
-   *
-   */
-  updateChildren(): Transaction[] {
-    const outChildren: Transaction[] = [];
-
-    if (this.children) {
-      /* We treat the parent's children as SchATransaction objects in order
-      to access fields exclusive to the SchATransaction model */
-      for (const child of this.children as SchATransaction[]) {
-        if (child.transaction_type_identifier) {
-          // Instantiate a TransactionType object in order to access the purpose description generator
-          const transactionType = TransactionTypeUtils.factory(child.transaction_type_identifier);
-
-          // Prep the TransactionType by setting fields it will need when generating a purpose description
-          transactionType.transaction = child;
-
-          /* Make a new object to represent the parent within the TransactionType
-          because setting the parent equal to the this causes an infinite loop */
-          if (transactionType.transaction.parent_transaction)
-            transactionType.transaction.parent_transaction = {
-              id: this.id,
-              contributor_organization_name: this.contributor_organization_name,
-            } as SchATransaction;
-
-          // Modify the purpose description this to reflect the changes to child transactions
-          if (transactionType.generatePurposeDescription) {
-            const newDescrip = transactionType.generatePurposeDescriptionWrapper();
-            child.contribution_purpose_descrip = newDescrip;
-          }
-        }
-
-        // Always add the child into the array or else it will be lost
-        outChildren.push(child);
-      }
-    }
-
-    return outChildren;
-  }
-
-  /**
-   * Returns a transaction payload with the parent of the original payload
-   * swapped in as the main payload and the original main payload is a child
-   * @returns
-   */
-  getUpdatedParent(childDeleted = false): SchATransaction {
-    if (!this.parent_transaction?.transaction_type_identifier) {
-      throw new Error(
-        `Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
-      );
-    }
-
-    // The parent is the new payload
-    const payload = this.parent_transaction as SchATransaction;
-
-    // Attach the original payload to the parent as a child, replacing an
-    // existing version if needed
-    if (this.id && this.parent_transaction) {
-      payload.children = this.parent_transaction.children?.filter((c) => c.id !== this.id);
-    }
-    if (!childDeleted) {
-      payload.children?.push(this);
-    }
-    payload.children = payload.updateChildren();
-
-    // Update the CPD
-    if (payload?.transactionType?.generatePurposeDescription) {
-      payload.transactionType.transaction = payload;
-      payload.contribution_purpose_descrip = payload.transactionType.generatePurposeDescriptionWrapper();
-    }
-
-    return payload;
   }
 }
 
@@ -234,6 +153,7 @@ export enum ScheduleATransactionTypes {
   EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION = 'EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT',
   PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT = 'PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT',
   // Child transactiion types
   PAC_EARMARK_MEMO = 'PAC_EARMARK_MEMO',
   EARMARK_MEMO = 'EARMARK_MEMO',
@@ -255,6 +175,7 @@ export enum ScheduleATransactionTypes {
   PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO',
   PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO',
   PARTNERSHIP_MEMO = 'PARTNERSHIP_MEMO',
+  PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO = 'PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO',
   EARMARK_MEMO_HEADQUARTERS_ACCOUNT = 'EARMARK_MEMO_HEADQUARTERS_ACCOUNT',
   EARMARK_MEMO_CONVENTION_ACCOUNT = 'EARMARK_MEMO_CONVENTION_ACCOUNT',
   EARMARK_MEMO_RECOUNT_ACCOUNT = 'EARMARK_MEMO_RECOUNT_ACCOUNT',
@@ -429,6 +350,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'Partnership National Party Recount/Legal Proceedings Account',
   ],
+  [ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT, 'Partnership Recount Account Receipt'],
   [
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
     'Partnership National Party Headquarters Buildings Account',
@@ -470,16 +392,5 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Partnership National Party Headquarters Buildings Account Memo',
   ],
   [ScheduleATransactionTypes.PARTNERSHIP_MEMO, 'Partnership Memo'],
+  [ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO, 'Partnership Recount Account Receipt Memo'],
 ];
-
-export enum AggregationGroups {
-  GENERAL = 'GENERAL',
-  LINE_15 = 'LINE_15',
-  LINE_16 = 'LINE_16',
-  NATIONAL_PARTY_CONVENTION_ACCOUNT = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
-  NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
-  NATIONAL_PARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
-  NON_CONTRIBUTION_ACCOUNT = 'NON_CONTRIBUTION_ACCOUNT',
-  OTHER_RECEIPTS = 'OTHER_RECEIPTS',
-  RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
-}

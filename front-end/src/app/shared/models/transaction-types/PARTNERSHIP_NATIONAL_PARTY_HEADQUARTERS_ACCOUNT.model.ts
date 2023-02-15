@@ -1,14 +1,9 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_NATIONAL_PARTY_RECEIPTS';
-import {
-  AggregationGroups,
-  SchATransaction,
-  ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes,
-} from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchaTransactionType {
   componentGroupId = 'D';
@@ -18,15 +13,12 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchaTransac
   );
   schema = schema;
   override subTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO];
-  override childTransactionType = TransactionTypeUtils.factory(
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO
-  );
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionLabelNotice =
     'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not require itemization". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
 
-  override generatePurposeDescription(): string {
-    if (this.transaction?.children && this.transaction?.children.length > 0) {
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    if (transaction.children && transaction.children.length > 0) {
       return 'Headquarters Buildings Account (See Partnership Attribution(s) below)';
     }
     return 'Headquarters Buildings Account (Partnership attributions do not require itemization)';

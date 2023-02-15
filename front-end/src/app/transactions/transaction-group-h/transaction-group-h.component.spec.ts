@@ -17,11 +17,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { SharedModule } from '../../shared/shared.module';
-import { TransactionGroupGComponent } from './transaction-group-g.component';
+import { TransactionGroupHComponent } from './transaction-group-h.component';
+import { testScheduleBTransaction } from '../../shared/utils/unit-test.utils';
 
-describe('TransactionGroupGComponent', () => {
-  let component: TransactionGroupGComponent;
-  let fixture: ComponentFixture<TransactionGroupGComponent>;
+describe('TransactionGroupHComponent', () => {
+  let component: TransactionGroupHComponent;
+  let fixture: ComponentFixture<TransactionGroupHComponent>;
+  const transaction = testScheduleBTransaction;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -37,19 +39,20 @@ describe('TransactionGroupGComponent', () => {
         CalendarModule,
         ButtonModule,
         CheckboxModule,
+        InputNumberModule,
         InputTextModule,
         InputTextareaModule,
-        InputNumberModule,
         ConfirmDialogModule,
       ],
-      declarations: [TransactionGroupGComponent],
+      declarations: [TransactionGroupHComponent],
       providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TransactionGroupGComponent);
+    fixture = TestBed.createComponent(TransactionGroupHComponent);
     component = fixture.componentInstance;
+    component.transaction = transaction;
     fixture.detectChanges();
   });
 

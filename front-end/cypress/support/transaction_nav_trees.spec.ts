@@ -52,7 +52,8 @@ export type SchATransactionName =
   | 'Party Returned/Bounced Receipt'
   | 'Earmark Receipt for Recount/Legal Proceedings Account (Contribution)'
   | 'Earmark Receipt for Pres. Nominating Convention Account (Contribution)'
-  | 'Earmark Receipt for Headquarters Buildings Account (Contribution)';
+  | 'Earmark Receipt for Headquarters Buildings Account (Contribution)'
+  | 'Partnership Recount Account Receipt';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -78,7 +79,8 @@ export type ChildTransactionName =
   | 'Partnership National Party Headquarters Buildings Account Memo'
   | 'Earmark Memo for Recount Account (Contribution)'
   | 'Earmark Memo for Convention Account (Contribution)'
-  | 'Earmark Memo for Headquarters Account (Contribution)';
+  | 'Earmark Memo for Headquarters Account (Contribution)'
+  | 'Partnership Recount Account Receipt Memo';
 
 export type TransactionGroup = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'AG' | 'FG';
 
@@ -1018,6 +1020,30 @@ const partnershipMemo: ChildTransactionForm = {
   },
 };
 
+const partnershipRecountAccountReceipt: TransactionForm = {
+  transaction_name: 'Partnership Recount Account Receipt',
+  transaction_category: 'OTHER',
+  transaction_group: 'D',
+  aggregation_group: 'RECOUNT_ACCOUNT',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...purposeDescriptionFieldsRequired,
+  },
+};
+
+const partnershipRecountAccountReceiptMemo: ChildTransactionForm = {
+  transaction_name: 'Partnership Recount Account Receipt Memo',
+  transaction_group: 'A',
+  aggregation_group: 'RECOUNT_ACCOUNT',
+  ...entityIndividual,
+  childOf: 'Partnership Recount Account Receipt',
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 const partyReturn: TransactionForm = {
   transaction_name: 'Party Returned/Bounced Receipt',
   transaction_category: 'REGISTERED FILERS',
@@ -1194,6 +1220,7 @@ export const schedANavTree: TransactionNavTree = {
     'Earmark Receipt for Recount/Legal Proceedings Account (Contribution)': earmarkRecountReceipt,
     'Earmark Receipt for Pres. Nominating Convention Account (Contribution)': earmarkConventionReceipt,
     'Earmark Receipt for Headquarters Buildings Account (Contribution)': earmarkHeadquartersReceipt,
+    'Partnership Recount Account Receipt': partnershipRecountAccountReceipt,
   },
 };
 
@@ -1220,5 +1247,8 @@ export const childTransactionTree = {
   },
   'Partnership National Party Headquarters Buildings Account': {
     'Partnership National Party Headquarters Buildings Account Memo': partnershipNationalPartyHeadquartersAccountMemo,
+  },
+  'Partnership Recount Account Receipt': {
+    'Partnership Recount Account Receipt Memo': partnershipRecountAccountReceiptMemo,
   },
 };

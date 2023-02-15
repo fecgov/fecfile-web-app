@@ -1,0 +1,30 @@
+import { LabelUtils } from 'app/shared/utils/label.utils';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction.model';
+import { SchaTransactionType } from './SchaTransactionType.model';
+
+export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT extends SchaTransactionType {
+  componentGroupId = 'D';
+  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT);
+  schema = schema;
+  override subTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO];
+  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override purposeDescriptionLabelNotice =
+    'If Partnership Receipt is saved without a Partnership Memo, this will read "Recount Account (Partnership attributions do not require itemization)". If a Partnership Memo is added, it will read "Recount Account (See Partnership Attribution(s) below)".';
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    if (transaction.children && transaction.children.length > 0) {
+      return 'Recount Account (See Partnership Attribution(s) below)';
+    }
+    return 'Recount Account (Partnership attributions do not require itemization)';
+  }
+
+  getNewTransaction() {
+    return SchATransaction.fromJSON({
+      form_type: 'SA17',
+      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
+      aggregation_group: AggregationGroups.RECOUNT_ACCOUNT,
+    });
+  }
+}
