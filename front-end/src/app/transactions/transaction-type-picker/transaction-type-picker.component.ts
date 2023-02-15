@@ -128,6 +128,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
           ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT,
           ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
+          ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
           ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
           ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
           ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
