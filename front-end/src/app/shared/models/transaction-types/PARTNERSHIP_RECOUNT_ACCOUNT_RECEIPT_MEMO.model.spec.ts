@@ -21,7 +21,6 @@ describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO', () => {
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
-    transactionType.transaction = transactionType.getNewTransaction();
     const descrip = transactionType.generatePurposeDescription();
     expect(descrip).toBe('Recount Account Partnership Attribution');
   });

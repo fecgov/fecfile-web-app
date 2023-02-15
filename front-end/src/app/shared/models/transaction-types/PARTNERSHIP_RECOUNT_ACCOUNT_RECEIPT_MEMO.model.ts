@@ -1,13 +1,9 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO';
-import {
-  AggregationGroups,
-  SchATransaction,
-  ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes,
-} from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO extends SchaTransactionType {
   componentGroupId = 'A';

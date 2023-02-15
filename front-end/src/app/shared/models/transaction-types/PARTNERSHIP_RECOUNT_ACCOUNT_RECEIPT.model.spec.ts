@@ -1,32 +1,34 @@
-import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT } from './PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
+import { Transaction } from '../transaction.model';
 
 describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT', () => {
-  let transactionType: PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT;
+  let transaction: SchATransaction;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT();
+    transaction = getTestTransactionByType(
+      ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT
+    ) as SchATransaction;
   });
 
   it('should create an instance', () => {
-    expect(transactionType).toBeTruthy();
-    expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transaction.transactionType).toBeTruthy();
+    expect(transaction.transactionType?.scheduleId).toBe('A');
+    expect(transaction.transactionType?.componentGroupId).toBe('D');
   });
 
   it('#factory() should return a SchATransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA17');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT);
+    const txn: SchATransaction | undefined = transaction.transactionType?.getNewTransaction() as SchATransaction;
+    expect(txn?.form_type).toBe('SA17');
+    expect(txn?.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT);
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
-    transactionType.transaction = transactionType.getNewTransaction();
-    let descrip = transactionType.generatePurposeDescription();
+    let descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Recount Account (Partnership attributions do not require itemization)');
 
-    transactionType.transaction.children = [transactionType.getNewTransaction()];
-    descrip = transactionType.generatePurposeDescription();
+    transaction.children = [transaction.transactionType?.getNewTransaction() as Transaction];
+    descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Recount Account (See Partnership Attribution(s) below)');
   });
 });
