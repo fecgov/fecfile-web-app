@@ -3,15 +3,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
-import { ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { NavigationDestination } from 'app/shared/models/transaction-navigation-controls.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import {
+  NavigationAction,
+  NavigationDestination,
+  NavigationEvent,
+} from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
-import { schema as INDIVIDUAL_JF_TRANSFER_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_JF_TRANSFER_MEMO';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -30,22 +30,7 @@ describe('TransactionGroupAComponent', () => {
   let httpTestingController: HttpTestingController;
   let component: TransactionGroupAComponent;
   let fixture: ComponentFixture<TransactionGroupAComponent>;
-
-  const transaction = SchATransaction.fromJSON({
-    form_type: 'SA11AI',
-    filer_committee_id_number: 'C00000000',
-    transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
-    transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-    entity_type: ContactTypes.ORGANIZATION,
-    contributor_organization_name: 'org name',
-    contributor_street_1: '123 Main St',
-    contributor_city: 'city',
-    contributor_state: 'VA',
-    contributor_zip: '20001',
-    contribution_date: '2022-08-11',
-    contribution_amount: 1,
-    contribution_aggregate: 2,
-  });
+  const transaction = getTestTransactionByType(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -75,21 +60,8 @@ describe('TransactionGroupAComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupAComponent);
     component = fixture.componentInstance;
-    component.transactionType = {
-      scheduleId: '',
-      componentGroupId: '',
-      contact: undefined,
-      generatePurposeDescriptionWrapper: () => 'test description',
-      getNewTransaction: () => {
-        return {} as Transaction;
-      },
-      title: '',
-      schema: INDIVIDUAL_JF_TRANSFER_MEMO,
-      transaction: transaction,
-      isDependentChild: false,
-      updateParentOnSave: false,
-      getSchemaName: () => 'foo',
-    } as TransactionType;
+    component.templateMap = testTemplateMap;
+    component.transaction = transaction;
     fixture.detectChanges();
   });
 
@@ -99,10 +71,10 @@ describe('TransactionGroupAComponent', () => {
 
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    component.save(NavigationDestination.LIST);
+    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
-      `${environment.apiUrl}/transactions/schedule-a/1/?schema=INDIVIDUAL_JF_TRANSFER_MEMO&fields_to_validate=`
+      `${environment.apiUrl}/transactions/schedule-a/1/?schema=INDIVIDUAL_RECEIPT&fields_to_validate=`
     );
     httpTestingController.verify();
   });

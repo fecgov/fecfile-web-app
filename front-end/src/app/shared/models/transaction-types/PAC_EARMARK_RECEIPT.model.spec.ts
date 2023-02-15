@@ -1,43 +1,38 @@
-import { ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
-import { PAC_EARMARK_MEMO } from './PAC_EARMARK_MEMO.model';
-import { PAC_EARMARK_RECEIPT } from './PAC_EARMARK_RECEIPT.model';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 
 describe('PAC_EARMARK_RECEIPT', () => {
-  let transactionType: PAC_EARMARK_RECEIPT;
+  let transaction: SchATransaction;
 
   beforeEach(() => {
-    transactionType = new PAC_EARMARK_RECEIPT();
+    transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
   });
 
   it('should create an instance', () => {
-    expect(transactionType).toBeTruthy();
-    if (transactionType) {
-      expect(transactionType.scheduleId).toBe('A');
-      expect(transactionType.componentGroupId).toBe('FG');
-    }
+    expect(transaction.transactionType).toBeTruthy();
+    expect(transaction.transactionType?.scheduleId).toBe('A');
+    expect(transaction.transactionType?.componentGroupId).toBe('FG');
   });
 
   it('#factory() should return a SchATransaction', () => {
-    const txn = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA11C');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
+    expect(transaction.form_type).toBe('SA11C');
+    expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
   });
 
   it('#generatePurposeDescription() should generate empty string', () => {
-    const descrip = transactionType.generatePurposeDescription();
+    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('');
   });
 
   it('#generatePurposeDescription() should reflect child', () => {
-    const childTransactionType: PAC_EARMARK_MEMO = new PAC_EARMARK_MEMO();
-    childTransactionType.transaction = childTransactionType.getNewTransaction();
-    childTransactionType.transaction.entity_type = ContactTypes.INDIVIDUAL;
-    childTransactionType.transaction.contributor_first_name = 'Joe';
-    childTransactionType.transaction.contributor_last_name = 'Smith';
+    const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction;
+    childTransaction.entity_type = ContactTypes.INDIVIDUAL;
+    childTransaction.contributor_first_name = 'Joe';
+    childTransaction.contributor_last_name = 'Smith';
+    transaction.children = [childTransaction];
 
-    transactionType.childTransactionType = childTransactionType;
-    const descrip = transactionType.generatePurposeDescription();
+    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Earmarked through Joe Smith');
   });
 });

@@ -1,3 +1,8 @@
+import { ScheduleTransaction } from '../models/transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchBTransaction } from '../models/schb-transaction.model';
+
+// Schedule A /////////////////////////////////////////////////////
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
@@ -64,8 +69,12 @@ import { EARMARK_MEMO_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMAR
 import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT.model';
 import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
 
+// Schedule B /////////////////////////////////////////////////////
+import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
+
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
+  // Schedule A /////////////////////////////////////////////////////
   EARMARK_RECEIPT,
   EARMARK_MEMO,
   INDIVIDUAL_JF_TRANSFER_MEMO,
@@ -130,16 +139,42 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   EARMARK_MEMO_RECOUNT_ACCOUNT,
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
+  // Schedule B /////////////////////////////////////////////////////
+  OPERATING_EXPENDITURE,
 }
 
 export class TransactionTypeUtils {
   static factory(transactionTypeIdentifier: string): TransactionType {
-    if (
-      transactionTypeClasses[transactionTypeIdentifier] === undefined ||
-      transactionTypeClasses[transactionTypeIdentifier] === null
-    ) {
+    const transactionType = getTransactionTypeClass(transactionTypeIdentifier);
+    if (!transactionType) {
       throw new Error(`Class transaction type of '${transactionTypeIdentifier}' is not found`);
     }
-    return new transactionTypeClasses[transactionTypeIdentifier]();
+    return new transactionType();
   }
+}
+
+// prettier-ignore
+export function getTransactionTypeClass(transactionTypeIdentifier: string): any { // eslint-disable-line @typescript-eslint/no-explicit-any
+  return transactionTypeClasses[transactionTypeIdentifier];
+}
+
+// prettier-ignore
+/**
+ * Returns a schedule object of the correct class as discovered by examining
+ * the scheduleId of the transaction type.
+ *
+ * This function is in this file because there is a REFERENCEERROR when it
+ * is included in the transaction.model.ts file
+ * @param json
+ * @param depth
+ * @returns
+ */
+export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+  if (json.transaction_type_identifier) {
+    const transactionType = TransactionTypeUtils.factory(json.transaction_type_identifier);
+    if (transactionType.scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
+  }
+  return SchATransaction.fromJSON(json, depth); // Until 404 resolved
+  // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');
 }

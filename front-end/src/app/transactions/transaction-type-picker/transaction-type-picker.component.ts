@@ -18,6 +18,7 @@ import {
   ScheduleBTransactionTypes,
 } from 'app/shared/models/schb-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
+import { getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
 
 type Categories = 'receipt' | 'disbursement';
 type GroupsTypes = ScheduleATransactionGroupsType | ScheduleBTransactionGroupsType;
@@ -209,5 +210,16 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
       default:
         return [];
     }
+  }
+
+  isTransactionDisabled(transactionTypeIdentifier: string): boolean {
+    return !getTransactionTypeClass(transactionTypeIdentifier);
+  }
+
+  getRouterLink(transactionType: string): string | undefined {
+    if (this.report && !this.isTransactionDisabled(transactionType)) {
+      return `/transactions/report/${this.report?.id}/create/${transactionType}`;
+    }
+    return undefined;
   }
 }

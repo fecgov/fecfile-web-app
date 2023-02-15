@@ -1,4 +1,5 @@
 import { hasNoContact, isNewTransaction, Transaction } from './transaction.model';
+import { ScheduleTransactionTypes } from 'app/shared/models/transaction.model';
 
 export enum NavigationAction {
   CANCEL,
@@ -10,6 +11,25 @@ export enum NavigationDestination {
   PARENT,
   ANOTHER,
   CHILD,
+}
+
+export class NavigationEvent {
+  action: NavigationAction;
+  destination: NavigationDestination;
+  transaction?: Transaction;
+  destinationTransactionType?: ScheduleTransactionTypes;
+
+  constructor(
+    action?: NavigationAction,
+    destination?: NavigationDestination,
+    transaction?: Transaction,
+    destinationTransactionType?: ScheduleTransactionTypes
+  ) {
+    this.action = action || NavigationAction.CANCEL;
+    this.destination = destination || NavigationDestination.LIST;
+    this.transaction = transaction;
+    this.destinationTransactionType = destinationTransactionType;
+  }
 }
 
 export class NavigationControl {
@@ -77,6 +97,20 @@ export class TransactionNavigationControls {
     this.inlineControls = inlineControls;
     this.cancelControls = cancelControls;
     this.continueControls = continueControls;
+  }
+
+  getNavigationControls(section: 'inline' | 'cancel' | 'continue', transaction?: Transaction): NavigationControl[] {
+    let controls: NavigationControl[] = [];
+    if (section === 'inline') {
+      controls = this.inlineControls || [];
+    } else if (section === 'cancel') {
+      controls = this.cancelControls || [];
+    } else if (section === 'continue') {
+      controls = this.continueControls || [];
+    }
+    return controls.filter((control: NavigationControl) => {
+      return !control.visibleCondition || control.visibleCondition(transaction);
+    });
   }
 }
 

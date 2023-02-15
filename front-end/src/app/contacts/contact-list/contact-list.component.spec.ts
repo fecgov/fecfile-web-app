@@ -66,7 +66,7 @@ describe('ContactListComponent', () => {
 
   it('#displayName returns the contact name', () => {
     let name = component.displayName(contact);
-    expect(name).toBe('Jane Smith');
+    expect(name).toBe('Smith, Jane');
 
     contact.type = ContactTypes.ORGANIZATION;
     name = component.displayName(contact);
