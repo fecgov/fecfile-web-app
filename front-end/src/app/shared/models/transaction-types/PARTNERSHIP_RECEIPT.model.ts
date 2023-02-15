@@ -1,11 +1,7 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_RECEIPT';
-import {
-  AggregationGroups,
-  SchATransaction,
-  ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes,
-} from '../scha-transaction.model';
+import { AggregationGroups } from '../transaction.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchaTransactionType } from './SchaTransactionType.model';
 
@@ -17,8 +13,8 @@ export class PARTNERSHIP_RECEIPT extends SchaTransactionType {
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionLabelNotice =
     'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not require itemization". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
-  override generatePurposeDescription(): string {
-    if (this.transaction?.children && this.transaction?.children.length > 0) {
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    if (transaction?.children && transaction?.children.length > 0) {
       return 'See Partnership Attribution(s) below';
     }
     return 'Partnership attributions do not require itemization';

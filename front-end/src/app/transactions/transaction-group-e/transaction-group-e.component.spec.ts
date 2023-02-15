@@ -53,9 +53,9 @@ describe('TransactionGroupEComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionGroupEComponent);
     component = fixture.componentInstance;
-    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
-    if (component.transactionType)
-      component.transactionType.transaction = component.transactionType?.getNewTransaction();
+    component.transaction = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
+    ).getNewTransaction();
     fixture.detectChanges();
   });
 

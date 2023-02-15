@@ -2,27 +2,22 @@
   <div class="grid">
     <div class="col-8">
       <div class="field">
-        <label for="contributor_organization_name">{{ entityRole }} NAME</label>
-        <input
-          type="text"
-          pInputText
-          id="contributor_organization_name"
-          formControlName="contributor_organization_name"
-        />
+        <label for="organization_name">{{ entityRole }} NAME</label>
+        <input type="text" pInputText id="organization_name" [formControlName]="templateMap['organization_name']" />
         <app-error-messages
           [form]="form"
-          fieldName="contributor_organization_name"
+          [fieldName]="templateMap['organization_name']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
     </div>
     <ng-container class="col-4" *ngIf="includeFecId">
       <div class="field">
-        <label for="donor_committee_fec_id">{{ entityRole }} FEC ID</label>
-        <input type="text" pInputText id="donor_committee_fec_id" formControlName="donor_committee_fec_id" />
+        <label for="committee_fec_id">{{ entityRole }} FEC ID</label>
+        <input type="text" pInputText id="committee_fec_id" [formControlName]="templateMap['committee_fec_id']" />
         <app-error-messages
           [form]="form"
-          fieldName="donor_committee_fec_id"
+          [fieldName]="templateMap['committee_fec_id']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

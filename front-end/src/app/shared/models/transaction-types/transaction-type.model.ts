@@ -13,27 +13,36 @@ export abstract class TransactionType {
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
+  dependentChildTransactionType?: TransactionType; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
-  contactTypeOptions?: ContactType[];
-  transaction?: Transaction;
-  childTransactionType?: TransactionType;
+  contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
+  defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
   subTransactionTypes?: ScheduleTransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction
   navigationControls?: TransactionNavigationControls;
-  generatePurposeDescription?(): string; // Dynamically generates the text in the CPD or EPD field
-  generatePurposeDescriptionLabel?(): string; // Get the CPD or EPD field label
+  generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
+  abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
     if (!schema_name) {
-      throw new Error('Schema name for transaction type not found.');
+      throw new Error('Fecfile: Schema name for transaction type not found.');
     }
     return schema_name;
   }
 
-  public generatePurposeDescriptionWrapper(): string {
-    const purpose = this.generatePurposeDescription?.();
+  generatePurposeDescriptionLabel(): string {
+    if (this.generatePurposeDescription !== undefined) {
+      return '(SYSTEM-GENERATED)';
+    } else if (this.schema.required.includes(this.templateMap.purpose_description)) {
+      return '(REQUIRED)';
+    }
+    return '(OPTIONAL)';
+  }
+
+  public generatePurposeDescriptionWrapper(transaction: Transaction): string {
+    const purpose = this.generatePurposeDescription?.(transaction);
     if (purpose) {
       if (purpose.length > 100) {
         return purpose.slice(0, 97) + '...';
@@ -43,3 +52,29 @@ export abstract class TransactionType {
     return '';
   }
 }
+
+export type TransactionTemplateMapType = {
+  last_name: string;
+  first_name: string;
+  middle_name: string;
+  prefix: string;
+  suffix: string;
+  street_1: string;
+  street_2: string;
+  city: string;
+  state: string;
+  zip: string;
+  employer: string;
+  occupation: string;
+  organization_name: string;
+  committee_fec_id: string;
+  date: string;
+  dateLabel: string;
+  memo_code: string;
+  amount: string;
+  aggregate: string;
+  purpose_description: string;
+  purposeDescripLabel: string;
+  memo_text_input: string;
+  category_code: string;
+};

@@ -35,7 +35,7 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.subTransactionOptions = (this.transactionType?.subTransactionTypes || []).map((type) => {
+    this.subTransactionOptions = (this.transaction?.transactionType?.subTransactionTypes || []).map((type) => {
       return {
         label: LabelUtils.get(ScheduleATransactionTypeLabels, type),
         value: type,

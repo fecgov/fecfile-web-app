@@ -1,7 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleTransaction } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
@@ -9,6 +8,7 @@ import { ContactTypes } from '../../models/contact.model';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 
 export class TransactionFormUtils {
   /**
@@ -18,20 +18,19 @@ export class TransactionFormUtils {
    * child transaction type defined in the DoubleTransactionTypeBase class.
    * @param component
    * @param form - parent or child (i.e. form or childForm)
-   * @param contactTypeOptions - parent or child (i.e. contactTypeOptions or childContactTypeOptions)
    * @param validateService - parent or child (i.e. validateService or childValidateService)
-   * @param transactionType - parent or child (i.e. transactionType or transactionType?.childTransactionType)
+   * @param transaction - parent or child
    * @param contactId$ - parent or child (i.e. contactId$ or childContactId$)
    */
   static onInit(
     component: TransactionTypeBaseComponent | DoubleTransactionTypeBaseComponent,
     form: FormGroup,
     validateService: ValidateService,
-    transactionType: TransactionType | undefined,
+    transaction: Transaction | undefined,
     contactId$: Subject<string>
   ): void {
     // Initialize validation tracking of current JSON schema and form data
-    validateService.formValidatorSchema = transactionType?.schema;
+    validateService.formValidatorSchema = transaction?.transactionType?.schema;
     validateService.formValidatorForm = form;
 
     // Intialize form values
@@ -39,11 +38,11 @@ export class TransactionFormUtils {
       return !!transaction?.id;
     }
 
-    if (isExisting(transactionType?.transaction)) {
-      const txn = { ...transactionType?.transaction } as SchATransaction;
+    if (isExisting(transaction)) {
+      const txn = { ...transaction } as Transaction;
       form.patchValue({ ...txn });
 
-      TransactionMemoUtils.patchMemoText(transactionType, form);
+      TransactionMemoUtils.patchMemoText(transaction, form);
 
       form.get('entity_type')?.disable();
       contactId$.next(txn.contact_id || '');
@@ -53,64 +52,74 @@ export class TransactionFormUtils {
       contactId$.next('');
     }
 
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!templateMap) {
+      throw new Error('Fecfile: Cannot find template map when initializing transaction form');
+    }
+
     form
       .get('entity_type')
       ?.valueChanges.pipe(takeUntil(component.destroy$))
       .subscribe((value: string) => {
         if (value === ContactTypes.INDIVIDUAL || value === ContactTypes.CANDIDATE) {
-          form.get('contributor_organization_name')?.reset();
+          form.get(templateMap.organization_name)?.reset();
         }
         if (value === ContactTypes.ORGANIZATION || value === ContactTypes.COMMITTEE) {
-          form.get('contributor_last_name')?.reset();
-          form.get('contributor_first_name')?.reset();
-          form.get('contributor_middle_name')?.reset();
-          form.get('contributor_prefix')?.reset();
-          form.get('contributor_suffix')?.reset();
-          form.get('contributor_employer')?.reset();
-          form.get('contributor_occupation')?.reset();
+          form.get(templateMap.last_name)?.reset();
+          form.get(templateMap.first_name)?.reset();
+          form.get(templateMap.middle_name)?.reset();
+          form.get(templateMap.prefix)?.reset();
+          form.get(templateMap.suffix)?.reset();
+          form.get(templateMap.employer)?.reset();
+          form.get(templateMap.occupation)?.reset();
         }
       });
 
     form
-      ?.get('contribution_aggregate')
+      ?.get(templateMap.aggregate)
       ?.valueChanges.pipe(takeUntil(component.destroy$))
       .subscribe(() => {
-        form.get('contributor_employer')?.updateValueAndValidity();
-        form.get('contributor_occupation')?.updateValueAndValidity();
+        form.get(templateMap.employer)?.updateValueAndValidity();
+        form.get(templateMap.occupation)?.updateValueAndValidity();
       });
 
     const previous_transaction$: Observable<Transaction | undefined> =
-      form.get('contribution_date')?.valueChanges.pipe(
-        startWith(form.get('contribution_date')?.value),
+      form.get(templateMap.date)?.valueChanges.pipe(
+        startWith(form.get(templateMap.date)?.value),
         combineLatestWith(contactId$),
         switchMap(([contribution_date, contactId]) => {
-          return component.transactionService.getPreviousTransaction(transactionType, contactId, contribution_date);
+          return component.transactionService.getPreviousTransaction(transaction, contactId, contribution_date);
         })
       ) || of(undefined);
     form
-      .get('contribution_amount')
+      .get(templateMap.amount)
       ?.valueChanges.pipe(
-        startWith(form.get('contribution_amount')?.value),
+        startWith(form.get(templateMap.amount)?.value),
         combineLatestWith(previous_transaction$),
         takeUntil(component.destroy$)
       )
-      .subscribe(([contribution_amount, previous_transaction]) => {
-        const previousAggregate = +((previous_transaction as SchATransaction)?.contribution_aggregate || 0);
-        form.get('contribution_aggregate')?.setValue(+contribution_amount + previousAggregate);
+      .subscribe(([amount, previous_transaction]) => {
+        const key = templateMap.aggregate as keyof ScheduleTransaction;
+        const previousAggregate = previous_transaction ? +((previous_transaction as ScheduleTransaction)[key] || 0) : 0;
+        form.get(templateMap.aggregate)?.setValue(+amount + previousAggregate);
       });
   }
 
   static getPayloadTransaction(
-    transactionType: TransactionType | undefined,
+    transaction: Transaction | undefined,
     validateService: ValidateService,
     form: FormGroup,
     formProperties: string[]
-  ): SchATransaction {
-    let formValues = validateService.getFormValues(form, formProperties);
-    if (transactionType) formValues = TransactionMemoUtils.retrieveMemoText(transactionType, form, formValues);
+  ): Transaction {
+    if (!transaction) {
+      throw new Error('Fecfile: Payload transaction not found');
+    }
 
-    const payload: SchATransaction = SchATransaction.fromJSON({
-      ...transactionType?.transaction,
+    let formValues = validateService.getFormValues(form, formProperties);
+    formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
+
+    const payload: ScheduleTransaction = getFromJSON({
+      ...transaction,
       ...formValues,
     });
     if (payload.children) {
@@ -120,17 +129,27 @@ export class TransactionFormUtils {
     return payload;
   }
 
-  static resetForm(form: FormGroup, transactionType: TransactionType | undefined, contactTypeOptions: PrimeOptions) {
+  static resetForm(form: FormGroup, transaction: Transaction | undefined, contactTypeOptions: PrimeOptions) {
     form.reset();
     form.markAsPristine();
     form.markAsUntouched();
 
-    form.patchValue({
-      entity_type: contactTypeOptions[0]?.code,
-      contribution_aggregate: '0',
-      memo_code: this.getMemoCodeConstant(transactionType),
-      contribution_purpose_descrip: transactionType?.generatePurposeDescriptionWrapper(),
-    });
+    // Override the default entity_type value if called for by the defaultContactTypeOption
+    // in the TransactionType
+    let defaultContactTypeOption: string = contactTypeOptions[0]?.code;
+    if (transaction?.transactionType?.defaultContactTypeOption) {
+      defaultContactTypeOption = transaction.transactionType.defaultContactTypeOption;
+    }
+
+    if (transaction?.transactionType) {
+      form.patchValue({
+        entity_type: defaultContactTypeOption,
+        [transaction.transactionType.templateMap.aggregate]: '0',
+        memo_code: this.getMemoCodeConstant(transaction?.transactionType),
+        [transaction.transactionType.templateMap.purpose_description]:
+          transaction?.transactionType?.generatePurposeDescriptionWrapper(transaction),
+      });
+    }
   }
 
   static getMemoCodeConstant(transactionType?: TransactionType): boolean | undefined {

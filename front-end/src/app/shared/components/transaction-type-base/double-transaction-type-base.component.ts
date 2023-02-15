@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleTransaction } from 'app/shared/models/transaction.model';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
@@ -11,6 +10,7 @@ import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.m
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionContactUtils } from './transaction-contact.utils';
+import { TransactionTemplateMapType } from 'app/shared/models/transaction-types/transaction-type.model';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -31,12 +31,14 @@ export abstract class DoubleTransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
   abstract childFormProperties: string[];
+  childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
   childValidateService: ValidateService = new ValidateService();
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
-  childContributionPurposeDescriptionLabel = '';
+  childPurposeDescriptionLabel = '';
   childNegativeAmountValueOnly = false;
+  childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -44,87 +46,86 @@ export abstract class DoubleTransactionTypeBaseComponent
 
     // Initialize child form.
     this.childForm = this.fb.group(this.childValidateService.getFormGroupFields(this.childFormProperties));
-    TransactionFormUtils.onInit(
-      this,
-      this.childForm,
-      this.childValidateService,
-      this.transactionType?.childTransactionType,
-      this.childContactId$
-    );
-
-    this.childOnInit();
+    if (this.transaction?.children) {
+      this.childTransaction = this.transaction?.children[0];
+      if (this.childTransaction.transactionType?.templateMap) {
+        this.childTemplateMap = this.childTransaction.transactionType.templateMap;
+      } else {
+        throw new Error('Fecfile: Template map not found for double transaction component');
+      }
+      TransactionFormUtils.onInit(
+        this,
+        this.childForm,
+        this.childValidateService,
+        this.childTransaction,
+        this.childContactId$
+      );
+      this.childOnInit();
+    }
   }
 
   childOnInit() {
     // Override contact type options if present in transactionType
-    if (this.transactionType?.childTransactionType && this.transactionType.childTransactionType.contactTypeOptions) {
-      this.childContactTypeOptions = LabelUtils.getPrimeOptions(
-        ContactTypeLabels,
-        this.transactionType.childTransactionType.contactTypeOptions
-      );
-    }
+    this.childContactTypeOptions = LabelUtils.getPrimeOptions(
+      ContactTypeLabels,
+      this.childTransaction?.transactionType?.contactTypeOptions
+    );
 
-    const contribution_amount_schema =
-      this.transactionType?.childTransactionType?.schema.properties['contribution_amount'];
-    if (contribution_amount_schema?.exclusiveMaximum === 0) {
+    const amountProperty = this.childTemplateMap.amount;
+    const amount_schema = this.childTransaction?.transactionType?.schema.properties[amountProperty];
+    if (amount_schema?.exclusiveMaximum === 0) {
       this.childNegativeAmountValueOnly = true;
       this.childForm
-        .get('contribution_amount')
+        .get(amountProperty)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((contribution_amount) => {
-          if (typeof contribution_amount === 'number' && contribution_amount > 0) {
-            this.childForm.patchValue({ contribution_amount: -1 * contribution_amount });
+        .subscribe((amount) => {
+          if (+amount > 0) {
+            this.childForm.patchValue({ amount: -1 * amount });
           }
         });
     }
 
-    if (this.transactionType?.childTransactionType?.generatePurposeDescriptionLabel) {
-      this.childContributionPurposeDescriptionLabel =
-        this.transactionType.childTransactionType.generatePurposeDescriptionLabel();
+    if (this.childTransaction?.transactionType?.generatePurposeDescriptionLabel) {
+      this.childPurposeDescriptionLabel = this.childTransaction.transactionType.generatePurposeDescriptionLabel();
     }
 
     // Default the child entity type to Committee
-    if (!this.transactionType?.childTransactionType?.transaction?.id) {
+    if (!this.childTransaction?.id) {
       this.childForm.get('entity_type')?.setValue(ContactTypes.COMMITTEE);
     }
 
     // Parent contribution purpose description updates with child contributor name updates.
     this.childForm
-      .get('contributor_organization_name')
+      .get(this.childTemplateMap.organization_name)
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        const childTransaction: SchATransaction = this.transactionType?.childTransactionType
-          ?.transaction as SchATransaction;
-        childTransaction.contributor_organization_name = value;
-        this.updateContributionPurposeDescription();
+        const key = this.childTemplateMap.organization_name as keyof ScheduleTransaction;
+        ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
+        this.updateParentPurposeDescription();
       });
     this.childForm
-      .get('contributor_first_name')
+      .get(this.childTemplateMap.first_name)
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        const memo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
-        if (memo) {
-          memo.contributor_first_name = value;
-        }
-        this.updateContributionPurposeDescription();
+        const key = this.childTemplateMap.first_name as keyof ScheduleTransaction;
+        ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
+        this.updateParentPurposeDescription();
       });
     this.childForm
-      .get('contributor_last_name')
+      .get(this.childTemplateMap.last_name)
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        const memo: SchATransaction = this.transactionType?.childTransactionType?.transaction as SchATransaction;
-        if (memo) {
-          memo.contributor_last_name = value;
-        }
-        this.updateContributionPurposeDescription();
+        const key = this.childTemplateMap.last_name as keyof ScheduleTransaction;
+        ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
+        this.updateParentPurposeDescription();
       });
 
     // Child amount must match parent contribution amount
     this.form
-      .get('contribution_amount')
+      .get(this.templateMap.amount)
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        this.childForm.get('contribution_amount')?.setValue(value);
+        this.childForm.get(this.childTemplateMap.amount)?.setValue(value);
       });
   }
 
@@ -133,14 +134,14 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.childContactId$.complete();
   }
 
-  private updateContributionPurposeDescription() {
-    const childTransaction: SchATransaction = this.transactionType?.childTransactionType
-      ?.transaction as SchATransaction;
-    childTransaction.entity_type = this.childForm.get('entity_type')?.value;
+  private updateParentPurposeDescription() {
+    (this.childTransaction as ScheduleTransaction).entity_type = this.childForm.get('entity_type')?.value;
 
-    if (this.transactionType?.generatePurposeDescription) {
+    if (this.transaction?.transactionType?.generatePurposeDescription) {
       this.form.patchValue({
-        contribution_purpose_descrip: this.transactionType.generatePurposeDescriptionWrapper(),
+        [this.templateMap.purpose_description]: this.transaction.transactionType.generatePurposeDescriptionWrapper(
+          this.transaction
+        ),
       });
     }
   }
@@ -153,14 +154,14 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
-      this.transactionType,
+      this.transaction,
       this.validateService,
       this.form,
       this.formProperties
     );
     payload.children = [
       TransactionFormUtils.getPayloadTransaction(
-        this.transactionType?.childTransactionType,
+        this.childTransaction,
         this.childValidateService,
         this.childForm,
         this.childFormProperties
@@ -176,25 +177,21 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (payload.children?.length === 1) {
       this.confirmSave(payload.children[0], this.childForm, this.doSave, navigationEvent, payload, 'childDialog');
     } else {
-      throw new Error('Parent transaction missing child transaction when trying to confirm save.');
+      throw new Error('Fecfile: Parent transaction missing child transaction when trying to confirm save.');
     }
   }
 
   override resetForm() {
     this.formSubmitted = false;
-    TransactionFormUtils.resetForm(this.form, this.transactionType, this.contactTypeOptions);
-    TransactionFormUtils.resetForm(
-      this.childForm,
-      this.transactionType?.childTransactionType,
-      this.childContactTypeOptions
-    );
+    TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions);
+    TransactionFormUtils.resetForm(this.childForm, this.childTransaction, this.childContactTypeOptions);
   }
 
   childOnContactLookupSelect(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.onContactLookupSelect(
       selectItem,
       this.childForm,
-      this.transactionType?.childTransactionType,
+      this.childTransaction,
       this.childContactId$
     );
   }

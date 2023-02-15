@@ -128,6 +128,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
           ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT,
           ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
+          ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
           ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
           ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
           ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
@@ -145,6 +146,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
           ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
           ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT,
+          ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
         ];
       case ScheduleBTransactionGroups.OPERATING_EXPENDITURES:
         return [
@@ -218,7 +220,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
 
   getRouterLink(transactionType: string): string | undefined {
     if (this.report && !this.isTransactionDisabled(transactionType)) {
-      return `/transactions/report/${this.report?.id}}/create/${transactionType}`;
+      return `/transactions/report/${this.report?.id}/create/${transactionType}`;
     }
     return undefined;
   }

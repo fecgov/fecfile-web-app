@@ -4,10 +4,9 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { PAC_EARMARK_MEMO } from 'app/shared/models/transaction-types/PAC_EARMARK_MEMO.model';
-import { PAC_EARMARK_RECEIPT } from 'app/shared/models/transaction-types/PAC_EARMARK_RECEIPT.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AccordionModule } from 'primeng/accordion';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -26,12 +25,6 @@ import { TransactionGroupFgComponent } from './transaction-group-fg.component';
 describe('TransactionGroupFgComponent', () => {
   let component: TransactionGroupFgComponent;
   let fixture: ComponentFixture<TransactionGroupFgComponent>;
-
-  const pacEarmarkReceipt = new PAC_EARMARK_RECEIPT();
-  pacEarmarkReceipt.transaction = pacEarmarkReceipt.getNewTransaction();
-  const pacEarmarkMemo = new PAC_EARMARK_MEMO();
-  pacEarmarkMemo.transaction = pacEarmarkMemo.getNewTransaction();
-  pacEarmarkReceipt.childTransactionType = pacEarmarkMemo;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -62,12 +55,14 @@ describe('TransactionGroupFgComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionGroupFgComponent);
     component = fixture.componentInstance;
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
+    component.templateMap = testTemplateMap;
+    component.childTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO);
+    component.childTemplateMap = testTemplateMap;
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    component.transactionType = pacEarmarkReceipt;
-    component.ngOnInit();
     expect(component).toBeTruthy();
   });
 });

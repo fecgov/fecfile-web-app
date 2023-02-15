@@ -1,23 +1,23 @@
 import { FormGroup } from '@angular/forms';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 
 export class TransactionMemoUtils {
   // prettier-ignore
-  static retrieveMemoText(transactionType: TransactionType, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static retrieveMemoText(transaction: Transaction, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       const text = form.get('memo_text_input')?.value;
       if (text && text.length > 0) {
         const memo_text = MemoText.fromJSON({
           text4000: text,
-          report_id: transactionType?.transaction?.report_id,
+          report_id: transaction?.report_id,
           rec_type: 'TEXT',
-          filer_committee_id_number: transactionType?.transaction?.filer_committee_id_number,
+          filer_committee_id_number: transaction?.filer_committee_id_number,
           transaction_id_number: '',
-          back_reference_sched_form_name: transactionType?.transaction?.form_type,
+          back_reference_sched_form_name: transaction?.form_type,
         });
   
-        if (transactionType.transaction?.id) {
-          memo_text.transaction_uuid = transactionType.transaction.id;
+        if (transaction?.id) {
+          memo_text.transaction_uuid = transaction.id;
         }
   
         formValues['memo_text'] = memo_text;
@@ -28,8 +28,8 @@ export class TransactionMemoUtils {
       return formValues;
     }
 
-  static patchMemoText(transactionType: TransactionType | undefined, form: FormGroup) {
-    const memo_text = transactionType?.transaction?.memo_text;
+  static patchMemoText(transaction: Transaction | undefined, form: FormGroup) {
+    const memo_text = transaction?.memo_text;
     if (memo_text?.text4000) {
       form.patchValue({ memo_text_input: memo_text.text4000 });
     }
