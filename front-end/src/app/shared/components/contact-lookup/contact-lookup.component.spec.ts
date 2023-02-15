@@ -219,15 +219,6 @@ describe('ContactLookupComponent', () => {
 
   it('#onCreateNewContactSelect Contact happy path', fakeAsync(() => {
     const eventEmitterEmitSpy = spyOn(component.createNewContactSelect, 'emit');
-    const testContact = Contact.fromJSON({
-      id: 123,
-      last_name: 'testLastName',
-      first_name: 'testFirstName',
-      type: ContactTypes.COMMITTEE,
-    });
-    const testValue = {
-      value: testContact,
-    } as SelectItem<Contact>;
     component.onCreateNewContactSelect();
     tick(500);
     expect(eventEmitterEmitSpy).toHaveBeenCalled();
