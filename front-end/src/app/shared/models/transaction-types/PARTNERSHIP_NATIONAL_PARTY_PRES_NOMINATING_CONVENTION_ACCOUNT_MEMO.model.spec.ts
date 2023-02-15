@@ -1,5 +1,4 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT } from './PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT.model';
 import { PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT_MEMO } from './PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT_MEMO.model';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT_MEMO', () => {
@@ -7,10 +6,6 @@ describe('PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT_MEMO', (
 
   beforeEach(() => {
     transactionType = new PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT_MEMO();
-    transactionType.transaction = transactionType.getNewTransaction();
-    transactionType.transaction.parent_transaction =
-      new PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT().getNewTransaction();
-    (transactionType.transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
 
   it('should create an instance', () => {

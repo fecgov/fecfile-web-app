@@ -24,18 +24,13 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     );
   });
 
-  it('#generatePurposeDescription() should generate expected retval', () => {
-    const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Pres. Nominating Convention Account (Partnership attributions do not require itemization)');
-  });
-
   it('#generatePurposeDescription() should generate a string', () => {
-    transactionType.transaction = transactionType.getNewTransaction();
-    let descrip = transactionType.generatePurposeDescription();
+    const transaction = transactionType.getNewTransaction();
+    let descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Pres. Nominating Convention Account (Partnership attributions do not require itemization)');
 
-    transactionType.transaction.children = [transactionType.getNewTransaction()];
-    descrip = transactionType.generatePurposeDescription();
+    transaction.children = [transactionType.getNewTransaction()];
+    descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('Pres. Nominating Convention Account (See Partnership Attribution(s) below)');
   });
 });
