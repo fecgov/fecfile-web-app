@@ -75,7 +75,7 @@ describe('TransactionContactLookupComponent', () => {
     const testValue = {
       value: testFecApiLookupData,
     } as SelectItem<FecApiLookupData>;
-    spyOn(testFecApiService, 'getDetails').and.returnValue(of(new CommitteeAccount()));
+    spyOn(testFecApiService, 'getCommitteeDetails').and.returnValue(of(new CommitteeAccount()));
     component.createContactForm.removeControl('committee_id');
     component.createContactForm.removeControl('name');
     component.createContactForm.removeControl('street_1');
@@ -93,7 +93,7 @@ describe('TransactionContactLookupComponent', () => {
     const testValue = {
       value: testFecApiLookupData,
     } as SelectItem<FecApiLookupData>;
-    spyOn(testFecApiService, 'getDetails').and.returnValue(of(new CommitteeAccount()));
+    spyOn(testFecApiService, 'getCommitteeDetails').and.returnValue(of(new CommitteeAccount()));
 
     component.onContactLookupSelect(testValue);
     tick(500);

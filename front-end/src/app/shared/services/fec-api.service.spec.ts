@@ -22,7 +22,7 @@ describe('FecApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('#getDetails()', () => {
+  describe('#getCommitteeDetails()', () => {
     it('should return committee details', () => {
       const committeeAccount: CommitteeAccount = new CommitteeAccount();
       const response: FecApiPaginatedResponse = {
@@ -36,7 +36,7 @@ describe('FecApiService', () => {
         results: [committeeAccount],
       };
 
-      service.getDetails('C00601211').subscribe((committeeAccountData) => {
+      service.getCommitteeDetails('C00601211').subscribe((committeeAccountData) => {
         expect(committeeAccountData).toEqual(committeeAccount);
       });
 

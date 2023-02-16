@@ -15,6 +15,7 @@ import {
   Contact,
   ContactTypeLabels,
   ContactTypes,
+  FecApiCandidateLookupData,
   FecApiCommitteeLookupData
 } from '../../models/contact.model';
 
@@ -161,6 +162,8 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     if (event && event.value) {
       if (event.value instanceof Contact) {
         this.onContactSelect(event.value);
+      } else if (event.value instanceof FecApiCandidateLookupData) {
+        this.onFecApiCandidateLookupDataSelect(event.value);
       } else if (event.value instanceof FecApiCommitteeLookupData) {
         this.onFecApiCommitteeLookupDataSelect(event.value);
       }
@@ -200,9 +203,36 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
+    if (data.id) {
+      this.fecApiService.getCandidateDetails(data.id).subscribe((candidate) => {
+        // TODO: fix once we get info from api and set all names below properly
+        const nameSplit = candidate.name?.split(/,(.*)/s);
+
+        this.form.get('type')?.setValue(ContactTypes.CANDIDATE);
+        this.form.get('candidate_id')?.setValue(candidate.candidate_id);
+        this.form.get('last_name')?.setValue(nameSplit?.[0]);
+        this.form.get('first_name')?.setValue(nameSplit?.[1]);
+        this.form.get('middle_name')?.setValue('');
+        this.form.get('prefix')?.setValue('');
+        this.form.get('suffix')?.setValue('');
+        this.form.get('street_1')?.setValue(candidate.address_street_1);
+        this.form.get('street_2')?.setValue(candidate.address_street_2);
+        this.form.get('city')?.setValue(candidate.address_city);
+        this.form.get('state')?.setValue(candidate.address_state);
+        this.form.get('zip')?.setValue(candidate.address_zip);
+        this.form.get('employer')?.setValue('');
+        this.form.get('occupation')?.setValue('');
+        this.form.get('candidate_office')?.setValue(candidate.office_full);
+        this.form.get('candidate_state')?.setValue(candidate.state);
+        this.form.get('candidate_district')?.setValue(candidate.district);
+      });
+    }
+  }
+
   onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
     if (data.id) {
-      this.fecApiService.getDetails(data.id).subscribe((committeeAccount) => {
+      this.fecApiService.getCommitteeDetails(data.id).subscribe((committeeAccount) => {
         let phone;
         if (committeeAccount?.treasurer_phone) {
           phone = '+1 ' + committeeAccount.treasurer_phone;

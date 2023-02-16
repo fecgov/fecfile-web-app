@@ -149,7 +149,7 @@ describe('ContactFormComponent', () => {
     testResponse.committee_id = testId;
     testResponse.treasurer_phone = testPhone;
 
-    spyOn(testFecApiService, 'getDetails').and.returnValue(of(testResponse));
+    spyOn(testFecApiService, 'getCommitteeDetails').and.returnValue(of(testResponse));
 
     component.onContactLookupSelect({ value: testFecApiCommitteeLookupData });
 

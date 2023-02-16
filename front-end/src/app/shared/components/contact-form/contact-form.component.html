@@ -14,6 +14,7 @@
           [contactTypeOptions]="contactTypeOptions"
           [showSearchBox]="form.get('type')?.value === ContactTypes.CANDIDATE ||  form.get('type')?.value === ContactTypes.COMMITTEE"
           [showCreateNewContactButton]="false"
+          [includeFecfileResults]="false"
           (contactLookupSelect)="onContactLookupSelect($event)"
         >
         </app-contact-lookup>

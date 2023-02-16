@@ -54,7 +54,7 @@ export class TransactionContactLookupComponent {
       } else if (event.value instanceof FecApiCommitteeLookupData) {
         const value: FecApiCommitteeLookupData = event.value;
         if (value.id) {
-          this.fecApiService.getDetails(value.id).subscribe((committeeAccount) => {
+          this.fecApiService.getCommitteeDetails(value.id).subscribe((committeeAccount) => {
             this.openCreateContactDialog(committeeAccount);
           });
         }

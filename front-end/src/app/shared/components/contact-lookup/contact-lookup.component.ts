@@ -21,6 +21,7 @@ export class ContactLookupComponent {
   @Input() maxFecfileCommitteeResults = 5;
   @Input() maxFecfileIndividualResults = 10;
   @Input() maxFecfileOrganizationResults = 10;
+  @Input() includeFecfileResults = true;
 
   @Output() contactLookupSelect = new EventEmitter<Contact | FecApiLookupData>();
   @Output() createNewContactSelect = new EventEmitter<void>();
@@ -47,11 +48,20 @@ export class ContactLookupComponent {
     if (searchTerm) {
       this.searchTerm = searchTerm;
       switch (this.contactTypeFormControl.value) {
+        case ContactTypes.CANDIDATE:
+          this.contactService
+            .candidateLookup(searchTerm, this.maxFecCommitteeResults, this.maxFecfileCommitteeResults)
+            .subscribe((response) => {
+              this.contactLookupList = response && response.toSelectItemGroups(
+                this.includeFecfileResults);
+            });
+          break;
         case ContactTypes.COMMITTEE:
           this.contactService
             .committeeLookup(searchTerm, this.maxFecCommitteeResults, this.maxFecfileCommitteeResults)
             .subscribe((response) => {
-              this.contactLookupList = response && response.toSelectItemGroups();
+              this.contactLookupList = response && response.toSelectItemGroups(
+                this.includeFecfileResults);
             });
           break;
         case ContactTypes.INDIVIDUAL:
