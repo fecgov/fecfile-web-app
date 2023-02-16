@@ -13,7 +13,6 @@ export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO extends SchATransactionTyp
   );
   schema = schema;
   override updateParentOnSave = true;
-  override subTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO];
   override navigationControls: TransactionNavigationControls = getChildNavigationControls(
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO)
   );

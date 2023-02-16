@@ -10,7 +10,6 @@ export class PARTNERSHIP_MEMO extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_MEMO);
   schema = schema;
   override updateParentOnSave = true;
-  override subTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_MEMO];
   override navigationControls: TransactionNavigationControls = getChildNavigationControls(
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECEIPT)
   );
