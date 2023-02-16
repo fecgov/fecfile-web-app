@@ -2,11 +2,11 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/COMMON_DISBURSEMENTS';
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { SchbTransactionType } from '../schb-transaction-type.model';
+import { SchBTransactionType } from '../schb-transaction-type.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
 
-export class OPERATING_EXPENDITURE extends SchbTransactionType {
+export class OPERATING_EXPENDITURE extends SchBTransactionType {
   componentGroupId = 'H';
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.OPERATING_EXPENDITURE);
   schema = schema;

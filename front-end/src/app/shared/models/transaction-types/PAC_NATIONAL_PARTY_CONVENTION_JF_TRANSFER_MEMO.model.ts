@@ -2,10 +2,10 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO';
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { SchaTransactionType } from '../scha-transaction-type.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
 
-export class PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchaTransactionType {
+export class PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchATransactionType {
   componentGroupId = 'F';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,

@@ -9,9 +9,9 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { SchaTransactionType } from '../scha-transaction-type.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 
-export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchaTransactionType {
+export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchATransactionType {
   componentGroupId = 'AG';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,

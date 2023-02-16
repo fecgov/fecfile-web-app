@@ -9,7 +9,7 @@ import {
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { Transaction, ScheduleTransaction, ScheduleTransactionTypes } from 'app/shared/models/transaction.model';
+import { Transaction, ScheduleTransaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -282,7 +282,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return this.form.get('entity_type')?.value || '';
   }
 
-  createSubTransaction(event: { value: ScheduleTransactionTypes }) {
+  createSubTransaction(event: { value: TransactionTypes }) {
     this.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.CHILD, this.transaction, event.value));
     this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }

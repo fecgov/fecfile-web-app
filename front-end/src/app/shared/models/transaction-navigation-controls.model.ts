@@ -1,5 +1,5 @@
 import { hasNoContact, isNewTransaction, Transaction } from './transaction.model';
-import { ScheduleTransactionTypes } from 'app/shared/models/transaction.model';
+import { TransactionTypes } from 'app/shared/models/transaction.model';
 
 export enum NavigationAction {
   CANCEL,
@@ -17,13 +17,13 @@ export class NavigationEvent {
   action: NavigationAction;
   destination: NavigationDestination;
   transaction?: Transaction;
-  destinationTransactionType?: ScheduleTransactionTypes;
+  destinationTransactionType?: TransactionTypes;
 
   constructor(
     action?: NavigationAction,
     destination?: NavigationDestination,
     transaction?: Transaction,
-    destinationTransactionType?: ScheduleTransactionTypes
+    destinationTransactionType?: TransactionTypes
   ) {
     this.action = action || NavigationAction.CANCEL;
     this.destination = destination || NavigationDestination.LIST;
