@@ -1,6 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -112,8 +112,10 @@ describe('ContactFormComponent', () => {
     component.onContactLookupSelect({ value: testContact });
 
     expect(component.form.get('last_name')?.value).toBe(testLastName);
-    expect(component.form.get('zip')?.value).toBe(testZip
-    );
+    expect(component.form.get('zip')?.value).toBe(testZip);
+
+    component.form = new FormGroup({});
+    component.onContactLookupSelect({ value: testContact });
   });
 
   it('#onContactLookupSelect COMMITTEE Contact happy path', () => {
@@ -127,8 +129,10 @@ describe('ContactFormComponent', () => {
     component.onContactLookupSelect({ value: testContact });
 
     expect(component.form.get('committee_id')?.value).toBe(testCommitteeId);
-    expect(component.form.get('zip')?.value).toBe(testZip
-    );
+    expect(component.form.get('zip')?.value).toBe(testZip);
+
+    component.form = new FormGroup({});
+    component.onContactLookupSelect({ value: testContact });
   });
 
   it('#onContactLookupSelect FecApiCommitteeLookupData happy path', () => {
@@ -152,6 +156,9 @@ describe('ContactFormComponent', () => {
     expect(component.form.get('type')?.value).toBe(ContactTypes.COMMITTEE);
     expect(component.form.get('committee_id')?.value).toBe(testId);
     expect(component.form.get('telephone')?.value).toBe('+1 ' + testPhone);
+
+    component.form = new FormGroup({});
+    component.onContactLookupSelect({ value: testFecApiCommitteeLookupData });
   });
 
 });
