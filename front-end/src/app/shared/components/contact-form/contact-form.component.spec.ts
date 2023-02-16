@@ -1,4 +1,4 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -16,7 +16,6 @@ import { ContactFormComponent } from './contact-form.component';
 describe('ContactFormComponent', () => {
   let component: ContactFormComponent;
   let fixture: ComponentFixture<ContactFormComponent>;
-  let httpTestingController: HttpTestingController;
   let testFecApiService: FecApiService;
 
   beforeEach(async () => {
@@ -31,7 +30,6 @@ describe('ContactFormComponent', () => {
         FecInternationalPhoneInputComponent],
       providers: [FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
-    httpTestingController = TestBed.inject(HttpTestingController);
     testFecApiService = TestBed.inject(FecApiService);
   });
 
