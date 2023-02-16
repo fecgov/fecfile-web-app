@@ -3,9 +3,9 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_JF_
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 
-export class INDIVIDUAL_JF_TRANSFER_MEMO extends SchaTransactionType {
+export class INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType {
   componentGroupId = 'A';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO);
   schema = schema;

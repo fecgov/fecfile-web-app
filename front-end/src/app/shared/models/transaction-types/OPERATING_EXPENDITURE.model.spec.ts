@@ -1,6 +1,6 @@
 import { OPERATING_EXPENDITURE } from './OPERATING_EXPENDITURE.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
+import { TransactionType } from 'app/shared/models/transaction-type.model';
 
 describe('OPERATING_EXPENDITURE', () => {
   let transactionType: OPERATING_EXPENDITURE;
@@ -12,7 +12,7 @@ describe('OPERATING_EXPENDITURE', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('H');
+    expect(transactionType.componentGroupId).toBe('B');
   });
 
   it('#factory() should return a SchBTransaction', () => {

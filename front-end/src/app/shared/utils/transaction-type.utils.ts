@@ -46,7 +46,7 @@ import { PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction
 import { PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { PARTY_RECEIPT } from '../models/transaction-types/PARTY_RECEIPT.model';
 import { PARTY_RECOUNT_RECEIPT } from '../models/transaction-types/PARTY_RECOUNT_RECEIPT.model';
-import { TransactionType } from '../models/transaction-types/transaction-type.model';
+import { TransactionType } from '../models/transaction-type.model';
 import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
 import { TRIBAL_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';

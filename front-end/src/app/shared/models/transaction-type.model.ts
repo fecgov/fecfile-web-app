@@ -1,7 +1,7 @@
-import { TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { JsonSchema } from '../../interfaces/json-schema.interface';
-import { ContactType } from '../contact.model';
-import { Transaction, ScheduleTransactionTypes } from '../transaction.model';
+import { TransactionNavigationControls } from './transaction-navigation-controls.model';
+import { JsonSchema } from '../interfaces/json-schema.interface';
+import { ContactType } from './contact.model';
+import { Transaction, TransactionTypes } from './transaction.model';
 
 /**
  * Class that defines the meta data associated with a transaction type.
@@ -17,7 +17,7 @@ export abstract class TransactionType {
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
   contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
   defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
-  subTransactionTypes?: ScheduleTransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction
+  subTransactionTypes?: TransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction
   navigationControls?: TransactionNavigationControls;
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
