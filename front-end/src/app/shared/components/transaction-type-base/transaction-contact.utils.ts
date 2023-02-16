@@ -1,5 +1,5 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-types/transaction-type.model';
+import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';

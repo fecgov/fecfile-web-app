@@ -10,7 +10,7 @@ import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.m
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionContactUtils } from './transaction-contact.utils';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-types/transaction-type.model';
+import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the

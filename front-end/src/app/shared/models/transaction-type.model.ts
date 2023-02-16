@@ -1,7 +1,7 @@
-import { TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { JsonSchema } from '../../interfaces/json-schema.interface';
-import { ContactType } from '../contact.model';
-import { Transaction, ScheduleTransactionTypes } from '../transaction.model';
+import { TransactionNavigationControls } from './transaction-navigation-controls.model';
+import { JsonSchema } from '../interfaces/json-schema.interface';
+import { ContactType } from './contact.model';
+import { Transaction, ScheduleTransactionTypes } from './transaction.model';
 
 /**
  * Class that defines the meta data associated with a transaction type.

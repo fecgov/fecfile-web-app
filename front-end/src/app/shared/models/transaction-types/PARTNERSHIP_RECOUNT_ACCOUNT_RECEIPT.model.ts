@@ -3,7 +3,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_RE
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchaTransactionType } from '../scha-transaction-type.model';
 
 export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT extends SchaTransactionType {
   componentGroupId = 'D';

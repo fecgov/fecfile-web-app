@@ -16,7 +16,7 @@ import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-trans
 import { Contact, ContactTypes } from '../models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
-import { TransactionTemplateMapType } from '../models/transaction-types/transaction-type.model';
+import { TransactionTemplateMapType } from '../models/transaction-type.model';
 import { MemoText } from '../models/memo-text.model';
 
 export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON({

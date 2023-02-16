@@ -1,4 +1,4 @@
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchaTransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { PAC_RETURN } from './PAC_RETURN.model';
 

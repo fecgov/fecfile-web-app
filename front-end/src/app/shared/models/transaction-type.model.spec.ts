@@ -1,4 +1,4 @@
-import { ScheduleATransactionTypes } from '../scha-transaction.model';
+import { ScheduleATransactionTypes } from './scha-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { TransactionType } from './transaction-type.model';
 

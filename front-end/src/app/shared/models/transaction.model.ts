@@ -4,7 +4,7 @@ import { MemoText } from './memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
 import { ValidateService } from '../services/validate.service';
-import { TransactionType } from './transaction-types/transaction-type.model';
+import { TransactionType } from './transaction-type.model';
 import { Type } from 'class-transformer';
 
 export abstract class Transaction extends BaseModel {

@@ -3,7 +3,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTY_JF_TRANS
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchaTransactionType } from '../scha-transaction-type.model';
 
 export class PARTY_JF_TRANSFER_MEMO extends SchaTransactionType {
   componentGroupId = 'F';

@@ -1,7 +1,7 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_MEMO';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchaTransactionType } from '../scha-transaction-type.model';
 
 export class EARMARK_MEMO extends SchaTransactionType {
   componentGroupId = 'AG';

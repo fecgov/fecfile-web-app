@@ -5,7 +5,7 @@ import { ContactTypes } from '../contact.model';
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS_MINIMAL, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchaTransactionType } from '../scha-transaction-type.model';
 
 export class PAC_EARMARK_RECEIPT extends SchaTransactionType {
   componentGroupId = 'FG';

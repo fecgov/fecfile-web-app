@@ -9,7 +9,7 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchaTransactionType } from '../scha-transaction-type.model';
 
 export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchaTransactionType {
   componentGroupId = 'AG';
