@@ -1,11 +1,14 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
-import { CandidateOfficeTypes, ContactTypes } from 'app/shared/models/contact.model';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { CandidateOfficeTypes, Contact, ContactTypes, FecApiCommitteeLookupData } from 'app/shared/models/contact.model';
+import { FecApiService } from 'app/shared/services/fec-api.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
+import { of } from 'rxjs';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactFormComponent } from './contact-form.component';
@@ -13,15 +16,23 @@ import { ContactFormComponent } from './contact-form.component';
 describe('ContactFormComponent', () => {
   let component: ContactFormComponent;
   let fixture: ComponentFixture<ContactFormComponent>;
+  let httpTestingController: HttpTestingController;
+  let testFecApiService: FecApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, FormsModule,
-        ReactiveFormsModule, DropdownModule],
+      imports: [
+        HttpClientTestingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        DropdownModule,
+      ],
       declarations: [ContactFormComponent, ErrorMessagesComponent,
         FecInternationalPhoneInputComponent],
       providers: [FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
+    httpTestingController = TestBed.inject(HttpTestingController);
+    testFecApiService = TestBed.inject(FecApiService);
   });
 
   beforeEach(() => {
@@ -88,6 +99,59 @@ describe('ContactFormComponent', () => {
 
     schema = component['getSchemaByType'](ContactTypes.CANDIDATE);
     expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Candidate.json');
+  });
+
+  it('#onContactLookupSelect CANDIDATE Contact happy path', () => {
+    const testContact = new Contact();
+    const testLastName = "testLastName";
+    const testZip = "12345";
+    testContact.type = ContactTypes.CANDIDATE;
+    testContact.last_name = testLastName;
+    testContact.zip = testZip;
+
+    component.onContactLookupSelect({ value: testContact });
+
+    expect(component.form.get('last_name')?.value).toBe(testLastName);
+    expect(component.form.get('zip')?.value).toBe(testZip
+    );
+  });
+
+  it('#onContactLookupSelect COMMITTEE Contact happy path', () => {
+    const testContact = new Contact();
+    const testCommitteeId = "C1234568";
+    const testZip = "12345";
+    testContact.type = ContactTypes.COMMITTEE;
+    testContact.committee_id = testCommitteeId;
+    testContact.zip = testZip;
+
+    component.onContactLookupSelect({ value: testContact });
+
+    expect(component.form.get('committee_id')?.value).toBe(testCommitteeId);
+    expect(component.form.get('zip')?.value).toBe(testZip
+    );
+  });
+
+  it('#onContactLookupSelect FecApiCommitteeLookupData happy path', () => {
+    const testId = 'C12345678'
+    const testIsActive = true;
+    const testName = 'testName';
+    const testPhone = '1234567890';
+    const testFecApiCommitteeLookupData = new FecApiCommitteeLookupData({
+      id: testId,
+      is_active: testIsActive,
+      name: testName
+    } as FecApiCommitteeLookupData);
+    const testResponse = new CommitteeAccount();
+    testResponse.committee_id = testId;
+    testResponse.treasurer_phone = testPhone;
+
+    spyOn(testFecApiService, 'getDetails').and.returnValue(of(testResponse));
+
+    component.onContactLookupSelect({ value: testFecApiCommitteeLookupData });
+
+    expect(component.form.get('type')?.value).toBe(ContactTypes.COMMITTEE);
+    expect(component.form.get('committee_id')?.value).toBe(testId);
+    expect(component.form.get('telephone')?.value).toBe('+1 ' + testPhone);
   });
 
 });
