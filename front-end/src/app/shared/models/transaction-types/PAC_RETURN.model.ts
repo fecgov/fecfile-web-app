@@ -6,7 +6,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_RETURN';
 import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
 
 export class PAC_RETURN extends SchATransactionType {
-  componentGroupId = 'F';
+  componentGroupId = 'E';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RETURN);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

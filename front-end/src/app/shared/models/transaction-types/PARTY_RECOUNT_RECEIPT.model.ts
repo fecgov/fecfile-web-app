@@ -6,7 +6,7 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
 export class PARTY_RECOUNT_RECEIPT extends SchATransactionType {
-  componentGroupId = 'F';
+  componentGroupId = 'E';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

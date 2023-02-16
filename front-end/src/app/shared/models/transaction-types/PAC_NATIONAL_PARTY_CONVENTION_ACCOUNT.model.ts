@@ -6,7 +6,7 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
 export class PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType {
-  componentGroupId = 'F';
+  componentGroupId = 'E';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT

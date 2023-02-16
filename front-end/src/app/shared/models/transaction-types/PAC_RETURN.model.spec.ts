@@ -12,7 +12,7 @@ describe('PAC_RETURN', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('F');
+    expect(transactionType.componentGroupId).toBe('E');
   });
 
   it('#factory() should return a SchATransaction', () => {

@@ -6,7 +6,7 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
 
 export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATransactionType {
-  componentGroupId = 'F';
+  componentGroupId = 'E';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO
