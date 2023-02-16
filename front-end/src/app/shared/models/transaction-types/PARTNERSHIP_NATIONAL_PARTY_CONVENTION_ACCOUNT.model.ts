@@ -5,16 +5,14 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { SchaTransactionType } from './SchaTransactionType.model';
 import { AggregationGroups } from '../transaction.model';
 
-export class PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT extends SchaTransactionType {
+export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchaTransactionType {
   componentGroupId = 'D';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT
   );
   schema = schema;
-  override subTransactionTypes = [
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT_MEMO,
-  ];
+  override subTransactionTypes = [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO];
 
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionLabelNotice =
@@ -30,8 +28,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT exten
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',
-      transaction_type_identifier:
-        ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT,
+      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });
   }

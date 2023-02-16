@@ -5,18 +5,18 @@ import { getChildNavigationControls, TransactionNavigationControls } from '../tr
 import { SchaTransactionType } from './SchaTransactionType.model';
 import { AggregationGroups } from '../transaction.model';
 
-export class PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT_MEMO extends SchaTransactionType {
+export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO extends SchaTransactionType {
   componentGroupId = 'A';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT_MEMO
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO
   );
   schema = schema;
   override updateParentOnSave = true;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls(
     LabelUtils.get(
       ScheduleATransactionTypeLabels,
-      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT
+      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT
     )
   );
 
@@ -27,10 +27,9 @@ export class PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT_MEMO 
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA17',
-      transaction_type_identifier:
-        ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_PRES_NOMINATING_CONVENTION_ACCOUNT_MEMO,
+      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO,
       back_reference_sched_name: 'SA17',
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });
   }
 }
