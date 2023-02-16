@@ -33,19 +33,13 @@ export class TransactionFormUtils {
     validateService.formValidatorSchema = transaction?.transactionType?.schema;
     validateService.formValidatorForm = form;
 
-    // Intialize form values
-    function isExisting(transaction: Transaction | undefined) {
-      return !!transaction?.id;
-    }
-
-    if (isExisting(transaction)) {
-      const txn = { ...transaction } as Transaction;
-      form.patchValue({ ...txn });
+    if (transaction && transaction.id) {
+      form.patchValue({ ...transaction });
 
       TransactionMemoUtils.patchMemoText(transaction, form);
 
       form.get('entity_type')?.disable();
-      contactId$.next(txn.contact_id || '');
+      contactId$.next(transaction.contact_id || '');
     } else {
       component.resetForm();
       form.get('entity_type')?.enable();
