@@ -223,7 +223,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
         this.form.get('zip')?.setValue(candidate.address_zip);
         this.form.get('employer')?.setValue('');
         this.form.get('occupation')?.setValue('');
-        this.form.get('candidate_office')?.setValue(candidate.office_full);
+        this.form.get('candidate_office')?.setValue(candidate.office);
         this.form.get('candidate_state')?.setValue(candidate.state);
         this.form.get('candidate_district')?.setValue(candidate.district);
       });
