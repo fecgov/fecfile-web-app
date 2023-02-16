@@ -12,7 +12,7 @@ describe('OPERATING_EXPENDITURE', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('H');
+    expect(transactionType.componentGroupId).toBe('B');
   });
 
   it('#factory() should return a SchBTransaction', () => {
