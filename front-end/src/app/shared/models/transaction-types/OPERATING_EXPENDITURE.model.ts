@@ -7,7 +7,7 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { ContactTypes } from '../contact.model';
 
 export class OPERATING_EXPENDITURE extends SchBTransactionType {
-  componentGroupId = 'H';
+  componentGroupId = 'B';
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.OPERATING_EXPENDITURE);
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;

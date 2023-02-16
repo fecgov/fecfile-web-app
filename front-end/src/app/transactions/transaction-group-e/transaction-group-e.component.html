@@ -48,7 +48,7 @@
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
         [purposeDescriptionLabel]="this.purposeDescriptionLabel"
       ></app-additional-info-input>
-      <div class="grid">
+      <div class="grid" *ngIf="subTransactionOptions.length > 0">
         <div class="col-2">
           <p-dropdown
             inputId="subTransaction"
