@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
@@ -11,8 +12,10 @@ import { Subject, takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypeLabels,
   CandidateOfficeTypes,
+  Contact,
   ContactTypeLabels,
   ContactTypes,
+  FecApiCommitteeLookupData
 } from '../../models/contact.model';
 
 @Component({
@@ -32,6 +35,8 @@ export class ContactFormComponent implements OnInit, OnDestroy {
   );
   @Input() formSubmitted = false;
 
+  contactTypeFormControl: FormControl = new FormControl();
+
   private destroy$: Subject<boolean> = new Subject();
 
   ContactTypes = ContactTypes;
@@ -42,7 +47,11 @@ export class ContactFormComponent implements OnInit, OnDestroy {
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
 
-  constructor(private validateService: ValidateService, private fb: FormBuilder) {}
+  constructor(
+    private validateService: ValidateService,
+    private fb: FormBuilder,
+    private fecApiService: FecApiService
+  ) { }
 
   ngOnInit(): void {
     this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
@@ -54,6 +63,8 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     // Initialize validation tracking of current JSON schema and form data
     this.validateService.formValidatorSchema = contactIndividualSchema;
     this.validateService.formValidatorForm = this.form;
+
+    this.contactTypeFormControl = this.form?.get('type') as FormControl || new FormControl();
 
     this.form
       ?.get('type')
@@ -143,6 +154,70 @@ export class ContactFormComponent implements OnInit, OnDestroy {
    */
   public get CandidateOfficeTypes() {
     return CandidateOfficeTypes;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onContactLookupSelect(event: any) {
+    if (event && event.value) {
+      if (event.value instanceof Contact) {
+        this.onContactSelect(event.value);
+      } else if (event.value instanceof FecApiCommitteeLookupData) {
+        this.onFecApiCommitteeLookupDataSelect(event.value);
+      }
+    }
+  }
+
+  onContactSelect(contact: Contact) {
+    if (contact) {
+      switch (contact.type) {
+        case ContactTypes.CANDIDATE:
+          this.form.get('type')?.setValue(contact.type);
+          this.form.get('candidate_id')?.setValue(contact.candidate_id);
+          this.form.get('last_name')?.setValue(contact.last_name);
+          this.form.get('first_name')?.setValue(contact.first_name);
+          this.form.get('middle_name')?.setValue(contact.middle_name);
+          this.form.get('prefix')?.setValue(contact.prefix);
+          this.form.get('suffix')?.setValue(contact.suffix);
+          this.form.get('employer')?.setValue(contact.employer);
+          this.form.get('occupation')?.setValue(contact.occupation);
+          this.form.get('candidate_office')?.setValue(contact.candidate_office);
+          this.form.get('candidate_state')?.setValue(contact.candidate_state);
+          this.form.get('candidate_district')?.setValue(contact.candidate_district);
+          break;
+        case ContactTypes.COMMITTEE:
+          this.form.get('type')?.setValue(contact.type);
+          this.form.get('committee_id')?.setValue(contact.committee_id);
+          this.form.get('name')?.setValue(contact.name);
+          break;
+      }
+      this.form.get('country')?.setValue(contact.country);
+      this.form.get('street_1')?.setValue(contact.street_1);
+      this.form.get('street_2')?.setValue(contact.street_2);
+      this.form.get('city')?.setValue(contact.city);
+      this.form.get('state')?.setValue(contact.state);
+      this.form.get('zip')?.setValue(contact.zip);
+      this.form.get('telephone')?.setValue(contact.telephone);
+    }
+  }
+
+  onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
+    if (data.id) {
+      this.fecApiService.getDetails(data.id).subscribe((committeeAccount) => {
+        let phone;
+        if (committeeAccount?.treasurer_phone) {
+          phone = '+1 ' + committeeAccount.treasurer_phone;
+        }
+        this.form.get('type')?.setValue(ContactTypes.COMMITTEE);
+        this.form.get('committee_id')?.setValue(committeeAccount.committee_id);
+        this.form.get('name')?.setValue(committeeAccount.name);
+        this.form.get('street_1')?.setValue(committeeAccount.street_1);
+        this.form.get('street_2')?.setValue(committeeAccount.street_2);
+        this.form.get('city')?.setValue(committeeAccount.city);
+        this.form.get('state')?.setValue(committeeAccount.state);
+        this.form.get('zip')?.setValue(committeeAccount.zip);
+        this.form.get('telephone')?.setValue(phone);
+      });
+    }
   }
 
   /**

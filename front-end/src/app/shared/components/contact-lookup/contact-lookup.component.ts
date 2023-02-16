@@ -14,6 +14,7 @@ export class ContactLookupComponent {
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() contactTypeFormControl: FormControl = new FormControl();
   @Input() contactTypeReadOnly = false;
+  @Input() showSearchBox = true;
   @Input() showCreateNewContactButton = true;
 
   @Input() maxFecCommitteeResults = 5;

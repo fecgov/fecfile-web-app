@@ -14,7 +14,7 @@
       >
       </p-dropdown>
     </div>
-    <div class="col-4 pl-0">
+    <div *ngIf="showSearchBox" class="col-4 pl-0">
       <p-autoComplete
         [group]="true"
         (completeMethod)="onDropdownSearch($event)"
