@@ -29,7 +29,9 @@ export class TransactionGroupHComponent extends TransactionTypeBaseComponent imp
     'memo_text_input',
     'category_code',
   ];
-  override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
-  );
+  override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.INDIVIDUAL,
+    ContactTypes.ORGANIZATION,
+    ContactTypes.COMMITTEE,
+  ]);
 }

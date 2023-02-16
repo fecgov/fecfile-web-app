@@ -28,9 +28,9 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
   ];
   subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
 
-  override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.ORGANIZATION].includes(option.code as ContactTypes)
-  );
+  override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.ORGANIZATION,
+  ]);
 
   override ngOnInit(): void {
     super.ngOnInit();

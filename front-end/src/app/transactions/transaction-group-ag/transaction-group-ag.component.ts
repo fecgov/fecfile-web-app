@@ -53,10 +53,9 @@ export class TransactionGroupAgComponent extends DoubleTransactionTypeBaseCompon
     'memo_code',
     'memo_text_input',
   ];
-  override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
-  );
-  override childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.INDIVIDUAL, ContactTypes.COMMITTEE].includes(option.code as ContactTypes)
-  );
+  override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
+  override childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.INDIVIDUAL,
+    ContactTypes.COMMITTEE,
+  ]);
 }
