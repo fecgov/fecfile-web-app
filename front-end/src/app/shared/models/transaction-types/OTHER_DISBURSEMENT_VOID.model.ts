@@ -10,6 +10,7 @@ export class OTHER_DISBURSEMENT_VOID extends SchBTransactionType {
   componentGroupId = 'B';
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID);
   schema = schema;
+  override negativeAmountValueOnly = true;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 

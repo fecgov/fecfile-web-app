@@ -10,6 +10,7 @@ export class OPERATING_EXPENDITURE_VOID extends SchBTransactionType {
   componentGroupId = 'B';
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID);
   schema = schema;
+  override negativeAmountValueOnly = true;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 

@@ -10,6 +10,7 @@ export class RETURN_RECEIPT extends SchATransactionType {
   componentGroupId = 'C';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
   schema = schema;
+  override negativeAmountValueOnly = true;
   override contactTypeOptions = [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
