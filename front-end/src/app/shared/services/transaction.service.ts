@@ -7,6 +7,7 @@ import { Transaction, AggregationGroups, ScheduleTransaction } from '../models/t
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 import { getFromJSON } from '../utils/transaction-type.utils';
+import { HttpResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -49,15 +50,25 @@ export class TransactionService implements TableListService<Transaction> {
       (transaction as ScheduleTransaction)?.aggregation_group || AggregationGroups.GENERAL;
 
     if (transaction && action_date && contact_id && aggregation_group) {
-      // Need 404 handler
       return this.apiService
-        .get<Transaction>('/transactions/previous/', {
-          transaction_id,
-          contact_id,
-          date: actionDateString,
-          aggregation_group,
-        })
-        .pipe(map((response) => getFromJSON(response)));
+        .get<HttpResponse<Transaction>>(
+          '/transactions/previous/',
+          {
+            transaction_id,
+            contact_id,
+            date: actionDateString,
+            aggregation_group,
+          },
+          [404]
+        )
+        .pipe(
+          map((response) => {
+            if (response.status === 404) {
+              return undefined;
+            }
+            return getFromJSON(response);
+          })
+        );
     }
     return of(undefined);
   }
