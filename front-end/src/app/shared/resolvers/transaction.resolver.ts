@@ -71,7 +71,7 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
               return this.transactionService.get(transaction.parent_transaction.id);
             } else {
               throw new Error(
-                `Transaction ${transaction.id} (${transaction.transaction_type_identifier}) is a dependent transaction type but does not have a parent transaction.`
+                `Fecfile: Transaction ${transaction.id} (${transaction.transaction_type_identifier}) is a dependent transaction type but does not have a parent transaction.`
               );
             }
           } else {
@@ -79,7 +79,7 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
           }
         }
         throw new Error(
-          `Transaction type resolver can't find transaction and/or contact for transaction ID ${transactionId}`
+          `Fecfile: Transaction type resolver can't find transaction and/or contact for transaction ID ${transactionId}`
         );
       })
     );
