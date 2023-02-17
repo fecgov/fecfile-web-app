@@ -163,7 +163,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID, 'Void of Contribution to Candidate'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE, 'Contribution to Other Committee'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID, 'Void of Contribution to Other Committee'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT, 'Other Disbursements'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT, 'Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT, 'Credit Card Payment for Other Disbursements'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO, 'Credit Card Corresponding Memo'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT, 'Staff Reimbursements for Other Disbursements'],
