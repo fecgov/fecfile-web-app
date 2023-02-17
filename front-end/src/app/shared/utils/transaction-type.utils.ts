@@ -75,6 +75,7 @@ import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-
 
 // Schedule B /////////////////////////////////////////////////////
 import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
+import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -149,6 +150,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
   // Schedule B /////////////////////////////////////////////////////
   OPERATING_EXPENDITURE,
+  OTHER_DISBURSEMENT,
 }
 
 export class TransactionTypeUtils {
