@@ -30,11 +30,11 @@ export class EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT extends SchATransactionType {
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children) return '';
     const subTransaction: SchATransaction = transaction.children[0] as SchATransaction;
-    let conduit = subTransaction?.contributor_organization_name || '';
+    let conduit = subTransaction.contributor_organization_name || '';
     if (
-      subTransaction?.entity_type === ContactTypes.INDIVIDUAL &&
-      subTransaction?.contributor_first_name &&
-      subTransaction?.contributor_last_name
+      subTransaction.entity_type === ContactTypes.INDIVIDUAL &&
+      subTransaction.contributor_first_name &&
+      subTransaction.contributor_last_name
     ) {
       conduit = `${subTransaction.contributor_first_name || ''} ${subTransaction.contributor_last_name || ''}`;
     }

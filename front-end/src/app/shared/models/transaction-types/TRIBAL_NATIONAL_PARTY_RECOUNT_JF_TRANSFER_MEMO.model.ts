@@ -18,7 +18,7 @@ export class TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATransact
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `Recount/Legal Proceedings Account JF Memo: ${
-      (transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
+      (transaction.parent_transaction as SchATransaction).contributor_organization_name
     }`;
   }
 
