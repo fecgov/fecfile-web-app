@@ -18,7 +18,7 @@ export class INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchAT
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `Pres. Nominating Convention Account JF Memo: ${
-      (transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
+      (transaction.parent_transaction as SchATransaction).contributor_organization_name
     }`;
   }
 

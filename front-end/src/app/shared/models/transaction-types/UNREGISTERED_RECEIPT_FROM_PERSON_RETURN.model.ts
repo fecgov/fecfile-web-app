@@ -12,6 +12,7 @@ export class UNREGISTERED_RECEIPT_FROM_PERSON_RETURN extends SchATransactionType
     ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN
   );
   schema = schema;
+  override negativeAmountValueOnly = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

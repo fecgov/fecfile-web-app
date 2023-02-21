@@ -100,7 +100,7 @@ export abstract class Transaction extends BaseModel {
   getUpdatedParent(childDeleted = false): Transaction {
     if (!this.parent_transaction?.transaction_type_identifier) {
       throw new Error(
-        `Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
+        `Fecfile: Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
       );
     }
 

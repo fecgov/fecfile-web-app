@@ -14,7 +14,7 @@ export class PARTY_JF_TRANSFER_MEMO extends SchATransactionType {
   );
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    return `JF Memo: ${(transaction?.parent_transaction as SchATransaction).contributor_organization_name}`;
+    return `JF Memo: ${(transaction.parent_transaction as SchATransaction).contributor_organization_name}`;
   }
 
   getNewTransaction() {
