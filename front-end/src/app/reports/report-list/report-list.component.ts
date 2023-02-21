@@ -85,4 +85,12 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
   public displayName(item: Report): string {
     return item.form_type;
   }
+
+  public actionOptions(item: Report): any {
+    console.log(item);
+    return [
+      { label: 'Edit report', action: this.editItem },
+      { label: 'Download as .fec', action: this.goToTest },
+    ];
+  }
 }

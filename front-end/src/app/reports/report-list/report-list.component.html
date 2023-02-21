@@ -59,7 +59,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
-        <td>{{ item.form_type | label: f3xFormTypeLabels }}</td>
+        <td>{{ item.form_type | label : f3xFormTypeLabels }}</td>
         <td>{{ item.report_code_label }}</td>
         <td>
           <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
@@ -67,21 +67,30 @@
           >
         </td>
         <td>{{ item.report_status }}</td>
-        <td>{{ item.form_type | label: f3xFormVerionLabels }}</td>
+        <td>{{ item.form_type | label : f3xFormVerionLabels }}</td>
         <td>{{ item.upload_submission?.created | fecDate }}</td>
         <td>
-          <p-button
-            pRipple
-            icon="pi pi-pencil"
-            styleClass="p-button-rounded p-button-success mr-2"
-            (click)="editItem(item)"
-            [ariaLabel]="'edit ' + displayName(item)"
-          ></p-button>
+          <p-overlayPanel #op>
+            <ng-template pTemplate>
+              <p-listbox [options]="actionOptions(item)">
+                <ng-template let-action pTemplate="item">
+                  <p-button
+                    pRipple
+                    icon="pi pi-pencil"
+                    styleClass="p-button-rounded p-button-success mr-2"
+                    [(onClick)]="action.action($event)"
+                    [ariaLabel]="'edit ' + displayName(action)"
+                  ></p-button>
+                  <button (click)="editItem(action)">{{ action.label }}</button>
+                </ng-template>
+              </p-listbox>
+            </ng-template>
+          </p-overlayPanel>
           <p-button
             pRipple
             icon="pi pi-ellipsis-v"
             styleClass="p-button-rounded p-button-success mr-2"
-            (click)="goToTest(item)"
+            (onClick)="op.toggle($event)"
             [ariaLabel]="'edit ' + displayName(item)"
           ></p-button>
         </td>
