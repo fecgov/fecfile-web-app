@@ -114,7 +114,7 @@ describe('ContactService', () => {
         max_fec_results: testMaxFecResults,
         max_fecfile_results: testMaxFecfileResults,
       })
-      .and.returnValue(of(expectedRetval) as any);
+      .and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     const expectedEndpoint = '/contacts/committee_lookup/';
     const expectedParams = {
@@ -131,7 +131,7 @@ describe('ContactService', () => {
 
   it('#individualLookup() happy path', () => {
     const expectedRetval = new IndividualLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any);
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     const testSearch = 'testSearch';
     const testMaxFecfileResults = 2;
 
@@ -149,7 +149,7 @@ describe('ContactService', () => {
 
   it('#organizationLookup() happy path', () => {
     const expectedRetval = new OrganizationLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any);
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     const testSearch = 'testSearch';
     const testMaxFecfileResults = 2;
 
