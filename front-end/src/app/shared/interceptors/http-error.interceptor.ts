@@ -24,10 +24,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         //pass on error code if allowed
         if (request.context.get(ALLOW_ERROR_CODES).includes(error.status)) {
-          console.log('AHOY');
           return of(new HttpResponse({ status: error.status }));
         }
-        console.log('YOHA');
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
           errorMessage = `Outgoing HTTP Error: ${error.error.message}`;
