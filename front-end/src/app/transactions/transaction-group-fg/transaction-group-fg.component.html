@@ -49,7 +49,7 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
             [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
-            [negativeAmountValueOnly]="negativeAmountValueOnly"
+            [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
           ></app-amount-input>
           <p-divider></p-divider>
           <h3>Additional Information</h3>
@@ -134,7 +134,7 @@
             [templateMap]="childTemplateMap"
             [memoCodeReadOnly]="isMemoCodeReadOnly(childTransaction?.transactionType)"
             [contributionAmountReadOnly]="true"
-            [negativeAmountValueOnly]="childNegativeAmountValueOnly"
+            [negativeAmountValueOnly]="!!childTransaction?.transactionType?.negativeAmountValueOnly"
           ></app-amount-input>
           <p-divider></p-divider>
           <h3>Additional Information</h3>

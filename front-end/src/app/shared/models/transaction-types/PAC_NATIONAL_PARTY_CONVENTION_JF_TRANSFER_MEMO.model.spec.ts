@@ -14,7 +14,7 @@ describe('PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
   it('should create an instance', () => {
     expect(transaction.transactionType).toBeTruthy();
     expect(transaction.transactionType?.scheduleId).toBe('A');
-    expect(transaction.transactionType?.componentGroupId).toBe('F');
+    expect(transaction.transactionType?.componentGroupId).toBe('E');
   });
 
   it('#factory() should return a SchATransaction', () => {

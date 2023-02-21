@@ -9,9 +9,9 @@ import {
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 
-export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchaTransactionType {
+export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchATransactionType {
   componentGroupId = 'AG';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
@@ -30,11 +30,11 @@ export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchaTransactionType {
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children) return '';
     const subTransaction: SchATransaction = transaction.children[0] as SchATransaction;
-    let conduit = subTransaction?.contributor_organization_name || '';
+    let conduit = subTransaction.contributor_organization_name || '';
     if (
-      subTransaction?.entity_type === ContactTypes.INDIVIDUAL &&
-      subTransaction?.contributor_first_name &&
-      subTransaction?.contributor_last_name
+      subTransaction.entity_type === ContactTypes.INDIVIDUAL &&
+      subTransaction.contributor_first_name &&
+      subTransaction.contributor_last_name
     ) {
       conduit = `${subTransaction.contributor_first_name || ''} ${subTransaction.contributor_last_name || ''}`;
     }

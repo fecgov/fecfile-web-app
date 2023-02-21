@@ -8,11 +8,8 @@ import {
   NavigationEvent,
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
-import {
-  TransactionTemplateMapType,
-  TransactionType,
-} from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction, ScheduleTransaction, ScheduleTransactionTypes } from 'app/shared/models/transaction.model';
+import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
+import { Transaction, ScheduleTransaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -39,7 +36,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   formSubmitted = false;
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   purposeDescriptionLabel = '';
-  negativeAmountValueOnly = false;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
 
   form: FormGroup = this.fb.group({});
@@ -76,19 +72,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
 
     // Determine if amount should always be negative and then force it to be so if needed
-    if (this.templateMap?.amount) {
-      const amount_schema = this.transaction?.transactionType?.schema.properties[this.templateMap.amount];
-      if (amount_schema?.exclusiveMaximum === 0) {
-        this.negativeAmountValueOnly = true;
-        this.form
-          .get(this.templateMap.amount)
-          ?.valueChanges.pipe(takeUntil(this.destroy$))
-          .subscribe((amount) => {
-            if (+amount > 0) {
-              this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
-            }
-          });
-      }
+    if (this.transaction?.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
+      this.form
+        .get(this.templateMap.amount)
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((amount) => {
+          if (+amount > 0) {
+            this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
+          }
+        });
     }
 
     if (this.transaction?.transactionType?.generatePurposeDescriptionLabel) {
@@ -285,7 +277,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return this.form.get('entity_type')?.value || '';
   }
 
-  createSubTransaction(event: { value: ScheduleTransactionTypes }) {
+  createSubTransaction(event: { value: TransactionTypes }) {
     this.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.CHILD, this.transaction, event.value));
     this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }

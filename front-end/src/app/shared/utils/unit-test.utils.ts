@@ -11,12 +11,12 @@ import { CommitteeAccount } from '../models/committee-account.model';
 import { F3xSummary } from '../models/f3x-summary.model';
 import { UploadSubmission } from '../models/upload-submission.model';
 import { CashOnHand } from '../interfaces/report.interface';
-import { Transaction, AggregationGroups, ScheduleTransactionTypes } from '../models/transaction.model';
+import { Transaction, AggregationGroups, TransactionTypes } from '../models/transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
 import { Contact, ContactTypes } from '../models/contact.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { TransactionTypeUtils } from './transaction-type.utils';
-import { TransactionTemplateMapType } from '../models/transaction-types/transaction-type.model';
+import { TransactionTemplateMapType } from '../models/transaction-type.model';
 import { MemoText } from '../models/memo-text.model';
 
 export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
@@ -198,8 +198,8 @@ export const testScheduleBTransaction = SchBTransaction.fromJSON({
 });
 
 export function getTestTransactionByType(
-  transactionType: ScheduleTransactionTypes,
-  parentTransactionType?: ScheduleTransactionTypes
+  transactionType: TransactionTypes,
+  parentTransactionType?: TransactionTypes
 ): Transaction {
   const transaction = TransactionTypeUtils.factory(transactionType).getNewTransaction();
   if (parentTransactionType) {

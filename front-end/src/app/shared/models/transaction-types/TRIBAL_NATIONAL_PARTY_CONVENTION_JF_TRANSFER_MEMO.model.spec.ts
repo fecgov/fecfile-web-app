@@ -25,6 +25,9 @@ describe('TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
+    transaction.parent_transaction = {
+      contributor_organization_name: 'ABC',
+    } as SchATransaction;
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
       `Pres. Nominating Convention Account JF Memo: ${

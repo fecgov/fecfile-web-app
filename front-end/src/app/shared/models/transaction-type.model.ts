@@ -1,7 +1,7 @@
-import { TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { JsonSchema } from '../../interfaces/json-schema.interface';
-import { ContactType } from '../contact.model';
-import { Transaction, ScheduleTransactionTypes } from '../transaction.model';
+import { TransactionNavigationControls } from './transaction-navigation-controls.model';
+import { JsonSchema } from '../interfaces/json-schema.interface';
+import { ContactType } from './contact.model';
+import { Transaction, TransactionTypes } from './transaction.model';
 
 /**
  * Class that defines the meta data associated with a transaction type.
@@ -12,12 +12,13 @@ export abstract class TransactionType {
   abstract componentGroupId: string; // Identifier of transaction component use to render UI form entry page
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
+  negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionType?: TransactionType; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
   contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
   defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
-  subTransactionTypes?: ScheduleTransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction
+  subTransactionTypes?: TransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction
   navigationControls?: TransactionNavigationControls;
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { TransactionTemplateMapType } from '../../models/transaction-types/transaction-type.model';
+import { TransactionTemplateMapType } from '../../models/transaction-type.model';
 
 @Component({
   template: '',

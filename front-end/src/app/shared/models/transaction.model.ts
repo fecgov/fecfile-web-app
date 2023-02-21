@@ -1,10 +1,10 @@
 import { BaseModel } from './base.model';
 import { Contact } from './contact.model';
 import { MemoText } from './memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionGroupsType } from './scha-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsType } from './schb-transaction.model';
 import { ValidateService } from '../services/validate.service';
-import { TransactionType } from './transaction-types/transaction-type.model';
+import { TransactionType } from './transaction-type.model';
 import { Type } from 'class-transformer';
 
 export abstract class Transaction extends BaseModel {
@@ -100,7 +100,7 @@ export abstract class Transaction extends BaseModel {
   getUpdatedParent(childDeleted = false): Transaction {
     if (!this.parent_transaction?.transaction_type_identifier) {
       throw new Error(
-        `Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
+        `Fecfile: Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
       );
     }
 
@@ -137,7 +137,8 @@ export function hasNoContact(transaction?: Transaction): boolean {
 }
 
 export type ScheduleTransaction = SchATransaction | SchBTransaction;
-export type ScheduleTransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
+export type TransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
+export type TransactionGroupTypes = ScheduleATransactionGroupsType | ScheduleBTransactionGroupsType;
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',

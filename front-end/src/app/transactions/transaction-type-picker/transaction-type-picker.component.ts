@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/interfaces/report.interface';
+import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
 import {
   ScheduleATransactionGroups,
   ScheduleATransactionGroupsType,
@@ -21,8 +22,6 @@ import { LabelList } from 'app/shared/utils/label.utils';
 import { getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
 
 type Categories = 'receipt' | 'disbursement';
-type GroupsTypes = ScheduleATransactionGroupsType | ScheduleBTransactionGroupsType;
-type TransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
 
 @Component({
   selector: 'app-transaction-type-picker',
@@ -55,7 +54,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  getTransactionGroups(): GroupsTypes[] {
+  getTransactionGroups(): TransactionGroupTypes[] {
     if (this.category == 'disbursement') {
       return [
         ScheduleBTransactionGroups.OPERATING_EXPENDITURES,
@@ -74,7 +73,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
     ];
   }
 
-  getTransactionTypes(group: GroupsTypes): TransactionTypes[] {
+  getTransactionTypes(group: TransactionGroupTypes): TransactionTypes[] {
     switch (group) {
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS:
         return [
@@ -145,6 +144,8 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
           ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
           ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+          ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+          ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
         ];
       case ScheduleBTransactionGroups.OPERATING_EXPENDITURES:
         return [
