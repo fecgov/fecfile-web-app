@@ -1,16 +1,18 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { InputNumber } from 'primeng/inputnumber';
+import { Checkbox } from 'primeng/checkbox';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Subject, takeUntil } from 'rxjs';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 
 @Component({
   selector: 'app-amount-input',
   templateUrl: './amount-input.component.html',
 })
-export class AmountInputComponent extends BaseInputComponent implements OnInit, OnDestroy {
+export class AmountInputComponent extends BaseInputComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() memoCodeReadOnly = false;
   @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
@@ -18,6 +20,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() negativeAmountValueOnly = false;
 
   @ViewChild('amountInput') amountInput!: InputNumber;
+  @ViewChild('memoItem') memoItem!: Checkbox;
 
   defaultMemoCodeReadOnly = false;
   defaultMemoItemHelpText = this.memoItemHelpText;
@@ -26,7 +29,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   destroy$: Subject<boolean> = new Subject<boolean>();
   report?: F3xSummary;
 
-  constructor(private store: Store) {
+  constructor(private store: Store, protected confirmationService: ConfirmationService) {
     super();
   }
 
@@ -57,9 +60,34 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
       });
   }
 
+  ngAfterViewInit(): void {
+    //const memoItem = this.memoItem.inputViewChild.nativeElement;
+    //Retrieving the checkbox via ViewChild does *not* want to work...
+    const memoItem = document.getElementById('memoItem');
+    memoItem?.addEventListener('click', this.onMemoItemClick);
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  onMemoItemClick($event: MouseEvent) {
+    console.log(this.confirmationService);
+    this.confirmationService.confirm({
+      key: 'memo-item-dialog',
+      header: 'Confirm',
+      icon: 'pi pi-info-circle',
+      message: 'Hey-o',
+      acceptLabel: 'Continue',
+      rejectLabel: 'Cancel',
+      accept: () => {
+        console.log('Yes please');
+      },
+      reject: () => {
+        return;
+      },
+    });
   }
 
   updateMemoItemWithDate(date: Date) {

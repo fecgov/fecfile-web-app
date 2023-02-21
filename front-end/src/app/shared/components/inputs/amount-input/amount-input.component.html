@@ -20,6 +20,8 @@
     <div class="col-12">
       <div class="field" [ngClass]="{ readonly: memoCodeReadOnly }">
         <p-checkbox
+          #memoItem
+          id="memoItem"
           [binary]="true"
           inputId="memo_code"
           formControlName="memo_code"
@@ -81,4 +83,5 @@
       </div>
     </div>
   </div>
+  <p-confirmDialog key="memo-item-dialog" [style]="{ width: '450px' }"></p-confirmDialog>
 </div>
