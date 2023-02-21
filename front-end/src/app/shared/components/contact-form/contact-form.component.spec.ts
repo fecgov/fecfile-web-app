@@ -3,8 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { Candidate } from 'app/shared/models/candidate.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { CandidateOfficeTypes, Contact, ContactTypes, FecApiCommitteeLookupData } from 'app/shared/models/contact.model';
+import { CandidateOfficeTypes, Contact, ContactTypes, FecApiCandidateLookupData, FecApiCommitteeLookupData } from 'app/shared/models/contact.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
@@ -131,6 +132,32 @@ describe('ContactFormComponent', () => {
 
     component.form = new FormGroup({});
     component.onContactLookupSelect({ value: testContact });
+  });
+
+  it('#onContactLookupSelect FecApiCandidateLookupData happy path', () => {
+    const testId = 'P12345678'
+    const testOfficeSought = 'P';
+    const testName = 'testName';
+    const testAddressCity = 'testAddressCity';
+    const testFecApiCandidateLookupData = new FecApiCandidateLookupData({
+      id: testId,
+      office_sought: testOfficeSought,
+      name: testName
+    } as FecApiCandidateLookupData);
+    const testResponse = new Candidate();
+    testResponse.candidate_id = testId;
+    testResponse.address_city = testAddressCity;
+
+    spyOn(testFecApiService, 'getCandidateDetails').and.returnValue(of(testResponse));
+
+    component.onContactLookupSelect({ value: testFecApiCandidateLookupData });
+
+    expect(component.form.get('type')?.value).toBe(ContactTypes.CANDIDATE);
+    expect(component.form.get('candidate_id')?.value).toBe(testId);
+    expect(component.form.get('city')?.value).toBe(testAddressCity);
+
+    component.form = new FormGroup({});
+    component.onContactLookupSelect({ value: testFecApiCandidateLookupData });
   });
 
   it('#onContactLookupSelect FecApiCommitteeLookupData happy path', () => {
