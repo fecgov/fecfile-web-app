@@ -4,10 +4,11 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import {
+  CandidateLookupResponse,
   CommitteeLookupResponse,
   Contact,
   ContactTypes,
-  FecApiCommitteeLookupData, FecfileCommitteeLookupData,
+  FecApiCommitteeLookupData, FecfileCandidateLookupData, FecfileCommitteeLookupData,
   FecfileIndividualLookupData,
   FecfileOrganizationLookupData,
   IndividualLookupResponse,
@@ -62,6 +63,59 @@ describe('ContactLookupComponent', () => {
     component.onDropdownSearch(testEvent);
     tick(500);
     expect(component.contactLookupList.length === 0).toBeTrue();
+  }));
+
+  it('#onDropdownSearch CAN undefined fec_api_candidates', fakeAsync(() => {
+    const testCandidateLookupResponse = new CandidateLookupResponse();
+    testCandidateLookupResponse.fecfile_candidates = [
+      {
+        id: 123,
+        first_name: 'testFirstName',
+        last_na2me: 'testLastName',
+      } as unknown as FecfileCandidateLookupData,
+    ];
+    spyOn(testContactService, 'candidateLookup').and.returnValue(of(testCandidateLookupResponse));
+    const testEvent = { query: 'hi' };
+    component.contactTypeFormControl.setValue('CAN');
+    component.onDropdownSearch(testEvent);
+    expect(component.contactLookupList[1].items.length === 0).toBeTrue();
+  }));
+
+  it('#onDropdownSearch CAN undefined fecfile_candidates', fakeAsync(() => {
+    const testCandidateLookupResponse = new CandidateLookupResponse();
+    spyOn(testContactService, 'candidateLookup').and.returnValue(of(testCandidateLookupResponse));
+    const testEvent = { query: 'hi' };
+    component.contactTypeFormControl.setValue('CAN');
+    component.onDropdownSearch(testEvent);
+    tick(500);
+    expect(component.contactLookupList[0].items.length === 0).toBeTrue();
+  }));
+
+  it('#onDropdownSearch CAN happy path', fakeAsync(() => {
+    const testCandidateLookupResponse = new CandidateLookupResponse();
+    testCandidateLookupResponse.fecfile_candidates = [
+      new FecfileCandidateLookupData({
+        id: 123,
+        last_name: 'testLastName',
+        first_name: 'testFirstName',
+        type: ContactTypes.CANDIDATE,
+      } as unknown as FecfileCandidateLookupData),
+    ];
+    spyOn(testContactService, 'candidateLookup').and.returnValue(of(testCandidateLookupResponse));
+    const testEvent = { query: 'hi' };
+    component.contactTypeFormControl.setValue('CAN');
+    component.onDropdownSearch(testEvent);
+    tick(500);
+    expect(
+      JSON.stringify(component.contactLookupList) === JSON.stringify(
+        testCandidateLookupResponse.toSelectItemGroups(true))
+    ).toBeTrue();
+    expect(
+      JSON.stringify([
+        { label: 'There are no matching candidates', items: [] },
+        { label: 'There are no matching registered candidates', items: [] },
+      ]) === JSON.stringify(new CandidateLookupResponse().toSelectItemGroups(true))
+    ).toBeTrue();
   }));
 
   it('#onDropdownSearch COM undefined fec_api_committees', fakeAsync(() => {

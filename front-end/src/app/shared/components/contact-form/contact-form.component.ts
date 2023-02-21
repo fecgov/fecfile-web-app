@@ -207,7 +207,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     if (data.id) {
       this.fecApiService.getCandidateDetails(data.id).subscribe((candidate) => {
         // TODO: fix once we get info from api and set all names below properly
-        const nameSplit = candidate.name?.split(/,(.*)/s);
+        const nameSplit = candidate.name?.split(", ");
 
         this.form.get('type')?.setValue(ContactTypes.CANDIDATE);
         this.form.get('candidate_id')?.setValue(candidate.candidate_id);
