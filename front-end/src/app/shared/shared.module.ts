@@ -29,12 +29,14 @@ import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
 import { NavigationControlComponent } from './components/navigation-control/navigation-control/navigation-control.component';
 import { NavigationControlBarComponent } from './components/navigation-control-bar/navigation-control-bar.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     ButtonModule,
+    TooltipModule,
     DropdownModule,
     AutoCompleteModule,
     InputTextModule,
