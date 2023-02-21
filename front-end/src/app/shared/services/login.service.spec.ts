@@ -46,7 +46,7 @@ describe('LoginService', () => {
   });
 
   it('should ping the API when requesting local login availability', () => {
-    const spy = spyOn(apiService, 'get').and.returnValue(of({ endpoint_available: true }) as any);
+    const spy = spyOn(apiService, 'get').and.returnValue(of({ endpoint_available: true }) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     const result$ = service.checkLocalLoginAvailability();
     expect(spy).toHaveBeenCalledWith('/user/login/authenticate');
     result$.subscribe((value) => {
