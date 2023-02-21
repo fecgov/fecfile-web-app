@@ -8,6 +8,7 @@ import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
 import { getFromJSON } from '../utils/transaction-type.utils';
 import { HttpResponse } from '@angular/common/http';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -59,14 +60,14 @@ export class TransactionService implements TableListService<Transaction> {
             date: actionDateString,
             aggregation_group,
           },
-          [404]
+          [HttpStatusCode.NotFound]
         )
         .pipe(
           map((response) => {
-            if (response.status === 404) {
+            if (response.status === HttpStatusCode.NotFound) {
               return undefined;
             }
-            return getFromJSON(response);
+            return getFromJSON(response.body);
           })
         );
     }
