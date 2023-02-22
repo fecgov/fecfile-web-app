@@ -273,3 +273,14 @@ label.disabled {
   color: black;
   border: 1px solid black;
 }
+
+.action-options {
+  padding: 0;
+}
+.action-options .p-overlaypanel-content {
+  padding: .5em;
+}
+.action-options .p-overlaypanel-content .p-button {
+  width: 100%;
+  text-align: inherit;
+}

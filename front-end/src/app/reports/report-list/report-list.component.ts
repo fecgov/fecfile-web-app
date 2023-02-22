@@ -21,6 +21,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     report_id: undefined,
     value: undefined,
   };
+  public actionOptions: any = [
+    { label: 'Edit report', action: this.editItem.bind(this) },
+    { label: 'Download as .fec', action: this.goToTest.bind(this) },
+  ];
   private destroy$ = new Subject<boolean>();
 
   constructor(
@@ -77,6 +81,10 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     this.router.navigateByUrl(`/transactions/report/${item.id}/create`);
   }
 
+  public onActionClick(action: any, report: Report) {
+    action.action(report);
+  }
+
   /**
    * Get the display name for the contact to show in the table column.
    * @param item
@@ -84,13 +92,5 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
    */
   public displayName(item: Report): string {
     return item.form_type;
-  }
-
-  public actionOptions(item: Report): any {
-    console.log(item);
-    return [
-      { label: 'Edit report', action: this.editItem },
-      { label: 'Download as .fec', action: this.goToTest },
-    ];
   }
 }
