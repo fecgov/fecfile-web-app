@@ -11,6 +11,7 @@ import { F3xSummary, F3xFormTypes } from '../../shared/models/f3x-summary.model'
 import { Report } from '../../shared/interfaces/report.interface';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
+import { UploadSubmission } from 'app/shared/models/upload-submission.model';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -49,9 +50,15 @@ describe('ReportListComponent', () => {
 
   it('#editItem should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-
-    component.editItem({ id: '999' } as F3xSummary);
+    component.editItem({ id: '999' } as F3xSummary); // 999 is the cash on hand report
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
+    component.editItem({ id: '888' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/888/list');
+    component.editItem({
+      id: '777',
+      upload_submission: UploadSubmission.fromJSON({ fec_status: 'ACCEPTED' }),
+    } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
   });
 
   it('#displayName should display the item form_type code', () => {

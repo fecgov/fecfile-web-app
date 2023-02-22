@@ -72,19 +72,21 @@
         <td>
           <p-overlayPanel #op [styleClass]="'action-options'">
             <ng-template pTemplate>
-              <li *ngFor="let action of actionOptions">
-                <button
-                  *ngIf="!action.isAvailable || action.isAvailable(item)"
-                  pButton
-                  pRipple
-                  type="button"
-                  class="p-button-secondary p-button-text"
-                  id="one"
-                  (click)="onActionClick(action, item)"
-                >
-                  {{ action.label }}
-                </button>
-              </li>
+              <ul>
+                <li *ngFor="let action of actionOptions">
+                  <button
+                    *ngIf="!action.isAvailable || action.isAvailable(item)"
+                    pButton
+                    pRipple
+                    type="button"
+                    class="p-button-secondary p-button-text"
+                    id="one"
+                    (click)="onActionClick(action, item)"
+                  >
+                    {{ action.label }}
+                  </button>
+                </li>
+              </ul>
             </ng-template>
           </p-overlayPanel>
           <p-button
