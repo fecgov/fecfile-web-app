@@ -17,6 +17,7 @@ describe('FormTypeDialogComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(FormTypeDialogComponent);
+    router = TestBed.inject(Router);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
