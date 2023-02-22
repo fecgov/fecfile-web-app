@@ -25,7 +25,7 @@ export abstract class SchATransactionType extends TransactionType {
     amount: 'contribution_amount',
     aggregate: 'contribution_aggregate',
     purpose_description: 'contribution_purpose_descrip',
-    purposeDescripLabel: 'CONTRIBUTION PURPOSE DESCRIPTION',
+    purposeDescripLabel: 'PURPOSE OF RECEIPT',
     memo_text_input: 'memo_text_input',
     category_code: '',
   };
