@@ -85,6 +85,7 @@ export class ContactLookupComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContactLookupSelect(event: any) {
     this.contactLookupSelect.emit(event);
+    this.contactLookupForm.patchValue({ selectedContact: '' });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
