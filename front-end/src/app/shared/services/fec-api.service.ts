@@ -34,7 +34,7 @@ export class FecApiService {
    */
   public getDetails(committeeId: string | null): Observable<CommitteeAccount> {
     if (!committeeId) {
-      throw new Error('No Committee Id provided.');
+      throw new Error('Fecfile: No Committee Id provided in getDetails()');
     }
     const headers = this.getHeaders();
     const params = this.getQueryParams();
@@ -58,7 +58,7 @@ export class FecApiService {
    */
   public getCommitteeRecentFiling(committeeId: string | undefined): Observable<FecFiling | undefined> {
     if (!committeeId) {
-      throw new Error('No Committee Id provided.');
+      throw new Error('Fecfile: No Committee Id provided in getCommitteeRecentFiling()');
     }
     const headers = this.getHeaders();
     const nightlyEndpointParams = this.getQueryParams({

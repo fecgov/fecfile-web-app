@@ -5,7 +5,6 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
 import {
   NavigationAction,
   NavigationDestination,
@@ -16,17 +15,14 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ApiService } from 'app/shared/services/api.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { ValidateService } from 'app/shared/services/validate.service';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore, testIndividualReceipt } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { TransactionTypeUtils } from '../../utils/transaction-type.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
-import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionContactUtils } from './transaction-contact.utils';
-import { TransactionFormUtils } from './transaction-form.utils';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -61,7 +57,7 @@ const initTransactionData = {
   form_type: undefined,
   filer_committee_id_number: undefined,
   transaction_id: null,
-  transaction_type_identifier: 'INDIVIDUAL_RECEIPT',
+  transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
   contribution_purpose_descrip: undefined,
   parent_transaction_id: undefined,
   children: undefined,
@@ -72,31 +68,7 @@ const initTransactionData = {
   memo_text_id: 'ID Goes Here',
 };
 
-const testTransaction = SchATransaction.fromJSON({
-  id: '123',
-  report_id: '999',
-  contact: undefined,
-  contact_id: '333',
-  form_type: undefined,
-  filer_committee_id_number: undefined,
-  transaction_id: null,
-  transaction_type_identifier: 'INDIVIDUAL_RECEIPT',
-  aggregation_group: 'GENERAL',
-  contribution_amount: '202.2',
-  contribution_date: '2022-02-02',
-  contribution_purpose_descrip: undefined,
-  parent_transaction_id: undefined,
-  children: undefined,
-  parent_transaction: undefined,
-  fields_to_validate: undefined,
-  itemized: false,
-  memo_text: undefined,
-  memo_text_id: undefined,
-});
-
-const testTransactionType =
-  TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) || ({} as TransactionType);
-testTransactionType.transaction = testTransactionType?.getNewTransaction();
+let testTransaction: SchATransaction;
 
 describe('TransactionTypeBaseComponent', () => {
   let component: TestTransactionTypeBaseComponent;
@@ -133,8 +105,10 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   beforeEach(() => {
+    testTransaction = testIndividualReceipt;
     fixture = TestBed.createComponent(TestTransactionTypeBaseComponent);
     component = fixture.componentInstance;
+    component.transaction = testTransaction;
     fixture.detectChanges();
   });
 
@@ -143,39 +117,17 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#retrieveMemoText should work', () => {
-    if (component.transactionType) component.transactionType.transaction = testTransaction;
-    else
-      component.transactionType = {
-        transaction: testTransaction,
-        scheduleId: 'TEST',
-        componentGroupId: 'TEST',
-        isDependentChild: false,
-        title: 'Title goes here',
-        getNewTransaction: () => {
-          return testTransaction;
-        },
-        schema: {
-          $id: '10101',
-          $schema: 'string',
-          type: 'string',
-          required: ['string'],
-          properties: {},
-        },
-        updateParentOnSave: false,
-        getSchemaName: () => 'foo',
-        generatePurposeDescriptionWrapper: () => 'bar',
-      };
-
+    if (!component.transaction) throw new Error('Fecfile: transaction does not exist');
     component.form = new FormGroup({
       memo_text_input: new FormControl('memo'),
     });
-    const formValues = TransactionMemoUtils.retrieveMemoText(component.transactionType, component.form, {});
+    const formValues = TransactionMemoUtils.retrieveMemoText(component.transaction, component.form, {});
     expect(formValues['memo_text']['text4000']).toBe('memo');
   });
 
   function addContact(component: TestTransactionTypeBaseComponent, contact: Contact) {
-    if (component.transactionType?.transaction) {
-      component.transactionType.transaction.contact = contact;
+    if (component.transaction) {
+      component.transaction.contact = contact;
     }
   }
 
@@ -198,7 +150,7 @@ describe('TransactionTypeBaseComponent', () => {
     testContact.zip = '12345';
 
     spyOn(testApiService, 'post').and.returnValue(of(testContact));
-    spyOn(testTransactionService, 'create').and.returnValue(of(testTransaction1));
+    spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction1));
     const confirmSpy = spyOn(testConfirmationService, 'confirm');
     // test reject
     confirmSpy.and.callFake((confirmation: Confirmation) => {
@@ -208,7 +160,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = testTransactionType;
+    component.transaction = testTransaction;
 
     addContact(component, testContact);
     const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
@@ -224,20 +176,28 @@ describe('TransactionTypeBaseComponent', () => {
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.INDIVIDUAL;
     testContact2.id = 'testId';
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact2;
+    if (component.transaction) {
+      component.transaction.contact = testContact2;
     }
     component.save(listSaveEvent);
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = undefined;
+    if (component.transaction) {
+      component.transaction.contact = undefined;
     }
-    TransactionContactUtils.getEditTransactionContactConfirmationMessage([], testContact, component.form, fecDatePipe);
+    if (testTransaction.transactionType) {
+      TransactionContactUtils.getEditTransactionContactConfirmationMessage(
+        [],
+        testContact,
+        component.form,
+        fecDatePipe,
+        testTransaction.transactionType?.templateMap
+      );
+    }
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
 
   function spyOnServices(contact: Contact, transaction: SchATransaction) {
     spyOn(testApiService, 'post').and.returnValue(of(contact));
-    spyOn(testTransactionService, 'create').and.returnValue(of(transaction));
+    spyOn(testTransactionService, 'update').and.returnValue(of(transaction));
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
       if (confirmation.accept) {
         return confirmation.accept();
@@ -256,7 +216,7 @@ describe('TransactionTypeBaseComponent', () => {
     spyOnServices(testContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = testTransactionType;
+    component.transaction = testTransaction;
 
     addContact(component, testContact);
     const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
@@ -267,8 +227,8 @@ describe('TransactionTypeBaseComponent', () => {
     const testContact2 = new Contact();
     testContact2.type = ContactTypes.COMMITTEE;
     testContact2.id = 'testId';
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = testContact2;
+    if (component.transaction) {
+      component.transaction.contact = testContact2;
     }
     component.save(listSaveEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
@@ -284,7 +244,7 @@ describe('TransactionTypeBaseComponent', () => {
     spyOnServices(orgContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = testTransactionType;
+    component.transaction = testTransaction;
 
     addContact(component, orgContact);
     const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
@@ -294,8 +254,8 @@ describe('TransactionTypeBaseComponent', () => {
     const orgContact2 = new Contact();
     orgContact2.type = ContactTypes.ORGANIZATION;
     orgContact2.id = 'testId';
-    if (component.transactionType.transaction) {
-      component.transactionType.transaction.contact = orgContact2;
+    if (component.transaction) {
+      component.transaction.contact = orgContact2;
     }
     component.save(listSaveEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
@@ -309,7 +269,7 @@ describe('TransactionTypeBaseComponent', () => {
     spyOnServices(testContact, testTransaction1);
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType = testTransactionType;
+    component.transaction = testTransaction;
 
     component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1));
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
@@ -330,9 +290,7 @@ describe('TransactionTypeBaseComponent', () => {
     });
 
     const componentNavigateToSpy = spyOn(component, 'navigateTo');
-    component.transactionType =
-      TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT) || ({} as TransactionType);
-    component.transactionType.transaction = testTransaction;
+    component.transaction = testTransaction;
 
     component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction2));
     tick(1000);
@@ -355,12 +313,8 @@ describe('TransactionTypeBaseComponent', () => {
   it('#navigateTo NavigationDestination.CHILD should show popup + navigate', () => {
     const testTransactionId = '123';
     const testTransactionTypeToAdd = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;
-
-    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
-    if (component.transactionType) {
-      component.transactionType.transaction = testTransaction;
-      component.transactionType.transaction.report_id = '999';
-    }
+    component.transaction = testTransaction;
+    component.transaction.report_id = '999';
 
     const expectedMessage: Message = {
       severity: 'success',
@@ -385,18 +339,6 @@ describe('TransactionTypeBaseComponent', () => {
     testTransaction3.id = '123';
     testTransaction3.report_id = '99';
     testTransaction3.contact_id = '33';
-    component.transactionType = {
-      scheduleId: 'A',
-      componentGroupId: 'A',
-      isDependentChild: false,
-      title: '',
-      schema: { properties: {} } as JsonSchema,
-      getNewTransaction: () => SchATransaction.fromJSON({}),
-      transaction: testTransaction3,
-      updateParentOnSave: false,
-      getSchemaName: () => 'foo',
-      generatePurposeDescriptionWrapper: () => 'bar',
-    } as TransactionType;
     const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction3));
@@ -404,10 +346,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo NavigationDestination.CHILD should navigate', () => {
-    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
-    if (component.transactionType) {
-      component.transactionType.transaction = testTransaction;
-    }
+    component.transaction = testTransaction;
     const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo(
@@ -424,18 +363,6 @@ describe('TransactionTypeBaseComponent', () => {
   it('#navigateTo NavigationDestination.PARENT should navigate', () => {
     const transaction = { ...testTransaction } as SchATransaction;
     transaction.parent_transaction_id = '333';
-    component.transactionType = {
-      scheduleId: 'A',
-      componentGroupId: 'A',
-      isDependentChild: false,
-      title: '',
-      schema: { properties: {} } as JsonSchema,
-      getNewTransaction: () => SchATransaction.fromJSON({}),
-      transaction: transaction,
-      updateParentOnSave: false,
-      getSchemaName: () => 'foo',
-      generatePurposeDescriptionWrapper: () => 'bar',
-    } as TransactionType;
     const expectedRoute = '/transactions/report/999/list/edit/333';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.PARENT, transaction));
@@ -443,10 +370,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#navigateTo default should navigate', () => {
-    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
-    if (component.transactionType) {
-      component.transactionType.transaction = testTransaction;
-    }
+    component.transaction = testTransaction;
     const expectedRoute = '/transactions/report/999/list';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction));
@@ -574,17 +498,7 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('#onContactLookupSelect INDIVIDUAL should calculate aggregate', () => {
-    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.INDIVIDUAL_RECEIPT);
-    component.transactionType.transaction = component.transactionType.getNewTransaction();
-    TransactionFormUtils.onInit(
-      component,
-      component.form,
-      new ValidateService(),
-      component.transactionType,
-      component.contactId$
-    );
-    component.transactionType.transaction = component.transactionType.getNewTransaction();
-
+    component.transaction = testTransaction;
     const testEntityType = ContactTypes.INDIVIDUAL;
 
     const testContact = new Contact();
@@ -671,33 +585,8 @@ describe('TransactionTypeBaseComponent', () => {
   });
 
   it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
-    component.transactionType = {
-      transaction: testTransaction,
-      scheduleId: 'TEST',
-      componentGroupId: 'TEST',
-      isDependentChild: false,
-      title: 'Title goes here',
-      getNewTransaction: () => {
-        return testTransaction;
-      },
-      schema: {
-        $id: '10101',
-        $schema: 'string',
-        type: 'string',
-        required: [],
-        properties: {
-          contribution_amount: {
-            type: 'number',
-            exclusiveMaximum: 0,
-          },
-        },
-      },
-      updateParentOnSave: false,
-      getSchemaName: () => 'foo',
-      generatePurposeDescriptionWrapper: () => 'bar',
-    };
-
-    component.parentOnInit();
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
+    component.ngOnInit();
     component.form.patchValue({ contribution_amount: 2 });
     expect(component.form.value.contribution_amount).toBe(-2);
   });

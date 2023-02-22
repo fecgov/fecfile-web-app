@@ -37,7 +37,7 @@ export class ValidateService {
    * @param {JsonSchema} schema
    * @returns {string[]} list of property names
    */
-  getSchemaProperties(schema: JsonSchema | undefined): string[] {
+  static getSchemaProperties(schema: JsonSchema | undefined): string[] {
     if (schema) {
       return Object.keys(schema.properties);
     }
@@ -69,7 +69,7 @@ export class ValidateService {
     const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
     if (this.formValidatorSchema) {
-      this.getSchemaProperties(this.formValidatorSchema).forEach((property: string) => {
+      ValidateService.getSchemaProperties(this.formValidatorSchema).forEach((property: string) => {
         if (propertiesSubset.length > 0 && !propertiesSubset.includes(property)) {
           return;
         }

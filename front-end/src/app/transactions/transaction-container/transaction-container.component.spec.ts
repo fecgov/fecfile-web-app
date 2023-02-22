@@ -4,8 +4,9 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -18,7 +19,6 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { SharedModule } from '../../shared/shared.module';
-import { TransactionTypeUtils } from '../../shared/utils/transaction-type.utils';
 import { TransactionGroupBComponent } from '../transaction-group-b/transaction-group-b.component';
 import { TransactionContainerComponent } from './transaction-container.component';
 
@@ -53,7 +53,9 @@ describe('TransactionContainerComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             data: of({
-              transactionType: TransactionTypeUtils.factory('OFFSET_TO_OPERATING_EXPENDITURES'),
+              transaction: getTestTransactionByType(
+                ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES
+              ) as SchATransaction,
             }),
           },
         },
