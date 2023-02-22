@@ -12,6 +12,7 @@ import { Report } from '../../shared/interfaces/report.interface';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { UploadSubmission } from 'app/shared/models/upload-submission.model';
+import { RowAction } from 'app/shared/components/table-list-base/table-list-base.component';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -59,6 +60,14 @@ describe('ReportListComponent', () => {
       upload_submission: UploadSubmission.fromJSON({ fec_status: 'ACCEPTED' }),
     } as F3xSummary);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
+  });
+
+  it('#onActionClick should route properly', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.onActionClick(new RowAction('', component.editItem.bind(component)), { id: '888' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/888/list');
+    component.onActionClick(new RowAction('', component.goToTest.bind(component)), { id: '888' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/test-dot-fec/888');
   });
 
   it('#displayName should display the item form_type code', () => {
