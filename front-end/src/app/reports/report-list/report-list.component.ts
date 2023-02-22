@@ -22,7 +22,16 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     value: undefined,
   };
   public actionOptions: any = [
-    { label: 'Edit report', action: this.editItem.bind(this) },
+    {
+      label: 'Edit report',
+      action: this.editItem.bind(this),
+      isAvailable: (report: F3xSummary) => report.report_status === 'In-Progress',
+    },
+    {
+      label: 'Review report',
+      action: this.editItem.bind(this),
+      isAvailable: (report: F3xSummary) => report.report_status !== 'In-Progress',
+    },
     { label: 'Download as .fec', action: this.goToTest.bind(this) },
   ];
   private destroy$ = new Subject<boolean>();

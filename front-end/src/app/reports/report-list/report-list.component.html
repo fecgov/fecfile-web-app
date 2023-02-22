@@ -74,6 +74,7 @@
             <ng-template pTemplate>
               <li *ngFor="let action of actionOptions">
                 <button
+                  *ngIf="!action.isAvailable || action.isAvailable(item)"
                   pButton
                   pRipple
                   type="button"
