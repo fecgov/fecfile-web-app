@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormType, FORM_TYPES, FormTypes } from 'app/shared/utils/form-type.utils';
 
