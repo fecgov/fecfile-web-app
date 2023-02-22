@@ -7,7 +7,7 @@ import { FormType, FORM_TYPES, FormTypes } from 'app/shared/utils/form-type.util
   templateUrl: './form-type-dialog.component.html',
   styleUrls: ['./form-type-dialog.component.scss'],
 })
-export class FormTypeDialogComponent implements OnInit {
+export class FormTypeDialogComponent {
   @Input() visible = false;
   formTypeOptions: FormTypes[] = Array.from(FORM_TYPES, (mapping) => mapping[0]);
   selectedType?: FormTypes;
@@ -20,6 +20,4 @@ export class FormTypeDialogComponent implements OnInit {
   getFormType(type?: FormTypes): FormType | undefined {
     return type ? FORM_TYPES.get(type) : undefined;
   }
-
-  ngOnInit(): void {}
 }

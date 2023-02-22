@@ -4649,6 +4649,13 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   margin-left: 1rem;
 }
 
+.form-type-dialog{
+  width: 50%;
+}
+.form-type-dialog p-dropdown{
+  display: flex;
+}
+
 .p-overlaypanel {
   background: #ffffff;
   color: #212121;
