@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
+import { Transaction } from '../models/transaction.model';
 import { DateUtils } from '../utils/date.utils';
 
 @Injectable({
@@ -50,9 +51,9 @@ export class ValidateService {
    * @param {string[]} properties
    * @returns data structure to pass to the FormBuilder group() method
    */
-  getFormGroupFields(properties: string[]) {
+  getFormGroupFields(properties: string[], transaction?: Transaction) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-    properties.forEach((property) => (group[property] = ['', [this.formValidator(property)]]));
+    properties.forEach((property) => (group[property] = ['', [this.formValidator(property, transaction)]]));
     return group;
   }
 
@@ -78,6 +79,21 @@ export class ValidateService {
     }
 
     return formValues;
+  }
+
+  /**
+   * 
+   * @param transaction Transaction object to get values from.
+   * This method returns "non-form" values that may be required
+   * for validation of form fields.
+   */
+  getNonFormValues(transaction?: Transaction) {
+    const values: any = {};
+    if (transaction) {
+      values['transaction_type_identifier'] =
+        transaction.transaction_type_identifier;
+    }
+    return values;
   }
 
   /**
@@ -120,15 +136,18 @@ export class ValidateService {
    * @param {string} property - name of form property to validate
    * @returns {ValidationErrors | undefined}
    */
-  formValidator(property: string): ValidatorFn {
+  formValidator(property: string, transaction?: Transaction): ValidatorFn {
     return (): ValidationErrors | null => {
       if (!this.formValidatorSchema || !this.formValidatorForm) {
         return null;
       }
-
+      const data = {
+        ...this.getFormValues(this.formValidatorForm),
+        ...this.getNonFormValues(transaction)
+      }
       const errors: ValidationError[] = this.validate(
         this.formValidatorSchema,
-        this.getFormValues(this.formValidatorForm),
+        data,
         [property]
       );
 
