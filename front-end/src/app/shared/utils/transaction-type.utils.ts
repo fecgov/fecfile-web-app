@@ -78,6 +78,7 @@ import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXP
 import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
 import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
 import { OTHER_DISBURSEMENT_VOID } from '../models/transaction-types/OTHER_DISBURSEMENT_VOID.model';
+import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -155,6 +156,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   OPERATING_EXPENDITURE_VOID,
   OTHER_DISBURSEMENT,
   OTHER_DISBURSEMENT_VOID,
+  OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
 }
 
 export class TransactionTypeUtils {

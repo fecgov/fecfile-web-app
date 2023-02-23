@@ -19,6 +19,8 @@ export class SchBTransaction extends Transaction {
   payee_city: string | undefined;
   payee_state: string | undefined;
   payee_zip: string | undefined;
+  payee_employer: string | undefined;
+  payee_occupation: string | undefined;
   election_code: string | undefined;
   election_other_description: string | undefined;
   @Transform(BaseModel.dateTransform) expenditure_date: Date | undefined;
