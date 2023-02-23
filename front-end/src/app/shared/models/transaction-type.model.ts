@@ -12,6 +12,7 @@ export abstract class TransactionType {
   abstract componentGroupId: string; // Identifier of transaction component use to render UI form entry page
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
+  negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionType?: TransactionType; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction

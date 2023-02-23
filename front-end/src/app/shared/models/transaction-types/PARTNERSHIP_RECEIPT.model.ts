@@ -14,7 +14,7 @@ export class PARTNERSHIP_RECEIPT extends SchATransactionType {
   override purposeDescriptionLabelNotice =
     'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not require itemization". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
   override generatePurposeDescription(transaction: SchATransaction): string {
-    if (transaction?.children && transaction?.children.length > 0) {
+    if (transaction.children && transaction.children.length > 0) {
       return 'See Partnership Attribution(s) below';
     }
     return 'Partnership attributions do not require itemization';

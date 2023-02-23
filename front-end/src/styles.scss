@@ -130,6 +130,13 @@ label.disabled {
   font-size: 48px;
 }
 
+.form-type-dialog {
+  width: 50%;
+}
+.form-type-dialog p-dropdown {
+  display: flex;
+}
+
 // PRIMENG PANELMENU STYLE OVERRIDE
 
 .menu-item-disabled {

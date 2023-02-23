@@ -75,7 +75,9 @@ import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-
 
 // Schedule B /////////////////////////////////////////////////////
 import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
+import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
 import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
+import { OTHER_DISBURSEMENT_VOID } from '../models/transaction-types/OTHER_DISBURSEMENT_VOID.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -150,14 +152,16 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
   // Schedule B /////////////////////////////////////////////////////
   OPERATING_EXPENDITURE,
+  OPERATING_EXPENDITURE_VOID,
   OTHER_DISBURSEMENT,
+  OTHER_DISBURSEMENT_VOID,
 }
 
 export class TransactionTypeUtils {
   static factory(transactionTypeIdentifier: string): TransactionType {
     const transactionType = getTransactionTypeClass(transactionTypeIdentifier);
     if (!transactionType) {
-      throw new Error(`Class transaction type of '${transactionTypeIdentifier}' is not found`);
+      throw new Error(`Fecfile: Class transaction type of '${transactionTypeIdentifier}' is not found`);
     }
     return new transactionType();
   }

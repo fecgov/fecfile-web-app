@@ -9,6 +9,7 @@ export class PARTY_RETURN extends SchATransactionType {
   componentGroupId = 'E';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_RETURN);
   schema = schema;
+  override negativeAmountValueOnly = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

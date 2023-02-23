@@ -1,12 +1,12 @@
-import { OTHER_DISBURSEMENT } from './OTHER_DISBURSEMENT.model';
+import { OPERATING_EXPENDITURE_VOID } from './OPERATING_EXPENDITURE_VOID.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 
-describe('OTHER_DISBURSEMENT', () => {
-  let transactionType: OTHER_DISBURSEMENT;
+describe('OPERATING_EXPENDITURE_VOID', () => {
+  let transactionType: OPERATING_EXPENDITURE_VOID;
 
   beforeEach(() => {
-    transactionType = new OTHER_DISBURSEMENT();
+    transactionType = new OPERATING_EXPENDITURE_VOID();
   });
 
   it('should create an instance', () => {
@@ -17,8 +17,8 @@ describe('OTHER_DISBURSEMENT', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SB29');
-    expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.OTHER_DISBURSEMENT);
+    expect(txn.form_type).toBe('SB21b');
+    expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID);
   });
 
   it('#generatePurposeDescription() should not be defined', () => {
