@@ -258,12 +258,6 @@ body {
   padding: 0;
   position: relative;
 }
-main[aria-hidden='true'] {
-  display: block !important;
-}
-[aria-hidden='true'] {
-  display: none !important;
-}
 @media print {
   footer,
   nav {
