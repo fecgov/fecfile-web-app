@@ -3,7 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CommitteeLookupResponse, Contact, IndividualLookupResponse, OrganizationLookupResponse } from '../models/contact.model';
+import { JsonSchema } from '../interfaces/json-schema.interface';
+import { CommitteeLookupResponse, Contact, ContactTypes, IndividualLookupResponse, OrganizationLookupResponse } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
@@ -152,6 +153,17 @@ describe('ContactService', () => {
       .organizationLookup(testSearch, testMaxFecfileResults)
       .subscribe((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
+  });
+
+  it('#getSchemaByType should return the correct schema', () => {
+    let schema: JsonSchema = service.getSchemaByType(ContactTypes.COMMITTEE);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Committee.json');
+
+    schema = service.getSchemaByType(ContactTypes.ORGANIZATION);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Organization.json');
+
+    schema = service.getSchemaByType(ContactTypes.CANDIDATE);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Candidate.json');
   });
 
 });

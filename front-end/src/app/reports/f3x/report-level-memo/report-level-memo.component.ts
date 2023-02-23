@@ -1,16 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
-import { ValidateService } from 'app/shared/services/validate.service';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-report-level-memo',
@@ -41,7 +41,6 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
-    protected validateService: ValidateService,
     protected fb: FormBuilder,
     public router: Router,
     public memoTextService: MemoTextService,
@@ -54,11 +53,7 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Intialize FormGroup, this must be done here. Not working when initialized only above the constructor().
-    this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
-
-    // Initialize validation tracking of current JSON schema and form data
-    this.validateService.formValidatorSchema = textSchema;
-    this.validateService.formValidatorForm = this.form;
+    this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
     this.store
       .select(selectCommitteeAccount)
@@ -95,7 +90,7 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
 
     const payload: MemoText = MemoText.fromJSON({
       ...this.assignedMemoText,
-      ...this.validateService.getFormValues(this.form, this.formProperties),
+      ...ValidateUtils.getFormValues(this.form, this.formProperties, textSchema),
     });
     payload.report_id = this.report.id;
 

@@ -3,7 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import { Transaction, ScheduleTransaction } from 'app/shared/models/transaction.model';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
@@ -11,6 +10,7 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -34,7 +34,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
-  childValidateService: ValidateService = new ValidateService();
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
   childPurposeDescriptionLabel = '';
   childNegativeAmountValueOnly = false;
@@ -45,7 +44,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    this.childForm = this.fb.group(this.childValidateService.getFormGroupFields(this.childFormProperties));
+    this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(
+      this.childFormProperties, this.childTransaction, 
+      this.childTransaction?.transactionType?.schema, this.form));
     if (this.transaction?.children) {
       this.childTransaction = this.transaction?.children[0];
       if (this.childTransaction.transactionType?.templateMap) {
@@ -56,7 +57,6 @@ export abstract class DoubleTransactionTypeBaseComponent
       TransactionFormUtils.onInit(
         this,
         this.childForm,
-        this.childValidateService,
         this.childTransaction,
         this.childContactId$
       );
@@ -155,14 +155,12 @@ export abstract class DoubleTransactionTypeBaseComponent
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
-      this.validateService,
       this.form,
       this.formProperties
     );
     payload.children = [
       TransactionFormUtils.getPayloadTransaction(
         this.childTransaction,
-        this.childValidateService,
         this.childForm,
         this.childFormProperties
       ),

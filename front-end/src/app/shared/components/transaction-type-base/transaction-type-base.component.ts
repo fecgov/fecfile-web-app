@@ -6,15 +6,15 @@ import {
   NavigationControl,
   NavigationDestination,
   NavigationEvent,
-  TransactionNavigationControls,
+  TransactionNavigationControls
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { Transaction, ScheduleTransaction, TransactionTypes } from 'app/shared/models/transaction.model';
+import { ScheduleTransaction, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
@@ -44,22 +44,22 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected messageService: MessageService,
     public transactionService: TransactionService,
     protected contactService: ContactService,
-    protected validateService: ValidateService,
     protected confirmationService: ConfirmationService,
     protected fb: FormBuilder,
     protected router: Router,
     protected fecDatePipe: FecDatePipe
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.form = this.fb.group(this.validateService.getFormGroupFields(
-      this.formProperties, this.transaction));
+    this.form = this.fb.group(ValidateUtils.getFormGroupFields(
+      this.formProperties, this.transaction,
+      this.transaction?.transactionType?.schema, this.form));
     if (this.transaction?.transactionType?.templateMap) {
       this.templateMap = this.transaction.transactionType.templateMap;
     } else {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
-    TransactionFormUtils.onInit(this, this.form, this.validateService, this.transaction, this.contactId$);
+    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
     this.parentOnInit();
   }
 
@@ -104,7 +104,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
-      this.validateService,
       this.form,
       this.formProperties
     );

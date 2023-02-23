@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
@@ -45,27 +46,26 @@ export class ContactLookupComponent {
   createContactDialogVisible = false;
   createContactFormSubmitted = false;
   createContactForm: FormGroup = this.formBuilder.group(
-    this.validateService.getFormGroupFields([
+    ValidateUtils.getFormGroupFields([
       ...new Set([
-        ...ValidateService.getSchemaProperties(contactIndividualSchema),
-        ...ValidateService.getSchemaProperties(contactCandidateSchema),
-        ...ValidateService.getSchemaProperties(contactCommitteeSchema),
-        ...ValidateService.getSchemaProperties(contactOrganizationSchema),
+        ...ValidateUtils.getSchemaProperties(contactIndividualSchema),
+        ...ValidateUtils.getSchemaProperties(contactCandidateSchema),
+        ...ValidateUtils.getSchemaProperties(contactCommitteeSchema),
+        ...ValidateUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ])
   );
 
   selectedFecCommitteeAccount: CommitteeAccount | undefined;
 
-  workingValidatorSchema = this.validateService.formValidatorSchema;
-  workingValidatorForm = this.validateService.formValidatorForm;
+  workingValidatorSchema: JsonSchema | undefined;
+  workingValidatorForm: FormGroup | undefined;
 
   constructor(
     private formBuilder: FormBuilder,
-    private validateService: ValidateService,
     private contactService: ContactService,
     private fecApiService: FecApiService
-  ) {}
+  ) { }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onDropdownSearch(event: any) {
@@ -125,18 +125,10 @@ export class ContactLookupComponent {
 
   openCreateContactDialog(value?: CommitteeAccount) {
     this.selectedFecCommitteeAccount = value;
-    // Need these since contact-form sets these for validation
-    this.workingValidatorSchema = this.validateService.formValidatorSchema;
-    this.workingValidatorForm = this.validateService.formValidatorForm;
-
     this.createContactDialogVisible = true;
   }
 
   closeCreateContactDialog() {
-    // Need these since contact-form sets these for validation
-    this.validateService.formValidatorSchema = this.workingValidatorSchema;
-    this.validateService.formValidatorForm = this.workingValidatorForm;
-
     this.createContactDialogVisible = false;
   }
 
@@ -147,7 +139,8 @@ export class ContactLookupComponent {
     }
 
     const createdContact = Contact.fromJSON({
-      ...this.validateService.getFormValues(this.createContactForm),
+      ...ValidateUtils.getFormValues(this.createContactForm,
+        undefined, this.contactTypeFormControl.value),
     });
     this.contactSelect.emit({
       value: createdContact,

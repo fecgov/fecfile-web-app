@@ -1,17 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { MessageService } from 'primeng/api';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
-import { ValidateService } from 'app/shared/services/validate.service';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
+import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
-import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
+import { MessageService } from 'primeng/api';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-submit-f3x-step1',
@@ -34,16 +34,15 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
-  form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
+  form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
   constructor(
     public router: Router,
     private f3xSummaryService: F3xSummaryService,
-    private validateService: ValidateService,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
@@ -60,8 +59,6 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       .subscribe((committeeAccount) => this.setDefaultFormValues(committeeAccount));
 
     // Initialize validation tracking of current JSON schema and form data
-    this.validateService.formValidatorSchema = f3xSchema;
-    this.validateService.formValidatorForm = this.form;
     this.form.controls['confirmation_email_1'].addValidators([
       Validators.required,
       Validators.maxLength(44),
@@ -146,7 +143,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     } else {
       addressFields = {
         change_of_address: true,
-        ...this.validateService.getFormValues(this.form, this.formProperties),
+        ...ValidateUtils.getFormValues(this.form, this.formProperties, f3xSchema),
       };
     }
 

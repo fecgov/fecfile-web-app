@@ -1,0 +1,104 @@
+import { FormBuilder, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
+import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
+import { ValidateUtils } from './validate.utils';
+
+describe('ValidateUtils', () => {
+
+  it('#formValidator should validate properties correctly', () => {
+    const fb: FormBuilder = new FormBuilder();
+    const formValidatorSchema = contactCandidateSchema;
+    const formValidatorForm = fb.group(
+      ValidateUtils.getFormGroupFields(ValidateUtils.getSchemaProperties(contactCandidateSchema))
+    );
+    formValidatorForm.patchValue({
+      telephone: '12345678910',
+      candidate_office: 'S',
+      last_name: 'Valid Name',
+    });
+
+    let validator: ValidatorFn = ValidateUtils.formValidator('telephone',
+      undefined, formValidatorSchema, formValidatorForm);
+    let result: ValidationErrors | null =
+      validator(formValidatorForm.get('telephone') as FormControl);
+    expect(result).not.toBe(null);
+    if (result) {
+      expect(result['pattern'].requiredPattern).toBe('^\\+\\d{1,3} \\d{10}$');
+    }
+
+    validator = ValidateUtils.formValidator('candidate_state',
+      undefined, formValidatorSchema, formValidatorForm);
+    result = validator(formValidatorForm.get('candidate_state') as FormControl);
+    expect(result).not.toBe(null);
+    if (result) {
+      expect(result['required']).toBe(true);
+    }
+
+    validator = ValidateUtils.formValidator('last_name',
+      undefined, formValidatorSchema, formValidatorForm);
+    result = validator(formValidatorForm.get('last_name') as FormControl);
+    expect(result).toBe(null);
+  });
+
+  it('#formValidator should validate boolean properties correctly', () => {
+    const fb: FormBuilder = new FormBuilder();
+    const formValidatorSchema = f3xSchema;
+    const formValidatorForm = fb.group(ValidateUtils.getFormGroupFields(
+      ValidateUtils.getSchemaProperties(f3xSchema)));
+    formValidatorForm.patchValue({
+      change_of_address: 'A',
+    });
+
+    let validator: ValidatorFn = ValidateUtils.formValidator('change_of_address',
+      undefined, formValidatorSchema, formValidatorForm);
+    let result: ValidationErrors | null = validator(
+      formValidatorForm.get('change_of_address') as FormControl);
+    expect(result).not.toBe(null);
+    if (result) {
+      expect(result['pattern'].requiredPattern).toBe('must be boolean,null');
+    }
+
+    formValidatorForm.patchValue({
+      change_of_address: true,
+    });
+    validator = ValidateUtils.formValidator('change_of_address',
+      undefined, formValidatorSchema, formValidatorForm);
+    result = validator(formValidatorForm.get('change_of_address') as FormControl);
+    expect(result).toBe(null);
+  });
+
+  it('#formValidator should validate min/max numeric properties correctly', () => {
+    const fb: FormBuilder = new FormBuilder();
+    const formValidatorSchema = f3xSchema;
+    const formValidatorForm = fb.group(ValidateUtils.getFormGroupFields(
+      ValidateUtils.getSchemaProperties(f3xSchema)));
+    formValidatorForm.patchValue({
+      L6a_cash_on_hand_jan_1_ytd: 1000000000.0,
+    });
+
+    let validator: ValidatorFn = ValidateUtils.formValidator('L6a_cash_on_hand_jan_1_ytd',
+      undefined, formValidatorSchema, formValidatorForm);
+    let result: ValidationErrors | null = validator(
+      formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as FormControl
+    );
+    expect(result).not.toEqual(null);
+    if (result) {
+      expect(result['max'].max).toBe(999999999.99);
+    }
+
+    formValidatorForm.patchValue({
+      L6a_cash_on_hand_jan_1_ytd: -200.0,
+    });
+    validator = ValidateUtils.formValidator('L6a_cash_on_hand_jan_1_ytd',
+      undefined, formValidatorSchema, formValidatorForm);
+    result = validator(formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as FormControl);
+    if (result) {
+      expect(result['min'].min).toBe(0);
+    }
+  });
+
+  it('#getSchemaProperties() should return empty array when no schema', () => {
+    const properties: string[] = ValidateUtils.getSchemaProperties(undefined);
+    expect(properties.length).toBe(0);
+  });
+});

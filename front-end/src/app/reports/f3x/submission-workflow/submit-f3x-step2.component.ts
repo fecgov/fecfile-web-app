@@ -1,20 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
-import { selectActiveReport } from 'app/store/active-report.selectors';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
-import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
-import { ValidateService } from 'app/shared/services/validate.service';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
+import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ApiService } from 'app/shared/services/api.service';
+import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
+import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
 
 @Component({
@@ -37,7 +37,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
-  form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
+  form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
   loading: 0 | 1 | 2 = 0;
   cashOnHand: CashOnHand = {
     report_id: undefined,
@@ -47,14 +47,13 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   constructor(
     public router: Router,
     private f3xSummaryService: F3xSummaryService,
-    private validateService: ValidateService,
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService,
     protected confirmationService: ConfirmationService,
     private apiService: ApiService,
     private reportService: ReportService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
@@ -76,9 +75,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       .subscribe((cashOnHand: CashOnHand) => (this.cashOnHand = cashOnHand));
 
     // Initialize validation tracking of current JSON schema and form data
-    this.validateService.formValidatorSchema = f3xSchema;
-    this.validateService.formValidatorForm = this.form;
-    this.form.controls['filing_password'].addValidators(this.validateService.passwordValidator());
+    this.form.controls['filing_password'].addValidators(ValidateUtils.passwordValidator());
     this.form.controls['truth_statement'].addValidators(Validators.requiredTrue);
   }
 
@@ -167,7 +164,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     this.loading = 1;
     const payload: F3xSummary = F3xSummary.fromJSON({
       ...this.report,
-      ...this.validateService.getFormValues(this.form, this.formProperties),
+      ...ValidateUtils.getFormValues(this.form, this.formProperties, f3xSchema),
     });
 
     return this.f3xSummaryService.update(payload, this.formProperties);

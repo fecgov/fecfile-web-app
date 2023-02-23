@@ -2,7 +2,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
-import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { CandidateOfficeTypes, ContactTypes } from 'app/shared/models/contact.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
@@ -77,17 +76,6 @@ describe('ContactFormComponent', () => {
     });
     expect(component.form.get('country')?.value).toBe('CANADA');
     expect(component.form.get('state')?.value).toBe('ZZ');
-  });
-
-  it('#getSchemaByType should return the correct schema', () => {
-    let schema: JsonSchema = component['getSchemaByType'](ContactTypes.COMMITTEE);
-    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Committee.json');
-
-    schema = component['getSchemaByType'](ContactTypes.ORGANIZATION);
-    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Organization.json');
-
-    schema = component['getSchemaByType'](ContactTypes.CANDIDATE);
-    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Candidate.json');
   });
 
 });

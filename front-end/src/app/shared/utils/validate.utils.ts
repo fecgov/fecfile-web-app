@@ -1,25 +1,10 @@
-import { Injectable } from '@angular/core';
 import { FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { validate, ValidationError } from 'fecfile-validate';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { Transaction } from '../models/transaction.model';
-import { DateUtils } from '../utils/date.utils';
+import { DateUtils } from './date.utils';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ValidateService {
-  /**
-   * @property - This property is a placeholder for the schema to use in the form element
-   * custom validator located in the method formValidator() below.
-   */
-  formValidatorSchema: JsonSchema | undefined;
-
-  /**
-   * @property - This property is a placeholder for the ng reactive form to use in the form
-   * element custom validator located in the method formValidator() below.
-   */
-  formValidatorForm: FormGroup | undefined;
+export class ValidateUtils {
 
   /**
    * Validate a data object against a JSON Schema document
@@ -29,7 +14,7 @@ export class ValidateService {
    * @returns {ValidationError[]} array of validation errors if any
    */
   // prettier-ignore
-  validate(schema: JsonSchema, data: any, fieldsToValidate: string[] = []): ValidationError[] { // eslint-disable-line @typescript-eslint/no-explicit-any
+  static validate(schema: JsonSchema, data: any, fieldsToValidate: string[] = []): ValidationError[] { // eslint-disable-line @typescript-eslint/no-explicit-any
     return validate(schema, data, fieldsToValidate);
   }
 
@@ -51,9 +36,12 @@ export class ValidateService {
    * @param {string[]} properties
    * @returns data structure to pass to the FormBuilder group() method
    */
-  getFormGroupFields(properties: string[], transaction?: Transaction) {
+  static getFormGroupFields(properties: string[], transaction?: Transaction,
+    formValidatorSchema?: JsonSchema, formValidatorForm?: FormGroup<any>) {
     const group: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-    properties.forEach((property) => (group[property] = ['', [this.formValidator(property, transaction)]]));
+    properties.forEach((property) => (group[property] = ['',
+      [ValidateUtils.formValidator(property, transaction,
+        formValidatorSchema, formValidatorForm)]]));
     return group;
   }
 
@@ -61,20 +49,22 @@ export class ValidateService {
    *
    * @param {FormGroup} form
    * @param {string[]} propertiesSubset - Only get values for the listed subset of schema parameters.
+   * @param {JsonSchema} formValidatorSchema - the schema to use in the form element custom validator.
    * @returns object containing the form property values limited to the current validation schema
    * This method will 'null' any schema values that do not have a form value and, more importantly,
    * set those form fields with an empty '' value to null for the backend. It will also convert
    * strings to number types when necessary.
    */
-  getFormValues(form: FormGroup, propertiesSubset: string[] = []) {
+  static getFormValues(form: FormGroup, propertiesSubset: string[] = [],
+    formValidatorSchema?: JsonSchema) {
     const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
 
-    if (this.formValidatorSchema) {
-      ValidateService.getSchemaProperties(this.formValidatorSchema).forEach((property: string) => {
+    if (formValidatorSchema) {
+      ValidateUtils.getSchemaProperties(formValidatorSchema).forEach((property: string) => {
         if (propertiesSubset.length > 0 && !propertiesSubset.includes(property)) {
           return;
         }
-        formValues[property] = this.getPropertyValue(property, form);
+        formValues[property] = ValidateUtils.getPropertyValue(property, form);
       });
     }
 
@@ -87,7 +77,7 @@ export class ValidateService {
    * This method returns "non-form" values that may be required
    * for validation of form fields.
    */
-  getNonFormValues(transaction?: Transaction) {
+  static getNonFormValues(transaction?: Transaction) {
     const values: any = {};
     if (transaction) {
       values['transaction_type_identifier'] =
@@ -100,9 +90,11 @@ export class ValidateService {
    * Convert the form input value to the appropriate type.
    * @param {string} property
    * @param {FromGroup} form
+   * @param {JsonSchema} formValidatorSchema - the schema to use in the form element custom validator.
    * @returns
    */
-  private getPropertyValue(property: string, form: FormGroup) {
+  private static getPropertyValue(property: string, form: FormGroup,
+    formValidatorSchema?: JsonSchema) {
     // Undefined and empty strings are set to null.
     if (
       form?.get(property)?.value === undefined ||
@@ -114,9 +106,9 @@ export class ValidateService {
 
     // Convert a string to number if expected in the schema.
     if (
-      (Array.isArray(this.formValidatorSchema?.properties[property].type) &&
-        this.formValidatorSchema?.properties[property].type.includes('number')) ||
-      this.formValidatorSchema?.properties[property].type === 'number'
+      (Array.isArray(formValidatorSchema?.properties[property].type) &&
+        formValidatorSchema?.properties[property].type.includes('number')) ||
+      formValidatorSchema?.properties[property].type === 'number'
     ) {
       return Number(form?.get(property)?.value);
     }
@@ -134,19 +126,30 @@ export class ValidateService {
    * ng validator function for reactive forms. Provides validation based on the
    * JSON schema and form in the formValidationSchema and formValidationForm properties
    * @param {string} property - name of form property to validate
+   * @param {Transaction} transaction - Transaction (if any) associated with the property passed in.
+   * @param {JsonSchema} formValidatorSchema - the schema to use in the form element custom validator.
+   * @param {FormGroup} formValidatorForm - the ng reactive form to use in the form element custom 
+   * validator
    * @returns {ValidationErrors | undefined}
    */
-  formValidator(property: string, transaction?: Transaction): ValidatorFn {
+  static formValidator(property: string, transaction?: Transaction,
+    formValidatorSchema?: JsonSchema, formValidatorForm?: FormGroup): ValidatorFn {
     return (): ValidationErrors | null => {
-      if (!this.formValidatorSchema || !this.formValidatorForm) {
+      if (!formValidatorSchema || !formValidatorForm) {
         return null;
       }
       const data = {
-        ...this.getFormValues(this.formValidatorForm),
-        ...this.getNonFormValues(transaction)
+        ...ValidateUtils.getFormValues(formValidatorForm),
+        ...ValidateUtils.getNonFormValues(transaction)
       }
-      const errors: ValidationError[] = this.validate(
-        this.formValidatorSchema,
+      if (data['contributor_state'] === 'not-valid') {
+        console.log('hi3');
+      }
+      if (data['transaction_type_identifier'] === 'INDIVIDUAL_RECEIPT') {
+        console.log('hi4');
+      }
+      const errors: ValidationError[] = ValidateUtils.validate(
+        formValidatorSchema,
         data,
         [property]
       );
@@ -185,9 +188,9 @@ export class ValidateService {
           }
           if (error.keyword === 'type' && error.params['type'] === 'number') {
             if (
-              this.formValidatorForm?.get(error.path)?.value === '' ||
-              this.formValidatorForm?.get(error.path)?.value === null ||
-              this.formValidatorForm?.get(error.path)?.value === undefined
+              formValidatorForm?.get(error.path)?.value === '' ||
+              formValidatorForm?.get(error.path)?.value === null ||
+              formValidatorForm?.get(error.path)?.value === undefined
             ) {
               result['required'] = true;
             } else {
@@ -205,7 +208,7 @@ export class ValidateService {
     };
   }
 
-  passwordValidator(): ValidatorFn | ValidatorFn[] {
+  static passwordValidator(): ValidatorFn | ValidatorFn[] {
     const v = Validators.compose([
       Validators.required,
       Validators.minLength(8),

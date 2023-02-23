@@ -1,14 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
-import { ValidateService } from 'app/shared/services/validate.service';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
 
 import { ErrorMessagesComponent } from './error-messages.component';
 
 describe('ErrorMessagesComponent', () => {
   let component: ErrorMessagesComponent;
   let fixture: ComponentFixture<ErrorMessagesComponent>;
-  let validateService: ValidateService;
 
   const testSchema: JsonSchema = {
     $schema: 'http://json-schema.org/draft-07/schema#',
@@ -41,12 +40,10 @@ describe('ErrorMessagesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ErrorMessagesComponent],
-      providers: [ValidateService],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    validateService = TestBed.inject(ValidateService);
     fixture = TestBed.createComponent(ErrorMessagesComponent);
     component = fixture.componentInstance;
 
@@ -58,12 +55,13 @@ describe('ErrorMessagesComponent', () => {
   });
 
   it('should provide default error messages', () => {
-    validateService.formValidatorSchema = testSchema;
+    const formValidatorSchema = testSchema;
     const fb: FormBuilder = new FormBuilder();
-    validateService.formValidatorForm = fb.group(
-      validateService.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount'])
+    const formValidatorForm = fb.group(
+      ValidateUtils.getFormGroupFields(['in_between', 
+      'low_high', 'exclusive_low_high', 'exclusive_negative_amount'])
     );
-    component.form = validateService.formValidatorForm;
+    component.form = formValidatorForm;
     component.fieldName = 'in_between';
     component.ngOnInit();
     component.form.patchValue({ in_between: 'short' });
@@ -88,10 +86,10 @@ describe('ErrorMessagesComponent', () => {
 
   it('should present a unique error message when a negative contribution amount is required', () => {
     //This has to be done separately because a new exclusiveMaxErrorMessage has to be generated
-    validateService.formValidatorSchema = testSchema;
+    const formValidatorSchema = testSchema;
     const fb: FormBuilder = new FormBuilder();
-    validateService.formValidatorForm = fb.group(validateService.getFormGroupFields(['exclusive_negative_amount']));
-    component.form = validateService.formValidatorForm;
+    const formValidatorForm = fb.group(ValidateUtils.getFormGroupFields(['exclusive_negative_amount']));
+    component.form = formValidatorForm;
     component.fieldName = 'exclusive_negative_amount';
     component.ngOnInit();
     component.form.patchValue({ exclusive_negative_amount: 1 });
