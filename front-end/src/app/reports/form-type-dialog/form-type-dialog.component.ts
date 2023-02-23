@@ -5,7 +5,6 @@ import { FormType, FORM_TYPES, FormTypes } from 'app/shared/utils/form-type.util
 @Component({
   selector: 'app-form-type-dialog',
   templateUrl: './form-type-dialog.component.html',
-  styleUrls: ['./form-type-dialog.component.scss'],
 })
 export class FormTypeDialogComponent {
   @Input() visible = false;
