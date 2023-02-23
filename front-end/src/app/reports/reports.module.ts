@@ -9,6 +9,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ListboxModule } from 'primeng/listbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -64,6 +66,8 @@ import { DialogModule } from 'primeng/dialog';
     DividerModule,
     DialogModule,
     DropdownModule,
+    OverlayPanelModule,
+    ListboxModule,
     RadioButtonModule,
     CheckboxModule,
     InputTextModule,
