@@ -11,7 +11,7 @@ describe('OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('B');
+    expect(transactionType.componentGroupId).toBe('A');
   });
 
   it('#factory() should return a SchBTransaction', () => {
