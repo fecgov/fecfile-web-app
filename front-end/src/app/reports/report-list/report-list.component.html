@@ -59,7 +59,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
-        <td>{{ item.form_type | label: f3xFormTypeLabels }}</td>
+        <td>{{ item.form_type | label : f3xFormTypeLabels }}</td>
         <td>{{ item.report_code_label }}</td>
         <td>
           <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
@@ -67,7 +67,7 @@
           >
         </td>
         <td>{{ item.report_status }}</td>
-        <td>{{ item.form_type | label: f3xFormVerionLabels }}</td>
+        <td>{{ item.form_type | label : f3xFormVerionLabels }}</td>
         <td>{{ item.upload_submission?.created | fecDate }}</td>
         <td>
           <p-button
@@ -89,3 +89,5 @@
     </ng-template>
   </p-table>
 </div>
+
+<app-form-type-dialog [visible]="detailVisible"></app-form-type-dialog>

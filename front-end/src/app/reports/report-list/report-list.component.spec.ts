@@ -41,12 +41,6 @@ describe('ReportListComponent', () => {
     expect(item.id).toBe(undefined);
   });
 
-  it('#addItem should route properly', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.addItem();
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
-  });
-
   it('#editItem should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
 
