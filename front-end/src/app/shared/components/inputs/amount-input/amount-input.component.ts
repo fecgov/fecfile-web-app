@@ -13,18 +13,18 @@ import { ConfirmationService } from 'primeng/api';
 })
 export class AmountInputComponent extends BaseInputComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() memoCodeReadOnly = false;
-  @Input() contributionAmountReadOnly = false;
-  @Input() memoItemHelpText =
+  @Input() amountReadOnly = false;
+  @Input() memoCodeHelpText =
     'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   @Input() negativeAmountValueOnly = false;
 
   @ViewChild('amountInput') amountInput!: InputNumber;
-  @ViewChild('memoItem', { read: ElementRef }) memoItem!: ElementRef;
+  @ViewChild('memoCode', { read: ElementRef }) memoCode!: ElementRef;
 
   defaultMemoCodeReadOnly = false; // True if the memo code is readonly at all times
-  defaultMemoItemHelpText = this.memoItemHelpText; // Original default value of the memo item help text
+  defaultMemoCodeHelpText = this.memoCodeHelpText; // Original default value of the memo item help text
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
-  contributionAmountInputStyleClass = '';
+  amountInputStyleClass = '';
   report?: F3xSummary;
   destroy$: Subject<boolean> = new Subject<boolean>();
   unlistener!: () => void;
@@ -34,37 +34,33 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   }
 
   ngOnInit(): void {
-    if (this.contributionAmountReadOnly) {
-      this.contributionAmountInputStyleClass = 'readonly';
+    if (this.amountReadOnly) {
+      this.amountInputStyleClass = 'readonly';
     }
 
     // These property records if the memo code is supposed to be readonly at all times
     this.defaultMemoCodeReadOnly = this.memoCodeReadOnly;
 
     // This property records the default value of the memo item help text
-    this.defaultMemoItemHelpText = this.memoItemHelpText;
+    this.defaultMemoCodeHelpText = this.memoCodeHelpText;
 
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => {
         this.report = report as F3xSummary;
-        // const date: Date = this.form.get(this.templateMap.date)?.value;
-        // if (date) {
-        //   this.updateMemoItemWithDate(date);
-        // }
       });
 
     this.form
       .get(this.templateMap.date)
       ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((date) => {
+      .subscribe((date: Date) => {
         this.updateMemoItemWithDate(date);
       });
   }
 
   ngAfterViewInit(): void {
-    this.unlistener = this.renderer2.listen(this.memoItem.nativeElement, 'click', this.onMemoItemClick.bind(this));
+    this.unlistener = this.renderer2.listen(this.memoCode.nativeElement, 'click', this.onMemoItemClick.bind(this));
   }
 
   ngOnDestroy(): void {
@@ -99,7 +95,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     if (this.report?.coverage_from_date && this.report?.coverage_through_date) {
       if (date < this.report.coverage_from_date || date > this.report.coverage_through_date) {
         this.memoCodeReadOnly = true;
-        this.memoItemHelpText =
+        this.memoCodeHelpText =
           'Memo item is required since your transaction date falls outside of report coverage dates';
         this.dateIsOutsideReport = true;
         this.form.patchValue({
@@ -107,7 +103,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
         });
       } else {
         this.memoCodeReadOnly = false;
-        this.memoItemHelpText = this.defaultMemoItemHelpText;
+        this.memoCodeHelpText = this.defaultMemoCodeHelpText;
         this.dateIsOutsideReport = false;
         this.form.patchValue({
           memo_code: false,

@@ -16,7 +16,7 @@
     <div class="col-12">
       <div class="field" [ngClass]="{ readonly: memoCodeReadOnly }">
         <p-checkbox
-          #memoItem
+          #memoCode
           [binary]="true"
           inputId="memo_code"
           [formControlName]="templateMap['memo_code']"
@@ -27,7 +27,7 @@
           [readonly]="memoCodeReadOnly"
         ></p-checkbox>
         <div class="memo-checkbox-note">
-          {{ memoItemHelpText }}
+          {{ memoCodeHelpText }}
         </div>
       </div>
     </div>
@@ -43,8 +43,8 @@
           mode="currency"
           currency="USD"
           locale="en-US"
-          [readonly]="contributionAmountReadOnly"
-          inputStyleClass="{{ contributionAmountInputStyleClass }}"
+          [readonly]="amountReadOnly"
+          inputStyleClass="{{ amountInputStyleClass }}"
           (onInput)="onInputAmount($event)"
         ></p-inputNumber>
         <app-error-messages

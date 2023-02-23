@@ -34,7 +34,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   destroy$: Subject<boolean> = new Subject<boolean>();
   contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
-  memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
+  memoCodeHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   purposeDescriptionLabel = '';
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
 
