@@ -44,8 +44,6 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
         'payee_city',
         'payee_state',
         'payee_zip',
-        'payee_employer',
-        'payee_occupation',
         'expenditure_date',
         'expenditure_amount',
         'aggregate_amount',
