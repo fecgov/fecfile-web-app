@@ -282,7 +282,16 @@ label.disabled {
 }
 
 .action-options {
+  &:before {
+      content:none !important;
+  }
+
+  &:after {
+      content:none !important;
+  }
+
   padding: 0;
+  margin-top: 0px !important;
 }
 .action-options .p-overlaypanel-content {
   padding: .5em;
