@@ -1,9 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { map, Observable, of, switchMap } from 'rxjs';
-import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from 'app/shared/models/fec-api.model';
+import { map, Observable, of, switchMap } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { Candidate } from '../models/candidate.model';
+import { CommitteeAccount } from '../models/committee-account.model';
 import { FecFiling } from '../models/fec-filing.model';
 
 export type QueryParamsType = { [param: string]: string | number | boolean | readonly (string | number | boolean)[] };
@@ -14,7 +15,7 @@ export type QueryParamsType = { [param: string]: string | number | boolean | rea
 export class FecApiService {
   private apiKey: string | null = environment.fecApiKey;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getHeaders() {
     return {
@@ -28,13 +29,33 @@ export class FecApiService {
   }
 
   /**
+   * Gets the candidate details.
+   *
+   * @return     {Observable}  The candidate details.
+   */
+  public getCandidateDetails(candidateId: string | null): Observable<Candidate> {
+    if (!candidateId) {
+      throw new Error('Fecfile: No Candidate Id provided in getCandidateDetails()');
+    }
+    const headers = this.getHeaders();
+    const params = this.getQueryParams();
+    return this.http
+      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}candidate/${candidateId}/`, {
+        headers: headers,
+        params: params,
+      })
+      .pipe(map((response: FecApiPaginatedResponse) => (response.results[0] as Candidate) || undefined));
+  }
+
+
+  /**
    * Gets the commitee account details.
    *
    * @return     {Observable}  The commitee details.
    */
-  public getDetails(committeeId: string | null): Observable<CommitteeAccount> {
+  public getCommitteeDetails(committeeId: string | null): Observable<CommitteeAccount> {
     if (!committeeId) {
-      throw new Error('Fecfile: No Committee Id provided in getDetails()');
+      throw new Error('Fecfile: No Committee Id provided in getCommitteeDetails()');
     }
     const headers = this.getHeaders();
     const params = this.getQueryParams();

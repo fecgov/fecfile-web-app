@@ -8,14 +8,13 @@
       <div class="col-12">
         <div class="field">
           <label for="entity_type">CONTACT TYPE</label>
-          <app-contact-lookup
+          <app-transaction-contact-lookup
             [contactTypeFormControl]="$any(form).controls['entity_type']"
             [contactTypeOptions]="contactTypeOptions"
             [contactTypeReadOnly]="true"
-            contactTypeStyleClass="readonly"
             (contactSelect)="onContactLookupSelect($event)"
           >
-          </app-contact-lookup>
+          </app-transaction-contact-lookup>
         </div>
       </div>
     </div>

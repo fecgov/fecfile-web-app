@@ -5,6 +5,7 @@ import { FecApiPaginatedResponse } from 'app/shared/models/fec-api.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { environment } from 'environments/environment';
 import { FecFiling } from '../models/fec-filing.model';
+import { Candidate } from '../models/candidate.model';
 
 describe('FecApiService', () => {
   let httpTestingController: HttpTestingController;
@@ -22,7 +23,34 @@ describe('FecApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('#getDetails()', () => {
+  describe('#getCandidateDetails()', () => {
+    it('should return candidate details', () => {
+      const candidate: Candidate = new Candidate();
+      const response: FecApiPaginatedResponse = {
+        api_version: '1.0',
+        pagination: {
+          page: 1,
+          per_page: 20,
+          count: 1,
+          pages: 1,
+        },
+        results: [candidate],
+      };
+
+      service.getCandidateDetails('P12345678').subscribe((candidateData) => {
+        expect(candidateData).toEqual(candidate);
+      });
+
+      const req = httpTestingController.expectOne(
+        'https://api.open.fec.gov/v1/candidate/P12345678/?api_key=' + environment.fecApiKey
+      );
+
+      expect(req.request.method).toEqual('GET');
+      req.flush(response);
+    });
+  });
+
+  describe('#getCommitteeDetails()', () => {
     it('should return committee details', () => {
       const committeeAccount: CommitteeAccount = new CommitteeAccount();
       const response: FecApiPaginatedResponse = {
@@ -36,7 +64,7 @@ describe('FecApiService', () => {
         results: [committeeAccount],
       };
 
-      service.getDetails('C00601211').subscribe((committeeAccountData) => {
+      service.getCommitteeDetails('C00601211').subscribe((committeeAccountData) => {
         expect(committeeAccountData).toEqual(committeeAccount);
       });
 
