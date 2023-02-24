@@ -1,25 +1,25 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { TransactionType } from '../../shared/models/transaction-types/transaction-type.model';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../../store/committee-account.selectors';
 import { CommitteeAccount } from '../../shared/models/committee-account.model';
 import { Title } from '@angular/platform-browser';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-transaction-container',
   templateUrl: './transaction-container.component.html',
 })
 export class TransactionContainerComponent implements OnInit, OnDestroy {
-  transactionType: TransactionType | undefined;
+  transaction: Transaction | undefined;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store, private titleService: Title) {
     activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      this.transactionType = data['transactionType'];
-      if (this.transactionType) {
-        const title = this.transactionType['title'];
+      this.transaction = data['transaction'];
+      if (this.transaction) {
+        const title: string = this.transaction.transactionType?.title || '';
         this.titleService.setTitle(title);
       }
     });
@@ -30,12 +30,11 @@ export class TransactionContainerComponent implements OnInit, OnDestroy {
       .select(selectCommitteeAccount)
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount: CommitteeAccount) => {
-        if (this.transactionType?.transaction) {
-          this.transactionType.transaction.filer_committee_id_number = committeeAccount.committee_id;
+        if (this.transaction) {
+          this.transaction.filer_committee_id_number = committeeAccount.committee_id;
         }
-        if (this.transactionType?.childTransactionType?.transaction) {
-          this.transactionType.childTransactionType.transaction.filer_committee_id_number =
-            committeeAccount.committee_id;
+        if (this.transaction?.transactionType?.dependentChildTransactionType && this.transaction.children) {
+          this.transaction.children[0].filer_committee_id_number = committeeAccount.committee_id;
         }
       });
   }

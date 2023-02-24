@@ -1,25 +1,22 @@
 <div [formGroup]="form">
   <div class="grid">
     <div class="col-12">
-      <label for="contribution_purpose_descrip">
-        CONTRIBUTION PURPOSE DESCRIPTION {{ contributionPurposeDescriptionLabel }}
-      </label>
+      <label for="purpose_description"> {{ templateMap['purposeDescripLabel'] }} {{ purposeDescriptionLabel }} </label>
       <em *ngIf="purposeDescriptionLabelNotice">{{ purposeDescriptionLabelNotice }}</em>
       <div>
         <textarea
-          id="contribution_purpose_descrip"
+          id="purpose_description"
           [rows]="4"
           [cols]="30"
           pInputTextarea
-          [disabled]="true"
           [autoResize]="true"
-          formControlName="contribution_purpose_descrip"
+          [formControlName]="templateMap['purpose_description']"
           [ngClass]="{ readonly: descriptionIsSystemGenerated }"
           [readonly]="descriptionIsSystemGenerated"
         ></textarea>
         <app-error-messages
           [form]="form"
-          fieldName="contribution_purpose_descrip"
+          [fieldName]="templateMap['purpose_description']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -35,11 +32,33 @@
           [cols]="30"
           pInputTextarea
           [autoResize]="true"
-          formControlName="memo_text_input"
+          [formControlName]="templateMap['memo_text_input']"
         ></textarea>
         <app-error-messages
           [form]="form"
-          fieldName="memo_text_input"
+          [fieldName]="templateMap['memo_text_input']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+  <div class="grid" *ngIf="templateMap['category_code']">
+    <div class="col-6">
+      <div class="field">
+        <label for="category_code">CATEGORY CODE (OPTIONAL)</label>
+        <p-dropdown
+          inputId="category_code"
+          [formControlName]="templateMap['category_code']"
+          [options]="categoryCodeOptions"
+          optionLabel="name"
+          optionValue="code"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+          [showClear]="true"
+        ></p-dropdown>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['category_code']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

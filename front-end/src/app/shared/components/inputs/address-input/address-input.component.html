@@ -2,22 +2,22 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="contributor_street_1">STREET ADDRESS</label>
-        <input type="text" pInputText id="contributor_street_1" formControlName="contributor_street_1" />
+        <label for="street_1">STREET ADDRESS</label>
+        <input type="text" pInputText id="street_1" [formControlName]="templateMap['street_1']" />
         <app-error-messages
           [form]="form"
-          fieldName="contributor_street_1"
+          [fieldName]="templateMap['street_1']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-6">
       <div class="field">
-        <label for="contributor_street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
-        <input type="text" pInputText id="contributor_street_2" formControlName="contributor_street_2" />
+        <label for="street_2">APARTMENT, SUITE, ETC. (OPTIONAL)</label>
+        <input type="text" pInputText id="street_2" [formControlName]="templateMap['street_2']" />
         <app-error-messages
           [form]="form"
-          fieldName="contributor_street_2"
+          [fieldName]="templateMap['street_2']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -26,21 +26,21 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="contributor_city">CITY</label>
-        <input type="text" pInputText id="contributor_city" formControlName="contributor_city" />
+        <label for="city">CITY</label>
+        <input type="text" pInputText id="city" [formControlName]="templateMap['city']" />
         <app-error-messages
           [form]="form"
-          fieldName="contributor_city"
+          [fieldName]="templateMap['city']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-3">
       <div class="field">
-        <label for="contributor_state">STATE/PROVINCE</label>
+        <label for="state">STATE/PROVINCE</label>
         <p-dropdown
-          inputId="contributor_state"
-          formControlName="contributor_state"
+          inputId="state"
+          [formControlName]="templateMap['state']"
           [options]="stateOptions"
           optionLabel="name"
           optionValue="code"
@@ -49,18 +49,18 @@
         ></p-dropdown>
         <app-error-messages
           [form]="form"
-          fieldName="contributor_state"
+          [fieldName]="templateMap['state']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
     </div>
     <div class="col-3">
       <div class="field">
-        <label for="contributor_zip">ZIP/POSTAL CODE</label>
-        <input type="text" pInputText id="contributor_zip" formControlName="contributor_zip" />
+        <label for="zip">ZIP/POSTAL CODE</label>
+        <input type="text" pInputText id="zip" [formControlName]="templateMap['zip']" />
         <app-error-messages
           [form]="form"
-          fieldName="contributor_zip"
+          [fieldName]="templateMap['zip']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

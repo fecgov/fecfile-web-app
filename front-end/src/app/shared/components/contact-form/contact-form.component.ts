@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { FecApiService } from 'app/shared/services/fec-api.service';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
@@ -10,8 +11,12 @@ import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_va
 import { Subject, takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypeLabels,
-  CandidateOfficeTypes, ContactTypeLabels,
-  ContactTypes
+  CandidateOfficeTypes,
+  Contact,
+  ContactTypeLabels,
+  ContactTypes,
+  FecApiCandidateLookupData,
+  FecApiCommitteeLookupData
 } from '../../models/contact.model';
 
 @Component({
@@ -22,14 +27,16 @@ export class ContactFormComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup = this.fb.group(
     this.validateService.getFormGroupFields([
       ...new Set([
-        ...this.validateService.getSchemaProperties(contactIndividualSchema),
-        ...this.validateService.getSchemaProperties(contactCandidateSchema),
-        ...this.validateService.getSchemaProperties(contactCommitteeSchema),
-        ...this.validateService.getSchemaProperties(contactOrganizationSchema),
+        ...ValidateService.getSchemaProperties(contactIndividualSchema),
+        ...ValidateService.getSchemaProperties(contactCandidateSchema),
+        ...ValidateService.getSchemaProperties(contactCommitteeSchema),
+        ...ValidateService.getSchemaProperties(contactOrganizationSchema),
       ]),
     ])
   );
   @Input() formSubmitted = false;
+
+  contactTypeFormControl: FormControl = new FormControl();
 
   private destroy$: Subject<boolean> = new Subject();
 
@@ -43,7 +50,8 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private validateService: ValidateService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private fecApiService: FecApiService
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +65,8 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     this.validateService.formValidatorSchema = contactIndividualSchema;
     this.validateService.formValidatorForm = this.form;
 
+    this.contactTypeFormControl = this.form?.get('type') as FormControl || new FormControl();
+
     this.form
       ?.get('type')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -66,7 +76,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
         // Clear out non-schema form values
         const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-        const schemaProperties: string[] = this.validateService.getSchemaProperties(
+        const schemaProperties: string[] = ValidateService.getSchemaProperties(
           this.validateService.formValidatorSchema
         );
         Object.keys(this.form.controls).forEach((property: string) => {
@@ -147,6 +157,99 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     return CandidateOfficeTypes;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onContactLookupSelect(event: any) {
+    if (event && event.value) {
+      if (event.value instanceof Contact) {
+        this.onContactSelect(event.value);
+      } else if (event.value instanceof FecApiCandidateLookupData) {
+        this.onFecApiCandidateLookupDataSelect(event.value);
+      } else if (event.value instanceof FecApiCommitteeLookupData) {
+        this.onFecApiCommitteeLookupDataSelect(event.value);
+      }
+    }
+  }
+
+  onContactSelect(contact: Contact) {
+    if (contact) {
+      switch (contact.type) {
+        case ContactTypes.CANDIDATE:
+          this.form.get('type')?.setValue(contact.type);
+          this.form.get('candidate_id')?.setValue(contact.candidate_id);
+          this.form.get('last_name')?.setValue(contact.last_name);
+          this.form.get('first_name')?.setValue(contact.first_name);
+          this.form.get('middle_name')?.setValue(contact.middle_name);
+          this.form.get('prefix')?.setValue(contact.prefix);
+          this.form.get('suffix')?.setValue(contact.suffix);
+          this.form.get('employer')?.setValue(contact.employer);
+          this.form.get('occupation')?.setValue(contact.occupation);
+          this.form.get('candidate_office')?.setValue(contact.candidate_office);
+          this.form.get('candidate_state')?.setValue(contact.candidate_state);
+          this.form.get('candidate_district')?.setValue(contact.candidate_district);
+          break;
+        case ContactTypes.COMMITTEE:
+          this.form.get('type')?.setValue(contact.type);
+          this.form.get('committee_id')?.setValue(contact.committee_id);
+          this.form.get('name')?.setValue(contact.name);
+          break;
+      }
+      this.form.get('country')?.setValue(contact.country);
+      this.form.get('street_1')?.setValue(contact.street_1);
+      this.form.get('street_2')?.setValue(contact.street_2);
+      this.form.get('city')?.setValue(contact.city);
+      this.form.get('state')?.setValue(contact.state);
+      this.form.get('zip')?.setValue(contact.zip);
+      this.form.get('telephone')?.setValue(contact.telephone);
+    }
+  }
+
+  onFecApiCandidateLookupDataSelect(data: FecApiCandidateLookupData) {
+    if (data.id) {
+      this.fecApiService.getCandidateDetails(data.id).subscribe((candidate) => {
+        // TODO: fix once we get info from api and set all names below properly
+        const nameSplit = candidate.name?.split(", ");
+
+        this.form.get('type')?.setValue(ContactTypes.CANDIDATE);
+        this.form.get('candidate_id')?.setValue(candidate.candidate_id);
+        this.form.get('last_name')?.setValue(nameSplit?.[0]);
+        this.form.get('first_name')?.setValue(nameSplit?.[1]);
+        this.form.get('middle_name')?.setValue('');
+        this.form.get('prefix')?.setValue('');
+        this.form.get('suffix')?.setValue('');
+        this.form.get('street_1')?.setValue(candidate.address_street_1);
+        this.form.get('street_2')?.setValue(candidate.address_street_2);
+        this.form.get('city')?.setValue(candidate.address_city);
+        this.form.get('state')?.setValue(candidate.address_state);
+        this.form.get('zip')?.setValue(candidate.address_zip);
+        this.form.get('employer')?.setValue('');
+        this.form.get('occupation')?.setValue('');
+        this.form.get('candidate_office')?.setValue(candidate.office);
+        this.form.get('candidate_state')?.setValue(candidate.state);
+        this.form.get('candidate_district')?.setValue(candidate.district);
+      });
+    }
+  }
+
+  onFecApiCommitteeLookupDataSelect(data: FecApiCommitteeLookupData) {
+    if (data.id) {
+      this.fecApiService.getCommitteeDetails(data.id).subscribe((committeeAccount) => {
+        let phone;
+        if (committeeAccount?.treasurer_phone) {
+          phone = '+1 ' + committeeAccount.treasurer_phone;
+        }
+        this.form.get('type')?.setValue(ContactTypes.COMMITTEE);
+        this.form.get('committee_id')?.setValue(committeeAccount.committee_id);
+        this.form.get('name')?.setValue(committeeAccount.name);
+        this.form.get('street_1')?.setValue(committeeAccount.street_1);
+        this.form.get('street_2')?.setValue(committeeAccount.street_2);
+        this.form.get('city')?.setValue(committeeAccount.city);
+        this.form.get('state')?.setValue(committeeAccount.state);
+        this.form.get('zip')?.setValue(committeeAccount.zip);
+        this.form.get('telephone')?.setValue(phone);
+      });
+    }
+  }
+
   /**
    * Given the type of contact given, return the appropriate JSON schema doc
    * @param {ContactTypes} type
@@ -165,5 +268,4 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     }
     return schema;
   }
-
 }

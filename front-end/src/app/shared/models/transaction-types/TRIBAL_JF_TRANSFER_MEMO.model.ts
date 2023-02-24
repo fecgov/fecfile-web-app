@@ -1,15 +1,11 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_JF_TRANSFER_MEMO';
-import {
-  AggregationGroups,
-  SchATransaction,
-  ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes,
-} from '../scha-transaction.model';
+import { AggregationGroups } from '../transaction.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 
-export class TRIBAL_JF_TRANSFER_MEMO extends SchaTransactionType {
+export class TRIBAL_JF_TRANSFER_MEMO extends SchATransactionType {
   componentGroupId = 'D';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO);
   schema = schema;
@@ -17,8 +13,8 @@ export class TRIBAL_JF_TRANSFER_MEMO extends SchaTransactionType {
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
   );
 
-  override generatePurposeDescription(): string {
-    return `JF Memo: ${(this.transaction?.parent_transaction as SchATransaction).contributor_organization_name}`;
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    return `JF Memo: ${(transaction.parent_transaction as SchATransaction).contributor_organization_name}`;
   }
 
   getNewTransaction() {

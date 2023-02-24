@@ -59,7 +59,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
-        <td>{{ item.form_type | label: f3xFormTypeLabels }}</td>
+        <td>{{ item.form_type | label : f3xFormTypeLabels }}</td>
         <td>{{ item.report_code_label }}</td>
         <td>
           <ng-container *ngIf="item.coverage_from_date || item.coverage_through_date"
@@ -67,21 +67,33 @@
           >
         </td>
         <td>{{ item.report_status }}</td>
-        <td>{{ item.form_type | label: f3xFormVerionLabels }}</td>
+        <td>{{ item.form_type | label : f3xFormVerionLabels }}</td>
         <td>{{ item.upload_submission?.created | fecDate }}</td>
         <td>
-          <p-button
-            pRipple
-            icon="pi pi-pencil"
-            styleClass="p-button-rounded p-button-success mr-2"
-            (click)="editItem(item)"
-            [ariaLabel]="'edit ' + displayName(item)"
-          ></p-button>
+          <p-overlayPanel #op [styleClass]="'action-options'">
+            <ng-template pTemplate>
+              <ul>
+                <li *ngFor="let action of actionOptions">
+                  <button
+                    *ngIf="!action.isAvailable || action.isAvailable(item)"
+                    pButton
+                    pRipple
+                    type="button"
+                    class="p-button-secondary p-button-text"
+                    id="one"
+                    (click)="onActionClick(action, item)"
+                  >
+                    {{ action.label }}
+                  </button>
+                </li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
           <p-button
             pRipple
             icon="pi pi-ellipsis-v"
-            styleClass="p-button-rounded p-button-success mr-2"
-            (click)="goToTest(item)"
+            styleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+            (onClick)="op.toggle($event)"
             [ariaLabel]="'edit ' + displayName(item)"
           ></p-button>
         </td>
@@ -89,3 +101,5 @@
     </ng-template>
   </p-table>
 </div>
+
+<app-form-type-dialog [visible]="detailVisible"></app-form-type-dialog>

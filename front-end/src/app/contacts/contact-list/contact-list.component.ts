@@ -18,9 +18,10 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   searchTerm = '';
 
   // contact lookup
-  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.COMMITTEE, ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
-  );
+  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.COMMITTEE,
+    ContactTypes.INDIVIDUAL,
+  ]);
 
   constructor(
     protected override messageService: MessageService,
@@ -52,7 +53,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
    */
   public displayName(item: Contact): string {
     if ([ContactTypes.INDIVIDUAL, ContactTypes.CANDIDATE].includes(item.type)) {
-      return `${item.first_name} ${item.last_name}`;
+      return `${item.last_name}, ${item.first_name}`;
     } else {
       return item.name || '';
     }

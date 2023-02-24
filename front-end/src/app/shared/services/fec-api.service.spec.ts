@@ -6,6 +6,8 @@ import { FecApiPaginatedResponse } from 'app/shared/models/fec-api.model';
 import { FecFiling } from '../models/fec-filing.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { FecApiService } from './fec-api.service';
+import { Candidate } from '../models/candidate.model';
+import { environment } from '../../../environments/environment';
 
 describe('FecApiService', () => {
   let httpTestingController: HttpTestingController;
@@ -24,7 +26,34 @@ describe('FecApiService', () => {
     expect(service).toBeTruthy();
   });
 
-  describe('#getDetails()', () => {
+  describe('#getCandidateDetails()', () => {
+    it('should return candidate details', () => {
+      const candidate: Candidate = new Candidate();
+      const response: FecApiPaginatedResponse = {
+        api_version: '1.0',
+        pagination: {
+          page: 1,
+          per_page: 20,
+          count: 1,
+          pages: 1,
+        },
+        results: [candidate],
+      };
+
+      service.getCandidateDetails('P12345678').subscribe((candidateData) => {
+        expect(candidateData).toEqual(candidate);
+      });
+
+      const req = httpTestingController.expectOne(
+        'https://api.open.fec.gov/v1/candidate/P12345678/?api_key=' + environment.fecApiKey
+      );
+
+      expect(req.request.method).toEqual('GET');
+      req.flush(response);
+    });
+  });
+
+  describe('#getCommitteeDetails()', () => {
     it('should return committee details', () => {
       const committeeAccount: CommitteeAccount = new CommitteeAccount();
       const response: FecApiPaginatedResponse = {
@@ -38,13 +67,11 @@ describe('FecApiService', () => {
         results: [committeeAccount],
       };
 
-      service.getDetails('C00601211').subscribe((committeeAccountData) => {
+      service.getCommitteeDetails('C00601211').subscribe((committeeAccountData) => {
         expect(committeeAccountData).toEqual(committeeAccount);
       });
 
-      const req = httpTestingController.expectOne(
-        `https://localhost/api/v1/openfec/C00601211/committee/`
-      );
+      const req = httpTestingController.expectOne(`https://localhost/api/v1/openfec/C00601211/committee/`);
 
       expect(req.request.method).toEqual('GET');
       req.flush(response);
@@ -59,9 +86,7 @@ describe('FecApiService', () => {
         expect(mostRecentFiling).toEqual(f1Filing);
       });
 
-      const req = httpTestingController.expectOne(
-        `https://localhost/api/v1/openfec/C00601211/filings/`
-      );
+      const req = httpTestingController.expectOne(`https://localhost/api/v1/openfec/C00601211/filings/`);
 
       expect(req.request.method).toEqual('GET');
       req.flush(f1Filing);
@@ -75,9 +100,7 @@ describe('FecApiService', () => {
       expect(mostRecentFiling).toEqual(f2Filing);
     });
 
-    const realtimeReq = httpTestingController.expectOne(
-      `https://localhost/api/v1/openfec/C00601211/filings/`
-    );
+    const realtimeReq = httpTestingController.expectOne(`https://localhost/api/v1/openfec/C00601211/filings/`);
     expect(realtimeReq.request.method).toEqual('GET');
     realtimeReq.flush(f2Filing);
   });

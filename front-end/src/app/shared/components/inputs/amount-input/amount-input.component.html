@@ -2,15 +2,11 @@
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="contribution_date">DATE RECEIVED</label>
-        <p-calendar
-          inputId="contribution_date"
-          name="contribution_date"
-          formControlName="contribution_date"
-        ></p-calendar>
+        <label for="date">{{ templateMap['dateLabel'] }}</label>
+        <p-calendar inputId="date" name="date" [formControlName]="templateMap['date']"></p-calendar>
         <app-error-messages
           [form]="form"
-          fieldName="contribution_date"
+          [fieldName]="templateMap['date']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>
@@ -22,27 +18,29 @@
         <p-checkbox
           [binary]="true"
           inputId="memo_code"
-          formControlName="memo_code"
+          [formControlName]="templateMap['memo_code']"
           label="MEMO ITEM"
           ariaLabel="have memo item"
           [trueValue]="true"
           [falseValue]="false"
           [readonly]="memoCodeReadOnly"
         ></p-checkbox>
-        <div class="memo-checkbox-note">
-          {{ memoItemHelpText }}
-        </div>
+        <span
+          class="pi pi-info-circle"
+          style="font-size: 1.5rem; margin-left: 0.5rem;"
+          pTooltip="{{ memoItemHelpText }}"
+        ></span>
       </div>
     </div>
   </div>
   <div class="grid">
     <div class="col-6">
       <div class="field">
-        <label for="contribution_amount">AMOUNT</label>
+        <label for="amount">AMOUNT</label>
         <p-inputNumber
           #amountInput
-          inputId="contribution_amount"
-          formControlName="contribution_amount"
+          inputId="amount"
+          [formControlName]="templateMap['amount']"
           mode="currency"
           currency="USD"
           locale="en-US"
@@ -52,7 +50,7 @@
         ></p-inputNumber>
         <app-error-messages
           [form]="form"
-          fieldName="contribution_amount"
+          [fieldName]="templateMap['amount']"
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The amount can be 12 digits max"
@@ -61,10 +59,10 @@
     </div>
     <div class="col-6">
       <div class="field">
-        <label for="contribution_aggregate">AGGREGATE</label>
+        <label for="aggregate">AGGREGATE</label>
         <p-inputNumber
-          inputId="contribution_aggregate"
-          formControlName="contribution_aggregate"
+          inputId="aggregate"
+          [formControlName]="templateMap['aggregate']"
           mode="currency"
           currency="USD"
           locale="en-US"
@@ -73,7 +71,7 @@
         ></p-inputNumber>
         <app-error-messages
           [form]="form"
-          fieldName="contribution_aggregate"
+          [fieldName]="templateMap['aggregate']"
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field must be a number"
           maxLengthErrorMessage="The aggregate can be 12 digits max"

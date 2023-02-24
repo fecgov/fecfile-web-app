@@ -20,7 +20,7 @@ describe('ValidateService', () => {
     const fb: FormBuilder = new FormBuilder();
     service.formValidatorSchema = contactCandidateSchema;
     service.formValidatorForm = fb.group(
-      service.getFormGroupFields(service.getSchemaProperties(contactCandidateSchema))
+      service.getFormGroupFields(ValidateService.getSchemaProperties(contactCandidateSchema))
     );
     service.formValidatorForm.patchValue({
       telephone: '12345678910',
@@ -50,7 +50,7 @@ describe('ValidateService', () => {
   it('#formValidator should validate boolean properties correctly', () => {
     const fb: FormBuilder = new FormBuilder();
     service.formValidatorSchema = f3xSchema;
-    service.formValidatorForm = fb.group(service.getFormGroupFields(service.getSchemaProperties(f3xSchema)));
+    service.formValidatorForm = fb.group(service.getFormGroupFields(ValidateService.getSchemaProperties(f3xSchema)));
     service.formValidatorForm.patchValue({
       change_of_address: 'A',
     });
@@ -73,7 +73,7 @@ describe('ValidateService', () => {
   it('#formValidator should validate min/max numeric properties correctly', () => {
     const fb: FormBuilder = new FormBuilder();
     service.formValidatorSchema = f3xSchema;
-    service.formValidatorForm = fb.group(service.getFormGroupFields(service.getSchemaProperties(f3xSchema)));
+    service.formValidatorForm = fb.group(service.getFormGroupFields(ValidateService.getSchemaProperties(f3xSchema)));
     service.formValidatorForm.patchValue({
       L6a_cash_on_hand_jan_1_ytd: 1000000000.0,
     });
@@ -98,7 +98,7 @@ describe('ValidateService', () => {
   });
 
   it('#getSchemaProperties() should return empty array when no schema', () => {
-    const properties: string[] = service.getSchemaProperties(undefined);
+    const properties: string[] = ValidateService.getSchemaProperties(undefined);
     expect(properties.length).toBe(0);
   });
 });

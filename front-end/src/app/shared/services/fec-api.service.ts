@@ -4,6 +4,7 @@ import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CommitteeAccount } from '../models/committee-account.model';
 import { FecApiPaginatedResponse } from '../models/fec-api.model';
+import { Candidate } from '../models/candidate.model';
 import { FecFiling } from '../models/fec-filing.model';
 import { ApiService } from './api.service';
 
@@ -15,9 +16,7 @@ export type QueryParamsType = { [param: string]: string | number | boolean | rea
 export class FecApiService {
   private apiKey: string | null = environment.fecApiKey;
 
-  constructor(
-    private http: HttpClient,
-    private apiService: ApiService) { }
+  constructor(private http: HttpClient, private apiService: ApiService) {}
 
   getHeaders() {
     return {
@@ -31,18 +30,37 @@ export class FecApiService {
   }
 
   /**
+   * Gets the candidate details.
+   *
+   * @return     {Observable}  The candidate details.
+   */
+  public getCandidateDetails(candidateId: string | null): Observable<Candidate> {
+    if (!candidateId) {
+      throw new Error('Fecfile: No Candidate Id provided in getCandidateDetails()');
+    }
+    const headers = this.getHeaders();
+    const params = this.getQueryParams();
+    return this.http
+      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}candidate/${candidateId}/`, {
+        headers: headers,
+        params: params,
+      })
+      .pipe(map((response: FecApiPaginatedResponse) => (response.results[0] as Candidate) || undefined));
+  }
+
+  /**
    * Gets the commitee account details.
    *
    * @return     {Observable}  The commitee details.
    */
-  public getDetails(committeeId: string | null): Observable<CommitteeAccount> {
+  public getCommitteeDetails(committeeId: string | null): Observable<CommitteeAccount> {
     if (!committeeId) {
-      throw new Error('No Committee Id provided.');
+      throw new Error('Fecfile: No Committee Id provided in getCommitteeDetails()');
     }
 
-    return this.apiService.get<FecApiPaginatedResponse>(
-      `/openfec/${committeeId}/committee/`).pipe(map(
-        (response) => response.results[0] as CommitteeAccount));
+    return this.apiService
+      .get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/`)
+      .pipe(map((response) => response.results[0] as CommitteeAccount));
   }
 
   /**
@@ -57,11 +75,11 @@ export class FecApiService {
    */
   public getCommitteeRecentFiling(committeeId: string | undefined): Observable<FecFiling | undefined> {
     if (!committeeId) {
-      throw new Error('No Committee Id provided.');
+      throw new Error('Fecfile: No Committee Id provided in getCommitteeRecentFiling()');
     }
 
-    return this.apiService.get<FecFiling>(
-      `/openfec/${committeeId}/filings/`).pipe(map(
-        (response) => FecFiling.fromJSON(response)));
+    return this.apiService
+      .get<FecFiling>(`/openfec/${committeeId}/filings/`)
+      .pipe(map((response) => FecFiling.fromJSON(response)));
   }
 }
