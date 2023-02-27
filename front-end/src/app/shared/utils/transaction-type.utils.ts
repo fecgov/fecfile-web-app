@@ -78,6 +78,8 @@ import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXP
 import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
 import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
 import { OTHER_DISBURSEMENT_VOID } from '../models/transaction-types/OTHER_DISBURSEMENT_VOID.model';
+import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT } from '../models/transaction-types/OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
+import { OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT } from '../models/transaction-types/OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -155,6 +157,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   OPERATING_EXPENDITURE_VOID,
   OTHER_DISBURSEMENT,
   OTHER_DISBURSEMENT_VOID,
+  OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
+  OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
 }
 
 export class TransactionTypeUtils {
