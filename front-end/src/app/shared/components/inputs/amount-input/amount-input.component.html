@@ -25,9 +25,11 @@
           [falseValue]="false"
           [readonly]="memoCodeReadOnly"
         ></p-checkbox>
-        <div class="memo-checkbox-note">
-          {{ memoItemHelpText }}
-        </div>
+        <span
+          class="pi pi-info-circle"
+          style="font-size: 1.5rem; margin-left: 0.5rem;"
+          pTooltip="{{ memoItemHelpText }}"
+        ></span>
       </div>
     </div>
   </div>

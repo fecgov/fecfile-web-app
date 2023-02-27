@@ -1,3 +1,4 @@
+import { Candidate } from './candidate.model';
 import { CommitteeAccount } from './committee-account.model';
 import { FecFiling } from './fec-filing.model';
 
@@ -11,5 +12,5 @@ export type FecApiPagination = {
 export type FecApiPaginatedResponse = {
   api_version: string;
   pagination: FecApiPagination;
-  results: CommitteeAccount[] | FecFiling[];
+  results: Candidate[] | CommitteeAccount[] | FecFiling[];
 };

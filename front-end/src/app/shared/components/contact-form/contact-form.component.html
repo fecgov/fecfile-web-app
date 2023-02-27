@@ -6,16 +6,18 @@
     </div>
   </div>
   <div class="grid">
-    <div class="col-6">
+    <div class="col-10">
       <div class="field">
         <label for="type">CONTACT TYPE</label>
-        <p-dropdown
-          inputId="type"
-          formControlName="type"
-          [options]="contactTypeOptions"
-          optionLabel="name"
-          optionValue="code"
-        ></p-dropdown>
+        <app-contact-lookup
+          [contactTypeFormControl]="contactTypeFormControl"
+          [contactTypeOptions]="contactTypeOptions"
+          [showSearchBox]="form.get('type')?.value === ContactTypes.CANDIDATE ||  form.get('type')?.value === ContactTypes.COMMITTEE"
+          [showCreateNewContactButton]="false"
+          [includeFecfileResults]="false"
+          (contactLookupSelect)="onContactLookupSelect($event)"
+        >
+        </app-contact-lookup>
       </div>
     </div>
     <div class="col-6"></div>

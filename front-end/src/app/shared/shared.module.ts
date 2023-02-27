@@ -29,12 +29,15 @@ import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
 import { NavigationControlComponent } from './components/navigation-control/navigation-control/navigation-control.component';
 import { NavigationControlBarComponent } from './components/navigation-control-bar/navigation-control-bar.component';
+import { TransactionContactLookupComponent } from './components/transaction-contact-lookup/transaction-contact-lookup.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     ButtonModule,
+    TooltipModule,
     DropdownModule,
     AutoCompleteModule,
     InputTextModule,
@@ -58,6 +61,7 @@ import { NavigationControlBarComponent } from './components/navigation-control-b
     NavigationControlComponent,
     NavigationControlBarComponent,
     ContactLookupComponent,
+    TransactionContactLookupComponent,
     ContactFormComponent,
     AddressInputComponent,
     NameInputComponent,
@@ -80,6 +84,7 @@ import { NavigationControlBarComponent } from './components/navigation-control-b
     NavigationControlComponent,
     NavigationControlBarComponent,
     ContactLookupComponent,
+    TransactionContactLookupComponent,
     ContactFormComponent,
     AddressInputComponent,
     NameInputComponent,
