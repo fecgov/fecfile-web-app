@@ -1,11 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FecApiPaginatedResponse } from 'app/shared/models/fec-api.model';
-import { map, Observable, of, switchMap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Candidate } from '../models/candidate.model';
 import { CommitteeAccount } from '../models/committee-account.model';
+import { FecApiPaginatedResponse } from '../models/fec-api.model';
+import { Candidate } from '../models/candidate.model';
 import { FecFiling } from '../models/fec-filing.model';
+import { ApiService } from './api.service';
 
 export type QueryParamsType = { [param: string]: string | number | boolean | readonly (string | number | boolean)[] };
 
@@ -15,7 +16,7 @@ export type QueryParamsType = { [param: string]: string | number | boolean | rea
 export class FecApiService {
   private apiKey: string | null = environment.fecApiKey;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private apiService: ApiService) {}
 
   getHeaders() {
     return {
@@ -47,7 +48,6 @@ export class FecApiService {
       .pipe(map((response: FecApiPaginatedResponse) => (response.results[0] as Candidate) || undefined));
   }
 
-
   /**
    * Gets the commitee account details.
    *
@@ -57,14 +57,10 @@ export class FecApiService {
     if (!committeeId) {
       throw new Error('Fecfile: No Committee Id provided in getCommitteeDetails()');
     }
-    const headers = this.getHeaders();
-    const params = this.getQueryParams();
-    return this.http
-      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}committee/${committeeId}/`, {
-        headers: headers,
-        params: params,
-      })
-      .pipe(map((response: FecApiPaginatedResponse) => (response.results[0] as CommitteeAccount) || undefined));
+
+    return this.apiService
+      .get<FecApiPaginatedResponse>(`/openfec/${committeeId}/committee/`)
+      .pipe(map((response) => response.results[0] as CommitteeAccount));
   }
 
   /**
@@ -81,48 +77,9 @@ export class FecApiService {
     if (!committeeId) {
       throw new Error('Fecfile: No Committee Id provided in getCommitteeRecentFiling()');
     }
-    const headers = this.getHeaders();
-    const nightlyEndpointParams = this.getQueryParams({
-      sort: '-receipt_date',
-      per_page: 1,
-      page: 1,
-      committee_id: committeeId,
-      form_type: 'F1',
-    });
 
-    const nightlyEndpoint = this.http
-      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}filings/`, {
-        headers: headers,
-        params: nightlyEndpointParams,
-      })
-      .pipe(
-        map((response: FecApiPaginatedResponse) => {
-          return (response.results as FecFiling[]).find((filing: FecFiling) => filing.form_type?.startsWith('F1'));
-        })
-      );
-
-    const realTimeEndpoint = this.http
-      .get<FecApiPaginatedResponse>(`${environment.fecApiUrl}efile/filings/`, {
-        headers: headers,
-        params: this.getQueryParams({
-          committee_id: committeeId,
-          sort: '-receipt_date',
-        }),
-      })
-      .pipe(
-        map((response: FecApiPaginatedResponse) => {
-          return (response.results as FecFiling[]).find((filing: FecFiling) => filing.form_type?.startsWith('F1'));
-        })
-      );
-
-    // Check real time endpoint for result. If it doesn't have one, check the nightly endpoint
-    return realTimeEndpoint.pipe(
-      switchMap((realTimeResult) => {
-        if (realTimeResult) {
-          return of(realTimeResult);
-        }
-        return nightlyEndpoint;
-      })
-    );
+    return this.apiService
+      .get<FecFiling>(`/openfec/${committeeId}/filings/`)
+      .pipe(map((response) => FecFiling.fromJSON(response)));
   }
 }
