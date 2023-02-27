@@ -58,9 +58,6 @@ export class ContactLookupComponent {
 
   selectedFecCommitteeAccount: CommitteeAccount | undefined;
 
-  workingValidatorSchema: JsonSchema | undefined;
-  workingValidatorForm: FormGroup | undefined;
-
   constructor(
     private formBuilder: FormBuilder,
     private contactService: ContactService,

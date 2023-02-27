@@ -142,12 +142,6 @@ export class ValidateUtils {
         ...ValidateUtils.getFormValues(formValidatorForm),
         ...ValidateUtils.getNonFormValues(transaction)
       }
-      if (data['contributor_state'] === 'not-valid') {
-        console.log('hi3');
-      }
-      if (data['transaction_type_identifier'] === 'INDIVIDUAL_RECEIPT') {
-        console.log('hi4');
-      }
       const errors: ValidationError[] = ValidateUtils.validate(
         formValidatorSchema,
         data,
