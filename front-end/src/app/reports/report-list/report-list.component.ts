@@ -3,7 +3,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { RowAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
+import { TableAction, TableListBaseComponent } from '../../shared/components/table-list-base/table-list-base.component';
 import { Report, CashOnHand } from '../../shared/interfaces/report.interface';
 import { LabelList } from '../../shared/utils/label.utils';
 import { ReportService } from '../../shared/services/report.service';
@@ -21,18 +21,18 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     report_id: undefined,
     value: undefined,
   };
-  public actionOptions: RowAction[] = [
-    new RowAction(
+  public rowActions: TableAction[] = [
+    new TableAction(
       'Edit report',
       this.editItem.bind(this),
       (report: F3xSummary) => report.report_status === 'In-Progress'
     ),
-    new RowAction(
+    new TableAction(
       'Review report',
       this.editItem.bind(this),
       (report: F3xSummary) => report.report_status !== 'In-Progress'
     ),
-    new RowAction('Download as .fec', this.goToTest.bind(this)),
+    new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
   private destroy$ = new Subject<boolean>();
 
@@ -82,7 +82,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     this.router.navigateByUrl(`/reports/f3x/test-dot-fec/${item.id}`);
   }
 
-  public onActionClick(action: RowAction, report: Report) {
+  public onRowActionClick(action: TableAction, report: Report) {
     action.action(report);
   }
 

@@ -9,6 +9,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -53,6 +54,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     ButtonModule,
     DividerModule,
     DropdownModule,
+    OverlayPanelModule,
     CheckboxModule,
     InputTextModule,
     InputTextareaModule,
