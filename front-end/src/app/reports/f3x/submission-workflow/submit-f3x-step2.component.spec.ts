@@ -149,7 +149,7 @@ describe('SubmitF3xStep2Component', () => {
 
     expect(component.treasurerNameChanged()).toBe(false);
 
-    const navigateSpy = spyOn(router, 'navigateByUrl').and.returnValue(new Promise((resolve) => resolve(true)));
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.returnValue(Promise.resolve(true));
     spyOn(apiService, 'post').and.returnValue(of(true));
     component.onConfirm().subscribe(() => {
       expect(navigateSpy).toHaveBeenCalledWith(`/reports/f3x/submit/status/999`);
