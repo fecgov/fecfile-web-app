@@ -78,11 +78,7 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     this.form.controls['filing_password'].addValidators(ValidateUtils.passwordValidator());
     this.form.controls['truth_statement'].addValidators(Validators.requiredTrue);
 
-    for (const key in this.form.controls) {
-      this.form.get(key)?.addValidators(
-        ValidateUtils.formValidator(key, undefined, f3xSchema, this.form));
-    }
-    this.form.updateValueAndValidity();
+    ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }
 
   setDefaultFormValues(committeeAccount: CommitteeAccount) {
@@ -170,7 +166,8 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     this.loading = 1;
     const payload: F3xSummary = F3xSummary.fromJSON({
       ...this.report,
-      ...ValidateUtils.getFormValues(this.form, this.formProperties, f3xSchema),
+      ...ValidateUtils.getFormValues(this.form,
+        f3xSchema, this.formProperties),
     });
 
     return this.f3xSummaryService.update(payload, this.formProperties);

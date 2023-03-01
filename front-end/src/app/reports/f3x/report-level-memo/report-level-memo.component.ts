@@ -75,11 +75,7 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
         }
       });
 
-    for (const key in this.form.controls) {
-      this.form.get(key)?.addValidators(
-        ValidateUtils.formValidator(key, undefined, textSchema, this.form));
-    }
-    this.form.updateValueAndValidity();
+    ValidateUtils.addJsonSchemaValidators(this.form, textSchema, false);
   }
 
   ngOnDestroy(): void {
@@ -96,7 +92,7 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
 
     const payload: MemoText = MemoText.fromJSON({
       ...this.assignedMemoText,
-      ...ValidateUtils.getFormValues(this.form, this.formProperties, textSchema),
+      ...ValidateUtils.getFormValues(this.form, textSchema, this.formProperties),
     });
     payload.report_id = this.report.id;
 

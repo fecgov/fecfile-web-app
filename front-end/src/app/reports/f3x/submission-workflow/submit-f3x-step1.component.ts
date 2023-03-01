@@ -69,11 +69,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       this.buildEmailValidator('confirmation_email_2'),
     ]);
 
-    for (const key in this.form.controls) {
-      this.form.get(key)?.addValidators(
-        ValidateUtils.formValidator(key, undefined, f3xSchema, this.form));
-    }
-    this.form.updateValueAndValidity();
+    ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }
 
   setDefaultFormValues(committeeAccount: CommitteeAccount) {
@@ -149,7 +145,8 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     } else {
       addressFields = {
         change_of_address: true,
-        ...ValidateUtils.getFormValues(this.form, this.formProperties, f3xSchema),
+        ...ValidateUtils.getFormValues(this.form,
+          f3xSchema, this.formProperties),
       };
     }
 

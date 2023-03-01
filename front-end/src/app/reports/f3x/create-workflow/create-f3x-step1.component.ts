@@ -60,7 +60,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     protected router: Router,
     private activatedRoute: ActivatedRoute,
     private reportService: ReportService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const reportId = this.activatedRoute.snapshot.data['reportId'];
@@ -130,11 +130,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       }
     });
 
-    for (const key in this.form.controls) {
-      this.form.get(key)?.addValidators(
-        ValidateUtils.formValidator(key, undefined, f3xSchema, this.form));
-    }
-    this.form.updateValueAndValidity();
+    ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
 
     // Initialize validation tracking of current JSON schema and form data
     this.form.addValidators(this.buildCoverageDatesValidator());
@@ -249,7 +245,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     }
 
     const summary: F3xSummary = F3xSummary.fromJSON(ValidateUtils.getFormValues(
-      this.form, this.formProperties, f3xSchema));
+      this.form, f3xSchema, this.formProperties));
 
     // If a termination report, set the form_type appropriately.
     if (summary.report_code === F3xReportCodes.TER) {

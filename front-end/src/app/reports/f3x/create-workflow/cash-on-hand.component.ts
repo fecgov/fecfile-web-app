@@ -58,7 +58,7 @@ export class CashOnHandComponent implements OnInit, OnDestroy {
 
     const payload: F3xSummary = F3xSummary.fromJSON({
       ...this.report,
-      ...ValidateUtils.getFormValues(this.form, this.formProperties, f3xSchema),
+      ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
       ...{
         cash_on_hand_date: this.form.controls['cash_on_hand_date'].value,
         L6a_year_for_above_ytd: String(this.form.controls['cash_on_hand_date'].value.getYear() + 1900),

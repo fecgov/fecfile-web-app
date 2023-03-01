@@ -17,8 +17,8 @@ describe('ValidateUtils', () => {
       last_name: 'Valid Name',
     });
 
-    let validator: ValidatorFn = ValidateUtils.formValidator('telephone',
-      undefined, formValidatorSchema, formValidatorForm);
+    let validator: ValidatorFn = ValidateUtils.jsonSchemaValidator('telephone',
+      formValidatorForm, formValidatorSchema);
     let result: ValidationErrors | null =
       validator(formValidatorForm.get('telephone') as FormControl);
     expect(result).not.toBe(null);
@@ -26,16 +26,16 @@ describe('ValidateUtils', () => {
       expect(result['pattern'].requiredPattern).toBe('^\\+\\d{1,3} \\d{10}$');
     }
 
-    validator = ValidateUtils.formValidator('candidate_state',
-      undefined, formValidatorSchema, formValidatorForm);
+    validator = ValidateUtils.jsonSchemaValidator('candidate_state',
+      formValidatorForm, formValidatorSchema);
     result = validator(formValidatorForm.get('candidate_state') as FormControl);
     expect(result).not.toBe(null);
     if (result) {
       expect(result['required']).toBe(true);
     }
 
-    validator = ValidateUtils.formValidator('last_name',
-      undefined, formValidatorSchema, formValidatorForm);
+    validator = ValidateUtils.jsonSchemaValidator('last_name',
+      formValidatorForm, formValidatorSchema);
     result = validator(formValidatorForm.get('last_name') as FormControl);
     expect(result).toBe(null);
   });
@@ -49,8 +49,8 @@ describe('ValidateUtils', () => {
       change_of_address: 'A',
     });
 
-    let validator: ValidatorFn = ValidateUtils.formValidator('change_of_address',
-      undefined, formValidatorSchema, formValidatorForm);
+    let validator: ValidatorFn = ValidateUtils.jsonSchemaValidator('change_of_address',
+      formValidatorForm, formValidatorSchema);
     let result: ValidationErrors | null = validator(
       formValidatorForm.get('change_of_address') as FormControl);
     expect(result).not.toBe(null);
@@ -61,8 +61,8 @@ describe('ValidateUtils', () => {
     formValidatorForm.patchValue({
       change_of_address: true,
     });
-    validator = ValidateUtils.formValidator('change_of_address',
-      undefined, formValidatorSchema, formValidatorForm);
+    validator = ValidateUtils.jsonSchemaValidator('change_of_address',
+      formValidatorForm, formValidatorSchema);
     result = validator(formValidatorForm.get('change_of_address') as FormControl);
     expect(result).toBe(null);
   });
@@ -76,8 +76,8 @@ describe('ValidateUtils', () => {
       L6a_cash_on_hand_jan_1_ytd: 1000000000.0,
     });
 
-    let validator: ValidatorFn = ValidateUtils.formValidator('L6a_cash_on_hand_jan_1_ytd',
-      undefined, formValidatorSchema, formValidatorForm);
+    let validator: ValidatorFn = ValidateUtils.jsonSchemaValidator('L6a_cash_on_hand_jan_1_ytd',
+      formValidatorForm, formValidatorSchema);
     let result: ValidationErrors | null = validator(
       formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as FormControl
     );
@@ -89,8 +89,8 @@ describe('ValidateUtils', () => {
     formValidatorForm.patchValue({
       L6a_cash_on_hand_jan_1_ytd: -200.0,
     });
-    validator = ValidateUtils.formValidator('L6a_cash_on_hand_jan_1_ytd',
-      undefined, formValidatorSchema, formValidatorForm);
+    validator = ValidateUtils.jsonSchemaValidator('L6a_cash_on_hand_jan_1_ytd',
+      formValidatorForm, formValidatorSchema);
     result = validator(formValidatorForm.get('L6a_cash_on_hand_jan_1_ytd') as FormControl);
     if (result) {
       expect(result['min'].min).toBe(0);

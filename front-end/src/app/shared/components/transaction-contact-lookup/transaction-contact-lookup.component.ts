@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Contact, FecApiCommitteeLookupData } from 'app/shared/models/contact.model';
+import { Contact, ContactType, FecApiCommitteeLookupData } from 'app/shared/models/contact.model';
+import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -78,7 +79,9 @@ export class TransactionContactLookupComponent {
     }
 
     const createdContact = Contact.fromJSON({
-      ...ValidateUtils.getFormValues(this.createContactForm),
+      ...ValidateUtils.getFormValues(this.createContactForm,
+        ContactService.getSchemaByType(
+          this.createContactForm.get('type')?.value as ContactType)),
     });
     this.contactSelect.emit({
       value: createdContact,

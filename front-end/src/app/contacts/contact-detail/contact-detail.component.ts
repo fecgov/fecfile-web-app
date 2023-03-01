@@ -66,7 +66,7 @@ export class ContactDetailComponent {
 
     const payload: Contact = Contact.fromJSON({
       ...this.contact,
-      ...ValidateUtils.getFormValues(this.form, undefined,
+      ...ValidateUtils.getFormValues(this.form,
         ContactService.getSchemaByType(
           this.form.get('type')?.value as ContactType))
     });

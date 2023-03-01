@@ -63,12 +63,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
       .subscribe((value: string) => {
         const schema = ContactService.getSchemaByType(
           value as ContactTypes);
-        for (const key in this.form.controls) {
-          this.form.get(key)?.clearValidators();
-          this.form.get(key)?.addValidators(
-            ValidateUtils.formValidator(key, undefined, schema, this.form));
-        }
-        this.form.updateValueAndValidity();
+        ValidateUtils.addJsonSchemaValidators(this.form, schema, true);
 
         // Clear out non-schema form values
         const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any

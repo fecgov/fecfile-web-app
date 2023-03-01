@@ -86,7 +86,6 @@ describe('ErrorMessagesComponent', () => {
 
   it('should present a unique error message when a negative contribution amount is required', () => {
     //This has to be done separately because a new exclusiveMaxErrorMessage has to be generated
-    const formValidatorSchema = testSchema;
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(ValidateUtils.getFormGroupFields(['exclusive_negative_amount']));
     component.form = formValidatorForm;

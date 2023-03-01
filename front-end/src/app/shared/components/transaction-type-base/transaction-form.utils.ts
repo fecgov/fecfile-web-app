@@ -93,11 +93,9 @@ export class TransactionFormUtils {
       });
 
     const schema = transaction.transactionType?.schema;
-    for (const key in form.controls) {
-      form.get(key)?.addValidators(
-        ValidateUtils.formValidator(key, undefined, schema, form));
+    if (schema) {
+      ValidateUtils.addJsonSchemaValidators(form, schema, false, transaction);
     }
-    form.updateValueAndValidity();
   }
 
   static getPayloadTransaction(
@@ -109,8 +107,8 @@ export class TransactionFormUtils {
       throw new Error('Fecfile: Payload transaction not found');
     }
 
-    let formValues = ValidateUtils.getFormValues(form, formProperties,
-      transaction.transactionType?.schema);
+    let formValues = ValidateUtils.getFormValues(form,
+      transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
 
     const payload: ScheduleTransaction = getFromJSON({
