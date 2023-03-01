@@ -55,12 +55,12 @@ describe('ErrorMessagesComponent', () => {
   });
 
   it('should provide default error messages', () => {
-    const formValidatorSchema = testSchema;
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(
-      ValidateUtils.getFormGroupFields(['in_between', 
-      'low_high', 'exclusive_low_high', 'exclusive_negative_amount'])
+      ValidateUtils.getFormGroupFields(['in_between',
+        'low_high', 'exclusive_low_high', 'exclusive_negative_amount'])
     );
+    ValidateUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
     component.form = formValidatorForm;
     component.fieldName = 'in_between';
     component.ngOnInit();
@@ -88,6 +88,7 @@ describe('ErrorMessagesComponent', () => {
     //This has to be done separately because a new exclusiveMaxErrorMessage has to be generated
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(ValidateUtils.getFormGroupFields(['exclusive_negative_amount']));
+    ValidateUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
     component.form = formValidatorForm;
     component.fieldName = 'exclusive_negative_amount';
     component.ngOnInit();

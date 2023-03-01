@@ -176,13 +176,13 @@ describe('ContactService', () => {
   });
 
   it('#getSchemaByType should return the correct schema', () => {
-    let schema: JsonSchema = service.getSchemaByType(ContactTypes.COMMITTEE);
+    let schema: JsonSchema = ContactService.getSchemaByType(ContactTypes.COMMITTEE);
     expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Committee.json');
 
-    schema = service.getSchemaByType(ContactTypes.ORGANIZATION);
+    schema = ContactService.getSchemaByType(ContactTypes.ORGANIZATION);
     expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Organization.json');
 
-    schema = service.getSchemaByType(ContactTypes.CANDIDATE);
+    schema = ContactService.getSchemaByType(ContactTypes.CANDIDATE);
     expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Candidate.json');
   });
 
