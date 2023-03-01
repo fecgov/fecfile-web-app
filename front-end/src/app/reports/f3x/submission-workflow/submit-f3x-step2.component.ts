@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil, from, switchMap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
@@ -141,25 +141,27 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       header: 'Are you sure?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.onConfirm();
+        this.onConfirm().subscribe();
       },
     });
   }
 
-  public onConfirm() {
+  public onConfirm(): Observable<boolean> {
     if (this.treasurerNameChanged()) {
-      this.saveTreasurerName().subscribe(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Report Updated',
-          life: 3000,
-        });
+      return this.saveTreasurerName().pipe(
+        switchMap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Report Updated',
+            life: 3000,
+          });
 
-        this.submitReport();
-      });
+          return this.submitReport();
+        })
+      );
     } else {
-      this.submitReport();
+      return this.submitReport();
     }
   }
 
@@ -173,21 +175,22 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     return this.f3xSummaryService.update(payload, this.formProperties);
   }
 
-  private submitReport(): void {
+  private submitReport(): Observable<boolean> {
     this.loading = 2;
 
     const payload = {
       report_id: this.report?.id,
       password: this.form?.value['filing_password'],
     };
-
-    this.apiService.post('/web-services/submit-to-fec/', payload).subscribe(() => {
-      if (this.report?.id) {
-        this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
-        this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`);
-      } else {
-        this.router.navigateByUrl('/reports');
-      }
-    });
+    return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
+      switchMap(() => {
+        if (this.report?.id) {
+          this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
+          return from(this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`));
+        } else {
+          return from(this.router.navigateByUrl('/reports'));
+        }
+      })
+    );
   }
 }

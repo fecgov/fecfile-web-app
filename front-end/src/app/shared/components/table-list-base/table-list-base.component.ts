@@ -193,11 +193,10 @@ export class TableAction {
   isEnabled: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
   constructor(
     label: string,
-    action: (item?: any) => void,
-    isAvailable?: (item?: any) => boolean,
-    isEnabled?: (item?: any) => boolean
+    action: (item?: any) => void, // eslint-disable-line @typescript-eslint/no-explicit-any
+    isAvailable?: (item?: any) => boolean, // eslint-disable-line @typescript-eslint/no-explicit-any
+    isEnabled?: (item?: any) => boolean // eslint-disable-line @typescript-eslint/no-explicit-any
   ) {
-    // eslint-disable-line @typescript-eslint/no-explicit-any
     this.label = label;
     this.action = action;
     this.isAvailable = isAvailable || this.isAvailable;

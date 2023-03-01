@@ -17,12 +17,14 @@ import { ValidateService } from '../../../shared/services/validate.service';
 import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
 import { ReportsModule } from '../../reports.module';
 import { ReportService } from '../../../shared/services/report.service';
+import { ApiService } from '../../../shared/services/api.service';
 
 describe('SubmitF3xStep2Component', () => {
   let component: SubmitF3xStep2Component;
   let fixture: ComponentFixture<SubmitF3xStep2Component>;
   let router: Router;
   let reportService: F3xSummaryService;
+  let apiService: ApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -45,6 +47,7 @@ describe('SubmitF3xStep2Component', () => {
         MessageService,
         ConfirmationService,
         ReportService,
+        ApiService,
         provideMockStore(testMockStore),
         {
           provide: ActivatedRoute,
@@ -67,6 +70,7 @@ describe('SubmitF3xStep2Component', () => {
     router = TestBed.inject(Router);
     reportService = TestBed.inject(F3xSummaryService);
     fixture = TestBed.createComponent(SubmitF3xStep2Component);
+    apiService = TestBed.inject(ApiService);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({ id: '999' })));
     fixture.detectChanges();
@@ -145,11 +149,11 @@ describe('SubmitF3xStep2Component', () => {
 
     expect(component.treasurerNameChanged()).toBe(false);
 
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.onConfirm();
-    setTimeout(() => {
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.returnValue(new Promise((resolve) => resolve(true)));
+    spyOn(apiService, 'post').and.returnValue(of(true));
+    component.onConfirm().subscribe(() => {
       expect(navigateSpy).toHaveBeenCalledWith(`/reports/submit/status/999`);
-    }, 5000);
+    });
   });
 
   it('#submit should not submit when form data invalid', () => {

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -13,13 +13,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { TransactionListComponent, MemoCodePipe } from './transaction-list.component';
 
-describe('CreateF3xStep4Component', () => {
+describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
   let fixture: ComponentFixture<TransactionListComponent>;
+  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, RouterTestingModule],
+      imports: [ToolbarModule, TableModule, RouterTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [TransactionListComponent],
       providers: [
         MessageService,
@@ -57,6 +58,7 @@ describe('CreateF3xStep4Component', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionListComponent);
+    router = TestBed.inject(Router);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -71,5 +73,11 @@ describe('CreateF3xStep4Component', () => {
     expect(result).toBe('Y');
     result = pipe.transform(false);
     expect(result).toBe('-');
+  });
+
+  it('should navigate to create disbursement', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.tableActions[1].action({ id: '999' });
+    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/disbursement`);
   });
 });
