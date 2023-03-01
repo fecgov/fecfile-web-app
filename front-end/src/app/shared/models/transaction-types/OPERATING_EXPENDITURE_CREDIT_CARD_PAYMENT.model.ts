@@ -14,6 +14,7 @@ export class OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchBTransactionTy
   );
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
+  override subTransactionTypes = [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO];
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {
