@@ -95,4 +95,14 @@ describe('TransactionListComponent', () => {
     component.onTableActionClick(component.tableActions[3], { id: '999' } as F3xSummary);
     expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/other-transactions`);
   });
+  it('should show the correct acitons', () => {
+    expect(component.tableActions[0].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
+    expect(component.tableActions[1].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
+    expect(component.tableActions[2].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
+    expect(component.tableActions[3].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
+    expect(component.tableActions[0].isEnabled({})).toEqual(true);
+    expect(component.tableActions[1].isEnabled({})).toEqual(true);
+    expect(component.tableActions[2].isEnabled({})).toEqual(false);
+    expect(component.tableActions[3].isEnabled({})).toEqual(false);
+  });
 });
