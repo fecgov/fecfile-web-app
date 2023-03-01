@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
@@ -63,14 +63,19 @@ export class ContactFormComponent implements OnInit, OnDestroy {
       ?.get('type')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
-        // Update validator JSON schema to the selected contact type
-        const formValidatorSchema = this.contactService.getSchemaByType(
+        const schema = this.contactService.getSchemaByType(
           value as ContactTypes);
+        for (const key in this.form.controls) {
+          this.form.get(key)?.clearValidators();
+          this.form.get(key)?.addValidators(
+            ValidateUtils.formValidator(key, undefined, schema, this.form));
+        }
+        this.form.updateValueAndValidity();
 
         // Clear out non-schema form values
         const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
         const schemaProperties: string[] = ValidateUtils.getSchemaProperties(
-          formValidatorSchema
+          schema
         );
         Object.keys(this.form.controls).forEach((property: string) => {
           if (!schemaProperties.includes(property)) {
@@ -136,6 +141,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
           this.candidateDistrictOptions = [];
         }
       });
+
   }
 
   ngOnDestroy(): void {

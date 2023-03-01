@@ -139,7 +139,8 @@ export class ValidateUtils {
         return null;
       }
       const data = {
-        ...ValidateUtils.getFormValues(formValidatorForm),
+        ...ValidateUtils.getFormValues(
+          formValidatorForm, undefined, formValidatorSchema),
         ...ValidateUtils.getNonFormValues(transaction)
       }
       const errors: ValidationError[] = ValidateUtils.validate(
