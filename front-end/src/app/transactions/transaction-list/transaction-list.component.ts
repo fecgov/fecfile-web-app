@@ -36,13 +36,13 @@ export class TransactionListComponent extends TableListBaseComponent<Transaction
     ),
     new TableAction(
       'Add loans and debts',
-      this.createTransactions.bind(this),
+      this.createTransactions.bind(this, 'loans-and-debts'),
       (report: F3xSummary) => report.report_status === 'In-Progress',
       () => false
     ),
     new TableAction(
       'Add other transactions',
-      this.createTransactions.bind(this),
+      this.createTransactions.bind(this, 'other-transactions'),
       (report: F3xSummary) => report.report_status === 'In-Progress',
       () => false
     ),
