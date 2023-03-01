@@ -36,8 +36,6 @@ export class ContactFormComponent implements OnInit, OnDestroy {
   );
   @Input() formSubmitted = false;
 
-  contactTypeFormControl: FormControl = new FormControl();
-
   private destroy$: Subject<boolean> = new Subject();
 
   ContactTypes = ContactTypes;
