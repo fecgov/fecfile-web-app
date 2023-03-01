@@ -1,11 +1,11 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT } from './OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
+import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO } from './OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO.model';
 
-describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
-  let transactionType: OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT;
+describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO', () => {
+  let transactionType: OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO;
 
   beforeEach(() => {
-    transactionType = new OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT();
+    transactionType = new OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO();
   });
 
   it('should create an instance', () => {
@@ -17,10 +17,12 @@ describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SB21b');
-    expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT);
+    expect(txn.transaction_type_identifier).toBe(
+      ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO
+    );
   });
 
   it('#generatePurposeDescription() should not be defined', () => {
-    expect(transactionType.generatePurposeDescription()).toBe('Credit Card: See Below');
+    expect(transactionType.generatePurposeDescription).toBe(undefined);
   });
 });
