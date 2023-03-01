@@ -10,7 +10,7 @@
       <div class="field">
         <label for="type">CONTACT TYPE</label>
         <app-contact-lookup
-          [contactTypeFormControl]="contactTypeFormControl"
+          [contactTypeFormControl]="$any(form).controls['type']"
           [contactTypeOptions]="contactTypeOptions"
           [showSearchBox]="form.get('type')?.value === ContactTypes.CANDIDATE ||  form.get('type')?.value === ContactTypes.COMMITTEE"
           [showCreateNewContactButton]="false"

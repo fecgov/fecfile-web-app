@@ -1,14 +1,14 @@
 import { FormGroup } from '@angular/forms';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { Transaction, ScheduleTransaction } from 'app/shared/models/transaction.model';
-import { ValidateService } from 'app/shared/services/validate.service';
+import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { ContactTypes } from '../../models/contact.model';
+import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 
 export class TransactionFormUtils {
   /**
@@ -18,21 +18,15 @@ export class TransactionFormUtils {
    * child transaction type defined in the DoubleTransactionTypeBase class.
    * @param component
    * @param form - parent or child (i.e. form or childForm)
-   * @param validateService - parent or child (i.e. validateService or childValidateService)
    * @param transaction - parent or child
    * @param contactId$ - parent or child (i.e. contactId$ or childContactId$)
    */
   static onInit(
     component: TransactionTypeBaseComponent | DoubleTransactionTypeBaseComponent,
     form: FormGroup,
-    validateService: ValidateService,
     transaction: Transaction | undefined,
     contactId$: Subject<string>
   ): void {
-    // Initialize validation tracking of current JSON schema and form data
-    validateService.formValidatorSchema = transaction?.transactionType?.schema;
-    validateService.formValidatorForm = form;
-
     if (transaction && transaction.id) {
       form.patchValue({ ...transaction });
 
@@ -97,11 +91,15 @@ export class TransactionFormUtils {
         const previousAggregate = previous_transaction ? +((previous_transaction as ScheduleTransaction)[key] || 0) : 0;
         form.get(templateMap.aggregate)?.setValue(+amount + previousAggregate);
       });
+
+    const schema = transaction.transactionType?.schema;
+    if (schema) {
+      ValidateUtils.addJsonSchemaValidators(form, schema, false, transaction);
+    }
   }
 
   static getPayloadTransaction(
     transaction: Transaction | undefined,
-    validateService: ValidateService,
     form: FormGroup,
     formProperties: string[]
   ): Transaction {
@@ -109,7 +107,8 @@ export class TransactionFormUtils {
       throw new Error('Fecfile: Payload transaction not found');
     }
 
-    let formValues = validateService.getFormValues(form, formProperties);
+    let formValues = ValidateUtils.getFormValues(form,
+      transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
 
     const payload: ScheduleTransaction = getFromJSON({
