@@ -96,5 +96,4 @@ export class ContactLookupComponent {
   isContact(value: Contact | FecApiLookupData) {
     return value instanceof Contact;
   }
-
 }
