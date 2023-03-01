@@ -37,11 +37,6 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
       this.formProperties = [
         'entity_type',
         'payee_organization_name',
-        'payee_last_name',
-        'payee_first_name',
-        'payee_middle_name',
-        'payee_prefix',
-        'payee_suffix',
         'payee_street_1',
         'payee_street_2',
         'payee_city',
