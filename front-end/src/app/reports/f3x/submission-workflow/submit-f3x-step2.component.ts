@@ -77,6 +77,12 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     // Initialize validation tracking of current JSON schema and form data
     this.form.controls['filing_password'].addValidators(ValidateUtils.passwordValidator());
     this.form.controls['truth_statement'].addValidators(Validators.requiredTrue);
+
+    for (const key in this.form.controls) {
+      this.form.get(key)?.addValidators(
+        ValidateUtils.formValidator(key, undefined, f3xSchema, this.form));
+    }
+    this.form.updateValueAndValidity();
   }
 
   setDefaultFormValues(committeeAccount: CommitteeAccount) {

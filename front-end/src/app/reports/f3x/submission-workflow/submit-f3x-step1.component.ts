@@ -68,6 +68,12 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       Validators.maxLength(44),
       this.buildEmailValidator('confirmation_email_2'),
     ]);
+
+    for (const key in this.form.controls) {
+      this.form.get(key)?.addValidators(
+        ValidateUtils.formValidator(key, undefined, f3xSchema, this.form));
+    }
+    this.form.updateValueAndValidity();
   }
 
   setDefaultFormValues(committeeAccount: CommitteeAccount) {

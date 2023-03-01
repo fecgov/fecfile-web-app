@@ -97,7 +97,7 @@ export class ContactService implements TableListService<Contact> {
    * @param {ContactTypes} type
    * @returns {JsonSchema} schema
    */
-  public getSchemaByType(type: ContactTypes): JsonSchema {
+  public static getSchemaByType(type: ContactTypes): JsonSchema {
     let schema: JsonSchema = contactIndividualSchema;
     if (type === ContactTypes.CANDIDATE) {
       schema = contactCandidateSchema;

@@ -74,6 +74,12 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
           });
         }
       });
+
+    for (const key in this.form.controls) {
+      this.form.get(key)?.addValidators(
+        ValidateUtils.formValidator(key, undefined, textSchema, this.form));
+    }
+    this.form.updateValueAndValidity();
   }
 
   ngOnDestroy(): void {

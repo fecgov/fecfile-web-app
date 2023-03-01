@@ -130,6 +130,12 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       }
     });
 
+    for (const key in this.form.controls) {
+      this.form.get(key)?.addValidators(
+        ValidateUtils.formValidator(key, undefined, f3xSchema, this.form));
+    }
+    this.form.updateValueAndValidity();
+
     // Initialize validation tracking of current JSON schema and form data
     this.form.addValidators(this.buildCoverageDatesValidator());
   }

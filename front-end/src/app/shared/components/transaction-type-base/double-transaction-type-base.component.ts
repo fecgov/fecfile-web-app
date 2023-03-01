@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
-import { Transaction, ScheduleTransaction } from 'app/shared/models/transaction.model';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { SelectItem } from 'primeng/api';
-import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
-import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { TransactionFormUtils } from './transaction-form.utils';
-import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { SelectItem } from 'primeng/api';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
+import { TransactionContactUtils } from './transaction-contact.utils';
+import { TransactionFormUtils } from './transaction-form.utils';
+import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -28,8 +28,7 @@ import { ValidateUtils } from 'app/shared/utils/validate.utils';
 })
 export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   abstract childFormProperties: string[];
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
@@ -45,8 +44,7 @@ export abstract class DoubleTransactionTypeBaseComponent
 
     // Initialize child form.
     this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(
-      this.childFormProperties, this.childTransaction, 
-      this.childTransaction?.transactionType?.schema, this.form));
+      this.childFormProperties));
     if (this.transaction?.children) {
       this.childTransaction = this.transaction?.children[0];
       if (this.childTransaction.transactionType?.templateMap) {

@@ -7,7 +7,7 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-import { Contact } from '../../shared/models/contact.model';
+import { Contact, ContactType } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-contact-detail',
@@ -66,7 +66,9 @@ export class ContactDetailComponent {
 
     const payload: Contact = Contact.fromJSON({
       ...this.contact,
-      ...ValidateUtils.getFormValues(this.form)
+      ...ValidateUtils.getFormValues(this.form, undefined,
+        ContactService.getSchemaByType(
+          this.form.get('type')?.value as ContactType))
     });
 
     if (payload.id) {

@@ -1,6 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
 import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -48,7 +47,6 @@ export class ContactFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private contactService: ContactService,
     private fecApiService: FecApiService
   ) { }
 
@@ -63,7 +61,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
       ?.get('type')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
-        const schema = this.contactService.getSchemaByType(
+        const schema = ContactService.getSchemaByType(
           value as ContactTypes);
         for (const key in this.form.controls) {
           this.form.get(key)?.clearValidators();
@@ -249,22 +247,4 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Given the type of contact given, return the appropriate JSON schema doc
-   * @param {ContactTypes} type
-   * @returns {JsonSchema} schema
-   */
-  private getSchemaByType(type: ContactTypes): JsonSchema {
-    let schema: JsonSchema = contactIndividualSchema;
-    if (type === ContactTypes.CANDIDATE) {
-      schema = contactCandidateSchema;
-    }
-    if (type === ContactTypes.COMMITTEE) {
-      schema = contactCommitteeSchema;
-    }
-    if (type === ContactTypes.ORGANIZATION) {
-      schema = contactOrganizationSchema;
-    }
-    return schema;
-  }
 }

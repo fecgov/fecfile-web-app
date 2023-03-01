@@ -91,6 +91,13 @@ export class TransactionFormUtils {
         const previousAggregate = previous_transaction ? +((previous_transaction as ScheduleTransaction)[key] || 0) : 0;
         form.get(templateMap.aggregate)?.setValue(+amount + previousAggregate);
       });
+
+    const schema = transaction.transactionType?.schema;
+    for (const key in form.controls) {
+      form.get(key)?.addValidators(
+        ValidateUtils.formValidator(key, undefined, schema, form));
+    }
+    form.updateValueAndValidity();
   }
 
   static getPayloadTransaction(
