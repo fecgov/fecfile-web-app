@@ -49,7 +49,8 @@ export class ValidateUtils {
         if (propertiesSubset.length > 0 && !propertiesSubset.includes(property)) {
           return;
         }
-        formValues[property] = ValidateUtils.getPropertyValue(property, form);
+        formValues[property] = ValidateUtils.getPropertyValue(
+          property, form, jsonSchema);
       });
     }
 
@@ -143,9 +144,6 @@ export class ValidateUtils {
   static jsonSchemaValidator(property: string, form: FormGroup,
     jsonSchema: JsonSchema, transaction?: Transaction): ValidatorFn {
     return (): ValidationErrors | null => {
-      if (!jsonSchema || !form) {
-        return null;
-      }
       const data = {
         ...ValidateUtils.getFormValues(form, jsonSchema),
         ...ValidateUtils.getNonFormValues(transaction)
