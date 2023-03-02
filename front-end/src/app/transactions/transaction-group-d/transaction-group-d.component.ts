@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
-import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
-import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
 @Component({
@@ -27,7 +25,6 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
     'memo_text_input',
     'subTransaction',
   ];
-  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
 
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
     ContactTypes.ORGANIZATION,
@@ -53,23 +50,5 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
       ];
     }
     super.ngOnInit();
-    this.subTransactionOptions = (this.transaction?.transactionType?.subTransactionTypes || []).map((type) => {
-      let scheduleLabels: LabelList | undefined;
-
-      if (this.transaction?.transactionType?.scheduleId === 'A') scheduleLabels = ScheduleATransactionTypeLabels;
-      if (this.transaction?.transactionType?.scheduleId === 'B') scheduleLabels = ScheduleBTransactionTypeLabels;
-
-      if (scheduleLabels !== undefined) {
-        return {
-          label: LabelUtils.get(scheduleLabels, type),
-          value: type,
-        };
-      }
-
-      return {
-        label: 'Label not found',
-        value: type,
-      };
-    });
   }
 }

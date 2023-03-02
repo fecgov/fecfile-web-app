@@ -8,7 +8,6 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
-import { LabelUtils, PrimeOptions, StatesCodeLabels, CountryCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateService } from 'app/shared/services/validate.service';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -32,8 +31,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     'truth_statement',
   ];
   report?: F3xSummary;
-  stateOptions: PrimeOptions = [];
-  countryOptions: PrimeOptions = [];
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
@@ -57,9 +54,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))

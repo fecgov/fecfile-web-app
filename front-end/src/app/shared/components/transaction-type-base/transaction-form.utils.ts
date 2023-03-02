@@ -130,7 +130,7 @@ export class TransactionFormUtils {
 
     // Override the default entity_type value if called for by the defaultContactTypeOption
     // in the TransactionType
-    let defaultContactTypeOption: string = contactTypeOptions[0]?.code;
+    let defaultContactTypeOption: string = contactTypeOptions[0]?.value;
     if (transaction?.transactionType?.defaultContactTypeOption) {
       defaultContactTypeOption = transaction.transactionType.defaultContactTypeOption;
     }
