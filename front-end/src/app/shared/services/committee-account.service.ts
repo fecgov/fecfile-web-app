@@ -20,7 +20,7 @@ export class CommitteeAccountService {
     const userLoginData$ = this.store.select(selectUserLoginData);
     return userLoginData$.pipe(
       mergeMap((userLoginData) => {
-        return this.fecApiService.getDetails(userLoginData.committee_id);
+        return this.fecApiService.getCommitteeDetails(userLoginData.committee_id);
       })
     );
   }
