@@ -14,7 +14,6 @@ import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ApiService } from 'app/shared/services/api.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { getTestTransactionByType, testMockStore, testIndividualReceipt } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
@@ -88,7 +87,6 @@ describe('TransactionTypeBaseComponent', () => {
         DatePipe,
         MessageService,
         FormBuilder,
-        ValidateService,
         TransactionService,
         ConfirmationService,
         provideMockStore(testMockStore),
