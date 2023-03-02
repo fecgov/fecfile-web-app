@@ -32,8 +32,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     'truth_statement',
   ];
   report?: F3xSummary;
-  stateOptions: PrimeOptions = [];
-  countryOptions: PrimeOptions = [];
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
@@ -57,9 +55,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))

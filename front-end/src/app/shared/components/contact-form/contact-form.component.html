@@ -1,4 +1,3 @@
-
 <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
   <div class="grid">
     <div class="col-12">
@@ -12,7 +11,9 @@
         <app-contact-lookup
           [contactTypeFormControl]="contactTypeFormControl"
           [contactTypeOptions]="contactTypeOptions"
-          [showSearchBox]="form.get('type')?.value === ContactTypes.CANDIDATE ||  form.get('type')?.value === ContactTypes.COMMITTEE"
+          [showSearchBox]="
+            form.get('type')?.value === ContactTypes.CANDIDATE || form.get('type')?.value === ContactTypes.COMMITTEE
+          "
           [showCreateNewContactButton]="false"
           [includeFecfileResults]="false"
           (contactLookupSelect)="onContactLookupSelect($event)"
@@ -71,22 +72,14 @@
         <div class="field">
           <label for="last_name">LAST NAME</label>
           <input type="text" pInputText id="last_name" formControlName="last_name" />
-          <app-error-messages
-            [form]="form"
-            fieldName="last_name"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="last_name" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
       <div class="col-4">
         <div class="field">
           <label for="first_name">FIRST NAME</label>
           <input type="text" pInputText id="first_name" formControlName="first_name" />
-          <app-error-messages
-            [form]="form"
-            fieldName="first_name"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="first_name" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
       <div class="col-4">
@@ -133,13 +126,7 @@
     <div class="col-6">
       <div class="field">
         <label for="country">COUNTRY/REGION</label>
-        <p-dropdown
-          inputId="country"
-          formControlName="country"
-          [options]="countryOptions"
-          optionLabel="name"
-          optionValue="code"
-        ></p-dropdown>
+        <p-dropdown inputId="country" formControlName="country" [options]="countryOptions"></p-dropdown>
       </div>
     </div>
     <div class="col-6"></div>
@@ -175,8 +162,6 @@
           inputId="state"
           formControlName="state"
           [options]="stateOptions"
-          optionLabel="name"
-          optionValue="code"
           [autoDisplayFirst]="false"
           appendTo="body"
         ></p-dropdown>
@@ -195,9 +180,7 @@
     <div class="col-6">
       <div class="field">
         <label for="telephone">TELEPHONE (OPTIONAL)</label>
-        <app-fec-international-phone-input 
-          id="telephone" 
-          formControlName="telephone">
+        <app-fec-international-phone-input id="telephone" formControlName="telephone">
         </app-fec-international-phone-input>
         <app-error-messages
           [form]="form"
@@ -225,22 +208,14 @@
         <div class="field">
           <label for="employer">EMPLOYER (OPTIONAL)</label>
           <input type="text" pInputText id="employer" formControlName="employer" />
-          <app-error-messages
-            [form]="form"
-            fieldName="employer"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="employer" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
       <div class="col-6">
         <div class="field">
           <label for="occupation">OCCUPATION (OPTIONAL)</label>
           <input type="text" pInputText id="occupation" formControlName="occupation" />
-          <app-error-messages
-            [form]="form"
-            fieldName="occupation"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <app-error-messages [form]="form" fieldName="occupation" [formSubmitted]="formSubmitted"></app-error-messages>
         </div>
       </div>
     </div>
@@ -264,8 +239,6 @@
             inputId="candidate_office"
             formControlName="candidate_office"
             [options]="candidateOfficeTypeOptions"
-            optionLabel="name"
-            optionValue="code"
             [autoDisplayFirst]="false"
             appendTo="body"
           ></p-dropdown>
@@ -289,8 +262,6 @@
             inputId="candidate_state"
             formControlName="candidate_state"
             [options]="candidateStateOptions"
-            optionLabel="name"
-            optionValue="code"
             [autoDisplayFirst]="false"
           ></p-dropdown>
           <app-error-messages
@@ -313,8 +284,6 @@
             inputId="candidate_district"
             formControlName="candidate_district"
             [options]="candidateDistrictOptions"
-            optionLabel="name"
-            optionValue="code"
             appendTo="body"
             [autoDisplayFirst]="false"
           ></p-dropdown>

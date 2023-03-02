@@ -1,5 +1,5 @@
 export type LabelList = string[][];
-export type PrimeOptions = { name: string; code: string }[];
+export type PrimeOptions = { label: string; value: string }[];
 
 /**
  * Class to provide utilities for options lists
@@ -42,13 +42,13 @@ export class LabelUtils {
   public static getPrimeOptions(labelArrays: LabelList, values?: string[]): PrimeOptions {
     if (values) {
       return values.map((type: string) => ({
-        name: LabelUtils.get(labelArrays, type),
-        code: type,
+        label: LabelUtils.get(labelArrays, type),
+        value: type,
       }));
     } else {
       return labelArrays.map((item: string[]) => ({
-        name: item[1],
-        code: item[0],
+        label: item[1],
+        value: item[0],
       }));
     }
   }
