@@ -26,7 +26,6 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
     'memo_text_input',
     'subTransaction',
   ];
-  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes }[] = [];
 
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
     ContactTypes.ORGANIZATION,
@@ -57,11 +56,5 @@ export class TransactionGroupDComponent extends TransactionTypeBaseComponent imp
       ];
     }
     super.ngOnInit();
-    this.subTransactionOptions = (this.transaction?.transactionType?.subTransactionTypes || []).map((type) => {
-      return {
-        label: LabelUtils.get(ScheduleATransactionTypeLabels, type),
-        value: type,
-      };
-    });
   }
 }
