@@ -158,7 +158,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL, 'Payment to Payroll for Operating Expenditure'],
   [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo'],
   [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID, 'Void of Operating Expenditure'],
-  [ScheduleBTransactionTypes.TRANSFER_TO_AFFIILIATES, 'Transfers to Affiliates/Other Committees'],
+  [ScheduleBTransactionTypes.TRANSFER_TO_AFFIILIATES, 'Transfers to Affiliates/Other Committee'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE, 'Contribution to Candidate'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID, 'Void of Contribution to Candidate'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE, 'Contribution to Other Committee'],
@@ -166,7 +166,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT, 'Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT, 'Credit Card Payment for Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO, 'Credit Card Corresponding Memo'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT, 'Staff Reimbursements for Other Disbursement'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT, 'Staff Reimbursement for Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO, 'Reimbursement Corresponding Memo'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL, 'Payment to Payroll for Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo for Other Disbursement'],
@@ -200,7 +200,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_RECOUNT, 'Recount Disbursement'],
   [
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY,
-    'Headquarters Account Operating Expense for National Party Expenses',
+    'Headquarters Account Operating Expense for National Party Expense',
   ],
   [
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY,

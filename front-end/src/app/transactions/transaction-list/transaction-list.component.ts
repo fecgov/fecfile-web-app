@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
+import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -21,12 +21,39 @@ export class TransactionListComponent extends TableListBaseComponent<Transaction
   report: F3xSummary | undefined;
   scheduleTransactionTypeLabels: LabelList = [...ScheduleATransactionTypeLabels, ...ScheduleBTransactionTypeLabels];
 
+  public tableActions: TableAction[] = [
+    new TableAction(
+      'Add a receipt',
+      this.createTransactions.bind(this, 'receipt'),
+      (report: F3xSummary) => report.report_status === 'In-Progress',
+      () => true
+    ),
+    new TableAction(
+      'Add a disbursement',
+      this.createTransactions.bind(this, 'disbursement'),
+      (report: F3xSummary) => report.report_status === 'In-Progress',
+      () => true
+    ),
+    new TableAction(
+      'Add loans and debts',
+      this.createTransactions.bind(this, 'loans-and-debts'),
+      (report: F3xSummary) => report.report_status === 'In-Progress',
+      () => false
+    ),
+    new TableAction(
+      'Add other transactions',
+      this.createTransactions.bind(this, 'other-transactions'),
+      (report: F3xSummary) => report.report_status === 'In-Progress',
+      () => false
+    ),
+  ];
   constructor(
     protected override messageService: MessageService,
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     protected override itemService: TransactionService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private store: Store
   ) {
     super(messageService, confirmationService, elementRef);
@@ -44,6 +71,14 @@ export class TransactionListComponent extends TableListBaseComponent<Transaction
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
+  }
+
+  createTransactions(transactionCategory: string, report?: F3xSummary): void {
+    this.router.navigateByUrl(`/transactions/report/${report?.id}/select/${transactionCategory}`);
+  }
+
+  public onTableActionClick(action: TableAction, report?: F3xSummary) {
+    action.action(report);
   }
 
   protected getEmptyItem(): Transaction {

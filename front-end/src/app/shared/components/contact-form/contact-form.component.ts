@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { JsonSchema } from 'app/shared/interfaces/json-schema.interface';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
@@ -14,8 +14,7 @@ import {
   CandidateOfficeTypes,
   Contact,
   ContactTypeLabels,
-  ContactTypes,
-  FecApiCandidateLookupData,
+  ContactTypes, FecApiCandidateLookupData,
   FecApiCommitteeLookupData
 } from '../../models/contact.model';
 
@@ -25,18 +24,16 @@ import {
 })
 export class ContactFormComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup = this.fb.group(
-    this.validateService.getFormGroupFields([
+    ValidateUtils.getFormGroupFields([
       ...new Set([
-        ...ValidateService.getSchemaProperties(contactIndividualSchema),
-        ...ValidateService.getSchemaProperties(contactCandidateSchema),
-        ...ValidateService.getSchemaProperties(contactCommitteeSchema),
-        ...ValidateService.getSchemaProperties(contactOrganizationSchema),
+        ...ValidateUtils.getSchemaProperties(contactIndividualSchema),
+        ...ValidateUtils.getSchemaProperties(contactCandidateSchema),
+        ...ValidateUtils.getSchemaProperties(contactCommitteeSchema),
+        ...ValidateUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ])
   );
   @Input() formSubmitted = false;
-
-  contactTypeFormControl: FormControl = new FormControl();
 
   private destroy$: Subject<boolean> = new Subject();
 
@@ -49,7 +46,6 @@ export class ContactFormComponent implements OnInit, OnDestroy {
   candidateDistrictOptions: PrimeOptions = [];
 
   constructor(
-    private validateService: ValidateService,
     private fb: FormBuilder,
     private fecApiService: FecApiService
   ) { }
@@ -61,23 +57,18 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
     this.candidateStateOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
 
-    // Initialize validation tracking of current JSON schema and form data
-    this.validateService.formValidatorSchema = contactIndividualSchema;
-    this.validateService.formValidatorForm = this.form;
-
-    this.contactTypeFormControl = this.form?.get('type') as FormControl || new FormControl();
-
     this.form
       ?.get('type')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
-        // Update validator JSON schema to the selected contact type
-        this.validateService.formValidatorSchema = this.getSchemaByType(value as ContactTypes);
+        const schema = ContactService.getSchemaByType(
+          value as ContactTypes);
+        ValidateUtils.addJsonSchemaValidators(this.form, schema, true);
 
         // Clear out non-schema form values
         const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-        const schemaProperties: string[] = ValidateService.getSchemaProperties(
-          this.validateService.formValidatorSchema
+        const schemaProperties: string[] = ValidateUtils.getSchemaProperties(
+          schema
         );
         Object.keys(this.form.controls).forEach((property: string) => {
           if (!schemaProperties.includes(property)) {
@@ -143,6 +134,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
           this.candidateDistrictOptions = [];
         }
       });
+
   }
 
   ngOnDestroy(): void {
@@ -250,22 +242,4 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Given the type of contact given, return the appropriate JSON schema doc
-   * @param {ContactTypes} type
-   * @returns {JsonSchema} schema
-   */
-  private getSchemaByType(type: ContactTypes): JsonSchema {
-    let schema: JsonSchema = contactIndividualSchema;
-    if (type === ContactTypes.CANDIDATE) {
-      schema = contactCandidateSchema;
-    }
-    if (type === ContactTypes.COMMITTEE) {
-      schema = contactCommitteeSchema;
-    }
-    if (type === ContactTypes.ORGANIZATION) {
-      schema = contactOrganizationSchema;
-    }
-    return schema;
-  }
 }

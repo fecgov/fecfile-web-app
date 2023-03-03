@@ -1,28 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { of } from 'rxjs';
-import { MessageService, SharedModule, ConfirmationService } from 'primeng/api';
-import { DividerModule } from 'primeng/divider';
-import { CheckboxModule } from 'primeng/checkbox';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { SubmitF3xStep2Component } from './submit-f3x-step2.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ConfirmationService, MessageService, SharedModule } from 'primeng/api';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DividerModule } from 'primeng/divider';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { of } from 'rxjs';
 import { CommitteeAccount } from '../../../shared/models/committee-account.model';
-import { ValidateService } from '../../../shared/services/validate.service';
 import { F3xSummaryService } from '../../../shared/services/f3x-summary.service';
-import { ReportsModule } from '../../reports.module';
 import { ReportService } from '../../../shared/services/report.service';
+import { ApiService } from '../../../shared/services/api.service';
+import { ReportsModule } from '../../reports.module';
+import { SubmitF3xStep2Component } from './submit-f3x-step2.component';
 
 describe('SubmitF3xStep2Component', () => {
   let component: SubmitF3xStep2Component;
   let fixture: ComponentFixture<SubmitF3xStep2Component>;
   let router: Router;
   let reportService: F3xSummaryService;
+  let apiService: ApiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -39,12 +40,12 @@ describe('SubmitF3xStep2Component', () => {
       ],
       declarations: [SubmitF3xStep2Component],
       providers: [
-        ValidateService,
         FormBuilder,
         F3xSummaryService,
         MessageService,
         ConfirmationService,
         ReportService,
+        ApiService,
         provideMockStore(testMockStore),
         {
           provide: ActivatedRoute,
@@ -67,6 +68,7 @@ describe('SubmitF3xStep2Component', () => {
     router = TestBed.inject(Router);
     reportService = TestBed.inject(F3xSummaryService);
     fixture = TestBed.createComponent(SubmitF3xStep2Component);
+    apiService = TestBed.inject(ApiService);
     component = fixture.componentInstance;
     spyOn(reportService, 'get').and.returnValue(of(F3xSummary.fromJSON({ id: '999' })));
     fixture.detectChanges();
@@ -145,11 +147,11 @@ describe('SubmitF3xStep2Component', () => {
 
     expect(component.treasurerNameChanged()).toBe(false);
 
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.onConfirm();
-    setTimeout(() => {
-      expect(navigateSpy).toHaveBeenCalledWith(`/reports/submit/status/999`);
-    }, 5000);
+    const navigateSpy = spyOn(router, 'navigateByUrl').and.returnValue(Promise.resolve(true));
+    spyOn(apiService, 'post').and.returnValue(of(true));
+    component.onConfirm().subscribe(() => {
+      expect(navigateSpy).toHaveBeenCalledWith(`/reports/f3x/submit/status/999`);
+    });
   });
 
   it('#submit should not submit when form data invalid', () => {
