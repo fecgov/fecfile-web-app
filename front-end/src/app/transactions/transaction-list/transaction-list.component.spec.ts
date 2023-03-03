@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -13,13 +13,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { TransactionListComponent, MemoCodePipe } from './transaction-list.component';
 
-describe('CreateF3xStep4Component', () => {
+describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
   let fixture: ComponentFixture<TransactionListComponent>;
+  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, RouterTestingModule],
+      imports: [ToolbarModule, TableModule, RouterTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [TransactionListComponent],
       providers: [
         MessageService,
@@ -57,6 +58,7 @@ describe('CreateF3xStep4Component', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionListComponent);
+    router = TestBed.inject(Router);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -71,5 +73,36 @@ describe('CreateF3xStep4Component', () => {
     expect(result).toBe('Y');
     result = pipe.transform(false);
     expect(result).toBe('-');
+  });
+
+  it('should navigate to create receipt', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.onTableActionClick(component.tableActions[0], { id: '999' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/receipt`);
+  });
+  it('should navigate to create disbursement', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.onTableActionClick(component.tableActions[1], { id: '999' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/disbursement`);
+  });
+  it('should navigate to create loans & debts', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.onTableActionClick(component.tableActions[2], { id: '999' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/loans-and-debts`);
+  });
+  it('should navigate to create other transactions', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.onTableActionClick(component.tableActions[3], { id: '999' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/other-transactions`);
+  });
+  it('should show the correct acitons', () => {
+    expect(component.tableActions[0].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
+    expect(component.tableActions[1].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
+    expect(component.tableActions[2].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
+    expect(component.tableActions[3].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
+    expect(component.tableActions[0].isEnabled({})).toEqual(true);
+    expect(component.tableActions[1].isEnabled({})).toEqual(true);
+    expect(component.tableActions[2].isEnabled({})).toEqual(false);
+    expect(component.tableActions[3].isEnabled({})).toEqual(false);
   });
 });
