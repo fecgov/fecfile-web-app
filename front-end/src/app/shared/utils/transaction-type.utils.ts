@@ -84,6 +84,7 @@ import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT } from '../models/transaction
 import { OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT } from '../models/transaction-types/OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT.model';
 import { OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL } from '../models/transaction-types/OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL.model';
 import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL } from '../models/transaction-types/OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL.model';
+import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -167,6 +168,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
   OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
   OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL,
+  OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO,
 }
 
 export class TransactionTypeUtils {

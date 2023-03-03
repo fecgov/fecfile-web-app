@@ -5,8 +5,6 @@
         inputId="entity_type"
         [formControl]="contactTypeFormControl"
         [options]="contactTypeOptions"
-        optionLabel="name"
-        optionValue="code"
         [readonly]="contactTypeReadOnly"
         styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
         [dropdownIcon]="contactTypeOptions.length > 1 ? 'pi pi-chevron-down' : ''"
@@ -34,7 +32,7 @@
           </div>
         </ng-template>
         <ng-template let-contact pTemplate="item">
-          <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
+          <span [innerHTML]="contact.label | highlightTerms : searchTerm" class="contact-label"> </span>
           <span *ngIf="isContact(contact.value)" class="in-contacts"> In contacts </span>
         </ng-template>
       </p-autoComplete>

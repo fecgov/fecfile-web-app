@@ -1,6 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
@@ -36,6 +38,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   formSubmitted = false;
   purposeDescriptionLabel = '';
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
+  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes | ScheduleBTransactionTypes }[] = [];
 
   form: FormGroup = this.fb.group({});
 
@@ -56,6 +59,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     } else {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
+    this.subTransactionOptions = (this.transaction?.transactionType?.subTransactionTypes || []).map((type) => {
+      return {
+        label:
+          LabelUtils.get(ScheduleATransactionTypeLabels, type) || LabelUtils.get(ScheduleBTransactionTypeLabels, type),
+        value: type,
+      };
+    });
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
     this.parentOnInit();
   }
