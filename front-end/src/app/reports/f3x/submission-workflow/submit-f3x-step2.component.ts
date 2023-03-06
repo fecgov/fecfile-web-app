@@ -5,10 +5,9 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ApiService } from 'app/shared/services/api.service';
+import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
-import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
@@ -32,8 +31,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     'truth_statement',
   ];
   report?: F3xSummary;
-  stateOptions: PrimeOptions = [];
-  countryOptions: PrimeOptions = [];
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
@@ -56,9 +53,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))

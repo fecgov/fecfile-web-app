@@ -23,11 +23,11 @@ describe('LabelUtils', () => {
 
   it('#getPrimeOptions() should return a PrimeOptions type of the label list', () => {
     const options: PrimeOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    let option: PrimeOptions = options.filter((item) => item.code === 'VA');
-    expect(option[0].name).toBe('Virginia');
-    option = options.filter((item) => item.code === 'MP');
-    expect(option[0].name).toBe('Northern Mariana Islands');
-    option = options.filter((item) => item.code === 'does-not-exist');
+    let option: PrimeOptions = options.filter((item) => item.value === 'VA');
+    expect(option[0].label).toBe('Virginia');
+    option = options.filter((item) => item.value === 'MP');
+    expect(option[0].label).toBe('Northern Mariana Islands');
+    option = options.filter((item) => item.value === 'does-not-exist');
     expect(option.length).toBe(0);
   });
 
