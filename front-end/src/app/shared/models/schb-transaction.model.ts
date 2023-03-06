@@ -52,14 +52,8 @@ export class SchBTransaction extends Transaction {
   override apiEndpoint = '/transactions/schedule-b';
 
   override getFieldsNotToValidate(): string[] {
-    return [
-      //'donor_committee_name',
-      'back_reference_tran_id_number',
-      'back_reference_sched_name',
-      ...super.getFieldsNotToValidate(),
-    ];
+    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
   }
-
   // prettier-ignore
   static fromJSON(json: any, depth = 2): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
     const transaction = plainToClass(SchBTransaction, json);
