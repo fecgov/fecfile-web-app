@@ -15,6 +15,7 @@ export class OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT extends SchBTransactionType 
   schema = schema;
   override defaultContactTypeOption = ContactTypes.INDIVIDUAL;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override subTransactionTypes = [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO];
 
   override generatePurposeDescription() {
     return 'Reimbursement: See Below';

@@ -6,6 +6,7 @@ import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.mod
 @Component({
   selector: 'app-transaction-group-a',
   templateUrl: './transaction-group-a.component.html',
+  styleUrls: ['../transaction.scss'],
 })
 export class TransactionGroupAComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -28,6 +29,7 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
     'contributor_occupation',
     'memo_code',
     'memo_text_input',
+    'subTransaction',
   ];
 
   override ngOnInit(): void {
@@ -51,6 +53,7 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
         'memo_code',
         'memo_text_input',
         'category_code',
+        'subTransaction',
       ];
     }
     super.ngOnInit();
