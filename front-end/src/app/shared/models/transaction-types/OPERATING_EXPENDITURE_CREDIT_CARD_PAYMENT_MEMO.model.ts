@@ -3,23 +3,28 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_M
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
 
-export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
+export class OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO extends SchBTransactionType {
   componentGroupId = 'B';
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO
+    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO
   );
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
+    LabelUtils.get(
+      ScheduleBTransactionTypeLabels,
+      ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO
+    )
+  );
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB29',
-      transaction_type_identifier: ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO,
+      form_type: 'SB21b',
+      transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });
   }

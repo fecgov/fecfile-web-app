@@ -8,7 +8,7 @@ import {
   NavigationControl,
   NavigationDestination,
   NavigationEvent,
-  TransactionNavigationControls
+  TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
@@ -50,7 +50,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fb: FormBuilder,
     protected router: Router,
     protected fecDatePipe: FecDatePipe
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
