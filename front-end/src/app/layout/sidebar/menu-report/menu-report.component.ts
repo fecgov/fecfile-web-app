@@ -20,7 +20,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   currentReportId: string | undefined;
   currentReportTimestamp: number | undefined;
   items: MenuItem[] = [];
-  showMenu = false;
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   reportIsEditableFlag = false;
   cashOnHand: CashOnHand = {
@@ -74,11 +73,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   }
 
   handleNavigationEvent(event: NavigationEnd) {
-    // Show the sidebar report menu if the router url matches one of the url
-    // regular expressions in the matchUrl array.
-    this.showMenu = this.isActive(this.urlMatch, event.url);
-
-    if (this.showMenu && this.activeReport) {
+    if (this.activeReport) {
       if (
         this.activeReport.id !== this.currentReportId ||
         this.activeReport.updated?.getTime() !== this.currentReportTimestamp
