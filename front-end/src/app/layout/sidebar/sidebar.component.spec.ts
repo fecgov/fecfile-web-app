@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { MenuReportComponent } from './menu-report/menu-report.component';
+import { SharedModule } from 'app/shared/shared.module';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -16,6 +17,7 @@ describe('SidebarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
+        SharedModule,
         BrowserAnimationsModule,
         MenuModule,
         PanelMenuModule,
