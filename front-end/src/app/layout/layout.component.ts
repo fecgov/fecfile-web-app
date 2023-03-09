@@ -52,7 +52,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
     // Show the sidebar report menu if the router url matches one of the url
     // regular expressions in the matchUrl array.
     this.sidebarVisible = this.isActive(this.urlMatch, event.url);
-    console.log(this.sidebarVisible);
   }
 
   /**
