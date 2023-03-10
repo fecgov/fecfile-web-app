@@ -114,7 +114,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
       case ScheduleATransactionGroups.REFUNDS:
         return [
           ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES,
-          ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_UNREGISTERED_COMMITTEES,
+          ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
         ];
       case ScheduleATransactionGroups.OTHER:
         return [
