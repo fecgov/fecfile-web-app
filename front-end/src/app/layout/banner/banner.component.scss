@@ -84,7 +84,6 @@ button:not([disabled]):focus {
   box-shadow: none;
   padding: 0;
   text-align: left;
-  background-image: url(https://designsystem.digital.gov/assets/img/usa-icons/remove.svg), linear-gradient(transparent, transparent);
   background-repeat: no-repeat;
   background-color: #f0f0f0;
   background-position: right 1.25rem center;
@@ -252,7 +251,7 @@ button:not([disabled]):focus {
 }
 
 .usa-banner__inner {
-  margin-left: auto;
+  margin-left: 0;
   margin-right: auto;
   max-width: 64rem;
   padding-left: 1rem;
@@ -265,7 +264,7 @@ button:not([disabled]):focus {
 
 @media all and (min-width:64em) {
   .usa-banner__inner {
-    padding-left: 2rem;
+    padding-left: 1.5rem;
     padding-right: 2rem;
   }
 }
@@ -296,7 +295,7 @@ button:not([disabled]):focus {
 .usa-banner__header-text {
   margin-bottom: 0;
   margin-top: 0;
-  font-size: .8rem;
+  font-size: .9rem;
   line-height: 1.1;
 }
 
@@ -381,7 +380,7 @@ button:not([disabled]):focus {
   vertical-align: baseline;
   color: #005ea2;
   display: block;
-  font-size: .8rem;
+  font-size: .9rem;
   height: auto;
   line-height: 1.1;
   padding: 0;
@@ -455,11 +454,6 @@ button:not([disabled]):focus {
     margin-left: 2px;
   }
 
-  .usa-banner__button:hover::after {
-    content: "";
-    background-color: #1a4480;
-  }
-
   .usa-banner__button:visited {
     color: #54278f;
   }
@@ -491,6 +485,47 @@ button:not([disabled]):focus {
 
 .usa-banner__button[aria-expanded=false] {
   background-image: none;
+}
+
+@media all and (min-width:40em) {
+  .usa-banner__button[aria-expanded=true] {
+      height: auto;
+      padding: 0;
+      position: relative
+  }
+
+  .usa-banner__button[aria-expanded=true]::after {
+      background: url(/assets/img/uswds/expand_less.svg)no-repeat center/contain;
+      display: inline-block;
+      height: 1rem;
+      width: 1rem;
+      content: "";
+      vertical-align: middle;
+      margin-left: 2px
+  }
+
+  @supports ((-webkit-mask:url()) or (mask:url())) {
+      .usa-banner__button[aria-expanded=true]::after {
+          background: 0 0;
+          background-color: #005ea2;
+          -webkit-mask: url(/assets/img/uswds/expand_less.svg)no-repeat center/contain;
+          mask: url(/assets/img/uswds/expand_less.svg)no-repeat center/contain
+      }
+
+      .usa-banner__button[aria-expanded=true]::after:hover {
+          background-color: #1a4480
+      }
+  }
+
+  .usa-banner__button[aria-expanded=true]:hover::after {
+      content: "";
+      background-color: #1a4480;
+      position: absolute
+  }
+
+  .usa-banner__button[aria-expanded=true]::after {
+      position: absolute
+  }
 }
 
 .usa-banner__button-text {
