@@ -1,27 +1,197 @@
-// banner
+/*! CSS Used from: https://designsystem.digital.gov/assets/css/styles.css */
+strong {
+  font-weight: bolder;
+}
+
+img {
+  border-style: none;
+  max-width: 100%;
+}
+
+button {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+button {
+  overflow: visible;
+}
+
+button {
+  text-transform: none;
+}
+
+[type=button],
+button {
+  -webkit-appearance: button;
+}
+
+[hidden] {
+  display: none;
+}
+
+button:not([disabled]):focus {
+  outline: .25rem solid #2491ff;
+  outline-offset: 0;
+}
+
+*,
+::after,
+::before {
+  box-sizing: inherit;
+}
+
+.usa-accordion {
+  list-style-type: none;
+  color: #1b1b1b;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
+  font-size: 1.06rem;
+  line-height: 1.5;
+}
+
+.usa-accordion--bordered .usa-accordion__content {
+  border-bottom: .25rem solid #f0f0f0;
+  border-left: .25rem solid #f0f0f0;
+  border-right: .25rem solid #f0f0f0;
+  padding-bottom: 1rem;
+}
+
+.usa-accordion__content {
+  background-color: #fff;
+  margin-top: 0;
+  overflow: auto;
+  padding: 1rem 1.25rem calc(1rem - .25rem);
+}
+
+.usa-accordion__content>:first-child {
+  margin-top: 0;
+}
+
+.usa-accordion__content>:last-child {
+  margin-bottom: 0;
+}
+
+.usa-accordion__button {
+  -moz-osx-font-smoothing: inherit;
+  -webkit-font-smoothing: inherit;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  text-align: left;
+  background-image: url(https://designsystem.digital.gov/assets/img/usa-icons/remove.svg), linear-gradient(transparent, transparent);
+  background-repeat: no-repeat;
+  background-color: #f0f0f0;
+  background-position: right 1.25rem center;
+  background-size: 1.5rem;
+  color: #1b1b1b;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  margin: 0;
+  padding: 1rem 3.5rem 1rem 1.25rem;
+  text-decoration: none;
+  width: 100%;
+}
+
+.usa-accordion__button:visited {
+  color: #54278f;
+}
+
+.usa-accordion__button:active {
+  color: #162e51;
+}
+
+.usa-accordion__button:focus {
+  outline: .25rem solid #2491ff;
+  outline-offset: 0;
+}
+
+.usa-accordion__button:active,
+.usa-accordion__button:disabled,
+.usa-accordion__button:disabled:active,
+.usa-accordion__button:disabled:focus,
+.usa-accordion__button:disabled:hover,
+.usa-accordion__button:hover {
+  -moz-osx-font-smoothing: inherit;
+  -webkit-font-smoothing: inherit;
+  background-color: transparent;
+  box-shadow: none;
+  text-decoration: underline;
+}
+
+.usa-accordion__button:disabled {
+  color: #c9c9c9;
+}
+
+.usa-accordion__button:hover {
+  background-color: #e6e6e6;
+  color: #1b1b1b;
+  text-decoration: none;
+}
+
+@media (forced-colors:active) {
+  .usa-accordion__button {
+    forced-color-adjust: none;
+  }
+}
+
+.usa-accordion__button[aria-expanded=false] {
+  background-image: url(https://designsystem.digital.gov/assets/img/usa-icons/add.svg), linear-gradient(transparent, transparent);
+  background-repeat: no-repeat;
+  background-size: 1.5rem;
+}
+
 .usa-banner {
   font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
   font-size: 1.06rem;
   line-height: 1.5;
-  background-color: #f0f0f0
+  background-color: #f0f0f0;
 }
 
 @media all and (min-width:40em) {
   .usa-banner {
-      font-size: .87rem;
-      padding-bottom: 0
+    font-size: .87rem;
+    padding-bottom: 0;
   }
 }
 
 .usa-banner .usa-accordion {
   font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
   font-size: 1.06rem;
-  line-height: 1.5
+  line-height: 1.5;
+}
+
+.usa-banner .grid-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
+.usa-banner .grid-row.grid-gap-lg {
+  margin-left: -.75rem;
+  margin-right: -.75rem;
+}
+
+.usa-banner .grid-row.grid-gap-lg>* {
+  padding-left: .75rem;
+  padding-right: .75rem;
+}
+
+@media all and (min-width:40em) {
+  .usa-banner .grid-row .tablet\:grid-col-6 {
+    flex: 0 1 auto;
+    width: 50%;
+  }
 }
 
 .usa-banner__content,
 .usa-banner__header {
-    color: #1b1b1b
+  color: #1b1b1b;
 }
 
 .usa-banner__content {
@@ -32,37 +202,52 @@
   font-size: 1rem;
   overflow: hidden;
   padding: .25rem 1rem 1rem .5rem;
-  width: 100%
+  width: 100%;
 }
 
 @media all and (min-width:64em) {
   .usa-banner__content {
-      padding-left: 2rem;
-      padding-right: 2rem
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
 @media all and (min-width:40em) {
   .usa-banner__content {
-      padding-bottom: 1.5rem;
-      padding-top: 1.5rem
+    padding-bottom: 1.5rem;
+    padding-top: 1.5rem;
   }
 }
 
 .usa-banner__content p:first-child {
-  margin: 0
+  margin: 0;
 }
 
 .usa-banner__guidance {
   display: flex;
   align-items: flex-start;
   max-width: 64ex;
-  padding-top: 1rem
+  padding-top: 1rem;
 }
 
 @media all and (min-width:40em) {
   .usa-banner__guidance {
-      padding-top: 0
+    padding-top: 0;
+  }
+}
+
+.usa-banner__lock-image {
+  height: 1.5ex;
+  width: 1.21875ex;
+}
+
+.usa-banner__lock-image path {
+  fill: currentColor;
+}
+
+@media (forced-colors:active) {
+  .usa-banner__lock-image path {
+    fill: CanvasText;
   }
 }
 
@@ -72,22 +257,22 @@
   max-width: 64rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  display: flex!important;
-  flex-wrap: wrap!important;
+  display: flex !important;
+  flex-wrap: wrap !important;
   align-items: flex-start;
-  padding-right: 0
+  padding-right: 0;
 }
 
 @media all and (min-width:64em) {
   .usa-banner__inner {
-      padding-left: 2rem;
-      padding-right: 2rem
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
 @media all and (min-width:40em) {
   .usa-banner__inner {
-      align-items: center
+    align-items: center;
   }
 }
 
@@ -97,14 +282,14 @@
   font-size: .8rem;
   font-weight: 400;
   min-height: 3rem;
-  position: relative
+  position: relative;
 }
 
 @media all and (min-width:40em) {
   .usa-banner__header {
-      padding-bottom: .25rem;
-      padding-top: .25rem;
-      min-height: 0
+    padding-bottom: .25rem;
+    padding-top: .25rem;
+    min-height: 0;
   }
 }
 
@@ -112,7 +297,7 @@
   margin-bottom: 0;
   margin-top: 0;
   font-size: .8rem;
-  line-height: 1.1
+  line-height: 1.1;
 }
 
 .usa-banner__header-action {
@@ -120,101 +305,62 @@
   line-height: 1.1;
   margin-bottom: 0;
   margin-top: 2px;
-  text-decoration: underline
+  text-decoration: underline;
 }
 
 .usa-banner__header-action::after {
-  background: url(/assets/img/uswds/expand_more.svg)no-repeat center/contain;
+  background-image: url(https://designsystem.digital.gov/assets/img/usa-icons/expand_more.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 1rem 1rem;
   display: inline-block;
   height: 1rem;
   width: 1rem;
   content: "";
   vertical-align: middle;
-  margin-left: auto
-}
-
-@supports ((-webkit-mask:url()) or (mask:url())) {
-  .usa-banner__header-action::after {
-      background: 0 0;
-      background-color: #005ea2;
-      -webkit-mask: url(/assets/img/uswds/expand_more.svg)no-repeat center/contain;
-      mask: url(/assets/img/uswds/expand_more.svg)no-repeat center/contain
-  }
-
-  .usa-banner__header-action::after:hover {
-      background-color: #1a4480
-  }
+  margin-left: auto;
 }
 
 .usa-banner__header-action:hover::after {
   content: "";
-  background-color: #1a4480
+  background-color: #1a4480;
 }
 
 .usa-banner__header-action:visited {
-  color: #54278f
+  color: #54278f;
 }
 
 .usa-banner__header-action:active,
 .usa-banner__header-action:hover {
-  color: #1a4480
+  color: #1a4480;
 }
 
 @media all and (min-width:40em) {
   .usa-banner__header-action {
-      display: none
+    display: none;
   }
 }
 
 @media (forced-colors:active) {
   .usa-banner__header-action {
-      color: LinkText
+    color: LinkText;
   }
 
   .usa-banner__header-action::after {
-      background-color: ButtonText
+    background-color: ButtonText;
   }
-}
-
-.usa-banner__header--expanded {
-  padding-right: 3.5rem
-}
-
-@media all and (min-width:40em) {
-  .usa-banner__header--expanded {
-      background-color: transparent;
-      display: block;
-      font-size: .8rem;
-      font-weight: 400;
-      min-height: 0;
-      padding-right: 0
-  }
-}
-
-.usa-banner__header--expanded .usa-banner__inner {
-  margin-left: 0
-}
-
-@media all and (min-width:40em) {
-  .usa-banner__header--expanded .usa-banner__inner {
-      margin-left: auto
-  }
-}
-
-.usa-banner__header--expanded .usa-banner__header-action {
-  display: none
 }
 
 .usa-banner__header-flag {
   float: left;
   margin-right: .5rem;
-  width: 1rem
+  width: 1rem;
 }
 
 @media all and (min-width:40em) {
   .usa-banner__header-flag {
-      margin-right: .5rem;
-      padding-top: 0
+    margin-right: .5rem;
+    padding-top: 0;
   }
 }
 
@@ -240,127 +386,92 @@
   line-height: 1.1;
   padding: 0;
   text-decoration: none;
-  width: auto
+  width: auto;
 }
 
 .usa-banner__button:focus {
   outline: .25rem solid #2491ff;
-  outline-offset: 0
+  outline-offset: 0;
 }
 
-.usa-banner__button.usa-button--active,
-.usa-banner__button.usa-button--disabled,
-.usa-banner__button.usa-button--disabled.usa-button--active,
-.usa-banner__button.usa-button--disabled.usa-button--hover,
-.usa-banner__button.usa-button--disabled.usa-focus,
-.usa-banner__button.usa-button--disabled:active,
-.usa-banner__button.usa-button--disabled:focus,
-.usa-banner__button.usa-button--disabled:hover,
-.usa-banner__button.usa-button--hover,
 .usa-banner__button:active,
 .usa-banner__button:disabled,
-.usa-banner__button:disabled.usa-button--active,
-.usa-banner__button:disabled.usa-button--hover,
-.usa-banner__button:disabled.usa-focus,
 .usa-banner__button:disabled:active,
 .usa-banner__button:disabled:focus,
 .usa-banner__button:disabled:hover,
-.usa-banner__button:hover,
-.usa-banner__button[aria-disabled=true],
-.usa-banner__button[aria-disabled=true].usa-button--active,
-.usa-banner__button[aria-disabled=true].usa-button--hover,
-.usa-banner__button[aria-disabled=true].usa-focus,
-.usa-banner__button[aria-disabled=true]:active,
-.usa-banner__button[aria-disabled=true]:focus,
-.usa-banner__button[aria-disabled=true]:hover {
+.usa-banner__button:hover {
   -moz-osx-font-smoothing: inherit;
   -webkit-font-smoothing: inherit;
   background-color: transparent;
   box-shadow: none;
-  text-decoration: underline
+  text-decoration: underline;
 }
 
-.usa-banner__button.usa-button--hover {
-  color: #1a4480
-}
-
-.usa-banner__button.usa-button--active {
-  color: #162e51
-}
-
-.usa-banner__button.usa-button--disabled,
-.usa-banner__button:disabled,
-.usa-banner__button[aria-disabled=true] {
-  color: #c9c9c9
+.usa-banner__button:disabled {
+  color: #c9c9c9;
 }
 
 .usa-banner__button:visited {
-  color: #54278f
+  color: #54278f;
 }
 
 .usa-banner__button:active,
 .usa-banner__button:hover {
-  color: #1a4480
+  color: #1a4480;
 }
 
 @media all and (max-width:39.99em) {
   .usa-banner__button {
-      width: 100%
+    width: 100%;
+  }
+
+  .usa-banner__button:enabled:focus {
+    outline-offset: -.25rem;
   }
 }
 
 @media all and (min-width:40em) {
   .usa-banner__button {
-      color: #005ea2;
-      bottom: auto;
-      left: auto;
-      right: auto;
-      top: auto;
-      display: inline;
-      margin-left: .5rem;
-      position: relative
+    color: #005ea2;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    top: auto;
+    display: inline;
+    margin-left: .5rem;
+    position: relative;
   }
 
   .usa-banner__button::after {
-      background: url(/assets/img/uswds/expand_more.svg)no-repeat center/contain;
-      display: inline-block;
-      height: 1rem;
-      width: 1rem;
-      content: "";
-      vertical-align: middle;
-      margin-left: 2px
-  }
-
-  @supports ((-webkit-mask:url()) or (mask:url())) {
-      .usa-banner__button::after {
-          background: 0 0;
-          background-color: #005ea2;
-          -webkit-mask: url(/assets/img/uswds/expand_more.svg)no-repeat center/contain;
-          mask: url(/assets/img/uswds/expand_more.svg)no-repeat center/contain
-      }
-
-      .usa-banner__button::after:hover {
-          background-color: #1a4480
-      }
+    background-image: url(https://designsystem.digital.gov/assets/img/usa-icons/expand_more.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 1rem 1rem;
+    display: inline-block;
+    height: 1rem;
+    width: 1rem;
+    content: "";
+    vertical-align: middle;
+    margin-left: 2px;
   }
 
   .usa-banner__button:hover::after {
-      content: "";
-      background-color: #1a4480
+    content: "";
+    background-color: #1a4480;
   }
 
   .usa-banner__button:visited {
-      color: #54278f
+    color: #54278f;
   }
 
   .usa-banner__button:active,
   .usa-banner__button:hover {
-      color: #1a4480
+    color: #1a4480;
   }
 
   .usa-banner__button::after,
   .usa-banner__button:hover::after {
-      position: absolute
+    position: absolute;
   }
 }
 
@@ -368,896 +479,322 @@
 
   .usa-banner__button::after,
   .usa-banner__button:hover::after {
-      background-color: ButtonText
+    background-color: ButtonText;
   }
 }
 
 @media all and (min-width:40em) {
   .usa-banner__button:hover {
-      text-decoration: none
+    text-decoration: none;
   }
 }
 
-.usa-banner__button[aria-expanded=false],
-.usa-banner__button[aria-expanded=true] {
-  background-image: none
-}
-
-@media all and (max-width:39.99em) {
-  .usa-banner__button[aria-expanded=true]::after {
-      background: url(/assets/img/uswds/close.svg)no-repeat center/contain;
-      display: inline-block;
-      height: 3rem;
-      width: 3rem;
-      content: "";
-      vertical-align: middle;
-      margin-left: 0
-  }
-
-  @supports ((-webkit-mask:url()) or (mask:url())) {
-      .usa-banner__button[aria-expanded=true]::after {
-          background: 0 0;
-          background-color: #005ea2;
-          -webkit-mask: url(/assets/img/uswds/close.svg)no-repeat center/contain;
-          mask: url(/assets/img/uswds/close.svg)no-repeat center/contain
-      }
-  }
-
-  .usa-banner__button[aria-expanded=true]::before {
-      bottom: 0;
-      top: 0;
-      position: absolute;
-      right: 0;
-      background-color: #dfe1e2;
-      content: "";
-      display: block;
-      height: 3rem;
-      width: 3rem
-  }
-
-  .usa-banner__button[aria-expanded=true]::after {
-      bottom: 0;
-      top: 0;
-      position: absolute;
-      right: 0
-  }
-}
-
-@media all and (min-width:40em) {
-  .usa-banner__button[aria-expanded=true] {
-      height: auto;
-      padding: 0;
-      position: relative
-  }
-
-  .usa-banner__button[aria-expanded=true]::after {
-      background: url(/assets/img/uswds/expand_less.svg)no-repeat center/contain;
-      display: inline-block;
-      height: 1rem;
-      width: 1rem;
-      content: "";
-      vertical-align: middle;
-      margin-left: 2px
-  }
-
-  @supports ((-webkit-mask:url()) or (mask:url())) {
-      .usa-banner__button[aria-expanded=true]::after {
-          background: 0 0;
-          background-color: #005ea2;
-          -webkit-mask: url(/assets/img/uswds/expand_less.svg)no-repeat center/contain;
-          mask: url(/assets/img/uswds/expand_less.svg)no-repeat center/contain
-      }
-
-      .usa-banner__button[aria-expanded=true]::after:hover {
-          background-color: #1a4480
-      }
-  }
-
-  .usa-banner__button[aria-expanded=true]:hover::after {
-      content: "";
-      background-color: #1a4480;
-      position: absolute
-  }
-
-  .usa-banner__button[aria-expanded=true]::after {
-      position: absolute
-  }
-}
-
-@media (min-width:40em) and (forced-colors:active) {
-
-  .usa-banner__button[aria-expanded=true]::after,
-  .usa-banner__button[aria-expanded=true]:hover::after {
-      background-color: ButtonText
-  }
+.usa-banner__button[aria-expanded=false] {
+  background-image: none;
 }
 
 .usa-banner__button-text {
   position: absolute;
   left: -999em;
   right: auto;
-  text-decoration: underline
+  text-decoration: underline;
 }
 
 @media all and (min-width:40em) {
   .usa-banner__button-text {
-      position: static;
-      display: inline
+    position: static;
+    display: inline;
   }
 }
 
 @media (forced-colors:active) {
   .usa-banner__button-text {
-      color: LinkText
+    color: LinkText;
   }
 }
 
 .usa-banner__icon {
-  width: 2.5rem
+  width: 2.5rem;
 }
 
-.usa-js-loading .usa-banner__content {
-  position: absolute;
-  left: -999em;
-  right: auto
-}
-
-// accordion
-.usa-accordion {
-  list-style-type: none;
-  color: #1b1b1b;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
-  font-size: 1.06rem;
-  line-height: 1.5
-}
-
-.usa-accordion--bordered .usa-accordion__content {
-  border-bottom: .25rem solid #f0f0f0;
-  border-left: .25rem solid #f0f0f0;
-  border-right: .25rem solid #f0f0f0;
-  padding-bottom: 1rem
-}
-
-.usa-accordion__content {
-  background-color: #fff;
-  margin-top: 0;
-  overflow: auto;
-  padding: 1rem 1.25rem calc(1rem - .25rem)
-}
-
-.usa-accordion__content>:first-child {
-  margin-top: 0
-}
-
-.usa-accordion__content>:last-child {
-  margin-bottom: 0
-}
-
-.usa-accordion__button {
-  -moz-osx-font-smoothing: inherit;
-  -webkit-font-smoothing: inherit;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  padding: 0;
-  text-align: left;
-  background-image: url(/assets/img/uswds/remove.svg), linear-gradient(transparent, transparent);
-  background-repeat: no-repeat;
-  background-color: #f0f0f0;
-  background-position: right 1.25rem center;
-  background-size: 1.5rem;
-  color: #1b1b1b;
-  cursor: pointer;
-  display: inline-block;
-  font-weight: 700;
-  margin: 0;
-  padding: 1rem 3.5rem 1rem 1.25rem;
-  text-decoration: none;
-  width: 100%
-}
-
-.usa-accordion__button:visited {
-  color: #54278f
-}
-
-.usa-accordion__button:active {
-  color: #162e51
-}
-
-.usa-accordion__button:focus {
-  outline: .25rem solid #2491ff;
-  outline-offset: 0
-}
-
-.usa-accordion__button.usa-button--active,
-.usa-accordion__button.usa-button--disabled,
-.usa-accordion__button.usa-button--disabled.usa-button--active,
-.usa-accordion__button.usa-button--disabled.usa-button--hover,
-.usa-accordion__button.usa-button--disabled.usa-focus,
-.usa-accordion__button.usa-button--disabled:active,
-.usa-accordion__button.usa-button--disabled:focus,
-.usa-accordion__button.usa-button--disabled:hover,
-.usa-accordion__button.usa-button--hover,
-.usa-accordion__button:active,
-.usa-accordion__button:disabled,
-.usa-accordion__button:disabled.usa-button--active,
-.usa-accordion__button:disabled.usa-button--hover,
-.usa-accordion__button:disabled.usa-focus,
-.usa-accordion__button:disabled:active,
-.usa-accordion__button:disabled:focus,
-.usa-accordion__button:disabled:hover,
-.usa-accordion__button:hover,
-.usa-accordion__button[aria-disabled=true],
-.usa-accordion__button[aria-disabled=true].usa-button--active,
-.usa-accordion__button[aria-disabled=true].usa-button--hover,
-.usa-accordion__button[aria-disabled=true].usa-focus,
-.usa-accordion__button[aria-disabled=true]:active,
-.usa-accordion__button[aria-disabled=true]:focus,
-.usa-accordion__button[aria-disabled=true]:hover {
-    -moz-osx-font-smoothing: inherit;
-    -webkit-font-smoothing: inherit;
-    background-color: transparent;
-    box-shadow: none;
-    text-decoration: underline
-}
-
-.usa-accordion__button.usa-button--hover {
-    color: #1a4480
-}
-
-.usa-accordion__button.usa-button--active {
-    color: #162e51
-}
-
-.usa-accordion__button.usa-button--disabled,
-.usa-accordion__button:disabled,
-.usa-accordion__button[aria-disabled=true] {
-    color: #c9c9c9
-}
-
-.usa-accordion__button:hover {
-    background-color: #dfe1e2;
-    color: #1b1b1b;
-    text-decoration: none
-}
-
-@media (forced-colors:active) {
-    .usa-accordion__button {
-        forced-color-adjust: none
-    }
-}
-
-.usa-accordion__button[aria-expanded=false] {
-    background-image: url(/assets/img/uswds/add.svg), linear-gradient(transparent, transparent);
-    background-repeat: no-repeat;
-    background-size: 1.5rem
-}
-
-@media all and (min-width:64em) {
-  .usa-nav__primary .usa-accordion__button span {
-      margin-right: 0;
-      padding-right: 1rem
-  }
-}
-
-// grid-row
 .grid-row {
-  display: flex!important;
-  flex-wrap: wrap!important
-}
-
-.grid-row.grid-gap {
-  margin-left: -.5rem;
-  margin-right: -.5rem
-}
-
-.grid-row.grid-gap>* {
-  padding-left: .5rem;
-  padding-right: .5rem
-}
-
-@media all and (min-width:64em) {
-  .grid-row.grid-gap {
-      margin-left: -1rem;
-      margin-right: -1rem
-  }
-
-  .grid-row.grid-gap>* {
-      padding-left: 1rem;
-      padding-right: 1rem
-  }
-}
-
-.grid-row.grid-gap-0 {
-  margin-left: 0;
-  margin-right: 0
-}
-
-.grid-row.grid-gap-0>* {
-  padding-left: 0;
-  padding-right: 0
-}
-
-.grid-row.grid-gap-2px {
-  margin-left: -1px;
-  margin-right: -1px
-}
-
-.grid-row.grid-gap-2px>* {
-  padding-left: 1px;
-  padding-right: 1px
-}
-
-.grid-row.grid-gap-05 {
-  margin-left: -2px;
-  margin-right: -2px
-}
-
-.grid-row.grid-gap-05>* {
-  padding-left: 2px;
-  padding-right: 2px
-}
-
-.grid-row.grid-gap-1 {
-  margin-left: -.25rem;
-  margin-right: -.25rem
-}
-
-.grid-row.grid-gap-1>* {
-  padding-left: .25rem;
-  padding-right: .25rem
-}
-
-.grid-row.grid-gap-2 {
-  margin-left: -.5rem;
-  margin-right: -.5rem
-}
-
-.grid-row.grid-gap-2>* {
-  padding-left: .5rem;
-  padding-right: .5rem
-}
-
-.grid-row.grid-gap-3 {
-  margin-left: -.75rem;
-  margin-right: -.75rem
-}
-
-.grid-row.grid-gap-3>* {
-  padding-left: .75rem;
-  padding-right: .75rem
-}
-
-.grid-row.grid-gap-4 {
-  margin-left: -1rem;
-  margin-right: -1rem
-}
-
-.grid-row.grid-gap-4>* {
-  padding-left: 1rem;
-  padding-right: 1rem
-}
-
-.grid-row.grid-gap-5 {
-  margin-left: -1.25rem;
-  margin-right: -1.25rem
-}
-
-.grid-row.grid-gap-5>* {
-  padding-left: 1.25rem;
-  padding-right: 1.25rem
-}
-
-.grid-row.grid-gap-6 {
-  margin-left: -1.5rem;
-  margin-right: -1.5rem
-}
-
-.grid-row.grid-gap-6>* {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem
-}
-
-.grid-row.grid-gap-sm {
-  margin-left: -1px;
-  margin-right: -1px
-}
-
-.grid-row.grid-gap-sm>* {
-  padding-left: 1px;
-  padding-right: 1px
-}
-
-.grid-row.grid-gap-md {
-  margin-left: -.5rem;
-  margin-right: -.5rem
-}
-
-.grid-row.grid-gap-md>* {
-  padding-left: .5rem;
-  padding-right: .5rem
+  display: flex !important;
+  flex-wrap: wrap !important;
 }
 
 .grid-row.grid-gap-lg {
-  margin-left: -.75rem;
-  margin-right: -.75rem
+  margin-left: -.75rem !important;
+  margin-right: -.75rem !important;
 }
 
 .grid-row.grid-gap-lg>* {
-  padding-left: .75rem;
-  padding-right: .75rem
+  padding-left: .75rem !important;
+  padding-right: .75rem !important;
 }
 
-@media all and (min-width:30em) {
-  .grid-row.mobile-lg\:grid-gap-0 {
-      margin-left: 0;
-      margin-right: 0
-  }
-
-  .grid-row.mobile-lg\:grid-gap-0>* {
-      padding-left: 0;
-      padding-right: 0
-  }
-
-  .grid-row.mobile-lg\:grid-gap-2px {
-      margin-left: -1px;
-      margin-right: -1px
-  }
-
-  .grid-row.mobile-lg\:grid-gap-2px>* {
-      padding-left: 1px;
-      padding-right: 1px
-  }
-
-  .grid-row.mobile-lg\:grid-gap-05 {
-      margin-left: -2px;
-      margin-right: -2px
-  }
-
-  .grid-row.mobile-lg\:grid-gap-05>* {
-      padding-left: 2px;
-      padding-right: 2px
-  }
-
-  .grid-row.mobile-lg\:grid-gap-1 {
-      margin-left: -.25rem;
-      margin-right: -.25rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-1>* {
-      padding-left: .25rem;
-      padding-right: .25rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-2 {
-      margin-left: -.5rem;
-      margin-right: -.5rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-2>* {
-      padding-left: .5rem;
-      padding-right: .5rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-3 {
-      margin-left: -.75rem;
-      margin-right: -.75rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-3>* {
-      padding-left: .75rem;
-      padding-right: .75rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-4 {
-      margin-left: -1rem;
-      margin-right: -1rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-4>* {
-      padding-left: 1rem;
-      padding-right: 1rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-5 {
-      margin-left: -1.25rem;
-      margin-right: -1.25rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-5>* {
-      padding-left: 1.25rem;
-      padding-right: 1.25rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-6 {
-      margin-left: -1.5rem;
-      margin-right: -1.5rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-6>* {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-sm {
-      margin-left: -1px;
-      margin-right: -1px
-  }
-
-  .grid-row.mobile-lg\:grid-gap-sm>* {
-      padding-left: 1px;
-      padding-right: 1px
-  }
-
-  .grid-row.mobile-lg\:grid-gap-md {
-      margin-left: -.5rem;
-      margin-right: -.5rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-md>* {
-      padding-left: .5rem;
-      padding-right: .5rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-lg {
-      margin-left: -.75rem;
-      margin-right: -.75rem
-  }
-
-  .grid-row.mobile-lg\:grid-gap-lg>* {
-      padding-left: .75rem;
-      padding-right: .75rem
-  }
+[class*=grid-col] {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-@media all and (min-width:40em) {
-  .grid-row.tablet\:grid-gap-0 {
-      margin-left: 0;
-      margin-right: 0
-  }
-
-  .grid-row.tablet\:grid-gap-0>* {
-      padding-left: 0;
-      padding-right: 0
-  }
-
-  .grid-row.tablet\:grid-gap-2px {
-      margin-left: -1px;
-      margin-right: -1px
-  }
-
-  .grid-row.tablet\:grid-gap-2px>* {
-      padding-left: 1px;
-      padding-right: 1px
-  }
-
-  .grid-row.tablet\:grid-gap-05 {
-      margin-left: -2px;
-      margin-right: -2px
-  }
-
-  .grid-row.tablet\:grid-gap-05>* {
-      padding-left: 2px;
-      padding-right: 2px
-  }
-
-  .grid-row.tablet\:grid-gap-1 {
-      margin-left: -.25rem;
-      margin-right: -.25rem
-  }
-
-  .grid-row.tablet\:grid-gap-1>* {
-      padding-left: .25rem;
-      padding-right: .25rem
-  }
-
-  .grid-row.tablet\:grid-gap-2 {
-      margin-left: -.5rem;
-      margin-right: -.5rem
-  }
-
-  .grid-row.tablet\:grid-gap-2>* {
-      padding-left: .5rem;
-      padding-right: .5rem
-  }
-
-  .grid-row.tablet\:grid-gap-3 {
-      margin-left: -.75rem;
-      margin-right: -.75rem
-  }
-
-  .grid-row.tablet\:grid-gap-3>* {
-      padding-left: .75rem;
-      padding-right: .75rem
-  }
-
-  .grid-row.tablet\:grid-gap-4 {
-      margin-left: -1rem;
-      margin-right: -1rem
-  }
-
-  .grid-row.tablet\:grid-gap-4>* {
-      padding-left: 1rem;
-      padding-right: 1rem
-  }
-
-  .grid-row.tablet\:grid-gap-5 {
-      margin-left: -1.25rem;
-      margin-right: -1.25rem
-  }
-
-  .grid-row.tablet\:grid-gap-5>* {
-      padding-left: 1.25rem;
-      padding-right: 1.25rem
-  }
-
-  .grid-row.tablet\:grid-gap-6 {
-      margin-left: -1.5rem;
-      margin-right: -1.5rem
-  }
-
-  .grid-row.tablet\:grid-gap-6>* {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem
-  }
-
-  .grid-row.tablet\:grid-gap-sm {
-      margin-left: -1px;
-      margin-right: -1px
-  }
-
-  .grid-row.tablet\:grid-gap-sm>* {
-      padding-left: 1px;
-      padding-right: 1px
-  }
-
-  .grid-row.tablet\:grid-gap-md {
-      margin-left: -.5rem;
-      margin-right: -.5rem
-  }
-
-  .grid-row.tablet\:grid-gap-md>* {
-      padding-left: .5rem;
-      padding-right: .5rem
-  }
-
-  .grid-row.tablet\:grid-gap-lg {
-      margin-left: -.75rem;
-      margin-right: -.75rem
-  }
-
-  .grid-row.tablet\:grid-gap-lg>* {
-      padding-left: .75rem;
-      padding-right: .75rem
-  }
-}
-
-@media all and (min-width:64em) {
-  .grid-row.desktop\:grid-gap-0 {
-      margin-left: 0;
-      margin-right: 0
-  }
-
-  .grid-row.desktop\:grid-gap-0>* {
-      padding-left: 0;
-      padding-right: 0
-  }
-
-  .grid-row.desktop\:grid-gap-2px {
-      margin-left: -1px;
-      margin-right: -1px
-  }
-
-  .grid-row.desktop\:grid-gap-2px>* {
-      padding-left: 1px;
-      padding-right: 1px
-  }
-
-  .grid-row.desktop\:grid-gap-05 {
-      margin-left: -2px;
-      margin-right: -2px
-  }
-
-  .grid-row.desktop\:grid-gap-05>* {
-      padding-left: 2px;
-      padding-right: 2px
-  }
-
-  .grid-row.desktop\:grid-gap-1 {
-      margin-left: -.25rem;
-      margin-right: -.25rem
-  }
-
-  .grid-row.desktop\:grid-gap-1>* {
-      padding-left: .25rem;
-      padding-right: .25rem
-  }
-
-  .grid-row.desktop\:grid-gap-2 {
-      margin-left: -.5rem;
-      margin-right: -.5rem
-  }
-
-  .grid-row.desktop\:grid-gap-2>* {
-      padding-left: .5rem;
-      padding-right: .5rem
-  }
-
-  .grid-row.desktop\:grid-gap-3 {
-      margin-left: -.75rem;
-      margin-right: -.75rem
-  }
-
-  .grid-row.desktop\:grid-gap-3>* {
-      padding-left: .75rem;
-      padding-right: .75rem
-  }
-
-  .grid-row.desktop\:grid-gap-4 {
-      margin-left: -1rem;
-      margin-right: -1rem
-  }
-
-  .grid-row.desktop\:grid-gap-4>* {
-      padding-left: 1rem;
-      padding-right: 1rem
-  }
-
-  .grid-row.desktop\:grid-gap-5 {
-      margin-left: -1.25rem;
-      margin-right: -1.25rem
-  }
-
-  .grid-row.desktop\:grid-gap-5>* {
-      padding-left: 1.25rem;
-      padding-right: 1.25rem
-  }
-
-  .grid-row.desktop\:grid-gap-6 {
-      margin-left: -1.5rem;
-      margin-right: -1.5rem
-  }
-
-  .grid-row.desktop\:grid-gap-6>* {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem
-  }
-
-  .grid-row.desktop\:grid-gap-sm {
-      margin-left: -1px;
-      margin-right: -1px
-  }
-
-  .grid-row.desktop\:grid-gap-sm>* {
-      padding-left: 1px;
-      padding-right: 1px
-  }
-
-  .grid-row.desktop\:grid-gap-md {
-      margin-left: -.5rem;
-      margin-right: -.5rem
-  }
-
-  .grid-row.desktop\:grid-gap-md>* {
-      padding-left: .5rem;
-      padding-right: .5rem
-  }
-
-  .grid-row.desktop\:grid-gap-lg {
-      margin-left: -.75rem;
-      margin-right: -.75rem
-  }
-
-  .grid-row.desktop\:grid-gap-lg>* {
-      padding-left: .75rem;
-      padding-right: .75rem
-  }
-}
-
-// grid-col
 .grid-col-auto,
 .grid-col-fill {
-    flex: 0 1 auto;
-    width: auto;
-    max-width: 100%
+  width: auto !important;
+  max-width: 100% !important;
+}
+
+.grid-col-auto {
+  flex: 0 1 auto !important;
 }
 
 .grid-col-fill {
-  flex: 1 1 0%;
-  min-width: 1px
-}
-
-@media all and (min-width:30em) {
-
-  .mobile-lg\:grid-col,
-  .mobile-lg\:grid-col-fill {
-      flex: 1 1 0%;
-      width: auto;
-      max-width: 100%;
-      min-width: 1px
-  }
-
-  .mobile-lg\:grid-col-auto {
-      flex: 0 1 auto;
-      width: auto;
-      max-width: 100%
-  }
-
-  .mobile-lg\:grid-col-6 {
-      flex: 0 1 auto;
-      width: 50%
-  }
+  flex: 1 1 0% !important;
+  min-width: 1px;
 }
 
 @media all and (min-width:40em) {
-
-  .tablet\:grid-col,
-  .tablet\:grid-col-fill {
-      flex: 1 1 0%;
-      width: auto;
-      max-width: 100%;
-      min-width: 1px
-  }
-
   .tablet\:grid-col-auto {
-      flex: 0 1 auto;
-      width: auto;
-      max-width: 100%
+    flex: 0 1 auto !important;
+    width: auto !important;
+    max-width: 100% !important;
   }
 
   .tablet\:grid-col-6 {
-      flex: 0 1 auto;
-      width: 50%
+    flex: 0 1 auto !important;
+    width: 50% !important;
   }
 }
 
-@media all and (min-width:64em) {
-
-  .desktop\:grid-col,
-  .desktop\:grid-col-fill {
-      flex: 1 1 0%;
-      width: auto;
-      max-width: 100%;
-      min-width: 1px
-  }
-
-  .desktop\:grid-col-auto {
-      flex: 0 1 auto;
-      width: auto;
-      max-width: 100%
-  }
-
-  .desktop\:grid-col-6 {
-      flex: 0 1 auto;
-      width: 50%
-  }
-
-}
-
-// other
 .usa-media-block__img {
   flex-shrink: 0;
-  margin-right: .5rem
+  margin-right: .5rem;
 }
 
 .usa-media-block__body {
-  flex: 1 1 0%
+  flex: 1 1 0%;
 }
 
-.usa-banner__lock-image {
-  height: 1.5ex;
-  width: 1.21875ex
+img {
+  height: auto;
 }
 
-.usa-banner__lock-image path {
-  fill: currentColor
+strong {
+  font-weight: 700;
 }
 
-@media (forced-colors:active) {
-  .usa-banner__lock-image path {
-      fill: CanvasText
-  }
+.usa-accordion--bordered .usa-accordion__content {
+  padding-bottom: 1.5rem;
+  padding-left: 1rem;
+  padding-top: 1.5rem;
+}
+
+.site-component-preview .usa-accordion:not(.usa-accordion--bordered) .usa-accordion__content {
+  border: 0;
+}
+
+.usa-accordion__button:hover {
+  text-decoration: none;
+}
+
+.site-accordion-code.site-component-preview .usa-accordion__content {
+  overflow: visible;
+}
+
+/*! CSS Used from: Embedded */
+img {
+  max-width: 100%;
+}
+
+/*! CSS Used fontfaces */
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 200;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-extralight-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 300;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-light-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-regular-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 600;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-semibold-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 700;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-bold-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 900;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-black-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 200;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-extralightitalic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 300;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-lightitalic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-italic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 600;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-semibolditalic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 700;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-bolditalic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 900;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-blackitalic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 200;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-extralight-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 300;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-light-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-regular-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 600;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-semibold-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 700;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-bold-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: normal;
+  font-weight: 900;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-black-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 200;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-extralightitalic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 300;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-lightitalic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-italic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 600;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-semibolditalic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 700;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-bolditalic-webfont.woff2) format("woff2");
+}
+
+@font-face {
+  font-family: "Source Sans Pro Web";
+  font-style: italic;
+  font-weight: 900;
+  font-display: fallback;
+  src: url(https://designsystem.digital.gov/assets/fonts/source-sans-pro/sourcesanspro-blackitalic-webfont.woff2) format("woff2");
 }
