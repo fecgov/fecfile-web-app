@@ -53,7 +53,8 @@ export type SchATransactionName =
   | 'Earmark Receipt for Recount/Legal Proceedings Account (Contribution)'
   | 'Earmark Receipt for Pres. Nominating Convention Account (Contribution)'
   | 'Earmark Receipt for Headquarters Buildings Account (Contribution)'
-  | 'Partnership Recount Account Receipt';
+  | 'Partnership Recount Account Receipt'
+  | 'Refund of Contribution to Unregistered Committee';
 
 export type ChildTransactionName =
   | 'PAC Joint Fundraising Transfer Memo'
@@ -1153,6 +1154,18 @@ const earmarkRecountReceipt: PairedTransactionForm = {
   transactionB: earmarkRecountReceiptStepTwo,
 };
 
+const refundOfContributionToUnregisteredCommittee: TransactionForm = {
+  transaction_name: 'Refund of Contribution to Unregistered Committee',
+  transaction_category: 'REFUNDS',
+  transaction_group: 'D',
+  aggregation_group: 'LINE_16',
+  ...entityOrganization,
+  fields: {
+    ...memoFields,
+    ...contributionFields,
+  },
+};
+
 /*
  *          Group A Transaction Navigation Tree
  * Every entry in this object represents a path that an E2E test
@@ -1192,7 +1205,9 @@ export const schedANavTree: TransactionNavTree = {
     // 'Joint Fundraising Transfer - National Party Headquarters Buildings Account':
     //   jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount,
   },
-  //"REFUNDS":{},
+  "REFUNDS":{
+    'Refund of Contribution to Unregistered Committee': refundOfContributionToUnregisteredCommittee,
+  },
   OTHER: {
     'Offsets to Operating Expenditures': offsetToOpex,
     'Other Committee Receipt - Non-Contribution Account': otherCommitteeReceiptNonContributionAccount,

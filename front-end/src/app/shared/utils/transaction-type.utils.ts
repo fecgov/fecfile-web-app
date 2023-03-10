@@ -90,6 +90,7 @@ import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL } from '../models/transaction-typ
 import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO.model';
 import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO.model';
 import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO.model';
+import { REFUND_TO_UNREGISTERED_COMMITTEE } from '../models/transaction-types/REFUND_TO_UNREGISTERED_COMMITTEE.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -118,6 +119,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTY_JF_TRANSFER_MEMO,
   PARTY_RECEIPT,
   PARTY_RECOUNT_RECEIPT,
+  REFUND_TO_UNREGISTERED_COMMITTEE,
   RETURN_RECEIPT,
   TRANSFER,
   TRIBAL_JF_TRANSFER_MEMO,
