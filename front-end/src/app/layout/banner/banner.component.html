@@ -22,8 +22,9 @@
         <button
           type="button"
           class="usa-accordion__button usa-banner__button"
-          aria-expanded="true"
+          attr.aria-expanded={{expanded}}
           aria-controls="gov-banner-default-default"
+          (click)="onBannerClick()"
         >
           <span class="usa-banner__button-text">Here’s how you know</span>
         </button>
@@ -32,6 +33,7 @@
     <div
       class="usa-banner__content usa-accordion__content"
       id="gov-banner-default-default"
+      style="{{expanded ? 'display: block;' : 'display: none;'}}"
     >
       <div class="grid-row grid-gap-lg">
         <div class="usa-banner__guidance tablet:grid-col-6">
