@@ -17,14 +17,13 @@
         <div class="grid">
           <div class="col-12">
             <label for="entity_type">CONTACT TYPE</label>
-            <app-contact-lookup
+            <app-transaction-contact-lookup
               [contactTypeFormControl]="$any(form).controls['entity_type']"
               [contactTypeOptions]="contactTypeOptions"
               [contactTypeReadOnly]="true"
-              contactTypeStyleClass="readonly"
               (contactSelect)="onContactLookupSelect($event)"
             >
-            </app-contact-lookup>
+            </app-transaction-contact-lookup>
           </div>
         </div>
         <ng-container *ngIf="transaction?.contact">
@@ -50,7 +49,7 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
             [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
-            [negativeAmountValueOnly]="negativeAmountValueOnly"
+            [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
           ></app-amount-input>
           <p-divider></p-divider>
           <h3>Additional Information</h3>
@@ -84,12 +83,12 @@
           <div class="col-12">
             <div class="field">
               <label for="entity_type">ENTITY TYPE</label>
-              <app-contact-lookup
+              <app-transaction-contact-lookup
                 [contactTypeFormControl]="$any(childForm).controls['entity_type']"
                 [contactTypeOptions]="childContactTypeOptions"
                 (contactSelect)="childOnContactLookupSelect($event)"
               >
-              </app-contact-lookup>
+              </app-transaction-contact-lookup>
             </div>
           </div>
         </div>
@@ -135,7 +134,7 @@
             [templateMap]="childTemplateMap"
             [memoCodeReadOnly]="isMemoCodeReadOnly(childTransaction?.transactionType)"
             [contributionAmountReadOnly]="true"
-            [negativeAmountValueOnly]="childNegativeAmountValueOnly"
+            [negativeAmountValueOnly]="!!childTransaction?.transactionType?.negativeAmountValueOnly"
           ></app-amount-input>
           <p-divider></p-divider>
           <h3>Additional Information</h3>

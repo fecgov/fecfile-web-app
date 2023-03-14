@@ -47,7 +47,7 @@ describe('Tests that memos have the memo_code checkbox checked', () => {
     enterContact(transaction.contact, true, true);
     cy.medWait();
 
-    cy.contains('The dollar amount in a memo item is not incorporated into the total figure for the schedule').should(
+    cy.contains('span', 'The dollar amount in a memo item is not incorporated into the total figures for the schedule').should(
       'exist'
     );
     cy.longWait();

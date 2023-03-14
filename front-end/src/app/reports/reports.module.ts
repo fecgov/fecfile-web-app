@@ -9,6 +9,8 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ListboxModule } from 'primeng/listbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -34,6 +36,8 @@ import { ReportsRoutingModule } from './reports-routing.module';
 import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
 import { AppSelectButtonComponent } from '../shared/components/app-selectbutton';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { FormTypeDialogComponent } from './form-type-dialog/form-type-dialog.component';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -49,6 +53,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     TestDotFecComponent,
     CashOnHandComponent,
     AppSelectButtonComponent,
+    FormTypeDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -59,7 +64,10 @@ import { InputNumberModule } from 'primeng/inputnumber';
     ToolbarModule,
     ButtonModule,
     DividerModule,
+    DialogModule,
     DropdownModule,
+    OverlayPanelModule,
+    ListboxModule,
     RadioButtonModule,
     CheckboxModule,
     InputTextModule,

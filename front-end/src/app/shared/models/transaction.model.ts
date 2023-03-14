@@ -3,9 +3,9 @@ import { Contact } from './contact.model';
 import { MemoText } from './memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionGroupsType } from './scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsType } from './schb-transaction.model';
-import { ValidateService } from '../services/validate.service';
 import { TransactionType } from './transaction-type.model';
 import { Type } from 'class-transformer';
+import { ValidateUtils } from '../utils/validate.utils';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
@@ -63,7 +63,7 @@ export abstract class Transaction extends BaseModel {
     this.contact_id = this.contact?.id;
     this.transactionType = transactionType;
     this.schema_name = transactionType.getSchemaName();
-    const fieldsToValidate: string[] = ValidateService.getSchemaProperties(transactionType.schema);
+    const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
     const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
     this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
   }
@@ -100,7 +100,7 @@ export abstract class Transaction extends BaseModel {
   getUpdatedParent(childDeleted = false): Transaction {
     if (!this.parent_transaction?.transaction_type_identifier) {
       throw new Error(
-        `Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
+        `Fecfile: Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
       );
     }
 

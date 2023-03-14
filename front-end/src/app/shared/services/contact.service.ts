@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
+import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
+import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
+import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
+import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
-import { CommitteeLookupResponse, Contact, IndividualLookupResponse, OrganizationLookupResponse } from '../models/contact.model';
+import { CandidateLookupResponse, CommitteeLookupResponse, Contact, ContactTypes, IndividualLookupResponse, OrganizationLookupResponse } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -44,6 +50,17 @@ export class ContactService implements TableListService<Contact> {
     return this.apiService.delete<null>(`/contacts/${contact.id}`);
   }
 
+  public candidateLookup(search: string, maxFecResults: number,
+    maxFecfileResults: number): Observable<CandidateLookupResponse> {
+    return this.apiService.get<CandidateLookupResponse>(
+      '/contacts/candidate_lookup/', {
+      q: search,
+      max_fec_results: maxFecResults,
+      max_fecfile_results: maxFecfileResults
+    }).pipe(
+      map((response) => CandidateLookupResponse.fromJSON(response)));
+  }
+
   public committeeLookup(search: string, maxFecResults: number,
     maxFecfileResults: number): Observable<CommitteeLookupResponse> {
     return this.apiService.get<CommitteeLookupResponse>(
@@ -73,6 +90,25 @@ export class ContactService implements TableListService<Contact> {
       max_fecfile_results: maxFecfileResults
     }).pipe(
       map((response) => OrganizationLookupResponse.fromJSON(response)));
+  }
+
+  /**
+   * Given the type of contact given, return the appropriate JSON schema doc
+   * @param {ContactTypes} type
+   * @returns {JsonSchema} schema
+   */
+  public static getSchemaByType(type: ContactTypes): JsonSchema {
+    let schema: JsonSchema = contactIndividualSchema;
+    if (type === ContactTypes.CANDIDATE) {
+      schema = contactCandidateSchema;
+    }
+    if (type === ContactTypes.COMMITTEE) {
+      schema = contactCommitteeSchema;
+    }
+    if (type === ContactTypes.ORGANIZATION) {
+      schema = contactOrganizationSchema;
+    }
+    return schema;
   }
 
 }

@@ -17,11 +17,11 @@ export class EARMARK_RECEIPT extends SchATransactionType {
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children) return '';
     const earmarkMemo: SchATransaction = transaction.children[0] as SchATransaction;
-    let conduit = earmarkMemo?.contributor_organization_name || '';
+    let conduit = earmarkMemo.contributor_organization_name || '';
     if (
-      earmarkMemo?.entity_type === ContactTypes.INDIVIDUAL &&
-      earmarkMemo?.contributor_first_name &&
-      earmarkMemo?.contributor_last_name
+      earmarkMemo.entity_type === ContactTypes.INDIVIDUAL &&
+      earmarkMemo.contributor_first_name &&
+      earmarkMemo.contributor_last_name
     ) {
       conduit = `${earmarkMemo.contributor_first_name || ''} ${earmarkMemo.contributor_last_name || ''}`;
     }

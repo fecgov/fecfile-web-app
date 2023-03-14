@@ -185,3 +185,21 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
     return {};
   }
 }
+
+export class TableAction {
+  label: string;
+  action: (item?: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
+  isAvailable: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
+  isEnabled: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
+  constructor(
+    label: string,
+    action: (item?: any) => void, // eslint-disable-line @typescript-eslint/no-explicit-any
+    isAvailable?: (item?: any) => boolean, // eslint-disable-line @typescript-eslint/no-explicit-any
+    isEnabled?: (item?: any) => boolean // eslint-disable-line @typescript-eslint/no-explicit-any
+  ) {
+    this.label = label;
+    this.action = action;
+    this.isAvailable = isAvailable || this.isAvailable;
+    this.isEnabled = isEnabled || this.isEnabled;
+  }
+}

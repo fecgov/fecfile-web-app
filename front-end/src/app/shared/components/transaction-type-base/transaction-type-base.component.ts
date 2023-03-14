@@ -1,6 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
@@ -9,12 +11,12 @@ import {
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { Transaction, ScheduleTransaction, TransactionTypes } from 'app/shared/models/transaction.model';
+import { ScheduleTransaction, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
@@ -34,10 +36,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   destroy$: Subject<boolean> = new Subject<boolean>();
   contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
-  memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   purposeDescriptionLabel = '';
-  negativeAmountValueOnly = false;
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
+  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes | ScheduleBTransactionTypes }[] = [];
 
   form: FormGroup = this.fb.group({});
 
@@ -45,7 +46,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected messageService: MessageService,
     public transactionService: TransactionService,
     protected contactService: ContactService,
-    protected validateService: ValidateService,
     protected confirmationService: ConfirmationService,
     protected fb: FormBuilder,
     protected router: Router,
@@ -53,13 +53,20 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   ) {}
 
   ngOnInit(): void {
-    this.form = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
+    this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
     if (this.transaction?.transactionType?.templateMap) {
       this.templateMap = this.transaction.transactionType.templateMap;
     } else {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
-    TransactionFormUtils.onInit(this, this.form, this.validateService, this.transaction, this.contactId$);
+    this.subTransactionOptions = (this.transaction?.transactionType?.subTransactionTypes || []).map((type) => {
+      return {
+        label:
+          LabelUtils.get(ScheduleATransactionTypeLabels, type) || LabelUtils.get(ScheduleBTransactionTypeLabels, type),
+        value: type,
+      };
+    });
+    TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
     this.parentOnInit();
   }
 
@@ -73,19 +80,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
 
     // Determine if amount should always be negative and then force it to be so if needed
-    if (this.templateMap?.amount) {
-      const amount_schema = this.transaction?.transactionType?.schema.properties[this.templateMap.amount];
-      if (amount_schema?.exclusiveMaximum === 0) {
-        this.negativeAmountValueOnly = true;
-        this.form
-          .get(this.templateMap.amount)
-          ?.valueChanges.pipe(takeUntil(this.destroy$))
-          .subscribe((amount) => {
-            if (+amount > 0) {
-              this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
-            }
-          });
-      }
+    if (this.transaction?.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
+      this.form
+        .get(this.templateMap.amount)
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((amount) => {
+          if (+amount > 0) {
+            this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
+          }
+        });
     }
 
     if (this.transaction?.transactionType?.generatePurposeDescriptionLabel) {
@@ -108,7 +111,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
-      this.validateService,
       this.form,
       this.formProperties
     );

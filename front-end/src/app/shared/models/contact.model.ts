@@ -98,7 +98,69 @@ export class Contact extends BaseModel {
   }
 }
 
-export class FecApiLookupData {}
+export class FecApiLookupData { }
+
+export class FecApiCandidateLookupData extends FecApiLookupData {
+  id: string | undefined;
+  office_sought: string | undefined;
+  name: string | undefined;
+
+  constructor(data: FecApiCandidateLookupData) {
+    super();
+    Object.assign(this, data);
+  }
+
+  toSelectItem(): SelectItem<FecApiCandidateLookupData> {
+    return {
+      label: `${this.name} (${this.id})`,
+      value: this,
+    };
+  }
+}
+
+export class FecfileCandidateLookupData extends Contact {
+  constructor(data: FecfileCandidateLookupData) {
+    super();
+    Object.assign(this, data);
+  }
+
+  toSelectItem(): SelectItem<Contact> {
+    return {
+      label: `${this.name} (${this.candidate_id})`,
+      value: this,
+    };
+  }
+}
+
+export class CandidateLookupResponse {
+  fec_api_candidates?: FecApiCandidateLookupData[];
+  fecfile_candidates?: FecfileCandidateLookupData[];
+
+  // prettier-ignore
+  static fromJSON(json: any): CandidateLookupResponse { // eslint-disable-line @typescript-eslint/no-explicit-any
+    return plainToClass(CandidateLookupResponse, json);
+  }
+
+  toSelectItemGroups(includeFecfileResults: boolean): SelectItemGroup[] {
+    const fecApiSelectItems =
+      this.fec_api_candidates?.map((data) => new FecApiCandidateLookupData(data).toSelectItem()) || [];
+    const fecfileSelectItems =
+      this.fecfile_candidates?.map((data) => new FecfileCandidateLookupData(data).toSelectItem()) || [];
+    return [
+      ...includeFecfileResults ? [{
+        label: fecfileSelectItems.length ? 'Select an existing candidate contact:' : 'There are no matching candidates',
+        items: fecfileSelectItems,
+      }] : [],
+      {
+        label: fecApiSelectItems.length
+          ? 'Create a new contact from list of registered candidates:'
+          : 'There are no matching registered candidates',
+        items: fecApiSelectItems,
+      },
+    ];
+  }
+}
+
 export class FecApiCommitteeLookupData extends FecApiLookupData {
   id: string | undefined;
   is_active: boolean | undefined;
@@ -140,16 +202,16 @@ export class CommitteeLookupResponse {
     return plainToClass(CommitteeLookupResponse, json);
   }
 
-  toSelectItemGroups(): SelectItemGroup[] {
+  toSelectItemGroups(includeFecfileResults: boolean): SelectItemGroup[] {
     const fecApiSelectItems =
       this.fec_api_committees?.map((data) => new FecApiCommitteeLookupData(data).toSelectItem()) || [];
     const fecfileSelectItems =
       this.fecfile_committees?.map((data) => new FecfileCommitteeLookupData(data).toSelectItem()) || [];
     return [
-      {
+      ...includeFecfileResults ? [{
         label: fecfileSelectItems.length ? 'Select an existing committee contact:' : 'There are no matching committees',
         items: fecfileSelectItems,
-      },
+      }] : [],
       {
         label: fecApiSelectItems.length
           ? 'Create a new contact from list of registered committees:'

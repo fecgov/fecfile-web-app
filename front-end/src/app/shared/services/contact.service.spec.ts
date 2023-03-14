@@ -3,9 +3,12 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { JsonSchema } from '../interfaces/json-schema.interface';
 import {
+  CandidateLookupResponse,
   CommitteeLookupResponse,
   Contact,
+  ContactTypes,
   IndividualLookupResponse,
   OrganizationLookupResponse,
 } from '../models/contact.model';
@@ -103,6 +106,26 @@ describe('ContactService', () => {
     httpTestingController.verify();
   });
 
+  it('#candidateLookup() happy path', () => {
+    const expectedRetval = new CandidateLookupResponse();
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+    const testSearch = 'testSearch';
+    const testMaxFecResults = 1;
+    const testMaxFecfileResults = 2;
+
+    const expectedEndpoint = '/contacts/candidate_lookup/';
+    const expectedParams = {
+      q: testSearch,
+      max_fec_results: testMaxFecResults,
+      max_fecfile_results: testMaxFecfileResults,
+    };
+
+    service
+      .candidateLookup(testSearch, testMaxFecResults, testMaxFecfileResults)
+      .subscribe((value) => expect(value).toEqual(expectedRetval));
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
+  });
+
   it('#committeeLookup() happy path', () => {
     const expectedRetval = new CommitteeLookupResponse();
     const testSearch = 'testSearch';
@@ -163,5 +186,16 @@ describe('ContactService', () => {
       .organizationLookup(testSearch, testMaxFecfileResults)
       .subscribe((value) => expect(value).toEqual(expectedRetval));
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
+  });
+
+  it('#getSchemaByType should return the correct schema', () => {
+    let schema: JsonSchema = ContactService.getSchemaByType(ContactTypes.COMMITTEE);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Committee.json');
+
+    schema = ContactService.getSchemaByType(ContactTypes.ORGANIZATION);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Organization.json');
+
+    schema = ContactService.getSchemaByType(ContactTypes.CANDIDATE);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Candidate.json');
   });
 });

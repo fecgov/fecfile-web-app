@@ -1,20 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { F3xCoverageDates, F3xFormTypes, F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
-import { ValidateService } from 'app/shared/services/validate.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { environment } from 'environments/environment';
-import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
-import { MessageService } from 'primeng/api';
-import { Subject, switchMap, of, takeUntil, zip, map, combineLatest, startWith } from 'rxjs';
-import { ReportService } from '../../../shared/services/report.service';
-import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import {
   electionReportCodes,
   F3xReportCodes,
@@ -23,8 +14,17 @@ import {
   monthlyElectionYearReportCodes,
   monthlyNonElectionYearReportCodes,
   quarterlyElectionYearReportCodes,
-  quarterlyNonElectionYearReportCodes,
+  quarterlyNonElectionYearReportCodes
 } from 'app/shared/utils/report-code.utils';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { environment } from 'environments/environment';
+import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
+import { MessageService } from 'primeng/api';
+import { combineLatest, map, of, startWith, Subject, switchMap, takeUntil, zip } from 'rxjs';
+import { ReportService } from '../../../shared/services/report.service';
+import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -46,14 +46,13 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
   stateOptions: PrimeOptions = [];
   formSubmitted = false;
 
-  form: FormGroup = this.fb.group(this.validateService.getFormGroupFields(this.formProperties));
+  form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   public f3xCoverageDatesList: F3xCoverageDates[] | undefined;
 
   constructor(
     private store: Store,
-    private validateService: ValidateService,
     private fecDatePipe: FecDatePipe,
     private fb: FormBuilder,
     private f3xSummaryService: F3xSummaryService,
@@ -61,7 +60,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     protected router: Router,
     private activatedRoute: ActivatedRoute,
     private reportService: ReportService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const reportId = this.activatedRoute.snapshot.data['reportId'];
@@ -131,9 +130,9 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       }
     });
 
+    ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
+
     // Initialize validation tracking of current JSON schema and form data
-    this.validateService.formValidatorSchema = f3xSchema;
-    this.validateService.formValidatorForm = this.form;
     this.form.addValidators(this.buildCoverageDatesValidator());
   }
 
@@ -245,7 +244,8 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       return;
     }
 
-    const summary: F3xSummary = F3xSummary.fromJSON(this.validateService.getFormValues(this.form, this.formProperties));
+    const summary: F3xSummary = F3xSummary.fromJSON(ValidateUtils.getFormValues(
+      this.form, f3xSchema, this.formProperties));
 
     // If a termination report, set the form_type appropriately.
     if (summary.report_code === F3xReportCodes.TER) {

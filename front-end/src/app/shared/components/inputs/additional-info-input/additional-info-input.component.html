@@ -9,7 +9,6 @@
           [rows]="4"
           [cols]="30"
           pInputTextarea
-          [disabled]="true"
           [autoResize]="true"
           [formControlName]="templateMap['purpose_description']"
           [ngClass]="{ readonly: descriptionIsSystemGenerated }"
@@ -51,8 +50,6 @@
           inputId="category_code"
           [formControlName]="templateMap['category_code']"
           [options]="categoryCodeOptions"
-          optionLabel="name"
-          optionValue="code"
           [autoDisplayFirst]="false"
           appendTo="body"
           [showClear]="true"

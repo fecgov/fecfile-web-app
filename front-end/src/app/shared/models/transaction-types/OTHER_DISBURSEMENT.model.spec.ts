@@ -2,7 +2,7 @@ import { OTHER_DISBURSEMENT } from './OTHER_DISBURSEMENT.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 
-describe('OPERATING_EXPENDITURE', () => {
+describe('OTHER_DISBURSEMENT', () => {
   let transactionType: OTHER_DISBURSEMENT;
 
   beforeEach(() => {

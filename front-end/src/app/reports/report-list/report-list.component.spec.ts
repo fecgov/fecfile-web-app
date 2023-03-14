@@ -11,6 +11,8 @@ import { F3xSummary, F3xFormTypes } from '../../shared/models/f3x-summary.model'
 import { Report } from '../../shared/interfaces/report.interface';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
+import { UploadSubmission } from 'app/shared/models/upload-submission.model';
+import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -41,17 +43,25 @@ describe('ReportListComponent', () => {
     expect(item.id).toBe(undefined);
   });
 
-  it('#addItem should route properly', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.addItem();
-    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
-  });
-
   it('#editItem should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
-
-    component.editItem({ id: '999' } as F3xSummary);
+    component.editItem({ id: '999' } as F3xSummary); // 999 is the cash on hand report
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
+    component.editItem({ id: '888' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/888/list');
+    component.editItem({
+      id: '777',
+      upload_submission: UploadSubmission.fromJSON({ fec_status: 'ACCEPTED' }),
+    } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/submit/status/777');
+  });
+
+  it('#onActionClick should route properly', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.onRowActionClick(new TableAction('', component.editItem.bind(component)), { id: '888' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/888/list');
+    component.onRowActionClick(new TableAction('', component.goToTest.bind(component)), { id: '888' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/test-dot-fec/888');
   });
 
   it('#displayName should display the item form_type code', () => {

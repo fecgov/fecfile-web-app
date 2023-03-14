@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
-import { ValidateService } from 'app/shared/services/validate.service';
+import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
-import { Contact } from '../../shared/models/contact.model';
+import { Contact, ContactType } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-contact-detail',
@@ -36,12 +36,12 @@ export class ContactDetailComponent {
   formSubmitted = false;
 
   form: FormGroup = this.fb.group(
-    this.validateService.getFormGroupFields([
+    ValidateUtils.getFormGroupFields([
       ...new Set([
-        ...ValidateService.getSchemaProperties(contactIndividualSchema),
-        ...ValidateService.getSchemaProperties(contactCandidateSchema),
-        ...ValidateService.getSchemaProperties(contactCommitteeSchema),
-        ...ValidateService.getSchemaProperties(contactOrganizationSchema),
+        ...ValidateUtils.getSchemaProperties(contactIndividualSchema),
+        ...ValidateUtils.getSchemaProperties(contactCandidateSchema),
+        ...ValidateUtils.getSchemaProperties(contactCommitteeSchema),
+        ...ValidateUtils.getSchemaProperties(contactOrganizationSchema),
       ]),
     ])
   );
@@ -49,9 +49,8 @@ export class ContactDetailComponent {
   constructor(
     private messageService: MessageService,
     private contactService: ContactService,
-    private validateService: ValidateService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   public onOpenDetail() {
     this.resetForm();
@@ -65,7 +64,12 @@ export class ContactDetailComponent {
       return;
     }
 
-    const payload: Contact = Contact.fromJSON({ ...this.contact, ...this.validateService.getFormValues(this.form) });
+    const payload: Contact = Contact.fromJSON({
+      ...this.contact,
+      ...ValidateUtils.getFormValues(this.form,
+        ContactService.getSchemaByType(
+          this.form.get('type')?.value as ContactType))
+    });
 
     if (payload.id) {
       this.contactService.update(payload).subscribe(() => {

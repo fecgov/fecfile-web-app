@@ -18,7 +18,7 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchATransa
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `Headquarters Buildings Account JF Memo: ${
-      (transaction?.parent_transaction as SchATransaction).contributor_organization_name
+      (transaction.parent_transaction as SchATransaction).contributor_organization_name
     }`;
   }
 

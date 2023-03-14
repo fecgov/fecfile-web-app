@@ -75,7 +75,22 @@ import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-
 
 // Schedule B /////////////////////////////////////////////////////
 import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
+import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
 import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
+import { OTHER_DISBURSEMENT_VOID } from '../models/transaction-types/OTHER_DISBURSEMENT_VOID.model';
+import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT.model';
+import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT } from '../models/transaction-types/OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT.model';
+import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT } from '../models/transaction-types/OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
+import { OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT } from '../models/transaction-types/OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT.model';
+import { OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL } from '../models/transaction-types/OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL.model';
+import { OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO.model';
+import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO.model';
+import { OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO.model';
+import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL } from '../models/transaction-types/OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL.model';
+import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO.model';
+import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO.model';
+import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO.model';
+import { REFUND_TO_UNREGISTERED_COMMITTEE } from '../models/transaction-types/REFUND_TO_UNREGISTERED_COMMITTEE.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -104,6 +119,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTY_JF_TRANSFER_MEMO,
   PARTY_RECEIPT,
   PARTY_RECOUNT_RECEIPT,
+  REFUND_TO_UNREGISTERED_COMMITTEE,
   RETURN_RECEIPT,
   TRANSFER,
   TRIBAL_JF_TRANSFER_MEMO,
@@ -150,14 +166,28 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
   // Schedule B /////////////////////////////////////////////////////
   OPERATING_EXPENDITURE,
+  OPERATING_EXPENDITURE_VOID,
   OTHER_DISBURSEMENT,
+  OTHER_DISBURSEMENT_VOID,
+  OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
+  OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO,
+  OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
+  OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
+  OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
+  OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
+  OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
+  OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO,
+  OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
+  OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
+  OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL,
+  OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO,
 }
 
 export class TransactionTypeUtils {
   static factory(transactionTypeIdentifier: string): TransactionType {
     const transactionType = getTransactionTypeClass(transactionTypeIdentifier);
     if (!transactionType) {
-      throw new Error(`Class transaction type of '${transactionTypeIdentifier}' is not found`);
+      throw new Error(`Fecfile: Class transaction type of '${transactionTypeIdentifier}' is not found`);
     }
     return new transactionType();
   }
