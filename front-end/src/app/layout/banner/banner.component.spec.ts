@@ -27,4 +27,10 @@ describe('BannerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should expand', () => {
+    expect(component.expanded).toBeFalse();
+    component.onBannerClick();
+    expect(component.expanded).toBeTrue();
+  });
 });
