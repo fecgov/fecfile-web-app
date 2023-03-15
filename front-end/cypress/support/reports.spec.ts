@@ -93,6 +93,8 @@ export function createReport(report, save = true) {
   cy.get('button[label="Create a new report"]').click();
   cy.medWait();
 
+  cy.get('button').contains('Start building report').click();
+
   cy.get("p-radiobutton[FormControlName='filing_frequency']").contains(report['filing_frequency']).click();
   cy.shortWait();
 
@@ -266,10 +268,12 @@ function chooseAReport(
     cy.get('tbody')
       .contains('tr', ...reportContains)
       .first()
-      .find('p-button[icon="pi pi-pencil"]')
+      .find('p-button')
       .click();
+    cy.get('button').contains('Edit report').click();
   } else {
-    cy.get('tbody').find('tr').first().find('p-button[icon="pi pi-pencil"]').click();
+    cy.get('tbody').find('tr').first().find('p-button').click();
+    cy.get('button').contains('Edit report').click();
   }
 
   cy.medWait();

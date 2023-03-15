@@ -56,8 +56,8 @@ describe('Tests that contacts are edited by transactions', () => {
     enterTransactionSchA(transactionIndv);
     cy.shortWait();
 
-    cy.get('input[formControlName="contributor_city"]').overwrite('TESTOPOLIS');
-    cy.get('input[formControlName="contributor_suffix"]').overwrite('XI');
+    cy.get('input[ng-reflect-name="contributor_city"]').overwrite('TESTOPOLIS');
+    cy.get('input[ng-reflect-name="contributor_suffix"]').overwrite('XI');
     cy.shortWait();
 
     cy.contains('button', 'Save & view all transactions').click();
@@ -78,7 +78,7 @@ describe('Tests that contacts are edited by transactions', () => {
     cy.contains('a', contactIndividual['name']).click();
     cy.shortWait();
 
-    cy.get('input[formControlName="city"]').should('have.value', 'TESTOPOLIS');
-    cy.get('input[formControlName="suffix"]').should('have.value', 'XI');
+    cy.get('input[ng-reflect-name="city"]').should('have.value', 'TESTOPOLIS');
+    cy.get('input[ng-reflect-name="suffix"]').should('have.value', 'XI');
   });
 });

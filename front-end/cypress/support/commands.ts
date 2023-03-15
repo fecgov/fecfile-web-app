@@ -101,7 +101,11 @@ function legacyLogin() {
       statusCode: 200,
     };
 
-    cy.intercept('GET', 'https://api.open.fec.gov/v1/committee/*/*', response).as('GetCommitteeAccount');
+    cy.intercept(
+      'GET',
+      `http://localhost:8080/api/v1/openfec/${response_body.results[0].committee_id}/committee/`,
+      response
+    ).as('GetCommitteeAccount');
   });
 
   cy.visit('/');
@@ -168,11 +172,11 @@ export function dropdownSetValue(dropdown: string, value: string, wait: boolean 
 
 export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   const currentDate: Date = new Date();
-  cy.get(calendar).click();
+  cy.get(calendar).as('calendarElement').click();
   cy.shortWait();
 
   //    Choose the year
-  cy.get('.p-datepicker-year').click({ force: true });
+  cy.get('@calendarElement').find('.p-datepicker-year').click({ force: true });
   cy.shortWait();
 
   const year: number = dateObj.getFullYear();
@@ -181,28 +185,28 @@ export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
   const decadeEnd: number = decadeStart + 9;
   if (year < decadeStart) {
     for (let i = 0; i < decadeStart - year; i += 10) {
-      cy.get('.p-datepicker-prev').click({ force: true });
+      cy.get('@calendarElement').find('.p-datepicker-prev').click({ force: true });
       cy.shortWait();
     }
   }
   if (year > decadeEnd) {
     for (let i = 0; i < year - decadeEnd; i += 10) {
-      cy.get('.p-datepicker-next').click({ force: true });
+      cy.get('@calendarElement').find('.p-datepicker-next').click({ force: true });
       cy.shortWait();
     }
   }
-  cy.get('.p-yearpicker-year').contains(year.toString()).click({ force: true });
+  cy.get('@calendarElement').find('.p-yearpicker-year').contains(year.toString()).click({ force: true });
   cy.shortWait();
 
   //    Choose the month
   const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const Month: string = Months[dateObj.getMonth()];
-  cy.get('.p-monthpicker-month').contains(Month).click({ force: true });
+  cy.get('@calendarElement').find('.p-monthpicker-month').contains(Month).click({ force: true });
   cy.shortWait();
 
   //    Choose the day
   const Day: string = dateObj.getDate().toString();
-  cy.get('td').find('span').not('.p-disabled').parent().contains(Day).click({ force: true });
+  cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(Day).click({ force: true });
   cy.shortWait();
 }
 
@@ -233,15 +237,18 @@ export function runLighthouse(directory: string, filename: string) {
 
 // shortWait() is appropriate for waiting for the UI to update after changing a field
 export function shortWait(): void {
+  return;
   cy.wait(100);
 }
 
 // medWait() is appropriate for waiting for loading a page or a table
 export function medWait(): void {
+  return;
   cy.wait(250);
 }
 
 // longWait() is appropriate for waiting on a database call such as saving a form
 export function longWait(): void {
+  return;
   cy.wait(400);
 }

@@ -137,20 +137,20 @@ export function enterTransactionSchA(transaction: Transaction) {
 function fillFormField(fieldName: string, fieldValue: string, fieldType: string) {
   switch (fieldType) {
     case 'Text':
-      cy.get(`input:visible[formControlName=${fieldName}]`).safeType(fieldValue);
+      cy.get(`input:visible[ng-reflect-name=${fieldName}]`).safeType(fieldValue);
       break;
     case 'P-InputNumber':
-      cy.get(`p-inputnumber:visible[formControlName=${fieldName}]`).safeType(fieldValue);
+      cy.get(`p-inputnumber:visible[ng-reflect-name=${fieldName}]`).safeType(fieldValue);
       break;
     case 'Textarea':
-      cy.get(`textarea:visible[formControlName=${fieldName}]`).safeType(fieldValue);
+      cy.get(`textarea:visible[ng-reflect-name=${fieldName}]`).safeType(fieldValue);
       break;
     case 'Dropdown':
       if (fieldName === 'entity_type_dropdown') cy.dropdownSetValue(`#${fieldName}`, fieldValue);
-      else cy.dropdownSetValue(`p-dropdown:visible[formControlName=${fieldName}]`, fieldValue);
+      else cy.dropdownSetValue(`p-dropdown:visible[ng-reflect-name=${fieldName}]`, fieldValue);
       break;
     case 'Calendar':
-      cy.calendarSetValue(`p-calendar:visible[formControlName=${fieldName}]`, fieldValue);
+      cy.calendarSetValue(`p-calendar:visible[ng-reflect-name=${fieldName}]`, fieldValue);
       break;
   }
 }

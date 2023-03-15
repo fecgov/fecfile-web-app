@@ -93,8 +93,8 @@ describe('Counts the number of districts associated with each state', () => {
     cy.get("div[role='dialog']").contains('Add Contact').should('exist');
 
     //Step 3: Set the Contact Type to 'Candidate'
-    cy.dropdownSetValue("p-dropdown[FormControlName='type']", 'Candidate');
-    cy.get("p-dropdown[FormControlName='type']").should('contain', 'Candidate');
+    cy.dropdownSetValue('p-dropdown[id=entity_type_dropdown]', 'Candidate');
+    cy.get('p-dropdown[id=entity_type_dropdown]').should('contain', 'Candidate');
 
     //Steps 4 & 5: Verify 'Candidate Office' dropdown contains House, Senate, and Presidential and then select Presidential
     cy.get(fieldCandidateOffice).click();

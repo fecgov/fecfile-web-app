@@ -43,6 +43,8 @@ describe('Tests that contacts are created by transactions', () => {
     //Step 1: Log in, navigate to the contacts page and create individual, organization, and committee contacts
     cy.login();
     cy.visit('/dashboard');
+    cy.deleteAllReports();
+    cy.deleteAllContacts();
     cy.url().should('contain', '/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.medWait();
@@ -68,7 +70,7 @@ describe('Tests that contacts are created by transactions', () => {
 
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
     cy.medWait();
-    cy.contains('td', contactIndividual['name']).should('exist');
+    cy.contains('td', `${contactIndividual['last_name']}, ${contactIndividual['first_name']}`).should('exist');
     cy.contains('td', contactOrganization['name']).should('exist');
     cy.contains('td', contactCommittee['name']).should('exist');
   });

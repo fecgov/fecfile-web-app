@@ -124,7 +124,7 @@ describe('Tests the maximum length and required/not-required for each field', ()
       cy.shortWait();
       cy.get("div[role='dialog']").contains('Add Contact').should('exist');
 
-      cy.dropdownSetValue("p-dropdown[FormControlName='type']", contactType);
+      cy.dropdownSetValue('p-dropdown[id=entity_type_dropdown]', contactType);
       cy.shortWait();
       cy.get("button[label='Save']").click(); //Clicking the save button populates the fields with 'required' error messages
       cy.shortWait();

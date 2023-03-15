@@ -1,4 +1,3 @@
-
 export function createContact(contact: object, save = true) {
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
   cy.shortWait();
@@ -12,8 +11,7 @@ export function createContact(contact: object, save = true) {
 }
 
 export function enterContact(contact: object, save = true, forTransaction = false) {
-  console.log('Contact:', contact);
-  if (!forTransaction) cy.dropdownSetValue("p-dropdown[formcontrolname='type']", contact['contact_type']);
+  if (!forTransaction) cy.dropdownSetValue('p-dropdown:first', contact['contact_type']);
 
   if (contact['contact_type'] == 'Individual' || contact['contact_type'] == 'Candidate') {
     //Contact
@@ -70,7 +68,7 @@ export function enterContact(contact: object, save = true, forTransaction = fals
 
 //Deletes all reports belonging to the logged-in committee
 export function deleteAllContacts() {
-  cy.getCookie('csrftoken').then(cookie => {
+  cy.getCookie('csrftoken').then((cookie) => {
     cy.request({
       method: 'GET',
       url: 'http://localhost:8080/api/v1/contacts/',
@@ -89,7 +87,7 @@ export function deleteAllContacts() {
 
 //Deletes a single report by its ID
 export function deleteContact(contactID: string) {
-  cy.getCookie('csrftoken').then(cookie => {
+  cy.getCookie('csrftoken').then((cookie) => {
     cy.request({
       method: 'DELETE',
       url: `http://localhost:8080/api/v1/contacts/${contactID}/`,
