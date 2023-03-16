@@ -71,26 +71,30 @@ export class TransactionFormUtils {
         form.get(templateMap.occupation)?.updateValueAndValidity();
       });
 
-    const previous_transaction$: Observable<Transaction | undefined> =
-      form.get(templateMap.date)?.valueChanges.pipe(
-        startWith(form.get(templateMap.date)?.value),
-        combineLatestWith(contactId$),
-        switchMap(([contribution_date, contactId]) => {
-          return component.transactionService.getPreviousTransaction(transaction, contactId, contribution_date);
-        })
-      ) || of(undefined);
-    form
-      .get(templateMap.amount)
-      ?.valueChanges.pipe(
-        startWith(form.get(templateMap.amount)?.value),
-        combineLatestWith(previous_transaction$),
-        takeUntil(component.destroy$)
-      )
-      .subscribe(([amount, previous_transaction]) => {
-        const key = templateMap.aggregate as keyof ScheduleTransaction;
-        const previousAggregate = previous_transaction ? +((previous_transaction as ScheduleTransaction)[key] || 0) : 0;
-        form.get(templateMap.aggregate)?.setValue(+amount + previousAggregate);
-      });
+    if (transaction.transactionType?.showAggregate) {
+      const previous_transaction$: Observable<Transaction | undefined> =
+        form.get(templateMap.date)?.valueChanges.pipe(
+          startWith(form.get(templateMap.date)?.value),
+          combineLatestWith(contactId$),
+          switchMap(([contribution_date, contactId]) => {
+            return component.transactionService.getPreviousTransaction(transaction, contactId, contribution_date);
+          })
+        ) || of(undefined);
+      form
+        .get(templateMap.amount)
+        ?.valueChanges.pipe(
+          startWith(form.get(templateMap.amount)?.value),
+          combineLatestWith(previous_transaction$),
+          takeUntil(component.destroy$)
+        )
+        .subscribe(([amount, previous_transaction]) => {
+          const key = templateMap.aggregate as keyof ScheduleTransaction;
+          const previousAggregate = previous_transaction
+            ? +((previous_transaction as ScheduleTransaction)[key] || 0)
+            : 0;
+          form.get(templateMap.aggregate)?.setValue(+amount + previousAggregate);
+        });
+    }
 
     const schema = transaction.transactionType?.schema;
     if (schema) {
@@ -107,8 +111,7 @@ export class TransactionFormUtils {
       throw new Error('Fecfile: Payload transaction not found');
     }
 
-    let formValues = ValidateUtils.getFormValues(form,
-      transaction.transactionType?.schema, formProperties);
+    let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
 
     const payload: ScheduleTransaction = getFromJSON({
