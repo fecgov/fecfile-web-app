@@ -42,6 +42,7 @@
         [templateMap]="templateMap"
         [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
         [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
+        [showAggregate]="!!transaction?.transactionType?.showAggregate"
       ></app-amount-input>
       <p-divider></p-divider>
       <h3>Additional Information</h3>
