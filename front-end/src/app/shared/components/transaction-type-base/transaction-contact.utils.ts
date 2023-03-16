@@ -1,10 +1,10 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { Contact, ContactFields, ContactTypes } from '../../models/contact.model';
-import { Transaction } from 'app/shared/models/transaction.model';
 
 export class TransactionContactUtils {
   static getEditTransactionContactConfirmationMessage(
@@ -92,7 +92,10 @@ export class TransactionContactUtils {
 
           if (formField && formField?.value !== contactValue) {
             contact[field as keyof typeof contact] = (formField.value || '') as never;
-            return `Updated ${label.toLowerCase()} to ${formField.value || ''}`;
+            if (!formField.value) {
+              return `Removed ${label.toLowerCase()}`;
+            }
+            return `Updated ${label.toLowerCase()} to ${formField.value}`;
           }
           return '';
         })
