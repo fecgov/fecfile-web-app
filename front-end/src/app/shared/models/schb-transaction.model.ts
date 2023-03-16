@@ -87,6 +87,7 @@ export type ScheduleBTransactionGroupsType =
   | ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES;
 
 export enum ScheduleBTransactionTypes {
+  BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT = 'BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT',
   OPERATING_EXPENDITURE = 'OPERATING_EXPENDITURE',
   OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT = 'OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT',
   OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO = 'OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO',
@@ -100,6 +101,7 @@ export enum ScheduleBTransactionTypes {
   CONTRIBUTION_TO_CANDIDATE_VOID = 'CONTRIBUTION_TO_CANDIDATE_VOID',
   CONTRIBUTION_TO_OTHER_COMMITTEE = 'CONTRIBUTION_TO_OTHER_COMMITTEE',
   CONTRIBUTION_TO_OTHER_COMMITTEE_VOID = 'CONTRIBUTION_TO_OTHER_COMMITTEE_VOID',
+  INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT = 'INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT',
   OTHER_DISBURSEMENT = 'OTHER_DISBURSEMENT',
   OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT = 'OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT',
   OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO = 'OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO',
@@ -147,6 +149,10 @@ export enum ScheduleBTransactionTypes {
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
+  [
+    ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
+    'Business/Labor Organization Refund - Non-contribution Account',
+  ],
   [ScheduleBTransactionTypes.OPERATING_EXPENDITURE, 'Operating Expenditure'],
   [
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
@@ -172,6 +178,10 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID, 'Void of Contribution to Candidate'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE, 'Contribution to Other Committee'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID, 'Void of Contribution to Other Committee'],
+  [
+    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
+    'Individual Refund - Non-contribution Account',
+  ],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT, 'Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT, 'Credit Card Payment for Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO, 'Credit Card Memo for Other Disbursement'],

@@ -74,6 +74,9 @@ import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT } from '../models/transaction-types
 import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
 
 // Schedule B /////////////////////////////////////////////////////
+
+import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
+import { INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
 import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
 import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
 import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
@@ -165,6 +168,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
   // Schedule B /////////////////////////////////////////////////////
+  BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
+  INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
   OPERATING_EXPENDITURE,
   OPERATING_EXPENDITURE_VOID,
   OTHER_DISBURSEMENT,
