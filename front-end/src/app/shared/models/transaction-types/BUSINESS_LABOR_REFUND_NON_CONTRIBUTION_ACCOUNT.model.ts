@@ -7,13 +7,13 @@ import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction
 import { ContactTypes } from '../contact.model';
 
 export class BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransactionType {
-  componentGroupId = 'C';
+  componentGroupId = 'D';
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT
   );
   schema = schema;
-  override defaultContactTypeOption = ContactTypes.INDIVIDUAL;
+  override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

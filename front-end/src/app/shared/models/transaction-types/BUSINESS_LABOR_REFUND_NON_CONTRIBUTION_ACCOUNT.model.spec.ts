@@ -11,7 +11,7 @@ describe('INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('C');
+    expect(transactionType.componentGroupId).toBe('D');
   });
 
   it('#factory() should return a SchBTransaction', () => {
