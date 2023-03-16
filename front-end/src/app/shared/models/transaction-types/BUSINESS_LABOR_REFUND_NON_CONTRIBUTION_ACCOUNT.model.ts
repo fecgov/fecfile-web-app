@@ -23,4 +23,8 @@ export class BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransact
       aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
     });
   }
+
+  override generatePurposeDescription(): string {
+    return 'Non-contribution Account Refund';
+  }
 }

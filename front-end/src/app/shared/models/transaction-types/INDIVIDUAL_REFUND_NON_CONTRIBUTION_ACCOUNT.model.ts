@@ -23,4 +23,7 @@ export class INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransactionT
       aggregation_group: AggregationGroups.NON_CONTRIBUTION_ACCOUNT,
     });
   }
+  override generatePurposeDescription(): string {
+    return 'Non-contribution Account Refund';
+  }
 }
