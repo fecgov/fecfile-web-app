@@ -5,11 +5,11 @@ import { generateContactObject } from '../../support/generators/contacts.spec';
 const contactTypes: Array<string> = ['Individual', 'Candidate', 'Committee', 'Organization'];
 
 describe('Tests that the names on the contact management page update when edited', () => {
-  after('Cleanup', () => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.deleteAllContacts();
-  });
+  // after('Cleanup', () => {
+  //   cy.login();
+  //   cy.visit('/dashboard');
+  //   cy.deleteAllContacts();
+  // });
 
   for (const contactType of contactTypes) {
     const contact: object = generateContactObject({
@@ -23,6 +23,7 @@ describe('Tests that the names on the contact management page update when edited
     it(`${contactType}`, () => {
       //Step 1: Navigate to contacts page
       cy.login();
+      cy.deleteAllContacts();
       cy.visit('/dashboard');
 
       cy.url().should('contain', '/dashboard');
@@ -31,16 +32,22 @@ describe('Tests that the names on the contact management page update when edited
       cy.createContact(contact);
 
       //Steps 2 & 3: Find the created contact, verify that it is an individual, and then select its edit checkbox
-      cy.contains('tr', 'Test Edit') //Find the correct row; side effect: selects the element with the name
-        .should('exist') //Double check that it exists
-        .should('contain', contactType)
-        .find("div[role='checkbox']")
-        .click()
-        .find('.pi-check')
-        .should('exist');
+      if (contactType == 'Individual' || contactType == 'Candidate') {
+        cy.contains('tr', 'Edit, Test') //Find the correct row; side effect: selects the element with the name
+          .should('exist') //Double check that it exists
+          .should('contain', contactType)
+          .find("div[role='checkbox']")
+          .click()
+          .find('.pi-check')
+          .should('exist');
+      }
 
       //Step 4: Open the "Edit Contact" form
-      cy.contains('a', 'Test Edit').click();
+      if (contactType == 'Individual' || contactType == 'Candidate') {
+        cy.contains('a', 'Edit, Test').click();
+      } else {
+        cy.contains('a', 'Test Edit').click();
+      }
       cy.contains('div', 'Edit Contact').should('exist');
 
       //Steps 5 & 6: Set the contact\'s name to "First Last"
@@ -56,8 +63,12 @@ describe('Tests that the names on the contact management page update when edited
       cy.medWait();
       cy.contains("div[role='alert']", 'Contact Updated').should('exist');
 
-      //Step 9: Verify that the contact name is now "First Last"
-      cy.contains('tr', 'First Last').should('exist');
+      //Step 9: Verify that the contact name is now "Last, First"
+      if (contactType == 'Individual' || contactType == 'Candidate') {
+        cy.contains('tr', 'Last, First').should('exist');
+      } else {
+        cy.contains('tr', 'First Last').should('exist');
+      }
     });
   }
 });

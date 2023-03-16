@@ -32,19 +32,20 @@ const transactionCommittee = generateTransactionObject({
 });
 
 describe('Tests that contacts are created by transactions', () => {
-  after(() => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.deleteAllReports();
-    cy.deleteAllContacts();
-  });
+  // after(() => {
+  //   cy.login();
+  //   cy.visit('/dashboard');
+  //   cy.deleteAllReports();
+  //   cy.deleteAllContacts();
+  // });
 
   before('', () => {
     //Step 1: Log in, navigate to the contacts page and create individual, organization, and committee contacts
     cy.login();
-    cy.visit('/dashboard');
     cy.deleteAllReports();
     cy.deleteAllContacts();
+
+    cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
     cy.medWait();

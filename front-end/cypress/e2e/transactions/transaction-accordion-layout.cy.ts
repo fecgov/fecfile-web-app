@@ -90,7 +90,8 @@ describe("Tests the transaction accordion's layout", () => {
     cy.shortWait();
 
     //Step 3: Select the "Add new transaction" button
-    cy.get('button[label="Add new transaction"]').click();
+    cy.contains('button', 'Add new transaction').click();
+    cy.contains('button', 'Add a receipt').click();
     cy.shortWait();
 
     //Step 4: Check the accordian tab headers

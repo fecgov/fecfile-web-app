@@ -4,11 +4,11 @@ import { generateContactObject } from '../../support/generators/contacts.spec';
 const candidateTypes: string[] = ['Presidential', 'House', 'Senate'];
 
 describe('Tests candidate ID field for different candidate types', () => {
-  after(() => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.deleteAllContacts();
-  });
+  // after(() => {
+  //   cy.login();
+  //   cy.visit('/dashboard');
+  //   cy.deleteAllContacts();
+  // });
 
   for (const candidateType of candidateTypes) {
     it(`Tests the candidate ID for ${candidateType} candidates`, () => {
@@ -25,6 +25,8 @@ describe('Tests candidate ID field for different candidate types', () => {
 
       //Step 1: Navigate to the Contacts Page
       cy.login();
+      cy.deleteAllContacts();
+
       cy.visit('/dashboard');
       cy.url().should('contain', '/dashboard');
       cy.medWait();

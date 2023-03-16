@@ -22,7 +22,8 @@ export function createTransactionSchA(transaction: Transaction | PairedTransacti
   const category = transaction.transaction_category;
   const transactionType = transaction.transaction_name;
 
-  cy.get('button[label="Add new transaction"]').click();
+  cy.contains('button', 'Add new transaction').click();
+  cy.contains('button', 'Add a receipt').click();
   cy.shortWait();
 
   navigateTransactionAccordion(category, transactionType);

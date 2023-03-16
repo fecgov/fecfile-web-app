@@ -172,7 +172,8 @@ describe('Test max lengths, requirements, and allowed characters on all fields o
         cy.navigateToTransactionManagement();
         cy.medWait();
 
-        cy.get('button[label="Add new transaction"]').click();
+        cy.contains('button', 'Add new transaction').click();
+        cy.contains('button', 'Add a receipt').click();
         cy.shortWait();
 
         navigateTransactionAccordion(category, transactionName);

@@ -52,12 +52,14 @@ function testAddressFields(contact) {
 }
 
 function testSavedProperly(contact, cType) {
-  cy.contains('tr', `${contact['name']}`).should('contain', contact['contact_type']);
   if (cType == 'Individual' || cType == 'Candidate') {
     cy.get('tbody')
-      .contains('tr', `${contact['name']}`)
+      .contains('tr', `${contact['last_name']}, ${contact['first_name']}`)
+      .should('contain', contact['contact_type'])
       .should('contain', contact['employer'])
       .should('contain', contact['occupation']);
+  } else {
+    cy.get('tbody').contains('tr', contact['name']).should('contain', contact['contact_type']);
   }
 }
 
@@ -67,14 +69,15 @@ const contacts: object = { Individual: {}, Candidate: {}, Committee: {}, Organiz
 describe('Contact Creation', () => {
   beforeEach('Logs in', () => {
     cy.login();
+    cy.deleteAllContacts();
     cy.visit('/dashboard');
   });
 
-  after('Cleans up', () => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.deleteAllContacts();
-  });
+  // after('Cleans up', () => {
+  //   cy.login();
+  //   cy.visit('/dashboard');
+  //   cy.deleteAllContacts();
+  // });
 
   for (contactType of Object.keys(contacts)) {
     contacts[contactType] = generateContactObject({ contact_type: contactType });

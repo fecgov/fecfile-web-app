@@ -90,7 +90,8 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
   cy.navigateToTransactionManagement();
 
   //Step 3: Test aggregation for individuals
-  cy.get('button[label="Add new transaction"]').click();
+  cy.contains('button', 'Add new transaction').click();
+  cy.contains('button', 'Add a receipt').click();
   cy.shortWait();
   cy.navigateTransactionAccordion(navigation[0], navigation[1]);
 
@@ -124,7 +125,8 @@ function testAggregation(contact: Contact, navigation: [string, string], transac
   if (transactions[3]) {
     cy.contains('button', 'Cancel').click();
     cy.medWait();
-    cy.get('button[label="Add new transaction"]').click();
+    cy.contains('button', 'Add new transaction').click();
+    cy.contains('button', 'Add a receipt').click();
     cy.navigateTransactionAccordion(transactions[3].transaction_category, transactions[3].transaction_name);
 
     enterTransactionSchA(transactions[3]);

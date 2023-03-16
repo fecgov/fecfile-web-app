@@ -21,19 +21,19 @@ describe('Checks that all states are present as options within the contact form'
     cy.shortWait();
 
     cy.get('.p-dialog-header').contains('Add Contact').should('contain', 'Add Contact');
-    cy.get('p-dropdown[formControlName="type"]')
+    cy.get('p-dropdown#entity_type_dropdown')
       .click()
       .find('p-dropdownitem')
       .contains('Candidate')
       .click({ force: true });
 
-    cy.get("[formcontrolname='state']").should('have.value', '');
-    cy.get("[formcontrolname='state']").click();
+    cy.get("p-dropdown[formcontrolname='state']").should('have.value', '');
+    cy.get("p-dropdown[formcontrolname='state']").click();
     for (const state of states) {
       cy.get("li[role='option']").contains(state).should('exist');
     }
 
     cy.get("li[role='option']").should('not.contain', 'Armed Forces').contains('Virginia').click({ force: true });
-    cy.get("[formcontrolname='state']").should('contain', 'Virginia');
+    cy.get("p-dropdown[formcontrolname='state']").should('contain', 'Virginia');
   });
 });

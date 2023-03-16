@@ -13,16 +13,19 @@ const transactionIndv = generateTransactionObject({
 });
 
 describe('Tests that contacts are edited by transactions', () => {
-  after(() => {
-    cy.login();
-    cy.visit('/dashboard');
-    cy.deleteAllReports();
-    cy.deleteAllContacts();
-  });
+  // after(() => {
+  //   cy.login();
+  //   cy.visit('/dashboard');
+  //   cy.deleteAllReports();
+  //   cy.deleteAllContacts();
+  // });
 
   before('', () => {
     //Step 1: Log in, navigate to the contacts page and creates the individual contact
     cy.login();
+    cy.deleteAllReports();
+    cy.deleteAllContacts();
+
     cy.visit('/dashboard');
     cy.url().should('contain', '/dashboard');
     cy.medWait();
@@ -49,7 +52,8 @@ describe('Tests that contacts are edited by transactions', () => {
     cy.navigateToTransactionManagement();
     cy.longWait();
 
-    cy.get('button[label="Add new transaction"]').click();
+    cy.contains('button', 'Add new transaction').click();
+    cy.contains('button', 'Add a receipt').click();
     cy.shortWait();
     cy.navigateTransactionAccordion('INDIVIDUALS/PERSONS', 'Individual Receipt');
 
