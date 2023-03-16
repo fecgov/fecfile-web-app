@@ -20,7 +20,8 @@ describe('INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT);
   });
 
-  it('#generatePurposeDescription() should not be defined', () => {
-    expect(transactionType.generatePurposeDescription).toBe(undefined);
+  it('#generatePurposeDescription() should generate a string', () => {
+    const descrip = transactionType.generatePurposeDescription();
+    expect(descrip).toBe('Non-contribution Account Receipt');
   });
 });
