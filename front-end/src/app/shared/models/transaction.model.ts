@@ -1,14 +1,16 @@
 import { BaseModel } from './base.model';
 import { Contact } from './contact.model';
 import { MemoText } from './memo-text.model';
-import { SchATransaction, ScheduleATransactionTypes } from './scha-transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from './schb-transaction.model';
-import { ValidateUtils } from '../utils/validate.utils';
-import { TransactionType } from './transaction-types/transaction-type.model';
+import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionGroupsType } from './scha-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsType } from './schb-transaction.model';
+import { TransactionType } from './transaction-type.model';
 import { Type } from 'class-transformer';
+import { ValidateUtils } from '../utils/validate.utils';
 
 export abstract class Transaction extends BaseModel {
   id: string | undefined;
+
+  @Type(() => TransactionType)
   transactionType: TransactionType | undefined;
 
   // FECFile spec properties
@@ -50,8 +52,6 @@ export abstract class Transaction extends BaseModel {
 
   abstract apiEndpoint: string; // Root URL for API endpoint
 
-  abstract getUpdatedParent(childDeleted?: boolean): Transaction; // Method to handle save when child must update parent properties
-
   /**
    * Perform bookkeeping updates to the transaction when it is created via fromJSON()
    * We have to pass the transactionType instead of getting from TransactonTypeUtils
@@ -61,15 +61,71 @@ export abstract class Transaction extends BaseModel {
    */
   setMetaProperties(transactionType: TransactionType): void {
     this.contact_id = this.contact?.id;
-    if (this?.transaction_type_identifier) {
-      this.transactionType = transactionType;
-      this.schema_name = transactionType.getSchemaName();
-      const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
-      const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
-      this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
-    } else {
-      throw new Error('No TRANSACTION_TYPE_IDENTIFIER found when setting Meta Properties');
+    this.transactionType = transactionType;
+    this.schema_name = transactionType.getSchemaName();
+    const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
+    const fieldsNotToValidate: string[] = this.getFieldsNotToValidate();
+    this.fields_to_validate = fieldsToValidate.filter((p) => ![...fieldsNotToValidate].includes(p));
+  }
+
+  /**
+   * updateChildren()
+   * @returns
+   *    An array of Transaction objects whose contribution_purpose_descriptions
+   *    have been re-generated to account for changes to their parent
+   *
+   */
+  updateChildren(): Transaction[] {
+    const outChildren: Transaction[] = [];
+    if (this.children) {
+      for (const child of this.children as SchATransaction[]) {
+        // Modify the purpose description this to reflect the changes to child transactions
+        if (child?.transactionType?.generatePurposeDescription) {
+          child.parent_transaction = this;
+          const newDescrip = child.transactionType.generatePurposeDescriptionWrapper(child);
+          const key = child.transactionType.templateMap.purpose_description as keyof ScheduleTransaction;
+          ((child as ScheduleTransaction)[key] as string) = newDescrip;
+        }
+        outChildren.push(child);
+      }
     }
+    return outChildren;
+  }
+
+  /**
+   * Returns a transaction payload with the parent of the original payload
+   * swapped in as the main payload and the original main payload is a child
+   * @returns
+   */
+  getUpdatedParent(childDeleted = false): Transaction {
+    if (!this.parent_transaction?.transaction_type_identifier) {
+      throw new Error(
+        `Fecfile: Child transaction '${this.transaction_type_identifier}' is missing its parent when saving to API`
+      );
+    }
+
+    // The parent is the new payload
+    const payload = this.parent_transaction;
+    if (!payload.children) payload.children = [];
+
+    // Attach the original payload to the parent as a child, replacing an
+    // existing version if needed
+    if (this.id) {
+      payload.children = payload.children.filter((c) => c.id !== this.id);
+    }
+    if (!childDeleted) {
+      payload.children.push(this);
+    }
+    payload.children = payload.updateChildren();
+
+    // Update the purpose description
+    if (payload.transactionType?.generatePurposeDescription) {
+      const key = payload.transactionType.templateMap.purpose_description as keyof ScheduleTransaction;
+      ((payload as ScheduleTransaction)[key] as string) =
+        payload.transactionType.generatePurposeDescriptionWrapper(payload);
+    }
+
+    return payload;
   }
 }
 
@@ -81,4 +137,18 @@ export function hasNoContact(transaction?: Transaction): boolean {
 }
 
 export type ScheduleTransaction = SchATransaction | SchBTransaction;
-export type ScheduleTransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
+export type TransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
+export type TransactionGroupTypes = ScheduleATransactionGroupsType | ScheduleBTransactionGroupsType;
+
+export enum AggregationGroups {
+  GENERAL = 'GENERAL',
+  LINE_15 = 'LINE_15',
+  LINE_16 = 'LINE_16',
+  NATIONAL_PARTY_CONVENTION_ACCOUNT = 'NATIONAL_PARTY_CONVENTION_ACCOUNT',
+  NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
+  NATIONAL_PARTY_RECOUNT_ACCOUNT = 'NATIONAL_PARTY_RECOUNT_ACCOUNT',
+  NON_CONTRIBUTION_ACCOUNT = 'NON_CONTRIBUTION_ACCOUNT',
+  OTHER_RECEIPTS = 'OTHER_RECEIPTS',
+  RECOUNT_ACCOUNT = 'RECOUNT_ACCOUNT',
+  GENERAL_DISBURSEMENT = 'GENERAL_DISBURSEMENT',
+}

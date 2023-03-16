@@ -1,4 +1,4 @@
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
+import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { PARTY_RETURN } from './PARTY_RETURN.model';
 
@@ -12,7 +12,7 @@ describe('PARTY_RETURN', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('F');
+    expect(transactionType.componentGroupId).toBe('E');
   });
 
   it('#factory() should return a SchATransaction', () => {

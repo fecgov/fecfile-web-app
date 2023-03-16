@@ -1,31 +1,30 @@
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { JOINT_FUNDRAISING_TRANSFER } from './JOINT_FUNDRAISING_TRANSFER.model';
-import { TRIBAL_JF_TRANSFER_MEMO } from './TRIBAL_JF_TRANSFER_MEMO.model';
 
 describe('TRIBAL_JF_TRANSFER_MEMO', () => {
-  let transactionType: TRIBAL_JF_TRANSFER_MEMO;
+  let transaction: SchATransaction;
 
   beforeEach(() => {
-    transactionType = new TRIBAL_JF_TRANSFER_MEMO();
-    transactionType.transaction = transactionType.getNewTransaction();
-    transactionType.transaction.parent_transaction = new JOINT_FUNDRAISING_TRANSFER().getNewTransaction();
-    (transactionType.transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
+    transaction = getTestTransactionByType(
+      ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO,
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
+    ) as SchATransaction;
+    (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
 
   it('should create an instance', () => {
-    expect(transactionType).toBeTruthy();
-    expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transaction.transactionType).toBeTruthy();
+    expect(transaction.transactionType?.scheduleId).toBe('A');
+    expect(transaction.transactionType?.componentGroupId).toBe('D');
   });
 
   it('#factory() should return a SchATransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA12');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO);
+    expect(transaction.form_type).toBe('SA12');
+    expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO);
   });
 
   it('#generatePurposeDescription() should return appropriate retval', () => {
-    const descrip = transactionType.generatePurposeDescription();
+    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(`JF Memo: Test Org`);
   });
 });

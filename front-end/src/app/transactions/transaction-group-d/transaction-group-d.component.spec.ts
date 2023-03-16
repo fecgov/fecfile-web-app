@@ -3,19 +3,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
 import { ContactTypes } from 'app/shared/models/contact.model';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationDestination,
   NavigationAction,
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
-import { schema as TRIBAL_JF_TRANSFER_MEMO } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_JF_TRANSFER_MEMO';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -35,20 +32,7 @@ describe('TransactionGroupDComponent', () => {
   let component: TransactionGroupDComponent;
   let fixture: ComponentFixture<TransactionGroupDComponent>;
 
-  const transaction = SchATransaction.fromJSON({
-    form_type: 'SA12',
-    transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO,
-    transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-    entity_type: ContactTypes.ORGANIZATION,
-    contributor_organization_name: 'org name',
-    contributor_street_1: '123 Main St',
-    contributor_city: 'city',
-    contributor_state: 'VA',
-    contributor_zip: '20001',
-    contribution_date: '2022-08-11',
-    contribution_amount: 1,
-    contribution_aggregate: 2,
-  });
+  const transaction = getTestTransactionByType(ScheduleATransactionTypes.TRIBAL_RECEIPT);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -78,27 +62,13 @@ describe('TransactionGroupDComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupDComponent);
     component = fixture.componentInstance;
-    component.transactionType = {
-      scheduleId: '',
-      componentGroupId: '',
-      contact: undefined,
-      generatePurposeDescriptionWrapper: () => 'test description',
-      getNewTransaction: () => {
-        return {} as Transaction;
-      },
-      title: '',
-      schema: TRIBAL_JF_TRANSFER_MEMO,
-      transaction: transaction,
-      isDependentChild: false,
-      updateParentOnSave: false,
-      getSchemaName: () => 'foo',
-    } as TransactionType;
+    component.transaction = transaction;
+    component.templateMap = testTemplateMap;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    component.ngOnInit();
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
   });
 
@@ -116,7 +86,7 @@ describe('TransactionGroupDComponent', () => {
     component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
     expect(component.form.invalid).toBe(true);
     httpTestingController.expectNone(
-      `${environment.apiUrl}/transactions/schedule-a/1/?schema=TRIBAL_JF_TRANSFER_MEMO&fields_to_validate=`
+      `${environment.apiUrl}/transactions/schedule-a/1/?schema=TRIBAL_RECEIPT&fields_to_validate=`
     );
     httpTestingController.verify();
   });

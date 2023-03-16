@@ -2,27 +2,23 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_EARMARK_RECEIPTS';
 import { ContactTypes } from '../contact.model';
-import {
-  AggregationGroups,
-  SchATransaction,
-  ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes,
-} from '../scha-transaction.model';
+import { AggregationGroups } from '../transaction.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import {
   CANCEL_CONTROL,
   SAVE_LIST_CONTROL,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 
-export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchaTransactionType {
+export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchATransactionType {
   componentGroupId = 'AG';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION
   );
   schema = schema;
-  override childTransactionType = TransactionTypeUtils.factory(
+  override dependentChildTransactionType = TransactionTypeUtils.factory(
     ScheduleATransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT
   );
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
@@ -31,13 +27,14 @@ export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchaTransactionType {
     [SAVE_LIST_CONTROL]
   );
 
-  override generatePurposeDescription(): string {
-    const subTransaction: SchATransaction = this.childTransactionType?.transaction as SchATransaction;
-    let conduit = subTransaction?.contributor_organization_name || '';
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    if (!transaction.children) return '';
+    const subTransaction: SchATransaction = transaction.children[0] as SchATransaction;
+    let conduit = subTransaction.contributor_organization_name || '';
     if (
-      subTransaction?.entity_type === ContactTypes.INDIVIDUAL &&
-      subTransaction?.contributor_first_name &&
-      subTransaction?.contributor_last_name
+      subTransaction.entity_type === ContactTypes.INDIVIDUAL &&
+      subTransaction.contributor_first_name &&
+      subTransaction.contributor_last_name
     ) {
       conduit = `${subTransaction.contributor_first_name || ''} ${subTransaction.contributor_last_name || ''}`;
     }

@@ -1,3 +1,8 @@
+import { ScheduleTransaction } from '../models/transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchBTransaction } from '../models/schb-transaction.model';
+
+// Schedule A /////////////////////////////////////////////////////
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
@@ -33,13 +38,15 @@ import { PARTNERSHIP_MEMO } from '../models/transaction-types/PARTNERSHIP_MEMO.m
 import { PARTNERSHIP_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECEIPT.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO.model';
+import { PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
+import { PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO.model';
 import { PARTY_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTY_JF_TRANSFER_MEMO.model';
 import { PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
 import { PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { PARTY_RECEIPT } from '../models/transaction-types/PARTY_RECEIPT.model';
 import { PARTY_RECOUNT_RECEIPT } from '../models/transaction-types/PARTY_RECOUNT_RECEIPT.model';
-import { TransactionType } from '../models/transaction-types/transaction-type.model';
+import { TransactionType } from '../models/transaction-type.model';
 import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
 import { TRIBAL_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
@@ -61,9 +68,20 @@ import { EARMARK_RECEIPT_CONVENTION_ACCOUNT } from '../models/transaction-types/
 import { EARMARK_MEMO_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_HEADQUARTERS_ACCOUNT.model';
 import { EARMARK_MEMO_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_CONVENTION_ACCOUNT.model';
 import { EARMARK_MEMO_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_RECOUNT_ACCOUNT.model';
+import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
+import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO.model';
+import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT.model';
+import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
+
+// Schedule B /////////////////////////////////////////////////////
+import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
+import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
+import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
+import { OTHER_DISBURSEMENT_VOID } from '../models/transaction-types/OTHER_DISBURSEMENT_VOID.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
+  // Schedule A /////////////////////////////////////////////////////
   EARMARK_RECEIPT,
   EARMARK_MEMO,
   INDIVIDUAL_JF_TRANSFER_MEMO,
@@ -111,6 +129,10 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
+  PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+  PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO,
+  PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
+  PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO,
   PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT,
@@ -126,13 +148,20 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   EARMARK_MEMO_HEADQUARTERS_ACCOUNT,
   EARMARK_MEMO_CONVENTION_ACCOUNT,
   EARMARK_MEMO_RECOUNT_ACCOUNT,
+  PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
+  PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
+  // Schedule B /////////////////////////////////////////////////////
+  OPERATING_EXPENDITURE,
+  OPERATING_EXPENDITURE_VOID,
+  OTHER_DISBURSEMENT,
+  OTHER_DISBURSEMENT_VOID,
 }
 
 export class TransactionTypeUtils {
   static factory(transactionTypeIdentifier: string): TransactionType {
     const transactionType = getTransactionTypeClass(transactionTypeIdentifier);
     if (!transactionType) {
-      throw new Error(`Class transaction type of '${transactionTypeIdentifier}' is not found`);
+      throw new Error(`Fecfile: Class transaction type of '${transactionTypeIdentifier}' is not found`);
     }
     return new transactionType();
   }
@@ -141,4 +170,25 @@ export class TransactionTypeUtils {
 // prettier-ignore
 export function getTransactionTypeClass(transactionTypeIdentifier: string): any { // eslint-disable-line @typescript-eslint/no-explicit-any
   return transactionTypeClasses[transactionTypeIdentifier];
+}
+
+// prettier-ignore
+/**
+ * Returns a schedule object of the correct class as discovered by examining
+ * the scheduleId of the transaction type.
+ *
+ * This function is in this file because there is a REFERENCEERROR when it
+ * is included in the transaction.model.ts file
+ * @param json
+ * @param depth
+ * @returns
+ */
+export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+  if (json.transaction_type_identifier) {
+    const transactionType = TransactionTypeUtils.factory(json.transaction_type_identifier);
+    if (transactionType.scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
+  }
+  return SchATransaction.fromJSON(json, depth); // Until 404 resolved
+  // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');
 }

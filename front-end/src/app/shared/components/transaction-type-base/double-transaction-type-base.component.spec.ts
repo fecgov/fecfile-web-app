@@ -1,12 +1,14 @@
+import { DatePipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { ValidateService } from 'app/shared/services/validate.service';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { MessageService } from 'primeng/api';
+import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
@@ -57,25 +59,39 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
   ];
 }
 
-describe('TransactionTypeBaseComponent', () => {
+describe('DoubleTransactionTypeBaseComponent', () => {
   let component: TestDoubleTransactionTypeBaseComponent;
   let fixture: ComponentFixture<TestDoubleTransactionTypeBaseComponent>;
+  let testTransaction: SchATransaction;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TestDoubleTransactionTypeBaseComponent],
       imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [MessageService, FormBuilder, ValidateService, TransactionService, provideMockStore(testMockStore)],
+      providers: [
+        DatePipe,
+        MessageService,
+        FormBuilder,
+        TransactionService,
+        ConfirmationService,
+        provideMockStore(testMockStore),
+        FecDatePipe,
+      ],
     }).compileComponents();
   });
 
   beforeEach(() => {
+    testTransaction = getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_RECEIPT) as SchATransaction;
+    testTransaction.children = [
+      getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
+    ];
     fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
     component = fixture.componentInstance;
+    component.transaction = testTransaction;
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

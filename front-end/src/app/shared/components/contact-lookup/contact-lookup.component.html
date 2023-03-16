@@ -1,93 +1,50 @@
-<div class="p-fluid">
-  <form [formGroup]="contactLookupForm">
-    <div class="grid contact-lookup-container">
-      <div class="col-2 pl-0 pr-0">
-        <p-dropdown
-          [inputId]="contactTypeInputId"
-          [formControl]="contactTypeFormControl"
-          [options]="contactTypeOptions"
-          optionLabel="name"
-          optionValue="code"
-          [readonly]="contactTypeReadOnly"
-          [styleClass]="contactTypeStyleClass"
-          [dropdownIcon]="contactTypeOptions.length > 1 ? 'pi pi-chevron-down' : ''"
-          id="entity_type_dropdown"
-        >
-        </p-dropdown>
-      </div>
-      <div class="col-4 pl-0">
-        <p-autoComplete
-          [group]="true"
-          (completeMethod)="onDropdownSearch($event)"
-          field="label"
-          dropdownMode="current"
-          dropdownIcon="pi pi-search"
-          [suggestions]="contactLookupList"
-          formControlName="selectedContact"
-          placeholder="Search for a contact"
-          [forceSelection]="true"
-          (onSelect)="onContactSelect($event)"
-        >
-          <ng-template let-group pTemplate="group">
-            <div>{{ group.label }}</div>
-            <div class="try-another-search-text" *ngIf="!group.items || !group.items.length">
-              Try another search or create a new contact
-            </div>
-          </ng-template>
-          <ng-template let-contact pTemplate="item">
-            <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
-            <span *ngIf="isContact(contact.value)" class="in-contacts"> In contacts </span>
-          </ng-template>
-        </p-autoComplete>
-      </div>
-      <div class="col">
-        <div class="add-contact-container">
-          or
-          <span class="pi pi-plus-circle"></span>
-          <a (click)="createNewContact()">Create a new contact</a>
-        </div>
+<form [formGroup]="contactLookupForm">
+  <div class="grid contact-lookup-container">
+    <div class="col-2 pl-0 pr-0">
+      <p-dropdown
+        inputId="entity_type"
+        [formControl]="contactTypeFormControl"
+        [options]="contactTypeOptions"
+        optionLabel="name"
+        optionValue="code"
+        [readonly]="contactTypeReadOnly"
+        styleClass="{{ contactTypeReadOnly ? 'readonly' : '' }}"
+        [dropdownIcon]="contactTypeOptions.length > 1 ? 'pi pi-chevron-down' : ''"
+        id="entity_type_dropdown"
+      >
+      </p-dropdown>
+    </div>
+    <div *ngIf="showSearchBox" class="col-4 pl-0">
+      <p-autoComplete
+        [group]="true"
+        (completeMethod)="onDropdownSearch($event)"
+        field="label"
+        dropdownMode="current"
+        dropdownIcon="pi pi-search"
+        [suggestions]="contactLookupList"
+        formControlName="selectedContact"
+        placeholder="Search for a contact"
+        [forceSelection]="true"
+        (onSelect)="onContactLookupSelect($event)"
+      >
+        <ng-template let-group pTemplate="group">
+          <div>{{ group.label }}</div>
+          <div class="try-another-search-text" *ngIf="!group.items || !group.items.length">
+            Try another search or create a new contact
+          </div>
+        </ng-template>
+        <ng-template let-contact pTemplate="item">
+          <span [innerHTML]="contact.label | highlightTerms: searchTerm" class="contact-label"> </span>
+          <span *ngIf="isContact(contact.value)" class="in-contacts"> In contacts </span>
+        </ng-template>
+      </p-autoComplete>
+    </div>
+    <div *ngIf="showCreateNewContactButton" class="col">
+      <div class="add-contact-container">
+        or
+        <span class="pi pi-plus-circle"></span>
+        <a (click)="onCreateNewContactSelect()">Create a new contact</a>
       </div>
     </div>
-  </form>
-  <p-dialog
-    [(visible)]="createContactDialogVisible"
-    [style]="{ width: '90%' }"
-    header="Create a new contact"
-    [modal]="true"
-    (onShow)="onCreateContactDialogOpen()"
-    (onHide)="onCreateContactDialogClose()"
-  >
-    <ng-template pTemplate="content">
-      <app-contact-form 
-        [formSubmitted]="createContactFormSubmitted" 
-        [form]="createContactForm">
-      </app-contact-form>
-    </ng-template>
-    <ng-template pTemplate="footer">
-      <div class="grid">
-        <div class="col-1">
-          <button
-            pButton
-            pRipple
-            label="Cancel"
-            type="button"
-            icon="pi pi-times"
-            class="p-button-secondary"
-            (click)="closeCreateContactDialog()"
-          ></button>
-        </div>
-        <div class="col-11">
-          <button
-            pButton
-            pRipple
-            type="button"
-            label="Save & continue"
-            icon="pi pi-check"
-            class="p-button-info"
-            (click)="createContactSave()"
-          ></button>
-        </div>
-      </div>
-    </ng-template>
-  </p-dialog>
-</div>
+  </div>
+</form>

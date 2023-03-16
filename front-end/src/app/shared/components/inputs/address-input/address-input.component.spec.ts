@@ -3,7 +3,7 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-
+import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AddressInputComponent } from './address-input.component';
 
 describe('AddressInputComponent', () => {
@@ -25,6 +25,7 @@ describe('AddressInputComponent', () => {
       contributor_state: new FormControl(''),
       contributor_zip: new FormControl(''),
     });
+    component.templateMap = testTemplateMap;
     fixture.detectChanges();
   });
 

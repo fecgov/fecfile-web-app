@@ -1,4 +1,4 @@
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { PAC_RETURN } from './PAC_RETURN.model';
 
@@ -12,7 +12,7 @@ describe('PAC_RETURN', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('F');
+    expect(transactionType.componentGroupId).toBe('E');
   });
 
   it('#factory() should return a SchATransaction', () => {
@@ -21,6 +21,6 @@ describe('PAC_RETURN', () => {
     expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PAC_RETURN);
   });
   it('#generatePurposeDescription() should not be defined', () => {
-    expect((transactionType as SchaTransactionType).generatePurposeDescription).toBe(undefined);
+    expect((transactionType as SchATransactionType).generatePurposeDescription).toBe(undefined);
   });
 });
