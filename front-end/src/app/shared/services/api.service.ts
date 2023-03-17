@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap, delay, switchMap } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { selectUserLoginData } from 'app/store/login.selectors';
 import { UserLoginData } from '../models/user.model';
 import { spinnerOnAction, spinnerOffAction } from 'app/store/spinner.actions';
 import { CookieService } from 'ngx-cookie-service';
+import { ALLOW_ERROR_CODES } from '../interceptors/http-error.interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -38,9 +39,29 @@ export class ApiService {
 
   public get<T>(
     endpoint: string,
-    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {}
-  ): Observable<T> {
+    params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> }
+  ): Observable<T>;
+  public get<T>(
+    endpoint: string,
+    params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> },
+    allowedErrorCodes?: number[]
+  ): Observable<HttpResponse<T>>;
+  public get<T>(
+    endpoint: string,
+    params: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } = {},
+    allowedErrorCodes?: number[]
+  ): Observable<T> | Observable<HttpResponse<T>> {
     const headers = this.getHeaders();
+    if (allowedErrorCodes) {
+      return this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
+        headers: headers,
+        params: params,
+        withCredentials: true,
+        observe: 'response',
+        responseType: 'json',
+        context: new HttpContext().set(ALLOW_ERROR_CODES, allowedErrorCodes),
+      });
+    }
     return this.http.get<T>(`${environment.apiUrl}${endpoint}`, {
       headers: headers,
       params: params,

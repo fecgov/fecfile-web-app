@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, Event } from '@angular/router';
+import { Router, NavigationEnd, Event, ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
@@ -19,6 +19,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
   activeReport: Report | undefined;
   currentReportId: string | undefined;
   currentReportTimestamp: number | undefined;
+  expandedSection: 'Transactions' | 'Review' | 'Submission' | 'None' = 'None';
   items: MenuItem[] = [];
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   reportIsEditableFlag = false;
@@ -46,7 +47,12 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     /^\/reports\/f3x\/submit\/status\/[\da-z-]+/, // Submit your report group
   ];
 
-  constructor(private router: Router, private store: Store, private reportService: ReportService) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private store: Store,
+    private reportService: ReportService
+  ) {}
 
   ngOnInit(): void {
     this.store
@@ -64,11 +70,17 @@ export class MenuReportComponent implements OnInit, OnDestroy {
         this.cashOnHand = cashOnHand;
       });
 
+    console.log(this.route.data);
     // Watch the router changes and display menu if URL is in urlMatch list.
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.handleNavigationEvent(event);
       }
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.route.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
+      console.log(data.sidebarStatus);
     });
   }
 
@@ -157,9 +169,12 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       }
 
       // Slice indexes are determined by the number of entries in each urlMatch group
-      this.items[0].expanded = this.isActive(this.urlMatch.slice(0, 4), event.url);
-      this.items[1].expanded = this.isActive(this.urlMatch.slice(4, 7), event.url);
-      this.items[2].expanded = this.isActive(this.urlMatch.slice(7, 10), event.url);
+      this.items[0].expanded = this.expandedSection == 'Transactions';
+      //this.items[0].expanded = this.isActive(this.urlMatch.slice(0, 4), event.url);
+      this.items[1].expanded = this.expandedSection == 'Review';
+      //this.items[1].expanded = this.isActive(this.urlMatch.slice(4, 7), event.url);
+      this.items[0].expanded = this.expandedSection == 'Submission';
+      //this.items[2].expanded = this.isActive(this.urlMatch.slice(7, 10), event.url);
     }
   }
 

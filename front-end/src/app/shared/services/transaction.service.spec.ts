@@ -9,6 +9,8 @@ import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-trans
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { HttpStatusCode, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -17,7 +19,12 @@ describe('TransactionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [TransactionService, provideMockStore(testMockStore), DatePipe],
+      providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+        TransactionService,
+        provideMockStore(testMockStore),
+        DatePipe,
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(TransactionService);
@@ -89,6 +96,23 @@ describe('TransactionService', () => {
     );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
+    httpTestingController.verify();
+  });
+
+  it('#getPreviousTransaction() should return undefined', () => {
+    const mockTransaction: Transaction = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+    ).getNewTransaction();
+    mockTransaction.id = 'abc';
+    service.getPreviousTransaction(mockTransaction, '1', new Date()).subscribe((response) => {
+      expect(response).toEqual(undefined);
+    });
+    const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/transactions/previous/?transaction_id=abc&contact_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush({}, { status: HttpStatusCode.NotFound, statusText: 'not found' });
     httpTestingController.verify();
   });
 

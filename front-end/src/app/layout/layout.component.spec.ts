@@ -10,6 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MenuReportComponent } from './sidebar/menu-report/menu-report.component';
 import { LayoutComponent } from './layout.component';
 import { NavigationEnd } from '@angular/router';
+import { BannerComponent } from './banner/banner.component';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -18,7 +19,14 @@ describe('LayoutComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MenubarModule, HttpClientTestingModule, RouterTestingModule],
-      declarations: [LayoutComponent, SidebarComponent, HeaderComponent, MenuReportComponent, FooterComponent],
+      declarations: [
+        LayoutComponent,
+        SidebarComponent,
+        HeaderComponent,
+        BannerComponent,
+        MenuReportComponent,
+        FooterComponent,
+      ],
       providers: [LayoutComponent, provideMockStore(testMockStore)],
     }).compileComponents();
 

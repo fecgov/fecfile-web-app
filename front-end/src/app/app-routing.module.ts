@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login/login.component';
 import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginGuard } from './shared/guards/login-page.guard';
+import { ReportSidebarResolver } from './shared/resolvers/report-sidebar.resolver';
 
 const routes: Routes = [
   {
@@ -14,6 +15,9 @@ const routes: Routes = [
   },
   {
     path: '',
+    resolve: {
+      sidebarStatus: ReportSidebarResolver,
+    },
     component: LayoutComponent,
     children: [
       { path: 'dashboard', component: DashboardComponent, title: 'FECFile Dashboard' },

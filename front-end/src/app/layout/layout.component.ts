@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../store/committee-account.selectors';
 import { selectSpinnerStatus } from '../store/spinner.selectors';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { NavigationEnd, Router, Event } from '@angular/router';
+import { NavigationEnd, Router, Event, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -34,7 +34,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
     /^\/reports\/f3x\/submit\/status\/[\da-z-]+/, // Submit your report group
   ];
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(private router: Router, private route: ActivatedRoute, private store: Store) {}
 
   ngOnInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
@@ -46,12 +46,17 @@ export class LayoutComponent implements OnInit, OnDestroy {
         this.handleNavigationEvent(event);
       }
     });
+
+    this.route.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
+      console.log(data);
+      this.sidebarVisible = data.sidebarStatus != 'None';
+    });
   }
 
   handleNavigationEvent(event: NavigationEnd) {
     // Show the sidebar report menu if the router url matches one of the url
     // regular expressions in the matchUrl array.
-    this.sidebarVisible = this.isActive(this.urlMatch, event.url);
+    //this.sidebarVisible = this.isActive(this.urlMatch, event.url);
   }
 
   /**

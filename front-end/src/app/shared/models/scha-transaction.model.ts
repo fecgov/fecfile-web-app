@@ -125,7 +125,7 @@ export enum ScheduleATransactionTypes {
   JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   // Refunds
   REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES = 'REF_TO_FED_CAN',
-  REFUNDS_OF_CONTRIBUTIONS_TO_UNREGISTERED_COMMITTEES = 'REF_TO_OTH_CMTE',
+  REFUND_TO_UNREGISTERED_COMMITTEE = 'REFUND_TO_UNREGISTERED_COMMITTEE',
   // Other
   OFFSET_TO_OPERATING_EXPENDITURES = 'OFFSET_TO_OPERATING_EXPENDITURES',
   OTHER_RECEIPTS = 'OTHER_RECEIPT',
@@ -254,8 +254,8 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Refunds of Contributions to Registered Committees',
   ],
   [
-    ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_UNREGISTERED_COMMITTEES,
-    'Refunds of Contributions to Unregistered Committees',
+    ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
+    'Refund of Contribution to Unregistered Committee',
   ],
   // Other
   [ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
