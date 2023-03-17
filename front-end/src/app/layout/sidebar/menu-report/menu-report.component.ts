@@ -80,7 +80,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.route.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
-      console.log(data.sidebarStatus);
+      console.log('sidebarStatus:', data.sidebarStatus);
     });
   }
 

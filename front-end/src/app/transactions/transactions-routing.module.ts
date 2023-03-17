@@ -6,6 +6,7 @@ import { ReportIsEditableGuard } from '../shared/guards/report-is-editable.guard
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
+import { ReportSidebarResolver } from 'app/shared/resolvers/report-sidebar.resolver';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -19,18 +20,24 @@ const routes: Routes = [
     path: 'report/:reportId/list',
     title: 'Manage your transactions',
     component: TransactionListComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: ReportResolver, sidebarStatus: ReportSidebarResolver },
   },
   {
     path: 'report/:reportId/select/:category',
     component: TransactionTypePickerComponent,
     canActivate: [ReportIsEditableGuard],
+    resolve: {
+      report: ReportResolver,
+      sidebarStatus: ReportSidebarResolver,
+    },
   },
   {
     path: 'report/:reportId/create/:transactionType',
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
+      report: ReportResolver,
+      sidebarStatus: ReportSidebarResolver,
     },
     canActivate: [ReportIsEditableGuard],
   },
@@ -39,6 +46,8 @@ const routes: Routes = [
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
+      report: ReportResolver,
+      sidebarStatus: ReportSidebarResolver,
     },
   },
   {
@@ -46,6 +55,8 @@ const routes: Routes = [
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
+      report: ReportResolver,
+      sidebarStatus: ReportSidebarResolver,
     },
     canActivate: [ReportIsEditableGuard],
   },
