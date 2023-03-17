@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, Event, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd, Event, ActivatedRoute, RoutesRecognized, ActivationStart } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
@@ -70,18 +70,21 @@ export class MenuReportComponent implements OnInit, OnDestroy {
         this.cashOnHand = cashOnHand;
       });
 
-    console.log(this.route.data);
     // Watch the router changes and display menu if URL is in urlMatch list.
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.handleNavigationEvent(event);
       }
+      if (event instanceof ActivationStart) {
+        const data = event.snapshot.data;
+        console.log('Data found:', event);
+      }
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.route.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
-      console.log('sidebarStatus:', data.sidebarStatus);
-    });
+    //this.route.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
+    //  console.log('sidebarStatus:', data);
+    //});
   }
 
   handleNavigationEvent(event: NavigationEnd) {

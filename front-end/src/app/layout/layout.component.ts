@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../store/committee-account.selectors';
 import { selectSpinnerStatus } from '../store/spinner.selectors';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { NavigationEnd, Router, Event, ActivatedRoute } from '@angular/router';
+import { NavigationEnd, Router, Event, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -34,7 +34,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
     /^\/reports\/f3x\/submit\/status\/[\da-z-]+/, // Submit your report group
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute, private store: Store) {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private store: Store) {}
 
   ngOnInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
@@ -47,8 +47,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.route.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
-      console.log(data);
+    this.activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
       this.sidebarVisible = data.sidebarStatus != 'None';
     });
   }
