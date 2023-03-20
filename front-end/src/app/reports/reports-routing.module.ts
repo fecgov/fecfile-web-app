@@ -52,7 +52,7 @@ const routes: Routes = [
     title: 'Create a report',
     component: CreateF3XStep1Component,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebarStatus: ReportSidebarResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebar: {
         sidebar: Sidebars.REPORT,
@@ -64,7 +64,7 @@ const routes: Routes = [
     path: 'f3x/summary/:reportId',
     title: 'View summary page',
     component: ReportSummaryComponent,
-    resolve: { report: ReportResolver, sidebarStatus: ReportSidebarResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebar: {
         sidebar: Sidebars.REPORT,
@@ -76,7 +76,7 @@ const routes: Routes = [
     path: 'f3x/detailed-summary/:reportId',
     title: 'View detailed summary page',
     component: ReportDetailedSummaryComponent,
-    resolve: { report: ReportResolver, sidebarStatus: ReportSidebarResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebar: {
         sidebar: Sidebars.REPORT,
@@ -88,7 +88,7 @@ const routes: Routes = [
     path: 'f3x/web-print/:reportId',
     title: 'Print preview',
     component: ReportWebPrintComponent,
-    resolve: { report: ReportResolver, sidebarStatus: ReportSidebarResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebar: {
         sidebar: Sidebars.REPORT,
@@ -101,7 +101,7 @@ const routes: Routes = [
     title: 'Add a report level memo',
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver, sidebarStatus: ReportSidebarResolver },
+    resolve: { report: ReportResolver },
     data: {
       sidebar: {
         sidebar: Sidebars.REPORT,

@@ -9,6 +9,7 @@ import { Report, CashOnHand } from '../../../shared/interfaces/report.interface'
 import { LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
 import { ReportService } from '../../../shared/services/report.service';
+import { ReportSidebarState, Sidebars } from '../sidebar.component';
 
 @Component({
   selector: 'app-menu-report',
@@ -27,25 +28,9 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     report_id: undefined,
     value: undefined,
   };
+  sidebarState: ReportSidebarState | undefined = undefined;
 
   private destroy$ = new Subject<boolean>();
-
-  // The order of the url regular expressions listed inthe urlMatch array is important
-  // because the order determines the expanded menu item group in the panal menu:
-  // 'Enter A Transaction', 'Review A Report', and 'Submit Your Report'.
-  urlMatch: RegExp[] = [
-    /^\/reports\/f3x\/create\/cash-on-hand\/[\da-z-]+/, // Enter a transaction group
-    /^\/transactions\/report\/[\da-z-]+\/list/, // Enter a transaction group
-    /^\/transactions\/report\/[\da-z-]+\/select/, // Select a transaction category
-    /^\/transactions\/report\/[\da-z-]+\/create/, // Enter a transaction type
-    /^\/reports\/f3x\/summary\/[\da-z-]+/, // Review a report group
-    /^\/reports\/f3x\/detailed-summary\/[\da-z-]+/, // Review a report group
-    /^\/reports\/f3x\/web-print\/[\da-z-]+/, // Review a report group
-    /^\/reports\/f3x\/memo\/[\da-z-]+/, // Review a report group
-    /^\/reports\/f3x\/submit\/step1\/[\da-z-]+/, // Submit your report group
-    /^\/reports\/f3x\/submit\/step2\/[\da-z-]+/, // Submit your report group
-    /^\/reports\/f3x\/submit\/status\/[\da-z-]+/, // Submit your report group
-  ];
 
   constructor(
     private router: Router,
@@ -70,23 +55,18 @@ export class MenuReportComponent implements OnInit, OnDestroy {
         this.cashOnHand = cashOnHand;
       });
 
-    // Watch the router changes and display menu if URL is in urlMatch list.
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.handleNavigationEvent(event);
       }
       if (event instanceof ActivationStart) {
         const data = event.snapshot.data;
-        console.log('Data found:', event);
+        this.sidebarState = data?.['sidebar']?.['sidebarState'];
       }
     });
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    //this.route.data.pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
-    //  console.log('sidebarStatus:', data);
-    //});
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   handleNavigationEvent(event: NavigationEnd) {
     if (this.activeReport) {
       if (
@@ -171,13 +151,10 @@ export class MenuReportComponent implements OnInit, OnDestroy {
         ];
       }
 
-      // Slice indexes are determined by the number of entries in each urlMatch group
-      this.items[0].expanded = this.expandedSection == 'Transactions';
-      //this.items[0].expanded = this.isActive(this.urlMatch.slice(0, 4), event.url);
-      this.items[1].expanded = this.expandedSection == 'Review';
-      //this.items[1].expanded = this.isActive(this.urlMatch.slice(4, 7), event.url);
-      this.items[0].expanded = this.expandedSection == 'Submission';
-      //this.items[2].expanded = this.isActive(this.urlMatch.slice(7, 10), event.url);
+      console.log(this.sidebarState);
+      this.items[0].expanded = this.sidebarState == ReportSidebarState.TRANSACTIONS;
+      this.items[1].expanded = this.sidebarState == ReportSidebarState.REVIEW;
+      this.items[2].expanded = this.sidebarState == ReportSidebarState.SUBMISSION;
     }
   }
 
