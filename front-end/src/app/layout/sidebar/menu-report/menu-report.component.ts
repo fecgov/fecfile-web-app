@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, Event, ActivatedRoute, ActivationStart } from '@angular/router';
+import { Router, NavigationEnd, Event, ActivationStart } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
@@ -32,12 +32,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<boolean>();
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private store: Store,
-    private reportService: ReportService
-  ) {}
+  constructor(private router: Router, private store: Store, private reportService: ReportService) {}
 
   ngOnInit(): void {
     this.store
@@ -151,7 +146,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
         ];
       }
 
-      console.log(this.sidebarState);
       this.items[0].expanded = this.sidebarState == ReportSidebarState.TRANSACTIONS;
       this.items[1].expanded = this.sidebarState == ReportSidebarState.REVIEW;
       this.items[2].expanded = this.sidebarState == ReportSidebarState.SUBMISSION;
