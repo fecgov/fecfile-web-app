@@ -79,7 +79,7 @@ describe('Tests that contacts are edited by transactions', () => {
     cy.medWait();
 
     // Click on contact name link in table.
-    cy.contains('a', contactIndividual['name']).click();
+    cy.contains('a', `${contactIndividual['last_name']}, ${contactIndividual['first_name']}`).click();
     cy.shortWait();
 
     cy.get('input[ng-reflect-name="city"]').should('have.value', 'TESTOPOLIS');
