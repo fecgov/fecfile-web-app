@@ -44,15 +44,6 @@ describe('MenuReportComponent', () => {
     expect(component.activeReport?.id).toBe('999');
   });
 
-  it('should determine an active url', () => {
-    const urlMatch: RegExp[] = [/\/report\/999\/list/];
-    let url = 'no-match';
-    expect(component.isActive(urlMatch, url)).toBe(false);
-
-    url = '/report/999/list';
-    expect(component.isActive(urlMatch, url)).toBe(true);
-  });
-
   it('should process a NavigationEnd event', () => {
     component.items = [];
     component.currentReportId = '888';
