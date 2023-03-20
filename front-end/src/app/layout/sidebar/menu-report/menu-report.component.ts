@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, NavigationEnd, Event, ActivatedRoute, RoutesRecognized, ActivationStart } from '@angular/router';
+import { Router, NavigationEnd, Event, ActivatedRoute, ActivationStart } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
@@ -9,7 +9,7 @@ import { Report, CashOnHand } from '../../../shared/interfaces/report.interface'
 import { LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
 import { ReportService } from '../../../shared/services/report.service';
-import { ReportSidebarState, Sidebars } from '../sidebar.component';
+import { ReportSidebarState } from '../sidebar.component';
 
 @Component({
   selector: 'app-menu-report',

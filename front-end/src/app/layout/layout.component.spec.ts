@@ -9,7 +9,6 @@ import { HeaderComponent } from './header/header.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MenuReportComponent } from './sidebar/menu-report/menu-report.component';
 import { LayoutComponent } from './layout.component';
-import { NavigationEnd } from '@angular/router';
 import { BannerComponent } from './banner/banner.component';
 
 describe('LayoutComponent', () => {
