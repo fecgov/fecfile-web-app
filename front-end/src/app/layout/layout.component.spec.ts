@@ -38,16 +38,4 @@ describe('LayoutComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should show or hide the sidebar based on the page', () => {
-    const navigationEvent = new NavigationEnd(1, '', '');
-
-    navigationEvent.url = '/reports/f3x/summary/1234-5678';
-    component.handleNavigationEvent(navigationEvent);
-    expect(component.sidebarVisible).toBe(true);
-
-    navigationEvent.url = '/contacts';
-    component.handleNavigationEvent(navigationEvent);
-    expect(component.sidebarVisible).toBe(false);
-  });
 });

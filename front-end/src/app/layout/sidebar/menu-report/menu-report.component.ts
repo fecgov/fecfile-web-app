@@ -158,18 +158,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Determine if the given url matches one of the regular expressions that define which
-   * group of menu items is selected.
-   *
-   * @param urlMatch {RegExp{}} - List of url regular expressions to compare to current router url
-   * @param url {string} - Current url in browser address bar
-   * @returns {boolean} - True is url matches one of the matchUrl regular expressions
-   */
-  isActive(urlMatch: RegExp[], url: string): boolean {
-    return urlMatch.reduce((prev: boolean, regex: RegExp) => prev || regex.test(url), false);
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
