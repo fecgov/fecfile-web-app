@@ -55,6 +55,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
         this.handleNavigationEvent(event);
       }
       if (event instanceof ActivationStart) {
+        console.log(event);
         const data = event.snapshot.data;
         this.sidebarState = data?.['sidebar']?.['sidebarState'];
       }
@@ -149,6 +150,8 @@ export class MenuReportComponent implements OnInit, OnDestroy {
       this.items[0].expanded = this.sidebarState == ReportSidebarState.TRANSACTIONS;
       this.items[1].expanded = this.sidebarState == ReportSidebarState.REVIEW;
       this.items[2].expanded = this.sidebarState == ReportSidebarState.SUBMISSION;
+
+      if (this.sidebarState == undefined) this.items[0].expanded = true;
     }
   }
 
