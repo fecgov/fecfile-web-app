@@ -55,7 +55,6 @@ export class MenuReportComponent implements OnInit, OnDestroy {
         this.handleNavigationEvent(event);
       }
       if (event instanceof ActivationStart) {
-        console.log(event);
         const data = event.snapshot.data;
         this.sidebarState = data?.['sidebar']?.['sidebarState'];
       }
