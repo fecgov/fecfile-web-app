@@ -29,11 +29,6 @@ describe('MenuReportComponent', () => {
           {
             path: 'transactions/report/999/list',
             redirectTo: '',
-            data: {
-              sidebar: {
-                sidebarState: ReportSidebarState.TRANSACTIONS,
-              },
-            },
           },
         ]),
       ],
