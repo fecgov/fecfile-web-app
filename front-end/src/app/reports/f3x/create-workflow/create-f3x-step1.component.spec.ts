@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { AbstractControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../../../shared/utils/unit-test.utils';
@@ -110,5 +110,20 @@ describe('CreateF3XStep1Component', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.goBack();
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
+  });
+
+  it('#existingCoverageValidator should return errors', () => {
+    const existingCoverage = F3xCoverageDates.fromJSON({
+      report_code: 'Q1',
+      coverage_from_date: new Date('01/02/2023'),
+      coverage_through_date: new Date('01/04/2023'),
+    });
+    const validator = component.existingCoverageValidator([existingCoverage]);
+    const control = new FormControl(new Date('01/03/2023'));
+    expect(validator(control)).toEqual({
+      invaliddate: {
+        msg: 'You have entered coverage dates that overlap the coverage dates of the following report: APRIL 15 QUARTERLY REPORT (Q1)  01/02/2023 - 01/04/2023',
+      },
+    });
   });
 });

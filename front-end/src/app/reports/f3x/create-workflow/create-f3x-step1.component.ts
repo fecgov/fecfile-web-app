@@ -122,8 +122,9 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       ),
     ]).subscribe(([existingCoverage, reportCode, filingFrequency, reportTypeCategory]) => {
       this.existingCoverage = existingCoverage;
-      this.form.controls['coverage_from_date'].addValidators([Validators.required, this.existingCoverageValidator]);
-      this.form.controls['coverage_through_date'].addValidators([Validators.required, this.existingCoverageValidator]);
+      const overlapValidator = this.existingCoverageValidator(existingCoverage);
+      this.form.controls['coverage_from_date'].addValidators([Validators.required, overlapValidator]);
+      this.form.controls['coverage_through_date'].addValidators([Validators.required, overlapValidator]);
       const coverageDatesFunction = F3X_REPORT_CODE_MAP.get(reportCode)?.coverageDatesFunction;
       if (coverageDatesFunction) {
         const year = new Date().getFullYear();
@@ -140,26 +141,29 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }
 
-  existingCoverageValidator = (control: AbstractControl): ValidationErrors | null => {
-    const date = control.value;
-    const collision = this.existingCoverage?.reduce<F3xCoverageDates | undefined>((collision, coverage) => {
-      if (collision) return collision;
-      const collides = DateUtils.isWithin(date, coverage.coverage_from_date, coverage.coverage_through_date);
-      return collides ? coverage : undefined;
-    }, undefined);
-    if (collision) {
-      return { invaliddate: { msg: this.getCoverageOverlapMessage(date, collision) } };
-    }
-    return null;
-  };
+  existingCoverageValidator(existingCoverage: F3xCoverageDates[]): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const date = control.value;
+      const collision = existingCoverage.reduce<F3xCoverageDates | undefined>((collision, coverage) => {
+        if (collision) return collision;
+        const collides = DateUtils.isWithin(date, coverage.coverage_from_date, coverage.coverage_through_date);
+        return collides ? coverage : undefined;
+      }, undefined);
+      console.log(`AHOY ${date} ${existingCoverage[0].coverage_from_date}`);
+      if (collision) {
+        return { invaliddate: { msg: this.getCoverageOverlapMessage(date, collision) } };
+      }
+      return null;
+    };
+  }
 
-  getCoverageOverlapMessage(date: Date, collision: F3xCoverageDates): string | undefined {
-    const dateOverlaps = DateUtils.isWithin(date, collision.coverage_from_date, collision.coverage_through_date);
-    return dateOverlaps
-      ? `You have entered coverage dates that overlap ` +
-          `the coverage dates of the following report: ${getReportCodeLabel(collision.report_code)} ` +
-          ` ${collision.coverage_from_date} - ${collision.coverage_through_date}`
-      : undefined;
+  getCoverageOverlapMessage(date: Date, collision: F3xCoverageDates): string {
+    return (
+      `You have entered coverage dates that overlap ` +
+      `the coverage dates of the following report: ${getReportCodeLabel(collision.report_code)} ` +
+      ` ${this.fecDatePipe.transform(collision.coverage_from_date)} -` +
+      ` ${this.fecDatePipe.transform(collision.coverage_through_date)}`
+    );
   }
 
   ngOnDestroy(): void {
