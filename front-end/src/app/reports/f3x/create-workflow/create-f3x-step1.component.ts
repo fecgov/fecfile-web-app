@@ -1,13 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ValidatorFn,
-  Validators,
-  ValidationErrors,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { F3xCoverageDates, F3xFormTypes, F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -59,6 +51,8 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
 
   readonly F3xReportTypeCategories = F3xReportTypeCategories;
   public existingCoverage: F3xCoverageDates[] | undefined;
+  public usedReportCodes?: F3xReportCodes[];
+  public thisYear = new Date().getFullYear();
 
   constructor(
     private store: Store,
@@ -82,16 +76,16 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
         }
       });
 
-    this.store
-      .select(selectCommitteeAccount)
+    combineLatest([this.store.select(selectCommitteeAccount), this.f3xSummaryService.getF3xCoverageDates()])
       .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount) => {
+      .subscribe(([committeeAccount, existingCoverage]) => {
         const filingFrequency = this.userCanSetFilingFrequency ? 'Q' : committeeAccount?.filing_frequency;
         this.form.addControl('filing_frequency', new FormControl());
         this.form.addControl('report_type_category', new FormControl());
         this.form?.patchValue({ filing_frequency: filingFrequency, form_type: 'F3XN' });
         this.form?.patchValue({ report_type_category: this.getReportTypeCategories()[0] });
-        this.form?.patchValue({ report_code: this.getReportCodes()[0] });
+        this.usedReportCodes = this.getUsedReportCodes(existingCoverage);
+        this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
         this.form
           ?.get('filing_frequency')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -99,38 +93,36 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
             this.form.patchValue({
               report_type_category: this.getReportTypeCategories()[0],
             });
-            this.form?.patchValue({ report_code: this.getReportCodes()[0] });
+            this.form?.patchValue({ report_code: this.getFirstEnabledReportCode() });
           });
         this.form
           ?.get('report_type_category')
           ?.valueChanges.pipe(takeUntil(this.destroy$))
           .subscribe(() => {
-            this.form.patchValue({
-              report_code: this.getReportCodes()[0],
-            });
+            this.form.patchValue({ report_code: this.getFirstEnabledReportCode() });
           });
+
+        this.existingCoverage = existingCoverage;
+        this.form.addValidators(this.groupExistingCoverageValidator(existingCoverage));
+        // const overlapValidator = this.existingCoverageValidator(existingCoverage);
+        // this.form.controls['coverage_from_date'].addValidators([Validators.required, overlapValidator]);
+        // this.form.controls['coverage_through_date'].addValidators([Validators.required, overlapValidator]);
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
 
     // Prepopulate coverage dates if the report code has rules to do so
     combineLatest([
-      this.f3xSummaryService.getF3xCoverageDates(),
       this.form.controls['report_code'].valueChanges.pipe(startWith(this.form.controls['report_code'].value)),
       this.form.controls['filing_frequency'].valueChanges.pipe(startWith(this.form.controls['filing_frequency'].value)),
       this.form.controls['report_type_category'].valueChanges.pipe(
         startWith(this.form.controls['report_type_category'].value)
       ),
-    ]).subscribe(([existingCoverage, reportCode, filingFrequency, reportTypeCategory]) => {
-      this.existingCoverage = existingCoverage;
-      const overlapValidator = this.existingCoverageValidator(existingCoverage);
-      this.form.controls['coverage_from_date'].addValidators([Validators.required, overlapValidator]);
-      this.form.controls['coverage_through_date'].addValidators([Validators.required, overlapValidator]);
+    ]).subscribe(([reportCode, filingFrequency, reportTypeCategory]) => {
       const coverageDatesFunction = F3X_REPORT_CODE_MAP.get(reportCode)?.coverageDatesFunction;
       if (coverageDatesFunction) {
-        const year = new Date().getFullYear();
         const isElectionYear = F3xReportTypeCategories.ELECTION_YEAR === reportTypeCategory;
         const [coverage_from_date, coverage_through_date] = coverageDatesFunction(
-          year,
+          this.thisYear,
           isElectionYear,
           filingFrequency
         );
@@ -151,13 +143,40 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       }, undefined);
       console.log(`AHOY ${date} ${existingCoverage[0].coverage_from_date}`);
       if (collision) {
-        return { invaliddate: { msg: this.getCoverageOverlapMessage(date, collision) } };
+        return { invaliddate: { msg: this.getCoverageOverlapMessage(collision) } };
       }
       return null;
     };
   }
 
-  getCoverageOverlapMessage(date: Date, collision: F3xCoverageDates): string {
+  groupExistingCoverageValidator(existingCoverage: F3xCoverageDates[]): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const fromControl = control.get('coverage_from_date');
+      const throughControl = control.get('coverage_through_date');
+      existingCoverage.reduce<ValidationErrors | null>((error, coverage) => {
+        if (error) return error;
+        const coverageFrom = coverage.coverage_from_date;
+        const coverageThrough = coverage.coverage_through_date;
+        const hit = DateUtils.areOverlapping(fromControl?.value, throughControl?.value, coverageFrom, coverageThrough);
+        if (hit) {
+          const msg = this.getCoverageOverlapMessage(coverage);
+          const fromIsWithin = DateUtils.isWithin(fromControl?.value, coverageFrom, coverageThrough);
+          const throughIsWithin = DateUtils.isWithin(throughControl?.value, coverageFrom, coverageThrough);
+
+          fromControl?.setErrors(fromIsWithin || !(fromIsWithin || throughIsWithin) ? { invaliddate: { msg } } : null);
+          throughControl?.setErrors(
+            throughIsWithin || !(fromIsWithin || throughIsWithin) ? { invaliddate: { msg } } : null
+          );
+          fromControl?.markAsTouched();
+          throughControl?.markAsTouched();
+        }
+        return null;
+      }, null);
+      return null;
+    };
+  }
+
+  getCoverageOverlapMessage(collision: F3xCoverageDates): string {
     return (
       `You have entered coverage dates that overlap ` +
       `the coverage dates of the following report: ${getReportCodeLabel(collision.report_code)} ` +
@@ -185,6 +204,22 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       default:
         return [];
     }
+  }
+
+  public getUsedReportCodes(existingCoverage: F3xCoverageDates[]): F3xReportCodes[] {
+    return existingCoverage.reduce((codes: F3xReportCodes[], coverage) => {
+      const years = [coverage.coverage_from_date?.getFullYear(), coverage.coverage_through_date?.getFullYear()];
+      if (years.includes(this.thisYear)) {
+        return [...codes, coverage.report_code] as F3xReportCodes[];
+      }
+      return codes;
+    }, []);
+  }
+
+  public getFirstEnabledReportCode() {
+    return this.getReportCodes().find((reportCode) => {
+      return !(this.usedReportCodes && this.usedReportCodes.includes(reportCode));
+    });
   }
 
   public isElectionReport() {
