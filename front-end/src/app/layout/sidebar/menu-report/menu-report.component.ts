@@ -28,7 +28,7 @@ export class MenuReportComponent implements OnInit, OnDestroy {
     report_id: undefined,
     value: undefined,
   };
-  sidebarState: ReportSidebarState | undefined = undefined;
+  sidebarState: ReportSidebarState | undefined;
 
   private destroy$ = new Subject<boolean>();
 
