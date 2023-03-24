@@ -6,3 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {}
+
+export enum Sidebars {
+  'REPORT',
+}
+
+export enum ReportSidebarState {
+  'TRANSACTIONS',
+  'REVIEW',
+  'SUBMISSION',
+}
