@@ -16,8 +16,15 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      { path: 'dashboard', component: DashboardComponent, title: 'FECFile Dashboard' },
-      { path: 'reports', loadChildren: () => import('./reports/reports.module').then((m) => m.ReportsModule) },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        title: 'FECFile Dashboard',
+      },
+      {
+        path: 'reports',
+        loadChildren: () => import('./reports/reports.module').then((m) => m.ReportsModule),
+      },
       { path: 'contacts', loadChildren: () => import('./contacts/contacts.module').then((m) => m.ContactsModule) },
       { path: 'committee/users', loadChildren: () => import('./users/users.module').then((m) => m.UsersModule) },
       { path: 'tools', loadChildren: () => import('./tools/tools.module').then((m) => m.ToolsModule) },

@@ -6,6 +6,7 @@ import { ReportIsEditableGuard } from '../shared/guards/report-is-editable.guard
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
+import { ReportSidebarState, Sidebars } from 'app/layout/sidebar/sidebar.component';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -20,17 +21,35 @@ const routes: Routes = [
     title: 'Manage your transactions',
     component: TransactionListComponent,
     resolve: { report: ReportResolver },
+    data: {
+      sidebar: {
+        sidebar: Sidebars.REPORT,
+        sidebarState: ReportSidebarState.TRANSACTIONS,
+      },
+    },
   },
   {
     path: 'report/:reportId/select/:category',
     component: TransactionTypePickerComponent,
     canActivate: [ReportIsEditableGuard],
+    data: {
+      sidebar: {
+        sidebar: Sidebars.REPORT,
+        sidebarState: ReportSidebarState.TRANSACTIONS,
+      },
+    },
   },
   {
     path: 'report/:reportId/create/:transactionType',
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
+    },
+    data: {
+      sidebar: {
+        sidebar: Sidebars.REPORT,
+        sidebarState: ReportSidebarState.TRANSACTIONS,
+      },
     },
     canActivate: [ReportIsEditableGuard],
   },
@@ -40,12 +59,24 @@ const routes: Routes = [
     resolve: {
       transaction: TransactionResolver,
     },
+    data: {
+      sidebar: {
+        sidebar: Sidebars.REPORT,
+        sidebarState: ReportSidebarState.TRANSACTIONS,
+      },
+    },
   },
   {
     path: 'report/:reportId/list/edit/:parentTransactionId/create-sub-transaction/:transactionType',
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
+    },
+    data: {
+      sidebar: {
+        sidebar: Sidebars.REPORT,
+        sidebarState: ReportSidebarState.TRANSACTIONS,
+      },
     },
     canActivate: [ReportIsEditableGuard],
   },
