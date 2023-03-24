@@ -1,5 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, ValidationErrors } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { F3xCoverageDates, F3xFormTypes, F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -26,6 +34,7 @@ import { MessageService } from 'primeng/api';
 import { combineLatest, map, of, startWith, Subject, switchMap, takeUntil, zip } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-create-f3x-step1',
@@ -104,11 +113,34 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
 
         this.existingCoverage = existingCoverage;
         this.form.addValidators(this.groupExistingCoverageValidator(existingCoverage));
-        // const overlapValidator = this.existingCoverageValidator(existingCoverage);
-        // this.form.controls['coverage_from_date'].addValidators([Validators.required, overlapValidator]);
-        // this.form.controls['coverage_through_date'].addValidators([Validators.required, overlapValidator]);
+        // const overlapValidator = this.existingCoverageValidator2(existingCoverage);
+        // const fromControl = this.form.controls['coverage_from_date'];
+        // const throughControl = this.form.controls['coverage_through_date'];
+        // combineLatest([
+        //   fromControl.valueChanges.pipe(startWith(fromControl.value)),
+        //   throughControl.valueChanges.pipe(startWith(throughControl.value)),
+        // ]).subscribe(([from, through]) => {
+        //   const hit = this.findCollision(from, through, existingCoverage);
+        //   const coverageFrom = hit?.coverage_from_date;
+        //   const coverageThrough = hit?.coverage_through_date;
+        //   const fromIsWithin = DateUtils.isWithin(fromControl?.value, coverageFrom, coverageThrough);
+        //   const throughIsWithin = DateUtils.isWithin(throughControl?.value, coverageFrom, coverageThrough);
+        //   if (hit && !fromIsWithin && !throughIsWithin) {
+        //     fromControl.setErrors({ invaliddate: { msg: this.getCoverageOverlapMessage(hit) } });
+        //     throughControl.setErrors({ invaliddate: { msg: this.getCoverageOverlapMessage(hit) } });
+        //   } else if (hit) {
+        //     fromControl.setValidators(this.foo(hit));
+        //     throughControl.setValidators(this.foo(hit));
+        //   } else {
+        //     fromControl.setErrors(null);
+        //     throughControl.setErrors(null);
+        //   }
+        //   fromControl.valid;
+        // });
       });
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
+    this.form.controls['coverage_from_date'].addValidators([Validators.required]);
+    this.form.controls['coverage_through_date'].addValidators([Validators.required]);
 
     // Prepopulate coverage dates if the report code has rules to do so
     combineLatest([
@@ -133,6 +165,35 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     ValidateUtils.addJsonSchemaValidators(this.form, f3xSchema, false);
   }
 
+  existingCoverageValidator2(existingCoverage: F3xCoverageDates[]): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const fromControl = this.form.get('coverage_from_date');
+      const throughControl = this.form.get('coverage_through_date');
+      const col = this.findCollision(fromControl?.value, throughControl?.value, existingCoverage);
+      const coverageFrom = col?.coverage_from_date;
+      const coverageThrough = col?.coverage_through_date;
+      const fromIsWithin = DateUtils.isWithin(fromControl?.value, coverageFrom, coverageThrough);
+      const throughIsWithin = DateUtils.isWithin(throughControl?.value, coverageFrom, coverageThrough);
+      if (
+        col &&
+        ((control === fromControl && fromIsWithin) ||
+          (control === fromControl && fromIsWithin) ||
+          (!fromIsWithin && !throughIsWithin))
+      ) {
+        return { invaliddate: { msg: this.getCoverageOverlapMessage(col) } };
+      }
+      return null;
+    };
+  }
+
+  foo(coverage: F3xCoverageDates): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return DateUtils.isWithin(control.value, coverage.coverage_from_date, coverage.coverage_through_date)
+        ? { invaliddate: { msg: this.getCoverageOverlapMessage(coverage) } }
+        : null;
+    };
+  }
+
   existingCoverageValidator(existingCoverage: F3xCoverageDates[]): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const date = control.value;
@@ -153,27 +214,78 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     return (control: AbstractControl): ValidationErrors | null => {
       const fromControl = control.get('coverage_from_date');
       const throughControl = control.get('coverage_through_date');
-      existingCoverage.reduce<ValidationErrors | null>((error, coverage) => {
-        if (error) return error;
-        const coverageFrom = coverage.coverage_from_date;
-        const coverageThrough = coverage.coverage_through_date;
-        const hit = DateUtils.areOverlapping(fromControl?.value, throughControl?.value, coverageFrom, coverageThrough);
-        if (hit) {
-          const msg = this.getCoverageOverlapMessage(coverage);
-          const fromIsWithin = DateUtils.isWithin(fromControl?.value, coverageFrom, coverageThrough);
-          const throughIsWithin = DateUtils.isWithin(throughControl?.value, coverageFrom, coverageThrough);
-
-          fromControl?.setErrors(fromIsWithin || !(fromIsWithin || throughIsWithin) ? { invaliddate: { msg } } : null);
-          throughControl?.setErrors(
-            throughIsWithin || !(fromIsWithin || throughIsWithin) ? { invaliddate: { msg } } : null
-          );
-          fromControl?.markAsTouched();
-          throughControl?.markAsTouched();
+      const hit = this.findCollision(fromControl?.value, throughControl?.value, existingCoverage);
+      let fromError = null;
+      let throughError = null;
+      if (hit) {
+        let error = { invaliddate: { msg: this.getCoverageOverlapMessage(hit) } };
+        fromError = this.bar(hit, fromControl);
+        throughError = this.bar(hit, throughControl);
+        if (!fromError && !throughError) {
+          fromError = throughError = error;
         }
-        return null;
-      }, null);
+        fromControl?.setErrors(fromControl?.errors || fromError ? { ...fromControl?.errors, ...fromError } : null);
+        throughControl?.setErrors(
+          throughControl?.errors || throughError ? { ...throughControl?.errors, ...throughError } : null
+        );
+        // const coverageFrom = hit?.coverage_from_date;
+        // const coverageThrough = hit?.coverage_through_date;
+        // const fromIsWithin = DateUtils.isWithin(fromControl?.value, coverageFrom, coverageThrough);
+        // const throughIsWithin = DateUtils.isWithin(throughControl?.value, coverageFrom, coverageThrough);
+        // fromError = fromIsWithin || !(fromIsWithin || throughIsWithin) ? error : null;
+        // throughError = throughIsWithin || !(fromIsWithin || throughIsWithin) ? error : null;
+      } else {
+        fromControl?.setErrors(
+          !_.isEmpty(_.omit(fromControl.errors, 'invaliddate')) ? _.omit(fromControl.errors, 'invalidate') : null
+        );
+        throughControl?.setErrors(
+          !_.isEmpty(_.omit(throughControl.errors, 'invaliddate')) ? _.omit(throughControl.errors, 'invaliddate') : null
+        );
+      }
+      // const e = fromControl?.errors || fromError ? { ...fromControl?.errors, ...fromError } : null;
+      // fromControl?.setErrors(e);
+      // const f = throughControl?.errors || throughError ? { ...throughControl?.errors, ...throughError } : null;
+      // throughControl?.setErrors(f);
+      fromControl?.markAsTouched();
+      throughControl?.markAsTouched();
       return null;
     };
+  }
+
+  bar(coverage: F3xCoverageDates, control: AbstractControl | null): ValidationErrors | null {
+    return DateUtils.isWithin(control?.value, coverage.coverage_from_date, coverage.coverage_through_date)
+      ? { invaliddate: { msg: this.getCoverageOverlapMessage(coverage) } }
+      : null;
+  }
+  //     existingCoverage.reduce<ValidationErrors | null>((error, coverage) => {
+  //       if (error) return error;
+  //       const coverageFrom = coverage.coverage_from_date;
+  //       const coverageThrough = coverage.coverage_through_date;
+  //       const hit = DateUtils.areOverlapping(fromControl?.value, throughControl?.value, coverageFrom, coverageThrough);
+  //       if (hit) {
+  //         const msg = this.getCoverageOverlapMessage(coverage);
+  //         const fromIsWithin = DateUtils.isWithin(fromControl?.value, coverageFrom, coverageThrough);
+  //         const throughIsWithin = DateUtils.isWithin(throughControl?.value, coverageFrom, coverageThrough);
+
+  //         fromControl?.setErrors(fromIsWithin || !(fromIsWithin || throughIsWithin) ? { invaliddate: { msg } } : null);
+  //         throughControl?.setErrors(
+  //           throughIsWithin || !(fromIsWithin || throughIsWithin) ? { invaliddate: { msg } } : null
+  //         );
+  //         fromControl?.markAsTouched();
+  //         throughControl?.markAsTouched();
+  //       }
+  //       return null;
+  //     }, null);
+  //     return null;
+  //   };
+  // }
+
+  findCollision(from: Date, through: Date, existingCoverage: F3xCoverageDates[]): F3xCoverageDates | undefined {
+    return existingCoverage.find((coverage) => {
+      const coverageFrom = coverage.coverage_from_date;
+      const coverageThrough = coverage.coverage_through_date;
+      return DateUtils.areOverlapping(from, through, coverageFrom, coverageThrough);
+    });
   }
 
   getCoverageOverlapMessage(collision: F3xCoverageDates): string {
