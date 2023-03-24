@@ -32,9 +32,6 @@ const routes: Routes = [
     path: 'report/:reportId/select/:category',
     component: TransactionTypePickerComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: {
-      report: ReportResolver,
-    },
     data: {
       sidebar: {
         sidebar: Sidebars.REPORT,
@@ -47,7 +44,6 @@ const routes: Routes = [
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
-      report: ReportResolver,
     },
     data: {
       sidebar: {
@@ -62,7 +58,6 @@ const routes: Routes = [
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
-      report: ReportResolver,
     },
     data: {
       sidebar: {
@@ -76,7 +71,6 @@ const routes: Routes = [
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
-      report: ReportResolver,
     },
     data: {
       sidebar: {

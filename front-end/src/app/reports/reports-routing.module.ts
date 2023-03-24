@@ -52,7 +52,6 @@ const routes: Routes = [
     title: 'Create a report',
     component: CreateF3XStep1Component,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
     data: {
       sidebar: {
         sidebar: Sidebars.REPORT,
@@ -101,7 +100,6 @@ const routes: Routes = [
     title: 'Add a report level memo',
     component: ReportLevelMemoComponent,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
     data: {
       sidebar: {
         sidebar: Sidebars.REPORT,
@@ -114,7 +112,6 @@ const routes: Routes = [
     title: 'Confirm information',
     component: SubmitF3xStep1Component,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
     data: {
       sidebar: {
         sidebar: Sidebars.REPORT,
@@ -127,7 +124,6 @@ const routes: Routes = [
     title: 'Submit report',
     component: SubmitF3xStep2Component,
     canActivate: [ReportIsEditableGuard],
-    resolve: { report: ReportResolver },
     data: {
       sidebar: {
         sidebar: Sidebars.REPORT,
