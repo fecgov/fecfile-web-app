@@ -166,7 +166,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     return existingCoverage.reduce((error: ValidationErrors | null, coverage) => {
       if (error) return error;
       return DateUtils.isWithin(control?.value, coverage.coverage_from_date, coverage.coverage_through_date)
-        ? this.getCoverageOverlapError(coverage, control?.value)
+        ? this.getCoverageOverlapError(coverage)
         : null;
     }, null);
   }
@@ -184,7 +184,7 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     });
   }
 
-  getCoverageOverlapError(collision: F3xCoverageDates, v?: Date): ValidationErrors {
+  getCoverageOverlapError(collision: F3xCoverageDates): ValidationErrors {
     const message =
       `You have entered coverage dates that overlap ` +
       `the coverage dates of the following report: ${getReportCodeLabel(collision.report_code)} ` +
