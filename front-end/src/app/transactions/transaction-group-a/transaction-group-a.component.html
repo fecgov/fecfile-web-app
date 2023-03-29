@@ -22,13 +22,15 @@
       <h3>Address</h3>
       <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-address-input>
       <p-divider></p-divider>
-      <h3>Employer</h3>
-      <app-employer-input
-        [form]="form"
-        [formSubmitted]="formSubmitted"
-        [templateMap]="templateMap"
-      ></app-employer-input>
-      <p-divider></p-divider>
+      <ng-container *ngIf="this.transaction?.transactionType?.scheduleId !== 'B'">
+        <h3>Employer</h3>
+        <app-employer-input
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [templateMap]="templateMap"
+        ></app-employer-input>
+        <p-divider></p-divider>
+      </ng-container>
       <h3>Receipt Information</h3>
       <app-amount-input
         [form]="form"
@@ -36,6 +38,7 @@
         [templateMap]="templateMap"
         [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
         [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
+        [showAggregate]="!!transaction?.transactionType?.showAggregate"
       ></app-amount-input>
       <p-divider></p-divider>
       <h3>Additional Information</h3>
@@ -56,6 +59,21 @@
             ></app-navigation-control>
           </div>
         </ng-template>
+      </div>
+      <div class="grid" *ngIf="subTransactionOptions.length > 0">
+        <div class="col-2">
+          <p-dropdown
+            inputId="subTransaction"
+            [options]="subTransactionOptions"
+            formControlName="subTransaction"
+            [autoDisplayFirst]="false"
+            (onChange)="createSubTransaction($event)"
+            placeholder="Save & add a Memo"
+            dropdownIcon="pi pi-plus"
+            styleClass="sub-transaction-dropdown"
+            panelStyleClass="sub-transaction-dropdown-panel"
+          ></p-dropdown>
+        </div>
       </div>
       <p-divider></p-divider>
     </ng-container>

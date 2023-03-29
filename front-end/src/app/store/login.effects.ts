@@ -14,8 +14,9 @@ export class LoginEffects {
       this.actions$.pipe(
         ofType(userLoggedOutAction.type),
         tap(() => {
-          this.apiService.get('/auth/logout').subscribe();
-          this.router.navigate(['/']);
+          this.apiService.get('/auth/logout').subscribe(() => {
+            this.router.navigate(['/']);
+          });
         })
       ),
     { dispatch: false }

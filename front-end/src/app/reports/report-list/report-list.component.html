@@ -73,7 +73,7 @@
           <p-overlayPanel #op [styleClass]="'action-options'">
             <ng-template pTemplate>
               <ul>
-                <li *ngFor="let action of actionOptions">
+                <li *ngFor="let action of rowActions">
                   <button
                     *ngIf="!action.isAvailable || action.isAvailable(item)"
                     pButton
@@ -81,7 +81,7 @@
                     type="button"
                     class="p-button-secondary p-button-text"
                     id="one"
-                    (click)="onActionClick(action, item)"
+                    (click)="onRowActionClick(action, item)"
                   >
                     {{ action.label }}
                   </button>

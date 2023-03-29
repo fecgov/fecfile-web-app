@@ -1,20 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable, Subject, takeUntil, from, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ApiService } from 'app/shared/services/api.service';
+import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
-import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Observable, Subject, takeUntil } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
 
 @Component({
@@ -32,8 +31,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     'truth_statement',
   ];
   report?: F3xSummary;
-  stateOptions: PrimeOptions = [];
-  countryOptions: PrimeOptions = [];
   formSubmitted = false;
   destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
@@ -53,12 +50,9 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     protected confirmationService: ConfirmationService,
     private apiService: ApiService,
     private reportService: ReportService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    this.countryOptions = LabelUtils.getPrimeOptions(CountryCodeLabels);
-
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
@@ -140,25 +134,27 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
       header: 'Are you sure?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.onConfirm();
+        this.onConfirm().subscribe();
       },
     });
   }
 
-  public onConfirm() {
+  public onConfirm(): Observable<boolean> {
     if (this.treasurerNameChanged()) {
-      this.saveTreasurerName().subscribe(() => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successful',
-          detail: 'Report Updated',
-          life: 3000,
-        });
+      return this.saveTreasurerName().pipe(
+        switchMap(() => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Report Updated',
+            life: 3000,
+          });
 
-        this.submitReport();
-      });
+          return this.submitReport();
+        })
+      );
     } else {
-      this.submitReport();
+      return this.submitReport();
     }
   }
 
@@ -166,28 +162,28 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     this.loading = 1;
     const payload: F3xSummary = F3xSummary.fromJSON({
       ...this.report,
-      ...ValidateUtils.getFormValues(this.form,
-        f3xSchema, this.formProperties),
+      ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
     });
 
     return this.f3xSummaryService.update(payload, this.formProperties);
   }
 
-  private submitReport(): void {
+  private submitReport(): Observable<boolean> {
     this.loading = 2;
 
     const payload = {
       report_id: this.report?.id,
       password: this.form?.value['filing_password'],
     };
-
-    this.apiService.post('/web-services/submit-to-fec/', payload).subscribe(() => {
-      if (this.report?.id) {
-        this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
-        this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`);
-      } else {
-        this.router.navigateByUrl('/reports');
-      }
-    });
+    return this.apiService.post('/web-services/submit-to-fec/', payload).pipe(
+      switchMap(() => {
+        if (this.report?.id) {
+          this.reportService.setActiveReportById(this.report.id).pipe(takeUntil(this.destroy$)).subscribe();
+          return from(this.router.navigateByUrl(`/reports/f3x/submit/status/${this.report.id}`));
+        } else {
+          return from(this.router.navigateByUrl('/reports'));
+        }
+      })
+    );
   }
 }
