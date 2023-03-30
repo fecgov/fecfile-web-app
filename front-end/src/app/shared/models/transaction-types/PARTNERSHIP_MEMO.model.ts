@@ -8,7 +8,6 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 export class PARTNERSHIP_MEMO extends SchATransactionType {
   componentGroupId = 'A';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_MEMO);
-  override entityCategoryName = 'Partnership';
   schema = schema;
   override updateParentOnSave = true;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls(

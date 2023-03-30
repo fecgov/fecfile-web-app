@@ -1,7 +1,11 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import {
+  STANDARD_CONTROLS,
+  STANDARD_PARENT_CONTROLS,
+  TransactionNavigationControls,
+} from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SubTransactionsConfig } from '../transaction-type.model';
@@ -13,7 +17,7 @@ export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT extends SchATransactionType {
   override subTransactionConfig = new SubTransactionsConfig('Partnership Recount Account Receipt', [
     ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
   ]);
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override purposeDescriptionLabelNotice =
     'If Partnership Receipt is saved without a Partnership Memo, this will read "Recount Account (Partnership attributions do not require itemization)". If a Partnership Memo is added, it will read "Recount Account (See Partnership Attribution(s) below)".';
   override generatePurposeDescription(transaction: SchATransaction): string {
