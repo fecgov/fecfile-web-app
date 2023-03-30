@@ -203,7 +203,10 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
     'Non-Contribution Account Staff Reimbursement',
   ],
-  [ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO, 'Reimbursement Corresponding Memo'],
+  [
+    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO,
+    'Non-contribution Account Staff Reimbursement Memo',
+  ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
     'Non-Contribution Account Payment to Payroll',
