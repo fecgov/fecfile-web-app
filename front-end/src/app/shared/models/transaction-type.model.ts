@@ -20,6 +20,7 @@ export abstract class TransactionType {
   contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
   defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
   subTransactionTypes?: TransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction
+  subTransactionConfig?: SubTransactionsConfig;
   navigationControls?: TransactionNavigationControls;
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
@@ -80,3 +81,13 @@ export type TransactionTemplateMapType = {
   memo_text_input: string;
   category_code: string;
 };
+
+export class SubTransactionsConfig {
+  groupName: string;
+  subTransactionTypes: TransactionTypes[];
+
+  constructor(groupName: string, subTransactionTypes: TransactionTypes[]) {
+    this.groupName = groupName;
+    this.subTransactionTypes = subTransactionTypes;
+  }
+}

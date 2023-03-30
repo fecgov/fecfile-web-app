@@ -5,6 +5,7 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
+import { SubTransactionsConfig } from '../transaction-type.model';
 
 export class OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchBTransactionType {
   componentGroupId = 'D';
@@ -14,7 +15,9 @@ export class OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchBTransactionTy
   );
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
-  override subTransactionTypes = [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO];
+  override subTransactionConfig = new SubTransactionsConfig('Credit Card Payment for Operating Expenditure', [
+    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
+  ]);
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

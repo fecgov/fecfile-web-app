@@ -70,7 +70,7 @@ export const CANCEL_CONTROL = new NavigationControl(
 export const SAVE_LIST_CONTROL = new NavigationControl(
   NavigationAction.SAVE,
   NavigationDestination.LIST,
-  'Save & view all transactions',
+  'Save',
   'p-button-primary',
   hasNoContact
 );
@@ -82,6 +82,16 @@ export const SAVE_ANOTHER_CONTROL = new NavigationControl(
   'p-button-info',
   hasNoContact,
   isNewTransaction
+);
+
+export const SAVE_CHILD_CONTROL = new NavigationControl(
+  NavigationAction.SAVE,
+  NavigationDestination.CHILD,
+  'Save & add memo',
+  'p-button-warning',
+  hasNoContact,
+  () => true,
+  'pi pi-plus'
 );
 
 export class TransactionNavigationControls {
@@ -117,16 +127,21 @@ export class TransactionNavigationControls {
 /**
  * Standard set of form buttons used across non-child transaction types.
  */
-export const STANDARD_CONTROLS = new TransactionNavigationControls(
-  [],
-  [CANCEL_CONTROL],
-  [SAVE_LIST_CONTROL, SAVE_ANOTHER_CONTROL]
-);
+export const STANDARD_CONTROLS = new TransactionNavigationControls([], [CANCEL_CONTROL], [SAVE_LIST_CONTROL]);
 
 /**
  * Standard set of form buttons used for double-transaction-entry screens.
  */
 export const STANDARD_CONTROLS_MINIMAL = new TransactionNavigationControls([], [CANCEL_CONTROL], [SAVE_LIST_CONTROL]);
+
+/**
+ * Standard set of form buttons used across tier 1 transactions with subtransactions.
+ */
+export const STANDARD_PARENT_CONTROLS = new TransactionNavigationControls(
+  [SAVE_CHILD_CONTROL],
+  [CANCEL_CONTROL],
+  [SAVE_LIST_CONTROL]
+);
 
 /**
  * Standard set of form buttons used across all child JF Transfer Memo transaction type screens.

@@ -5,6 +5,7 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
+import { SubTransactionsConfig } from '../transaction-type.model';
 
 export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT extends SchBTransactionType {
   componentGroupId = 'A';
@@ -15,7 +16,9 @@ export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT extends SchBTransactionTy
   schema = schema;
   override defaultContactTypeOption = ContactTypes.INDIVIDUAL;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
-  override subTransactionTypes = [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO];
+  override subTransactionConfig = new SubTransactionsConfig('Staff Reimbursement for Operating Expenditure', [
+    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
+  ]);
 
   override generatePurposeDescription() {
     return 'Reimbursement: See Below';

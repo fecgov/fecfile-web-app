@@ -59,13 +59,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     } else {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
-    this.subTransactionOptions = (this.transaction?.transactionType?.subTransactionTypes || []).map((type) => {
-      return {
-        label:
-          LabelUtils.get(ScheduleATransactionTypeLabels, type) || LabelUtils.get(ScheduleBTransactionTypeLabels, type),
-        value: type,
-      };
-    });
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
     this.parentOnInit();
   }
@@ -223,7 +216,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   getInlineControls(): NavigationControl[] {
-    return this.getNavigationControls().getNavigationControls('inline', this.transaction);
+    let foo = this.getNavigationControls().getNavigationControls('inline', this.transaction);
+    return foo;
   }
 
   handleNavigate(navigationEvent: NavigationEvent): void {
