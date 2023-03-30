@@ -13,9 +13,7 @@ export class TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchATrans
   );
   override entityCategoryName = 'Tribal';
   schema = schema;
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
-    LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
-  );
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `Pres. Nominating Convention Account JF Memo: ${

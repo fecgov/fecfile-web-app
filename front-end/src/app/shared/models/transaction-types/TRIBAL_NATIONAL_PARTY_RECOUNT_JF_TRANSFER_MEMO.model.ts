@@ -13,9 +13,7 @@ export class TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATransact
   );
   override entityCategoryName = 'Tribal';
   schema = schema;
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
-    LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
-  );
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `Recount/Legal Proceedings Account JF Memo: ${

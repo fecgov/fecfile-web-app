@@ -10,6 +10,7 @@ export enum NavigationDestination {
   LIST,
   PARENT,
   ANOTHER,
+  ANOTHER_CHILD,
   CHILD,
 }
 
@@ -146,27 +147,20 @@ export const STANDARD_PARENT_CONTROLS = new TransactionNavigationControls(
 /**
  * Standard set of form buttons used across all child JF Transfer Memo transaction type screens.
  */
-export function getChildNavigationControls(parentTransactionTypeLabel: string): TransactionNavigationControls {
+export function getChildNavigationControls(): TransactionNavigationControls {
   return new TransactionNavigationControls(
     [
       new NavigationControl(
         NavigationAction.SAVE,
-        NavigationDestination.ANOTHER,
-        'Save & add another Memo',
+        NavigationDestination.ANOTHER_CHILD,
+        'Save & add memo',
         'p-button-warning',
         hasNoContact,
-        isNewTransaction,
+        () => true,
         'pi pi-plus'
       ),
     ],
-    [
-      new NavigationControl(
-        NavigationAction.CANCEL,
-        NavigationDestination.PARENT,
-        `Back to ${parentTransactionTypeLabel}`,
-        'p-button-secondary'
-      ),
-    ],
+    [CANCEL_CONTROL],
     [SAVE_LIST_CONTROL]
   );
 }

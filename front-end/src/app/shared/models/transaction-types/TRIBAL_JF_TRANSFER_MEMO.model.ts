@@ -10,9 +10,7 @@ export class TRIBAL_JF_TRANSFER_MEMO extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO);
   override entityCategoryName = 'Tribal';
   schema = schema;
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
-    LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
-  );
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `JF Memo: ${(transaction.parent_transaction as SchATransaction).contributor_organization_name}`;

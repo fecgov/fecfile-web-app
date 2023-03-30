@@ -230,14 +230,25 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   navigateTo(event: NavigationEvent) {
     const reportPath = `/transactions/report/${event.transaction?.report_id}`;
-    if (event.destination === NavigationDestination.ANOTHER) {
+    if (
+      event.destination === NavigationDestination.ANOTHER ||
+      event.destination === NavigationDestination.ANOTHER_CHILD
+    ) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
         detail: 'Transaction Saved',
         life: 3000,
       });
-      this.resetForm();
+      if (event.transaction?.parent_transaction_id) {
+        this.router.navigateByUrl(
+          `${reportPath}/list/edit/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`
+        );
+        this.resetForm();
+      } else {
+        this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
+        this.resetForm();
+      }
     } else if (event.destination === NavigationDestination.CHILD) {
       this.messageService.add({
         severity: 'success',

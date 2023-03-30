@@ -32,6 +32,9 @@ export class NavigationControlComponent implements OnInit {
     if (NavigationDestination.CHILD == this.navigationControl?.navigationDestination) {
       this.controlType = 'dropdown';
       this.dropdownOptions = this.getOptions(this.transaction?.transactionType);
+    } else if (NavigationDestination.ANOTHER_CHILD == this.navigationControl?.navigationDestination) {
+      this.controlType = 'dropdown';
+      this.dropdownOptions = this.getOptions(this.transaction?.parent_transaction?.transactionType);
     } else {
       this.controlType = 'button';
     }
@@ -76,7 +79,12 @@ export class NavigationControlComponent implements OnInit {
                 type.entityCategoryName ||
                 LabelUtils.get(ScheduleATransactionTypeLabels, typeId) ||
                 LabelUtils.get(ScheduleBTransactionTypeLabels, typeId),
-              value: new NavigationEvent(NavigationAction.SAVE, NavigationDestination.CHILD, this.transaction, typeId),
+              value: new NavigationEvent(
+                NavigationAction.SAVE,
+                this.navigationControl?.navigationDestination,
+                this.transaction,
+                typeId
+              ),
             };
           }),
         },
