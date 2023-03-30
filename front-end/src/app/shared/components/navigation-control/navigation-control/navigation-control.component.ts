@@ -8,8 +8,13 @@ import {
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
+import {
+  ScheduleATransactionTypeLabels,
+  UnimplementedTypeEntityCategories,
+} from 'app/shared/models/scha-transaction.model';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
+import { getTransactionTypeClass, TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-navigation-control',
@@ -21,6 +26,7 @@ export class NavigationControlComponent implements OnInit {
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
   public controlType: 'button' | 'dropdown' = 'button';
   public dropdownOptions?: any;
+  dropdownControl = new FormControl('');
 
   ngOnInit(): void {
     if (NavigationDestination.CHILD == this.navigationControl?.navigationDestination) {
@@ -49,6 +55,7 @@ export class NavigationControlComponent implements OnInit {
     if (event.value.action) {
       this.navigate.emit(event.value);
     }
+    this.dropdownControl.reset(); // If the save fails, this clears the dropdown
   }
 
   getOptions(transactionType?: TransactionType): any {
@@ -57,12 +64,19 @@ export class NavigationControlComponent implements OnInit {
       return [
         {
           label: config.groupName,
-          items: config.subTransactionTypes.map((type) => {
+          items: config.subTransactionTypes.map((typeId) => {
+            if (!getTransactionTypeClass(typeId)) {
+              return {
+                label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId),
+              };
+            }
+            const type = TransactionTypeUtils.factory(typeId);
             return {
               label:
-                LabelUtils.get(ScheduleATransactionTypeLabels, type) ||
-                LabelUtils.get(ScheduleBTransactionTypeLabels, type),
-              value: new NavigationEvent(NavigationAction.SAVE, NavigationDestination.CHILD, this.transaction, type),
+                type.entityCategoryName ||
+                LabelUtils.get(ScheduleATransactionTypeLabels, typeId) ||
+                LabelUtils.get(ScheduleBTransactionTypeLabels, typeId),
+              value: new NavigationEvent(NavigationAction.SAVE, NavigationDestination.CHILD, this.transaction, typeId),
             };
           }),
         },
