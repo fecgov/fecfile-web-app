@@ -9,6 +9,7 @@ export class INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType {
   componentGroupId = 'A';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO);
   schema = schema;
+  override entityCategoryName = 'Individual';
   override navigationControls: TransactionNavigationControls = getChildNavigationControls(
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
   );

@@ -11,6 +11,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO extends SchATran
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO
   );
+  override entityCategoryName = 'Partnership';
   schema = schema;
   override updateParentOnSave = true;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls(

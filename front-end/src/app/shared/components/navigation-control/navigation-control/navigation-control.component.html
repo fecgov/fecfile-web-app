@@ -11,6 +11,7 @@
   ></button>
   <p-dropdown
     *ngIf="controlType == 'dropdown'"
+    [formControl]="dropdownControl"
     [options]="dropdownOptions"
     pRipple
     [placeholder]="navigationControl?.label || ''"
@@ -23,6 +24,11 @@
     <ng-template let-group pTemplate="group">
       <div class="bold">
         <span>{{ group.label }}</span>
+      </div>
+    </ng-template>
+    <ng-template let-transactiontype pTemplate="item">
+      <div class="flex align-items-center gap-2" [ngClass]="{ 'p-disabled': !transactiontype.value }">
+        <div>{{ transactiontype.label }}</div>
       </div>
     </ng-template>
   </p-dropdown>

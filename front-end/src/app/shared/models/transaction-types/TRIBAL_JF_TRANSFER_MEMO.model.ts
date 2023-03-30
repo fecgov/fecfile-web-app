@@ -8,6 +8,7 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 export class TRIBAL_JF_TRANSFER_MEMO extends SchATransactionType {
   componentGroupId = 'D';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO);
+  override entityCategoryName = 'Tribal';
   schema = schema;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls(
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)

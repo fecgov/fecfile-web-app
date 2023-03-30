@@ -20,7 +20,8 @@ export abstract class TransactionType {
   contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
   defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
   subTransactionTypes?: TransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction
-  subTransactionConfig?: SubTransactionsConfig;
+  subTransactionConfig?: SubTransactionsConfig; // Configuration of Sub-TransactionTypes
+  entityCategoryName?: string; // Short name for the category of entity this transaction handles (e.g: Individual, PAC, Tribal, Partnership)
   navigationControls?: TransactionNavigationControls;
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label

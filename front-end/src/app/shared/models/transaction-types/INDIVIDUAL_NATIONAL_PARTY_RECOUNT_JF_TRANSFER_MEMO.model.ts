@@ -11,6 +11,7 @@ export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATran
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO
   );
+  override entityCategoryName = 'Individual';
   schema = schema;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls(
     LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
