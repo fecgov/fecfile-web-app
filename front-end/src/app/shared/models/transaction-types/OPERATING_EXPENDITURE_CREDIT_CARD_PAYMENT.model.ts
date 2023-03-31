@@ -3,13 +3,8 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_P
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import {
-  STANDARD_CONTROLS,
-  STANDARD_PARENT_CONTROLS,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
+import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
-import { SubTransactionGroup } from '../transaction-type.model';
 
 export class OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchBTransactionType {
   componentGroupId = 'D';
