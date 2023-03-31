@@ -7,7 +7,7 @@ import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction
 import { ContactTypes } from '../contact.model';
 
 export class NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
-  componentGroupId = 'B';
+  componentGroupId = 'A';
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO

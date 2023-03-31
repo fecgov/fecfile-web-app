@@ -11,7 +11,7 @@ describe('NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('B');
+    expect(transactionType.componentGroupId).toBe('A');
   });
 
   xit('#factory() should return a SchBTransaction', () => {
