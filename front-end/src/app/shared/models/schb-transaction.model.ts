@@ -198,7 +198,10 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
     'Non-Contribution Account Credit Card Payment',
   ],
-  [ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO, 'Credit Card Corresponding Memo'],
+  [
+    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
+    'Non-Contribution Account Credit Card Memo',
+  ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
     'Non-Contribution Account Staff Reimbursement',
@@ -211,7 +214,10 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
     'Non-Contribution Account Payment to Payroll',
   ],
-  [ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo'],
+  [
+    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO,
+    'Non-Contribution Account Payment to Payroll Memo',
+  ],
   [
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'National Party Recount Account Disbursement',
