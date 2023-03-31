@@ -3,11 +3,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/JF_TRANSFER_NA
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import {
-  STANDARD_CONTROLS,
-  STANDARD_PARENT_CONTROLS,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
+import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 
 export class JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType {

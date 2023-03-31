@@ -3,11 +3,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/JOINT_FUNDRAIS
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import {
-  STANDARD_CONTROLS,
-  STANDARD_PARENT_CONTROLS,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
+import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 
 export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
