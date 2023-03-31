@@ -8,7 +8,7 @@ import {
   STANDARD_PARENT_CONTROLS,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { SubTransactionsConfig } from '../transaction-type.model';
+import { SubTransactionGroup } from '../transaction-type.model';
 
 export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionType {
   componentGroupId = 'E';
@@ -17,7 +17,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionT
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT
   );
   schema = schema;
-  override subTransactionConfig = new SubTransactionsConfig(
+  override subTransactionConfig = new SubTransactionGroup(
     'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account Memo',
     [
       ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,

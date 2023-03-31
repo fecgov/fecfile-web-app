@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
 import {
   NavigationAction,
   NavigationControl,
   NavigationDestination,
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
-import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { SubTransactionGroup, TransactionType } from 'app/shared/models/transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import {
   ScheduleATransactionTypeLabels,
@@ -19,6 +19,7 @@ import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-navigation-control',
   templateUrl: './navigation-control.component.html',
+  styleUrls: ['./navigation-control.component.scss'],
 })
 export class NavigationControlComponent implements OnInit {
   @Input() navigationControl?: NavigationControl;
@@ -26,6 +27,7 @@ export class NavigationControlComponent implements OnInit {
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
   public controlType: 'button' | 'dropdown' = 'button';
   public dropdownOptions?: any;
+  public isGroupedDropdown: boolean = false;
   dropdownControl = new FormControl('');
 
   ngOnInit(): void {
@@ -38,6 +40,7 @@ export class NavigationControlComponent implements OnInit {
     } else {
       this.controlType = 'button';
     }
+    this.isGroupedDropdown = !this.dropdownOptions?.find((option: Object) => option.hasOwnProperty('value'));
   }
   isVisible = true;
 
@@ -61,35 +64,39 @@ export class NavigationControlComponent implements OnInit {
     this.dropdownControl.reset(); // If the save fails, this clears the dropdown
   }
 
+  getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes): any => {
+    if ((config as SubTransactionGroup).subTransactionTypes) {
+      const group = config as SubTransactionGroup;
+      return {
+        label: group.groupName,
+        items: group.subTransactionTypes.map(this.getOptionFromConfig),
+      };
+    }
+    const typeId = config as TransactionTypes;
+    if (!getTransactionTypeClass(typeId)) {
+      return { label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId) };
+    }
+    const type = TransactionTypeUtils.factory(typeId);
+    return {
+      label:
+        type.shortName ||
+        LabelUtils.get(ScheduleATransactionTypeLabels, typeId) ||
+        LabelUtils.get(ScheduleBTransactionTypeLabels, typeId),
+      value: new NavigationEvent(
+        NavigationAction.SAVE,
+        this.navigationControl?.navigationDestination,
+        this.transaction,
+        typeId
+      ),
+    };
+  };
+
   getOptions(transactionType?: TransactionType): any {
     const config = transactionType?.subTransactionConfig;
-    if (config) {
-      return [
-        {
-          label: config.groupName,
-          items: config.subTransactionTypes.map((typeId) => {
-            if (!getTransactionTypeClass(typeId)) {
-              return {
-                label: LabelUtils.get(UnimplementedTypeEntityCategories, typeId),
-              };
-            }
-            const type = TransactionTypeUtils.factory(typeId);
-            return {
-              label:
-                type.entityCategoryName ||
-                LabelUtils.get(ScheduleATransactionTypeLabels, typeId) ||
-                LabelUtils.get(ScheduleBTransactionTypeLabels, typeId),
-              value: new NavigationEvent(
-                NavigationAction.SAVE,
-                this.navigationControl?.navigationDestination,
-                this.transaction,
-                typeId
-              ),
-            };
-          }),
-        },
-      ];
+    if (!config) return [];
+    if (Array.isArray(config)) {
+      return config.map(this.getOptionFromConfig);
     }
-    return;
+    return [this.getOptionFromConfig(config)];
   }
 }

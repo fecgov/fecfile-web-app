@@ -11,7 +11,7 @@ export class INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends Sch
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
   );
-  override entityCategoryName = 'Individual';
+  override shortName = 'Individual';
   schema = schema;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 

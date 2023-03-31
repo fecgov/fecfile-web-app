@@ -154,7 +154,7 @@ export function getChildNavigationControls(): TransactionNavigationControls {
         NavigationAction.SAVE,
         NavigationDestination.ANOTHER_CHILD,
         'Save & add memo',
-        'p-button-warning',
+        '',
         hasNoContact,
         () => true,
         'pi pi-plus'

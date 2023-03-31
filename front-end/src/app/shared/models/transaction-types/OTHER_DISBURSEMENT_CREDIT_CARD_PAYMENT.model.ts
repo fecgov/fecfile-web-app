@@ -9,7 +9,7 @@ import {
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
-import { SubTransactionsConfig } from '../transaction-type.model';
+import { SubTransactionGroup } from '../transaction-type.model';
 
 export class OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT extends SchBTransactionType {
   componentGroupId = 'D';
@@ -20,9 +20,7 @@ export class OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT extends SchBTransactionType 
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
-  override subTransactionConfig = new SubTransactionsConfig('Credit Card Payment for Other Disbursement', [
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO,
-  ]);
+  override subTransactionConfig = [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO];
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

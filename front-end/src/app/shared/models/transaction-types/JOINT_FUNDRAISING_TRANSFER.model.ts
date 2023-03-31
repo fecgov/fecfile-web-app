@@ -8,13 +8,13 @@ import {
   STANDARD_PARENT_CONTROLS,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { SubTransactionsConfig } from '../transaction-type.model';
+import { SubTransactionGroup } from '../transaction-type.model';
 
 export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
   componentGroupId = 'E';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
   schema = schema;
-  override subTransactionConfig = new SubTransactionsConfig('Joint Fundraising Transfer Memo', [
+  override subTransactionConfig = new SubTransactionGroup('Joint Fundraising Transfer Memo', [
     ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,

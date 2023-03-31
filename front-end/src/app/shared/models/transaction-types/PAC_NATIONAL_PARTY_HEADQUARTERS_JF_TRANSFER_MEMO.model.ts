@@ -11,7 +11,7 @@ export class PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchATransa
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
   );
-  override entityCategoryName = 'PAC';
+  override shortName = 'PAC';
   schema = schema;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 

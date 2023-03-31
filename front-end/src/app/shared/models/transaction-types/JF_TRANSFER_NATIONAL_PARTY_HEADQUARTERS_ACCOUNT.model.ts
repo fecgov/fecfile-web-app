@@ -8,7 +8,7 @@ import {
   STANDARD_PARENT_CONTROLS,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { SubTransactionsConfig } from '../transaction-type.model';
+import { SubTransactionGroup } from '../transaction-type.model';
 
 export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransactionType {
   componentGroupId = 'E';
@@ -17,7 +17,7 @@ export class JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransac
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT
   );
   schema = schema;
-  override subTransactionConfig = new SubTransactionsConfig(
+  override subTransactionConfig = new SubTransactionGroup(
     'JF Transfer - National Party Headquarters Buildings Account Memo',
     [
       ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,

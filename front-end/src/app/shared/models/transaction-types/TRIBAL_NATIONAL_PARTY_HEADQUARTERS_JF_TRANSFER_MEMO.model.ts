@@ -11,7 +11,7 @@ export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchATra
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
   );
-  override entityCategoryName = 'Tribal';
+  override shortName = 'Tribal';
   schema = schema;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 

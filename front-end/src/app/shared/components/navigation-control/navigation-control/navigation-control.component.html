@@ -16,14 +16,16 @@
     pRipple
     [placeholder]="navigationControl?.label || ''"
     [dropdownIcon]="navigationControl?.icon || ''"
-    [class]="navigationControl?.ngClass || ''"
+    styleClass="navigation-dropdown"
+    panelStyleClass="navigation-dropdown-panel"
     (onChange)="onDropdownChange($event)"
     [disabled]="isDisabled()"
-    [group]="true"
+    [group]="isGroupedDropdown"
   >
     <ng-template let-group pTemplate="group">
-      <div class="bold">
+      <div class="bold navigation-dropdown-group">
         <span>{{ group.label }}</span>
+        <p-divider></p-divider>
       </div>
     </ng-template>
     <ng-template let-transactiontype pTemplate="item">
