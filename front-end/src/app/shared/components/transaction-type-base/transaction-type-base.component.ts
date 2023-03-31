@@ -212,8 +212,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   getInlineControls(): NavigationControl[] {
-    let foo = this.getNavigationControls().getNavigationControls('inline', this.transaction);
-    return foo;
+    return this.getNavigationControls().getNavigationControls('inline', this.transaction);
   }
 
   handleNavigate(navigationEvent: NavigationEvent): void {
