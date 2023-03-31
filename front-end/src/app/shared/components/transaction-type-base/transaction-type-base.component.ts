@@ -1,8 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
@@ -38,8 +36,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   formSubmitted = false;
   purposeDescriptionLabel = '';
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes | ScheduleBTransactionTypes }[] = [];
-
   form: FormGroup = this.fb.group({});
 
   constructor(
@@ -287,10 +283,5 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   getEntityType(): string {
     return this.form.get('entity_type')?.value || '';
-  }
-
-  createSubTransaction(event: { value: TransactionTypes }) {
-    this.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.CHILD, this.transaction, event.value));
-    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }
