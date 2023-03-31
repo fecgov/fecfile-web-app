@@ -26,11 +26,12 @@ export class NavigationControlComponent implements OnInit {
   @Input() transaction?: Transaction;
   @Output() navigate: EventEmitter<NavigationEvent> = new EventEmitter<NavigationEvent>();
   public controlType: 'button' | 'dropdown' = 'button';
-  public dropdownOptions?: any;
+  public dropdownOptions?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   public isGroupedDropdown = false;
   dropdownControl = new FormControl('');
 
   ngOnInit(): void {
+    console.log(`AHOY ${this.navigationControl}`);
     if (NavigationDestination.CHILD == this.navigationControl?.navigationDestination) {
       this.controlType = 'dropdown';
       this.dropdownOptions = this.getOptions(this.transaction?.transactionType);
@@ -66,7 +67,8 @@ export class NavigationControlComponent implements OnInit {
     this.dropdownControl.reset(); // If the save fails, this clears the dropdown
   }
 
-  getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes): any => { // eslint-disable-line @typescript-eslint/no-explicit-any
+  getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes): any => {
+    // eslint-disable-line @typescript-eslint/no-explicit-any
     if ((config as SubTransactionGroup).subTransactionTypes) {
       const group = config as SubTransactionGroup;
       return {
@@ -93,7 +95,8 @@ export class NavigationControlComponent implements OnInit {
     };
   };
 
-  getOptions(transactionType?: TransactionType): any { // eslint-disable-line @typescript-eslint/no-explicit-any
+  getOptions(transactionType?: TransactionType): any {
+    // eslint-disable-line @typescript-eslint/no-explicit-any
     const config = transactionType?.subTransactionConfig;
     if (!config) return [];
     if (Array.isArray(config)) {
