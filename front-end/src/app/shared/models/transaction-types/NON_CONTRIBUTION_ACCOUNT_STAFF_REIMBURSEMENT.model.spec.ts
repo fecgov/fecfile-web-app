@@ -14,7 +14,7 @@ describe('NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT', () => {
     expect(transactionType.componentGroupId).toBe('A');
   });
 
-  xit('#factory() should return a SchBTransaction', () => {
+  it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SB29');
     expect(txn.transaction_type_identifier).toBe(
