@@ -15,7 +15,7 @@ export class NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransa
   schema = schema;
   override showAggregate = false;
   override defaultContactTypeOption = ContactTypes.INDIVIDUAL;
-  override contactTypeOptions?: ContactType[] | undefined = [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION];
+  override contactTypeOptions = [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {
