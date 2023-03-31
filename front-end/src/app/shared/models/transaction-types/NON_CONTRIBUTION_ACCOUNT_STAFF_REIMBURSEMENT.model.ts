@@ -26,6 +26,6 @@ export class NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT extends SchBTransactio
     });
   }
   override generatePurposeDescription(): string {
-    return 'Reimbursement: See Below';
+    return 'Non-Contribution Account - Reimbursement: See Below';
   }
 }
