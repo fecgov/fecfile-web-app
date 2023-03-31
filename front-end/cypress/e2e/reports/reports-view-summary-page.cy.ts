@@ -16,9 +16,9 @@ function testReportType(frequency: FilingFrequency, type: FilingType, reportCode
 
   cy.get('.p-menubar').find('.p-menuitem-link').contains('Reports').click();
   cy.shortWait();
-  cy.get('p-button[icon="pi pi-pencil"]').click();
+  cy.get('tbody').find('tr').first().find('p-button').click();
+  cy.get('button').contains('Edit report').click();
   cy.shortWait();
-  cy.navigateToTransactionManagement();
   cy.navigateReportSidebar('Review', 'View summary page');
 
   cy.get('.summary-header').contains(reportCode).should('exist');

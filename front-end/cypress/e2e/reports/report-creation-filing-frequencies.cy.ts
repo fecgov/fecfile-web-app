@@ -36,6 +36,7 @@ describe('Tests the radio buttons and fields related to the various filing frequ
 
           //Step 2: Open a New Report
           cy.get("button[label='Create a new report']").click();
+          cy.get('button').contains('Start building report').click();
           cy.shortWait();
 
           //`Step 3: Select the Filing Frequency ${filingFrequency}`

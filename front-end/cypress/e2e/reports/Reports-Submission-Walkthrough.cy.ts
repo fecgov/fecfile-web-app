@@ -17,6 +17,7 @@ const filingDetails = generateFilingDetails();
 describe('Test creating and submitting a report', () => {
   beforeEach('Logs in', () => {
     cy.login();
+    cy.deleteAllReports();
   });
 
   after('', () => {
@@ -40,7 +41,7 @@ describe('Test creating and submitting a report', () => {
     //Checks pre-existing confirmation details
     cy.navigateReportSidebar('Submit', 'Confirm information');
 
-    cy.get('input[formControlName="confirmation_email_1"]').should('have.value', 'test@pacyourbags.csv');
+    cy.get('input#confirmation_email_1').should('have.value', 'test@pacyourbags.csv');
 
     cy.get('p-radiobutton[label="YES"]').find('div').last().click({ force: true });
 

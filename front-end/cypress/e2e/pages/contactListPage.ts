@@ -54,8 +54,10 @@ export class ContactListPage {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
   }
 
-  static enterFormData(formData: ContactFormData) {
-    PageUtils.dropdownSetValue('#entity_type_dropdown', formData['contact_type']);
+  static enterFormData(formData: ContactFormData, readOnlyContactType = false) {
+    if (!readOnlyContactType) {
+      PageUtils.dropdownSetValue('#entity_type_dropdown', formData['contact_type']);
+    }
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
       //Contact
@@ -104,6 +106,22 @@ export class ContactListPage {
     if (formData['contact_type'] == 'Organization') {
       cy.get('#name').safeType(formData['name']);
     }
+  }
+
+  static assertFormData(formData: ContactFormData) {
+    cy.get('#last_name').should('have.value', formData['last_name']);
+    cy.get('#first_name').should('have.value', formData['first_name']);
+    cy.get('#middle_name').should('have.value', formData['middle_name']);
+    cy.get('#prefix').should('have.value', formData['prefix']);
+    cy.get('#suffix').should('have.value', formData['suffix']);
+    cy.get('[inputid="country"]').should('contain', formData['country']);
+    cy.get('#street_1').should('have.value', formData['street_1']);
+    cy.get('#street_2').should('have.value', formData['street_2']);
+    cy.get('#city').should('have.value', formData['city']);
+    cy.get('[inputid="state"]').should('contain', formData['state']);
+    cy.get('#zip').should('have.value', formData['zip']);
+    cy.get('#employer').should('have.value', formData['employer']);
+    cy.get('#occupation').should('have.value', formData['occupation']);
   }
 
   static clickNewButton() {

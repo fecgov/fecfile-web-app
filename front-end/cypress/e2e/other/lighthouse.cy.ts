@@ -56,6 +56,7 @@ describe('Generates lighthouse reports for every page', () => {
     cy.deleteAllReports();
     cy.visit('/reports');
     cy.contains('button', 'Create a new report').click();
+    cy.get('button').contains('Start building report').click();
     cy.shortWait();
     cy.runLighthouse('reports', 'report-creation');
   });

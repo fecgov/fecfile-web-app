@@ -95,4 +95,22 @@ export abstract class PageUtils {
     cy.get('p-panelmenu').contains('a', menuItem).as('menuItem');
     cy.get('@menuItem').click({ force: true });
   }
+
+  static clickLink(name: string) {
+    cy.contains('a', name).click();
+  }
+
+  static clickButton(name: string) {
+    cy.contains('button', name).click();
+  }
+
+  static dateToString(date: Date) {
+    return (
+      (date.getMonth() > 8 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)) +
+      '/' +
+      (date.getDate() > 9 ? date.getDate() : '0' + date.getDate()) +
+      '/' +
+      date.getFullYear()
+    );
+  }
 }
