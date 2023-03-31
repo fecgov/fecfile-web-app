@@ -14,7 +14,7 @@ export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO extends SchBTrans
   );
   schema = schema;
   override showAggregate = false;
-  override defaultContactTypeOption = ContactTypes.INDIVIDUAL;
+  override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {
