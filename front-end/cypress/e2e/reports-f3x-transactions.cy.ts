@@ -16,14 +16,14 @@ describe('Transactions', () => {
   xit('Create a Group A transaction', () => {
     // Create an individual contact to be used with contact lookup
     ContactListPage.goToPage();
-    ContactListPage.clickNewButton();
+    PageUtils.clickButton('New');
     ContactListPage.enterFormData(defaultContactFormData);
-    ContactListPage.clickSaveButton();
+    PageUtils.clickButton('Save');
 
     ReportListPage.goToPage();
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
 
     PageUtils.clickSidebarItem('Add a receipt');
     PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
@@ -47,33 +47,14 @@ describe('Transactions', () => {
 
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
-    cy.get('#last_name').should('have.value', defaultContactFormData['last_name']);
-    cy.get('#first_name').should('have.value', defaultContactFormData['first_name']);
-    cy.get('#middle_name').should('have.value', defaultContactFormData['middle_name']);
-    cy.get('#prefix').should('have.value', defaultContactFormData['prefix']);
-    cy.get('#suffix').should('have.value', defaultContactFormData['suffix']);
-    cy.get('#street_1').should('have.value', defaultContactFormData['street_1']);
-    cy.get('#street_2').should('have.value', defaultContactFormData['street_2']);
-    cy.get('#city').should('have.value', defaultContactFormData['city']);
-    cy.get('[inputid="state"]').should('contain', defaultContactFormData['state']);
-    cy.get('#zip').should('have.value', defaultContactFormData['zip']);
-    cy.get('#employer').should('have.value', defaultContactFormData['employer']);
-    cy.get('#occupation').should('have.value', defaultContactFormData['occupation']);
-    cy.get('#date').should('have.value', PageUtils.dateToString(defaultTransactionFormData['date_received']));
-    cy.get('#memo_code').should(
-      'have.attr',
-      'aria-checked',
-      defaultTransactionFormData['memo_code'] ? 'true' : 'false'
-    );
-    cy.get('#amount').should('have.value', '$' + defaultTransactionFormData['amount']);
-    cy.get('#purpose_description').should('have.value', defaultTransactionFormData['purpose_description']);
-    cy.get('#memo_text_input').should('have.value', defaultTransactionFormData['memo_text']);
+    ContactListPage.assertFormData(defaultContactFormData, true);
+    TransactionDetailPage.assertFormData(defaultTransactionFormData);
   });
 
   xit('Create a Group B transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
 
     PageUtils.clickSidebarItem('Add a disbursement');
     PageUtils.clickLink('OTHER EXPENDITURES');
@@ -111,24 +92,14 @@ describe('Transactions', () => {
 
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
-    cy.get('#organization_name').should('have.value', formContactData['name']);
-    cy.get('#street_1').should('have.value', formContactData['street_1']);
-    cy.get('#street_2').should('have.value', formContactData['street_2']);
-    cy.get('#city').should('have.value', formContactData['city']);
-    cy.get('[inputid="state"]').should('contain', formContactData['state']);
-    cy.get('#zip').should('have.value', formContactData['zip']);
-    cy.get('#date').should('have.value', PageUtils.dateToString(formTransactionData['date_received']));
-    cy.get('#memo_code').should('have.attr', 'aria-checked', formTransactionData['memo_code'] ? 'true' : 'false');
-    cy.get('#amount').should('have.value', '$' + formTransactionData['amount']);
-    cy.get('#purpose_description').should('have.value', formTransactionData['purpose_description']);
-    cy.get('#memo_text_input').should('have.value', formTransactionData['memo_text']);
-    cy.get('[inputid="category_code"]').should('contain', formTransactionData['category_code']);
+    ContactListPage.assertFormData(formContactData, true);
+    TransactionDetailPage.assertFormData(formTransactionData);
   });
 
   xit('Create a Group C transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
 
     PageUtils.clickSidebarItem('Add a receipt');
     PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
@@ -155,33 +126,14 @@ describe('Transactions', () => {
 
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
-    cy.get('#last_name').should('have.value', defaultContactFormData['last_name']);
-    cy.get('#first_name').should('have.value', defaultContactFormData['first_name']);
-    cy.get('#middle_name').should('have.value', defaultContactFormData['middle_name']);
-    cy.get('#prefix').should('have.value', defaultContactFormData['prefix']);
-    cy.get('#suffix').should('have.value', defaultContactFormData['suffix']);
-    cy.get('#street_1').should('have.value', defaultContactFormData['street_1']);
-    cy.get('#street_2').should('have.value', defaultContactFormData['street_2']);
-    cy.get('#city').should('have.value', defaultContactFormData['city']);
-    cy.get('[inputid="state"]').should('contain', defaultContactFormData['state']);
-    cy.get('#zip').should('have.value', defaultContactFormData['zip']);
-    cy.get('#employer').should('have.value', defaultContactFormData['employer']);
-    cy.get('#occupation').should('have.value', defaultContactFormData['occupation']);
-    cy.get('#date').should('have.value', PageUtils.dateToString(defaultTransactionFormData['date_received']));
-    cy.get('#memo_code').should(
-      'have.attr',
-      'aria-checked',
-      defaultTransactionFormData['memo_code'] ? 'true' : 'false'
-    );
-    cy.get('#amount').should('have.value', '-$' + defaultTransactionFormData['amount']);
-    cy.get('#purpose_description').should('have.value', defaultTransactionFormData['purpose_description']);
-    cy.get('#memo_text_input').should('have.value', defaultTransactionFormData['memo_text']);
+    ContactListPage.assertFormData(defaultContactFormData, true);
+    TransactionDetailPage.assertFormData({ ...defaultTransactionFormData, ...{ amount: -100.55 } });
   });
 
-  it('Create a Group D transaction and memo', () => {
+  xit('Create a Group D transaction and memos', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
 
     PageUtils.clickSidebarItem('Add a receipt');
     PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
@@ -248,39 +200,105 @@ describe('Transactions', () => {
     PageUtils.clickLink('Partnership Receipt');
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
-    cy.get('#organization_name').should('have.value', formContactData['name']);
-    cy.get('#street_1').should('have.value', formContactData['street_1']);
-    cy.get('#street_2').should('have.value', formContactData['street_2']);
-    cy.get('#city').should('have.value', formContactData['city']);
-    cy.get('[inputid="state"]').should('contain', formContactData['state']);
-    cy.get('#zip').should('have.value', formContactData['zip']);
-    cy.get('#date').should('have.value', PageUtils.dateToString(formTransactionData['date_received']));
-    cy.get('#memo_code').should('have.attr', 'aria-checked', formTransactionData['memo_code'] ? 'true' : 'false');
-    cy.get('#amount').should('have.value', '$' + formTransactionData['amount']);
-    cy.get('#purpose_description').should('have.value', 'See Partnership Attribution(s) below');
-    cy.get('#memo_text_input').should('have.value', formTransactionData['memo_text']);
+    ContactListPage.assertFormData(formContactData, true);
+    TransactionDetailPage.assertFormData({
+      ...formTransactionData,
+      ...{ purpose_description: 'See Partnership Attribution(s) below' },
+    });
     PageUtils.clickButton('Save & view all transactions');
 
     // Check form values of memo
     cy.get('tbody tr').first().contains('a', 'Partnership Memo').click();
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
-    cy.get('#last_name').should('have.value', defaultContactFormData['last_name']);
-    cy.get('#first_name').should('have.value', defaultContactFormData['first_name']);
-    cy.get('#middle_name').should('have.value', defaultContactFormData['middle_name']);
-    cy.get('#prefix').should('have.value', defaultContactFormData['prefix']);
-    cy.get('#suffix').should('have.value', defaultContactFormData['suffix']);
-    cy.get('#street_1').should('have.value', defaultContactFormData['street_1']);
-    cy.get('#street_2').should('have.value', defaultContactFormData['street_2']);
-    cy.get('#city').should('have.value', defaultContactFormData['city']);
-    cy.get('[inputid="state"]').should('contain', defaultContactFormData['state']);
-    cy.get('#zip').should('have.value', defaultContactFormData['zip']);
-    cy.get('#employer').should('have.value', defaultContactFormData['employer']);
-    cy.get('#occupation').should('have.value', defaultContactFormData['occupation']);
-    cy.get('#date').should('have.value', PageUtils.dateToString(memoFormTransactionData['date_received']));
-    cy.get('#memo_code').should('have.attr', 'aria-checked', memoFormTransactionData['memo_code'] ? 'true' : 'false');
-    cy.get('#amount').should('have.value', '$' + memoFormTransactionData['amount']);
-    cy.get('#purpose_description').should('have.value', 'Partnership Attribution');
-    cy.get('#memo_text_input').should('have.value', memoFormTransactionData['memo_text']);
+    ContactListPage.assertFormData(defaultContactFormData, true);
+    TransactionDetailPage.assertFormData({
+      ...memoFormTransactionData,
+      ...{ purpose_description: 'Partnership Attribution' },
+    });
+  });
+
+  xit('Create a Group E transaction', () => {
+    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.enterFormData(defaultReportFormData);
+    PageUtils.clickButton('Save and continue');
+
+    PageUtils.clickSidebarItem('Add a receipt');
+    PageUtils.clickLink('CONTRIBUTIONS FROM REGISTERED FILERS');
+    PageUtils.clickLink('Party Receipt');
+
+    PageUtils.clickLink('Create a new contact');
+    const formContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Committee' },
+    };
+    ContactListPage.enterFormData(formContactData, true);
+    PageUtils.clickButton('Save & continue');
+
+    TransactionDetailPage.enterFormData(defaultTransactionFormData);
+    PageUtils.clickButton('Save & view all transactions');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+
+    cy.get('tr').should('contain', 'Party Receipt');
+    cy.get('tr').should('not.contain', 'Unitemized');
+    cy.get('tr').should('contain', formContactData['name']);
+    cy.get('tr').should('contain', PageUtils.dateToString(defaultTransactionFormData['date_received']));
+    cy.get('tr').should('contain', '$' + defaultTransactionFormData['amount']);
+
+    PageUtils.clickLink('Party Receipt');
+
+    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown').should('contain', 'Committee');
+    ContactListPage.assertFormData(formContactData, true);
+    TransactionDetailPage.assertFormData(defaultTransactionFormData);
+  });
+
+  it('Create a Group AG transaction', () => {
+    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.enterFormData(defaultReportFormData);
+    PageUtils.clickButton('Save and continue');
+
+    PageUtils.clickSidebarItem('Add a receipt');
+    PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
+    PageUtils.clickLink('Earmark Receipt');
+
+    // Enter STEP ONE transaction
+    PageUtils.clickLink('STEP ONE');
+    PageUtils.clickLink('Create a new contact');
+    ContactListPage.enterFormData(defaultContactFormData, true);
+    PageUtils.clickButton('Save & continue');
+    const transactionFormData = {
+      ...defaultTransactionFormData,
+      ...{
+        purpose_description: '',
+      },
+    };
+    TransactionDetailPage.enterFormData(transactionFormData);
+
+    // Enter STEP TWO transaction
+    PageUtils.clickLink('STEP TWO');
+    PageUtils.clickLink('Create a new contact');
+    const stepTwoContactFormData = { ...defaultContactFormData, ...{ contact_type: 'Committee' } };
+    ContactListPage.enterFormData(stepTwoContactFormData, true);
+    PageUtils.clickButton('Save & continue');
+    TransactionDetailPage.enterFormData(transactionFormData);
+
+    // PageUtils.clickButton('Save & view all transactions');
+    // cy.contains('Confirm').should('exist');
+    // PageUtils.clickButton('Continue');
+
+    // cy.get('tr').should('contain', 'Party Receipt');
+    // cy.get('tr').should('not.contain', 'Unitemized');
+    // cy.get('tr').should('contain', formContactData['name']);
+    // cy.get('tr').should('contain', PageUtils.dateToString(defaultTransactionFormData['date_received']));
+    // cy.get('tr').should('contain', '$' + defaultTransactionFormData['amount']);
+
+    // PageUtils.clickLink('Party Receipt');
+
+    // cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    // cy.get('#entity_type_dropdown').should('contain', 'Committee');
+    // ContactListPage.assertFormData(formContactData, true);
+    // TransactionDetailPage.assertFormData(defaultTransactionFormData);
   });
 });

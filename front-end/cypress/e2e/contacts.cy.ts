@@ -1,5 +1,6 @@
 import { LoginPage } from './pages/loginPage';
 import { defaultFormData, ContactListPage } from './pages/contactListPage';
+import { PageUtils } from './pages/pageUtils';
 
 describe('Manage contacts', () => {
   beforeEach(() => {
@@ -9,33 +10,21 @@ describe('Manage contacts', () => {
   });
 
   it('Create an Individual contact', () => {
-    ContactListPage.clickNewButton();
+    PageUtils.clickButton('New');
     const formData = { ...defaultFormData };
     ContactListPage.enterFormData(formData);
-    ContactListPage.clickSaveButton();
+    PageUtils.clickButton('Save');
     cy.contains('a', ContactListPage.getName(formData)).should('exist');
 
     // Edit new contact and verify form conains correct values.
-    ContactListPage.clickContactName(ContactListPage.getName(formData));
+    PageUtils.clickLink(ContactListPage.getName(formData));
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
-    cy.get('#last_name').should('have.value', formData['last_name']);
-    cy.get('#first_name').should('have.value', formData['first_name']);
-    cy.get('#middle_name').should('have.value', formData['middle_name']);
-    cy.get('#prefix').should('have.value', formData['prefix']);
-    cy.get('#suffix').should('have.value', formData['suffix']);
-    cy.get('[inputid="country"]').should('contain', formData['country']);
-    cy.get('#street_1').should('have.value', formData['street_1']);
-    cy.get('#street_2').should('have.value', formData['street_2']);
-    cy.get('#city').should('have.value', formData['city']);
-    cy.get('[inputid="state"]').should('contain', formData['state']);
-    cy.get('#zip').should('have.value', formData['zip']);
-    cy.get('#employer').should('have.value', formData['employer']);
-    cy.get('#occupation').should('have.value', formData['occupation']);
+    ContactListPage.assertFormData(formData);
   });
 
   it('Create a Candidate contact', () => {
-    ContactListPage.clickNewButton();
+    PageUtils.clickButton('New');
 
     const formData = {
       ...defaultFormData,
@@ -44,34 +33,18 @@ describe('Manage contacts', () => {
       },
     };
     ContactListPage.enterFormData(formData);
-    ContactListPage.clickSaveButton();
+    PageUtils.clickButton('Save');
     cy.contains('a', ContactListPage.getName(formData)).should('exist');
 
     // Edit new contact and verify form conains correct values.
-    ContactListPage.clickContactName(ContactListPage.getName(formData));
+    PageUtils.clickLink(ContactListPage.getName(formData));
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Candidate');
-    // cy.get('#candidate_id').should('contain', formData['candidate_id']);
-    cy.get('#last_name').should('have.value', formData['last_name']);
-    cy.get('#first_name').should('have.value', formData['first_name']);
-    cy.get('#middle_name').should('have.value', formData['middle_name']);
-    cy.get('#prefix').should('have.value', formData['prefix']);
-    cy.get('#suffix').should('have.value', formData['suffix']);
-    cy.get('[inputid="country"]').should('contain', formData['country']);
-    cy.get('#street_1').should('have.value', formData['street_1']);
-    cy.get('#street_2').should('have.value', formData['street_2']);
-    cy.get('#city').should('have.value', formData['city']);
-    cy.get('[inputid="state"]').should('contain', formData['state']);
-    cy.get('#zip').should('have.value', formData['zip']);
-    cy.get('#employer').should('have.value', formData['employer']);
-    cy.get('#occupation').should('have.value', formData['occupation']);
-    cy.get('[inputid="candidate_office"]').should('contain', formData['candidate_office']);
-    cy.get('[inputid="candidate_state"]').should('contain', formData['candidate_state']);
-    cy.get('[inputid="candidate_district"]').should('contain', formData['candidate_district']);
+    ContactListPage.assertFormData(formData);
   });
 
   it('Create a Committee contact', () => {
-    ContactListPage.clickNewButton();
+    PageUtils.clickButton('New');
 
     const formData = {
       ...defaultFormData,
@@ -80,25 +53,18 @@ describe('Manage contacts', () => {
       },
     };
     ContactListPage.enterFormData(formData);
-    ContactListPage.clickSaveButton();
+    PageUtils.clickButton('Save');
     cy.contains('a', ContactListPage.getName(formData)).should('exist');
 
     // Edit new contact and verify form conains correct values.
-    ContactListPage.clickContactName(ContactListPage.getName(formData));
+    PageUtils.clickLink(ContactListPage.getName(formData));
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
-    // cy.get('#committee_id').should('contain', formData['committee_id']);
-    // cy.get('#name').should('contain', formData['name']);
-    cy.get('[inputid="country"]').should('contain', formData['country']);
-    cy.get('#street_1').should('have.value', formData['street_1']);
-    cy.get('#street_2').should('have.value', formData['street_2']);
-    cy.get('#city').should('have.value', formData['city']);
-    cy.get('[inputid="state"]').should('contain', formData['state']);
-    cy.get('#zip').should('have.value', formData['zip']);
+    ContactListPage.assertFormData(formData);
   });
 
   it('Create an Organization contact', () => {
-    ContactListPage.clickNewButton();
+    PageUtils.clickButton('New');
 
     const formData = {
       ...defaultFormData,
@@ -107,25 +73,19 @@ describe('Manage contacts', () => {
       },
     };
     ContactListPage.enterFormData(formData);
-    ContactListPage.clickSaveButton();
+    PageUtils.clickButton('Save');
     cy.contains('a', ContactListPage.getName(formData)).should('exist');
 
     // Edit new contact and verify form conains correct values.
-    ContactListPage.clickContactName(ContactListPage.getName(formData));
+    PageUtils.clickLink(ContactListPage.getName(formData));
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
-    // cy.get('#name').should('contain', formData['name']);
-    cy.get('[inputid="country"]').should('contain', formData['country']);
-    cy.get('#street_1').should('have.value', formData['street_1']);
-    cy.get('#street_2').should('have.value', formData['street_2']);
-    cy.get('#city').should('have.value', formData['city']);
-    cy.get('[inputid="state"]').should('contain', formData['state']);
-    cy.get('#zip').should('have.value', formData['zip']);
+    ContactListPage.assertFormData(formData);
   });
 
   it('Empty required fields should display an error message', () => {
-    ContactListPage.clickNewButton();
-    const formData = {
+    PageUtils.clickButton('New');
+    ContactListPage.enterFormData({
       ...defaultFormData,
       ...{
         last_name: '',
@@ -135,9 +95,8 @@ describe('Manage contacts', () => {
         state: '',
         zip: '',
       },
-    };
-    ContactListPage.enterFormData(formData);
-    ContactListPage.clickSaveButton();
+    });
+    PageUtils.clickButton('Save');
     cy.get('#last_name').parent().should('contain', 'This is a required field');
     cy.get('#first_name').parent().should('contain', 'This is a required field');
     cy.get('#street_1').parent().should('contain', 'This is a required field');
@@ -148,8 +107,8 @@ describe('Manage contacts', () => {
   });
 
   it('Fields with too a long string should display an error message', () => {
-    ContactListPage.clickNewButton();
-    const formData = {
+    PageUtils.clickButton('New');
+    ContactListPage.enterFormData({
       ...defaultFormData,
       ...{
         last_name: '012345678901234567890123456789LONG',
@@ -164,8 +123,7 @@ describe('Manage contacts', () => {
         employer: '012345678901234567890123456789012345678LONG',
         occupation: '012345678901234567890123456789012345678LONG',
       },
-    };
-    ContactListPage.enterFormData(formData);
+    });
     cy.get('#last_name').parent().should('contain', 'This field cannot contain more than 30 alphanumeric characters.');
     cy.get('#first_name').parent().should('contain', 'This field cannot contain more than 20 alphanumeric characters.');
     cy.get('#middle_name')

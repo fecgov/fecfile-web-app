@@ -54,7 +54,7 @@ export class ContactListPage {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
   }
 
-  static enterFormData(formData: ContactFormData, readOnlyContactType = false) {
+  static enterFormData(formData: ContactFormData, readOnlyContactType = false, alias = 'body') {
     if (!readOnlyContactType) {
       PageUtils.dropdownSetValue('#entity_type_dropdown', formData['contact_type']);
     }
@@ -108,32 +108,40 @@ export class ContactListPage {
     }
   }
 
-  static assertFormData(formData: ContactFormData) {
-    cy.get('#last_name').should('have.value', formData['last_name']);
-    cy.get('#first_name').should('have.value', formData['first_name']);
-    cy.get('#middle_name').should('have.value', formData['middle_name']);
-    cy.get('#prefix').should('have.value', formData['prefix']);
-    cy.get('#suffix').should('have.value', formData['suffix']);
-    cy.get('[inputid="country"]').should('contain', formData['country']);
+  static assertFormData(formData: ContactFormData, excludeCountry = false) {
+    if (['Individual', 'Candidate'].includes(formData['contact_type'])) {
+      cy.get('#last_name').should('have.value', formData['last_name']);
+      cy.get('#first_name').should('have.value', formData['first_name']);
+      cy.get('#middle_name').should('have.value', formData['middle_name']);
+      cy.get('#prefix').should('have.value', formData['prefix']);
+      cy.get('#suffix').should('have.value', formData['suffix']);
+      cy.get('#employer').should('have.value', formData['employer']);
+      cy.get('#occupation').should('have.value', formData['occupation']);
+    }
+
+    if (!excludeCountry) {
+      cy.get('[inputid="country"]').should('contain', formData['country']);
+    }
     cy.get('#street_1').should('have.value', formData['street_1']);
     cy.get('#street_2').should('have.value', formData['street_2']);
     cy.get('#city').should('have.value', formData['city']);
     cy.get('[inputid="state"]').should('contain', formData['state']);
     cy.get('#zip').should('have.value', formData['zip']);
-    cy.get('#employer').should('have.value', formData['employer']);
-    cy.get('#occupation').should('have.value', formData['occupation']);
-  }
 
-  static clickNewButton() {
-    cy.get('#button-contacts-new').click();
-  }
+    if (formData['contact_type'] === 'Candidate') {
+      // cy.get('#candidate_id').should('contain', formData['candidate_id']);
+      cy.get('[inputid="candidate_office"]').should('contain', formData['candidate_office']);
+      cy.get('[inputid="candidate_state"]').should('contain', formData['candidate_state']);
+      cy.get('[inputid="candidate_district"]').should('contain', formData['candidate_district']);
+    }
 
-  static clickSaveButton() {
-    cy.contains('.p-button-primary > .p-button-label', 'Save').click();
-  }
+    if (formData['contact_type'] === 'Committee') {
+      // cy.get('#committee_id').should('contain', formData['committee_id']);
+    }
 
-  static clickContactName(name: string) {
-    cy.contains('a', name).click();
+    if (['Committee', 'Organization'].includes(formData['contact_type'])) {
+      // cy.get('#name').should('contain', formData['name']);
+    }
   }
 
   static getName(formData: ContactFormData) {

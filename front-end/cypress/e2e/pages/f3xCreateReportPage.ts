@@ -46,12 +46,4 @@ export class F3xCreateReportPage {
       new Date(formData['coverage_through_date'])
     );
   }
-
-  static clickSaveButton() {
-    cy.get("button[label='Save']").click();
-  }
-
-  static clickSaveAndContinueButton() {
-    cy.get("button[label='Save and continue']").click();
-  }
 }

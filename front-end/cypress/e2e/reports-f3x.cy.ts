@@ -16,7 +16,7 @@ describe('Manage reports', () => {
     ReportListPage.clickCreateButton();
     const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveButton();
+    PageUtils.clickButton('Save');
 
     cy.get('tr').should('contain', 'FORM 3X');
     cy.get('tr').should('contain', 'GENERAL (12G)');
@@ -33,7 +33,7 @@ describe('Manage reports', () => {
       },
     };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveButton();
+    PageUtils.clickButton('Save');
 
     cy.get('tr').should('contain', 'FORM 3X');
     cy.get('tr').should('contain', 'OCTOBER 20 (M10)');
@@ -49,7 +49,7 @@ describe('Manage reports', () => {
       },
     };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveButton();
+    PageUtils.clickButton('Save');
 
     cy.get('tr').should('contain', 'FORM 3X');
     cy.get('tr').should('contain', 'RUNOFF (30R)');
@@ -66,7 +66,7 @@ describe('Manage reports', () => {
       },
     };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveButton();
+    PageUtils.clickButton('Save');
 
     cy.get('tr').should('contain', 'FORM 3X');
     cy.get('tr').should('contain', 'JANUARY 31 (YE)');
@@ -78,9 +78,9 @@ describe('Manage reports', () => {
     ReportListPage.clickCreateButton();
     const formData1 = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData1);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
     F3xCashOnHandPage.enterFormData(cohFormData);
-    F3xCashOnHandPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save & continue');
     ReportListPage.goToPage();
 
     // Create report #2
@@ -104,7 +104,7 @@ describe('Manage reports', () => {
     ReportListPage.clickCreateButton();
     const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveButton();
+    PageUtils.clickButton('Save');
 
     // Start second report and check to see if report code disabled
     ReportListPage.clickCreateButton();
@@ -115,10 +115,10 @@ describe('Manage reports', () => {
     ReportListPage.clickCreateButton();
     const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
 
     F3xCashOnHandPage.enterFormData(cohFormData);
-    F3xCashOnHandPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save & continue');
     cy.contains('Cash on hand').should('exist');
   });
 
@@ -126,28 +126,28 @@ describe('Manage reports', () => {
     ReportListPage.clickCreateButton();
     const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
   });
 
   xit('Check values on the Detail Summary Page', () => {
     ReportListPage.clickCreateButton();
     const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
   });
 
   it('Create a report level memo', () => {
     ReportListPage.clickCreateButton();
     const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
 
     // Enter the memo text
     PageUtils.clickSidebarSection('REVIEW A REPORT');
     PageUtils.clickSidebarItem('Add a report level memo');
     const memoText = PageUtils.randomString(30);
     F3xReportLevelMemoPage.enterFormData(memoText);
-    F3xReportLevelMemoPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save & continue');
 
     // Verify it is still there when we go back to the page
     PageUtils.clickSidebarSection('REVIEW A REPORT');
@@ -159,13 +159,13 @@ describe('Manage reports', () => {
     ReportListPage.clickCreateButton();
     const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
   });
 
   xit('Submit a report', () => {
     ReportListPage.clickCreateButton();
     const formData = { ...defaultFormData };
     F3xCreateReportPage.enterFormData(formData);
-    F3xCreateReportPage.clickSaveAndContinueButton();
+    PageUtils.clickButton('Save and continue');
   });
 });

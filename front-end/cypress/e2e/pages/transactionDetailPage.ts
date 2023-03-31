@@ -34,5 +34,17 @@ export class TransactionDetailPage {
     }
   }
 
-  static assertFormData(formData: ScheduleFormData) {}
+  static assertFormData(formData: ScheduleFormData) {
+    cy.get('#date').should('have.value', PageUtils.dateToString(formData['date_received']));
+    cy.get('#memo_code').should('have.attr', 'aria-checked', formData['memo_code'] ? 'true' : 'false');
+    cy.get('#purpose_description').should('have.value', formData['purpose_description']);
+    cy.get('#memo_text_input').should('have.value', formData['memo_text']);
+
+    const amount = formData['amount'] < 0 ? '-$' + -1 * formData['amount'] : '$' + formData['amount'];
+    cy.get('#amount').should('have.value', amount);
+
+    if (formData['category_code']) {
+      cy.get('[inputid="category_code"]').should('contain', formData['category_code']);
+    }
+  }
 }
