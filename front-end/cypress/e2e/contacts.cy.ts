@@ -14,10 +14,10 @@ describe('Manage contacts', () => {
     const formData = { ...defaultFormData };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('a', ContactListPage.getName(formData)).should('exist');
+    cy.contains('a', `${formData['last_name']}, ${formData['first_name']}`).should('exist');
 
     // Edit new contact and verify form conains correct values.
-    PageUtils.clickLink(ContactListPage.getName(formData));
+    PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(formData);
@@ -34,10 +34,10 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('a', ContactListPage.getName(formData)).should('exist');
+    cy.contains('a', `${formData['last_name']}, ${formData['first_name']}`).should('exist');
 
     // Edit new contact and verify form conains correct values.
-    PageUtils.clickLink(ContactListPage.getName(formData));
+    PageUtils.clickLink(`${formData['last_name']}, ${formData['first_name']}`);
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Candidate');
     ContactListPage.assertFormData(formData);
@@ -54,10 +54,10 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('a', ContactListPage.getName(formData)).should('exist');
+    cy.contains('a', formData['name']).should('exist');
 
     // Edit new contact and verify form conains correct values.
-    PageUtils.clickLink(ContactListPage.getName(formData));
+    PageUtils.clickLink(formData['name']);
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formData);
@@ -74,10 +74,10 @@ describe('Manage contacts', () => {
     };
     ContactListPage.enterFormData(formData);
     PageUtils.clickButton('Save');
-    cy.contains('a', ContactListPage.getName(formData)).should('exist');
+    cy.contains('a', formData['name']).should('exist');
 
     // Edit new contact and verify form conains correct values.
-    PageUtils.clickLink(ContactListPage.getName(formData));
+    PageUtils.clickLink(formData['name']);
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formData);

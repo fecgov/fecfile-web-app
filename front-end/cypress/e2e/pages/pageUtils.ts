@@ -1,6 +1,6 @@
 export const currentYear = new Date().getFullYear();
 
-export abstract class PageUtils {
+export class PageUtils {
   static dropdownSetValue(querySelector: string, value: string, alias = '') {
     alias = PageUtils.getAlias(alias);
 

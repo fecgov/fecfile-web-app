@@ -149,13 +149,6 @@ export class ContactListPage {
     }
   }
 
-  static getName(formData: ContactFormData) {
-    if (formData['contact_type'] === 'Individual' || formData['contact_type'] === 'Candidate') {
-      return `${formData['last_name']}, ${formData['first_name']}`;
-    }
-    return formData['name'];
-  }
-
   //Deletes all reports belonging to the logged-in committee
   static deleteAllContacts() {
     cy.getCookie('csrftoken').then((cookie) => {

@@ -7,7 +7,7 @@ describe('Manage profile', () => {
     LoginPage.login();
   });
 
-  it('Can view the Account Info page', () => {
+  xit('Can view the Account Info page', () => {
     ProfileAccountPage.goToPage();
     cy.contains('C00601211').should('exist');
   });

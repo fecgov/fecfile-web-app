@@ -9,25 +9,25 @@ import '@cypress-audit/lighthouse/commands';
  * existing one and saves the authentication token
  * for use in later API calls.
  */
-export function login() {
-  const sessionDuration = 10; //Login session duration in minutes
-  const intervalString = getLoginIntervalString(sessionDuration);
-  cy.session(
-    `Login Through ${intervalString}`,
-    () => {
-      //apiLogin();
-      legacyLogin();
-    },
-    {
-      cacheAcrossSpecs: true,
-    }
-  );
+// export function login() {
+//   const sessionDuration = 10; //Login session duration in minutes
+//   const intervalString = getLoginIntervalString(sessionDuration);
+//   cy.session(
+//     `Login Through ${intervalString}`,
+//     () => {
+//       //apiLogin();
+//       legacyLogin();
+//     },
+//     {
+//       cacheAcrossSpecs: true,
+//     }
+//   );
 
-  //Retrieve the AUTH TOKEN from the created/restored session
-  cy.then(() => {
-    Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
-  });
-}
+//   //Retrieve the AUTH TOKEN from the created/restored session
+//   cy.then(() => {
+//     Cypress.env({ AUTH_TOKEN: retrieveAuthToken() });
+//   });
+// }
 
 /**
  * getLoginIntervalString
@@ -45,68 +45,68 @@ export function login() {
  * @returns         `HH:MM` where the minute mark is a
  *                   multiple of sessionDur.
  */
-function getLoginIntervalString(sessionDur: number): string {
-  const datetime = new Date();
-  let hour: number = datetime.getHours();
-  let minute: number = sessionDur * (Math.floor(datetime.getMinutes() / sessionDur) + 1);
-  if (minute >= 60) {
-    minute = 0;
-    hour += 1;
-  }
-  if (minute !== 0) {
-    return `${hour}:${minute}`;
-  } else {
-    return `${hour}:00`;
-  }
-}
+// function getLoginIntervalString(sessionDur: number): string {
+//   const datetime = new Date();
+//   let hour: number = datetime.getHours();
+//   let minute: number = sessionDur * (Math.floor(datetime.getMinutes() / sessionDur) + 1);
+//   if (minute >= 60) {
+//     minute = 0;
+//     hour += 1;
+//   }
+//   if (minute !== 0) {
+//     return `${hour}:${minute}`;
+//   } else {
+//     return `${hour}:00`;
+//   }
+// }
 
-function legacyLogin() {
-  //Dummy login information
-  const email = Cypress.env('EMAIL');
-  const committeeID = Cypress.env('COMMITTEE_ID');
-  const testPassword = Cypress.env('PASSWORD');
+// function legacyLogin() {
+//   //Dummy login information
+//   const email = Cypress.env('EMAIL');
+//   const committeeID = Cypress.env('COMMITTEE_ID');
+//   const testPassword = Cypress.env('PASSWORD');
 
-  //login page form-fields' id's (or classes where elements have no id's)
-  const fieldEmail = '#login-email-id';
-  const fieldCommittee = '#login-committee-id';
-  const fieldPassword = '#login-password';
+//   //login page form-fields' id's (or classes where elements have no id's)
+//   const fieldEmail = '#login-email-id';
+//   const fieldCommittee = '#login-committee-id';
+//   const fieldPassword = '#login-password';
 
-  cy.fixture('FEC_Get_Committee_Account').then((response_body) => {
-    response_body.results[0].committee_id = Cypress.env('COMMITTEE_ID');
-    const response = {
-      body: response_body,
-      statusCode: 200,
-    };
+//   cy.fixture('FEC_Get_Committee_Account').then((response_body) => {
+//     response_body.results[0].committee_id = Cypress.env('COMMITTEE_ID');
+//     const response = {
+//       body: response_body,
+//       statusCode: 200,
+//     };
 
-    cy.intercept(
-      'GET',
-      `http://localhost:8080/api/v1/openfec/${response_body.results[0].committee_id}/committee/`,
-      response
-    ).as('GetCommitteeAccount');
-  });
+//     cy.intercept(
+//       'GET',
+//       `http://localhost:8080/api/v1/openfec/${response_body.results[0].committee_id}/committee/`,
+//       response
+//     ).as('GetCommitteeAccount');
+//   });
 
-  cy.visit('/');
+//   cy.visit('/');
 
-  cy.get(fieldEmail).type(email);
-  cy.get(fieldCommittee).type(committeeID);
-  cy.get(fieldPassword).type(testPassword).type('{enter}');
-  cy.wait('@GetCommitteeAccount');
-}
+//   cy.get(fieldEmail).type(email);
+//   cy.get(fieldCommittee).type(committeeID);
+//   cy.get(fieldPassword).type(testPassword).type('{enter}');
+//   cy.wait('@GetCommitteeAccount');
+// }
 
-export function logout() {
-  cy.get('.p-menubar').find('.p-menuitem-link').contains('Profile').click();
-  cy.get('.p-menuitem-text').contains('Logout').click();
-}
+// export function logout() {
+//   cy.get('.p-menubar').find('.p-menuitem-link').contains('Profile').click();
+//   cy.get('.p-menuitem-text').contains('Logout').click();
+// }
 
-function retrieveAuthToken() {
-  const storedData = localStorage.getItem('fecfile_online_userLoginData');
-  const loginData: JSON = JSON.parse(storedData);
-  return 'JWT ' + loginData.token;
-}
+// function retrieveAuthToken() {
+//   const storedData = localStorage.getItem('fecfile_online_userLoginData');
+//   const loginData: JSON = JSON.parse(storedData);
+//   return 'JWT ' + loginData.token;
+// }
 
-export function getAuthToken() {
-  return Cypress.env('AUTH_TOKEN');
-}
+// export function getAuthToken() {
+//   return Cypress.env('AUTH_TOKEN');
+// }
 
 function safeString(stringVal: string | number | undefined | null): string {
   if (stringVal === null || stringVal === undefined) {
@@ -135,54 +135,54 @@ export function overwrite(prevSubject: any, stringVal: string | number) {
   return safeType(prevSubject, '{selectall}{del}' + outString);
 }
 
-export function dropdownSetValue(dropdown: string, value: string, wait: boolean = true) {
-  cy.get(dropdown).click();
-  cy.contains('p-dropdownitem', value).should('be.visible');
-  cy.contains('p-dropdownitem', value).click({ scrollBehavior: 'top' });
-  if (wait) {
-    cy.shortWait();
-  }
-}
+// export function dropdownSetValue(dropdown: string, value: string, wait: boolean = true) {
+//   cy.get(dropdown).click();
+//   cy.contains('p-dropdownitem', value).should('be.visible');
+//   cy.contains('p-dropdownitem', value).click({ scrollBehavior: 'top' });
+//   if (wait) {
+//     cy.shortWait();
+//   }
+// }
 
-export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
-  const currentDate: Date = new Date();
-  cy.get(calendar).as('calendarElement').click();
-  cy.shortWait();
+// export function calendarSetValue(calendar: string, dateObj: Date = new Date()) {
+//   const currentDate: Date = new Date();
+//   cy.get(calendar).as('calendarElement').click();
+//   cy.shortWait();
 
-  //    Choose the year
-  cy.get('@calendarElement').find('.p-datepicker-year').click({ force: true });
-  cy.shortWait();
+//   //    Choose the year
+//   cy.get('@calendarElement').find('.p-datepicker-year').click({ force: true });
+//   cy.shortWait();
 
-  const year: number = dateObj.getFullYear();
-  const currentYear: number = currentDate.getFullYear();
-  const decadeStart: number = currentYear - (currentYear % 10);
-  const decadeEnd: number = decadeStart + 9;
-  if (year < decadeStart) {
-    for (let i = 0; i < decadeStart - year; i += 10) {
-      cy.get('@calendarElement').find('.p-datepicker-prev').click({ force: true });
-      cy.shortWait();
-    }
-  }
-  if (year > decadeEnd) {
-    for (let i = 0; i < year - decadeEnd; i += 10) {
-      cy.get('@calendarElement').find('.p-datepicker-next').click({ force: true });
-      cy.shortWait();
-    }
-  }
-  cy.get('@calendarElement').find('.p-yearpicker-year').contains(year.toString()).click({ force: true });
-  cy.shortWait();
+//   const year: number = dateObj.getFullYear();
+//   const currentYear: number = currentDate.getFullYear();
+//   const decadeStart: number = currentYear - (currentYear % 10);
+//   const decadeEnd: number = decadeStart + 9;
+//   if (year < decadeStart) {
+//     for (let i = 0; i < decadeStart - year; i += 10) {
+//       cy.get('@calendarElement').find('.p-datepicker-prev').click({ force: true });
+//       cy.shortWait();
+//     }
+//   }
+//   if (year > decadeEnd) {
+//     for (let i = 0; i < year - decadeEnd; i += 10) {
+//       cy.get('@calendarElement').find('.p-datepicker-next').click({ force: true });
+//       cy.shortWait();
+//     }
+//   }
+//   cy.get('@calendarElement').find('.p-yearpicker-year').contains(year.toString()).click({ force: true });
+//   cy.shortWait();
 
-  //    Choose the month
-  const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const Month: string = Months[dateObj.getMonth()];
-  cy.get('@calendarElement').find('.p-monthpicker-month').contains(Month).click({ force: true });
-  cy.shortWait();
+//   //    Choose the month
+//   const Months: Array<string> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+//   const Month: string = Months[dateObj.getMonth()];
+//   cy.get('@calendarElement').find('.p-monthpicker-month').contains(Month).click({ force: true });
+//   cy.shortWait();
 
-  //    Choose the day
-  const Day: string = dateObj.getDate().toString();
-  cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(Day).click({ force: true });
-  cy.shortWait();
-}
+//   //    Choose the day
+//   const Day: string = dateObj.getDate().toString();
+//   cy.get('@calendarElement').find('td').find('span').not('.p-disabled').parent().contains(Day).click({ force: true });
+//   cy.shortWait();
+// }
 
 export function runLighthouse(directory: string, filename: string) {
   cy.lighthouse(
@@ -209,20 +209,20 @@ export function runLighthouse(directory: string, filename: string) {
   });
 }
 
-// shortWait() is appropriate for waiting for the UI to update after changing a field
-export function shortWait(): void {
-  return;
-  cy.wait(100);
-}
+// // shortWait() is appropriate for waiting for the UI to update after changing a field
+// export function shortWait(): void {
+//   return;
+//   cy.wait(100);
+// }
 
-// medWait() is appropriate for waiting for loading a page or a table
-export function medWait(): void {
-  return;
-  cy.wait(250);
-}
+// // medWait() is appropriate for waiting for loading a page or a table
+// export function medWait(): void {
+//   return;
+//   cy.wait(250);
+// }
 
-// longWait() is appropriate for waiting on a database call such as saving a form
-export function longWait(): void {
-  return;
-  cy.wait(400);
-}
+// // longWait() is appropriate for waiting on a database call such as saving a form
+// export function longWait(): void {
+//   return;
+//   cy.wait(400);
+// }

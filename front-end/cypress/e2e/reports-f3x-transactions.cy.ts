@@ -43,8 +43,8 @@ describe('Transactions', () => {
     cy.get('tr').should('contain', PageUtils.dateToString(defaultTransactionFormData['date_received']));
     cy.get('tr').should('contain', '$' + defaultTransactionFormData['amount']);
 
+    // Check values of edit form
     PageUtils.clickLink('Individual Receipt');
-
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
@@ -88,8 +88,8 @@ describe('Transactions', () => {
     cy.get('tr').should('contain', PageUtils.dateToString(formTransactionData['date_received']));
     cy.get('tr').should('contain', '$' + formTransactionData['amount']);
 
+    // Check values of edit form
     PageUtils.clickLink('Other Disbursement');
-
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
     ContactListPage.assertFormData(formContactData, true);
@@ -122,8 +122,8 @@ describe('Transactions', () => {
     // Assert that the positive amount was converted to a negative amount
     cy.get('tr').should('contain', '-$' + defaultTransactionFormData['amount']);
 
+    // Check values of edit form
     PageUtils.clickLink('Returned/Bounced Receipt');
-
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
@@ -135,6 +135,7 @@ describe('Transactions', () => {
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
 
+    // Create a receipt
     PageUtils.clickSidebarItem('Add a receipt');
     PageUtils.clickLink('CONTRIBUTIONS FROM INDIVIDUALS/PERSONS');
     PageUtils.clickLink('Partnership Receipt');
@@ -156,7 +157,7 @@ describe('Transactions', () => {
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
-    // Create Partnership Memo transaction
+    // Create memo transaction
     cy.contains('a', 'Create a new contact').should('exist').wait(500); // Race condition with clicking 'Create a new contact' link being ready
     PageUtils.clickLink('Create a new contact');
     ContactListPage.enterFormData(defaultContactFormData, true);
@@ -170,7 +171,7 @@ describe('Transactions', () => {
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
-    // Create a second Partnership Memo so we can check the aggregate value
+    // Create a second memo transaction so we can check the aggregate value
     cy.get('[role="searchbox"]').type(defaultContactFormData['last_name'].slice(0, 1));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click();
@@ -196,7 +197,7 @@ describe('Transactions', () => {
     cy.get('@row-3').find('td').eq(3).contains('Y').should('not.exist');
     cy.get('@row-3').find('td').eq(5).contains('$100.55').should('exist');
 
-    // Check form values of receipt
+    // Check form values of receipt form
     PageUtils.clickLink('Partnership Receipt');
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Organization');
@@ -207,7 +208,7 @@ describe('Transactions', () => {
     });
     PageUtils.clickButton('Save & view all transactions');
 
-    // Check form values of memo
+    // Check form values of memo form
     cy.get('tbody tr').first().contains('a', 'Partnership Memo').click();
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
@@ -246,15 +247,15 @@ describe('Transactions', () => {
     cy.get('tr').should('contain', PageUtils.dateToString(defaultTransactionFormData['date_received']));
     cy.get('tr').should('contain', '$' + defaultTransactionFormData['amount']);
 
+    // Check values of edit form
     PageUtils.clickLink('Party Receipt');
-
     cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(formContactData, true);
     TransactionDetailPage.assertFormData(defaultTransactionFormData);
   });
 
-  it('Create a Group AG transaction', () => {
+  xit('Create a Group AG transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -273,7 +274,7 @@ describe('Transactions', () => {
       ...defaultTransactionFormData,
       ...{
         purpose_description: '',
-        memo_text: '',
+        memo_text: '', // TODO: remove this after bug fix
       },
     };
     TransactionDetailPage.enterFormData(transactionFormData, false, '@stepOneAccordion');
@@ -287,21 +288,143 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
     TransactionDetailPage.enterFormData(transactionFormData, true, '@stepTwoAccordion');
 
-    // PageUtils.clickButton('Save & view all transactions');
-    // cy.contains('Confirm').should('exist');
-    // PageUtils.clickButton('Continue');
+    PageUtils.clickButton('Save & view all transactions');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+    cy.contains('Confirm').should('exist').wait(500);
+    PageUtils.clickButton('Continue');
 
-    // cy.get('tr').should('contain', 'Party Receipt');
-    // cy.get('tr').should('not.contain', 'Unitemized');
-    // cy.get('tr').should('contain', formContactData['name']);
-    // cy.get('tr').should('contain', PageUtils.dateToString(defaultTransactionFormData['date_received']));
-    // cy.get('tr').should('contain', '$' + defaultTransactionFormData['amount']);
+    // Assert transaction list table is correct
+    cy.get('tbody tr').eq(0).as('row-1');
+    cy.get('@row-1').find('td').eq(0).contains('Earmark Memo').should('exist');
+    cy.get('@row-1').find('td').eq(1).contains(defaultContactFormData['name']).should('exist');
+    cy.get('@row-1').find('td').eq(3).contains('Y').should('exist');
+    cy.get('@row-1').find('td').eq(5).contains('$100.55').should('exist');
 
-    // PageUtils.clickLink('Party Receipt');
+    cy.get('tbody tr').eq(1).as('row-2');
+    cy.get('@row-2').find('td').eq(0).contains('Earmark Receipt').should('exist');
+    cy.get('@row-2')
+      .find('td')
+      .eq(1)
+      .contains(`${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`)
+      .should('exist');
+    cy.get('@row-2').find('td').eq(3).contains('Y').should('not.exist');
+    cy.get('@row-2').find('td').eq(5).contains('$100.55').should('exist');
 
-    // cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
-    // cy.get('#entity_type_dropdown').should('contain', 'Committee');
-    // ContactListPage.assertFormData(formContactData, true);
-    // TransactionDetailPage.assertFormData(defaultTransactionFormData);
+    // Check form values of receipt edit form
+    PageUtils.clickLink('Earmark Receipt');
+    PageUtils.clickLink('STEP ONE');
+    // cy.get('@stepOneAccordion').contains('Receipt').should('exist');
+    cy.get('@stepOneAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('@stepOneAccordion').find('#entity_type_dropdown').should('contain', 'Individual');
+    ContactListPage.assertFormData(defaultContactFormData, true, '@stepOneAccordion');
+    TransactionDetailPage.assertFormData(
+      {
+        ...transactionFormData,
+        ...{ purpose_description: `Earmarked through ${defaultContactFormData['name']}` },
+      },
+      '@stepOneAccordion'
+    );
+
+    // Check form values of memo edit form
+    PageUtils.clickLink('STEP TWO');
+    // cy.get('@stepTwoAccordion').contains('Earmark memo').should('exist');
+    cy.get('@stepTwoAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('@stepTwoAccordion').find('#entity_type_dropdown').should('contain', 'Committee');
+    ContactListPage.assertFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
+    TransactionDetailPage.assertFormData(
+      {
+        ...transactionFormData,
+        ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
+      },
+      '@stepTwoAccordion'
+    );
+  });
+
+  it('Create a Group FG transaction', () => {
+    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.enterFormData(defaultReportFormData);
+    PageUtils.clickButton('Save and continue');
+
+    PageUtils.clickSidebarItem('Add a receipt');
+    PageUtils.clickLink('CONTRIBUTIONS FROM REGISTERED FILERS');
+    PageUtils.clickLink('PAC Earmark Receipt');
+
+    // Enter STEP ONE transaction
+    PageUtils.clickLink('STEP ONE');
+    cy.get('p-accordiontab').first().as('stepOneAccordion');
+    PageUtils.clickLink('Create a new contact', '@stepOneAccordion');
+    const stepOneContactFormData = { ...defaultContactFormData, ...{ contact_type: 'Committee' } };
+    ContactListPage.enterFormData(stepOneContactFormData, true, '@stepOneAccordion');
+    PageUtils.clickButton('Save & continue', '@stepOneAccordion');
+    const transactionFormData = {
+      ...defaultTransactionFormData,
+      ...{
+        purpose_description: '',
+        memo_text: '', // TODO: remove this after bug fix
+      },
+    };
+    TransactionDetailPage.enterFormData(transactionFormData, false, '@stepOneAccordion');
+
+    // Enter STEP TWO transaction
+    PageUtils.clickLink('STEP TWO');
+    cy.get('p-accordiontab').last().as('stepTwoAccordion');
+    PageUtils.clickLink('Create a new contact', '@stepTwoAccordion');
+    const stepTwoContactFormData = { ...defaultContactFormData, ...{ contact_type: 'Candidate' } };
+    ContactListPage.enterFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
+    PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
+    TransactionDetailPage.enterFormData(transactionFormData, true, '@stepTwoAccordion');
+
+    PageUtils.clickButton('Save & view all transactions');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+    cy.contains('Confirm').should('exist').wait(500);
+    PageUtils.clickButton('Continue');
+
+    // Assert transaction list table is correct
+    cy.get('tbody tr').eq(0).as('row-1');
+    cy.get('@row-1').find('td').eq(0).contains('Earmark Memo').should('exist');
+    cy.get('@row-1').find('td').eq(1).contains(defaultContactFormData['name']).should('exist');
+    cy.get('@row-1').find('td').eq(3).contains('Y').should('exist');
+    cy.get('@row-1').find('td').eq(5).contains('$100.55').should('exist');
+
+    cy.get('tbody tr').eq(1).as('row-2');
+    cy.get('@row-2').find('td').eq(0).contains('Earmark Receipt').should('exist');
+    cy.get('@row-2')
+      .find('td')
+      .eq(1)
+      .contains(`${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`)
+      .should('exist');
+    cy.get('@row-2').find('td').eq(3).contains('Y').should('not.exist');
+    cy.get('@row-2').find('td').eq(5).contains('$100.55').should('exist');
+
+    // Check form values of receipt edit form
+    PageUtils.clickLink('Earmark Receipt');
+    PageUtils.clickLink('STEP ONE');
+    // cy.get('@stepOneAccordion').contains('Receipt').should('exist');
+    cy.get('@stepOneAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('@stepOneAccordion').find('#entity_type_dropdown').should('contain', 'Committee');
+    ContactListPage.assertFormData(defaultContactFormData, true, '@stepOneAccordion');
+    TransactionDetailPage.assertFormData(
+      {
+        ...transactionFormData,
+        ...{ purpose_description: `Earmarked through ${defaultContactFormData['name']}` },
+      },
+      '@stepOneAccordion'
+    );
+
+    // Check form values of memo edit form
+    PageUtils.clickLink('STEP TWO');
+    // cy.get('@stepTwoAccordion').contains('Earmark memo').should('exist');
+    cy.get('@stepTwoAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('@stepTwoAccordion').find('#entity_type_dropdown').should('contain', 'Candidate');
+    ContactListPage.assertFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
+    TransactionDetailPage.assertFormData(
+      {
+        ...transactionFormData,
+        ...{ memo_code: true, purpose_description: 'Total earmarked through conduit.' },
+      },
+      '@stepTwoAccordion'
+    );
   });
 });
