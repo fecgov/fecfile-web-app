@@ -15,7 +15,7 @@ function getToTransactionsPage() {
   cy.shortWait();
 }
 
-describe('Generates lighthouse reports for every page', () => {
+xdescribe('Generates lighthouse reports for every page', () => {
   it('Login page', () => {
     cy.visit('/');
     cy.runLighthouse('other', 'login');

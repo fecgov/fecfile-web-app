@@ -13,7 +13,7 @@ describe('Transactions', () => {
     ReportListPage.goToPage();
   });
 
-  xit('Create a Group A transaction', () => {
+  xit('Create a Group A transaction with lookup', () => {
     // Create an individual contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton('New');
@@ -96,7 +96,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(formTransactionData);
   });
 
-  xit('Create a Group C transaction', () => {
+  xit('Create a Group C transaction with negative only amount', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -130,7 +130,7 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData({ ...defaultTransactionFormData, ...{ amount: -100.55 } });
   });
 
-  xit('Create a Group D transaction and memos', () => {
+  xit('Create a Group D transaction and memos with correct aggregate values', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
     PageUtils.clickButton('Save and continue');
@@ -265,24 +265,27 @@ describe('Transactions', () => {
 
     // Enter STEP ONE transaction
     PageUtils.clickLink('STEP ONE');
-    PageUtils.clickLink('Create a new contact');
-    ContactListPage.enterFormData(defaultContactFormData, true);
-    PageUtils.clickButton('Save & continue');
+    cy.get('p-accordiontab').first().as('stepOneAccordion');
+    PageUtils.clickLink('Create a new contact', '@stepOneAccordion');
+    ContactListPage.enterFormData(defaultContactFormData, true, '@stepOneAccordion');
+    PageUtils.clickButton('Save & continue', '@stepOneAccordion');
     const transactionFormData = {
       ...defaultTransactionFormData,
       ...{
         purpose_description: '',
+        memo_text: '',
       },
     };
-    TransactionDetailPage.enterFormData(transactionFormData);
+    TransactionDetailPage.enterFormData(transactionFormData, false, '@stepOneAccordion');
 
     // Enter STEP TWO transaction
     PageUtils.clickLink('STEP TWO');
-    PageUtils.clickLink('Create a new contact');
+    cy.get('p-accordiontab').last().as('stepTwoAccordion');
+    PageUtils.clickLink('Create a new contact', '@stepTwoAccordion');
     const stepTwoContactFormData = { ...defaultContactFormData, ...{ contact_type: 'Committee' } };
-    ContactListPage.enterFormData(stepTwoContactFormData, true);
-    PageUtils.clickButton('Save & continue');
-    TransactionDetailPage.enterFormData(transactionFormData);
+    ContactListPage.enterFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
+    PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
+    TransactionDetailPage.enterFormData(transactionFormData, true, '@stepTwoAccordion');
 
     // PageUtils.clickButton('Save & view all transactions');
     // cy.contains('Confirm').should('exist');

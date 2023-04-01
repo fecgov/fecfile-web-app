@@ -54,93 +54,98 @@ export class ContactListPage {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
   }
 
-  static enterFormData(formData: ContactFormData, readOnlyContactType = false, alias = 'body') {
+  static enterFormData(formData: ContactFormData, readOnlyContactType = false, alias = '') {
+    alias = PageUtils.getAlias(alias);
+
     if (!readOnlyContactType) {
-      PageUtils.dropdownSetValue('#entity_type_dropdown', formData['contact_type']);
+      PageUtils.dropdownSetValue('#entity_type_dropdown', formData['contact_type'], alias);
     }
 
     if (formData['contact_type'] == 'Individual' || formData['contact_type'] == 'Candidate') {
       //Contact
-      cy.get('#last_name').safeType(formData['last_name']);
-      cy.get('#first_name').safeType(formData['first_name']);
-      cy.get('#middle_name').safeType(formData['middle_name']);
-      cy.get('#prefix').safeType(formData['prefix']);
-      cy.get('#suffix').safeType(formData['suffix']);
+      cy.get(alias).find('#last_name').safeType(formData['last_name']);
+      cy.get(alias).find('#first_name').safeType(formData['first_name']);
+      cy.get(alias).find('#middle_name').safeType(formData['middle_name']);
+      cy.get(alias).find('#prefix').safeType(formData['prefix']);
+      cy.get(alias).find('#suffix').safeType(formData['suffix']);
 
       //Employer
-      cy.get('#employer').safeType(formData['employer']);
-      cy.get('#occupation').safeType(formData['occupation']);
+      cy.get(alias).find('#employer').safeType(formData['employer']);
+      cy.get(alias).find('#occupation').safeType(formData['occupation']);
     }
 
     //Address
-    cy.get('#street_1').safeType(formData['street_1']);
-    cy.get('#street_2').safeType(formData['street_2']);
-    cy.get('#city').safeType(formData['city']);
-    cy.get('#zip').safeType(formData['zip']);
-    cy.get('#telephone').safeType(formData['phone']);
-    PageUtils.dropdownSetValue("p-dropdown[formcontrolname='state']", formData['state']);
+    cy.get(alias).find('#street_1').safeType(formData['street_1']);
+    cy.get(alias).find('#street_2').safeType(formData['street_2']);
+    cy.get(alias).find('#city').safeType(formData['city']);
+    cy.get(alias).find('#zip').safeType(formData['zip']);
+    cy.get(alias).find('#telephone').safeType(formData['phone']);
+    PageUtils.dropdownSetValue("p-dropdown[formcontrolname='state']", formData['state'], alias);
 
     //Candidate-exclusive fields
     if (formData['contact_type'] == 'Candidate') {
-      cy.get('#candidate_id').safeType(formData['candidate_id']);
+      cy.get(alias).find('#candidate_id').safeType(formData['candidate_id']);
 
-      PageUtils.dropdownSetValue("p-dropdown[formcontrolname='candidate_office']", formData['candidate_office']);
+      PageUtils.dropdownSetValue("p-dropdown[formcontrolname='candidate_office']", formData['candidate_office'], alias);
 
       if (formData['candidate_office'] != 'Presidential') {
-        PageUtils.dropdownSetValue("p-dropdown[formcontrolname='candidate_state']", formData['candidate_state']);
+        PageUtils.dropdownSetValue("p-dropdown[formcontrolname='candidate_state']", formData['candidate_state'], alias);
 
         if (formData['candidate_office'] == 'House') {
           PageUtils.dropdownSetValue(
             "p-dropdown[formcontrolname='candidate_district']",
-            formData['candidate_district']
+            formData['candidate_district'],
+            alias
           );
         }
       }
     }
 
     if (formData['contact_type'] == 'Committee') {
-      cy.get('#committee_id').safeType(formData['committee_id']);
-      cy.get('#name').safeType(formData['name']);
+      cy.get(alias).find('#committee_id').safeType(formData['committee_id']);
+      cy.get(alias).find('#name').safeType(formData['name']);
     }
 
     if (formData['contact_type'] == 'Organization') {
-      cy.get('#name').safeType(formData['name']);
+      cy.get(alias).find('#name').safeType(formData['name']);
     }
   }
 
-  static assertFormData(formData: ContactFormData, excludeCountry = false) {
+  static assertFormData(formData: ContactFormData, excludeCountry = false, alias = '') {
+    alias = PageUtils.getAlias(alias);
+
     if (['Individual', 'Candidate'].includes(formData['contact_type'])) {
-      cy.get('#last_name').should('have.value', formData['last_name']);
-      cy.get('#first_name').should('have.value', formData['first_name']);
-      cy.get('#middle_name').should('have.value', formData['middle_name']);
-      cy.get('#prefix').should('have.value', formData['prefix']);
-      cy.get('#suffix').should('have.value', formData['suffix']);
-      cy.get('#employer').should('have.value', formData['employer']);
-      cy.get('#occupation').should('have.value', formData['occupation']);
+      cy.get(alias).find('#last_name').should('have.value', formData['last_name']);
+      cy.get(alias).find('#first_name').should('have.value', formData['first_name']);
+      cy.get(alias).find('#middle_name').should('have.value', formData['middle_name']);
+      cy.get(alias).find('#prefix').should('have.value', formData['prefix']);
+      cy.get(alias).find('#suffix').should('have.value', formData['suffix']);
+      cy.get(alias).find('#employer').should('have.value', formData['employer']);
+      cy.get(alias).find('#occupation').should('have.value', formData['occupation']);
     }
 
     if (!excludeCountry) {
-      cy.get('[inputid="country"]').should('contain', formData['country']);
+      cy.get(alias).find('[inputid="country"]').should('contain', formData['country']);
     }
-    cy.get('#street_1').should('have.value', formData['street_1']);
-    cy.get('#street_2').should('have.value', formData['street_2']);
-    cy.get('#city').should('have.value', formData['city']);
-    cy.get('[inputid="state"]').should('contain', formData['state']);
-    cy.get('#zip').should('have.value', formData['zip']);
+    cy.get(alias).find('#street_1').should('have.value', formData['street_1']);
+    cy.get(alias).find('#street_2').should('have.value', formData['street_2']);
+    cy.get(alias).find('#city').should('have.value', formData['city']);
+    cy.get(alias).find('[inputid="state"]').should('contain', formData['state']);
+    cy.get(alias).find('#zip').should('have.value', formData['zip']);
 
     if (formData['contact_type'] === 'Candidate') {
-      // cy.get('#candidate_id').should('contain', formData['candidate_id']);
-      cy.get('[inputid="candidate_office"]').should('contain', formData['candidate_office']);
-      cy.get('[inputid="candidate_state"]').should('contain', formData['candidate_state']);
-      cy.get('[inputid="candidate_district"]').should('contain', formData['candidate_district']);
+      // cy.get(alias).find('#candidate_id').should('contain', formData['candidate_id']);
+      cy.get(alias).find('[inputid="candidate_office"]').should('contain', formData['candidate_office']);
+      cy.get(alias).find('[inputid="candidate_state"]').should('contain', formData['candidate_state']);
+      cy.get(alias).find('[inputid="candidate_district"]').should('contain', formData['candidate_district']);
     }
 
     if (formData['contact_type'] === 'Committee') {
-      // cy.get('#committee_id').should('contain', formData['committee_id']);
+      // cy.get(alias).find('#committee_id').should('contain', formData['committee_id']);
     }
 
     if (['Committee', 'Organization'].includes(formData['contact_type'])) {
-      // cy.get('#name').should('contain', formData['name']);
+      // cy.get(alias).find('#name').should('contain', formData['name']);
     }
   }
 

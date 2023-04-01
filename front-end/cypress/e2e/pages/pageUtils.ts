@@ -1,17 +1,21 @@
 export const currentYear = new Date().getFullYear();
 
 export abstract class PageUtils {
-  static dropdownSetValue(querySelector: string, value: string) {
+  static dropdownSetValue(querySelector: string, value: string, alias = '') {
+    alias = PageUtils.getAlias(alias);
+
     if (value) {
-      cy.get(querySelector).click();
+      cy.get(alias).find(querySelector).click();
       cy.contains('p-dropdownitem', value).should('be.visible');
       cy.contains('p-dropdownitem', value).click({ scrollBehavior: 'top' });
     }
   }
 
-  static calendarSetValue(calendar: string, dateObj: Date = new Date()) {
+  static calendarSetValue(calendar: string, dateObj: Date = new Date(), alias = '') {
+    alias = PageUtils.getAlias(alias);
+
     const currentDate: Date = new Date();
-    cy.get(calendar).as('calendarElement').click();
+    cy.get(alias).find(calendar).as('calendarElement').click();
 
     //    Choose the year
     cy.get('@calendarElement').find('.p-datepicker-year').click();
@@ -96,12 +100,23 @@ export abstract class PageUtils {
     cy.get('@menuItem').click({ force: true });
   }
 
-  static clickLink(name: string) {
-    cy.contains('a', name).click();
+  static getAlias(alias = ''): string {
+    // Create the alias to limit the scope of the query selectors
+    if (!alias) {
+      cy.get('body').as('body');
+      return '@body';
+    }
+    return alias;
   }
 
-  static clickButton(name: string) {
-    cy.contains('button', name).click();
+  static clickLink(name: string, alias = '') {
+    alias = PageUtils.getAlias(alias);
+    cy.get(alias).contains('a', name).click();
+  }
+
+  static clickButton(name: string, alias = '') {
+    alias = PageUtils.getAlias(alias);
+    cy.get(alias).contains('button', name).click();
   }
 
   static dateToString(date: Date) {

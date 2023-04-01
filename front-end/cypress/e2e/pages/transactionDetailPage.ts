@@ -19,32 +19,40 @@ export const defaultFormData: ScheduleFormData = {
 };
 
 export class TransactionDetailPage {
-  static enterFormData(formData: ScheduleFormData) {
-    PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData['date_received']);
+  static enterFormData(formData: ScheduleFormData, readOnlyAmount = false, alias = '') {
+    alias = PageUtils.getAlias(alias);
+
+    PageUtils.calendarSetValue('p-calendar[inputid="date"]', formData['date_received'], alias);
     if (formData['memo_code']) {
-      cy.get('p-checkbox[inputid="memo_code"]').click();
+      cy.get(alias).find('p-checkbox[inputid="memo_code"]').click();
     }
-    cy.get('input#amount').safeType(formData['amount']);
+    if (!readOnlyAmount) {
+      cy.get(alias).find('input#amount').safeType(formData['amount']);
+    }
     if (formData['purpose_description']) {
-      cy.get('textarea#purpose_description').safeType(formData['purpose_description']);
+      cy.get(alias).find('textarea#purpose_description').safeType(formData['purpose_description']);
     }
-    cy.get('textarea#memo_text_input').safeType(formData['memo_text']);
+    cy.get(alias).find('textarea#memo_text_input').safeType(formData['memo_text']);
     if (formData['category_code']) {
-      PageUtils.dropdownSetValue('[inputid="category_code"]', formData['category_code']);
+      PageUtils.dropdownSetValue('[inputid="category_code"]', formData['category_code'], alias);
     }
   }
 
-  static assertFormData(formData: ScheduleFormData) {
-    cy.get('#date').should('have.value', PageUtils.dateToString(formData['date_received']));
-    cy.get('#memo_code').should('have.attr', 'aria-checked', formData['memo_code'] ? 'true' : 'false');
-    cy.get('#purpose_description').should('have.value', formData['purpose_description']);
-    cy.get('#memo_text_input').should('have.value', formData['memo_text']);
+  static assertFormData(formData: ScheduleFormData, alias = '') {
+    alias = PageUtils.getAlias(alias);
+
+    cy.get(alias).find('#date').should('have.value', PageUtils.dateToString(formData['date_received']));
+    cy.get(alias)
+      .find('#memo_code')
+      .should('have.attr', 'aria-checked', formData['memo_code'] ? 'true' : 'false');
+    cy.get(alias).find('#purpose_description').should('have.value', formData['purpose_description']);
+    cy.get(alias).find('#memo_text_input').should('have.value', formData['memo_text']);
 
     const amount = formData['amount'] < 0 ? '-$' + -1 * formData['amount'] : '$' + formData['amount'];
-    cy.get('#amount').should('have.value', amount);
+    cy.get(alias).find('#amount').should('have.value', amount);
 
     if (formData['category_code']) {
-      cy.get('[inputid="category_code"]').should('contain', formData['category_code']);
+      cy.get(alias).find('[inputid="category_code"]').should('contain', formData['category_code']);
     }
   }
 }
