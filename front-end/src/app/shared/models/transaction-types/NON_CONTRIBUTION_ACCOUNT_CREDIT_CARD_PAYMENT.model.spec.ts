@@ -1,11 +1,11 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from './BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
+import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT } from './NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT.model';
 
-describe('BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
-  let transactionType: BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT;
+describe('NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT', () => {
+  let transactionType: NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT;
 
   beforeEach(() => {
-    transactionType = new BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT();
+    transactionType = new NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT();
   });
 
   it('should create an instance', () => {
@@ -14,16 +14,16 @@ describe('BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
     expect(transactionType.componentGroupId).toBe('D');
   });
 
-  xit('#factory() should return a SchBTransaction', () => {
+  it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SB29');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT
+      ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT
     );
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Non-contribution Account Refund');
+    expect(descrip).toBe('Non-Contribution Account - Credit Card: See Below');
   });
 });
