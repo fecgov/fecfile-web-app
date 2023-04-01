@@ -13,7 +13,6 @@ export class NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT extends SchBTransactio
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT
   );
   schema = schema;
-  override showAggregate = false;
   override defaultContactTypeOption = ContactTypes.INDIVIDUAL;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override subTransactionTypes = [ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO];
