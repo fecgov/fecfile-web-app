@@ -346,6 +346,7 @@ const unregisteredReceiptFromPerson: TransactionForm = {
   ...entityOrganization,
   fields: {
     ...memoFields,
+    ...purposeDescriptionFieldsRequired,
     ...contributionFields,
   },
 };
@@ -1205,7 +1206,7 @@ export const schedANavTree: TransactionNavTree = {
     // 'Joint Fundraising Transfer - National Party Headquarters Buildings Account':
     //   jointFundraisingTransferNationalPartyHeadquartersBuildingsAccount,
   },
-  "REFUNDS":{
+  REFUNDS: {
     'Refund of Contribution to Unregistered Committee': refundOfContributionToUnregisteredCommittee,
   },
   OTHER: {

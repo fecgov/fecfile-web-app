@@ -60,29 +60,6 @@ function getLoginIntervalString(sessionDur: number): string {
   }
 }
 
-function apiLogin() {
-  const email = Cypress.env('EMAIL');
-  const committeeID = Cypress.env('COMMITTEE_ID');
-  const testPassword = Cypress.env('PASSWORD');
-
-  cy.request({
-    method: 'POST',
-    url: 'http://localhost:8080/api/v1/user/login/authenticate',
-    body: {
-      password: testPassword,
-      username: committeeID + email,
-    },
-  }).then((resp) => {
-    if (resp.body.token) {
-      cy.setCookie('user', `%22${resp.body.token}%22`);
-      Cypress.env({ AUTH_TOKEN: 'JWT ' + resp.body.token });
-      const loginData =
-        `{"is_allowed":true,"committee_id":"${committeeID}",` + `"email":"${email}","token":"${resp.body.token}"}`;
-      localStorage.setItem('fecfile_online_userLoginData', loginData);
-    }
-  });
-}
-
 function legacyLogin() {
   //Dummy login information
   const email = Cypress.env('EMAIL');
@@ -109,14 +86,11 @@ function legacyLogin() {
   });
 
   cy.visit('/');
-  cy.longWait();
 
   cy.get(fieldEmail).type(email);
   cy.get(fieldCommittee).type(committeeID);
   cy.get(fieldPassword).type(testPassword).type('{enter}');
-
   cy.wait('@GetCommitteeAccount');
-  cy.longWait();
 }
 
 export function logout() {
