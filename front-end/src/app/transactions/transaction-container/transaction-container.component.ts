@@ -34,7 +34,7 @@ export class TransactionContainerComponent implements OnInit, OnDestroy {
           this.transaction.filer_committee_id_number = committeeAccount.committee_id ?? 'C00000000';
         }
         if (this.transaction?.transactionType?.dependentChildTransactionType && this.transaction.children) {
-          this.transaction.children[0].filer_committee_id_number = committeeAccount.committee_id ?? 'C0000000';
+          this.transaction.children[0].filer_committee_id_number = committeeAccount.committee_id ?? 'C00000000';
         }
       });
   }

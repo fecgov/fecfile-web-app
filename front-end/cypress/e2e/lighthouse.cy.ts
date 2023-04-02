@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-describe('Generates lighthouse reports for every page', () => {
+describe('Generate lighthouse reports for every page', () => {
   xit('Login page', () => {
     cy.visit('/');
     cy.runLighthouse('other', 'login');
