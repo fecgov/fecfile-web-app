@@ -28,7 +28,8 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 })
 export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   abstract childFormProperties: string[];
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
@@ -43,8 +44,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(
-      this.childFormProperties));
+    this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
     if (this.transaction?.children) {
       this.childTransaction = this.transaction?.children[0];
       if (this.childTransaction.transactionType?.templateMap) {
@@ -52,22 +52,19 @@ export abstract class DoubleTransactionTypeBaseComponent
       } else {
         throw new Error('Fecfile: Template map not found for double transaction component');
       }
-      TransactionFormUtils.onInit(
-        this,
-        this.childForm,
-        this.childTransaction,
-        this.childContactId$
-      );
+      TransactionFormUtils.onInit(this, this.childForm, this.childTransaction, this.childContactId$);
       this.childOnInit();
     }
   }
 
   childOnInit() {
     // Override contact type options if present in transactionType
-    this.childContactTypeOptions = LabelUtils.getPrimeOptions(
-      ContactTypeLabels,
-      this.childTransaction?.transactionType?.contactTypeOptions
-    );
+    if (this.childTransaction?.transactionType?.contactTypeOptions) {
+      this.childContactTypeOptions = LabelUtils.getPrimeOptions(
+        ContactTypeLabels,
+        this.childTransaction?.transactionType?.contactTypeOptions
+      );
+    }
 
     const amountProperty = this.childTemplateMap.amount;
     const amount_schema = this.childTransaction?.transactionType?.schema.properties[amountProperty];
@@ -157,11 +154,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.formProperties
     );
     payload.children = [
-      TransactionFormUtils.getPayloadTransaction(
-        this.childTransaction,
-        this.childForm,
-        this.childFormProperties
-      ),
+      TransactionFormUtils.getPayloadTransaction(this.childTransaction, this.childForm, this.childFormProperties),
     ];
     payload.children[0].report_id = payload.report_id;
 

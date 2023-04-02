@@ -54,10 +54,10 @@ export class ContactListPage {
     cy.get('.p-menubar').find('.p-menuitem-link').contains('Contacts').click();
   }
 
-  static enterFormData(formData: ContactFormData, readOnlyContactType = false, alias = '') {
+  static enterFormData(formData: ContactFormData, excludeContactType = false, alias = '') {
     alias = PageUtils.getAlias(alias);
 
-    if (!readOnlyContactType) {
+    if (!excludeContactType) {
       PageUtils.dropdownSetValue('#entity_type_dropdown', formData['contact_type'], alias);
     }
 
