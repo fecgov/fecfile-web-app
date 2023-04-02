@@ -180,22 +180,22 @@ describe('Transactions', () => {
 
     // Assert transaction list table is correct
     cy.get('tbody tr').eq(0).as('row-1');
-    cy.get('@row-1').find('td').eq(0).contains('Partnership Memo').should('exist');
-    cy.get('@row-1').find('td').eq(0).contains('Unitemized').should('not.exist');
-    cy.get('@row-1').find('td').eq(3).contains('Y').should('exist');
-    cy.get('@row-1').find('td').eq(5).contains('$201.10').should('exist');
+    cy.get('@row-1').find('td').eq(0).should('contain', 'Partnership Memo');
+    cy.get('@row-1').find('td').eq(0).should('not.contain', 'Unitemized');
+    cy.get('@row-1').find('td').eq(3).should('contain', 'Y');
+    cy.get('@row-1').find('td').eq(5).should('contain', '$201.10');
 
     cy.get('tbody tr').eq(1).as('row-2');
-    cy.get('@row-2').find('td').eq(0).contains('Partnership Memo').should('exist');
-    cy.get('@row-2').find('td').eq(0).contains('Unitemized').should('exist');
-    cy.get('@row-2').find('td').eq(3).contains('Y').should('exist');
-    cy.get('@row-2').find('td').eq(5).contains('$100.55').should('exist');
+    cy.get('@row-2').find('td').eq(0).should('contain', 'Partnership Memo');
+    cy.get('@row-2').find('td').eq(0).should('contain', 'Unitemized');
+    cy.get('@row-2').find('td').eq(3).should('contain', 'Y');
+    cy.get('@row-2').find('td').eq(5).should('contain', '$100.55');
 
     cy.get('tbody tr').eq(2).as('row-3');
-    cy.get('@row-3').find('td').eq(0).contains('Partnership Receipt').should('exist');
-    cy.get('@row-3').find('td').eq(0).contains('Unitemized').should('exist');
-    cy.get('@row-3').find('td').eq(3).contains('Y').should('not.exist');
-    cy.get('@row-3').find('td').eq(5).contains('$100.55').should('exist');
+    cy.get('@row-3').find('td').eq(0).should('contain', 'Partnership Receipt');
+    cy.get('@row-3').find('td').eq(0).should('contain', 'Unitemized');
+    cy.get('@row-3').find('td').eq(3).should('not.contain', 'Y');
+    cy.get('@row-3').find('td').eq(5).should('contain', '$100.55');
 
     // Check form values of receipt form
     PageUtils.clickLink('Partnership Receipt');
@@ -296,20 +296,19 @@ describe('Transactions', () => {
 
     // Assert transaction list table is correct
     cy.get('tbody tr').eq(0).as('row-1');
-    cy.get('@row-1').find('td').eq(0).contains('Earmark Memo').should('exist');
-    cy.get('@row-1').find('td').eq(1).contains(defaultContactFormData['name']).should('exist');
-    cy.get('@row-1').find('td').eq(3).contains('Y').should('exist');
-    cy.get('@row-1').find('td').eq(5).contains('$100.55').should('exist');
+    cy.get('@row-1').find('td').eq(0).should('contain', 'Earmark Memo');
+    cy.get('@row-1').find('td').eq(1).should('contain', defaultContactFormData['name']);
+    cy.get('@row-1').find('td').eq(3).should('contain', 'Y');
+    cy.get('@row-1').find('td').eq(5).should('contain', '$100.55');
 
     cy.get('tbody tr').eq(1).as('row-2');
-    cy.get('@row-2').find('td').eq(0).contains('Earmark Receipt').should('exist');
+    cy.get('@row-2').find('td').eq(0).should('contain', 'Earmark Receipt');
     cy.get('@row-2')
       .find('td')
       .eq(1)
-      .contains(`${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`)
-      .should('exist');
-    cy.get('@row-2').find('td').eq(3).contains('Y').should('not.exist');
-    cy.get('@row-2').find('td').eq(5).contains('$100.55').should('exist');
+      .should('contain', `${defaultContactFormData['last_name']}, ${defaultContactFormData['first_name']}`);
+    cy.get('@row-2').find('td').eq(3).should('not.contain', 'Y');
+    cy.get('@row-2').find('td').eq(5).should('contain', '$100.55');
 
     // Check form values of receipt edit form
     PageUtils.clickLink('Earmark Receipt');
@@ -328,7 +327,6 @@ describe('Transactions', () => {
 
     // Check form values of memo edit form
     PageUtils.clickLink('STEP TWO');
-    // cy.get('@stepTwoAccordion').contains('Earmark memo').should('exist');
     cy.get('@stepTwoAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('@stepTwoAccordion').find('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
@@ -384,20 +382,19 @@ describe('Transactions', () => {
 
     // Assert transaction list table is correct
     cy.get('tbody tr').eq(0).as('row-1');
-    cy.get('@row-1').find('td').eq(0).contains('PAC Earmark Memo').should('exist');
+    cy.get('@row-1').find('td').eq(0).should('contain', 'PAC Earmark Memo');
     cy.get('@row-1')
       .find('td')
       .eq(1)
-      .contains(`${stepOneContactFormData['last_name']}, ${stepOneContactFormData['first_name']}`)
-      .should('exist');
-    cy.get('@row-1').find('td').eq(3).contains('Y').should('exist');
-    cy.get('@row-1').find('td').eq(5).contains('$100.55').should('exist');
+      .should('contain', `${stepOneContactFormData['last_name']}, ${stepOneContactFormData['first_name']}`);
+    cy.get('@row-1').find('td').eq(3).should('contain', 'Y');
+    cy.get('@row-1').find('td').eq(5).should('contain', '$100.55');
 
     cy.get('tbody tr').eq(1).as('row-2');
-    cy.get('@row-2').find('td').eq(0).contains('PAC Earmark Receipt').should('exist');
-    cy.get('@row-2').find('td').eq(1).contains(defaultContactFormData['name']).should('exist');
-    cy.get('@row-2').find('td').eq(3).contains('Y').should('not.exist');
-    cy.get('@row-2').find('td').eq(5).contains('$100.55').should('exist');
+    cy.get('@row-2').find('td').eq(0).should('contain', 'PAC Earmark Receipt');
+    cy.get('@row-2').find('td').eq(1).should('contain', defaultContactFormData['name']);
+    cy.get('@row-2').find('td').eq(3).should('not.contain', 'Y');
+    cy.get('@row-2').find('td').eq(5).should('contain', '$100.55');
 
     // Check form values of receipt edit form
     PageUtils.clickLink('PAC Earmark Receipt');
