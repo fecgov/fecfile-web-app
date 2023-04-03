@@ -67,7 +67,7 @@ describe('NavigationControlComponent', () => {
   });
 
   it('should have grouped options', () => {
-    let options = component.getOptions(TransactionTypeUtils.factory(JOINT_FUNDRAISING_TRANSFER.name));
+    const options = component.getOptions(TransactionTypeUtils.factory(JOINT_FUNDRAISING_TRANSFER.name));
     expect(options[0].label).toBe('Joint Fundraising Transfer Memo');
     expect(options[0].items[0].label).toBe('Individual');
   });
