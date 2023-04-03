@@ -10,6 +10,8 @@ describe('Manage contacts', () => {
   });
 
   it('Create an Individual contact', () => {
+    cy.runLighthouse('contacts', 'list');
+
     PageUtils.clickButton('New');
     const formData = { ...defaultFormData };
     ContactListPage.enterFormData(formData);

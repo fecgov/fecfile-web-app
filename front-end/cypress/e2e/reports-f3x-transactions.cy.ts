@@ -14,6 +14,8 @@ describe('Transactions', () => {
   });
 
   it('Create a Group A transaction using a contact lookup', () => {
+    cy.runLighthouse('reports', 'transactions-list');
+
     // Create an individual contact to be used with contact lookup
     ContactListPage.goToPage();
     PageUtils.clickButton('New');
@@ -49,6 +51,8 @@ describe('Transactions', () => {
     cy.get('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true);
     TransactionDetailPage.assertFormData(defaultTransactionFormData);
+
+    cy.runLighthouse('reports', 'single-transaction');
   });
 
   it('Create a Group B transaction', () => {
@@ -312,6 +316,9 @@ describe('Transactions', () => {
     // Check form values of receipt edit form
     PageUtils.clickLink('Earmark Receipt');
     PageUtils.clickLink('STEP ONE');
+
+    cy.runLighthouse('reports', 'double-transaction-first-accordion');
+
     cy.get('@stepOneAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('@stepOneAccordion').find('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true, '@stepOneAccordion');
@@ -325,6 +332,9 @@ describe('Transactions', () => {
 
     // Check form values of memo edit form
     PageUtils.clickLink('STEP TWO');
+
+    cy.runLighthouse('reports', 'double-transaction-second-accordion');
+
     cy.get('@stepTwoAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('@stepTwoAccordion').find('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
