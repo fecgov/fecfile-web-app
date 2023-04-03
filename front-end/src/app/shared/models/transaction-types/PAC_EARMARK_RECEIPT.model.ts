@@ -11,7 +11,7 @@ export class PAC_EARMARK_RECEIPT extends SchATransactionType {
   componentGroupId = 'FG';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
   schema = schema;
-  override dependentChildTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.PAC_EARMARK_MEMO);
+  override dependentChildTransactionType = ScheduleATransactionTypes.PAC_EARMARK_MEMO;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS_MINIMAL;
 
   override generatePurposeDescription(transaction: SchATransaction): string {

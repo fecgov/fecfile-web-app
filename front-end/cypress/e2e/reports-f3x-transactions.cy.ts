@@ -274,7 +274,6 @@ describe('Transactions', () => {
       ...defaultTransactionFormData,
       ...{
         purpose_description: '',
-        memo_text: '', // TODO: remove this after bug fix
       },
     };
     TransactionDetailPage.enterFormData(transactionFormData, false, '@stepOneAccordion');
@@ -313,7 +312,6 @@ describe('Transactions', () => {
     // Check form values of receipt edit form
     PageUtils.clickLink('Earmark Receipt');
     PageUtils.clickLink('STEP ONE');
-    // cy.get('@stepOneAccordion').contains('Receipt').should('exist');
     cy.get('@stepOneAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('@stepOneAccordion').find('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true, '@stepOneAccordion');
@@ -360,7 +358,6 @@ describe('Transactions', () => {
       ...defaultTransactionFormData,
       ...{
         purpose_description: '',
-        memo_text: '', // TODO: remove this after bug fix
       },
     };
     TransactionDetailPage.enterFormData(transactionFormData, false, '@stepOneAccordion');

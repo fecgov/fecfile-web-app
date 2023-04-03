@@ -253,10 +253,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES,
     'Refunds of Contributions to Registered Committees',
   ],
-  [
-    ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
-    'Refund of Contribution to Unregistered Committee',
-  ],
+  [ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE, 'Refund of Contribution to Unregistered Committee'],
   // Other
   [ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
   [ScheduleATransactionTypes.OTHER_RECEIPTS, 'Other Receipts'],

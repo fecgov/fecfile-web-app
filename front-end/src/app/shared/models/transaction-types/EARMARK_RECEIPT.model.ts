@@ -1,5 +1,4 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_RECEIPT';
 import { ContactTypes } from '../contact.model';
 import { AggregationGroups } from '../transaction.model';
@@ -11,7 +10,7 @@ export class EARMARK_RECEIPT extends SchATransactionType {
   componentGroupId = 'AG';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
-  override dependentChildTransactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO);
+  override dependentChildTransactionType = ScheduleATransactionTypes.EARMARK_MEMO;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS_MINIMAL;
 
   override generatePurposeDescription(transaction: SchATransaction): string {

@@ -148,6 +148,16 @@ export abstract class DoubleTransactionTypeBaseComponent
       return;
     }
 
+    // Remove parent transaction links within the parent-child heirarchy in the
+    // transaction objects to avoid a recursion overflow from the class-transformer
+    // plainToClass() converter.
+    if (this.transaction?.children) {
+      this.transaction.children[0].parent_transaction = undefined;
+    }
+    if (this.childTransaction?.parent_transaction) {
+      this.childTransaction.parent_transaction = undefined;
+    }
+
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.form,

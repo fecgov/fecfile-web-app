@@ -1,5 +1,4 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_EARMARK_RECEIPTS';
 import { ContactTypes } from '../contact.model';
 import { AggregationGroups } from '../transaction.model';
@@ -18,9 +17,7 @@ export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchATransactionType {
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION
   );
   schema = schema;
-  override dependentChildTransactionType = TransactionTypeUtils.factory(
-    ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT
-  );
+  override dependentChildTransactionType = ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT;
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [],
     [CANCEL_CONTROL],
