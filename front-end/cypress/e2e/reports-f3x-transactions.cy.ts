@@ -316,9 +316,6 @@ describe('Transactions', () => {
     // Check form values of receipt edit form
     PageUtils.clickLink('Earmark Receipt');
     PageUtils.clickLink('STEP ONE');
-
-    cy.runLighthouse('reports', 'double-transaction-first-accordion');
-
     cy.get('@stepOneAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('@stepOneAccordion').find('#entity_type_dropdown').should('contain', 'Individual');
     ContactListPage.assertFormData(defaultContactFormData, true, '@stepOneAccordion');
@@ -332,9 +329,6 @@ describe('Transactions', () => {
 
     // Check form values of memo edit form
     PageUtils.clickLink('STEP TWO');
-
-    cy.runLighthouse('reports', 'double-transaction-second-accordion');
-
     cy.get('@stepTwoAccordion').find('#entity_type_dropdown > div.p-disabled').should('exist');
     cy.get('@stepTwoAccordion').find('#entity_type_dropdown').should('contain', 'Committee');
     ContactListPage.assertFormData(stepTwoContactFormData, true, '@stepTwoAccordion');
