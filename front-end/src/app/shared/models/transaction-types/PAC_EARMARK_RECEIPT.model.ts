@@ -1,5 +1,4 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_RECEIPT';
 import { ContactTypes } from '../contact.model';
 import { AggregationGroups } from '../transaction.model';
