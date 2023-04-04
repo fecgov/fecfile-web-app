@@ -193,18 +193,18 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL, 'Payment to Payroll for Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo for Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID, 'Void of Other Disbursement'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT, 'Non-Contribution Account Disbursement'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT, 'Non-contribution Account Disbursement'],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
-    'Non-Contribution Account Credit Card Payment',
+    'Non-contribution Account Credit Card Payment',
   ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
-    'Non-Contribution Account Credit Card Memo',
+    'Non-contribution Account Credit Card Memo',
   ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
-    'Non-Contribution Account Staff Reimbursement',
+    'Non-contribution Account Staff Reimbursement',
   ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO,
@@ -212,11 +212,11 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
-    'Non-Contribution Account Payment to Payroll',
+    'Non-contribution Account Payment to Payroll',
   ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO,
-    'Non-Contribution Account Payment to Payroll Memo',
+    'Non-contribution Account Payment to Payroll Memo',
   ],
   [
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_ACCOUNT,

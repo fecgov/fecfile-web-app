@@ -23,6 +23,6 @@ export class NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL extends SchBTransaction
     });
   }
   override generatePurposeDescription(): string {
-    return 'Non-Contribution Account - Payroll: See Below';
+    return 'Non-contribution Account - Payroll: See Below';
   }
 }
