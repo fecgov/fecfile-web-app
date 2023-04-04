@@ -259,15 +259,15 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.OTHER_RECEIPTS, 'Other Receipts'],
   [
     ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
-    'Individual Receipt - Non-Contribution Account',
+    'Individual Receipt - Non-contribution Account',
   ],
   [
     ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
-    'Other Committee Receipt - Non-Contribution Account',
+    'Other Committee Receipt - Non-contribution Account',
   ],
   [
     ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
-    'Business/Labor Organization Receipt - Non-Contribution Account',
+    'Business/Labor Organization Receipt - Non-contribution Account',
   ],
   [ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT, 'Individual Recount Receipt'],
   [ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT, 'Party Recount Receipt'],
