@@ -4,7 +4,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY
 import { ContactTypes } from '../contact.model';
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { STANDARD_CONTROLS_MINIMAL, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 
 export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchATransactionType {
@@ -17,7 +17,7 @@ export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchATransactionType {
   override dependentChildTransactionType = TransactionTypeUtils.factory(
     ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT
   );
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS_MINIMAL;
+  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children) return '';

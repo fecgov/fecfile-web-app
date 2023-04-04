@@ -131,11 +131,6 @@ export class TransactionNavigationControls {
 export const STANDARD_CONTROLS = new TransactionNavigationControls([], [CANCEL_CONTROL], [SAVE_LIST_CONTROL]);
 
 /**
- * Standard set of form buttons used for double-transaction-entry screens.
- */
-export const STANDARD_CONTROLS_MINIMAL = new TransactionNavigationControls([], [CANCEL_CONTROL], [SAVE_LIST_CONTROL]);
-
-/**
  * Standard set of form buttons used across tier 1 transactions with subtransactions.
  */
 export const STANDARD_PARENT_CONTROLS = new TransactionNavigationControls(
