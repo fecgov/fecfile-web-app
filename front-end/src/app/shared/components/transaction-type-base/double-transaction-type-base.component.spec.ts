@@ -10,6 +10,8 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
+import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -93,5 +95,26 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should catch exception if there is no templateMap', () => {
+    const earmarkReceipt = new EARMARK_RECEIPT();
+    component.transaction = earmarkReceipt.getNewTransaction();
+    const earmarkMemo = new EARMARK_MEMO();
+    component.childTransaction = earmarkMemo.getNewTransaction();
+    component.childTransaction.transactionType = undefined;
+    component.transaction.children = [component.childTransaction];
+    expect(() => component.ngOnInit()).toThrow(
+      new Error('Fecfile: Template map not found for double transaction component')
+    );
+  });
+
+  it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
+    component.childTransaction = getTestTransactionByType(
+      ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL
+    );
+    component.ngOnInit();
+    component.childForm.patchValue({ contribution_amount: 2 });
+    expect(component.childForm.value.contribution_amount).toBe(-2);
   });
 });
