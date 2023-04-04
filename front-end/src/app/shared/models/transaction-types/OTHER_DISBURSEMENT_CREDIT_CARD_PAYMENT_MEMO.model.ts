@@ -14,12 +14,7 @@ export class OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO extends SchBTransaction
   );
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
-    LabelUtils.get(
-      ScheduleBTransactionTypeLabels,
-      ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO
-    )
-  );
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
