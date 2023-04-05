@@ -126,7 +126,10 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
   it('should save a parent and child transaction', () => {
     component.transaction = testTransaction;
-    if (testTransaction.children) component.childTransaction = testTransaction.children[0];
+    if (testTransaction.children) {
+      component.childTransaction = testTransaction.children[0];
+      component.childTransaction.parent_transaction = component.transaction;
+    }
 
     // Save invalid form values
     const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
@@ -134,8 +137,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
     // Save valid form values
     component.form.patchValue({
-      entity_type: 'Individual',
-      contributor_organization_name: '',
+      entity_type: 'IND',
+      contributor_organization_name: 'org name',
       contributor_last_name: 'fname',
       contributor_first_name: 'lname',
       contributor_middle_name: '',
@@ -150,13 +153,13 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contributor_occupation: 'occ',
       contribution_date: new Date(2023, 6, 12),
       contribution_amount: 5,
-      contribution_aggregate: '',
+      contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
       memo_code: '',
       memo_text_input: '',
     });
     component.childForm.patchValue({
-      entity_type: 'Individual',
+      entity_type: 'IND',
       contributor_organization_name: '',
       contributor_last_name: 'fname',
       contributor_first_name: 'lname',
@@ -172,9 +175,9 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contributor_occupation: 'occ',
       contribution_date: new Date(2023, 6, 12),
       contribution_amount: 5,
-      contribution_aggregate: '',
+      contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
-      memo_code: '',
+      memo_code: true,
       memo_text_input: '',
     });
     component.save(navEvent);
