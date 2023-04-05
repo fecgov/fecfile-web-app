@@ -36,7 +36,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   childForm: FormGroup = this.fb.group({});
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
   childPurposeDescriptionLabel = '';
-  childNegativeAmountValueOnly = false;
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
 
   override ngOnInit(): void {
@@ -66,16 +65,14 @@ export abstract class DoubleTransactionTypeBaseComponent
       );
     }
 
-    const amountProperty = this.childTemplateMap.amount;
-    const amount_schema = this.childTransaction?.transactionType?.schema.properties[amountProperty];
-    if (amount_schema?.exclusiveMaximum === 0) {
-      this.childNegativeAmountValueOnly = true;
+    // Determine if amount should always be negative and then force it to be so if needed
+    if (this.childTransaction?.transactionType?.negativeAmountValueOnly && this.childTemplateMap?.amount) {
       this.childForm
-        .get(amountProperty)
+        .get(this.childTemplateMap.amount)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((amount) => {
           if (+amount > 0) {
-            this.childForm.patchValue({ amount: -1 * amount });
+            this.form.patchValue({ [this.childTemplateMap.amount]: -1 * amount });
           }
         });
     }

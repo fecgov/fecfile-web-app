@@ -77,8 +77,8 @@ describe('TransactionContainerComponent', () => {
   });
 
   it('should assign filer committee id number to child transaction', () => {
-    const transaction = TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_RECEIPT).getNewTransaction();
-    transaction.children = [TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO).getNewTransaction()];
+    const transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
+    transaction.children = [getTestTransactionByType(ScheduleATransactionTypes.EARMARK_MEMO)];
     component.transaction = transaction;
     component.ngOnInit();
     if (component?.transaction?.children)
