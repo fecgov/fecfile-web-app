@@ -12,6 +12,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
+import {
+  NavigationEvent,
+  NavigationAction,
+  NavigationDestination,
+} from 'app/shared/models/transaction-navigation-controls.model';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -117,5 +122,61 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
     component.childForm.patchValue({ contribution_amount: 2 });
     expect(component.childForm.value.contribution_amount).toBe(-2);
+  });
+
+  it('should save a parent and child transaction', () => {
+    component.transaction = testTransaction;
+    if (testTransaction.children) component.childTransaction = testTransaction.children[0];
+
+    // Save invalid form values
+    const navEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, component.transaction);
+    component.save(navEvent);
+
+    // Save valid form values
+    component.form.patchValue({
+      entity_type: 'Individual',
+      contributor_organization_name: '',
+      contributor_last_name: 'fname',
+      contributor_first_name: 'lname',
+      contributor_middle_name: '',
+      contributor_prefix: '',
+      contributor_suffix: '',
+      contributor_street_1: 'street1',
+      contributor_street_2: '',
+      contributor_city: 'city',
+      contributor_state: 'DC',
+      contributor_zip: '20001',
+      contributor_employer: 'emp',
+      contributor_occupation: 'occ',
+      contribution_date: new Date(2023, 6, 12),
+      contribution_amount: 5,
+      contribution_aggregate: '',
+      contribution_purpose_descrip: 'individual',
+      memo_code: '',
+      memo_text_input: '',
+    });
+    component.childForm.patchValue({
+      entity_type: 'Individual',
+      contributor_organization_name: '',
+      contributor_last_name: 'fname',
+      contributor_first_name: 'lname',
+      contributor_middle_name: '',
+      contributor_prefix: '',
+      contributor_suffix: '',
+      contributor_street_1: 'street1',
+      contributor_street_2: '',
+      contributor_city: 'city',
+      contributor_state: 'DC',
+      contributor_zip: '20001',
+      contributor_employer: 'emp',
+      contributor_occupation: 'occ',
+      contribution_date: new Date(2023, 6, 12),
+      contribution_amount: 5,
+      contribution_aggregate: '',
+      contribution_purpose_descrip: 'individual',
+      memo_code: '',
+      memo_text_input: '',
+    });
+    component.save(navEvent);
   });
 });
