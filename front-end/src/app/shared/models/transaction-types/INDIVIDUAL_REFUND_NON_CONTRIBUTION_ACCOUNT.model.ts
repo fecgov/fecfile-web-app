@@ -25,6 +25,6 @@ export class INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransactionT
     });
   }
   override generatePurposeDescription(): string {
-    return 'Non-contribution Account Refund';
+    return 'Non-Contribution Account Refund';
   }
 }

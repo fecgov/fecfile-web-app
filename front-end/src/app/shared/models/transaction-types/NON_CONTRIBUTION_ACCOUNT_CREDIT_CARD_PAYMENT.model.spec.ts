@@ -24,6 +24,6 @@ describe('NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT', () => {
 
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Non-contribution Account - Credit Card: See Below');
+    expect(descrip).toBe('Non-Contribution Account - Credit Card: See Below');
   });
 });

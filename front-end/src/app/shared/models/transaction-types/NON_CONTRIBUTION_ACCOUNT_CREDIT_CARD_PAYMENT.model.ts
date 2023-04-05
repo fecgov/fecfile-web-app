@@ -23,6 +23,6 @@ export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT extends SchBTransactio
     });
   }
   override generatePurposeDescription(): string {
-    return 'Non-contribution Account - Credit Card: See Below';
+    return 'Non-Contribution Account - Credit Card: See Below';
   }
 }

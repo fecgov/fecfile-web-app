@@ -22,6 +22,6 @@ describe('NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL', () => {
 
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Non-contribution Account - Payroll: See Below');
+    expect(descrip).toBe('Non-Contribution Account - Payroll: See Below');
   });
 });

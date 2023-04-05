@@ -26,6 +26,6 @@ export class BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransact
   }
 
   override generatePurposeDescription(): string {
-    return 'Non-contribution Account Refund';
+    return 'Non-Contribution Account Refund';
   }
 }

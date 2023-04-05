@@ -22,6 +22,6 @@ describe('INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
 
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Non-contribution Account Refund');
+    expect(descrip).toBe('Non-Contribution Account Refund');
   });
 });
