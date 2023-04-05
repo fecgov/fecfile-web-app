@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { of, catchError } from 'rxjs';
 import { Transaction } from '../models/transaction.model';
 import { Contact } from '../models/contact.model';
-import { SchATransaction } from '../models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { ContactService } from '../services/contact.service';
 import { TransactionService } from '../services/transaction.service';
 import { testMockStore } from '../utils/unit-test.utils';
@@ -27,7 +27,7 @@ describe('TransactionResolver', () => {
             of(
               SchATransaction.fromJSON({
                 id: transactionId,
-                transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
+                transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
                 contact_id: '123',
                 contact: Contact.fromJSON({ id: 123 }),
               })
@@ -76,7 +76,10 @@ describe('TransactionResolver', () => {
 
   it('should return an existing transaction', () => {
     const route = {
-      paramMap: convertToParamMap({ reportId: 1, transactionType: 'OFFSET_TO_OPERATING_EXPENDITURES' }),
+      paramMap: convertToParamMap({
+        reportId: 1,
+        transactionType: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
+      }),
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
@@ -89,7 +92,10 @@ describe('TransactionResolver', () => {
 
   it('should return a child transaction', () => {
     const route = {
-      paramMap: convertToParamMap({ parentTransactionId: 1, transactionType: 'PAC_JF_TRANSFER_MEMO' }),
+      paramMap: convertToParamMap({
+        parentTransactionId: 1,
+        transactionType: ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
+      }),
     };
 
     resolver.resolve(route as ActivatedRouteSnapshot).subscribe((response: Transaction | undefined) => {
@@ -101,7 +107,7 @@ describe('TransactionResolver', () => {
   });
 
   it('should attach child for transaction with dependent child transaction type', () => {
-    resolver.resolve_new_child_transaction('1', 'EARMARK_RECEIPT').subscribe((transaction) => {
+    resolver.resolve_new_child_transaction('1', ScheduleATransactionTypes.EARMARK_RECEIPT).subscribe((transaction) => {
       if (transaction?.children) {
         expect(transaction.children[0].transactionType?.title).toBe('Earmark Memo');
       }
@@ -129,8 +135,8 @@ describe('TransactionResolver', () => {
       of(
         SchATransaction.fromJSON({
           id: 999,
-          transaction_type_identifier: 'EARMARK_MEMO',
-          transactionType: TransactionTypeUtils.factory('EARMARK_MEMO'),
+          transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
+          transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
           contact_id: '123',
           contact: Contact.fromJSON({ id: 123 }),
         })
@@ -155,8 +161,8 @@ describe('TransactionResolver', () => {
       of(
         SchATransaction.fromJSON({
           id: 999,
-          transaction_type_identifier: 'EARMARK_MEMO',
-          transactionType: TransactionTypeUtils.factory('EARMARK_MEMO'),
+          transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
+          transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
           contact_id: '123',
           contact: Contact.fromJSON({ id: 123 }),
           parent_transaction_id: 2,
@@ -164,13 +170,16 @@ describe('TransactionResolver', () => {
       )
     );
     resolver.resolve_existing_transaction('10').subscribe((transaction: Transaction | undefined) => {
-      if (transaction) expect(transaction.transaction_type_identifier).toBe('EARMARK_MEMO');
+      if (transaction) expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
     });
   });
 
   it('should add new child transaction to new parent if parent has a dependentChildTransactionType', () => {
-    resolver.resolve_new_transaction('10', 'EARMARK_RECEIPT').subscribe((transaction: Transaction | undefined) => {
-      if (transaction?.children) expect(transaction.children[0].transaction_type_identifier).toBe('EARMARK_MEMO');
-    });
+    resolver
+      .resolve_new_transaction('10', ScheduleATransactionTypes.EARMARK_RECEIPT)
+      .subscribe((transaction: Transaction | undefined) => {
+        if (transaction?.children)
+          expect(transaction.children[0].transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_MEMO);
+      });
   });
 });
