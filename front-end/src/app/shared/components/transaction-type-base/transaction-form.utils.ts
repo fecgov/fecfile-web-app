@@ -88,11 +88,10 @@ export class TransactionFormUtils {
           takeUntil(component.destroy$)
         )
         .subscribe(([amount, previous_transaction, transaction]) => {
-          const key = templateMap.aggregate as keyof ScheduleTransaction;
+          const key = previous_transaction?.transactionType?.templateMap.aggregate as keyof ScheduleTransaction;
           const previousAggregate = previous_transaction
             ? +((previous_transaction as ScheduleTransaction)[key] || 0)
             : 0;
-          console.log(previous_transaction, previousAggregate);
           if (!transaction.transactionType?.isRefundAggregate) {
             form.get(templateMap.aggregate)?.setValue(previousAggregate + amount);
           } else {
