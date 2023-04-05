@@ -164,7 +164,13 @@ describe('TransactionResolver', () => {
       )
     );
     resolver.resolve_existing_transaction('10').subscribe((transaction: Transaction | undefined) => {
-      if (transaction) expect((transaction.transaction_type_identifier = 'EARMARK_MEMO'));
+      if (transaction) expect(transaction.transaction_type_identifier).toBe('EARMARK_MEMO');
+    });
+  });
+
+  it('should add new child transaction to new parent if parent has a dependentChildTransactionType', () => {
+    resolver.resolve_new_transaction('10', 'EARMARK_RECEIPT').subscribe((transaction: Transaction | undefined) => {
+      if (transaction?.children) expect(transaction.children[0].transaction_type_identifier).toBe('EARMARK_MEMO');
     });
   });
 });
