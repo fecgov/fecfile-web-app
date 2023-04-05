@@ -84,15 +84,20 @@ export class TransactionFormUtils {
         .get(templateMap.amount)
         ?.valueChanges.pipe(
           startWith(form.get(templateMap.amount)?.value),
-          combineLatestWith(previous_transaction$),
+          combineLatestWith(previous_transaction$, of(transaction)),
           takeUntil(component.destroy$)
         )
-        .subscribe(([amount, previous_transaction]) => {
+        .subscribe(([amount, previous_transaction, transaction]) => {
           const key = templateMap.aggregate as keyof ScheduleTransaction;
           const previousAggregate = previous_transaction
             ? +((previous_transaction as ScheduleTransaction)[key] || 0)
             : 0;
-          form.get(templateMap.aggregate)?.setValue(+amount + previousAggregate);
+          console.log(previous_transaction, previousAggregate);
+          if (!transaction.transactionType?.isRefundAggregate) {
+            form.get(templateMap.aggregate)?.setValue(previousAggregate + amount);
+          } else {
+            form.get(templateMap.aggregate)?.setValue(previousAggregate - amount);
+          }
         });
     }
 
