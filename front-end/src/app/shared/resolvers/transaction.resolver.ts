@@ -10,7 +10,7 @@ import { TransactionTypeUtils } from '../utils/transaction-type.utils';
   providedIn: 'root',
 })
 export class TransactionResolver implements Resolve<Transaction | undefined> {
-  constructor(private transactionService: TransactionService, private contactService: ContactService) {}
+  constructor(public transactionService: TransactionService, private contactService: ContactService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Transaction | undefined> {
     const reportId = route.paramMap.get('reportId');
