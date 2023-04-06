@@ -134,10 +134,15 @@ export class DeletedContactService implements TableListService<Contact> {
     }
     return this.apiService.get<ListRestResponse>(`/contacts-deleted/?page=${pageNumber}&ordering=${ordering}`).pipe(
       map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => Contact.fromJSON(item));
+        response.results = response.results.map(Contact.fromJSON);
         return response;
       })
     );
+  }
+
+  public restore(contacts: Contact[]): Observable<string[]> {
+    const contactIds = contacts.map((contact) => contact.id);
+    return this.apiService.post<string[]>('/contacts-deleted/restore/', contactIds);
   }
 
   public delete(contact: Contact): Observable<null> {

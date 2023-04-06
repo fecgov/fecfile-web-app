@@ -5,11 +5,9 @@
   [modal]="true"
   styleClass="p-fluid"
   (onShow)="onShow()"
-  (onHide)="onHide()"
+  (onHide)="hide()"
 >
   <ng-template pTemplate="content">
-    <p>table goes here</p>
-    <!-- 
     <p-table
       #dt
       [value]="items"
@@ -59,26 +57,19 @@
             <p-tableCheckbox [value]="item" [ariaLabel]="'select ' + displayName(item)"></p-tableCheckbox>
           </td>
           <td>
-            <p>{{ displayName(item) }}</p>
+            <a>{{ displayName(item) }}</a>
           </td>
           <td>{{ item.type | label : contactTypeLabels }}</td>
           <td>{{ item.employer }}</td>
           <td>{{ item.occupation }}</td>
         </tr>
       </ng-template>
-    </p-table> -->
+    </p-table>
   </ng-template>
   <ng-template pTemplate="footer">
     <div class="grid">
       <div class="col-1">
-        <button
-          pButton
-          pRipple
-          label="Cancel"
-          icon="pi pi-times"
-          class="p-button-secondary"
-          (click)="onHide()"
-        ></button>
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-secondary" (click)="hide()"></button>
       </div>
       <div class="col-11">
         <button
@@ -87,7 +78,7 @@
           label="Restore selected"
           icon="pi pi-check"
           class="p-button-primary"
-          [disabled]="restoreEnabled"
+          [disabled]="selectedItems.length === 0"
           (click)="restoreSelected()"
         ></button>
       </div>

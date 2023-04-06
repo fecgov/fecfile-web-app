@@ -97,4 +97,7 @@
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
 
-<app-deleted-contact-dialog [(visible)]="restoreDialogIsVisible"></app-deleted-contact-dialog>
+<app-deleted-contact-dialog
+  [(visible)]="restoreDialogIsVisible"
+  (contactsRestored)="refreshTable()"
+></app-deleted-contact-dialog>

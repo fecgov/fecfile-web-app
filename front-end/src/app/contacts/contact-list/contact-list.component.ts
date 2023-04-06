@@ -67,6 +67,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   public onRestoreClick() {
     this.restoreDialogIsVisible = true;
   }
+
   public override onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {
     const checked: boolean = event.checked;
 
