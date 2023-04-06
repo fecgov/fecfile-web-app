@@ -9,6 +9,7 @@ export class TRIBAL_REFUND_NP_CONVENTION_ACCOUNT extends SchBTransactionType {
   componentGroupId = 'D';
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT);
   schema = schema;
+  override showAggregate = false;
   override isRefundAggregate = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
