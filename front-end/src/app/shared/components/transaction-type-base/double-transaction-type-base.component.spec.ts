@@ -8,7 +8,7 @@ import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/sc
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
@@ -70,6 +70,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   let component: TestDoubleTransactionTypeBaseComponent;
   let fixture: ComponentFixture<TestDoubleTransactionTypeBaseComponent>;
   let testTransaction: SchATransaction;
+  let testConfirmationService: ConfirmationService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -92,6 +93,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
+    testConfirmationService = TestBed.inject(ConfirmationService);
     fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
     component = fixture.componentInstance;
     component.transaction = testTransaction;
@@ -125,7 +127,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   it('should save a parent and child transaction', () => {
-    component.transaction = testTransaction;
+    const componentNavigateToSpy = spyOn(testConfirmationService, 'confirm');
+
     if (testTransaction.children) {
       component.childTransaction = testTransaction.children[0];
       component.childTransaction.parent_transaction = component.transaction;
@@ -138,7 +141,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     // Save valid form values
     component.form.patchValue({
       entity_type: 'IND',
-      contributor_organization_name: 'org name',
+      contributor_organization_name: 'org222 name',
       contributor_last_name: 'fname',
       contributor_first_name: 'lname',
       contributor_middle_name: '',
@@ -160,7 +163,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     });
     component.childForm.patchValue({
       entity_type: 'IND',
-      contributor_organization_name: '',
+      contributor_organization_name: 'zzzz',
       contributor_last_name: 'fname',
       contributor_first_name: 'lname',
       contributor_middle_name: '',
@@ -181,5 +184,6 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       memo_text_input: '',
     });
     component.save(navEvent);
+    expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
   });
 });
