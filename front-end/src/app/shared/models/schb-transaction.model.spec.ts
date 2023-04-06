@@ -19,4 +19,20 @@ describe('SchBTransaction', () => {
     expect(transaction.payee_organization_name).toBe('foo');
     expect(transaction.election_code).toBe(undefined);
   });
+
+  it('Creates a transaction object from JSON', () => {
+    const json = {
+      transaction_type_identifier: 'RETURN_RECEIPT',
+      parent_transaction: {
+        transaction_type_identifier: 'RETURN_RECEIPT',
+      },
+      children: [
+        {
+          transaction_type_identifier: 'RETURN_RECEIPT',
+        },
+      ],
+    };
+    const transaction: SchBTransaction = SchBTransaction.fromJSON(json);
+    expect(transaction.constructor.name).toBe('SchBTransaction');
+  });
 });
