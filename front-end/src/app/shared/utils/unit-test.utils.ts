@@ -158,38 +158,6 @@ export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
   }),
 });
 
-export const testTribalDisbursementRefund: SchATransaction = SchATransaction.fromJSON({
-  id: '125',
-  transaction_type_identifier: ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
-  report_id: '999',
-  contribution_amount: '101.1',
-  contribution_date: '2022-03-02',
-  entity_type: ContactTypes.ORGANIZATION,
-  contributor_organization_name: 'org name',
-  contributor_street_1: '123 Main St',
-  contributor_city: 'city',
-  contributor_state: 'VA',
-  contributor_zip: '20001',
-  memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
-  contact_id: '456',
-  contact: Contact.fromJSON({
-    id: 'testId',
-    type: ContactTypes.INDIVIDUAL,
-    last_name: 'testLn1',
-    first_name: 'testFn1',
-    middle_name: 'testMn1',
-    prefix: 'testPrefix1',
-    suffix: 'testSuffix1',
-    employer: 'testEmployer1',
-    occupation: 'testOccupation1',
-    street_1: 'testStreet1',
-    street_2: 'testStreet2',
-    city: 'testCity1',
-    state: 'VA',
-    zip: '12345',
-  }),
-});
-
 export const testScheduleATransaction = SchATransaction.fromJSON({
   form_type: 'SA15',
   filer_committee_id_number: 'C00000000',
