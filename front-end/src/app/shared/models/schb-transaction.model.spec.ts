@@ -5,7 +5,7 @@ describe('SchBTransaction', () => {
     expect(new SchBTransaction()).toBeTruthy();
   });
 
-  xit('#fromJSON() should return a populated SchBTransaction instance', () => {
+  it('#fromJSON() should return a populated SchBTransaction instance', () => {
     const data = {
       id: '999',
       form_type: 'SA11Ai',
