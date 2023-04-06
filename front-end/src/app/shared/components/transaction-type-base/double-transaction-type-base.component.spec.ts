@@ -8,7 +8,7 @@ import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/sc
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
