@@ -52,13 +52,13 @@ import { TRIBAL_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_JF_T
 import { TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
+import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
 import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOUNT_RECEIPT.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
-import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
 import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model';
 import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
 import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';

@@ -3,7 +3,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_M
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
 export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
   componentGroupId = 'B';
@@ -12,7 +12,7 @@ export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionT
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO
   );
   schema = schema;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
