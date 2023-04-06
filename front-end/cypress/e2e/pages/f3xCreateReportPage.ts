@@ -24,7 +24,7 @@ export class F3xCreateReportPage {
   static enterFormData(formData: F3xCreateReportFormData) {
     cy.get("p-radiobutton[FormControlName='filing_frequency']").contains(formData['filing_frequency']).click();
 
-    cy.get('app-select-button[data-test="report_type_category"]').contains(formData['report_type_category']).click();
+    cy.get('app-select-button[data-test="report-type-category"]').contains(formData['report_type_category']).click();
 
     cy.get("p-radiobutton[FormControlName='report_code']").contains(formData['report_code']).click();
 

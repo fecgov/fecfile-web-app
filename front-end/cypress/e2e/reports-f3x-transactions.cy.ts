@@ -37,7 +37,7 @@ describe('Transactions', () => {
     cy.contains(defaultContactFormData['last_name']).click();
 
     TransactionDetailPage.enterFormData(defaultTransactionFormData);
-    PageUtils.clickButton('Save & view all transactions');
+    PageUtils.clickButton('Save');
 
     cy.get('tr').should('contain', 'Individual Receipt');
     cy.get('tr').should('contain', 'Unitemized');
@@ -77,14 +77,9 @@ describe('Transactions', () => {
       ...{ amount: 200.01, category_code: '005 Polling Expenses' },
     };
     TransactionDetailPage.enterFormData(formTransactionData);
-    PageUtils.clickButton('Save & add another');
+    PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
-
-    // Assert "Save & add another" button provides a new empty form
-    cy.get('#organization_name').should('have.value', '');
-
-    PageUtils.clickButton('Cancel');
 
     cy.get('tr').should('contain', 'Other Disbursement');
     cy.get('tr').should('not.contain', 'Unitemized');
@@ -114,7 +109,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue');
 
     TransactionDetailPage.enterFormData(defaultTransactionFormData);
-    PageUtils.clickButton('Save & view all transactions');
+    PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
@@ -157,7 +152,7 @@ describe('Transactions', () => {
       ...{ purpose_description: '' },
     };
     TransactionDetailPage.enterFormData(formTransactionData);
-    PageUtils.dropdownSetValue('[inputid="subTransaction"]', 'Partnership Memo');
+    PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Memo');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
@@ -171,16 +166,19 @@ describe('Transactions', () => {
       ...{ memo_code: true, purpose_description: '' },
     };
     TransactionDetailPage.enterFormData(memoFormTransactionData);
-    PageUtils.clickButton('Save & add another Memo');
+    PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
     // Create a second memo transaction so we can check the aggregate value
+    PageUtils.clickLink('Partnership Receipt');
+    PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Memo');
+    cy.contains('Partnership Memo').wait(500);
     cy.get('[role="searchbox"]').type(defaultContactFormData['last_name'].slice(0, 1));
     cy.contains(defaultContactFormData['last_name']).should('exist');
     cy.contains(defaultContactFormData['last_name']).click();
     TransactionDetailPage.enterFormData(memoFormTransactionData);
-    PageUtils.clickButton('Save & view all transactions');
+    PageUtils.clickButton('Save');
 
     // Assert transaction list table is correct
     cy.get('tbody tr').eq(0).as('row-1');
@@ -210,7 +208,7 @@ describe('Transactions', () => {
       ...formTransactionData,
       ...{ purpose_description: 'See Partnership Attribution(s) below' },
     });
-    PageUtils.clickButton('Save & view all transactions');
+    PageUtils.clickButton('Cancel');
 
     // Check form values of memo form
     cy.get('tbody tr').first().contains('a', 'Partnership Memo').click();
@@ -241,7 +239,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue');
 
     TransactionDetailPage.enterFormData(defaultTransactionFormData);
-    PageUtils.clickButton('Save & view all transactions');
+    PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
 
@@ -291,7 +289,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
     TransactionDetailPage.enterFormData(transactionFormData, true, '@stepTwoAccordion');
 
-    PageUtils.clickButton('Save & view all transactions');
+    PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
     cy.contains('Confirm').should('exist').wait(500);
@@ -375,7 +373,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Save & continue', '@stepTwoAccordion');
     TransactionDetailPage.enterFormData(transactionFormData, true, '@stepTwoAccordion');
 
-    PageUtils.clickButton('Save & view all transactions');
+    PageUtils.clickButton('Save');
     cy.contains('Confirm').should('exist');
     PageUtils.clickButton('Continue');
     cy.contains('Confirm').should('exist').wait(500);
