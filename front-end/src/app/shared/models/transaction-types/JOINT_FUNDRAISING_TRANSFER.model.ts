@@ -15,6 +15,7 @@ export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
     ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO,
     ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO,
+    ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO,
   ]);
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
