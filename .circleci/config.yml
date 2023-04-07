@@ -98,9 +98,6 @@ jobs:
   e2e-test:
     docker:
       - image: cimg/node:16.15-browsers
-    parameters: # parameters are at the job level
-      e2e-specs-dir-to-run:
-        type: string
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -131,15 +128,15 @@ jobs:
               cd fecfile-web-app/front-end; \
               git checkout ${E2E_BRANCH_NAME}; \
               npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec cypress/e2e"<< parameters.e2e-specs-dir-to-run >>"/**/* --headless --watch=false --browser chrome;'\
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec cypress/e2e/**/* --headless --watch=false --browser chrome;'\
       - run:
           name: stage test result artifacts
           when: always
           command: |
             rm -rf /tmp/cypress
-            mkdir -p /tmp/cypress/results<< parameters.e2e-specs-dir-to-run >>
+            mkdir -p /tmp/cypress/results
             mkdir -p /tmp/cypress/lighthouse
-            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results/<< parameters.e2e-specs-dir-to-run >>
+            docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/results/. /tmp/cypress/results
             docker cp fecfile-web-app-e2e:/root/fecfile-web-app/front-end/cypress/lighthouse/. /tmp/cypress/lighthouse
             docker rm fecfile-web-app-e2e
       - store_artifacts:
@@ -302,15 +299,4 @@ workflows:
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>
     jobs:
-      - e2e-test:
-          e2e-specs-dir-to-run: "/contacts"
-      - e2e-test:
-          e2e-specs-dir-to-run: "/long-running1"
-      - e2e-test:
-          e2e-specs-dir-to-run: "/long-running2"
-      - e2e-test:
-          e2e-specs-dir-to-run: "/other"
-      - e2e-test:
-          e2e-specs-dir-to-run: "/reports"
-      - e2e-test:
-          e2e-specs-dir-to-run: "/transactions"
+      - e2e-test

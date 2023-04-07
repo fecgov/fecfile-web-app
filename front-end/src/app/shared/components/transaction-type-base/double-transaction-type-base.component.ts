@@ -28,14 +28,14 @@ import { TransactionTypeBaseComponent } from './transaction-type-base.component'
 })
 export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
-  implements OnInit, OnDestroy {
+  implements OnInit, OnDestroy
+{
   abstract childFormProperties: string[];
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
   childPurposeDescriptionLabel = '';
-  childNegativeAmountValueOnly = false;
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
 
   override ngOnInit(): void {
@@ -43,8 +43,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(
-      this.childFormProperties));
+    this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
     if (this.transaction?.children) {
       this.childTransaction = this.transaction?.children[0];
       if (this.childTransaction.transactionType?.templateMap) {
@@ -52,33 +51,28 @@ export abstract class DoubleTransactionTypeBaseComponent
       } else {
         throw new Error('Fecfile: Template map not found for double transaction component');
       }
-      TransactionFormUtils.onInit(
-        this,
-        this.childForm,
-        this.childTransaction,
-        this.childContactId$
-      );
+      TransactionFormUtils.onInit(this, this.childForm, this.childTransaction, this.childContactId$);
       this.childOnInit();
     }
   }
 
   childOnInit() {
     // Override contact type options if present in transactionType
-    this.childContactTypeOptions = LabelUtils.getPrimeOptions(
-      ContactTypeLabels,
-      this.childTransaction?.transactionType?.contactTypeOptions
-    );
+    if (this.childTransaction?.transactionType?.contactTypeOptions) {
+      this.childContactTypeOptions = LabelUtils.getPrimeOptions(
+        ContactTypeLabels,
+        this.childTransaction?.transactionType?.contactTypeOptions
+      );
+    }
 
-    const amountProperty = this.childTemplateMap.amount;
-    const amount_schema = this.childTransaction?.transactionType?.schema.properties[amountProperty];
-    if (amount_schema?.exclusiveMaximum === 0) {
-      this.childNegativeAmountValueOnly = true;
+    // Determine if amount should always be negative and then force it to be so if needed
+    if (this.childTransaction?.transactionType?.negativeAmountValueOnly && this.childTemplateMap?.amount) {
       this.childForm
-        .get(amountProperty)
+        .get(this.childTemplateMap.amount)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((amount) => {
           if (+amount > 0) {
-            this.childForm.patchValue({ amount: -1 * amount });
+            this.form.patchValue({ [this.childTemplateMap.amount]: -1 * amount });
           }
         });
     }
@@ -151,17 +145,23 @@ export abstract class DoubleTransactionTypeBaseComponent
       return;
     }
 
+    // Remove parent transaction links within the parent-child heirarchy in the
+    // transaction objects to avoid a recursion overflow from the class-transformer
+    // plainToClass() converter.
+    if (this.transaction?.children) {
+      this.transaction.children[0].parent_transaction = undefined;
+    }
+    if (this.childTransaction?.parent_transaction) {
+      this.childTransaction.parent_transaction = undefined;
+    }
+
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.form,
       this.formProperties
     );
     payload.children = [
-      TransactionFormUtils.getPayloadTransaction(
-        this.childTransaction,
-        this.childForm,
-        this.childFormProperties
-      ),
+      TransactionFormUtils.getPayloadTransaction(this.childTransaction, this.childForm, this.childFormProperties),
     ];
     payload.children[0].report_id = payload.report_id;
 

@@ -10,7 +10,7 @@ import { TransactionTypeUtils } from '../utils/transaction-type.utils';
   providedIn: 'root',
 })
 export class TransactionResolver implements Resolve<Transaction | undefined> {
-  constructor(private transactionService: TransactionService, private contactService: ContactService) {}
+  constructor(public transactionService: TransactionService, private contactService: ContactService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Transaction | undefined> {
     const reportId = route.paramMap.get('reportId');
@@ -36,7 +36,7 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
     transaction.report_id = String(reportId);
 
     if (transactionType.dependentChildTransactionType) {
-      transaction.children = [transactionType.dependentChildTransactionType.getNewTransaction()];
+      transaction.children = [this.getNewChildTransaction(transaction, transactionType.dependentChildTransactionType)];
     }
 
     return of(transaction);
@@ -48,12 +48,7 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
   ): Observable<Transaction | undefined> {
     return this.transactionService.get(String(parentTransactionId)).pipe(
       map((parentTransaction: Transaction) => {
-        const childTransactionType = TransactionTypeUtils.factory(childTransactionTypeName);
-        const childTransaction = childTransactionType.getNewTransaction();
-        childTransaction.parent_transaction = parentTransaction;
-        childTransaction.parent_transaction_id = String(parentTransactionId);
-        childTransaction.report_id = String(parentTransaction.report_id);
-        return childTransaction;
+        return this.getNewChildTransaction(parentTransaction, childTransactionTypeName);
       })
     );
   }
@@ -67,8 +62,8 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
           // be modified directly in a UI form. (e.g. EARMARK_MEMO)
           if (transaction.transactionType && transaction.transactionType.isDependentChild) {
             // Get parent transaction to ensure we have a full list of children
-            if (transaction?.parent_transaction?.id) {
-              return this.transactionService.get(transaction.parent_transaction.id);
+            if (transaction?.parent_transaction_id) {
+              return this.transactionService.get(transaction.parent_transaction_id);
             } else {
               throw new Error(
                 `Fecfile: Transaction ${transaction.id} (${transaction.transaction_type_identifier}) is a dependent transaction type but does not have a parent transaction.`
@@ -83,5 +78,14 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
         );
       })
     );
+  }
+
+  private getNewChildTransaction(parentTransaction: Transaction, childTransactionTypeName: string): Transaction {
+    const childTransactionType = TransactionTypeUtils.factory(childTransactionTypeName);
+    const childTransaction = childTransactionType.getNewTransaction();
+    childTransaction.parent_transaction = parentTransaction;
+    childTransaction.parent_transaction_id = parentTransaction.id;
+    childTransaction.report_id = parentTransaction.report_id;
+    return childTransaction;
   }
 }

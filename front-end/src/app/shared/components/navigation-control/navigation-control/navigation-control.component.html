@@ -1,6 +1,6 @@
 <div>
   <button
-    *ngIf="controlType == 'button'"
+    *ngIf="controlType === 'button'"
     pButton
     pRipple
     [label]="navigationControl?.label || ''"
@@ -10,7 +10,8 @@
     [disabled]="isDisabled()"
   ></button>
   <p-dropdown
-    *ngIf="controlType == 'dropdown'"
+    *ngIf="controlType === 'dropdown'"
+    data-test="navigation-control-dropdown"
     [formControl]="dropdownControl"
     [options]="dropdownOptions"
     pRipple

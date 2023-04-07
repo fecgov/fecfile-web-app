@@ -16,7 +16,7 @@ export abstract class TransactionType {
   isRefundAggregate = false; // Boolean flag to control whether or not the amount is subtracted from the aggregate
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
-  dependentChildTransactionType?: TransactionType; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
+  dependentChildTransactionType?: TransactionTypes; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
   contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
   defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
