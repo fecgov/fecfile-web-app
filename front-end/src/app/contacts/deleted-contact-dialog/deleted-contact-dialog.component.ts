@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { DeletedContactService } from 'app/shared/services/contact.service';
@@ -16,6 +17,7 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
   @Output() contactsRestored = new EventEmitter<string[]>();
   restoreEnabled = false;
   contactTypeLabels: LabelList = ContactTypeLabels;
+  restoreControl = new FormControl('');
 
   constructor(
     protected override messageService: MessageService,
@@ -33,6 +35,17 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
   }
 
   onShow(): void {}
+
+  public override onSelectionChange(items: Contact[] = []) {
+    super.onSelectionChange(items);
+    if (items.length > 0) this.restoreControl.enable();
+    else this.restoreControl.disable();
+  }
+  public override onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {
+    super.onSelectAllChange(event);
+    if (event.checked) this.restoreControl.enable();
+    else this.restoreControl.disable();
+  }
 
   restoreSelected(): void {
     this.itemService.restore(this.selectedItems).subscribe((restoredContacts: string[]) => {
