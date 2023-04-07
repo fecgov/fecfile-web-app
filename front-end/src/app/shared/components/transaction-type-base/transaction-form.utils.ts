@@ -107,10 +107,10 @@ export class TransactionFormUtils {
   ) {
     const key = previousTransaction?.transactionType?.templateMap.aggregate as keyof ScheduleTransaction;
     const previousAggregate = previousTransaction ? +((previousTransaction as ScheduleTransaction)[key] || 0) : 0;
-    if (!transaction.transactionType?.isRefundAggregate) {
-      form.get(templateMap.aggregate)?.setValue(previousAggregate + amount);
-    } else {
+    if (transaction.transactionType?.isRefundAggregate) {
       form.get(templateMap.aggregate)?.setValue(previousAggregate - amount);
+    } else {
+      form.get(templateMap.aggregate)?.setValue(previousAggregate + amount);
     }
   }
 
