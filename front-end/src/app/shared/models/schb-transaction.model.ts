@@ -239,7 +239,10 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_REGULAR_REFUND,
     'Headquarters Account - Regular Filer Refund',
   ],
-  [ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT, 'Headquarters Account - Tribal Refund'],
+  [
+    ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+    'Tribal Refund - National Party Headquarters Buildings Account',
+  ],
   [
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_INDIVIDUAL_REFUND,
     'Convention Account - Individual Refund',
