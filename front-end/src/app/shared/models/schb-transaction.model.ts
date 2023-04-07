@@ -54,18 +54,20 @@ export class SchBTransaction extends Transaction {
   override getFieldsNotToValidate(): string[] {
     return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
   }
-  // prettier-ignore
-  static fromJSON(json: any, depth = 2): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: any, depth = 2): SchBTransaction {
     const transaction = plainToClass(SchBTransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
     }
     if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = SchBTransaction.fromJSON(transaction.parent_transaction, depth-1);
+      transaction.parent_transaction = SchBTransaction.fromJSON(transaction.parent_transaction, depth - 1);
     }
     if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function(child) { return SchBTransaction.fromJSON(child, depth-1) });
+      transaction.children = transaction.children.map(function (child) {
+        return SchBTransaction.fromJSON(child, depth - 1);
+      });
     }
     return transaction;
   }
