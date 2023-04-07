@@ -7,11 +7,11 @@ import { AggregationGroups } from '../transaction.model';
 
 export class INDIVIDUAL_REFUND_NP_RECOUNT extends SchBTransactionType {
   componentGroupId = 'A';
-  title = LabelUtils.get(ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT);
+  title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override showAggregate = false;
+  override isRefundAggregate = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
