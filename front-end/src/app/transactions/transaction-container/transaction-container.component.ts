@@ -31,10 +31,10 @@ export class TransactionContainerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((committeeAccount: CommitteeAccount) => {
         if (this.transaction) {
-          this.transaction.filer_committee_id_number = committeeAccount.committee_id;
+          this.transaction.filer_committee_id_number = committeeAccount.committee_id ?? 'C00000000';
         }
         if (this.transaction?.transactionType?.dependentChildTransactionType && this.transaction.children) {
-          this.transaction.children[0].filer_committee_id_number = committeeAccount.committee_id;
+          this.transaction.children[0].filer_committee_id_number = committeeAccount.committee_id ?? 'C00000000';
         }
       });
   }
