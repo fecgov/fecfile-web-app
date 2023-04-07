@@ -15,7 +15,7 @@ export class BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT extends SchATransactionType
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override generatePurposeDescription(): string {
-    return 'Non-contribution Account Receipt';
+    return 'Non-contribution Account';
   }
 
   getNewTransaction() {
