@@ -1,11 +1,11 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { INDIVIDUAL_REFUND_NP_RECOUNT } from './INDIVIDUAL_REFUND_NP_RECOUNT.model';
+import { INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT } from './INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 
-describe('INDIVIDUAL_REFUND_NP_RECOUNT', () => {
-  let transactionType: INDIVIDUAL_REFUND_NP_RECOUNT;
+describe('INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT', () => {
+  let transactionType: INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new INDIVIDUAL_REFUND_NP_RECOUNT();
+    transactionType = new INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT();
   });
 
   it('should create an instance', () => {
@@ -17,12 +17,10 @@ describe('INDIVIDUAL_REFUND_NP_RECOUNT', () => {
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SB29');
-    expect(txn.transaction_type_identifier).toBe(
-      ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT);
+    expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT);
   });
 
   it('#generatePurposeDescription() should be the correct value', () => {
-    expect(transactionType.generatePurposeDescription()).toBe(
-      "Recount/Legal Proceedings Account: Refund");
+    expect(transactionType.generatePurposeDescription()).toBe('Recount/Legal Proceedings Account: Refund');
   });
 });

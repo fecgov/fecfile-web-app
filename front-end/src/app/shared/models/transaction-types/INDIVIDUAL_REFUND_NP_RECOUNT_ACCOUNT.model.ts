@@ -5,9 +5,12 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 
-export class INDIVIDUAL_REFUND_NP_RECOUNT extends SchBTransactionType {
+export class INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT extends SchBTransactionType {
   componentGroupId = 'A';
-  title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT);
+  title = LabelUtils.get(
+    ScheduleBTransactionTypeLabels,
+    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT
+  );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override showAggregate = false;
@@ -16,7 +19,7 @@ export class INDIVIDUAL_REFUND_NP_RECOUNT extends SchBTransactionType {
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB29',
-      transaction_type_identifier: ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT,
+      transaction_type_identifier: ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
     });
   }
