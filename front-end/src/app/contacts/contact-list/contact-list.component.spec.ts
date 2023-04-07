@@ -111,4 +111,9 @@ describe('ContactListComponent', () => {
     expect(component.selectAll).toBeTrue();
     expect(component.selectedItems.length).toBe(1);
   });
+
+  it('#restoreButton should make dialog visible', () => {
+    component.onRestoreClick();
+    expect(component.restoreDialogIsVisible).toBeTrue();
+  });
 });

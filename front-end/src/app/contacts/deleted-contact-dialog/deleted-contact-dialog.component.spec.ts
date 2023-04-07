@@ -9,7 +9,7 @@ import { ToastModule } from 'primeng/toast';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { of } from 'rxjs';
-import { Contact } from 'app/shared/models/contact.model';
+import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 
 describe('DeletedContactDialogComponent', () => {
   let component: DeletedContactDialogComponent;
@@ -57,9 +57,10 @@ describe('DeletedContactDialogComponent', () => {
     expect(component.selectedItems).toEqual([]);
   });
 
-  it('should display naem', () => {
+  it('should display name', () => {
     const label = component.displayName(Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' }));
-
     expect(label).toEqual('last, first');
+    const orglabel = component.displayName(Contact.fromJSON({ id: 1, name: 'name', type: ContactTypes.ORGANIZATION }));
+    expect(orglabel).toEqual('name');
   });
 });
