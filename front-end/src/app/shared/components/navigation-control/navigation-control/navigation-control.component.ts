@@ -31,7 +31,6 @@ export class NavigationControlComponent implements OnInit {
   dropdownControl = new FormControl('');
 
   ngOnInit(): void {
-    console.log(`AHOY ${this.navigationControl}`);
     if (NavigationDestination.CHILD == this.navigationControl?.navigationDestination) {
       this.controlType = 'dropdown';
       this.dropdownOptions = this.getOptions(this.transaction?.transactionType);
