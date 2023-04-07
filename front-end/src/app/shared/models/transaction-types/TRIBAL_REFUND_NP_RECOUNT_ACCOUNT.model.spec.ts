@@ -22,6 +22,6 @@ describe('TRIBAL_REFUND_NP_RECOUNT_ACCOUNT', () => {
 
   it('#generatePurposeDescription() should return constant', () => {
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Headquarters Buildings Account: Refund');
+    expect(descrip).toBe('Recount/Legal Proceedings Account: Refund');
   });
 });

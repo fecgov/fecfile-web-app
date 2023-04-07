@@ -17,10 +17,10 @@ export class TRIBAL_REFUND_NP_RECOUNT_ACCOUNT extends SchBTransactionType {
     return SchBTransaction.fromJSON({
       form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
-      aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT_ACCOUNT,
+      aggregation_group: AggregationGroups.NATIONAL_PARTY_RECOUNT_ACCOUNT,
     });
   }
   override generatePurposeDescription(): string {
-    return 'Headquarters Buildings Account: Refund';
+    return 'Recount/Legal Proceedings Account: Refund';
   }
 }
