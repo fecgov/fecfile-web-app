@@ -56,4 +56,10 @@ describe('DeletedContactDialogComponent', () => {
 
     expect(component.selectedItems).toEqual([]);
   });
+
+  it('should display naem', () => {
+    const label = component.displayName(Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' }));
+
+    expect(label).toEqual('last, first');
+  });
 });
