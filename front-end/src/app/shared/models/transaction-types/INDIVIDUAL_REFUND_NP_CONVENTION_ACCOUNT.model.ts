@@ -7,15 +7,17 @@ import { AggregationGroups } from '../transaction.model';
 
 export class INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT extends SchBTransactionType {
   componentGroupId = 'A';
-  title = LabelUtils.get(ScheduleBTransactionTypeLabels,
-    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT);
+  title = LabelUtils.get(
+    ScheduleBTransactionTypeLabels,
+    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT
+  );
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override showAggregate = false;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21b',
+      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
       aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });

@@ -19,7 +19,7 @@ export class OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchBTransactionTyp
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21b',
+      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

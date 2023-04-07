@@ -16,13 +16,11 @@ describe('INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SB21b');
-    expect(txn.transaction_type_identifier).toBe(
-      ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT);
+    expect(txn.form_type).toBe('SB21B');
+    expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT);
   });
 
   it('#generatePurposeDescription() should be the correct value', () => {
-    expect(transactionType.generatePurposeDescription()).toBe(
-      "Pres. Nominating Convention Account: Refund");
+    expect(transactionType.generatePurposeDescription()).toBe('Pres. Nominating Convention Account: Refund');
   });
 });
