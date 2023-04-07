@@ -47,4 +47,13 @@ describe('DeletedContactDialogComponent', () => {
     component.hide();
     expect(component.selectedItems).toEqual([]);
   });
+
+  it('should restore', () => {
+    spyOn(component.itemService, 'restore').and.returnValue(of(['1']));
+    component.visible = true;
+    component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
+    component.restoreSelected();
+
+    expect(component.selectedItems).toEqual([]);
+  });
 });
