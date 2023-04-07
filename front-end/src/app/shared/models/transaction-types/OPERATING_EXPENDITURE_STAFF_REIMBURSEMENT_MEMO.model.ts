@@ -18,7 +18,7 @@ export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO extends SchBTransact
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21b',
+      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

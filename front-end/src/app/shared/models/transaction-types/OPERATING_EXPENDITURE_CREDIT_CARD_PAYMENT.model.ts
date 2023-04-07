@@ -19,7 +19,7 @@ export class OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchBTransactionTy
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21b',
+      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

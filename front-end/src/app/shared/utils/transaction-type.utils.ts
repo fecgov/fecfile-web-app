@@ -100,6 +100,9 @@ import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO } from '../models/tra
 import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO.model';
 import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT.model';
 import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL.model';
+import { INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
+import { INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT.model';
+import { INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
@@ -181,6 +184,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   // INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
   OPERATING_EXPENDITURE,
   OPERATING_EXPENDITURE_VOID,
+  INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+  INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
+  INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
   OTHER_DISBURSEMENT,
   OTHER_DISBURSEMENT_VOID,
   OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
@@ -216,8 +222,8 @@ export class TransactionTypeUtils {
   }
 }
 
-// prettier-ignore
-export function getTransactionTypeClass(transactionTypeIdentifier: string): any { // eslint-disable-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getTransactionTypeClass(transactionTypeIdentifier: string): any {
   return transactionTypeClasses[transactionTypeIdentifier];
 }
 
