@@ -37,7 +37,7 @@
         "@popperjs/core": "^2.10.2",
         "bootstrap": "5.1.3",
         "class-transformer": "^0.5.1",
-        "fecfile-validate": "https://github.com/fecgov/fecfile-validate#b645ece7c196e6f41a868126b194875480ee6e55",
+        "fecfile-validate": "https://github.com/fecgov/fecfile-validate#31e387ad2a56a02a792c4d403099d636049b17d3",
         "intl-tel-input": "^17.0.18",
         "jwt-decode": "^3.1.2",
         "lodash": "^4.17.21",
