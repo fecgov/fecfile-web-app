@@ -55,9 +55,7 @@
           <td>
             <p-tableCheckbox [value]="item" [ariaLabel]="'select ' + displayName(item)"></p-tableCheckbox>
           </td>
-          <td>
-            <a>{{ displayName(item) }}</a>
-          </td>
+          <td>{{ displayName(item) }}</td>
           <td>{{ item.type | label : contactTypeLabels }}</td>
           <td>{{ item.employer }}</td>
           <td>{{ item.occupation }}</td>

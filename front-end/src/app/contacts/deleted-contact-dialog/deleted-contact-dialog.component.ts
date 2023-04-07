@@ -1,5 +1,4 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Contact, ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { DeletedContactService } from 'app/shared/services/contact.service';
@@ -14,7 +13,6 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
   @Input() visible = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() contactsRestored = new EventEmitter<string[]>();
-  restoreEnabled = false;
   contactTypeLabels: LabelList = ContactTypeLabels;
 
   constructor(

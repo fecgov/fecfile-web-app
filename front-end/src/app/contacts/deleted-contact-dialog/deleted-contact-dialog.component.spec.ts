@@ -43,7 +43,6 @@ describe('DeletedContactDialogComponent', () => {
   it('should enable restore', () => {
     component.visible = true;
     component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
-    expect(component.restoreControl.enabled).toBeTrue();
     component.hide();
     expect(component.selectedItems).toEqual([]);
   });
