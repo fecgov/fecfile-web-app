@@ -73,13 +73,9 @@ export type ScheduleCTransactionGroupsType = ScheduleCTransactionGroups.SCHEDULE
 export enum ScheduleCTransactionTypes {
   LOANS_RECEIVED_FROM_INDIVIDUAL = 'LOANS_RECEIVED_FROM_INDIVIDUAL',
   LOANS_RECEIVED_FROM_BANK = 'LOANS_RECEIVED_FROM_BANK',
-  C1_LOAN_AGREEMENT = 'C1_LOAN_AGREEMENT',
-  C2_LOAN_GUARANTOR = 'C2_LOAN_GUARANTOR',
 }
 
 export const ScheduleCTransactionTypeLabels: LabelList = [
   [ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_INDIVIDUAL, 'Loans Received from Individual'],
   [ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_BANK, 'Loans Received from Bank'],
-  [ScheduleCTransactionTypes.C1_LOAN_AGREEMENT, 'C-1 Loan Agreement'],
-  [ScheduleCTransactionTypes.C2_LOAN_GUARANTOR, 'C2 - LOAN GUARANTOR NAME & ADDRESS INFORMATION '],
 ];
