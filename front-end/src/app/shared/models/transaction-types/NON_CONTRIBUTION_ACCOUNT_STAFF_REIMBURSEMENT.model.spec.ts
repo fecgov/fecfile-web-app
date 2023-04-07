@@ -24,6 +24,6 @@ describe('NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT', () => {
 
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Non-Contribution Account - Reimbursement: See Below');
+    expect(descrip).toBe('Non-contribution Account - Reimbursement: See Below');
   });
 });

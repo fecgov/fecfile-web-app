@@ -13,12 +13,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO extends SchATran
   );
   schema = schema;
   override updateParentOnSave = true;
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
-    LabelUtils.get(
-      ScheduleATransactionTypeLabels,
-      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT
-    )
-  );
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(): string {
     return 'Pres. Nominating Convention Account Partnership Attribution';

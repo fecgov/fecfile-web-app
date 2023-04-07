@@ -3,7 +3,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_P
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
 
 export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT extends SchBTransactionType {
@@ -14,8 +14,8 @@ export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT extends SchBTransactionTy
   );
   schema = schema;
   override defaultContactTypeOption = ContactTypes.INDIVIDUAL;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
-  override subTransactionTypes = [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO];
+  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override subTransactionConfig = [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO];
 
   override generatePurposeDescription() {
     return 'Reimbursement: See Below';
@@ -23,7 +23,7 @@ export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT extends SchBTransactionTy
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21b',
+      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

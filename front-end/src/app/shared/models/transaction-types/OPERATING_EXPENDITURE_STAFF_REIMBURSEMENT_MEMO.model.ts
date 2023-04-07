@@ -3,7 +3,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_M
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
 
 export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO extends SchBTransactionType {
@@ -14,11 +14,11 @@ export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO extends SchBTransact
   );
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SB21b',
+      form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
     });

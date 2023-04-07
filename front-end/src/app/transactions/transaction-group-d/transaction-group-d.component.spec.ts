@@ -72,15 +72,6 @@ describe('TransactionGroupDComponent', () => {
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
   });
 
-  it('should reset the subTransaction dropdown', () => {
-    component.form.get('subTransaction')?.setValue('A Value');
-    expect(component.form.get('subTransaction')?.value).toEqual('A Value');
-    component.createSubTransaction({
-      value: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    });
-    expect(component.form.get('subTransaction')?.value).toBeNull();
-  });
-
   it('#save() should not save an invalid record', () => {
     component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
     component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
