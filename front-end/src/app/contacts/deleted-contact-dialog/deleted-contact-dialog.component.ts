@@ -30,6 +30,7 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
 
   hide(): void {
     this.selectAll = false;
+    this.onSelectionChange([]);
     this.visibleChange.emit(false);
     this.visible = false;
   }

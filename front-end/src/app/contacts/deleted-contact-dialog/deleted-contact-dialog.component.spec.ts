@@ -24,6 +24,15 @@ describe('DeletedContactDialogComponent', () => {
 
     fixture = TestBed.createComponent(DeletedContactDialogComponent);
     component = fixture.componentInstance;
+    spyOn(component.itemService, 'getTableData').and.returnValue(
+      of({
+        count: 2,
+        pageNumber: 1,
+        next: 'https://next',
+        previous: 'https://previous',
+        results: [Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })],
+      })
+    );
     fixture.detectChanges();
   });
 
@@ -32,16 +41,10 @@ describe('DeletedContactDialogComponent', () => {
   });
 
   it('should enable restore', () => {
-    spyOn(component.itemService, 'getTableData').and.returnValue(
-      of({
-        count: 2,
-        pageNumber: 1,
-        next: 'https://next',
-        previous: 'https://previous',
-        results: [Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' }), Contact.fromJSON({ id: 2 })],
-      })
-    );
+    component.visible = true;
     component.onSelectionChange([Contact.fromJSON({ id: 1, first_name: 'first', last_name: 'last' })]);
     expect(component.restoreControl.enabled).toBeTrue();
+    component.hide();
+    expect(component.selectedItems).toEqual([]);
   });
 });
