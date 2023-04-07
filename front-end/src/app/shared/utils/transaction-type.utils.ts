@@ -100,6 +100,7 @@ import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO } from '../models/tra
 import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO.model';
 import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT.model';
 import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL.model';
+import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -197,7 +198,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
   NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
   NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
-  NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO
+  NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO,
+  TRIBAL_REFUND_NP_CONVENTION_ACCOUNT
 }
 
 export class TransactionTypeUtils {

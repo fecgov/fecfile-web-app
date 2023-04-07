@@ -13,6 +13,7 @@ export abstract class TransactionType {
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
+  isRefundAggregate = false; // Boolean flag to control whether or not the amount is subtracted from the aggregate
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionType?: TransactionType; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
