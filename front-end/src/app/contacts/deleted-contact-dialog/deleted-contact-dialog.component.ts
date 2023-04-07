@@ -9,7 +9,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 @Component({
   selector: 'app-deleted-contact-dialog',
   templateUrl: './deleted-contact-dialog.component.html',
-  styleUrls: ['./deleted-contact-dialog.component.scss'],
 })
 export class DeletedContactDialogComponent extends TableListBaseComponent<Contact> implements OnInit {
   @Input() visible = false;
