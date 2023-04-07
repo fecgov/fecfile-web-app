@@ -16,7 +16,6 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
   @Output() contactsRestored = new EventEmitter<string[]>();
   restoreEnabled = false;
   contactTypeLabels: LabelList = ContactTypeLabels;
-  restoreControl = new FormControl('');
 
   constructor(
     protected override messageService: MessageService,
@@ -32,17 +31,6 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     this.onSelectionChange([]);
     this.visibleChange.emit(false);
     this.visible = false;
-  }
-
-  public override onSelectionChange(items: Contact[] = []) {
-    super.onSelectionChange(items);
-    if (items.length > 0) this.restoreControl.enable();
-    else this.restoreControl.disable();
-  }
-  public override onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {
-    super.onSelectAllChange(event);
-    if (event.checked) this.restoreControl.enable();
-    else this.restoreControl.disable();
   }
 
   restoreSelected(): void {

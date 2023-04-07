@@ -75,7 +75,7 @@
           pButton
           pRipple
           id="restoreButton"
-          [formControl]="restoreControl"
+          [disabled]="selectedItems.length <= 0"
           label="Restore selected"
           icon="pi pi-check"
           class="p-button-primary"
