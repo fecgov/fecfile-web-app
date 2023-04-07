@@ -34,8 +34,6 @@ export class DeletedContactDialogComponent extends TableListBaseComponent<Contac
     this.visible = false;
   }
 
-  onShow(): void {}
-
   public override onSelectionChange(items: Contact[] = []) {
     super.onSelectionChange(items);
     if (items.length > 0) this.restoreControl.enable();

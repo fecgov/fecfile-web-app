@@ -145,7 +145,7 @@ export class DeletedContactService implements TableListService<Contact> {
     return this.apiService.post<string[]>('/contacts-deleted/restore/', contactIds);
   }
 
-  public delete(contact: Contact): Observable<null> {
+  public delete(_: Contact): Observable<null> {
     return of(null);
   }
 }
