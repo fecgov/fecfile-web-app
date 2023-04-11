@@ -134,7 +134,7 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="childTemplateMap"
             [memoCodeReadOnly]="isMemoCodeReadOnly(childTransaction?.transactionType)"
-            [contributionAmountReadOnly]="true"
+            [amountReadOnly]="true"
             [negativeAmountValueOnly]="!!childTransaction?.transactionType?.negativeAmountValueOnly"
             [showAggregate]="!!childTransaction?.transactionType?.showAggregate"
           ></app-amount-input>
