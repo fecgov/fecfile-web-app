@@ -130,6 +130,13 @@ label.disabled {
   font-size: 48px;
 }
 
+.form-type-dialog {
+  width: 50%;
+}
+.form-type-dialog p-dropdown {
+  display: flex;
+}
+
 // PRIMENG PANELMENU STYLE OVERRIDE
 
 .menu-item-disabled {
@@ -260,6 +267,10 @@ label.disabled {
   border-bottom-left-radius: 0;
 }
 
+.p-dropdown {
+  height:48px;
+}
+
 .pi-trash {
   cursor: pointer;
 }
@@ -272,4 +283,24 @@ label.disabled {
   background: white;
   color: black;
   border: 1px solid black;
+}
+
+.action-options {
+  &:before {
+      content:none !important;
+  }
+
+  &:after {
+      content:none !important;
+  }
+
+  padding: 0;
+  margin-top: 0px !important;
+}
+.action-options .p-overlaypanel-content {
+  padding: .5em;
+}
+.action-options .p-overlaypanel-content .p-button {
+  width: 100%;
+  text-align: inherit;
 }

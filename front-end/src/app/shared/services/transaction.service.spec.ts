@@ -3,12 +3,14 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { environment } from '../../../environments/environment';
-import { TransactionType } from '../models/transaction-types/transaction-type.model';
+import { Transaction, AggregationGroups } from '../models/transaction.model';
 import { ListRestResponse } from '../models/rest-api.model';
-import { SchATransaction, ScheduleATransactionTypes, AggregationGroups } from '../models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { TransactionService } from './transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { HttpStatusCode, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpErrorInterceptor } from '../interceptors/http-error.interceptor';
 
 describe('TransactionService', () => {
   let service: TransactionService;
@@ -17,7 +19,12 @@ describe('TransactionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [TransactionService, provideMockStore(testMockStore), DatePipe],
+      providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+        TransactionService,
+        provideMockStore(testMockStore),
+        DatePipe,
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(TransactionService);
@@ -48,9 +55,7 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/transactions/schedule-a/?page=1&ordering=form_type`
-    );
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/?page=1&ordering=form_type`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
@@ -66,7 +71,7 @@ describe('TransactionService', () => {
       expect(response).toEqual(mockResponse);
     });
 
-    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/schedule-a/1/`);
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/transactions/1/`);
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
     httpTestingController.verify();
@@ -78,25 +83,36 @@ describe('TransactionService', () => {
       transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
       aggregation_group: AggregationGroups.GENERAL,
     });
-    const mockTransactionType: TransactionType | undefined = TransactionTypeUtils.factory(
+    const mockTransaction: Transaction = TransactionTypeUtils.factory(
       ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
-    );
-    if (mockTransactionType) {
-      mockTransactionType.transaction = mockResponse;
-      mockTransactionType.transaction = SchATransaction.fromJSON({
-        id: 'abc',
-        transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
-      });
-      service.getPreviousTransaction(mockTransactionType, '1', new Date()).subscribe((response) => {
-        expect(response).toEqual(mockResponse);
-      });
-    }
+    ).getNewTransaction();
+    mockTransaction.id = 'abc';
+    service.getPreviousTransaction(mockTransaction, '1', new Date()).subscribe((response) => {
+      expect(response).toEqual(mockResponse);
+    });
     const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
     const req = httpTestingController.expectOne(
-      `${environment.apiUrl}/transactions/schedule-a/previous/?transaction_id=abc&contact_id=1&action_date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
+      `${environment.apiUrl}/transactions/previous/?transaction_id=abc&contact_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
     );
     expect(req.request.method).toEqual('GET');
     req.flush(mockResponse);
+    httpTestingController.verify();
+  });
+
+  it('#getPreviousTransaction() should return undefined', () => {
+    const mockTransaction: Transaction = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+    ).getNewTransaction();
+    mockTransaction.id = 'abc';
+    service.getPreviousTransaction(mockTransaction, '1', new Date()).subscribe((response) => {
+      expect(response).toEqual(undefined);
+    });
+    const formattedDate = formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
+    const req = httpTestingController.expectOne(
+      `${environment.apiUrl}/transactions/previous/?transaction_id=abc&contact_id=1&date=${formattedDate}&aggregation_group=${AggregationGroups.GENERAL}`
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush({}, { status: HttpStatusCode.NotFound, statusText: 'not found' });
     httpTestingController.verify();
   });
 

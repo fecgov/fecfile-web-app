@@ -53,9 +53,9 @@ describe('TransactionGroupEComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionGroupEComponent);
     component = fixture.componentInstance;
-    component.transactionType = TransactionTypeUtils.factory(ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
-    if (component.transactionType)
-      component.transactionType.transaction = component.transactionType?.getNewTransaction();
+    component.transaction = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
+    ).getNewTransaction();
     fixture.detectChanges();
   });
 
@@ -63,12 +63,5 @@ describe('TransactionGroupEComponent', () => {
     expect(component).toBeTruthy();
     component.ngOnInit();
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.COMMITTEE);
-  });
-
-  it('should reset the subTransaction dropdown', () => {
-    component.form.get('subTransaction')?.setValue('A Value');
-    expect(component.form.get('subTransaction')?.value).toEqual('A Value');
-    component.createSubTransaction({ value: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT });
-    expect(component.form.get('subTransaction')?.value).toBeNull();
   });
 });

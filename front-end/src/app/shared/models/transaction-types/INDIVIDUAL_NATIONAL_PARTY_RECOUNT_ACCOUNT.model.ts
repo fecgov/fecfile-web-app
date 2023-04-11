@@ -1,15 +1,11 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT';
-import {
-  AggregationGroups,
-  SchATransaction,
-  ScheduleATransactionTypeLabels,
-  ScheduleATransactionTypes,
-} from '../scha-transaction.model';
-import { SchaTransactionType } from './SchaTransactionType.model';
+import { AggregationGroups } from '../transaction.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransactionType } from '../scha-transaction-type.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
-export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchaTransactionType {
+export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionType {
   componentGroupId = 'A';
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,

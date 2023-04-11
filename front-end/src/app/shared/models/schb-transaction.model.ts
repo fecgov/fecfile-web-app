@@ -1,5 +1,5 @@
 import { plainToClass, Transform } from 'class-transformer';
-import { Transaction } from './transaction.model';
+import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
@@ -23,6 +23,8 @@ export class SchBTransaction extends Transaction {
   election_other_description: string | undefined;
   @Transform(BaseModel.dateTransform) expenditure_date: Date | undefined;
   expenditure_amount: number | undefined;
+  aggregate_amount: number | undefined;
+  aggregation_group: AggregationGroups | undefined;
   semi_annual_refunded_bundled_amt: number | undefined;
   expenditure_purpose_descrip: string | undefined;
   category_code: string | undefined;
@@ -47,29 +49,27 @@ export class SchBTransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
-  override apiEndpoint = '/sch-b-transactions';
+  override apiEndpoint = '/transactions/schedule-b';
 
-  // prettier-ignore
-  static fromJSON(json: any, depth = 2): SchBTransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+  override getFieldsNotToValidate(): string[] {
+    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: any, depth = 2): SchBTransaction {
     const transaction = plainToClass(SchBTransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
     }
-    else {
-      throw new Error("Can't find transaction_type_identifier when creating class from JSON");
-    }
     if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = SchBTransaction.fromJSON(transaction.parent_transaction, depth-1);
+      transaction.parent_transaction = SchBTransaction.fromJSON(transaction.parent_transaction, depth - 1);
     }
     if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function(child) { return SchBTransaction.fromJSON(child, depth-1) });
+      transaction.children = transaction.children.map(function (child) {
+        return SchBTransaction.fromJSON(child, depth - 1);
+      });
     }
     return transaction;
-  }
-
-  getUpdatedParent(): Transaction {
-    throw new Error('Tried to call updateParent on SchBTransaction and there is no update code');
   }
 }
 
@@ -89,6 +89,7 @@ export type ScheduleBTransactionGroupsType =
   | ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES;
 
 export enum ScheduleBTransactionTypes {
+  BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT = 'BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT',
   OPERATING_EXPENDITURE = 'OPERATING_EXPENDITURE',
   OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT = 'OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT',
   OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO = 'OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO',
@@ -102,6 +103,10 @@ export enum ScheduleBTransactionTypes {
   CONTRIBUTION_TO_CANDIDATE_VOID = 'CONTRIBUTION_TO_CANDIDATE_VOID',
   CONTRIBUTION_TO_OTHER_COMMITTEE = 'CONTRIBUTION_TO_OTHER_COMMITTEE',
   CONTRIBUTION_TO_OTHER_COMMITTEE_VOID = 'CONTRIBUTION_TO_OTHER_COMMITTEE_VOID',
+  INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT = 'INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT',
+  INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT = 'INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT',
+  INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT = 'INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT',
+  INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT = 'INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT',
   OTHER_DISBURSEMENT = 'OTHER_DISBURSEMENT',
   OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT = 'OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT',
   OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO = 'OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO',
@@ -111,25 +116,25 @@ export enum ScheduleBTransactionTypes {
   OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO = 'OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO',
   OTHER_DISBURSEMENT_VOID = 'OTHER_DISBURSEMENT_VOID',
   OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT = 'OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT',
-  OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT = 'OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT',
-  OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO = 'OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO',
-  OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT = 'OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT',
-  OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO = 'OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO',
-  OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL = 'OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL',
-  OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO = 'OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO',
+  NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT = 'NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT',
+  NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO = 'NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO',
+  NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT = 'NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT',
+  NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO = 'NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO',
+  NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL = 'NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL',
+  NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO = 'NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO',
   OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   OTHER_DISBURSEMENT_RECOUNT = 'OTHER_DISBURSEMENT_RECOUNT',
   OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY = 'OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY',
   OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY = 'OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY',
   OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_INDIVIDUAL_REFUND = 'OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_INDIVIDUAL_REFUND',
   OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_REGULAR_REFUND = 'OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_REGULAR_REFUND',
-  OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_TRIBAL_REFUND = 'OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_TRIBAL_REFUND',
+  TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT = 'TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT',
   OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_INDIVIDUAL_REFUND = 'OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_INDIVIDUAL_REFUND',
   OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_REGULAR_REFUND = 'OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_REGULAR_REFUND',
-  OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_TRIBAL_REFUND = 'OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_TRIBAL_REFUND',
+  TRIBAL_REFUND_NP_CONVENTION_ACCOUNT = 'TRIBAL_REFUND_NP_CONVENTION_ACCOUNT',
   OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND = 'OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND',
   OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_REGULAR_REFUND = 'OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_REGULAR_REFUND',
-  OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_TRIBAL_REFUND = 'OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_TRIBAL_REFUND',
+  TRIBAL_REFUND_NP_RECOUNT_ACCOUNT = 'TRIBAL_REFUND_NP_RECOUNT_ACCOUNT',
   REFUND_CONTRIBUTION_INDIVIDUAL = 'REFUND_CONTRIBUTION_INDIVIDUAL',
   REFUND_CONTRIBUTION_INDIVIDUAL_VOID = 'REFUND_CONTRIBUTION_INDIVIDUAL_VOID',
   REFUND_CONTRIBUTION_PARTY = 'REFUND_CONTRIBUTION_PARTY',
@@ -149,63 +154,95 @@ export enum ScheduleBTransactionTypes {
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
+  [
+    ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
+    'Business/Labor Organization Refund - Non-contribution Account',
+  ],
   [ScheduleBTransactionTypes.OPERATING_EXPENDITURE, 'Operating Expenditure'],
   [
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT,
     'Credit Card Payment for Operating Expenditure',
   ],
-  [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO, 'Credit Card Corresponding Memo'],
+  [
+    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO,
+    'Credit Card Memo for Operating Expenditure',
+  ],
   [
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT,
     'Staff Reimbursement for Operating Expenditure',
   ],
-  [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO, 'Reimbursement Corresponding Memo'],
+  [
+    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO,
+    'Staff Reimbursement Memo for Operating Expenditure',
+  ],
   [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL, 'Payment to Payroll for Operating Expenditure'],
-  [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo'],
+  [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo for Operating Expenditure'],
   [ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID, 'Void of Operating Expenditure'],
-  [ScheduleBTransactionTypes.TRANSFER_TO_AFFIILIATES, 'Transfers to Affiliates/Other Committees'],
+  [ScheduleBTransactionTypes.TRANSFER_TO_AFFIILIATES, 'Transfers to Affiliates/Other Committee'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE, 'Contribution to Candidate'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID, 'Void of Contribution to Candidate'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE, 'Contribution to Other Committee'],
   [ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE_VOID, 'Void of Contribution to Other Committee'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT, 'Other Disbursements'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT, 'Credit Card Payment for Other Disbursements'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO, 'Credit Card Corresponding Memo'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT, 'Staff Reimbursements for Other Disbursements'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO, 'Reimbursement Corresponding Memo'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL, 'Payment to Payroll for Other Disbursements'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID, 'Void of Other Disbursements'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT, 'Non-Contribution Account Disbursements'],
   [
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
-    'Non-Contribution Account Credit Card Payment',
+    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
+    'Individual Refund - Non-contribution Account',
   ],
   [
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
-    'Credit Card Corresponding Memo',
+    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+    'Individual Refund - National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
-    'Non-Contribution Account Staff Reimbursement',
+    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
+    'Individual Refund - National Party Pres. Nominating Convention Account',
   ],
   [
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO,
-    'Reimbursement Corresponding Memo',
+    ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
+    'Individual Refund - National Party Recount/Legal Proceedings Account',
+  ],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT, 'Other Disbursement'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT, 'Credit Card Payment for Other Disbursement'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO, 'Credit Card Memo for Other Disbursement'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT, 'Staff Reimbursement for Other Disbursement'],
+  [
+    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO,
+    'Staff Reimbursement Memo for Other Disbursement',
+  ],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL, 'Payment to Payroll for Other Disbursement'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo for Other Disbursement'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID, 'Void of Other Disbursement'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT, 'Non-contribution Account Disbursement'],
+  [
+    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
+    'Non-contribution Account Credit Card Payment',
   ],
   [
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
-    'Non-Contribution Account Payment to Payroll',
+    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
+    'Non-contribution Account Credit Card Memo',
   ],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo'],
+  [
+    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
+    'Non-contribution Account Staff Reimbursement',
+  ],
+  [
+    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO,
+    'Non-contribution Account Staff Reimbursement Memo',
+  ],
+  [
+    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
+    'Non-contribution Account Payment to Payroll',
+  ],
+  [
+    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO,
+    'Non-contribution Account Payment to Payroll Memo',
+  ],
   [
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-    'National Party Recount Account Disbursements',
+    'National Party Recount Account Disbursement',
   ],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_RECOUNT, 'Recount Disbursements'],
+  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_RECOUNT, 'Recount Disbursement'],
   [
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY,
-    'Headquarters Account Operating Expense for National Party Expenses',
+    'Headquarters Account Operating Expense for National Party Expense',
   ],
   [
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY,
@@ -220,8 +257,8 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     'Headquarters Account - Regular Filer Refund',
   ],
   [
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_TRIBAL_REFUND,
-    'Headquarters Account - Tribal Refund',
+    ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+    'Tribal Refund - National Party Headquarters Buildings Account',
   ],
   [
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_INDIVIDUAL_REFUND,
@@ -232,8 +269,8 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     'Convention Account - Regular Filer Refund',
   ],
   [
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_TRIBAL_REFUND,
-    'Convention Account - Tribal Refund',
+    ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
+    'Tribal Refund - National Party Pres. Nominating Convention Account',
   ],
   [
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND,
@@ -244,8 +281,8 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     'National Party Recount Account - Regular Filer Refund',
   ],
   [
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_TRIBAL_REFUND,
-    'National Party Recount Account - Tribal Refund',
+    ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
+    'Tribal Refund - National Party Recount/Legal Proceedings Account',
   ],
   [ScheduleBTransactionTypes.REFUND_CONTRIBUTION_INDIVIDUAL, 'Refund of Individual Contribution'],
   [ScheduleBTransactionTypes.REFUND_CONTRIBUTION_INDIVIDUAL_VOID, 'Refund of Individual Contribution - Void'],

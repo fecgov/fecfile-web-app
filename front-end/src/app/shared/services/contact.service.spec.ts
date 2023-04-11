@@ -3,25 +3,35 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CommitteeLookupResponse, Contact, IndividualLookupResponse, OrganizationLookupResponse } from '../models/contact.model';
+import { JsonSchema } from '../interfaces/json-schema.interface';
+import {
+  CandidateLookupResponse,
+  CommitteeLookupResponse,
+  Contact,
+  ContactTypes,
+  IndividualLookupResponse,
+  OrganizationLookupResponse,
+} from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
-import { ContactService } from './contact.service';
+import { ContactService, DeletedContactService } from './contact.service';
 
 describe('ContactService', () => {
   let httpTestingController: HttpTestingController;
   let service: ContactService;
+  let deletedService: DeletedContactService;
   let testApiService: ApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ContactService, ApiService, provideMockStore(testMockStore)],
+      providers: [ContactService, DeletedContactService, ApiService, provideMockStore(testMockStore)],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(ContactService);
+    deletedService = TestBed.inject(DeletedContactService);
     testApiService = TestBed.inject(ApiService);
   });
 
@@ -98,19 +108,45 @@ describe('ContactService', () => {
     httpTestingController.verify();
   });
 
-  it('#committeeLookup() happy path', () => {
-    const expectedRetval = new CommitteeLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval));
+  it('#candidateLookup() happy path', () => {
+    const expectedRetval = new CandidateLookupResponse();
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     const testSearch = 'testSearch';
     const testMaxFecResults = 1;
     const testMaxFecfileResults = 2;
+
+    const expectedEndpoint = '/contacts/candidate_lookup/';
+    const expectedParams = {
+      q: testSearch,
+      max_fec_results: testMaxFecResults,
+      max_fecfile_results: testMaxFecfileResults,
+    };
+
+    service
+      .candidateLookup(testSearch, testMaxFecResults, testMaxFecfileResults)
+      .subscribe((value) => expect(value).toEqual(expectedRetval));
+    expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
+  });
+
+  it('#committeeLookup() happy path', () => {
+    const expectedRetval = new CommitteeLookupResponse();
+    const testSearch = 'testSearch';
+    const testMaxFecResults = 1;
+    const testMaxFecfileResults = 2;
+    const apiServiceGetSpy = spyOn(testApiService, 'get')
+      .withArgs('/contacts/committee_lookup/', {
+        q: testSearch,
+        max_fec_results: testMaxFecResults,
+        max_fecfile_results: testMaxFecfileResults,
+      })
+      .and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     const expectedEndpoint = '/contacts/committee_lookup/';
     const expectedParams = {
       q: testSearch,
       max_fec_results: testMaxFecResults,
-      max_fecfile_results: testMaxFecfileResults
-    }
+      max_fecfile_results: testMaxFecfileResults,
+    };
 
     service
       .committeeLookup(testSearch, testMaxFecResults, testMaxFecfileResults)
@@ -120,15 +156,15 @@ describe('ContactService', () => {
 
   it('#individualLookup() happy path', () => {
     const expectedRetval = new IndividualLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval));
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     const testSearch = 'testSearch';
     const testMaxFecfileResults = 2;
 
     const expectedEndpoint = '/contacts/individual_lookup/';
     const expectedParams = {
       q: testSearch,
-      max_fecfile_results: testMaxFecfileResults
-    }
+      max_fecfile_results: testMaxFecfileResults,
+    };
 
     service
       .individualLookup(testSearch, testMaxFecfileResults)
@@ -138,15 +174,15 @@ describe('ContactService', () => {
 
   it('#organizationLookup() happy path', () => {
     const expectedRetval = new OrganizationLookupResponse();
-    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval));
+    const apiServiceGetSpy = spyOn(testApiService, 'get').and.returnValue(of(expectedRetval) as any); // eslint-disable-line @typescript-eslint/no-explicit-any
     const testSearch = 'testSearch';
     const testMaxFecfileResults = 2;
 
     const expectedEndpoint = '/contacts/organization_lookup/';
     const expectedParams = {
       q: testSearch,
-      max_fecfile_results: testMaxFecfileResults
-    }
+      max_fecfile_results: testMaxFecfileResults,
+    };
 
     service
       .organizationLookup(testSearch, testMaxFecfileResults)
@@ -154,4 +190,51 @@ describe('ContactService', () => {
     expect(apiServiceGetSpy).toHaveBeenCalledOnceWith(expectedEndpoint, expectedParams);
   });
 
+  it('#getSchemaByType should return the correct schema', () => {
+    let schema: JsonSchema = ContactService.getSchemaByType(ContactTypes.COMMITTEE);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Committee.json');
+
+    schema = ContactService.getSchemaByType(ContactTypes.ORGANIZATION);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Organization.json');
+
+    schema = ContactService.getSchemaByType(ContactTypes.CANDIDATE);
+    expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Candidate.json');
+  });
+
+  it('#deleted.getTableData() should return a list of contacts', () => {
+    const mockResponse: ListRestResponse = {
+      count: 2,
+      next: 'https://next-page',
+      previous: 'https://previous-page',
+      results: [
+        Contact.fromJSON({
+          id: 'C00000001',
+        }),
+        Contact.fromJSON({
+          id: 'C00000002',
+        }),
+      ],
+    };
+
+    deletedService.getTableData().subscribe((response: ListRestResponse) => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts-deleted/?page=1&ordering=name`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(mockResponse);
+    httpTestingController.verify();
+  });
+
+  it('#restore() should POST a payload', () => {
+    const mockResponse: string[] = ['1'];
+    deletedService.restore([new Contact()]).subscribe((response: string[]) => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts-deleted/restore/`);
+    expect(req.request.method).toEqual('POST');
+    req.flush(mockResponse);
+    httpTestingController.verify();
+  });
 });

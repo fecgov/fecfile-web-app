@@ -15,12 +15,14 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   override item: Contact = new Contact();
   contactTypeLabels: LabelList = ContactTypeLabels;
 
+  restoreDialogIsVisible = false;
   searchTerm = '';
 
   // contact lookup
-  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.COMMITTEE, ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
-  );
+  contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.COMMITTEE,
+    ContactTypes.INDIVIDUAL,
+  ]);
 
   constructor(
     protected override messageService: MessageService,
@@ -60,6 +62,10 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
 
   public canDeleteItem(item: Contact): boolean {
     return item.transaction_count === 0;
+  }
+
+  public onRestoreClick() {
+    this.restoreDialogIsVisible = true;
   }
 
   public override onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {

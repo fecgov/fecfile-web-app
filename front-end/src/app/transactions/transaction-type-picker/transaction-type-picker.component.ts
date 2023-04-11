@@ -5,6 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/interfaces/report.interface';
+import { TransactionTypes, TransactionGroupTypes } from 'app/shared/models/transaction.model';
 import {
   ScheduleATransactionGroups,
   ScheduleATransactionGroupsType,
@@ -21,8 +22,6 @@ import { LabelList } from 'app/shared/utils/label.utils';
 import { getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
 
 type Categories = 'receipt' | 'disbursement';
-type GroupsTypes = ScheduleATransactionGroupsType | ScheduleBTransactionGroupsType;
-type TransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
 
 @Component({
   selector: 'app-transaction-type-picker',
@@ -55,7 +54,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  getTransactionGroups(): GroupsTypes[] {
+  getTransactionGroups(): TransactionGroupTypes[] {
     if (this.category == 'disbursement') {
       return [
         ScheduleBTransactionGroups.OPERATING_EXPENDITURES,
@@ -74,7 +73,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
     ];
   }
 
-  getTransactionTypes(group: GroupsTypes): TransactionTypes[] {
+  getTransactionTypes(group: TransactionGroupTypes): TransactionTypes[] {
     switch (group) {
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS:
         return [
@@ -115,7 +114,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
       case ScheduleATransactionGroups.REFUNDS:
         return [
           ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES,
-          ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_UNREGISTERED_COMMITTEES,
+          ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
         ];
       case ScheduleATransactionGroups.OTHER:
         return [
@@ -128,6 +127,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT,
           ScheduleATransactionTypes.PAC_RECOUNT_RECEIPT,
           ScheduleATransactionTypes.TRIBAL_RECOUNT_RECEIPT,
+          ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
           ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT,
           ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT,
           ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
@@ -144,6 +144,8 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION,
           ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_HEADQUARTERS_ACCOUNT_CONTRIBUTION,
           ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT,
+          ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT,
+          ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,
         ];
       case ScheduleBTransactionGroups.OPERATING_EXPENDITURES:
         return [
@@ -164,28 +166,33 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
         ];
       case ScheduleBTransactionGroups.OTHER_EXPENDITURES:
         return [
+          ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
+          ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
+          ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+          ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
+          ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT,
-          ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
-          ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
-          ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
+          ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
+          ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
+          ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_ACCOUNT,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_RECOUNT,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_INDIVIDUAL_REFUND,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_REGULAR_REFUND,
-          ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_TRIBAL_REFUND,
+          ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_INDIVIDUAL_REFUND,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_REGULAR_REFUND,
-          ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_TRIBAL_REFUND,
+          ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_REGULAR_REFUND,
-          ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_TRIBAL_REFUND,
+          ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
         ];
       case ScheduleBTransactionGroups.REFUND:
         return [
@@ -217,7 +224,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
 
   getRouterLink(transactionType: string): string | undefined {
     if (this.report && !this.isTransactionDisabled(transactionType)) {
-      return `/transactions/report/${this.report?.id}}/create/${transactionType}`;
+      return `/transactions/report/${this.report?.id}/create/${transactionType}`;
     }
     return undefined;
   }

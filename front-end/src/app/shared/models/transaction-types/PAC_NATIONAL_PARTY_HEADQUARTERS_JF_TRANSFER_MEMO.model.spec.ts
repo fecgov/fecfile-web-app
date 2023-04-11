@@ -1,33 +1,32 @@
-import { PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from './PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { JOINT_FUNDRAISING_TRANSFER } from './JOINT_FUNDRAISING_TRANSFER.model';
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 
 describe('PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
-  let transactionType: PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO;
+  let transaction: SchATransaction;
 
   beforeEach(() => {
-    transactionType = new PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO();
-    transactionType.transaction = transactionType.getNewTransaction();
-    transactionType.transaction.parent_transaction = new JOINT_FUNDRAISING_TRANSFER().getNewTransaction();
-    (transactionType.transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
+    transaction = getTestTransactionByType(
+      ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
+    ) as SchATransaction;
+    (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
 
   it('should create an instance', () => {
-    expect(transactionType).toBeTruthy();
-    expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('F');
+    expect(transaction.transactionType).toBeTruthy();
+    expect(transaction.transactionType?.scheduleId).toBe('A');
+    expect(transaction.transactionType?.componentGroupId).toBe('E');
   });
 
   it('#factory() should return a SchATransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA17');
-    expect(txn.transaction_type_identifier).toBe(
+    expect(transaction.form_type).toBe('SA17');
+    expect(transaction.transaction_type_identifier).toBe(
       ScheduleATransactionTypes.PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO
     );
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
-    const descrip = transactionType.generatePurposeDescription();
+    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(`Headquarters Buildings Account JF Memo: Test Org`);
   });
 });

@@ -6,6 +6,7 @@ import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.mod
 @Component({
   selector: 'app-transaction-group-a',
   templateUrl: './transaction-group-a.component.html',
+  styleUrls: ['../transaction.scss'],
 })
 export class TransactionGroupAComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
@@ -28,8 +29,35 @@ export class TransactionGroupAComponent extends TransactionTypeBaseComponent imp
     'contributor_occupation',
     'memo_code',
     'memo_text_input',
+    'subTransaction',
   ];
-  override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels).filter((option) =>
-    [ContactTypes.INDIVIDUAL].includes(option.code as ContactTypes)
-  );
+
+  override ngOnInit(): void {
+    if (this.transaction?.transactionType?.scheduleId === 'B') {
+      this.formProperties = [
+        'entity_type',
+        'payee_last_name',
+        'payee_first_name',
+        'payee_middle_name',
+        'payee_prefix',
+        'payee_suffix',
+        'payee_street_1',
+        'payee_street_2',
+        'payee_city',
+        'payee_state',
+        'payee_zip',
+        'expenditure_date',
+        'expenditure_amount',
+        'aggregate_amount',
+        'expenditure_purpose_descrip',
+        'memo_code',
+        'memo_text_input',
+        'category_code',
+        'subTransaction',
+      ];
+    }
+    super.ngOnInit();
+  }
+
+  override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
 }

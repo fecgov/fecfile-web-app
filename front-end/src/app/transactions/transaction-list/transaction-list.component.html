@@ -2,15 +2,35 @@
   <p-toolbar styleClass="mb-4">
     <ng-template pTemplate="left">Transactions</ng-template>
 
-    <ng-template pTemplate="right"
-      ><button
-        pButton
+    <ng-template pTemplate="right">
+      <p-overlayPanel #op [styleClass]="'action-options'">
+        <ng-template pTemplate>
+          <ul>
+            <li *ngFor="let action of tableActions">
+              <button
+                *ngIf="!action.isAvailable || action.isAvailable(report)"
+                [disabled]="!action.isEnabled(report)"
+                pButton
+                pRipple
+                type="button"
+                class="p-button-secondary p-button-text"
+                id="one"
+                (click)="onTableActionClick(action, report)"
+              >
+                {{ action.label }}
+              </button>
+            </li>
+          </ul>
+        </ng-template>
+      </p-overlayPanel>
+      <p-button
         pRipple
-        label="Add new transaction"
         icon="pi pi-plus"
-        class="p-button-success mr-2"
-        [routerLink]="['/transactions/report/', report?.id, 'select', 'receipt']"
-      ></button>
+        label="Add new transaction"
+        styleClass="p-button-success mr-2"
+        (onClick)="op.toggle($event)"
+        ariaLabel="Add a Transaction"
+      ></p-button>
     </ng-template>
   </p-toolbar>
 
@@ -38,20 +58,18 @@
         <th pSortableColumn="transaction_type_identifier" id="transaction-type-identifier-column" role="columnheader">
           Transaction type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
         </th>
-        <th pSortableColumn="contributor_name" id="contributor--name-column" role="columnheader">
-          Name <p-sortIcon field="contributor_name"></p-sortIcon>
-        </th>
-        <th pSortableColumn="contribution_date" id="contribution-date-column" role="columnheader">
-          Contribution date <p-sortIcon field="contribution_date"></p-sortIcon>
+        <th pSortableColumn="name" id="name-column" role="columnheader">Name <p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="date" id="date-column" role="columnheader">
+          Contribution date <p-sortIcon field="date"></p-sortIcon>
         </th>
         <th pSortableColumn="memo_code" id="memo-code-column" role="columnheader">
           Memo code <p-sortIcon field="memo_code"></p-sortIcon>
         </th>
-        <th pSortableColumn="contribution_amount" id="contribution-amount-column" role="columnheader">
-          Amount <p-sortIcon field="contribution_amount"></p-sortIcon>
+        <th pSortableColumn="amount" id="amount-column" role="columnheader">
+          Amount <p-sortIcon field="amount"></p-sortIcon>
         </th>
-        <th pSortableColumn="contribution_aggregate" id="contribution-aggregate-column" role="columnheader">
-          Aggregate <p-sortIcon field="contribution_aggregate"></p-sortIcon>
+        <th pSortableColumn="aggregate" id="aggregate-column" role="columnheader">
+          Aggregate <p-sortIcon field="aggregate"></p-sortIcon>
         </th>
         <th id="transaction_id" role="columnheader">Transaction ID</th>
         <th id="transaction_parent" role="columnheader">Associated With</th>
@@ -62,24 +80,29 @@
       <tr role="row">
         <td>
           <a [routerLink]="['edit', item?.id]">{{
-            item.transaction_type_identifier | label : scheduleATransactionTypeLabels
+            item.transaction_type_identifier | label : scheduleTransactionTypeLabels
           }}</a>
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
         </td>
         <td>
-          {{ item.contributor_organization_name || item.contributor_last_name + ', ' + item.contributor_first_name }}
+          {{
+            item[item.transactionType.templateMap.organization_name] ||
+              item[item.transactionType.templateMap.last_name] +
+                ', ' +
+                item[item.transactionType.templateMap.first_name]
+          }}
         </td>
         <td>
-          {{ item.contribution_date | fecDate }}
+          {{ item[item.transactionType.templateMap.date] | fecDate }}
         </td>
         <td>
           {{ item.memo_code | memoCode }}
         </td>
         <td>
-          {{ item.contribution_amount | currency }}
+          {{ item[item.transactionType.templateMap.amount] | currency }}
         </td>
         <td>
-          {{ item.contribution_aggregate | currency }}
+          {{ item[item.transactionType.templateMap.aggregate] | currency }}
         </td>
         <td>
           {{ item.transaction_id }}

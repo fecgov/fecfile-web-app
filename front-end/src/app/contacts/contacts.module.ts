@@ -21,9 +21,10 @@ import { SharedModule } from '../shared/shared.module';
 import { ContactsRoutingModule } from './contacts-routing.module';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
+import { DeletedContactDialogComponent } from './deleted-contact-dialog/deleted-contact-dialog.component';
 
 @NgModule({
-  declarations: [ContactListComponent, ContactDetailComponent],
+  declarations: [ContactListComponent, ContactDetailComponent, DeletedContactDialogComponent],
   imports: [
     CommonModule,
     FormsModule,

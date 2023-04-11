@@ -142,7 +142,7 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
       accept: () => {
         this.itemService.delete(item).subscribe(() => {
           this.item = this.getEmptyItem();
-          this.loadTableItems({} as LazyLoadEvent); // Refresh table list
+          this.refreshTable();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });
       },
@@ -166,9 +166,13 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
     forkJoin(obs).subscribe(() => {
       this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
       this.selectedItems = [];
-      this.loadTableItems({} as LazyLoadEvent); // Refresh table list
+      this.refreshTable();
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     });
+  }
+
+  public refreshTable() {
+    this.loadTableItems({} as LazyLoadEvent);
   }
 
   /**
@@ -183,5 +187,23 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
 
   public getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     return {};
+  }
+}
+
+export class TableAction {
+  label: string;
+  action: (item?: any) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
+  isAvailable: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
+  isEnabled: (item?: any) => boolean = () => true; // eslint-disable-line @typescript-eslint/no-explicit-any
+  constructor(
+    label: string,
+    action: (item?: any) => void, // eslint-disable-line @typescript-eslint/no-explicit-any
+    isAvailable?: (item?: any) => boolean, // eslint-disable-line @typescript-eslint/no-explicit-any
+    isEnabled?: (item?: any) => boolean // eslint-disable-line @typescript-eslint/no-explicit-any
+  ) {
+    this.label = label;
+    this.action = action;
+    this.isAvailable = isAvailable || this.isAvailable;
+    this.isEnabled = isEnabled || this.isEnabled;
   }
 }

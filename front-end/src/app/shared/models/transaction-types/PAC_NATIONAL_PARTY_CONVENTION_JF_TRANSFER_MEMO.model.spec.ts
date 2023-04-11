@@ -1,33 +1,31 @@
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from './PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
 
 describe('PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
-  let transactionType: PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO;
+  let transaction: SchATransaction;
 
   beforeEach(() => {
-    transactionType = new PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO();
+    transaction = getTestTransactionByType(
+      ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
+    ) as SchATransaction;
+    transaction.parent_transaction = { contributor_organization_name: 'Test Org' } as SchATransaction;
   });
 
   it('should create an instance', () => {
-    expect(transactionType).toBeTruthy();
-    expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('F');
+    expect(transaction.transactionType).toBeTruthy();
+    expect(transaction.transactionType?.scheduleId).toBe('A');
+    expect(transaction.transactionType?.componentGroupId).toBe('E');
   });
 
   it('#factory() should return a SchATransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA17');
-    expect(txn.transaction_type_identifier).toBe(
+    expect(transaction.form_type).toBe('SA17');
+    expect(transaction.transaction_type_identifier).toBe(
       ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
     );
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
-    const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe(
-      `Pres. Nominating Convention Account JF Memo: ${
-        (transactionType.transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
-      }`
-    );
+    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
+    expect(descrip).toBe('Pres. Nominating Convention Account JF Memo: Test Org');
   });
 });

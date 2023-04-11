@@ -43,6 +43,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { MenuReportComponent } from './layout/sidebar/menu-report/menu-report.component';
+import { BannerComponent } from './layout/banner/banner.component';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -59,6 +60,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     AppComponent,
     LayoutComponent,
     HeaderComponent,
+    BannerComponent,
     SidebarComponent,
     FooterComponent,
     LoginComponent,

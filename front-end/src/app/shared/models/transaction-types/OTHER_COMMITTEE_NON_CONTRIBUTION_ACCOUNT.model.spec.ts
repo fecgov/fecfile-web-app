@@ -11,7 +11,7 @@ describe('OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('F');
+    expect(transactionType.componentGroupId).toBe('E');
   });
 
   it('#factory() should return a SchATransaction', () => {
@@ -24,6 +24,6 @@ describe('OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT', () => {
 
   it('#generatePurposeDescription() should return constant', () => {
     const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Non-contribution Account Receipt');
+    expect(descrip).toBe('Non-contribution Account');
   });
 });

@@ -4,7 +4,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-
+import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AmountInputComponent } from './amount-input.component';
 
 describe('AmountInputComponent', () => {
@@ -25,6 +25,7 @@ describe('AmountInputComponent', () => {
       contribution_amount: new FormControl(''),
       contribution_aggregate: new FormControl(''),
     });
+    component.templateMap = testTemplateMap;
     fixture.detectChanges();
   });
 

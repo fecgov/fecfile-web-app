@@ -3,10 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { TransactionType } from 'app/shared/models/transaction-types/transaction-type.model';
-import { Transaction } from 'app/shared/models/transaction.model';
+import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { AggregationGroups, SchATransaction } from 'app/shared/models/scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
   NavigationDestination,
@@ -15,7 +14,6 @@ import {
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { schema as OFFSET_TO_OPERATING_EXPENDITURES } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPERATING_EXPENDITURES';
 import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -31,6 +29,7 @@ import { of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { SharedModule } from '../../shared/shared.module';
 import { TransactionGroupBComponent } from './transaction-group-b.component';
+import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 
 describe('TransactionGroupBComponent', () => {
   let httpTestingController: HttpTestingController;
@@ -86,21 +85,9 @@ describe('TransactionGroupBComponent', () => {
     httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(TransactionGroupBComponent);
     component = fixture.componentInstance;
-    component.transactionType = {
-      scheduleId: '',
-      componentGroupId: '',
-      contact: undefined,
-      generatePurposeDescriptionWrapper: () => 'test description',
-      getNewTransaction: () => {
-        return {} as Transaction;
-      },
-      title: '',
-      schema: OFFSET_TO_OPERATING_EXPENDITURES,
-      transaction: transaction,
-      isDependentChild: false,
-      updateParentOnSave: false,
-      getSchemaName: () => 'foo',
-    } as TransactionType;
+    component.transaction = TransactionTypeUtils.factory(
+      ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES
+    ).getNewTransaction();
     fixture.detectChanges();
   });
 
@@ -144,8 +131,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
-      component.transactionType.transaction.id = undefined;
+    if (component.transaction) {
+      component.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -180,8 +167,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
-      component.transactionType.transaction.id = '10';
+    if (component.transaction) {
+      component.transaction.id = '10';
     }
     component.form.patchValue({ ...transaction });
     component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.ANOTHER, transaction));
@@ -200,8 +187,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
-      component.transactionType.transaction.id = undefined;
+    if (component.transaction) {
+      component.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -238,8 +225,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
-      component.transactionType.transaction.id = undefined;
+    if (component.transaction) {
+      component.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
@@ -275,8 +262,8 @@ describe('TransactionGroupBComponent', () => {
   it('#save() should not save an invalid org record', () => {
     const testContact: Contact = new Contact();
     testContact.id = 'testId';
-    if (component.transactionType?.transaction) {
-      component.transactionType.transaction.contact = testContact;
+    if (component.transaction) {
+      component.transaction.contact = testContact;
     }
     spyOn(testContactService, 'create').and.returnValue(of(testContact));
     spyOn(testConfirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
@@ -285,8 +272,8 @@ describe('TransactionGroupBComponent', () => {
       }
     });
 
-    if (component.transactionType?.transaction) {
-      component.transactionType.transaction.id = undefined;
+    if (component.transaction) {
+      component.transaction.id = undefined;
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
