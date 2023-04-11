@@ -4,8 +4,10 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
-import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { AmountInputComponent } from './amount-input.component';
+import { provideMockStore } from '@ngrx/store/testing';
+import { ConfirmationService } from 'primeng/api';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -15,6 +17,7 @@ describe('AmountInputComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [AmountInputComponent, ErrorMessagesComponent],
       imports: [CheckboxModule, InputNumberModule, CalendarModule, ReactiveFormsModule],
+      providers: [provideMockStore(testMockStore), ConfirmationService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AmountInputComponent);
