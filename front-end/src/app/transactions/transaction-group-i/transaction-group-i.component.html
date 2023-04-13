@@ -40,6 +40,13 @@
         [showAggregate]="!!transaction?.transactionType?.showAggregate"
       ></app-amount-input>
       <p-divider></p-divider>
+      <h3>Election Information</h3>
+      <app-election-input
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        [templateMap]="templateMap"
+      ></app-election-input>
+      <p-divider></p-divider>
       <h3>Additional Information</h3>
       <app-additional-info-input
         [form]="form"
@@ -50,7 +57,7 @@
       ></app-additional-info-input>
       <div class="grid">
         <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
-          <div class="col-3">
+          <div class="col-4">
             <app-navigation-control
               [navigationControl]="navigationControl"
               [transaction]="transaction"

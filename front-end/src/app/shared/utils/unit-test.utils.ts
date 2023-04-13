@@ -232,4 +232,6 @@ export const testTemplateMap: TransactionTemplateMapType = {
   purposeDescripLabel: 'CONTRIBUTION PURPOSE DESCRIPTION',
   memo_text_input: 'memo_text_input',
   category_code: '',
+  election_code: 'election_code',
+  election_other_description: 'election_other_description',
 };
