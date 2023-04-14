@@ -4,7 +4,6 @@ import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
-import { SubTransactionGroup } from '../transaction-type.model';
 
 export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT extends SchBTransactionType {
   componentGroupId = 'D';
@@ -13,9 +12,7 @@ export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT extends SchBTransactio
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT
   );
   schema = schema;
-  override subTransactionConfig = new SubTransactionGroup('Non-contribution Account Credit Card Payment', [
-    ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
-  ]);
+  override subTransactionConfig = [ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   getNewTransaction() {

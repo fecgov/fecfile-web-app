@@ -14,7 +14,6 @@ export class NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO extends SchBTrans
   );
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
-  override shortName = 'Staff Reimbursement Memo';
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   getNewTransaction() {

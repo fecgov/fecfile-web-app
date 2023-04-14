@@ -14,7 +14,6 @@ export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO extends SchBTrans
   );
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
-  override shortName = 'Credit Card Memo';
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   getNewTransaction() {
