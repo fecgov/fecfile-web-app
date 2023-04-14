@@ -4,6 +4,9 @@ export type ScheduleFormData = {
   date_received: Date;
   memo_code: boolean;
   amount: number;
+  electionType: string; // electionType and electionYear are composite form data for election_code
+  electionYear: number;
+  election_other_description: string;
   purpose_description: string;
   memo_text: string;
   category_code: string;
@@ -13,6 +16,9 @@ export const defaultFormData: ScheduleFormData = {
   date_received: new Date(currentYear, 7 - 1, 27),
   memo_code: false,
   amount: 100.55,
+  electionType: '',
+  electionYear: 0,
+  election_other_description: '',
   purpose_description: PageUtils.randomString(20),
   memo_text: PageUtils.randomString(20),
   category_code: '',
@@ -28,6 +34,15 @@ export class TransactionDetailPage {
     }
     if (!readOnlyAmount) {
       cy.get(alias).find('input#amount').safeType(formData['amount']);
+    }
+    if (formData['electionType']) {
+      PageUtils.dropdownSetValue('[inputid="electionType"]', formData['electionType'], alias);
+    }
+    if (formData['electionYear']) {
+      cy.get(alias).find('#electionYear').safeType(formData['electionYear']);
+    }
+    if (formData['election_other_description']) {
+      cy.get(alias).find('#election_other_description').safeType(formData['election_other_description']);
     }
     if (formData['purpose_description']) {
       cy.get(alias).find('textarea#purpose_description').safeType(formData['purpose_description']);
@@ -45,9 +60,15 @@ export class TransactionDetailPage {
     cy.get(alias)
       .find('#memo_code')
       .should('have.attr', 'aria-checked', formData['memo_code'] ? 'true' : 'false');
-    cy.get(alias).find('#purpose_description').should('have.value', formData['purpose_description']);
-    cy.get(alias).find('#memo_text_input').should('have.value', formData['memo_text']);
-
+    if (formData['electionType']) {
+      cy.get(alias).find('[inputid="electionType"]').should('contain', formData['electionType']);
+    }
+    if (formData['electionYear']) {
+      cy.get(alias).find('#electionYear').should('have.value', formData['electionYear']);
+    }
+    if (formData['election_other_description']) {
+      cy.get(alias).find('#election_other_description').should('have.value', formData['election_other_description']);
+    }
     const amount = formData['amount'] < 0 ? '-$' + -1 * formData['amount'] : '$' + formData['amount'];
     cy.get(alias).find('#amount').should('have.value', amount);
 
