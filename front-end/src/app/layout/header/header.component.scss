@@ -1,0 +1,12 @@
+.seal-and-title {
+  height: 48px;
+}
+
+:host ::ng-deep p-menubar{
+  padding: 0px;
+}
+:host ::ng-deep p-menubarsub{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
