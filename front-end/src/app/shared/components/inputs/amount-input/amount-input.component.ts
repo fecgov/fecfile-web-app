@@ -14,7 +14,6 @@ import { Validators } from '@angular/forms';
 })
 export class AmountInputComponent extends BaseInputComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() memoCodeReadOnly = false;
-  @Input() contributionAmountReadOnly = false;
   @Input() amountReadOnly = false;
   @Input() memoItemHelpText =
     'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
