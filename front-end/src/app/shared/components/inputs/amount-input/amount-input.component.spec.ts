@@ -87,4 +87,14 @@ describe('AmountInputComponent', () => {
 
     expect(component.form.get('memo_code')?.hasValidator(Validators.email)).toBeTrue();
   });
+
+  it('should not crash if it tries to update the contribution date without a memo_code formControl', () => {
+    component.report = new F3xSummary();
+    component.report.coverage_from_date = new Date('01/01/2020');
+    component.report.coverage_through_date = new Date('01/31/2020');
+    component.form.removeControl('memo_code');
+
+    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    expect(component.dateIsOutsideReport).toBeTrue();
+  });
 });
