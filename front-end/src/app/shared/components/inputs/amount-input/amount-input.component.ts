@@ -5,10 +5,10 @@ import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Subject, takeUntil } from 'rxjs';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-amount-input',
+  styleUrls: ['./amount-input.component.scss'],
   templateUrl: './amount-input.component.html',
 })
 export class AmountInputComponent extends BaseInputComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -29,9 +29,11 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   amountInputStyleClass = '';
   report?: F3xSummary;
   destroy$: Subject<boolean> = new Subject<boolean>();
+
+  outOfDateDialogVisible = false;
   unlistener!: () => void;
 
-  constructor(private store: Store, protected confirmationService: ConfirmationService, private renderer2: Renderer2) {
+  constructor(private store: Store, private renderer2: Renderer2) {
     super();
   }
 
@@ -71,23 +73,29 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     this.unlistener();
   }
 
+  closeOutOfDateDialog() {
+    this.outOfDateDialogVisible = false;
+  }
+
   // prettier-ignore
   onMemoItemClick($event: MouseEvent) { // eslint-disable-line @typescript-eslint/no-unused-vars
     if (!this.defaultMemoCodeReadOnly && this.dateIsOutsideReport) {
-      this.confirmationService.confirm({
+      /*
+      this.dialogService.open({
         key: 'memo-item-dialog',
         header: 'Confirm',
         icon: 'pi pi-info-circle',
-        message: 'Hey-o',
+        message: ,
         acceptLabel: 'Continue',
         rejectLabel: 'Cancel',
         accept: () => {
-          console.log('Yes please');
+          this.form.get(this.templateMap.memo_code)?.setValue(false);
         },
         reject: () => {
           return;
         },
       });
+      */
     }
   }
 
@@ -96,6 +104,26 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
     if (this.report?.coverage_from_date && this.report?.coverage_through_date) {
       if (date < this.report.coverage_from_date || date > this.report.coverage_through_date) {
+        this.outOfDateDialogVisible = true;
+        /*this.confirmationService.confirm({
+          key: 'memo-item-dialog',
+          header: 'Confirm',
+          icon: 'pi pi-info-circle',
+          message: ` ${
+            this.form.get(this.templateMap.date)?.value
+          } falls outside the report coverages dates of ${this.report?.coverage_from_date} - ${
+            this.report?.coverage_through_date
+          }. Did you mean to date this transaction outside of the report coverage period?`,
+          acceptLabel: 'Continue',
+          rejectLabel: 'Cancel',
+          accept: () => {
+            this.form.get(this.templateMap.memo_code)?.setValue(false);
+          },
+          reject: () => {
+            return;
+          },
+        });*/
+
         this.memoCodeReadOnly = true;
         this.memoCodeHelpText =
           'Memo item is required since your transaction date falls outside of report coverage dates';
