@@ -59,6 +59,7 @@ describe('AmountInputComponent', () => {
 
   it('should open the dialog box when memo_code is unchecked and outside of report dates', () => {
     component.report = new F3xSummary();
+    component.templateMap.memo_code = 'memo_code';
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
 
@@ -74,11 +75,30 @@ describe('AmountInputComponent', () => {
 
   it('should not open the dialog box when memo_code is unchecked and inside of report dates', () => {
     component.report = new F3xSummary();
+    component.templateMap.memo_code = 'memo_code';
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
 
     component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
     component.form.get('memo_code')?.patchValue(false);
+    component.onMemoItemClick(new MouseEvent('test'));
+    expect(component.outOfDateDialogVisible).toBeFalse();
+  });
+
+  it('should not open the dialog box when memo_code is checked and outside of report dates', () => {
+    component.report = new F3xSummary();
+    component.templateMap.memo_code = 'memo_code';
+    component.report.coverage_from_date = new Date('01/01/2020');
+    component.report.coverage_through_date = new Date('01/31/2020');
+
+    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    component.outOfDateDialogVisible = false;
+    component.form.get('memo_code')?.patchValue(true);
+    component.onMemoItemClick(new MouseEvent('test'));
+    expect(component.outOfDateDialogVisible).toBeFalse();
+
+    component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
+    component.outOfDateDialogVisible = false;
     component.onMemoItemClick(new MouseEvent('test'));
     expect(component.outOfDateDialogVisible).toBeFalse();
   });
