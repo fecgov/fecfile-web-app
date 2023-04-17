@@ -57,6 +57,32 @@ describe('AmountInputComponent', () => {
     expect(component.outOfDateDialogVisible).toBeFalse();
   });
 
+  it('should open the dialog box when memo_code is unchecked and outside of report dates', () => {
+    component.report = new F3xSummary();
+    component.report.coverage_from_date = new Date('01/01/2020');
+    component.report.coverage_through_date = new Date('01/31/2020');
+
+    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    component.form.get('memo_code')?.patchValue(false);
+    component.onMemoItemClick(new MouseEvent('test'));
+    expect(component.outOfDateDialogVisible).toBeTrue();
+
+    component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
+    component.onMemoItemClick(new MouseEvent('test'));
+    expect(component.outOfDateDialogVisible).toBeTrue();
+  });
+
+  it('should not open the dialog box when memo_code is unchecked and inside of report dates', () => {
+    component.report = new F3xSummary();
+    component.report.coverage_from_date = new Date('01/01/2020');
+    component.report.coverage_through_date = new Date('01/31/2020');
+
+    component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
+    component.form.get('memo_code')?.patchValue(false);
+    component.onMemoItemClick(new MouseEvent('test'));
+    expect(component.outOfDateDialogVisible).toBeFalse();
+  });
+
   it('should add and remove the requiredTrue validator when a date is set', () => {
     component.report = new F3xSummary();
     component.report.coverage_from_date = new Date('01/01/2020');
