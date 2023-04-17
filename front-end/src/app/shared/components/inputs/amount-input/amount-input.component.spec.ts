@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
@@ -9,6 +9,7 @@ import { AmountInputComponent } from './amount-input.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ConfirmationService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -49,5 +50,41 @@ describe('AmountInputComponent', () => {
     const updateInputMethodTrue = spyOn(component.amountInput, 'updateInput');
     component.onInputAmount(new KeyboardEvent('1', undefined));
     expect(updateInputMethodTrue).toHaveBeenCalled();
+  });
+
+  it('should close the dialog box when the method is called', () => {
+    component.closeOutOfDateDialog();
+    expect(component.outOfDateDialogVisible).toBeFalse();
+  });
+
+  it('should add and remove the requiredTrue validator when a date is set', () => {
+    component.report = new F3xSummary();
+    component.report.coverage_from_date = new Date('01/01/2020');
+    component.report.coverage_through_date = new Date('01/31/2020');
+
+    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
+
+    component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
+    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeFalse();
+
+    component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
+    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
+  });
+
+  it('should preserve old validators when clearing an added requiredTrue validator', () => {
+    component.report = new F3xSummary();
+    component.report.coverage_from_date = new Date('01/01/2020');
+    component.report.coverage_through_date = new Date('01/31/2020');
+
+    component.form.get('memo_code')?.addValidators(Validators.email);
+
+    component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
+    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
+
+    component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
+    expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeFalse();
+
+    expect(component.form.get('memo_code')?.hasValidator(Validators.email)).toBeTrue();
   });
 });

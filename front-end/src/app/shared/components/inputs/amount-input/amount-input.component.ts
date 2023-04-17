@@ -90,7 +90,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   updateMemoItemWithDate(date: Date) {
     if (this.defaultMemoCodeReadOnly) return;
 
-    if (this.report?.coverage_from_date && this.report?.coverage_through_date && !this.memoCodeReadOnly) {
+    if (this.report?.coverage_from_date && this.report?.coverage_through_date) {
       const memo_code = this.form.get(this.templateMap.memo_code);
       if (date < this.report.coverage_from_date || date > this.report.coverage_through_date) {
         this.outOfDateDialogVisible = true;
