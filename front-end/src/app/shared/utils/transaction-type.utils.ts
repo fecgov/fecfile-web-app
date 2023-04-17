@@ -106,6 +106,8 @@ import { INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-type
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
+import { REFUND_INDIVIDUAL_CONTRIBUTION } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION.model';
+import { REFUND_INDIVIDUAL_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION_VOID.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -210,6 +212,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
   TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
   TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
+  REFUND_INDIVIDUAL_CONTRIBUTION,
+  REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
 }
 
 export class TransactionTypeUtils {
