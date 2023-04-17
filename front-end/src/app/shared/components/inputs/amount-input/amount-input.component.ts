@@ -14,7 +14,7 @@ import { Validators } from '@angular/forms';
 })
 export class AmountInputComponent extends BaseInputComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() memoCodeReadOnly = false;
-  @Input() amountReadOnly = false;
+  @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
     'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   @Input() negativeAmountValueOnly = false;
@@ -25,7 +25,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   defaultMemoItemHelpText = this.memoItemHelpText; // Original default value of the memo item help text
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
-  amountInputStyleClass = '';
+  contributionAmountInputStyleClass = '';
   report?: F3xSummary;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -37,8 +37,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   }
 
   ngOnInit(): void {
-    if (this.amountReadOnly) {
-      this.amountInputStyleClass = 'readonly';
+    if (this.contributionAmountReadOnly) {
+      this.contributionAmountInputStyleClass = 'readonly';
     }
 
     this.store
