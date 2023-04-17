@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Subject, takeUntil } from 'rxjs';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-amount-input',
@@ -80,64 +81,29 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   // prettier-ignore
   onMemoItemClick($event: MouseEvent) { // eslint-disable-line @typescript-eslint/no-unused-vars
     if (!this.defaultMemoCodeReadOnly && this.dateIsOutsideReport) {
-      /*
-      this.dialogService.open({
-        key: 'memo-item-dialog',
-        header: 'Confirm',
-        icon: 'pi pi-info-circle',
-        message: ,
-        acceptLabel: 'Continue',
-        rejectLabel: 'Cancel',
-        accept: () => {
-          this.form.get(this.templateMap.memo_code)?.setValue(false);
-        },
-        reject: () => {
-          return;
-        },
-      });
-      */
+      if (!this.form.get(this.templateMap.memo_code)?.value){
+        this.outOfDateDialogVisible = true;
+      }
     }
   }
 
   updateMemoItemWithDate(date: Date) {
     if (this.defaultMemoCodeReadOnly) return;
 
-    if (this.report?.coverage_from_date && this.report?.coverage_through_date) {
+    if (this.report?.coverage_from_date && this.report?.coverage_through_date && !this.memoCodeReadOnly) {
+      const memo_code = this.form.get(this.templateMap.memo_code);
       if (date < this.report.coverage_from_date || date > this.report.coverage_through_date) {
         this.outOfDateDialogVisible = true;
-        /*this.confirmationService.confirm({
-          key: 'memo-item-dialog',
-          header: 'Confirm',
-          icon: 'pi pi-info-circle',
-          message: ` ${
-            this.form.get(this.templateMap.date)?.value
-          } falls outside the report coverages dates of ${this.report?.coverage_from_date} - ${
-            this.report?.coverage_through_date
-          }. Did you mean to date this transaction outside of the report coverage period?`,
-          acceptLabel: 'Continue',
-          rejectLabel: 'Cancel',
-          accept: () => {
-            this.form.get(this.templateMap.memo_code)?.setValue(false);
-          },
-          reject: () => {
-            return;
-          },
-        });*/
-
-        this.memoCodeReadOnly = true;
-        this.memoCodeHelpText =
-          'Memo item is required since your transaction date falls outside of report coverage dates';
+        memo_code?.addValidators(Validators.requiredTrue);
+        memo_code?.markAsTouched();
+        memo_code?.updateValueAndValidity();
         this.dateIsOutsideReport = true;
-        this.form.patchValue({
-          memo_code: true,
-        });
       } else {
-        this.memoCodeReadOnly = false;
-        this.memoCodeHelpText = this.defaultMemoCodeHelpText;
+        if (this.dateIsOutsideReport && memo_code?.hasValidator(Validators.required)) {
+          memo_code?.clearValidators();
+          memo_code?.updateValueAndValidity();
+        }
         this.dateIsOutsideReport = false;
-        this.form.patchValue({
-          memo_code: false,
-        });
       }
     }
   }
