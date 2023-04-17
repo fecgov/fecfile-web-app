@@ -16,14 +16,13 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() memoCodeReadOnly = false;
   @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
-    'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
+    'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
 
   @ViewChild('amountInput') amountInput!: InputNumber;
   @ViewChild('memoCode', { read: ElementRef }) memoCode!: ElementRef;
 
-  defaultMemoItemHelpText = this.memoItemHelpText; // Original default value of the memo item help text
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
   report?: F3xSummary;
