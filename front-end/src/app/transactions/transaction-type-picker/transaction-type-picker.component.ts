@@ -196,8 +196,8 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
         ];
       case ScheduleBTransactionGroups.REFUND:
         return [
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_INDIVIDUAL,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_INDIVIDUAL_VOID,
+          ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
+          ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
           ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PARTY,
           ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PARTY_VOID,
           ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PAC,
