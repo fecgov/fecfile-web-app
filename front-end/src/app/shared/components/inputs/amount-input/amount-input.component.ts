@@ -16,7 +16,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() memoCodeReadOnly = false;
   @Input() contributionAmountReadOnly = false;
   @Input() amountReadOnly = false;
-  @Input() memoCodeHelpText =
+  @Input() memoItemHelpText =
     'The dollar amount in a memo item is not incorporated into the total figure for the schedule.';
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
@@ -24,8 +24,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @ViewChild('amountInput') amountInput!: InputNumber;
   @ViewChild('memoCode', { read: ElementRef }) memoCode!: ElementRef;
 
-  defaultMemoCodeReadOnly = false; // True if the memo code is readonly at all times
-  defaultMemoCodeHelpText = this.memoCodeHelpText; // Original default value of the memo item help text
+  defaultMemoItemHelpText = this.memoItemHelpText; // Original default value of the memo item help text
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   amountInputStyleClass = '';
   report?: F3xSummary;
@@ -42,12 +41,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     if (this.amountReadOnly) {
       this.amountInputStyleClass = 'readonly';
     }
-
-    // These property records if the memo code is supposed to be readonly at all times
-    this.defaultMemoCodeReadOnly = this.memoCodeReadOnly;
-
-    // This property records the default value of the memo item help text
-    this.defaultMemoCodeHelpText = this.memoCodeHelpText;
 
     this.store
       .select(selectActiveReport)
@@ -80,7 +73,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   // prettier-ignore
   onMemoItemClick($event: MouseEvent) { // eslint-disable-line @typescript-eslint/no-unused-vars
-    if (!this.defaultMemoCodeReadOnly && this.dateIsOutsideReport) {
+    if (!this.memoCodeReadOnly && this.dateIsOutsideReport) {
       if (!this.form.get(this.templateMap.memo_code)?.value){
         this.outOfDateDialogVisible = true;
       }
@@ -88,7 +81,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   }
 
   updateMemoItemWithDate(date: Date) {
-    if (this.defaultMemoCodeReadOnly) return;
+    if (this.memoCodeReadOnly) return;
 
     if (this.report?.coverage_from_date && this.report?.coverage_through_date) {
       const memo_code = this.form.get(this.templateMap.memo_code);
