@@ -11,7 +11,7 @@ describe('REFUND_INDIVIDUAL_CONTRIBUTION_VOID', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('A');
+    expect(transactionType.componentGroupId).toBe('B');
   });
 
   it('#factory() should return a SchBTransaction', () => {
