@@ -8,6 +8,7 @@ import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils
 import { AmountInputComponent } from './amount-input.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ConfirmationService } from 'primeng/api';
+import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -15,7 +16,7 @@ describe('AmountInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AmountInputComponent, ErrorMessagesComponent],
+      declarations: [AmountInputComponent, ErrorMessagesComponent, FecDatePipe],
       imports: [CheckboxModule, InputNumberModule, CalendarModule, ReactiveFormsModule],
       providers: [provideMockStore(testMockStore), ConfirmationService],
     }).compileComponents();

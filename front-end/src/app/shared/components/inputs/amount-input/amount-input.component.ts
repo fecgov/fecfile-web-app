@@ -99,8 +99,9 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
         memo_code?.updateValueAndValidity();
         this.dateIsOutsideReport = true;
       } else {
-        if (this.dateIsOutsideReport && memo_code?.hasValidator(Validators.required)) {
-          memo_code?.clearValidators();
+        if (this.dateIsOutsideReport && memo_code?.hasValidator(Validators.requiredTrue)) {
+          memo_code?.removeValidators([Validators.requiredTrue]);
+          memo_code?.markAsTouched();
           memo_code?.updateValueAndValidity();
         }
         this.dateIsOutsideReport = false;
