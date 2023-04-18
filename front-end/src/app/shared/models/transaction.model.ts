@@ -3,6 +3,7 @@ import { Contact } from './contact.model';
 import { MemoText } from './memo-text.model';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionGroupsType } from './scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionGroupsType } from './schb-transaction.model';
+import { SchCTransaction, ScheduleCTransactionTypes, ScheduleCTransactionGroupsType } from './schc-transaction.model';
 import { TransactionType } from './transaction-type.model';
 import { Type } from 'class-transformer';
 import { ValidateUtils } from '../utils/validate.utils';
@@ -136,9 +137,12 @@ export function hasNoContact(transaction?: Transaction): boolean {
   return !transaction?.contact;
 }
 
-export type ScheduleTransaction = SchATransaction | SchBTransaction;
-export type TransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes;
-export type TransactionGroupTypes = ScheduleATransactionGroupsType | ScheduleBTransactionGroupsType;
+export type ScheduleTransaction = SchATransaction | SchBTransaction | SchCTransaction;
+export type TransactionTypes = ScheduleATransactionTypes | ScheduleBTransactionTypes | ScheduleCTransactionTypes;
+export type TransactionGroupTypes =
+  | ScheduleATransactionGroupsType
+  | ScheduleBTransactionGroupsType
+  | ScheduleCTransactionGroupsType;
 
 export enum AggregationGroups {
   GENERAL = 'GENERAL',

@@ -142,7 +142,7 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
       accept: () => {
         this.itemService.delete(item).subscribe(() => {
           this.item = this.getEmptyItem();
-          this.loadTableItems({} as LazyLoadEvent); // Refresh table list
+          this.refreshTable();
           this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Item Deleted', life: 3000 });
         });
       },
@@ -166,9 +166,13 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
     forkJoin(obs).subscribe(() => {
       this.items = this.items.filter((item: T) => !this.selectedItems.includes(item));
       this.selectedItems = [];
-      this.loadTableItems({} as LazyLoadEvent); // Refresh table list
+      this.refreshTable();
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Items Deleted', life: 3000 });
     });
+  }
+
+  public refreshTable() {
+    this.loadTableItems({} as LazyLoadEvent);
   }
 
   /**

@@ -13,9 +13,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO extends SchATransac
   );
   schema = schema;
   override updateParentOnSave = true;
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
-    LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT)
-  );
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(): string {
     return 'Recount/Legal Proceedings Account Partnership Attribution';

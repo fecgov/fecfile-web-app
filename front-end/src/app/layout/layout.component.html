@@ -1,8 +1,10 @@
 <app-banner></app-banner>
 <div class="grid flex-nowrap">
-  <div class="col-fixed fec-background-gradient">
-    <app-sidebar></app-sidebar>
-  </div>
+  <ng-container *ngIf="sidebar === sidebars.REPORT">
+    <div class="col-fixed fec-background-gradient">
+      <app-sidebar></app-sidebar>
+    </div>
+  </ng-container>
   <div class="col no-padding">
     <div class="col-12">
       <app-header></app-header>

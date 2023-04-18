@@ -1,11 +1,10 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { AbstractControl, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from '../../../shared/utils/unit-test.utils';
-import { of } from 'rxjs';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { LabelPipe } from 'app/shared/pipes/label.pipe';
@@ -17,10 +16,11 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xCoverageDates } from '../../../shared/models/f3x-summary.model';
-import { AppSelectButtonComponent } from '../../../shared/components/app-selectbutton';
+import { AppSelectButtonComponent } from '../../../shared/components/app-selectbutton.component';
 import { ReportService } from '../../../shared/services/report.service';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';
+import { of } from 'rxjs';
 
 describe('CreateF3XStep1Component', () => {
   let component: CreateF3XStep1Component;
@@ -35,6 +35,28 @@ describe('CreateF3XStep1Component', () => {
     form_type: 'F3XN',
     report_code: 'Q1',
   });
+
+  const first = new Date('01/01/2023');
+  const second = new Date('01/02/2023');
+  const third = new Date('01/03/2023');
+  const fourth = new Date('01/04/2023');
+  const fifth = new Date('01/05/2023');
+  const sixth = new Date('01/06/2023');
+  const seventh = new Date('01/07/2023');
+  const ninth = new Date('01/09/2023');
+  const eigth = new Date('01/08/2023');
+  const tenth = new Date('01/10/2023');
+  const thirdThroughFifth = F3xCoverageDates.fromJSON({
+    report_code: 'Q1',
+    coverage_from_date: third,
+    coverage_through_date: fifth,
+  });
+  const seventhThroughNinth = F3xCoverageDates.fromJSON({
+    report_code: 'Q2',
+    coverage_from_date: seventh,
+    coverage_through_date: ninth,
+  });
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -49,14 +71,14 @@ describe('CreateF3XStep1Component', () => {
       declarations: [CreateF3XStep1Component, LabelPipe, AppSelectButtonComponent],
       providers: [F3xSummaryService, FormBuilder, MessageService, FecDatePipe, provideMockStore(testMockStore)],
     }).compileComponents();
-  });
 
-  beforeEach(() => {
     router = TestBed.inject(Router);
     f3xSummaryService = TestBed.inject(F3xSummaryService);
+    f3xSummaryService.getF3xCoverageDates = () => of([]);
     reportService = TestBed.inject(ReportService);
     fixture = TestBed.createComponent(CreateF3XStep1Component);
     component = fixture.componentInstance;
+
     fixture.detectChanges();
   });
 
@@ -77,6 +99,24 @@ describe('CreateF3XStep1Component', () => {
     expect(component.form.controls['report_code'].value).toEqual(undefined);
   });
 
+  describe('with existing coverage', () => {
+    beforeEach(async () => {
+      router = TestBed.inject(Router);
+      f3xSummaryService = TestBed.inject(F3xSummaryService);
+      f3xSummaryService.getF3xCoverageDates = () => of([thirdThroughFifth]);
+      reportService = TestBed.inject(ReportService);
+      fixture = TestBed.createComponent(CreateF3XStep1Component);
+      component = fixture.componentInstance;
+
+      fixture.detectChanges();
+    });
+    it('should pick first unused report code', () => {
+      component.form.controls['filing_frequency'].setValue('Q');
+      component.form.controls['report_type_category'].setValue(F3xReportTypeCategories.ELECTION_YEAR);
+      expect(component.form.controls['report_code'].value).toEqual(F3xReportCodes.Q2);
+    });
+  });
+
   it('#save should save a new f3x record', () => {
     const listResponse = {
       count: 0,
@@ -90,6 +130,7 @@ describe('CreateF3XStep1Component', () => {
 
     component.form.patchValue({ ...f3x });
     component.save();
+    expect(component.form.invalid).toBe(false);
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
 
     navigateSpy.calls.reset();
@@ -112,91 +153,52 @@ describe('CreateF3XStep1Component', () => {
     expect(navigateSpy).toHaveBeenCalledWith('/reports');
   });
 
-  it('should catch date overlaps', () => {
-    //New dates inside of existing report
-    const fromDate = new Date('12/01/2012');
-    const throughDate = new Date('12/31/2012');
-    let fieldDate = fromDate;
-    let targetDate = F3xCoverageDates.fromJSON({
-      coverage_from_date: new Date('11/01/2012'),
-      coverage_through_date: new Date('1/01/2013'),
-    });
-    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(true);
+  it('#existingCoverageValidator should return errors', () => {
+    const foo = (
+      existingCoverage: F3xCoverageDates[],
+      controlFromDate: Date,
+      controlThroughDate: Date,
+      expectedFromMessage: string | null,
+      expectedThroughMessage: string | null
+    ) => {
+      const validator = component.existingCoverageValidator(existingCoverage);
+      const group = new FormGroup({
+        coverage_from_date: new FormControl(controlFromDate),
+        coverage_through_date: new FormControl(controlThroughDate),
+      });
+      validator(group);
+      expect(group.get('coverage_from_date')?.errors).toEqual(
+        expectedFromMessage ? { invaliddate: { msg: expectedFromMessage } } : null
+      );
+      expect(group.get('coverage_through_date')?.errors).toEqual(
+        expectedThroughMessage ? { invaliddate: { msg: expectedThroughMessage } } : null
+      );
+    };
+    const hitsQ1Msg =
+      'You have entered coverage dates that overlap the coverage dates of the following report: APRIL 15 QUARTERLY REPORT (Q1)  01/03/2023 - 01/05/2023';
+    const hitsQ2Msg =
+      'You have entered coverage dates that overlap the coverage dates of the following report: JULY 15 QUARTERLY REPORT (Q2)  01/07/2023 - 01/09/2023';
 
-    //New dates start inside of existing report - FromDate
-    targetDate = F3xCoverageDates.fromJSON({
-      coverage_from_date: new Date('11/01/2012'),
-      coverage_through_date: new Date('12/15/2012'),
-    });
-    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(true);
+    /**
+     * FC, TC: from/through control
+     * [1--1]: existing coverage
+     * FC--[1--1]--TC--[2--2]
+     */
+    foo([thirdThroughFifth, seventhThroughNinth], first, tenth, hitsQ1Msg, hitsQ1Msg);
 
-    //New dates start inside of existing report - ThroughDate
-    fieldDate = throughDate;
-    targetDate = F3xCoverageDates.fromJSON({
-      coverage_from_date: new Date('11/01/2012'),
-      coverage_through_date: new Date('12/15/2012'),
-    });
-    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(false);
+    //FC--[1--TC--1]--[2--2]
+    foo([thirdThroughFifth, seventhThroughNinth], first, fourth, null, hitsQ1Msg);
 
-    //New dates end inside of existing report - FromDate
-    fieldDate = fromDate;
-    targetDate = F3xCoverageDates.fromJSON({
-      coverage_from_date: new Date('12/15/2012'),
-      coverage_through_date: new Date('1/15/2013'),
-    });
-    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(false);
+    //FC--[1--1]--[2--TC--2]
+    foo([thirdThroughFifth, seventhThroughNinth], first, eigth, hitsQ1Msg, hitsQ1Msg);
 
-    //New dates end inside of existing report - ThroughDate
-    fieldDate = throughDate;
-    targetDate = F3xCoverageDates.fromJSON({
-      coverage_from_date: new Date('12/15/2012'),
-      coverage_through_date: new Date('1/15/2013'),
-    });
-    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(true);
+    //[1--FC--1]--[2--TC--2]
+    foo([thirdThroughFifth, seventhThroughNinth], fourth, eigth, hitsQ1Msg, hitsQ2Msg);
 
-    //New dates encompass existing report
-    targetDate = F3xCoverageDates.fromJSON({
-      coverage_from_date: new Date('12/05/2012'),
-      coverage_through_date: new Date('12/25/2012'),
-    });
-    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(true);
+    //[1--1]--FC--[2--TC--2]
+    foo([thirdThroughFifth, seventhThroughNinth], sixth, eigth, null, hitsQ2Msg);
 
-    //New dates do not overlap with existing report
-    targetDate = F3xCoverageDates.fromJSON({
-      coverage_from_date: new Date('12/05/2015'),
-      coverage_through_date: new Date('12/25/2015'),
-    });
-    expect(component.checkForDateOverlap(fieldDate, fromDate, throughDate, targetDate)).toBe(false);
-  });
-
-  it('setCoverageOverlapError should set an error', () => {
-    const formValue: AbstractControl = component.form.controls['coverage_from_date'];
-    const overlap: F3xCoverageDates = F3xCoverageDates.fromJSON({
-      coverage_from_date: '10/10/2010',
-      coverage_through_date: '11/10/2010',
-    });
-    component.setCoverageOverlapError(formValue, overlap);
-    expect(component.form.controls['coverage_from_date'].errors).not.toBe(null);
-  });
-
-  it('The coverage date validator does not explode if passed an AbstractControl instead of a FormGroup', () => {
-    const validatorFn = component.buildCoverageDatesValidator();
-    const field = component.form.controls['coverage_from_date'];
-    expect(validatorFn(field)).toBe(null);
-  });
-
-  it('Should catch an overlap in dates with the constructed validator function', () => {
-    const validatorFn = component.buildCoverageDatesValidator();
-    component.form.controls['coverage_from_date'].setValue(new Date('12/15/2010'));
-    component.form.controls['coverage_through_date'].setValue(new Date('1/01/2011'));
-    component.f3xCoverageDatesList = [
-      F3xCoverageDates.fromJSON({
-        coverage_from_date: new Date('12/01/2010'),
-        coverage_through_date: new Date('12/31/2010'),
-      }),
-    ];
-
-    validatorFn(component.form);
-    expect(component.form.controls['coverage_from_date'].errors).not.toEqual(null);
+    //FC--TC--[1--1]--[2--2]
+    foo([thirdThroughFifth, seventhThroughNinth], first, second, null, null);
   });
 });

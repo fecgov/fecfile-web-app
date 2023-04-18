@@ -1,0 +1,38 @@
+<div>
+  <button
+    *ngIf="controlType === 'button'"
+    pButton
+    pRipple
+    [label]="navigationControl?.label || ''"
+    [icon]="navigationControl?.icon || ''"
+    [class]="navigationControl?.ngClass || ''"
+    (click)="click()"
+    [disabled]="isDisabled()"
+  ></button>
+  <p-dropdown
+    *ngIf="controlType === 'dropdown'"
+    data-test="navigation-control-dropdown"
+    [formControl]="dropdownControl"
+    [options]="dropdownOptions"
+    pRipple
+    [placeholder]="navigationControl?.label || ''"
+    [dropdownIcon]="navigationControl?.icon || ''"
+    styleClass="navigation-dropdown"
+    panelStyleClass="navigation-dropdown-panel"
+    (onChange)="onDropdownChange($event)"
+    [disabled]="isDisabled()"
+    [group]="isGroupedDropdown"
+  >
+    <ng-template let-group pTemplate="group">
+      <div class="bold navigation-dropdown-group">
+        <span>{{ group.label }}</span>
+        <p-divider></p-divider>
+      </div>
+    </ng-template>
+    <ng-template let-transactiontype pTemplate="item">
+      <div class="flex align-items-center gap-2" [ngClass]="{ 'p-disabled': !transactiontype.value }">
+        <div>{{ transactiontype.label }}</div>
+      </div>
+    </ng-template>
+  </p-dropdown>
+</div>

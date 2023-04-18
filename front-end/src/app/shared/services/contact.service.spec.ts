@@ -15,21 +15,23 @@ import {
 import { ListRestResponse } from '../models/rest-api.model';
 import { testMockStore } from '../utils/unit-test.utils';
 import { ApiService } from './api.service';
-import { ContactService } from './contact.service';
+import { ContactService, DeletedContactService } from './contact.service';
 
 describe('ContactService', () => {
   let httpTestingController: HttpTestingController;
   let service: ContactService;
+  let deletedService: DeletedContactService;
   let testApiService: ApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ContactService, ApiService, provideMockStore(testMockStore)],
+      providers: [ContactService, DeletedContactService, ApiService, provideMockStore(testMockStore)],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(ContactService);
+    deletedService = TestBed.inject(DeletedContactService);
     testApiService = TestBed.inject(ApiService);
   });
 
@@ -197,5 +199,42 @@ describe('ContactService', () => {
 
     schema = ContactService.getSchemaByType(ContactTypes.CANDIDATE);
     expect(schema.$id).toBe('https://github.com/fecgov/fecfile-validate/blob/main/schema/Contact_Candidate.json');
+  });
+
+  it('#deleted.getTableData() should return a list of contacts', () => {
+    const mockResponse: ListRestResponse = {
+      count: 2,
+      next: 'https://next-page',
+      previous: 'https://previous-page',
+      results: [
+        Contact.fromJSON({
+          id: 'C00000001',
+        }),
+        Contact.fromJSON({
+          id: 'C00000002',
+        }),
+      ],
+    };
+
+    deletedService.getTableData().subscribe((response: ListRestResponse) => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts-deleted/?page=1&ordering=name`);
+    expect(req.request.method).toEqual('GET');
+    req.flush(mockResponse);
+    httpTestingController.verify();
+  });
+
+  it('#restore() should POST a payload', () => {
+    const mockResponse: string[] = ['1'];
+    deletedService.restore([new Contact()]).subscribe((response: string[]) => {
+      expect(response).toEqual(mockResponse);
+    });
+
+    const req = httpTestingController.expectOne(`${environment.apiUrl}/contacts-deleted/restore/`);
+    expect(req.request.method).toEqual('POST');
+    req.flush(mockResponse);
+    httpTestingController.verify();
   });
 });

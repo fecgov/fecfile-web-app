@@ -9,9 +9,8 @@ export class INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType {
   componentGroupId = 'A';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_JF_TRANSFER_MEMO);
   schema = schema;
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
-    LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER)
-  );
+  override shortName = 'Individual';
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     return `JF Memo: ${(transaction.parent_transaction as SchATransaction).contributor_organization_name}`;

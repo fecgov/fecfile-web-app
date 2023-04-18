@@ -13,12 +13,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO extends SchATr
   );
   schema = schema;
   override updateParentOnSave = true;
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
-    LabelUtils.get(
-      ScheduleATransactionTypeLabels,
-      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT
-    )
-  );
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(): string {
     return 'Headquarters Buildings Account Partnership Attribution';

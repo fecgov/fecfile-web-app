@@ -5,7 +5,7 @@ describe('SchBTransaction', () => {
     expect(new SchBTransaction()).toBeTruthy();
   });
 
-  xit('#fromJSON() should return a populated SchBTransaction instance', () => {
+  it('#fromJSON() should return a populated SchBTransaction instance', () => {
     const data = {
       id: '999',
       form_type: 'SA11Ai',
@@ -18,5 +18,21 @@ describe('SchBTransaction', () => {
     expect(transaction.form_type).toBe('SA11Ai');
     expect(transaction.payee_organization_name).toBe('foo');
     expect(transaction.election_code).toBe(undefined);
+  });
+
+  it('Creates a transaction object from JSON', () => {
+    const json = {
+      transaction_type_identifier: 'RETURN_RECEIPT',
+      parent_transaction: {
+        transaction_type_identifier: 'RETURN_RECEIPT',
+      },
+      children: [
+        {
+          transaction_type_identifier: 'RETURN_RECEIPT',
+        },
+      ],
+    };
+    const transaction: SchBTransaction = SchBTransaction.fromJSON(json);
+    expect(transaction.constructor.name).toBe('SchBTransaction');
   });
 });

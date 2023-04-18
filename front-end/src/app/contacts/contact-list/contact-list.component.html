@@ -2,7 +2,9 @@
 
 <div class="card">
   <p-toolbar styleClass="mb-4">
-    <ng-template pTemplate="left">
+    <ng-template pTemplate="left"> <h1 class="m-0">Manage Contacts</h1></ng-template>
+
+    <ng-template pTemplate="right">
       <button
         id="button-contacts-new"
         pButton
@@ -12,18 +14,6 @@
         class="p-button-success mr-2"
         (click)="addItem()"
       ></button>
-      <button
-        pButton
-        pRipple
-        label="Delete"
-        icon="pi pi-trash"
-        class="p-button-danger mr-2"
-        (click)="deleteSelectedItems()"
-        [disabled]="!selectedItems.length"
-      ></button>
-    </ng-template>
-
-    <ng-template pTemplate="right">
       <p-fileUpload
         mode="basic"
         accept="image/*"
@@ -57,18 +47,12 @@
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
-        <h5 class="m-0">Manage Contacts</h5>
-        <span class="p-input-icon-left">
-          <em class="pi pi-search"></em>
-          <input pInputText type="text" placeholder="Search..." />
-        </span>
+        <h2 class="m-0">Contacts</h2>
+        <p-button label="Restore deleted contact(s)" styleClass="p-button-link" (click)="onRestoreClick()"></p-button>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
-        <th style="width: 3rem" id="header-checkbox" role="columnheader">
-          <p-tableHeaderCheckbox ariaLabel="select all candidates"></p-tableHeaderCheckbox>
-        </th>
         <th pSortableColumn="sort_name" id="name-column" role="columnheader">
           Name <p-sortIcon field="sort_name"></p-sortIcon>
         </th>
@@ -84,13 +68,6 @@
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
-        <td>
-          <p-tableCheckbox
-            [value]="item"
-            [disabled]="!canDeleteItem(item)"
-            [ariaLabel]="'select ' + displayName(item)"
-          ></p-tableCheckbox>
-        </td>
         <td>
           <a (click)="editItem(item)">{{ displayName(item) }}</a>
         </td>
@@ -119,3 +96,8 @@
 ></app-contact-detail>
 
 <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+
+<app-deleted-contact-dialog
+  [(visible)]="restoreDialogIsVisible"
+  (contactsRestored)="refreshTable()"
+></app-deleted-contact-dialog>

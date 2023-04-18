@@ -60,18 +60,20 @@ export class SchATransaction extends Transaction {
     ];
   }
 
-  // prettier-ignore
-  static fromJSON(json: any, depth = 2): SchATransaction { // eslint-disable-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static fromJSON(json: any, depth = 2): SchATransaction {
     const transaction = plainToClass(SchATransaction, json);
     if (transaction.transaction_type_identifier) {
       const transactionType = TransactionTypeUtils.factory(transaction.transaction_type_identifier);
       transaction.setMetaProperties(transactionType);
     }
     if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = SchATransaction.fromJSON(transaction.parent_transaction, depth-1);
+      transaction.parent_transaction = SchATransaction.fromJSON(transaction.parent_transaction, depth - 1);
     }
     if (depth > 0 && transaction.children) {
-      transaction.children = transaction.children.map(function(child) { return SchATransaction.fromJSON(child, depth-1) });
+      transaction.children = transaction.children.map(function (child) {
+        return SchATransaction.fromJSON(child, depth - 1);
+      });
     }
     return transaction;
   }
@@ -162,17 +164,19 @@ export enum ScheduleATransactionTypes {
   INDIVIDUAL_JF_TRANSFER_MEMO = 'INDIVIDUAL_JF_TRANSFER_MEMO',
   PARTY_JF_TRANSFER_MEMO = 'PARTY_JF_TRANSFER_MEMO',
   TRIBAL_JF_TRANSFER_MEMO = 'TRIBAL_JF_TRANSFER_MEMO',
+  PARTNERSHIP_JF_TRANSFER_MEMO = 'PARTNERSHIP_JF_TRANSFER_MEMO',
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
   PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
   TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
-  PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
   INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
   PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
   TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
   INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
   PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'PAC_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
   TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
+  PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
   PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
+  PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
   PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO',
   PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO',
   PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO = 'PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO',
@@ -253,24 +257,21 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES,
     'Refunds of Contributions to Registered Committees',
   ],
-  [
-    ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
-    'Refund of Contribution to Unregistered Committee',
-  ],
+  [ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE, 'Refund of Contribution to Unregistered Committee'],
   // Other
   [ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES, 'Offsets to Operating Expenditures'],
   [ScheduleATransactionTypes.OTHER_RECEIPTS, 'Other Receipts'],
   [
     ScheduleATransactionTypes.INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
-    'Individual Receipt - Non-Contribution Account',
+    'Individual Receipt - Non-contribution Account',
   ],
   [
     ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT,
-    'Other Committee Receipt - Non-Contribution Account',
+    'Other Committee Receipt - Non-contribution Account',
   ],
   [
     ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT,
-    'Business/Labor Organization Receipt - Non-Contribution Account',
+    'Business/Labor Organization Receipt - Non-contribution Account',
   ],
   [ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT, 'Individual Recount Receipt'],
   [ScheduleATransactionTypes.PARTY_RECOUNT_RECEIPT, 'Party Recount Receipt'],
@@ -390,6 +391,14 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Partnership Receipt Headquarters Buildings Account JF Transfer Memo',
   ],
   [
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'Partnership National Party Recount/Legal Proceedings Account Memo',
+  ],
+  [
+    ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    'Partnership National Party Pres. Nominating Convention Proceedings Account Memo',
+  ],
+  [
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
     'Partnership National Party Recount/Legal Proceedings Account Memo',
   ],
@@ -403,4 +412,11 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   [ScheduleATransactionTypes.PARTNERSHIP_MEMO, 'Partnership Memo'],
   [ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO, 'Partnership Recount Account Receipt Memo'],
+];
+
+export const UnimplementedTypeEntityCategories: LabelList = [
+  [ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO, 'Partnership'],
+  [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO, 'Partnership'],
+  [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO, 'Partnership'],
+  [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO, 'Partnership'],
 ];

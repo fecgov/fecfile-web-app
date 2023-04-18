@@ -34,4 +34,20 @@ describe('SchATransaction', () => {
     parentTransaction.updateChildren();
     expect(childTransaction.contribution_purpose_descrip).toContain('Test Committee');
   });
+
+  it('Creates a transaction object from JSON', () => {
+    const json = {
+      transaction_type_identifier: 'EARMARK_RECEIPT',
+      parent_transaction: {
+        transaction_type_identifier: 'EARMARK_RECEIPT',
+      },
+      children: [
+        {
+          transaction_type_identifier: 'EARMARK_MEMO',
+        },
+      ],
+    };
+    const transaction: SchATransaction = SchATransaction.fromJSON(json);
+    expect(transaction.constructor.name).toBe('SchATransaction');
+  });
 });

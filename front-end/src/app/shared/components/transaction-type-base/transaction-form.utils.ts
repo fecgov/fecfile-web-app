@@ -1,5 +1,5 @@
 import { FormGroup } from '@angular/forms';
-import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
@@ -84,21 +84,33 @@ export class TransactionFormUtils {
         .get(templateMap.amount)
         ?.valueChanges.pipe(
           startWith(form.get(templateMap.amount)?.value),
-          combineLatestWith(previous_transaction$),
+          combineLatestWith(previous_transaction$, of(transaction)),
           takeUntil(component.destroy$)
         )
-        .subscribe(([amount, previous_transaction]) => {
-          const key = templateMap.aggregate as keyof ScheduleTransaction;
-          const previousAggregate = previous_transaction
-            ? +((previous_transaction as ScheduleTransaction)[key] || 0)
-            : 0;
-          form.get(templateMap.aggregate)?.setValue(+amount + previousAggregate);
+        .subscribe(([amount, previous_transaction, transaction]) => {
+          this.updateAggregate(form, templateMap, transaction, previous_transaction, amount);
         });
     }
 
     const schema = transaction.transactionType?.schema;
     if (schema) {
       ValidateUtils.addJsonSchemaValidators(form, schema, false, transaction);
+    }
+  }
+
+  static updateAggregate(
+    form: FormGroup,
+    templateMap: TransactionTemplateMapType,
+    transaction: Transaction,
+    previousTransaction: Transaction | undefined,
+    amount: number
+  ) {
+    const key = previousTransaction?.transactionType?.templateMap.aggregate as keyof ScheduleTransaction;
+    const previousAggregate = previousTransaction ? +((previousTransaction as ScheduleTransaction)[key] || 0) : 0;
+    if (transaction.transactionType?.isRefundAggregate) {
+      form.get(templateMap.aggregate)?.setValue(previousAggregate - +amount);
+    } else {
+      form.get(templateMap.aggregate)?.setValue(previousAggregate + +amount);
     }
   }
 

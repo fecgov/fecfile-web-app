@@ -57,6 +57,7 @@
         <div class="field">
           <label for="report_type_category">TIME PERIOD</label>
           <app-select-button
+            data-test="report-type-category"
             [options]="getReportTypeCategories()"
             formControlName="report_type_category"
           ></app-select-button>
@@ -73,6 +74,7 @@
               name="report_code"
               [value]="reportCode"
               label="{{ reportCode | reportCodeLabel }}"
+              [disabled]="usedReportCodes?.includes(reportCode) || false"
               formControlName="report_code"
             ></p-radioButton>
           </div>

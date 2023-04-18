@@ -1,0 +1,5 @@
+export class F3xReportLevelMemoPage {
+  static enterFormData(text: string) {
+    cy.get('[id="text4000"]').overwrite(text);
+  }
+}

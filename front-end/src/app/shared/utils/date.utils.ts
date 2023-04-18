@@ -25,4 +25,15 @@ export class DateUtils {
     }
     return DateTime.fromFormat(date, 'yyyy-MM-dd').toJSDate();
   }
+
+  /**
+   * @returns True if all dates are defined and date ranges overlap.  (dates that are the same count as overlapping)
+   */
+  public static areOverlapping(fromA?: Date, throughA?: Date, fromB?: Date, throughB?: Date): boolean {
+    return !!(fromA && throughA && fromB && throughB) && fromA <= throughB && throughA >= fromB;
+  }
+
+  public static isWithin(date?: Date, from?: Date, through?: Date): boolean {
+    return !!(date && from && through) && from <= date && date <= through;
+  }
 }

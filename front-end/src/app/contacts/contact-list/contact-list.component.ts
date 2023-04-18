@@ -15,6 +15,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   override item: Contact = new Contact();
   contactTypeLabels: LabelList = ContactTypeLabels;
 
+  restoreDialogIsVisible = false;
   searchTerm = '';
 
   // contact lookup
@@ -61,6 +62,10 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
 
   public canDeleteItem(item: Contact): boolean {
     return item.transaction_count === 0;
+  }
+
+  public onRestoreClick() {
+    this.restoreDialogIsVisible = true;
   }
 
   public override onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {

@@ -64,11 +64,4 @@ describe('TransactionGroupEComponent', () => {
     component.ngOnInit();
     expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.COMMITTEE);
   });
-
-  it('should reset the subTransaction dropdown', () => {
-    component.form.get('subTransaction')?.setValue('A Value');
-    expect(component.form.get('subTransaction')?.value).toEqual('A Value');
-    component.createSubTransaction({ value: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT });
-    expect(component.form.get('subTransaction')?.value).toBeNull();
-  });
 });

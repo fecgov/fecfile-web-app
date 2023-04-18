@@ -48,20 +48,16 @@
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
         [purposeDescriptionLabel]="this.purposeDescriptionLabel"
       ></app-additional-info-input>
-      <div class="grid" *ngIf="subTransactionOptions.length > 0">
-        <div class="col-2">
-          <p-dropdown
-            inputId="subTransaction"
-            [options]="subTransactionOptions"
-            formControlName="subTransaction"
-            [autoDisplayFirst]="false"
-            (onChange)="createSubTransaction($event)"
-            placeholder="Save & add a Memo"
-            dropdownIcon="pi pi-plus"
-            styleClass="sub-transaction-dropdown"
-            panelStyleClass="sub-transaction-dropdown-panel"
-          ></p-dropdown>
-        </div>
+      <div class="grid">
+        <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
+          <div class="col-4">
+            <app-navigation-control
+              [navigationControl]="navigationControl"
+              [transaction]="transaction"
+              (navigate)="handleNavigate($event)"
+            ></app-navigation-control>
+          </div>
+        </ng-template>
       </div>
     </ng-container>
     <p-divider></p-divider>

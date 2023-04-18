@@ -13,13 +13,15 @@ export abstract class TransactionType {
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
+  isRefundAggregate = false; // Boolean flag to control whether or not the amount is subtracted from the aggregate
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
-  dependentChildTransactionType?: TransactionType; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
+  dependentChildTransactionType?: TransactionTypes; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
   contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
   defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
-  subTransactionTypes?: TransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction
+  subTransactionConfig?: (SubTransactionGroup | TransactionTypes)[] | SubTransactionGroup; // Configuration of Sub-TransactionTypes
+  shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
   navigationControls?: TransactionNavigationControls;
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
@@ -80,3 +82,13 @@ export type TransactionTemplateMapType = {
   memo_text_input: string;
   category_code: string;
 };
+
+export class SubTransactionGroup {
+  groupName: string;
+  subTransactionTypes: TransactionTypes[];
+
+  constructor(groupName: string, subTransactionTypes: TransactionTypes[]) {
+    this.groupName = groupName;
+    this.subTransactionTypes = subTransactionTypes;
+  }
+}

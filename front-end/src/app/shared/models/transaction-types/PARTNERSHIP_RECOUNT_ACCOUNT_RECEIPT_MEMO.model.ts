@@ -13,9 +13,7 @@ export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO extends SchATransactionTyp
   );
   schema = schema;
   override updateParentOnSave = true;
-  override navigationControls: TransactionNavigationControls = getChildNavigationControls(
-    LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO)
-  );
+  override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(): string {
     return 'Recount Account Partnership Attribution';

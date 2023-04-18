@@ -1,8 +1,8 @@
-<div class="report-menu" *ngIf="showMenu">
+<div class="report-menu">
   <div class="grid report-info">
     <div class="col-12">
       <div class="title-2">REPORT PROGRESS</div>
-      <div class="report-type">{{ activeReport?.form_type | label: f3xFormTypeLabels }}</div>
+      <div class="report-type">{{ activeReport?.form_type | label : f3xFormTypeLabels }}</div>
       <div class="sub-heading">{{ activeReport?.report_code | reportCodeLabel }}</div>
       <div class="sub-heading">
         {{ activeReport!.coverage_from_date | fecDate }} — <wbr /> {{ activeReport!.coverage_through_date | fecDate }}

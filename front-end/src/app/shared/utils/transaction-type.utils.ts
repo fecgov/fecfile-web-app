@@ -52,13 +52,13 @@ import { TRIBAL_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_JF_T
 import { TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
+import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model';
 import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOUNT_RECEIPT.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
-import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
 import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model';
 import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
 import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
@@ -94,6 +94,18 @@ import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO } from '../models/transactio
 import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO.model';
 import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO.model';
 import { REFUND_TO_UNREGISTERED_COMMITTEE } from '../models/transaction-types/REFUND_TO_UNREGISTERED_COMMITTEE.model';
+import { NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT.model';
+import { NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO.model';
+import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO.model';
+import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO.model';
+import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT.model';
+import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL.model';
+import { INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
+import { INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT.model';
+import { INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT.model';
+import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
+import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
+import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -172,6 +184,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   // INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
   OPERATING_EXPENDITURE,
   OPERATING_EXPENDITURE_VOID,
+  INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+  INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
+  INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
   OTHER_DISBURSEMENT,
   OTHER_DISBURSEMENT_VOID,
   OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
@@ -186,6 +201,15 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO,
   OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL,
   OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO,
+  NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
+  NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO,
+  NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
+  NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
+  NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
+  NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO,
+  TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
+  TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
+  TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
 }
 
 export class TransactionTypeUtils {
@@ -198,8 +222,8 @@ export class TransactionTypeUtils {
   }
 }
 
-// prettier-ignore
-export function getTransactionTypeClass(transactionTypeIdentifier: string): any { // eslint-disable-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function getTransactionTypeClass(transactionTypeIdentifier: string): any {
   return transactionTypeClasses[transactionTypeIdentifier];
 }
 

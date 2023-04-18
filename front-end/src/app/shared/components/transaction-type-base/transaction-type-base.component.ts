@@ -1,8 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import {
   NavigationAction,
   NavigationControl,
@@ -11,7 +9,7 @@ import {
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { ScheduleTransaction, Transaction, TransactionTypes } from 'app/shared/models/transaction.model';
+import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
@@ -38,8 +36,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   formSubmitted = false;
   purposeDescriptionLabel = '';
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  subTransactionOptions: { [key: string]: string | ScheduleATransactionTypes | ScheduleBTransactionTypes }[] = [];
-
   form: FormGroup = this.fb.group({});
 
   constructor(
@@ -59,20 +55,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     } else {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
-    this.subTransactionOptions = (this.transaction?.transactionType?.subTransactionTypes || []).map((type) => {
-      return {
-        label:
-          LabelUtils.get(ScheduleATransactionTypeLabels, type) || LabelUtils.get(ScheduleBTransactionTypeLabels, type),
-        value: type,
-      };
-    });
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
     this.parentOnInit();
   }
 
   parentOnInit() {
     // Override contact type options if present in transactionType
-    if (this.transaction?.transactionType && this.transaction?.transactionType.contactTypeOptions) {
+    if (this.transaction?.transactionType?.contactTypeOptions) {
       this.contactTypeOptions = LabelUtils.getPrimeOptions(
         ContactTypeLabels,
         this.transaction.transactionType.contactTypeOptions
@@ -236,14 +225,25 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   navigateTo(event: NavigationEvent) {
     const reportPath = `/transactions/report/${event.transaction?.report_id}`;
-    if (event.destination === NavigationDestination.ANOTHER) {
+    if (
+      event.destination === NavigationDestination.ANOTHER ||
+      event.destination === NavigationDestination.ANOTHER_CHILD
+    ) {
       this.messageService.add({
         severity: 'success',
         summary: 'Successful',
         detail: 'Transaction Saved',
         life: 3000,
       });
-      this.resetForm();
+      if (event.transaction?.parent_transaction_id) {
+        this.router.navigateByUrl(
+          `${reportPath}/list/edit/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`
+        );
+        this.resetForm();
+      } else {
+        this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
+        this.resetForm();
+      }
     } else if (event.destination === NavigationDestination.CHILD) {
       this.messageService.add({
         severity: 'success',
@@ -282,10 +282,5 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   getEntityType(): string {
     return this.form.get('entity_type')?.value || '';
-  }
-
-  createSubTransaction(event: { value: TransactionTypes }) {
-    this.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.CHILD, this.transaction, event.value));
-    this.form.get('subTransaction')?.reset(); // If the save fails, this clears the dropdown
   }
 }
