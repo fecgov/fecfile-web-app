@@ -8,9 +8,9 @@
           [options]="electionTypeOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
-          formControlName="electionType"
+          [formControl]="electionTypeControl"
         ></p-dropdown>
-        <app-error-messages [form]="form" fieldName="electionType" [formSubmitted]="formSubmitted"></app-error-messages>
+        <app-error-messages [control]="electionTypeControl" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
     </div>
     <div class="col-3">
@@ -20,11 +20,10 @@
           id="electionYear"
           [format]="false"
           [maxlength]="4"
-          formControlName="electionYear"
+          [formControl]="electionYearControl"
         ></p-inputNumber>
         <app-error-messages
-          [form]="form"
-          fieldName="electionYear"
+          [control]="electionYearControl"
           [formSubmitted]="formSubmitted"
           patternErrorMessage="This field requires a 4-digit year. (YYYY)"
         ></app-error-messages>

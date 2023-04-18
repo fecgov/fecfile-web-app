@@ -12,6 +12,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() formSubmitted = false;
   @Input() requiredErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
+  @Input() control: FormGroup | undefined;
 
   private _emailErrorMessage = '';
   @Input() set emailErrorMessage(value: string) {
@@ -129,11 +130,9 @@ export class ErrorMessagesComponent implements OnInit {
     return this.control?.errors?.['invaliddate']?.msg;
   }
 
-  control: FormGroup | undefined;
-
   constructor(@Inject(LOCALE_ID) private localeId: string) {}
 
   ngOnInit(): void {
-    this.control = this.form?.get(this.fieldName) as FormGroup;
+    this.control = this.control || (this.form?.get(this.fieldName) as FormGroup);
   }
 }

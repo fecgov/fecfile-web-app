@@ -17,28 +17,24 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     { label: 'Special', value: 'S' },
     { label: 'Recount', value: 'E' },
   ];
+  electionTypeControl = new FormControl('', Validators.required);
+  electionYearControl = new FormControl('', [Validators.required, Validators.pattern('\\d{4}')]);
 
   ngOnInit(): void {
-    // Create two additional form controls that will join values to populate the composit election_code form control value
-    const electionTypeControl = new FormControl('', Validators.required);
-    const electionYearControl = new FormControl('', [Validators.required, Validators.pattern('\\d{4}')]);
-    this.form.addControl('electionType', electionTypeControl);
-    this.form.addControl('electionYear', electionYearControl);
-
     // Get inital values for election type and year for additional form inputs
     const election_code = this.form.get('election_code')?.value;
     if (election_code) {
-      this.form.patchValue({
-        electionType: election_code.slice(0, 1),
-        electionYear: election_code.slice(1, 5),
-      });
+      this.electionTypeControl.setValue(election_code.slice(0, 1));
+      this.electionYearControl.setValue(election_code.slice(1, 5));
     }
 
     // Listen to election type and year form inputs and update election_code upon value changes
 
-    combineLatest([electionTypeControl.valueChanges, electionYearControl.valueChanges]).subscribe(([type, year]) => {
-      this.updateElectionCode(type || '', year || '');
-    });
+    combineLatest([this.electionTypeControl.valueChanges, this.electionYearControl.valueChanges]).subscribe(
+      ([type, year]) => {
+        this.updateElectionCode(type || '', year || '');
+      }
+    );
   }
 
   updateElectionCode(type: string, year: string) {
