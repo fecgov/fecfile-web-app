@@ -217,7 +217,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
-    'Non-contribution Account Credit Card Memo',
+    'Non-contribution Account Credit Card Payment Memo',
   ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
