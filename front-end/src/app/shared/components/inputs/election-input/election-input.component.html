@@ -8,7 +8,7 @@
           [options]="electionTypeOptions"
           [autoDisplayFirst]="false"
           appendTo="body"
-          [formControl]="electionTypeControl"
+          formControlName="electionType"
         ></p-dropdown>
         <app-error-messages [control]="electionTypeControl" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
@@ -17,10 +17,10 @@
       <div class="field">
         <label for="electionYear">ELECTION YEAR</label>
         <p-inputNumber
-          id="electionYear"
-          [format]="false"
+          inputId="electionYear"
           [maxlength]="4"
-          [formControl]="electionYearControl"
+          formControlName="electionYear"
+          ngDefaultControl
         ></p-inputNumber>
         <app-error-messages
           [control]="electionYearControl"
@@ -39,6 +39,7 @@
           pInputText
           id="election_other_description"
           [formControlName]="templateMap['election_other_description']"
+          ngDefaultControl
         />
         <app-error-messages
           [form]="form"

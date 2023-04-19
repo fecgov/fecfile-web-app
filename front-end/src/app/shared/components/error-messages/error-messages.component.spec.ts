@@ -57,12 +57,12 @@ describe('ErrorMessagesComponent', () => {
   it('should provide default error messages', () => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(
-      ValidateUtils.getFormGroupFields(['in_between',
-        'low_high', 'exclusive_low_high', 'exclusive_negative_amount'])
+      ValidateUtils.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount'])
     );
     ValidateUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
     component.form = formValidatorForm;
     component.fieldName = 'in_between';
+    component.control = undefined;
     component.ngOnInit();
     component.form.patchValue({ in_between: 'short' });
     expect(component.minLengthErrorMessage).toBe('This field must contain at least 10 alphanumeric characters.');
@@ -71,12 +71,14 @@ describe('ErrorMessagesComponent', () => {
     component.form.patchValue({ in_between: '' });
     expect(component.requiredErrorMessage).toBe('This is a required field.');
     component.fieldName = 'low_high';
+    component.control = undefined;
     component.ngOnInit();
     component.form.patchValue({ low_high: -100 });
     expect(component.minErrorMessage).toBe('This field must be greater than or equal to $0.00.');
     component.form.patchValue({ low_high: 100 });
     expect(component.maxErrorMessage).toBe('This field must be less than or equal to $10.00.');
     component.fieldName = 'exclusive_low_high';
+    component.control = undefined;
     component.ngOnInit();
     component.form.patchValue({ exclusive_low_high: 0 });
     expect(component.exclusiveMinErrorMessage).toBe('This field must be greater than $0.00.');
@@ -91,6 +93,7 @@ describe('ErrorMessagesComponent', () => {
     ValidateUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
     component.form = formValidatorForm;
     component.fieldName = 'exclusive_negative_amount';
+    component.control = undefined;
     component.ngOnInit();
     component.form.patchValue({ exclusive_negative_amount: 1 });
     expect(component.exclusiveMaxErrorMessage).toBe('Amount must be negative (example: -$20.00)');

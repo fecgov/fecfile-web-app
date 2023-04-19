@@ -21,6 +21,8 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
   electionYearControl = new FormControl('', [Validators.required, Validators.pattern('\\d{4}')]);
 
   ngOnInit(): void {
+    this.form.addControl('electionType', this.electionTypeControl);
+    this.form.addControl('electionYear', this.electionYearControl);
     // Get inital values for election type and year for additional form inputs
     const election_code = this.form.get('election_code')?.value;
     if (election_code) {
@@ -39,7 +41,7 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
 
   updateElectionCode(type: string, year: string) {
     const election_code = type + year;
-    this.form.patchValue({ [this.templateMap['election_code']]: election_code });
+    this.form.get(this.templateMap['election_code'])?.patchValue(election_code);
     this.form.get(this.templateMap['election_other_description'])?.updateValueAndValidity();
   }
 

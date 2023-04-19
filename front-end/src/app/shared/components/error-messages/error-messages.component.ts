@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, LOCALE_ID, Inject } from '@angular/core';
 import { formatCurrency } from '@angular/common';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-error-messages',
@@ -12,7 +12,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() formSubmitted = false;
   @Input() requiredErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
-  @Input() control: FormGroup | undefined;
+  @Input() control: FormGroup | FormControl | undefined;
 
   private _emailErrorMessage = '';
   @Input() set emailErrorMessage(value: string) {
