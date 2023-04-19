@@ -12,7 +12,7 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./amount-input.component.scss'],
   templateUrl: './amount-input.component.html',
 })
-export class AmountInputComponent extends BaseInputComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AmountInputComponent extends BaseInputComponent implements OnInit, OnDestroy {
   @Input() memoCodeReadOnly = false;
   @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
@@ -21,7 +21,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() showAggregate = true;
 
   @ViewChild('amountInput') amountInput!: InputNumber;
-  @ViewChild('memoCode', { read: ElementRef }) memoCode!: ElementRef;
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
@@ -29,7 +28,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   outOfDateDialogVisible = false;
-  unlistener!: () => void;
 
   constructor(private store: Store, private renderer2: Renderer2) {
     super();
@@ -60,14 +58,9 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     }
   }
 
-  ngAfterViewInit(): void {
-    this.unlistener = this.renderer2.listen(this.memoCode.nativeElement, 'click', this.onMemoItemClick.bind(this));
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.complete();
-    this.unlistener();
   }
 
   closeOutOfDateDialog() {
@@ -76,6 +69,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   // prettier-ignore
   onMemoItemClick() {
+    console.log("Called!");
     if (!this.memoCodeReadOnly && this.dateIsOutsideReport) {
       if (!this.form.get(this.templateMap.memo_code)?.value){
         this.outOfDateDialogVisible = true;
