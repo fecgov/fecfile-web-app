@@ -93,7 +93,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
         memo_code?.markAsTouched();
         memo_code?.updateValueAndValidity();
         this.dateIsOutsideReport = true;
-        if (!memo_code) {
+        if (!memo_code?.value) {
           this.outOfDateDialogVisible = true;
         }
       } else {
