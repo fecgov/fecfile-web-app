@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Subject, combineLatest, takeUntil, startWith } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-election-input',
   templateUrl: './election-input.component.html',
 })
-export class ElectionInputComponent extends BaseInputComponent implements OnInit {
+export class ElectionInputComponent extends BaseInputComponent implements OnInit, OnDestroy {
   electionTypeOptions = [
     { label: 'Primary', value: 'P' },
     { label: 'General', value: 'G' },
@@ -15,6 +16,7 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     { label: 'Special', value: 'S' },
     { label: 'Recount', value: 'E' },
   ];
+  private destroy$ = new Subject<boolean>();
 
   ngOnInit(): void {
     // Create two additional form controls that will join values to populate the composit election_code form control value
@@ -31,21 +33,28 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     }
 
     // Listen to election type and year form inputs and update election_code upon value changes
-    this.form.get('electionType')?.valueChanges.subscribe(() => {
-      this.updateElectionCode();
-    });
-    this.form.get('electionYear')?.valueChanges.subscribe(() => {
-      this.updateElectionCode();
-    });
+    this.form
+      .get('electionType')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateElectionCode();
+      });
+    this.form
+      .get('electionYear')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.updateElectionCode();
+      });
   }
 
   updateElectionCode() {
-    // Update the election_other_description as well so as to fire off its validation rule check
     const election_code = this.form.get('electionType')?.value + this.form.get('electionYear')?.value;
-    const election_other_description = this.form.get(this.templateMap['election_other_description'])?.value;
-    this.form.patchValue({
-      [this.templateMap['election_code']]: election_code,
-      [this.templateMap['election_other_description']]: election_other_description,
-    });
+    this.form.get(this.templateMap['election_code'])?.setValue(election_code);
+    this.form.get(this.templateMap['election_other_description'])?.updateValueAndValidity();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
 }
