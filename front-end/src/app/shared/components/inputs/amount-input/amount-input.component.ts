@@ -53,6 +53,11 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
       .subscribe((date: Date) => {
         this.updateMemoItemWithDate(date);
       });
+
+    const savedDate: Date | null = this.form.get(this.templateMap.date)?.value as Date | null;
+    if (savedDate) {
+      this.updateMemoItemWithDate(savedDate);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -84,11 +89,13 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     if (this.report?.coverage_from_date && this.report?.coverage_through_date) {
       const memo_code = this.form.get(this.templateMap.memo_code);
       if (date < this.report.coverage_from_date || date > this.report.coverage_through_date) {
-        this.outOfDateDialogVisible = true;
         memo_code?.addValidators(Validators.requiredTrue);
         memo_code?.markAsTouched();
         memo_code?.updateValueAndValidity();
         this.dateIsOutsideReport = true;
+        if (!memo_code) {
+          this.outOfDateDialogVisible = true;
+        }
       } else {
         if (this.dateIsOutsideReport && memo_code?.hasValidator(Validators.requiredTrue)) {
           memo_code?.removeValidators([Validators.requiredTrue]);
