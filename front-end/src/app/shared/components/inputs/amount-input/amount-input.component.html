@@ -88,7 +88,7 @@
   <p-confirmDialog key="memo-item-dialog" [style]="{ width: '450px' }"></p-confirmDialog>
   <p-dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '50vw' }" [modal]="true">
     <ng-template pTemplate="header">
-      <span class="text-xl font-bold">Just checking...</span>
+      <span class="text-xl" id="out-of-date-dialog-header">Just checking...</span>
     </ng-template>
     <p id="out-of-date-dialog-text">
       <b>

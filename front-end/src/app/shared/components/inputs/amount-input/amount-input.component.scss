@@ -4,7 +4,16 @@
   line-height: 1.5em;
 }
 
+#out-of-date-dialog-header {
+  font-family: 'gandhi-bold';
+  font-size: 36px;
+  color: #212121;
+}
+
 #out-of-date-dialog-text {
   padding-left: 40px;
   padding-right: 40px;
+  font-family: karla;
+  font-size: 14px;
+  color: #212121;
 }
