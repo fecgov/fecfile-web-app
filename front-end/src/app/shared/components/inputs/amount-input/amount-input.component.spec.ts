@@ -41,14 +41,14 @@ describe('AmountInputComponent', () => {
   it('should not call updateInput when negativeAmountValueOnly is false', () => {
     component.negativeAmountValueOnly = false;
     const updateInputMethodFalse = spyOn(component.amountInput, 'updateInput');
-    component.onInputAmount(new KeyboardEvent('1', undefined));
+    component.onInputAmount();
     expect(updateInputMethodFalse).toHaveBeenCalledTimes(0);
   });
 
   it('should call updateInput when negativeAmountValueOnly is true', () => {
     component.negativeAmountValueOnly = true;
     const updateInputMethodTrue = spyOn(component.amountInput, 'updateInput');
-    component.onInputAmount(new KeyboardEvent('1', undefined));
+    component.onInputAmount();
     expect(updateInputMethodTrue).toHaveBeenCalled();
   });
 

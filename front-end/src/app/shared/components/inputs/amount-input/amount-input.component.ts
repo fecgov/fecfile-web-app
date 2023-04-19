@@ -74,10 +74,9 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     this.outOfDateDialogVisible = false;
   }
 
-  // prettier-ignore
   onMemoItemClick() {
     if (!this.memoCodeReadOnly && this.dateIsOutsideReport) {
-      if (!this.form.get(this.templateMap.memo_code)?.value){
+      if (!this.form.get(this.templateMap.memo_code)?.value) {
         this.outOfDateDialogVisible = true;
       }
     }
@@ -107,8 +106,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     }
   }
 
-  // prettier-ignore
-  onInputAmount($event: KeyboardEvent) { // eslint-disable-line @typescript-eslint/no-unused-vars
+  onInputAmount() {
     if (this.negativeAmountValueOnly) {
       // Automatically convert the amount value to a negative dollar amount.
       const inputValue = this.amountInput.input.nativeElement.value;
