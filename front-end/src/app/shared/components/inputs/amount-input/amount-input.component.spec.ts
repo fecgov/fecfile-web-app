@@ -65,11 +65,11 @@ describe('AmountInputComponent', () => {
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
     component.form.get('memo_code')?.patchValue(false);
-    component.onMemoItemClick(new MouseEvent('test'));
+    component.onMemoItemClick();
     expect(component.outOfDateDialogVisible).toBeTrue();
 
     component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
-    component.onMemoItemClick(new MouseEvent('test'));
+    component.onMemoItemClick();
     expect(component.outOfDateDialogVisible).toBeTrue();
   });
 
@@ -81,7 +81,7 @@ describe('AmountInputComponent', () => {
 
     component.form.get('contribution_date')?.patchValue(new Date('01/15/2020'));
     component.form.get('memo_code')?.patchValue(false);
-    component.onMemoItemClick(new MouseEvent('test'));
+    component.onMemoItemClick();
     expect(component.outOfDateDialogVisible).toBeFalse();
   });
 
@@ -94,12 +94,12 @@ describe('AmountInputComponent', () => {
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
     component.outOfDateDialogVisible = false;
     component.form.get('memo_code')?.patchValue(true);
-    component.onMemoItemClick(new MouseEvent('test'));
+    component.onMemoItemClick();
     expect(component.outOfDateDialogVisible).toBeFalse();
 
     component.form.get('contribution_date')?.patchValue(new Date('02/01/2020'));
     component.outOfDateDialogVisible = false;
-    component.onMemoItemClick(new MouseEvent('test'));
+    component.onMemoItemClick();
     expect(component.outOfDateDialogVisible).toBeFalse();
   });
 

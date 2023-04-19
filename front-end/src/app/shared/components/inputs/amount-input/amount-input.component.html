@@ -52,7 +52,7 @@
           locale="en-US"
           [readonly]="contributionAmountReadOnly"
           inputStyleClass="{{ contributionAmountInputStyleClass }}"
-          (onInput)="onInputAmount($event)"
+          (onInput)="(onInputAmount)"
         ></p-inputNumber>
         <app-error-messages
           [form]="form"

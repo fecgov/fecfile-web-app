@@ -70,7 +70,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   }
 
   // prettier-ignore
-  onMemoItemClick($event: MouseEvent) { // eslint-disable-line @typescript-eslint/no-unused-vars
+  onMemoItemClick() { // eslint-disable-line @typescript-eslint/no-unused-vars
     if (!this.memoCodeReadOnly && this.dateIsOutsideReport) {
       if (!this.form.get(this.templateMap.memo_code)?.value){
         this.outOfDateDialogVisible = true;
