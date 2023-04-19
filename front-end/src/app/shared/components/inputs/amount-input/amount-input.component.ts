@@ -71,10 +71,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   // prettier-ignore
   onMemoItemClick() {
-    if (!this.memoCodeReadOnly && this.dateIsOutsideReport) {
-      if (!this.memoControl.value){
-        this.outOfDateDialogVisible = true;
-      }
+    if (!this.memoCodeReadOnly && this.dateIsOutsideReport && !this.memoControl.value) {
+      this.outOfDateDialogVisible = true;
     }
   }
 
