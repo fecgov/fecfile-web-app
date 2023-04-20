@@ -12,6 +12,7 @@ export class REFUND_PAC_CONTRIBUTION_VOID extends SchBTransactionType {
   override showAggregate = false;
   override isRefundAggregate = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override negativeAmountValueOnly = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
