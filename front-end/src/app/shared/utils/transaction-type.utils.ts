@@ -76,8 +76,8 @@ import { REFUND_TO_OTHER_POLITICAL_COMMITTEE } from '../models/transaction-types
 
 // Schedule B /////////////////////////////////////////////////////
 
-// import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
-// import { INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
+import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
+import { INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
 import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
 import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
 import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
@@ -107,6 +107,8 @@ import { INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-type
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
+import { REFUND_INDIVIDUAL_CONTRIBUTION } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION.model';
+import { REFUND_INDIVIDUAL_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION_VOID.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -182,8 +184,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
   REFUND_TO_OTHER_POLITICAL_COMMITTEE,
   // Schedule B /////////////////////////////////////////////////////
-  // BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
-  // INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
+  BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
+  INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
   OPERATING_EXPENDITURE,
   OPERATING_EXPENDITURE_VOID,
   INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
@@ -212,6 +214,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
   TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
   TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
+  REFUND_INDIVIDUAL_CONTRIBUTION,
+  REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
 }
 
 export class TransactionTypeUtils {
