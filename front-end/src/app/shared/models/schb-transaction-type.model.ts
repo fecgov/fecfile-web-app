@@ -28,5 +28,7 @@ export abstract class SchBTransactionType extends TransactionType {
     purposeDescripLabel: 'PURPOSE OF DISBURSEMENT',
     memo_text_input: 'memo_text_input',
     category_code: 'category_code',
+    election_code: 'election_code',
+    election_other_description: 'election_other_description',
   };
 }

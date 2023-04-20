@@ -22,6 +22,7 @@ import { EmployerInputComponent } from './components/inputs/employer-input/emplo
 import { CommitteeInputComponent } from './components/inputs/committee-input/committee-input.component';
 import { AmountInputComponent } from './components/inputs/amount-input/amount-input.component';
 import { AdditionalInfoInputComponent } from './components/inputs/additional-info-input/additional-info-input.component';
+import { ElectionInputComponent } from './components/inputs/election-input/election-input.component';
 import { DefaultZeroPipe } from './pipes/default-zero.pipe';
 import { FecDatePipe } from './pipes/fec-date.pipe';
 import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
@@ -71,6 +72,7 @@ import { TooltipModule } from 'primeng/tooltip';
     CommitteeInputComponent,
     AmountInputComponent,
     AdditionalInfoInputComponent,
+    ElectionInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,
   ],
@@ -94,6 +96,7 @@ import { TooltipModule } from 'primeng/tooltip';
     CommitteeInputComponent,
     AmountInputComponent,
     AdditionalInfoInputComponent,
+    ElectionInputComponent,
   ],
   providers: [DatePipe],
 })
