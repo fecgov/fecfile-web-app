@@ -24,6 +24,8 @@ export class TransactionGroupMComponent extends TransactionTypeBaseComponent imp
     'aggregate_amount',
     'expenditure_purpose_descrip',
     'category_code',
+    'memo_code',
+    'memo_text_input',
   ];
 
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
