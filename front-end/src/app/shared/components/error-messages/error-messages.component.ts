@@ -11,6 +11,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() fieldName = '';
   @Input() formSubmitted = false;
   @Input() requiredErrorMessage = 'This is a required field.';
+  @Input() requiredTrueErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
 
   private _emailErrorMessage = '';

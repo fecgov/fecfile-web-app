@@ -44,16 +44,17 @@ label.disabled {
   color: rgba(118, 118, 118, 0.3);
 }
 
+.label-note {
+  color: grey;
+  font-family: karla, sans-serif;
+}
+
 .bold {
   font-weight: bolder;
 }
 
 .readonly {
   background-color: #f1f1f1;
-}
-
-.grey {
-  color: grey;
 }
 
 .memo-checkbox-note {

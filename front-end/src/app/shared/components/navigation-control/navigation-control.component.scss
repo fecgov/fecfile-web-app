@@ -1,0 +1,23 @@
+:host ::ng-deep .navigation-dropdown {
+  background-color: #f77b42;
+  flex-direction: row-reverse;
+  padding: 0 16px;
+}
+
+:host ::ng-deep .navigation-dropdown span.p-dropdown-label.p-inputtext.p-placeholder,
+:host ::ng-deep .p-dropdown-trigger {
+  color: #212121;
+  font-weight: bold;
+  padding-right: 0;
+}
+
+:host ::ng-deep .navigation-dropdown-panel {
+  background-color: #f1f1f1;
+  color: #000000;
+}
+
+:host ::ng-deep .navigation-dropdown-group {
+  margin: -0.75rem -1rem -2rem;
+  padding: 0.75rem 1rem;
+  background-color: #f1f1f1;
+}

@@ -50,6 +50,7 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
   updateElectionCode() {
     const election_code = this.form.get('electionType')?.value + this.form.get('electionYear')?.value;
     this.form.get(this.templateMap['election_code'])?.setValue(election_code);
+    this.form.get(this.templateMap['election_other_description'])?.markAsTouched();
     this.form.get(this.templateMap['election_other_description'])?.updateValueAndValidity();
   }
 
