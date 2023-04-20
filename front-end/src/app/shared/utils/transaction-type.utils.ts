@@ -107,6 +107,8 @@ import { INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-type
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
+import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT.model';
+import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -212,6 +214,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
   TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
   TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
+  FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
+  FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
 }
 
 export class TransactionTypeUtils {
