@@ -107,6 +107,9 @@ import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 import { REFUND_PARTY_CONTRIBUTION } from '../models/transaction-types/REFUND_PARTY_CONTRIBUTION.model';
+import { REFUND_PAC_CONTRIBUTION } from '../models/transaction-types/REFUND_PAC_CONTRIBUTION.model';
+import { REFUND_PAC_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_PAC_CONTRIBUTION_VOID.model';
+import { REFUND_PARTY_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_PARTY_CONTRIBUTION_VOID.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -212,9 +215,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
   TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
   REFUND_PARTY_CONTRIBUTION,
-  //REFUND_PARTY_CONTRIBUTION_VOID,
-  //REFUND_PAC_CONTRIBUTION,
-  //REFUND_PAC_CONTRIBUTION_VOID
+  REFUND_PARTY_CONTRIBUTION_VOID,
+  REFUND_PAC_CONTRIBUTION,
+  REFUND_PAC_CONTRIBUTION_VOID
 }
 
 export class TransactionTypeUtils {

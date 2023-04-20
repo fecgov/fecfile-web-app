@@ -1,11 +1,11 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { REFUND_PARTY_CONTRIBUTION } from './REFUND_PARTY_CONTRIBUTION.model';
+import { REFUND_PAC_CONTRIBUTION } from './REFUND_PAC_CONTRIBUTION.model';
 
-describe('REFUND_PARTY_CONTRIBUTION', () => {
-  let transactionType: REFUND_PARTY_CONTRIBUTION;
+describe('REFUND_PAC_CONTRIBUTION', () => {
+  let transactionType: REFUND_PAC_CONTRIBUTION;
 
   beforeEach(() => {
-    transactionType = new REFUND_PARTY_CONTRIBUTION();
+    transactionType = new REFUND_PAC_CONTRIBUTION();
   });
 
   it('should create an instance', () => {
@@ -16,8 +16,8 @@ describe('REFUND_PARTY_CONTRIBUTION', () => {
 
   it('#factory() should return a SchBTransaction', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SB28B');
-    expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION);
+    expect(txn.form_type).toBe('SB28C');
+    expect(txn.transaction_type_identifier).toBe(ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION);
   });
 
   it('#generatePurposeDescription() should return constant', () => {
