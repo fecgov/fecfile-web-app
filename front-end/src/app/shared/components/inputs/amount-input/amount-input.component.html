@@ -15,28 +15,32 @@
   <div class="grid">
     <div class="col-12">
       <div class="field" [ngClass]="{ readonly: memoCodeReadOnly }">
-        <p-checkbox
-          #memoCode
-          [binary]="true"
-          inputId="memo_code"
-          [formControlName]="templateMap['memo_code']"
-          label="MEMO ITEM"
-          ariaLabel="have memo item"
-          [trueValue]="true"
-          [falseValue]="false"
-          [readonly]="memoCodeReadOnly"
-          (click)="onMemoItemClick()"
-        ></p-checkbox>
-        <span
-          class="pi pi-info-circle"
-          style="font-size: 1.5rem; margin-left: 0.5rem"
-          pTooltip="{{ memoItemHelpText }}"
-        ></span>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['memo_code']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+        <div class="field">
+          <div class="col-12">
+            <p-checkbox
+              #memoCode
+              [binary]="true"
+              inputId="memo_code"
+              [formControlName]="templateMap['memo_code']"
+              label="MEMO ITEM"
+              ariaLabel="have memo item"
+              [trueValue]="true"
+              [falseValue]="false"
+              [readonly]="memoCodeReadOnly"
+              (click)="onMemoItemClick()"
+            ></p-checkbox>
+            <span
+              class="pi pi-info-circle"
+              style="font-size: 1.5rem; margin-left: 0.5rem"
+              pTooltip="{{ memoItemHelpText }}"
+            ></span>
+          </div>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['memo_code']"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
       </div>
     </div>
   </div>
