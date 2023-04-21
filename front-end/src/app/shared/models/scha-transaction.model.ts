@@ -52,12 +52,7 @@ export class SchATransaction extends Transaction {
   override apiEndpoint = '/transactions/schedule-a';
 
   override getFieldsNotToValidate(): string[] {
-    return [
-      'donor_committee_name',
-      'back_reference_tran_id_number',
-      'back_reference_sched_name',
-      ...super.getFieldsNotToValidate(),
-    ];
+    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

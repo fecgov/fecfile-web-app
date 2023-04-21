@@ -223,6 +223,7 @@ export const testTemplateMap: TransactionTemplateMapType = {
   occupation: 'contributor_occupation',
   organization_name: 'contributor_organization_name',
   committee_fec_id: 'donor_committee_fec_id',
+  committee_name: 'donor_committee_name',
   date: 'contribution_date',
   dateLabel: 'DATE RECEIVED',
   memo_code: 'memo_code',
