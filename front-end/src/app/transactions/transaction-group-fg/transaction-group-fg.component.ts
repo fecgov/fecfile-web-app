@@ -21,6 +21,7 @@ export class TransactionGroupFgComponent extends DoubleTransactionTypeBaseCompon
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'donor_committee_fec_id',
+    'donor_committee_name',
     'memo_code',
     'memo_text_input',
   ];
@@ -45,6 +46,7 @@ export class TransactionGroupFgComponent extends DoubleTransactionTypeBaseCompon
     'contributor_employer',
     'contributor_occupation',
     'donor_committee_fec_id',
+    'donor_committee_name',
     'memo_code',
     'memo_text_input',
   ];

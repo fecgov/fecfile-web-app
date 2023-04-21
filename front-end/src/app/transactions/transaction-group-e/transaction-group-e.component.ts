@@ -22,6 +22,7 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'donor_committee_fec_id',
+    'donor_committee_name',
     'memo_code',
     'memo_text_input',
     'subTransaction',
@@ -30,6 +31,26 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
 
   override ngOnInit(): void {
+    if (this.transaction?.transactionType?.scheduleId === 'B') {
+      this.formProperties = [
+        'entity_type',
+        'payee_organization_name',
+        'payee_street_1',
+        'payee_street_2',
+        'payee_city',
+        'payee_state',
+        'payee_zip',
+        'expenditure_date',
+        'expenditure_amount',
+        'aggregate_amount',
+        'expenditure_purpose_descrip',
+        'beneficiary_committee_fec_id',
+        'beneficiary_committee_name',
+        'memo_code',
+        'memo_text_input',
+        'category_code',
+      ];
+    }
     super.ngOnInit();
   }
 }
