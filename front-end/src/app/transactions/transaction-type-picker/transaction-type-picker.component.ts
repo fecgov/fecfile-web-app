@@ -113,7 +113,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
         ];
       case ScheduleATransactionGroups.REFUNDS:
         return [
-          ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES,
+          ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
           ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
         ];
       case ScheduleATransactionGroups.OTHER:
@@ -196,8 +196,8 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
         ];
       case ScheduleBTransactionGroups.REFUND:
         return [
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_INDIVIDUAL,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_INDIVIDUAL_VOID,
+          ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
+          ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
           ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
           ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
           ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,

@@ -72,6 +72,7 @@ import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/trans
 import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO.model';
 import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT.model';
 import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
+import { REFUND_TO_OTHER_POLITICAL_COMMITTEE } from '../models/transaction-types/REFUND_TO_OTHER_POLITICAL_COMMITTEE.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
@@ -110,6 +111,8 @@ import { REFUND_PARTY_CONTRIBUTION } from '../models/transaction-types/REFUND_PA
 import { REFUND_PAC_CONTRIBUTION } from '../models/transaction-types/REFUND_PAC_CONTRIBUTION.model';
 import { REFUND_PAC_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_PAC_CONTRIBUTION_VOID.model';
 import { REFUND_PARTY_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_PARTY_CONTRIBUTION_VOID.model';
+import { REFUND_INDIVIDUAL_CONTRIBUTION } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION.model';
+import { REFUND_INDIVIDUAL_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION_VOID.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -183,6 +186,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   EARMARK_MEMO_RECOUNT_ACCOUNT,
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
+  REFUND_TO_OTHER_POLITICAL_COMMITTEE,
   // Schedule B /////////////////////////////////////////////////////
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
   INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
@@ -217,7 +221,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   REFUND_PARTY_CONTRIBUTION,
   REFUND_PARTY_CONTRIBUTION_VOID,
   REFUND_PAC_CONTRIBUTION,
-  REFUND_PAC_CONTRIBUTION_VOID
+  REFUND_PAC_CONTRIBUTION_VOID,
+  REFUND_INDIVIDUAL_CONTRIBUTION,
+  REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
 }
 
 export class TransactionTypeUtils {

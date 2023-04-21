@@ -128,7 +128,7 @@ jobs:
               cd fecfile-web-app/front-end; \
               git checkout ${E2E_BRANCH_NAME}; \
               npm install; \
-              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec cypress/e2e/*.cy.ts --headless --watch=false --browser chrome;'\
+              node --max_old_space_size=4000 ./node_modules/@angular/cli/bin/ng e2e --spec "cypress/e2e/*.cy.ts" --headless --watch=false --browser chrome;'\
       - run:
           name: stage test result artifacts
           when: always
