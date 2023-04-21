@@ -135,8 +135,8 @@ export enum ScheduleBTransactionTypes {
   OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND = 'OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND',
   OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_REGULAR_REFUND = 'OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_REGULAR_REFUND',
   TRIBAL_REFUND_NP_RECOUNT_ACCOUNT = 'TRIBAL_REFUND_NP_RECOUNT_ACCOUNT',
-  REFUND_CONTRIBUTION_INDIVIDUAL = 'REFUND_CONTRIBUTION_INDIVIDUAL',
-  REFUND_CONTRIBUTION_INDIVIDUAL_VOID = 'REFUND_CONTRIBUTION_INDIVIDUAL_VOID',
+  REFUND_INDIVIDUAL_CONTRIBUTION = 'REFUND_INDIVIDUAL_CONTRIBUTION',
+  REFUND_INDIVIDUAL_CONTRIBUTION_VOID = 'REFUND_INDIVIDUAL_CONTRIBUTION_VOID',
   REFUND_CONTRIBUTION_PARTY = 'REFUND_CONTRIBUTION_PARTY',
   REFUND_CONTRIBUTION_PARTY_VOID = 'REFUND_CONTRIBUTION_PARTY_VOID',
   REFUND_CONTRIBUTION_PAC = 'REFUND_CONTRIBUTION_PAC',
@@ -151,6 +151,9 @@ export enum ScheduleBTransactionTypes {
   FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL = 'FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL',
   FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO = 'FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO',
   FEDERAL_ELECTION_ACTIVITY_VOID = 'FEDERAL_ELECTION_ACTIVITY_VOID',
+  OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT = 'OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT',
+  OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT = 'OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT',
+  OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT = 'OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
@@ -217,7 +220,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO,
-    'Non-contribution Account Credit Card Memo',
+    'Non-contribution Account Credit Card Payment Memo',
   ],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
@@ -284,8 +287,8 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
     'Tribal Refund - National Party Recount/Legal Proceedings Account',
   ],
-  [ScheduleBTransactionTypes.REFUND_CONTRIBUTION_INDIVIDUAL, 'Refund of Individual Contribution'],
-  [ScheduleBTransactionTypes.REFUND_CONTRIBUTION_INDIVIDUAL_VOID, 'Refund of Individual Contribution - Void'],
+  [ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION, 'Refund of Individual Contribution'],
+  [ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID, 'Refund of Individual Contribution - Void'],
   [ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PARTY, 'Refund of Party Contribution'],
   [ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PARTY_VOID, 'Refund of Party Contribution - Void'],
   [ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PAC, 'Refund of PAC Contribution'],
@@ -312,4 +315,16 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   ],
   [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo'],
   [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID, 'Void of 100% Federal Election Activity'],
+  [
+    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
+    'Other Committee Refund - National Party Headquarters Buildings Account',
+  ],
+  [
+    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
+    'Other Committee Refund - National Party Pres. Nominating Convention Account',
+  ],
+  [
+    ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
+    'Other Committee Refund - National Party Recount/Legal Proceedings Account',
+  ],
 ];

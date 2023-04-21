@@ -23,7 +23,8 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         [templateMap]="templateMap"
-        entityRole="ORGANIZATION"
+        entityRole="COMMITTEE"
+        [includeFecId]="true"
       ></app-committee-input>
       <p-divider></p-divider>
       <h3>Address</h3>
@@ -39,6 +40,13 @@
         [showAggregate]="!!transaction?.transactionType?.showAggregate"
       ></app-amount-input>
       <p-divider></p-divider>
+      <h3>Election Information</h3>
+      <app-election-input
+        [form]="form"
+        [formSubmitted]="formSubmitted"
+        [templateMap]="templateMap"
+      ></app-election-input>
+      <p-divider></p-divider>
       <h3>Additional Information</h3>
       <app-additional-info-input
         [form]="form"
@@ -46,7 +54,6 @@
         [templateMap]="templateMap"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
         [purposeDescriptionLabel]="this.purposeDescriptionLabel"
-        [purposeDescriptionLabelNotice]="transaction?.transactionType?.purposeDescriptionLabelNotice"
       ></app-additional-info-input>
       <div class="grid">
         <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">

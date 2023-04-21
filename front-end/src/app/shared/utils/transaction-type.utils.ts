@@ -72,6 +72,7 @@ import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/trans
 import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO.model';
 import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT.model';
 import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
+import { REFUND_TO_OTHER_POLITICAL_COMMITTEE } from '../models/transaction-types/REFUND_TO_OTHER_POLITICAL_COMMITTEE.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
@@ -108,6 +109,11 @@ import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-typ
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 import { REFUND_UNREGISTERED_CONTRIBUTION } from '../models/transaction-types/REFUND_UNREGISTERED_CONTRIBUTION.model';
 import { REFUND_UNREGISTERED_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_UNREGISTERED_CONTRIBUTION_VOID.model';
+import { REFUND_INDIVIDUAL_CONTRIBUTION } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION.model';
+import { REFUND_INDIVIDUAL_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION_VOID.model';
+import { OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
+import { OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT.model';
+import { OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -181,6 +187,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   EARMARK_MEMO_RECOUNT_ACCOUNT,
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
+  REFUND_TO_OTHER_POLITICAL_COMMITTEE,
   // Schedule B /////////////////////////////////////////////////////
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
   INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
@@ -214,6 +221,11 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
   REFUND_UNREGISTERED_CONTRIBUTION,
   REFUND_UNREGISTERED_CONTRIBUTION_VOID,
+  REFUND_INDIVIDUAL_CONTRIBUTION,
+  REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
+  OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
+  OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
+  OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
 }
 
 export class TransactionTypeUtils {

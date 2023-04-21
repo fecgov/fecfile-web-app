@@ -16,7 +16,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { CreateF3XStep1Component, F3xReportTypeCategories } from './create-f3x-step1.component';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xCoverageDates } from '../../../shared/models/f3x-summary.model';
-import { AppSelectButtonComponent } from '../../../shared/components/app-selectbutton';
+import { AppSelectButtonComponent } from '../../../shared/components/app-selectbutton.component';
 import { ReportService } from '../../../shared/services/report.service';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { F3xReportCodes } from 'app/shared/utils/report-code.utils';

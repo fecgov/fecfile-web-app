@@ -57,8 +57,7 @@ describe('ErrorMessagesComponent', () => {
   it('should provide default error messages', () => {
     const fb: FormBuilder = new FormBuilder();
     const formValidatorForm = fb.group(
-      ValidateUtils.getFormGroupFields(['in_between',
-        'low_high', 'exclusive_low_high', 'exclusive_negative_amount'])
+      ValidateUtils.getFormGroupFields(['in_between', 'low_high', 'exclusive_low_high', 'exclusive_negative_amount'])
     );
     ValidateUtils.addJsonSchemaValidators(formValidatorForm, testSchema, false);
     component.form = formValidatorForm;
@@ -70,6 +69,7 @@ describe('ErrorMessagesComponent', () => {
     expect(component.maxLengthErrorMessage).toBe('This field cannot contain more than 20 alphanumeric characters.');
     component.form.patchValue({ in_between: '' });
     expect(component.requiredErrorMessage).toBe('This is a required field.');
+    expect(component.requiredTrueErrorMessage).toBe('This is a required field.');
     component.fieldName = 'low_high';
     component.ngOnInit();
     component.form.patchValue({ low_high: -100 });

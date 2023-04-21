@@ -4,11 +4,11 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 
 @Component({
-  selector: 'app-transaction-group-e',
-  templateUrl: './transaction-group-e.component.html',
+  selector: 'app-transaction-group-i',
+  templateUrl: './transaction-group-i.component.html',
   styleUrls: ['../transaction.scss'],
 })
-export class TransactionGroupEComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
+export class TransactionGroupIComponent extends TransactionTypeBaseComponent implements OnInit, OnDestroy {
   formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
@@ -17,12 +17,13 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
     'contributor_city',
     'contributor_state',
     'contributor_zip',
+    'election_code',
+    'election_other_description',
     'contribution_date',
     'contribution_amount',
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'donor_committee_fec_id',
-    'donor_committee_name',
     'memo_code',
     'memo_text_input',
     'subTransaction',
@@ -31,26 +32,6 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
   override contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
 
   override ngOnInit(): void {
-    if (this.transaction?.transactionType?.scheduleId === 'B') {
-      this.formProperties = [
-        'entity_type',
-        'payee_organization_name',
-        'payee_street_1',
-        'payee_street_2',
-        'payee_city',
-        'payee_state',
-        'payee_zip',
-        'expenditure_date',
-        'expenditure_amount',
-        'aggregate_amount',
-        'expenditure_purpose_descrip',
-        'beneficiary_committee_fec_id',
-        'beneficiary_committee_name',
-        'memo_code',
-        'memo_text_input',
-        'category_code',
-      ];
-    }
     super.ngOnInit();
   }
 }

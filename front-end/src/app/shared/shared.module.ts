@@ -22,13 +22,14 @@ import { EmployerInputComponent } from './components/inputs/employer-input/emplo
 import { CommitteeInputComponent } from './components/inputs/committee-input/committee-input.component';
 import { AmountInputComponent } from './components/inputs/amount-input/amount-input.component';
 import { AdditionalInfoInputComponent } from './components/inputs/additional-info-input/additional-info-input.component';
+import { ElectionInputComponent } from './components/inputs/election-input/election-input.component';
 import { DefaultZeroPipe } from './pipes/default-zero.pipe';
 import { FecDatePipe } from './pipes/fec-date.pipe';
 import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
 import { ReportCodeLabelPipe } from './utils/report-code.utils';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
-import { NavigationControlComponent } from './components/navigation-control/navigation-control/navigation-control.component';
+import { NavigationControlComponent } from './components/navigation-control/navigation-control.component';
 import { NavigationControlBarComponent } from './components/navigation-control-bar/navigation-control-bar.component';
 import { TransactionContactLookupComponent } from './components/transaction-contact-lookup/transaction-contact-lookup.component';
 import { TooltipModule } from 'primeng/tooltip';
@@ -71,6 +72,7 @@ import { TooltipModule } from 'primeng/tooltip';
     CommitteeInputComponent,
     AmountInputComponent,
     AdditionalInfoInputComponent,
+    ElectionInputComponent,
     NavigationControlComponent,
     NavigationControlBarComponent,
   ],
@@ -94,6 +96,7 @@ import { TooltipModule } from 'primeng/tooltip';
     CommitteeInputComponent,
     AmountInputComponent,
     AdditionalInfoInputComponent,
+    ElectionInputComponent,
   ],
   providers: [DatePipe],
 })

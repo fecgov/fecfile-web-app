@@ -127,6 +127,7 @@ export class TransactionContactUtils {
           case ContactTypes.COMMITTEE:
             form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
             form.get(templateMap.organization_name)?.setValue(contact.name);
+            form.get(templateMap.committee_name)?.setValue(contact.name);
             break;
           case ContactTypes.ORGANIZATION:
             form.get(templateMap.organization_name)?.setValue(contact.name);

@@ -1,0 +1,52 @@
+<div [formGroup]="form">
+  <div class="grid">
+    <div class="col-3">
+      <div class="field">
+        <label for="electionType">ELECTION TYPE</label>
+        <p-dropdown
+          inputId="electionType"
+          [options]="electionTypeOptions"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+          formControlName="electionType"
+        ></p-dropdown>
+        <app-error-messages [form]="form" fieldName="electionType" [formSubmitted]="formSubmitted"></app-error-messages>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label for="electionYear">ELECTION YEAR</label>
+        <p-inputNumber
+          inputId="electionYear"
+          [format]="false"
+          [maxlength]="4"
+          formControlName="electionYear"
+        ></p-inputNumber>
+        <app-error-messages
+          [form]="form"
+          fieldName="electionYear"
+          [formSubmitted]="formSubmitted"
+          patternErrorMessage="This field requires a 4-digit year. (YYYY)"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="field">
+        <label for="election_other_description"
+          >ELECTION DESCRIPTION <span class="label-note">(OPTIONAL IF PRIMARY OR GENERAL)</span></label
+        >
+        <input
+          type="text"
+          pInputText
+          id="election_other_description"
+          [formControlName]="templateMap['election_other_description']"
+        />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['election_other_description']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+</div>

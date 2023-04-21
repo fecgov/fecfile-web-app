@@ -19,6 +19,7 @@ export abstract class SchBTransactionType extends TransactionType {
     occupation: '',
     organization_name: 'payee_organization_name',
     committee_fec_id: 'beneficiary_committee_fec_id',
+    committee_name: 'beneficiary_committee_name',
     date: 'expenditure_date',
     dateLabel: 'DATE',
     memo_code: 'memo_code',
@@ -28,5 +29,7 @@ export abstract class SchBTransactionType extends TransactionType {
     purposeDescripLabel: 'PURPOSE OF DISBURSEMENT',
     memo_text_input: 'memo_text_input',
     category_code: 'category_code',
+    election_code: 'election_code',
+    election_other_description: 'election_other_description',
   };
 }

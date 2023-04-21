@@ -20,7 +20,6 @@ export abstract class TransactionType {
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
   contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
   defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
-  subTransactionTypes?: TransactionTypes[]; // TransactionTypes displayed in dropdown to choose from when creating a child transaction
   subTransactionConfig?: (SubTransactionGroup | TransactionTypes)[] | SubTransactionGroup; // Configuration of Sub-TransactionTypes
   shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
   navigationControls?: TransactionNavigationControls;
@@ -73,6 +72,7 @@ export type TransactionTemplateMapType = {
   occupation: string;
   organization_name: string;
   committee_fec_id: string;
+  committee_name: string;
   date: string;
   dateLabel: string;
   memo_code: string;
@@ -82,6 +82,8 @@ export type TransactionTemplateMapType = {
   purposeDescripLabel: string;
   memo_text_input: string;
   category_code: string;
+  election_code: string;
+  election_other_description: string;
 };
 
 export class SubTransactionGroup {
