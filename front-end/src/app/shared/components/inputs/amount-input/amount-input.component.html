@@ -35,11 +35,13 @@
               pTooltip="{{ memoItemHelpText }}"
             ></span>
           </div>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['memo_code']"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
+          <div class="col-12">
+            <app-error-messages
+              [form]="form"
+              [fieldName]="templateMap['memo_code']"
+              [formSubmitted]="formSubmitted"
+            ></app-error-messages>
+          </div>
         </div>
       </div>
     </div>
