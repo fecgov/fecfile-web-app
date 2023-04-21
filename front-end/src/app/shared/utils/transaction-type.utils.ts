@@ -72,6 +72,7 @@ import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/trans
 import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO.model';
 import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT.model';
 import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
+import { REFUND_TO_OTHER_POLITICAL_COMMITTEE } from '../models/transaction-types/REFUND_TO_OTHER_POLITICAL_COMMITTEE.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
@@ -184,6 +185,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   EARMARK_MEMO_RECOUNT_ACCOUNT,
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT,
   PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO,
+  REFUND_TO_OTHER_POLITICAL_COMMITTEE,
   // Schedule B /////////////////////////////////////////////////////
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
   INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
