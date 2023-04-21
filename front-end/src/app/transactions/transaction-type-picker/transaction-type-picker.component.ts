@@ -205,8 +205,8 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PARTY_VOID,
           ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PAC,
           ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PAC_VOID,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_NON_FEDERAL,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_NON_FEDERAL_VOID,
+          ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION,
+          ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
         ];
       case ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES:
         return [
