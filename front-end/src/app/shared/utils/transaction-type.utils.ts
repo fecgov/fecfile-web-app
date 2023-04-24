@@ -109,6 +109,7 @@ import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-typ
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 import { REFUND_INDIVIDUAL_CONTRIBUTION } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION.model';
 import { REFUND_INDIVIDUAL_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION_VOID.model';
+import { OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -216,6 +217,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
   REFUND_INDIVIDUAL_CONTRIBUTION,
   REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
+  OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
 }
 
 export class TransactionTypeUtils {
