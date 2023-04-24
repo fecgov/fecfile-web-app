@@ -9,7 +9,16 @@
           [autoDisplayFirst]="false"
           appendTo="body"
           formControlName="electionType"
-        ></p-dropdown>
+        >
+          <ng-template let-electionCode pTemplate="selectedItem">
+            <span class="bold">{{ electionCode.label.split(' ')[0] }}</span>
+            {{ electionCode.label.split(' ')[1] }}
+          </ng-template>
+          <ng-template let-electionCode pTemplate="item">
+            <span class="bold">{{ electionCode.label.split(' ')[0] }}</span>
+            {{ electionCode.label.split(' ')[1] }}
+          </ng-template>
+        </p-dropdown>
         <app-error-messages [form]="form" fieldName="electionType" [formSubmitted]="formSubmitted"></app-error-messages>
       </div>
     </div>
