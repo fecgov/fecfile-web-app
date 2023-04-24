@@ -9,12 +9,12 @@ import { BaseInputComponent } from '../base-input.component';
 })
 export class ElectionInputComponent extends BaseInputComponent implements OnInit, OnDestroy {
   electionTypeOptions = [
-    { label: 'Primary', value: 'P' },
-    { label: 'General', value: 'G' },
-    { label: 'Convention', value: 'C' },
-    { label: 'Runoff', value: 'R' },
-    { label: 'Special', value: 'S' },
-    { label: 'Recount', value: 'E' },
+    { label: 'Primary (P)', value: 'P' },
+    { label: 'General (G)', value: 'G' },
+    { label: 'Convention (C)', value: 'C' },
+    { label: 'Runoff (R)', value: 'R' },
+    { label: 'Special (S)', value: 'S' },
+    { label: 'Recount (E)', value: 'E' },
   ];
   private destroy$ = new Subject<boolean>();
 
