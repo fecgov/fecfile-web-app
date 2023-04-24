@@ -11,7 +11,7 @@ describe('OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('A');
+    expect(transactionType.componentGroupId).toBe('E');
   });
 
   xit('#factory() should return a SchBTransaction', () => {
