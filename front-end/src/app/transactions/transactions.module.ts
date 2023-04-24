@@ -31,6 +31,7 @@ import { TransactionGroupFgComponent } from './transaction-group-fg/transaction-
 import { MemoCodePipe, TransactionListComponent } from './transaction-list/transaction-list.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
+import { TransactionGroupMComponent } from './transaction-group-m/transaction-group-m.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     TransactionGroupDComponent,
     TransactionGroupEComponent,
     TransactionGroupIComponent,
+    TransactionGroupMComponent,
     TransactionGroupAgComponent,
     TransactionGroupFgComponent,
   ],
