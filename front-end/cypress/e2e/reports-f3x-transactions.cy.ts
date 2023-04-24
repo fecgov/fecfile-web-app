@@ -301,6 +301,50 @@ describe('Transactions', () => {
     TransactionDetailPage.assertFormData(transactionFormData);
   });
 
+  it('Create a Group M transaction', () => {
+    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.enterFormData(defaultReportFormData);
+    PageUtils.clickButton('Save and continue');
+
+    PageUtils.clickSidebarItem('Add a disbursement');
+    PageUtils.clickLink('FEDERAL ELECTION ACTIVITY EXPENDITURES');
+    PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
+
+    PageUtils.clickLink('Create a new contact');
+    const formContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Organization' },
+    };
+    ContactListPage.enterFormData(formContactData, true);
+    PageUtils.clickButton('Save & continue');
+
+    const transactionFormData = {
+      ...defaultTransactionFormData,
+      ...{
+        electionType: 'General',
+        electionYear: 2024,
+        election_other_description: PageUtils.randomString(10),
+      },
+    };
+    TransactionDetailPage.enterFormData(transactionFormData);
+    PageUtils.clickButton('Save');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+
+    cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
+    cy.get('tr').should('not.contain', 'Unitemized');
+    cy.get('tr').should('contain', formContactData['name']);
+    cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData['date_received']));
+    cy.get('tr').should('contain', '$' + transactionFormData['amount']);
+
+    // Check values of edit form
+    PageUtils.clickLink('Credit Card Payment for 100% Federal Election Activity');
+    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown').should('contain', 'Organization');
+    ContactListPage.assertFormData(formContactData, true);
+    TransactionDetailPage.assertFormData(transactionFormData);
+  });
+
   it('Create a Group AG transaction', () => {
     ReportListPage.clickCreateButton();
     F3xCreateReportPage.enterFormData(defaultReportFormData);
