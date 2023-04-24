@@ -24,6 +24,7 @@ export class TransactionGroupIComponent extends TransactionTypeBaseComponent imp
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'donor_committee_fec_id',
+    'donor_committee_name',
     'memo_code',
     'memo_text_input',
     'subTransaction',
