@@ -201,10 +201,10 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
         return [
           ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
           ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PARTY,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PARTY_VOID,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PAC,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PAC_VOID,
+          ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
+          ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
+          ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,
+          ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION_VOID,
           ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION,
           ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
         ];

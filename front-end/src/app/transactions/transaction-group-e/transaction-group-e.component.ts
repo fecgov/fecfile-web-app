@@ -49,6 +49,7 @@ export class TransactionGroupEComponent extends TransactionTypeBaseComponent imp
         'memo_code',
         'memo_text_input',
         'category_code',
+        'subTransaction',
       ];
     }
     super.ngOnInit();
