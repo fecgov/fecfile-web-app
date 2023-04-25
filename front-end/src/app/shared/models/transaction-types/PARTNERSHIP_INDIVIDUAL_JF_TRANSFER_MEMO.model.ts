@@ -11,12 +11,15 @@ export class PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
   );
+  override updateParentOnSave = true;
   schema = schema;
   override shortName = 'Individual';
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    return `JF Memo: ${(transaction.parent_transaction as SchATransaction).contributor_organization_name}`;
+    return `JF Memo: ${
+      (transaction.parent_transaction?.parent_transaction as SchATransaction).contributor_organization_name
+    } (Partnership Attribution)`;
   }
 
   getNewTransaction() {

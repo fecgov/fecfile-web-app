@@ -31,12 +31,15 @@ export class NavigationControlComponent implements OnInit {
   dropdownControl = new FormControl('');
 
   ngOnInit(): void {
-    if (NavigationDestination.CHILD == this.navigationControl?.navigationDestination) {
+    if (
+      NavigationDestination.CHILD == this.navigationControl?.navigationDestination ||
+      NavigationDestination.ANOTHER_CHILD == this.navigationControl?.navigationDestination
+    ) {
       this.controlType = 'dropdown';
-      this.dropdownOptions = this.getOptions(this.transaction?.transactionType);
-    } else if (NavigationDestination.ANOTHER_CHILD == this.navigationControl?.navigationDestination) {
-      this.controlType = 'dropdown';
-      this.dropdownOptions = this.getOptions(this.transaction?.parent_transaction?.transactionType);
+      this.dropdownOptions = this.getOptions(
+        this.transaction?.transactionType,
+        this.transaction?.parent_transaction?.transactionType
+      );
     } else {
       this.controlType = 'button';
     }
@@ -67,12 +70,12 @@ export class NavigationControlComponent implements OnInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes): any => {
+  getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes, isParentConfig: boolean = false): any => {
     if ((config as SubTransactionGroup).subTransactionTypes) {
       const group = config as SubTransactionGroup;
       return {
         label: group.groupName,
-        items: group.subTransactionTypes.map(this.getOptionFromConfig),
+        items: group.subTransactionTypes.map((type) => this.getOptionFromConfig(type, isParentConfig)),
       };
     }
     const typeId = config as TransactionTypes;
@@ -87,7 +90,7 @@ export class NavigationControlComponent implements OnInit {
         LabelUtils.get(ScheduleBTransactionTypeLabels, typeId),
       value: new NavigationEvent(
         NavigationAction.SAVE,
-        this.navigationControl?.navigationDestination,
+        isParentConfig ? NavigationDestination.ANOTHER_CHILD : NavigationDestination.CHILD,
         this.transaction,
         typeId
       ),
@@ -95,12 +98,20 @@ export class NavigationControlComponent implements OnInit {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getOptions(transactionType?: TransactionType): any {
+  getOptions(transactionType?: TransactionType, parentTransactionType?: TransactionType): any {
     const config = transactionType?.subTransactionConfig;
-    if (!config) return [];
-    if (Array.isArray(config)) {
-      return config.map(this.getOptionFromConfig);
+    const parentConfig = parentTransactionType?.subTransactionConfig;
+    const options = [];
+    if (Array.isArray(parentConfig)) {
+      options.push(...parentConfig.map((type) => this.getOptionFromConfig(type, true)));
+    } else if (parentConfig) {
+      options.push(this.getOptionFromConfig(parentConfig, true));
     }
-    return [this.getOptionFromConfig(config)];
+    if (Array.isArray(config)) {
+      options.push(...config.map((type) => this.getOptionFromConfig(type)));
+    } else if (config) {
+      options.push(this.getOptionFromConfig(config));
+    }
+    return options;
   }
 }

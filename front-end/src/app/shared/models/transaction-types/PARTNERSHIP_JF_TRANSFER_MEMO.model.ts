@@ -1,5 +1,5 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NON_CONTRIBUTION_ACCOUNT_REFUNDS';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_JF_TRANSFER_MEMO';
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
@@ -15,7 +15,9 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
   override contactTypeOptions = [ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
-  override subTransactionConfig = new SubTransactionGroup('Partnership Receipt JF Transfer Memo', []);
+  override subTransactionConfig = new SubTransactionGroup('Partnership Receipt JF Transfer Memo', [
+    ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+  ]);
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
@@ -25,7 +27,13 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
     });
   }
 
-  override generatePurposeDescription(): string {
-    return 'Non-contribution Account Refund';
+  override generatePurposeDescription(transaction: SchATransaction): string {
+    const committeeClause = `JF Memo: ${
+      (transaction.parent_transaction as SchATransaction).contributor_organization_name
+    }`;
+    if (transaction.children && transaction.children.length > 0) {
+      return committeeClause + ' (See Partnership Attribution(s) below)';
+    }
+    return committeeClause + ' (Partnership attributions do not require itemization)';
   }
 }
