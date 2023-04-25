@@ -14,6 +14,7 @@ export class OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransac
   );
   schema = schema;
   override showAggregate = false;
+  override isRefundAggregate = true;
   override defaultContactTypeOption = ContactTypes.COMMITTEE;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
