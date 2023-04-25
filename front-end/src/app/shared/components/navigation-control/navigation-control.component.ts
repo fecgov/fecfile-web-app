@@ -70,7 +70,7 @@ export class NavigationControlComponent implements OnInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes, isParentConfig: boolean = false): any => {
+  getOptionFromConfig = (config: SubTransactionGroup | TransactionTypes, isParentConfig = false): any => {
     if ((config as SubTransactionGroup).subTransactionTypes) {
       const group = config as SubTransactionGroup;
       return {

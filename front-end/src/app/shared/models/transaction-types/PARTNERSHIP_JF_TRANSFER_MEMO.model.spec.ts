@@ -1,6 +1,5 @@
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { PARTNERSHIP_JF_TRANSFER_MEMO } from './PARTNERSHIP_JF_TRANSFER_MEMO.model';
 
 describe('PARTNERSHIP_JF_TRANSFER_MEMO', () => {
   let transaction: SchATransaction;
