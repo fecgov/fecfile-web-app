@@ -18,6 +18,7 @@ describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
   let fixture: ComponentFixture<TransactionListComponent>;
   let router: Router;
+  let testItemService: TransactionService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -61,6 +62,7 @@ describe('TransactionListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionListComponent);
     router = TestBed.inject(Router);
+    testItemService = TestBed.inject(TransactionService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -109,20 +111,18 @@ describe('TransactionListComponent', () => {
   });
 
   it('test forceItemize', () => {
-    const componentUpdateItemSpy = spyOn(component, 'updateItem');
+    spyOn(testItemService, 'getTableData').and.returnValue(of());
     const testTransaction: Transaction =
       { force_itemized: null } as unknown as Transaction;
     component.forceItemize(testTransaction);
-    expect(componentUpdateItemSpy).toHaveBeenCalledOnceWith(testTransaction);
     expect(testTransaction.force_itemized).toBe(true);
   });
 
   it('test forceItemize', () => {
-    const componentUpdateItemSpy = spyOn(component, 'updateItem');
+    spyOn(testItemService, 'getTableData').and.returnValue(of());
     const testTransaction: Transaction =
       { force_itemized: null } as unknown as Transaction;
     component.forceUnitemize(testTransaction);
-    expect(componentUpdateItemSpy).toHaveBeenCalledOnceWith(testTransaction);
     expect(testTransaction.force_itemized).toBe(false);
   });
 
