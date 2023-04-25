@@ -99,7 +99,7 @@ describe('TransactionListComponent', () => {
     component.onTableActionClick(component.tableActions[3], { id: '999' } as F3xSummary);
     expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/other-transactions`);
   });
-  it('should show the correct acitons', () => {
+  it('should show the correct table actions', () => {
     expect(component.tableActions[0].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
     expect(component.tableActions[1].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
     expect(component.tableActions[2].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
@@ -108,6 +108,15 @@ describe('TransactionListComponent', () => {
     expect(component.tableActions[1].isEnabled({})).toEqual(true);
     expect(component.tableActions[2].isEnabled({})).toEqual(false);
     expect(component.tableActions[3].isEnabled({})).toEqual(false);
+  });
+
+  it('should show the correct row actions', () => {
+    expect(component.rowActions[0].isAvailable()).toEqual(true);
+    expect(component.rowActions[1].isAvailable({ itemized: false })).toEqual(true);
+    expect(component.rowActions[2].isAvailable({ itemized: true })).toEqual(true);
+    expect(component.rowActions[0].isEnabled({})).toEqual(true);
+    expect(component.rowActions[1].isEnabled({})).toEqual(true);
+    expect(component.rowActions[2].isEnabled({})).toEqual(true);
   });
 
   it('test forceItemize', () => {

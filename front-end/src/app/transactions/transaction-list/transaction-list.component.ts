@@ -51,17 +51,20 @@ export class TransactionListComponent extends TableListBaseComponent<Transaction
     new TableAction(
       'Edit',
       this.editItem.bind(this),
+      () => true,
       () => true
     ),
     new TableAction(
       'Itemize',
       this.forceItemize.bind(this),
-      (transaction: Transaction) => transaction.itemized === false
+      (transaction: Transaction) => transaction.itemized === false,
+      () => true
     ),
     new TableAction(
       'Unitemize',
       this.forceUnitemize.bind(this),
-      (transaction: Transaction) => transaction.itemized === true
+      (transaction: Transaction) => transaction.itemized === true,
+      () => true
     ),
   ];
   constructor(
