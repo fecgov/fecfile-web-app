@@ -111,7 +111,32 @@
           {{ item.parent_transaction?.transaction_id }}
         </td>
         <td>
-          <p-button pRipple icon="pi pi-ellipsis-v" styleClass="p-button-text" ariaLabel="action"></p-button>
+          <p-overlayPanel #op [styleClass]="'action-options'">
+            <ng-template pTemplate>
+              <ul>
+                <li *ngFor="let action of rowActions">
+                  <button
+                    *ngIf="!action.isAvailable || action.isAvailable(item)"
+                    pButton
+                    pRipple
+                    type="button"
+                    class="p-button-secondary p-button-text"
+                    id="one"
+                    (click)="onRowActionClick(action, item)"
+                  >
+                    {{ action.label }}
+                  </button>
+                </li>
+              </ul>
+            </ng-template>
+          </p-overlayPanel>
+          <p-button 
+            pRipple 
+            icon="pi pi-ellipsis-v" 
+            styleClass="p-button-text"
+            (onClick)="op.toggle($event)"
+            ariaLabel="action"
+          ></p-button>
           <!-- <em class="pi pi-trash" (click)="deleteItem(item)"></em> -->
         </td>
       </tr>

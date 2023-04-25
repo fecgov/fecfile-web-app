@@ -24,6 +24,7 @@ export abstract class Transaction extends BaseModel {
 
   transaction_type_identifier: string | undefined;
   itemized: boolean | undefined;
+  force_itemized: boolean | undefined;
 
   parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined; // Foreign key to the parent transaction db record
