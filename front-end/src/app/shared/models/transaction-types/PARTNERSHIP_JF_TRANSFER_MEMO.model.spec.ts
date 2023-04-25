@@ -1,27 +1,31 @@
+import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { PARTNERSHIP_JF_TRANSFER_MEMO } from './PARTNERSHIP_JF_TRANSFER_MEMO.model';
 
 describe('PARTNERSHIP_JF_TRANSFER_MEMO', () => {
-  let transactionType: PARTNERSHIP_JF_TRANSFER_MEMO;
+  let transaction: SchATransaction;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_JF_TRANSFER_MEMO();
+    transaction = getTestTransactionByType(
+      ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO,
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
+    ) as SchATransaction;
+    (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
   });
 
   it('should create an instance', () => {
-    expect(transactionType).toBeTruthy();
-    expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transaction).toBeTruthy();
+    expect(transaction.transactionType?.scheduleId).toBe('A');
+    expect(transaction.transactionType?.componentGroupId).toBe('D');
   });
 
   xit('#factory() should return a SchBTransaction', () => {
-    const txn: SchATransaction = transactionType.getNewTransaction();
-    expect(txn.form_type).toBe('SA12');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
+    expect(transaction.form_type).toBe('SA12');
+    expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
   });
 
   it('#generatePurposeDescription() should generate a string', () => {
-    const descrip = transactionType.generatePurposeDescription();
-    expect(descrip).toBe('Non-contribution Account Refund');
+    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
+    expect(descrip).toBe('JF Memo: Test Org (Partnership attributions do not require itemization)');
   });
 });

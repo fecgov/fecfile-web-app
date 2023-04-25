@@ -9,7 +9,12 @@ describe('PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO', () => {
       ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
       ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO
     ) as SchATransaction;
-    (transaction.parent_transaction as SchATransaction).contributor_organization_name = 'Test Org';
+    (transaction.parent_transaction as SchATransaction).parent_transaction = getTestTransactionByType(
+      ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER
+    );
+    (
+      (transaction.parent_transaction as SchATransaction).parent_transaction as SchATransaction
+    ).contributor_organization_name = 'Test Org';
   });
 
   it('should create an instance', () => {
@@ -27,6 +32,6 @@ describe('PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO', () => {
 
   it('#generatePurposeDescription() should return appropriate retval', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe(`JF Memo: Test Org`);
+    expect(descrip).toBe(`JF Memo: Test Org (Partnership Attribution)`);
   });
 });
