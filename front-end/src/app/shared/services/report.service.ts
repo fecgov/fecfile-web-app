@@ -50,12 +50,12 @@ export class ReportService implements TableListService<Report> {
         report_id: undefined,
         value: undefined,
       };
-    }
-    if (reports.length === 1) {
+    } else if (reports.length > 0) {
       const report: F3xSummary = reports[0] as F3xSummary;
+      const value = report.L6a_cash_on_hand_jan_1_ytd || 1.00;
       payload = {
         report_id: report.id,
-        value: report.L6a_cash_on_hand_jan_1_ytd,
+        value: value,
       };
     }
     if (payload) {
