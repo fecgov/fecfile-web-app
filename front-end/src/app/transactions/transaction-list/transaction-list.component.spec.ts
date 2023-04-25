@@ -1,17 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { of } from 'rxjs';
-import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ToolbarModule } from 'primeng/toolbar';
+import { of } from 'rxjs';
 
-import { TransactionListComponent, MemoCodePipe } from './transaction-list.component';
+import { Transaction } from 'app/shared/models/transaction.model';
+import { MemoCodePipe, TransactionListComponent } from './transaction-list.component';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -37,6 +38,7 @@ describe('TransactionListComponent', () => {
                 })
               ),
             getTableData: () => of([]),
+            update: () => of([]),
           },
         },
         {
@@ -105,4 +107,23 @@ describe('TransactionListComponent', () => {
     expect(component.tableActions[2].isEnabled({})).toEqual(false);
     expect(component.tableActions[3].isEnabled({})).toEqual(false);
   });
+
+  it('test forceItemize', () => {
+    const componentUpdateItemSpy = spyOn(component, 'updateItem');
+    const testTransaction: Transaction =
+      { force_itemized: null } as unknown as Transaction;
+    component.forceItemize(testTransaction);
+    expect(componentUpdateItemSpy).toHaveBeenCalledOnceWith(testTransaction);
+    expect(testTransaction.force_itemized).toBe(true);
+  });
+
+  it('test forceItemize', () => {
+    const componentUpdateItemSpy = spyOn(component, 'updateItem');
+    const testTransaction: Transaction =
+      { force_itemized: null } as unknown as Transaction;
+    component.forceUnitemize(testTransaction);
+    expect(componentUpdateItemSpy).toHaveBeenCalledOnceWith(testTransaction);
+    expect(testTransaction.force_itemized).toBe(false);
+  });
+
 });
