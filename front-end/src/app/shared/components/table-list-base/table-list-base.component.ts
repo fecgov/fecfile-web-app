@@ -10,6 +10,7 @@ import { Observable, forkJoin } from 'rxjs';
 export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit {
   item!: T;
   items: T[] = [];
+  rowsPerPage = 10;
   totalItems = 0;
   pagerState: LazyLoadEvent | undefined;
   loading = false;
@@ -72,7 +73,7 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
         ? this.pagerState
         : {
             first: 0,
-            rows: 10,
+            rows: this.rowsPerPage,
           };
     }
 

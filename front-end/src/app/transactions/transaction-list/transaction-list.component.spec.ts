@@ -10,6 +10,7 @@ import { of } from 'rxjs';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SharedModule } from '../../shared/shared.module';
 
 import { TransactionListComponent, MemoCodePipe } from './transaction-list.component';
 
@@ -20,7 +21,7 @@ describe('TransactionListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, RouterTestingModule, RouterTestingModule.withRoutes([])],
+      imports: [ToolbarModule, TableModule, SharedModule, RouterTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [TransactionListComponent],
       providers: [
         MessageService,

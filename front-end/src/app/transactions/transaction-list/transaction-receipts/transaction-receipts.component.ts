@@ -9,6 +9,7 @@ import { TransactionListTableBaseComponent } from '../transaction-list-table-bas
 @Component({
   selector: 'app-transaction-receipts',
   templateUrl: './transaction-receipts.component.html',
+  styleUrls: ['../../transaction.scss'],
 })
 export class TransactionReceiptsComponent extends TransactionListTableBaseComponent implements OnInit {
   scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;

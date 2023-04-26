@@ -7,15 +7,25 @@
     responsiveLayout="scroll"
     dataKey="id"
     [paginator]="true"
-    [rows]="10"
+    [rows]="rowsPerPage"
     [totalRecords]="totalItems"
     [loading]="loading"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
     [showCurrentPageReport]="true"
   >
     <ng-template pTemplate="caption">
-      <div class="flex align-items-center justify-content-between">
-        <h5 class="m-0">Disbursements</h5>
+      <div class="grid">
+        <div class="col-9 flex align-items-center justify-content-between">
+          <h5 class="ghandi-bold size-24">Disbursements</h5>
+        </div>
+        <div class="col-3 align-right">
+          Results per table:
+          <p-dropdown
+            [options]="paginationPageSizeOptions"
+            [(ngModel)]="rowsPerPage"
+            (onChange)="onRowsPerPageChange()"
+          ></p-dropdown>
+        </div>
       </div>
     </ng-template>
     <ng-template pTemplate="header">

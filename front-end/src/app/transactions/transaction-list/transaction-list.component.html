@@ -3,11 +3,12 @@
     <ng-template pTemplate="left">
       <div class="grid">
         <div class="col-12">
-          <h1>Transactions in this report</h1>
+          <h1 class="ghandi-bold size-36">Transactions in this report</h1>
         </div>
         <div class="col-12">
-          <span class="bold">{{ report?.form_type | label : f3xFormTypeLabels }}:</span>
-          {{ report?.report_code | reportCodeLabel }}
+          <span class="subtitle"
+            >{{ report?.form_type | label : f3xFormTypeLabels }}: {{ report?.report_code | reportCodeLabel }}</span
+          >
         </div>
       </div>
     </ng-template>
@@ -37,7 +38,7 @@
         pRipple
         icon="pi pi-plus"
         label="Add new transaction"
-        styleClass="p-button-success mr-2"
+        styleClass="add-button mr-2"
         (onClick)="op.toggle($event)"
         ariaLabel="Add a Transaction"
       ></p-button>

@@ -11,6 +11,8 @@ import { LabelList } from 'app/shared/utils/label.utils';
 })
 export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> implements OnInit {
   abstract scheduleTransactionTypeLabels: LabelList;
+  override rowsPerPage = 5;
+  paginationPageSizeOptions = [5, 10, 15, 20];
 
   constructor(
     protected override messageService: MessageService,
@@ -35,6 +37,13 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
 
   override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
     const reportId = this.activatedRoute.snapshot.params['reportId'];
-    return { report_id: reportId };
+    return { report_id: reportId, page_size: this.rowsPerPage };
+  }
+
+  onRowsPerPageChange() {
+    this.loadTableItems({
+      first: 0,
+      rows: this.rowsPerPage,
+    });
   }
 }

@@ -11,6 +11,7 @@ import { F3xFormTypeLabels } from '../../shared/models/f3x-summary.model';
 @Component({
   selector: 'app-transaction-list',
   templateUrl: './transaction-list.component.html',
+  styleUrls: ['../transaction.scss'],
 })
 export class TransactionListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
