@@ -13,7 +13,7 @@ export class PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType
   );
   override updateParentOnSave = true;
   schema = schema;
-  override shortName = 'Individual';
+  override shortName = 'Partnership Individual';
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(transaction: SchATransaction): string {

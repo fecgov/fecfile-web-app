@@ -11,7 +11,7 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
   componentGroupId = 'D';
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
   schema = schema;
-  override shortName = 'Partnership';
+  override shortName = 'Partnership Receipt';
   override contactTypeOptions = [ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
@@ -36,4 +36,7 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
     }
     return committeeClause + ' (Partnership attributions do not require itemization)';
   }
+
+  override purposeDescriptionLabelNotice =
+    'If transaction has no associated Partnership memos, reads "JF Memo: XX (Partnership attributions do not require itemization)". Otherwise, reads "JF Memo: XX (See Partnership Attribution(s) below)"';
 }
