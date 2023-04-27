@@ -86,6 +86,7 @@ export abstract class Transaction extends BaseModel {
           const newDescrip = child.transactionType.generatePurposeDescriptionWrapper(child);
           const key = child.transactionType.templateMap.purpose_description as keyof ScheduleTransaction;
           ((child as ScheduleTransaction)[key] as string) = newDescrip;
+          child.updateChildren();
         }
         outChildren.push(child);
       }
