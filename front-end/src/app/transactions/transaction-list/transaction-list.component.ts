@@ -97,6 +97,10 @@ export class TransactionListComponent extends TableListBaseComponent<Transaction
     this.router.navigateByUrl(`/transactions/report/${report?.id}/select/${transactionCategory}`);
   }
 
+  public override editItem(item: Transaction): void {
+    this.router.navigate([`edit/${item.id}`], { relativeTo: this.activatedRoute });
+  }
+
   public onTableActionClick(action: TableAction, report?: F3xSummary) {
     action.action(report);
   }

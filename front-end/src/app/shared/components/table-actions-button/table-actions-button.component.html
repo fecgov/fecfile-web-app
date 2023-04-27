@@ -1,0 +1,30 @@
+<ng-container>
+  <p-overlayPanel #op [styleClass]="'action-options'">
+    <ng-template pTemplate>
+      <ul>
+        <li *ngFor="let action of tableActions">
+          <button
+            *ngIf="!action.isAvailable || action.isAvailable(actionItem)"
+            [disabled]="!action.isEnabled(actionItem)"
+            pButton
+            pRipple
+            type="button"
+            class="p-button-secondary p-button-text"
+            id="one"
+            (click)="onTableActionClick(action, actionItem)"
+          >
+            {{ action.label }}
+          </button>
+        </li>
+      </ul>
+    </ng-template>
+  </p-overlayPanel>
+  <p-button
+    pRipple
+    [icon]="buttonIcon"
+    [label]="buttonLabel"
+    [styleClass]="buttonStyleClass"
+    [ariaLabel]="buttonAriaLabel"
+    (onClick)="op.toggle($event)"
+  ></p-button>
+</ng-container>
