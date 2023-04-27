@@ -32,4 +32,14 @@ describe('FormTypeDialogComponent', () => {
     component.goToReportForm();
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
   });
+
+  it('#onHide should change visible to false', () => {
+    let detailVisibleChangeValue = true;
+    expect(component.detailVisible).toEqual(false);
+    component.detailVisibleChange.subscribe(value => {
+      detailVisibleChangeValue = value;
+    });
+    component.onHide();
+    expect(detailVisibleChangeValue).toEqual(false);
+  });
 });
