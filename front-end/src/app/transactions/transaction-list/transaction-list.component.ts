@@ -10,7 +10,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-list',
@@ -125,7 +125,10 @@ export class TransactionListComponent extends TableListBaseComponent<Transaction
   }
 
   public updateItem(item: Transaction) {
-    this.itemService.update(item).subscribe(() => {
+    this.itemService.update(item).pipe(
+      take(1),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
       this.loadTableItems({});
     });
   }
