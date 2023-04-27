@@ -6,7 +6,7 @@
       <app-table-actions-button
         [tableActions]="tableActions"
         [actionItem]="report"
-        [onTableActionClick]="onTableActionClick"
+        [tableActionClick]="onTableActionClick"
         buttonIcon="pi pi-plus"
         buttonLabel="Add new transaction"
         buttonStyleClass="p-button-success mr-2"
@@ -95,7 +95,7 @@
           <app-table-actions-button
             [tableActions]="rowActions"
             [actionItem]="item"
-            [onTableActionClick]="onRowActionClick"
+            [tableActionClick]="onRowActionClick"
             buttonIcon="pi pi-ellipsis-v"
             buttonStyleClass="p-button-text"
             buttonAriaLabel="action"
