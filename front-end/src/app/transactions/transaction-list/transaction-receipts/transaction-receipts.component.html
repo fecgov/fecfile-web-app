@@ -84,7 +84,14 @@
           {{ item.parent_transaction?.transaction_id }}
         </td>
         <td>
-          <p-button pRipple icon="pi pi-ellipsis-v" styleClass="p-button-text" ariaLabel="action"></p-button>
+          <app-table-actions-button
+            [tableActions]="rowActions"
+            [actionItem]="item"
+            [tableActionClick]="onRowActionClick"
+            buttonIcon="pi pi-ellipsis-v"
+            buttonStyleClass="p-button-text"
+            buttonAriaLabel="action"
+          ></app-table-actions-button>
         </td>
       </tr>
     </ng-template>

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -9,10 +10,14 @@ import { TableModule } from 'primeng/table';
 import { SharedModule } from '../../../shared/shared.module';
 import { TransactionReceiptsComponent } from './transaction-receipts.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TransactionService } from 'app/shared/services/transaction.service';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
   let component: TransactionReceiptsComponent;
+  let router: Router;
+  let testItemService: TransactionService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -41,11 +46,43 @@ describe('TransactionReceiptsComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionReceiptsComponent);
+    router = TestBed.inject(Router);
+    testItemService = TestBed.inject(TransactionService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should show the correct row actions', () => {
+    expect(component.rowActions[0].isAvailable()).toEqual(true);
+    expect(component.rowActions[1].isAvailable({ itemized: false })).toEqual(true);
+    expect(component.rowActions[2].isAvailable({ itemized: true })).toEqual(true);
+    expect(component.rowActions[0].isEnabled({})).toEqual(true);
+    expect(component.rowActions[1].isEnabled({})).toEqual(true);
+    expect(component.rowActions[2].isEnabled({})).toEqual(true);
+  });
+
+  it('test forceItemize', () => {
+    spyOn(testItemService, 'getTableData').and.returnValue(of());
+    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
+    component.forceItemize(testTransaction);
+    expect(testTransaction.force_itemized).toBe(true);
+  });
+
+  it('test forceUnitemize', () => {
+    spyOn(testItemService, 'getTableData').and.returnValue(of());
+    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
+    component.forceUnitemize(testTransaction);
+    expect(testTransaction.force_itemized).toBe(false);
+  });
+
+  it('test editItem', () => {
+    const navigateSpy = spyOn(router, 'navigate');
+    const testTransaction: Transaction = { id: 'testId' } as unknown as Transaction;
+    component.editItem(testTransaction);
+    expect(navigateSpy).toHaveBeenCalled();
   });
 });

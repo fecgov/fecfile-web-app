@@ -1,4 +1,6 @@
 <p-menubar [model]="items"
   ><ng-template pTemplate="start">
-    <img src="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" /> </ng-template
+    <a class="seal-link" routerLink="/" *ngIf="showLogo">
+      <img src="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" />
+    </a> </ng-template
 ></p-menubar>

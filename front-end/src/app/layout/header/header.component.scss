@@ -2,6 +2,10 @@
   height: 48px;
 }
 
+a {
+  border: none;
+}
+
 :host ::ng-deep p-menubar{
   padding: 0px;
 }

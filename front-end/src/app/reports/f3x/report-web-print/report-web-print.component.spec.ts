@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -35,10 +35,16 @@ describe('ReportWebPrintComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('Sets the status messages as expected', () => {
+  it('Sets the status messages as expected', fakeAsync(() => {
+    const refresh = spyOn(component, 'refreshReportStatus');
     component.pollPrintStatus();
-    expect(component.pollingStatusMessage).toBe('This may take a while...');
-  });
+    tick(5001);
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(refresh).toHaveBeenCalled();
+      expect(component.pollingStatusMessage).toBe('This may take a while...');
+    });
+  }));
 
   it('refreshes the active report', () => {
     const refresh = spyOn(webPrintService, 'getStatus');
@@ -82,9 +88,15 @@ describe('ReportWebPrintComponent', () => {
     );
   });
 
-  it('#submitPrintJob() calls the service', () => {
+  it('#submitPrintJob() calls the service', fakeAsync(() => {
     const submit = spyOn(webPrintService, 'submitPrintJob');
+    const refresh = spyOn(component, 'refreshReportStatus');
     component.submitPrintJob();
     expect(submit).toHaveBeenCalled();
-  });
+    tick(5001);
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      expect(refresh).toHaveBeenCalled();
+    });
+  }));
 });

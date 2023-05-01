@@ -4,6 +4,7 @@ import { FormTypes } from 'app/shared/utils/form-type.utils';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { FormTypeDialogComponent } from './form-type-dialog.component';
+import { Dialog, DialogModule } from 'primeng/dialog';
 
 describe('FormTypeDialogComponent', () => {
   let component: FormTypeDialogComponent;
@@ -12,8 +13,8 @@ describe('FormTypeDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([])],
-      declarations: [FormTypeDialogComponent],
+      imports: [RouterTestingModule.withRoutes([]), DialogModule],
+      declarations: [Dialog, FormTypeDialogComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FormTypeDialogComponent);
@@ -31,5 +32,15 @@ describe('FormTypeDialogComponent', () => {
     component.selectedType = FormTypes.F3X;
     component.goToReportForm();
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/step1');
+  });
+
+  it('#onHide should change visible to false', () => {
+    let detailVisibleChangeValue = true;
+    expect(component.detailVisible).toEqual(false);
+    component.detailVisibleChange.subscribe(value => {
+      detailVisibleChangeValue = value;
+    });
+    component.onHide();
+    expect(detailVisibleChangeValue).toEqual(false);
   });
 });

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TransactionSchBService } from 'app/shared/services/transaction-schB.service';
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
@@ -19,8 +19,9 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     protected override activatedRoute: ActivatedRoute,
+    protected override router: Router,
     protected override itemService: TransactionSchBService
   ) {
-    super(messageService, confirmationService, elementRef, activatedRoute);
+    super(messageService, confirmationService, elementRef, activatedRoute, router);
   }
 }
