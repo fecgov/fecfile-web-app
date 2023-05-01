@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
 import { Dropdown, DropdownModule } from 'primeng/dropdown';
 import { FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('NavigationControlComponent', () => {
   let component: NavigationControlComponent;
@@ -18,7 +19,7 @@ describe('NavigationControlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ButtonModule, DropdownModule],
+      imports: [ButtonModule, DropdownModule, ReactiveFormsModule],
       declarations: [NavigationControlComponent, Dropdown],
       providers: [FormBuilder],
     }).compileComponents();
