@@ -10,14 +10,15 @@ import { TableModule } from 'primeng/table';
 import { SharedModule } from '../../../shared/shared.module';
 import { TransactionReceiptsComponent } from './transaction-receipts.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TransactionService } from 'app/shared/services/transaction.service';
+import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionReceiptsComponent>;
   let component: TransactionReceiptsComponent;
   let router: Router;
-  let testItemService: TransactionService;
+  let testItemService: TransactionSchAService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -40,6 +41,20 @@ describe('TransactionReceiptsComponent', () => {
             },
           },
         },
+        {
+          provide: TransactionSchAService,
+          useValue: {
+            get: (transactionId: string) =>
+              of(
+                SchATransaction.fromJSON({
+                  id: transactionId,
+                  transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
+                })
+              ),
+            getTableData: () => of([]),
+            update: () => of([]),
+          },
+        },
       ],
     }).compileComponents();
   });
@@ -47,7 +62,7 @@ describe('TransactionReceiptsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionReceiptsComponent);
     router = TestBed.inject(Router);
-    testItemService = TestBed.inject(TransactionService);
+    testItemService = TestBed.inject(TransactionSchAService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -66,14 +81,14 @@ describe('TransactionReceiptsComponent', () => {
   });
 
   it('test forceItemize', () => {
-    spyOn(testItemService, 'getTableData').and.returnValue(of());
+    spyOn(testItemService, 'update').and.returnValue(of());
     const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
     component.forceItemize(testTransaction);
     expect(testTransaction.force_itemized).toBe(true);
   });
 
   it('test forceUnitemize', () => {
-    spyOn(testItemService, 'getTableData').and.returnValue(of());
+    spyOn(testItemService, 'update').and.returnValue(of());
     const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
     component.forceUnitemize(testTransaction);
     expect(testTransaction.force_itemized).toBe(false);
