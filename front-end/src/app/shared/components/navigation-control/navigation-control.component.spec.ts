@@ -10,8 +10,7 @@ import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
 import { Dropdown, DropdownModule } from 'primeng/dropdown';
-import { FormBuilder } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 describe('NavigationControlComponent', () => {
   let component: NavigationControlComponent;
