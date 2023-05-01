@@ -9,6 +9,8 @@ import { JOINT_FUNDRAISING_TRANSFER } from 'app/shared/models/transaction-types/
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { ButtonModule } from 'primeng/button';
 import { NavigationControlComponent } from './navigation-control.component';
+import { Dropdown, DropdownModule } from 'primeng/dropdown';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 describe('NavigationControlComponent', () => {
   let component: NavigationControlComponent;
@@ -16,8 +18,9 @@ describe('NavigationControlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ButtonModule],
-      declarations: [NavigationControlComponent],
+      imports: [ButtonModule, DropdownModule, ReactiveFormsModule],
+      declarations: [NavigationControlComponent, Dropdown],
+      providers: [FormBuilder],
     }).compileComponents();
 
     fixture = TestBed.createComponent(NavigationControlComponent);

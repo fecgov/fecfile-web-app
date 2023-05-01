@@ -10,6 +10,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { ConfirmationService } from 'primeng/api';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { Dialog } from 'primeng/dialog';
+import { Tooltip, TooltipModule } from 'primeng/tooltip';
 
 describe('AmountInputComponent', () => {
   let component: AmountInputComponent;
@@ -17,8 +19,8 @@ describe('AmountInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AmountInputComponent, ErrorMessagesComponent, FecDatePipe],
-      imports: [CheckboxModule, InputNumberModule, CalendarModule, ReactiveFormsModule],
+      declarations: [AmountInputComponent, ErrorMessagesComponent, FecDatePipe, Dialog, Tooltip],
+      imports: [CheckboxModule, InputNumberModule, CalendarModule, ReactiveFormsModule, TooltipModule],
       providers: [provideMockStore(testMockStore), ConfirmationService],
     }).compileComponents();
 

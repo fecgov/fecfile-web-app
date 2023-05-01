@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private loginService: LoginService,
     private router: Router,
-    private store: Store
+    private store: Store,
+    private ngZone: NgZone
   ) {
     this.form = this.fb.group({
       committeeId: ['', Validators.required],
@@ -94,7 +95,9 @@ export class LoginComponent implements OnInit {
       next: (res: UserLoginData) => {
         if (res.is_allowed) {
           this.store.dispatch(userLoggedInAction({ payload: res }));
-          this.router.navigate(['dashboard']);
+          this.ngZone.run(() => {
+            this.router.navigate(['dashboard']);
+          });
         }
       },
       error: () => {

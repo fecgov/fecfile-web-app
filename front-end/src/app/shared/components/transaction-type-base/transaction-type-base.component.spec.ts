@@ -493,6 +493,31 @@ describe('TransactionTypeBaseComponent', () => {
 
     component.form.addControl('entity_type', { value: testEntityType });
     component.onContactLookupSelect(testContactSelectItem);
+    const lastNameFormControlValue = component.form.get('contributor_last_name')?.value;
+    const firstNameFormControlValue = component.form.get('contributor_first_name')?.value;
+    const middleNameFormControlValue = component.form.get('contributor_middle_name')?.value;
+    const prefixFormControlValue = component.form.get('contributor_prefix')?.value;
+    const suffixFormControlValue = component.form.get('contributor_suffix')?.value;
+    const employerFormControlValue = component.form.get('contributor_employer')?.value;
+    const occupationFormControlValue = component.form.get('contributor_occupation')?.value;
+    const street1FormControlValue = component.form.get('contributor_street_1')?.value;
+    const street2FormControlValue = component.form.get('contributor_street_2')?.value;
+    const cityFormControlValue = component.form.get('contributor_city')?.value;
+    const stateFormControlValue = component.form.get('contributor_state')?.value;
+    const zipFormControlValue = component.form.get('contributor_zip')?.value;
+
+    expect(lastNameFormControlValue === testContact.last_name).toBeTrue();
+    expect(firstNameFormControlValue === testContact.first_name).toBeTrue();
+    expect(middleNameFormControlValue === testContact.middle_name).toBeTrue();
+    expect(prefixFormControlValue === testContact.prefix).toBeTrue();
+    expect(suffixFormControlValue === testContact.suffix).toBeTrue();
+    expect(employerFormControlValue === testContact.employer).toBeTrue();
+    expect(occupationFormControlValue === testContact.occupation).toBeTrue();
+    expect(street1FormControlValue === testContact.street_1).toBeTrue();
+    expect(street2FormControlValue === testContact.street_2).toBeTrue();
+    expect(cityFormControlValue === testContact.city).toBeTrue();
+    expect(stateFormControlValue === testContact.state).toBeTrue();
+    expect(zipFormControlValue === testContact.zip).toBeTrue();
   });
 
   it('#onContactLookupSelect INDIVIDUAL should calculate aggregate', () => {
