@@ -40,7 +40,6 @@ describe('TransactionGroupBComponent', () => {
 
   const transaction = SchATransaction.fromJSON({
     form_type: 'SA15',
-    filer_committee_id_number: 'C00000000',
     transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
     transaction_id: 'AAAAAAAAAAAAAAAAAAA',
     entity_type: ContactTypes.ORGANIZATION,
@@ -136,7 +135,6 @@ describe('TransactionGroupBComponent', () => {
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
-      filer_committee_id_number: 'C00000000',
       transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
       transaction_id: 'AAAAAAAAAAAAAAAAAAA',
       entity_type: ContactTypes.ORGANIZATION,
@@ -192,7 +190,6 @@ describe('TransactionGroupBComponent', () => {
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
-      filer_committee_id_number: 'C00000000',
       transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
       transaction_id: 'AAAAAAAAAAAAAAAAAAA',
       entity_type: ContactTypes.INDIVIDUAL,
@@ -230,7 +227,6 @@ describe('TransactionGroupBComponent', () => {
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
-      filer_committee_id_number: 'C00000000',
       transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
       transaction_id: 'AAAAAAAAAAAAAAAAAAA',
       entity_type: ContactTypes.COMMITTEE,
@@ -277,7 +273,6 @@ describe('TransactionGroupBComponent', () => {
     }
     const testTran = SchATransaction.fromJSON({
       form_type: 'SA15',
-      filer_committee_id_number: 'C00000000',
       transaction_type_identifier: 'OFFSET_TO_OPERATING_EXPENDITURES',
       transaction_id: 'AAAAAAAAAAAAAAAAAAA',
       entity_type: ContactTypes.INDIVIDUAL,

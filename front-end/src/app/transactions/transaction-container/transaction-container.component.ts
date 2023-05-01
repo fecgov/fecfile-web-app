@@ -11,7 +11,7 @@ import { Transaction } from 'app/shared/models/transaction.model';
   selector: 'app-transaction-container',
   templateUrl: './transaction-container.component.html',
 })
-export class TransactionContainerComponent implements OnInit, OnDestroy {
+export class TransactionContainerComponent implements OnDestroy {
   transaction: Transaction | undefined;
   destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -23,20 +23,6 @@ export class TransactionContainerComponent implements OnInit, OnDestroy {
         this.titleService.setTitle(title);
       }
     });
-  }
-
-  ngOnInit(): void {
-    this.store
-      .select(selectCommitteeAccount)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount: CommitteeAccount) => {
-        if (this.transaction) {
-          this.transaction.filer_committee_id_number = committeeAccount.committee_id ?? 'C00000000';
-        }
-        if (this.transaction?.transactionType?.dependentChildTransactionType && this.transaction.children) {
-          this.transaction.children[0].filer_committee_id_number = committeeAccount.committee_id ?? 'C00000000';
-        }
-      });
   }
 
   ngOnDestroy(): void {

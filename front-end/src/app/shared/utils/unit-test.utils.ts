@@ -160,7 +160,6 @@ export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
 
 export const testScheduleATransaction = SchATransaction.fromJSON({
   form_type: 'SA15',
-  filer_committee_id_number: 'C00000000',
   transaction_type_identifier: 'PAC_JF_TRANSFER_MEMO',
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
   back_reference_tran_id_number: 'AAAAAAAAAAAAAAAAAAA',
@@ -182,7 +181,6 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
 
 export const testScheduleBTransaction = SchBTransaction.fromJSON({
   form_type: 'SB21b',
-  filer_committee_id_number: 'C00000000',
   transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
   entity_type: ContactTypes.ORGANIZATION,
