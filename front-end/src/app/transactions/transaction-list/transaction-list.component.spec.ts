@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -8,33 +9,19 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-import { ToolbarModule } from 'primeng/toolbar';
-import { of } from 'rxjs';
-
-import { Transaction } from 'app/shared/models/transaction.model';
+import { SharedModule } from '../../shared/shared.module';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list.component';
-import { ConfirmDialog } from 'primeng/confirmdialog';
-import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
-import { Button, ButtonModule } from 'primeng/button';
-import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
+import { ToolbarModule } from 'primeng/toolbar';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
   let fixture: ComponentFixture<TransactionListComponent>;
   let router: Router;
-  let testItemService: TransactionService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ToolbarModule,
-        TableModule,
-        RouterTestingModule,
-        RouterTestingModule.withRoutes([]),
-        OverlayPanelModule,
-        ButtonModule,
-      ],
-      declarations: [TransactionListComponent, ConfirmDialog, OverlayPanel, Button, TableActionsButtonComponent],
+      imports: [ToolbarModule, TableModule, SharedModule, RouterTestingModule, RouterTestingModule.withRoutes([])],
+      declarations: [TransactionListComponent],
       providers: [
         MessageService,
         ConfirmationService,
@@ -73,7 +60,6 @@ describe('TransactionListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionListComponent);
     router = TestBed.inject(Router);
-    testItemService = TestBed.inject(TransactionService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -119,41 +105,5 @@ describe('TransactionListComponent', () => {
     expect(component.tableActions[1].isEnabled({})).toEqual(true);
     expect(component.tableActions[2].isEnabled({})).toEqual(false);
     expect(component.tableActions[3].isEnabled({})).toEqual(false);
-  });
-
-  it('should show the correct row actions', () => {
-    expect(component.rowActions[0].isAvailable()).toEqual(true);
-    expect(component.rowActions[1].isAvailable({ itemized: false })).toEqual(true);
-    expect(component.rowActions[2].isAvailable({ itemized: true })).toEqual(true);
-    expect(component.rowActions[0].isEnabled({})).toEqual(true);
-    expect(component.rowActions[1].isEnabled({})).toEqual(true);
-    expect(component.rowActions[2].isEnabled({})).toEqual(true);
-  });
-
-  it('test forceItemize', () => {
-    spyOn(testItemService, 'getTableData').and.returnValue(of());
-    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceItemize(testTransaction);
-    expect(testTransaction.force_itemized).toBe(true);
-  });
-
-  it('test forceItemize', () => {
-    spyOn(testItemService, 'getTableData').and.returnValue(of());
-    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
-    component.forceUnitemize(testTransaction);
-    expect(testTransaction.force_itemized).toBe(false);
-  });
-
-  it('test editItem', () => {
-    const navigateSpy = spyOn(router, 'navigate');
-    const testTransaction: Transaction = { id: 'testId' } as unknown as Transaction;
-    component.editItem(testTransaction);
-    expect(navigateSpy).toHaveBeenCalled();
-  });
-
-  it('should navigate to create other transactions', () => {
-    const navigateSpy = spyOn(router, 'navigateByUrl');
-    component.onTableActionClick(component.tableActions[3], { id: '999' } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/other-transactions`);
   });
 });

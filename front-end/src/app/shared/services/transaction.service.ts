@@ -14,7 +14,9 @@ import { HttpStatusCode } from '@angular/common/http';
   providedIn: 'root',
 })
 export class TransactionService implements TableListService<Transaction> {
-  constructor(private apiService: ApiService, private datePipe: DatePipe) {}
+  tableDataEndpoint = '/transactions';
+
+  constructor(protected apiService: ApiService, protected datePipe: DatePipe) {}
 
   public getTableData(
     pageNumber = 1,
@@ -24,12 +26,14 @@ export class TransactionService implements TableListService<Transaction> {
     if (!ordering) {
       ordering = 'form_type';
     }
-    return this.apiService.get<ListRestResponse>(`/transactions/?page=${pageNumber}&ordering=${ordering}`, params).pipe(
-      map((response: ListRestResponse) => {
-        response.results = response.results.map((item) => getFromJSON(item));
-        return response;
-      })
-    );
+    return this.apiService
+      .get<ListRestResponse>(`${this.tableDataEndpoint}/?page=${pageNumber}&ordering=${ordering}`, params)
+      .pipe(
+        map((response: ListRestResponse) => {
+          response.results = response.results.map((item) => getFromJSON(item));
+          return response;
+        })
+      );
   }
 
   public get(id: string): Observable<ScheduleTransaction> {
