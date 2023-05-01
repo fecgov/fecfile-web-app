@@ -16,6 +16,7 @@ import { MemoCodePipe, TransactionListComponent } from './transaction-list.compo
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { Button, ButtonModule } from 'primeng/button';
+import { TableActionsButtonComponent } from 'app/shared/components/table-actions-button/table-actions-button.component';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -33,7 +34,7 @@ describe('TransactionListComponent', () => {
         OverlayPanelModule,
         ButtonModule,
       ],
-      declarations: [TransactionListComponent, ConfirmDialog, OverlayPanel, Button],
+      declarations: [TransactionListComponent, ConfirmDialog, OverlayPanel, Button, TableActionsButtonComponent],
       providers: [
         MessageService,
         ConfirmationService,
