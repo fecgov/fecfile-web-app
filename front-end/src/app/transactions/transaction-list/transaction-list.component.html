@@ -3,34 +3,15 @@
     <ng-template pTemplate="left">Transactions</ng-template>
 
     <ng-template pTemplate="right">
-      <p-overlayPanel #op [styleClass]="'action-options'">
-        <ng-template pTemplate>
-          <ul>
-            <li *ngFor="let action of tableActions">
-              <button
-                *ngIf="!action.isAvailable || action.isAvailable(report)"
-                [disabled]="!action.isEnabled(report)"
-                pButton
-                pRipple
-                type="button"
-                class="p-button-secondary p-button-text"
-                id="one"
-                (click)="onTableActionClick(action, report)"
-              >
-                {{ action.label }}
-              </button>
-            </li>
-          </ul>
-        </ng-template>
-      </p-overlayPanel>
-      <p-button
-        pRipple
-        icon="pi pi-plus"
-        label="Add new transaction"
-        styleClass="p-button-success mr-2"
-        (onClick)="op.toggle($event)"
-        ariaLabel="Add a Transaction"
-      ></p-button>
+      <app-table-actions-button
+        [tableActions]="tableActions"
+        [actionItem]="report"
+        [tableActionClick]="onTableActionClick"
+        buttonIcon="pi pi-plus"
+        buttonLabel="Add new transaction"
+        buttonStyleClass="p-button-success mr-2"
+        buttonAriaLabel="Add a Transaction"
+      ></app-table-actions-button>
     </ng-template>
   </p-toolbar>
 
@@ -111,32 +92,14 @@
           {{ item.parent_transaction?.transaction_id }}
         </td>
         <td>
-          <p-overlayPanel #op [styleClass]="'action-options'">
-            <ng-template pTemplate>
-              <ul>
-                <li *ngFor="let action of rowActions">
-                  <button
-                    *ngIf="!action.isAvailable || action.isAvailable(item)"
-                    pButton
-                    pRipple
-                    type="button"
-                    class="p-button-secondary p-button-text"
-                    id="one"
-                    (click)="onRowActionClick(action, item)"
-                  >
-                    {{ action.label }}
-                  </button>
-                </li>
-              </ul>
-            </ng-template>
-          </p-overlayPanel>
-          <p-button 
-            pRipple 
-            icon="pi pi-ellipsis-v" 
-            styleClass="p-button-text"
-            (onClick)="op.toggle($event)"
-            ariaLabel="action"
-          ></p-button>
+          <app-table-actions-button
+            [tableActions]="rowActions"
+            [actionItem]="item"
+            [tableActionClick]="onRowActionClick"
+            buttonIcon="pi pi-ellipsis-v"
+            buttonStyleClass="p-button-text"
+            buttonAriaLabel="action"
+          ></app-table-actions-button>
           <!-- <em class="pi pi-trash" (click)="deleteItem(item)"></em> -->
         </td>
       </tr>

@@ -70,6 +70,14 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
               );
             }
           } else {
+            if (transaction?.parent_transaction_id) {
+              return this.transactionService.get(transaction.parent_transaction_id).pipe(
+                map((parent) => {
+                  transaction.parent_transaction = parent;
+                  return transaction;
+                })
+              );
+            }
             return of(transaction);
           }
         }

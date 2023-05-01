@@ -10,7 +10,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-list',
@@ -97,6 +97,10 @@ export class TransactionListComponent extends TableListBaseComponent<Transaction
     this.router.navigateByUrl(`/transactions/report/${report?.id}/select/${transactionCategory}`);
   }
 
+  public override editItem(item: Transaction): void {
+    this.router.navigate([`edit/${item.id}`], { relativeTo: this.activatedRoute });
+  }
+
   public onTableActionClick(action: TableAction, report?: F3xSummary) {
     action.action(report);
   }
@@ -125,7 +129,10 @@ export class TransactionListComponent extends TableListBaseComponent<Transaction
   }
 
   public updateItem(item: Transaction) {
-    this.itemService.update(item).subscribe(() => {
+    this.itemService.update(item).pipe(
+      take(1),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
       this.loadTableItems({});
     });
   }

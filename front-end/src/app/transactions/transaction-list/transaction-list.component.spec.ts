@@ -142,4 +142,17 @@ describe('TransactionListComponent', () => {
     component.forceUnitemize(testTransaction);
     expect(testTransaction.force_itemized).toBe(false);
   });
+
+  it('test editItem', () => {
+    const navigateSpy = spyOn(router, 'navigate');
+    const testTransaction: Transaction = { id: 'testId' } as unknown as Transaction;
+    component.editItem(testTransaction);
+    expect(navigateSpy).toHaveBeenCalled();
+  });
+
+  it('should navigate to create other transactions', () => {
+    const navigateSpy = spyOn(router, 'navigateByUrl');
+    component.onTableActionClick(component.tableActions[3], { id: '999' } as F3xSummary);
+    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/other-transactions`);
+  });
 });
