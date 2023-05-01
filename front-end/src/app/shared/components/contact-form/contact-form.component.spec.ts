@@ -4,7 +4,13 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { provideMockStore } from '@ngrx/store/testing';
 import { Candidate } from 'app/shared/models/candidate.model';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { CandidateOfficeTypes, Contact, ContactTypes, FecApiCandidateLookupData, FecApiCommitteeLookupData } from 'app/shared/models/contact.model';
+import {
+  CandidateOfficeTypes,
+  Contact,
+  ContactTypes,
+  FecApiCandidateLookupData,
+  FecApiCommitteeLookupData,
+} from 'app/shared/models/contact.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
@@ -12,6 +18,7 @@ import { of } from 'rxjs';
 import { ErrorMessagesComponent } from '../error-messages/error-messages.component';
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactFormComponent } from './contact-form.component';
+import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 
 describe('ContactFormComponent', () => {
   let component: ContactFormComponent;
@@ -20,14 +27,13 @@ describe('ContactFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        DropdownModule,
+      imports: [HttpClientTestingModule, FormsModule, ReactiveFormsModule, DropdownModule],
+      declarations: [
+        ContactFormComponent,
+        ErrorMessagesComponent,
+        FecInternationalPhoneInputComponent,
+        ContactLookupComponent,
       ],
-      declarations: [ContactFormComponent, ErrorMessagesComponent,
-        FecInternationalPhoneInputComponent],
       providers: [FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
     testFecApiService = TestBed.inject(FecApiService);
@@ -72,7 +78,6 @@ describe('ContactFormComponent', () => {
     component.form.get('type')?.setValue(ContactTypes.COMMITTEE);
   });
 
-
   it('changing country from USA should change state', () => {
     component.form.patchValue({
       country: 'USA',
@@ -90,8 +95,8 @@ describe('ContactFormComponent', () => {
 
   it('#onContactLookupSelect CANDIDATE Contact happy path', () => {
     const testContact = new Contact();
-    const testLastName = "testLastName";
-    const testZip = "12345";
+    const testLastName = 'testLastName';
+    const testZip = '12345';
     testContact.type = ContactTypes.CANDIDATE;
     testContact.last_name = testLastName;
     testContact.zip = testZip;
@@ -107,8 +112,8 @@ describe('ContactFormComponent', () => {
 
   it('#onContactLookupSelect COMMITTEE Contact happy path', () => {
     const testContact = new Contact();
-    const testCommitteeId = "C1234568";
-    const testZip = "12345";
+    const testCommitteeId = 'C1234568';
+    const testZip = '12345';
     testContact.type = ContactTypes.COMMITTEE;
     testContact.committee_id = testCommitteeId;
     testContact.zip = testZip;
@@ -123,14 +128,14 @@ describe('ContactFormComponent', () => {
   });
 
   it('#onContactLookupSelect FecApiCandidateLookupData happy path', () => {
-    const testId = 'P12345678'
+    const testId = 'P12345678';
     const testOfficeSought = 'P';
     const testName = 'testName';
     const testAddressCity = 'testAddressCity';
     const testFecApiCandidateLookupData = new FecApiCandidateLookupData({
       id: testId,
       office_sought: testOfficeSought,
-      name: testName
+      name: testName,
     } as FecApiCandidateLookupData);
     const testResponse = new Candidate();
     testResponse.candidate_id = testId;
@@ -149,14 +154,14 @@ describe('ContactFormComponent', () => {
   });
 
   it('#onContactLookupSelect FecApiCommitteeLookupData happy path', () => {
-    const testId = 'C12345678'
+    const testId = 'C12345678';
     const testIsActive = true;
     const testName = 'testName';
     const testPhone = '1234567890';
     const testFecApiCommitteeLookupData = new FecApiCommitteeLookupData({
       id: testId,
       is_active: testIsActive,
-      name: testName
+      name: testName,
     } as FecApiCommitteeLookupData);
     const testResponse = new CommitteeAccount();
     testResponse.committee_id = testId;
@@ -173,5 +178,4 @@ describe('ContactFormComponent', () => {
     component.form = new FormGroup({});
     component.onContactLookupSelect({ value: testFecApiCommitteeLookupData });
   });
-
 });

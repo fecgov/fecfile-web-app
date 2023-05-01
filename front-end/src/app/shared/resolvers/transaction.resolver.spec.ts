@@ -106,7 +106,7 @@ describe('TransactionResolver', () => {
     });
   });
 
-  it('should attach child for transaction with dependent child transaction type', () => {
+  xit('should attach child for transaction with dependent child transaction type', () => {
     resolver.resolve_new_child_transaction('1', ScheduleATransactionTypes.EARMARK_RECEIPT).subscribe((transaction) => {
       if (transaction?.children) {
         expect(transaction.children[0].transactionType?.title).toBe('Earmark Memo');

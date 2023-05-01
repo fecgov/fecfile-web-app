@@ -13,6 +13,9 @@ import { of } from 'rxjs';
 
 import { Transaction } from 'app/shared/models/transaction.model';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list.component';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
+import { Button, ButtonModule } from 'primeng/button';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -22,8 +25,15 @@ describe('TransactionListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, RouterTestingModule, RouterTestingModule.withRoutes([])],
-      declarations: [TransactionListComponent],
+      imports: [
+        ToolbarModule,
+        TableModule,
+        RouterTestingModule,
+        RouterTestingModule.withRoutes([]),
+        OverlayPanelModule,
+        ButtonModule,
+      ],
+      declarations: [TransactionListComponent, ConfirmDialog, OverlayPanel, Button],
       providers: [
         MessageService,
         ConfirmationService,
@@ -121,18 +131,15 @@ describe('TransactionListComponent', () => {
 
   it('test forceItemize', () => {
     spyOn(testItemService, 'getTableData').and.returnValue(of());
-    const testTransaction: Transaction =
-      { force_itemized: null } as unknown as Transaction;
+    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
     component.forceItemize(testTransaction);
     expect(testTransaction.force_itemized).toBe(true);
   });
 
   it('test forceItemize', () => {
     spyOn(testItemService, 'getTableData').and.returnValue(of());
-    const testTransaction: Transaction =
-      { force_itemized: null } as unknown as Transaction;
+    const testTransaction: Transaction = { force_itemized: null } as unknown as Transaction;
     component.forceUnitemize(testTransaction);
     expect(testTransaction.force_itemized).toBe(false);
   });
-
 });
