@@ -8,4 +8,5 @@ export interface TableListService<T> {
     params?: { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> }
   ): Observable<ListRestResponse>;
   delete(item: T): Observable<null>;
+  update?: { (item: T): Observable<T> };
 }

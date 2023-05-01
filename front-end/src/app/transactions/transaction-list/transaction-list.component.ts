@@ -1,25 +1,22 @@
-import { Component, ElementRef, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
-import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
-import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
-import { Transaction } from 'app/shared/models/transaction.model';
-import { TransactionService } from 'app/shared/services/transaction.service';
-import { LabelList } from 'app/shared/utils/label.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { Subject, take, takeUntil } from 'rxjs';
+import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { LabelList } from '../../shared/utils/label.utils';
+import { F3xFormTypeLabels } from '../../shared/models/f3x-summary.model';
 
 @Component({
   selector: 'app-transaction-list',
   templateUrl: './transaction-list.component.html',
+  styleUrls: ['../transaction.scss'],
 })
-export class TransactionListComponent extends TableListBaseComponent<Transaction> implements OnInit, OnDestroy {
+export class TransactionListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   report: F3xSummary | undefined;
-  scheduleTransactionTypeLabels: LabelList = [...ScheduleATransactionTypeLabels, ...ScheduleBTransactionTypeLabels];
+  f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
 
   public tableActions: TableAction[] = [
     new TableAction(
@@ -47,45 +44,14 @@ export class TransactionListComponent extends TableListBaseComponent<Transaction
       () => false
     ),
   ];
-  public rowActions: TableAction[] = [
-    new TableAction(
-      'Edit',
-      this.editItem.bind(this),
-      () => true,
-      () => true
-    ),
-    new TableAction(
-      'Itemize',
-      this.forceItemize.bind(this),
-      (transaction: Transaction) => transaction.itemized === false,
-      () => true
-    ),
-    new TableAction(
-      'Unitemize',
-      this.forceUnitemize.bind(this),
-      (transaction: Transaction) => transaction.itemized === true,
-      () => true
-    ),
-  ];
-  constructor(
-    protected override messageService: MessageService,
-    protected override confirmationService: ConfirmationService,
-    protected override elementRef: ElementRef,
-    protected override itemService: TransactionService,
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private store: Store
-  ) {
-    super(messageService, confirmationService, elementRef);
-  }
 
-  override ngOnInit(): void {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store) {}
+
+  ngOnInit(): void {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report as F3xSummary));
-
-    this.loading = true;
   }
 
   ngOnDestroy(): void {
@@ -97,46 +63,9 @@ export class TransactionListComponent extends TableListBaseComponent<Transaction
     this.router.navigateByUrl(`/transactions/report/${report?.id}/select/${transactionCategory}`);
   }
 
-  public override editItem(item: Transaction): void {
-    this.router.navigate([`edit/${item.id}`], { relativeTo: this.activatedRoute });
-  }
-
   public onTableActionClick(action: TableAction, report?: F3xSummary) {
     action.action(report);
   }
-
-  protected getEmptyItem(): Transaction {
-    return {} as Transaction;
-  }
-
-  override getGetParams(): { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> } {
-    const reportId = this.activatedRoute.snapshot.params['reportId'];
-    return { report_id: reportId };
-  }
-
-  public onRowActionClick(action: TableAction, transaction: Transaction) {
-    action.action(transaction);
-  }
-
-  public forceItemize(transaction: Transaction): void {
-    transaction.force_itemized = true;
-    this.updateItem(transaction);
-  }
-
-  public forceUnitemize(transaction: Transaction): void {
-    transaction.force_itemized = false;
-    this.updateItem(transaction);
-  }
-
-  public updateItem(item: Transaction) {
-    this.itemService.update(item).pipe(
-      take(1),
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.loadTableItems({});
-    });
-  }
-
 }
 
 @Pipe({ name: 'memoCode' })
