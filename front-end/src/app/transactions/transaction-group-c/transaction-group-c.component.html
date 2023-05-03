@@ -65,6 +65,7 @@
         [templateMap]="templateMap"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
         [purposeDescriptionLabel]="this.purposeDescriptionLabel"
+        [purposeDescriptionPrefix]="this.transaction?.transactionType?.purposeDescriptionPrefix"
       ></app-additional-info-input>
       <div class="grid">
         <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">

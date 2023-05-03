@@ -15,6 +15,7 @@ export class NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
   schema = schema;
   override defaultContactTypeOption = ContactTypes.COMMITTEE;
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override purposeDescriptionPrefix = 'Non-contribution Account: ';
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
