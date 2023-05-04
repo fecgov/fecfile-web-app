@@ -42,4 +42,31 @@ describe('AdditionalInfoInputComponent', () => {
     fixture.detectChanges();
     expect(cpd.classes['readonly']).toBeFalsy();
   });
+
+  it('should patch the purpose description if purposeDescriptionPrefix is set', () => {
+    component.purposeDescriptionPrefix = 'Prefix: ';
+    const purposeField = component.form.get(component.templateMap.purpose_description);
+    purposeField?.setValue('A value without the prefix');
+    component.patchPurposeDescriptionPrefix();
+    expect(purposeField?.value).toBe('Prefix: A value without the prefix');
+
+    purposeField?.setValue('A value containing the Prefix: ');
+    component.patchPurposeDescriptionPrefix();
+    expect(purposeField?.value).toBe('Prefix: A value containing the Prefix: ');
+
+    purposeField?.setValue('Pref');
+    component.patchPurposeDescriptionPrefix();
+    expect(purposeField?.value).toBe('Prefix: ');
+
+    purposeField?.setValue('Prefix: A random value');
+    component.patchPurposeDescriptionPrefix();
+    expect(purposeField?.value).toBe('Prefix: A random value');
+  });
+
+  it('should not patch the purpose description if purposeDescriptionPrefix is not set', () => {
+    const purposeField = component.form.get(component.templateMap.purpose_description);
+    purposeField?.setValue('A value without the prefix');
+    component.patchPurposeDescriptionPrefix();
+    expect(purposeField?.value).toBe('A value without the prefix');
+  });
 });
