@@ -304,12 +304,7 @@ describe('TransactionTypeBaseComponent', () => {
       life: 3000,
     };
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
-    spyOn(testRouter, 'navigateByUrl').and.callFake(
-      () =>
-        new Promise((res) => {
-          res(true);
-        })
-    );
+    spyOn(testRouter, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
     component.navigateTo(
       new NavigationEvent(
         NavigationAction.SAVE,

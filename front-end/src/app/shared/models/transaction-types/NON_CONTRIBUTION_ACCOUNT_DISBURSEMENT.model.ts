@@ -3,7 +3,7 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NON_CONTRIBUTI
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
-import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
+import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
 
 export class NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
@@ -13,8 +13,8 @@ export class NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT
   );
   schema = schema;
-  override defaultContactTypeOption = ContactTypes.COMMITTEE;
-  override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
+  override defaultContactTypeOption = ContactTypes.ORGANIZATION;
+  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionPrefix = 'Non-contribution Account: ';
 
   getNewTransaction() {
