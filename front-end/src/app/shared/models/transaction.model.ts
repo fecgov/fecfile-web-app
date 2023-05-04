@@ -23,6 +23,7 @@ export abstract class Transaction extends BaseModel {
 
   transaction_type_identifier: string | undefined;
   itemized: boolean | undefined;
+  force_itemized: boolean | undefined;
 
   parent_transaction: Transaction | undefined;
   parent_transaction_id: string | undefined; // Foreign key to the parent transaction db record
@@ -85,6 +86,7 @@ export abstract class Transaction extends BaseModel {
           const newDescrip = child.transactionType.generatePurposeDescriptionWrapper(child);
           const key = child.transactionType.templateMap.purpose_description as keyof ScheduleTransaction;
           ((child as ScheduleTransaction)[key] as string) = newDescrip;
+          child.updateChildren();
         }
         outChildren.push(child);
       }

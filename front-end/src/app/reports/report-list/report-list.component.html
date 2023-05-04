@@ -1,6 +1,6 @@
 <div class="card">
   <p-toolbar styleClass="mb-4">
-    <ng-template pTemplate="left"> Manage reports </ng-template>
+    <ng-template pTemplate="left"><span class="title1">Manage reports</span></ng-template>
 
     <ng-template pTemplate="right">
       <button
@@ -70,36 +70,18 @@
         <td>{{ item.form_type | label : f3xFormVerionLabels }}</td>
         <td>{{ item.upload_submission?.created | fecDate }}</td>
         <td>
-          <p-overlayPanel #op [styleClass]="'action-options'">
-            <ng-template pTemplate>
-              <ul>
-                <li *ngFor="let action of rowActions">
-                  <button
-                    *ngIf="!action.isAvailable || action.isAvailable(item)"
-                    pButton
-                    pRipple
-                    type="button"
-                    class="p-button-secondary p-button-text"
-                    id="one"
-                    (click)="onRowActionClick(action, item)"
-                  >
-                    {{ action.label }}
-                  </button>
-                </li>
-              </ul>
-            </ng-template>
-          </p-overlayPanel>
-          <p-button
-            pRipple
-            icon="pi pi-ellipsis-v"
-            styleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
-            (onClick)="op.toggle($event)"
-            [ariaLabel]="'edit ' + displayName(item)"
-          ></p-button>
+          <app-table-actions-button
+            [tableActions]="rowActions"
+            [actionItem]="item"
+            [tableActionClick]="onRowActionClick"
+            buttonIcon="pi pi-ellipsis-v"
+            buttonStyleClass="flex justify-content-center p-button-rounded p-button-primary  p-button-text mr-2"
+            [buttonAriaLabel]="'edit ' + displayName(item)"
+          ></app-table-actions-button>
         </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
 
-<app-form-type-dialog [visible]="detailVisible"></app-form-type-dialog>
+<app-form-type-dialog [(detailVisible)]="detailVisible"></app-form-type-dialog>

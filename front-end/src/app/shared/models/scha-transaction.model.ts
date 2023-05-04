@@ -158,6 +158,7 @@ export enum ScheduleATransactionTypes {
   PARTY_JF_TRANSFER_MEMO = 'PARTY_JF_TRANSFER_MEMO',
   TRIBAL_JF_TRANSFER_MEMO = 'TRIBAL_JF_TRANSFER_MEMO',
   PARTNERSHIP_JF_TRANSFER_MEMO = 'PARTNERSHIP_JF_TRANSFER_MEMO',
+  PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO = 'PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO',
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
   PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
   TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
@@ -404,11 +405,15 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Partnership National Party Headquarters Buildings Account Memo',
   ],
   [ScheduleATransactionTypes.PARTNERSHIP_MEMO, 'Partnership Memo'],
-  [ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO, 'Partnership Recount Account Receipt Memo'],
+  [ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO, 'Partnership Receipt Joint Fundraising Transfer Memo'],
+  [
+    ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+    'Partnership Individual Joint Fundraising Transfer Memo',
+  ],
+  [(ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO, 'Partnership Recount Account Receipt Memo')],
 ];
 
 export const UnimplementedTypeEntityCategories: LabelList = [
-  [ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO, 'Partnership'],
   [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO, 'Partnership'],
   [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO, 'Partnership'],
   [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO, 'Partnership'],

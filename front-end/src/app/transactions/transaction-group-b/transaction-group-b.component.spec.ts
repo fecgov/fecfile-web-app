@@ -18,7 +18,7 @@ import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmDialogModule, ConfirmDialog } from 'primeng/confirmdialog';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -73,7 +73,7 @@ describe('TransactionGroupBComponent', () => {
         InputTextareaModule,
         ConfirmDialogModule,
       ],
-      declarations: [TransactionGroupBComponent],
+      declarations: [TransactionGroupBComponent, ConfirmDialog],
       providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
     }).compileComponents();
     testContactService = TestBed.inject(ContactService);

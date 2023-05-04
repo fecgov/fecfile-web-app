@@ -10,6 +10,7 @@ import { environment } from 'environments/environment';
 import { of, throwError } from 'rxjs';
 import { LoginService } from '../../shared/services/login.service';
 import { LoginComponent } from './login.component';
+import { BannerComponent } from 'app/layout/banner/banner.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -21,13 +22,16 @@ describe('LoginComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes([{
-          path: 'dashboard', component: DashboardComponent
-        }]),
-        ReactiveFormsModule
+        RouterTestingModule.withRoutes([
+          {
+            path: 'dashboard',
+            component: DashboardComponent,
+          },
+        ]),
+        ReactiveFormsModule,
       ],
       providers: [{ provide: Window, useValue: window }, provideMockStore(testMockStore)],
-      declarations: [LoginComponent],
+      declarations: [LoginComponent, BannerComponent],
     }).compileComponents();
   });
 
