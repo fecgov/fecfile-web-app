@@ -58,6 +58,10 @@ describe('AdditionalInfoInputComponent', () => {
     component.patchPurposeDescriptionPrefix();
     expect(purposeField?.value).toBe('Prefix: ');
 
+    purposeField?.setValue('');
+    component.patchPurposeDescriptionPrefix();
+    expect(purposeField?.value).toBe('Prefix: ');
+
     purposeField?.setValue('Prefix: A random value');
     component.patchPurposeDescriptionPrefix();
     expect(purposeField?.value).toBe('Prefix: A random value');
