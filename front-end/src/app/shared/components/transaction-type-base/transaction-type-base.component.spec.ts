@@ -297,6 +297,7 @@ describe('TransactionTypeBaseComponent', () => {
   }));
 
   it('#navigateTo NavigationDestination.ANOTHER should show popup', () => {
+    spyOn(testRouter, 'navigateByUrl');
     const expectedMessage: Message = {
       severity: 'success',
       summary: 'Successful',
@@ -304,7 +305,14 @@ describe('TransactionTypeBaseComponent', () => {
       life: 3000,
     };
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
-    component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.ANOTHER));
+    component.navigateTo(
+      new NavigationEvent(
+        NavigationAction.SAVE,
+        NavigationDestination.ANOTHER,
+        testTransaction,
+        ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+      )
+    );
     expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
