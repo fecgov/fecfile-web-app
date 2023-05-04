@@ -1,12 +1,17 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_JF_TRANSFER_MEMO';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
+import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class PAC_JF_TRANSFER_MEMO extends SchATransactionType {
-  componentGroupId = 'E';
+  constructor(private transactionGroupE: TransactionGroupE) {
+    super();
+  }
+  
+  transactionGroup = this.transactionGroupE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   override shortName = 'PAC';
   schema = schema;

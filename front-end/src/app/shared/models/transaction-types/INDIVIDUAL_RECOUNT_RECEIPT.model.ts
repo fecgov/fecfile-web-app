@@ -1,12 +1,17 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/INDIVIDUAL_RECOUNT_RECEIPT';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class INDIVIDUAL_RECOUNT_RECEIPT extends SchATransactionType {
-  componentGroupId = 'A';
+  constructor(private transactionGroupA: TransactionGroupA) {
+    super();
+  }
+  
+  transactionGroup = this.transactionGroupA;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.INDIVIDUAL_RECOUNT_RECEIPT);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

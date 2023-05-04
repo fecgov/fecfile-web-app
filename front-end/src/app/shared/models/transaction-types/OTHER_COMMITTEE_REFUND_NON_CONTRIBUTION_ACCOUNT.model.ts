@@ -1,13 +1,18 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NON_CONTRIBUTION_ACCOUNT_REFUNDS';
-import { AggregationGroups } from '../transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { SchBTransactionType } from '../schb-transaction-type.model';
-import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
+import { SchBTransactionType } from '../schb-transaction-type.model';
+import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
+import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransactionType {
-  componentGroupId = 'E';
+  constructor(private transactionGroupE: TransactionGroupE) {
+    super();
+  }
+  
+  transactionGroup = this.transactionGroupE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT

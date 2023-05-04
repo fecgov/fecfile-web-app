@@ -1,17 +1,18 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 import { OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT } from './OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT.model';
 
 describe('OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT', () => {
   let transactionType: OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT();
+    transactionType = new OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT(new TransactionGroupE());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('E');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupE);
   });
 
   it('#factory() should return a SchBTransaction', () => {

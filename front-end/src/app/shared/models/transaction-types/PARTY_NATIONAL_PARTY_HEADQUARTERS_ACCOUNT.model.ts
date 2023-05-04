@@ -1,12 +1,17 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransactionType {
-  componentGroupId = 'E';
+  constructor(private transactionGroupE: TransactionGroupE) {
+    super();
+  }
+  
+  transactionGroup = this.transactionGroupE;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT

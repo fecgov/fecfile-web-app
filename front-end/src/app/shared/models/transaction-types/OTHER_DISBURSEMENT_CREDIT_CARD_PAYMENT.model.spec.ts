@@ -1,17 +1,18 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 import { OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT } from './OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT.model';
 
 describe('OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT', () => {
   let transactionType: OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT;
 
   beforeEach(() => {
-    transactionType = new OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT();
+    transactionType = new OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT(new TransactionGroupD());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchBTransaction', () => {

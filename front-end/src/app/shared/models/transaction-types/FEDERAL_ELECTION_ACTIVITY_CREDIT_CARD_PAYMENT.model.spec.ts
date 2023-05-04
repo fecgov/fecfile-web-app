@@ -1,17 +1,18 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupM } from '../transaction-groups/transaction-group-m';
 import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT } from './FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT.model';
 
 describe('FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT', () => {
   let transactionType: FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT;
 
   beforeEach(() => {
-    transactionType = new FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT();
+    transactionType = new FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT(new TransactionGroupM());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('M');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupM);
   });
 
   it('#factory() should return a SchBTransaction', () => {

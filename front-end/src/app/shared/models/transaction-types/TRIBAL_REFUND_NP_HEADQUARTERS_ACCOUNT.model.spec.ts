@@ -1,17 +1,18 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from './TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 
 describe('TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT', () => {
   let transactionType: TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT();
+    transactionType = new TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT(new TransactionGroupD());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchBTransaction', () => {

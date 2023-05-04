@@ -4,9 +4,14 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 
 export class PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType {
-  componentGroupId = 'E';
+  constructor(private transactionGroupE: TransactionGroupE) {
+    super();
+  }
+  
+  transactionGroup = this.transactionGroupE;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT

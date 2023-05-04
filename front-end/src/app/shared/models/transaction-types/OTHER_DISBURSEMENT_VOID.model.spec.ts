@@ -1,18 +1,19 @@
 import { OTHER_DISBURSEMENT_VOID } from './OTHER_DISBURSEMENT_VOID.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
 
 describe('OTHER_DISBURSEMENT_VOID', () => {
   let transactionType: OTHER_DISBURSEMENT_VOID;
 
   beforeEach(() => {
-    transactionType = new OTHER_DISBURSEMENT_VOID();
+    transactionType = new OTHER_DISBURSEMENT_VOID(new TransactionGroupB());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('B');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupB);
   });
 
   it('#factory() should return a SchBTransaction', () => {

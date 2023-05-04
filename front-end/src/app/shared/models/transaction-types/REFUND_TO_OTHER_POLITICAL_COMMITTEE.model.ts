@@ -1,12 +1,17 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/REFUND_TO_OTHER_POLITICAL_COMMITTEE';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupI } from '../transaction-groups/transaction-group-i';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class REFUND_TO_OTHER_POLITICAL_COMMITTEE extends SchATransactionType {
-  componentGroupId = 'I';
+  constructor(private transactionGroupI: TransactionGroupI) {
+    super();
+  }
+  
+  transactionGroup = this.transactionGroupI;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

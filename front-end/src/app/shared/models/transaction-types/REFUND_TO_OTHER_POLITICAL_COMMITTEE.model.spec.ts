@@ -1,18 +1,19 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupI } from '../transaction-groups/transaction-group-i';
 import { REFUND_TO_OTHER_POLITICAL_COMMITTEE } from './REFUND_TO_OTHER_POLITICAL_COMMITTEE.model';
 
 describe('REFUND_TO_OTHER_POLITICAL_COMMITTEE', () => {
   let transactionType: REFUND_TO_OTHER_POLITICAL_COMMITTEE;
 
   beforeEach(() => {
-    transactionType = new REFUND_TO_OTHER_POLITICAL_COMMITTEE();
+    transactionType = new REFUND_TO_OTHER_POLITICAL_COMMITTEE(new TransactionGroupI());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('I');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupI);
   });
 
   it('#factory() should return a SchATransaction', () => {

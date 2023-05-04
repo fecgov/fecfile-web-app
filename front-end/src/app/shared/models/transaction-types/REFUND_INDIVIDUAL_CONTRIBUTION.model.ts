@@ -5,9 +5,14 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
 
 export class REFUND_INDIVIDUAL_CONTRIBUTION extends SchBTransactionType {
-  componentGroupId = 'B';
+  constructor(private transactionGroupB: TransactionGroupB) {
+    super();
+  }
+  
+  transactionGroup = this.transactionGroupB;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION);
   schema = schema;
   override showAggregate = false;

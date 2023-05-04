@@ -1,27 +1,6 @@
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'A'">
-  <app-transaction-group-a [transaction]="transaction"></app-transaction-group-a>
+<ng-container *ngIf="transaction?.transactionType?.transactionGroup instanceof TransactionGroup">
+  <app-transaction-detail [transaction]="transaction"></app-transaction-detail>
 </ng-container>
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'B'">
-  <app-transaction-group-b [transaction]="transaction"></app-transaction-group-b>
-</ng-container>
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'C'">
-  <app-transaction-group-c [transaction]="transaction"></app-transaction-group-c>
-</ng-container>
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'D'">
-  <app-transaction-group-d [transaction]="transaction"></app-transaction-group-d>
-</ng-container>
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'E'">
-  <app-transaction-group-e [transaction]="transaction"></app-transaction-group-e>
-</ng-container>
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'I'">
-  <app-transaction-group-i [transaction]="transaction"></app-transaction-group-i>
-</ng-container>
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'M'">
-  <app-transaction-group-m [transaction]="transaction"></app-transaction-group-m>
-</ng-container>
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'AG'">
-  <app-transaction-group-ag [transaction]="transaction"></app-transaction-group-ag>
-</ng-container>
-<ng-container *ngIf="transaction?.transactionType?.componentGroupId === 'FG'">
-  <app-transaction-group-fg [transaction]="transaction"></app-transaction-group-fg>
+<ng-container *ngIf="transaction?.transactionType?.transactionGroup instanceof DoubleTransactionGroup">
+  <app-double-transaction-detail [transaction]="transaction"></app-double-transaction-detail>
 </ng-container>

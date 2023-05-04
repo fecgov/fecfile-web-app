@@ -1,17 +1,18 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 import { REFUND_PAC_CONTRIBUTION_VOID } from './REFUND_PAC_CONTRIBUTION_VOID.model';
 
 describe('REFUND_PAC_CONTRIBUTION_VOID', () => {
   let transactionType: REFUND_PAC_CONTRIBUTION_VOID;
 
   beforeEach(() => {
-    transactionType = new REFUND_PAC_CONTRIBUTION_VOID();
+    transactionType = new REFUND_PAC_CONTRIBUTION_VOID(new TransactionGroupE());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('E');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupE);
   });
 
   it('#factory() should return a SchBTransaction', () => {

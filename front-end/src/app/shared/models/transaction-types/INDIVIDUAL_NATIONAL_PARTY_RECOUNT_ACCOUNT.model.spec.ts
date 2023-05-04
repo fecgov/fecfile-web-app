@@ -1,17 +1,18 @@
 import { INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT } from './INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
 
 describe('INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   let transactionType: INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT();
+    transactionType = new INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT(new TransactionGroupA());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('A');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupA);
   });
 
   it('#factory() should return a SchATransaction', () => {

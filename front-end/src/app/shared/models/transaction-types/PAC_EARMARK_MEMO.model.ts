@@ -1,10 +1,15 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_MEMO';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { AggregationGroups } from '../transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupFG } from '../transaction-groups/transaction-group-fg';
+import { AggregationGroups } from '../transaction.model';
 
 export class PAC_EARMARK_MEMO extends SchATransactionType {
-  componentGroupId = 'FG';
+  constructor(private transactionGroupFG: TransactionGroupFG) {
+    super();
+  }
+  
+  transactionGroup = this.transactionGroupFG;
   override isDependentChild = true;
   title = '';
   schema = schema;

@@ -1,13 +1,18 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NON_CONTRIBUTION_MEMOS';
-import { AggregationGroups } from '../transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { SchBTransactionType } from '../schb-transaction-type.model';
-import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
+import { SchBTransactionType } from '../schb-transaction-type.model';
+import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
+import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO extends SchBTransactionType {
-  componentGroupId = 'B';
+  constructor(private transactionGroupB: TransactionGroupB) {
+    super();
+  }
+  
+  transactionGroup = this.transactionGroupB;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO

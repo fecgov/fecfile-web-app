@@ -1,17 +1,18 @@
 import { TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from './TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 
 describe('TRIBAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT', () => {
   let transactionType: TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT();
+    transactionType = new TRIBAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT(new TransactionGroupD());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchATransaction', () => {

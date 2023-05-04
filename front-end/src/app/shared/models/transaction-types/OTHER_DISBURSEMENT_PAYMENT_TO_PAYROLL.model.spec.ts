@@ -1,17 +1,18 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL } from './OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL.model';
 
 describe('OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL', () => {
   let transactionType: OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL;
 
   beforeEach(() => {
-    transactionType = new OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL();
+    transactionType = new OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL(new TransactionGroupD());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchBTransaction', () => {

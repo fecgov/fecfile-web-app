@@ -1,17 +1,18 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 import { TRIBAL_RECOUNT_RECEIPT } from './TRIBAL_RECOUNT_RECEIPT.model';
 
 describe('TRIBAL_RECOUNT_RECEIPT', () => {
   let transactionType: TRIBAL_RECOUNT_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new TRIBAL_RECOUNT_RECEIPT();
+    transactionType = new TRIBAL_RECOUNT_RECEIPT(new TransactionGroupD());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchATransaction', () => {

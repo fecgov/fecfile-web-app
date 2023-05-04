@@ -1,18 +1,19 @@
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 import { PAC_RETURN } from './PAC_RETURN.model';
 
 describe('PAC_RETURN', () => {
   let transactionType: PAC_RETURN;
 
   beforeEach(() => {
-    transactionType = new PAC_RETURN();
+    transactionType = new PAC_RETURN(new TransactionGroupE());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('E');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupE);
   });
 
   it('#factory() should return a SchATransaction', () => {

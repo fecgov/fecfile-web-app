@@ -1,18 +1,19 @@
 import { UNREGISTERED_RECEIPT_FROM_PERSON } from './UNREGISTERED_RECEIPT_FROM_PERSON.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 
 describe('UNREGISTERED_RECEIPT_FROM_PERSON', () => {
   let transactionType: UNREGISTERED_RECEIPT_FROM_PERSON;
 
   beforeEach(() => {
-    transactionType = new UNREGISTERED_RECEIPT_FROM_PERSON();
+    transactionType = new UNREGISTERED_RECEIPT_FROM_PERSON(new TransactionGroupD());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchATransaction', () => {

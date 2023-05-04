@@ -1,17 +1,18 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 import { JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from './JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
 
 describe('JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {
   let transactionType: JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT();
+    transactionType = new JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT(new TransactionGroupE());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('E');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupE);
   });
 
   it('#factory() should return a SchATransaction', () => {

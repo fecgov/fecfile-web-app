@@ -1,17 +1,18 @@
-import { EARMARK_MEMO_CONVENTION_ACCOUNT } from './EARMARK_MEMO_CONVENTION_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag';
+import { EARMARK_MEMO_CONVENTION_ACCOUNT } from './EARMARK_MEMO_CONVENTION_ACCOUNT.model';
 
 describe('EARMARK_MEMO_CONVENTION_ACCOUNT', () => {
   let transactionType: EARMARK_MEMO_CONVENTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new EARMARK_MEMO_CONVENTION_ACCOUNT();
+    transactionType = new EARMARK_MEMO_CONVENTION_ACCOUNT(new TransactionGroupAG);
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('AG');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupAG);
   });
 
   it('#factory() should return a SchATransaction', () => {

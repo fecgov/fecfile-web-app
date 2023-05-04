@@ -1,18 +1,19 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupC } from '../transaction-groups/transaction-group-c';
 import { RETURN_RECEIPT } from './RETURN_RECEIPT.model';
 
 describe('RETURN_RECEIPT', () => {
   let transactionType: RETURN_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new RETURN_RECEIPT();
+    transactionType = new RETURN_RECEIPT(new TransactionGroupC());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('C');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupC);
   });
 
   it('#factory() should return a SchATransaction', () => {

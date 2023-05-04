@@ -1,17 +1,18 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupM } from '../transaction-groups/transaction-group-m';
 import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL } from './FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL.model';
 
 describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL', () => {
   let transactionType: FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL;
 
   beforeEach(() => {
-    transactionType = new FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL();
+    transactionType = new FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL(new TransactionGroupM());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('M');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupM);
   });
 
   it('#factory() should return a SchBTransaction', () => {

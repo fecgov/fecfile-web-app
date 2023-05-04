@@ -1,18 +1,19 @@
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 import { PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT } from './PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   let transactionType: PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT();
+    transactionType = new PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT(new TransactionGroupD());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     if (transactionType) {
       expect(transactionType.scheduleId).toBe('A');
-      expect(transactionType.componentGroupId).toBe('D');
+      expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
     }
   });
 

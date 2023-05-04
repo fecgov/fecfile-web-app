@@ -1,17 +1,18 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from './BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 
 describe('TRIBAL_RECEIPT', () => {
   let transactionType: BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT();
+    transactionType = new BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT(new TransactionGroupD());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('D');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchATransaction', () => {

@@ -1,17 +1,18 @@
 import { PAC_EARMARK_MEMO } from './PAC_EARMARK_MEMO.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupFG } from '../transaction-groups/transaction-group-fg';
 
 describe('PAC_EARMARK_MEMO', () => {
   let transactionType: PAC_EARMARK_MEMO;
 
   beforeEach(() => {
-    transactionType = new PAC_EARMARK_MEMO();
+    transactionType = new PAC_EARMARK_MEMO(new TransactionGroupFG());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('FG');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupFG);
   });
 
   it('#factory() should return a SchATransaction', () => {

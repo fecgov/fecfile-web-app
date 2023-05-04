@@ -6,9 +6,14 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
 import { SubTransactionGroup } from '../transaction-type.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 
 export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
-  componentGroupId = 'D';
+  constructor(private transactionGroupD: TransactionGroupD) {
+    super();
+  }
+  
+  transactionGroup = this.transactionGroupD;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
   schema = schema;
   override shortName = 'Partnership Receipt';

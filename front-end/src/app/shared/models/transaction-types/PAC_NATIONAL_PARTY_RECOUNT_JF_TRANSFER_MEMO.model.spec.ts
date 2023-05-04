@@ -1,17 +1,18 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 import { PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from './PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 
 describe('PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
   let transactionType: PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO;
 
   beforeEach(() => {
-    transactionType = new PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO();
+    transactionType = new PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO(new TransactionGroupE());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('E');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupE);
   });
 
   it('#factory() should return a SchATransaction', () => {

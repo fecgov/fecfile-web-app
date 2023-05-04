@@ -1,17 +1,18 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
 import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO } from './OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO.model';
 
 describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO', () => {
   let transactionType: OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO;
 
   beforeEach(() => {
-    transactionType = new OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO();
+    transactionType = new OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO(new TransactionGroupB());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('B');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupB);
   });
 
   it('#factory() should return a SchBTransaction', () => {

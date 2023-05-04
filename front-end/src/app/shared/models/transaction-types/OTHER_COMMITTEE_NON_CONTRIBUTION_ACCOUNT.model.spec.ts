@@ -1,17 +1,18 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 import { OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT } from './OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT.model';
 
 describe('OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT', () => {
   let transactionType: OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT();
+    transactionType = new OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT(new TransactionGroupE());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('E');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupE);
   });
 
   it('#factory() should return a SchATransaction', () => {

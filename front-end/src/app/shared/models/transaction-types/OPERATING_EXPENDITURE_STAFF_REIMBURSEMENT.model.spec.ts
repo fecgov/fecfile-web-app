@@ -1,17 +1,18 @@
 import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT } from './OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
 
 describe('OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT', () => {
   let transactionType: OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT;
 
   beforeEach(() => {
-    transactionType = new OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT();
+    transactionType = new OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT(new TransactionGroupA());
   });
 
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('A');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupA);
   });
 
   it('#factory() should return a SchBTransaction', () => {

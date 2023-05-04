@@ -19,15 +19,6 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SharedModule } from '../shared/shared.module';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
-import { TransactionGroupAComponent } from './transaction-group-a/transaction-group-a.component';
-import { TransactionGroupAgComponent } from './transaction-group-ag/transaction-group-ag.component';
-import { TransactionGroupBComponent } from './transaction-group-b/transaction-group-b.component';
-import { TransactionGroupCComponent } from './transaction-group-c/transaction-group-c.component';
-import { TransactionGroupDComponent } from './transaction-group-d/transaction-group-d.component';
-import { TransactionGroupEComponent } from './transaction-group-e/transaction-group-e.component';
-import { TransactionGroupFgComponent } from './transaction-group-fg/transaction-group-fg.component';
-import { TransactionGroupIComponent } from './transaction-group-i/transaction-group-i.component';
-import { TransactionGroupMComponent } from './transaction-group-m/transaction-group-m.component';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list/transaction-list.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
@@ -38,15 +29,6 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     TransactionTypePickerComponent,
     TransactionListComponent,
     MemoCodePipe,
-    TransactionGroupAComponent,
-    TransactionGroupBComponent,
-    TransactionGroupCComponent,
-    TransactionGroupDComponent,
-    TransactionGroupEComponent,
-    TransactionGroupIComponent,
-    TransactionGroupMComponent,
-    TransactionGroupAgComponent,
-    TransactionGroupFgComponent,
   ],
   imports: [
     AccordionModule,
