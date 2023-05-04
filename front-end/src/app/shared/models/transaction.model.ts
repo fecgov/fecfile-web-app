@@ -17,7 +17,6 @@ export abstract class Transaction extends BaseModel {
   // FECFile spec properties
 
   form_type: string | undefined;
-  filer_committee_id_number: string | undefined;
   transaction_id: string | undefined;
 
   // FECFile Online custom properties
@@ -47,7 +46,7 @@ export abstract class Transaction extends BaseModel {
 
   fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
   getFieldsNotToValidate(): string[] {
-    return ['transaction_id'];
+    return ['transaction_id', 'filer_committee_id_number'];
   }
 
   schema_name: string | undefined;

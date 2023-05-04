@@ -20,7 +20,6 @@ export class PARTY_JF_TRANSFER_MEMO extends SchATransactionType {
     return SchATransaction.fromJSON({
       form_type: 'SA12',
       transaction_type_identifier: ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO,
-      back_reference_sched_name: 'SA12',
       aggregation_group: AggregationGroups.GENERAL,
     });
   }
