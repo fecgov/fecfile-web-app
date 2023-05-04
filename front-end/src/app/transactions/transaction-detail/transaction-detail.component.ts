@@ -22,13 +22,6 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
       const transactionGroup =
         transactionType.transactionGroup as TransactionGroup;
 
-      this.form.get('entity_type')?.valueChanges.pipe(
-        takeUntil(this.destroy$)
-      ).subscribe((entityType: ContactTypes) => {
-        this.hasEmployerInput = transactionGroup.hasEmployerInput(
-          entityType, transactionType.scheduleId);
-      });
-
       this.contactTypeOptions = transactionGroup.getContactTypeOptions();
       this.formProperties = transactionGroup.getFormProperties(
         transactionType.templateMap, transactionType.scheduleId);
@@ -36,7 +29,17 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
       this.hasElectionInformationInput =
         transactionGroup.hasElectionInformationInput();
       this.amountInputTitle = transactionGroup.getAmountInputTitle();
+      
       super.ngOnInit();
+
+      this.hasEmployerInput = transactionGroup.hasEmployerInput(
+        this.form.get('entity_type')?.value, transactionType.scheduleId);
+      this.form.get('entity_type')?.valueChanges.pipe(
+        takeUntil(this.destroy$)
+      ).subscribe((entityType: ContactTypes) => {
+        this.hasEmployerInput = transactionGroup.hasEmployerInput(
+          entityType, transactionType.scheduleId);
+      });
     } else {
       throw new Error('Fecfile: Template map not found for transaction component');
     }

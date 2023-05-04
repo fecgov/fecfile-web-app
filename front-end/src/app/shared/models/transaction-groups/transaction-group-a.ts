@@ -64,8 +64,8 @@ export class TransactionGroupA extends TransactionGroup {
     ]);
   }
 
-  hasEmployerInput(scheduleId: string): boolean {
-    return 'B' !== scheduleId;
+  hasEmployerInput(entityType: ContactTypes, scheduleId: string): boolean {
+    return ContactTypes.INDIVIDUAL === entityType && 'B' !== scheduleId;
   }
 
   hasCommitteeFecIdInput(): boolean {
