@@ -162,8 +162,6 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
   form_type: 'SA15',
   transaction_type_identifier: 'PAC_JF_TRANSFER_MEMO',
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-  back_reference_tran_id_number: 'AAAAAAAAAAAAAAAAAAA',
-  back_reference_sched_name: 'SA12',
   entity_type: ContactTypes.COMMITTEE,
   contributor_organization_name: 'org name',
   contributor_street_1: '123 Main St',

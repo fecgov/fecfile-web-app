@@ -76,8 +76,6 @@ describe('ReportLevelMemoComponent', () => {
     testMemoText.report_id = '123';
     testMemoText.rec_type = 'test_rec_type';
     testMemoText.transaction_id_number = 'test_tin';
-    testMemoText.back_reference_tran_id_number = 'test_brtin';
-    testMemoText.back_reference_sched_form_name = 'test_brsfn';
     testMemoText.text4000 = 'test_text4k';
     component.form.addControl('text4000', new FormControl());
     component.form.get('text4000')?.setValue(testText4kValue);

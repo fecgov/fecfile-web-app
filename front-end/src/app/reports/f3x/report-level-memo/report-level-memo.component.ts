@@ -19,10 +19,9 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class ReportLevelMemoComponent implements OnInit, OnDestroy {
   readonly recTypeFormProperty = 'rec_type';
-  readonly brSchedFormProperty = 'back_reference_sched_form_name';
   readonly text4kFormProperty = 'text4000';
 
-  formProperties: string[] = [this.recTypeFormProperty, this.brSchedFormProperty, this.text4kFormProperty];
+  formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
 
   report: F3xSummary = new F3xSummary();
   committeeAccountId: string | undefined;
@@ -41,7 +40,6 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
     private messageService: MessageService
   ) {
     this.form.addControl(this.recTypeFormProperty, new FormControl());
-    this.form.addControl(this.brSchedFormProperty, new FormControl());
   }
 
   ngOnInit(): void {
@@ -80,7 +78,6 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
     this.formSubmitted = true;
 
     this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
-    this.form.get(this.brSchedFormProperty)?.setValue(this.report.form_type);
 
     const payload: MemoText = MemoText.fromJSON({
       ...this.assignedMemoText,
