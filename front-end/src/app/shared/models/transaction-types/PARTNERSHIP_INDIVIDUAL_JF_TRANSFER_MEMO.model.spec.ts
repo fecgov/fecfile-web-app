@@ -35,4 +35,14 @@ describe('PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(`JF Memo: Test Org (Partnership Attribution)`);
   });
+
+  it('#generatePurposeDescription() should shrink long description', () => {
+    (
+      (transaction.parent_transaction as SchATransaction).parent_transaction as SchATransaction
+    ).contributor_organization_name = 'Super Duper Hyper Very Really Long Committee Name That Needs to Shrink';
+    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
+    expect(descrip).toBe(
+      'JF Memo: Super Duper Hyper Very Really Long Committee Name That Needs t... (Partnership Attribution)'
+    );
+  });
 });

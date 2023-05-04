@@ -28,4 +28,13 @@ describe('PARTNERSHIP_JF_TRANSFER_MEMO', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe('JF Memo: Test Org (Partnership attributions do not require itemization)');
   });
+
+  it('#generatePurposeDescription() should shrink long description', () => {
+    (transaction.parent_transaction as SchATransaction).contributor_organization_name =
+      'Super Duper Long Committee Name That Needs to Shrink';
+    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
+    expect(descrip).toBe(
+      'JF Memo: Super Duper Long Committee Name Th... (Partnership attributions do not require itemization)'
+    );
+  });
 });

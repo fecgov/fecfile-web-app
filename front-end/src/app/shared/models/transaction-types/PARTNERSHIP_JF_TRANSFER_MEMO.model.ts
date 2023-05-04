@@ -30,13 +30,17 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
   }
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    const committeeClause = `JF Memo: ${
+    let committeeClause = `JF Memo: ${
       (transaction.parent_transaction as SchATransaction).contributor_organization_name
     }`;
-    if (transaction.children && transaction.children.length > 0) {
-      return committeeClause + ' (See Partnership Attribution(s) below)';
+    const hasChildren = transaction.children && transaction.children.length > 0;
+    const parenthetical = hasChildren
+      ? ' (See Partnership Attribution(s) below)'
+      : ' (Partnership attributions do not require itemization)';
+    if ((committeeClause + parenthetical).length > 100) {
+      committeeClause = committeeClause.slice(0, 97 - parenthetical.length) + '...';
     }
-    return committeeClause + ' (Partnership attributions do not require itemization)';
+    return committeeClause + parenthetical;
   }
 
   override purposeDescriptionLabelNotice =

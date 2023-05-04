@@ -7,12 +7,16 @@ assignees: ''
 
 ---
 
-### Business Reason ### 
+### Business Reason
 
 As a [role], I will be able to [blank] so that I can [business reason]
 
-### Acceptance Criteria ### 
+### Acceptance Criteria
 
-**If** [precedent]
+**Given** [precedent]
 **When** [action]
 **Then** [result]
+
+### QA Notes
+
+### DEV Notes

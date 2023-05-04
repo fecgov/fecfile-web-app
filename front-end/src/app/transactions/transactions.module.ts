@@ -21,7 +21,9 @@ import { SharedModule } from '../shared/shared.module';
 import { DoubleTransactionDetailComponent } from './double-transaction-detail/double-transaction-detail.component';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
+import { TransactionDisbursementsComponent } from './transaction-list/transaction-disbursements/transaction-disbursements.component';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list/transaction-list.component';
+import { TransactionReceiptsComponent } from './transaction-list/transaction-receipts/transaction-receipts.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
 
@@ -33,6 +35,8 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     DoubleTransactionDetailComponent,
     TransactionDetailComponent,
     MemoCodePipe,
+    TransactionReceiptsComponent,
+    TransactionDisbursementsComponent,
   ],
   imports: [
     AccordionModule,
