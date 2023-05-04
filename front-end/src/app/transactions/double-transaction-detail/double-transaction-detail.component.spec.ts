@@ -1,4 +1,4 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -21,7 +21,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { DoubleTransactionDetailComponent } from './double-transaction-detail.component';
 
 describe('DoubleTransactionDetailComponent', () => {
-  let httpTestingController: HttpTestingController;
   let component: DoubleTransactionDetailComponent;
   let fixture: ComponentFixture<DoubleTransactionDetailComponent>;
 
@@ -55,7 +54,6 @@ describe('DoubleTransactionDetailComponent', () => {
   });
 
   beforeEach(() => {
-    httpTestingController = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(DoubleTransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = transaction;

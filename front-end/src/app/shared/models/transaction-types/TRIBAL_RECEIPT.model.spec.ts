@@ -1,7 +1,6 @@
-import { TRIBAL_RECEIPT } from './TRIBAL_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
+import { TRIBAL_RECEIPT } from './TRIBAL_RECEIPT.model';
 
 describe('TRIBAL_RECEIPT', () => {
   let transactionType: TRIBAL_RECEIPT;
