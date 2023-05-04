@@ -7,7 +7,7 @@ describe('INDIVIDUAL_RECEIPT', () => {
   let transactionType: INDIVIDUAL_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new INDIVIDUAL_RECEIPT(new TransactionGroupA());
+    transactionType = new INDIVIDUAL_RECEIPT();
   });
 
   it('should create an instance', () => {

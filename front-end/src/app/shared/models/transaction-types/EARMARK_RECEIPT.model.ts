@@ -8,11 +8,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class EARMARK_RECEIPT extends SchATransactionType {
-  constructor(private transactionGroupAG: TransactionGroupAG) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupAG;
+  transactionGroup = new TransactionGroupAG();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
   override dependentChildTransactionType = ScheduleATransactionTypes.EARMARK_MEMO;

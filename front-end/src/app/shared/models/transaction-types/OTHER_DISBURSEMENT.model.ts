@@ -8,11 +8,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class OTHER_DISBURSEMENT extends SchBTransactionType {
-  constructor(private transactionGroupB: TransactionGroupB) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupB;
+  transactionGroup = new TransactionGroupB();
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.OTHER_DISBURSEMENT);
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;

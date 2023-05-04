@@ -6,7 +6,7 @@ describe('PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO', () => {
   let transactionType: PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO;
 
   beforeEach(() => {
-    transactionType = new PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO(new TransactionGroupE());
+    transactionType = new PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO();
   });
 
   it('should create an instance', () => {

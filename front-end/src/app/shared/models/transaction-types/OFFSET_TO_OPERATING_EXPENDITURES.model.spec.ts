@@ -7,7 +7,7 @@ describe('OFFSET_TO_OPERATING_EXPENDITURES', () => {
   let transactionType: OFFSET_TO_OPERATING_EXPENDITURES;
 
   beforeEach(() => {
-    transactionType = new OFFSET_TO_OPERATING_EXPENDITURES(new TransactionGroupB());
+    transactionType = new OFFSET_TO_OPERATING_EXPENDITURES();
   });
 
   it('should create an instance', () => {

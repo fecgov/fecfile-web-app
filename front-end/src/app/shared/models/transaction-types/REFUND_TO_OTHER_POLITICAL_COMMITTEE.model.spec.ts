@@ -7,7 +7,7 @@ describe('REFUND_TO_OTHER_POLITICAL_COMMITTEE', () => {
   let transactionType: REFUND_TO_OTHER_POLITICAL_COMMITTEE;
 
   beforeEach(() => {
-    transactionType = new REFUND_TO_OTHER_POLITICAL_COMMITTEE(new TransactionGroupI());
+    transactionType = new REFUND_TO_OTHER_POLITICAL_COMMITTEE();
   });
 
   it('should create an instance', () => {

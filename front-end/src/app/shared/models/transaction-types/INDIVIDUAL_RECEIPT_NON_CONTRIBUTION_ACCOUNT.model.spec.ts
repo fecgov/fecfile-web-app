@@ -6,7 +6,7 @@ describe('INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT', () => {
   let transactionType: INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT(new TransactionGroupA());
+    transactionType = new INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT();
   });
 
   it('should create an instance', () => {

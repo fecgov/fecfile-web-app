@@ -7,7 +7,7 @@ describe('PARTY_RETURN', () => {
   let transactionType: PARTY_RETURN;
 
   beforeEach(() => {
-    transactionType = new PARTY_RETURN(new TransactionGroupE());
+    transactionType = new PARTY_RETURN();
   });
 
   it('should create an instance', () => {

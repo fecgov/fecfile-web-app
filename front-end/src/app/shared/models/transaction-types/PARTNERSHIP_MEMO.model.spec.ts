@@ -6,7 +6,7 @@ describe('PARTNERSHIP_MEMO', () => {
   let transactionType: PARTNERSHIP_MEMO;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_MEMO(new TransactionGroupA());
+    transactionType = new PARTNERSHIP_MEMO();
   });
 
   it('should create an instance', () => {

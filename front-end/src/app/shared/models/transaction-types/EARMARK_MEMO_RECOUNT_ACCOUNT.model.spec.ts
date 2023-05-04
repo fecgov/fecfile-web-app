@@ -6,7 +6,7 @@ describe('EARMARK_MEMO_RECOUNT_ACCOUNT', () => {
   let transactionType: EARMARK_MEMO_RECOUNT_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new EARMARK_MEMO_RECOUNT_ACCOUNT(new TransactionGroupAG());
+    transactionType = new EARMARK_MEMO_RECOUNT_ACCOUNT();
   });
 
   it('should create an instance', () => {

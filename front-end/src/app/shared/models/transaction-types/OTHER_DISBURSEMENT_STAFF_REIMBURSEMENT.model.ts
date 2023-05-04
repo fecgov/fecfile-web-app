@@ -8,11 +8,8 @@ import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../tran
 import { AggregationGroups } from '../transaction.model';
 
 export class OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT extends SchBTransactionType {
-  constructor(private transactionGroupA: TransactionGroupA) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupA;
+  transactionGroup = new TransactionGroupA();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT

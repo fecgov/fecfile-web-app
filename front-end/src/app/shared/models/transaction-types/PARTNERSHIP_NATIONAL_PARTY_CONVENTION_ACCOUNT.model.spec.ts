@@ -6,7 +6,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   let transactionType: PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT(new TransactionGroupD());
+    transactionType = new PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT();
   });
 
   it('should create an instance', () => {

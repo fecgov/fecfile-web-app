@@ -6,7 +6,7 @@ describe('REFUND_PAC_CONTRIBUTION', () => {
   let transactionType: REFUND_PAC_CONTRIBUTION;
 
   beforeEach(() => {
-    transactionType = new REFUND_PAC_CONTRIBUTION(new TransactionGroupE());
+    transactionType = new REFUND_PAC_CONTRIBUTION();
   });
 
   it('should create an instance', () => {

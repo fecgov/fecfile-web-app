@@ -3,7 +3,7 @@ import { ContactTypeLabels, ContactTypes } from '../contact.model';
 import { TransactionTemplateMapType } from '../transaction-type.model';
 import { DoubleTransactionGroup } from './double-transaction-group.interface';
 
-export class TransactionGroupAG implements DoubleTransactionGroup {
+export class TransactionGroupAG extends DoubleTransactionGroup {
   getFormProperties(templateMap: TransactionTemplateMapType): string[] {
     return [
       'entity_type',

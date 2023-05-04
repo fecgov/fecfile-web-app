@@ -6,7 +6,7 @@ describe('REFUND_UNREGISTERED_CONTRIBUTION', () => {
   let transactionType: REFUND_UNREGISTERED_CONTRIBUTION;
 
   beforeEach(() => {
-    transactionType = new REFUND_UNREGISTERED_CONTRIBUTION(new TransactionGroupD());
+    transactionType = new REFUND_UNREGISTERED_CONTRIBUTION();
   });
 
   it('should create an instance', () => {

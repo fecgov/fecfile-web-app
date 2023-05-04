@@ -6,7 +6,7 @@ describe('INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   let transactionType: INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT(new TransactionGroupA());
+    transactionType = new INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT();
   });
 
   it('should create an instance', () => {

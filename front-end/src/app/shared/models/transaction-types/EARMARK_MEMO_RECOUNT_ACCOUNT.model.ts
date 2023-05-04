@@ -5,11 +5,8 @@ import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag';
 import { AggregationGroups } from '../transaction.model';
 
 export class EARMARK_MEMO_RECOUNT_ACCOUNT extends SchATransactionType {
-  constructor(private transactionGroupAG: TransactionGroupAG) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupAG;
+  transactionGroup = new TransactionGroupAG();
   override isDependentChild = true;
   title = '';
   schema = schema;

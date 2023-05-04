@@ -6,7 +6,7 @@ describe('JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   let transactionType: JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT(new TransactionGroupE());
+    transactionType = new JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT();
   });
 
   it('should create an instance', () => {

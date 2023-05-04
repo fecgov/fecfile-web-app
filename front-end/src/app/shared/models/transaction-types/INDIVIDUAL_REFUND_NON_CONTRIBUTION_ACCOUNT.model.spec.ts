@@ -6,7 +6,7 @@ describe('INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
   let transactionType: INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT(new TransactionGroupA());
+    transactionType = new INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT();
   });
 
   it('should create an instance', () => {

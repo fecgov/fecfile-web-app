@@ -7,11 +7,8 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
 
 export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO extends SchATransactionType {
-  constructor(private transactionGroupA: TransactionGroupA) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupA;
+  transactionGroup = new TransactionGroupA();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO

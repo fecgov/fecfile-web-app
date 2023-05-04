@@ -7,11 +7,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class TRIBAL_REFUND_NP_RECOUNT_ACCOUNT extends SchBTransactionType {
-  constructor(private transactionGroupD: TransactionGroupD) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupD;
+  transactionGroup = new TransactionGroupD();
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT);
   schema = schema;
   override showAggregate = false;

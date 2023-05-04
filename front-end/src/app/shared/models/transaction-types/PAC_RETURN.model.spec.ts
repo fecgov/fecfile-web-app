@@ -7,7 +7,7 @@ describe('PAC_RETURN', () => {
   let transactionType: PAC_RETURN;
 
   beforeEach(() => {
-    transactionType = new PAC_RETURN(new TransactionGroupE());
+    transactionType = new PAC_RETURN();
   });
 
   it('should create an instance', () => {

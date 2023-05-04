@@ -6,7 +6,7 @@ describe('OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT', () => {
   let transactionType: OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT(new TransactionGroupE());
+    transactionType = new OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT();
   });
 
   it('should create an instance', () => {

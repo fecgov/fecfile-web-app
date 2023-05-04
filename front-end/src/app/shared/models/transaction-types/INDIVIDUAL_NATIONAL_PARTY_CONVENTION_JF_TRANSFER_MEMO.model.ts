@@ -7,11 +7,8 @@ import { getChildNavigationControls, TransactionNavigationControls } from '../tr
 import { AggregationGroups } from '../transaction.model';
 
 export class INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchATransactionType {
-  constructor(private transactionGroupA: TransactionGroupA) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupA;
+  transactionGroup = new TransactionGroupA();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO

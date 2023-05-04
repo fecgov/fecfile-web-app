@@ -7,11 +7,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class REFUND_UNREGISTERED_CONTRIBUTION_VOID extends SchBTransactionType {
-  constructor(private transactionGroupD: TransactionGroupD) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupD;
+  transactionGroup = new TransactionGroupD();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID

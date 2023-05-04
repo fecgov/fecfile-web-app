@@ -20,7 +20,7 @@
     </div>
     <ng-container *ngIf="transaction?.contact">
       <ng-container
-        *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(getEntityType())"
+        *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(form.get('entity_type')?.value)"
       >
         <app-committee-input
           [form]="form"

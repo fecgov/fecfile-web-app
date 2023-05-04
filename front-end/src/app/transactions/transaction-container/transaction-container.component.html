@@ -1,6 +1,6 @@
-<ng-container *ngIf="transaction?.transactionType?.transactionGroup instanceof TransactionGroup">
+<ng-container *ngIf="isTransactionGroup()">
   <app-transaction-detail [transaction]="transaction"></app-transaction-detail>
 </ng-container>
-<ng-container *ngIf="transaction?.transactionType?.transactionGroup instanceof DoubleTransactionGroup">
+<ng-container *ngIf="isDoubleTransactionGroup()">
   <app-double-transaction-detail [transaction]="transaction"></app-double-transaction-detail>
 </ng-container>

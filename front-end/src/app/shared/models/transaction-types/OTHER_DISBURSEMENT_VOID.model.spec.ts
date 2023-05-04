@@ -7,7 +7,7 @@ describe('OTHER_DISBURSEMENT_VOID', () => {
   let transactionType: OTHER_DISBURSEMENT_VOID;
 
   beforeEach(() => {
-    transactionType = new OTHER_DISBURSEMENT_VOID(new TransactionGroupB());
+    transactionType = new OTHER_DISBURSEMENT_VOID();
   });
 
   it('should create an instance', () => {

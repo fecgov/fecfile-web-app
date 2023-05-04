@@ -6,7 +6,7 @@ describe('NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO', () => {
   let transactionType: NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO;
 
   beforeEach(() => {
-    transactionType = new NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO(new TransactionGroupB());
+    transactionType = new NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO();
   });
 
   it('should create an instance', () => {

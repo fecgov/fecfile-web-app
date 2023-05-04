@@ -8,11 +8,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class RETURN_RECEIPT extends SchATransactionType {
-  constructor(private transactionGroupC: TransactionGroupC) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupC;
+  transactionGroup = new TransactionGroupC();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
   schema = schema;
   override negativeAmountValueOnly = true;

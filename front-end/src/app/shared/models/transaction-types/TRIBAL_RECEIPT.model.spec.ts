@@ -7,7 +7,7 @@ describe('TRIBAL_RECEIPT', () => {
   let transactionType: TRIBAL_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new TRIBAL_RECEIPT(new TransactionGroupD());
+    transactionType = new TRIBAL_RECEIPT();
   });
 
   it('should create an instance', () => {

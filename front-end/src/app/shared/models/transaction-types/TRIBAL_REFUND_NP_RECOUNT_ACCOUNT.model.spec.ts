@@ -6,7 +6,7 @@ describe('TRIBAL_REFUND_NP_RECOUNT_ACCOUNT', () => {
   let transactionType: TRIBAL_REFUND_NP_RECOUNT_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new TRIBAL_REFUND_NP_RECOUNT_ACCOUNT(new TransactionGroupD());
+    transactionType = new TRIBAL_REFUND_NP_RECOUNT_ACCOUNT();
   });
 
   it('should create an instance', () => {

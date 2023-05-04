@@ -7,7 +7,7 @@ describe('OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO', () => {
   let transactionType: OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO;
 
   beforeEach(() => {
-    transactionType = new OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO(new TransactionGroupB());
+    transactionType = new OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO();
   });
 
   it('should create an instance', () => {

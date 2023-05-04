@@ -7,11 +7,8 @@ import { AggregationGroups } from '../transaction.model';
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
 
 export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO extends SchATransactionType {
-  constructor(private transactionGroupA: TransactionGroupA) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupA;
+  transactionGroup = new TransactionGroupA();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO

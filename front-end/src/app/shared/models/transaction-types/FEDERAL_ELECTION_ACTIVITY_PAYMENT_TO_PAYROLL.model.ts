@@ -8,11 +8,8 @@ import { SubTransactionGroup } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL extends SchBTransactionType {
-  constructor(private transactionGroupM: TransactionGroupM) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupM;
+  transactionGroup = new TransactionGroupM();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL

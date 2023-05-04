@@ -6,7 +6,7 @@ describe('OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL', () => {
   let transactionType: OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL;
 
   beforeEach(() => {
-    transactionType = new OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL(new TransactionGroupD());
+    transactionType = new OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL();
   });
 
   it('should create an instance', () => {

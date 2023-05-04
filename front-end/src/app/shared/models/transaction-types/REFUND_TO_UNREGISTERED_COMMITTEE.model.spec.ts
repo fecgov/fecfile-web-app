@@ -7,7 +7,7 @@ describe('REFUND_TO_UNREGISTERED_COMMITTEE', () => {
   let transactionType: REFUND_TO_UNREGISTERED_COMMITTEE;
 
   beforeEach(() => {
-    transactionType = new REFUND_TO_UNREGISTERED_COMMITTEE(new TransactionGroupD());
+    transactionType = new REFUND_TO_UNREGISTERED_COMMITTEE();
   });
 
   it('should create an instance', () => {

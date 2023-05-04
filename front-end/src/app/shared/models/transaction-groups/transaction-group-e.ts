@@ -3,7 +3,7 @@ import { ContactTypeLabels, ContactTypes } from '../contact.model';
 import { TransactionTemplateMapType } from '../transaction-type.model';
 import { TransactionGroup } from './transaction-group.interface';
 
-export class TransactionGroupE implements TransactionGroup {
+export class TransactionGroupE extends TransactionGroup {
   getFormProperties(templateMap: TransactionTemplateMapType,
     scheduleId: string): string[] {
     switch (scheduleId) {

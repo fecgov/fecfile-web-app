@@ -18,7 +18,9 @@ import { ToolbarModule } from 'primeng/toolbar';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { SharedModule } from '../shared/shared.module';
+import { DoubleTransactionDetailComponent } from './double-transaction-detail/double-transaction-detail.component';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
+import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list/transaction-list.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
@@ -28,6 +30,8 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     TransactionContainerComponent,
     TransactionTypePickerComponent,
     TransactionListComponent,
+    DoubleTransactionDetailComponent,
+    TransactionDetailComponent,
     MemoCodePipe,
   ],
   imports: [

@@ -6,7 +6,7 @@ describe('REFUND_PAC_CONTRIBUTION_VOID', () => {
   let transactionType: REFUND_PAC_CONTRIBUTION_VOID;
 
   beforeEach(() => {
-    transactionType = new REFUND_PAC_CONTRIBUTION_VOID(new TransactionGroupE());
+    transactionType = new REFUND_PAC_CONTRIBUTION_VOID();
   });
 
   it('should create an instance', () => {

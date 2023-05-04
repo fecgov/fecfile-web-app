@@ -9,11 +9,8 @@ import { SubTransactionGroup } from '../transaction-type.model';
 import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 
 export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
-  constructor(private transactionGroupD: TransactionGroupD) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupD;
+  transactionGroup = new TransactionGroupD();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
   schema = schema;
   override shortName = 'Partnership Receipt';

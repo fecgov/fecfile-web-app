@@ -8,11 +8,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class OFFSET_TO_OPERATING_EXPENDITURES extends SchATransactionType {
-  constructor(private transactionGroupB: TransactionGroupB) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupB;
+  transactionGroup = new TransactionGroupB();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;

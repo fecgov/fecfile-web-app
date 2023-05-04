@@ -8,11 +8,8 @@ import { getChildNavigationControls, TransactionNavigationControls } from '../tr
 import { AggregationGroups } from '../transaction.model';
 
 export class OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO extends SchBTransactionType {
-  constructor(private transactionGroupB: TransactionGroupB) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupB;
+  transactionGroup = new TransactionGroupB();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO

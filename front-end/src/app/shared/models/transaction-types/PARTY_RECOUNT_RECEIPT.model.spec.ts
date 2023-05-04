@@ -6,7 +6,7 @@ describe('PARTY_RECOUNT_RECEIPT', () => {
   let transactionType: PARTY_RECOUNT_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new PARTY_RECOUNT_RECEIPT(new TransactionGroupE());
+    transactionType = new PARTY_RECOUNT_RECEIPT();
   });
 
   it('should create an instance', () => {

@@ -6,7 +6,7 @@ describe('JOINT_FUNDRAISING_TRANSFER', () => {
   let transactionType: JOINT_FUNDRAISING_TRANSFER;
 
   beforeEach(() => {
-    transactionType = new JOINT_FUNDRAISING_TRANSFER(new TransactionGroupE());
+    transactionType = new JOINT_FUNDRAISING_TRANSFER();
   });
 
   it('should create an instance', () => {

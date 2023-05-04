@@ -7,11 +7,8 @@ import { AggregationGroups } from '../transaction.model';
 import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 
 export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType {
-  constructor(private transactionGroupD: TransactionGroupD) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupD;
+  transactionGroup = new TransactionGroupD();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT

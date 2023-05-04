@@ -8,11 +8,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends SchATransactionType {
-  constructor(private transactionGroupAG: TransactionGroupAG) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupAG;
+  transactionGroup = new TransactionGroupAG();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_CONVENTION_ACCOUNT_CONTRIBUTION

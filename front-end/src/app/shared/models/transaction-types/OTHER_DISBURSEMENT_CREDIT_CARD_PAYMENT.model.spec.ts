@@ -6,7 +6,7 @@ describe('OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT', () => {
   let transactionType: OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT;
 
   beforeEach(() => {
-    transactionType = new OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT(new TransactionGroupD());
+    transactionType = new OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT();
   });
 
   it('should create an instance', () => {

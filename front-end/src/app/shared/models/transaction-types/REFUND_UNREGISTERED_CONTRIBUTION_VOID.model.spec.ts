@@ -6,7 +6,7 @@ describe('REFUND_UNREGISTERED_CONTRIBUTION_VOID', () => {
   let transactionType: REFUND_UNREGISTERED_CONTRIBUTION_VOID;
 
   beforeEach(() => {
-    transactionType = new REFUND_UNREGISTERED_CONTRIBUTION_VOID(new TransactionGroupD());
+    transactionType = new REFUND_UNREGISTERED_CONTRIBUTION_VOID();
   });
 
   it('should create an instance', () => {

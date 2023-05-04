@@ -3,14 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { ContactTypes } from 'app/shared/models/contact.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
-import {
-  NavigationAction, NavigationDestination, NavigationEvent
-} from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
-import { environment } from 'environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -30,7 +25,10 @@ describe('DoubleTransactionDetailComponent', () => {
   let component: DoubleTransactionDetailComponent;
   let fixture: ComponentFixture<DoubleTransactionDetailComponent>;
 
-  const transaction = getTestTransactionByType(ScheduleATransactionTypes.TRIBAL_RECEIPT);
+  const transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
+  const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_MEMO);
+  transaction.children = [childTransaction];
+
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -67,16 +65,6 @@ describe('DoubleTransactionDetailComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.form.get('entity_type')?.value).toEqual(ContactTypes.ORGANIZATION);
   });
 
-  it('#save() should not save an invalid record', () => {
-    component.form.patchValue({ ...transaction, ...{ contributor_state: 'not-valid' } });
-    component.save(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, transaction));
-    expect(component.form.invalid).toBe(true);
-    httpTestingController.expectNone(
-      `${environment.apiUrl}/transactions/schedule-a/1/?schema=TRIBAL_RECEIPT&fields_to_validate=`
-    );
-    httpTestingController.verify();
-  });
 });

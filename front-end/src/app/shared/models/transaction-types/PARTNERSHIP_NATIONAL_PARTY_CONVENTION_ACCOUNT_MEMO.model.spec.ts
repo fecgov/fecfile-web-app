@@ -6,7 +6,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO', () => {
   let transactionType: PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO(new TransactionGroupA());
+    transactionType = new PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO();
   });
 
   it('should create an instance', () => {

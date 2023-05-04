@@ -6,7 +6,7 @@ describe('INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT', () => {
   let transactionType: INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT(new TransactionGroupA());
+    transactionType = new INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT();
   });
 
   it('should create an instance', () => {

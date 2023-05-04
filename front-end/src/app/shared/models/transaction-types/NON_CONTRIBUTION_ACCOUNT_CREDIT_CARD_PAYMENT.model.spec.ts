@@ -6,7 +6,7 @@ describe('NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT', () => {
   let transactionType: NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT;
 
   beforeEach(() => {
-    transactionType = new NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT(new TransactionGroupD());
+    transactionType = new NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT();
   });
 
   it('should create an instance', () => {

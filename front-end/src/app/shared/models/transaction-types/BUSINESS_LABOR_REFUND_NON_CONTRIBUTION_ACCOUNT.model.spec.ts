@@ -6,7 +6,7 @@ describe('BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
   let transactionType: BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT(new TransactionGroupD());
+    transactionType = new BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT();
   });
 
   it('should create an instance', () => {

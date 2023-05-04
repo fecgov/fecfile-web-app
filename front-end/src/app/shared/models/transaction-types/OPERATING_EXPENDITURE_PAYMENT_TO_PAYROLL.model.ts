@@ -8,11 +8,8 @@ import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../tran
 import { AggregationGroups } from '../transaction.model';
 
 export class OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL extends SchBTransactionType {
-  constructor(private transactionGroupD: TransactionGroupD) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupD;
+  transactionGroup = new TransactionGroupD();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL

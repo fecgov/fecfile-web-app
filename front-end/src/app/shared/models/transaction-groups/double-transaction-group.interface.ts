@@ -1,14 +1,14 @@
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { TransactionTemplateMapType } from '../transaction-type.model';
 
-export interface DoubleTransactionGroup {
-  getFormProperties(templateMap: TransactionTemplateMapType): string[];
-  getChildFormProperties(childTemplateMap: TransactionTemplateMapType): string[];
+export abstract class DoubleTransactionGroup {
+  abstract getFormProperties(templateMap: TransactionTemplateMapType): string[];
+  abstract getChildFormProperties(childTemplateMap: TransactionTemplateMapType): string[];
 
-  getContactTypeOptions(): PrimeOptions;
-  getChildContactTypeOptions(): PrimeOptions;
+  abstract getContactTypeOptions(): PrimeOptions;
+  abstract getChildContactTypeOptions(): PrimeOptions;
 
-  hasEmployerInput(): boolean;
+  abstract hasEmployerInput(): boolean;
 
-  getChildTransactionTitle(): string;
+  abstract getChildTransactionTitle(): string;
 }

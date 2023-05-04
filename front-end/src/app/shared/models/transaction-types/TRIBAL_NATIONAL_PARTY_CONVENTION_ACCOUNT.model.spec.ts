@@ -6,7 +6,7 @@ describe('TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT', () => {
   let transactionType: TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT(new TransactionGroupD());
+    transactionType = new TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT();
   });
 
   it('should create an instance', () => {

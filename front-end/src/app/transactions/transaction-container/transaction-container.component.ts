@@ -1,11 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { selectCommitteeAccount } from '../../store/committee-account.selectors';
-import { CommitteeAccount } from '../../shared/models/committee-account.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/double-transaction-group.interface';
+import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.interface';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { Subject, takeUntil } from 'rxjs';
+import { CommitteeAccount } from '../../shared/models/committee-account.model';
+import { selectCommitteeAccount } from '../../store/committee-account.selectors';
 
 @Component({
   selector: 'app-transaction-container',
@@ -37,6 +39,14 @@ export class TransactionContainerComponent implements OnInit, OnDestroy {
           this.transaction.children[0].filer_committee_id_number = committeeAccount.committee_id ?? 'C00000000';
         }
       });
+  }
+
+  isTransactionGroup() {
+    return this.transaction?.transactionType?.transactionGroup instanceof TransactionGroup;
+  }
+
+  isDoubleTransactionGroup() {
+    return this.transaction?.transactionType?.transactionGroup instanceof DoubleTransactionGroup;
   }
 
   ngOnDestroy(): void {

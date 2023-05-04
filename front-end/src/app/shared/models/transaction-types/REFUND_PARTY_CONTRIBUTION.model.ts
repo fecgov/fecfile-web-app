@@ -7,11 +7,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class REFUND_PARTY_CONTRIBUTION extends SchBTransactionType {
-  constructor(private transactionGroupE: TransactionGroupE) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupE;
+  transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION);
   schema = schema;
   override showAggregate = false;

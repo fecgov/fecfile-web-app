@@ -8,11 +8,8 @@ import { SubTransactionGroup } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
-  constructor(private transactionGroupE: TransactionGroupE) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupE;
+  transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
   schema = schema;
   override subTransactionConfig = new SubTransactionGroup('Joint Fundraising Transfer Memo', [

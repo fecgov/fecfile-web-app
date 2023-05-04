@@ -7,11 +7,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT extends SchATransactionType {
-  constructor(private transactionGroupE: TransactionGroupE) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupE;
+  transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.OTHER_COMMITTEE_RECEIPT_NON_CONTRIBUTION_ACCOUNT

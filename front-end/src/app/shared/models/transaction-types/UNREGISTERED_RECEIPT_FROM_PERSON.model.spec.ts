@@ -7,7 +7,7 @@ describe('UNREGISTERED_RECEIPT_FROM_PERSON', () => {
   let transactionType: UNREGISTERED_RECEIPT_FROM_PERSON;
 
   beforeEach(() => {
-    transactionType = new UNREGISTERED_RECEIPT_FROM_PERSON(new TransactionGroupD());
+    transactionType = new UNREGISTERED_RECEIPT_FROM_PERSON();
   });
 
   it('should create an instance', () => {

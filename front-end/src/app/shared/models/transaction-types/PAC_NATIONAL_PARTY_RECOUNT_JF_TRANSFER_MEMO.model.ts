@@ -7,11 +7,8 @@ import { TransactionNavigationControls, getChildNavigationControls } from '../tr
 import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 
 export class PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATransactionType {
-  constructor(private transactionGroupE: TransactionGroupE) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupE;
+  transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO

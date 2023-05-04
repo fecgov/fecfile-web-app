@@ -6,7 +6,7 @@ describe('REFUND_PARTY_CONTRIBUTION_VOID', () => {
   let transactionType: REFUND_PARTY_CONTRIBUTION_VOID;
 
   beforeEach(() => {
-    transactionType = new REFUND_PARTY_CONTRIBUTION_VOID(new TransactionGroupE());
+    transactionType = new REFUND_PARTY_CONTRIBUTION_VOID();
   });
 
   it('should create an instance', () => {

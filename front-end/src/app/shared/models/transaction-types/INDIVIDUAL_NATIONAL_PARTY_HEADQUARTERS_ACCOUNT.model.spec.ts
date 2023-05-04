@@ -6,7 +6,7 @@ describe('INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT', () => {
   let transactionType: INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT(new TransactionGroupA());
+    transactionType = new INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT();
   });
 
   it('should create an instance', () => {

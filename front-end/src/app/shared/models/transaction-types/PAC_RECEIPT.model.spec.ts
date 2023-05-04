@@ -7,7 +7,7 @@ describe('PAC_RECEIPT', () => {
   let transactionType: PAC_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new PAC_RECEIPT(new TransactionGroupE());
+    transactionType = new PAC_RECEIPT();
   });
 
   it('should create an instance', () => {

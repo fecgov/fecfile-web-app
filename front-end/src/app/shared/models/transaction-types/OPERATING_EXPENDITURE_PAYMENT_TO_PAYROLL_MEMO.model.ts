@@ -7,11 +7,8 @@ import { getChildNavigationControls, TransactionNavigationControls } from '../tr
 import { AggregationGroups } from '../transaction.model';
 
 export class OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
-  constructor(private transactionGroupB: TransactionGroupB) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupB;
+  transactionGroup = new TransactionGroupB();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO

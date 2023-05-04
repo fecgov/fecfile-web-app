@@ -6,7 +6,7 @@ describe('FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT', () => {
   let transactionType: FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT;
 
   beforeEach(() => {
-    transactionType = new FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT(new TransactionGroupM());
+    transactionType = new FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT();
   });
 
   it('should create an instance', () => {

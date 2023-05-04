@@ -6,7 +6,7 @@ describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL', () => {
   let transactionType: FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL;
 
   beforeEach(() => {
-    transactionType = new FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL(new TransactionGroupM());
+    transactionType = new FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL();
   });
 
   it('should create an instance', () => {

@@ -7,7 +7,7 @@ describe('RETURN_RECEIPT', () => {
   let transactionType: RETURN_RECEIPT;
 
   beforeEach(() => {
-    transactionType = new RETURN_RECEIPT(new TransactionGroupC());
+    transactionType = new RETURN_RECEIPT();
   });
 
   it('should create an instance', () => {

@@ -7,11 +7,8 @@ import { getChildNavigationControls, TransactionNavigationControls } from '../tr
 import { AggregationGroups } from '../transaction.model';
 
 export class PAC_JF_TRANSFER_MEMO extends SchATransactionType {
-  constructor(private transactionGroupE: TransactionGroupE) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupE;
+  transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   override shortName = 'PAC';
   schema = schema;

@@ -8,11 +8,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class REFUND_INDIVIDUAL_CONTRIBUTION_VOID extends SchBTransactionType {
-  constructor(private transactionGroupB: TransactionGroupB) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupB;
+  transactionGroup = new TransactionGroupB();
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;

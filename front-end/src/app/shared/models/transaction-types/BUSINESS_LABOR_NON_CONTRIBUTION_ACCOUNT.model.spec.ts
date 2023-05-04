@@ -6,7 +6,7 @@ describe('TRIBAL_RECEIPT', () => {
   let transactionType: BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT(new TransactionGroupD());
+    transactionType = new BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT();
   });
 
   it('should create an instance', () => {

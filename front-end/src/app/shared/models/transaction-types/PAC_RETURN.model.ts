@@ -7,11 +7,8 @@ import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction
 import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 
 export class PAC_RETURN extends SchATransactionType {
-  constructor(private transactionGroupE: TransactionGroupE) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupE;
+  transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RETURN);
   schema = schema;
   override negativeAmountValueOnly = true;

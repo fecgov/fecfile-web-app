@@ -6,7 +6,7 @@ describe('EARMARK_MEMO', () => {
   let transactionType: EARMARK_MEMO;
 
   beforeEach(() => {
-    transactionType = new EARMARK_MEMO(new TransactionGroupAG());
+    transactionType = new EARMARK_MEMO();
   });
 
   it('should create an instance', () => {

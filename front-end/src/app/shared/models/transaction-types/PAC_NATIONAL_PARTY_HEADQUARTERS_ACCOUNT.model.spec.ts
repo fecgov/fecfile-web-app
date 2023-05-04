@@ -6,7 +6,7 @@ describe('PAC_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT', () => {
   let transactionType: PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT(new TransactionGroupE());
+    transactionType = new PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT();
   });
 
   it('should create an instance', () => {

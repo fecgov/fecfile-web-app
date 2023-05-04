@@ -6,7 +6,7 @@ describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
   let transactionType: OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT;
 
   beforeEach(() => {
-    transactionType = new OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT(new TransactionGroupD());
+    transactionType = new OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT();
   });
 
   it('should create an instance', () => {

@@ -7,7 +7,7 @@ describe('TRANSFER', () => {
   let transactionType: TRANSFER;
 
   beforeEach(() => {
-    transactionType = new TRANSFER(new TransactionGroupE());
+    transactionType = new TRANSFER();
   });
 
   it('should create an instance', () => {

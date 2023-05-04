@@ -8,11 +8,8 @@ import { SubTransactionGroup } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionType {
-  constructor(private transactionGroupE: TransactionGroupE) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupE;
+  transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT

@@ -6,7 +6,7 @@ describe('REFUND_INDIVIDUAL_CONTRIBUTION', () => {
   let transactionType: REFUND_INDIVIDUAL_CONTRIBUTION;
 
   beforeEach(() => {
-    transactionType = new REFUND_INDIVIDUAL_CONTRIBUTION(new TransactionGroupB());
+    transactionType = new REFUND_INDIVIDUAL_CONTRIBUTION();
   });
 
   it('should create an instance', () => {

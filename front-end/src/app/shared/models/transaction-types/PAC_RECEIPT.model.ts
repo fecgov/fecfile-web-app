@@ -7,11 +7,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 
 export class PAC_RECEIPT extends SchATransactionType {
-  constructor(private transactionGroupE: TransactionGroupE) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupE;
+  transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RECEIPT);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

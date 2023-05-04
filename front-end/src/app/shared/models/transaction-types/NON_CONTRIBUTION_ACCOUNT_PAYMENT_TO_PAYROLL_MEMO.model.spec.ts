@@ -6,7 +6,7 @@ describe('NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO', () => {
   let transactionType: NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO;
 
   beforeEach(() => {
-    transactionType = new NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO(new TransactionGroupC());
+    transactionType = new NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO();
   });
 
   it('should create an instance', () => {

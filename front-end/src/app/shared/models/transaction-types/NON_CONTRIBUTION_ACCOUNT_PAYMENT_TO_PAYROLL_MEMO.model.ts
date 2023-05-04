@@ -8,11 +8,8 @@ import { getChildNavigationControls, TransactionNavigationControls } from '../tr
 import { AggregationGroups } from '../transaction.model';
 
 export class NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
-  constructor(private transactionGroupC: TransactionGroupC) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupC;
+  transactionGroup = new TransactionGroupC();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO

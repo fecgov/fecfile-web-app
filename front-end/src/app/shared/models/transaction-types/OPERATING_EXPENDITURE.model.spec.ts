@@ -7,7 +7,7 @@ describe('OPERATING_EXPENDITURE', () => {
   let transactionType: OPERATING_EXPENDITURE;
 
   beforeEach(() => {
-    transactionType = new OPERATING_EXPENDITURE(new TransactionGroupB());
+    transactionType = new OPERATING_EXPENDITURE();
   });
 
   it('should create an instance', () => {

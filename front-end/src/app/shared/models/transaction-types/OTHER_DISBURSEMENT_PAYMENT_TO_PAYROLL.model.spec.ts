@@ -6,7 +6,7 @@ describe('OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL', () => {
   let transactionType: OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL;
 
   beforeEach(() => {
-    transactionType = new OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL(new TransactionGroupD());
+    transactionType = new OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL();
   });
 
   it('should create an instance', () => {

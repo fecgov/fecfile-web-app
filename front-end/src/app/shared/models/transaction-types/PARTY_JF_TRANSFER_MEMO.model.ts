@@ -7,11 +7,8 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
 
 export class PARTY_JF_TRANSFER_MEMO extends SchATransactionType {
-  constructor(private transactionGroupE: TransactionGroupE) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupE;
+  transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO);
   override shortName = 'Party';
   schema = schema;

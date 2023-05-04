@@ -8,11 +8,8 @@ import { ContactTypes } from '../contact.model';
 import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
 
 export class REFUND_INDIVIDUAL_CONTRIBUTION extends SchBTransactionType {
-  constructor(private transactionGroupB: TransactionGroupB) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupB;
+  transactionGroup = new TransactionGroupB();
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION);
   schema = schema;
   override showAggregate = false;

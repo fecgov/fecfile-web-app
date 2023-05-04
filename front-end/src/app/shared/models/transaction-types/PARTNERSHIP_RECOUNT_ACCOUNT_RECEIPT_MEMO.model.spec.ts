@@ -6,7 +6,7 @@ describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO', () => {
   let transactionType: PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO(new TransactionGroupA());
+    transactionType = new PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO();
   });
 
   it('should create an instance', () => {

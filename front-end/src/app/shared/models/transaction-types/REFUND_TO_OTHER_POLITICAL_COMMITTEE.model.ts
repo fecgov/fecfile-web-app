@@ -7,11 +7,8 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { AggregationGroups } from '../transaction.model';
 
 export class REFUND_TO_OTHER_POLITICAL_COMMITTEE extends SchATransactionType {
-  constructor(private transactionGroupI: TransactionGroupI) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupI;
+  transactionGroup = new TransactionGroupI();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

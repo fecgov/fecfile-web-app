@@ -6,7 +6,7 @@ describe('OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT', () => {
   let transactionType: OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT;
 
   beforeEach(() => {
-    transactionType = new OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT(new TransactionGroupE());
+    transactionType = new OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT();
   });
 
   it('should create an instance', () => {

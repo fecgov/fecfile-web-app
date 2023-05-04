@@ -6,7 +6,7 @@ describe('REFUND_PARTY_CONTRIBUTION', () => {
   let transactionType: REFUND_PARTY_CONTRIBUTION;
 
   beforeEach(() => {
-    transactionType = new REFUND_PARTY_CONTRIBUTION(new TransactionGroupE());
+    transactionType = new REFUND_PARTY_CONTRIBUTION();
   });
 
   it('should create an instance', () => {

@@ -7,11 +7,8 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
 
 export class PARTNERSHIP_RECEIPT extends SchATransactionType {
-  constructor(private transactionGroupD: TransactionGroupD) {
-    super();
-  }
   
-  transactionGroup = this.transactionGroupD;
+  transactionGroup = new TransactionGroupD();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
   schema = schema;
   override subTransactionConfig = [ScheduleATransactionTypes.PARTNERSHIP_MEMO];

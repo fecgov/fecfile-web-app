@@ -7,7 +7,7 @@ describe('OPERATING_EXPENDITURE_VOID', () => {
   let transactionType: OPERATING_EXPENDITURE_VOID;
 
   beforeEach(() => {
-    transactionType = new OPERATING_EXPENDITURE_VOID(new TransactionGroupB());
+    transactionType = new OPERATING_EXPENDITURE_VOID();
   });
 
   it('should create an instance', () => {

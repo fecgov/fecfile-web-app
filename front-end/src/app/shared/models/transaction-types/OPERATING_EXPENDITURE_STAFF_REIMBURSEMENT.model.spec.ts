@@ -6,7 +6,7 @@ describe('OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT', () => {
   let transactionType: OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT;
 
   beforeEach(() => {
-    transactionType = new OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT(new TransactionGroupA());
+    transactionType = new OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT();
   });
 
   it('should create an instance', () => {
