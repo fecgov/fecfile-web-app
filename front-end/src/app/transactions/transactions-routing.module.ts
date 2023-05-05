@@ -6,7 +6,8 @@ import { ReportIsEditableGuard } from '../shared/guards/report-is-editable.guard
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';
-import { ReportSidebarState, Sidebars } from 'app/layout/sidebar/sidebar.component';
+import { ReportSidebarState, SidebarState } from 'app/layout/sidebar/sidebar.component';
+import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 
 // ROUTING NOTE:
 // Due to lifecycle conflict issues between the ReportIsEditableGuard and the
@@ -20,23 +21,18 @@ const routes: Routes = [
     path: 'report/:reportId/list',
     title: 'Manage your transactions',
     component: TransactionListComponent,
-    resolve: { report: ReportResolver },
+    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: {
-      sidebar: {
-        sidebar: Sidebars.REPORT,
-        sidebarState: ReportSidebarState.TRANSACTIONS,
-      },
+      sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS),
     },
   },
   {
     path: 'report/:reportId/select/:category',
     component: TransactionTypePickerComponent,
     canActivate: [ReportIsEditableGuard],
+    resolve: { report: ReportResolver, sidebar: SidebarStateResolver },
     data: {
-      sidebar: {
-        sidebar: Sidebars.REPORT,
-        sidebarState: ReportSidebarState.TRANSACTIONS,
-      },
+      sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS),
     },
   },
   {
@@ -44,12 +40,10 @@ const routes: Routes = [
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
+      sidebar: SidebarStateResolver,
     },
     data: {
-      sidebar: {
-        sidebar: Sidebars.REPORT,
-        sidebarState: ReportSidebarState.TRANSACTIONS,
-      },
+      sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS),
     },
     canActivate: [ReportIsEditableGuard],
   },
@@ -58,12 +52,10 @@ const routes: Routes = [
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
+      sidebar: SidebarStateResolver,
     },
     data: {
-      sidebar: {
-        sidebar: Sidebars.REPORT,
-        sidebarState: ReportSidebarState.TRANSACTIONS,
-      },
+      sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS),
     },
   },
   {
@@ -71,12 +63,7 @@ const routes: Routes = [
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
-    },
-    data: {
-      sidebar: {
-        sidebar: Sidebars.REPORT,
-        sidebarState: ReportSidebarState.TRANSACTIONS,
-      },
+      sidebar: SidebarStateResolver,
     },
     canActivate: [ReportIsEditableGuard],
   },

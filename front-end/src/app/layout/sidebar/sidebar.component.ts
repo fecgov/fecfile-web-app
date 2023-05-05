@@ -16,3 +16,10 @@ export enum ReportSidebarState {
   'REVIEW',
   'SUBMISSION',
 }
+
+export class SidebarState {
+  section: ReportSidebarState;
+  constructor(section: ReportSidebarState) {
+    this.section = section;
+  }
+}

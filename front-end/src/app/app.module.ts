@@ -17,6 +17,7 @@ import { LoginEffects } from './store/login.effects';
 import { AppState } from './store/app-state.model';
 import { activeReportReducer } from './store/active-report.reducer';
 import { cashOnHandReducer } from './store/cash-on-hand.reducer';
+import { sidebarStateReducer } from './store/sidebar-state.reducer';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -48,7 +49,7 @@ import { BannerComponent } from './layout/banner/banner.component';
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
   return localStorageSync({
-    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'activeReport', 'cashOnHand'],
+    keys: ['committeeAccount', 'spinnerOn', 'userLoginData', 'activeReport', 'cashOnHand', 'sidebarState'],
     storageKeySerializer: (key) => `fecfile_online_${key}`,
     rehydrate: true,
   })(reducer);
@@ -82,6 +83,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
         userLoginData: loginReducer,
         activeReport: activeReportReducer,
         cashOnHand: cashOnHandReducer,
+        sidebarState: sidebarStateReducer,
       },
       { metaReducers }
     ),

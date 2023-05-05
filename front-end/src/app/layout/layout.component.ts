@@ -4,8 +4,9 @@ import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../store/committee-account.selectors';
 import { selectSpinnerStatus } from '../store/spinner.selectors';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Router, Event, ActivationStart } from '@angular/router';
-import { Sidebars } from './sidebar/sidebar.component';
+import { Router, Event, ActivationStart, ActivatedRoute, ResolveEnd } from '@angular/router';
+import { Sidebars, SidebarState } from './sidebar/sidebar.component';
+import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 
 @Component({
   selector: 'app-layout',
@@ -15,22 +16,26 @@ import { Sidebars } from './sidebar/sidebar.component';
 export class LayoutComponent implements OnInit, OnDestroy {
   committeeAccount$: Observable<CommitteeAccount> | undefined;
   progressBarVisible$: Observable<{ spinnerOn: boolean }> | undefined;
-  sidebar: Sidebars | undefined = undefined;
+  sidebarState?: SidebarState;
+  sidebarState$?: Observable<SidebarState | undefined>;
   sidebars = Sidebars;
   private destroy$ = new Subject<boolean>();
 
-  constructor(private router: Router, private store: Store) {}
+  constructor(private router: Router, private route: ActivatedRoute, private store: Store) {}
 
   ngOnInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.progressBarVisible$ = this.store.select(selectSpinnerStatus);
 
+    this.sidebarState$ = this.store.select(selectSidebarState);
+
     this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event: Event) => {
       if (event instanceof ActivationStart) {
-        const data = event.snapshot.data;
-        this.sidebar = data?.['sidebar']?.['sidebar'];
+        this.sidebarState = event.snapshot.data?.['sidebarState'] as SidebarState;
       }
     });
+
+    this.route.children;
   }
 
   ngOnDestroy(): void {

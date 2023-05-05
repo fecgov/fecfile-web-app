@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, Event, ActivationStart } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { combineLatest, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { selectActiveReport } from '../../../store/active-report.selectors';
@@ -9,7 +9,8 @@ import { Report, CashOnHand } from '../../../shared/interfaces/report.interface'
 import { LabelList } from '../../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
 import { ReportService } from '../../../shared/services/report.service';
-import { ReportSidebarState } from '../sidebar.component';
+import { ReportSidebarState, SidebarState } from '../sidebar.component';
+import { selectSidebarState } from 'app/store/sidebar-state.selectors';
 
 @Component({
   selector: 'app-menu-report',
@@ -17,84 +18,49 @@ import { ReportSidebarState } from '../sidebar.component';
   styleUrls: ['./menu-report.component.scss'],
 })
 export class MenuReportComponent implements OnInit, OnDestroy {
-  activeReport: Report | undefined;
-  currentReportId: string | undefined;
-  currentReportTimestamp: number | undefined;
-  expandedSection: 'Transactions' | 'Review' | 'Submission' | 'None' = 'None';
-  items: MenuItem[] = [];
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
-  reportIsEditableFlag = false;
-  cashOnHand: CashOnHand = {
-    report_id: undefined,
-    value: undefined,
-  };
-  sidebarState: ReportSidebarState | undefined;
+  activeReport$?: Observable<Report | undefined>;
+  items$: Observable<MenuItem[]> = of([]);
 
   private destroy$ = new Subject<boolean>();
 
-  constructor(private router: Router, private store: Store, private reportService: ReportService) {}
+  constructor(private store: Store, private reportService: ReportService) {}
 
   ngOnInit(): void {
-    this.store
-      .select(selectActiveReport)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((report: Report | undefined) => {
-        this.activeReport = report;
-        this.reportIsEditableFlag = this.reportService.isEditable(report);
-      });
+    this.activeReport$ = this.store.select(selectActiveReport);
 
-    this.store
-      .select(selectCashOnHand)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((cashOnHand: CashOnHand) => {
-        this.cashOnHand = cashOnHand;
-      });
-
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((event: Event) => {
-      if (event instanceof NavigationEnd) {
-        this.handleNavigationEvent(event);
-      }
-      if (event instanceof ActivationStart) {
-        const data = event.snapshot.data;
-        this.sidebarState = data?.['sidebar']?.['sidebarState'];
-      }
-    });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  handleNavigationEvent(event: NavigationEnd) {
-    if (this.activeReport) {
-      if (
-        this.activeReport.id !== this.currentReportId ||
-        this.activeReport.updated?.getTime() !== this.currentReportTimestamp
-      ) {
-        this.currentReportId = this.activeReport.id;
-        if (this.activeReport.updated) this.currentReportTimestamp = this.activeReport.updated.getTime();
-
-        this.items = [
+    this.items$ = combineLatest([
+      this.store.select(selectCashOnHand),
+      this.store.select(selectSidebarState),
+      this.activeReport$,
+    ]).pipe(
+      takeUntil(this.destroy$),
+      switchMap(([cashOnHand, sidebarState, activeReport]: [CashOnHand, SidebarState, Report | undefined]) => {
+        const isEditable = this.reportService.isEditable(activeReport);
+        return of([
           {
             label: 'ENTER A TRANSACTION',
-            expanded: false,
-            visible: this.reportIsEditableFlag,
+            expanded: sidebarState?.section == ReportSidebarState.TRANSACTIONS,
+            visible: isEditable,
             items: [
               {
                 label: 'Cash on hand',
-                routerLink: [`/reports/f3x/create/cash-on-hand/${this.currentReportId}`],
-                visible: this.currentReportId === this.cashOnHand.report_id,
+                routerLink: [`/reports/f3x/create/cash-on-hand/${activeReport?.id}`],
+                visible: activeReport?.id === cashOnHand.report_id,
               },
               {
                 label: 'Manage your transactions',
-                routerLink: [`/transactions/report/${this.currentReportId}/list`],
+                routerLink: [`/transactions/report/${activeReport?.id}/list`],
               },
               {
                 label: 'Add a receipt',
-                routerLink: [`/transactions/report/${this.currentReportId}/select/receipt`],
-                visible: this.reportIsEditableFlag,
+                routerLink: [`/transactions/report/${activeReport?.id}/select/receipt`],
+                visible: isEditable,
               },
               {
                 label: 'Add a disbursement',
-                routerLink: [`/transactions/report/${this.currentReportId}/select/disbursement`],
-                visible: this.reportIsEditableFlag,
+                routerLink: [`/transactions/report/${activeReport?.id}/select/disbursement`],
+                visible: isEditable,
               },
               { label: 'Add loans and debts', styleClass: 'menu-item-disabled' },
               { label: 'Add other transactions', styleClass: 'menu-item-disabled' },
@@ -102,57 +68,50 @@ export class MenuReportComponent implements OnInit, OnDestroy {
           },
           {
             label: 'REVIEW A REPORT',
-            expanded: false,
+            expanded: sidebarState?.section == ReportSidebarState.REVIEW,
             items: [
               {
                 label: 'View summary page',
-                routerLink: [`/reports/f3x/summary/${this.currentReportId}`],
+                routerLink: [`/reports/f3x/summary/${activeReport?.id}`],
               },
               {
                 label: 'View detailed summary page',
-                routerLink: [`/reports/f3x/detailed-summary/${this.currentReportId}`],
+                routerLink: [`/reports/f3x/detailed-summary/${activeReport?.id}`],
               },
               {
                 label: 'View print preview',
-                routerLink: [`/reports/f3x/web-print/${this.currentReportId}`],
+                routerLink: [`/reports/f3x/web-print/${activeReport?.id}`],
               },
               {
                 label: 'Add a report level memo',
-                routerLink: [`/reports/f3x/memo/${this.currentReportId}`],
-                visible: this.reportIsEditableFlag,
+                routerLink: [`/reports/f3x/memo/${activeReport?.id}`],
+                visible: isEditable,
               },
             ],
           },
           {
             label: 'SUBMIT YOUR REPORT',
-            expanded: false,
+            expanded: sidebarState?.section == ReportSidebarState.SUBMISSION,
             items: [
               {
                 label: 'Confirm information',
-                routerLink: [`/reports/f3x/submit/step1/${this.currentReportId}`],
-                visible: this.reportIsEditableFlag,
+                routerLink: [`/reports/f3x/submit/step1/${activeReport?.id}`],
+                visible: isEditable,
               },
               {
                 label: 'Submit report',
-                routerLink: [`/reports/f3x/submit/step2/${this.currentReportId}`],
-                visible: this.reportIsEditableFlag,
+                routerLink: [`/reports/f3x/submit/step2/${activeReport?.id}`],
+                visible: isEditable,
               },
               {
                 label: 'Report status',
-                routerLink: [`/reports/f3x/submit/status/${this.currentReportId}`],
+                routerLink: [`/reports/f3x/submit/status/${activeReport?.id}`],
               },
             ],
           },
-        ];
-      }
-
-      this.items[0].expanded = this.sidebarState == ReportSidebarState.TRANSACTIONS;
-      this.items[1].expanded = this.sidebarState == ReportSidebarState.REVIEW;
-      this.items[2].expanded = this.sidebarState == ReportSidebarState.SUBMISSION;
-
-      // This fixes a bug where the sidebarState is undefined when first navigating to a report
-      if (this.sidebarState == undefined) this.items[0].expanded = true;
-    }
+        ] as MenuItem[]);
+      })
+    );
   }
 
   ngOnDestroy(): void {
