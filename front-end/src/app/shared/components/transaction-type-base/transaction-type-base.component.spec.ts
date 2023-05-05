@@ -54,7 +54,6 @@ const initTransactionData = {
   contact: undefined,
   contact_id: undefined,
   form_type: undefined,
-  filer_committee_id_number: undefined,
   transaction_id: null,
   transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
   contribution_purpose_descrip: undefined,

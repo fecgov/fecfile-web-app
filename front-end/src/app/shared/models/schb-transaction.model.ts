@@ -5,8 +5,6 @@ import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchBTransaction extends Transaction {
-  back_reference_tran_id_number: string | undefined;
-  back_reference_sched_name: string | undefined;
   entity_type: string | undefined;
   payee_organization_name: string | undefined;
   payee_last_name: string | undefined;
