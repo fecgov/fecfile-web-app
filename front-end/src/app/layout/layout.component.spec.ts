@@ -10,8 +10,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MenuReportComponent } from './sidebar/menu-report/menu-report.component';
 import { LayoutComponent } from './layout.component';
 import { BannerComponent } from './banner/banner.component';
-import { ActivatedRouteSnapshot, ActivationStart, Event, Router } from '@angular/router';
-import { filter, Subject } from 'rxjs';
+import { Router } from '@angular/router';
+import { filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 

@@ -3,17 +3,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ActivatedRouteSnapshot, ActivationStart, Event, NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '../../../shared/shared.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { MenuReportComponent } from './menu-report.component';
 import { ReportSidebarState, SidebarState } from '../sidebar.component';
-import { combineLatest, filter, Subject } from 'rxjs';
+import { combineLatest, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
-import { MenuItem } from 'primeng/api';
 
 describe('MenuReportComponent', () => {
   let component: MenuReportComponent;

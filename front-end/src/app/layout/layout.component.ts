@@ -25,8 +25,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.progressBarVisible$ = this.store.select(selectSpinnerStatus);
     this.sidebarState$ = this.store.select(selectSidebarState);
-
-    this.route.children;
   }
 
   ngOnDestroy(): void {
