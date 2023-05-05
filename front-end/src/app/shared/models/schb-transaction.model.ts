@@ -5,8 +5,6 @@ import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchBTransaction extends Transaction {
-  back_reference_tran_id_number: string | undefined;
-  back_reference_sched_name: string | undefined;
   entity_type: string | undefined;
   payee_organization_name: string | undefined;
   payee_last_name: string | undefined;
@@ -116,7 +114,7 @@ export enum ScheduleBTransactionTypes {
   OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL = 'OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL',
   OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO = 'OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO',
   OTHER_DISBURSEMENT_VOID = 'OTHER_DISBURSEMENT_VOID',
-  OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT = 'OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT',
+  NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT = 'NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT',
   NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT = 'NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT',
   NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO = 'NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO',
   NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT = 'NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT',
@@ -218,7 +216,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL, 'Payment to Payroll for Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo for Other Disbursement'],
   [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID, 'Void of Other Disbursement'],
-  [ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT, 'Non-contribution Account Disbursement'],
+  [ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT, 'Non-contribution Account Disbursement'],
   [
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
     'Non-contribution Account Credit Card Payment',

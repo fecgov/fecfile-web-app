@@ -54,7 +54,6 @@ const initTransactionData = {
   contact: undefined,
   contact_id: undefined,
   form_type: undefined,
-  filer_committee_id_number: undefined,
   transaction_id: null,
   transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
   contribution_purpose_descrip: undefined,
@@ -304,7 +303,15 @@ describe('TransactionTypeBaseComponent', () => {
       life: 3000,
     };
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
-    component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.ANOTHER));
+    spyOn(testRouter, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    component.navigateTo(
+      new NavigationEvent(
+        NavigationAction.SAVE,
+        NavigationDestination.ANOTHER,
+        testTransaction,
+        ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+      )
+    );
     expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 

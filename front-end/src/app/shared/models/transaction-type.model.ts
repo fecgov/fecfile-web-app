@@ -25,6 +25,7 @@ export abstract class TransactionType {
   navigationControls?: TransactionNavigationControls;
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
+  purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 
