@@ -7,10 +7,6 @@ import { Component } from '@angular/core';
 })
 export class SidebarComponent {}
 
-export enum Sidebars {
-  'REPORT',
-}
-
 export enum ReportSidebarState {
   'TRANSACTIONS',
   'REVIEW',

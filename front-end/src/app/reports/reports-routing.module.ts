@@ -14,7 +14,7 @@ import { ReportWebPrintComponent } from './f3x/report-web-print/report-web-print
 import { CashOnHandComponent } from './f3x/create-workflow/cash-on-hand.component';
 import { CashOnHandGuard } from 'app/shared/guards/cash-on-hand.guard';
 import { ReportIsEditableGuard } from '../shared/guards/report-is-editable.guard';
-import { ReportSidebarState, Sidebars, SidebarState } from 'app/layout/sidebar/sidebar.component';
+import { ReportSidebarState, SidebarState } from 'app/layout/sidebar/sidebar.component';
 import { SidebarStateResolver } from 'app/shared/resolvers/sidebar-state.resolver';
 
 // ROUTING NOTE:
