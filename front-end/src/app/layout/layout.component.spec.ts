@@ -10,7 +10,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MenuReportComponent } from './sidebar/menu-report/menu-report.component';
 import { LayoutComponent } from './layout.component';
 import { BannerComponent } from './banner/banner.component';
-import { Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
@@ -18,7 +17,6 @@ import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
   let fixture: ComponentFixture<LayoutComponent>;
-  let router: Router;
   let store: Store;
 
   beforeEach(async () => {
@@ -35,7 +33,6 @@ describe('LayoutComponent', () => {
       providers: [LayoutComponent, provideMockStore(testMockStore)],
     }).compileComponents();
 
-    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(LayoutComponent);
     store = TestBed.inject(Store);
     component = fixture.componentInstance;
