@@ -1,5 +1,6 @@
 import { PARTNERSHIP_MEMO } from './PARTNERSHIP_MEMO.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('PARTNERSHIP_MEMO', () => {
   let transactionType: PARTNERSHIP_MEMO;
@@ -11,7 +12,7 @@ describe('PARTNERSHIP_MEMO', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('A');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupA);
   });
 
   it('#factory() should return a SchATransaction', () => {

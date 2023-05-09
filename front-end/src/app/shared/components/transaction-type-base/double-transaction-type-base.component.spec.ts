@@ -5,18 +5,17 @@ import { FormBuilder } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
+import {
+  NavigationAction,
+  NavigationDestination, NavigationEvent
+} from 'app/shared/models/transaction-navigation-controls.model';
+import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
+import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
-import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
-import {
-  NavigationEvent,
-  NavigationAction,
-  NavigationDestination,
-} from 'app/shared/models/transaction-navigation-controls.model';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   formProperties: string[] = [
