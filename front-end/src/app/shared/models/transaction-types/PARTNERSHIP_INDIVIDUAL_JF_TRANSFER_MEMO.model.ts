@@ -4,10 +4,9 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 export class PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType {
-  
   transactionGroup = new TransactionGroupA();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,

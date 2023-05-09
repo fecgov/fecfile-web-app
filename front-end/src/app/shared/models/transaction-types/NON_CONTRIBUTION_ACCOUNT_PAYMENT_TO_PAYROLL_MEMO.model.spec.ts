@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupC } from '../transaction-groups/transaction-group-c';
+import { TransactionGroupC } from '../transaction-groups/transaction-group-c.model';
 import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO } from './NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO.model';
 
 describe('NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO', () => {

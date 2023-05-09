@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT } from './NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT.model';
 
 describe('NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT', () => {

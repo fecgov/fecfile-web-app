@@ -3,12 +3,11 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_RECEIP
 import { ContactTypes } from '../contact.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag';
+import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class EARMARK_RECEIPT extends SchATransactionType {
-  
   transactionGroup = new TransactionGroupAG();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;

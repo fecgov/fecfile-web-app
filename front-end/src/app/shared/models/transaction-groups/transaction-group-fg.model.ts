@@ -1,7 +1,7 @@
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
 import { TransactionTemplateMapType } from '../transaction-type.model';
-import { DoubleTransactionGroup } from './double-transaction-group.interface';
+import { DoubleTransactionGroup } from './double-transaction-group.model';
 
 export class TransactionGroupFG extends DoubleTransactionGroup {
   getFormProperties(templateMap: TransactionTemplateMapType): string[] {
@@ -21,7 +21,7 @@ export class TransactionGroupFG extends DoubleTransactionGroup {
       templateMap.committee_name,
       templateMap.memo_code,
       templateMap.memo_text_input,
-    ].filter(val => !!val);
+    ].filter((val) => !!val);
   }
 
   getChildFormProperties(childTemplateMap: TransactionTemplateMapType): string[] {
@@ -48,20 +48,15 @@ export class TransactionGroupFG extends DoubleTransactionGroup {
       childTemplateMap.committee_name,
       childTemplateMap.memo_code,
       childTemplateMap.memo_text_input,
-    ].filter(val => !!val);
+    ].filter((val) => !!val);
   }
 
   getContactTypeOptions(): PrimeOptions {
-    return LabelUtils.getPrimeOptions(ContactTypeLabels, [
-      ContactTypes.COMMITTEE,
-    ]);
+    return LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
   }
 
   getChildContactTypeOptions(): PrimeOptions {
-    return LabelUtils.getPrimeOptions(ContactTypeLabels, [
-      ContactTypes.INDIVIDUAL,
-      ContactTypes.COMMITTEE,
-    ]);
+    return LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL, ContactTypes.COMMITTEE]);
   }
 
   hasEmployerInput(): boolean {

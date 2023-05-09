@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT } from './OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT.model';
 
 describe('OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT', () => {

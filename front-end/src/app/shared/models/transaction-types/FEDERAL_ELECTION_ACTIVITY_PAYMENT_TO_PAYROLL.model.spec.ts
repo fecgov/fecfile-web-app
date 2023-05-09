@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupM } from '../transaction-groups/transaction-group-m';
+import { TransactionGroupM } from '../transaction-groups/transaction-group-m.model';
 import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL } from './FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL.model';
 
 describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL', () => {
@@ -19,7 +19,8 @@ describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL', () => {
     const txn: SchBTransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SB30B');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL);
+      ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL
+    );
   });
 
   it('#generatePurposeDescription() should be the correct value', () => {

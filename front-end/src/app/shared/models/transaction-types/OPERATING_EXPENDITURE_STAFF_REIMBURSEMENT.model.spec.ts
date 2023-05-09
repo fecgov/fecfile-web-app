@@ -1,6 +1,6 @@
 import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT } from './OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT', () => {
   let transactionType: OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT;

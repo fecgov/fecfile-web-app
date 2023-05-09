@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DoubleTransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/double-transaction-type-base.component';
-import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/double-transaction-group.interface';
+import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/double-transaction-group.model';
 
 @Component({
   selector: 'app-double-transaction-detail',
@@ -14,20 +14,15 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
   childTransactionTitle = '';
 
   override ngOnInit(): void {
-
     if (this.transaction?.transactionType?.templateMap) {
-      const childTransaction = this.transaction?.children ?
-        this.transaction?.children[0] : undefined;
+      const childTransaction = this.transaction?.children ? this.transaction?.children[0] : undefined;
       if (childTransaction?.transactionType?.templateMap) {
         const transactionType = this.transaction.transactionType;
         const childTransactionType = childTransaction.transactionType;
-        const doubleTransactionGroup =
-          transactionType.transactionGroup as DoubleTransactionGroup;
+        const doubleTransactionGroup = transactionType.transactionGroup as DoubleTransactionGroup;
 
-        this.formProperties = doubleTransactionGroup.getFormProperties(
-          transactionType.templateMap);
-        this.childFormProperties = doubleTransactionGroup.getChildFormProperties(
-          childTransactionType.templateMap);
+        this.formProperties = doubleTransactionGroup.getFormProperties(transactionType.templateMap);
+        this.childFormProperties = doubleTransactionGroup.getChildFormProperties(childTransactionType.templateMap);
 
         this.contactTypeOptions = doubleTransactionGroup.getContactTypeOptions();
         this.childContactTypeOptions = doubleTransactionGroup.getChildContactTypeOptions();
@@ -42,5 +37,4 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
       throw new Error('Fecfile: parent template map not found');
     }
   }
-
 }

@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { REFUND_UNREGISTERED_CONTRIBUTION } from './REFUND_UNREGISTERED_CONTRIBUTION.model';
 
 describe('REFUND_UNREGISTERED_CONTRIBUTION', () => {

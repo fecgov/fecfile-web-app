@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT } from './NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT.model';
 
 describe('NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT', () => {

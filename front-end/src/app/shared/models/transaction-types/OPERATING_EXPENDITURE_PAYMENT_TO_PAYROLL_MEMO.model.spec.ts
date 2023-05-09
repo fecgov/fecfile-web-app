@@ -1,6 +1,6 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO } from './OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO.model';
 
 describe('OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO', () => {

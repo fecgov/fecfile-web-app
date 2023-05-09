@@ -1,6 +1,6 @@
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 
 describe('PARTY_JF_TRANSFER_MEMO', () => {
   let transaction: SchATransaction;

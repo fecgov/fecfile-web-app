@@ -1,6 +1,6 @@
 import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from './PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO', () => {
   let transactionType: PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO;

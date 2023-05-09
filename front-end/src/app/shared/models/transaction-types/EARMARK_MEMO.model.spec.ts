@@ -1,6 +1,6 @@
 import { EARMARK_MEMO } from './EARMARK_MEMO.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag';
+import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 
 describe('EARMARK_MEMO', () => {
   let transactionType: EARMARK_MEMO;

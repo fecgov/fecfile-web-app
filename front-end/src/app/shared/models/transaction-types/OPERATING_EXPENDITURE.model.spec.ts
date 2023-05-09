@@ -1,7 +1,7 @@
 import { OPERATING_EXPENDITURE } from './OPERATING_EXPENDITURE.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 
 describe('OPERATING_EXPENDITURE', () => {
   let transactionType: OPERATING_EXPENDITURE;

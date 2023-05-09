@@ -4,10 +4,9 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 
 export class PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType {
-  
   transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,

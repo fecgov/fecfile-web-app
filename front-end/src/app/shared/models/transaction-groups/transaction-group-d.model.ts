@@ -1,9 +1,9 @@
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
 import { TransactionTemplateMapType } from '../transaction-type.model';
-import { TransactionGroup } from './transaction-group.interface';
+import { TransactionGroup } from './transaction-group.model';
 
-export class TransactionGroupM extends TransactionGroup {
+export class TransactionGroupD extends TransactionGroup {
   getFormProperties(templateMap: TransactionTemplateMapType): string[] {
     return [
       'entity_type',
@@ -13,22 +13,18 @@ export class TransactionGroupM extends TransactionGroup {
       templateMap.city,
       templateMap.state,
       templateMap.zip,
-      templateMap.election_code,
-      templateMap.election_other_description,
       templateMap.date,
       templateMap.amount,
       templateMap.aggregate,
       templateMap.purpose_description,
-      templateMap.category_code,
       templateMap.memo_code,
       templateMap.memo_text_input,
-    ].filter(val => !!val);
+      templateMap.category_code,
+    ].filter((val) => !!val);
   }
 
   getContactTypeOptions(): PrimeOptions {
-    return LabelUtils.getPrimeOptions(ContactTypeLabels, [
-      ContactTypes.ORGANIZATION,
-    ]);
+    return LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.ORGANIZATION]);
   }
 
   hasEmployerInput(): boolean {
@@ -40,7 +36,6 @@ export class TransactionGroupM extends TransactionGroup {
   }
 
   hasElectionInformationInput(): boolean {
-    return true;
+    return false;
   }
-
 }

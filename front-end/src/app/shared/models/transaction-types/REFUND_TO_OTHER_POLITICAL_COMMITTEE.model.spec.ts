@@ -1,6 +1,6 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupI } from '../transaction-groups/transaction-group-i';
+import { TransactionGroupI } from '../transaction-groups/transaction-group-i.model';
 import { REFUND_TO_OTHER_POLITICAL_COMMITTEE } from './REFUND_TO_OTHER_POLITICAL_COMMITTEE.model';
 
 describe('REFUND_TO_OTHER_POLITICAL_COMMITTEE', () => {

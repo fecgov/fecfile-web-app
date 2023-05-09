@@ -1,6 +1,6 @@
 import { PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT } from './PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 
 describe('PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   let transactionType: PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT;

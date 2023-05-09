@@ -1,5 +1,5 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag';
+import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 import { EARMARK_MEMO_CONVENTION_ACCOUNT } from './EARMARK_MEMO_CONVENTION_ACCOUNT.model';
 
 describe('EARMARK_MEMO_CONVENTION_ACCOUNT', () => {

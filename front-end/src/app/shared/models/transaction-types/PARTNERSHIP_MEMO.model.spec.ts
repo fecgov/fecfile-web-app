@@ -1,6 +1,6 @@
 import { PARTNERSHIP_MEMO } from './PARTNERSHIP_MEMO.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('PARTNERSHIP_MEMO', () => {
   let transactionType: PARTNERSHIP_MEMO;

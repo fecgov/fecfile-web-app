@@ -1,6 +1,6 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionTypeUtils } from 'app/shared/utils/transaction-type.utils';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 
 describe('PARTNERSHIP_RECEIPT', () => {
   let transaction: SchATransaction;

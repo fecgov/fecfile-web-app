@@ -3,12 +3,11 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NON_CONTRIBUTI
 import { ContactTypes } from '../contact.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO extends SchBTransactionType {
-  
   transactionGroup = new TransactionGroupB();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

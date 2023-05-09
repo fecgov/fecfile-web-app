@@ -2,8 +2,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/double-transaction-group.interface';
-import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.interface';
+import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/double-transaction-group.model';
+import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { Subject, takeUntil } from 'rxjs';
 

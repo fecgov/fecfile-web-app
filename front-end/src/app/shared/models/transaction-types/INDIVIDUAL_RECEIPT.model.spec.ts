@@ -1,7 +1,7 @@
 import { INDIVIDUAL_RECEIPT } from './INDIVIDUAL_RECEIPT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('INDIVIDUAL_RECEIPT', () => {
   let transactionType: INDIVIDUAL_RECEIPT;

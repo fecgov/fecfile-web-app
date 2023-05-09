@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
 import { ContactTypes } from 'app/shared/models/contact.model';
-import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.interface';
+import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
 import { takeUntil } from 'rxjs';
 
 @Component({
@@ -18,29 +18,27 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
   override ngOnInit(): void {
     if (this.transaction?.transactionType?.templateMap) {
       const transactionType = this.transaction.transactionType;
-      const transactionGroup =
-        transactionType.transactionGroup as TransactionGroup;
+      const transactionGroup = transactionType.transactionGroup as TransactionGroup;
 
       this.contactTypeOptions = transactionGroup.getContactTypeOptions();
-      this.formProperties = transactionGroup.getFormProperties(
-        transactionType.templateMap, transactionType.scheduleId);
+      this.formProperties = transactionGroup.getFormProperties(transactionType.templateMap, transactionType.scheduleId);
       this.hasCommitteeFecIdInput = transactionGroup.hasCommitteeFecIdInput();
-      this.hasElectionInformationInput =
-        transactionGroup.hasElectionInformationInput();
+      this.hasElectionInformationInput = transactionGroup.hasElectionInformationInput();
 
       super.ngOnInit();
 
       this.hasEmployerInput = transactionGroup.hasEmployerInput(
-        this.form.get('entity_type')?.value, transactionType.scheduleId);
-      this.form.get('entity_type')?.valueChanges.pipe(
-        takeUntil(this.destroy$)
-      ).subscribe((entityType: ContactTypes) => {
-        this.hasEmployerInput = transactionGroup.hasEmployerInput(
-          entityType, transactionType.scheduleId);
-      });
+        this.form.get('entity_type')?.value,
+        transactionType.scheduleId
+      );
+      this.form
+        .get('entity_type')
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((entityType: ContactTypes) => {
+          this.hasEmployerInput = transactionGroup.hasEmployerInput(entityType, transactionType.scheduleId);
+        });
     } else {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
   }
-
 }

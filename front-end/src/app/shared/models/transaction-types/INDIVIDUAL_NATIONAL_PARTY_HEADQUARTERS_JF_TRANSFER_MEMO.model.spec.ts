@@ -1,6 +1,6 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
   let transaction: SchATransaction;

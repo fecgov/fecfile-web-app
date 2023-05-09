@@ -1,5 +1,5 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 import { JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from './JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
 
 describe('JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {

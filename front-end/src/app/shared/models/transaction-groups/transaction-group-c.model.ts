@@ -1,48 +1,53 @@
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
 import { TransactionTemplateMapType } from '../transaction-type.model';
-import { TransactionGroup } from './transaction-group.interface';
+import { TransactionGroup } from './transaction-group.model';
 
-export class TransactionGroupI extends TransactionGroup {
+export class TransactionGroupC extends TransactionGroup {
   getFormProperties(templateMap: TransactionTemplateMapType): string[] {
     return [
       'entity_type',
       templateMap.organization_name,
+      templateMap.last_name,
+      templateMap.first_name,
+      templateMap.middle_name,
+      templateMap.prefix,
+      templateMap.suffix,
       templateMap.street_1,
       templateMap.street_2,
       templateMap.city,
       templateMap.state,
       templateMap.zip,
-      templateMap.election_code,
-      templateMap.election_other_description,
       templateMap.date,
       templateMap.amount,
       templateMap.aggregate,
       templateMap.purpose_description,
-      templateMap.committee_fec_id,
-      templateMap.committee_name,
+      templateMap.employer,
+      templateMap.occupation,
       templateMap.memo_code,
       templateMap.memo_text_input,
+      templateMap.category_code,
       'subTransaction',
-    ].filter(val => !!val);
+    ].filter((val) => !!val);
   }
 
   getContactTypeOptions(): PrimeOptions {
     return LabelUtils.getPrimeOptions(ContactTypeLabels, [
+      ContactTypes.INDIVIDUAL,
+      ContactTypes.ORGANIZATION,
       ContactTypes.COMMITTEE,
     ]);
   }
 
-  hasEmployerInput(): boolean {
-    return false;
+  hasEmployerInput(entityType: ContactTypes, scheduleId: string): boolean {
+    return ContactTypes.INDIVIDUAL === entityType && 'B' !== scheduleId;
   }
 
   hasCommitteeFecIdInput(): boolean {
-    return true;
+    return false;
   }
 
   hasElectionInformationInput(): boolean {
-    return true;
+    return false;
   }
-
 }

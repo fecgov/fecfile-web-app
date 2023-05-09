@@ -2,18 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
-import { TransactionGroupI } from './transaction-group-i';
+import { TransactionGroupB } from './transaction-group-b.model';
 
-describe('TransactionGroupI', () => {
-  let component: TransactionGroupI;
+describe('TransactionGroupB', () => {
+  let component: TransactionGroupB;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [TransactionGroupI,],
+      providers: [TransactionGroupB],
     });
 
-    component = TestBed.inject(TransactionGroupI);
+    component = TestBed.inject(TransactionGroupB);
   });
 
   it('should create', () => {
@@ -24,18 +24,18 @@ describe('TransactionGroupI', () => {
     const testOrganizationName = 'testOrganizationName';
     const testTemplateMapCopy = { ...testTemplateMap };
     testTemplateMapCopy.organization_name = testOrganizationName;
-    const retval = component.getFormProperties(
-      testTemplateMapCopy);
+    const retval = component.getFormProperties(testTemplateMapCopy);
     expect(retval.includes(testOrganizationName)).toBeTruthy();
   });
 
   it('#getContactTypeOptions happy path', () => {
     const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+      ContactTypes.INDIVIDUAL,
+      ContactTypes.ORGANIZATION,
       ContactTypes.COMMITTEE,
     ]);
     const retval = component.getContactTypeOptions();
-    expect(JSON.stringify(expectedRetval) ===
-      JSON.stringify(retval)).toBeTruthy();
+    expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
   });
 
   it('#hasEmployerInput happy path', () => {
@@ -45,12 +45,11 @@ describe('TransactionGroupI', () => {
 
   it('#hasCommitteeFecIdInput happy path', () => {
     const retval = component.hasCommitteeFecIdInput();
-    expect(retval).toBeTrue();
+    expect(retval).toBeFalse();
   });
 
   it('#hasElectionInformationInput happy path', () => {
     const retval = component.hasElectionInformationInput();
-    expect(retval).toBeTrue();
+    expect(retval).toBeFalse();
   });
-
 });

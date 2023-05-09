@@ -1,6 +1,6 @@
 import { EARMARK_MEMO_HEADQUARTERS_ACCOUNT } from './EARMARK_MEMO_HEADQUARTERS_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag';
+import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 
 describe('EARMARK_MEMO_HEADQUARTERS_ACCOUNT', () => {
   let transactionType: EARMARK_MEMO_HEADQUARTERS_ACCOUNT;

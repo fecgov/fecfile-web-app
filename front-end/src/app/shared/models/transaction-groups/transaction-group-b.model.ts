@@ -1,9 +1,9 @@
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
 import { TransactionTemplateMapType } from '../transaction-type.model';
-import { TransactionGroup } from './transaction-group.interface';
+import { TransactionGroup } from './transaction-group.model';
 
-export class TransactionGroupC extends TransactionGroup {
+export class TransactionGroupB extends TransactionGroup {
   getFormProperties(templateMap: TransactionTemplateMapType): string[] {
     return [
       'entity_type',
@@ -22,13 +22,10 @@ export class TransactionGroupC extends TransactionGroup {
       templateMap.amount,
       templateMap.aggregate,
       templateMap.purpose_description,
-      templateMap.employer,
-      templateMap.occupation,
       templateMap.memo_code,
       templateMap.memo_text_input,
       templateMap.category_code,
-      'subTransaction',
-    ].filter(val => !!val);
+    ].filter((val) => !!val);
   }
 
   getContactTypeOptions(): PrimeOptions {
@@ -39,8 +36,8 @@ export class TransactionGroupC extends TransactionGroup {
     ]);
   }
 
-  hasEmployerInput(entityType: ContactTypes, scheduleId: string): boolean {
-    return ContactTypes.INDIVIDUAL === entityType && 'B' !== scheduleId;
+  hasEmployerInput(): boolean {
+    return false;
   }
 
   hasCommitteeFecIdInput(): boolean {
@@ -50,5 +47,4 @@ export class TransactionGroupC extends TransactionGroup {
   hasElectionInformationInput(): boolean {
     return false;
   }
-
 }

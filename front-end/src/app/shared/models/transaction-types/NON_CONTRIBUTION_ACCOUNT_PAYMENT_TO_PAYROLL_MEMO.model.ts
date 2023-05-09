@@ -3,12 +3,11 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NON_CONTRIBUTI
 import { ContactTypes } from '../contact.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupC } from '../transaction-groups/transaction-group-c';
+import { TransactionGroupC } from '../transaction-groups/transaction-group-c.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
-  
   transactionGroup = new TransactionGroupC();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

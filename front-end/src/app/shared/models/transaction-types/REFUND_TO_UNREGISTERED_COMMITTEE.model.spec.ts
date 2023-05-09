@@ -1,7 +1,7 @@
 import { REFUND_TO_UNREGISTERED_COMMITTEE } from './REFUND_TO_UNREGISTERED_COMMITTEE.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 
 describe('REFUND_TO_UNREGISTERED_COMMITTEE', () => {
   let transactionType: REFUND_TO_UNREGISTERED_COMMITTEE;

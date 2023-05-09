@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
-import { TransactionGroupAG } from './transaction-group-ag';
+import { TransactionGroupAG } from './transaction-group-ag.model';
 
 describe('TransactionGroupAG', () => {
   let component: TransactionGroupAG;
@@ -10,7 +10,7 @@ describe('TransactionGroupAG', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [TransactionGroupAG,],
+      providers: [TransactionGroupAG],
     });
 
     component = TestBed.inject(TransactionGroupAG);
@@ -24,8 +24,7 @@ describe('TransactionGroupAG', () => {
     const testLastName = 'testLastName';
     const testTemplateMapCopy = { ...testTemplateMap };
     testTemplateMapCopy.last_name = testLastName;
-    const retval = component.getFormProperties(
-      testTemplateMapCopy);
+    const retval = component.getFormProperties(testTemplateMapCopy);
     expect(retval.includes(testLastName)).toBeTruthy();
   });
 
@@ -33,18 +32,14 @@ describe('TransactionGroupAG', () => {
     const testOrganizationName = 'testOrganizationName';
     const testTemplateMapCopy = { ...testTemplateMap };
     testTemplateMapCopy.organization_name = testOrganizationName;
-    const retval = component.getChildFormProperties(
-      testTemplateMapCopy);
+    const retval = component.getChildFormProperties(testTemplateMapCopy);
     expect(retval.includes(testOrganizationName)).toBeTruthy();
   });
 
   it('#getContactTypeOptions happy path', () => {
-    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-      ContactTypes.INDIVIDUAL,
-    ]);
+    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
     const retval = component.getContactTypeOptions();
-    expect(JSON.stringify(expectedRetval) ===
-      JSON.stringify(retval)).toBeTruthy();
+    expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
   });
 
   it('#getChildContactTypeOptions happy path', () => {
@@ -53,8 +48,7 @@ describe('TransactionGroupAG', () => {
       ContactTypes.COMMITTEE,
     ]);
     const retval = component.getChildContactTypeOptions();
-    expect(JSON.stringify(expectedRetval) ===
-      JSON.stringify(retval)).toBeTruthy();
+    expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
   });
 
   it('#hasEmployerInput happy path', () => {
@@ -66,5 +60,4 @@ describe('TransactionGroupAG', () => {
     const retval = component.getChildTransactionTitle();
     expect(retval === 'Earmark memo').toBeTrue();
   });
-
 });

@@ -1,7 +1,7 @@
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
 import { TransactionTemplateMapType } from '../transaction-type.model';
-import { TransactionGroup } from './transaction-group.interface';
+import { TransactionGroup } from './transaction-group.model';
 
 export class TransactionGroupA extends TransactionGroup {
   getFormProperties(templateMap: TransactionTemplateMapType): string[] {
@@ -27,13 +27,11 @@ export class TransactionGroupA extends TransactionGroup {
       templateMap.memo_text_input,
       templateMap.category_code,
       'subTransaction',
-    ].filter(val => !!val);
+    ].filter((val) => !!val);
   }
 
   getContactTypeOptions(): PrimeOptions {
-    return LabelUtils.getPrimeOptions(ContactTypeLabels, [
-      ContactTypes.INDIVIDUAL,
-    ]);
+    return LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
   }
 
   hasEmployerInput(entityType: ContactTypes, scheduleId: string): boolean {
@@ -47,5 +45,4 @@ export class TransactionGroupA extends TransactionGroup {
   hasElectionInformationInput(): boolean {
     return false;
   }
-
 }

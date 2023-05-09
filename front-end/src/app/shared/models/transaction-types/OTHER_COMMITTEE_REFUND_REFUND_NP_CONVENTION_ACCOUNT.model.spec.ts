@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 import { OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT } from './OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT.model';
 
 describe('OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT', () => {

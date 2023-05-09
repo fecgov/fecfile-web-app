@@ -1,9 +1,9 @@
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
 import { TransactionTemplateMapType } from '../transaction-type.model';
-import { TransactionGroup } from './transaction-group.interface';
+import { TransactionGroup } from './transaction-group.model';
 
-export class TransactionGroupD extends TransactionGroup {
+export class TransactionGroupE extends TransactionGroup {
   getFormProperties(templateMap: TransactionTemplateMapType): string[] {
     return [
       'entity_type',
@@ -17,16 +17,17 @@ export class TransactionGroupD extends TransactionGroup {
       templateMap.amount,
       templateMap.aggregate,
       templateMap.purpose_description,
+      templateMap.committee_fec_id,
+      templateMap.committee_name,
       templateMap.memo_code,
       templateMap.memo_text_input,
       templateMap.category_code,
-    ].filter(val => !!val);
+      'subTransaction',
+    ].filter((val) => !!val);
   }
 
   getContactTypeOptions(): PrimeOptions {
-    return LabelUtils.getPrimeOptions(ContactTypeLabels, [
-      ContactTypes.ORGANIZATION,
-    ]);
+    return LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
   }
 
   hasEmployerInput(): boolean {
@@ -34,11 +35,10 @@ export class TransactionGroupD extends TransactionGroup {
   }
 
   hasCommitteeFecIdInput(): boolean {
-    return false;
+    return true;
   }
 
   hasElectionInformationInput(): boolean {
     return false;
   }
-
 }

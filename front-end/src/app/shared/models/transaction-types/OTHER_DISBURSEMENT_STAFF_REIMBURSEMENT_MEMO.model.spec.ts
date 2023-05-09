@@ -1,7 +1,7 @@
 import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO } from './OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 
 describe('OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO', () => {
   let transactionType: OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO;

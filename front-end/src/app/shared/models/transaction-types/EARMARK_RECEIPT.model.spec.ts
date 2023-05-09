@@ -1,7 +1,7 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag';
+import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 
 describe('EARMARK_RECEIPT', () => {
   let transaction: SchATransaction;

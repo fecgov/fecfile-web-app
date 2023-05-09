@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 import { REFUND_PAC_CONTRIBUTION } from './REFUND_PAC_CONTRIBUTION.model';
 
 describe('REFUND_PAC_CONTRIBUTION', () => {

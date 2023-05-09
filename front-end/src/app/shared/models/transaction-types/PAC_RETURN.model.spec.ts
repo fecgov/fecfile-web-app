@@ -1,6 +1,6 @@
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 import { PAC_RETURN } from './PAC_RETURN.model';
 
 describe('PAC_RETURN', () => {

@@ -2,13 +2,12 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_PARENTS_FEA';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupM } from '../transaction-groups/transaction-group-m';
+import { TransactionGroupM } from '../transaction-groups/transaction-group-m.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL extends SchBTransactionType {
-  
   transactionGroup = new TransactionGroupM();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
@@ -16,9 +15,9 @@ export class FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL extends SchBTransactio
   );
   schema = schema;
   override subTransactionConfig = new SubTransactionGroup(
-    'Payment to Payroll Memo for 100% Federal Election Activity', [
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO,
-  ]);
+    'Payment to Payroll Memo for 100% Federal Election Activity',
+    [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO]
+  );
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   getNewTransaction() {

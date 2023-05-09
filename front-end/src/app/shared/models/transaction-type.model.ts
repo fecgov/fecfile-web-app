@@ -1,7 +1,7 @@
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { ContactType } from './contact.model';
-import { DoubleTransactionGroup } from './transaction-groups/double-transaction-group.interface';
-import { TransactionGroup } from './transaction-groups/transaction-group.interface';
+import { DoubleTransactionGroup } from './transaction-groups/double-transaction-group.model';
+import { TransactionGroup } from './transaction-groups/transaction-group.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { Transaction, TransactionTypes } from './transaction.model';
 

@@ -1,6 +1,6 @@
 import { PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from './PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 
 describe('PAC_NATIONAL_PARTY_HEADQUARTERS_BUILDINGS_ACCOUNT', () => {
   let transactionType: PAC_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT;

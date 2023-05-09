@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from './TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 
 describe('TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT', () => {

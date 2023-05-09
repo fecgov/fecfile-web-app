@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { REFUND_INDIVIDUAL_CONTRIBUTION_VOID } from './REFUND_INDIVIDUAL_CONTRIBUTION_VOID.model';
 
 describe('REFUND_INDIVIDUAL_CONTRIBUTION_VOID', () => {

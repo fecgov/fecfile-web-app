@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
-import { TransactionGroupE } from './transaction-group-e';
+import { TransactionGroupE } from './transaction-group-e.model';
 
 describe('TransactionGroupE', () => {
   let component: TransactionGroupE;
@@ -10,7 +10,7 @@ describe('TransactionGroupE', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [TransactionGroupE,],
+      providers: [TransactionGroupE],
     });
 
     component = TestBed.inject(TransactionGroupE);
@@ -24,18 +24,14 @@ describe('TransactionGroupE', () => {
     const testOrganizationName = 'testOrganizationName';
     const testTemplateMapCopy = { ...testTemplateMap };
     testTemplateMapCopy.organization_name = testOrganizationName;
-    const retval = component.getFormProperties(
-      testTemplateMapCopy);
+    const retval = component.getFormProperties(testTemplateMapCopy);
     expect(retval.includes(testOrganizationName)).toBeTruthy();
   });
 
   it('#getContactTypeOptions happy path', () => {
-    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-      ContactTypes.COMMITTEE,
-    ]);
+    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
     const retval = component.getContactTypeOptions();
-    expect(JSON.stringify(expectedRetval) ===
-      JSON.stringify(retval)).toBeTruthy();
+    expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
   });
 
   it('#hasEmployerInput happy path', () => {
@@ -52,5 +48,4 @@ describe('TransactionGroupE', () => {
     const retval = component.hasElectionInformationInput();
     expect(retval).toBeFalse();
   });
-
 });

@@ -1,11 +1,10 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_MEMO';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag';
+import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class EARMARK_MEMO extends SchATransactionType {
-  
   transactionGroup = new TransactionGroupAG();
   override isDependentChild = true;
   title = '';

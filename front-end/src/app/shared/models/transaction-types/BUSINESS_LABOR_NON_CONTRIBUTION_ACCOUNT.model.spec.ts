@@ -1,5 +1,5 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from './BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 
 describe('TRIBAL_RECEIPT', () => {

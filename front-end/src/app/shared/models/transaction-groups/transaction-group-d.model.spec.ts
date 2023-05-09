@@ -2,18 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
-import { TransactionGroupC } from './transaction-group-c';
+import { TransactionGroupD } from './transaction-group-d.model';
 
-describe('TransactionGroupC', () => {
-  let component: TransactionGroupC;
+describe('TransactionGroupD', () => {
+  let component: TransactionGroupD;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [TransactionGroupC,],
+      providers: [TransactionGroupD],
     });
 
-    component = TestBed.inject(TransactionGroupC);
+    component = TestBed.inject(TransactionGroupD);
   });
 
   it('should create', () => {
@@ -24,28 +24,19 @@ describe('TransactionGroupC', () => {
     const testOrganizationName = 'testOrganizationName';
     const testTemplateMapCopy = { ...testTemplateMap };
     testTemplateMapCopy.organization_name = testOrganizationName;
-    const retval = component.getFormProperties(
-      testTemplateMapCopy);
+    const retval = component.getFormProperties(testTemplateMapCopy);
     expect(retval.includes(testOrganizationName)).toBeTruthy();
   });
 
   it('#getContactTypeOptions happy path', () => {
-    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-      ContactTypes.INDIVIDUAL,
-      ContactTypes.ORGANIZATION,
-      ContactTypes.COMMITTEE,
-    ]);
+    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.ORGANIZATION]);
     const retval = component.getContactTypeOptions();
-    expect(JSON.stringify(expectedRetval) ===
-      JSON.stringify(retval)).toBeTruthy();
+    expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
   });
 
   it('#hasEmployerInput happy path', () => {
-    const testEntityType = ContactTypes.INDIVIDUAL;
-    const testScheduleId = 'A';
-    const retval = component.hasEmployerInput(
-      testEntityType, testScheduleId);
-    expect(retval).toBeTrue();
+    const retval = component.hasEmployerInput();
+    expect(retval).toBeFalse();
   });
 
   it('#hasCommitteeFecIdInput happy path', () => {
@@ -57,5 +48,4 @@ describe('TransactionGroupC', () => {
     const retval = component.hasElectionInformationInput();
     expect(retval).toBeFalse();
   });
-
 });

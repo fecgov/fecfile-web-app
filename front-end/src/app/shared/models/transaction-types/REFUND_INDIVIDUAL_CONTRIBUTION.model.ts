@@ -5,10 +5,9 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 
 export class REFUND_INDIVIDUAL_CONTRIBUTION extends SchBTransactionType {
-  
   transactionGroup = new TransactionGroupB();
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION);
   schema = schema;

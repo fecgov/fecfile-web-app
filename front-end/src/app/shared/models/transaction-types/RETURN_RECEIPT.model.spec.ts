@@ -1,6 +1,6 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupC } from '../transaction-groups/transaction-group-c';
+import { TransactionGroupC } from '../transaction-groups/transaction-group-c.model';
 import { RETURN_RECEIPT } from './RETURN_RECEIPT.model';
 
 describe('RETURN_RECEIPT', () => {

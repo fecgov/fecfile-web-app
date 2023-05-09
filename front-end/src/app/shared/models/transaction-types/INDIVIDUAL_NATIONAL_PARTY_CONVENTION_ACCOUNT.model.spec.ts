@@ -1,6 +1,6 @@
 import { INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from './INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT', () => {
   let transactionType: INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT;

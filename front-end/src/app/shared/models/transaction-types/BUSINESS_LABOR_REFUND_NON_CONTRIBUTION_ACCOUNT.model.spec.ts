@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from './BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
 
 describe('BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT', () => {
