@@ -28,15 +28,17 @@ describe('PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
 
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Pres. Nominating Convention Account JF Memo... (Partnership attributions do not require itemization)');
+    expect(descrip).toBe('Pres. Nominating Convention Account JF Memo:  ' +
+      '(Partnership attributions do not require itemization)');
   });
 
   it('#generatePurposeDescription() should shrink long description', () => {
     (transaction.parent_transaction as SchATransaction).contributor_organization_name =
       'Super Duper Long Committee Name That Needs to Shrink';
+    transaction.children = [{} as SchATransaction];
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe(
-      'Pres. Nominating Convention Account JF Memo... (Partnership attributions do not require itemization)'
+    expect(descrip).toBe('Pres. Nominating Convention Account JF Memo: Super Duper ' +
+      'L... (See Partnership Attribution(s) below)'
     );
   });
 });

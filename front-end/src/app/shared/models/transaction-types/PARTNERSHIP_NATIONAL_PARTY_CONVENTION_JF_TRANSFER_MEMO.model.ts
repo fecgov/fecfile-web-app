@@ -22,16 +22,16 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchA
   ]);
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    let committeeClause = `Pres. Nominating Convention Account JF Memo: ${(transaction.parent_transaction as SchATransaction).contributor_organization_name
-      }`;
+    const base = 'Pres. Nominating Convention Account JF Memo: ';
+    const committeeName = (transaction.parent_transaction as SchATransaction).contributor_organization_name;
+    let committeeClause = `${base}${committeeName}`;
     const hasChildren = transaction.children && transaction.children.length > 0;
-    const parenthetical = hasChildren
-      ? ' (See Partnership Attribution(s) below)'
-      : ' (Partnership attributions do not require itemization)';
-    if ((committeeClause + parenthetical).length > 100) {
+    if (hasChildren) {
+      const parenthetical = ' (See Partnership Attribution(s) below)';
       committeeClause = committeeClause.slice(0, 97 - parenthetical.length) + '...';
+      return committeeClause + parenthetical;
     }
-    return committeeClause + parenthetical;
+    return base + ' (Partnership attributions do not require itemization)';
   }
 
   override purposeDescriptionLabelNotice =
