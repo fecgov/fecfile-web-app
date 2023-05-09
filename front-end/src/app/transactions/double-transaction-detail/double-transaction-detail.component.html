@@ -75,6 +75,7 @@
             [templateMap]="templateMap"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
             [purposeDescriptionLabel]="this.purposeDescriptionLabel"
+            [purposeDescriptionPrefix]="this.transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
           <div class="grid" style="flex-direction: row-reverse">
             <p style="font-style: italic">This type of receipt requires a memo transaction</p>
@@ -162,6 +163,7 @@
             [templateMap]="childTemplateMap"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(childTransaction?.transactionType)"
             [purposeDescriptionLabel]="this.childPurposeDescriptionLabel"
+            [purposeDescriptionPrefix]="this.transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
         </ng-container>
       </form>
