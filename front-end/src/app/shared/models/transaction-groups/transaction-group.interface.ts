@@ -11,5 +11,4 @@ export abstract class TransactionGroup {
   abstract hasEmployerInput(entityType: ContactTypes, scheduleId: string): boolean;
   abstract hasCommitteeFecIdInput(): boolean;
   abstract hasElectionInformationInput(): boolean;
-  abstract getAmountInputTitle(): string;
 }

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
-import { TransactionTemplateMapType } from '../transaction-type.model';
 import { TransactionGroupI } from './transaction-group-i';
 
 describe('TransactionGroupI', () => {
@@ -20,38 +20,12 @@ describe('TransactionGroupI', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#getFormProperties scha', () => {
+  it('#getFormProperties happy path', () => {
     const testOrganizationName = 'testOrganizationName';
-    const testTemplateMap: TransactionTemplateMapType = {
-      last_name: '',
-      first_name: '',
-      middle_name: '',
-      prefix: '',
-      suffix: '',
-      street_1: '',
-      street_2: '',
-      city: '',
-      state: '',
-      zip: '',
-      employer: '',
-      occupation: '',
-      organization_name: testOrganizationName,
-      committee_fec_id: '',
-      committee_name: '',
-      date: '',
-      dateLabel: '',
-      memo_code: '',
-      amount: '',
-      aggregate: '',
-      purpose_description: '',
-      purposeDescripLabel: '',
-      memo_text_input: '',
-      category_code: '',
-      election_code: '',
-      election_other_description: ''
-    }
+    const testTemplateMapCopy = { ...testTemplateMap };
+    testTemplateMapCopy.organization_name = testOrganizationName;
     const retval = component.getFormProperties(
-      testTemplateMap);
+      testTemplateMapCopy);
     expect(retval.includes(testOrganizationName)).toBeTruthy();
   });
 
@@ -77,11 +51,6 @@ describe('TransactionGroupI', () => {
   it('#hasElectionInformationInput happy path', () => {
     const retval = component.hasElectionInformationInput();
     expect(retval).toBeTrue();
-  });
-
-  it('#getAmountInputTitle happy path', () => {
-    const retval = component.getAmountInputTitle();
-    expect(retval === 'Receipt Information').toBeTrue();
   });
 
 });

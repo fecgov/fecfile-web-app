@@ -224,6 +224,7 @@ export const testTemplateMap: TransactionTemplateMapType = {
   dateLabel: 'DATE RECEIVED',
   memo_code: 'memo_code',
   amount: 'contribution_amount',
+  amountInputHeader: 'Receipt Information',
   aggregate: 'contribution_aggregate',
   purpose_description: 'contribution_purpose_descrip',
   purposeDescripLabel: 'CONTRIBUTION PURPOSE DESCRIPTION',

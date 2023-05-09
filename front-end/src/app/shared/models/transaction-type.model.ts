@@ -80,6 +80,7 @@ export type TransactionTemplateMapType = {
   dateLabel: string;
   memo_code: string;
   amount: string;
+  amountInputHeader: string;
   aggregate: string;
   purpose_description: string;
   purposeDescripLabel: string;

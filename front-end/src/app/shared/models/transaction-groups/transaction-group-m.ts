@@ -43,7 +43,4 @@ export class TransactionGroupM extends TransactionGroup {
     return true;
   }
 
-  getAmountInputTitle(): string {
-    return 'Expenditure Information';
-  }
 }

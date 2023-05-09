@@ -14,7 +14,6 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
   hasEmployerInput = false;
   hasCommitteeFecIdInput = false;
   hasElectionInformationInput = false;
-  amountInputTitle = '';
 
   override ngOnInit(): void {
     if (this.transaction?.transactionType?.templateMap) {
@@ -28,8 +27,7 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
       this.hasCommitteeFecIdInput = transactionGroup.hasCommitteeFecIdInput();
       this.hasElectionInformationInput =
         transactionGroup.hasElectionInformationInput();
-      this.amountInputTitle = transactionGroup.getAmountInputTitle();
-      
+
       super.ngOnInit();
 
       this.hasEmployerInput = transactionGroup.hasEmployerInput(

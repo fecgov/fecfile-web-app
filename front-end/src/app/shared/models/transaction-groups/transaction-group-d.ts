@@ -41,7 +41,4 @@ export class TransactionGroupD extends TransactionGroup {
     return false;
   }
 
-  getAmountInputTitle(): string {
-    return 'Receipt Information';
-  }
 }

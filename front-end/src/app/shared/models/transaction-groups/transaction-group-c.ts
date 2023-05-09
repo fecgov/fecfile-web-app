@@ -4,35 +4,7 @@ import { TransactionTemplateMapType } from '../transaction-type.model';
 import { TransactionGroup } from './transaction-group.interface';
 
 export class TransactionGroupC extends TransactionGroup {
-  getFormProperties(
-    templateMap: TransactionTemplateMapType,
-    scheduleId: string
-  ): string[] {
-    if (scheduleId === 'B') {
-      return [
-        'entity_type',
-        templateMap.organization_name,
-        templateMap.last_name,
-        templateMap.first_name,
-        templateMap.middle_name,
-        templateMap.prefix,
-        templateMap.suffix,
-        templateMap.street_1,
-        templateMap.street_2,
-        templateMap.city,
-        templateMap.state,
-        templateMap.zip,
-        templateMap.date,
-        templateMap.amount,
-        templateMap.aggregate,
-        templateMap.purpose_description,
-        templateMap.memo_code,
-        templateMap.memo_text_input,
-        templateMap.category_code,
-        'subTransaction',
-      ].filter(val => !!val);
-    }
-
+  getFormProperties(templateMap: TransactionTemplateMapType): string[] {
     return [
       'entity_type',
       templateMap.organization_name,
@@ -54,6 +26,8 @@ export class TransactionGroupC extends TransactionGroup {
       templateMap.occupation,
       templateMap.memo_code,
       templateMap.memo_text_input,
+      templateMap.category_code,
+      'subTransaction',
     ].filter(val => !!val);
   }
 
@@ -77,7 +51,4 @@ export class TransactionGroupC extends TransactionGroup {
     return false;
   }
 
-  getAmountInputTitle(): string {
-    return 'Receipt Information';
-  }
 }
