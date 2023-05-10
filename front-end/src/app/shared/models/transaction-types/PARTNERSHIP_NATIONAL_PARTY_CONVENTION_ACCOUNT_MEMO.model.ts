@@ -4,9 +4,10 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO extends SchATransactionType {
-  componentGroupId = 'A';
+  transactionGroup = new TransactionGroupA();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO

@@ -1,10 +1,11 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_EARMARK_MEMOS';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class EARMARK_MEMO_CONVENTION_ACCOUNT extends SchATransactionType {
-  componentGroupId = 'AG';
+  transactionGroup = new TransactionGroupAG();
   override isDependentChild = true;
   title = '';
   schema = schema;
