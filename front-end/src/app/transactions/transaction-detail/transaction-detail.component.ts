@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, SimpleChanges } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
@@ -9,13 +9,14 @@ import { takeUntil } from 'rxjs';
   templateUrl: './transaction-detail.component.html',
   styleUrls: ['../transaction.scss'],
 })
-export class TransactionDetailComponent extends TransactionTypeBaseComponent implements OnInit {
+export class TransactionDetailComponent extends TransactionTypeBaseComponent implements OnChanges {
   override formProperties: string[] = [];
   hasEmployerInput = false;
   hasCommitteeFecIdInput = false;
   hasElectionInformationInput = false;
 
-  override ngOnInit(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ngOnChanges(changes: SimpleChanges): void {
     if (this.transaction?.transactionType?.templateMap) {
       const transactionType = this.transaction.transactionType;
       const transactionGroup = transactionType.transactionGroup as TransactionGroup;
