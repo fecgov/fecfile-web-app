@@ -18,12 +18,14 @@ export class PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO e
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    let committeeClause = `Pres. Nominating Convention Account JF Memo: ${(transaction.parent_transaction?.parent_transaction as SchATransaction).contributor_organization_name
-      } (Partnership Attribution)`;
-    if (committeeClause.length > 100) {
-      committeeClause = committeeClause.slice(0, 97) + '...';
+    let committeeClause = `Pres. Nominating Convention Account JF Memo: ${
+      (transaction.parent_transaction?.parent_transaction as SchATransaction).contributor_organization_name
+    }`;
+    const parenthetical = ' (Partnership Attribution)';
+    if ((committeeClause + parenthetical).length > 100) {
+      committeeClause = committeeClause.slice(0, 97 - parenthetical.length) + '...';
     }
-    return committeeClause;
+    return committeeClause + parenthetical;
   }
 
   getNewTransaction() {

@@ -32,8 +32,7 @@ describe('PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', ()
 
   it('#generatePurposeDescription() should return appropriate retval', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Pres. Nominating Convention Account JF Memo: ' +
-      'Test Committee');
+    expect(descrip).toBe('Pres. Nominating Convention Account JF Memo: Test Committee (Partnership Attribution)');
   });
 
   it('#generatePurposeDescription() should shrink long description', () => {
@@ -41,7 +40,7 @@ describe('PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', ()
       'Super Duper Extra Super Long Committee Name That Needs to Shrink';
     transaction.children = [{} as SchATransaction];
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Pres. Nominating Convention Account JF Memo: Super Duper Extra Super Long Committee Name That Nee...'
+    expect(descrip).toBe('Pres. Nominating Convention Account JF Memo: Super Duper Extra Super Lo... (Partnership Attribution)'
     );
   });
 });
