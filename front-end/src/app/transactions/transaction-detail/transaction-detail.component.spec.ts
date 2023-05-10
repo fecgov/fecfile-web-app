@@ -62,7 +62,7 @@ describe('TransactionDetailComponent', () => {
     component = fixture.componentInstance;
     component.transaction = transaction;
     component.templateMap = testTemplateMap;
-    fixture.detectChanges();
+    component.ngOnChanges({});
   });
 
   it('should create', () => {
