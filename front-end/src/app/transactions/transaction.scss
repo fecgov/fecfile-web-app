@@ -6,3 +6,28 @@
   background-color: #f1f1f1;
   color: #000000;
 }
+
+.gandhi-bold {
+  font-family: gandhi-bold, serif;
+  color: #212121;
+}
+
+.size-36 {
+  font-size: 36px;
+}
+
+.size-24 {
+  font-size: 24px;
+}
+
+.subtitle {
+  font-family: karla-bold, serif;
+  font-size: 14px;
+  color: #212121;
+}
+
+:host ::ng-deep .p-button.add-button {
+  color: black;
+  background-color: #f77b42;
+  border-color: #f77b42;
+}

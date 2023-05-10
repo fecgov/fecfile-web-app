@@ -13,6 +13,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { UploadSubmission } from 'app/shared/models/upload-submission.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
+import { FormTypeDialogComponent } from '../form-type-dialog/form-type-dialog.component';
+import { Dialog, DialogModule } from 'primeng/dialog';
 
 describe('ReportListComponent', () => {
   let component: ReportListComponent;
@@ -21,8 +23,8 @@ describe('ReportListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, TableModule, ToolbarModule, RouterTestingModule.withRoutes([])],
-      declarations: [ReportListComponent],
+      imports: [HttpClientTestingModule, TableModule, ToolbarModule, RouterTestingModule.withRoutes([]), DialogModule],
+      declarations: [ReportListComponent, FormTypeDialogComponent, Dialog],
       providers: [ConfirmationService, MessageService, ApiService, provideMockStore(testMockStore)],
     }).compileComponents();
   });

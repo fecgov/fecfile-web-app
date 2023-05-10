@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { LoginService } from 'app/shared/services/login.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
   items: MenuItem[] = [];
+  @Input() showLogo = false;
 
   constructor(private loginService: LoginService) {}
 

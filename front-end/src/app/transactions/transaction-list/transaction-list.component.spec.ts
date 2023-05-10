@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionService } from 'app/shared/services/transaction.service';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { of } from 'rxjs';
-import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
-import { RouterTestingModule } from '@angular/router/testing';
-
-import { TransactionListComponent, MemoCodePipe } from './transaction-list.component';
+import { SharedModule } from '../../shared/shared.module';
+import { MemoCodePipe, TransactionListComponent } from './transaction-list.component';
+import { ToolbarModule } from 'primeng/toolbar';
 
 describe('TransactionListComponent', () => {
   let component: TransactionListComponent;
@@ -20,7 +20,7 @@ describe('TransactionListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarModule, TableModule, RouterTestingModule, RouterTestingModule.withRoutes([])],
+      imports: [ToolbarModule, TableModule, SharedModule, RouterTestingModule, RouterTestingModule.withRoutes([])],
       declarations: [TransactionListComponent],
       providers: [
         MessageService,
@@ -37,6 +37,7 @@ describe('TransactionListComponent', () => {
                 })
               ),
             getTableData: () => of([]),
+            update: () => of([]),
           },
         },
         {
@@ -95,7 +96,7 @@ describe('TransactionListComponent', () => {
     component.onTableActionClick(component.tableActions[3], { id: '999' } as F3xSummary);
     expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/other-transactions`);
   });
-  it('should show the correct acitons', () => {
+  it('should show the correct table actions', () => {
     expect(component.tableActions[0].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
     expect(component.tableActions[1].isAvailable({ report_status: 'In-Progress' })).toEqual(true);
     expect(component.tableActions[2].isAvailable({ report_status: 'In-Progress' })).toEqual(true);

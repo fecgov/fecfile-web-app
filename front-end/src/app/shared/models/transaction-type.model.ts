@@ -72,6 +72,7 @@ export type TransactionTemplateMapType = {
   occupation: string;
   organization_name: string;
   committee_fec_id: string;
+  committee_name: string;
   date: string;
   dateLabel: string;
   memo_code: string;
@@ -81,6 +82,8 @@ export type TransactionTemplateMapType = {
   purposeDescripLabel: string;
   memo_text_input: string;
   category_code: string;
+  election_code: string;
+  election_other_description: string;
 };
 
 export class SubTransactionGroup {

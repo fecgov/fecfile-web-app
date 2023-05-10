@@ -50,6 +50,7 @@ export class TransactionGroupAgComponent extends DoubleTransactionTypeBaseCompon
     'contributor_employer',
     'contributor_occupation',
     'donor_committee_fec_id',
+    'donor_committee_name',
     'memo_code',
     'memo_text_input',
   ];

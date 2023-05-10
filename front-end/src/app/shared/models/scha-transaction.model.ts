@@ -52,12 +52,7 @@ export class SchATransaction extends Transaction {
   override apiEndpoint = '/transactions/schedule-a';
 
   override getFieldsNotToValidate(): string[] {
-    return [
-      'donor_committee_name',
-      'back_reference_tran_id_number',
-      'back_reference_sched_name',
-      ...super.getFieldsNotToValidate(),
-    ];
+    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -126,7 +121,7 @@ export enum ScheduleATransactionTypes {
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   // Refunds
-  REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES = 'REF_TO_FED_CAN',
+  REFUND_TO_OTHER_POLITICAL_COMMITTEE = 'REFUND_TO_OTHER_POLITICAL_COMMITTEE',
   REFUND_TO_UNREGISTERED_COMMITTEE = 'REFUND_TO_UNREGISTERED_COMMITTEE',
   // Other
   OFFSET_TO_OPERATING_EXPENDITURES = 'OFFSET_TO_OPERATING_EXPENDITURES',
@@ -165,6 +160,7 @@ export enum ScheduleATransactionTypes {
   PARTY_JF_TRANSFER_MEMO = 'PARTY_JF_TRANSFER_MEMO',
   TRIBAL_JF_TRANSFER_MEMO = 'TRIBAL_JF_TRANSFER_MEMO',
   PARTNERSHIP_JF_TRANSFER_MEMO = 'PARTNERSHIP_JF_TRANSFER_MEMO',
+  PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO = 'PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO',
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
   PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
   TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO = 'TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO',
@@ -254,8 +250,8 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   // Refunds
   [
-    ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES,
-    'Refunds of Contributions to Registered Committees',
+    ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
+    'Refund of Contribution to Other Political Committee',
   ],
   [ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE, 'Refund of Contribution to Unregistered Committee'],
   // Other
@@ -411,11 +407,15 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Partnership National Party Headquarters Buildings Account Memo',
   ],
   [ScheduleATransactionTypes.PARTNERSHIP_MEMO, 'Partnership Memo'],
-  [ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO, 'Partnership Recount Account Receipt Memo'],
+  [ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO, 'Partnership Receipt Joint Fundraising Transfer Memo'],
+  [
+    ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+    'Partnership Individual Joint Fundraising Transfer Memo',
+  ],
+  [(ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO, 'Partnership Recount Account Receipt Memo')],
 ];
 
 export const UnimplementedTypeEntityCategories: LabelList = [
-  [ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO, 'Partnership'],
   [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO, 'Partnership'],
   [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO, 'Partnership'],
   [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO, 'Partnership'],

@@ -113,7 +113,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
         ];
       case ScheduleATransactionGroups.REFUNDS:
         return [
-          ScheduleATransactionTypes.REFUNDS_OF_CONTRIBUTIONS_TO_REGISTERED_COMMITTEES,
+          ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
           ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
         ];
       case ScheduleATransactionGroups.OTHER:
@@ -171,6 +171,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
           ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT,
           ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT,
+          ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
@@ -193,17 +194,20 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_REGULAR_REFUND,
           ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
+          ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
+          ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
+          ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
         ];
       case ScheduleBTransactionGroups.REFUND:
         return [
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_INDIVIDUAL,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_INDIVIDUAL_VOID,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PARTY,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PARTY_VOID,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PAC,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_PAC_VOID,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_NON_FEDERAL,
-          ScheduleBTransactionTypes.REFUND_CONTRIBUTION_NON_FEDERAL_VOID,
+          ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION,
+          ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
+          ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION,
+          ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION_VOID,
+          ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION,
+          ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION_VOID,
+          ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION,
+          ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION_VOID,
         ];
       case ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES:
         return [
