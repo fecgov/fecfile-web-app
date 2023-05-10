@@ -9,10 +9,10 @@ import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 @Injectable({
   providedIn: 'root',
 })
-export class TransactionResolver implements Resolve<Transaction | undefined> {
+export class TransactionResolver implements Resolve<Transaction | Observable<Transaction> | undefined> {
   constructor(public transactionService: TransactionService, private contactService: ContactService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<Transaction | undefined> {
+  resolve(route: ActivatedRouteSnapshot): Observable<Transaction | Observable<Transaction> | undefined> {
     const reportId = route.paramMap.get('reportId');
     const transactionTypeName = route.paramMap.get('transactionType');
     const transactionId = route.paramMap.get('transactionId');
@@ -53,7 +53,7 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
     );
   }
 
-  resolve_existing_transaction(transactionId: string): Observable<Transaction | undefined> {
+  resolve_existing_transaction(transactionId: string): Observable<Transaction | Observable<Transaction> | undefined> {
     return this.transactionService.get(String(transactionId)).pipe(
       mergeMap((transaction: Transaction) => {
         if (transaction.transaction_type_identifier && transaction.contact) {
@@ -74,6 +74,14 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
               return this.transactionService.get(transaction.parent_transaction_id).pipe(
                 map((parent) => {
                   transaction.parent_transaction = parent;
+                  if (parent.parent_transaction_id) {
+                    return this.transactionService.get(parent.parent_transaction_id).pipe(
+                      map((grandparent) => {
+                        parent.parent_transaction = grandparent;
+                        return transaction;
+                      })
+                    );
+                  }
                   return transaction;
                 })
               );
