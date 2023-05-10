@@ -47,8 +47,18 @@ export class TransactionResolver implements Resolve<Transaction | Observable<Tra
     childTransactionTypeName: string
   ): Observable<Transaction | undefined> {
     return this.transactionService.get(String(parentTransactionId)).pipe(
-      map((parentTransaction: Transaction) => {
-        return this.getNewChildTransaction(parentTransaction, childTransactionTypeName);
+      mergeMap((parentTransaction: Transaction) => {
+        // If there is a grandparent transaction, then we need to retrieve it
+        if (parentTransaction.parent_transaction_id) {
+          return this.transactionService.get(parentTransaction.parent_transaction_id).pipe(
+            map((grandparent) => {
+              parentTransaction.parent_transaction = grandparent;
+              return this.getNewChildTransaction(parentTransaction, childTransactionTypeName);
+            })
+          );
+        }
+        // Otherwise we just need to return an observable of the parent transaction
+        return of(this.getNewChildTransaction(parentTransaction, childTransactionTypeName));
       })
     );
   }
@@ -70,22 +80,28 @@ export class TransactionResolver implements Resolve<Transaction | Observable<Tra
               );
             }
           } else {
+            // If there is a parent transaction
             if (transaction?.parent_transaction_id) {
               return this.transactionService.get(transaction.parent_transaction_id).pipe(
-                map((parent) => {
+                mergeMap((parent: Transaction) => {
+                  // We set the retrieved transaction's parent
                   transaction.parent_transaction = parent;
+                  // We also check for a grandparent transaction
                   if (parent.parent_transaction_id) {
                     return this.transactionService.get(parent.parent_transaction_id).pipe(
                       map((grandparent) => {
+                        // And link it to the parent transaction
                         parent.parent_transaction = grandparent;
                         return transaction;
                       })
                     );
                   }
-                  return transaction;
+                  // If there is no grandparent, we're done
+                  return of(transaction);
                 })
               );
             }
+            // If there is no parent, we're done
             return of(transaction);
           }
         }
