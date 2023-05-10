@@ -11,9 +11,6 @@ export class TransactionMemoUtils {
           text4000: text,
           report_id: transaction?.report_id,
           rec_type: 'TEXT',
-          filer_committee_id_number: transaction?.filer_committee_id_number,
-          transaction_id_number: '',
-          back_reference_sched_form_name: transaction?.form_type,
         });
   
         if (transaction?.id) {

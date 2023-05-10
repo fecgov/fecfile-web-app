@@ -1,5 +1,6 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupC } from '../transaction-groups/transaction-group-c.model';
 import { RETURN_RECEIPT } from './RETURN_RECEIPT.model';
 
 describe('RETURN_RECEIPT', () => {
@@ -12,7 +13,7 @@ describe('RETURN_RECEIPT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.componentGroupId).toBe('C');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupC);
   });
 
   it('#factory() should return a SchATransaction', () => {

@@ -1,4 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 import { INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT } from './INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 
 describe('INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT', () => {
@@ -11,7 +12,7 @@ describe('INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('A');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupA);
   });
 
   it('#factory() should return a SchBTransaction', () => {

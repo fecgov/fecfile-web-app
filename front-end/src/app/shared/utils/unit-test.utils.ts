@@ -160,11 +160,8 @@ export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
 
 export const testScheduleATransaction = SchATransaction.fromJSON({
   form_type: 'SA15',
-  filer_committee_id_number: 'C00000000',
   transaction_type_identifier: 'PAC_JF_TRANSFER_MEMO',
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
-  back_reference_tran_id_number: 'AAAAAAAAAAAAAAAAAAA',
-  back_reference_sched_name: 'SA12',
   entity_type: ContactTypes.COMMITTEE,
   contributor_organization_name: 'org name',
   contributor_street_1: '123 Main St',
@@ -182,7 +179,6 @@ export const testScheduleATransaction = SchATransaction.fromJSON({
 
 export const testScheduleBTransaction = SchBTransaction.fromJSON({
   form_type: 'SB21b',
-  filer_committee_id_number: 'C00000000',
   transaction_type_identifier: ScheduleBTransactionTypes.OPERATING_EXPENDITURE,
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
   entity_type: ContactTypes.ORGANIZATION,
@@ -228,6 +224,7 @@ export const testTemplateMap: TransactionTemplateMapType = {
   dateLabel: 'DATE RECEIVED',
   memo_code: 'memo_code',
   amount: 'contribution_amount',
+  amountInputHeader: 'Receipt Information',
   aggregate: 'contribution_aggregate',
   purpose_description: 'contribution_purpose_descrip',
   purposeDescripLabel: 'CONTRIBUTION PURPOSE DESCRIPTION',

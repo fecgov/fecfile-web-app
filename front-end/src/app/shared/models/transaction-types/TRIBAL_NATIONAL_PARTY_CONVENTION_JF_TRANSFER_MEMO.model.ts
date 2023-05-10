@@ -1,12 +1,13 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO';
-import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
+import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
+import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchATransactionType {
-  componentGroupId = 'D';
+  transactionGroup = new TransactionGroupD();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO
@@ -25,7 +26,6 @@ export class TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchATrans
     return SchATransaction.fromJSON({
       form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
-      back_reference_sched_name: 'SA17',
       aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });
   }

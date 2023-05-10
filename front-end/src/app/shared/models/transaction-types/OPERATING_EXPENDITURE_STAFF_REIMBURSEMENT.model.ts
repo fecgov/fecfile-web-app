@@ -1,13 +1,14 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_PARENTS_STAFF';
-import { AggregationGroups } from '../transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { SchBTransactionType } from '../schb-transaction-type.model';
-import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { ContactTypes } from '../contact.model';
+import { SchBTransactionType } from '../schb-transaction-type.model';
+import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
+import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { AggregationGroups } from '../transaction.model';
 
 export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT extends SchBTransactionType {
-  componentGroupId = 'A';
+  transactionGroup = new TransactionGroupA();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT
