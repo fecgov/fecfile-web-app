@@ -420,6 +420,4 @@ export const ScheduleATransactionTypeLabels: LabelList = [
 
 export const UnimplementedTypeEntityCategories: LabelList = [
   [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO, 'Partnership'],
-  [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO, 'Partnership'],
-  [ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO, 'Partnership Individual'],
 ];
