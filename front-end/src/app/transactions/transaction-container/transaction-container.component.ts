@@ -1,9 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/double-transaction-group.model';
+import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-container',
@@ -21,6 +23,14 @@ export class TransactionContainerComponent implements OnDestroy {
         this.titleService.setTitle(title);
       }
     });
+  }
+
+  isTransactionGroup() {
+    return this.transaction?.transactionType?.transactionGroup instanceof TransactionGroup;
+  }
+
+  isDoubleTransactionGroup() {
+    return this.transaction?.transactionType?.transactionGroup instanceof DoubleTransactionGroup;
   }
 
   ngOnDestroy(): void {
