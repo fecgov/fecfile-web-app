@@ -20,7 +20,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATra
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   override subTransactionConfig = new SubTransactionGroup(
-    'PARTNERSHIP RECEIPT RECOUNT/LEGAL PROCEEDINGS ACCOUNT JF TRANSFER MEMO',
+    'Partnership Receipt Recount/Legal Proceedings Account JF Transfer Memo',
     [ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO]
   );
 
