@@ -158,7 +158,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
       case ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGULAR_FILERS:
         return [
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
-          ScheduleBTransactionTypes.TRANSFER_TO_AFFIILIATES,
+          ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE,

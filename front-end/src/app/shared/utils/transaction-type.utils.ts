@@ -129,6 +129,7 @@ import { OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models
 import { OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT.model';
 import { OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT.model';
 import { PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
+import { TRANSFER_TO_AFFILIATES } from '../models/transaction-types/TRANSFER_TO_AFFILIATES.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -256,6 +257,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
   OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
   OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
+  TRANSFER_TO_AFFILIATES,
 }
 
 export class TransactionTypeUtils {
