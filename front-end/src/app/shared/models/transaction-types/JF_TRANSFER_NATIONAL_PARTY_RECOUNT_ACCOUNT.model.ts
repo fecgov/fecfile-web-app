@@ -15,10 +15,10 @@ export class JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionT
   );
   schema = schema;
   override subTransactionConfig = new SubTransactionGroup(
-    'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account Memo',
+    'JOINT FUNDRAISING TRANSFER - NATIONAL PARTY RECOUNT/LEGAL PROCEEDINGS MEMO',
     [
-      ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
       ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+      ScheduleATransactionTypes.PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
       ScheduleATransactionTypes.TRIBAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
       ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     ]

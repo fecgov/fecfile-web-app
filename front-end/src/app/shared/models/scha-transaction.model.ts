@@ -180,6 +180,7 @@ export enum ScheduleATransactionTypes {
   EARMARK_MEMO_HEADQUARTERS_ACCOUNT = 'EARMARK_MEMO_HEADQUARTERS_ACCOUNT',
   EARMARK_MEMO_CONVENTION_ACCOUNT = 'EARMARK_MEMO_CONVENTION_ACCOUNT',
   EARMARK_MEMO_RECOUNT_ACCOUNT = 'EARMARK_MEMO_RECOUNT_ACCOUNT',
+  PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO = 'PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO',
   PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO = 'PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO',
 }
 
@@ -388,7 +389,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
-    'Partnership National Party Recount/Legal Proceedings Account Memo',
+    'Partnership Receipt Recount/Legal Proceedings Account JF Transfer Memo',
   ],
   [
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
@@ -414,17 +415,23 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   [
     ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
-    'Partnership Individual Pres. Nominating Convention Account JF Transfer Memo'
+    'Partnership Individual Pres. Nominating Convention Account JF Transfer Memo',
   ],
   [(ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO, 'Partnership Recount Account Receipt Memo')],
   [
+    ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
+    'Partnership Individual Recount/Legal Proceedings Account JF Transfer Memo',
     ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     'Partnership Individual Headquarters Buildings Account JF Transfer Memo',
   ],
 ];
 
 export const UnimplementedTypeEntityCategories: LabelList = [
+  [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO, 'Partnership'],
   [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO, 'Partnership'],
   [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO, 'Partnership'],
-  [ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO, 'Partnership Individual'],
+  [
+    ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
+    'Partnership Individual',
+  ],
 ];
