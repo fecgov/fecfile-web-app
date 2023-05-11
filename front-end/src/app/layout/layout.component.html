@@ -10,33 +10,23 @@
       <app-header [showLogo]="(sidebarState$ | async) === undefined"></app-header>
     </div>
     <div class="col no-padding">
-      <div class="grid committee-banner">
-        <div class="col">
-          <h1>
-            {{ (committeeAccount$ | async)?.committee_id }}
-          </h1>
-        </div>
-        <div class="col">
-          <h2>
-            {{ (committeeAccount$ | async)?.name }}
-          </h2>
-        </div>
-        <div class="col">
-          <h2>
-            {{ (committeeAccount$ | async)?.committee_type_full }}
-          </h2>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="col-12">
-          <div *ngIf="progressBarVisible$ | async">
-            <p-progressBar mode="indeterminate"></p-progressBar>
+      <div class="main-content">
+        <div class="grid">
+          <div class="col-12">
+            <app-committee-banner></app-committee-banner>
           </div>
         </div>
-      </div>
-      <div class="grid">
-        <div class="col-12 router-outlet">
-          <router-outlet></router-outlet>
+        <div class="grid">
+          <div class="col-12">
+            <div *ngIf="progressBarVisible$ | async">
+              <p-progressBar mode="indeterminate"></p-progressBar>
+            </div>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12 router-outlet">
+            <router-outlet></router-outlet>
+          </div>
         </div>
       </div>
       <div class="grid">

@@ -1,0 +1,7 @@
+<div class="grid">
+  <div class="col-12">
+    <h1 class="committee-name">{{ committeeName }}</h1>
+    <span *ngFor="let item of subBannerItems; let last = last" class="sub-banner-item">{{item}}<span *ngIf="!last" class="pipe-separator">|</span>
+    </span>
+  </div>
+</div>
