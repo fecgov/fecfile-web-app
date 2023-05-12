@@ -3,11 +3,12 @@ import { ConfirmationService, MessageService, LazyLoadEvent } from 'primeng/api'
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
 import { Observable, forkJoin } from 'rxjs';
+import { Destroyer } from '../app-destroyer.component';
 
 @Component({
   template: '',
 })
-export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit {
+export abstract class TableListBaseComponent<T> extends Destroyer implements OnInit, AfterViewInit {
   item!: T;
   items: T[] = [];
   rowsPerPage = 10;
@@ -24,7 +25,9 @@ export abstract class TableListBaseComponent<T> implements OnInit, AfterViewInit
     protected messageService: MessageService,
     protected confirmationService: ConfirmationService,
     protected elementRef: ElementRef
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit() {
     this.loading = true;

@@ -6,14 +6,14 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
+import { Destroyer } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-report-detailed-summary',
   templateUrl: './report-detailed-summary.component.html',
   styleUrls: ['../../styles.scss'],
 })
-export class ReportDetailedSummaryComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class ReportDetailedSummaryComponent extends Destroyer implements OnInit {
   protected calculationFinished$ = new BehaviorSubject<boolean>(false);
   report: F3xSummary = new F3xSummary();
 
@@ -22,7 +22,9 @@ export class ReportDetailedSummaryComponent implements OnInit, OnDestroy {
     public router: Router,
     private apiService: ApiService,
     private reportService: ReportService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.calculationFinished$.pipe(takeUntil(this.destroy$)).subscribe();
@@ -44,11 +46,6 @@ export class ReportDetailedSummaryComponent implements OnInit, OnDestroy {
           this.calculationFinished$.next(true);
         }
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   refreshSummary(): void {

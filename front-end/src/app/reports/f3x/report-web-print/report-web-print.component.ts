@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { LabelList } from '../../../shared/utils/label.utils';
@@ -7,14 +7,14 @@ import { F3xFormTypeLabels, F3xSummary } from '../../../shared/models/f3x-summar
 import { WebPrintService } from '../../../shared/services/web-print.service';
 import { Report } from '../../../shared/interfaces/report.interface';
 import { selectActiveReport } from '../../../store/active-report.selectors';
+import { Destroyer } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-report-web-print',
   templateUrl: './report-web-print.component.html',
   styleUrls: ['../../styles.scss'],
 })
-export class ReportWebPrintComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class ReportWebPrintComponent extends Destroyer implements OnInit {
   report: F3xSummary = new F3xSummary();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
 
@@ -27,7 +27,9 @@ export class ReportWebPrintComponent implements OnInit, OnDestroy {
     | 'Checking Web-Print Status...' = 'Checking Web-Print Status...';
   webPrintStage: 'checking' | 'not-submitted' | 'success' | 'failure' = 'checking';
 
-  constructor(private store: Store, public router: Router, private webPrintService: WebPrintService) {}
+  constructor(private store: Store, public router: Router, private webPrintService: WebPrintService) {
+    super();
+  }
 
   ngOnInit(): void {
     this.store
@@ -39,11 +41,6 @@ export class ReportWebPrintComponent implements OnInit, OnDestroy {
           this.updatePrintStatus(report);
         }
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   public updatePrintStatus(report: Report) {

@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Destroyer } from 'app/shared/components/app-destroyer.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -9,14 +10,13 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { setCashOnHandAction } from 'app/store/cash-on-hand.actions';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-cash-on-hand',
   templateUrl: './cash-on-hand.component.html',
 })
-export class CashOnHandComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class CashOnHandComponent extends Destroyer implements OnInit {
   formProperties: string[] = ['L6a_cash_on_hand_jan_1_ytd', 'cash_on_hand_date'];
   report: F3xSummary | undefined;
   formSubmitted = false;
@@ -28,7 +28,9 @@ export class CashOnHandComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private messageService: MessageService,
     private store: Store
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.store
@@ -42,11 +44,6 @@ export class CashOnHandComponent implements OnInit, OnDestroy {
 
     // Set form default values
     this.form.patchValue({ ...this.report });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   public save(): void {

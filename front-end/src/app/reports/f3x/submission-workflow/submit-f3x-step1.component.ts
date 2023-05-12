@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Destroyer } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
@@ -11,13 +12,13 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-submit-f3x-step1',
   templateUrl: './submit-f3x-step1.component.html',
 })
-export class SubmitF3xStep1Component implements OnInit, OnDestroy {
+export class SubmitF3xStep1Component extends Destroyer implements OnInit {
   formProperties: string[] = [
     'confirmation_email_1',
     'confirmation_email_2',
@@ -32,7 +33,6 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
   stateOptions: PrimeOptions = [];
   countryOptions: PrimeOptions = [];
   formSubmitted = false;
-  destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
@@ -42,7 +42,9 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private store: Store,
     private messageService: MessageService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
@@ -88,11 +90,6 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
       confirmation_email_1: this.report?.confirmation_email_1 ?? committeeAccount?.email,
       confirmation_email_2: this.report?.confirmation_email_2 ?? undefined,
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   public buildEmailValidator(valueFormControlName: string): ValidatorFn {
@@ -145,8 +142,7 @@ export class SubmitF3xStep1Component implements OnInit, OnDestroy {
     } else {
       addressFields = {
         change_of_address: true,
-        ...ValidateUtils.getFormValues(this.form,
-          f3xSchema, this.formProperties),
+        ...ValidateUtils.getFormValues(this.form, f3xSchema, this.formProperties),
       };
     }
 

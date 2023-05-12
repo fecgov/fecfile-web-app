@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/interfaces/report.interface';
@@ -20,6 +20,7 @@ import {
 } from 'app/shared/models/schb-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
+import { Destroyer } from 'app/shared/components/app-destroyer.component';
 
 type Categories = 'receipt' | 'disbursement';
 
@@ -28,14 +29,15 @@ type Categories = 'receipt' | 'disbursement';
   templateUrl: './transaction-type-picker.component.html',
   styleUrls: ['./transaction-type-picker.component.scss'],
 })
-export class TransactionTypePickerComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class TransactionTypePickerComponent extends Destroyer implements OnInit {
   transactionTypeLabels: LabelList = [...ScheduleATransactionTypeLabels, ...ScheduleBTransactionTypeLabels];
   report: Report | undefined;
   category: Categories = 'receipt';
   groups: ScheduleATransactionGroupsType[] | ScheduleBTransactionGroupsType[] = [];
 
-  constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {}
+  constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {
+    super();
+  }
 
   ngOnInit(): void {
     this.store
@@ -47,11 +49,6 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
       this.category = params['category'];
       this.titleService.setTitle('Add a ' + this.category);
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   getTransactionGroups(): TransactionGroupTypes[] {

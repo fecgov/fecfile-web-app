@@ -1,21 +1,23 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { environment } from 'environments/environment';
+import { Destroyer } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-test-dot-fec',
   templateUrl: './test-dot-fec.component.html',
 })
-export class TestDotFecComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class TestDotFecComponent extends Destroyer implements OnInit {
   report: F3xSummary | undefined;
   fileIsGenerated = false;
-  constructor(private store: Store, private apiService: ApiService, private http: HttpClient) {}
+  constructor(private store: Store, private apiService: ApiService, private http: HttpClient) {
+    super();
+  }
 
   ngOnInit(): void {
     this.store
@@ -23,11 +25,6 @@ export class TestDotFecComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report as F3xSummary));
     this.fileIsGenerated = false;
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   generate(): void {

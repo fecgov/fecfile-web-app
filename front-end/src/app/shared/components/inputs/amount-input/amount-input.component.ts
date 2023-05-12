@@ -1,9 +1,9 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { InputNumber } from 'primeng/inputnumber';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { FormControl, Validators } from '@angular/forms';
 
@@ -12,7 +12,7 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./amount-input.component.scss'],
   templateUrl: './amount-input.component.html',
 })
-export class AmountInputComponent extends BaseInputComponent implements OnInit, OnDestroy {
+export class AmountInputComponent extends BaseInputComponent implements OnInit {
   @Input() memoCodeReadOnly = false;
   @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
@@ -25,7 +25,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
   report?: F3xSummary;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   memoControl: FormControl = new FormControl();
   outOfDateDialogVisible = false;
@@ -58,11 +57,6 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     if (savedDate) {
       this.updateMemoItemWithDate(savedDate);
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   closeOutOfDateDialog() {

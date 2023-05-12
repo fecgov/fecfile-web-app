@@ -35,13 +35,13 @@ import { combineLatest, map, of, startWith, Subject, switchMap, takeUntil, zip }
 import { ReportService } from '../../../shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import * as _ from 'lodash';
+import { Destroyer } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-create-f3x-step1',
   templateUrl: './create-f3x-step1.component.html',
 })
-export class CreateF3XStep1Component implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class CreateF3XStep1Component extends Destroyer implements OnInit {
   formProperties: string[] = [
     'filing_frequency',
     'report_type_category',
@@ -72,7 +72,9 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
     protected router: Router,
     private activatedRoute: ActivatedRoute,
     private reportService: ReportService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     const reportId = this.activatedRoute.snapshot.data['reportId'];
@@ -191,11 +193,6 @@ export class CreateF3XStep1Component implements OnInit, OnDestroy {
       ` ${this.fecDatePipe.transform(collision.coverage_from_date)} -` +
       ` ${this.fecDatePipe.transform(collision.coverage_through_date)}`;
     return { invaliddate: { msg: message } };
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   public getReportTypeCategories(): F3xReportTypeCategoryType[] {

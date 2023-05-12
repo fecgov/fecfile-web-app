@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
@@ -7,14 +7,14 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList } from '../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../shared/models/f3x-summary.model';
+import { Destroyer } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-transaction-list',
   templateUrl: './transaction-list.component.html',
   styleUrls: ['../transaction.scss'],
 })
-export class TransactionListComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class TransactionListComponent extends Destroyer implements OnInit {
   report: F3xSummary | undefined;
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
 
@@ -45,18 +45,15 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     ),
   ];
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store) {}
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store) {
+    super();
+  }
 
   ngOnInit(): void {
     this.store
       .select(selectActiveReport)
       .pipe(takeUntil(this.destroy$))
       .subscribe((report) => (this.report = report as F3xSummary));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   createTransactions(transactionCategory: string, report?: F3xSummary): void {

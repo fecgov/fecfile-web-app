@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
@@ -8,21 +8,23 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import {
   CandidateOfficeTypeLabels,
   CandidateOfficeTypes,
   Contact,
   ContactTypeLabels,
-  ContactTypes, FecApiCandidateLookupData,
-  FecApiCommitteeLookupData
+  ContactTypes,
+  FecApiCandidateLookupData,
+  FecApiCommitteeLookupData,
 } from '../../models/contact.model';
+import { Destroyer } from '../app-destroyer.component';
 
 @Component({
   selector: 'app-contact-form',
   templateUrl: './contact-form.component.html',
 })
-export class ContactFormComponent implements OnInit, OnDestroy {
+export class ContactFormComponent extends Destroyer implements OnInit {
   @Input() form: FormGroup = this.fb.group(
     ValidateUtils.getFormGroupFields([
       ...new Set([
@@ -35,8 +37,6 @@ export class ContactFormComponent implements OnInit, OnDestroy {
   );
   @Input() formSubmitted = false;
 
-  private destroy$: Subject<boolean> = new Subject();
-
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = [];
   candidateOfficeTypeOptions: PrimeOptions = [];
@@ -45,10 +45,9 @@ export class ContactFormComponent implements OnInit, OnDestroy {
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
 
-  constructor(
-    private fb: FormBuilder,
-    private fecApiService: FecApiService
-  ) { }
+  constructor(private fb: FormBuilder, private fecApiService: FecApiService) {
+    super();
+  }
 
   ngOnInit(): void {
     this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
@@ -61,15 +60,12 @@ export class ContactFormComponent implements OnInit, OnDestroy {
       ?.get('type')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {
-        const schema = ContactService.getSchemaByType(
-          value as ContactTypes);
+        const schema = ContactService.getSchemaByType(value as ContactTypes);
         ValidateUtils.addJsonSchemaValidators(this.form, schema, true);
 
         // Clear out non-schema form values
         const formValues: any = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
-        const schemaProperties: string[] = ValidateUtils.getSchemaProperties(
-          schema
-        );
+        const schemaProperties: string[] = ValidateUtils.getSchemaProperties(schema);
         Object.keys(this.form.controls).forEach((property: string) => {
           if (!schemaProperties.includes(property)) {
             formValues[property] = '';
@@ -134,12 +130,6 @@ export class ContactFormComponent implements OnInit, OnDestroy {
           this.candidateDistrictOptions = [];
         }
       });
-
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   /**
@@ -199,7 +189,7 @@ export class ContactFormComponent implements OnInit, OnDestroy {
     if (data.id) {
       this.fecApiService.getCandidateDetails(data.id).subscribe((candidate) => {
         // TODO: fix once we get info from api and set all names below properly
-        const nameSplit = candidate.name?.split(", ");
+        const nameSplit = candidate.name?.split(', ');
 
         this.form.get('type')?.setValue(ContactTypes.CANDIDATE);
         this.form.get('candidate_id')?.setValue(candidate.candidate_id);
@@ -241,5 +231,4 @@ export class ContactFormComponent implements OnInit, OnDestroy {
       });
     }
   }
-
 }

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCashOnHand } from '../../store/cash-on-hand.selectors';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -34,7 +34,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     ),
     new TableAction('Download as .fec', this.goToTest.bind(this)),
   ];
-  private destroy$ = new Subject<boolean>();
 
   constructor(
     private store: Store,
@@ -57,11 +56,6 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
       .subscribe((cashOnHand: CashOnHand) => {
         this.cashOnHand = cashOnHand;
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   protected getEmptyItem(): F3xSummary {

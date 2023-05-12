@@ -1,19 +1,20 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { Destroyer } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-transaction-container',
   templateUrl: './transaction-container.component.html',
 })
-export class TransactionContainerComponent implements OnDestroy {
+export class TransactionContainerComponent extends Destroyer {
   transaction: Transaction | undefined;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store, private titleService: Title) {
+    super();
     activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       this.transaction = data['transaction'];
       if (this.transaction) {
@@ -21,10 +22,5 @@ export class TransactionContainerComponent implements OnDestroy {
         this.titleService.setTitle(title);
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }
