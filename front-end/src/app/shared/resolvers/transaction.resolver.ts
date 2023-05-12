@@ -80,28 +80,14 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
               );
             }
           } else {
-            // If there is a parent transaction
             if (transaction?.parent_transaction_id) {
-              return this.transactionService.get(transaction.parent_transaction_id).pipe(
-                mergeMap((parent: Transaction) => {
-                  // We set the retrieved transaction's parent
+              return this.resolve_existing_transaction(transaction.parent_transaction_id).pipe(
+                map((parent) => {
                   transaction.parent_transaction = parent;
-                  // We also check for a grandparent transaction
-                  if (parent.parent_transaction_id) {
-                    return this.transactionService.get(parent.parent_transaction_id).pipe(
-                      map((grandparent) => {
-                        // And link it to the parent transaction
-                        parent.parent_transaction = grandparent;
-                        return transaction;
-                      })
-                    );
-                  }
-                  // If there is no grandparent, we're done
-                  return of(transaction);
+                  return transaction;
                 })
               );
             }
-            // If there is no parent, we're done
             return of(transaction);
           }
         }
