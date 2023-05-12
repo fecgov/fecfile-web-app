@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import {
+  GO_BACK_CONTROL,
   NavigationAction,
   NavigationControl,
   NavigationDestination,
@@ -12,9 +14,11 @@ import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/t
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
+import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
@@ -37,6 +41,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   purposeDescriptionLabel = '';
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({});
+  isEditable = true;
 
   constructor(
     protected messageService: MessageService,
@@ -45,7 +50,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected confirmationService: ConfirmationService,
     protected fb: FormBuilder,
     protected router: Router,
-    protected fecDatePipe: FecDatePipe
+    protected fecDatePipe: FecDatePipe,
+    protected store: Store,
+    protected reportService: ReportService
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +64,13 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
     this.parentOnInit();
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        this.isEditable = this.reportService.isEditable(report);
+        if (!this.isEditable) this.form.disable();
+      });
   }
 
   parentOnInit() {
@@ -208,6 +222,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   getNavigationControls(): TransactionNavigationControls {
+    if (!this.isEditable) return new TransactionNavigationControls([], [GO_BACK_CONTROL], []);
     return this.transaction?.transactionType?.navigationControls || new TransactionNavigationControls([], [], []);
   }
 

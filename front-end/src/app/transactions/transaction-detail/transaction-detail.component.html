@@ -4,7 +4,7 @@
   <h1>{{ transaction?.transactionType?.title }}</h1>
   <h3>Contact</h3>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
-    <div class="grid">
+    <div class="grid" *ngIf="isEditable">
       <div class="col-12">
         <div class="field">
           <label for="entity_type">CONTACT TYPE</label>
@@ -75,7 +75,7 @@
         [purposeDescriptionLabelNotice]="transaction?.transactionType?.purposeDescriptionLabelNotice"
         [purposeDescriptionPrefix]="this.transaction?.transactionType?.purposeDescriptionPrefix"
       ></app-additional-info-input>
-      <div class="grid">
+      <div class="grid" *ngIf="isEditable">
         <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
           <div class="col-4">
             <app-navigation-control
