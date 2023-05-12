@@ -1,13 +1,17 @@
 .grid {
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .cancel-controls {
-    padding: 0px;
-    justify-content: flex-start;
+  padding: 0px;
+  justify-content: flex-start;
 }
 .continue-controls {
-    padding: 0px;
-    display: flex;
-    justify-content: flex-end;
+  padding: 0px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.align-right {
+  text-align: right;
 }

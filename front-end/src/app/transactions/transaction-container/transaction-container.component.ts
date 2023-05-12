@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
+import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/double-transaction-group.model';
+import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
@@ -22,5 +24,13 @@ export class TransactionContainerComponent extends DestroyerComponent {
         this.titleService.setTitle(title);
       }
     });
+  }
+
+  isTransactionGroup() {
+    return this.transaction?.transactionType?.transactionGroup instanceof TransactionGroup;
+  }
+
+  isDoubleTransactionGroup() {
+    return this.transaction?.transactionType?.transactionGroup instanceof DoubleTransactionGroup;
   }
 }

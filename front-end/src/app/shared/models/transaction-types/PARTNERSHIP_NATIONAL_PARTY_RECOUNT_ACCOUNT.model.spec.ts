@@ -1,4 +1,5 @@
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
+import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from './PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
@@ -12,7 +13,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
     expect(transactionType).toBeTruthy();
     if (transactionType) {
       expect(transactionType.scheduleId).toBe('A');
-      expect(transactionType.componentGroupId).toBe('D');
+      expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
     }
   });
 

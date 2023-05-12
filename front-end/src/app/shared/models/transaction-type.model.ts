@@ -1,6 +1,8 @@
-import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { ContactType } from './contact.model';
+import { DoubleTransactionGroup } from './transaction-groups/double-transaction-group.model';
+import { TransactionGroup } from './transaction-groups/transaction-group.model';
+import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { Transaction, TransactionTypes } from './transaction.model';
 
 /**
@@ -9,7 +11,7 @@ import { Transaction, TransactionTypes } from './transaction.model';
  */
 export abstract class TransactionType {
   abstract scheduleId: string;
-  abstract componentGroupId: string; // Identifier of transaction component use to render UI form entry page
+  abstract transactionGroup: TransactionGroup | DoubleTransactionGroup; // Transaction group used to render UI form entry page
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
@@ -78,6 +80,7 @@ export type TransactionTemplateMapType = {
   dateLabel: string;
   memo_code: string;
   amount: string;
+  amountInputHeader: string;
   aggregate: string;
   purpose_description: string;
   purposeDescripLabel: string;

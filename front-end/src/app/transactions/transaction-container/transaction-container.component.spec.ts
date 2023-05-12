@@ -19,7 +19,6 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { SharedModule } from '../../shared/shared.module';
-import { TransactionGroupBComponent } from '../transaction-group-b/transaction-group-b.component';
 import { TransactionContainerComponent } from './transaction-container.component';
 import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
 
@@ -46,7 +45,7 @@ describe('TransactionContainerComponent', () => {
         InputTextareaModule,
         ConfirmDialogModule,
       ],
-      declarations: [TransactionContainerComponent, TransactionGroupBComponent, ConfirmDialog],
+      declarations: [TransactionContainerComponent, ConfirmDialog],
       providers: [
         FormBuilder,
         MessageService,
