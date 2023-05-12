@@ -1,19 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject, delay, of, Subject, takeUntil } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject, delay, of, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { ReportService } from 'app/shared/services/report.service';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-report-detailed-summary',
   templateUrl: './report-detailed-summary.component.html',
   styleUrls: ['../../styles.scss'],
 })
-export class ReportDetailedSummaryComponent extends Destroyer implements OnInit {
+export class ReportDetailedSummaryComponent extends DestroyerComponent implements OnInit {
   protected calculationFinished$ = new BehaviorSubject<boolean>(false);
   report: F3xSummary = new F3xSummary();
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -16,7 +16,7 @@ import { takeUntil } from 'rxjs';
   selector: 'app-cash-on-hand',
   templateUrl: './cash-on-hand.component.html',
 })
-export class CashOnHandComponent extends Destroyer implements OnInit {
+export class CashOnHandComponent extends DestroyerComponent implements OnInit {
   formProperties: string[] = ['L6a_cash_on_hand_jan_1_ytd', 'cash_on_hand_date'];
   report: F3xSummary | undefined;
   formSubmitted = false;

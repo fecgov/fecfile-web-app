@@ -6,13 +6,13 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ApiService } from 'app/shared/services/api.service';
 import { environment } from 'environments/environment';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-test-dot-fec',
   templateUrl: './test-dot-fec.component.html',
 })
-export class TestDotFecComponent extends Destroyer implements OnInit {
+export class TestDotFecComponent extends DestroyerComponent implements OnInit {
   report: F3xSummary | undefined;
   fileIsGenerated = false;
   constructor(private store: Store, private apiService: ApiService, private http: HttpClient) {

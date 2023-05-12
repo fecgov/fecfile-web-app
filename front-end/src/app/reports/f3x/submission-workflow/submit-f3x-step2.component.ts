@@ -15,13 +15,13 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ReportService } from '../../../shared/services/report.service';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-submit-f3x-step2',
   templateUrl: './submit-f3x-step2.component.html',
 })
-export class SubmitF3xStep2Component extends Destroyer implements OnInit {
+export class SubmitF3xStep2Component extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
     'treasurer_first_name',
     'treasurer_last_name',

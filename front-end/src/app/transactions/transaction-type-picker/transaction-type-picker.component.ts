@@ -20,7 +20,7 @@ import {
 } from 'app/shared/models/schb-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 type Categories = 'receipt' | 'disbursement';
 
@@ -29,7 +29,7 @@ type Categories = 'receipt' | 'disbursement';
   templateUrl: './transaction-type-picker.component.html',
   styleUrls: ['./transaction-type-picker.component.scss'],
 })
-export class TransactionTypePickerComponent extends Destroyer implements OnInit {
+export class TransactionTypePickerComponent extends DestroyerComponent implements OnInit {
   transactionTypeLabels: LabelList = [...ScheduleATransactionTypeLabels, ...ScheduleBTransactionTypeLabels];
   report: Report | undefined;
   category: Categories = 'receipt';

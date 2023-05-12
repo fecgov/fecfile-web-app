@@ -7,14 +7,14 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList } from '../../shared/utils/label.utils';
 import { F3xFormTypeLabels } from '../../shared/models/f3x-summary.model';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-transaction-list',
   templateUrl: './transaction-list.component.html',
   styleUrls: ['../transaction.scss'],
 })
-export class TransactionListComponent extends Destroyer implements OnInit {
+export class TransactionListComponent extends DestroyerComponent implements OnInit {
   report: F3xSummary | undefined;
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
 

@@ -7,14 +7,14 @@ import { F3xFormTypeLabels, F3xSummary } from '../../../shared/models/f3x-summar
 import { WebPrintService } from '../../../shared/services/web-print.service';
 import { Report } from '../../../shared/interfaces/report.interface';
 import { selectActiveReport } from '../../../store/active-report.selectors';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-report-web-print',
   templateUrl: './report-web-print.component.html',
   styleUrls: ['../../styles.scss'],
 })
-export class ReportWebPrintComponent extends Destroyer implements OnInit {
+export class ReportWebPrintComponent extends DestroyerComponent implements OnInit {
   report: F3xSummary = new F3xSummary();
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
 

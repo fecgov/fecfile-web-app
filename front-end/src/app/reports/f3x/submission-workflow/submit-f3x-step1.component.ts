@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { F3xSummaryService } from 'app/shared/services/f3x-summary.service';
@@ -18,7 +18,7 @@ import { Observable, takeUntil } from 'rxjs';
   selector: 'app-submit-f3x-step1',
   templateUrl: './submit-f3x-step1.component.html',
 })
-export class SubmitF3xStep1Component extends Destroyer implements OnInit {
+export class SubmitF3xStep1Component extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
     'confirmation_email_1',
     'confirmation_email_2',

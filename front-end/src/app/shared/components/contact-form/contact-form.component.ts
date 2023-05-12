@@ -18,13 +18,13 @@ import {
   FecApiCandidateLookupData,
   FecApiCommitteeLookupData,
 } from '../../models/contact.model';
-import { Destroyer } from '../app-destroyer.component';
+import { DestroyerComponent } from '../app-destroyer.component';
 
 @Component({
   selector: 'app-contact-form',
   templateUrl: './contact-form.component.html',
 })
-export class ContactFormComponent extends Destroyer implements OnInit {
+export class ContactFormComponent extends DestroyerComponent implements OnInit {
   @Input() form: FormGroup = this.fb.group(
     ValidateUtils.getFormGroupFields([
       ...new Set([

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -31,17 +31,17 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { environment } from 'environments/environment';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { MessageService } from 'primeng/api';
-import { combineLatest, map, of, startWith, Subject, switchMap, takeUntil, zip } from 'rxjs';
+import { combineLatest, map, of, startWith, switchMap, takeUntil, zip } from 'rxjs';
 import { ReportService } from '../../../shared/services/report.service';
 import { selectCashOnHand } from '../../../store/cash-on-hand.selectors';
 import * as _ from 'lodash';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-create-f3x-step1',
   templateUrl: './create-f3x-step1.component.html',
 })
-export class CreateF3XStep1Component extends Destroyer implements OnInit {
+export class CreateF3XStep1Component extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
     'filing_frequency',
     'report_type_category',

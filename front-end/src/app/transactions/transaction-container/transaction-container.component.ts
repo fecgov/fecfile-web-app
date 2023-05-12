@@ -4,13 +4,13 @@ import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Title } from '@angular/platform-browser';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-transaction-container',
   templateUrl: './transaction-container.component.html',
 })
-export class TransactionContainerComponent extends Destroyer {
+export class TransactionContainerComponent extends DestroyerComponent {
   transaction: Transaction | undefined;
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store, private titleService: Title) {

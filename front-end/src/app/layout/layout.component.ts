@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCommitteeAccount } from '../store/committee-account.selectors';
 import { selectSpinnerStatus } from '../store/spinner.selectors';
@@ -7,14 +7,14 @@ import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SidebarState } from './sidebar/sidebar.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
-export class LayoutComponent extends Destroyer implements OnInit {
+export class LayoutComponent extends DestroyerComponent implements OnInit {
   committeeAccount$: Observable<CommitteeAccount> | undefined;
   progressBarVisible$: Observable<{ spinnerOn: boolean }> | undefined;
   sidebarState$?: Observable<SidebarState | undefined>;

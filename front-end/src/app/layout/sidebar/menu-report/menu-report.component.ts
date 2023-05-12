@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { combineLatest, Observable, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { combineLatest, Observable, of, switchMap, takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { selectActiveReport } from '../../../store/active-report.selectors';
@@ -10,14 +10,14 @@ import { F3xFormTypeLabels } from '../../../shared/models/f3x-summary.model';
 import { ReportService } from '../../../shared/services/report.service';
 import { ReportSidebarState, SidebarState } from '../sidebar.component';
 import { selectSidebarState } from 'app/store/sidebar-state.selectors';
-import { Destroyer } from 'app/shared/components/app-destroyer.component';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-menu-report',
   templateUrl: './menu-report.component.html',
   styleUrls: ['./menu-report.component.scss'],
 })
-export class MenuReportComponent extends Destroyer implements OnInit {
+export class MenuReportComponent extends DestroyerComponent implements OnInit {
   f3xFormTypeLabels: LabelList = F3xFormTypeLabels;
   activeReport$?: Observable<Report | undefined>;
   items$: Observable<MenuItem[]> = of([]);

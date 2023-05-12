@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, take, takeUntil } from 'rxjs';
+import { take, takeUntil } from 'rxjs';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Transaction } from 'app/shared/models/transaction.model';
