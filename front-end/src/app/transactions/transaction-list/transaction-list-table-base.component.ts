@@ -1,41 +1,47 @@
-import { Component, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, take, takeUntil } from 'rxjs';
+import { take, takeUntil } from 'rxjs';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { LabelList } from 'app/shared/utils/label.utils';
+import { Store } from '@ngrx/store';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { ReportService } from 'app/shared/services/report.service';
 
 @Component({
   template: '',
 })
-export abstract class TransactionListTableBaseComponent
-  extends TableListBaseComponent<Transaction>
-  implements OnInit, OnDestroy
-{
-  private destroy$ = new Subject<boolean>();
+export abstract class TransactionListTableBaseComponent extends TableListBaseComponent<Transaction> implements OnInit {
   abstract scheduleTransactionTypeLabels: LabelList;
   override rowsPerPage = 5;
   paginationPageSizeOptions = [5, 10, 15, 20];
+  reportIsEditable = false;
 
   public rowActions: TableAction[] = [
     new TableAction(
+      'View',
+      this.editItem.bind(this),
+      () => !this.reportIsEditable,
+      () => true
+    ),
+    new TableAction(
       'Edit',
       this.editItem.bind(this),
-      () => true,
+      () => this.reportIsEditable,
       () => true
     ),
     new TableAction(
       'Itemize',
       this.forceItemize.bind(this),
-      (transaction: Transaction) => transaction.itemized === false,
+      (transaction: Transaction) => transaction.itemized === false && this.reportIsEditable,
       () => true
     ),
     new TableAction(
       'Unitemize',
       this.forceUnitemize.bind(this),
-      (transaction: Transaction) => transaction.itemized === true,
+      (transaction: Transaction) => transaction.itemized === true && this.reportIsEditable,
       () => true
     ),
   ];
@@ -45,18 +51,21 @@ export abstract class TransactionListTableBaseComponent
     protected override confirmationService: ConfirmationService,
     protected override elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
-    protected router: Router
+    protected router: Router,
+    protected store: Store,
+    protected reportService: ReportService
   ) {
     super(messageService, confirmationService, elementRef);
   }
 
   override ngOnInit(): void {
     this.loading = true;
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
+    this.store
+      .select(selectActiveReport)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((report) => {
+        this.reportIsEditable = this.reportService.isEditable(report);
+      });
   }
 
   public onTableActionClick(action: TableAction, report?: F3xSummary) {
