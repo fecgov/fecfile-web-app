@@ -49,7 +49,7 @@
     <ng-template pTemplate="body" let-item>
       <tr role="row">
         <td>
-          <a [routerLink]="['edit', item?.id]">{{
+          <a [routerLink]="[item?.id]">{{
             item.transaction_type_identifier | label : scheduleTransactionTypeLabels
           }}</a>
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>

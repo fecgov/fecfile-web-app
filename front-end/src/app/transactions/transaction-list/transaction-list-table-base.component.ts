@@ -93,7 +93,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   override editItem(item: Transaction): void {
-    this.router.navigate([`edit/${item.id}`], { relativeTo: this.activatedRoute });
+    this.router.navigate([`${item.id}`], { relativeTo: this.activatedRoute });
   }
 
   public forceItemize(transaction: Transaction): void {

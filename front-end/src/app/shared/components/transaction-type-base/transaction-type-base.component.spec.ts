@@ -327,7 +327,7 @@ describe('TransactionTypeBaseComponent', () => {
       detail: 'Parent Transaction Saved',
       life: 3000,
     };
-    const expectedRoute = `/transactions/report/999/list/edit/${testTransactionId}/create-sub-transaction/${testTransactionTypeToAdd}`;
+    const expectedRoute = `/transactions/report/999/list/${testTransactionId}/create-sub-transaction/${testTransactionTypeToAdd}`;
 
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
@@ -352,7 +352,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#navigateTo NavigationDestination.CHILD should navigate', () => {
     component.transaction = testTransaction;
-    const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
+    const expectedRoute = '/transactions/report/999/list/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo(
       new NavigationEvent(
@@ -368,7 +368,7 @@ describe('TransactionTypeBaseComponent', () => {
   it('#navigateTo NavigationDestination.PARENT should navigate', () => {
     const transaction = { ...testTransaction } as SchATransaction;
     transaction.parent_transaction_id = '333';
-    const expectedRoute = '/transactions/report/999/list/edit/333';
+    const expectedRoute = '/transactions/report/999/list/333';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.PARENT, transaction));
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);

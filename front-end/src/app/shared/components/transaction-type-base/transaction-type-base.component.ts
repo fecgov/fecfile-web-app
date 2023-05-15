@@ -252,7 +252,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       });
       if (event.transaction?.parent_transaction_id) {
         this.router.navigateByUrl(
-          `${reportPath}/list/edit/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`
+          `${reportPath}/list/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`
         );
         this.resetForm();
       } else {
@@ -267,10 +267,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       this.router.navigateByUrl(
-        `${reportPath}/list/edit/${event.transaction?.id}/create-sub-transaction/${event.destinationTransactionType}`
+        `${reportPath}/list/${event.transaction?.id}/create-sub-transaction/${event.destinationTransactionType}`
       );
     } else if (event.destination === NavigationDestination.PARENT) {
-      this.router.navigateByUrl(`${reportPath}/list/edit/${event.transaction?.parent_transaction_id}`);
+      this.router.navigateByUrl(`${reportPath}/list/${event.transaction?.parent_transaction_id}`);
     } else {
       this.router.navigateByUrl(`${reportPath}/list`);
     }
