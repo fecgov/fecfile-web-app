@@ -15,6 +15,7 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     { label: 'Runoff (R)', value: 'R' },
     { label: 'Special (S)', value: 'S' },
     { label: 'Recount (E)', value: 'E' },
+    { label: 'Other (O)', value: 'O' },
   ];
 
   ngOnInit(): void {
