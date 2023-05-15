@@ -421,6 +421,8 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [
     ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
     'Partnership Individual Recount/Legal Proceedings Account JF Transfer Memo',
+  ],
+  [
     ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
     'Partnership Individual Headquarters Buildings Account JF Transfer Memo',
   ],
