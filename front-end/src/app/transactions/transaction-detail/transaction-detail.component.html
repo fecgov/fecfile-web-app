@@ -92,6 +92,7 @@
       [navigationControls]="getNavigationControls()"
       [transaction]="transaction"
       (navigate)="handleNavigate($event)"
+      [class]="isEditable ? '' : 'flex-center'"
     ></app-navigation-control-bar>
   </form>
 </div>

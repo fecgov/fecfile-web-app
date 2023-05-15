@@ -93,7 +93,7 @@
       </p></ng-template
     >
     <div class="p-fluid">
-      <h2>{{this.childTransactionTitle}}</h2>
+      <h2>{{ this.childTransactionTitle }}</h2>
       <h3>Conduit</h3>
       <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid">
@@ -175,6 +175,7 @@
   [navigationControls]="getNavigationControls()"
   [transaction]="transaction"
   (navigate)="handleNavigate($event)"
+  [class]="isEditable ? '' : 'flex-center'"
 ></app-navigation-control-bar>
 
 <p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
