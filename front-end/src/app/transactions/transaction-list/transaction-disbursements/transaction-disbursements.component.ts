@@ -5,6 +5,8 @@ import { TransactionSchBService } from 'app/shared/services/transaction-schB.ser
 import { ScheduleBTransactionTypeLabels } from 'app/shared/models/schb-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
+import { Store } from '@ngrx/store';
+import { ReportService } from 'app/shared/services/report.service';
 
 @Component({
   selector: 'app-transaction-disbursements',
@@ -20,8 +22,10 @@ export class TransactionDisbursementsComponent extends TransactionListTableBaseC
     protected override elementRef: ElementRef,
     protected override activatedRoute: ActivatedRoute,
     protected override router: Router,
-    protected override itemService: TransactionSchBService
+    protected override itemService: TransactionSchBService,
+    protected override store: Store,
+    protected override reportService: ReportService
   ) {
-    super(messageService, confirmationService, elementRef, activatedRoute, router);
+    super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
   }
 }

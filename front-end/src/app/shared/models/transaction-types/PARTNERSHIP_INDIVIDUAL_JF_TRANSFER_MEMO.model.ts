@@ -19,7 +19,7 @@ export class PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     let committeeClause = `JF Memo: ${
-      (transaction.parent_transaction?.parent_transaction as SchATransaction).contributor_organization_name
+      (transaction.parent_transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;
     const parenthetical = ' (Partnership Attribution)';
     if ((committeeClause + parenthetical).length > 100) {
