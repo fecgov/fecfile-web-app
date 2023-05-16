@@ -72,10 +72,10 @@
           {{ item[item.transactionType.templateMap.amount] | currency }}
         </td>
         <td>
-          {{ item.transaction_id }}
+          {{ formatId(item.id) }}
         </td>
         <td>
-          {{ item.parent_transaction?.transaction_id }}
+          {{ formatId(item.parent_transaction_id) }}
         </td>
         <td>
           <app-table-actions-button

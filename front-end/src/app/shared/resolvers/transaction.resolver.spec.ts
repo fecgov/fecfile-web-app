@@ -203,4 +203,54 @@ describe('TransactionResolver', () => {
       expect(transaction?.parent_transaction?.id).toBe('2');
     });
   });
+
+  it('should populate grandparent transaction if child is existing', () => {
+    spyOn(resolver.transactionService, 'get').and.callFake((id) => {
+      if (id === '10') {
+        return of(
+          SchATransaction.fromJSON({
+            id: id,
+            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+            transactionType: TransactionTypeUtils.factory(
+              ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
+            ),
+            contact_id: '123',
+            contact: Contact.fromJSON({ id: 123 }),
+            parent_transaction_id: '2',
+          })
+        );
+      }
+      if (id === '2') {
+        return of(
+          SchATransaction.fromJSON({
+            id: id,
+            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+            transactionType: TransactionTypeUtils.factory(
+              ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
+            ),
+            contact_id: '123',
+            contact: Contact.fromJSON({ id: 123 }),
+            parent_transaction_id: '1',
+          })
+        );
+      } else {
+        return of(
+          SchATransaction.fromJSON({
+            id: id,
+            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+            transactionType: TransactionTypeUtils.factory(
+              ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
+            ),
+            contact_id: '123',
+            contact: Contact.fromJSON({ id: 123 }),
+          })
+        );
+      }
+    });
+    resolver.resolve_existing_transaction('10').subscribe((transaction: Transaction | undefined) => {
+      if (transaction) expect(transaction.id).toBe('10');
+      expect(transaction?.parent_transaction?.id).toBe('2');
+      expect(transaction?.parent_transaction?.parent_transaction?.id).toBe('1');
+    });
+  });
 });

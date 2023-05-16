@@ -15,6 +15,7 @@
 
     <ng-template pTemplate="right">
       <app-table-actions-button
+        *ngIf="report?.report_status === 'In-Progress'"
         [tableActions]="tableActions"
         [actionItem]="report"
         [tableActionClick]="onTableActionClick"
