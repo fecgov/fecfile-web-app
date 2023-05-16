@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable, Subject, takeUntil, from, switchMap } from 'rxjs';
+import { Observable, takeUntil, from, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CashOnHand } from 'app/shared/interfaces/report.interface';
@@ -15,12 +15,13 @@ import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as f3xSchema } from 'fecfile-validate/fecfile_validate_js/dist/F3X';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ReportService } from '../../../shared/services/report.service';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-submit-f3x-step2',
   templateUrl: './submit-f3x-step2.component.html',
 })
-export class SubmitF3xStep2Component implements OnInit, OnDestroy {
+export class SubmitF3xStep2Component extends DestroyerComponent implements OnInit {
   formProperties: string[] = [
     'treasurer_first_name',
     'treasurer_last_name',
@@ -32,7 +33,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
   ];
   report?: F3xSummary;
   formSubmitted = false;
-  destroy$: Subject<boolean> = new Subject<boolean>();
   committeeAccount$: Observable<CommitteeAccount> = this.store.select(selectCommitteeAccount);
   form: FormGroup = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
   loading: 0 | 1 | 2 = 0;
@@ -50,7 +50,9 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
     protected confirmationService: ConfirmationService,
     private apiService: ApiService,
     private reportService: ReportService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.store
@@ -95,11 +97,6 @@ export class SubmitF3xStep2Component implements OnInit, OnDestroy {
         treasurer_suffix: committeeAccount?.treasurer_name_suffix,
       });
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   /**

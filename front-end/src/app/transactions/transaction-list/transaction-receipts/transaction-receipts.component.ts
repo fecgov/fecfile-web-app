@@ -5,6 +5,8 @@ import { TransactionSchAService } from 'app/shared/services/transaction-schA.ser
 import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
+import { Store } from '@ngrx/store';
+import { ReportService } from 'app/shared/services/report.service';
 
 @Component({
   selector: 'app-transaction-receipts',
@@ -20,8 +22,10 @@ export class TransactionReceiptsComponent extends TransactionListTableBaseCompon
     protected override elementRef: ElementRef,
     protected override activatedRoute: ActivatedRoute,
     protected override router: Router,
-    protected override itemService: TransactionSchAService
+    protected override itemService: TransactionSchAService,
+    protected override store: Store,
+    protected override reportService: ReportService
   ) {
-    super(messageService, confirmationService, elementRef, activatedRoute, router);
+    super(messageService, confirmationService, elementRef, activatedRoute, router, store, reportService);
   }
 }
