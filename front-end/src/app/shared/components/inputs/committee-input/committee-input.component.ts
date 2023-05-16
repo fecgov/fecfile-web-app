@@ -1,16 +1,14 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
+import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-committee-input',
   templateUrl: './committee-input.component.html',
 })
-export class CommitteeInputComponent extends BaseInputComponent implements OnInit, OnDestroy {
+export class CommitteeInputComponent extends BaseInputComponent implements OnInit {
   @Input() entityRole = 'CONTACT';
   @Input() includeFecId = false;
-
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   ngOnInit(): void {
     this.form
@@ -19,10 +17,5 @@ export class CommitteeInputComponent extends BaseInputComponent implements OnIni
       .subscribe((value) => {
         this.form.get(this.templateMap.committee_name)?.setValue(value);
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }

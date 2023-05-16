@@ -1,21 +1,22 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { Title } from '@angular/platform-browser';
 import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/double-transaction-group.model';
 import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { Subject, takeUntil } from 'rxjs';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-transaction-container',
   templateUrl: './transaction-container.component.html',
 })
-export class TransactionContainerComponent implements OnDestroy {
+export class TransactionContainerComponent extends DestroyerComponent {
   transaction: Transaction | undefined;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store, private titleService: Title) {
+    super();
     activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       this.transaction = data['transaction'];
       if (this.transaction) {
@@ -31,10 +32,5 @@ export class TransactionContainerComponent implements OnDestroy {
 
   isDoubleTransactionGroup() {
     return this.transaction?.transactionType?.transactionGroup instanceof DoubleTransactionGroup;
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }
