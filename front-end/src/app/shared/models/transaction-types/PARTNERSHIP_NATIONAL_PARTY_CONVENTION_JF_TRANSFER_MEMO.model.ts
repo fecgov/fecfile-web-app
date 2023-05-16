@@ -18,9 +18,9 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchA
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   override subTransactionConfig = new SubTransactionGroup(
-    'Partnership Receipt Nominating Convention Account JF Transfer Memo', [
-    ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
-  ]);
+    'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',
+    [ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO]
+  );
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     const base = 'Pres. Nominating Convention Account JF Memo: ';
