@@ -19,7 +19,7 @@ export class PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     let committeeClause = `JF Memo: ${
-      (transaction.parent_transaction?.parent_transaction as SchATransaction).contributor_organization_name
+      (transaction.parent_transaction?.parent_transaction as SchATransaction)?.contributor_organization_name
     }`;
     const parenthetical = ' (Partnership Attribution)';
     if ((committeeClause + parenthetical).length > 100) {
@@ -32,7 +32,6 @@ export class PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType
     return SchATransaction.fromJSON({
       form_type: 'SA12',
       transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
-      back_reference_sched_name: 'SA12',
       aggregation_group: AggregationGroups.GENERAL,
     });
   }

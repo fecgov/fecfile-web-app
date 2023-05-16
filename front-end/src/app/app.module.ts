@@ -1,50 +1,51 @@
 // Anguluar
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // NGRX
-import { StoreModule, ActionReducer, MetaReducer, Action } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { Action, ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { loginReducer } from './store/login.reducer';
-import { committeeAccountReducer } from './store/committee-account.reducer';
-import { spinnerReducer } from './store/spinner.reducer';
-import { CommitteeAccountEffects } from './store/committee-account.effects';
-import { LoginEffects } from './store/login.effects';
-import { AppState } from './store/app-state.model';
 import { activeReportReducer } from './store/active-report.reducer';
+import { AppState } from './store/app-state.model';
 import { cashOnHandReducer } from './store/cash-on-hand.reducer';
+import { CommitteeAccountEffects } from './store/committee-account.effects';
+import { committeeAccountReducer } from './store/committee-account.reducer';
+import { LoginEffects } from './store/login.effects';
+import { loginReducer } from './store/login.reducer';
 import { sidebarStateReducer } from './store/sidebar-state.reducer';
+import { spinnerReducer } from './store/spinner.reducer';
 
 // PrimeNG
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { MenubarModule } from 'primeng/menubar';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
+import { MenubarModule } from 'primeng/menubar';
+import { PanelModule } from 'primeng/panel';
+import { PanelMenuModule } from 'primeng/panelmenu';
 import { ProgressBarModule } from 'primeng/progressbar';
 
 // Third party
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { CookieService } from 'ngx-cookie-service';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 // App
 import { AppRoutingModule } from './app-routing.module';
-import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
-import { LayoutComponent } from './layout/layout.component';
-import { HeaderComponent } from './layout/header/header.component';
-import { SidebarComponent } from './layout/sidebar/sidebar.component';
-import { FooterComponent } from './layout/footer/footer.component';
-import { LoginComponent } from './login/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { BannerComponent } from './layout/banner/banner.component';
+import { CommitteeBannerComponent } from './layout/committee-banner/committee-banner.component';
+import { FooterComponent } from './layout/footer/footer.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { LayoutComponent } from './layout/layout.component';
+import { MenuReportComponent } from './layout/sidebar/menu-report/menu-report.component';
+import { SidebarComponent } from './layout/sidebar/sidebar.component';
+import { LoginComponent } from './login/login/login.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
-import { MenuReportComponent } from './layout/sidebar/menu-report/menu-report.component';
-import { BannerComponent } from './layout/banner/banner.component';
+import { SharedModule } from './shared/shared.module';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -60,6 +61,7 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
   declarations: [
     AppComponent,
     LayoutComponent,
+    CommitteeBannerComponent,
     HeaderComponent,
     BannerComponent,
     SidebarComponent,
@@ -104,4 +106,4 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

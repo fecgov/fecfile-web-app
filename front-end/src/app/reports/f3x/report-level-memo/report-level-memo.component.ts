@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
@@ -10,14 +11,14 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
   styleUrls: ['../../styles.scss'],
 })
-export class ReportLevelMemoComponent implements OnInit, OnDestroy {
+export class ReportLevelMemoComponent extends DestroyerComponent implements OnInit {
   readonly recTypeFormProperty = 'rec_type';
   readonly text4kFormProperty = 'text4000';
 
@@ -25,7 +26,6 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
 
   report: F3xSummary = new F3xSummary();
   committeeAccountId: string | undefined;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   assignedMemoText: MemoText = new MemoText();
 
@@ -39,6 +39,7 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
     public memoTextService: MemoTextService,
     private messageService: MessageService
   ) {
+    super();
     this.form.addControl(this.recTypeFormProperty, new FormControl());
   }
 
@@ -67,11 +68,6 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
       });
 
     ValidateUtils.addJsonSchemaValidators(this.form, textSchema, false);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   save() {

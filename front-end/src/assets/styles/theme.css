@@ -66,6 +66,9 @@
 }
 
 .p-error {
+  font-family: karla, Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-size: 13px;
+  font-weight: bold;
   color: #cd2026;
 }
 

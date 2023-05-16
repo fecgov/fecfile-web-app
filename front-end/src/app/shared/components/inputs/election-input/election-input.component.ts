@@ -1,13 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-election-input',
   templateUrl: './election-input.component.html',
 })
-export class ElectionInputComponent extends BaseInputComponent implements OnInit, OnDestroy {
+export class ElectionInputComponent extends BaseInputComponent implements OnInit {
   electionTypeOptions = [
     { label: 'Primary (P)', value: 'P' },
     { label: 'General (G)', value: 'G' },
@@ -15,8 +15,8 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     { label: 'Runoff (R)', value: 'R' },
     { label: 'Special (S)', value: 'S' },
     { label: 'Recount (E)', value: 'E' },
+    { label: 'Other (O)', value: 'O' },
   ];
-  private destroy$ = new Subject<boolean>();
 
   ngOnInit(): void {
     // Create two additional form controls that will join values to populate the composit election_code form control value
@@ -52,10 +52,5 @@ export class ElectionInputComponent extends BaseInputComponent implements OnInit
     this.form.get(this.templateMap['election_code'])?.setValue(election_code);
     this.form.get(this.templateMap['election_other_description'])?.markAsTouched();
     this.form.get(this.templateMap['election_other_description'])?.updateValueAndValidity();
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 }
