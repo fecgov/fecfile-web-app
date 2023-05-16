@@ -315,6 +315,29 @@ describe('TransactionTypeBaseComponent', () => {
     expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
+  it('#navigateTo NavigationDestination.ANOTHER_CHILD should show popup', () => {
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
+    testTransaction1.parent_transaction_id = '123';
+    component.transaction = testTransaction1;
+    const expectedMessage: Message = {
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Transaction Saved',
+      life: 3000,
+    };
+    const messageServiceAddSpy = spyOn(testMessageService, 'add');
+    spyOn(testRouter, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    component.navigateTo(
+      new NavigationEvent(
+        NavigationAction.SAVE,
+        NavigationDestination.ANOTHER_CHILD,
+        testTransaction1,
+        ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+      )
+    );
+    expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
+  });
+
   it('#navigateTo NavigationDestination.CHILD should show popup + navigate', () => {
     const testTransactionId = '123';
     const testTransactionTypeToAdd = ScheduleATransactionTypes.INDIVIDUAL_RECEIPT;

@@ -54,7 +54,14 @@ describe('ElectionInputComponent', () => {
   });
 
   it('should disable all fields', () => {
+    fixture = TestBed.createComponent(ElectionInputComponent);
+    component = fixture.componentInstance;
+    component.form = new FormGroup({
+      election_code: new FormControl(''),
+      election_other_description: new FormControl(''),
+    });
     component.form.disable();
+    component.templateMap = testTemplateMap;
     fixture.detectChanges();
     expect(component.form.get('electionYear')?.disabled).toBe(true);
   });
