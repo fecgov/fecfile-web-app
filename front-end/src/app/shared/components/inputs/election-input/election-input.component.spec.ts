@@ -52,4 +52,10 @@ describe('ElectionInputComponent', () => {
     });
     expect(component.form.status).toBe('INVALID');
   });
+
+  it('should disable all fields', () => {
+    component.form.disable();
+    fixture.detectChanges();
+    expect(component.form.get('electionYear')?.disabled).toBe(true);
+  });
 });
