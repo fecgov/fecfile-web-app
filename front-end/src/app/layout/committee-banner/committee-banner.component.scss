@@ -1,0 +1,25 @@
+.committee-name, .sub-banner-item {
+  font-family: karla, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  color: #212121;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.committee-name {
+  line-height: 1.2;
+  font-size: 36px;
+  text-align: left;
+}
+
+.sub-banner-item {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.pipe-separator {
+  font-family: ghandi-bold, serif;
+  font-weight: lighter;
+  font-size: 18px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
