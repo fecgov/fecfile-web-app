@@ -120,7 +120,6 @@ export class ValidateUtils {
     transaction?: Transaction
   ) {
     for (const key in form.controls) {
-      console.log('Key:', key);
       if (clearExistingValidators) {
         form.get(key)?.clearValidators();
       }
