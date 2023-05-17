@@ -40,7 +40,7 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_input',
+    'text4000',
   ];
 
   childFormProperties: string[] = [
@@ -63,7 +63,7 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_input',
+    'text4000',
   ];
 }
 
@@ -164,7 +164,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
       memo_code: '',
-      memo_text_input: '',
+      text4000: '',
     });
     component.childForm.patchValue({
       entity_type: 'IND',
@@ -186,7 +186,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
       memo_code: true,
-      memo_text_input: '',
+      text4000: '',
     });
     component.save(navEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
