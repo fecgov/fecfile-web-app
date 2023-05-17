@@ -1,5 +1,6 @@
 <p-toast></p-toast>
 <h1>{{ transaction?.transactionType?.title }}</h1>
+<h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
 <p>
   This type of receipt requires a memo transaction. Follow this two-step process to create both an earmark receipt and
   an earmark memo:
