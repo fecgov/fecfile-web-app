@@ -24,7 +24,7 @@ export class TransactionGroupAG extends DoubleTransactionGroup {
       templateMap.employer,
       templateMap.occupation,
       templateMap.memo_code,
-      templateMap.memo_text_input,
+      templateMap.memo_text_description,
     ].filter((val) => !!val);
   }
 
@@ -51,7 +51,7 @@ export class TransactionGroupAG extends DoubleTransactionGroup {
       childTemplateMap.committee_fec_id,
       childTemplateMap.committee_name,
       childTemplateMap.memo_code,
-      childTemplateMap.memo_text_input,
+      childTemplateMap.memo_text_description,
     ].filter((val) => !!val);
   }
 

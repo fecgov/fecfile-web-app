@@ -27,7 +27,7 @@ export abstract class SchCTransactionType extends TransactionType {
     aggregate: '',
     purpose_description: '',
     purposeDescripLabel: '',
-    memo_text_input: 'memo_text_input',
+    memo_text_description: 'memo_text_description',
     category_code: '',
     election_code: 'election_code',
     election_other_description: 'election_other_description',

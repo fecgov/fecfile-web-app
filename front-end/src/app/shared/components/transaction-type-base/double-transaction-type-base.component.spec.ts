@@ -7,7 +7,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
-  NavigationDestination, NavigationEvent
+  NavigationDestination,
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
@@ -38,7 +39,7 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_input',
+    'memo_text_description',
   ];
 
   childFormProperties: string[] = [
@@ -61,7 +62,7 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_input',
+    'memo_text_description',
   ];
 }
 
@@ -158,7 +159,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
       memo_code: '',
-      memo_text_input: '',
+      memo_text_description: '',
     });
     component.childForm.patchValue({
       entity_type: 'IND',
@@ -180,7 +181,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
       memo_code: true,
-      memo_text_input: '',
+      memo_text_description: '',
     });
     component.save(navEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);
