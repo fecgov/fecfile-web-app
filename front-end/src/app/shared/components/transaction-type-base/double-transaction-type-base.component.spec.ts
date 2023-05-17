@@ -7,11 +7,13 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
-  NavigationDestination, NavigationEvent
+  NavigationDestination,
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -70,6 +72,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   let fixture: ComponentFixture<TestDoubleTransactionTypeBaseComponent>;
   let testTransaction: SchATransaction;
   let testConfirmationService: ConfirmationService;
+  let reportService: ReportService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -83,6 +86,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         ConfirmationService,
         provideMockStore(testMockStore),
         FecDatePipe,
+        ReportService,
       ],
     }).compileComponents();
   });
@@ -92,6 +96,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
+    reportService = TestBed.inject(ReportService);
+    spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
     fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
     component = fixture.componentInstance;
