@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BaseInputComponent } from '../base-input.component';
 import { LabelUtils, PrimeOptions, CategoryCodeLabels } from 'app/shared/utils/label.utils';
-import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
-import { ValidateUtils } from 'app/shared/utils/validate.utils';
 
 @Component({
   selector: 'app-additional-info-input',
@@ -21,8 +19,6 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
     //Add 'implements OnInit' to the class.
 
     this.patchPurposeDescriptionPrefix();
-
-    ValidateUtils.addJsonSchemaValidators(this.form, memoTextSchema, false);
   }
 
   patchPurposeDescriptionPrefix() {
