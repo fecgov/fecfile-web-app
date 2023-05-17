@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
@@ -12,7 +12,7 @@ import { BaseInputComponent } from '../base-input.component';
   styleUrls: ['./amount-input.component.scss'],
   templateUrl: './amount-input.component.html',
 })
-export class AmountInputComponent extends BaseInputComponent implements OnInit {
+export class AmountInputComponent extends BaseInputComponent implements OnInit, OnChanges {
   @Input() memoCodeReadOnly = false;
   @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
@@ -57,6 +57,10 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
     if (savedDate) {
       this.updateMemoItemWithDate(savedDate);
     }
+  }
+
+  ngOnChanges(): void {
+    this.changeDetectorRef.detectChanges();
   }
 
   closeOutOfDateDialog() {
