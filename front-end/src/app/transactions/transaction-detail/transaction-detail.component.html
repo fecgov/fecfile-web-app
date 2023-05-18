@@ -2,6 +2,7 @@
 
 <div class="p-fluid">
   <h1>{{ transaction?.transactionType?.title }}</h1>
+  <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
   <h3>Contact</h3>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
     <div class="grid" *ngIf="isEditable">
