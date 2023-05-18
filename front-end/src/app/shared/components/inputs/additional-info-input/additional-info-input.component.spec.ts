@@ -49,5 +49,12 @@ describe('AdditionalInfoInputComponent', () => {
       [testTemplateMap.purpose_description]: 'abc',
     });
     expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(component.purposeDescriptionPrefix);
+
+    component.form.patchValue({
+      [testTemplateMap.purpose_description]: 'Prefax: abc',
+    });
+    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
+      component.purposeDescriptionPrefix + 'abc'
+    );
   });
 });
