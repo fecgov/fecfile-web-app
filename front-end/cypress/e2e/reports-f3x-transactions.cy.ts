@@ -325,6 +325,7 @@ describe('Transactions', () => {
         electionYear: 2024,
         election_other_description: PageUtils.randomString(10),
       },
+      ...{ purpose_description: '' },
     };
     TransactionDetailPage.enterFormData(transactionFormData);
     PageUtils.clickButton('Save');
@@ -332,7 +333,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Continue');
 
     cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
-    cy.get('tr').should('not.contain', 'Unitemized');
+    cy.get('tr').should('contain', 'Unitemized');
     cy.get('tr').should('contain', formContactData['name']);
     cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData['date_received']));
     cy.get('tr').should('contain', '$' + transactionFormData['amount']);
