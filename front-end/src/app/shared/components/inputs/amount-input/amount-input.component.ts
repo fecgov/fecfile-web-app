@@ -1,18 +1,18 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { BaseInputComponent } from '../base-input.component';
-import { InputNumber } from 'primeng/inputnumber';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { takeUntil } from 'rxjs';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { InputNumber } from 'primeng/inputnumber';
+import { takeUntil } from 'rxjs';
+import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-amount-input',
   styleUrls: ['./amount-input.component.scss'],
   templateUrl: './amount-input.component.html',
 })
-export class AmountInputComponent extends BaseInputComponent implements OnInit {
+export class AmountInputComponent extends BaseInputComponent implements OnInit, OnChanges {
   @Input() memoCodeReadOnly = false;
   @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
@@ -29,7 +29,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
   memoControl: FormControl = new FormControl();
   outOfDateDialogVisible = false;
 
-  constructor(private store: Store) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
     super();
   }
 
@@ -57,6 +57,10 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit {
     if (savedDate) {
       this.updateMemoItemWithDate(savedDate);
     }
+  }
+
+  ngOnChanges(): void {
+    this.changeDetectorRef.detectChanges();
   }
 
   closeOutOfDateDialog() {

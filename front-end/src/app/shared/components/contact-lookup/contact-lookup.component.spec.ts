@@ -50,8 +50,6 @@ describe('ContactLookupComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ContactLookupComponent);
     component = fixture.componentInstance;
-
-    fixture.detectChanges();
   });
 
   it('should create', () => {

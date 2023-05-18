@@ -1,5 +1,6 @@
 <p-toast></p-toast>
 <h1>{{ transaction?.transactionType?.title }}</h1>
+<h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
 <p>
   This type of receipt requires a memo transaction. Follow this two-step process to create both an earmark receipt and
   an earmark memo:
@@ -171,12 +172,14 @@
   </p-accordionTab>
 </p-accordion>
 
-<app-navigation-control-bar
-  [navigationControls]="getNavigationControls()"
-  [transaction]="transaction"
-  (navigate)="handleNavigate($event)"
-  [class]="isEditable ? '' : 'flex-center'"
-></app-navigation-control-bar>
+<div class="p-fluid">
+  <app-navigation-control-bar
+    [navigationControls]="getNavigationControls()"
+    [transaction]="transaction"
+    (navigate)="handleNavigate($event)"
+    [class]="isEditable ? '' : 'flex-center'"
+  ></app-navigation-control-bar>
+</div>
 
 <p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
 <p-confirmDialog key="childDialog" [style]="{ width: '450px' }"></p-confirmDialog>
