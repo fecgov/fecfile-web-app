@@ -93,7 +93,7 @@ export type TransactionTemplateMapType = {
   aggregate: string;
   purpose_description: string;
   purposeDescripLabel: string;
-  memo_text_input: string;
+  text4000: string;
   category_code: string;
   election_code: string;
   election_other_description: string;

@@ -28,7 +28,7 @@ export abstract class SchBTransactionType extends TransactionType {
     aggregate: 'aggregate_amount',
     purpose_description: 'expenditure_purpose_descrip',
     purposeDescripLabel: 'PURPOSE OF DISBURSEMENT',
-    memo_text_input: 'memo_text_input',
+    text4000: 'text4000',
     category_code: 'category_code',
     election_code: 'election_code',
     election_other_description: 'election_other_description',

@@ -22,7 +22,7 @@ export class TransactionGroupI extends TransactionGroup {
       templateMap.committee_fec_id,
       templateMap.committee_name,
       templateMap.memo_code,
-      templateMap.memo_text_input,
+      templateMap.text4000,
       'subTransaction',
     ].filter((val) => !!val);
   }
