@@ -88,14 +88,15 @@
         </ng-template>
       </div>
     </ng-container>
-    <p-divider></p-divider>
-    <app-navigation-control-bar
-      [navigationControls]="getNavigationControls()"
-      [transaction]="transaction"
-      (navigate)="handleNavigate($event)"
-      [class]="isEditable ? '' : 'flex-center'"
-    ></app-navigation-control-bar>
   </form>
 </div>
+
+<p-divider></p-divider>
+<app-navigation-control-bar
+  [navigationControls]="getNavigationControls()"
+  [transaction]="transaction"
+  (navigate)="handleNavigate($event)"
+  [class]="isEditable ? '' : 'flex-center'"
+></app-navigation-control-bar>
 
 <p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
