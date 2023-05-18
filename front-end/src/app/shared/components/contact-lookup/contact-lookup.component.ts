@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Contact, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
@@ -10,7 +10,7 @@ import { SelectItem, SelectItemGroup } from 'primeng/api';
   templateUrl: './contact-lookup.component.html',
   styleUrls: ['./contact-lookup.component.scss'],
 })
-export class ContactLookupComponent {
+export class ContactLookupComponent implements OnChanges {
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() contactTypeFormControl: FormControl = new FormControl();
   @Input() contactTypeReadOnly = false;
@@ -38,9 +38,14 @@ export class ContactLookupComponent {
   searchTerm = '';
 
   constructor(
+    private changeDetectorRef: ChangeDetectorRef,
     private formBuilder: FormBuilder,
     private contactService: ContactService
   ) { }
+
+  ngOnChanges(): void {
+    this.changeDetectorRef.detectChanges();
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onDropdownSearch(event: any) {
