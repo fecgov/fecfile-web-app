@@ -71,7 +71,7 @@ export const CANCEL_CONTROL = new NavigationControl(
 export const GO_BACK_CONTROL = new NavigationControl(
   NavigationAction.CANCEL,
   NavigationDestination.LIST,
-  'Go Back',
+  'Go back',
   'p-button-secondary'
 );
 export const SAVE_LIST_CONTROL = new NavigationControl(
