@@ -13,8 +13,6 @@
           [formControlName]="templateMap['purpose_description']"
           [ngClass]="{ readonly: descriptionIsSystemGenerated }"
           [readonly]="descriptionIsSystemGenerated"
-          (change)="patchPurposeDescriptionPrefix()"
-          (keydown)="patchPurposeDescriptionPrefix()"
         ></textarea>
         <app-error-messages
           [form]="form"
