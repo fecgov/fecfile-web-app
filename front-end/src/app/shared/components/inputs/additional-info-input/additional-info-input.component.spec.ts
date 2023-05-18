@@ -24,6 +24,7 @@ describe('AdditionalInfoInputComponent', () => {
     });
     component.templateMap = testTemplateMap;
     component.descriptionIsSystemGenerated = true;
+    component.purposeDescriptionPrefix = 'Prefix: ';
     fixture.detectChanges();
   });
 
@@ -41,5 +42,12 @@ describe('AdditionalInfoInputComponent', () => {
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     fixture.detectChanges();
     expect(cpd.classes['readonly']).toBeFalsy();
+  });
+
+  it('should trigger the purposeDescriptionPrefix callbacks', () => {
+    component.form.patchValue({
+      [testTemplateMap.purpose_description]: 'abc',
+    });
+    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(component.purposeDescriptionPrefix);
   });
 });
