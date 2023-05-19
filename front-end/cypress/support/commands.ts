@@ -28,6 +28,7 @@ export function overwrite(prevSubject: any, stringVal: string | number) {
 }
 
 export function runLighthouse(directory: string, filename: string) {
+  return; // Temporarily suspend lighthouse while we trouble-shoot CircleCI
   cy.lighthouse(
     {
       performance: 0,
