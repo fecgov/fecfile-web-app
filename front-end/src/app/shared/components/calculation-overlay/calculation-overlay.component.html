@@ -1,0 +1,13 @@
+<div>
+  <p-overlayPanel #op>
+    <ng-content></ng-content>
+  </p-overlayPanel>
+  <img
+    class="usa-banner__icon"
+    src="/assets/img/calculation-icon.svg"
+    role="img"
+    alt=""
+    aria-hidden="true"
+    (click)="op.toggle($event)"
+  />
+</div>

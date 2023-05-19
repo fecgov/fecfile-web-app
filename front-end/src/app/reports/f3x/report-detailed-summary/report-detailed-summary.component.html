@@ -38,20 +38,23 @@
         <td></td>
       </tr>
       <tr>
-        <td class="right-border">(i)</td>
+        <td class="right-border">(a)(i)</td>
         <td class="justify-left right-border indent-2"><em>Itemized individual contributions</em></td>
         <td class="right-border">{{ report.L11ai_itemized_period | defaultZero | currency }}</td>
         <td>{{ report.L11ai_itemized_ytd | defaultZero | currency }}</td>
       </tr>
       <tr>
-        <td class="right-border">(ii)</td>
+        <td class="right-border">(a)(ii)</td>
         <td class="justify-left right-border indent-2"><em>Unitemized individual contributions</em></td>
         <td class="right-border">{{ report.L11aii_unitemized_period | defaultZero | currency }}</td>
         <td>{{ report.L11aii_unitemized_ytd | defaultZero | currency }}</td>
       </tr>
       <tr>
-        <td class="right-border">(iii)</td>
-        <td class="justify-left right-border indent-2"><em>Total individual contributions</em></td>
+        <td class="right-border">(a)(iii)</td>
+        <td class="justify-left right-border indent-2">
+          <em>Total individual contributions</em
+          ><app-calculation-overlay>Lines 11(a)(i) <b>+</b> 11(a)(ii) <b>=</b> Line 11(a)(iii)</app-calculation-overlay>
+        </td>
         <td class="right-border">{{ report.L11aiii_total_period | defaultZero | currency }}</td>
         <td>{{ report.L11aiii_total_ytd | defaultZero | currency }}</td>
       </tr>
@@ -69,7 +72,13 @@
       </tr>
       <tr>
         <td class="right-border">(d)</td>
-        <td class="justify-left right-border indent-1">Total contributions</td>
+        <td class="justify-left right-border indent-1">
+          Total contributions
+          <app-calculation-overlay>
+            Lines 11(a)(iii) + 11(b) + 11(c) = Line 11(d)<br />(This total will also appear on Line
+            33).</app-calculation-overlay
+          >
+        </td>
         <td class="right-border">{{ report.L11d_total_contributions_period | defaultZero | currency }}</td>
         <td>{{ report.L11d_total_contributions_ytd | defaultZero | currency }}</td>
       </tr>
@@ -95,7 +104,10 @@
       </tr>
       <tr class="gray">
         <td class="right-border bold">15</td>
-        <td class="justify-left right-border bold">OFFSETS TO OPERATING EXPENDITURES (REFUNDS, REBATES, ETC.)</td>
+        <td class="justify-left right-border bold">
+          OFFSETS TO OPERATING EXPENDITURES (REFUNDS, REBATES, ETC.)
+          <app-calculation-overlay>(This total will also appear on Line 37).</app-calculation-overlay>
+        </td>
         <td class="right-border">
           {{ report.L15_offsets_to_operating_expenditures_refunds_period | defaultZero | currency }}
         </td>
@@ -137,7 +149,10 @@
       </tr>
       <tr>
         <td class="right-border">(c)</td>
-        <td class="justify-left right-border indent-1">Total Transfers</td>
+        <td class="justify-left right-border indent-1">
+          Total Transfers
+          <app-calculation-overlay>Lines 18(a) <b>+</b> 18(b) <b>=</b> Line 18(c)</app-calculation-overlay>
+        </td>
         <td class="right-border">
           {{ report.L18c_total_nonfederal_transfers_18a_18b_period | defaultZero | currency }}
         </td>
@@ -145,13 +160,22 @@
       </tr>
       <tr class="gray">
         <td class="right-border bold">19</td>
-        <td class="justify-left right-border bold">TOTAL FEDERAL RECEIPTS</td>
+        <td class="justify-left right-border bold">
+          TOTAL FEDERAL RECEIPTS
+          <app-calculation-overlay
+            >Lines 11(d) <b>+</b> 12 <b>+</b> 13 <b>+</b> 14 <b>+</b> 15 <b>+</b> 16 <b>+</b> 17 <b>+</b> 18(c)
+            <b>=</b> Line 19</app-calculation-overlay
+          >
+        </td>
         <td class="right-border">{{ report.L19_total_receipts_period | defaultZero | currency }}</td>
         <td>{{ report.L19_total_receipts_ytd | defaultZero | currency }}</td>
       </tr>
       <tr class="dark-gray last">
         <td class="right-border bold">20</td>
-        <td class="justify-left right-border bold">TOTAL RECEIPTS</td>
+        <td class="justify-left right-border bold">
+          TOTAL RECEIPTS
+          <app-calculation-overlay>Lines 19 <b>-</b>> 18(c) <b>=</b> Line 20</app-calculation-overlay>
+        </td>
         <td class="right-border">{{ report.L20_total_federal_receipts_period | defaultZero | currency }}</td>
         <td class="bold">{{ report.L20_total_federal_receipts_ytd | defaultZero | currency }}</td>
       </tr>
@@ -197,7 +221,12 @@
       </tr>
       <tr>
         <td class="right-border">(c)</td>
-        <td class="justify-left right-border indent-1">Total operating expenditures</td>
+        <td class="justify-left right-border indent-1">
+          Total operating expenditures
+          <app-calculation-overlay
+            >Lines 21(a)(i) <b>+</b>> 21(a)(ii) <b>+</b>> 21(b) <b>+</b> Line 21(c)</app-calculation-overlay
+          >
+        </td>
         <td class="right-border">{{ report.L21c_total_operating_expenditures_period | defaultZero | currency }}</td>
         <td>{{ report.L21c_total_operating_expenditures_ytd | defaultZero | currency }}</td>
       </tr>
@@ -269,7 +298,12 @@
       </tr>
       <tr>
         <td class="right-border">(d)</td>
-        <td class="justify-left right-border indent-1">Total Contribution Refunds</td>
+        <td class="justify-left right-border indent-1">
+          Total Contribution Refunds
+          <app-calculation-overlay
+            >Lines 28(a) <b>+</b>> 28(b) <b>+</b>> 28(c) <b>=</b> Line 28(d)</app-calculation-overlay
+          >
+        </td>
         <td class="right-border">{{ report.L28d_total_contributions_refunds_period | defaultZero | currency }}</td>
         <td>{{ report.L28d_total_contributions_refunds_ytd | defaultZero | currency }}</td>
       </tr>
@@ -311,19 +345,35 @@
       </tr>
       <tr>
         <td class="right-border">(c)</td>
-        <td class="justify-left right-border indent-1">Total Federal election activity</td>
+        <td class="justify-left right-border indent-1">
+          Total Federal election activity
+          <app-calculation-overlay
+            >Lines 30(a)(i) <b>+</b>> 30(a)(ii) <b>+</b>> 30(b) <b>=</b> Line 30(c)
+          </app-calculation-overlay>
+        </td>
         <td class="right-border">{{ report.L30c_total_federal_election_activity_period | defaultZero | currency }}</td>
         <td>{{ report.L30c_total_federal_election_activity_ytd | defaultZero | currency }}</td>
       </tr>
       <tr class="gray">
         <td class="right-border bold">31</td>
-        <td class="justify-left right-border bold">TOTAL DISBURSEMENTS</td>
+        <td class="justify-left right-border bold">
+          TOTAL DISBURSEMENTS
+          <app-calculation-overlay>
+            Lines 21(c) <b>+</b> 22 <b>+</b> 23 <b>+</b> 24 <b>+</b> 25 <b>+</b> 26 <b>+</b> 27 <b>+</b> 28(d)
+            <b>+</b> 29 <b>+</b> 30(c) <b>=</b> Line 31
+          </app-calculation-overlay>
+        </td>
         <td class="right-border">{{ report.L31_total_disbursements_period | defaultZero | currency }}</td>
         <td>{{ report.L31_total_disbursements_ytd | defaultZero | currency }}</td>
       </tr>
       <tr class="dark-gray last">
         <td class="right-border bold">32</td>
-        <td class="justify-left right-border bold">TOTAL FEDERAL DISBURSEMENTS</td>
+        <td class="justify-left right-border bold">
+          TOTAL FEDERAL DISBURSEMENTS
+          <app-calculation-overlay
+            >Lines 31 <b>-</b> (21(a)(ii) <b>+</b> 30(a)(ii)) <b>=</b> Line 32</app-calculation-overlay
+          >
+        </td>
         <td class="right-border">{{ report.L32_total_federal_disbursements_period | defaultZero | currency }}</td>
         <td>{{ report.L32_total_federal_disbursements_ytd | defaultZero | currency }}</td>
       </tr>
@@ -343,25 +393,35 @@
       </tr>
       <tr class="gray">
         <td class="right-border bold">33</td>
-        <td class="justify-left right-border bold">TOTAL CONTRIBUTIONS</td>
+        <td class="justify-left right-border bold">
+          TOTAL CONTRIBUTIONS
+          <app-calculation-overlay>Carried from Line 11(d).</app-calculation-overlay>
+        </td>
         <td class="right-border">{{ report.L33_total_contributions_period | defaultZero | currency }}</td>
         <td>{{ report.L33_total_contributions_ytd | defaultZero | currency }}</td>
       </tr>
       <tr class="gray">
         <td class="right-border bold">34</td>
-        <td class="justify-left right-border bold">TOTAL CONTRIBUTION REFUNDS</td>
+        <td class="justify-left right-border bold">
+          TOTAL CONTRIBUTION REFUNDS <app-calculation-overlay>Carried from Line 28(d).</app-calculation-overlay>
+        </td>
         <td class="right-border">{{ report.L34_total_contribution_refunds_period | defaultZero | currency }}</td>
         <td>{{ report.L34_total_contribution_refunds_ytd | defaultZero | currency }}</td>
       </tr>
       <tr class="gray">
         <td class="right-border bold">35</td>
-        <td class="justify-left right-border bold">NET CONTRIBUTIONS</td>
+        <td class="justify-left right-border bold">
+          NET CONTRIBUTIONS <app-calculation-overlay>Line 34 <b>-</b> 33 <b>=</b> Line 35</app-calculation-overlay>
+        </td>
         <td class="right-border">{{ report.L35_net_contributions_period | defaultZero | currency }}</td>
         <td>{{ report.L35_net_contributions_ytd | defaultZero | currency }}</td>
       </tr>
       <tr class="gray">
         <td class="right-border bold">36</td>
-        <td class="justify-left right-border bold">TOTAL FEDERAL OPERATING EXPENDITURES</td>
+        <td class="justify-left right-border bold">
+          TOTAL FEDERAL OPERATING EXPENDITURES
+          <app-calculation-overlay>Line 21(a)(i) <b>+</b> 21(b) <b>=</b> Line 36</app-calculation-overlay>
+        </td>
         <td class="right-border">
           {{ report.L36_total_federal_operating_expenditures_period | defaultZero | currency }}
         </td>
@@ -369,13 +429,18 @@
       </tr>
       <tr class="gray">
         <td class="right-border bold">37</td>
-        <td class="justify-left right-border bold">OFFSETS TO OPERATING EXPENDITURES</td>
+        <td class="justify-left right-border bold">
+          OFFSETS TO OPERATING EXPENDITURES <app-calculation-overlay>Carried from Line 15.</app-calculation-overlay>
+        </td>
         <td class="right-border">{{ report.L37_offsets_to_operating_expenditures_period | defaultZero | currency }}</td>
         <td>{{ report.L37_offsets_to_operating_expenditures_ytd | defaultZero | currency }}</td>
       </tr>
       <tr class="gray">
         <td class="right-border bold">38</td>
-        <td class="justify-left right-border bold">NET OPERATING EXPENDITURES</td>
+        <td class="justify-left right-border bold">
+          NET OPERATING EXPENDITURE
+          <app-calculation-overlay>Line 37 <b>-</b> 36 <b>=</b> Line 38</app-calculation-overlay>
+        </td>
         <td class="right-border">{{ report.L38_net_operating_expenditures_period | defaultZero | currency }}</td>
         <td>{{ report.L38_net_operating_expenditures_ytd | defaultZero | currency }}</td>
       </tr>
