@@ -13,7 +13,7 @@ export type ScheduleFormData = {
 };
 
 export const defaultFormData: ScheduleFormData = {
-  date_received: new Date(currentYear, 7 - 1, 27),
+  date_received: new Date(currentYear, 4 - 1, 27),
   memo_code: false,
   amount: 100.55,
   electionType: '',
