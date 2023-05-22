@@ -14,7 +14,7 @@
   </div>
   <div class="grid">
     <div class="col-12">
-      <div class="field" [ngClass]="{ readonly: memoCodeReadOnly }">
+      <div class="field">
         <div class="grid">
           <div class="col-12">
             <p-checkbox
@@ -115,6 +115,7 @@
           label="Close"
           styleClass="p-button-link"
           (click)="closeOutOfDateDialog()"
+          [autofocus]="true"
         ></button>
       </div>
     </div>

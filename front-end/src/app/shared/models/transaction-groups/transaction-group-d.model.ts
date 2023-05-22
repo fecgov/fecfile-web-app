@@ -18,7 +18,7 @@ export class TransactionGroupD extends TransactionGroup {
       templateMap.aggregate,
       templateMap.purpose_description,
       templateMap.memo_code,
-      templateMap.memo_text_input,
+      templateMap.text4000,
       templateMap.category_code,
     ].filter((val) => !!val);
   }

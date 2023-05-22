@@ -6,9 +6,12 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
-  NavigationAction, NavigationDestination, NavigationEvent
+  NavigationAction,
+  NavigationDestination,
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { ReportService } from 'app/shared/services/report.service';
 import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { environment } from 'environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -29,7 +32,7 @@ describe('TransactionDetailComponent', () => {
   let httpTestingController: HttpTestingController;
   let component: TransactionDetailComponent;
   let fixture: ComponentFixture<TransactionDetailComponent>;
-
+  let reportService: ReportService;
   const transaction = getTestTransactionByType(ScheduleATransactionTypes.TRIBAL_RECEIPT);
 
   beforeEach(async () => {
@@ -52,12 +55,21 @@ describe('TransactionDetailComponent', () => {
         ConfirmDialogModule,
       ],
       declarations: [TransactionDetailComponent],
-      providers: [MessageService, ConfirmationService, FormBuilder, provideMockStore(testMockStore), FecDatePipe],
+      providers: [
+        MessageService,
+        ConfirmationService,
+        FormBuilder,
+        provideMockStore(testMockStore),
+        FecDatePipe,
+        ReportService,
+      ],
     }).compileComponents();
   });
 
   beforeEach(() => {
     httpTestingController = TestBed.inject(HttpTestingController);
+    reportService = TestBed.inject(ReportService);
+    spyOn(reportService, 'isEditable').and.returnValue(true);
     fixture = TestBed.createComponent(TransactionDetailComponent);
     component = fixture.componentInstance;
     component.transaction = transaction;

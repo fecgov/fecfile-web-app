@@ -2,6 +2,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { AutoFocusModule } from 'primeng/autofocus';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -44,6 +45,7 @@ import { CalculationOverlayComponent } from './components/calculation-overlay/ca
     ButtonModule,
     TooltipModule,
     DropdownModule,
+    AutoFocusModule,
     AutoCompleteModule,
     InputTextModule,
     InputTextareaModule,

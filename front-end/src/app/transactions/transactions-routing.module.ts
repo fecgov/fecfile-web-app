@@ -48,7 +48,7 @@ const routes: Routes = [
     canActivate: [ReportIsEditableGuard],
   },
   {
-    path: 'report/:reportId/list/edit/:transactionId',
+    path: 'report/:reportId/list/:transactionId',
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,
@@ -59,7 +59,7 @@ const routes: Routes = [
     },
   },
   {
-    path: 'report/:reportId/list/edit/:parentTransactionId/create-sub-transaction/:transactionType',
+    path: 'report/:reportId/list/:parentTransactionId/create-sub-transaction/:transactionType',
     component: TransactionContainerComponent,
     resolve: {
       transaction: TransactionResolver,

@@ -61,8 +61,12 @@
 }
 
 .p-disabled,
-.p-component:disabled {
+.p-component:disabled,
+.p-dropdown:disabled {
   opacity: 0.65;
+  background: lightgrey;
+  border: 2px solid gray;
+  color: black;
 }
 
 .p-error {
@@ -720,6 +724,11 @@ p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
 
 .p-checkbox-label {
   margin-left: 0.5rem;
+  opacity: 1;
+  background: white;
+  border: none;
+  color: black;
+  
 }
 
 .p-highlight .p-checkbox .p-checkbox-box {
@@ -792,10 +801,12 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
 }
 
 .p-dropdown {
+  border-radius: 4px;
+}
+.p-dropdown:not(.p-disabled) {
   background: #ffffff;
   border: 2px solid #aeb0b5;
   transition: background-color 0.15s, border-color 0.15s, box-shadow 0.15s;
-  border-radius: 4px;
 }
 .p-dropdown:not(.p-disabled):hover {
   border-color: #d6d7d9;

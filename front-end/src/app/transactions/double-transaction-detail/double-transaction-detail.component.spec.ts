@@ -58,7 +58,6 @@ describe('DoubleTransactionDetailComponent', () => {
     component = fixture.componentInstance;
     component.transaction = transaction;
     component.templateMap = testTemplateMap;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

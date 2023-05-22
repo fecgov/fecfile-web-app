@@ -7,11 +7,13 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import {
   NavigationAction,
-  NavigationDestination, NavigationEvent
+  NavigationDestination,
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { EARMARK_MEMO } from 'app/shared/models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from 'app/shared/models/transaction-types/EARMARK_RECEIPT.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
+import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -38,7 +40,7 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_input',
+    'text4000',
   ];
 
   childFormProperties: string[] = [
@@ -61,7 +63,7 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_input',
+    'text4000',
   ];
 }
 
@@ -70,6 +72,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   let fixture: ComponentFixture<TestDoubleTransactionTypeBaseComponent>;
   let testTransaction: SchATransaction;
   let testConfirmationService: ConfirmationService;
+  let reportService: ReportService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -83,6 +86,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
         ConfirmationService,
         provideMockStore(testMockStore),
         FecDatePipe,
+        ReportService,
       ],
     }).compileComponents();
   });
@@ -92,6 +96,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     testTransaction.children = [
       getTestTransactionByType(ScheduleATransactionTypes.PAC_EARMARK_MEMO) as SchATransaction,
     ];
+    reportService = TestBed.inject(ReportService);
+    spyOn(reportService, 'isEditable').and.returnValue(true);
     testConfirmationService = TestBed.inject(ConfirmationService);
     fixture = TestBed.createComponent(TestDoubleTransactionTypeBaseComponent);
     component = fixture.componentInstance;
@@ -158,7 +164,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
       memo_code: '',
-      memo_text_input: '',
+      text4000: '',
     });
     component.childForm.patchValue({
       entity_type: 'IND',
@@ -180,7 +186,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
       memo_code: true,
-      memo_text_input: '',
+      text4000: '',
     });
     component.save(navEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(1);

@@ -25,7 +25,7 @@ export class TransactionGroupC extends TransactionGroup {
       templateMap.employer,
       templateMap.occupation,
       templateMap.memo_code,
-      templateMap.memo_text_input,
+      templateMap.text4000,
       templateMap.category_code,
       'subTransaction',
     ].filter((val) => !!val);

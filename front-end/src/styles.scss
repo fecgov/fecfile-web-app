@@ -57,6 +57,11 @@ label.disabled {
   background-color: #f1f1f1;
 }
 
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+
 .memo-checkbox-note {
   padding-left: 28px;
   padding-bottom: 10px;

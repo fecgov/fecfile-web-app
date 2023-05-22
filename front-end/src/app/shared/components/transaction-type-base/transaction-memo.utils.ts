@@ -5,7 +5,7 @@ import { MemoText } from 'app/shared/models/memo-text.model';
 export class TransactionMemoUtils {
   // prettier-ignore
   static retrieveMemoText(transaction: Transaction, form: FormGroup, formValues: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      const text = form.get('memo_text_input')?.value;
+      const text = form.get('text4000')?.value;
       if (text && text.length > 0) {
         const memo_text = MemoText.fromJSON({
           text4000: text,
@@ -28,7 +28,7 @@ export class TransactionMemoUtils {
   static patchMemoText(transaction: Transaction | undefined, form: FormGroup) {
     const memo_text = transaction?.memo_text;
     if (memo_text?.text4000) {
-      form.patchValue({ memo_text_input: memo_text.text4000 });
+      form.patchValue({ text4000: memo_text.text4000 });
     }
   }
 }
