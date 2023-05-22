@@ -74,8 +74,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   }
 
   updateMemoItemWithDate(date: Date) {
-    if (date && this.report?.coverage_from_date && this.report?.coverage_through_date) {
-      if (date < this.report.coverage_from_date || date > this.report.coverage_through_date) {
+    if (this.report?.coverage_from_date && this.report?.coverage_through_date) {
+      if (date && (date < this.report.coverage_from_date || date > this.report.coverage_through_date)) {
         this.memoControl.addValidators(Validators.requiredTrue);
         this.memoControl.markAsTouched();
         this.memoControl.updateValueAndValidity();
