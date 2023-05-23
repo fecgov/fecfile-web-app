@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './calculation-overlay.component.html',
   styleUrls: ['./calculation-overlay.component.scss'],
 })
-export class CalculationOverlayComponent {
-  constructor() {}
-}
+export class CalculationOverlayComponent {}
