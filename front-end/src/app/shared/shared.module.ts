@@ -36,6 +36,7 @@ import { HighlightTermsPipe } from './pipes/highlight-terms.pipe';
 import { LabelPipe } from './pipes/label.pipe';
 import { LongDatePipe } from './pipes/long-date.pipe';
 import { ReportCodeLabelPipe } from './utils/report-code.utils';
+import { CalculationOverlayComponent } from './components/calculation-overlay/calculation-overlay.component';
 
 @NgModule({
   imports: [
@@ -81,6 +82,7 @@ import { ReportCodeLabelPipe } from './utils/report-code.utils';
     NavigationControlComponent,
     NavigationControlBarComponent,
     TableActionsButtonComponent,
+    CalculationOverlayComponent,
   ],
   exports: [
     FecDatePipe,
@@ -104,7 +106,8 @@ import { ReportCodeLabelPipe } from './utils/report-code.utils';
     AdditionalInfoInputComponent,
     ElectionInputComponent,
     TableActionsButtonComponent,
+    CalculationOverlayComponent,
   ],
   providers: [DatePipe],
 })
-export class SharedModule { }
+export class SharedModule {}
