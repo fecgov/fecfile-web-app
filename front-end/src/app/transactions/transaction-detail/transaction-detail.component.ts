@@ -1,7 +1,9 @@
 import { Component, OnChanges, SimpleChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
-import { ContactTypes } from 'app/shared/models/contact.model';
+import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { takeUntil } from 'rxjs';
 
 @Component({
@@ -14,6 +16,12 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
   hasEmployerInput = false;
   hasCommitteeFecIdInput = false;
   hasElectionInformationInput = false;
+  hasCandidateInformationInput = false;
+
+  candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE);
+  candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+    ContactTypes.CANDIDATE,
+  ]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ngOnChanges(changes: SimpleChanges): void {
@@ -25,6 +33,7 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
       this.formProperties = transactionGroup.getFormProperties(transactionType.templateMap, transactionType.scheduleId);
       this.hasCommitteeFecIdInput = transactionGroup.hasCommitteeFecIdInput();
       this.hasElectionInformationInput = transactionGroup.hasElectionInformationInput();
+      this.hasCandidateInformationInput = transactionGroup.hasCandidateInformationInput();
 
       super.ngOnInit();
 

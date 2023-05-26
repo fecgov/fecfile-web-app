@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
-import { Contact, ContactType, FecApiCommitteeLookupData } from 'app/shared/models/contact.model';
+import { Contact, ContactType, FecApiCandidateLookupData, FecApiCommitteeLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
@@ -53,6 +53,13 @@ export class TransactionContactLookupComponent {
         if (value.id) {
           this.fecApiService.getCommitteeDetails(value.id).subscribe((committeeAccount) => {
             this.openCreateContactDialog(committeeAccount);
+          });
+        }
+      } else if (event.value instanceof FecApiCandidateLookupData) {
+        const value: FecApiCandidateLookupData = event.value;
+        if (value.id) {
+          this.fecApiService.getCandidateDetails(value.id).subscribe((candidate) => {
+            this.openCreateContactDialog(candidate);
           });
         }
       }

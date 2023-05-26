@@ -1,0 +1,141 @@
+<div [formGroup]="form">
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="candidate_id">CANDIDATE ID</label>
+        <input type="text" pInputText id="candidate_id" [formControlName]="templateMap['candidate_fec_id']" />
+        <app-error-messages
+          [form]="form"
+          fieldName="candidate_id"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-4"></div>
+  </div>
+  <div class="grid">
+    <div class="col-4">
+      <div class="field">
+        <label for="last_name">LAST NAME</label>
+        <input type="text" pInputText id="last_name" [formControlName]="templateMap['candidate_last_name']" />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['candidate_last_name']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="field">
+        <label for="first_name">FIRST NAME</label>
+        <input type="text" pInputText id="first_name" [formControlName]="templateMap['candidate_first_name']" />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['candidate_first_name']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="field">
+        <label for="middle_name">MIDDLE NAME (OPTIONAL)</label>
+        <input type="text" pInputText id="middle_name" [formControlName]="templateMap['candidate_middle_name']" />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['candidate_middle_name']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-3">
+      <div class="field">
+        <label for="prefix">PREFIX (OPTIONAL)</label>
+        <input type="text" pInputText id="prefix" [formControlName]="templateMap['candidate_prefix']" />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['candidate_prefix']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label for="suffix">SUFFIX (OPTIONAL)</label>
+        <input type="text" pInputText id="suffix" [formControlName]="templateMap['candidate_suffix']" />
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['candidate_suffix']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-6"></div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="candidate_office">CANDIDATE OFFICE</label>
+        <p-dropdown
+          inputId="candidate_office"
+          [formControlName]="templateMap['candidate_office']"
+          [options]="candidateOfficeTypeOptions"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-dropdown>
+        <app-error-messages
+          [form]="form"
+          fieldName="candidate_office"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label
+          for="candidate_state"
+          [ngClass]="{
+            disabled: this.form.get('candidate_state')?.disabled
+          }"
+          >CANDIDATE STATE</label
+        >
+        <p-dropdown
+          inputId="candidate_state"
+          [formControlName]="templateMap['candidate_state']"
+          [options]="candidateStateOptions"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-dropdown>
+        <app-error-messages
+          [form]="form"
+          fieldName="candidate_state"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label
+          for="candidate_district"
+          [ngClass]="{
+            disabled: this.form.get('candidate_district')?.disabled
+          }"
+          >CANDIDATE DISTRICT</label
+        >
+        <p-dropdown
+          inputId="candidate_district"
+          [formControlName]="templateMap['candidate_district']"
+          [options]="candidateDistrictOptions"
+          appendTo="body"
+          [autoDisplayFirst]="false"
+        ></p-dropdown>
+        <app-error-messages
+          [form]="form"
+          fieldName="candidate_district"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+</div>

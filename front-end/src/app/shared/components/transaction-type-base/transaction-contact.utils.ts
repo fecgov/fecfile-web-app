@@ -124,6 +124,17 @@ export class TransactionContactUtils {
             form.get(templateMap.employer)?.setValue(contact.employer);
             form.get(templateMap.occupation)?.setValue(contact.occupation);
             break;
+          case ContactTypes.CANDIDATE:
+            form.get(templateMap.candidate_fec_id)?.setValue(contact.candidate_id);
+            form.get(templateMap.candidate_last_name)?.setValue(contact.last_name);
+            form.get(templateMap.candidate_first_name)?.setValue(contact.first_name);
+            form.get(templateMap.candidate_middle_name)?.setValue(contact.middle_name);
+            form.get(templateMap.candidate_prefix)?.setValue(contact.prefix);
+            form.get(templateMap.candidate_suffix)?.setValue(contact.suffix);
+            form.get(templateMap.candidate_office)?.setValue(contact.candidate_office);
+            form.get(templateMap.candidate_state)?.setValue(contact.candidate_state);
+            form.get(templateMap.candidate_district)?.setValue(contact.candidate_district);
+            break;
           case ContactTypes.COMMITTEE:
             form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
             form.get(templateMap.organization_name)?.setValue(contact.name);
