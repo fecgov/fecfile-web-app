@@ -1,6 +1,22 @@
-<p-menubar [model]="items"
-  ><ng-template pTemplate="start">
+<div class="grid">
+  <div class="col-4">
     <a class="seal-link" routerLink="/" *ngIf="showLogo">
       <img src="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" />
-    </a> </ng-template
-></p-menubar>
+    </a>
+  </div>
+  <div class="col-8 header-nav-menu">
+    <p-tabMenu class="nav-menu" [model]="items">
+      <ng-template pTemplate="item" let-item let-i="index">
+        <button #button (click)="toggleMenu($event, item, menu)">
+          <ng-container *ngIf="item.icon === undefined; else icon">
+            {{ item.label }}
+          </ng-container>
+          <ng-template #icon>
+            <img class="header-navbar-icon" src="assets/img/{{ item.icon }}" alt="{{ item.label }}" />
+          </ng-template>
+          <p-menu #menu id="menu-{{ item.label }}" [model]="item.items" [popup]="true"></p-menu>
+        </button>
+      </ng-template>
+    </p-tabMenu>
+  </div>
+</div>

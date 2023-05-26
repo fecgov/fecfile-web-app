@@ -29,6 +29,7 @@ export class HeaderComponent implements OnInit {
       },
       {
         label: 'Tools',
+        expanded: true,
         items: [
           { label: 'All Transactions' },
           { label: 'Import FECFile' },
@@ -51,10 +52,11 @@ export class HeaderComponent implements OnInit {
       },
       {
         label: 'Notifications',
+        icon: 'notification_bell_icon.svg',
       },
       {
         label: 'Profile',
-        icon: 'pi pi-fw pi-user',
+        icon: 'profile_icon.svg',
         items: [
           { label: 'Account', routerLink: ['/profile/account'] },
           { label: 'Users', routerLink: ['/committee/users'] },
@@ -62,5 +64,16 @@ export class HeaderComponent implements OnInit {
         ],
       },
     ];
+  }
+
+  toggleMenu($event: any, item: any, menu: any) {
+    console.log($event);
+    if (item.items) {
+      console.log('Toggling');
+      menu.toggle($event);
+    }
+
+    //getComponent(menu);
+    //<button pButton type="button" (click)="menu.toggle($event)" icon="pi pi-bars" label="Show"></button>
   }
 }

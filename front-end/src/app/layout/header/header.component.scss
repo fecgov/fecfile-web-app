@@ -6,6 +6,18 @@ a {
   border: none;
 }
 
+.header-nav-menu {
+  padding-top: 0px;
+}
+
+.header-navbar-icon {
+  height: 16px;
+}
+
+.nav-menu {
+  float:right;
+}
+
 :host ::ng-deep p-menubar{
   padding: 0px;
 }
@@ -13,4 +25,23 @@ a {
   width: 100%;
   display: flex;
   justify-content: flex-end;
+}
+
+:host ::ng-deep .p-tabmenu-nav{
+  border-bottom: 0px !important;
+}
+
+:host ::ng-deep .p-menuitem-link{
+  border-width: 0px !important;
+}
+
+:host ::ng-deep .p-menuitem-link-active{
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  //border-top: 4px !important;
+  border-bottom: 0px !important;
+  border-width: 4px !important;
+  border-color: #112E51 !important;
 }

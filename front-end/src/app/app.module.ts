@@ -23,6 +23,7 @@ import { spinnerReducer } from './store/spinner.reducer';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
+import { TabMenuModule } from 'primeng/tabmenu';
 import { PanelModule } from 'primeng/panel';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -46,6 +47,7 @@ import { LoginComponent } from './login/login/login.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { SharedModule } from './shared/shared.module';
+import { MenuModule } from 'primeng/menu';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -90,7 +92,9 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
       { metaReducers }
     ),
     EffectsModule.forRoot([CommitteeAccountEffects, LoginEffects]),
+    MenuModule,
     MenubarModule,
+    TabMenuModule,
     PanelMenuModule,
     PanelModule,
     ButtonModule,
@@ -106,4 +110,4 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
