@@ -28,6 +28,7 @@ export abstract class TransactionType {
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
+  purposeDescriptionLabelSuffix?: string; // Additional text that will appear after the purpose_description input label. If this is not set, '(SYSTEM-GENERATED)', '(REQUIRED)', or '(OPTIONAL)' will be diplayed
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
   abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 
@@ -40,12 +41,14 @@ export abstract class TransactionType {
   }
 
   generatePurposeDescriptionLabel(): string {
-    if (this.generatePurposeDescription !== undefined) {
-      return '(SYSTEM-GENERATED)';
+    if (this.purposeDescriptionLabelSuffix) {
+      return this.purposeDescriptionLabelSuffix;
+    } else if (this.generatePurposeDescription !== undefined) {
+      return PurposeDescriptionLabelSuffix.SYSTEM_GENERATED;
     } else if (this.schema.required.includes(this.templateMap.purpose_description)) {
-      return '(REQUIRED)';
+      return PurposeDescriptionLabelSuffix.REQUIRED;
     }
-    return '(OPTIONAL)';
+    return PurposeDescriptionLabelSuffix.OPTIONAL;
   }
 
   public generatePurposeDescriptionWrapper(transaction: Transaction): string {
@@ -58,6 +61,12 @@ export abstract class TransactionType {
     }
     return '';
   }
+}
+
+export enum PurposeDescriptionLabelSuffix {
+  SYSTEM_GENERATED = '(SYSTEM-GENERATED)',
+  REQUIRED = '(REQUIRED)',
+  OPTIONAL = '(OPTIONAL)',
 }
 
 export type TransactionTemplateMapType = {
@@ -84,7 +93,7 @@ export type TransactionTemplateMapType = {
   aggregate: string;
   purpose_description: string;
   purposeDescripLabel: string;
-  memo_text_input: string;
+  text4000: string;
   category_code: string;
   election_code: string;
   election_other_description: string;

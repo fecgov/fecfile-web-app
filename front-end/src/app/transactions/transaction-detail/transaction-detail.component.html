@@ -92,11 +92,13 @@
 </div>
 
 <p-divider></p-divider>
-<app-navigation-control-bar
-  [navigationControls]="getNavigationControls()"
-  [transaction]="transaction"
-  (navigate)="handleNavigate($event)"
-  [class]="isEditable ? '' : 'flex-center'"
-></app-navigation-control-bar>
+<div class="p-fluid">
+  <app-navigation-control-bar
+    [navigationControls]="getNavigationControls()"
+    [transaction]="transaction"
+    (navigate)="handleNavigate($event)"
+    [class]="isEditable ? '' : 'flex-center'"
+  ></app-navigation-control-bar>
+</div>
 
 <p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>

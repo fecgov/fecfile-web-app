@@ -44,7 +44,7 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_input',
+    'text4000',
   ];
 }
 
@@ -116,7 +116,7 @@ describe('TransactionTypeBaseComponent', () => {
   it('#retrieveMemoText should work', () => {
     if (!component.transaction) throw new Error('Fecfile: transaction does not exist');
     component.form = new FormGroup({
-      memo_text_input: new FormControl('memo'),
+      text4000: new FormControl('memo'),
     });
     const formValues = TransactionMemoUtils.retrieveMemoText(component.transaction, component.form, {});
     expect(formValues['memo_text']['text4000']).toBe('memo');

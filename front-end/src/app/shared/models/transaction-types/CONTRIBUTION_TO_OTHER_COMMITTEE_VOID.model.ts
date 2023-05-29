@@ -4,6 +4,7 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { PurposeDescriptionLabelSuffix } from '../transaction-type.model';
 
 export class CONTRIBUTION_TO_OTHER_COMMITTEE_VOID extends SchBTransactionType {
   transactionGroup = new TransactionGroupE();
@@ -16,6 +17,7 @@ export class CONTRIBUTION_TO_OTHER_COMMITTEE_VOID extends SchBTransactionType {
   override isRefundAggregate = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override negativeAmountValueOnly = true;
+  override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

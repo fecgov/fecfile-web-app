@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../base-input.component';
 import { LabelUtils, PrimeOptions, CategoryCodeLabels } from 'app/shared/utils/label.utils';
+import { schema as memoTextSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 
 @Component({
@@ -17,6 +18,8 @@ export class AdditionalInfoInputComponent extends BaseInputComponent implements 
   categoryCodeOptions: PrimeOptions = LabelUtils.getPrimeOptions(CategoryCodeLabels);
 
   ngOnInit(): void {
+    ValidateUtils.addJsonSchemaValidators(this.form, memoTextSchema, false);
+
     if (this.purposeDescriptionPrefix) {
       // Add custom prefix required validation function to purpose description
       this.form.controls[this.templateMap.purpose_description].addValidators([

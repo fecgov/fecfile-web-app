@@ -20,7 +20,7 @@ describe('AdditionalInfoInputComponent', () => {
     component = fixture.componentInstance;
     component.form = new FormGroup({
       contribution_purpose_descrip: new FormControl(''),
-      memo_text_input: new FormControl(''),
+      text4000: new FormControl(''),
     });
     component.templateMap = testTemplateMap;
     component.descriptionIsSystemGenerated = true;

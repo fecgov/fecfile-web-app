@@ -1,8 +1,8 @@
+import { ContactListPage, defaultFormData as defaultContactFormData } from './pages/contactListPage';
+import { defaultFormData as defaultReportFormData, F3xCreateReportPage } from './pages/f3xCreateReportPage';
 import { LoginPage } from './pages/loginPage';
 import { PageUtils } from './pages/pageUtils';
 import { ReportListPage } from './pages/reportListPage';
-import { defaultFormData as defaultReportFormData, F3xCreateReportPage } from './pages/f3xCreateReportPage';
-import { defaultFormData as defaultContactFormData, ContactListPage } from './pages/contactListPage';
 import { defaultFormData as defaultTransactionFormData, TransactionDetailPage } from './pages/transactionDetailPage';
 
 describe('Transactions', () => {
@@ -325,6 +325,7 @@ describe('Transactions', () => {
         electionYear: 2024,
         election_other_description: PageUtils.randomString(10),
       },
+      ...{ purpose_description: '' },
     };
     TransactionDetailPage.enterFormData(transactionFormData);
     PageUtils.clickButton('Save');
@@ -332,7 +333,7 @@ describe('Transactions', () => {
     PageUtils.clickButton('Continue');
 
     cy.get('tr').should('contain', 'Credit Card Payment for 100% Federal Election Activity');
-    cy.get('tr').should('not.contain', 'Unitemized');
+    cy.get('tr').should('contain', 'Unitemized');
     cy.get('tr').should('contain', formContactData['name']);
     cy.get('tr').should('contain', PageUtils.dateToString(transactionFormData['date_received']));
     cy.get('tr').should('contain', '$' + transactionFormData['amount']);
@@ -511,5 +512,100 @@ describe('Transactions', () => {
       },
       '@stepTwoAccordion'
     );
+  });
+
+  it('Create a Group E,D,A Tier 3 transactions', () => {
+    ReportListPage.clickCreateButton();
+    F3xCreateReportPage.enterFormData(defaultReportFormData);
+    PageUtils.clickButton('Save and continue');
+
+    // Create a Joint Fundraising Transfer
+    PageUtils.clickSidebarItem('Add a receipt');
+    PageUtils.clickLink('TRANSFERS');
+    PageUtils.clickLink('Joint Fundraising Transfer');
+
+    PageUtils.clickLink('Create a new contact');
+    const committeeFormContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Committee' },
+    };
+    ContactListPage.enterFormData(committeeFormContactData, true);
+    PageUtils.clickButton('Save & continue');
+
+    const tier1TransactionData = {
+      ...defaultTransactionFormData,
+      ...{ purpose_description: '' },
+    };
+    TransactionDetailPage.enterFormData(tier1TransactionData);
+    PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Receipt');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+
+    // Create Partnership Receipt Joint Fundraising Transfer Memo
+    cy.contains('a', 'Create a new contact').should('exist').wait(500); // Race condition with clicking 'Create a new contact' link being ready
+    PageUtils.clickLink('Create a new contact');
+    const organizationFormContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Organization' },
+    };
+    ContactListPage.enterFormData(organizationFormContactData, true);
+    PageUtils.clickButton('Save & continue');
+    const tier2TransactionData = {
+      ...defaultTransactionFormData,
+      ...{ purpose_description: '' },
+    };
+    TransactionDetailPage.enterFormData(tier2TransactionData);
+    PageUtils.dropdownSetValue('[data-test="navigation-control-dropdown"]', 'Partnership Individual');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+
+    // Create Partnership Individual Joint Fundraising Transfer Memo
+    cy.contains('a', 'Create a new contact').should('exist').wait(500); // Race condition with clicking 'Create a new contact' link being ready
+    PageUtils.clickLink('Create a new contact');
+    const individualFormContactData = {
+      ...defaultContactFormData,
+      ...{ contact_type: 'Individual' },
+    };
+    ContactListPage.enterFormData(individualFormContactData, true);
+    PageUtils.clickButton('Save & continue');
+    const tier3TransactionData = {
+      ...defaultTransactionFormData,
+      ...{ purpose_description: '' },
+    };
+    TransactionDetailPage.enterFormData(tier3TransactionData);
+    PageUtils.clickButton('Save');
+    cy.contains('Confirm').should('exist');
+    PageUtils.clickButton('Continue');
+
+    // Assert transaction list table is correct
+    cy.get('tbody tr').eq(0).as('row-1');
+    cy.get('@row-1').find('td').eq(0).should('contain', 'Partnership Individual Joint Fundraising Transfer Memo');
+    cy.get('@row-1').find('td').eq(0).should('contain', 'Unitemized');
+    cy.get('@row-1').find('td').eq(3).should('contain', 'Y');
+    cy.get('@row-1').find('td').eq(5).should('contain', '$100.55');
+
+    cy.get('tbody tr').eq(1).as('row-2');
+    cy.get('@row-2').find('td').eq(0).should('contain', 'Partnership Receipt Joint Fundraising Transfer Memo');
+    cy.get('@row-2').find('td').eq(0).should('contain', 'Unitemized');
+    cy.get('@row-2').find('td').eq(3).should('contain', 'Y');
+    cy.get('@row-2').find('td').eq(5).should('contain', '$100.55');
+
+    cy.get('tbody tr').eq(2).as('row-3');
+    cy.get('@row-3').find('td').as('joint_fundraising_transfer_link').eq(
+      0).should('contain', 'Joint Fundraising Transfer');
+    cy.get('@row-3').find('td').eq(0).should('not.contain', 'Unitemized');
+    cy.get('@row-3').find('td').eq(3).should('not.contain', 'Y');
+    cy.get('@row-3').find('td').eq(5).should('contain', '$100.55');
+
+    // Check form values of receipt form
+    PageUtils.clickLink('Joint Fundraising Transfer', '@joint_fundraising_transfer_link');
+    cy.get('#entity_type_dropdown > div.p-disabled').should('exist');
+    cy.get('#entity_type_dropdown').should('contain', 'Committee');
+    ContactListPage.assertFormData(committeeFormContactData, true);
+    TransactionDetailPage.assertFormData({
+      ...tier1TransactionData,
+      ...{ purpose_description: 'Transfer of Joint Fundraising Proceeds' },
+    });
+    PageUtils.clickButton('Cancel');
   });
 });
