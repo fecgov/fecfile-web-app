@@ -4,10 +4,15 @@
       <img src="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" />
     </a>
   </div>
-  <div class="col-8 header-nav-menu">
+  <div class="col-8 float-right header-nav-menu">
+    <p-menubar [model]="items"> </p-menubar>
+  </div>
+</div>
+
+<!--<div class="col-8 header-nav-menu">
     <p-tabMenu class="nav-menu" [model]="items">
       <ng-template pTemplate="item" let-item let-i="index">
-        <button #button (click)="toggleMenu($event, item, menu)">
+        <button pButton (click)="toggleMenu($event, item, menu)">
           <ng-container *ngIf="item.icon === undefined; else icon">
             {{ item.label }}
           </ng-container>
@@ -19,4 +24,4 @@
       </ng-template>
     </p-tabMenu>
   </div>
-</div>
+</div>-->

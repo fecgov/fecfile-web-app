@@ -5226,9 +5226,6 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   user-select: none;
   border-bottom: 0px;
 }
-.p-menubar .p-menuitem-link .p-menuitem-text {
-  color: #212121;
-}
 .p-menubar .p-menuitem-link .p-menuitem-icon {
   color: #212121;
   margin-right: 0.5rem;
@@ -5260,9 +5257,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   transition: box-shadow 0.15s;
   user-select: none;
 }
-.p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-menuitem-text {
-  color: rgba(0, 0, 0, 0.5);
-}
+
 .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link .p-menuitem-icon {
   color: rgba(0, 0, 0, 0.5);
   margin-right: 0.5rem;
