@@ -29,7 +29,7 @@ a {
 
 :host ::ng-deep .p-menuitem-text{
   font-size: 12px;
-  font-family: "karla-bold";
+  font-family: "karla-bold", sans-serif;
 }
 
 :host ::ng-deep .dead-link {
