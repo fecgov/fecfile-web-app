@@ -8,20 +8,3 @@
     <p-menubar [model]="items"> </p-menubar>
   </div>
 </div>
-
-<!--<div class="col-8 header-nav-menu">
-    <p-tabMenu class="nav-menu" [model]="items">
-      <ng-template pTemplate="item" let-item let-i="index">
-        <button pButton (click)="toggleMenu($event, item, menu)">
-          <ng-container *ngIf="item.icon === undefined; else icon">
-            {{ item.label }}
-          </ng-container>
-          <ng-template #icon>
-            <img class="header-navbar-icon" src="assets/img/{{ item.icon }}" alt="{{ item.label }}" />
-          </ng-template>
-          <p-menu #menu id="menu-{{ item.label }}" [model]="item.items" [popup]="true"></p-menu>
-        </button>
-      </ng-template>
-    </p-tabMenu>
-  </div>
-</div>-->
