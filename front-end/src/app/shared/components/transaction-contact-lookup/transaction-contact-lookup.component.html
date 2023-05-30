@@ -12,15 +12,12 @@
     [style]="{ width: '90%' }"
     header="Create a new contact"
     [modal]="true"
-    (onShow)="onCreateContactDialogOpen()"
     (onHide)="onCreateContactDialogClose()"
   >
-    <ng-template pTemplate="content">
-      <app-contact-form 
-        [formSubmitted]="createContactFormSubmitted" 
-        [form]="createContactForm">
-      </app-contact-form>
-    </ng-template>
+    <app-contact-form 
+      [formSubmitted]="createContactFormSubmitted" 
+      [form]="createContactForm">
+    </app-contact-form>
     <ng-template pTemplate="footer">
       <div class="grid">
         <div class="col-1">

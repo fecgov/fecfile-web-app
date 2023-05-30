@@ -2,18 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
-import { TransactionGroupI } from './transaction-group-i.model';
+import { TransactionGroupH } from './transaction-group-h.model';
 
-describe('TransactionGroupI', () => {
-  let component: TransactionGroupI;
+describe('TransactionGroupH', () => {
+  let component: TransactionGroupH;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [TransactionGroupI],
+      providers: [TransactionGroupH],
     });
 
-    component = TestBed.inject(TransactionGroupI);
+    component = TestBed.inject(TransactionGroupH);
   });
 
   it('should create', () => {

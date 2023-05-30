@@ -96,33 +96,12 @@ describe('TransactionContactLookupComponent', () => {
     expect(component.createContactDialogVisible).toEqual(true);
   }));
 
-  it('#onCreateContactDialogOpen null form control', () => {
-    component.createContactForm = new FormGroup({});
-    component.selectedFecCommitteeAccount = {} as CommitteeAccount;
-
-    component.onCreateContactDialogOpen();
-    expect(component.createContactFormSubmitted).toBeFalse();
-    component.selectedFecCommitteeAccount = undefined;
-    component.onCreateContactDialogOpen();
-  });
-
   it('#createNewContact happy path', () => {
     component.onCreateNewContactSelect();
     component.closeCreateContactDialog();
     component.createContactSave();
-    component.selectedFecCommitteeAccount = {
-      committee_id: 'testCommitteeId',
-      name: 'testName',
-      street_1: 'testStreet1',
-      street_2: 'testStreet2',
-      city: 'testCity',
-      state: 'testState',
-      zip: 'testZip',
-      treasurer_phone: 'testTreasPhone',
-    } as CommitteeAccount;
-    component.onCreateContactDialogOpen();
     expect(component.createContactForm.get('committee_id')?.value).toBe(
-      component.selectedFecCommitteeAccount.committee_id
+      ''
     );
     component.onCreateContactDialogClose();
     expect(component.createContactFormSubmitted).toBeFalse();

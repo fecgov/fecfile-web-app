@@ -232,4 +232,14 @@ export const testTemplateMap: TransactionTemplateMapType = {
   category_code: '',
   election_code: 'election_code',
   election_other_description: 'election_other_description',
+  candidate_fec_id: '',
+  candidate_last_name: '',
+  candidate_first_name: '',
+  candidate_middle_name: '',
+  candidate_prefix: '',
+  candidate_suffix: '',
+  candidate_office: '',
+  candidate_state: '',
+  candidate_district: '',
+  candidateInputHeader: ''
 };
