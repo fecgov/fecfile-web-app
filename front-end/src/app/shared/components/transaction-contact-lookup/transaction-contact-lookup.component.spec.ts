@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData } from 'app/shared/models/contact.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -13,8 +13,8 @@ import { FecApiService } from 'app/shared/services/fec-api.service';
 import { SelectItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
-import { TransactionContactLookupComponent } from './transaction-contact-lookup.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
+import { TransactionContactLookupComponent } from './transaction-contact-lookup.component';
 
 describe('TransactionContactLookupComponent', () => {
   let component: TransactionContactLookupComponent;
