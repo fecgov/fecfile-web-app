@@ -42,7 +42,6 @@ export class HeaderComponent implements OnInit {
       {
         label: '<img class="header-navbar-icon" src="assets/img/profile_icon.svg" alt="Profile" />',
         escape: false,
-        routerLinkActiveOptions: ['/profile/account', '/committee/users'],
         items: [
           { label: 'Account', routerLink: ['/profile/account'] },
           { label: 'Users', routerLink: ['/committee/users'] },
