@@ -18,7 +18,7 @@ export class CommitteeBannerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store) {}
 
-  public committee_statuses = {
+  public committee_statuses: { [key: string]: string } = {
     T: 'Terminated',
     A: 'Administratively terminated',
     D: 'Active - Debt',
@@ -27,7 +27,7 @@ export class CommitteeBannerComponent implements OnInit, OnDestroy {
     Q: 'Active - Quarterly filer',
   };
 
-  public committee_types = {
+  public committee_types: { [key: string]: string } = {
     C: 'communication cost',
     D: 'delegate',
     E: 'electioneering communication',
@@ -46,11 +46,6 @@ export class CommitteeBannerComponent implements OnInit, OnDestroy {
     Z: 'national party non-federal account',
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private getArbitraryValueFromObject(code: string, object: any): string {
-    return object[code as keyof typeof object] || '';
-  }
-
   public active_committees = ['M', 'Q', 'W', 'D'];
 
   ngOnInit(): void {
@@ -60,13 +55,13 @@ export class CommitteeBannerComponent implements OnInit, OnDestroy {
 
       const frequency_code = committeeAccount.filing_frequency;
       if (frequency_code) {
-        this.committeeFrequency = this.getArbitraryValueFromObject(frequency_code, this.committee_statuses);
-        this.committeeStatus = frequency_code in this.active_committees ? 'Active' : 'Inactive';
+        this.committeeFrequency = this.committee_statuses[frequency_code] || '';
+        this.committeeStatus = this.active_committees.includes(frequency_code) ? 'Active' : 'Inactive';
       }
 
       const committee_type_code = committeeAccount.committee_type;
       if (committee_type_code) {
-        this.committeeType = this.getArbitraryValueFromObject(committee_type_code, this.committee_types);
+        this.committeeType = this.committee_types[committee_type_code] || '';
       }
     });
   }
