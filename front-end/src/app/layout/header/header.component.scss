@@ -23,10 +23,6 @@ a {
   justify-content: flex-end;
 }
 
-:host ::ng-deep .p-tabmenu-nav{
-  border-bottom: 0px !important;
-}
-
 :host ::ng-deep .p-menuitem-text{
   font-size: 12px;
   font-family: "karla-bold", sans-serif;
@@ -37,7 +33,6 @@ a {
 }
 
 :host ::ng-deep .p-menuitem-link{
-  border-width: 0px !important;
   color: #777777 !important;
 }
 

@@ -18,72 +18,40 @@ export class CommitteeBannerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store) {}
 
-  getFilingFrequency(frequency_code: string): string {
-    switch (frequency_code) {
-      case 'T':
-        return 'Terminated';
-      case 'A':
-        return 'Administratively terminated';
-      case 'D':
-        return 'Active - Debt';
-      case 'W':
-        return 'Active - Waived';
-      case 'M':
-        return 'Active - Monthly filer';
-      case 'Q':
-        return 'Active - Quarterly filer';
-    }
-    return '';
+  public committee_statuses = {
+    T: 'Terminated',
+    A: 'Administratively terminated',
+    D: 'Active - Debt',
+    W: 'Active - Waived',
+    M: 'Active - Monthly filer',
+    Q: 'Active - Quarterly filer',
+  };
+
+  public committee_types = {
+    C: 'communication cost',
+    D: 'delegate',
+    E: 'electioneering communication',
+    H: 'House',
+    I: 'independent expenditure filer (not a committee)',
+    N: 'PAC - nonqualified',
+    O: 'independent expenditure-only (super PACs)',
+    P: 'presidential',
+    Q: 'PAC - qualified',
+    S: 'Senate',
+    U: 'single candidate independent expenditure',
+    V: 'PAC with non-contribution account, nonqualified',
+    W: 'PAC with non-contribution account, qualified',
+    X: 'party, nonqualified',
+    Y: 'party, qualified',
+    Z: 'national party non-federal account',
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private getArbitraryValueFromObject(code: string, object: any): string {
+    return object[code as keyof typeof object] || '';
   }
 
-  public getCommitteeActive(frequency_code: string): boolean {
-    switch (frequency_code) {
-      case 'M':
-      case 'Q':
-      case 'W':
-      case 'D':
-        return true;
-    }
-    return false;
-  }
-
-  public getCommitteeType(committee_type_code: string): string {
-    switch (committee_type_code) {
-      case 'C':
-        return 'communication cost';
-      case 'D':
-        return 'delegate';
-      case 'E':
-        return 'electioneering communication';
-      case 'H':
-        return 'House';
-      case 'I':
-        return 'independent expenditure filer (not a committee)';
-      case 'N':
-        return 'PAC - nonqualified';
-      case 'O':
-        return 'independent expenditure-only (super PACs)';
-      case 'P':
-        return 'presidential';
-      case 'Q':
-        return 'PAC - qualified';
-      case 'S':
-        return 'Senate';
-      case 'U':
-        return 'single candidate independent expenditure';
-      case 'V':
-        return 'PAC with non-contribution account, nonqualified';
-      case 'W':
-        return 'PAC with non-contribution account, qualified';
-      case 'X':
-        return 'party, nonqualified';
-      case 'Y':
-        return 'party, qualified';
-      case 'Z':
-        return 'national party non-federal account';
-    }
-    return '';
-  }
+  public active_committees = ['M', 'Q', 'W', 'D'];
 
   ngOnInit(): void {
     this.store.select(selectCommitteeAccount).subscribe((committeeAccount) => {
@@ -92,13 +60,13 @@ export class CommitteeBannerComponent implements OnInit, OnDestroy {
 
       const frequency_code = committeeAccount.filing_frequency;
       if (frequency_code) {
-        this.committeeFrequency = this.getFilingFrequency(frequency_code);
-        this.committeeStatus = this.getCommitteeActive(frequency_code) ? 'Active' : 'Inactive';
+        this.committeeFrequency = this.getArbitraryValueFromObject(frequency_code, this.committee_statuses);
+        this.committeeStatus = frequency_code in this.active_committees ? 'Active' : 'Inactive';
       }
 
       const committee_type_code = committeeAccount.committee_type;
       if (committee_type_code) {
-        this.committeeType = this.getCommitteeType(committee_type_code);
+        this.committeeType = this.getArbitraryValueFromObject(committee_type_code, this.committee_types);
       }
     });
   }
