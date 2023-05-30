@@ -49,6 +49,10 @@ a {
   color: #112E51 !important;
  }
 
+:host ::ng-deep a:has( + p-menubarsub > ul > li > a.p-menuitem-link-active){
+  padding-top: 12px !important;
+}
+
 :host ::ng-deep p-menubar > div > p-menubarsub > ul > li > a.p-menuitem-link {
   height: 80px !important;
 }
