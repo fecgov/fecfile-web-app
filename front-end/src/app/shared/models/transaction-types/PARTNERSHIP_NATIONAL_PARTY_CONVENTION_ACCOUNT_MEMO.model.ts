@@ -4,9 +4,10 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
+import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO extends SchATransactionType {
-  componentGroupId = 'A';
+  transactionGroup = new TransactionGroupA();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO
@@ -23,7 +24,6 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO extends SchATran
     return SchATransaction.fromJSON({
       form_type: 'SA17',
       transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO,
-      back_reference_sched_name: 'SA17',
       aggregation_group: AggregationGroups.NATIONAL_PARTY_CONVENTION_ACCOUNT,
     });
   }

@@ -19,7 +19,6 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
 import { SharedModule } from '../../shared/shared.module';
-import { TransactionGroupBComponent } from '../transaction-group-b/transaction-group-b.component';
 import { TransactionContainerComponent } from './transaction-container.component';
 import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
 
@@ -46,7 +45,7 @@ describe('TransactionContainerComponent', () => {
         InputTextareaModule,
         ConfirmDialogModule,
       ],
-      declarations: [TransactionContainerComponent, TransactionGroupBComponent, ConfirmDialog],
+      declarations: [TransactionContainerComponent, ConfirmDialog],
       providers: [
         FormBuilder,
         MessageService,
@@ -75,14 +74,5 @@ describe('TransactionContainerComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should assign filer committee id number to child transaction', () => {
-    const transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT);
-    transaction.children = [getTestTransactionByType(ScheduleATransactionTypes.EARMARK_MEMO)];
-    component.transaction = transaction;
-    component.ngOnInit();
-    if (component?.transaction?.children)
-      expect(component.transaction.children[0].filer_committee_id_number).toBe('C00601211');
   });
 });

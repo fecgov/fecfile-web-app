@@ -49,7 +49,7 @@
     <ng-template pTemplate="body" let-item>
       <tr role="row">
         <td>
-          <a [routerLink]="['edit', item?.id]">{{
+          <a [routerLink]="[item?.id]">{{
             item.transaction_type_identifier | label : scheduleTransactionTypeLabels
           }}</a>
           <div *ngIf="item?.itemized === false"><strong>Unitemized</strong></div>
@@ -72,10 +72,10 @@
           {{ item[item.transactionType.templateMap.amount] | currency }}
         </td>
         <td>
-          {{ item.transaction_id }}
+          {{ formatId(item.id) }}
         </td>
         <td>
-          {{ item.parent_transaction?.transaction_id }}
+          {{ formatId(item.parent_transaction_id) }}
         </td>
         <td>
           <app-table-actions-button

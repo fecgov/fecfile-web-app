@@ -1,7 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { MemoText } from 'app/shared/models/memo-text.model';
 import { MemoTextService } from 'app/shared/services/memo-text.service';
@@ -10,29 +11,21 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { schema as textSchema } from 'fecfile-validate/fecfile_validate_js/dist/Text';
 import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-report-level-memo',
   templateUrl: './report-level-memo.component.html',
   styleUrls: ['../../styles.scss'],
 })
-export class ReportLevelMemoComponent implements OnInit, OnDestroy {
+export class ReportLevelMemoComponent extends DestroyerComponent implements OnInit {
   readonly recTypeFormProperty = 'rec_type';
-  readonly committeeIdFormProperty = 'filer_committee_id_number';
-  readonly brSchedFormProperty = 'back_reference_sched_form_name';
   readonly text4kFormProperty = 'text4000';
 
-  formProperties: string[] = [
-    this.recTypeFormProperty,
-    this.committeeIdFormProperty,
-    this.brSchedFormProperty,
-    this.text4kFormProperty,
-  ];
+  formProperties: string[] = [this.recTypeFormProperty, this.text4kFormProperty];
 
   report: F3xSummary = new F3xSummary();
   committeeAccountId: string | undefined;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   assignedMemoText: MemoText = new MemoText();
 
@@ -46,9 +39,8 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
     public memoTextService: MemoTextService,
     private messageService: MessageService
   ) {
+    super();
     this.form.addControl(this.recTypeFormProperty, new FormControl());
-    this.form.addControl(this.committeeIdFormProperty, new FormControl());
-    this.form.addControl(this.brSchedFormProperty, new FormControl());
   }
 
   ngOnInit(): void {
@@ -78,17 +70,10 @@ export class ReportLevelMemoComponent implements OnInit, OnDestroy {
     ValidateUtils.addJsonSchemaValidators(this.form, textSchema, false);
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-  }
-
   save() {
     this.formSubmitted = true;
 
     this.form.get(this.recTypeFormProperty)?.setValue('TEXT');
-    this.form.get(this.committeeIdFormProperty)?.setValue(this.committeeAccountId);
-    this.form.get(this.brSchedFormProperty)?.setValue(this.report.form_type);
 
     const payload: MemoText = MemoText.fromJSON({
       ...this.assignedMemoText,

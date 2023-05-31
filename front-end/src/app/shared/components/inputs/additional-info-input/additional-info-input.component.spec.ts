@@ -20,10 +20,11 @@ describe('AdditionalInfoInputComponent', () => {
     component = fixture.componentInstance;
     component.form = new FormGroup({
       contribution_purpose_descrip: new FormControl(''),
-      memo_text_input: new FormControl(''),
+      text4000: new FormControl(''),
     });
     component.templateMap = testTemplateMap;
     component.descriptionIsSystemGenerated = true;
+    component.purposeDescriptionPrefix = 'Prefix: ';
     fixture.detectChanges();
   });
 
@@ -41,5 +42,19 @@ describe('AdditionalInfoInputComponent', () => {
     const cpd = fixture.debugElement.query(By.css('#purpose_description'));
     fixture.detectChanges();
     expect(cpd.classes['readonly']).toBeFalsy();
+  });
+
+  it('should trigger the purposeDescriptionPrefix callbacks', () => {
+    component.form.patchValue({
+      [testTemplateMap.purpose_description]: 'abc',
+    });
+    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(component.purposeDescriptionPrefix);
+
+    component.form.patchValue({
+      [testTemplateMap.purpose_description]: 'Prefax: abc',
+    });
+    expect(component.form.get(testTemplateMap.purpose_description)?.value).toBe(
+      component.purposeDescriptionPrefix + 'abc'
+    );
   });
 });

@@ -1,6 +1,7 @@
 import { OTHER_DISBURSEMENT } from './OTHER_DISBURSEMENT.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionType } from 'app/shared/models/transaction-type.model';
+import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 
 describe('OTHER_DISBURSEMENT', () => {
   let transactionType: OTHER_DISBURSEMENT;
@@ -12,7 +13,7 @@ describe('OTHER_DISBURSEMENT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('B');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupB);
   });
 
   it('#factory() should return a SchBTransaction', () => {

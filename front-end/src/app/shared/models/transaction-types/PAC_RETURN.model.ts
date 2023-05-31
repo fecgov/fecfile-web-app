@@ -4,9 +4,10 @@ import { AggregationGroups } from '../transaction.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_RETURN';
 import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
+import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 
 export class PAC_RETURN extends SchATransactionType {
-  componentGroupId = 'E';
+  transactionGroup = new TransactionGroupE();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RETURN);
   schema = schema;
   override negativeAmountValueOnly = true;

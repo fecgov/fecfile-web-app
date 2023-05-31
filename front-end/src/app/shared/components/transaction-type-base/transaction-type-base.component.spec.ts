@@ -44,7 +44,7 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
     'contribution_aggregate',
     'contribution_purpose_descrip',
     'memo_code',
-    'memo_text_input',
+    'text4000',
   ];
 }
 
@@ -54,7 +54,6 @@ const initTransactionData = {
   contact: undefined,
   contact_id: undefined,
   form_type: undefined,
-  filer_committee_id_number: undefined,
   transaction_id: null,
   transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
   contribution_purpose_descrip: undefined,
@@ -117,7 +116,7 @@ describe('TransactionTypeBaseComponent', () => {
   it('#retrieveMemoText should work', () => {
     if (!component.transaction) throw new Error('Fecfile: transaction does not exist');
     component.form = new FormGroup({
-      memo_text_input: new FormControl('memo'),
+      text4000: new FormControl('memo'),
     });
     const formValues = TransactionMemoUtils.retrieveMemoText(component.transaction, component.form, {});
     expect(formValues['memo_text']['text4000']).toBe('memo');
@@ -304,7 +303,38 @@ describe('TransactionTypeBaseComponent', () => {
       life: 3000,
     };
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
-    component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.ANOTHER));
+    spyOn(testRouter, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    component.navigateTo(
+      new NavigationEvent(
+        NavigationAction.SAVE,
+        NavigationDestination.ANOTHER,
+        testTransaction,
+        ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+      )
+    );
+    expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
+  });
+
+  it('#navigateTo NavigationDestination.ANOTHER_CHILD should show popup', () => {
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
+    testTransaction1.parent_transaction_id = '123';
+    component.transaction = testTransaction1;
+    const expectedMessage: Message = {
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Transaction Saved',
+      life: 3000,
+    };
+    const messageServiceAddSpy = spyOn(testMessageService, 'add');
+    spyOn(testRouter, 'navigateByUrl').and.callFake(() => Promise.resolve(true));
+    component.navigateTo(
+      new NavigationEvent(
+        NavigationAction.SAVE,
+        NavigationDestination.ANOTHER_CHILD,
+        testTransaction1,
+        ScheduleATransactionTypes.INDIVIDUAL_RECEIPT
+      )
+    );
     expect(messageServiceAddSpy).toHaveBeenCalledOnceWith(expectedMessage);
   });
 
@@ -320,7 +350,7 @@ describe('TransactionTypeBaseComponent', () => {
       detail: 'Parent Transaction Saved',
       life: 3000,
     };
-    const expectedRoute = `/transactions/report/999/list/edit/${testTransactionId}/create-sub-transaction/${testTransactionTypeToAdd}`;
+    const expectedRoute = `/transactions/report/999/list/${testTransactionId}/create-sub-transaction/${testTransactionTypeToAdd}`;
 
     const messageServiceAddSpy = spyOn(testMessageService, 'add');
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
@@ -345,7 +375,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   it('#navigateTo NavigationDestination.CHILD should navigate', () => {
     component.transaction = testTransaction;
-    const expectedRoute = '/transactions/report/999/list/edit/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
+    const expectedRoute = '/transactions/report/999/list/123/create-sub-transaction/INDIVIDUAL_RECEIPT';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo(
       new NavigationEvent(
@@ -361,7 +391,7 @@ describe('TransactionTypeBaseComponent', () => {
   it('#navigateTo NavigationDestination.PARENT should navigate', () => {
     const transaction = { ...testTransaction } as SchATransaction;
     transaction.parent_transaction_id = '333';
-    const expectedRoute = '/transactions/report/999/list/edit/333';
+    const expectedRoute = '/transactions/report/999/list/333';
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.PARENT, transaction));
     expect(routerNavigateByUrlSpy).toHaveBeenCalledOnceWith(expectedRoute);

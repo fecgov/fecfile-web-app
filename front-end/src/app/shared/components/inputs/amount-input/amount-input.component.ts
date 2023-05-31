@@ -1,18 +1,18 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { BaseInputComponent } from '../base-input.component';
-import { InputNumber } from 'primeng/inputnumber';
-import { Store } from '@ngrx/store';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { Subject, takeUntil } from 'rxjs';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { selectActiveReport } from 'app/store/active-report.selectors';
+import { InputNumber } from 'primeng/inputnumber';
+import { takeUntil } from 'rxjs';
+import { BaseInputComponent } from '../base-input.component';
 
 @Component({
   selector: 'app-amount-input',
   styleUrls: ['./amount-input.component.scss'],
   templateUrl: './amount-input.component.html',
 })
-export class AmountInputComponent extends BaseInputComponent implements OnInit, OnDestroy {
+export class AmountInputComponent extends BaseInputComponent implements OnInit, OnChanges {
   @Input() memoCodeReadOnly = false;
   @Input() contributionAmountReadOnly = false;
   @Input() memoItemHelpText =
@@ -25,12 +25,11 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   contributionAmountInputStyleClass = '';
   report?: F3xSummary;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   memoControl: FormControl = new FormControl();
   outOfDateDialogVisible = false;
 
-  constructor(private store: Store) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
     super();
   }
 
@@ -60,9 +59,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
     }
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
+  ngOnChanges(): void {
+    this.changeDetectorRef.detectChanges();
   }
 
   closeOutOfDateDialog() {
@@ -77,7 +75,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
 
   updateMemoItemWithDate(date: Date) {
     if (this.report?.coverage_from_date && this.report?.coverage_through_date) {
-      if (date < this.report.coverage_from_date || date > this.report.coverage_through_date) {
+      if (date && (date < this.report.coverage_from_date || date > this.report.coverage_through_date)) {
         this.memoControl.addValidators(Validators.requiredTrue);
         this.memoControl.markAsTouched();
         this.memoControl.updateValueAndValidity();

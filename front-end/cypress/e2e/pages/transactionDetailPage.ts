@@ -13,7 +13,7 @@ export type ScheduleFormData = {
 };
 
 export const defaultFormData: ScheduleFormData = {
-  date_received: new Date(currentYear, 7 - 1, 27),
+  date_received: new Date(currentYear, 4 - 1, 27),
   memo_code: false,
   amount: 100.55,
   electionType: '',
@@ -47,7 +47,7 @@ export class TransactionDetailPage {
     if (formData['purpose_description']) {
       cy.get(alias).find('textarea#purpose_description').safeType(formData['purpose_description']);
     }
-    cy.get(alias).find('textarea#memo_text_input').safeType(formData['memo_text']);
+    cy.get(alias).find('textarea#text4000').safeType(formData['memo_text']);
     if (formData['category_code']) {
       PageUtils.dropdownSetValue('[inputid="category_code"]', formData['category_code'], alias);
     }

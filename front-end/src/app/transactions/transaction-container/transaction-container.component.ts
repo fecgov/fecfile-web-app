@@ -1,21 +1,22 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectCommitteeAccount } from '../../store/committee-account.selectors';
-import { CommitteeAccount } from '../../shared/models/committee-account.model';
 import { Title } from '@angular/platform-browser';
+import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/double-transaction-group.model';
+import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-transaction-container',
   templateUrl: './transaction-container.component.html',
 })
-export class TransactionContainerComponent implements OnInit, OnDestroy {
+export class TransactionContainerComponent extends DestroyerComponent {
   transaction: Transaction | undefined;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private activatedRoute: ActivatedRoute, private store: Store, private titleService: Title) {
+    super();
     activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       this.transaction = data['transaction'];
       if (this.transaction) {
@@ -25,22 +26,11 @@ export class TransactionContainerComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-    this.store
-      .select(selectCommitteeAccount)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((committeeAccount: CommitteeAccount) => {
-        if (this.transaction) {
-          this.transaction.filer_committee_id_number = committeeAccount.committee_id ?? 'C00000000';
-        }
-        if (this.transaction?.transactionType?.dependentChildTransactionType && this.transaction.children) {
-          this.transaction.children[0].filer_committee_id_number = committeeAccount.committee_id ?? 'C00000000';
-        }
-      });
+  isTransactionGroup() {
+    return this.transaction?.transactionType?.transactionGroup instanceof TransactionGroup;
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
+  isDoubleTransactionGroup() {
+    return this.transaction?.transactionType?.transactionGroup instanceof DoubleTransactionGroup;
   }
 }

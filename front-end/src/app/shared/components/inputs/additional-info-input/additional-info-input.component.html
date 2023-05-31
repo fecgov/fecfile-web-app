@@ -24,19 +24,19 @@
   </div>
   <div class="grid">
     <div class="col-12">
-      <label for="memo_text_input">NOTE OR MEMO TEXT (OPTIONAL)</label>
+      <label for="text4000">NOTE OR MEMO TEXT (OPTIONAL)</label>
       <div>
         <textarea
-          id="memo_text_input"
+          id="text4000"
           [rows]="5"
           [cols]="30"
           pInputTextarea
           [autoResize]="true"
-          [formControlName]="templateMap['memo_text_input']"
+          [formControlName]="templateMap['text4000']"
         ></textarea>
         <app-error-messages
           [form]="form"
-          [fieldName]="templateMap['memo_text_input']"
+          [fieldName]="templateMap['text4000']"
           [formSubmitted]="formSubmitted"
         ></app-error-messages>
       </div>

@@ -1,4 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupC } from '../transaction-groups/transaction-group-c.model';
 import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO } from './NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO.model';
 
 describe('NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO', () => {
@@ -11,7 +12,7 @@ describe('NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.componentGroupId).toBe('C');
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupC);
   });
 
   it('#factory() should return a SchBTransaction', () => {

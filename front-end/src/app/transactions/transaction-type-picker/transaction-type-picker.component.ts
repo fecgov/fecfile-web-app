@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { Report } from 'app/shared/interfaces/report.interface';
@@ -20,6 +20,7 @@ import {
 } from 'app/shared/models/schb-transaction.model';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 type Categories = 'receipt' | 'disbursement';
 
@@ -28,14 +29,15 @@ type Categories = 'receipt' | 'disbursement';
   templateUrl: './transaction-type-picker.component.html',
   styleUrls: ['./transaction-type-picker.component.scss'],
 })
-export class TransactionTypePickerComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<boolean>();
+export class TransactionTypePickerComponent extends DestroyerComponent implements OnInit {
   transactionTypeLabels: LabelList = [...ScheduleATransactionTypeLabels, ...ScheduleBTransactionTypeLabels];
   report: Report | undefined;
   category: Categories = 'receipt';
   groups: ScheduleATransactionGroupsType[] | ScheduleBTransactionGroupsType[] = [];
 
-  constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {}
+  constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {
+    super();
+  }
 
   ngOnInit(): void {
     this.store
@@ -47,11 +49,6 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
       this.category = params['category'];
       this.titleService.setTitle('Add a ' + this.category);
     });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   getTransactionGroups(): TransactionGroupTypes[] {
@@ -158,7 +155,7 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
       case ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGULAR_FILERS:
         return [
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
-          ScheduleBTransactionTypes.TRANSFER_TO_AFFIILIATES,
+          ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE,
@@ -177,14 +174,14 @@ export class TransactionTypePickerComponent implements OnInit, OnDestroy {
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL,
           ScheduleBTransactionTypes.OTHER_DISBURSEMENT_VOID,
-          ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NON_CONTRIBUTION_ACCOUNT,
+          ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT,
           ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT,
           ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT,
           ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL,
-          ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_ACCOUNT,
-          ScheduleBTransactionTypes.OTHER_DISBURSEMENT_RECOUNT,
-          ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY,
-          ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_OPERATING_EXPENSE_NATIONAL_PARTY,
+          ScheduleBTransactionTypes.NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT,
+          ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
+          ScheduleBTransactionTypes.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT,
+          ScheduleBTransactionTypes.NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_INDIVIDUAL_REFUND,
           ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_REGULAR_REFUND,
           ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
