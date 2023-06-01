@@ -12,6 +12,7 @@
     [loading]="loading"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} transactions"
     [showCurrentPageReport]="true"
+    sortField="form_type,created"
   >
     <ng-template pTemplate="caption">
       <div class="grid">
@@ -30,19 +31,26 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr role="row">
+        <th pSortableColumn="form_type" id="form-type-column" role="columnheader">
+          Line <p-sortIcon field="form_type"></p-sortIcon>
+        </th>
         <th pSortableColumn="transaction_type_identifier" id="transaction-type-identifier-column" role="columnheader">
           Transaction type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
         </th>
-        <th pSortableColumn="name" id="name-column" role="columnheader">Name <p-sortIcon field="name"></p-sortIcon></th>
-        <th pSortableColumn="date" id="date-column" role="columnheader">Date <p-sortIcon field="date"></p-sortIcon></th>
+        <th pSortableColumn="contributor_name" id="name-column" role="columnheader">
+          Name <p-sortIcon field="contributor_name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="contribution_date" id="date-column" role="columnheader">
+          Date <p-sortIcon field="contribution_date"></p-sortIcon>
+        </th>
         <th pSortableColumn="memo_code" id="memo-code-column" role="columnheader">
           Memo code <p-sortIcon field="memo_code"></p-sortIcon>
         </th>
-        <th pSortableColumn="amount" id="amount-column" role="columnheader">
-          Amount <p-sortIcon field="amount"></p-sortIcon>
+        <th pSortableColumn="contribution_amount" id="amount-column" role="columnheader">
+          Amount <p-sortIcon field="contribution_amount"></p-sortIcon>
         </th>
-        <th pSortableColumn="aggregate" id="aggregate-column" role="columnheader">
-          Aggregate <p-sortIcon field="aggregate"></p-sortIcon>
+        <th pSortableColumn="contribution_aggregate" id="aggregate-column" role="columnheader">
+          Aggregate <p-sortIcon field="contribution_aggregate"></p-sortIcon>
         </th>
         <th id="transaction_id" role="columnheader">Transaction ID</th>
         <th id="transaction_parent" role="columnheader">Associated With</th>
@@ -51,6 +59,9 @@
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr role="row">
+        <td nowrap>
+          {{ item.form_type | label : lineLabels }}
+        </td>
         <td>
           <a [routerLink]="[item?.id]">{{
             item.transaction_type_identifier | label : scheduleTransactionTypeLabels
