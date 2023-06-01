@@ -58,6 +58,7 @@ export class TransactionContactLookupComponent {
   }
 
   openCreateContactDialog() {
+    this.createContactForm.reset();
     this.createContactFormSubmitted = false;
     const typeFormControl = this.createContactForm.get('type');
     typeFormControl?.setValue(this.contactTypeFormControl.value);

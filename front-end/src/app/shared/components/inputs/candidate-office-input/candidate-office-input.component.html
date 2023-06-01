@@ -1,0 +1,67 @@
+<div [formGroup]="form">
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="candidate_office">CANDIDATE OFFICE</label>
+        <p-dropdown
+          inputId="candidate_office"
+          [formControlName]="this.candidateOfficeFormControlName"
+          [options]="candidateOfficeTypeOptions"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-dropdown>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="this.candidateOfficeFormControlName"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label
+          for="candidate_state"
+          [ngClass]="{
+            disabled: this.form.get(this.candidateStateFormControlName)?.disabled
+          }"
+          >CANDIDATE STATE</label
+        >
+        <p-dropdown
+          inputId="candidate_state"
+          [formControlName]="this.candidateStateFormControlName"
+          [options]="candidateStateOptions"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-dropdown>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="this.candidateStateFormControlName"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label
+          for="candidate_district"
+          [ngClass]="{
+            disabled: this.form.get(this.candidateDistrictFormControlName)?.disabled
+          }"
+          >CANDIDATE DISTRICT</label
+        >
+        <p-dropdown
+          inputId="candidate_district"
+          [formControlName]="this.candidateDistrictFormControlName"
+          [options]="candidateDistrictOptions"
+          appendTo="body"
+          [autoDisplayFirst]="false"
+        ></p-dropdown>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="this.candidateDistrictFormControlName"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+</div>

@@ -112,6 +112,8 @@ export class FecApiCandidateLookupData extends FecApiLookupData {
 
   toSelectItem(): SelectItem<FecApiCandidateLookupData> {
     return {
+      // TODO: Will need to update this to last/first name fields 
+      // when FEC updates their candidate API to add those fields
       label: `${this.name} (${this.id})`,
       value: this,
     };
@@ -126,7 +128,7 @@ export class FecfileCandidateLookupData extends Contact {
 
   toSelectItem(): SelectItem<Contact> {
     return {
-      label: `${this.name} (${this.candidate_id})`,
+      label: `${this.last_name}, ${this.first_name} (${this.candidate_id})`,
       value: this,
     };
   }

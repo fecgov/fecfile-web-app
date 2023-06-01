@@ -38,6 +38,7 @@ import { LongDatePipe } from './pipes/long-date.pipe';
 import { ReportCodeLabelPipe } from './utils/report-code.utils';
 import { CalculationOverlayComponent } from './components/calculation-overlay/calculation-overlay.component';
 import { CandidateInputComponent } from './components/inputs/candidate-input/candidate-input.component';
+import { CandidateOfficeInputComponent } from './components/inputs/candidate-office-input/candidate-office-input.component';
 
 @NgModule({
   imports: [
@@ -76,6 +77,7 @@ import { CandidateInputComponent } from './components/inputs/candidate-input/can
     AddressInputComponent,
     NameInputComponent,
     CandidateInputComponent,
+    CandidateOfficeInputComponent,
     EmployerInputComponent,
     CommitteeInputComponent,
     AmountInputComponent,
@@ -103,6 +105,7 @@ import { CandidateInputComponent } from './components/inputs/candidate-input/can
     AddressInputComponent,
     NameInputComponent,
     CandidateInputComponent,
+    CandidateOfficeInputComponent,
     EmployerInputComponent,
     CommitteeInputComponent,
     AmountInputComponent,
