@@ -101,7 +101,7 @@ describe('TransactionContactLookupComponent', () => {
     component.closeCreateContactDialog();
     component.createContactSave();
     expect(component.createContactForm.get('committee_id')?.value).toBe(
-      ''
+      null
     );
     component.onCreateContactDialogClose();
     expect(component.createContactFormSubmitted).toBeFalse();
