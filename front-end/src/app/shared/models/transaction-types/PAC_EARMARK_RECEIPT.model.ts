@@ -6,6 +6,7 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { TransactionGroupFG } from '../transaction-groups/transaction-group-fg.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { TemplateMapKeyType } from '../transaction-type.model';
 
 export class PAC_EARMARK_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupFG();
@@ -13,6 +14,7 @@ export class PAC_EARMARK_RECEIPT extends SchATransactionType {
   schema = schema;
   override dependentChildTransactionType = ScheduleATransactionTypes.PAC_EARMARK_MEMO;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override childTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children) return '';

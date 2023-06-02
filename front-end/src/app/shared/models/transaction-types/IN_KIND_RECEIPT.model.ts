@@ -6,12 +6,14 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { TransactionGroupAA } from '../transaction-groups/transaction-group-aa.model';
 
 export class IN_KIND_RECEIPT extends SchATransactionType {
-  transactionGroup = new TransactionGroupAG();
+  transactionGroup = new TransactionGroupAA();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.IN_KIND_RECEIPT);
   schema = schema;
-  //override dependentChildTransactionType = ScheduleATransactionTypes.IN_KIND_MEMO;
+  override dependentChildTransactionType = ScheduleBTransactionTypes.IN_KIND_OUT;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionPrefix = 'In-Kind: ';
 

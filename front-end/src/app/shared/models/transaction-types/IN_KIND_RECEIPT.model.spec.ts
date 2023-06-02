@@ -22,8 +22,8 @@ describe('EARMARK_RECEIPT', () => {
   });
 
   it('#generatePurposeDescription() should generate empty string', () => {
-    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('');
+    const description = transaction.transactionType?.generatePurposeDescription?.(transaction);
+    expect(description).toBe('');
   });
 
   it('#generatePurposeDescription() should reflect child', () => {
@@ -33,7 +33,7 @@ describe('EARMARK_RECEIPT', () => {
     childTransaction.contributor_last_name = 'Smith';
     transaction.children = [childTransaction];
 
-    const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Earmarked through Joe Smith');
+    const description = transaction.transactionType?.generatePurposeDescription?.(transaction);
+    expect(description).toBe('Earmarked through Joe Smith');
   });
 });

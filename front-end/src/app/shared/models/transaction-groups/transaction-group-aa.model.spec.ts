@@ -43,12 +43,9 @@ describe('TransactionGroupAA', () => {
   });
 
   it('#getChildContactTypeOptions should return individual and committee', () => {
-    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-      ContactTypes.INDIVIDUAL,
-      ContactTypes.COMMITTEE,
-    ]);
-    const retval = component.getChildContactTypeOptions();
-    expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
+    const expectedOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.INDIVIDUAL]);
+    const options = component.getChildContactTypeOptions();
+    expect(JSON.stringify(expectedOptions) === JSON.stringify(options)).toBeTruthy();
   });
 
   it('#hasEmployerInput should return true', () => {

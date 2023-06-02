@@ -85,6 +85,7 @@ import { PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } f
 
 import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
 import { INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
+import { IN_KIND_OUT } from '../models/transaction-types/IN_KIND_OUT.model';
 import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
 import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
 import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
@@ -145,6 +146,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   EARMARK_RECEIPT,
   EARMARK_MEMO,
   IN_KIND_RECEIPT,
+  IN_KIND_OUT,
   INDIVIDUAL_JF_TRANSFER_MEMO,
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
   INDIVIDUAL_RECEIPT,

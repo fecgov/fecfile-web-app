@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
-import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
+import { TransactionTemplateMapType, TemplateMapKeyType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -37,6 +37,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
   childPurposeDescriptionLabel = '';
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
+  useParentContact = false;
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -81,44 +82,41 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childPurposeDescriptionLabel = this.childTransaction.transactionType.generatePurposeDescriptionLabel();
     }
 
-    // Default the child entity type to Committee
-    if (!this.childTransaction?.id) {
-      this.childForm.get('entity_type')?.setValue(ContactTypes.COMMITTEE);
+    // Parent contribution purpose description updates with configured child fields update.
+    this.transaction?.transactionType?.childTriggerFields?.forEach((triggerField) => {
+      this.childForm
+        .get(this.childTemplateMap[triggerField as TemplateMapKeyType])
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          /** Before updating the parent description, manually update the child
+           * fields because they will not be updated by the time this hook is called
+           **/
+          const key = this.childTemplateMap[triggerField as TemplateMapKeyType] as keyof ScheduleTransaction;
+          ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
+          (this.childTransaction as ScheduleTransaction).entity_type = this.childForm.get('entity_type')?.value;
+          this.updateParentPurposeDescription();
+        });
+    });
+
+    this.useParentContact = !!this.childTransaction?.transactionType?.useParentContact;
+
+    // Inheritted fields must match parent values
+    this.childTransaction?.transactionType?.inherittedFields?.forEach((inherittedField) => {
+      this.form
+        .get(this.templateMap[inherittedField as TemplateMapKeyType])
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          this.childForm.get(this.childTemplateMap[inherittedField as TemplateMapKeyType])?.setValue(value);
+        });
+      this.childForm.get(inherittedField)?.disable();
+    });
+  }
+
+  override onContactLookupSelect(selectItem: SelectItem<Contact>): void {
+    super.onContactLookupSelect(selectItem);
+    if (this.useParentContact && this.childTransaction && this.transaction?.contact) {
+      this.childTransaction.contact = this.transaction.contact;
     }
-
-    // Parent contribution purpose description updates with child contributor name updates.
-    this.childForm
-      .get(this.childTemplateMap.organization_name)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        const key = this.childTemplateMap.organization_name as keyof ScheduleTransaction;
-        ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
-        this.updateParentPurposeDescription();
-      });
-    this.childForm
-      .get(this.childTemplateMap.first_name)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        const key = this.childTemplateMap.first_name as keyof ScheduleTransaction;
-        ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
-        this.updateParentPurposeDescription();
-      });
-    this.childForm
-      .get(this.childTemplateMap.last_name)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        const key = this.childTemplateMap.last_name as keyof ScheduleTransaction;
-        ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
-        this.updateParentPurposeDescription();
-      });
-
-    // Child amount must match parent contribution amount
-    this.form
-      .get(this.templateMap.amount)
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value) => {
-        this.childForm.get(this.childTemplateMap.amount)?.setValue(value);
-      });
   }
 
   override ngOnDestroy(): void {
@@ -127,8 +125,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   private updateParentPurposeDescription() {
-    (this.childTransaction as ScheduleTransaction).entity_type = this.childForm.get('entity_type')?.value;
-
     if (this.transaction?.transactionType?.generatePurposeDescription) {
       this.form.patchValue({
         [this.templateMap.purpose_description]: this.transaction.transactionType.generatePurposeDescriptionWrapper(

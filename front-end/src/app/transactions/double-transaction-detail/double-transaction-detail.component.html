@@ -1,21 +1,18 @@
 <p-toast></p-toast>
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
-<p>
-  This type of receipt requires a memo transaction. Follow this two-step process to create both an earmark receipt and
-  an earmark memo:
-</p>
+<p>{{ this.groupDescription }}</p>
 <p-accordion>
   <p-accordionTab>
     <ng-template pTemplate="header">
-      <strong>STEP ONE:</strong>
-      <p style="font-weight: normal">Add receipt and contributor information</p></ng-template
+      <strong>{{ this.parentAccordionTitle }}:</strong>
+      <p style="font-weight: normal">{{ this.parentAccordionSubTitle }}</p></ng-template
     >
     <div class="p-fluid">
-      <h2>Receipt</h2>
+      <h2 *ngIf="this.parentTransactionTitle">{{ this.parentTransactionTitle }}</h2>
       <h3>Contact</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
-        <div class="grid">
+        <div class="grid" *ngIf="isEditable">
           <div class="col-12">
             <label for="entity_type">CONTACT TYPE</label>
             <app-transaction-contact-lookup
@@ -79,7 +76,7 @@
             [purposeDescriptionPrefix]="this.transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
           <div class="grid" style="flex-direction: row-reverse">
-            <p style="font-style: italic">This type of receipt requires a memo transaction</p>
+            <p style="font-style: italic">{{ this.parentFooter }}</p>
           </div>
         </ng-container>
       </form>
@@ -88,19 +85,20 @@
 
   <p-accordionTab>
     <ng-template pTemplate="header">
-      <strong>STEP TWO:</strong>
+      <strong>{{ this.childAccordionTitle }}:</strong>
       <p style="font-weight: normal">
-        Add earmarked memo and conduit information (REQUIRED FOR EARMARKED RECEIPTS)
+        {{ this.childAccordionSubTitle }}
       </p></ng-template
     >
     <div class="p-fluid">
       <h2>{{ this.childTransactionTitle }}</h2>
-      <h3>Conduit</h3>
+      <h3>{{ this.childContactLabel }}</h3>
       <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
-        <div class="grid">
+        <div class="grid" *ngIf="isEditable && !useParentContact">
           <div class="col-12">
             <div class="field">
               <label for="entity_type">ENTITY TYPE</label>
+              {{ this.childForm.controls['entity_type'].value }}
               <app-transaction-contact-lookup
                 [contactTypeFormControl]="$any(childForm).controls['entity_type']"
                 [contactTypeOptions]="childContactTypeOptions"
@@ -117,7 +115,7 @@
               [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
-              entityRole="CONDUIT"
+              [entityRole]="this.childContactLabel"
               [includeFecId]="true"
             ></app-committee-input>
           </ng-container>
@@ -137,7 +135,9 @@
             [stateOptions]="stateOptions"
           ></app-address-input>
           <p-divider></p-divider>
-          <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
+          <ng-container
+            *ngIf="childHasEmployerInput && childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL"
+          >
             <h3>Employer</h3>
             <app-employer-input
               [form]="childForm"
