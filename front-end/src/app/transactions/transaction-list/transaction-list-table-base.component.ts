@@ -5,7 +5,7 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { TableAction, TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { LabelList } from 'app/shared/utils/label.utils';
+import { LabelList, LineIdentifierLabels } from 'app/shared/utils/label.utils';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ReportService } from 'app/shared/services/report.service';
@@ -18,6 +18,7 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   override rowsPerPage = 5;
   paginationPageSizeOptions = [5, 10, 15, 20];
   reportIsEditable = false;
+  lineLabels = LineIdentifierLabels;
 
   public rowActions: TableAction[] = [
     new TableAction(
