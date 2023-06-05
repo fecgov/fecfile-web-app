@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { CandidateOfficeTypes } from 'app/shared/models/contact.model';
+import { LabelUtils } from 'app/shared/utils/label.utils';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
@@ -8,6 +10,10 @@ import { CandidateOfficeInputComponent } from './candidate-office-input.componen
 describe('CandidateOfficeInputComponent', () => {
   let component: CandidateOfficeInputComponent;
   let fixture: ComponentFixture<CandidateOfficeInputComponent>;
+
+  const testCandidateOfficeFormControlName = 'testCandidateOfficeFormControlName';
+  const testCandidateStateFormControlName = 'testCandidateStateFormControlName';
+  const candidateDistrictFormControlName = 'candidateDistrictFormControlName';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -25,15 +31,12 @@ describe('CandidateOfficeInputComponent', () => {
       donor_candidate_suffix: new FormControl(''),
     });
 
-    const testCandidateOfficeFormControlName = 'testCandidateOfficeFormControlName';
     component.form.addControl(testCandidateOfficeFormControlName, new FormControl());
     component.candidateOfficeFormControlName = testCandidateOfficeFormControlName;
 
-    const testCandidateStateFormControlName = 'testCandidateStateFormControlName';
     component.form.addControl(testCandidateStateFormControlName, new FormControl());
     component.candidateStateFormControlName = testCandidateStateFormControlName;
 
-    const candidateDistrictFormControlName = 'candidateDistrictFormControlName';
     component.form.addControl(candidateDistrictFormControlName, new FormControl());
     component.candidateDistrictFormControlName = candidateDistrictFormControlName;
 
@@ -43,4 +46,52 @@ describe('CandidateOfficeInputComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('test PRESIDENTIAL office', () => {
+    component.form.patchValue({
+      [testCandidateOfficeFormControlName]:
+        CandidateOfficeTypes.PRESIDENTIAL
+    });
+    const stateFormControl = component.form.get(component.candidateStateFormControlName);
+    const districtFormControl = component.form.get(component.candidateDistrictFormControlName);
+
+    expect(stateFormControl?.value).toBe('');
+    expect(stateFormControl?.disabled).toBe(true);
+
+    expect(districtFormControl?.value).toBe('');
+    expect(districtFormControl?.disabled).toBe(true);
+  });
+
+  it('test SENATE office', () => {
+    component.form.patchValue({
+      [testCandidateOfficeFormControlName]:
+        CandidateOfficeTypes.SENATE
+    });
+    const stateFormControl = component.form.get(component.candidateStateFormControlName);
+    const districtFormControl = component.form.get(component.candidateDistrictFormControlName);
+
+    expect(stateFormControl?.disabled).toBe(false);
+
+    expect(districtFormControl?.value).toBe('');
+    expect(districtFormControl?.disabled).toBe(true);
+  });
+
+  it('test HOUSE office', () => {
+    component.form.patchValue({
+      [testCandidateOfficeFormControlName]:
+        CandidateOfficeTypes.HOUSE
+    });
+    component.form.patchValue({
+      [testCandidateStateFormControlName]: 'FL'
+    });
+    const stateFormControl = component.form.get(component.candidateStateFormControlName);
+    const districtFormControl = component.form.get(component.candidateDistrictFormControlName);
+
+    expect(stateFormControl?.disabled).toBe(false);
+    expect(districtFormControl?.disabled).toBe(false);
+
+    expect(component.candidateDistrictOptions).toEqual(LabelUtils.getPrimeOptions(
+      LabelUtils.getCongressionalDistrictLabels('FL')));
+  });
+
 });
