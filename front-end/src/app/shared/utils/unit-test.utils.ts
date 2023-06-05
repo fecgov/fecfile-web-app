@@ -139,8 +139,8 @@ export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
   contributor_state: 'VA',
   contributor_zip: '20001',
   memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
-  contact_id: '456',
-  contact: Contact.fromJSON({
+  contact_1_id: '456',
+  contact_1: Contact.fromJSON({
     id: 'testId',
     type: ContactTypes.INDIVIDUAL,
     last_name: 'testLn1',

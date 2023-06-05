@@ -66,7 +66,7 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
   resolve_existing_transaction(transactionId: string): Observable<Transaction | undefined> {
     return this.transactionService.get(String(transactionId)).pipe(
       mergeMap((transaction: Transaction) => {
-        if (transaction.transaction_type_identifier && transaction.contact) {
+        if (transaction.transaction_type_identifier && transaction.contact_1) {
           // Determine if we need to get the parent transaction as the
           // transaction type requested is a dependent transaction and cannot
           // be modified directly in a UI form. (e.g. EARMARK_MEMO)

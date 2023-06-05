@@ -2,10 +2,10 @@ import { Component, ElementRef } from '@angular/core';
 import { TableListBaseComponent } from 'app/shared/components/table-list-base/table-list-base.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
+import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 import { ContactService } from '../../shared/services/contact.service';
-import { ListRestResponse } from 'app/shared/models/rest-api.model';
 
 @Component({
   selector: 'app-contact-list',
@@ -61,7 +61,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
   }
 
   public canDeleteItem(item: Contact): boolean {
-    return item.transaction_count === 0;
+    return item.contact_1_transaction_count === 0 && item.contact_2_transaction_count === 0;
   }
 
   public onRestoreClick() {

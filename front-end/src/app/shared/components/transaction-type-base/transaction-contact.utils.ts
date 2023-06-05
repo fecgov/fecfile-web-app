@@ -150,7 +150,7 @@ export class TransactionContactUtils {
         form.get(templateMap.state)?.setValue(contact.state);
         form.get(templateMap.zip)?.setValue(contact.zip);
         if (transaction) {
-          transaction.contact = contact;
+          transaction.contact_1 = contact;
         }
         contactId$.next(contact.id || '');
       }

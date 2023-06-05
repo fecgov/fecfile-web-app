@@ -130,19 +130,19 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     targetDialog: 'dialog' | 'childDialog' = 'dialog'
   ) {
     if (
-      confirmTransaction.contact_id &&
-      confirmTransaction.contact &&
+      confirmTransaction.contact_1_id &&
+      confirmTransaction.contact_1 &&
       confirmTransaction?.transactionType?.templateMap
     ) {
       const transactionContactChanges = TransactionContactUtils.setTransactionContactFormChanges(
         form,
-        confirmTransaction.contact,
+        confirmTransaction.contact_1,
         confirmTransaction.transactionType.templateMap
       );
       if (transactionContactChanges?.length) {
         const confirmationMessage = TransactionContactUtils.getEditTransactionContactConfirmationMessage(
           transactionContactChanges,
-          confirmTransaction.contact,
+          confirmTransaction.contact_1,
           form,
           this.fecDatePipe,
           confirmTransaction.transactionType.templateMap

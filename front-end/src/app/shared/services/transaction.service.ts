@@ -46,7 +46,7 @@ export class TransactionService implements TableListService<Transaction> {
 
   public getPreviousTransaction(
     transaction: Transaction | undefined,
-    contact_id: string,
+    contact_1_id: string,
     action_date: Date
   ): Observable<Transaction | undefined> {
     const actionDateString: string = this.datePipe.transform(action_date, 'yyyy-MM-dd') || '';
@@ -54,13 +54,13 @@ export class TransactionService implements TableListService<Transaction> {
     const aggregation_group: AggregationGroups | undefined =
       (transaction as ScheduleTransaction)?.aggregation_group || AggregationGroups.GENERAL;
 
-    if (transaction && action_date && contact_id && aggregation_group) {
+    if (transaction && action_date && contact_1_id && aggregation_group) {
       return this.apiService
         .get<HttpResponse<Transaction>>(
           '/transactions/previous/',
           {
             transaction_id,
-            contact_id,
+            contact_1_id,
             date: actionDateString,
             aggregation_group,
           },

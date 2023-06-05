@@ -135,7 +135,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   function addContact(component: TestTransactionTypeBaseComponent, contact: Contact) {
     if (component.transaction) {
-      component.transaction.contact = contact;
+      component.transaction.contact_1 = contact;
     }
   }
 
@@ -185,11 +185,11 @@ describe('TransactionTypeBaseComponent', () => {
     testContact2.type = ContactTypes.INDIVIDUAL;
     testContact2.id = 'testId';
     if (component.transaction) {
-      component.transaction.contact = testContact2;
+      component.transaction.contact_1 = testContact2;
     }
     component.save(listSaveEvent);
     if (component.transaction) {
-      component.transaction.contact = undefined;
+      component.transaction.contact_1 = undefined;
     }
     if (testTransaction.transactionType) {
       TransactionContactUtils.getEditTransactionContactConfirmationMessage(
@@ -236,7 +236,7 @@ describe('TransactionTypeBaseComponent', () => {
     testContact2.type = ContactTypes.COMMITTEE;
     testContact2.id = 'testId';
     if (component.transaction) {
-      component.transaction.contact = testContact2;
+      component.transaction.contact_1 = testContact2;
     }
     component.save(listSaveEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
@@ -263,7 +263,7 @@ describe('TransactionTypeBaseComponent', () => {
     orgContact2.type = ContactTypes.ORGANIZATION;
     orgContact2.id = 'testId';
     if (component.transaction) {
-      component.transaction.contact = orgContact2;
+      component.transaction.contact_1 = orgContact2;
     }
     component.save(listSaveEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
@@ -315,11 +315,11 @@ describe('TransactionTypeBaseComponent', () => {
     testContact2.type = ContactTypes.CANDIDATE;
     testContact2.id = 'testId';
     if (component.transaction) {
-      component.transaction.contact = testContact2;
+      component.transaction.contact_1 = testContact2;
     }
     component.save(listSaveEvent);
     if (component.transaction) {
-      component.transaction.contact = undefined;
+      component.transaction.contact_1 = undefined;
     }
     if (testTransaction.transactionType) {
       TransactionContactUtils.getEditTransactionContactConfirmationMessage(
@@ -441,7 +441,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction3: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     testTransaction3.id = '123';
     testTransaction3.report_id = '99';
-    testTransaction3.contact_id = '33';
+    testTransaction3.contact_1_id = '33';
     const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction3));
