@@ -28,12 +28,12 @@ describe('TransactionGroupAA', () => {
     expect(retval.includes(testLastName)).toBeTruthy();
   });
 
-  it('#getChildFormProperties should include org name', () => {
-    const testOrganizationName = 'testOrganizationName';
+  it('#getChildFormProperties should include last name', () => {
+    const testLastName = 'testLastName';
     const testTemplateMapCopy = { ...testTemplateMap };
-    testTemplateMapCopy.organization_name = testOrganizationName;
+    testTemplateMapCopy.last_name = testLastName;
     const retval = component.getChildFormProperties(testTemplateMapCopy);
-    expect(retval.includes(testOrganizationName)).toBeTruthy();
+    expect(retval.includes(testLastName)).toBeTruthy();
   });
 
   it('#getContactTypeOptions should return individual', () => {
@@ -55,6 +55,6 @@ describe('TransactionGroupAA', () => {
 
   it('#getChildTransactionTitle should return title', () => {
     const retval = component.getChildTransactionTitle();
-    expect(retval === 'In-Kind out').toBeTrue();
+    expect(retval === 'In-kind Out').toBeTrue();
   });
 });

@@ -44,8 +44,8 @@ describe('TransactionGroupAG', () => {
 
   it('#getChildContactTypeOptions happy path', () => {
     const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-      ContactTypes.INDIVIDUAL,
       ContactTypes.COMMITTEE,
+      ContactTypes.INDIVIDUAL,
     ]);
     const retval = component.getChildContactTypeOptions();
     expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();

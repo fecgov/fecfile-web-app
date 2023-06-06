@@ -1,13 +1,12 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { ContactTypes } from '../contact.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
 import { TransactionGroupAA } from '../transaction-groups/transaction-group-aa.model';
 
-describe('EARMARK_RECEIPT', () => {
+describe('IN_KIND_RECEIPT', () => {
   let transaction: SchATransaction;
 
   beforeEach(() => {
-    transaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_RECEIPT) as SchATransaction;
+    transaction = getTestTransactionByType(ScheduleATransactionTypes.IN_KIND_RECEIPT) as SchATransaction;
   });
 
   it('should create an instance', () => {
@@ -18,22 +17,6 @@ describe('EARMARK_RECEIPT', () => {
 
   it('#factory() should return a SchATransaction', () => {
     expect(transaction.form_type).toBe('SA11AI');
-    expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.EARMARK_RECEIPT);
-  });
-
-  it('#generatePurposeDescription() should generate empty string', () => {
-    const description = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(description).toBe('');
-  });
-
-  it('#generatePurposeDescription() should reflect child', () => {
-    const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_MEMO) as SchATransaction;
-    childTransaction.entity_type = ContactTypes.INDIVIDUAL;
-    childTransaction.contributor_first_name = 'Joe';
-    childTransaction.contributor_last_name = 'Smith';
-    transaction.children = [childTransaction];
-
-    const description = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(description).toBe('Earmarked through Joe Smith');
+    expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.IN_KIND_RECEIPT);
   });
 });
