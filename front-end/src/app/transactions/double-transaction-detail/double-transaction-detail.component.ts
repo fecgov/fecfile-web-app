@@ -5,7 +5,7 @@ import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/dou
 @Component({
   selector: 'app-double-transaction-detail',
   templateUrl: './double-transaction-detail.component.html',
-  styleUrls: ['../transaction.scss'],
+  styleUrls: ['../transaction.scss', './double-transaction-detail.component.scss'],
 })
 export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseComponent implements OnInit {
   override formProperties: string[] = [];

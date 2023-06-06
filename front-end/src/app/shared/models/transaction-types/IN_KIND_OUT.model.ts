@@ -33,7 +33,6 @@ export class IN_KIND_OUT extends SchBTransactionType {
       form_type: 'SB21B',
       transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_OUT,
       aggregation_group: AggregationGroups.GENERAL_DISBURSEMENT,
-      memo_code: true,
     });
   }
 }

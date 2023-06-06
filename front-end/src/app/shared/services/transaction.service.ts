@@ -81,14 +81,14 @@ export class TransactionService implements TableListService<Transaction> {
   public create(transaction: Transaction): Observable<Transaction> {
     const payload = transaction.toJson();
     return this.apiService
-      .post<Transaction>(`${transaction.apiEndpoint}/`, payload)
+      .post<Transaction>(`${this.getApiEndpoint(transaction)}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
   }
 
   public update(transaction: Transaction): Observable<Transaction> {
     const payload = transaction.toJson();
     return this.apiService
-      .put<Transaction>(`${transaction.apiEndpoint}/${transaction.id}/`, payload)
+      .put<Transaction>(`${this.getApiEndpoint(transaction)}/${transaction.id}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
   }
 
@@ -105,5 +105,14 @@ export class TransactionService implements TableListService<Transaction> {
         }
       })
     );
+  }
+
+  private getApiEndpoint(transaction: Transaction): string {
+    // Determine if this is a double-entry transaction save and send
+    // the transactions double-entry endpoint if it is.
+    if (transaction.transactionType?.dependentChildTransactionType) {
+      return '/transactions/save-pair';
+    }
+    return transaction.apiEndpoint;
   }
 }
