@@ -25,6 +25,8 @@ export class HeaderComponent implements OnInit {
       },
       {
         label: 'Transactions',
+        routerLink: ['/transactions'],
+        disabled: true,
       },
       {
         label: 'Contacts',

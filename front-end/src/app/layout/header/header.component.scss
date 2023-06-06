@@ -62,3 +62,9 @@ a {
   width: 0px;
   position: absolute;
 }
+
+:host ::ng-deep a.p-ripple.p-element.p-menuitem-link.p-disabled {
+  opacity: 1;
+  background: white;
+  border: 0px solid black;
+}
