@@ -56,3 +56,9 @@ a {
 :host ::ng-deep p-menubar > div > p-menubarsub > ul > li > a.p-menuitem-link {
   height: 80px !important;
 }
+
+:host ::ng-deep span.p-submenu-icon.pi.pi-angle-down {
+  visibility: hidden;
+  width: 0px;
+  position: absolute;
+}

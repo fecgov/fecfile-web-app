@@ -1,10 +1,10 @@
 <div class="grid">
-  <div class="col-4">
-    <a class="seal-link" routerLink="/" *ngIf="showLogo">
+  <div class="col-4" *ngIf="showLogo">
+    <a class="seal-link" routerLink="/">
       <img src="assets/img/seal-and-title.svg" class="seal-and-title mr-2" alt="FEC Seal" />
     </a>
   </div>
-  <div class="col-8 float-right header-nav-menu">
+  <div class="float-right header-nav-menu" [ngClass]="{ 'col-8': showLogo, 'col-12': !showLogo }">
     <p-menubar [model]="items"> </p-menubar>
   </div>
 </div>
