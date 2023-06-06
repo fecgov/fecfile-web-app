@@ -2,7 +2,6 @@ import { plainToClass } from 'class-transformer';
 import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { ScheduleCTransactionGroups } from './schc-transaction.model';
 
 export class SchC2Transaction extends Transaction {
   guarantor_last_name: string | undefined;
@@ -48,7 +47,11 @@ export class SchC2Transaction extends Transaction {
   }
 }
 
-export type ScheduleCTransactionGroupsType = ScheduleCTransactionGroups.SCHEDULE_C_AND_C1;
+export enum ScheduleC2TransactionGroups {
+  SCHEDULE_C2 = 'Schedule C-2',
+}
+
+export type ScheduleC2TransactionGroupsType = ScheduleC2TransactionGroups.SCHEDULE_C2;
 
 export enum ScheduleC2TransactionTypes {
   LOAN_GUARANTOR_INFORMATION = 'LOAN_GUARANTOR_INFORMATION',

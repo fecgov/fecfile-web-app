@@ -3,7 +3,6 @@ import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
-import { ScheduleCTransactionGroups } from './schc-transaction.model';
 
 export class SchC1Transaction extends Transaction {
   lender_organization_name: string | undefined;
@@ -80,7 +79,11 @@ export class SchC1Transaction extends Transaction {
   }
 }
 
-export type ScheduleC1TransactionGroupsType = ScheduleCTransactionGroups.SCHEDULE_C_AND_C1;
+export enum ScheduleC1TransactionGroups {
+  SCHEDULE_C1 = 'Schedule C-1',
+}
+
+export type ScheduleC1TransactionGroupsType = ScheduleC1TransactionGroups.SCHEDULE_C1;
 
 export enum ScheduleCTransactionTypes {
   LOAN_AGREEMENT = 'LOAN_AGREEMENT',
