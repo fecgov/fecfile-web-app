@@ -157,7 +157,7 @@ export enum ScheduleBTransactionTypes {
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
-  [ScheduleBTransactionTypes.IN_KIND_OUT, 'In-Kind Out'],
+  [ScheduleBTransactionTypes.IN_KIND_OUT, 'In-kind Out'],
   [
     ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
     'Business/Labor Organization Refund - Non-contribution Account',

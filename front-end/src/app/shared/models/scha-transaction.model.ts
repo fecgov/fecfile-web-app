@@ -190,7 +190,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.TRIBAL_RECEIPT, 'Tribal Receipt'],
   [ScheduleATransactionTypes.PARTNERSHIP_RECEIPT, 'Partnership Receipt'],
   [ScheduleATransactionTypes.REATTRIBUTION, 'Reattribution'],
-  [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-Kind Receipt'],
+  [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-kind Receipt'],
   [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.EARMARK_RECEIPT, 'Earmark Receipt'],
   [ScheduleATransactionTypes.EARMARK_MEMO, 'Earmark Memo'],

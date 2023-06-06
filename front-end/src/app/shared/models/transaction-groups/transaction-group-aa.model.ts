@@ -74,11 +74,11 @@ export class TransactionGroupAA extends DoubleTransactionGroup {
     return 'The information in this receipt will automatically populate a related transaction. Review the associated disbursement or click "Save both transactions" to record these transactions.';
   }
   getChildTransactionTitle(): string {
-    return 'In-Kind Out';
+    return 'In-kind Out';
   }
 
   getGroupDescription(): string {
-    return 'This receipt type automatically creates an associated transaction. Saving an in kind receipt will automatically create an in-kind out.';
+    return 'This receipt type automatically creates an associated transaction. Saving an in-kind receipt will automatically create an in-kind out.';
   }
 
   getParentAccordionTitle(): string {

@@ -141,7 +141,7 @@ export abstract class DoubleTransactionTypeBaseComponent
       return;
     }
 
-    // Remove parent transaction links within the parent-child heirarchy in the
+    // Remove parent transaction links within the parent-child hierarchy in the
     // transaction objects to avoid a recursion overflow from the class-transformer
     // plainToClass() converter.
     if (this.transaction?.children) {
