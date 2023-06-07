@@ -11,29 +11,38 @@ import { Transaction, TransactionTypes } from './transaction.model';
  */
 export abstract class TransactionType {
   abstract scheduleId: string;
+  abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
   abstract transactionGroup: TransactionGroup | DoubleTransactionGroup; // Transaction group used to render UI form entry page
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
+  abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
+  abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
+  updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
+
+  // Form display settings
+  contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
+  defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefundAggregate = false; // Boolean flag to control whether or not the amount is subtracted from the aggregate
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
+
+  // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionType?: TransactionTypes; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
   inherittedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
-  useParentContact = false;
+  useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
   childTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the child, trigger the parent to regenerate its description
-  updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
-  contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
-  defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
+
+  // Navigations settings
   subTransactionConfig?: (SubTransactionGroup | TransactionTypes)[] | SubTransactionGroup; // Configuration of Sub-TransactionTypes
   shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
   navigationControls?: TransactionNavigationControls;
+
+  // Pupose description settings
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
   purposeDescriptionLabelSuffix?: string; // Additional text that will appear after the purpose_description input label. If this is not set, '(SYSTEM-GENERATED)', '(REQUIRED)', or '(OPTIONAL)' will be diplayed
-  abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
-  abstract getNewTransaction(): Transaction; // Factory method to create a new Transaction object with default property values for this transaction type
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];

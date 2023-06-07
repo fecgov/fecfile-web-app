@@ -162,7 +162,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     payload.children[0].report_id = payload.report_id;
 
     // Confirm save for parent transaction
-    this.confirmSave(payload, this.form, this.childConfirmSave, navigationEvent, payload);
+    // No need to confirm child contact changes if it uses the parent contact info
+    const saveCallback = this.childTransaction?.transactionType?.useParentContact ? this.doSave : this.childConfirmSave;
+    this.confirmSave(payload, this.form, saveCallback, navigationEvent, payload);
   }
 
   private childConfirmSave(navigationEvent: NavigationEvent, payload: Transaction) {

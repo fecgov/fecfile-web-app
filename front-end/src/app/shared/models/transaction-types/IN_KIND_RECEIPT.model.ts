@@ -11,6 +11,7 @@ export class IN_KIND_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupAA();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.IN_KIND_RECEIPT);
   schema = schema;
+  override apiEndpoint = '/transactions/save-pair';
   override dependentChildTransactionType = ScheduleBTransactionTypes.IN_KIND_OUT;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionPrefix = 'In-Kind: ';
