@@ -240,7 +240,7 @@
         <td class="justify-left right-border indent-1 cell-with-overlay">
           Total operating expenditures
           <app-calculation-overlay
-            >Lines 21(a)(i) <b>+</b> 21(a)(ii) <b>+</b> 21(b) <b>+</b> Line 21(c)</app-calculation-overlay
+            >Lines 21(a)(i) <b>+</b> 21(a)(ii) <b>+</b> 21(b) <b>=</b> Line 21(c)</app-calculation-overlay
           >
         </td>
         <td class="right-border">{{ report.L21c_total_operating_expenditures_period | defaultZero | currency }}</td>
@@ -401,7 +401,7 @@
         <td class="justify-left right-border bold cell-with-overlay">
           TOTAL FEDERAL DISBURSEMENTS
           <app-calculation-overlay
-            >Lines 31 <b>-</b> (21(a)(ii) <b>+</b> 30(a)(ii)) <b>=</b> Line 32</app-calculation-overlay
+            >Lines 31 <b>-</b> 21(a)(ii) <b>+</b> 30(a)(ii) <b>=</b> Line 32</app-calculation-overlay
           >
         </td>
         <td class="right-border">{{ report.L32_total_federal_disbursements_period | defaultZero | currency }}</td>
