@@ -70,6 +70,7 @@ describe('TransactionGroupFG', () => {
     );
     expect(component.getParentAccordionTitle()).toBe('STEP ONE');
     expect(component.getParentAccordionSubTitle()).toBe('Add receipt and contributor information');
+    expect(component.getChildAccordionTitle()).toBe('STEP TWO');
     expect(component.getChildAccordionSubTitle()).toBe(
       'Add earmarked memo and conduit information (REQUIRED FOR EARMARKED RECEIPTS)'
     );
