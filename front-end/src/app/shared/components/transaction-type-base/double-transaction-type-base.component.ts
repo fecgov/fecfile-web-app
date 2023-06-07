@@ -85,13 +85,13 @@ export abstract class DoubleTransactionTypeBaseComponent
     // Parent contribution purpose description updates with configured child fields update.
     this.transaction?.transactionType?.childTriggerFields?.forEach((triggerField) => {
       this.childForm
-        .get(this.childTemplateMap[triggerField as TemplateMapKeyType])
+        .get(this.childTemplateMap[triggerField])
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((value) => {
           /** Before updating the parent description, manually update the child
            * fields because they will not be updated by the time this hook is called
            **/
-          const key = this.childTemplateMap[triggerField as TemplateMapKeyType] as keyof ScheduleTransaction;
+          const key = this.childTemplateMap[triggerField] as keyof ScheduleTransaction;
           ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
           (this.childTransaction as ScheduleTransaction).entity_type = this.childForm.get('entity_type')?.value;
           this.updateParentPurposeDescription();
@@ -103,10 +103,10 @@ export abstract class DoubleTransactionTypeBaseComponent
     // Inheritted fields must match parent values
     this.childTransaction?.transactionType?.inherittedFields?.forEach((inherittedField) => {
       this.form
-        .get(this.templateMap[inherittedField as TemplateMapKeyType])
+        .get(this.templateMap[inherittedField])
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((value) => {
-          this.childForm.get(this.childTemplateMap[inherittedField as TemplateMapKeyType])?.setValue(value);
+          this.childForm.get(this.childTemplateMap[inherittedField])?.setValue(value);
         });
       this.childForm.get(inherittedField)?.disable();
     });
