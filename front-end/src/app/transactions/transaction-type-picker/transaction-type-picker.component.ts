@@ -43,6 +43,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
   report: Report | undefined;
   category: Categories = 'receipt';
   groups: ScheduleATransactionGroupsType[] | ScheduleBTransactionGroupsType[] = [];
+  title: string = this.getCategoryTitle();
 
   constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {
     super();
@@ -56,8 +57,22 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
 
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.category = params['category'];
-      this.titleService.setTitle('Add a ' + this.category);
+      this.title = this.getCategoryTitle();
+      this.titleService.setTitle(this.title);
     });
+  }
+
+  getCategoryTitle(): string {
+    switch (this.category) {
+      case 'receipt':
+        return 'Add a receipt';
+      case 'disbursement':
+        return 'Add a disbursement';
+      case 'loans-and-debts':
+        return 'Add loans and debts';
+      default:
+        return this.category;
+    }
   }
 
   getTransactionGroups(): TransactionGroupTypes[] {
