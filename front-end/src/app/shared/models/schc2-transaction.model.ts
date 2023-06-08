@@ -18,7 +18,6 @@ export class SchC2Transaction extends Transaction {
   guarantor_occupation: string | undefined;
   guaranteed_amount: number | undefined;
 
-  entity_type: string | undefined;
   aggregation_group: AggregationGroups | undefined;
 
   override apiEndpoint = '/transactions/schedule-c2';

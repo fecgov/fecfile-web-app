@@ -50,7 +50,6 @@ export class SchC1Transaction extends Transaction {
   authorized_title: string | undefined;
   @Transform(BaseModel.dateTransform) authorized_date_signed: Date | undefined;
 
-  entity_type: string | undefined;
   aggregation_group: AggregationGroups | undefined;
 
   override apiEndpoint = '/transactions/schedule-c1';
