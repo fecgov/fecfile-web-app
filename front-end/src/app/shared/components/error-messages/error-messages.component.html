@@ -18,6 +18,7 @@
   <small
     class="p-error"
     *ngIf="
+      !control?.hasError('required') &&
       !control?.hasError('minlength') &&
       !control?.hasError('maxlength') &&
       !control?.hasError('min') &&
