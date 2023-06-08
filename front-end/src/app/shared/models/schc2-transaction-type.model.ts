@@ -21,7 +21,7 @@ export abstract class SchC2TransactionType extends TransactionType {
     committee_fec_id: '',
     date: '',
     dateLabel: '',
-    memo_code: 'memo_code',
+    memo_code: '',
     amount: 'guaranteed_amount',
     amountInputHeader: 'Loan Information',
     aggregate: '',
@@ -29,7 +29,7 @@ export abstract class SchC2TransactionType extends TransactionType {
     purposeDescripLabel: '',
     text4000: 'text4000',
     category_code: '',
-    election_code: 'election_code',
-    election_other_description: 'election_other_description',
+    election_code: '',
+    election_other_description: '',
   };
 }

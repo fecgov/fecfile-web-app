@@ -20,10 +20,6 @@ export class SchC2Transaction extends Transaction {
 
   entity_type: string | undefined;
   receipt_line_number: string | undefined;
-  election_code: string | undefined;
-  election_other_description: string | undefined;
-  memo_code: boolean | undefined;
-  memo_text_description: string | undefined;
   aggregation_group: AggregationGroups | undefined;
 
   override apiEndpoint = '/transactions/schedule-c2';
