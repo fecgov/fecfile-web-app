@@ -1,15 +1,15 @@
 <p-toast></p-toast>
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
-<p class="group-description">{{ this.groupDescription }}</p>
+<p class="group-description">{{ groupDescription }}</p>
 <p-accordion [activeIndex]="0">
   <p-accordionTab>
     <ng-template pTemplate="header">
-      <strong>{{ this.parentAccordionTitle }}:</strong>
-      <p style="font-weight: normal">{{ this.parentAccordionSubTitle }}</p></ng-template
+      <strong>{{ parentAccordionTitle }}:</strong>
+      <p style="font-weight: normal">{{ parentAccordionSubTitle }}</p></ng-template
     >
     <div class="p-fluid">
-      <h2 *ngIf="this.parentTransactionTitle">{{ this.parentTransactionTitle }}</h2>
+      <h2 *ngIf="parentTransactionTitle">{{ parentTransactionTitle }}</h2>
       <h3>Contact</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid" *ngIf="isEditable">
@@ -18,7 +18,7 @@
             <app-transaction-contact-lookup
               [contactTypeFormControl]="$any(form).controls['entity_type']"
               [contactTypeOptions]="contactTypeOptions"
-              [contactTypeReadOnly]="this.contactTypeOptions.length === 1"
+              [contactTypeReadOnly]="contactTypeOptions.length === 1"
               (contactSelect)="onContactLookupSelect($event)"
             >
             </app-transaction-contact-lookup>
@@ -47,7 +47,7 @@
             [templateMap]="templateMap"
           ></app-address-input>
           <p-divider></p-divider>
-          <ng-container *ngIf="this.hasEmployerInput">
+          <ng-container *ngIf="hasEmployerInput">
             <h3>Employer</h3>
             <app-employer-input
               [form]="form"
@@ -72,11 +72,11 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
-            [purposeDescriptionLabel]="this.purposeDescriptionLabel"
-            [purposeDescriptionPrefix]="this.transaction?.transactionType?.purposeDescriptionPrefix"
+            [purposeDescriptionLabel]="purposeDescriptionLabel"
+            [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
           <div class="grid" style="flex-direction: row-reverse">
-            <p style="font-style: italic">{{ this.parentFooter }}</p>
+            <p style="font-style: italic">{{ parentFooter }}</p>
           </div>
         </ng-container>
       </form>
@@ -85,24 +85,26 @@
 
   <p-accordionTab>
     <ng-template pTemplate="header">
-      <strong>{{ this.childAccordionTitle }}:</strong>
+      <strong>{{ childAccordionTitle }}:</strong>
       <p style="font-weight: normal">
-        {{ this.childAccordionSubTitle }}
+        {{ childAccordionSubTitle }}
       </p></ng-template
     >
     <div class="p-fluid">
-      <h2>{{ this.childTransactionTitle }}</h2>
-      <h3>{{ this.childContactLabel }}</h3>
+      <h2>{{ childTransactionTitle }}</h2>
+      <p *ngIf="childTransactionSubTitle">
+        <em>{{ childTransactionSubTitle }}</em>
+      </p>
+      <h3>{{ childContactLabel }}</h3>
       <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid" *ngIf="isEditable && !useParentContact">
           <div class="col-12">
             <div class="field">
               <label for="entity_type">ENTITY TYPE</label>
-              {{ this.childForm.controls['entity_type'].value }}
               <app-transaction-contact-lookup
                 [contactTypeFormControl]="$any(childForm).controls['entity_type']"
                 [contactTypeOptions]="childContactTypeOptions"
-                [contactTypeReadOnly]="this.childContactTypeOptions.length === 1"
+                [contactTypeReadOnly]="childContactTypeOptions.length === 1"
                 (contactSelect)="childOnContactLookupSelect($event)"
               >
               </app-transaction-contact-lookup>
@@ -115,7 +117,7 @@
               [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
-              [entityRole]="this.childContactLabel"
+              [entityRole]="childContactLabel"
               [includeFecId]="true"
             ></app-committee-input>
           </ng-container>
@@ -163,8 +165,8 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="childTemplateMap"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(childTransaction?.transactionType)"
-            [purposeDescriptionLabel]="this.childPurposeDescriptionLabel"
-            [purposeDescriptionPrefix]="this.transaction?.transactionType?.purposeDescriptionPrefix"
+            [purposeDescriptionLabel]="childPurposeDescriptionLabel"
+            [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
         </ng-container>
       </form>

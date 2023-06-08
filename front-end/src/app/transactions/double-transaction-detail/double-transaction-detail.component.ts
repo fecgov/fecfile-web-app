@@ -15,6 +15,7 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
   parentTransactionTitle = '';
   parentFooter = '';
   childTransactionTitle = '';
+  childTransactionSubTitle = '';
   groupDescription = '';
   parentAccordionTitle = '';
   parentAccordionSubTitle = '';
@@ -48,6 +49,7 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
         this.parentTransactionTitle = doubleTransactionGroup.getParentTransactionTitle();
         this.parentFooter = doubleTransactionGroup.getParentFooter();
         this.childTransactionTitle = doubleTransactionGroup.getChildTransactionTitle();
+        this.childTransactionSubTitle = doubleTransactionGroup.getChildTransactionSubTitle();
 
         this.childContactLabel = doubleTransactionGroup.getChildContactLabel();
         super.ngOnInit();
