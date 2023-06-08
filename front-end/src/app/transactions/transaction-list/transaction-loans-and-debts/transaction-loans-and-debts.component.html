@@ -17,7 +17,7 @@
     <ng-template pTemplate="caption">
       <div class="grid">
         <div class="col-9 flex align-items-center justify-content-between">
-          <h5 class="gandhi-bold size-24">Receipts</h5>
+          <h5 class="gandhi-bold size-24">Loans and Debts</h5>
         </div>
         <div class="col-3 align-right">
           Results per table:
@@ -35,22 +35,19 @@
           Line <p-sortIcon field="form_type"></p-sortIcon>
         </th>
         <th pSortableColumn="transaction_type_identifier" id="transaction-type-identifier-column" role="columnheader">
-          Transaction type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
+          Type <p-sortIcon field="transaction_type_identifier"></p-sortIcon>
         </th>
         <th pSortableColumn="contributor_name" id="name-column" role="columnheader">
           Name <p-sortIcon field="contributor_name"></p-sortIcon>
         </th>
         <th pSortableColumn="contribution_date" id="date-column" role="columnheader">
-          Date <p-sortIcon field="contribution_date"></p-sortIcon>
-        </th>
-        <th pSortableColumn="memo_code" id="memo-code-column" role="columnheader">
-          Memo code <p-sortIcon field="memo_code"></p-sortIcon>
+          Date incurred <p-sortIcon field="contribution_date"></p-sortIcon>
         </th>
         <th pSortableColumn="contribution_amount" id="amount-column" role="columnheader">
           Amount <p-sortIcon field="contribution_amount"></p-sortIcon>
         </th>
-        <th pSortableColumn="contribution_aggregate" id="aggregate-column" role="columnheader">
-          Aggregate <p-sortIcon field="contribution_aggregate"></p-sortIcon>
+        <th pSortableColumn="contribution_amount" id="amount-column" role="columnheader">
+          Balance <p-sortIcon field="contribution_amount"></p-sortIcon>
         </th>
         <th id="transaction_id" role="columnheader">Transaction ID</th>
         <th id="transaction_parent" role="columnheader">Associated With</th>
@@ -80,13 +77,10 @@
           {{ item[item.transactionType.templateMap.date] | fecDate }}
         </td>
         <td>
-          {{ item.memo_code | memoCode }}
-        </td>
-        <td>
           {{ item[item.transactionType.templateMap.amount] | currency }}
         </td>
         <td>
-          {{ item[item.transactionType.templateMap.aggregate] | currency }}
+          {{ item[item.transactionType.templateMap.balance] | currency }}
         </td>
         <td>
           {{ formatId(item.id) }}

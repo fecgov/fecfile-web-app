@@ -1,12 +1,13 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
-import { ScheduleATransactionTypeLabels } from 'app/shared/models/scha-transaction.model';
+import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { LabelList } from 'app/shared/utils/label.utils';
 import { TransactionListTableBaseComponent } from '../transaction-list-table-base.component';
 import { Store } from '@ngrx/store';
 import { ReportService } from 'app/shared/services/report.service';
+import { ScheduleC1TransactionTypeLabels } from 'app/shared/models/schc1-transaction.model';
+import { ScheduleC2TransactionTypeLabels } from 'app/shared/models/schc2-transaction.model';
 
 @Component({
   selector: 'app-transaction-loans-and-debts',
@@ -14,7 +15,7 @@ import { ReportService } from 'app/shared/services/report.service';
   styleUrls: ['../../transaction.scss'],
 })
 export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseComponent implements OnInit {
-  scheduleTransactionTypeLabels: LabelList = ScheduleATransactionTypeLabels;
+  scheduleTransactionTypeLabels: LabelList = ScheduleC1TransactionTypeLabels.concat(ScheduleC2TransactionTypeLabels);
 
   constructor(
     protected override messageService: MessageService,
@@ -22,7 +23,7 @@ export class TransactionLoansAndDebtsComponent extends TransactionListTableBaseC
     protected override elementRef: ElementRef,
     protected override activatedRoute: ActivatedRoute,
     protected override router: Router,
-    protected override itemService: TransactionSchAService,
+    protected override itemService: TransactionSchCService,
     protected override store: Store,
     protected override reportService: ReportService
   ) {

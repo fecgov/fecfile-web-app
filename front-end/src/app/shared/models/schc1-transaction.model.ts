@@ -82,6 +82,6 @@ export enum ScheduleC1TransactionTypes {
   LOAN_AGREEMENT = 'LOAN_AGREEMENT',
 }
 
-export const ScheduleCTransactionTypeLabels: LabelList = [
+export const ScheduleC1TransactionTypeLabels: LabelList = [
   [ScheduleC1TransactionTypes.LOAN_AGREEMENT, 'Loan Agreement'],
 ];

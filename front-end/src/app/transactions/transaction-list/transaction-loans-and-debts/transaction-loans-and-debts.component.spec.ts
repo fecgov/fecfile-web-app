@@ -10,7 +10,7 @@ import { TableModule } from 'primeng/table';
 import { SharedModule } from '../../../shared/shared.module';
 import { TransactionLoansAndDebtsComponent } from './transaction-loans-and-debts.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';
+import { TransactionSchCService } from 'app/shared/services/transaction-schC.service';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { SchC1Transaction } from 'app/shared/models/schc1-transaction.model';
 
@@ -18,7 +18,7 @@ describe('TransactionReceiptsComponent', () => {
   let fixture: ComponentFixture<TransactionLoansAndDebtsComponent>;
   let component: TransactionLoansAndDebtsComponent;
   let router: Router;
-  let testItemService: TransactionSchAService;
+  let testItemService: TransactionSchCService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -42,7 +42,7 @@ describe('TransactionReceiptsComponent', () => {
           },
         },
         {
-          provide: TransactionSchAService,
+          provide: TransactionSchCService,
           useValue: {
             get: (transactionId: string) =>
               of(
@@ -62,7 +62,7 @@ describe('TransactionReceiptsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TransactionLoansAndDebtsComponent);
     router = TestBed.inject(Router);
-    testItemService = TestBed.inject(TransactionSchAService);
+    testItemService = TestBed.inject(TransactionSchCService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

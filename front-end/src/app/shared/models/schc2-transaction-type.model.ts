@@ -25,6 +25,7 @@ export abstract class SchC2TransactionType extends TransactionType {
     dateLabel: '',
     memo_code: '',
     amount: 'guaranteed_amount',
+    balance: '',
     amountInputHeader: 'Loan Information',
     aggregate: '',
     purpose_description: '',
