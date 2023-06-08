@@ -2,6 +2,7 @@ import { TransactionType, TransactionTemplateMapType } from './transaction-type.
 
 export abstract class SchC2TransactionType extends TransactionType {
   scheduleId = 'C1';
+  apiEndpoint = '/transactions/schedule-c2';
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
@@ -19,6 +20,7 @@ export abstract class SchC2TransactionType extends TransactionType {
     occupation: 'guarantor_occupation',
     organization_name: '',
     committee_fec_id: '',
+    committee_name: '',
     date: '',
     dateLabel: '',
     memo_code: '',
