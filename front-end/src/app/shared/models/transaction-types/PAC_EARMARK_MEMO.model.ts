@@ -3,12 +3,14 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionGroupFG } from '../transaction-groups/transaction-group-fg.model';
 import { AggregationGroups } from '../transaction.model';
+import { TemplateMapKeyType } from '../transaction-type.model';
 
 export class PAC_EARMARK_MEMO extends SchATransactionType {
   transactionGroup = new TransactionGroupFG();
   override isDependentChild = true;
   title = '';
   schema = schema;
+  override inherittedFields = ['amount' as TemplateMapKeyType];
 
   override generatePurposeDescription(): string {
     return 'Total earmarked through conduit.';
