@@ -61,8 +61,6 @@ export abstract class Transaction extends BaseModel {
 
   schema_name: string | undefined;
 
-  abstract apiEndpoint: string; // Root URL for API endpoint
-
   /**
    * Perform bookkeeping updates to the transaction when it is created via fromJSON()
    * We have to pass the transactionType instead of getting from TransactonTypeUtils
