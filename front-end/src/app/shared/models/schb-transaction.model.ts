@@ -153,6 +153,8 @@ export enum ScheduleBTransactionTypes {
   OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT = 'OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT',
   OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT = 'OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT',
   PARTY_IN_KIND_OUT = 'PARTY_IN_KIND_OUT',
+  IN_KIND_TRANSFER_OUT = 'IN_KIND_TRANSFER_OUT',
+  IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY_OUT = 'IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY_OUT',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
@@ -332,4 +334,9 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     'Other Committee Refund - National Party Recount/Legal Proceedings Account',
   ],
   [ScheduleBTransactionTypes.PARTY_IN_KIND_OUT, 'Party In-kind Out'],
+  [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT, 'In-kind Transfer Out'],
+  [
+    ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY_OUT,
+    'In-kind Transfer Federal Election Activity Out',
+  ],
 ];
