@@ -131,7 +131,7 @@ export class TransactionFormUtils {
       TransactionContactUtils.setTransactionContactFormChanges(
         form,
         transaction.contact,
-        transaction.transactionType?.templateMap
+        transaction.transactionType.templateMap
       );
     }
 
