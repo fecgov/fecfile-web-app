@@ -28,7 +28,6 @@ describe('DoubleTransactionDetailComponent', () => {
   const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.EARMARK_MEMO);
   transaction.children = [childTransaction];
 
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -58,10 +57,10 @@ describe('DoubleTransactionDetailComponent', () => {
     component = fixture.componentInstance;
     component.transaction = transaction;
     component.templateMap = testTemplateMap;
+    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 });

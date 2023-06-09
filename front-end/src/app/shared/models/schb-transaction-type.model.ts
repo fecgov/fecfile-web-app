@@ -2,9 +2,11 @@ import { TransactionType, TransactionTemplateMapType } from './transaction-type.
 
 export abstract class SchBTransactionType extends TransactionType {
   scheduleId = 'B';
+  apiEndpoint = '/transactions/schedule-b';
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
+    // Form fields
     last_name: 'payee_last_name',
     first_name: 'payee_first_name',
     middle_name: 'payee_middle_name',
@@ -30,17 +32,19 @@ export abstract class SchBTransactionType extends TransactionType {
     candidate_state: 'beneficiary_candidate_state',
     candidate_district: 'beneficiary_candidate_district',
     date: 'expenditure_date',
-    dateLabel: 'DATE',
     memo_code: 'memo_code',
     amount: 'expenditure_amount',
-    amountInputHeader: 'Expenditure Information',
-    candidateInputHeader: 'Beneficiary Information',
     aggregate: 'aggregate_amount',
     purpose_description: 'expenditure_purpose_descrip',
-    purposeDescripLabel: 'PURPOSE OF DISBURSEMENT',
     text4000: 'text4000',
     category_code: 'category_code',
     election_code: 'election_code',
     election_other_description: 'election_other_description',
+
+    // Labels and text strings
+    dateLabel: 'DATE',
+    amountInputHeader: 'Expenditure Information',
+    purposeDescripLabel: 'PURPOSE OF DISBURSEMENT',
+    candidateInputHeader: 'Beneficiary Information',
   };
 }

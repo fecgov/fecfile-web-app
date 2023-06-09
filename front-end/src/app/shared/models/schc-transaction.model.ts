@@ -43,8 +43,6 @@ export class SchCTransaction extends Transaction {
 
   aggregation_group: AggregationGroups | undefined;
 
-  override apiEndpoint = '/transactions/schedule-c';
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchCTransaction {
     const transaction = plainToClass(SchCTransaction, json);

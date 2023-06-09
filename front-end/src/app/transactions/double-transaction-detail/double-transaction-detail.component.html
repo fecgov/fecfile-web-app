@@ -1,27 +1,24 @@
 <p-toast></p-toast>
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
-<p>
-  This type of receipt requires a memo transaction. Follow this two-step process to create both an earmark receipt and
-  an earmark memo:
-</p>
-<p-accordion>
+<p class="group-description">{{ groupDescription }}</p>
+<p-accordion [activeIndex]="0">
   <p-accordionTab>
     <ng-template pTemplate="header">
-      <strong>STEP ONE:</strong>
-      <p style="font-weight: normal">Add receipt and contributor information</p></ng-template
+      <strong>{{ parentAccordionTitle }}:</strong>
+      <p style="font-weight: normal">{{ parentAccordionSubTitle }}</p></ng-template
     >
     <div class="p-fluid">
-      <h2>Receipt</h2>
+      <h2 *ngIf="parentTransactionTitle">{{ parentTransactionTitle }}</h2>
       <h3>Contact</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
-        <div class="grid">
+        <div class="grid" *ngIf="isEditable">
           <div class="col-12">
             <label for="entity_type">CONTACT TYPE</label>
             <app-transaction-contact-lookup
               [contactTypeFormControl]="$any(form).controls['entity_type']"
               [contactTypeOptions]="contactTypeOptions"
-              [contactTypeReadOnly]="this.contactTypeOptions.length === 1"
+              [contactTypeReadOnly]="contactTypeOptions.length === 1"
               (contactSelect)="onContactLookupSelect($event)"
             >
             </app-transaction-contact-lookup>
@@ -50,7 +47,7 @@
             [templateMap]="templateMap"
           ></app-address-input>
           <p-divider></p-divider>
-          <ng-container *ngIf="this.hasEmployerInput">
+          <ng-container *ngIf="hasEmployerInput">
             <h3>Employer</h3>
             <app-employer-input
               [form]="form"
@@ -59,7 +56,7 @@
             ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
-          <h3>Receipt Information</h3>
+          <h3>{{ templateMap.amountInputHeader }}</h3>
           <app-amount-input
             [form]="form"
             [formSubmitted]="formSubmitted"
@@ -75,11 +72,11 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
-            [purposeDescriptionLabel]="this.purposeDescriptionLabel"
-            [purposeDescriptionPrefix]="this.transaction?.transactionType?.purposeDescriptionPrefix"
+            [purposeDescriptionLabel]="purposeDescriptionLabel"
+            [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
           <div class="grid" style="flex-direction: row-reverse">
-            <p style="font-style: italic">This type of receipt requires a memo transaction</p>
+            <p style="font-style: italic">{{ parentFooter }}</p>
           </div>
         </ng-container>
       </form>
@@ -88,23 +85,26 @@
 
   <p-accordionTab>
     <ng-template pTemplate="header">
-      <strong>STEP TWO:</strong>
+      <strong>{{ childAccordionTitle }}:</strong>
       <p style="font-weight: normal">
-        Add earmarked memo and conduit information (REQUIRED FOR EARMARKED RECEIPTS)
+        {{ childAccordionSubTitle }}
       </p></ng-template
     >
     <div class="p-fluid">
-      <h2>{{ this.childTransactionTitle }}</h2>
-      <h3>Conduit</h3>
+      <h2>{{ childTransactionTitle }}</h2>
+      <p *ngIf="childTransactionSubTitle">
+        <em>{{ childTransactionSubTitle }}</em>
+      </p>
+      <h3>{{ childContactLabel }}</h3>
       <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
-        <div class="grid">
+        <div class="grid" *ngIf="isEditable && !useParentContact">
           <div class="col-12">
             <div class="field">
               <label for="entity_type">ENTITY TYPE</label>
               <app-transaction-contact-lookup
                 [contactTypeFormControl]="$any(childForm).controls['entity_type']"
                 [contactTypeOptions]="childContactTypeOptions"
-                [contactTypeReadOnly]="this.childContactTypeOptions.length === 1"
+                [contactTypeReadOnly]="childContactTypeOptions.length === 1"
                 (contactSelect)="childOnContactLookupSelect($event)"
               >
               </app-transaction-contact-lookup>
@@ -117,7 +117,7 @@
               [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
-              entityRole="CONDUIT"
+              [entityRole]="childContactLabel"
               [includeFecId]="true"
             ></app-committee-input>
           </ng-container>
@@ -137,7 +137,9 @@
             [stateOptions]="stateOptions"
           ></app-address-input>
           <p-divider></p-divider>
-          <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
+          <ng-container
+            *ngIf="childHasEmployerInput && childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL"
+          >
             <h3>Employer</h3>
             <app-employer-input
               [form]="childForm"
@@ -146,7 +148,7 @@
             ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
-          <h3>Receipt Information</h3>
+          <h3>{{ childTemplateMap.amountInputHeader }}</h3>
           <app-amount-input
             [form]="childForm"
             [formSubmitted]="formSubmitted"
@@ -163,8 +165,8 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="childTemplateMap"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(childTransaction?.transactionType)"
-            [purposeDescriptionLabel]="this.childPurposeDescriptionLabel"
-            [purposeDescriptionPrefix]="this.transaction?.transactionType?.purposeDescriptionPrefix"
+            [purposeDescriptionLabel]="childPurposeDescriptionLabel"
+            [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
         </ng-container>
       </form>

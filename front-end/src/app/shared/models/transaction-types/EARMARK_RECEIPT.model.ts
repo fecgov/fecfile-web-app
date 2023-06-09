@@ -4,15 +4,20 @@ import { ContactTypes } from '../contact.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
-import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import {
+  STANDARD_DOUBLE_ENTRY_CONTROLS,
+  TransactionNavigationControls,
+} from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { TemplateMapKeyType } from '../transaction-type.model';
 
 export class EARMARK_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupAG();
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
   override dependentChildTransactionType = ScheduleATransactionTypes.EARMARK_MEMO;
-  override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
+  override childTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children) return '';

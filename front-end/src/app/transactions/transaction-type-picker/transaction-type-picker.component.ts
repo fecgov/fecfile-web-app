@@ -89,7 +89,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS:
         return [
           ScheduleATransactionTypes.PARTY_RECEIPT,
-          ScheduleATransactionTypes.PARTY_IN_KIND,
+          ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
           ScheduleATransactionTypes.PARTY_RETURN,
           ScheduleATransactionTypes.PAC_RECEIPT,
           ScheduleATransactionTypes.PAC_IN_KIND,

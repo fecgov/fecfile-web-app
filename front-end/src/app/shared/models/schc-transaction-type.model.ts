@@ -2,9 +2,11 @@ import { TransactionType, TransactionTemplateMapType } from './transaction-type.
 
 export abstract class SchCTransactionType extends TransactionType {
   scheduleId = 'C';
+  apiEndpoint = '/transactions/schedule-c';
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
+    // Form fields
     last_name: 'lender_last_name',
     first_name: 'lender_first_name',
     middle_name: 'lender_middle_name',
@@ -30,17 +32,19 @@ export abstract class SchCTransactionType extends TransactionType {
     candidate_state: 'lender_candidate_state',
     candidate_district: 'lender_candidate_district',
     date: 'loan_incurred_date',
-    dateLabel: 'DATE',
     memo_code: 'memo_code',
     amount: 'loan_amount',
-    amountInputHeader: 'Loan Information',
-    candidateInputHeader: '',
     aggregate: '',
     purpose_description: '',
-    purposeDescripLabel: '',
     text4000: 'text4000',
     category_code: '',
     election_code: 'election_code',
     election_other_description: 'election_other_description',
+
+    // Labels and text strings
+    dateLabel: 'DATE',
+    amountInputHeader: 'Loan Information',
+    candidateInputHeader: '',
+    purposeDescripLabel: '',
   };
 }

@@ -81,19 +81,19 @@ export class TransactionService implements TableListService<Transaction> {
   public create(transaction: Transaction): Observable<Transaction> {
     const payload = transaction.toJson();
     return this.apiService
-      .post<Transaction>(`${transaction.apiEndpoint}/`, payload)
+      .post<Transaction>(`${transaction.transactionType?.apiEndpoint}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
   }
 
   public update(transaction: Transaction): Observable<Transaction> {
     const payload = transaction.toJson();
     return this.apiService
-      .put<Transaction>(`${transaction.apiEndpoint}/${transaction.id}/`, payload)
+      .put<Transaction>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
   }
 
   public delete(transaction: Transaction): Observable<null> {
-    return this.apiService.delete<null>(`${transaction.apiEndpoint}/${transaction.id}`).pipe(
+    return this.apiService.delete<null>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}`).pipe(
       tap(() => {
         if (transaction.transactionType?.updateParentOnSave && transaction.parent_transaction?.children) {
           // Remove deleted transaction from parent's list of children

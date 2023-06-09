@@ -2,7 +2,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchATransaction extends Transaction {
   entity_type: string | undefined;
@@ -47,8 +47,6 @@ export class SchATransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
-  override apiEndpoint = '/transactions/schedule-a';
-
   override getFieldsNotToValidate(): string[] {
     return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
   }
@@ -61,11 +59,11 @@ export class SchATransaction extends Transaction {
       transaction.setMetaProperties(transactionType);
     }
     if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = SchATransaction.fromJSON(transaction.parent_transaction, depth - 1);
+      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
     }
     if (depth > 0 && transaction.children) {
       transaction.children = transaction.children.map(function (child) {
-        return SchATransaction.fromJSON(child, depth - 1);
+        return getFromJSON(child, depth - 1);
       });
     }
     return transaction;
@@ -93,7 +91,7 @@ export enum ScheduleATransactionTypes {
   TRIBAL_RECEIPT = 'TRIBAL_RECEIPT',
   PARTNERSHIP_RECEIPT = 'PARTNERSHIP_RECEIPT',
   REATTRIBUTION = 'REATT_FROM',
-  IN_KIND_RECEIPT = 'IK_REC',
+  IN_KIND_RECEIPT = 'IN_KIND_RECEIPT',
   RETURNED_BOUNCED_RECEIPT_INDIVIDUAL = 'RETURN_RECEIPT',
   EARMARK_RECEIPT = 'EARMARK_RECEIPT',
   CONDUIT_EARMARK_DEPOSITED = 'CONDUIT_EARMARK_DEPOSITED',
@@ -102,7 +100,7 @@ export enum ScheduleATransactionTypes {
   UNREGISTERED_RECEIPT_FROM_PERSON_RETURN = 'UNREGISTERED_RECEIPT_FROM_PERSON_RETURN',
   // Contributions from Registered Filers
   PARTY_RECEIPT = 'PARTY_RECEIPT',
-  PARTY_IN_KIND = 'PARTY_IK_REC',
+  PARTY_IN_KIND_RECEIPT = 'PARTY_IN_KIND_RECEIPT',
   PARTY_RETURN = 'PARTY_RETURN',
   PAC_RECEIPT = 'PAC_RECEIPT',
   PAC_IN_KIND = 'PAC_IK_REC',
@@ -191,7 +189,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.TRIBAL_RECEIPT, 'Tribal Receipt'],
   [ScheduleATransactionTypes.PARTNERSHIP_RECEIPT, 'Partnership Receipt'],
   [ScheduleATransactionTypes.REATTRIBUTION, 'Reattribution'],
-  [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-Kind Receipt'],
+  [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-kind Receipt'],
   [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.EARMARK_RECEIPT, 'Earmark Receipt'],
   [ScheduleATransactionTypes.EARMARK_MEMO, 'Earmark Memo'],
@@ -204,7 +202,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   // Contributions from Registered Filers
   [ScheduleATransactionTypes.PARTY_RECEIPT, 'Party Receipt'],
-  [ScheduleATransactionTypes.PARTY_IN_KIND, 'Party In-Kind'],
+  [ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT, 'Party In-kind Receipt'],
   [ScheduleATransactionTypes.PARTY_RETURN, 'Party Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.PAC_RECEIPT, 'PAC Receipt'],
   [ScheduleATransactionTypes.PAC_IN_KIND, 'PAC In-Kind'],
