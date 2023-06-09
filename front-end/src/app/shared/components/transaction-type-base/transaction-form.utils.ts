@@ -126,7 +126,14 @@ export class TransactionFormUtils {
 
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
-    transaction.contact = TransactionContactUtils.updateContactFromForm(form, transaction);
+    if (transaction.transactionType?.templateMap) {
+      // Update contact object in transaction with new form values
+      TransactionContactUtils.setTransactionContactFormChanges(
+        form,
+        transaction.contact,
+        transaction.transactionType?.templateMap
+      );
+    }
 
     const payload: ScheduleTransaction = getFromJSON({
       ...transaction,

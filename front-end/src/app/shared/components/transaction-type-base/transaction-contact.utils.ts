@@ -145,38 +145,4 @@ export class TransactionContactUtils {
       }
     }
   }
-
-  static updateContactFromForm(form: FormGroup, transaction: Transaction) {
-    const contact: Contact | undefined = transaction.contact;
-    const templateMap = transaction?.transactionType?.templateMap;
-    if (contact && templateMap) {
-      switch (contact.type) {
-        case ContactTypes.INDIVIDUAL:
-          contact.last_name = form.get(templateMap.last_name)?.value;
-          contact.first_name = form.get(templateMap.first_name)?.value;
-          contact.middle_name = form.get(templateMap.middle_name)?.value;
-          contact.prefix = form.get(templateMap.prefix)?.value;
-          contact.suffix = form.get(templateMap.suffix)?.value;
-          contact.employer = form.get(templateMap.employer)?.value;
-          contact.occupation = form.get(templateMap.occupation)?.value;
-          break;
-        case ContactTypes.COMMITTEE:
-          contact.committee_id = form.get(templateMap.committee_fec_id)?.value;
-          contact.name = form.get(templateMap.organization_name)?.value;
-          contact.name = form.get(templateMap.committee_name)?.value;
-          break;
-        case ContactTypes.ORGANIZATION:
-          contact.name = form.get(templateMap.organization_name)?.value;
-          break;
-      }
-      contact.street_1 = form.get(templateMap.street_1)?.value;
-      contact.street_2 = form.get(templateMap.street_2)?.value;
-      contact.city = form.get(templateMap.city)?.value;
-      contact.state = form.get(templateMap.state)?.value;
-      contact.zip = form.get(templateMap.zip)?.value;
-
-      return contact;
-    }
-    throw new Error('Fecfile: no contact attached to transaction');
-  }
 }
