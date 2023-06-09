@@ -10,7 +10,7 @@ import { MemoText } from 'app/shared/models/memo-text.model';
 import {
   NavigationAction,
   NavigationDestination,
-  NavigationEvent
+  NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ApiService } from 'app/shared/services/api.service';
@@ -63,7 +63,7 @@ const initTransactionData = {
   id: undefined,
   report_id: undefined,
   contact: undefined,
-  contact_id: undefined,
+  contact_1_id: undefined,
   form_type: undefined,
   transaction_id: null,
   transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
@@ -718,7 +718,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testContact = new Contact();
     testContact.id = '123';
     testContact.type = ContactTypes.CANDIDATE;
-    testContact.candidate_id = 'testCandidateId'
+    testContact.candidate_id = 'testCandidateId';
     testContact.last_name = 'testLastName';
     testContact.first_name = 'testFirstName';
     testContact.middle_name = 'testMiddleName';
@@ -738,7 +738,7 @@ describe('TransactionTypeBaseComponent', () => {
     };
 
     component.form.addControl('entity_type', { value: testEntityType });
-    component.onContactLookupSelect(testContactSelectItem);
+    component.onSecondaryContactLookupSelect(testContactSelectItem);
     const candidateIdFormControlValue = component.form.get('donor_candidate_fec_id')?.value;
     const lastNameFormControlValue = component.form.get('donor_candidate_last_name')?.value;
     const firstNameFormControlValue = component.form.get('donor_candidate_first_name')?.value;
@@ -763,11 +763,6 @@ describe('TransactionTypeBaseComponent', () => {
     expect(candidateOfficeFormControlValue === testContact.candidate_office).toBeTrue();
     expect(candidateStateFormControlValue === testContact.candidate_state).toBeTrue();
     expect(candidateDistrictFormControlValue === testContact.candidate_district).toBeTrue();
-    expect(street1FormControlValue === testContact.street_1).toBeTrue();
-    expect(street2FormControlValue === testContact.street_2).toBeTrue();
-    expect(cityFormControlValue === testContact.city).toBeTrue();
-    expect(stateFormControlValue === testContact.state).toBeTrue();
-    expect(zipFormControlValue === testContact.zip).toBeTrue();
   });
 
   it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
