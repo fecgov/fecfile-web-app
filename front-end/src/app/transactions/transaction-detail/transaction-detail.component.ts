@@ -1,9 +1,7 @@
-import { Component, OnChanges, SimpleChanges } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnChanges } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
-import { ContactTypeLabels, ContactTypes } from 'app/shared/models/contact.model';
+import { ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
-import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { takeUntil } from 'rxjs';
 
 @Component({
@@ -18,7 +16,7 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
   hasElectionInformationInput = false;
   hasCandidateInformationInput = false;
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     if (this.transaction?.transactionType?.templateMap) {
       const transactionType = this.transaction.transactionType;
       const transactionGroup = transactionType.transactionGroup as TransactionGroup;
