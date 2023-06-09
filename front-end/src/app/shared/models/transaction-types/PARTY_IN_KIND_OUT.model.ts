@@ -8,6 +8,7 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 export class PARTY_IN_KIND_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupEE();
   override isDependentChild = true;
+  override showAggregate = false;
   title = '';
   schema = schema;
   override useParentContact = true;
