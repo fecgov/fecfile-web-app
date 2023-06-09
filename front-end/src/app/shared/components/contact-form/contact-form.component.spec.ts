@@ -70,15 +70,20 @@ describe('ContactFormComponent', () => {
     });
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      expect(component.form.get('candidate_state')?.value).toBe('');
-      expect(component.form.get('candidate_district')?.value).toBe('');
+    fixture
+      .whenStable()
+      .then(() => {
+        expect(component.form.get('candidate_state')?.value).toBe('');
+        expect(component.form.get('candidate_district')?.value).toBe('');
 
-      component.form.get('candidate_office')?.setValue(CandidateOfficeTypes.SENATE);
-      component.form.get('candidate_state')?.setValue('VA');
-      expect(component.form.get('candidate_state')?.value).toBe('VA');
-      expect(component.form.get('candidate_district')?.value).toBe('');
-    });
+        component.form.get('candidate_office')?.setValue(CandidateOfficeTypes.SENATE);
+        component.form.get('candidate_state')?.setValue('VA');
+        expect(component.form.get('candidate_state')?.value).toBe('VA');
+        expect(component.form.get('candidate_district')?.value).toBe('');
+      })
+      .catch(() => {
+        fail('fixture should stablize');
+      });
 
     component.form.get('type')?.setValue(ContactTypes.COMMITTEE);
   });
