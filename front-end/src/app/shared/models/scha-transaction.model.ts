@@ -100,7 +100,7 @@ export enum ScheduleATransactionTypes {
   UNREGISTERED_RECEIPT_FROM_PERSON_RETURN = 'UNREGISTERED_RECEIPT_FROM_PERSON_RETURN',
   // Contributions from Registered Filers
   PARTY_RECEIPT = 'PARTY_RECEIPT',
-  PARTY_IN_KIND = 'PARTY_IK_REC',
+  PARTY_IN_KIND_RECEIPT = 'PARTY_IN_KIND_RECEIPT',
   PARTY_RETURN = 'PARTY_RETURN',
   PAC_RECEIPT = 'PAC_RECEIPT',
   PAC_IN_KIND = 'PAC_IK_REC',
@@ -201,7 +201,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   // Contributions from Registered Filers
   [ScheduleATransactionTypes.PARTY_RECEIPT, 'Party Receipt'],
-  [ScheduleATransactionTypes.PARTY_IN_KIND, 'Party In-Kind'],
+  [ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT, 'Party In-kind Receipt'],
   [ScheduleATransactionTypes.PARTY_RETURN, 'Party Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.PAC_RECEIPT, 'PAC Receipt'],
   [ScheduleATransactionTypes.PAC_IN_KIND, 'PAC In-Kind'],

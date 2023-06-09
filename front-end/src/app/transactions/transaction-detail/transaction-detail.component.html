@@ -12,7 +12,7 @@
           <app-transaction-contact-lookup
             [contactTypeFormControl]="$any(form).controls['entity_type']"
             [contactTypeOptions]="contactTypeOptions"
-            [contactTypeReadOnly]="this.contactTypeOptions.length === 1"
+            [contactTypeReadOnly]="contactTypeOptions.length === 1"
             (contactSelect)="onContactLookupSelect($event)"
           >
           </app-transaction-contact-lookup>
@@ -38,7 +38,7 @@
       <h3>Address</h3>
       <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-address-input>
       <p-divider></p-divider>
-      <ng-container *ngIf="this.hasEmployerInput">
+      <ng-container *ngIf="hasEmployerInput">
         <h3>Employer</h3>
         <app-employer-input
           [form]="form"
@@ -47,7 +47,7 @@
         ></app-employer-input>
         <p-divider></p-divider>
       </ng-container>
-      <h3>{{ templateMap['amountInputHeader'] }}</h3>
+      <h3>{{ templateMap.amountInputHeader }}</h3>
       <app-amount-input
         [form]="form"
         [formSubmitted]="formSubmitted"
@@ -57,7 +57,7 @@
         [showAggregate]="!!transaction?.transactionType?.showAggregate"
       ></app-amount-input>
       <p-divider></p-divider>
-      <ng-container *ngIf="this.hasElectionInformationInput">
+      <ng-container *ngIf="hasElectionInformationInput">
         <h3>Election Information</h3>
         <app-election-input
           [form]="form"
@@ -72,9 +72,9 @@
         [formSubmitted]="formSubmitted"
         [templateMap]="templateMap"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
-        [purposeDescriptionLabel]="this.purposeDescriptionLabel"
+        [purposeDescriptionLabel]="purposeDescriptionLabel"
         [purposeDescriptionLabelNotice]="transaction?.transactionType?.purposeDescriptionLabelNotice"
-        [purposeDescriptionPrefix]="this.transaction?.transactionType?.purposeDescriptionPrefix"
+        [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
       ></app-additional-info-input>
       <div class="grid" *ngIf="isEditable">
         <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">
