@@ -71,13 +71,15 @@
           [contactTypeFormControl]="candidateContactTypeFormControl"
           [contactTypeOptions]="candidateContactTypeOption"
           [contactTypeReadOnly]="true"
-          (contactSelect)="onContactLookupSelect($event)"
+          (contactSelect)="onSecondaryContactLookupSelect($event)"
         ></app-transaction-contact-lookup>
-        <app-candidate-input
-          [form]="form"
-          [formSubmitted]="formSubmitted"
-          [templateMap]="templateMap"
-        ></app-candidate-input>
+        <ng-container *ngIf="transaction?.contact_2">
+          <app-candidate-input
+            [form]="form"
+            [formSubmitted]="formSubmitted"
+            [templateMap]="templateMap"
+          ></app-candidate-input>
+        </ng-container>
         <p-divider></p-divider>
       </ng-container>
       <p-divider></p-divider>

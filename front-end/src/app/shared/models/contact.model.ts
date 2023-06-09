@@ -90,8 +90,7 @@ export class Contact extends BaseModel {
   created: string | undefined;
   updated: string | undefined;
   deleted: string | undefined;
-  contact_1_transaction_count: number | undefined; // The number of transactions linked to this contact as contact_1. Read-only from the database.
-  contact_2_transaction_count: number | undefined; // The number of transactions linked to this contact as contact_2. Read-only from the database.
+  transaction_count: number | undefined;
 
   // prettier-ignore
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -99,7 +98,7 @@ export class Contact extends BaseModel {
   }
 }
 
-export class FecApiLookupData { }
+export class FecApiLookupData {}
 
 export class FecApiCandidateLookupData extends FecApiLookupData {
   id: string | undefined;
@@ -113,7 +112,7 @@ export class FecApiCandidateLookupData extends FecApiLookupData {
 
   toSelectItem(): SelectItem<FecApiCandidateLookupData> {
     return {
-      // TODO: Will need to update this to last/first name fields 
+      // TODO: Will need to update this to last/first name fields
       // when FEC updates their candidate API to add those fields
       label: `${this.name} (${this.id})`,
       value: this,
@@ -150,10 +149,16 @@ export class CandidateLookupResponse {
     const fecfileSelectItems =
       this.fecfile_candidates?.map((data) => new FecfileCandidateLookupData(data).toSelectItem()) || [];
     return [
-      ...includeFecfileResults ? [{
-        label: fecfileSelectItems.length ? 'Select an existing candidate contact:' : 'There are no matching candidates',
-        items: fecfileSelectItems,
-      }] : [],
+      ...(includeFecfileResults
+        ? [
+            {
+              label: fecfileSelectItems.length
+                ? 'Select an existing candidate contact:'
+                : 'There are no matching candidates',
+              items: fecfileSelectItems,
+            },
+          ]
+        : []),
       {
         label: fecApiSelectItems.length
           ? 'Create a new contact from list of registered candidates:'
@@ -211,10 +216,16 @@ export class CommitteeLookupResponse {
     const fecfileSelectItems =
       this.fecfile_committees?.map((data) => new FecfileCommitteeLookupData(data).toSelectItem()) || [];
     return [
-      ...includeFecfileResults ? [{
-        label: fecfileSelectItems.length ? 'Select an existing committee contact:' : 'There are no matching committees',
-        items: fecfileSelectItems,
-      }] : [],
+      ...(includeFecfileResults
+        ? [
+            {
+              label: fecfileSelectItems.length
+                ? 'Select an existing committee contact:'
+                : 'There are no matching committees',
+              items: fecfileSelectItems,
+            },
+          ]
+        : []),
       {
         label: fecApiSelectItems.length
           ? 'Create a new contact from list of registered committees:'

@@ -34,7 +34,7 @@ export abstract class SchATransactionType extends TransactionType {
     memo_code: 'memo_code',
     amount: 'contribution_amount',
     amountInputHeader: 'Receipt Information',
-    candidateInputHeader: 'Donor Information',
+    candidateInputHeader: 'Committee/Candidate information',
     aggregate: 'contribution_aggregate',
     purpose_description: 'contribution_purpose_descrip',
     purposeDescripLabel: 'PURPOSE OF RECEIPT',

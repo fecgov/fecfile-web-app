@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import {
@@ -34,6 +34,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   abstract formProperties: string[];
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+  candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
   contactId$: Subject<string> = new BehaviorSubject<string>('');
@@ -293,6 +295,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   onContactLookupSelect(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.onContactLookupSelect(selectItem, this.form, this.transaction, this.contactId$);
+  }
+  onSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.form, this.transaction);
   }
 
   getEntityType(): string {

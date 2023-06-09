@@ -18,12 +18,6 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
   hasElectionInformationInput = false;
   hasCandidateInformationInput = false;
 
-  candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE);
-  candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [
-    ContactTypes.CANDIDATE,
-  ]);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ngOnChanges(changes: SimpleChanges): void {
     if (this.transaction?.transactionType?.templateMap) {
       const transactionType = this.transaction.transactionType;

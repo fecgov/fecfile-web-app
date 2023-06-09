@@ -6,8 +6,4 @@ import { BaseInputComponent } from '../base-input.component';
   selector: 'app-candidate-input',
   templateUrl: './candidate-input.component.html',
 })
-export class CandidateInputComponent extends BaseInputComponent {
-  candidateOfficeTypeOptions: PrimeOptions = [];
-  candidateStateOptions: PrimeOptions = [];
-  candidateDistrictOptions: PrimeOptions = [];
-}
+export class CandidateInputComponent extends BaseInputComponent {}
