@@ -130,7 +130,7 @@ export class TransactionFormUtils {
       // Update contact object in transaction with new form values
       TransactionContactUtils.setTransactionContactFormChanges(
         form,
-        transaction.contact,
+        transaction.contact_1,
         transaction.transactionType.templateMap
       );
     }
