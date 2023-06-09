@@ -748,11 +748,6 @@ describe('TransactionTypeBaseComponent', () => {
     const candidateOfficeFormControlValue = component.form.get('donor_candidate_office')?.value;
     const candidateStateFormControlValue = component.form.get('donor_candidate_state')?.value;
     const candidateDistrictFormControlValue = component.form.get('donor_candidate_district')?.value;
-    const street1FormControlValue = component.form.get('contributor_street_1')?.value;
-    const street2FormControlValue = component.form.get('contributor_street_2')?.value;
-    const cityFormControlValue = component.form.get('contributor_city')?.value;
-    const stateFormControlValue = component.form.get('contributor_state')?.value;
-    const zipFormControlValue = component.form.get('contributor_zip')?.value;
 
     expect(candidateIdFormControlValue === testContact.candidate_id).toBeTrue();
     expect(lastNameFormControlValue === testContact.last_name).toBeTrue();

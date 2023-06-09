@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Contact, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
-import { SelectItem, SelectItemGroup } from 'primeng/api';
+import { SelectItemGroup } from 'primeng/api';
 
 @Component({
   selector: 'app-contact-lookup',
