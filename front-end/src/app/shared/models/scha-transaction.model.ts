@@ -111,8 +111,8 @@ export enum ScheduleATransactionTypes {
   // Transfers
   TRANSFER = 'TRANSFER',
   JOINT_FUNDRAISING_TRANSFER = 'JOINT_FUNDRAISING_TRANSFER',
-  IN_KIND_TRANSFER = 'IK_TRAN',
-  IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
+  IN_KIND_TRANSFER = 'IN_KIND_TRANSFER',
+  IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY = 'IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY',
   JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT',
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
@@ -218,7 +218,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO, 'Party Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO, 'Tribal Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-kind Transfer'],
-  [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-kind Transfer - Federal Election Activity'],
+  [
+    ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
+    'In-kind Transfer - Federal Election Activity',
+  ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
