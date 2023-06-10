@@ -83,6 +83,7 @@ import { PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } f
 import { PARTY_IN_KIND_RECEIPT } from '../models/transaction-types/PARTY_IN_KIND_RECEIPT.model';
 import { IN_KIND_TRANSFER } from '../models/transaction-types/IN_KIND_TRANSFER.model';
 import { IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY } from '../models/transaction-types/IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY.model';
+import { PAC_IN_KIND_RECEIPT } from '../models/transaction-types/PAC_IN_KIND_RECEIPT.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
@@ -145,6 +146,7 @@ import { NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT } from '../models/transa
 import { PARTY_IN_KIND_OUT } from '../models/transaction-types/PARTY_IN_KIND_OUT.model';
 import { IN_KIND_TRANSFER_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_OUT.model';
 import { IN_KIND_TRANSFER_FEA_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_FEA_OUT.model';
+import { PAC_IN_KIND_OUT } from '../models/transaction-types/PAC_IN_KIND_OUT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -232,6 +234,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTY_IN_KIND_RECEIPT,
   IN_KIND_TRANSFER,
   IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
+  PAC_IN_KIND_RECEIPT,
   // Schedule B /////////////////////////////////////////////////////
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
   INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
@@ -288,6 +291,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTY_IN_KIND_OUT,
   IN_KIND_TRANSFER_OUT,
   IN_KIND_TRANSFER_FEA_OUT,
+  PAC_IN_KIND_OUT,
 }
 
 export class TransactionTypeUtils {

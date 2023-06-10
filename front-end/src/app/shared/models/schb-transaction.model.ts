@@ -155,6 +155,7 @@ export enum ScheduleBTransactionTypes {
   PARTY_IN_KIND_OUT = 'PARTY_IN_KIND_OUT',
   IN_KIND_TRANSFER_OUT = 'IN_KIND_TRANSFER_OUT',
   IN_KIND_TRANSFER_FEA_OUT = 'IN_KIND_TRANSFER_FEA_OUT',
+  PAC_IN_KIND_OUT = 'PAC_IN_KIND_OUT',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
@@ -336,4 +337,5 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.PARTY_IN_KIND_OUT, 'Party In-kind Out'],
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT, 'In-kind Transfer Out'],
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT, 'In-kind Transfer Federal Election Activity Out'],
+  [ScheduleBTransactionTypes.PAC_IN_KIND_OUT, 'PAC In-kind Out'],
 ];
