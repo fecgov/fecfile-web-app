@@ -204,7 +204,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT, 'Party In-kind Receipt'],
   [ScheduleATransactionTypes.PARTY_RETURN, 'Party Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.PAC_RECEIPT, 'PAC Receipt'],
-  [ScheduleATransactionTypes.PAC_IN_KIND, 'PAC In-Kind'],
+  [ScheduleATransactionTypes.PAC_IN_KIND, 'PAC In-kind'],
   [ScheduleATransactionTypes.PAC_EARMARK_RECEIPT, 'PAC Earmark Receipt'],
   [ScheduleATransactionTypes.PAC_EARMARK_MEMO, 'PAC Earmark Memo'],
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED, 'PAC Conduit Earmark (Deposited)'],
@@ -217,10 +217,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO, 'PAC Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO, 'Party Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO, 'Tribal Joint Fundraising Transfer Memo'],
-  [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],
+  [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-kind Transfer'],
   [
     ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
-    'In-Kind Transfer - Federal Election Activity',
+    'In-kind Transfer - Federal Election Activity',
   ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
