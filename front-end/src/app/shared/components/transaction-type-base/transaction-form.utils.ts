@@ -9,6 +9,7 @@ import { ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { TransactionContactUtils } from './transaction-contact.utils';
 
 export class TransactionFormUtils {
   /**
@@ -125,11 +126,20 @@ export class TransactionFormUtils {
 
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
+    if (transaction.transactionType?.templateMap) {
+      // Update contact object in transaction with new form values
+      TransactionContactUtils.setTransactionContactFormChanges(
+        form,
+        transaction.contact,
+        transaction.transactionType.templateMap
+      );
+    }
 
     const payload: ScheduleTransaction = getFromJSON({
       ...transaction,
       ...formValues,
     });
+
     if (payload.children) {
       payload.children = payload.updateChildren();
     }

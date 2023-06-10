@@ -116,10 +116,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
       case ScheduleATransactionGroups.CONTRIBUTIONS_FROM_REGISTERED_FILERS:
         return [
           ScheduleATransactionTypes.PARTY_RECEIPT,
-          ScheduleATransactionTypes.PARTY_IN_KIND,
+          ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT,
           ScheduleATransactionTypes.PARTY_RETURN,
           ScheduleATransactionTypes.PAC_RECEIPT,
-          ScheduleATransactionTypes.PAC_IN_KIND,
+          ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT,
           ScheduleATransactionTypes.PAC_EARMARK_RECEIPT,
           ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED,
           ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED,
@@ -130,7 +130,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleATransactionTypes.TRANSFER,
           ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER,
           ScheduleATransactionTypes.IN_KIND_TRANSFER,
-          ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA,
+          ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
           ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
           ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT,
           ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT,

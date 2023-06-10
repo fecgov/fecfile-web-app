@@ -82,6 +82,7 @@ export enum PurposeDescriptionLabelSuffix {
 }
 
 export type TransactionTemplateMapType = {
+  // Form fields
   last_name: string;
   first_name: string;
   middle_name: string;
@@ -98,18 +99,20 @@ export type TransactionTemplateMapType = {
   committee_fec_id: string;
   committee_name: string;
   date: string;
-  dateLabel: string;
   memo_code: string;
   amount: string;
   balance: string;
-  amountInputHeader: string;
   aggregate: string;
   purpose_description: string;
-  purposeDescripLabel: string;
   text4000: string;
   category_code: string;
   election_code: string;
   election_other_description: string;
+
+  // Labels and text strings
+  dateLabel: string;
+  amountInputHeader: string;
+  purposeDescripLabel: string;
 };
 
 export type TemplateMapKeyType = keyof TransactionTemplateMapType;

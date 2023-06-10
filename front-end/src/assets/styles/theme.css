@@ -41,7 +41,7 @@
   --surface-overlay: #ffffff;
   --surface-border: #d6d7d9;
   --surface-hover: #e8e8e8;
-  --maskbg: rgba(0, 0, 0, .4);
+  --maskbg: rgba(0, 0, 0, 0.4);
   --focus-ring: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
 }
 
@@ -64,7 +64,7 @@
 .p-component:disabled,
 .p-dropdown:disabled {
   opacity: 0.65;
-  background: lightgrey;
+  background: #f1f1f1;
   border: 2px solid gray;
   color: black;
 }
@@ -728,7 +728,6 @@ p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
   background: white;
   border: none;
   color: black;
-  
 }
 
 .p-highlight .p-checkbox .p-checkbox-box {
