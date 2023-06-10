@@ -333,5 +333,5 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     'Other Committee Refund - National Party Recount/Legal Proceedings Account',
   ],
   [ScheduleBTransactionTypes.PARTY_IN_KIND_OUT, 'Party In-kind Out'],
-  [ScheduleBTransactionTypes.PAC_IN_KIND_OUT, 'PAC In-Kind Out'],
+  [ScheduleBTransactionTypes.PAC_IN_KIND_OUT, 'PAC In-kind Out'],
 ];

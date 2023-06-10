@@ -17,7 +17,7 @@ export class IN_KIND_RECEIPT extends SchATransactionType {
   override apiEndpoint = '/transactions/save-pair';
   override dependentChildTransactionType = ScheduleBTransactionTypes.IN_KIND_OUT;
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
-  override purposeDescriptionPrefix = 'In-Kind: ';
+  override purposeDescriptionPrefix = 'In Kind: ';
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
