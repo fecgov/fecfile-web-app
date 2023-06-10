@@ -63,10 +63,11 @@ export class SchCTransaction extends Transaction {
 }
 
 export enum ScheduleCTransactionGroups {
-  SCHEDULE_C_AND_C1 = 'Schedule C and C-1',
+  LOANS = 'LOANS',
+  DEBTS = 'DEBTS',
 }
 
-export type ScheduleCTransactionGroupsType = ScheduleCTransactionGroups.SCHEDULE_C_AND_C1;
+export type ScheduleCTransactionGroupsType = ScheduleCTransactionGroups.LOANS | ScheduleCTransactionGroups.DEBTS;
 
 export enum ScheduleCTransactionTypes {
   LOANS_RECEIVED_FROM_INDIVIDUAL = 'LOANS_RECEIVED_FROM_INDIVIDUAL',

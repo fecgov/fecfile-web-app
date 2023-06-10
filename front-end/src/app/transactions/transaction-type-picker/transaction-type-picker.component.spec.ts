@@ -55,4 +55,13 @@ describe('TransactionTypePickerComponent', () => {
     const groups = component.getTransactionGroups();
     expect(groups[0]).toBe(ScheduleBTransactionGroups.OPERATING_EXPENDITURES);
   });
+
+  it('should set the title correctly', () => {
+    component.category = 'receipt';
+    expect(component.getCategoryTitle()).toEqual('Add a receipt');
+    component.category = 'disbursement';
+    expect(component.getCategoryTitle()).toEqual('Add a disbursement');
+    component.category = 'loans-and-debts';
+    expect(component.getCategoryTitle()).toEqual('Add loans and debts');
+  });
 });

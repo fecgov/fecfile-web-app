@@ -21,8 +21,13 @@ import {
 import { LabelList } from 'app/shared/utils/label.utils';
 import { getTransactionTypeClass } from 'app/shared/utils/transaction-type.utils';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+import {
+  ScheduleCTransactionGroups,
+  ScheduleCTransactionTypeLabels,
+  ScheduleCTransactionTypes,
+} from 'app/shared/models/schc-transaction.model';
 
-type Categories = 'receipt' | 'disbursement';
+type Categories = 'receipt' | 'disbursement' | 'loans-and-debts';
 
 @Component({
   selector: 'app-transaction-type-picker',
@@ -30,10 +35,15 @@ type Categories = 'receipt' | 'disbursement';
   styleUrls: ['./transaction-type-picker.component.scss'],
 })
 export class TransactionTypePickerComponent extends DestroyerComponent implements OnInit {
-  transactionTypeLabels: LabelList = [...ScheduleATransactionTypeLabels, ...ScheduleBTransactionTypeLabels];
+  transactionTypeLabels: LabelList = [
+    ...ScheduleATransactionTypeLabels,
+    ...ScheduleBTransactionTypeLabels,
+    ...ScheduleCTransactionTypeLabels,
+  ];
   report: Report | undefined;
   category: Categories = 'receipt';
   groups: ScheduleATransactionGroupsType[] | ScheduleBTransactionGroupsType[] = [];
+  title: string = this.getCategoryTitle();
 
   constructor(private store: Store, private route: ActivatedRoute, private titleService: Title) {
     super();
@@ -47,12 +57,26 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
 
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.category = params['category'];
-      this.titleService.setTitle('Add a ' + this.category);
+      this.title = this.getCategoryTitle();
+      this.titleService.setTitle(this.title);
     });
   }
 
+  getCategoryTitle(): string {
+    switch (this.category) {
+      case 'receipt':
+        return 'Add a receipt';
+      case 'disbursement':
+        return 'Add a disbursement';
+      case 'loans-and-debts':
+        return 'Add loans and debts';
+      default:
+        return this.category;
+    }
+  }
+
   getTransactionGroups(): TransactionGroupTypes[] {
-    if (this.category == 'disbursement') {
+    if (this.category === 'disbursement') {
       return [
         ScheduleBTransactionGroups.OPERATING_EXPENDITURES,
         ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGULAR_FILERS,
@@ -60,6 +84,9 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         ScheduleBTransactionGroups.REFUND,
         ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES,
       ];
+    }
+    if (this.category === 'loans-and-debts') {
+      return [ScheduleCTransactionGroups.LOANS, ScheduleCTransactionGroups.DEBTS];
     }
     return [
       ScheduleATransactionGroups.CONTRIBUTIONS_FROM_INDIVIDUALS_PERSONS,
@@ -214,6 +241,13 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
           ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID,
         ];
+      case ScheduleCTransactionGroups.LOANS:
+        return [
+          ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_INDIVIDUAL,
+          ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_BANK,
+        ];
+      case ScheduleCTransactionGroups.DEBTS:
+        return [];
       default:
         return [];
     }

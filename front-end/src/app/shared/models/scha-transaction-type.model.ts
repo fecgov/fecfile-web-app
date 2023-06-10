@@ -25,6 +25,7 @@ export abstract class SchATransactionType extends TransactionType {
     date: 'contribution_date',
     memo_code: 'memo_code',
     amount: 'contribution_amount',
+    balance: '',
     aggregate: 'contribution_aggregate',
     purpose_description: 'contribution_purpose_descrip',
     text4000: 'text4000',

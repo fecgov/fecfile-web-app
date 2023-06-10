@@ -25,6 +25,7 @@ export abstract class SchBTransactionType extends TransactionType {
     date: 'expenditure_date',
     memo_code: 'memo_code',
     amount: 'expenditure_amount',
+    balance: '',
     aggregate: 'aggregate_amount',
     purpose_description: 'expenditure_purpose_descrip',
     text4000: 'text4000',

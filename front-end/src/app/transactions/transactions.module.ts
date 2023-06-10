@@ -24,6 +24,7 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
 import { TransactionDisbursementsComponent } from './transaction-list/transaction-disbursements/transaction-disbursements.component';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list/transaction-list.component';
 import { TransactionReceiptsComponent } from './transaction-list/transaction-receipts/transaction-receipts.component';
+import { TransactionLoansAndDebtsComponent } from './transaction-list/transaction-loans-and-debts/transaction-loans-and-debts.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionsRoutingModule } from './transactions-routing.module';
 
@@ -37,6 +38,7 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     MemoCodePipe,
     TransactionReceiptsComponent,
     TransactionDisbursementsComponent,
+    TransactionLoansAndDebtsComponent,
   ],
   imports: [
     AccordionModule,
@@ -59,4 +61,4 @@ import { TransactionsRoutingModule } from './transactions-routing.module';
     ConfirmDialogModule,
   ],
 })
-export class TransactionsModule { }
+export class TransactionsModule {}

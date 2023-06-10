@@ -101,6 +101,7 @@ export type TransactionTemplateMapType = {
   date: string;
   memo_code: string;
   amount: string;
+  balance: string;
   aggregate: string;
   purpose_description: string;
   text4000: string;
