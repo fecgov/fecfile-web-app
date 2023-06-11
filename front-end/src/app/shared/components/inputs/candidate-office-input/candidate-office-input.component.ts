@@ -58,10 +58,8 @@ export class CandidateOfficeInputComponent extends DestroyerComponent implements
         }
       });
 
-    // Run office and state valueChange logic to update form elements when editing a record
-    this.form.patchValue({
-      [this.candidateOfficeFormControlName]: this.form.get(this.candidateOfficeFormControlName)?.value,
-      [this.candidateStateFormControlName]: this.form.get(this.candidateStateFormControlName)?.value,
-    });
+    // Run office and state valueChange logic when initializing form elements
+    this.form.get(this.candidateOfficeFormControlName)?.updateValueAndValidity();
+    this.form.get(this.candidateStateFormControlName)?.updateValueAndValidity();
   }
 }
