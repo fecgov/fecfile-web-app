@@ -57,5 +57,11 @@ export class CandidateOfficeInputComponent extends DestroyerComponent implements
           this.candidateDistrictOptions = [];
         }
       });
+
+    // Run office and state valueChange logic to update form elements when editing a record
+    this.form.patchValue({
+      [this.candidateOfficeFormControlName]: this.form.get(this.candidateOfficeFormControlName)?.value,
+      [this.candidateStateFormControlName]: this.form.get(this.candidateStateFormControlName)?.value,
+    });
   }
 }
