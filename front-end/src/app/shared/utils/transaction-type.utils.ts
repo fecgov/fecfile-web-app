@@ -143,6 +143,7 @@ import { RECOUNT_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/RECOUN
 import { NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT.model';
 import { NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT.model';
 import { NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT.model';
+import { REFUND_TO_FEDERAL_CANDIDATE } from '../models/transaction-types/REFUND_TO_FEDERAL_CANDIDATE.model';
 import { PARTY_IN_KIND_OUT } from '../models/transaction-types/PARTY_IN_KIND_OUT.model';
 import { IN_KIND_TRANSFER_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_OUT.model';
 import { IN_KIND_TRANSFER_FEA_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_FEA_OUT.model';
@@ -181,6 +182,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTY_JF_TRANSFER_MEMO,
   PARTY_RECEIPT,
   PARTY_RECOUNT_RECEIPT,
+  REFUND_TO_FEDERAL_CANDIDATE,
   REFUND_TO_UNREGISTERED_COMMITTEE,
   RETURN_RECEIPT,
   TRANSFER,

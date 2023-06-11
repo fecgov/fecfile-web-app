@@ -22,6 +22,15 @@ export abstract class SchBTransactionType extends TransactionType {
     organization_name: 'payee_organization_name',
     committee_fec_id: 'beneficiary_committee_fec_id',
     committee_name: 'beneficiary_committee_name',
+    candidate_fec_id: 'beneficiary_candidate_fec_id',
+    candidate_last_name: 'beneficiary_candidate_last_name',
+    candidate_first_name: 'beneficiary_candidate_first_name',
+    candidate_middle_name: 'beneficiary_candidate_middle_name',
+    candidate_prefix: 'beneficiary_candidate_prefix',
+    candidate_suffix: 'beneficiary_candidate_suffix',
+    candidate_office: 'beneficiary_candidate_office',
+    candidate_state: 'beneficiary_candidate_state',
+    candidate_district: 'beneficiary_candidate_district',
     date: 'expenditure_date',
     memo_code: 'memo_code',
     amount: 'expenditure_amount',
@@ -37,5 +46,6 @@ export abstract class SchBTransactionType extends TransactionType {
     dateLabel: 'DATE',
     amountInputHeader: 'Expenditure Information',
     purposeDescripLabel: 'PURPOSE OF DISBURSEMENT',
+    candidateInputHeader: 'Beneficiary Information',
   };
 }

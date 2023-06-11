@@ -19,6 +19,7 @@ import { ErrorMessagesComponent } from '../error-messages/error-messages.compone
 import { FecInternationalPhoneInputComponent } from '../fec-international-phone-input/fec-international-phone-input.component';
 import { ContactFormComponent } from './contact-form.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 describe('ContactFormComponent', () => {
   let component: ContactFormComponent;
@@ -27,7 +28,7 @@ describe('ContactFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, FormsModule, ReactiveFormsModule, DropdownModule],
+      imports: [HttpClientTestingModule, FormsModule, ReactiveFormsModule, DropdownModule, AutoCompleteModule],
       declarations: [
         ContactFormComponent,
         ErrorMessagesComponent,
@@ -67,13 +68,22 @@ describe('ContactFormComponent', () => {
     component.form.patchValue({
       candidate_office: CandidateOfficeTypes.PRESIDENTIAL,
     });
-    expect(component.form.get('candidate_state')?.value).toBe('');
-    expect(component.form.get('candidate_district')?.value).toBe('');
+    fixture.detectChanges();
 
-    component.form.get('candidate_office')?.setValue(CandidateOfficeTypes.SENATE);
-    component.form.get('candidate_state')?.setValue('VA');
-    expect(component.form.get('candidate_state')?.value).toBe('VA');
-    expect(component.form.get('candidate_district')?.value).toBe('');
+    fixture
+      .whenStable()
+      .then(() => {
+        expect(component.form.get('candidate_state')?.value).toBe('');
+        expect(component.form.get('candidate_district')?.value).toBe('');
+
+        component.form.get('candidate_office')?.setValue(CandidateOfficeTypes.SENATE);
+        component.form.get('candidate_state')?.setValue('VA');
+        expect(component.form.get('candidate_state')?.value).toBe('VA');
+        expect(component.form.get('candidate_district')?.value).toBe('');
+      })
+      .catch(() => {
+        fail('fixture should stablize');
+      });
 
     component.form.get('type')?.setValue(ContactTypes.COMMITTEE);
   });

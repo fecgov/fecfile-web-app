@@ -22,6 +22,15 @@ export abstract class SchATransactionType extends TransactionType {
     organization_name: 'contributor_organization_name',
     committee_fec_id: 'donor_committee_fec_id',
     committee_name: 'donor_committee_name',
+    candidate_fec_id: 'donor_candidate_fec_id',
+    candidate_last_name: 'donor_candidate_last_name',
+    candidate_first_name: 'donor_candidate_first_name',
+    candidate_middle_name: 'donor_candidate_middle_name',
+    candidate_prefix: 'donor_candidate_prefix',
+    candidate_suffix: 'donor_candidate_suffix',
+    candidate_office: 'donor_candidate_office',
+    candidate_state: 'donor_candidate_state',
+    candidate_district: 'donor_candidate_district',
     date: 'contribution_date',
     memo_code: 'memo_code',
     amount: 'contribution_amount',
@@ -37,5 +46,6 @@ export abstract class SchATransactionType extends TransactionType {
     dateLabel: 'DATE RECEIVED',
     amountInputHeader: 'Receipt Information',
     purposeDescripLabel: 'PURPOSE OF RECEIPT',
+    candidateInputHeader: 'Committee/Candidate information',
   };
 }

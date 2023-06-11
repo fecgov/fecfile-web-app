@@ -52,4 +52,9 @@ describe('TransactionGroupB', () => {
     const retval = component.hasElectionInformationInput();
     expect(retval).toBeFalse();
   });
+
+  it('#hasCandidateInformationInput happy path', () => {
+    const retval = component.hasCandidateInformationInput();
+    expect(retval).toBeFalse();
+  });
 });

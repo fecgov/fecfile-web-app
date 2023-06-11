@@ -34,7 +34,7 @@ export class TransactionFormUtils {
       TransactionMemoUtils.patchMemoText(transaction, form);
 
       form.get('entity_type')?.disable();
-      contactId$.next(transaction.contact_id || '');
+      contactId$.next(transaction.contact_1_id || '');
     } else {
       component.resetForm();
       form.get('entity_type')?.enable();
@@ -130,7 +130,7 @@ export class TransactionFormUtils {
       // Update contact object in transaction with new form values
       TransactionContactUtils.setTransactionContactFormChanges(
         form,
-        transaction.contact,
+        transaction.contact_1,
         transaction.transactionType.templateMap
       );
     }

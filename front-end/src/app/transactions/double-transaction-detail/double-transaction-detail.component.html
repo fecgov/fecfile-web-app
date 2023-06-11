@@ -24,7 +24,7 @@
             </app-transaction-contact-lookup>
           </div>
         </div>
-        <ng-container *ngIf="transaction?.contact">
+        <ng-container *ngIf="transaction?.contact_1">
           <ng-container
             *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(form.get('entity_type')?.value)"
           >
@@ -111,7 +111,7 @@
             </div>
           </div>
         </div>
-        <ng-container *ngIf="childTransaction?.contact">
+        <ng-container *ngIf="childTransaction?.contact_1">
           <ng-container *ngIf="childForm.get('entity_type')?.value === ContactTypes.COMMITTEE">
             <app-committee-input
               [form]="childForm"

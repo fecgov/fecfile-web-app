@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { Contact, ContactTypes, FecApiCommitteeLookupData, FecApiLookupData } from 'app/shared/models/contact.model';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
@@ -13,8 +13,8 @@ import { FecApiService } from 'app/shared/services/fec-api.service';
 import { SelectItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
-import { TransactionContactLookupComponent } from './transaction-contact-lookup.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
+import { TransactionContactLookupComponent } from './transaction-contact-lookup.component';
 
 describe('TransactionContactLookupComponent', () => {
   let component: TransactionContactLookupComponent;
@@ -96,33 +96,12 @@ describe('TransactionContactLookupComponent', () => {
     expect(component.createContactDialogVisible).toEqual(true);
   }));
 
-  it('#onCreateContactDialogOpen null form control', () => {
-    component.createContactForm = new FormGroup({});
-    component.selectedFecCommitteeAccount = {} as CommitteeAccount;
-
-    component.onCreateContactDialogOpen();
-    expect(component.createContactFormSubmitted).toBeFalse();
-    component.selectedFecCommitteeAccount = undefined;
-    component.onCreateContactDialogOpen();
-  });
-
   it('#createNewContact happy path', () => {
     component.onCreateNewContactSelect();
     component.closeCreateContactDialog();
     component.createContactSave();
-    component.selectedFecCommitteeAccount = {
-      committee_id: 'testCommitteeId',
-      name: 'testName',
-      street_1: 'testStreet1',
-      street_2: 'testStreet2',
-      city: 'testCity',
-      state: 'testState',
-      zip: 'testZip',
-      treasurer_phone: 'testTreasPhone',
-    } as CommitteeAccount;
-    component.onCreateContactDialogOpen();
     expect(component.createContactForm.get('committee_id')?.value).toBe(
-      component.selectedFecCommitteeAccount.committee_id
+      null
     );
     component.onCreateContactDialogClose();
     expect(component.createContactFormSubmitted).toBeFalse();

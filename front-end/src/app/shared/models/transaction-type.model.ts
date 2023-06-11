@@ -98,6 +98,15 @@ export type TransactionTemplateMapType = {
   organization_name: string;
   committee_fec_id: string;
   committee_name: string;
+  candidate_fec_id: string;
+  candidate_last_name: string;
+  candidate_first_name: string;
+  candidate_middle_name: string;
+  candidate_prefix: string;
+  candidate_suffix: string;
+  candidate_office: string;
+  candidate_state: string;
+  candidate_district: string;
   date: string;
   memo_code: string;
   amount: string;
@@ -113,6 +122,7 @@ export type TransactionTemplateMapType = {
   dateLabel: string;
   amountInputHeader: string;
   purposeDescripLabel: string;
+  candidateInputHeader: string;
 };
 
 export type TemplateMapKeyType = keyof TransactionTemplateMapType;

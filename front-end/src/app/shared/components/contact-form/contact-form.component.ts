@@ -98,29 +98,6 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
       });
 
     this.form
-      ?.get('candidate_office')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((value: string) => {
-        if (!value || value === CandidateOfficeTypes.PRESIDENTIAL) {
-          this.form.patchValue({
-            candidate_state: '',
-            candidate_district: '',
-          });
-          this.form.get('candidate_state')?.disable();
-          this.form.get('candidate_district')?.disable();
-        } else if (value === CandidateOfficeTypes.SENATE) {
-          this.form.patchValue({
-            candidate_district: '',
-          });
-          this.form.get('candidate_state')?.enable();
-          this.form.get('candidate_district')?.disable();
-        } else {
-          this.form.get('candidate_state')?.enable();
-          this.form.get('candidate_district')?.enable();
-        }
-      });
-
-    this.form
       ?.get('candidate_state')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value: string) => {

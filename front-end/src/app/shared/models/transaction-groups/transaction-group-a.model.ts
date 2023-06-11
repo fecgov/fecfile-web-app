@@ -45,4 +45,8 @@ export class TransactionGroupA extends TransactionGroup {
   hasElectionInformationInput(): boolean {
     return false;
   }
+
+  hasCandidateInformationInput(): boolean {
+    return false;
+  }
 }

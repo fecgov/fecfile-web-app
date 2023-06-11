@@ -22,6 +22,15 @@ export abstract class SchCTransactionType extends TransactionType {
     organization_name: 'lender_organization_name',
     committee_fec_id: 'lender_committee_id_number',
     committee_name: '',
+    candidate_fec_id: 'lender_candidate_id_number',
+    candidate_last_name: 'lender_candidate_last_name',
+    candidate_first_name: 'lender_candidate_first_name',
+    candidate_middle_name: 'lender_candidate_middle_name',
+    candidate_prefix: 'lender_candidate_prefix',
+    candidate_suffix: 'lender_candidate_suffix',
+    candidate_office: 'lender_candidate_office',
+    candidate_state: 'lender_candidate_state',
+    candidate_district: 'lender_candidate_district',
     date: 'loan_incurred_date',
     memo_code: 'memo_code',
     amount: 'loan_amount',
@@ -36,6 +45,7 @@ export abstract class SchCTransactionType extends TransactionType {
     // Labels and text strings
     dateLabel: 'DATE',
     amountInputHeader: 'Loan Information',
+    candidateInputHeader: '',
     purposeDescripLabel: '',
   };
 }

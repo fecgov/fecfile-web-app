@@ -5,23 +5,23 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
+import { CandidateOfficeTypes, Contact, ContactTypes } from 'app/shared/models/contact.model';
+import { MemoText } from 'app/shared/models/memo-text.model';
 import {
   NavigationAction,
   NavigationDestination,
   NavigationEvent,
 } from 'app/shared/models/transaction-navigation-controls.model';
-import { Contact, ContactTypes } from 'app/shared/models/contact.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ApiService } from 'app/shared/services/api.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
-import { getTestTransactionByType, testMockStore, testIndividualReceipt } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testIndividualReceipt, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { Confirmation, ConfirmationService, Message, MessageService, SelectItem } from 'primeng/api';
 import { of } from 'rxjs';
-import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { SchATransaction, ScheduleATransactionTypes } from '../../models/scha-transaction.model';
-import { MemoText } from 'app/shared/models/memo-text.model';
-import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionContactUtils } from './transaction-contact.utils';
+import { TransactionMemoUtils } from './transaction-memo.utils';
+import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -39,6 +39,17 @@ class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
     'contributor_zip',
     'contributor_employer',
     'contributor_occupation',
+    'donor_committee_fec_id',
+    'donor_committee_name',
+    'donor_candidate_fec_id',
+    'donor_candidate_last_name',
+    'donor_candidate_first_name',
+    'donor_candidate_middle_name',
+    'donor_candidate_prefix',
+    'donor_candidate_suffix',
+    'donor_candidate_office',
+    'donor_candidate_state',
+    'donor_candidate_district',
     'contribution_date',
     'contribution_amount',
     'contribution_aggregate',
@@ -52,7 +63,7 @@ const initTransactionData = {
   id: undefined,
   report_id: undefined,
   contact: undefined,
-  contact_id: undefined,
+  contact_1_id: undefined,
   form_type: undefined,
   transaction_id: null,
   transaction_type_identifier: ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
@@ -124,7 +135,7 @@ describe('TransactionTypeBaseComponent', () => {
 
   function addContact(component: TestTransactionTypeBaseComponent, contact: Contact) {
     if (component.transaction) {
-      component.transaction.contact = contact;
+      component.transaction.contact_1 = contact;
     }
   }
 
@@ -174,11 +185,11 @@ describe('TransactionTypeBaseComponent', () => {
     testContact2.type = ContactTypes.INDIVIDUAL;
     testContact2.id = 'testId';
     if (component.transaction) {
-      component.transaction.contact = testContact2;
+      component.transaction.contact_1 = testContact2;
     }
     component.save(listSaveEvent);
     if (component.transaction) {
-      component.transaction.contact = undefined;
+      component.transaction.contact_1 = undefined;
     }
     if (testTransaction.transactionType) {
       TransactionContactUtils.getEditTransactionContactConfirmationMessage(
@@ -225,7 +236,7 @@ describe('TransactionTypeBaseComponent', () => {
     testContact2.type = ContactTypes.COMMITTEE;
     testContact2.id = 'testId';
     if (component.transaction) {
-      component.transaction.contact = testContact2;
+      component.transaction.contact_1 = testContact2;
     }
     component.save(listSaveEvent);
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
@@ -252,9 +263,73 @@ describe('TransactionTypeBaseComponent', () => {
     orgContact2.type = ContactTypes.ORGANIZATION;
     orgContact2.id = 'testId';
     if (component.transaction) {
-      component.transaction.contact = orgContact2;
+      component.transaction.contact_1 = orgContact2;
     }
     component.save(listSaveEvent);
+    expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
+  });
+
+  it('#save should update CAN contact', () => {
+    const testTransaction1: SchATransaction = SchATransaction.fromJSON(initTransactionData);
+    const testContact: Contact = new Contact();
+    testContact.id = 'testId';
+    testContact.type = ContactTypes.CANDIDATE;
+    testContact.last_name = 'testLn1';
+    testContact.first_name = 'testFn1';
+    testContact.middle_name = 'testMn1';
+    testContact.prefix = 'testPrefix1';
+    testContact.suffix = 'testSuffix1';
+    testContact.employer = 'testEmployer1';
+    testContact.occupation = 'testOccupation1';
+    testContact.street_1 = 'testStreet1';
+    testContact.street_2 = 'testStreet2';
+    testContact.city = 'testCity1';
+    testContact.state = 'VA';
+    testContact.zip = '12345';
+
+    spyOn(testApiService, 'post').and.returnValue(of(testContact));
+    spyOn(testTransactionService, 'update').and.returnValue(of(testTransaction1));
+    const confirmSpy = spyOn(testConfirmationService, 'confirm');
+    // test reject
+    confirmSpy.and.callFake((confirmation: Confirmation) => {
+      if (confirmation.reject) {
+        return confirmation.reject();
+      }
+    });
+
+    const componentNavigateToSpy = spyOn(component, 'navigateTo');
+    component.transaction = testTransaction;
+
+    addContact(component, testContact);
+    const listSaveEvent = new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction1);
+    component.save(listSaveEvent);
+    confirmSpy.and.callFake((confirmation: Confirmation) => {
+      if (confirmation.accept) {
+        return confirmation.accept();
+      }
+    });
+    component.save(listSaveEvent);
+    component.form = new FormGroup([]);
+    component.save(listSaveEvent);
+    const testContact2 = new Contact();
+    testContact2.type = ContactTypes.CANDIDATE;
+    testContact2.id = 'testId';
+    if (component.transaction) {
+      component.transaction.contact_1 = testContact2;
+    }
+    component.save(listSaveEvent);
+    if (component.transaction) {
+      component.transaction.contact_1 = undefined;
+    }
+    if (testTransaction.transactionType) {
+      TransactionContactUtils.getEditTransactionContactConfirmationMessage(
+        [],
+        testContact,
+        component.form,
+        fecDatePipe,
+        testTransaction.transactionType?.templateMap
+      );
+    }
     expect(componentNavigateToSpy).toHaveBeenCalledTimes(3);
   });
 
@@ -366,7 +441,7 @@ describe('TransactionTypeBaseComponent', () => {
     const testTransaction3: SchATransaction = SchATransaction.fromJSON(initTransactionData);
     testTransaction3.id = '123';
     testTransaction3.report_id = '99';
-    testTransaction3.contact_id = '33';
+    testTransaction3.contact_1_id = '33';
     const expectedRoute = `/transactions/report/${testTransaction3.report_id}/list`;
     const routerNavigateByUrlSpy = spyOn(testRouter, 'navigateByUrl');
     component.navigateTo(new NavigationEvent(NavigationAction.SAVE, NavigationDestination.LIST, testTransaction3));
@@ -635,6 +710,54 @@ describe('TransactionTypeBaseComponent', () => {
     const committeeNameFormControlValue = component.form.get('contributor_organization_name')?.value;
 
     expect(committeeNameFormControlValue === testCommitteeName).toBeTrue();
+  });
+
+  it('#onContactLookupSelect CANDIDATE should set fields', () => {
+    const testEntityType = ContactTypes.CANDIDATE;
+
+    const testContact = new Contact();
+    testContact.id = '123';
+    testContact.type = ContactTypes.CANDIDATE;
+    testContact.candidate_id = 'testCandidateId';
+    testContact.last_name = 'testLastName';
+    testContact.first_name = 'testFirstName';
+    testContact.middle_name = 'testMiddleName';
+    testContact.prefix = 'testPrefix';
+    testContact.suffix = 'testSuffix';
+    testContact.candidate_office = CandidateOfficeTypes.HOUSE;
+    testContact.candidate_state = 'MD';
+    testContact.candidate_district = '01';
+    testContact.street_1 = 'testStreet1';
+    testContact.street_2 = 'testStreet2';
+    testContact.city = 'testCity';
+    testContact.state = 'testState';
+    testContact.zip = 'testZip';
+
+    const testContactSelectItem: SelectItem<Contact> = {
+      value: testContact,
+    };
+
+    component.form.addControl('entity_type', { value: testEntityType });
+    component.onSecondaryContactLookupSelect(testContactSelectItem);
+    const candidateIdFormControlValue = component.form.get('donor_candidate_fec_id')?.value;
+    const lastNameFormControlValue = component.form.get('donor_candidate_last_name')?.value;
+    const firstNameFormControlValue = component.form.get('donor_candidate_first_name')?.value;
+    const middleNameFormControlValue = component.form.get('donor_candidate_middle_name')?.value;
+    const prefixFormControlValue = component.form.get('donor_candidate_prefix')?.value;
+    const suffixFormControlValue = component.form.get('donor_candidate_suffix')?.value;
+    const candidateOfficeFormControlValue = component.form.get('donor_candidate_office')?.value;
+    const candidateStateFormControlValue = component.form.get('donor_candidate_state')?.value;
+    const candidateDistrictFormControlValue = component.form.get('donor_candidate_district')?.value;
+
+    expect(candidateIdFormControlValue === testContact.candidate_id).toBeTrue();
+    expect(lastNameFormControlValue === testContact.last_name).toBeTrue();
+    expect(firstNameFormControlValue === testContact.first_name).toBeTrue();
+    expect(middleNameFormControlValue === testContact.middle_name).toBeTrue();
+    expect(prefixFormControlValue === testContact.prefix).toBeTrue();
+    expect(suffixFormControlValue === testContact.suffix).toBeTrue();
+    expect(candidateOfficeFormControlValue === testContact.candidate_office).toBeTrue();
+    expect(candidateStateFormControlValue === testContact.candidate_state).toBeTrue();
+    expect(candidateDistrictFormControlValue === testContact.candidate_district).toBeTrue();
   });
 
   it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {

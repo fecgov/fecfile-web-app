@@ -114,8 +114,8 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override onContactLookupSelect(selectItem: SelectItem<Contact>): void {
     super.onContactLookupSelect(selectItem);
-    if (this.useParentContact && this.childTransaction && this.transaction?.contact) {
-      this.childTransaction.contact = this.transaction.contact;
+    if (this.useParentContact && this.childTransaction && this.transaction?.contact_1) {
+      this.childTransaction.contact_1 = this.transaction.contact_1;
     }
   }
 

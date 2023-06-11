@@ -117,6 +117,7 @@ export enum ScheduleATransactionTypes {
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   // Refunds
+  REFUND_TO_FEDERAL_CANDIDATE = 'REFUND_TO_FEDERAL_CANDIDATE',
   REFUND_TO_OTHER_POLITICAL_COMMITTEE = 'REFUND_TO_OTHER_POLITICAL_COMMITTEE',
   REFUND_TO_UNREGISTERED_COMMITTEE = 'REFUND_TO_UNREGISTERED_COMMITTEE',
   // Other
@@ -251,6 +252,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',
   ],
   // Refunds
+  [
+    ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
+    'Refund of Contribution to Federal Candidate',
+  ],
   [
     ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
     'Refund of Contribution to Other Political Committee',

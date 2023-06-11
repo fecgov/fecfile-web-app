@@ -137,6 +137,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         ];
       case ScheduleATransactionGroups.REFUNDS:
         return [
+          ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
           ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
           ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE,
         ];

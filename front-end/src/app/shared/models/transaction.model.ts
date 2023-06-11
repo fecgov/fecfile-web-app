@@ -45,8 +45,12 @@ export abstract class Transaction extends BaseModel {
   report_id: string | undefined; // Foreign key to the parent report db record
 
   @Type(() => Contact)
-  contact: Contact | undefined;
-  contact_id: string | undefined; // Foreign key to the Contact db record
+  contact_1: Contact | undefined;
+  contact_1_id: string | undefined; // Foreign key to the Contact db record
+
+  @Type(() => Contact)
+  contact_2: Contact | undefined;
+  contact_2_id: string | undefined; // Foreign key to the Contact db record
 
   @Type(() => MemoText)
   memo_text: MemoText | undefined;
@@ -69,7 +73,8 @@ export abstract class Transaction extends BaseModel {
    * @param transactionType
    */
   setMetaProperties(transactionType: TransactionType): void {
-    this.contact_id = this.contact?.id;
+    this.contact_1_id = this.contact_1?.id;
+    this.contact_2_id = this.contact_2?.id;
     this.transactionType = transactionType;
     this.schema_name = transactionType.getSchemaName();
     const fieldsToValidate: string[] = ValidateUtils.getSchemaProperties(transactionType.schema);
@@ -143,7 +148,7 @@ export function isNewTransaction(transaction?: Transaction): boolean {
   return !transaction?.id;
 }
 export function hasNoContact(transaction?: Transaction): boolean {
-  return !transaction?.contact;
+  return !transaction?.contact_1;
 }
 
 export type ScheduleTransaction =
