@@ -18,7 +18,6 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { Contact } from 'app/shared/models/contact.model';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   formProperties: string[] = [
