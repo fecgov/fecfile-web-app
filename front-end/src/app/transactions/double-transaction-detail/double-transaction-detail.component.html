@@ -2,7 +2,7 @@
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
 <p class="group-description">{{ groupDescription }}</p>
-<p-accordion [activeIndex]="0">
+<p-accordion [activeIndex]="accordionActiveIndex">
   <p-accordionTab>
     <ng-template pTemplate="header">
       <strong>{{ parentAccordionTitle }}:</strong>
