@@ -13,7 +13,6 @@ export abstract class DoubleTransactionGroup {
 
   abstract getParentTransactionTitle(): string;
   abstract getParentFooter(): string;
-  abstract getChildTransactionTitle(): string;
   abstract getChildTransactionSubTitle(): string;
   abstract getGroupDescription(): string;
 

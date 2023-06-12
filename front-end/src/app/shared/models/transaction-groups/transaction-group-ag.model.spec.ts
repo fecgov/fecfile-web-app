@@ -56,11 +56,6 @@ describe('TransactionGroupAG', () => {
     expect(retval).toBeTrue();
   });
 
-  it('#getChildTransactionTitle happy path', () => {
-    const retval = component.getChildTransactionTitle();
-    expect(retval === 'Earmark memo').toBeTrue();
-  });
-
   it('#test group methods to ensure they return the right values', () => {
     expect(component.childHasEmployerInput()).toBeTrue();
     expect(component.getParentTransactionTitle()).toBe('Receipt');

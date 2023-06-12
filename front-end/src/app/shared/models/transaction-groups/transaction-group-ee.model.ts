@@ -77,10 +77,6 @@ export class TransactionGroupEE extends DoubleTransactionGroup {
     return 'The information in this receipt will automatically populate a related transaction. Review the associated disbursement or click "Save both transactions" to record these transactions.';
   }
 
-  getChildTransactionTitle(): string {
-    return 'In-kind Out';
-  }
-
   getChildTransactionSubTitle(): string {
     return 'To update any errors found, return to the previous step to update the in-kind receipt.';
   }

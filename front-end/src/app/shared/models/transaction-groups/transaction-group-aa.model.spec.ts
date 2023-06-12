@@ -53,11 +53,6 @@ describe('TransactionGroupAA', () => {
     expect(retval).toBeTrue();
   });
 
-  it('#getChildTransactionTitle should return title', () => {
-    const retval = component.getChildTransactionTitle();
-    expect(retval === 'In-kind Out').toBeTrue();
-  });
-
   it('#test group methods to ensure they return the right values', () => {
     expect(component.childHasEmployerInput()).toBeFalse();
     expect(component.getParentTransactionTitle()).toBe('');

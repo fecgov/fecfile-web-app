@@ -74,10 +74,6 @@ export class TransactionGroupFG extends DoubleTransactionGroup {
     return 'This type of receipt requires a memo transaction';
   }
 
-  getChildTransactionTitle(): string {
-    return 'PAC Earmark memo';
-  }
-
   getChildTransactionSubTitle(): string {
     return '';
   }
