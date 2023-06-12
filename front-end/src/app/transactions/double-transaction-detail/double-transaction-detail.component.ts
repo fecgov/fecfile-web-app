@@ -22,7 +22,6 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
   childHasEmployerInput = true;
   parentTransactionTitle = '';
   parentFooter = '';
-  childTransactionTitle = '';
   childTransactionSubTitle = '';
   groupDescription = '';
   parentAccordionTitle = '';
@@ -82,7 +81,6 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
         this.childHasEmployerInput = doubleTransactionGroup.childHasEmployerInput();
         this.parentTransactionTitle = doubleTransactionGroup.getParentTransactionTitle();
         this.parentFooter = doubleTransactionGroup.getParentFooter();
-        this.childTransactionTitle = doubleTransactionGroup.getChildTransactionTitle();
         this.childTransactionSubTitle = doubleTransactionGroup.getChildTransactionSubTitle();
 
         this.childContactLabel = doubleTransactionGroup.getChildContactLabel();
@@ -95,7 +93,7 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
 
         // Determine which accordion pane to open initially based on transaction id in page URL
         const transactionId = this.route.snapshot.params['transactionId'];
-        if (this.childTransaction && this.childTransaction?.id === transactionId) {
+        if (this.childTransaction && transactionId && this.childTransaction?.id === transactionId) {
           this.accordionActiveIndex = 1;
         }
       } else {

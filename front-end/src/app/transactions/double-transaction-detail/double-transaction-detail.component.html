@@ -86,12 +86,10 @@
   <p-accordionTab>
     <ng-template pTemplate="header">
       <strong>{{ childAccordionTitle }}:</strong>
-      <p style="font-weight: normal">
-        {{ childAccordionSubTitle }}
-      </p></ng-template
+      <p style="font-weight: normal">{{ childAccordionSubTitle }}</p></ng-template
     >
     <div class="p-fluid">
-      <h2>{{ childTransactionTitle }}</h2>
+      <h2>{{ childTransaction?.transactionType?.title }}</h2>
       <p *ngIf="childTransactionSubTitle">
         <em>{{ childTransactionSubTitle }}</em>
       </p>

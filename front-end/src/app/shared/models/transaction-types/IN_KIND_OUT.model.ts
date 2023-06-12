@@ -1,14 +1,15 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/IN_KIND_OUT';
 import { TransactionGroupAA } from '../transaction-groups/transaction-group-aa.model';
 import { AggregationGroups } from '../transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
+import { LabelUtils } from 'app/shared/utils/label.utils';
 
 export class IN_KIND_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupAA();
   override isDependentChild = true;
-  title = '';
+  title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);
   schema = schema;
   override useParentContact = true;
   override inherittedFields = [

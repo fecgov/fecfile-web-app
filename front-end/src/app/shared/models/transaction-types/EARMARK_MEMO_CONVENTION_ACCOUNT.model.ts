@@ -1,14 +1,15 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_EARMARK_MEMOS';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
 import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
+import { LabelUtils } from '../../utils/label.utils';
 
 export class EARMARK_MEMO_CONVENTION_ACCOUNT extends SchATransactionType {
   transactionGroup = new TransactionGroupAG();
   override isDependentChild = true;
-  title = '';
+  title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT);
   schema = schema;
   override inherittedFields = ['amount' as TemplateMapKeyType];
 

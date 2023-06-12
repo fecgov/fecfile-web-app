@@ -78,10 +78,6 @@ export class TransactionGroupAG extends DoubleTransactionGroup {
     return 'This type of receipt requires a memo transaction';
   }
 
-  getChildTransactionTitle(): string {
-    return 'Earmark memo';
-  }
-
   getChildTransactionSubTitle(): string {
     return '';
   }
