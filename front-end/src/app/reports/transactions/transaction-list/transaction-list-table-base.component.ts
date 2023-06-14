@@ -94,7 +94,9 @@ export abstract class TransactionListTableBaseComponent extends TableListBaseCom
   }
 
   override editItem(item: Transaction): void {
-    this.router.navigate([`${item.id}`], { relativeTo: this.activatedRoute });
+    this.router.navigate([`${item.id}`], { relativeTo: this.activatedRoute }).catch((error) => {
+      throw new Error(`Fecfile: ${error}`);
+    });
   }
 
   public forceItemize(transaction: Transaction): void {

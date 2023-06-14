@@ -3,10 +3,9 @@ import { takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectActiveReport } from 'app/store/active-report.selectors';
-import { F3xSummary } from 'app/shared/models/f3x-summary.model';
+import { F3xSummary, F3xFormTypeLabels } from 'app/shared/models/f3x-summary.model';
 import { TableAction } from 'app/shared/components/table-list-base/table-list-base.component';
 import { LabelList } from 'app/shared/utils/label.utils';
-import { F3xFormTypeLabels } from 'app/shared/models/f3x-summary.model';
 import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
@@ -57,7 +56,11 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   }
 
   createTransactions(transactionCategory: string, report?: F3xSummary): void {
-    this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
+    this.router
+      .navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`)
+      .catch((error) => {
+        throw new Error(`Fecfile: ${error}`);
+      });
   }
 
   public onTableActionClick(action: TableAction, report?: F3xSummary) {
