@@ -25,6 +25,7 @@ export abstract class TransactionType {
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefundAggregate = false; // Boolean flag to control whether or not the amount is subtracted from the aggregate
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
+  showDepositedToggle = false; // Boolean flag to show the Deposited/Undeposited toggle instead of the Memo Code checkbox
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
@@ -38,11 +39,15 @@ export abstract class TransactionType {
   shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
   navigationControls?: TransactionNavigationControls;
 
+  // Dynamic Transaction Type Identifier settings
+  dynamicTTIFieldsToWatch: string[] = []; // Contains a list of fields where, when they update, the transaction type identifier should be updated
+  updateTransactionTypeIdentifier?(): string; // The method to call to handle updating the transaction type identifier
+
   // Pupose description settings
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
-  purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
   purposeDescriptionLabelSuffix?: string; // Additional text that will appear after the purpose_description input label. If this is not set, '(SYSTEM-GENERATED)', '(REQUIRED)', or '(OPTIONAL)' will be diplayed
+  purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];

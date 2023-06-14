@@ -156,6 +156,8 @@ export enum ScheduleBTransactionTypes {
   IN_KIND_TRANSFER_OUT = 'IN_KIND_TRANSFER_OUT',
   IN_KIND_TRANSFER_FEA_OUT = 'IN_KIND_TRANSFER_FEA_OUT',
   PAC_IN_KIND_OUT = 'PAC_IN_KIND_OUT',
+  CONDUIT_EARMARK_OUT_DEPOSITED = 'CONDUIT_EARMARK_OUT_DEPOSITED',
+  CONDUIT_EARMARK_OUT_UNDEPOSITED = 'CONDUIT_EARMARK_OUT_UNDEPOSITED',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
@@ -338,4 +340,6 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT, 'In-kind Transfer Out'],
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT, 'In-kind Transfer Federal Election Activity Out'],
   [ScheduleBTransactionTypes.PAC_IN_KIND_OUT, 'PAC In-kind Out'],
+  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED, 'Conduit Earmark Out Deposited'],
+  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out Undeposited'],
 ];
