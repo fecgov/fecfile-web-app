@@ -5,7 +5,6 @@ import { LayoutComponent } from './layout/layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginGuard } from './shared/guards/login-page.guard';
 import { SidebarStateResolver } from './shared/resolvers/sidebar-state.resolver';
-import { ReportSidebarState, SidebarState } from './layout/sidebar/sidebar.component';
 
 const routes: Routes = [
   {
@@ -38,12 +37,6 @@ const routes: Routes = [
         loadChildren: () => import('./notifications/notifications.module').then((m) => m.NotificationsModule),
       },
       { path: 'profile', loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule) },
-      {
-        path: 'transactions',
-        resolve: { sidebar: SidebarStateResolver },
-        data: { sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS) },
-        loadChildren: () => import('./transactions/transactions.module').then((m) => m.TransactionsModule),
-      },
     ],
   },
   { path: '**', redirectTo: '' },

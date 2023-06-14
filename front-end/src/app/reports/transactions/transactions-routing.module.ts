@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ReportResolver } from 'app/shared/resolvers/report.resolver';
 import { TransactionResolver } from 'app/shared/resolvers/transaction.resolver';
-import { ReportIsEditableGuard } from '../shared/guards/report-is-editable.guard';
+import { ReportIsEditableGuard } from 'app/shared/guards/report-is-editable.guard';
 import { TransactionContainerComponent } from './transaction-container/transaction-container.component';
 import { TransactionTypePickerComponent } from './transaction-type-picker/transaction-type-picker.component';
 import { TransactionListComponent } from './transaction-list/transaction-list.component';

@@ -74,7 +74,7 @@ export class CashOnHandComponent extends DestroyerComponent implements OnInit {
       );
 
       if (this.report) {
-        this.router.navigateByUrl(`/transactions/report/${this.report.id}/list`);
+        this.router.navigateByUrl(`/reports/transactions/report/${this.report.id}/list`);
       }
 
       this.messageService.add({

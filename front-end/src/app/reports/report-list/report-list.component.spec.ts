@@ -50,7 +50,7 @@ describe('ReportListComponent', () => {
     component.editItem({ id: '999' } as F3xSummary); // 999 is the cash on hand report
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/create/cash-on-hand/999');
     component.editItem({ id: '888' } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/888/list');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
     component.editItem({
       id: '777',
       upload_submission: UploadSubmission.fromJSON({ fec_status: 'ACCEPTED' }),
@@ -61,7 +61,7 @@ describe('ReportListComponent', () => {
   it('#onActionClick should route properly', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.onRowActionClick(new TableAction('', component.editItem.bind(component)), { id: '888' } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/888/list');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/888/list');
     component.onRowActionClick(new TableAction('', component.goToTest.bind(component)), { id: '888' } as F3xSummary);
     expect(navigateSpy).toHaveBeenCalledWith('/reports/f3x/test-dot-fec/888');
   });
