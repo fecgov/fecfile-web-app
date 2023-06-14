@@ -56,11 +56,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
   }
 
   createTransactions(transactionCategory: string, report?: F3xSummary): void {
-    this.router
-      .navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`)
-      .catch((error) => {
-        throw new Error(`Fecfile: ${error}`);
-      });
+    this.router.navigateByUrl(`/reports/transactions/report/${report?.id}/select/${transactionCategory}`);
   }
 
   public onTableActionClick(action: TableAction, report?: F3xSummary) {
