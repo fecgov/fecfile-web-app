@@ -60,7 +60,10 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
                 label: 'Add a disbursement',
                 routerLink: [`/transactions/report/${activeReport?.id}/select/disbursement`],
               },
-              { label: 'Add loans and debts', styleClass: 'menu-item-disabled' },
+              {
+                label: 'Add loans and debts',
+                routerLink: [`/transactions/report/${activeReport?.id}/select/loans-and-debts`],
+              },
               { label: 'Add other transactions', styleClass: 'menu-item-disabled' },
             ],
           },

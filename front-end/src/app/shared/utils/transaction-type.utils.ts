@@ -6,6 +6,7 @@ import { SchBTransaction } from '../models/schb-transaction.model';
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
+import { IN_KIND_RECEIPT } from '../models/transaction-types/IN_KIND_RECEIPT.model';
 import { INDIVIDUAL_JF_TRANSFER_MEMO } from '../models/transaction-types/INDIVIDUAL_JF_TRANSFER_MEMO.model';
 import { INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
@@ -79,11 +80,16 @@ import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/t
 import { PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
 import { PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
+import { PARTY_IN_KIND_RECEIPT } from '../models/transaction-types/PARTY_IN_KIND_RECEIPT.model';
+import { IN_KIND_TRANSFER } from '../models/transaction-types/IN_KIND_TRANSFER.model';
+import { IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY } from '../models/transaction-types/IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY.model';
+import { PAC_IN_KIND_RECEIPT } from '../models/transaction-types/PAC_IN_KIND_RECEIPT.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
 import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
 import { INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
+import { IN_KIND_OUT } from '../models/transaction-types/IN_KIND_OUT.model';
 import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
 import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
 import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
@@ -137,12 +143,19 @@ import { RECOUNT_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/RECOUN
 import { NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT.model';
 import { NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT.model';
 import { NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT.model';
+import { REFUND_TO_FEDERAL_CANDIDATE } from '../models/transaction-types/REFUND_TO_FEDERAL_CANDIDATE.model';
+import { PARTY_IN_KIND_OUT } from '../models/transaction-types/PARTY_IN_KIND_OUT.model';
+import { IN_KIND_TRANSFER_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_OUT.model';
+import { IN_KIND_TRANSFER_FEA_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_FEA_OUT.model';
+import { PAC_IN_KIND_OUT } from '../models/transaction-types/PAC_IN_KIND_OUT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
   // Schedule A /////////////////////////////////////////////////////
   EARMARK_RECEIPT,
   EARMARK_MEMO,
+  IN_KIND_RECEIPT,
+  IN_KIND_OUT,
   INDIVIDUAL_JF_TRANSFER_MEMO,
   INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
   INDIVIDUAL_RECEIPT,
@@ -169,6 +182,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTY_JF_TRANSFER_MEMO,
   PARTY_RECEIPT,
   PARTY_RECOUNT_RECEIPT,
+  REFUND_TO_FEDERAL_CANDIDATE,
   REFUND_TO_UNREGISTERED_COMMITTEE,
   RETURN_RECEIPT,
   TRANSFER,
@@ -219,6 +233,10 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
   PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
   PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO,
+  PARTY_IN_KIND_RECEIPT,
+  IN_KIND_TRANSFER,
+  IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
+  PAC_IN_KIND_RECEIPT,
   // Schedule B /////////////////////////////////////////////////////
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
   INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
@@ -272,6 +290,10 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT,
   NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT,
   NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT,
+  PARTY_IN_KIND_OUT,
+  IN_KIND_TRANSFER_OUT,
+  IN_KIND_TRANSFER_FEA_OUT,
+  PAC_IN_KIND_OUT,
 }
 
 export class TransactionTypeUtils {

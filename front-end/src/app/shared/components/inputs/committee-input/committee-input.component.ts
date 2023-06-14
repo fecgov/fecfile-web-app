@@ -5,10 +5,12 @@ import { BaseInputComponent } from '../base-input.component';
 @Component({
   selector: 'app-committee-input',
   templateUrl: './committee-input.component.html',
+  styleUrls: ['./committee-input.component.scss'],
 })
 export class CommitteeInputComponent extends BaseInputComponent implements OnInit {
   @Input() entityRole = 'CONTACT';
   @Input() includeFecId = false;
+  @Input() readonly = false;
 
   ngOnInit(): void {
     this.form

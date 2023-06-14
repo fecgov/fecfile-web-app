@@ -2,7 +2,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchATransaction extends Transaction {
   entity_type: string | undefined;
@@ -47,8 +47,6 @@ export class SchATransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
-  override apiEndpoint = '/transactions/schedule-a';
-
   override getFieldsNotToValidate(): string[] {
     return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
   }
@@ -61,11 +59,11 @@ export class SchATransaction extends Transaction {
       transaction.setMetaProperties(transactionType);
     }
     if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = SchATransaction.fromJSON(transaction.parent_transaction, depth - 1);
+      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
     }
     if (depth > 0 && transaction.children) {
       transaction.children = transaction.children.map(function (child) {
-        return SchATransaction.fromJSON(child, depth - 1);
+        return getFromJSON(child, depth - 1);
       });
     }
     return transaction;
@@ -93,7 +91,7 @@ export enum ScheduleATransactionTypes {
   TRIBAL_RECEIPT = 'TRIBAL_RECEIPT',
   PARTNERSHIP_RECEIPT = 'PARTNERSHIP_RECEIPT',
   REATTRIBUTION = 'REATT_FROM',
-  IN_KIND_RECEIPT = 'IK_REC',
+  IN_KIND_RECEIPT = 'IN_KIND_RECEIPT',
   RETURNED_BOUNCED_RECEIPT_INDIVIDUAL = 'RETURN_RECEIPT',
   EARMARK_RECEIPT = 'EARMARK_RECEIPT',
   CONDUIT_EARMARK_DEPOSITED = 'CONDUIT_EARMARK_DEPOSITED',
@@ -102,10 +100,10 @@ export enum ScheduleATransactionTypes {
   UNREGISTERED_RECEIPT_FROM_PERSON_RETURN = 'UNREGISTERED_RECEIPT_FROM_PERSON_RETURN',
   // Contributions from Registered Filers
   PARTY_RECEIPT = 'PARTY_RECEIPT',
-  PARTY_IN_KIND = 'PARTY_IK_REC',
+  PARTY_IN_KIND_RECEIPT = 'PARTY_IN_KIND_RECEIPT',
   PARTY_RETURN = 'PARTY_RETURN',
   PAC_RECEIPT = 'PAC_RECEIPT',
-  PAC_IN_KIND = 'PAC_IK_REC',
+  PAC_IN_KIND_RECEIPT = 'PAC_IN_KIND_RECEIPT',
   PAC_EARMARK_RECEIPT = 'PAC_EARMARK_RECEIPT',
   PAC_CONDUIT_EARMARK_DEPOSITED = 'PAC_CONDUIT_EARMARK_DEPOSITED',
   PAC_CONDUIT_EARMARK_UNDEPOSITED = 'PAC_CONDUIT_EARMARK_UNDEPOSITED',
@@ -113,12 +111,13 @@ export enum ScheduleATransactionTypes {
   // Transfers
   TRANSFER = 'TRANSFER',
   JOINT_FUNDRAISING_TRANSFER = 'JOINT_FUNDRAISING_TRANSFER',
-  IN_KIND_TRANSFER = 'IK_TRAN',
-  IN_KIND_TRANSFER_FEA = 'IK_TRAN_FEA',
+  IN_KIND_TRANSFER = 'IN_KIND_TRANSFER',
+  IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY = 'IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY',
   JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT',
   JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT',
   JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT = 'JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT',
   // Refunds
+  REFUND_TO_FEDERAL_CANDIDATE = 'REFUND_TO_FEDERAL_CANDIDATE',
   REFUND_TO_OTHER_POLITICAL_COMMITTEE = 'REFUND_TO_OTHER_POLITICAL_COMMITTEE',
   REFUND_TO_UNREGISTERED_COMMITTEE = 'REFUND_TO_UNREGISTERED_COMMITTEE',
   // Other
@@ -190,7 +189,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.TRIBAL_RECEIPT, 'Tribal Receipt'],
   [ScheduleATransactionTypes.PARTNERSHIP_RECEIPT, 'Partnership Receipt'],
   [ScheduleATransactionTypes.REATTRIBUTION, 'Reattribution'],
-  [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-Kind Receipt'],
+  [ScheduleATransactionTypes.IN_KIND_RECEIPT, 'In-kind Receipt'],
   [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.EARMARK_RECEIPT, 'Earmark Receipt'],
   [ScheduleATransactionTypes.EARMARK_MEMO, 'Earmark Memo'],
@@ -203,10 +202,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   ],
   // Contributions from Registered Filers
   [ScheduleATransactionTypes.PARTY_RECEIPT, 'Party Receipt'],
-  [ScheduleATransactionTypes.PARTY_IN_KIND, 'Party In-Kind'],
+  [ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT, 'Party In-kind Receipt'],
   [ScheduleATransactionTypes.PARTY_RETURN, 'Party Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.PAC_RECEIPT, 'PAC Receipt'],
-  [ScheduleATransactionTypes.PAC_IN_KIND, 'PAC In-Kind'],
+  [ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT, 'PAC In-kind Receipt'],
   [ScheduleATransactionTypes.PAC_EARMARK_RECEIPT, 'PAC Earmark Receipt'],
   [ScheduleATransactionTypes.PAC_EARMARK_MEMO, 'PAC Earmark Memo'],
   [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED, 'PAC Conduit Earmark (Deposited)'],
@@ -219,8 +218,11 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO, 'PAC Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO, 'Party Joint Fundraising Transfer Memo'],
   [ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO, 'Tribal Joint Fundraising Transfer Memo'],
-  [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-Kind Transfer'],
-  [ScheduleATransactionTypes.IN_KIND_TRANSFER_FEA, 'In-Kind Transfer - Federal Election Activity'],
+  [ScheduleATransactionTypes.IN_KIND_TRANSFER, 'In-kind Transfer'],
+  [
+    ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
+    'In-kind Transfer - Federal Election Activity',
+  ],
   [
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT,
     'Joint Fundraising Transfer - National Party Recount/Legal Proceedings Account',
@@ -250,6 +252,10 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',
   ],
   // Refunds
+  [
+    ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
+    'Refund of Contribution to Federal Candidate',
+  ],
   [
     ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
     'Refund of Contribution to Other Political Committee',

@@ -35,7 +35,7 @@ export class TransactionListComponent extends DestroyerComponent implements OnIn
       'Add loans and debts',
       this.createTransactions.bind(this, 'loans-and-debts'),
       (report: F3xSummary) => report.report_status === 'In-Progress',
-      () => false
+      () => true
     ),
     new TableAction(
       'Add other transactions',

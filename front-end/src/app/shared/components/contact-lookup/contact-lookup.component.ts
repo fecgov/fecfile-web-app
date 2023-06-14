@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Contact, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
-import { SelectItem, SelectItemGroup } from 'primeng/api';
+import { SelectItemGroup } from 'primeng/api';
 
 @Component({
   selector: 'app-contact-lookup',
@@ -26,11 +26,9 @@ export class ContactLookupComponent implements OnChanges {
   @Output() contactLookupSelect = new EventEmitter<Contact | FecApiLookupData>();
   @Output() createNewContactSelect = new EventEmitter<void>();
 
-  selectedContact: FormControl<SelectItem> | null = null;
-
   contactLookupForm: FormGroup = this.formBuilder.group({
     selectedContactType: this.contactTypeFormControl,
-    selectedContact: this.selectedContact,
+    selectedContact: new FormControl(''),
   });
 
   contactLookupList: SelectItemGroup[] = [];
@@ -41,7 +39,7 @@ export class ContactLookupComponent implements OnChanges {
     private changeDetectorRef: ChangeDetectorRef,
     private formBuilder: FormBuilder,
     private contactService: ContactService
-  ) { }
+  ) {}
 
   ngOnChanges(): void {
     this.changeDetectorRef.detectChanges();
@@ -57,16 +55,14 @@ export class ContactLookupComponent implements OnChanges {
           this.contactService
             .candidateLookup(searchTerm, this.maxFecCommitteeResults, this.maxFecfileCommitteeResults)
             .subscribe((response) => {
-              this.contactLookupList = response && response.toSelectItemGroups(
-                this.includeFecfileResults);
+              this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
             });
           break;
         case ContactTypes.COMMITTEE:
           this.contactService
             .committeeLookup(searchTerm, this.maxFecCommitteeResults, this.maxFecfileCommitteeResults)
             .subscribe((response) => {
-              this.contactLookupList = response && response.toSelectItemGroups(
-                this.includeFecfileResults);
+              this.contactLookupList = response && response.toSelectItemGroups(this.includeFecfileResults);
             });
           break;
         case ContactTypes.INDIVIDUAL:

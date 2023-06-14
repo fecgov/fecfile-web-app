@@ -231,70 +231,13 @@
         <h3>Office</h3>
       </div>
     </div>
-    <div class="grid">
-      <div class="col-6">
-        <div class="field">
-          <label for="candidate_office">CANDIDATE OFFICE</label>
-          <p-dropdown
-            inputId="candidate_office"
-            formControlName="candidate_office"
-            [options]="candidateOfficeTypeOptions"
-            [autoDisplayFirst]="false"
-            appendTo="body"
-          ></p-dropdown>
-          <app-error-messages
-            [form]="form"
-            fieldName="candidate_office"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
-      </div>
-      <div class="col-3">
-        <div class="field">
-          <label
-            for="candidate_state"
-            [ngClass]="{
-              disabled: this.form.get('candidate_state')?.disabled
-            }"
-            >CANDIDATE STATE</label
-          >
-          <p-dropdown
-            inputId="candidate_state"
-            formControlName="candidate_state"
-            [options]="candidateStateOptions"
-            [autoDisplayFirst]="false"
-            appendTo="body"
-          ></p-dropdown>
-          <app-error-messages
-            [form]="form"
-            fieldName="candidate_state"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
-      </div>
-      <div class="col-3">
-        <div class="field">
-          <label
-            for="candidate_district"
-            [ngClass]="{
-              disabled: this.form.get('candidate_district')?.disabled
-            }"
-            >CANDIDATE DISTRICT</label
-          >
-          <p-dropdown
-            inputId="candidate_district"
-            formControlName="candidate_district"
-            [options]="candidateDistrictOptions"
-            appendTo="body"
-            [autoDisplayFirst]="false"
-          ></p-dropdown>
-          <app-error-messages
-            [form]="form"
-            fieldName="candidate_district"
-            [formSubmitted]="formSubmitted"
-          ></app-error-messages>
-        </div>
-      </div>
-    </div>
+    <app-candidate-office-input
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      candidateOfficeFormControlName="candidate_office"
+      candidateStateFormControlName="candidate_state"
+      candidateDistrictFormControlName="candidate_district"
+    >
+    </app-candidate-office-input>
   </ng-container>
 </form>

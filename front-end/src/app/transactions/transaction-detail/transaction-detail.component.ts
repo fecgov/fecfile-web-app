@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnChanges } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
 import { ContactTypes } from 'app/shared/models/contact.model';
 import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
@@ -14,9 +14,9 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
   hasEmployerInput = false;
   hasCommitteeFecIdInput = false;
   hasElectionInformationInput = false;
+  hasCandidateInformationInput = false;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     if (this.transaction?.transactionType?.templateMap) {
       const transactionType = this.transaction.transactionType;
       const transactionGroup = transactionType.transactionGroup as TransactionGroup;
@@ -25,6 +25,7 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
       this.formProperties = transactionGroup.getFormProperties(transactionType.templateMap, transactionType.scheduleId);
       this.hasCommitteeFecIdInput = transactionGroup.hasCommitteeFecIdInput();
       this.hasElectionInformationInput = transactionGroup.hasElectionInformationInput();
+      this.hasCandidateInformationInput = transactionGroup.hasCandidateInformationInput();
 
       super.ngOnInit();
 
