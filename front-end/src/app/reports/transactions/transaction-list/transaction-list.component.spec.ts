@@ -9,7 +9,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { MemoCodePipe, TransactionListComponent } from './transaction-list.component';
 import { ToolbarModule } from 'primeng/toolbar';
 
@@ -79,22 +79,22 @@ describe('TransactionListComponent', () => {
   it('should navigate to create receipt', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.onTableActionClick(component.tableActions[0], { id: '999' } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/receipt`);
+    expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/receipt`);
   });
   it('should navigate to create disbursement', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.onTableActionClick(component.tableActions[1], { id: '999' } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/disbursement`);
+    expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/disbursement`);
   });
   it('should navigate to create loans & debts', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.onTableActionClick(component.tableActions[2], { id: '999' } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/loans-and-debts`);
+    expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/loans-and-debts`);
   });
   it('should navigate to create other transactions', () => {
     const navigateSpy = spyOn(router, 'navigateByUrl');
     component.onTableActionClick(component.tableActions[3], { id: '999' } as F3xSummary);
-    expect(navigateSpy).toHaveBeenCalledWith(`/transactions/report/999/select/other-transactions`);
+    expect(navigateSpy).toHaveBeenCalledWith(`/reports/transactions/report/999/select/other-transactions`);
   });
   it('should show the correct table actions', () => {
     expect(component.tableActions[0].isAvailable({ report_status: 'In-Progress' })).toEqual(true);

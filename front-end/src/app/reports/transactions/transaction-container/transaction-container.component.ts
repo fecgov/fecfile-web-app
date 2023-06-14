@@ -20,7 +20,7 @@ export class TransactionContainerComponent extends DestroyerComponent {
     activatedRoute.data.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       this.transaction = data['transaction'];
       if (this.transaction) {
-        const title: string = this.transaction.transactionType?.title || '';
+        const title: string = this.transaction.transactionType?.title ?? '';
         this.titleService.setTitle(title);
       }
     });

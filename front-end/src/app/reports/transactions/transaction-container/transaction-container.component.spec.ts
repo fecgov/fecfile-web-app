@@ -18,7 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
 import { of } from 'rxjs';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { TransactionContainerComponent } from './transaction-container.component';
 import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
 

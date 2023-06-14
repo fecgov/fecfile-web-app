@@ -50,19 +50,19 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
               },
               {
                 label: 'Manage your transactions',
-                routerLink: [`/transactions/report/${activeReport?.id}/list`],
+                routerLink: [`/reports/transactions/report/${activeReport?.id}/list`],
               },
               {
                 label: 'Add a receipt',
-                routerLink: [`/transactions/report/${activeReport?.id}/select/receipt`],
+                routerLink: [`/reports/transactions/report/${activeReport?.id}/select/receipt`],
               },
               {
                 label: 'Add a disbursement',
-                routerLink: [`/transactions/report/${activeReport?.id}/select/disbursement`],
+                routerLink: [`/reports/transactions/report/${activeReport?.id}/select/disbursement`],
               },
               {
                 label: 'Add loans and debts',
-                routerLink: [`/transactions/report/${activeReport?.id}/select/loans-and-debts`],
+                routerLink: [`/reports/transactions/report/${activeReport?.id}/select/loans-and-debts`],
               },
               { label: 'Add other transactions', styleClass: 'menu-item-disabled' },
             ],
@@ -71,7 +71,7 @@ export class MenuReportComponent extends DestroyerComponent implements OnInit {
             label: 'REVIEW TRANSACTIONS',
             expanded: sidebarState?.section == ReportSidebarState.TRANSACTIONS,
             visible: !isEditable,
-            routerLink: [`/transactions/report/${activeReport?.id}/list`],
+            routerLink: [`/reports/transactions/report/${activeReport?.id}/list`],
           },
           {
             label: 'REVIEW A REPORT',

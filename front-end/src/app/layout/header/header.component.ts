@@ -24,40 +24,31 @@ export class HeaderComponent implements OnInit {
         routerLink: ['/reports'],
       },
       {
+        label: 'Transactions',
+        routerLink: ['/transactions'],
+        disabled: true,
+      },
+      {
         label: 'Contacts',
         routerLink: ['/contacts'],
       },
       {
         label: 'Tools',
-        items: [
-          { label: 'All Transactions' },
-          { label: 'Import FECFile' },
-          { label: 'Import Transactions' },
-          { label: 'Export Transactions' },
-          { label: 'Import Contacts' },
-          { label: 'Export Contacts' },
-          { label: 'First Time COH' },
-        ],
+        escape: false,
+        items: [{ label: 'Import' }, { label: 'Export' }, { label: 'Update cash on hand' }, { label: 'FECFile Help' }],
       },
       {
-        label: 'Help',
-        items: [
-          { label: 'Help - Link to EFO' },
-          { label: 'Feedback' },
-          { label: 'User Guide' },
-          { label: 'Glossary' },
-          { label: 'NextGen System Help' },
-        ],
+        label: '<img class="header-navbar-icon" src="assets/img/notification_bell_icon.svg" alt="Notifications" />',
+        escape: false,
       },
       {
-        label: 'Notifications',
-      },
-      {
-        label: 'Profile',
-        icon: 'pi pi-fw pi-user',
+        label: '<img class="header-navbar-icon" src="assets/img/profile_icon.svg" alt="Profile" />',
+        escape: false,
         items: [
           { label: 'Account', routerLink: ['/profile/account'] },
           { label: 'Users', routerLink: ['/committee/users'] },
+          { label: '<span class="dead-link">Switch Committees</span>', escape: false },
+          { label: '<span class="dead-link">User Profile</span>', escape: false },
           { label: 'Logout', command: () => this.loginService.logOut() },
         ],
       },
