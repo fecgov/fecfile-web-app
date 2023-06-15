@@ -15,109 +15,58 @@
   <div class="grid">
     <div class="col-12">
       <div class="field">
-        <div class="grid">
-          <div class="col-12">
-            <p-checkbox
-              #memoCode
-              [binary]="true"
-              inputId="memo_code"
-              [formControlName]="templateMap['memo_code']"
-              label="MEMO ITEM"
-              ariaLabel="have memo item"
-              [trueValue]="true"
-              [falseValue]="false"
-              [readonly]="memoCodeReadOnly"
-              (click)="onMemoItemClick()"
-            ></p-checkbox>
-            <span
-              class="pi pi-info-circle"
-              style="font-size: 1.5rem; margin-left: 0.5rem"
-              pTooltip="{{ memoItemHelpText }}"
-            ></span>
-          </div>
-          <div class="col-12">
-            <app-error-messages
-              [form]="form"
-              [fieldName]="templateMap['memo_code']"
-              [formSubmitted]="formSubmitted"
-            ></app-error-messages>
-          </div>
+        <app-memo-code
+          [memoCodeMap]="memoCodeMap"
+          [memoCodeReadOnly]="memoCodeReadOnly"
+          [memoItemHelpText]="memoItemHelpText"
+        ></app-memo-code>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-6">
+        <div class="field">
+          <label for="amount">AMOUNT</label>
+          <p-inputNumber
+            #amountInput
+            inputId="amount"
+            [formControlName]="templateMap['amount']"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            [readonly]="contributionAmountReadOnly"
+            inputStyleClass="{{ contributionAmountInputStyleClass }}"
+            (onInput)="onInputAmount()"
+          ></p-inputNumber>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['amount']"
+            [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must be a number"
+            maxLengthErrorMessage="The amount can be 12 digits max"
+          ></app-error-messages>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="field" *ngIf="showAggregate">
+          <label for="aggregate">AGGREGATE</label>
+          <p-inputNumber
+            inputId="aggregate"
+            [formControlName]="templateMap['aggregate']"
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            [readonly]="true"
+            inputStyleClass="readonly"
+          ></p-inputNumber>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['aggregate']"
+            [formSubmitted]="formSubmitted"
+            patternErrorMessage="This field must be a number"
+            maxLengthErrorMessage="The aggregate can be 12 digits max"
+          ></app-error-messages>
         </div>
       </div>
     </div>
   </div>
-  <div class="grid">
-    <div class="col-6">
-      <div class="field">
-        <label for="amount">AMOUNT</label>
-        <p-inputNumber
-          #amountInput
-          inputId="amount"
-          [formControlName]="templateMap['amount']"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
-          [readonly]="contributionAmountReadOnly"
-          inputStyleClass="{{ contributionAmountInputStyleClass }}"
-          (onInput)="onInputAmount()"
-        ></p-inputNumber>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['amount']"
-          [formSubmitted]="formSubmitted"
-          patternErrorMessage="This field must be a number"
-          maxLengthErrorMessage="The amount can be 12 digits max"
-        ></app-error-messages>
-      </div>
-    </div>
-    <div class="col-6">
-      <div class="field" *ngIf="showAggregate">
-        <label for="aggregate">AGGREGATE</label>
-        <p-inputNumber
-          inputId="aggregate"
-          [formControlName]="templateMap['aggregate']"
-          mode="currency"
-          currency="USD"
-          locale="en-US"
-          [readonly]="true"
-          inputStyleClass="readonly"
-        ></p-inputNumber>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['aggregate']"
-          [formSubmitted]="formSubmitted"
-          patternErrorMessage="This field must be a number"
-          maxLengthErrorMessage="The aggregate can be 12 digits max"
-        ></app-error-messages>
-      </div>
-    </div>
-  </div>
-  <p-dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '496px' }" [modal]="true">
-    <ng-template pTemplate="header">
-      <span class="text-xl" id="out-of-date-dialog-header">Just checking...</span>
-    </ng-template>
-    <p id="out-of-date-dialog-text">
-      <b>
-        {{ this.form.get(this.templateMap.date)?.value | fecDate }}
-      </b>
-      falls outside the report coverages dates of
-      <b> {{ this.report?.coverage_from_date | fecDate }}-{{ this.report?.coverage_through_date | fecDate }}</b
-      >. Did you mean to date this transaction outside of the report coverage period? <br /><br />
-      If the data entered is correct, please check the <b>Memo Item</b> box to continue.
-    </p>
-    <div class="grid">
-      <div class="mx-auto">
-        <button
-          type="button"
-          pButton
-          id="out-of-date-dialog-button"
-          class="p-button"
-          label="Close"
-          styleClass="p-button-link"
-          (click)="closeOutOfDateDialog()"
-          [autofocus]="true"
-        ></button>
-      </div>
-    </div>
-  </p-dialog>
 </div>

@@ -94,8 +94,8 @@ export enum ScheduleATransactionTypes {
   IN_KIND_RECEIPT = 'IN_KIND_RECEIPT',
   RETURNED_BOUNCED_RECEIPT_INDIVIDUAL = 'RETURN_RECEIPT',
   EARMARK_RECEIPT = 'EARMARK_RECEIPT',
-  CONDUIT_EARMARK_DEPOSITED = 'CONDUIT_EARMARK_DEPOSITED',
-  CONDUIT_EARMARK_UNDEPOSITED = 'CONDUIT_EARMARK_UNDEPOSITED',
+  CONDUIT_EARMARK_RECEIPT_DEPOSITED = 'CONDUIT_EARMARK_RECEIPT_DEPOSITED',
+  CONDUIT_EARMARK_RECEIPT_UNDEPOSITED = 'CONDUIT_EARMARK_RECEIPT_UNDEPOSITED',
   UNREGISTERED_RECEIPT_FROM_PERSON = 'UNREGISTERED_RECEIPT_FROM_PERSON',
   UNREGISTERED_RECEIPT_FROM_PERSON_RETURN = 'UNREGISTERED_RECEIPT_FROM_PERSON_RETURN',
   // Contributions from Registered Filers
@@ -193,8 +193,8 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL, 'Returned/Bounced Receipt'],
   [ScheduleATransactionTypes.EARMARK_RECEIPT, 'Earmark Receipt'],
   [ScheduleATransactionTypes.EARMARK_MEMO, 'Earmark Memo'],
-  [ScheduleATransactionTypes.CONDUIT_EARMARK_DEPOSITED, 'Conduit Earmark (Deposited)'],
-  [ScheduleATransactionTypes.CONDUIT_EARMARK_UNDEPOSITED, 'Conduit Earmark (Undeposited)'],
+  [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED, 'Conduit Earmark (Deposited)'],
+  [ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_UNDEPOSITED, 'Conduit Earmark (Undeposited)'],
   [ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON, 'Unregistered Receipt from Person'],
   [
     ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
@@ -252,10 +252,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',
   ],
   // Refunds
-  [
-    ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
-    'Refund of Contribution to Federal Candidate',
-  ],
+  [ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE, 'Refund of Contribution to Federal Candidate'],
   [
     ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
     'Refund of Contribution to Other Political Committee',
