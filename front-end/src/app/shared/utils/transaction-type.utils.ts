@@ -148,6 +148,7 @@ import { PARTY_IN_KIND_OUT } from '../models/transaction-types/PARTY_IN_KIND_OUT
 import { IN_KIND_TRANSFER_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_OUT.model';
 import { IN_KIND_TRANSFER_FEA_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_FEA_OUT.model';
 import { PAC_IN_KIND_OUT } from '../models/transaction-types/PAC_IN_KIND_OUT.model';
+import { FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -279,6 +280,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
   OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
   FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
+  FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
   FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
   OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
   OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
