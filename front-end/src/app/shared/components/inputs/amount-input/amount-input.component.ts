@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } fro
 import { Store } from '@ngrx/store';
 import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-amount-input',
@@ -16,7 +17,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() memoCodeReadOnly = false;
   @Input() memoItemHelpText =
     'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
-  @Input() memoCodeMap?: { true: string; false: string } = undefined;
+  @Input() transaction: Transaction | undefined;
 
   @ViewChild('amountInput') amountInput!: InputNumber;
 

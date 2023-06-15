@@ -1,4 +1,4 @@
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_RECEIPT';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARKS';
 import { ContactTypes } from '../contact.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
@@ -19,9 +19,14 @@ export class CONDUIT_EARMARK_RECEIPT_DEPOSITED extends SchATransactionType {
   override dependentChildTransactionType = ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED;
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   override childTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
+  override showAggregate = false;
   override memoCodeMap = {
     true: 'Undeposited',
     false: 'Deposited',
+  };
+  override memoCodeTransactionTypes = {
+    true: ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_UNDEPOSITED,
+    false: ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED,
   };
 
   override generatePurposeDescription(transaction: SchATransaction): string {
@@ -49,6 +54,7 @@ export class CONDUIT_EARMARK_RECEIPT_DEPOSITED extends SchATransactionType {
       form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED,
       aggregation_group: AggregationGroups.NONE,
+      memo_code: false,
     });
   }
 }

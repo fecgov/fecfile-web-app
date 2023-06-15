@@ -98,6 +98,22 @@ export abstract class DoubleTransactionTypeBaseComponent
         });
     });
 
+    // Child contribution purpose description updates with configured parent fields update.
+    this.childTransaction?.transactionType?.parentTriggerFields?.forEach((triggerField) => {
+      this.form
+        .get(this.templateMap[triggerField])
+        ?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe((value) => {
+          /** Before updating the parent description, manually update the child
+           * fields because they will not be updated by the time this hook is called
+           **/
+          const key = this.templateMap[triggerField] as keyof ScheduleTransaction;
+          ((this.transaction as ScheduleTransaction)[key] as string) = value;
+          (this.transaction as ScheduleTransaction).entity_type = this.form.get('entity_type')?.value;
+          this.updateChildPurposeDescription();
+        });
+    });
+
     this.useParentContact = !!this.childTransaction?.transactionType?.useParentContact;
 
     // Inheritted fields must match parent values
@@ -130,6 +146,15 @@ export abstract class DoubleTransactionTypeBaseComponent
         [this.templateMap.purpose_description]: this.transaction.transactionType.generatePurposeDescriptionWrapper(
           this.transaction
         ),
+      });
+    }
+  }
+
+  private updateChildPurposeDescription() {
+    if (this.childTransaction?.transactionType?.generatePurposeDescription) {
+      this.childForm.patchValue({
+        [this.childTemplateMap.purpose_description]:
+          this.childTransaction.transactionType.generatePurposeDescriptionWrapper(this.childTransaction),
       });
     }
   }

@@ -55,7 +55,7 @@
         [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
         [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
         [showAggregate]="!!transaction?.transactionType?.showAggregate"
-        [memoCodeMap]="transaction?.transactionType?.memoCodeMap"
+        [transaction]="transaction"
       ></app-amount-input>
       <p-divider></p-divider>
       <ng-container *ngIf="this.hasCandidateInformationInput">

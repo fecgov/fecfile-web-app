@@ -32,6 +32,7 @@ export abstract class TransactionType {
   inherittedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
   useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
   childTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the child, trigger the parent to regenerate its description
+  parentTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the parent, trigger the child to regenerate its description
 
   // Navigations settings
   subTransactionConfig?: (SubTransactionGroup | TransactionTypes)[] | SubTransactionGroup; // Configuration of Sub-TransactionTypes
@@ -39,7 +40,8 @@ export abstract class TransactionType {
   navigationControls?: TransactionNavigationControls;
 
   // Dynamic Transaction Type Identifier settings
-  memoCodeMap?: { true: string; false: string }; // Show a SelectButton for memo code where the options are the values in this map
+  memoCodeMap?: { true: string; false: string }; // Show a SelectButton for memo code where the labels are the values in this map
+  memoCodeTransactionTypes?: { true: TransactionTypes; false: TransactionTypes };
 
   // Pupose description settings
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field

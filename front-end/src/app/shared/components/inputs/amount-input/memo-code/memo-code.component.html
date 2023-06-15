@@ -1,6 +1,6 @@
 <div [formGroup]="form">
   <div class="grid">
-    <ng-container *ngIf="memoCodeMap === undefined">
+    <ng-container *ngIf="memoCodeMapOptions.length === 0">
       <div class="col-12">
         <p-checkbox
           #memoCode
@@ -28,7 +28,7 @@
         ></app-error-messages>
       </div>
     </ng-container>
-    <ng-container *ngIf="memoCodeMap">
+    <ng-container *ngIf="memoCodeMapOptions.length > 0">
       <p-selectButton
         #memoCode
         inputId="memo_code"
@@ -36,6 +36,7 @@
         [options]="memoCodeMapOptions"
         optionLabel="label"
         optionValue="value"
+        (onChange)="updateTTI()"
       ></p-selectButton>
     </ng-container>
   </div>

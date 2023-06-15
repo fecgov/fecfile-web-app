@@ -16,9 +16,12 @@
     <div class="col-12">
       <div class="field">
         <app-memo-code
-          [memoCodeMap]="memoCodeMap"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [templateMap]="templateMap"
           [memoCodeReadOnly]="memoCodeReadOnly"
           [memoItemHelpText]="memoItemHelpText"
+          [transaction]="transaction"
         ></app-memo-code>
       </div>
     </div>

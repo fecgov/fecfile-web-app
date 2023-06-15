@@ -5,6 +5,7 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../../base-input.component';
+import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-memo-code',
@@ -15,14 +16,13 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   @Input() memoCodeReadOnly = false;
   @Input() memoItemHelpText =
     'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
-  @Input() memoCodeMap?: { true: string; false: string } = undefined;
+  @Input() transaction?: Transaction | undefined;
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   report?: F3xSummary;
 
   memoControl: FormControl = new FormControl();
   outOfDateDialogVisible = false;
-  options?: [{ value: true; label: string }, { value: false; label: string }];
   memoCodeMapOptions: any[] = [];
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
@@ -50,23 +50,36 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       this.updateMemoItemWithDate(savedDate);
     }
 
-    if (this.memoCodeMap) {
-      this.options = [
+    if (this.transaction?.transactionType?.memoCodeMap) {
+      const memoCodeMap = this.transaction.transactionType.memoCodeMap;
+      this.memoCodeMapOptions = [
         {
           value: true,
-          label: this.memoCodeMap.true,
+          label: memoCodeMap.true,
         },
         {
           value: false,
-          label: this.memoCodeMap.false,
+          label: memoCodeMap.false,
         },
       ];
-      this.memoCodeMapOptions = this.options;
     }
   }
 
   ngOnChanges(): void {
     this.changeDetectorRef.detectChanges();
+  }
+
+  updateTTI(): void {
+    if (this.transaction?.transactionType?.memoCodeTransactionTypes) {
+      const memo_code = this.form.get(this.templateMap.memo_code)?.value as boolean;
+      console.log(memo_code);
+      if (memo_code) {
+        this.transaction.transaction_type_identifier = this.transaction.transactionType.memoCodeTransactionTypes.true;
+      } else {
+        this.transaction.transaction_type_identifier = this.transaction.transactionType.memoCodeTransactionTypes.false;
+      }
+      console.log(this.transaction.transaction_type_identifier);
+    }
   }
 
   closeOutOfDateDialog() {
