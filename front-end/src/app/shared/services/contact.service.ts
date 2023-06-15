@@ -17,6 +17,7 @@ import {
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
+import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -83,6 +84,18 @@ export class ContactService implements TableListService<Contact> {
       })
       .pipe(map((response) => CommitteeLookupResponse.fromJSON(response)));
   }
+
+  public checkFecIdForUniqness(fec_id: string): Observable<boolean> {
+    return fec_id ? this.apiService.get<boolean>(`/contacts/fec_id_is_unique/${fec_id}/`) : of(true);
+  }
+
+  public fecIdValidator: AsyncValidatorFn = (control: AbstractControl) => {
+    return this.checkFecIdForUniqness(control.value).pipe(
+      map((isUnique: boolean) => {
+        return isUnique ? null : { fec_id_unique: true };
+      })
+    );
+  };
 
   public individualLookup(search: string, maxFecfileResults: number): Observable<IndividualLookupResponse> {
     return this.apiService

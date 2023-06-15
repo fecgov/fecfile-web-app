@@ -1,5 +1,6 @@
 <ng-container *ngIf="formSubmitted || (control?.invalid && (control?.dirty || control?.touched))">
   <small class="p-error" *ngIf="control?.hasError('required')">{{ requiredErrorMessage }}</small>
+  <small class="p-error" *ngIf="control?.hasError('fec_id_unique')">{{ uniqueFecIdMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('requiredTrue')">{{ requiredTrueErrorMessage }}</small>
   <small class="p-error" *ngIf="control?.hasError('minlength')">{{ minLengthErrorMessage }}</small>
   <small class="p-error" *ngIf="!control?.hasError('max') && control?.hasError('maxlength')">{{
