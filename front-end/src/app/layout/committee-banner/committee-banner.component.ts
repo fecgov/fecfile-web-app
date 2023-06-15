@@ -1,30 +1,32 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { Subject } from 'rxjs';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-committee-banner',
   templateUrl: './committee-banner.component.html',
   styleUrls: ['./committee-banner.component.scss'],
 })
-export class CommitteeBannerComponent implements OnInit, OnDestroy {
+export class CommitteeBannerComponent extends DestroyerComponent implements OnInit {
   committeeName?: string;
   committeeStatus?: string;
   committeeFrequency?: string;
   committeeType?: string;
   committeeID?: string;
-  private destroy$ = new Subject<boolean>();
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    super();
+  }
 
   public committee_statuses: { [key: string]: string } = {
     T: 'Terminated',
     A: 'Administratively terminated',
     D: 'Active - Debt',
     W: 'Active - Waived',
-    M: 'Active - Monthly filer',
-    Q: 'Active - Quarterly filer',
+    M: 'Active - Monthly',
+    Q: 'Active - Quarterly',
   };
 
   public committee_types: { [key: string]: string } = {
@@ -46,28 +48,26 @@ export class CommitteeBannerComponent implements OnInit, OnDestroy {
     Z: 'national party non-federal account',
   };
 
-  public active_committees = ['M', 'Q', 'W', 'D'];
+  public activeCommittees = ['M', 'Q', 'W', 'D'];
 
   ngOnInit(): void {
-    this.store.select(selectCommitteeAccount).subscribe((committeeAccount) => {
-      this.committeeName = committeeAccount.name;
-      this.committeeID = committeeAccount.committee_id;
+    this.store
+      .select(selectCommitteeAccount)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((committeeAccount) => {
+        this.committeeName = committeeAccount.name;
+        this.committeeID = committeeAccount.committee_id;
 
-      const frequency_code = committeeAccount.filing_frequency;
-      if (frequency_code) {
-        this.committeeFrequency = this.committee_statuses[frequency_code] || '';
-        this.committeeStatus = this.active_committees.includes(frequency_code) ? 'Active' : 'Inactive';
-      }
+        const frequencyCode = committeeAccount.filing_frequency;
+        if (frequencyCode) {
+          this.committeeFrequency = this.committee_statuses[frequencyCode] ?? '';
+          this.committeeStatus = this.activeCommittees.includes(frequencyCode) ? 'Active' : 'Inactive';
+        }
 
-      const committee_type_code = committeeAccount.committee_type;
-      if (committee_type_code) {
-        this.committeeType = this.committee_types[committee_type_code] || '';
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
+        const committeeTypeCode = committeeAccount.committee_type;
+        if (committeeTypeCode) {
+          this.committeeType = this.committee_types[committeeTypeCode] ?? '';
+        }
+      });
   }
 }
