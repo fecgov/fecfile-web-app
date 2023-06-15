@@ -148,6 +148,8 @@ import { PARTY_IN_KIND_OUT } from '../models/transaction-types/PARTY_IN_KIND_OUT
 import { IN_KIND_TRANSFER_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_OUT.model';
 import { IN_KIND_TRANSFER_FEA_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_FEA_OUT.model';
 import { PAC_IN_KIND_OUT } from '../models/transaction-types/PAC_IN_KIND_OUT.model';
+import { PAC_CONDUIT_EARMARK } from '../models/transaction-types/PAC_CONDUIT_EARMARK.model';
+import { PAC_CONDUIT_EARMARK_OUT } from '../models/transaction-types/PAC_CONDUIT_EARMARK_OUT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -294,6 +296,12 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   IN_KIND_TRANSFER_OUT,
   IN_KIND_TRANSFER_FEA_OUT,
   PAC_IN_KIND_OUT,
+  PAC_CONDUIT_EARMARK,
+  PAC_CONDUIT_EARMARK_OUT,
+  "PAC_CONDUIT_EARMARK_DEPOSITED":PAC_CONDUIT_EARMARK,
+  "PAC_CONDUIT_EARMARK_UNDEPOSITED":PAC_CONDUIT_EARMARK,
+  "PAC_CONDUIT_EARMARK_OUT_DEPOSITED":PAC_CONDUIT_EARMARK_OUT,
+  "PAC_CONDUIT_EARMARK_OUT_UNDEPOSITED":PAC_CONDUIT_EARMARK_OUT
 }
 
 export class TransactionTypeUtils {

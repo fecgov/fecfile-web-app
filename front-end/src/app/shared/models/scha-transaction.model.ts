@@ -105,8 +105,7 @@ export enum ScheduleATransactionTypes {
   PAC_RECEIPT = 'PAC_RECEIPT',
   PAC_IN_KIND_RECEIPT = 'PAC_IN_KIND_RECEIPT',
   PAC_EARMARK_RECEIPT = 'PAC_EARMARK_RECEIPT',
-  PAC_CONDUIT_EARMARK_DEPOSITED = 'PAC_CONDUIT_EARMARK_DEPOSITED',
-  PAC_CONDUIT_EARMARK_UNDEPOSITED = 'PAC_CONDUIT_EARMARK_UNDEPOSITED',
+  PAC_CONDUIT_EARMARK = 'PAC_CONDUIT_EARMARK',
   PAC_RETURN = 'PAC_RETURN',
   // Transfers
   TRANSFER = 'TRANSFER',
@@ -208,8 +207,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
   [ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT, 'PAC In-kind Receipt'],
   [ScheduleATransactionTypes.PAC_EARMARK_RECEIPT, 'PAC Earmark Receipt'],
   [ScheduleATransactionTypes.PAC_EARMARK_MEMO, 'PAC Earmark Memo'],
-  [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED, 'PAC Conduit Earmark (Deposited)'],
-  [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED, 'PAC Conduit Earmark (Undeposited)'],
+  [ScheduleATransactionTypes.PAC_CONDUIT_EARMARK, 'PAC Conduit Earmark'],
   [ScheduleATransactionTypes.PAC_RETURN, 'PAC Returned/Bounced Receipt'],
   // Transfers
   [ScheduleATransactionTypes.TRANSFER, 'Transfer'],
@@ -252,10 +250,7 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',
   ],
   // Refunds
-  [
-    ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE,
-    'Refund of Contribution to Federal Candidate',
-  ],
+  [ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE, 'Refund of Contribution to Federal Candidate'],
   [
     ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE,
     'Refund of Contribution to Other Political Committee',
