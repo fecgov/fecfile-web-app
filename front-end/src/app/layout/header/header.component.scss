@@ -6,11 +6,65 @@ a {
   border: none;
 }
 
-:host ::ng-deep p-menubar{
-  padding: 0px;
+.header-nav-menu {
+  padding-top: 0px;
+}
+
+:host ::ng-deep .header-navbar-icon {
+  height: 16px !important;
+}
+
+:host ::ng-deep .p-menubar{
+  padding: 0px !important;
 }
 :host ::ng-deep p-menubarsub{
   width: 100%;
   display: flex;
   justify-content: flex-end;
+}
+
+:host ::ng-deep .p-menuitem-text{
+  font-size: 12px;
+  font-family: "karla-bold", sans-serif;
+}
+
+:host ::ng-deep .dead-link {
+  color: #D6D7D9 !important;
+}
+
+:host ::ng-deep .p-menuitem-link{
+  color: #5B616B !important;
+}
+
+:host ::ng-deep p-menubar > div > p-menubarsub > ul > li > a.p-menuitem-link-active{
+  border-top: 4px solid #000000 !important;
+  padding-top: 12px !important;
+  border-radius: 0 0 2px 2px !important;
+  color: #112E51 !important;
+ }
+
+:host ::ng-deep li:has( > p-menubarsub > ul > li > a.p-menuitem-link-active) {
+  border-top: 4px solid #000000 !important;
+  border-radius: 0 0 2px 2px !important;
+  color: #112E51 !important;
+ }
+
+:host ::ng-deep a:has( + p-menubarsub > ul > li > a.p-menuitem-link-active){
+  padding-top: 12px !important;
+}
+
+:host ::ng-deep p-menubar > div > p-menubarsub > ul > li > a.p-menuitem-link {
+  height: 80px !important;
+}
+
+:host ::ng-deep span.p-submenu-icon.pi.pi-angle-down {
+  visibility: hidden;
+  width: 0px;
+  position: absolute;
+}
+
+:host ::ng-deep a.p-ripple.p-element.p-menuitem-link.p-disabled {
+  opacity: 1;
+  background: white;
+  border: 0px solid black;
 }

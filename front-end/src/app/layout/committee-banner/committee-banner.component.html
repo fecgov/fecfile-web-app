@@ -1,7 +1,21 @@
 <div class="grid">
   <div class="col-12">
     <h1 class="committee-name">{{ committeeName }}</h1>
-    <span *ngFor="let item of subBannerItems; let last = last" class="sub-banner-item">{{item}}<span *ngIf="!last" class="pipe-separator">|</span>
-    </span>
+    <div class="grid">
+      <div class="col-12">
+        <span
+          class="pi pi-circle-on"
+          [ngStyle]="{
+            color: committeeStatus === 'Active' ? '#4AA564' : '#AEB0B5',
+            'font-size': '14px'
+          }"
+        ></span>
+        <span class="sub-banner-item"> {{ committeeFrequency }} </span>
+        |
+        <span class="sub-banner-item"> {{ committeeType }} </span>
+        |
+        <span class="sub-banner-item"> ID: {{ committeeID }} </span>
+      </div>
+    </div>
   </div>
 </div>

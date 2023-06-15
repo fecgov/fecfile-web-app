@@ -6,24 +6,62 @@ import { Subject } from 'rxjs';
 @Component({
   selector: 'app-committee-banner',
   templateUrl: './committee-banner.component.html',
-  styleUrls: ['./committee-banner.component.scss']
+  styleUrls: ['./committee-banner.component.scss'],
 })
 export class CommitteeBannerComponent implements OnInit, OnDestroy {
-  committeeName: string | undefined;
-  subBannerItems: (string | undefined)[] = [];
+  committeeName?: string;
+  committeeStatus?: string;
+  committeeFrequency?: string;
+  committeeType?: string;
+  committeeID?: string;
   private destroy$ = new Subject<boolean>();
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {}
+
+  public committee_statuses: { [key: string]: string } = {
+    T: 'Terminated',
+    A: 'Administratively terminated',
+    D: 'Active - Debt',
+    W: 'Active - Waived',
+    M: 'Active - Monthly filer',
+    Q: 'Active - Quarterly filer',
+  };
+
+  public committee_types: { [key: string]: string } = {
+    C: 'communication cost',
+    D: 'delegate',
+    E: 'electioneering communication',
+    H: 'House',
+    I: 'independent expenditure filer (not a committee)',
+    N: 'PAC - nonqualified',
+    O: 'independent expenditure-only (super PACs)',
+    P: 'presidential',
+    Q: 'PAC - qualified',
+    S: 'Senate',
+    U: 'single candidate independent expenditure',
+    V: 'PAC with non-contribution account, nonqualified',
+    W: 'PAC with non-contribution account, qualified',
+    X: 'party, nonqualified',
+    Y: 'party, qualified',
+    Z: 'national party non-federal account',
+  };
+
+  public active_committees = ['M', 'Q', 'W', 'D'];
 
   ngOnInit(): void {
-    this.store.select(selectCommitteeAccount).subscribe(committeeAccount => {
-      this.subBannerItems = [];
+    this.store.select(selectCommitteeAccount).subscribe((committeeAccount) => {
       this.committeeName = committeeAccount.name;
-      if (committeeAccount.committee_type_full) {
-        this.subBannerItems.push(committeeAccount.committee_type_full);
+      this.committeeID = committeeAccount.committee_id;
+
+      const frequency_code = committeeAccount.filing_frequency;
+      if (frequency_code) {
+        this.committeeFrequency = this.committee_statuses[frequency_code] || '';
+        this.committeeStatus = this.active_committees.includes(frequency_code) ? 'Active' : 'Inactive';
       }
-      if (committeeAccount.committee_id) {
-        this.subBannerItems.push('ID: ' + committeeAccount.committee_id);
+
+      const committee_type_code = committeeAccount.committee_type;
+      if (committee_type_code) {
+        this.committeeType = this.committee_types[committee_type_code] || '';
       }
     });
   }

@@ -68,7 +68,7 @@ export class ReportListComponent extends TableListBaseComponent<Report> implemen
     } else if (item.id === this.cashOnHand.report_id) {
       this.router.navigateByUrl(`/reports/f3x/create/cash-on-hand/${item.id}`);
     } else {
-      this.router.navigateByUrl(`/transactions/report/${item.id}/list`);
+      this.router.navigateByUrl(`/reports/transactions/report/${item.id}/list`);
     }
   }
 

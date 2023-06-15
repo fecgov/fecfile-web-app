@@ -31,7 +31,7 @@ describe('MenuReportComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           {
-            path: 'transactions/report/999/list',
+            path: 'reports/transactions/report/999/list',
             redirectTo: '',
           },
         ]),
@@ -79,7 +79,7 @@ describe('MenuReportComponent', () => {
   }));
 
   it('should get report from url', waitForAsync(() => {
-    router.navigateByUrl('/transactions/report/999/list');
+    router.navigateByUrl('/reports/transactions/report/999/list');
     component.activeReport$?.subscribe((report) => {
       expect(report?.id).toBe('999');
     });

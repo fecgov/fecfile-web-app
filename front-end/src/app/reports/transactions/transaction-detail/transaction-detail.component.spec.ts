@@ -25,7 +25,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ToastModule } from 'primeng/toast';
-import { SharedModule } from '../../shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { TransactionDetailComponent } from './transaction-detail.component';
 
 describe('TransactionDetailComponent', () => {

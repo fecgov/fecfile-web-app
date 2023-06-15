@@ -7,7 +7,7 @@ import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TableModule } from 'primeng/table';
-import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from 'app/shared/shared.module';
 import { TransactionReceiptsComponent } from './transaction-receipts.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TransactionSchAService } from 'app/shared/services/transaction-schA.service';

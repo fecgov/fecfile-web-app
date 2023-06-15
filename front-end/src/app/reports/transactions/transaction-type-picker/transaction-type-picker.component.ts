@@ -260,7 +260,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
 
   getRouterLink(transactionType: string): string | undefined {
     if (this.report && !this.isTransactionDisabled(transactionType)) {
-      return `/transactions/report/${this.report?.id}/create/${transactionType}`;
+      return `/reports/transactions/report/${this.report?.id}/create/${transactionType}`;
     }
     return undefined;
   }
