@@ -20,13 +20,11 @@ import { FecInternationalPhoneInputComponent } from '../fec-international-phone-
 import { ContactFormComponent } from './contact-form.component';
 import { ContactLookupComponent } from '../contact-lookup/contact-lookup.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import { ContactService } from 'app/shared/services/contact.service';
 
 describe('ContactFormComponent', () => {
   let component: ContactFormComponent;
   let fixture: ComponentFixture<ContactFormComponent>;
   let testFecApiService: FecApiService;
-  let testContactService: ContactService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -36,12 +34,10 @@ describe('ContactFormComponent', () => {
         ErrorMessagesComponent,
         FecInternationalPhoneInputComponent,
         ContactLookupComponent,
-        ContactService,
       ],
       providers: [FormBuilder, provideMockStore(testMockStore)],
     }).compileComponents();
     testFecApiService = TestBed.inject(FecApiService);
-    testContactService = TestBed.inject(ContactService);
   });
 
   beforeEach(() => {
