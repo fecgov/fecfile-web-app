@@ -104,7 +104,6 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
           ScheduleATransactionTypes.TRIBAL_RECEIPT,
           ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
-          ScheduleATransactionTypes.REATTRIBUTION,
           ScheduleATransactionTypes.IN_KIND_RECEIPT,
           ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
           ScheduleATransactionTypes.EARMARK_RECEIPT,
@@ -182,7 +181,6 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         ];
       case ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGULAR_FILERS:
         return [
-          ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
           ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
