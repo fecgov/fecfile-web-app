@@ -42,21 +42,19 @@
       </div>
       <div class="col-12">
         <ng-container *ngIf="this.memoControl?.value === true">
+          <span
+            class="pi pi-check"
+            style="font-size: 1rem; margin-left: 0.5rem"
+            pTooltip="{{ memoItemHelpText }}"
+          ></span>
           MEMO ITEM
-          <span
-            class="pi pi-info-circle"
-            style="font-size: 1.5rem; margin-left: 0.5rem"
-            pTooltip="{{ memoItemHelpText }}"
-          ></span>
         </ng-container>
-        <ng-container *ngIf="this.memoControl?.value === false">
-          NOT A MEMO ITEM
-          <span
-            class="pi pi-info-circle"
-            style="font-size: 1.5rem; margin-left: 0.5rem"
-            pTooltip="{{ memoItemHelpText }}"
-          ></span>
-        </ng-container>
+        <ng-container *ngIf="this.memoControl?.value === false"> NOT A MEMO ITEM </ng-container>
+        <span
+          class="pi pi-info-circle"
+          style="font-size: 1.5rem; margin-left: 0.5rem"
+          pTooltip="{{ memoItemHelpText }}"
+        ></span>
       </div>
     </ng-container>
   </div>
