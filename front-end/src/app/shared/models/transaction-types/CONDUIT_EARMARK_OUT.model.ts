@@ -1,20 +1,21 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARK_OUTS';
 import { SchBTransaction } from '../schb-transaction.model';
-import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { ContactTypes } from '../contact.model';
 import { SchATransaction } from '../scha-transaction.model';
+import { TransactionGroupNM } from '../transaction-groups/transaction-group-nm.model';
 
-export class CONDUIT_EARMARK_OUT_DEPOSITED extends SchBTransactionType {
-  transactionGroup = new TransactionGroupAG();
-  title = 'Conduit Earmark Receipt';
+export class CONDUIT_EARMARK_OUT extends SchBTransactionType {
+  transactionGroup = new TransactionGroupNM();
+  title = 'Conduit Earmark Out (Deposited)';
   schema = schema;
   override isDependentChild = true;
   override parentTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
   override inherittedFields = ['amount' as TemplateMapKeyType];
+  override showAggregate = false;
   override memoCodeMap = {
     true: 'Undeposited',
     false: 'Deposited',
@@ -42,7 +43,7 @@ export class CONDUIT_EARMARK_OUT_DEPOSITED extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SA11AI',
+      form_type: 'SB23',
       transaction_type_identifier: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED,
       aggregation_group: AggregationGroups.NONE,
     });

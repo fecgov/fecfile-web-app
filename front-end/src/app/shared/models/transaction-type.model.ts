@@ -39,9 +39,9 @@ export abstract class TransactionType {
   shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
   navigationControls?: TransactionNavigationControls;
 
-  // Dynamic Transaction Type Identifier settings
+  // Memo Code settings
   memoCodeMap?: { true: string; false: string }; // Show a SelectButton for memo code where the labels are the values in this map
-  memoCodeTransactionTypes?: { true: TransactionTypes; false: TransactionTypes };
+  memoCodeTransactionTypes?: { true: TransactionTypes; false: TransactionTypes }; // Change the transaction type based on the value of memo_code (when it's a SelectButton)
 
   // Pupose description settings
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field

@@ -6,6 +6,7 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../../base-input.component';
 import { Transaction } from 'app/shared/models/transaction.model';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 @Component({
   selector: 'app-memo-code',
@@ -54,15 +55,17 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       const memoCodeMap = this.transaction.transactionType.memoCodeMap;
       this.memoCodeMapOptions = [
         {
-          value: true,
-          label: memoCodeMap.true,
-        },
-        {
           value: false,
           label: memoCodeMap.false,
         },
+        {
+          value: true,
+          label: memoCodeMap.true,
+        },
       ];
     }
+
+    this.memoControl?.patchValue((this.transaction as SchATransaction)?.memo_code);
   }
 
   ngOnChanges(): void {
@@ -72,13 +75,11 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   updateTTI(): void {
     if (this.transaction?.transactionType?.memoCodeTransactionTypes) {
       const memo_code = this.form.get(this.templateMap.memo_code)?.value as boolean;
-      console.log(memo_code);
       if (memo_code) {
         this.transaction.transaction_type_identifier = this.transaction.transactionType.memoCodeTransactionTypes.true;
       } else {
         this.transaction.transaction_type_identifier = this.transaction.transactionType.memoCodeTransactionTypes.false;
       }
-      console.log(this.transaction.transaction_type_identifier);
     }
   }
 

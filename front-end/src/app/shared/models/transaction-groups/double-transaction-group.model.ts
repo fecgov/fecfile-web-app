@@ -10,6 +10,10 @@ export abstract class DoubleTransactionGroup {
 
   abstract hasEmployerInput(): boolean;
   abstract childHasEmployerInput(): boolean;
+  abstract hasParentCandidateInformationInput(): boolean;
+  abstract hasChildCandidateInformationInput(): boolean;
+  abstract hasParentElectionInformationInput(): boolean;
+  abstract hasChildElectionInformationInput(): boolean;
 
   abstract getParentTransactionTitle(): string;
   abstract getParentFooter(): string;

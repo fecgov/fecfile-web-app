@@ -67,6 +67,41 @@
             [transaction]="transaction"
           ></app-amount-input>
           <p-divider></p-divider>
+          <ng-container *ngIf="this.hasParentCandidateInformationInput">
+            <h3>{{ templateMap['candidateInputHeader'] }}</h3>
+            <app-committee-input
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="templateMap"
+              entityRole="COMMITTEE"
+              [includeFecId]="true"
+              [readonly]="true"
+            ></app-committee-input>
+            <app-transaction-contact-lookup
+              [contactTypeFormControl]="candidateContactTypeFormControl"
+              [contactTypeOptions]="candidateContactTypeOption"
+              [contactTypeReadOnly]="true"
+              (contactSelect)="onSecondaryContactLookupSelect($event)"
+            ></app-transaction-contact-lookup>
+            <ng-container *ngIf="transaction?.contact_2">
+              <app-candidate-input
+                [form]="form"
+                [formSubmitted]="formSubmitted"
+                [templateMap]="templateMap"
+              ></app-candidate-input>
+            </ng-container>
+            <p-divider></p-divider>
+          </ng-container>
+          <ng-container *ngIf="hasParentElectionInformationInput">
+            <h3>Election Information</h3>
+            <app-election-input
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="templateMap"
+            ></app-election-input>
+            <p-divider></p-divider>
+          </ng-container>
+          <p-divider></p-divider>
           <h3>Additional Information</h3>
           <app-additional-info-input
             [form]="form"
@@ -147,6 +182,41 @@
             ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
+          <ng-container *ngIf="this.hasChildCandidateInformationInput">
+            <h3>{{ templateMap['candidateInputHeader'] }}</h3>
+            <app-committee-input
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap"
+              entityRole="COMMITTEE"
+              [includeFecId]="true"
+              [readonly]="true"
+            ></app-committee-input>
+            <app-transaction-contact-lookup
+              [contactTypeFormControl]="candidateContactTypeFormControl"
+              [contactTypeOptions]="candidateContactTypeOption"
+              [contactTypeReadOnly]="true"
+              (contactSelect)="onSecondaryContactLookupSelect($event)"
+            ></app-transaction-contact-lookup>
+            <ng-container *ngIf="childTransaction?.contact_2">
+              <app-candidate-input
+                [form]="form"
+                [formSubmitted]="formSubmitted"
+                [templateMap]="childTemplateMap"
+              ></app-candidate-input>
+            </ng-container>
+            <p-divider></p-divider>
+          </ng-container>
+          <ng-container *ngIf="hasChildElectionInformationInput">
+            <h3>Election Information</h3>
+            <app-election-input
+              [form]="form"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap"
+            ></app-election-input>
+            <p-divider></p-divider>
+          </ng-container>
+          <p-divider></p-divider>
           <h3>{{ childTemplateMap.amountInputHeader }}</h3>
           <app-amount-input
             [form]="childForm"

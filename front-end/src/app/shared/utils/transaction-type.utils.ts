@@ -84,8 +84,7 @@ import { PARTY_IN_KIND_RECEIPT } from '../models/transaction-types/PARTY_IN_KIND
 import { IN_KIND_TRANSFER } from '../models/transaction-types/IN_KIND_TRANSFER.model';
 import { IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY } from '../models/transaction-types/IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY.model';
 import { PAC_IN_KIND_RECEIPT } from '../models/transaction-types/PAC_IN_KIND_RECEIPT.model';
-import { CONDUIT_EARMARK_RECEIPT_DEPOSITED } from '../models/transaction-types/CONDUIT_EARMARK_RECEIPT_DEPOSITED.model';
-import { CONDUIT_EARMARK_RECEIPT_UNDEPOSITED } from '../models/transaction-types/CONDUIT_EARMARK_RECEIPT_UNDEPOSITED.model';
+import { CONDUIT_EARMARK_RECEIPT } from '../models/transaction-types/CONDUIT_EARMARK_RECEIPT.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
@@ -150,7 +149,7 @@ import { PARTY_IN_KIND_OUT } from '../models/transaction-types/PARTY_IN_KIND_OUT
 import { IN_KIND_TRANSFER_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_OUT.model';
 import { IN_KIND_TRANSFER_FEA_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_FEA_OUT.model';
 import { PAC_IN_KIND_OUT } from '../models/transaction-types/PAC_IN_KIND_OUT.model';
-import { CONDUIT_EARMARK_OUT_DEPOSITED } from '../models/transaction-types/CONDUIT_EARMARK_OUT_DEPOSITED.model';
+import { CONDUIT_EARMARK_OUT } from '../models/transaction-types/CONDUIT_EARMARK_OUT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -240,8 +239,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   IN_KIND_TRANSFER,
   IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
   PAC_IN_KIND_RECEIPT,
-  CONDUIT_EARMARK_RECEIPT_DEPOSITED,
-  CONDUIT_EARMARK_RECEIPT_UNDEPOSITED,
+  CONDUIT_EARMARK_RECEIPT,
+  CONDUIT_EARMARK_RECEIPT_DEPOSITED: CONDUIT_EARMARK_RECEIPT,
+  CONDUIT_EARMARK_RECEIPT_UNDEPOSITED: CONDUIT_EARMARK_RECEIPT,
   // Schedule B /////////////////////////////////////////////////////
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
   INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
@@ -299,7 +299,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   IN_KIND_TRANSFER_OUT,
   IN_KIND_TRANSFER_FEA_OUT,
   PAC_IN_KIND_OUT,
-  CONDUIT_EARMARK_OUT_DEPOSITED,
+  CONDUIT_EARMARK_OUT,
+  CONDUIT_EARMARK_OUT_DEPOSITED: CONDUIT_EARMARK_OUT,
+  CONDUIT_EARMARK_OUT_UNDEPOSITED: CONDUIT_EARMARK_OUT,
 }
 
 export class TransactionTypeUtils {
