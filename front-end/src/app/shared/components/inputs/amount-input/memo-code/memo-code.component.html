@@ -29,15 +29,35 @@
       </div>
     </ng-container>
     <ng-container *ngIf="memoCodeMapOptions.length > 0">
-      <p-selectButton
-        #memoCode
-        inputId="memo_code"
-        [formControlName]="templateMap['memo_code']"
-        [options]="memoCodeMapOptions"
-        optionLabel="label"
-        optionValue="value"
-        (onChange)="updateTTI()"
-      ></p-selectButton>
+      <div class="col-3">
+        <p-selectButton
+          #memoCode
+          inputId="memo_code"
+          [formControlName]="templateMap['memo_code']"
+          [options]="memoCodeMapOptions"
+          optionLabel="label"
+          optionValue="value"
+          (onChange)="updateTTI()"
+        ></p-selectButton>
+      </div>
+      <div class="col-12">
+        <ng-container *ngIf="this.memoControl?.value === true">
+          MEMO ITEM
+          <span
+            class="pi pi-info-circle"
+            style="font-size: 1.5rem; margin-left: 0.5rem"
+            pTooltip="{{ memoItemHelpText }}"
+          ></span>
+        </ng-container>
+        <ng-container *ngIf="this.memoControl?.value === false">
+          NOT A MEMO ITEM
+          <span
+            class="pi pi-info-circle"
+            style="font-size: 1.5rem; margin-left: 0.5rem"
+            pTooltip="{{ memoItemHelpText }}"
+          ></span>
+        </ng-container>
+      </div>
     </ng-container>
   </div>
   <p-dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '496px' }" [modal]="true">
