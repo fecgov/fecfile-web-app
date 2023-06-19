@@ -1,6 +1,6 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupL } from '../transaction-groups/transaction-group-l.model';
+import { TransactionGroupM } from '../transaction-groups/transaction-group-m.model';
 import { CONTRIBUTION_TO_CANDIDATE } from './CONTRIBUTION_TO_CANDIDATE.model';
 
 describe('CONTRIBUTION_TO_CANDIDATE', () => {
@@ -13,7 +13,7 @@ describe('CONTRIBUTION_TO_CANDIDATE', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupL);
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupM);
   });
 
   it('#factory() should return a SchATransaction', () => {

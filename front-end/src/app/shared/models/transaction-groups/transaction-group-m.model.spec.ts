@@ -29,7 +29,7 @@ describe('TransactionGroupM', () => {
   });
 
   it('#getContactTypeOptions happy path', () => {
-    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.ORGANIZATION]);
+    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
     const retval = component.getContactTypeOptions();
     expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
   });
@@ -41,7 +41,7 @@ describe('TransactionGroupM', () => {
 
   it('#hasCommitteeFecIdInput happy path', () => {
     const retval = component.hasCommitteeFecIdInput();
-    expect(retval).toBeFalse();
+    expect(retval).toBeTrue();
   });
 
   it('#hasElectionInformationInput happy path', () => {
@@ -51,6 +51,6 @@ describe('TransactionGroupM', () => {
 
   it('#hasCandidateInformationInput happy path', () => {
     const retval = component.hasCandidateInformationInput();
-    expect(retval).toBeFalse();
+    expect(retval).toBeTrue();
   });
 });
