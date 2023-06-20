@@ -48,7 +48,12 @@ export class SchBTransaction extends Transaction {
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
   override getFieldsNotToValidate(): string[] {
-    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
+    return [
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      'beneficiary_committee_name',
+      ...super.getFieldsNotToValidate(),
+    ];
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchBTransaction {

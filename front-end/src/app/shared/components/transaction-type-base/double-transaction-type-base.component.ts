@@ -213,6 +213,19 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childTransaction,
       this.childContactId$
     );
+
+    // Inheritted fields must match parent values
+    this.childTransaction?.transactionType?.inherittedFields?.forEach((inherittedField) => {
+      const childFieldControl = this.childForm.get(this.childTemplateMap[inherittedField]);
+      childFieldControl?.enable();
+      const value = this.form.get(this.templateMap[inherittedField])?.value;
+      if (value !== undefined) {
+        childFieldControl?.setValue(value);
+        childFieldControl?.updateValueAndValidity();
+        console.log('Called', value, childFieldControl);
+      }
+      //childFieldControl?.disable();
+    });
   }
 
   childOnSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {

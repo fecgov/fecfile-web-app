@@ -226,6 +226,7 @@
             [contributionAmountReadOnly]="true"
             [negativeAmountValueOnly]="!!childTransaction?.transactionType?.negativeAmountValueOnly"
             [showAggregate]="!!childTransaction?.transactionType?.showAggregate"
+            [transaction]="childTransaction"
           ></app-amount-input>
           <p-divider></p-divider>
           <h3>Additional Information</h3>
