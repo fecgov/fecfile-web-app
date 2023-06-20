@@ -51,7 +51,7 @@ export class SchBTransaction extends Transaction {
     return [
       'back_reference_tran_id_number',
       'back_reference_sched_name',
-      'beneficiary_committee_name',
+      //'beneficiary_committee_name',
       ...super.getFieldsNotToValidate(),
     ];
   }
