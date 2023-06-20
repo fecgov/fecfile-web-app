@@ -214,4 +214,8 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childContactId$
     );
   }
+
+  childOnSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.childForm, this.childTransaction);
+  }
 }

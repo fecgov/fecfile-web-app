@@ -185,7 +185,7 @@
           <ng-container *ngIf="this.hasChildCandidateInformationInput">
             <h3>{{ templateMap['candidateInputHeader'] }}</h3>
             <app-committee-input
-              [form]="form"
+              [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
               entityRole="COMMITTEE"
@@ -196,11 +196,11 @@
               [contactTypeFormControl]="candidateContactTypeFormControl"
               [contactTypeOptions]="candidateContactTypeOption"
               [contactTypeReadOnly]="true"
-              (contactSelect)="onSecondaryContactLookupSelect($event)"
+              (contactSelect)="childOnSecondaryContactLookupSelect($event)"
             ></app-transaction-contact-lookup>
             <ng-container *ngIf="childTransaction?.contact_2">
               <app-candidate-input
-                [form]="form"
+                [form]="childForm"
                 [formSubmitted]="formSubmitted"
                 [templateMap]="childTemplateMap"
               ></app-candidate-input>
@@ -210,7 +210,7 @@
           <ng-container *ngIf="hasChildElectionInformationInput">
             <h3>Election Information</h3>
             <app-election-input
-              [form]="form"
+              [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
             ></app-election-input>
