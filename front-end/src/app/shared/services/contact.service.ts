@@ -4,7 +4,7 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { Observable, of } from 'rxjs';
-import { delay, map, switchMap } from 'rxjs/operators';
+import { debounceTime, map, switchMap } from 'rxjs/operators';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import {
@@ -91,7 +91,7 @@ export class ContactService implements TableListService<Contact> {
 
   public fecIdValidator: AsyncValidatorFn = (control: AbstractControl) => {
     return of(control.value).pipe(
-      delay(500),
+      debounceTime(500),
       switchMap((fecId) =>
         this.checkFecIdForUniqness(fecId).pipe(
           map((isUnique: boolean) => {
