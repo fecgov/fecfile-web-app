@@ -148,6 +148,8 @@ import { PARTY_IN_KIND_OUT } from '../models/transaction-types/PARTY_IN_KIND_OUT
 import { IN_KIND_TRANSFER_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_OUT.model';
 import { IN_KIND_TRANSFER_FEA_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_FEA_OUT.model';
 import { PAC_IN_KIND_OUT } from '../models/transaction-types/PAC_IN_KIND_OUT.model';
+import { CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE.model';
+import { CONTRIBUTION_TO_CANDIDATE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE_VOID.model';
 import { FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT.model';
 
 // prettier-ignore
@@ -296,6 +298,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   IN_KIND_TRANSFER_OUT,
   IN_KIND_TRANSFER_FEA_OUT,
   PAC_IN_KIND_OUT,
+  CONTRIBUTION_TO_CANDIDATE,
+  CONTRIBUTION_TO_CANDIDATE_VOID,
 }
 
 export class TransactionTypeUtils {
