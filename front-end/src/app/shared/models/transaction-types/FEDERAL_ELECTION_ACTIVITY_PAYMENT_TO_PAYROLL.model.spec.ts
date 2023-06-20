@@ -1,5 +1,5 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupM } from '../transaction-groups/transaction-group-m.model';
+import { TransactionGroupR } from '../transaction-groups/transaction-group-r.model';
 import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL } from './FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL.model';
 
 describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL', () => {
@@ -12,7 +12,7 @@ describe('FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupM);
+    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupR);
   });
 
   it('#factory() should return a SchBTransaction', () => {
