@@ -9,7 +9,7 @@ import { TransactionGroupNM } from '../transaction-groups/transaction-group-nm.m
 
 export class CONDUIT_EARMARK_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupNM();
-  title = 'Conduit Earmark Out (Deposited)';
+  title = 'Conduit Earmark Out';
   schema = schema;
   override isDependentChild = true;
   override parentTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];

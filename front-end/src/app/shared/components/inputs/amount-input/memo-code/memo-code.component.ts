@@ -75,21 +75,25 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     ) {
       this.memoControl?.patchValue((this.transaction as SchATransaction)?.memo_code);
     }
+
+    if (this.transaction?.transactionType?.memoCodeTransactionTypes) {
+      this.memoControl?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+        if (this.transaction && this.transaction.transactionType?.memoCodeTransactionTypes) {
+          if (value) {
+            this.transaction.transaction_type_identifier =
+              this.transaction.transactionType.memoCodeTransactionTypes.true;
+          } else {
+            this.transaction.transaction_type_identifier =
+              this.transaction.transactionType.memoCodeTransactionTypes.false;
+          }
+          console.log(this.transaction.transaction_type_identifier);
+        }
+      });
+    }
   }
 
   ngOnChanges(): void {
     this.changeDetectorRef.detectChanges();
-  }
-
-  updateTTI(): void {
-    if (this.transaction?.transactionType?.memoCodeTransactionTypes) {
-      const memo_code = this.form.get(this.templateMap.memo_code)?.value as boolean;
-      if (memo_code) {
-        this.transaction.transaction_type_identifier = this.transaction.transactionType.memoCodeTransactionTypes.true;
-      } else {
-        this.transaction.transaction_type_identifier = this.transaction.transactionType.memoCodeTransactionTypes.false;
-      }
-    }
   }
 
   closeOutOfDateDialog() {
