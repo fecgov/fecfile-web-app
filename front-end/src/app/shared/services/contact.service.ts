@@ -4,7 +4,7 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { debounceTime, map, switchMap } from 'rxjs/operators';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import {
@@ -17,6 +17,7 @@ import {
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
+import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -83,6 +84,23 @@ export class ContactService implements TableListService<Contact> {
       })
       .pipe(map((response) => CommitteeLookupResponse.fromJSON(response)));
   }
+
+  public checkFecIdForUniqness(fec_id: string): Observable<boolean> {
+    return fec_id ? this.apiService.get<boolean>(`/contacts/fec_id_is_unique/${fec_id}/`) : of(true);
+  }
+
+  public fecIdValidator: AsyncValidatorFn = (control: AbstractControl) => {
+    return of(control.value).pipe(
+      debounceTime(500),
+      switchMap((fecId) =>
+        this.checkFecIdForUniqness(fecId).pipe(
+          map((isUnique: boolean) => {
+            return isUnique ? null : { fecIdMustBeUnique: true };
+          })
+        )
+      )
+    );
+  };
 
   public individualLookup(search: string, maxFecfileResults: number): Observable<IndividualLookupResponse> {
     return this.apiService
