@@ -17,7 +17,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   @Input() memoCodeReadOnly = false;
   @Input() memoItemHelpText =
     'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
-  @Input() transaction?: Transaction | undefined;
+  @Input() transaction: Transaction | undefined;
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   report?: F3xSummary;

@@ -2,14 +2,13 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMAR
 import { ContactTypes } from '../contact.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { SchBTransaction } from '../schb-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
-import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionGroupNM } from '../transaction-groups/transaction-group-nm.model';
 
 export class CONDUIT_EARMARK_RECEIPT extends SchATransactionType {

@@ -1,7 +1,6 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARK_OUTS';
-import { SchBTransaction } from '../schb-transaction.model';
 import { AggregationGroups } from '../transaction.model';
-import { ScheduleBTransactionTypes } from '../schb-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { ContactTypes } from '../contact.model';
