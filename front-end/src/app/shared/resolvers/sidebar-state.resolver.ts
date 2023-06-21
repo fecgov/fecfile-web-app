@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { SidebarState } from 'app/layout/sidebar/sidebar.component';
@@ -8,7 +8,7 @@ import { setSidebarStateAction } from 'app/store/sidebar-state.actions';
 @Injectable({
   providedIn: 'root',
 })
-export class SidebarStateResolver implements Resolve<SidebarState | undefined> {
+export class SidebarStateResolver  {
   constructor(private store: Store) {}
 
   /**
