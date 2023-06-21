@@ -14,7 +14,7 @@ export class CONDUIT_EARMARK_OUT extends SchBTransactionType {
   schema = schema;
   override isDependentChild = true;
   override parentTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
-  override inherittedFields = ['amount', 'memo_code'] as TemplateMapKeyType[];
+  override inheritedFields = ['amount', 'memo_code'] as TemplateMapKeyType[];
   override showAggregate = false;
   override memoCodeTransactionTypes = {
     true: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED,

@@ -65,7 +65,16 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       ];
     }
 
-    this.memoControl?.patchValue((this.transaction as SchATransaction)?.memo_code);
+    // Set value of memo code from transaction object if the memo_code
+    // is NOT an inherited field from the parent transaction
+    if (
+      !(
+        this.transaction?.transactionType?.inheritedFields &&
+        this.transaction?.transactionType?.inheritedFields.includes('memo_code')
+      )
+    ) {
+      this.memoControl?.patchValue((this.transaction as SchATransaction)?.memo_code);
+    }
   }
 
   ngOnChanges(): void {
