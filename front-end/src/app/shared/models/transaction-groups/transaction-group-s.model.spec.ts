@@ -2,18 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
-import { TransactionGroupM } from './transaction-group-m.model';
+import { TransactionGroupS } from './transaction-group-s.model';
 
-describe('TransactionGroupM', () => {
-  let component: TransactionGroupM;
+describe('TransactionGroupS', () => {
+  let component: TransactionGroupS;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [TransactionGroupM],
+      providers: [TransactionGroupS],
     });
 
-    component = TestBed.inject(TransactionGroupM);
+    component = TestBed.inject(TransactionGroupS);
   });
 
   it('should create', () => {
@@ -29,7 +29,11 @@ describe('TransactionGroupM', () => {
   });
 
   it('#getContactTypeOptions happy path', () => {
-    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+      ContactTypes.ORGANIZATION,
+      ContactTypes.INDIVIDUAL,
+      ContactTypes.COMMITTEE
+    ]);
     const retval = component.getContactTypeOptions();
     expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
   });
@@ -41,7 +45,7 @@ describe('TransactionGroupM', () => {
 
   it('#hasCommitteeFecIdInput happy path', () => {
     const retval = component.hasCommitteeFecIdInput();
-    expect(retval).toBeTrue();
+    expect(retval).toBeFalse();
   });
 
   it('#hasElectionInformationInput happy path', () => {
@@ -51,6 +55,6 @@ describe('TransactionGroupM', () => {
 
   it('#hasCandidateInformationInput happy path', () => {
     const retval = component.hasCandidateInformationInput();
-    expect(retval).toBeTrue();
+    expect(retval).toBeFalse();
   });
 });

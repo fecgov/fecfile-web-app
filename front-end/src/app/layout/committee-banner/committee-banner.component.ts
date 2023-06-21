@@ -1,73 +1,73 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { takeUntil } from 'rxjs';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { Subject } from 'rxjs';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
+
+const committeeStatusCodes: { [key: string]: string } = {
+  T: 'Terminated',
+  A: 'Administratively terminated',
+  D: 'Active - Debt',
+  W: 'Active - Waived',
+  M: 'Active - Monthly',
+  Q: 'Active - Quarterly',
+};
+
+const activeStatusCodes = ['M', 'Q', 'W', 'D'];
+
+const committeeTypeCodes: { [key: string]: string } = {
+  C: 'communication cost',
+  D: 'delegate',
+  E: 'electioneering communication',
+  H: 'House',
+  I: 'independent expenditure filer (not a committee)',
+  N: 'PAC - nonqualified',
+  O: 'independent expenditure-only (super PACs)',
+  P: 'presidential',
+  Q: 'PAC - qualified',
+  S: 'Senate',
+  U: 'single candidate independent expenditure',
+  V: 'PAC with non-contribution account, nonqualified',
+  W: 'PAC with non-contribution account, qualified',
+  X: 'party, nonqualified',
+  Y: 'party, qualified',
+  Z: 'national party non-federal account',
+};
 
 @Component({
   selector: 'app-committee-banner',
   templateUrl: './committee-banner.component.html',
   styleUrls: ['./committee-banner.component.scss'],
 })
-export class CommitteeBannerComponent implements OnInit, OnDestroy {
+export class CommitteeBannerComponent extends DestroyerComponent implements OnInit {
   committeeName?: string;
   committeeStatus?: string;
   committeeFrequency?: string;
   committeeType?: string;
   committeeID?: string;
-  private destroy$ = new Subject<boolean>();
 
-  constructor(private store: Store) {}
-
-  public committee_statuses: { [key: string]: string } = {
-    T: 'Terminated',
-    A: 'Administratively terminated',
-    D: 'Active - Debt',
-    W: 'Active - Waived',
-    M: 'Active - Monthly filer',
-    Q: 'Active - Quarterly filer',
-  };
-
-  public committee_types: { [key: string]: string } = {
-    C: 'communication cost',
-    D: 'delegate',
-    E: 'electioneering communication',
-    H: 'House',
-    I: 'independent expenditure filer (not a committee)',
-    N: 'PAC - nonqualified',
-    O: 'independent expenditure-only (super PACs)',
-    P: 'presidential',
-    Q: 'PAC - qualified',
-    S: 'Senate',
-    U: 'single candidate independent expenditure',
-    V: 'PAC with non-contribution account, nonqualified',
-    W: 'PAC with non-contribution account, qualified',
-    X: 'party, nonqualified',
-    Y: 'party, qualified',
-    Z: 'national party non-federal account',
-  };
-
-  public active_committees = ['M', 'Q', 'W', 'D'];
-
-  ngOnInit(): void {
-    this.store.select(selectCommitteeAccount).subscribe((committeeAccount) => {
-      this.committeeName = committeeAccount.name;
-      this.committeeID = committeeAccount.committee_id;
-
-      const frequency_code = committeeAccount.filing_frequency;
-      if (frequency_code) {
-        this.committeeFrequency = this.committee_statuses[frequency_code] || '';
-        this.committeeStatus = this.active_committees.includes(frequency_code) ? 'Active' : 'Inactive';
-      }
-
-      const committee_type_code = committeeAccount.committee_type;
-      if (committee_type_code) {
-        this.committeeType = this.committee_types[committee_type_code] || '';
-      }
-    });
+  constructor(private store: Store) {
+    super();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
+  ngOnInit(): void {
+    this.store
+      .select(selectCommitteeAccount)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((committeeAccount) => {
+        this.committeeName = committeeAccount.name;
+        this.committeeID = committeeAccount.committee_id;
+
+        const frequencyCode = committeeAccount.filing_frequency;
+        if (frequencyCode) {
+          this.committeeFrequency = committeeStatusCodes[frequencyCode] ?? '';
+          this.committeeStatus = activeStatusCodes.includes(frequencyCode) ? 'Active' : 'Inactive';
+        }
+
+        const committeeTypeCode = committeeAccount.committee_type;
+        if (committeeTypeCode) {
+          this.committeeType = committeeTypeCodes[committeeTypeCode] ?? '';
+        }
+      });
   }
 }
