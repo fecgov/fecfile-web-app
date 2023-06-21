@@ -315,6 +315,6 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT, 'In-kind Transfer Out'],
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT, 'In-kind Transfer Federal Election Activity Out'],
   [ScheduleBTransactionTypes.PAC_IN_KIND_OUT, 'PAC In-kind Out'],
-  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED, 'Conduit Earmark Out Deposited'],
-  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out Undeposited'],
+  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED, 'Conduit Earmark Out (Deposited)'],
+  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out (Undeposited)'],
 ];
