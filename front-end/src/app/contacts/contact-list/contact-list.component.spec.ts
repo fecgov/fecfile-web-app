@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { SharedModule } from 'app/shared/shared.module';
@@ -49,9 +49,9 @@ describe('ContactListComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', fakeAsync(() => {
+  it('should create', () => {
     expect(component).toBeTruthy();
-  }));
+  });
 
   it('#addItem opens the dialog to add an item', () => {
     component.isNewItem = false;
