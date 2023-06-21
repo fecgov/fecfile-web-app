@@ -45,7 +45,7 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
   candidateStateOptions: PrimeOptions = [];
   candidateDistrictOptions: PrimeOptions = [];
 
-  constructor(private fb: FormBuilder, private fecApiService: FecApiService) {
+  constructor(private fb: FormBuilder, private fecApiService: FecApiService, private contactService: ContactService) {
     super();
   }
 
@@ -107,6 +107,8 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
           this.candidateDistrictOptions = [];
         }
       });
+    this.form?.get('candidate_id')?.addAsyncValidators(this.contactService.fecIdValidator);
+    this.form?.get('committee_id')?.addAsyncValidators(this.contactService.fecIdValidator);
   }
 
   /**
