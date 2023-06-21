@@ -222,7 +222,6 @@ export abstract class DoubleTransactionTypeBaseComponent
       if (value !== undefined) {
         childFieldControl?.setValue(value);
         childFieldControl?.updateValueAndValidity();
-        console.log('Called', value, childFieldControl);
       }
       childFieldControl?.disable();
     });
