@@ -24,7 +24,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
 
   memoControl: FormControl = new FormControl();
   outOfDateDialogVisible = false;
-  memoCodeMapOptions: any[] = [];
+  memoCodeMapOptions: any[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private store: Store) {
     super();
