@@ -117,7 +117,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.useParentContact = !!this.childTransaction?.transactionType?.useParentContact;
 
     // Inheritted fields must match parent values
-    this.childTransaction?.transactionType?.inherittedFields?.forEach((inherittedField) => {
+    this.childTransaction?.transactionType?.inheritedFields?.forEach((inherittedField) => {
       this.form
         .get(this.templateMap[inherittedField])
         ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -215,7 +215,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     );
 
     // Inheritted fields must match parent values
-    this.childTransaction?.transactionType?.inherittedFields?.forEach((inherittedField) => {
+    this.childTransaction?.transactionType?.inheritedFields?.forEach((inherittedField) => {
       const childFieldControl = this.childForm.get(this.childTemplateMap[inherittedField]);
       childFieldControl?.enable();
       const value = this.form.get(this.templateMap[inherittedField])?.value;
@@ -224,7 +224,7 @@ export abstract class DoubleTransactionTypeBaseComponent
         childFieldControl?.updateValueAndValidity();
         console.log('Called', value, childFieldControl);
       }
-      //childFieldControl?.disable();
+      childFieldControl?.disable();
     });
   }
 

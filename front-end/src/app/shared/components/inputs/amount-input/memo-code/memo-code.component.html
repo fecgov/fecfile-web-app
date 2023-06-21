@@ -41,7 +41,7 @@
         ></p-selectButton>
       </div>
       <div class="col-12">
-        <ng-container *ngIf="this.memoControl?.value === true">
+        <ng-container *ngIf="memoControl?.value === true">
           <span
             class="pi pi-check"
             style="font-size: 1rem; margin-left: 0.5rem"
@@ -49,7 +49,7 @@
           ></span>
           MEMO ITEM
         </ng-container>
-        <ng-container *ngIf="this.memoControl?.value === false"> NOT A MEMO ITEM </ng-container>
+        <ng-container *ngIf="memoControl?.value === false"> NOT A MEMO ITEM </ng-container>
         <span
           class="pi pi-info-circle"
           style="font-size: 1.5rem; margin-left: 0.5rem"
@@ -64,10 +64,10 @@
     </ng-template>
     <p id="out-of-date-dialog-text">
       <b>
-        {{ this.form.get(this.templateMap.date)?.value | fecDate }}
+        {{ form.get(templateMap.date)?.value | fecDate }}
       </b>
       falls outside the report coverages dates of
-      <b> {{ this.report?.coverage_from_date | fecDate }}-{{ this.report?.coverage_through_date | fecDate }}</b
+      <b> {{ report?.coverage_from_date | fecDate }}-{{ report?.coverage_through_date | fecDate }}</b
       >. Did you mean to date this transaction outside of the report coverage period? <br /><br />
       If the data entered is correct, this transaction must be a <b>Memo Item</b>.
     </p>
