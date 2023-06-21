@@ -31,6 +31,7 @@ export class TransactionGroupNM extends DoubleTransactionGroup {
     return [
       'entity_type',
       childTemplateMap.organization_name,
+      childTemplateMap.committee_name,
       childTemplateMap.committee_fec_id,
       childTemplateMap.street_1,
       childTemplateMap.street_2,
