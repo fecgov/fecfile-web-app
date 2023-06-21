@@ -56,6 +56,13 @@
           pTooltip="{{ memoItemHelpText }}"
         ></span>
       </div>
+      <div class="col-12">
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['memo_code']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
     </ng-container>
   </div>
   <p-dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '496px' }" [modal]="true">
