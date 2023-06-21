@@ -14,7 +14,7 @@ import { TransactionGroupNM } from '../transaction-groups/transaction-group-nm.m
 
 export class CONDUIT_EARMARK_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupNM();
-  title = 'Conduit Earmark Receipt';
+  title = 'Conduit Earmark';
   schema = schema;
   override dependentChildTransactionType = ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED;
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;

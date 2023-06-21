@@ -75,11 +75,11 @@ export class TransactionGroupNM extends DoubleTransactionGroup {
   }
 
   getParentTransactionTitle(): string {
-    return '';
+    return 'Conduit Earmark Receipt';
   }
 
   getParentFooter(): string {
-    return 'The information in this receipt will automatically populate a related transaction. Review the associated disbursement or click "Save both transactions" to record these transactions.';
+    return 'This type of receipt requires a conduit earmark out.';
   }
 
   getChildTransactionSubTitle(): string {
@@ -87,11 +87,11 @@ export class TransactionGroupNM extends DoubleTransactionGroup {
   }
 
   getGroupDescription(): string {
-    return 'This receipt type automatically creates an associated transaction. Saving an in-kind receipt will automatically create an in-kind out.';
+    return 'This receipt type requires an associated transaction. Follow this two-step process to create both a conduit earmark receipt and a conduit earmark out:';
   }
 
   getParentAccordionTitle(): string {
-    return 'ENTER DATA';
+    return 'STEP ONE';
   }
 
   getParentAccordionSubTitle(): string {
@@ -99,11 +99,11 @@ export class TransactionGroupNM extends DoubleTransactionGroup {
   }
 
   getChildAccordionTitle(): string {
-    return 'AUTO-POPULATED';
+    return 'STEP TWO';
   }
 
   getChildAccordionSubTitle(): string {
-    return 'Review disbursement information';
+    return 'Add earmarked memo and conduit information (REQUIRED FOR CONDUIT EARMARKED RECEIPTS)';
   }
 
   getChildContactLabel(): string {
