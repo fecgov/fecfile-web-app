@@ -64,13 +64,23 @@ export class TransactionFormUtils {
         }
       });
 
-    form
-      ?.get(templateMap.aggregate)
-      ?.valueChanges.pipe(takeUntil(component.destroy$))
-      .subscribe(() => {
-        form.get(templateMap.employer)?.updateValueAndValidity();
-        form.get(templateMap.occupation)?.updateValueAndValidity();
-      });
+    if (transaction.transactionType?.showAggregate) {
+      form
+        ?.get(templateMap.aggregate)
+        ?.valueChanges.pipe(takeUntil(component.destroy$))
+        .subscribe(() => {
+          form.get(templateMap.employer)?.updateValueAndValidity();
+          form.get(templateMap.occupation)?.updateValueAndValidity();
+        });
+    } else {
+      form
+        ?.get(templateMap.amount)
+        ?.valueChanges.pipe(takeUntil(component.destroy$))
+        .subscribe(() => {
+          form.get(templateMap.employer)?.updateValueAndValidity();
+          form.get(templateMap.occupation)?.updateValueAndValidity();
+        });
+    }
 
     if (transaction.transactionType?.showAggregate) {
       const previous_transaction$: Observable<Transaction | undefined> =
