@@ -75,6 +75,7 @@
     "cypress": "^10.10.0",
     "cypress-mochawesome-reporter": "^3.2.3",
     "eslint": "^8.28.0",
+    "glob": "^7.2.0",
     "jasmine-core": "~4.0.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
