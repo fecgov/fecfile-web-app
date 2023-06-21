@@ -3,7 +3,7 @@ import { ContactTypeLabels, ContactTypes } from '../contact.model';
 import { TransactionTemplateMapType } from '../transaction-type.model';
 import { TransactionGroup } from './transaction-group.model';
 
-export class TransactionGroupO extends TransactionGroup {
+export class TransactionGroupS extends TransactionGroup {
   getFormProperties(templateMap: TransactionTemplateMapType): string[] {
     return [
       'entity_type',
@@ -25,12 +25,6 @@ export class TransactionGroupO extends TransactionGroup {
       templateMap.aggregate,
       templateMap.purpose_description,
       templateMap.category_code,
-      templateMap.candidate_fec_id,
-      templateMap.candidate_last_name,
-      templateMap.candidate_first_name,
-      templateMap.candidate_middle_name,
-      templateMap.candidate_prefix,
-      templateMap.candidate_suffix,
       templateMap.memo_code,
       templateMap.text4000,
     ].filter((val) => !!val);
