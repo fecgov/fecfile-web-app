@@ -77,6 +77,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     }
 
     if (this.transaction?.transactionType?.memoCodeTransactionTypes) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       this.memoControl?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
         this.updateTTI();
       });
