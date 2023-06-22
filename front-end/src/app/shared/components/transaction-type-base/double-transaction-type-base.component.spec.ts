@@ -18,6 +18,7 @@ import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -129,6 +130,16 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
     component.childForm.patchValue({ contribution_amount: 2 });
     expect(component.childForm.value.contribution_amount).toBe(-2);
+  });
+
+  it('should push changes in the parent to the child for inherited fields', () => {
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+    component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
+
+    expect(component.childTransaction.transactionType?.inheritedFields).toContain('amount');
+    component.childForm.get(component.childTemplateMap.amount)?.setValue(0);
+    component.form.get(component.templateMap.amount)?.setValue(250);
+    expect(component.childForm.get(component.childTemplateMap.amount)?.value).toEqual(250);
   });
 
   it('should save a parent and child transaction', () => {
