@@ -79,5 +79,7 @@ describe('TransactionGroupFG', () => {
     expect(component.hasChildElectionInformationInput()).toBeFalse();
     expect(component.hasParentCandidateInformationInput()).toBeFalse();
     expect(component.hasParentElectionInformationInput()).toBeFalse();
+    expect(component.hasCandidateInformationInput()).toBeFalse();
+    expect(component.hasElectionInformationInput()).toBeFalse();
   });
 });
