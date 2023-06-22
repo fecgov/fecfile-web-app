@@ -4,7 +4,6 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { SubTransactionGroup } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT extends SchBTransactionType {
@@ -14,10 +13,9 @@ export class FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT extends SchBTransacti
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT
   );
   schema = schema;
-  override subTransactionConfig = new SubTransactionGroup(
-    'Staff Reimbursement Memo for 100% Federal Election Activity', [
+  override subTransactionConfig = [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO,
-  ]);
+  ];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   getNewTransaction() {
