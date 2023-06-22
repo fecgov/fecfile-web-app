@@ -79,18 +79,18 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     if (this.transaction?.transactionType?.memoCodeTransactionTypes) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       this.memoControl?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-        this.updateTTI();
+        this.updateTransactionTypeIdentifier();
       });
     }
 
-    this.updateTTI();
+    this.updateTransactionTypeIdentifier();
   }
 
   ngOnChanges(): void {
     this.changeDetectorRef.detectChanges();
   }
 
-  updateTTI(): void {
+  updateTransactionTypeIdentifier(): void {
     if (this.transaction?.transactionType?.memoCodeTransactionTypes) {
       const memo_code = this.form.get(this.templateMap.memo_code)?.value as boolean;
       if (memo_code) {
