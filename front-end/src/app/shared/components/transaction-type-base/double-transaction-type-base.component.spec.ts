@@ -132,6 +132,20 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     expect(component.childForm.value.contribution_amount).toBe(-2);
   });
 
+  it("should auto-generate the child transaction's purpose description", () => {
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED);
+    component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
+    component.childTransaction.parent_transaction = component.transaction;
+    component.childOnInit();
+
+    component.form.get(component.templateMap.first_name)?.setValue('First');
+    component.form.get(component.templateMap.last_name)?.setValue('Last');
+
+    expect(component.childForm.get(component.childTemplateMap.purpose_description)?.value).toEqual(
+      'Earmarked from First Last (Individual)'
+    );
+  });
+
   it('should push changes in the parent to the child for inherited fields', () => {
     component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
     component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
