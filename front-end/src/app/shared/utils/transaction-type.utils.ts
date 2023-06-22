@@ -151,6 +151,9 @@ import { REFUND_TO_UNREGISTERED_COMMITTEE } from '../models/transaction-types/RE
 import { REFUND_UNREGISTERED_CONTRIBUTION } from '../models/transaction-types/REFUND_UNREGISTERED_CONTRIBUTION.model';
 import { REFUND_UNREGISTERED_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_UNREGISTERED_CONTRIBUTION_VOID.model';
 import { TRANSFER_TO_AFFILIATES } from '../models/transaction-types/TRANSFER_TO_AFFILIATES.model';
+import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
+import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
+import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
