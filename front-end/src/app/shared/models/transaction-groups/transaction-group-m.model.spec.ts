@@ -53,4 +53,9 @@ describe('TransactionGroupM', () => {
     const retval = component.hasCandidateInformationInput();
     expect(retval).toBeTrue();
   });
+
+  it('#hasCandidateCommitteeInput happy path', () => {
+    const retval = component.hasCandidateCommitteeInput();
+    expect(retval).toBeTrue();
+  });
 });
