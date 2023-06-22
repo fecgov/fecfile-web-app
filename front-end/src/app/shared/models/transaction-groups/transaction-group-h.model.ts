@@ -55,4 +55,8 @@ export class TransactionGroupH extends TransactionGroup {
   hasCandidateInformationInput(): boolean {
     return true;
   }
+
+  hasCandidateCommitteeInput(): boolean {
+    return true;
+  }
 }

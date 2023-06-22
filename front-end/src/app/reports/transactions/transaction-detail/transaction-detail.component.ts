@@ -15,6 +15,7 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
   hasCommitteeFecIdInput = false;
   hasElectionInformationInput = false;
   hasCandidateInformationInput = false;
+  hasCandidateCommitteeInput = false;
 
   ngOnChanges(): void {
     if (this.transaction?.transactionType?.templateMap) {
@@ -26,6 +27,7 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
       this.hasCommitteeFecIdInput = transactionGroup.hasCommitteeFecIdInput();
       this.hasElectionInformationInput = transactionGroup.hasElectionInformationInput();
       this.hasCandidateInformationInput = transactionGroup.hasCandidateInformationInput();
+      this.hasCandidateCommitteeInput = transactionGroup.hasCandidateCommitteeInput();
 
       super.ngOnInit();
 

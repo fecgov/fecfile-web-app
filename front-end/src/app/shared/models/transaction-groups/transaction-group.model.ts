@@ -12,4 +12,5 @@ export abstract class TransactionGroup {
   abstract hasCommitteeFecIdInput(entityType?: ContactTypes): boolean;
   abstract hasElectionInformationInput(): boolean;
   abstract hasCandidateInformationInput(): boolean;
+  abstract hasCandidateCommitteeInput(): boolean;
 }
