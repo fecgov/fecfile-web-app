@@ -16,8 +16,9 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { Contact } from 'app/shared/models/contact.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
@@ -120,6 +121,23 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     expect(() => component.ngOnInit()).toThrow(
       new Error('Fecfile: Template map not found for double transaction component')
     );
+  });
+
+  it("should set the child transaction's contact when its shared with the parent", () => {
+    component.useParentContact = true;
+    component.transaction = testTransaction;
+    component.childTransaction = testTransaction.children?.[0] as SchATransaction;
+
+    const contact = new Contact();
+    contact.name = 'Name';
+    component.transaction.contact_1 = contact;
+
+    const selectContact: SelectItem<Contact> = {
+      value: contact,
+    };
+
+    component.onContactLookupSelect(selectContact);
+    expect(component.childTransaction.contact_1?.name).toEqual('Name');
   });
 
   it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
