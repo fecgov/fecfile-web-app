@@ -4,7 +4,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ErrorMessagesComponent } from '../../../error-messages/error-messages.component';
-import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { MemoCodeInputComponent } from './memo-code.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ConfirmationService } from 'primeng/api';
@@ -12,7 +12,7 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
-import { CONDUIT_EARMARK_RECEIPT } from 'app/shared/models/transaction-types/CONDUIT_EARMARK_RECEIPT.model';
+import { ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 
 describe('MemoCodeInputComponent', () => {
   let component: MemoCodeInputComponent;
@@ -134,17 +134,30 @@ describe('MemoCodeInputComponent', () => {
   });
 
   it('should update transaction type identifiers correctly based on the TransactionType', () => {
-    component.transaction = new CONDUIT_EARMARK_RECEIPT().getNewTransaction();
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+    component.ngOnInit();
 
     const trueTTI = component.transaction.transactionType?.memoCodeTransactionTypes?.true;
     const falseTTI = component.transaction.transactionType?.memoCodeTransactionTypes?.false;
 
     component.memoControl.setValue(true);
-    component.updateTransactionTypeIdentifier();
     expect(component.transaction.transaction_type_identifier).toEqual(trueTTI);
 
     component.memoControl.setValue(false);
-    component.updateTransactionTypeIdentifier();
     expect(component.transaction.transaction_type_identifier).toEqual(falseTTI);
+  });
+
+  it('should form the memoCodeMapOptions correctly', () => {
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+    component.ngOnInit();
+
+    for (const option of component.memoCodeMapOptions) {
+      if (option.value === false) {
+        expect(option.label).toEqual(component.transaction.transactionType?.memoCodeMap?.false);
+      }
+      if (option.value === true) {
+        expect(option.label).toEqual(component.transaction.transactionType?.memoCodeMap?.true);
+      }
+    }
   });
 });
