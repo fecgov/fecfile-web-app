@@ -12,6 +12,7 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { F3xSummary } from 'app/shared/models/f3x-summary.model';
 import { Dialog } from 'primeng/dialog';
 import { Tooltip, TooltipModule } from 'primeng/tooltip';
+import { CONDUIT_EARMARK_RECEIPT } from 'app/shared/models/transaction-types/CONDUIT_EARMARK_RECEIPT.model';
 
 describe('MemoCodeInputComponent', () => {
   let component: MemoCodeInputComponent;
@@ -130,5 +131,20 @@ describe('MemoCodeInputComponent', () => {
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
     expect(component.dateIsOutsideReport).toBeTrue();
+  });
+
+  it('should update transaction type identifiers correctly based on the TransactionType', () => {
+    component.transaction = new CONDUIT_EARMARK_RECEIPT().getNewTransaction();
+
+    const trueTTI = component.transaction.transactionType?.memoCodeTransactionTypes?.true;
+    const falseTTI = component.transaction.transactionType?.memoCodeTransactionTypes?.false;
+
+    component.memoControl.setValue(true);
+    component.updateTransactionTypeIdentifier();
+    expect(component.transaction.transaction_type_identifier).toEqual(trueTTI);
+
+    component.memoControl.setValue(false);
+    component.updateTransactionTypeIdentifier();
+    expect(component.transaction.transaction_type_identifier).toEqual(falseTTI);
   });
 });
