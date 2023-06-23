@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { AggregationGroups, ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
