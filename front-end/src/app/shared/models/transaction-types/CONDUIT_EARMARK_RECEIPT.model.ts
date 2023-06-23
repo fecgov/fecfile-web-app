@@ -31,18 +31,12 @@ export class CONDUIT_EARMARK_RECEIPT extends SchATransactionType {
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children?.length) return '';
     const earmarkMemo: SchBTransaction = transaction.children[0] as SchBTransaction;
-    let conduit = '';
-    if (earmarkMemo.payee_organization_name) {
-      conduit = earmarkMemo.payee_organization_name;
-    }
     if (
       earmarkMemo.entity_type === ContactTypes.INDIVIDUAL &&
       earmarkMemo.payee_first_name &&
       earmarkMemo.payee_last_name
     ) {
-      conduit = `${earmarkMemo.payee_first_name || ''} ${earmarkMemo.payee_last_name || ''}`;
-    }
-    if (conduit) {
+      const conduit = `${earmarkMemo.payee_first_name || ''} ${earmarkMemo.payee_last_name || ''}`;
       return `Earmarked for ${conduit} (Committee)`;
     }
     return '';
