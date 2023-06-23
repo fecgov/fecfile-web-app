@@ -79,11 +79,11 @@ describe('TableListBaseComponent', () => {
   });
 
   it('#onSelectAllChange should update selected property values', () => {
-    component.onSelectAllChange({ checked: true, event: {} as PointerEvent });
+    component.onSelectAllChange({ checked: true, originalEvent: {} as PointerEvent });
     expect(component.selectedItems[0]).toBe('abc');
     expect(component.selectAll).toBe(true);
 
-    component.onSelectAllChange({ checked: false, event: {} as PointerEvent });
+    component.onSelectAllChange({ checked: false, originalEvent: {} as PointerEvent });
     expect(component.selectedItems.length).toBe(0);
     expect(component.selectAll).toBe(false);
   });
