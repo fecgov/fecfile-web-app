@@ -2,18 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
-import { TransactionGroupE } from './transaction-group-e.model';
+import { TransactionGroupO } from './transaction-group-o.model';
 
-describe('TransactionGroupE', () => {
-  let component: TransactionGroupE;
+describe('TransactionGroupO', () => {
+  let component: TransactionGroupO;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [TransactionGroupE],
+      providers: [TransactionGroupO],
     });
 
-    component = TestBed.inject(TransactionGroupE);
+    component = TestBed.inject(TransactionGroupO);
   });
 
   it('should create', () => {
@@ -29,7 +29,11 @@ describe('TransactionGroupE', () => {
   });
 
   it('#getContactTypeOptions happy path', () => {
-    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+      ContactTypes.ORGANIZATION,
+      ContactTypes.INDIVIDUAL,
+      ContactTypes.COMMITTEE
+    ]);
     const retval = component.getContactTypeOptions();
     expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
   });
@@ -39,15 +43,15 @@ describe('TransactionGroupE', () => {
   });
 
   it('#hasCommitteeFecIdInput happy path', () => {
-    expect(component.hasCommitteeFecIdInput()).toBeTrue();
+    expect(component.hasCommitteeFecIdInput()).toBeFalse();
   });
 
   it('#hasElectionInformationInput happy path', () => {
-    expect(component.hasElectionInformationInput()).toBeFalse();
+    expect(component.hasElectionInformationInput()).toBeTrue();
   });
 
   it('#hasCandidateInformationInput happy path', () => {
-    expect(component.hasCandidateInformationInput()).toBeFalse();
+    expect(component.hasCandidateInformationInput()).toBeTrue();
   });
 
   it('#hasCandidateCommitteeInput happy path', () => {
