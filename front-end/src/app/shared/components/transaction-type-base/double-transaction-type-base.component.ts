@@ -214,7 +214,9 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childContactId$
     );
 
-    // Inheritted fields must match parent values
+    // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
+    // This happens most reliably when the user selects a contact for the child transaction.
+    // Afterwards, inheritted fields are updated to match parent values.
     this.childTransaction?.transactionType?.inheritedFields?.forEach((inherittedField) => {
       const childFieldControl = this.childForm.get(this.childTemplateMap[inherittedField]);
       childFieldControl?.enable();
