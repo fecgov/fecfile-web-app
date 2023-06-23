@@ -35,27 +35,22 @@ describe('TransactionGroupD', () => {
   });
 
   it('#hasEmployerInput happy path', () => {
-    const retval = component.hasEmployerInput();
-    expect(retval).toBeFalse();
+    expect(component.hasEmployerInput()).toBeFalse();
   });
 
   it('#hasCommitteeFecIdInput happy path', () => {
-    const retval = component.hasCommitteeFecIdInput();
-    expect(retval).toBeFalse();
+    expect(component.hasCommitteeFecIdInput()).toBeFalse();
   });
 
   it('#hasElectionInformationInput happy path', () => {
-    const retval = component.hasElectionInformationInput();
-    expect(retval).toBeFalse();
+    expect(component.hasElectionInformationInput()).toBeFalse();
   });
 
   it('#hasCandidateInformationInput happy path', () => {
-    const retval = component.hasCandidateInformationInput();
-    expect(retval).toBeFalse();
+    expect(component.hasCandidateInformationInput()).toBeFalse();
   });
 
   it('#hasCandidateCommitteeInput happy path', () => {
-    const retval = component.hasCandidateCommitteeInput();
-    expect(retval).toBeFalse();
+    expect(component.hasCandidateCommitteeInput()).toBeFalse();
   });
 });

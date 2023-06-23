@@ -13,6 +13,7 @@ export class FEDERAL_ELECTION_ACTIVITY_VOID extends SchBTransactionType {
   schema = schema;
   override negativeAmountValueOnly = true;
   override showAggregate = false;
+  override isRefundAggregate = true;
   override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
