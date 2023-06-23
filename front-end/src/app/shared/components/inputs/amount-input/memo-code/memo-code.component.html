@@ -48,8 +48,9 @@
           ></span>
           MEMO ITEM
         </ng-container>
-        <ng-container *ngIf="memoControl?.value !== true"> NOT A MEMO ITEM </ng-container>
+        <ng-container *ngIf="memoControl?.value === false"> NOT A MEMO ITEM </ng-container>
         <span
+          *ngIf="memoControl?.value !== undefined"
           class="pi pi-info-circle"
           style="font-size: 1.5rem; margin-left: 0.5rem"
           pTooltip="{{ memoItemHelpText }}"
@@ -60,6 +61,7 @@
           [form]="form"
           [fieldName]="templateMap['memo_code']"
           [formSubmitted]="formSubmitted"
+          [patternErrorMessage]="'This is a required field.'"
         ></app-error-messages>
       </div>
     </ng-container>
