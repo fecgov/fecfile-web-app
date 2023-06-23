@@ -38,7 +38,7 @@
         "@types/ws": "8.5.4",
         "bootstrap": "5.1.3",
         "class-transformer": "^0.5.1",
-        "fecfile-validate": "https://github.com/fecgov/fecfile-validate#aa77e5b453dd13b74c0acabf3c5cfe9b9bd8e1d9",
+        "fecfile-validate": "https://github.com/fecgov/fecfile-validate#4a73eb7f267bbf7f6242593954dadc031832c3ec",
         "intl-tel-input": "^17.0.18",
         "jwt-decode": "^3.1.2",
         "lodash": "^4.17.21",
