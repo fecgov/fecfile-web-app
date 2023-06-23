@@ -1,5 +1,4 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARKS';
-import { ContactTypes } from '../contact.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
