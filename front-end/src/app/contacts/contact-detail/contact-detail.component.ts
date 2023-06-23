@@ -6,8 +6,9 @@ import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
-import { LazyLoadEvent, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { Contact, ContactType } from '../../shared/models/contact.model';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 @Component({
   selector: 'app-contact-detail',
@@ -17,7 +18,7 @@ export class ContactDetailComponent {
   @Input() contact: Contact = new Contact();
   @Input() detailVisible = false;
   @Output() detailVisibleChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() loadTableItems: EventEmitter<LazyLoadEvent> = new EventEmitter<LazyLoadEvent>();
+  @Output() loadTableItems: EventEmitter<TableLazyLoadEvent> = new EventEmitter<TableLazyLoadEvent>();
 
   // Need this setter/getter to get the isNewItem value into the template
   private _isNewItem = false;
@@ -50,7 +51,7 @@ export class ContactDetailComponent {
     private messageService: MessageService,
     private contactService: ContactService,
     private fb: FormBuilder
-  ) { }
+  ) {}
 
   public onOpenDetail() {
     this.resetForm();
@@ -66,9 +67,10 @@ export class ContactDetailComponent {
 
     const payload: Contact = Contact.fromJSON({
       ...this.contact,
-      ...ValidateUtils.getFormValues(this.form,
-        ContactService.getSchemaByType(
-          this.form.get('type')?.value as ContactType))
+      ...ValidateUtils.getFormValues(
+        this.form,
+        ContactService.getSchemaByType(this.form.get('type')?.value as ContactType)
+      ),
     });
 
     if (payload.id) {
