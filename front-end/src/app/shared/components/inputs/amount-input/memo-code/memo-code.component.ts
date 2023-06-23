@@ -6,7 +6,6 @@ import { selectActiveReport } from 'app/store/active-report.selectors';
 import { takeUntil } from 'rxjs';
 import { BaseInputComponent } from '../../base-input.component';
 import { Transaction } from 'app/shared/models/transaction.model';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 @Component({
   selector: 'app-memo-code',
