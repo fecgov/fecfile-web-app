@@ -28,9 +28,7 @@ describe('CONDUIT_EARMARK_RECEIPT', () => {
   });
 
   it('#generatePurposeDescription() should reflect child', () => {
-    const childTransaction = getTestTransactionByType(
-      ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED
-    ) as SchBTransaction;
+    const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT) as SchBTransaction;
     childTransaction.entity_type = ContactTypes.COMMITTEE;
     childTransaction.payee_organization_name = 'Joe';
     transaction.children = [childTransaction];
