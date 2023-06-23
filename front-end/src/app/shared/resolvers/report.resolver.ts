@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Report } from '../interfaces/report.interface';
@@ -8,7 +8,7 @@ import { ReportService } from '../services/report.service';
 @Injectable({
   providedIn: 'root',
 })
-export class ReportResolver implements Resolve<Report | undefined> {
+export class ReportResolver  {
   constructor(private store: Store, private reportService: ReportService) {}
 
   /**
