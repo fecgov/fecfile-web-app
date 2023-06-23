@@ -4,6 +4,7 @@ import { ScheduleTransaction } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
 import { TransactionType } from '../models/transaction-type.model';
+import { CONDUIT_EARMARK_RECEIPT } from '../models/transaction-types/CONDUIT_EARMARK_RECEIPT.model';
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
 import { EARMARK_MEMO_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_CONVENTION_ACCOUNT.model';
@@ -88,6 +89,7 @@ import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-t
 // Schedule B /////////////////////////////////////////////////////
 
 import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
+import { CONDUIT_EARMARK_OUT } from '../models/transaction-types/CONDUIT_EARMARK_OUT.model';
 import { CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE.model';
 import { CONTRIBUTION_TO_CANDIDATE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE_VOID.model';
 import { CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE.model';
@@ -243,6 +245,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   IN_KIND_TRANSFER,
   IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
   PAC_IN_KIND_RECEIPT,
+  CONDUIT_EARMARK_RECEIPT,
+  CONDUIT_EARMARK_RECEIPT_DEPOSITED: CONDUIT_EARMARK_RECEIPT,
+  CONDUIT_EARMARK_RECEIPT_UNDEPOSITED: CONDUIT_EARMARK_RECEIPT,
   // Schedule B /////////////////////////////////////////////////////
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
   INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
@@ -304,6 +309,9 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   IN_KIND_TRANSFER_OUT,
   IN_KIND_TRANSFER_FEA_OUT,
   PAC_IN_KIND_OUT,
+  CONDUIT_EARMARK_OUT,
+  CONDUIT_EARMARK_OUT_DEPOSITED: CONDUIT_EARMARK_OUT,
+  CONDUIT_EARMARK_OUT_UNDEPOSITED: CONDUIT_EARMARK_OUT,
   CONTRIBUTION_TO_CANDIDATE,
   CONTRIBUTION_TO_CANDIDATE_VOID,
 }
