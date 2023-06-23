@@ -7,7 +7,6 @@ import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
-import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { TransactionGroupNM } from '../transaction-groups/transaction-group-nm.model';
 
@@ -15,7 +14,7 @@ export class CONDUIT_EARMARK_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupNM();
   title = 'Conduit Earmark';
   schema = schema;
-  override dependentChildTransactionType = ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED;
+  override dependentChildTransactionType = ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT;
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   override childTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
   override showAggregate = false;
@@ -31,7 +30,6 @@ export class CONDUIT_EARMARK_RECEIPT extends SchATransactionType {
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children?.length) return '';
-
     const earmarkMemo: SchBTransaction = transaction.children[0] as SchBTransaction;
     let conduit = '';
     if (earmarkMemo.payee_organization_name) {
@@ -54,7 +52,6 @@ export class CONDUIT_EARMARK_RECEIPT extends SchATransactionType {
     return SchATransaction.fromJSON({
       form_type: 'SA11AI',
       transaction_type_identifier: ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED,
-      aggregation_group: AggregationGroups.NONE,
       memo_code: false,
     });
   }

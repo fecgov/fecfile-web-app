@@ -14,10 +14,12 @@ import { SchATransaction } from 'app/shared/models/scha-transaction.model';
   templateUrl: './memo-code.component.html',
 })
 export class MemoCodeInputComponent extends BaseInputComponent implements OnInit, OnChanges {
-  @Input() memoCodeReadOnly = false;
-  @Input() memoItemHelpText =
-    'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
+  @Input() overrideMemoItemHelpText: string | undefined;
+  @Input() overrideMemoCodeReadOnly: boolean | undefined;
   @Input() transaction: Transaction | undefined;
+
+  memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
+  memoCodeReadOnly = false;
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
   report?: F3xSummary;
@@ -44,6 +46,9 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
       .subscribe((date: Date) => {
         this.updateMemoItemWithDate(date);
       });
+
+    if (this.overrideMemoCodeReadOnly) this.memoCodeReadOnly = this.overrideMemoCodeReadOnly;
+    if (this.overrideMemoItemHelpText) this.memoItemHelpText = this.overrideMemoItemHelpText;
 
     this.memoControl = (this.form.get(this.templateMap.memo_code) as FormControl) || this.memoControl;
     const savedDate: Date | null = this.form.get(this.templateMap.date)?.value as Date | null;

@@ -1,5 +1,4 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARK_OUTS';
-import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
@@ -43,8 +42,7 @@ export class CONDUIT_EARMARK_OUT extends SchBTransactionType {
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB23',
-      transaction_type_identifier: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED,
-      aggregation_group: AggregationGroups.NONE,
+      transaction_type_identifier: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT,
     });
   }
 }

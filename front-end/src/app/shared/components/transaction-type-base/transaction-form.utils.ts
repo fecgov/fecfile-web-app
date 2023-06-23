@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { AggregationGroups, ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
 import { getFromJSON } from 'app/shared/utils/transaction-type.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
@@ -10,6 +10,7 @@ import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-ba
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionContactUtils } from './transaction-contact.utils';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 export class TransactionFormUtils {
   /**
@@ -64,7 +65,7 @@ export class TransactionFormUtils {
         }
       });
 
-    if (transaction.transactionType?.showAggregate) {
+    if ((transaction as SchATransaction).aggregation_group) {
       form
         ?.get(templateMap.aggregate)
         ?.valueChanges.pipe(takeUntil(component.destroy$))

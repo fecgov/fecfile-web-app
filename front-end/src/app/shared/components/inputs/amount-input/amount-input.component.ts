@@ -14,9 +14,8 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
 
-  @Input() memoCodeReadOnly = false;
-  @Input() memoItemHelpText =
-    'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
+  @Input() memoCodeReadOnly: boolean | undefined;
+  @Input() memoItemHelpText: string | undefined;
   @Input() transaction: Transaction | undefined;
 
   @ViewChild('amountInput') amountInput!: InputNumber;
