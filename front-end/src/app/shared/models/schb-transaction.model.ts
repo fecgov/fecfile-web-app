@@ -48,7 +48,12 @@ export class SchBTransaction extends Transaction {
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
   override getFieldsNotToValidate(): string[] {
-    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
+    return [
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      //'beneficiary_committee_name',
+      ...super.getFieldsNotToValidate(),
+    ];
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchBTransaction {
@@ -150,6 +155,9 @@ export enum ScheduleBTransactionTypes {
   IN_KIND_TRANSFER_OUT = 'IN_KIND_TRANSFER_OUT',
   IN_KIND_TRANSFER_FEA_OUT = 'IN_KIND_TRANSFER_FEA_OUT',
   PAC_IN_KIND_OUT = 'PAC_IN_KIND_OUT',
+  CONDUIT_EARMARK_OUT = 'CONDUIT_EARMARK_OUT',
+  CONDUIT_EARMARK_OUT_DEPOSITED = 'CONDUIT_EARMARK_OUT_DEPOSITED',
+  CONDUIT_EARMARK_OUT_UNDEPOSITED = 'CONDUIT_EARMARK_OUT_UNDEPOSITED',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
@@ -288,7 +296,10 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
     'Staff Reimbursement for 100% Federal Election Activity',
   ],
-  [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO, 'Staff Reimbursement Memo for 100% Federal Election Activity'],
+  [
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO,
+    'Staff Reimbursement Memo for 100% Federal Election Activity',
+  ],
   [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
     'Payment to Payroll for 100% Federal Election Activity',
@@ -311,4 +322,7 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT, 'In-kind Transfer Out'],
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT, 'In-kind Transfer Federal Election Activity Out'],
   [ScheduleBTransactionTypes.PAC_IN_KIND_OUT, 'PAC In-kind Out'],
+  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT, 'Conduit Earmark Out'],
+  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED, 'Conduit Earmark Out (Deposited)'],
+  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out (Undeposited)'],
 ];

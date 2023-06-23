@@ -20,6 +20,10 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
   override childFormProperties: string[] = [];
   hasEmployerInput = false;
   childHasEmployerInput = true;
+  hasParentCandidateInformationInput = false;
+  hasChildCandidateInformationInput = false;
+  hasParentElectionInformationInput = false;
+  hasChildElectionInformationInput = false;
   parentTransactionTitle = '';
   parentFooter = '';
   childTransactionSubTitle = '';
@@ -82,6 +86,11 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
         this.parentTransactionTitle = doubleTransactionGroup.getParentTransactionTitle();
         this.parentFooter = doubleTransactionGroup.getParentFooter();
         this.childTransactionSubTitle = doubleTransactionGroup.getChildTransactionSubTitle();
+
+        this.hasParentCandidateInformationInput = doubleTransactionGroup.hasParentCandidateInformationInput();
+        this.hasChildCandidateInformationInput = doubleTransactionGroup.hasChildCandidateInformationInput();
+        this.hasParentElectionInformationInput = doubleTransactionGroup.hasParentElectionInformationInput();
+        this.hasChildElectionInformationInput = doubleTransactionGroup.hasChildElectionInformationInput();
 
         this.childContactLabel = doubleTransactionGroup.getChildContactLabel();
         super.ngOnInit();

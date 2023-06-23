@@ -11,7 +11,7 @@ export class PAC_EARMARK_MEMO extends SchATransactionType {
   override isDependentChild = true;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_MEMO);
   schema = schema;
-  override inherittedFields = ['amount' as TemplateMapKeyType];
+  override inheritedFields = ['amount' as TemplateMapKeyType];
 
   override generatePurposeDescription(): string {
     return 'Total earmarked through conduit.';

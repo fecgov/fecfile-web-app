@@ -1,0 +1,97 @@
+<div [formGroup]="form">
+  <div class="grid">
+    <ng-container *ngIf="memoCodeMapOptions.length === 0">
+      <div class="col-12">
+        <p-checkbox
+          #memoCode
+          [binary]="true"
+          inputId="memo_code"
+          [formControlName]="templateMap['memo_code']"
+          label="MEMO ITEM"
+          ariaLabel="have memo item"
+          [trueValue]="true"
+          [falseValue]="false"
+          [readonly]="memoCodeReadOnly"
+          (click)="onMemoItemClick()"
+        ></p-checkbox>
+        <span
+          class="pi pi-info-circle"
+          style="font-size: 1.5rem; margin-left: 0.5rem"
+          pTooltip="{{ memoItemHelpText }}"
+        ></span>
+      </div>
+      <div class="col-12">
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['memo_code']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="memoCodeMapOptions.length > 0">
+      <div class="col-3">
+        <p-selectButton
+          #memoCode
+          inputId="memo_code"
+          [formControlName]="templateMap['memo_code']"
+          [options]="memoCodeMapOptions"
+          optionLabel="label"
+          optionValue="value"
+        ></p-selectButton>
+      </div>
+      <div class="col-12">
+        <ng-container *ngIf="memoControl?.value === true">
+          <span
+            class="pi pi-check"
+            style="font-size: 1rem; margin-left: 0.5rem"
+            pTooltip="{{ memoItemHelpText }}"
+          ></span>
+          MEMO ITEM
+        </ng-container>
+        <ng-container *ngIf="memoControl?.value === false"> NOT A MEMO ITEM </ng-container>
+        <span
+          *ngIf="memoControl?.value !== undefined"
+          class="pi pi-info-circle"
+          style="font-size: 1.5rem; margin-left: 0.5rem"
+          pTooltip="{{ memoItemHelpText }}"
+        ></span>
+      </div>
+      <div class="col-12">
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['memo_code']"
+          [formSubmitted]="formSubmitted"
+          [patternErrorMessage]="'This is a required field.'"
+        ></app-error-messages>
+      </div>
+    </ng-container>
+  </div>
+  <p-dialog header="Header" [(visible)]="outOfDateDialogVisible" [style]="{ width: '496px' }" [modal]="true">
+    <ng-template pTemplate="header">
+      <span class="text-xl" id="out-of-date-dialog-header">Just checking...</span>
+    </ng-template>
+    <p id="out-of-date-dialog-text">
+      <b>
+        {{ form.get(templateMap.date)?.value | fecDate }}
+      </b>
+      falls outside the report coverages dates of
+      <b> {{ report?.coverage_from_date | fecDate }}-{{ report?.coverage_through_date | fecDate }}</b
+      >. Did you mean to date this transaction outside of the report coverage period? <br /><br />
+      If the data entered is correct, this transaction must be a <b>Memo Item</b>.
+    </p>
+    <div class="grid">
+      <div class="mx-auto">
+        <button
+          type="button"
+          pButton
+          id="out-of-date-dialog-button"
+          class="p-button"
+          label="Close"
+          styleClass="p-button-link"
+          (click)="closeOutOfDateDialog()"
+          [autofocus]="true"
+        ></button>
+      </div>
+    </div>
+  </p-dialog>
+</div>
