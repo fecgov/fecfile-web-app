@@ -16,13 +16,13 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransac
   override subTransactionConfig = [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override purposeDescriptionLabelNotice =
-    'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not require itemization". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
+    'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not meet itemization threshold". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (transaction.children && transaction.children.length > 0) {
       return 'Headquarters Buildings Account (See Partnership Attribution(s) below)';
     }
-    return 'Headquarters Buildings Account (Partnership attributions do not require itemization)';
+    return 'Headquarters Buildings Account (Partnership attributions do not meet itemization threshold)';
   }
 
   getNewTransaction() {

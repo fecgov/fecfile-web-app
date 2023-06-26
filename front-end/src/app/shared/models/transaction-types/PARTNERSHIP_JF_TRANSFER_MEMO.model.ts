@@ -35,7 +35,7 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
     const hasChildren = transaction.children && transaction.children.length > 0;
     const parenthetical = hasChildren
       ? ' (See Partnership Attribution(s) below)'
-      : ' (Partnership attributions do not require itemization)';
+      : ' (Partnership attributions do not meet itemization threshold)';
     if ((committeeClause + parenthetical).length > 100) {
       committeeClause = committeeClause.slice(0, 97 - parenthetical.length) + '...';
     }
@@ -43,5 +43,5 @@ export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
   }
 
   override purposeDescriptionLabelNotice =
-    'If transaction has no associated Partnership memos, reads "JF Memo: XX (Partnership attributions do not require itemization)". Otherwise, reads "JF Memo: XX (See Partnership Attribution(s) below)"';
+    'If transaction has no associated Partnership memos, reads "JF Memo: XX (Partnership attributions do not meet itemization threshold)". Otherwise, reads "JF Memo: XX (See Partnership Attribution(s) below)"';
 }
