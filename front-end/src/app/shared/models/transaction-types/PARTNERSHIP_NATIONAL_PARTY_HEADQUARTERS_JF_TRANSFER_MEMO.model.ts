@@ -33,7 +33,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends Sc
   }
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    let committeeClause = `Headquarters Buildings Account JF Memo: ${
+    const committeeClause = `Headquarters Buildings Account JF Memo: ${
       (transaction.parent_transaction as SchATransaction).contributor_organization_name
     }`;
     const hasChildren = transaction.children && transaction.children.length > 0;

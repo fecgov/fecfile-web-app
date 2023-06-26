@@ -33,7 +33,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATra
   }
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    let committeeClause = `Recount/Legal Proceedings Account JF Memo: ${
+    const committeeClause = `Recount/Legal Proceedings Account JF Memo: ${
       (transaction.parent_transaction as SchATransaction).contributor_organization_name
     }`;
     const hasChildren = transaction.children && transaction.children.length > 0;
