@@ -10,6 +10,7 @@ import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-ba
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 import { TransactionContactUtils } from './transaction-contact.utils';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 export class TransactionFormUtils {
   /**
@@ -64,13 +65,23 @@ export class TransactionFormUtils {
         }
       });
 
-    form
-      ?.get(templateMap.aggregate)
-      ?.valueChanges.pipe(takeUntil(component.destroy$))
-      .subscribe(() => {
-        form.get(templateMap.employer)?.updateValueAndValidity();
-        form.get(templateMap.occupation)?.updateValueAndValidity();
-      });
+    if ((transaction as SchATransaction).aggregation_group) {
+      form
+        ?.get(templateMap.aggregate)
+        ?.valueChanges.pipe(takeUntil(component.destroy$))
+        .subscribe(() => {
+          form.get(templateMap.employer)?.updateValueAndValidity();
+          form.get(templateMap.occupation)?.updateValueAndValidity();
+        });
+    } else {
+      form
+        ?.get(templateMap.amount)
+        ?.valueChanges.pipe(takeUntil(component.destroy$))
+        .subscribe(() => {
+          form.get(templateMap.employer)?.updateValueAndValidity();
+          form.get(templateMap.occupation)?.updateValueAndValidity();
+        });
+    }
 
     if (transaction.transactionType?.showAggregate) {
       const previous_transaction$: Observable<Transaction | undefined> =
@@ -142,6 +153,10 @@ export class TransactionFormUtils {
 
     if (payload.children) {
       payload.children = payload.updateChildren();
+    }
+
+    if (transaction.transactionType?.useParentContact) {
+      payload.use_parent_contact = transaction.transactionType.useParentContact;
     }
 
     return payload;

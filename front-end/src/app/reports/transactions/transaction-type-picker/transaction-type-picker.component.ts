@@ -104,12 +104,10 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleATransactionTypes.INDIVIDUAL_RECEIPT,
           ScheduleATransactionTypes.TRIBAL_RECEIPT,
           ScheduleATransactionTypes.PARTNERSHIP_RECEIPT,
-          ScheduleATransactionTypes.REATTRIBUTION,
           ScheduleATransactionTypes.IN_KIND_RECEIPT,
           ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL,
           ScheduleATransactionTypes.EARMARK_RECEIPT,
-          ScheduleATransactionTypes.CONDUIT_EARMARK_DEPOSITED,
-          ScheduleATransactionTypes.CONDUIT_EARMARK_UNDEPOSITED,
+          ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT,
           ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON,
           ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON_RETURN,
         ];
@@ -181,7 +179,6 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         ];
       case ScheduleBTransactionGroups.CONTRIBUTIONS_EXPENDITURES_TO_REGULAR_FILERS:
         return [
-          ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID,
           ScheduleBTransactionTypes.TRANSFER_TO_AFFILIATES,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE,
           ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID,
@@ -209,14 +206,8 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
           ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT,
           ScheduleBTransactionTypes.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT,
           ScheduleBTransactionTypes.NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT,
-          ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_INDIVIDUAL_REFUND,
-          ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_REGULAR_REFUND,
           ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
-          ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_INDIVIDUAL_REFUND,
-          ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_REGULAR_REFUND,
           ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
-          ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND,
-          ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_REGULAR_REFUND,
           ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
           ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
           ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,

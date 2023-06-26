@@ -104,11 +104,11 @@ describe('ContactListComponent', () => {
         results: [Contact.fromJSON({ id: 1, transaction_count: 0 }), Contact.fromJSON({ id: 2, transaction_count: 5 })],
       })
     );
-    component.onSelectAllChange({ checked: false, event: {} as PointerEvent });
+    component.onSelectAllChange({ checked: false, originalEvent: {} as PointerEvent });
     expect(component.selectAll).toBeFalse();
     expect(component.selectedItems).toEqual([]);
 
-    component.onSelectAllChange({ checked: true, event: {} as PointerEvent });
+    component.onSelectAllChange({ checked: true, originalEvent: {} as PointerEvent });
     expect(component.selectAll).toBeTrue();
     expect(component.selectedItems.length).toBe(1);
   });

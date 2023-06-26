@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
@@ -8,7 +8,7 @@ import { CashOnHand } from '../interfaces/report.interface';
 @Injectable({
   providedIn: 'root',
 })
-export class CashOnHandGuard implements CanActivate {
+export class CashOnHandGuard  {
   constructor(private store: Store) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {

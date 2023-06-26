@@ -38,10 +38,7 @@ export class TransactionContactLookupComponent {
     ])
   );
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private fecApiService: FecApiService
-  ) { }
+  constructor(private formBuilder: FormBuilder, private fecApiService: FecApiService) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContactLookupSelect(event: any) {
@@ -77,9 +74,10 @@ export class TransactionContactLookupComponent {
     }
 
     const createdContact = Contact.fromJSON({
-      ...ValidateUtils.getFormValues(this.createContactForm,
-        ContactService.getSchemaByType(
-          this.createContactForm.get('type')?.value as ContactType)),
+      ...ValidateUtils.getFormValues(
+        this.createContactForm,
+        ContactService.getSchemaByType(this.createContactForm.get('type')?.value as ContactType)
+      ),
     });
     this.contactSelect.emit({
       value: createdContact,
@@ -92,5 +90,4 @@ export class TransactionContactLookupComponent {
     this.createContactFormSubmitted = false;
     this.createContactDialogVisible = false;
   }
-
 }

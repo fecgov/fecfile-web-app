@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, OnInit, ElementRef } from '@angular/core';
-import { ConfirmationService, MessageService, LazyLoadEvent } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ListRestResponse } from '../../../shared/models/rest-api.model';
 import { TableListService } from '../../interfaces/table-list-service.interface';
 import { Observable, forkJoin } from 'rxjs';
 import { DestroyerComponent } from '../app-destroyer.component';
+import { TableLazyLoadEvent, TableSelectAllChangeEvent } from 'primeng/table';
 
 @Component({
   template: '',
@@ -13,7 +14,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   items: T[] = [];
   rowsPerPage = 10;
   totalItems = 0;
-  pagerState: LazyLoadEvent | undefined;
+  pagerState: TableLazyLoadEvent | undefined;
   loading = false;
   selectAll = false;
   selectedItems: T[] = [];
@@ -61,9 +62,9 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
 
   /**
    * Method is called when the table data needs to be refreshed.
-   * @param {LazyLoadEvent} event
+   * @param {TableLazyLoadEvent} event
    */
-  public loadTableItems(event: LazyLoadEvent) {
+  public loadTableItems(event: TableLazyLoadEvent) {
     this.loading = true;
 
     // event is undefined when triggered from the detail page because
@@ -87,9 +88,11 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
     const params = this.getGetParams();
 
     // Determine query sort ordering
-    let ordering: string = event.sortField ? event.sortField : '';
+    let ordering: string | string[] = event.sortField ? event.sortField : '';
     if (ordering && event.sortOrder === -1) {
       ordering = `-${ordering}`;
+    } else {
+      ordering = `${ordering}`;
     }
 
     this.itemService.getTableData(pageNumber, ordering, params).subscribe((response: ListRestResponse) => {
@@ -112,7 +115,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
    * Event listener when user selects the "all" checkbox to select/deselect row checkboxes.
    * @param event
    */
-  public onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {
+  public onSelectAllChange(event: TableSelectAllChangeEvent) {
     const checked: boolean = event.checked;
 
     if (checked) {
@@ -176,7 +179,7 @@ export abstract class TableListBaseComponent<T> extends DestroyerComponent imple
   }
 
   public refreshTable() {
-    this.loadTableItems({} as LazyLoadEvent);
+    this.loadTableItems({} as TableLazyLoadEvent);
   }
 
   /**

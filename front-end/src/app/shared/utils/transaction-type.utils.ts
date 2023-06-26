@@ -1,12 +1,19 @@
-import { ScheduleTransaction } from '../models/transaction.model';
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
+import { ScheduleTransaction } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
+import { TransactionType } from '../models/transaction-type.model';
+import { CONDUIT_EARMARK_RECEIPT } from '../models/transaction-types/CONDUIT_EARMARK_RECEIPT.model';
 import { BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT.model';
 import { EARMARK_MEMO } from '../models/transaction-types/EARMARK_MEMO.model';
+import { EARMARK_MEMO_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_CONVENTION_ACCOUNT.model';
+import { EARMARK_MEMO_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_HEADQUARTERS_ACCOUNT.model';
+import { EARMARK_MEMO_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_RECOUNT_ACCOUNT.model';
 import { EARMARK_RECEIPT } from '../models/transaction-types/EARMARK_RECEIPT.model';
-import { IN_KIND_RECEIPT } from '../models/transaction-types/IN_KIND_RECEIPT.model';
+import { EARMARK_RECEIPT_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_CONVENTION_ACCOUNT.model';
+import { EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT.model';
+import { EARMARK_RECEIPT_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_RECOUNT_ACCOUNT.model';
 import { INDIVIDUAL_JF_TRANSFER_MEMO } from '../models/transaction-types/INDIVIDUAL_JF_TRANSFER_MEMO.model';
 import { INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
@@ -17,6 +24,9 @@ import { INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/tr
 import { INDIVIDUAL_RECEIPT } from '../models/transaction-types/INDIVIDUAL_RECEIPT.model';
 import { INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT.model';
 import { INDIVIDUAL_RECOUNT_RECEIPT } from '../models/transaction-types/INDIVIDUAL_RECOUNT_RECEIPT.model';
+import { IN_KIND_RECEIPT } from '../models/transaction-types/IN_KIND_RECEIPT.model';
+import { IN_KIND_TRANSFER } from '../models/transaction-types/IN_KIND_TRANSFER.model';
+import { IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY } from '../models/transaction-types/IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY.model';
 import { JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/JF_TRANSFER_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
 import { JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/JF_TRANSFER_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
@@ -24,8 +34,10 @@ import { JOINT_FUNDRAISING_TRANSFER } from '../models/transaction-types/JOINT_FU
 import { OFFSET_TO_OPERATING_EXPENDITURES } from '../models/transaction-types/OFFSET_TO_OPERATING_EXPENDITURES.model';
 import { OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT.model';
 import { OTHER_RECEIPT } from '../models/transaction-types/OTHER_RECEIPT.model';
+import { PAC_CONDUIT_EARMARK } from '../models/transaction-types/PAC_CONDUIT_EARMARK.model';
 import { PAC_EARMARK_MEMO } from '../models/transaction-types/PAC_EARMARK_MEMO.model';
 import { PAC_EARMARK_RECEIPT } from '../models/transaction-types/PAC_EARMARK_RECEIPT.model';
+import { PAC_IN_KIND_RECEIPT } from '../models/transaction-types/PAC_IN_KIND_RECEIPT.model';
 import { PAC_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_JF_TRANSFER_MEMO.model';
 import { PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
@@ -35,21 +47,33 @@ import { PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/
 import { PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/PAC_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
 import { PAC_RECEIPT } from '../models/transaction-types/PAC_RECEIPT.model';
 import { PAC_RECOUNT_RECEIPT } from '../models/transaction-types/PAC_RECOUNT_RECEIPT.model';
-import { PARTNERSHIP_MEMO } from '../models/transaction-types/PARTNERSHIP_MEMO.model';
-import { PARTNERSHIP_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECEIPT.model';
-import { PARTNERSHIP_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_JF_TRANSFER_MEMO.model';
+import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
 import { PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO.model';
-import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
-import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO.model';
+import { PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
+import { PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
+import { PARTNERSHIP_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_JF_TRANSFER_MEMO.model';
+import { PARTNERSHIP_MEMO } from '../models/transaction-types/PARTNERSHIP_MEMO.model';
 import { PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO.model';
+import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
+import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO.model';
+import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
+import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
+import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO.model';
+import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
+import { PARTNERSHIP_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECEIPT.model';
+import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT.model';
+import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
+import { PARTY_IN_KIND_RECEIPT } from '../models/transaction-types/PARTY_IN_KIND_RECEIPT.model';
 import { PARTY_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTY_JF_TRANSFER_MEMO.model';
 import { PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/PARTY_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/PARTY_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
 import { PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT } from '../models/transaction-types/PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT.model';
 import { PARTY_RECEIPT } from '../models/transaction-types/PARTY_RECEIPT.model';
 import { PARTY_RECOUNT_RECEIPT } from '../models/transaction-types/PARTY_RECOUNT_RECEIPT.model';
-import { TransactionType } from '../models/transaction-type.model';
+import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
+import { REFUND_TO_OTHER_POLITICAL_COMMITTEE } from '../models/transaction-types/REFUND_TO_OTHER_POLITICAL_COMMITTEE.model';
+import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model';
 import { TRANSFER } from '../models/transaction-types/TRANSFER.model';
 import { TRIBAL_JF_TRANSFER_MEMO } from '../models/transaction-types/TRIBAL_JF_TRANSFER_MEMO.model';
 import { TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
@@ -62,94 +86,78 @@ import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model
 import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOUNT_RECEIPT.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
-import { RETURN_RECEIPT } from '../models/transaction-types/RETURN_RECEIPT.model';
-import { PAC_RETURN } from '../models/transaction-types/PAC_RETURN.model';
-import { PARTY_RETURN } from '../models/transaction-types/PARTY_RETURN.model';
-import { EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_HEADQUARTERS_ACCOUNT.model';
-import { EARMARK_RECEIPT_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_RECOUNT_ACCOUNT.model';
-import { EARMARK_RECEIPT_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_RECEIPT_CONVENTION_ACCOUNT.model';
-import { EARMARK_MEMO_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_HEADQUARTERS_ACCOUNT.model';
-import { EARMARK_MEMO_CONVENTION_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_CONVENTION_ACCOUNT.model';
-import { EARMARK_MEMO_RECOUNT_ACCOUNT } from '../models/transaction-types/EARMARK_MEMO_RECOUNT_ACCOUNT.model';
-import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT.model';
-import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO.model';
-import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT.model';
-import { PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO } from '../models/transaction-types/PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
-import { REFUND_TO_OTHER_POLITICAL_COMMITTEE } from '../models/transaction-types/REFUND_TO_OTHER_POLITICAL_COMMITTEE.model';
-import { PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
-import { PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO.model';
-import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
-import { PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO.model';
-import { PARTY_IN_KIND_RECEIPT } from '../models/transaction-types/PARTY_IN_KIND_RECEIPT.model';
-import { IN_KIND_TRANSFER } from '../models/transaction-types/IN_KIND_TRANSFER.model';
-import { IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY } from '../models/transaction-types/IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY.model';
-import { PAC_IN_KIND_RECEIPT } from '../models/transaction-types/PAC_IN_KIND_RECEIPT.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
 import { BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
+import { CONDUIT_EARMARK_OUT } from '../models/transaction-types/CONDUIT_EARMARK_OUT.model';
+import { CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE.model';
+import { CONTRIBUTION_TO_CANDIDATE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_CANDIDATE_VOID.model';
+import { CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE.model';
+import { CONTRIBUTION_TO_OTHER_COMMITTEE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE_VOID.model';
+import { FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT.model';
+import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT.model';
+import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL.model';
+import { FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT.model';
+import { FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO.model';
+import { FEDERAL_ELECTION_ACTIVITY_VOID } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_VOID.model';
 import { INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
+import { INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT.model';
+import { INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
+import { INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 import { IN_KIND_OUT } from '../models/transaction-types/IN_KIND_OUT.model';
+import { IN_KIND_TRANSFER_FEA_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_FEA_OUT.model';
+import { IN_KIND_TRANSFER_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_OUT.model';
+import { NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT.model';
+import { NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT.model';
+import { NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT.model';
+import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT.model';
+import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO.model';
+import { NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT.model';
+import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL.model';
+import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO.model';
+import { NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT.model';
+import { NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO.model';
 import { OPERATING_EXPENDITURE } from '../models/transaction-types/OPERATING_EXPENDITURE.model';
-import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
-import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
-import { OTHER_DISBURSEMENT_VOID } from '../models/transaction-types/OTHER_DISBURSEMENT_VOID.model';
-import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT.model';
-import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT } from '../models/transaction-types/OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT.model';
 import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT } from '../models/transaction-types/OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
-import { OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT } from '../models/transaction-types/OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT.model';
+import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO.model';
 import { OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL } from '../models/transaction-types/OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL.model';
 import { OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO.model';
-import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT_MEMO.model';
+import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT } from '../models/transaction-types/OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT.model';
+import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO.model';
+import { OPERATING_EXPENDITURE_VOID } from '../models/transaction-types/OPERATING_EXPENDITURE_VOID.model';
+import { OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
+import { OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT.model';
+import { OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
+import { OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT.model';
+import { OTHER_DISBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT.model';
+import { OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT } from '../models/transaction-types/OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT.model';
 import { OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/OTHER_DISBURSEMENT_CREDIT_CARD_PAYMENT_MEMO.model';
 import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL } from '../models/transaction-types/OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL.model';
 import { OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO.model';
+import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT } from '../models/transaction-types/OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT.model';
 import { OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT_MEMO.model';
-import { OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO.model';
+import { OTHER_DISBURSEMENT_VOID } from '../models/transaction-types/OTHER_DISBURSEMENT_VOID.model';
+import {PAC_CONDUIT_EARMARK_OUT} from '../models/transaction-types/PAC_CONDUIT_EARMARK_OUT.model';
+import { PAC_IN_KIND_OUT } from '../models/transaction-types/PAC_IN_KIND_OUT.model';
+import { PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
+import { PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
+import { PARTY_IN_KIND_OUT } from '../models/transaction-types/PARTY_IN_KIND_OUT.model';
+import { RECOUNT_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/RECOUNT_ACCOUNT_DISBURSEMENT.model';
+import { REFUND_INDIVIDUAL_CONTRIBUTION } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION.model';
+import { REFUND_INDIVIDUAL_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION_VOID.model';
+import { REFUND_PAC_CONTRIBUTION } from '../models/transaction-types/REFUND_PAC_CONTRIBUTION.model';
+import { REFUND_PAC_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_PAC_CONTRIBUTION_VOID.model';
+import { REFUND_PARTY_CONTRIBUTION } from '../models/transaction-types/REFUND_PARTY_CONTRIBUTION.model';
+import { REFUND_PARTY_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_PARTY_CONTRIBUTION_VOID.model';
+import { REFUND_TO_FEDERAL_CANDIDATE } from '../models/transaction-types/REFUND_TO_FEDERAL_CANDIDATE.model';
 import { REFUND_TO_UNREGISTERED_COMMITTEE } from '../models/transaction-types/REFUND_TO_UNREGISTERED_COMMITTEE.model';
-import { NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT.model';
-import { NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT.model';
-import { NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT_MEMO.model';
-import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO.model';
-import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO.model';
-import { NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT.model';
-import { NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL } from '../models/transaction-types/NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL.model';
-import { INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
-import { INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT.model';
-import { INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT.model';
+import { REFUND_UNREGISTERED_CONTRIBUTION } from '../models/transaction-types/REFUND_UNREGISTERED_CONTRIBUTION.model';
+import { REFUND_UNREGISTERED_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_UNREGISTERED_CONTRIBUTION_VOID.model';
+import { TRANSFER_TO_AFFILIATES } from '../models/transaction-types/TRANSFER_TO_AFFILIATES.model';
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
-import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT.model';
-import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL.model';
-import { REFUND_PARTY_CONTRIBUTION } from '../models/transaction-types/REFUND_PARTY_CONTRIBUTION.model';
-import { REFUND_PAC_CONTRIBUTION } from '../models/transaction-types/REFUND_PAC_CONTRIBUTION.model';
-import { REFUND_PAC_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_PAC_CONTRIBUTION_VOID.model';
-import { REFUND_PARTY_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_PARTY_CONTRIBUTION_VOID.model';
-import { REFUND_UNREGISTERED_CONTRIBUTION } from '../models/transaction-types/REFUND_UNREGISTERED_CONTRIBUTION.model';
-import { REFUND_UNREGISTERED_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_UNREGISTERED_CONTRIBUTION_VOID.model';
-import { REFUND_INDIVIDUAL_CONTRIBUTION } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION.model';
-import { REFUND_INDIVIDUAL_CONTRIBUTION_VOID } from '../models/transaction-types/REFUND_INDIVIDUAL_CONTRIBUTION_VOID.model';
-import { OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT.model';
-import { OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT.model';
-import { OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT.model';
-import { OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT.model';
-import { PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
-import { PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO } from '../models/transaction-types/PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO.model';
-import { TRANSFER_TO_AFFILIATES } from '../models/transaction-types/TRANSFER_TO_AFFILIATES.model';
-import { CONTRIBUTION_TO_OTHER_COMMITTEE } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE.model';
-import { CONTRIBUTION_TO_OTHER_COMMITTEE_VOID } from '../models/transaction-types/CONTRIBUTION_TO_OTHER_COMMITTEE_VOID.model';
-import { RECOUNT_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/RECOUNT_ACCOUNT_DISBURSEMENT.model';
-import { NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT.model';
-import { NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT.model';
-import { NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT } from '../models/transaction-types/NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT.model';
-import { REFUND_TO_FEDERAL_CANDIDATE } from '../models/transaction-types/REFUND_TO_FEDERAL_CANDIDATE.model';
-import { PARTY_IN_KIND_OUT } from '../models/transaction-types/PARTY_IN_KIND_OUT.model';
-import { IN_KIND_TRANSFER_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_OUT.model';
-import { IN_KIND_TRANSFER_FEA_OUT } from '../models/transaction-types/IN_KIND_TRANSFER_FEA_OUT.model';
-import { PAC_IN_KIND_OUT } from '../models/transaction-types/PAC_IN_KIND_OUT.model';
-import { PAC_CONDUIT_EARMARK } from '../models/transaction-types/PAC_CONDUIT_EARMARK.model';
-import { PAC_CONDUIT_EARMARK_OUT } from '../models/transaction-types/PAC_CONDUIT_EARMARK_OUT.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -168,6 +176,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   OFFSET_TO_OPERATING_EXPENDITURES,
   OTHER_COMMITTEE_NON_CONTRIBUTION_ACCOUNT,
   OTHER_RECEIPT,
+  PAC_CONDUIT_EARMARK,
   PAC_JF_TRANSFER_MEMO,
   PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO,
   PAC_NATIONAL_PARTY_RECOUNT_ACCOUNT,
@@ -239,7 +248,11 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   IN_KIND_TRANSFER,
   IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY,
   PAC_IN_KIND_RECEIPT,
+  CONDUIT_EARMARK_RECEIPT,
+  CONDUIT_EARMARK_RECEIPT_DEPOSITED: CONDUIT_EARMARK_RECEIPT,
+  CONDUIT_EARMARK_RECEIPT_UNDEPOSITED: CONDUIT_EARMARK_RECEIPT,
   // Schedule B /////////////////////////////////////////////////////
+  PAC_CONDUIT_EARMARK_OUT,
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
   INDIVIDUAL_REFUND_NON_CONTRIBUTION_ACCOUNT,
   OPERATING_EXPENDITURE,
@@ -280,8 +293,12 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   REFUND_INDIVIDUAL_CONTRIBUTION,
   REFUND_INDIVIDUAL_CONTRIBUTION_VOID,
   OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT,
+  FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT,
   FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
+  FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
+  FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO,
   FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
+  FEDERAL_ELECTION_ACTIVITY_VOID,
   OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
   OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT,
   OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
@@ -296,12 +313,11 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   IN_KIND_TRANSFER_OUT,
   IN_KIND_TRANSFER_FEA_OUT,
   PAC_IN_KIND_OUT,
-  PAC_CONDUIT_EARMARK,
-  PAC_CONDUIT_EARMARK_OUT,
-  "PAC_CONDUIT_EARMARK_DEPOSITED":PAC_CONDUIT_EARMARK,
-  "PAC_CONDUIT_EARMARK_UNDEPOSITED":PAC_CONDUIT_EARMARK,
-  "PAC_CONDUIT_EARMARK_OUT_DEPOSITED":PAC_CONDUIT_EARMARK_OUT,
-  "PAC_CONDUIT_EARMARK_OUT_UNDEPOSITED":PAC_CONDUIT_EARMARK_OUT
+  CONDUIT_EARMARK_OUT,
+  CONDUIT_EARMARK_OUT_DEPOSITED: CONDUIT_EARMARK_OUT,
+  CONDUIT_EARMARK_OUT_UNDEPOSITED: CONDUIT_EARMARK_OUT,
+  CONTRIBUTION_TO_CANDIDATE,
+  CONTRIBUTION_TO_CANDIDATE_VOID,
 }
 
 export class TransactionTypeUtils {

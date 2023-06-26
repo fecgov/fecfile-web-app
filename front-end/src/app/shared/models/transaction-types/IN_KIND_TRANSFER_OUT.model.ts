@@ -13,7 +13,7 @@ export class IN_KIND_TRANSFER_OUT extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT);
   schema = schema;
   override useParentContact = true;
-  override inherittedFields = [
+  override inheritedFields = [
     'organization_name',
     'street_1',
     'street_2',

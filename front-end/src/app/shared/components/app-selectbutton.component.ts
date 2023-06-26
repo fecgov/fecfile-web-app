@@ -11,7 +11,7 @@ export const SELECTBUTTON_VALUE_ACCESSOR = {
 @Component({
   selector: 'app-select-button',
   template: `
-    <div [ngClass]="'p-selectbutton p-buttonset p-component'" [ngStyle]="style" [class]="styleClass" role="group">
+    <div [ngClass]="'p-selectbutton p-buttonset p-component'" [ngStyle]="style" [class]="styleClass ?? ''" role="group">
       <div
         *ngFor="let option of options; let i = index"
         #btn
@@ -32,12 +32,14 @@ export const SELECTBUTTON_VALUE_ACCESSOR = {
         [attr.tabindex]="disabled ? null : tabindex"
         pRipple
       >
-        <ng-container *ngIf="!itemTemplate; else customcontent">
+        <ng-container *ngIf="!itemTemplate?.template; else customcontent">
           <span [ngClass]="'p-button-icon p-button-icon-left'" [class]="option.icon" *ngIf="option.icon"></span>
           <span class="p-button-label">{{ getOptionLabel(option) }}</span>
         </ng-container>
         <ng-template #customcontent>
-          <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: option, index: i }"></ng-container>
+          <ng-container
+            *ngTemplateOutlet="itemTemplate.template; context: { $implicit: option, index: i }"
+          ></ng-container>
         </ng-template>
       </div>
     </div>

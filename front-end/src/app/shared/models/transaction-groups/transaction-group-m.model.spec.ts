@@ -29,28 +29,28 @@ describe('TransactionGroupM', () => {
   });
 
   it('#getContactTypeOptions happy path', () => {
-    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.ORGANIZATION]);
+    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
     const retval = component.getContactTypeOptions();
     expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
   });
 
   it('#hasEmployerInput happy path', () => {
-    const retval = component.hasEmployerInput();
-    expect(retval).toBeFalse();
+    expect(component.hasEmployerInput()).toBeFalse();
   });
 
   it('#hasCommitteeFecIdInput happy path', () => {
-    const retval = component.hasCommitteeFecIdInput();
-    expect(retval).toBeFalse();
+    expect(component.hasCommitteeFecIdInput()).toBeTrue();
   });
 
   it('#hasElectionInformationInput happy path', () => {
-    const retval = component.hasElectionInformationInput();
-    expect(retval).toBeTrue();
+    expect(component.hasElectionInformationInput()).toBeTrue();
   });
 
   it('#hasCandidateInformationInput happy path', () => {
-    const retval = component.hasCandidateInformationInput();
-    expect(retval).toBeFalse();
+    expect(component.hasCandidateInformationInput()).toBeTrue();
+  });
+
+  it('#hasCandidateCommitteeInput happy path', () => {
+    expect(component.hasCandidateCommitteeInput()).toBeTrue();
   });
 });

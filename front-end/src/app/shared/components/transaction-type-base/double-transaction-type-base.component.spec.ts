@@ -16,8 +16,10 @@ import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { getTestTransactionByType, testMockStore } from 'app/shared/utils/unit-test.utils';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { Contact } from 'app/shared/models/contact.model';
+import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
   formProperties: string[] = [
@@ -121,6 +123,23 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     );
   });
 
+  it("should set the child transaction's contact when its shared with the parent", () => {
+    component.useParentContact = true;
+    component.transaction = testTransaction;
+    component.childTransaction = testTransaction.children?.[0] as SchATransaction;
+
+    const contact = new Contact();
+    contact.name = 'Name';
+    component.transaction.contact_1 = contact;
+
+    const selectContact: SelectItem<Contact> = {
+      value: contact,
+    };
+
+    component.onContactLookupSelect(selectContact);
+    expect(component.childTransaction.contact_1?.name).toEqual('Name');
+  });
+
   it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
     component.childTransaction = getTestTransactionByType(
       ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL
@@ -129,6 +148,30 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
     component.childForm.patchValue({ contribution_amount: 2 });
     expect(component.childForm.value.contribution_amount).toBe(-2);
+  });
+
+  it("should auto-generate the child transaction's purpose description", () => {
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED);
+    component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
+    component.childTransaction.parent_transaction = component.transaction;
+    component.childOnInit();
+
+    component.form.get(component.templateMap.first_name)?.setValue('First');
+    component.form.get(component.templateMap.last_name)?.setValue('Last');
+
+    expect(component.childForm.get(component.childTemplateMap.purpose_description)?.value).toEqual(
+      'Earmarked from First Last (Individual)'
+    );
+  });
+
+  it('should push changes in the parent to the child for inherited fields', () => {
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT);
+    component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
+
+    expect(component.childTransaction.transactionType?.inheritedFields).toContain('amount');
+    component.childForm.get(component.childTemplateMap.amount)?.setValue(0);
+    component.form.get(component.templateMap.amount)?.setValue(250);
+    expect(component.childForm.get(component.childTemplateMap.amount)?.value).toEqual(250);
   });
 
   it('should save a parent and child transaction', () => {

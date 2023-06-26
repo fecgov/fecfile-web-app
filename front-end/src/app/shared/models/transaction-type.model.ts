@@ -29,20 +29,25 @@ export abstract class TransactionType {
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
   dependentChildTransactionType?: TransactionTypes; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
-  inherittedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
+  inheritedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
   useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
   childTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the child, trigger the parent to regenerate its description
+  parentTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the parent, trigger the child to regenerate its description
 
   // Navigations settings
   subTransactionConfig?: (SubTransactionGroup | TransactionTypes)[] | SubTransactionGroup; // Configuration of Sub-TransactionTypes
   shortName?: string; // Short name for transaction. Could be used in context where most of the name can be inferred (e.g: Individual, PAC, Tribal, Partnership)
   navigationControls?: TransactionNavigationControls;
 
+  // Memo Code settings
+  memoCodeMap?: { true: string; false: string }; // Show a SelectButton for memo code where the labels are the values in this map
+  memoCodeTransactionTypes?: { true: TransactionTypes; false: TransactionTypes }; // Change the transaction type based on the value of memo_code (when it's a SelectButton)
+
   // Pupose description settings
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
-  purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
   purposeDescriptionLabelSuffix?: string; // Additional text that will appear after the purpose_description input label. If this is not set, '(SYSTEM-GENERATED)', '(REQUIRED)', or '(OPTIONAL)' will be diplayed
+  purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];

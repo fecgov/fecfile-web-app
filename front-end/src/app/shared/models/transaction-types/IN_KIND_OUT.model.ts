@@ -12,7 +12,7 @@ export class IN_KIND_OUT extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);
   schema = schema;
   override useParentContact = true;
-  override inherittedFields = [
+  override inheritedFields = [
     'last_name',
     'first_name',
     'middle_name',

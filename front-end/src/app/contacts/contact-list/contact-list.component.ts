@@ -6,6 +6,7 @@ import { ListRestResponse } from 'app/shared/models/rest-api.model';
 import { LabelList, LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../shared/models/contact.model';
 import { ContactService } from '../../shared/services/contact.service';
+import { TableSelectAllChangeEvent } from 'primeng/table';
 
 @Component({
   selector: 'app-contact-list',
@@ -68,7 +69,7 @@ export class ContactListComponent extends TableListBaseComponent<Contact> {
     this.restoreDialogIsVisible = true;
   }
 
-  public override onSelectAllChange(event: { checked: boolean; event: PointerEvent }) {
+  public override onSelectAllChange(event: TableSelectAllChangeEvent) {
     const checked: boolean = event.checked;
 
     if (checked) {
