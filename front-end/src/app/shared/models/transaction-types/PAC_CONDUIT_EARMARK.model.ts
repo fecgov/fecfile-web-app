@@ -37,7 +37,7 @@ export class PAC_CONDUIT_EARMARK extends SchATransactionType {
   }
   getNewTransaction() {
     return SchATransaction.fromJSON({
-      form_type: 'SA11AI',
+      form_type: 'SA11C',
       transaction_type_identifier: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK,
       memo_code: false,
     });
