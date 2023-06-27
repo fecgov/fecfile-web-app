@@ -1,6 +1,6 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_CONDUIT_EARMARKS';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
   TransactionNavigationControls,

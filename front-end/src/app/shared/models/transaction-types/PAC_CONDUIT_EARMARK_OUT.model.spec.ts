@@ -1,4 +1,3 @@
-import { CONDUIT_EARMARK_OUT } from './CONDUIT_EARMARK_OUT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
