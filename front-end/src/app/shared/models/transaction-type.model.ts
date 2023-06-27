@@ -23,7 +23,7 @@ export abstract class TransactionType {
   contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
   defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
-  isRefundAggregate = false; // Boolean flag to control whether or not the amount is subtracted from the aggregate
+  isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
 
   // Double-entry settings

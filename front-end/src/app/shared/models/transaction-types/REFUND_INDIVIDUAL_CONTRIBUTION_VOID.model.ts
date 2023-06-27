@@ -13,7 +13,7 @@ export class REFUND_INDIVIDUAL_CONTRIBUTION_VOID extends SchBTransactionType {
   schema = schema;
   override negativeAmountValueOnly = true;
   override showAggregate = false;
-  override isRefundAggregate = true;
+  override isRefund = true;
   override contactTypeOptions = [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
