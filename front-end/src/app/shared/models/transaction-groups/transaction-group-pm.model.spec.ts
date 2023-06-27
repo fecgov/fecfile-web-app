@@ -49,12 +49,12 @@ describe('TransactionGroupPM', () => {
   });
 
   it('#hasEmployerInput should return false', () => {
-    expect(component.hasEmployerInput()).toBeTrue();
+    expect(component.hasEmployerInput()).toBeFalse();
   });
 
   it('#test group methods to ensure they return the right values', () => {
     expect(component.childHasEmployerInput()).toBeFalse();
-    expect(component.getParentTransactionTitle()).toBe('Conduit Earmark Receipt');
+    expect(component.getParentTransactionTitle()).toBe('PAC Conduit Earmark Receipt');
     expect(component.getParentFooter()).toBe('This type of receipt requires a conduit earmark out.');
     expect(component.getGroupDescription()).toBe(
       'This receipt type requires an associated transaction. Follow this two-step process to create both a conduit earmark receipt and a conduit earmark out:'
