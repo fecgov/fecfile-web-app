@@ -75,6 +75,6 @@ export enum ScheduleCTransactionTypes {
 }
 
 export const ScheduleCTransactionTypeLabels: LabelList = [
-  [ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_INDIVIDUAL, 'Loans Received from Individual'],
-  [ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_BANK, 'Loans Received from Bank'],
+  [ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_INDIVIDUAL, 'Loan Received from Individual'],
+  [ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_BANK, 'Loan Received from Bank'],
 ];

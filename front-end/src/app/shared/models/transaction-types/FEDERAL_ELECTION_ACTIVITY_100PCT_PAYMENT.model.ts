@@ -8,9 +8,11 @@ import { AggregationGroups } from '../transaction.model';
 
 export class FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT extends SchBTransactionType {
   transactionGroup = new TransactionGroupO();
-  title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT);
+  title = LabelUtils.get(
+    ScheduleBTransactionTypeLabels,
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT
+  );
   schema = schema;
-  override showAggregate = false;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

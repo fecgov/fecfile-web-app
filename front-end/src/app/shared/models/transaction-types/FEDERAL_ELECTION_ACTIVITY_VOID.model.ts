@@ -12,7 +12,6 @@ export class FEDERAL_ELECTION_ACTIVITY_VOID extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;
-  override showAggregate = false;
   override isRefundAggregate = true;
   override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
