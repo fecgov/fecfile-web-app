@@ -14,7 +14,7 @@ export class CONTRIBUTION_TO_OTHER_COMMITTEE_VOID extends SchBTransactionType {
   );
   schema = schema;
   override showAggregate = false;
-  override isRefundAggregate = true;
+  override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override negativeAmountValueOnly = true;
   override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
