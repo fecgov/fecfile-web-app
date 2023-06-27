@@ -15,7 +15,7 @@ export class REFUND_UNREGISTERED_CONTRIBUTION_VOID extends SchBTransactionType {
   schema = schema;
   override negativeAmountValueOnly = true;
   override showAggregate = false;
-  override isRefundAggregate = true;
+  override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

@@ -14,7 +14,7 @@ export class OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT extends SchBTra
   );
   schema = schema;
   override showAggregate = false;
-  override isRefundAggregate = true;
+  override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   override generatePurposeDescription() {
