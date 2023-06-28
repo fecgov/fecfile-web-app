@@ -11,7 +11,7 @@ export class REFUND_PAC_CONTRIBUTION_VOID extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION_VOID);
   schema = schema;
   override showAggregate = false;
-  override isRefundAggregate = true;
+  override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override negativeAmountValueOnly = true;
 
