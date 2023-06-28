@@ -53,4 +53,8 @@ describe('TransactionGroupH', () => {
   it('#hasCandidateCommitteeInput happy path', () => {
     expect(component.hasCandidateCommitteeInput()).toBeTrue();
   });
+
+  it('#hasCandidateOfficeInput happy path', () => {
+    expect(component.hasCandidateOfficeInput()).toBeTrue();
+  });
 });
