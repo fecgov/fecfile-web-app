@@ -13,10 +13,6 @@ export class PAC_CONDUIT_EARMARK_OUT extends SchBTransactionType {
   override parentTriggerFields = ['organization_name'] as TemplateMapKeyType[];
   override inheritedFields = ['amount', 'memo_code'] as TemplateMapKeyType[];
   override showAggregate = false;
-  override memoCodeMap = {
-    true: 'Undeposited',
-    false: 'Deposited',
-  };
   override memoCodeTransactionTypes = {
     true: ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT_UNDEPOSITED,
     false: ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT_DEPOSITED,
