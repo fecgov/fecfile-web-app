@@ -73,12 +73,14 @@
     </div>
     <div class="col-6"></div>
   </div>
-  <app-candidate-office-input
-    [form]="form"
-    [formSubmitted]="formSubmitted"
-    [candidateOfficeFormControlName]="templateMap['candidate_office']"
-    [candidateStateFormControlName]="templateMap['candidate_state']"
-    [candidateDistrictFormControlName]="templateMap['candidate_district']"
-  >
-  </app-candidate-office-input>
+  <ng-container *ngIf="hasCandidateOfficeInput">
+    <app-candidate-office-input
+      [form]="form"
+      [formSubmitted]="formSubmitted"
+      [candidateOfficeFormControlName]="templateMap['candidate_office']"
+      [candidateStateFormControlName]="templateMap['candidate_state']"
+      [candidateDistrictFormControlName]="templateMap['candidate_district']"
+    >
+    </app-candidate-office-input>
+  </ng-container>
 </div>

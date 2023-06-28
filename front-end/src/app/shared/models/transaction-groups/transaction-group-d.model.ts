@@ -46,4 +46,8 @@ export class TransactionGroupD extends TransactionGroup {
   hasCandidateCommitteeInput(): boolean {
     return false;
   }
+
+  hasCandidateOfficeInput(): boolean {
+    return true;
+  }
 }
