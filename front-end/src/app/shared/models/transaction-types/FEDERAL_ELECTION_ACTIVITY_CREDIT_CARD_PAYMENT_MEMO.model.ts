@@ -3,12 +3,12 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_M
 import { ContactTypes } from '../contact.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupO } from '../transaction-groups/transaction-group-o.model';
+import { TransactionGroupS } from '../transaction-groups/transaction-group-s.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 
 export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO extends SchBTransactionType {
-  transactionGroup = new TransactionGroupO();
+  transactionGroup = new TransactionGroupS();
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO
@@ -16,6 +16,7 @@ export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO extends SchBTran
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
+  override hasCandidateLookup = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
