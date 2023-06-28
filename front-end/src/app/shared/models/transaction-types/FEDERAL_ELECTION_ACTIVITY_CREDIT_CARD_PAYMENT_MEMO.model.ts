@@ -16,6 +16,7 @@ export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO extends SchBTran
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
+  override hasCandidateLookup = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
