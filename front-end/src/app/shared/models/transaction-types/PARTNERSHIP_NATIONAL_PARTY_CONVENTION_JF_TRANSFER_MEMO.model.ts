@@ -19,7 +19,7 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchA
 
   override subTransactionConfig = new SubTransactionGroup(
     'Partnership Receipt Pres. Nominating Convention Account JF Transfer Memo',
-    [ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO]
+    [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO]
   );
 
   override generatePurposeDescription(transaction: SchATransaction): string {
