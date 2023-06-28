@@ -13,4 +13,5 @@ export abstract class TransactionGroup {
   abstract hasElectionInformationInput(): boolean;
   abstract hasCandidateInformationInput(): boolean;
   abstract hasCandidateCommitteeInput(): boolean;
+  abstract hasCandidateOfficeInput(): boolean;
 }
