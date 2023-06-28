@@ -23,8 +23,8 @@ export class PAC_CONDUIT_EARMARK extends SchATransactionType {
     false: 'Deposited',
   };
   override memoCodeTransactionTypes = {
-    true: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_UNDEPOSITED,
-    false: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_DEPOSITED,
+    true: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_UNDEPOSITED,
+    false: ScheduleATransactionTypes.PAC_CONDUIT_EARMARK_RECEIPT_DEPOSITED,
   };
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children?.length) return '';
