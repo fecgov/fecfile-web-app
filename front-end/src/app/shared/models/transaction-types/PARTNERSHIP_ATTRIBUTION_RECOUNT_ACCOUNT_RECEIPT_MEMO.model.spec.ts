@@ -1,4 +1,4 @@
-import { PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO } from './PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
+import { PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO } from './PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 

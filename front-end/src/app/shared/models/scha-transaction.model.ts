@@ -421,8 +421,8 @@ export const ScheduleATransactionTypeLabels: LabelList = [
     'Partnership Attribution Pres. Nominating Convention Account JF Transfer Memo',
   ],
   [
-    (ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO,
-    'Partnership Attribution Recount Account Receipt Memo'),
+    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO,
+    'Partnership Attribution Recount Account Receipt Memo',
   ],
   [
     ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO,
