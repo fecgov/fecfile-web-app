@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
@@ -14,8 +15,9 @@ import { Observable, switchMap } from 'rxjs';
 export class AccountInfoComponent implements OnInit {
   committeeAccount$: Observable<CommitteeAccount> | undefined;
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
+  form: FormGroup = this.fb.group({});
 
-  constructor(private store: Store, private fecApiService: FecApiService) {}
+  constructor(private store: Store, private fecApiService: FecApiService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
