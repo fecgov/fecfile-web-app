@@ -110,39 +110,58 @@ export class TransactionContactUtils {
     transaction: Transaction | undefined,
     contactId$: Subject<string>
   ) {
-    if (selectItem) {
-      const contact: Contact = selectItem.value;
-      const templateMap = transaction?.transactionType?.templateMap;
-      if (contact && templateMap) {
-        switch (contact.type) {
-          case ContactTypes.INDIVIDUAL:
-            form.get(templateMap.last_name)?.setValue(contact.last_name);
-            form.get(templateMap.first_name)?.setValue(contact.first_name);
-            form.get(templateMap.middle_name)?.setValue(contact.middle_name);
-            form.get(templateMap.prefix)?.setValue(contact.prefix);
-            form.get(templateMap.suffix)?.setValue(contact.suffix);
-            form.get(templateMap.employer)?.setValue(contact.employer);
-            form.get(templateMap.occupation)?.setValue(contact.occupation);
-            break;
-          case ContactTypes.COMMITTEE:
-            form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
-            form.get(templateMap.organization_name)?.setValue(contact.name);
-            form.get(templateMap.committee_name)?.setValue(contact.name);
-            break;
-          case ContactTypes.ORGANIZATION:
-            form.get(templateMap.organization_name)?.setValue(contact.name);
-            break;
-        }
-        form.get(templateMap.street_1)?.setValue(contact.street_1);
-        form.get(templateMap.street_2)?.setValue(contact.street_2);
-        form.get(templateMap.city)?.setValue(contact.city);
-        form.get(templateMap.state)?.setValue(contact.state);
-        form.get(templateMap.zip)?.setValue(contact.zip);
-        if (transaction) {
-          transaction.contact = contact;
-        }
-        contactId$.next(contact.id || '');
-      }
+    const contact: Contact = selectItem?.value;
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!(contact && templateMap)) return;
+    switch (contact.type) {
+      case ContactTypes.INDIVIDUAL:
+        form.get(templateMap.last_name)?.setValue(contact.last_name);
+        form.get(templateMap.first_name)?.setValue(contact.first_name);
+        form.get(templateMap.middle_name)?.setValue(contact.middle_name);
+        form.get(templateMap.prefix)?.setValue(contact.prefix);
+        form.get(templateMap.suffix)?.setValue(contact.suffix);
+        form.get(templateMap.employer)?.setValue(contact.employer);
+        form.get(templateMap.occupation)?.setValue(contact.occupation);
+        break;
+      case ContactTypes.COMMITTEE:
+        form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
+        form.get(templateMap.organization_name)?.setValue(contact.name);
+        form.get(templateMap.committee_name)?.setValue(contact.name);
+        break;
+      case ContactTypes.ORGANIZATION:
+        form.get(templateMap.organization_name)?.setValue(contact.name);
+        break;
+    }
+    form.get(templateMap.street_1)?.setValue(contact.street_1);
+    form.get(templateMap.street_2)?.setValue(contact.street_2);
+    form.get(templateMap.city)?.setValue(contact.city);
+    form.get(templateMap.state)?.setValue(contact.state);
+    form.get(templateMap.zip)?.setValue(contact.zip);
+    if (transaction) {
+      transaction.contact_1 = contact;
+    }
+    contactId$.next(contact.id || '');
+  }
+
+  static onSecondaryContactLookupSelect(
+    selectItem: SelectItem<Contact>,
+    form: FormGroup,
+    transaction: Transaction | undefined
+  ) {
+    const contact: Contact = selectItem?.value;
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!(contact && templateMap)) return;
+    form.get(templateMap.candidate_fec_id)?.setValue(contact.candidate_id);
+    form.get(templateMap.candidate_last_name)?.setValue(contact.last_name);
+    form.get(templateMap.candidate_first_name)?.setValue(contact.first_name);
+    form.get(templateMap.candidate_middle_name)?.setValue(contact.middle_name);
+    form.get(templateMap.candidate_prefix)?.setValue(contact.prefix);
+    form.get(templateMap.candidate_suffix)?.setValue(contact.suffix);
+    form.get(templateMap.candidate_office)?.setValue(contact.candidate_office);
+    form.get(templateMap.candidate_state)?.setValue(contact.candidate_state);
+    form.get(templateMap.candidate_district)?.setValue(contact.candidate_district);
+    if (transaction) {
+      transaction.contact_2 = contact;
     }
   }
 }

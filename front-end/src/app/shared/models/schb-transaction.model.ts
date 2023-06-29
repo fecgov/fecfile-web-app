@@ -2,7 +2,7 @@ import { plainToClass, Transform } from 'class-transformer';
 import { Transaction, AggregationGroups } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { BaseModel } from './base.model';
-import { TransactionTypeUtils } from '../utils/transaction-type.utils';
+import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchBTransaction extends Transaction {
   entity_type: string | undefined;
@@ -47,8 +47,6 @@ export class SchBTransaction extends Transaction {
   memo_text_description: string | undefined;
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
-  override apiEndpoint = '/transactions/schedule-b';
-
   override getFieldsNotToValidate(): string[] {
     return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
   }
@@ -60,11 +58,11 @@ export class SchBTransaction extends Transaction {
       transaction.setMetaProperties(transactionType);
     }
     if (depth > 0 && transaction.parent_transaction) {
-      transaction.parent_transaction = SchBTransaction.fromJSON(transaction.parent_transaction, depth - 1);
+      transaction.parent_transaction = getFromJSON(transaction.parent_transaction, depth - 1);
     }
     if (depth > 0 && transaction.children) {
       transaction.children = transaction.children.map(function (child) {
-        return SchBTransaction.fromJSON(child, depth - 1);
+        return getFromJSON(child, depth - 1);
       });
     }
     return transaction;
@@ -87,6 +85,7 @@ export type ScheduleBTransactionGroupsType =
   | ScheduleBTransactionGroups.FEDERAL_ELECTION_ACTIVITY_EXPENDITURES;
 
 export enum ScheduleBTransactionTypes {
+  IN_KIND_OUT = 'IN_KIND_OUT',
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT = 'BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT',
   OPERATING_EXPENDITURE = 'OPERATING_EXPENDITURE',
   OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT = 'OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT',
@@ -153,9 +152,14 @@ export enum ScheduleBTransactionTypes {
   OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT = 'OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT',
   OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT = 'OTHER_COMMITTEE_REFUND_REFUND_NP_CONVENTION_ACCOUNT',
   OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT = 'OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT',
+  PARTY_IN_KIND_OUT = 'PARTY_IN_KIND_OUT',
+  IN_KIND_TRANSFER_OUT = 'IN_KIND_TRANSFER_OUT',
+  IN_KIND_TRANSFER_FEA_OUT = 'IN_KIND_TRANSFER_FEA_OUT',
+  PAC_IN_KIND_OUT = 'PAC_IN_KIND_OUT',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
+  [ScheduleBTransactionTypes.IN_KIND_OUT, 'In-kind Out'],
   [
     ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
     'Business/Labor Organization Refund - Non-contribution Account',
@@ -330,4 +334,8 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_RECOUNT_ACCOUNT,
     'Other Committee Refund - National Party Recount/Legal Proceedings Account',
   ],
+  [ScheduleBTransactionTypes.PARTY_IN_KIND_OUT, 'Party In-kind Out'],
+  [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT, 'In-kind Transfer Out'],
+  [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT, 'In-kind Transfer Federal Election Activity Out'],
+  [ScheduleBTransactionTypes.PAC_IN_KIND_OUT, 'PAC In-kind Out'],
 ];

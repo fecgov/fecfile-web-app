@@ -1,0 +1,14 @@
+<div class="calculation-icon">
+  <p-overlayPanel #op>
+    <ng-content></ng-content>
+  </p-overlayPanel>
+  <img
+    src="/assets/img/calculation-icon.svg"
+    role="img"
+    alt=""
+    aria-hidden="true"
+    (click)="op.toggle($event)"
+    (keyup.enter)="op.toggle($event)"
+    tabindex="0"
+  />
+</div>

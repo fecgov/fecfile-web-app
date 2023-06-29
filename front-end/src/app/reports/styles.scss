@@ -54,11 +54,17 @@ td.justify-left {
   text-align: left;
 }
 
+.cell-with-overlay {
+  display: flex;
+  justify-content: space-between;
+}
+
 .last {
   border-bottom: 2px solid black;
 }
 
 caption {
+  font-family: gandhi-bold, serif;
   font-weight: bolder;
   text-align: left;
   margin-bottom: 10px;

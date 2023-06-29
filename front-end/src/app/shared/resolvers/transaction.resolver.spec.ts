@@ -29,7 +29,7 @@ describe('TransactionResolver', () => {
                 id: transactionId,
                 transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
                 contact_id: '123',
-                contact: Contact.fromJSON({ id: 123 }),
+                contact_1: Contact.fromJSON({ id: 123 }),
               })
             ),
         },
@@ -138,7 +138,7 @@ describe('TransactionResolver', () => {
           transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
           transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
           contact_id: '123',
-          contact: Contact.fromJSON({ id: 123 }),
+          contact_1: Contact.fromJSON({ id: 123 }),
         })
       )
     );
@@ -164,7 +164,7 @@ describe('TransactionResolver', () => {
           transaction_type_identifier: ScheduleATransactionTypes.EARMARK_MEMO,
           transactionType: TransactionTypeUtils.factory(ScheduleATransactionTypes.EARMARK_MEMO),
           contact_id: '123',
-          contact: Contact.fromJSON({ id: 123 }),
+          contact_1: Contact.fromJSON({ id: 123 }),
           parent_transaction_id: 2,
         })
       )
@@ -193,7 +193,7 @@ describe('TransactionResolver', () => {
             ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
           ),
           contact_id: '123',
-          contact: Contact.fromJSON({ id: 123 }),
+          contact_1: Contact.fromJSON({ id: 123 }),
           parent_transaction_id: '2',
         })
       );
@@ -215,7 +215,7 @@ describe('TransactionResolver', () => {
               ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
             ),
             contact_id: '123',
-            contact: Contact.fromJSON({ id: 123 }),
+            contact_1: Contact.fromJSON({ id: 123 }),
             parent_transaction_id: '2',
           })
         );
@@ -229,7 +229,7 @@ describe('TransactionResolver', () => {
               ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
             ),
             contact_id: '123',
-            contact: Contact.fromJSON({ id: 123 }),
+            contact_1: Contact.fromJSON({ id: 123 }),
             parent_transaction_id: '1',
           })
         );
@@ -242,7 +242,7 @@ describe('TransactionResolver', () => {
               ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
             ),
             contact_id: '123',
-            contact: Contact.fromJSON({ id: 123 }),
+            contact_1: Contact.fromJSON({ id: 123 }),
           })
         );
       }

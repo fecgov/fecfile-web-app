@@ -1,23 +1,23 @@
-import { selectUserLoginData } from 'app/store/login.selectors';
-import { selectActiveReport } from 'app/store/active-report.selectors';
-import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
-import { initialState as initUserLoginData } from 'app/store/login.reducer';
 import { initialState as initActiveReport } from 'app/store/active-report.reducer';
-import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
+import { selectActiveReport } from 'app/store/active-report.selectors';
 import { initialState as initCashOnHand } from 'app/store/cash-on-hand.reducer';
-import { UserLoginData } from '../models/user.model';
-import { CommitteeAccount } from '../models/committee-account.model';
-import { F3xSummary } from '../models/f3x-summary.model';
-import { UploadSubmission } from '../models/upload-submission.model';
+import { selectCashOnHand } from 'app/store/cash-on-hand.selectors';
+import { initialState as initCommitteeAccount } from 'app/store/committee-account.reducer';
+import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
+import { initialState as initUserLoginData } from 'app/store/login.reducer';
+import { selectUserLoginData } from 'app/store/login.selectors';
 import { CashOnHand } from '../interfaces/report.interface';
-import { Transaction, AggregationGroups, TransactionTypes } from '../models/transaction.model';
-import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
+import { CommitteeAccount } from '../models/committee-account.model';
 import { Contact, ContactTypes } from '../models/contact.model';
-import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
-import { TransactionTypeUtils } from './transaction-type.utils';
-import { TransactionTemplateMapType } from '../models/transaction-type.model';
+import { F3xSummary } from '../models/f3x-summary.model';
 import { MemoText } from '../models/memo-text.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../models/scha-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from '../models/schb-transaction.model';
+import { TransactionTemplateMapType } from '../models/transaction-type.model';
+import { AggregationGroups, Transaction, TransactionTypes } from '../models/transaction.model';
+import { UploadSubmission } from '../models/upload-submission.model';
+import { UserLoginData } from '../models/user.model';
+import { TransactionTypeUtils } from './transaction-type.utils';
 
 export const testCommitteeAccount: CommitteeAccount = CommitteeAccount.fromJSON({
   affiliated_committee_name: 'NONE',
@@ -139,8 +139,8 @@ export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
   contributor_state: 'VA',
   contributor_zip: '20001',
   memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
-  contact_id: '456',
-  contact: Contact.fromJSON({
+  contact_1_id: '456',
+  contact_1: Contact.fromJSON({
     id: 'testId',
     type: ContactTypes.INDIVIDUAL,
     last_name: 'testLn1',
@@ -220,10 +220,20 @@ export const testTemplateMap: TransactionTemplateMapType = {
   organization_name: 'contributor_organization_name',
   committee_fec_id: 'donor_committee_fec_id',
   committee_name: 'donor_committee_name',
+  candidate_fec_id: 'donor_candidate_fec_id',
+  candidate_last_name: 'donor_candidate_last_name',
+  candidate_first_name: 'donor_candidate_first_name',
+  candidate_middle_name: 'donor_candidate_middle_name',
+  candidate_prefix: 'donor_candidate_prefix',
+  candidate_suffix: 'donor_candidate_suffix',
+  candidate_office: 'donor_candidate_office',
+  candidate_state: 'donor_candidate_state',
+  candidate_district: 'donor_candidate_district',
   date: 'contribution_date',
   dateLabel: 'DATE RECEIVED',
   memo_code: 'memo_code',
   amount: 'contribution_amount',
+  balance: 'loan_balance',
   amountInputHeader: 'Receipt Information',
   aggregate: 'contribution_aggregate',
   purpose_description: 'contribution_purpose_descrip',
@@ -232,4 +242,5 @@ export const testTemplateMap: TransactionTemplateMapType = {
   category_code: '',
   election_code: 'election_code',
   election_other_description: 'election_other_description',
+  candidateInputHeader: ''
 };

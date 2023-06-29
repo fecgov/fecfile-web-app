@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { map, Observable, of, mergeMap } from 'rxjs';
 import { Transaction } from '../models/transaction.model';
-import { ContactService } from '../services/contact.service';
 import { TransactionService } from '../services/transaction.service';
 import { TransactionTypeUtils } from '../utils/transaction-type.utils';
 
@@ -10,7 +9,7 @@ import { TransactionTypeUtils } from '../utils/transaction-type.utils';
   providedIn: 'root',
 })
 export class TransactionResolver implements Resolve<Transaction | undefined> {
-  constructor(public transactionService: TransactionService, private contactService: ContactService) {}
+  constructor(public transactionService: TransactionService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Transaction | undefined> {
     const reportId = route.paramMap.get('reportId');
@@ -66,7 +65,7 @@ export class TransactionResolver implements Resolve<Transaction | undefined> {
   resolve_existing_transaction(transactionId: string): Observable<Transaction | undefined> {
     return this.transactionService.get(String(transactionId)).pipe(
       mergeMap((transaction: Transaction) => {
-        if (transaction.transaction_type_identifier && transaction.contact) {
+        if (transaction.transaction_type_identifier && transaction.contact_1) {
           // Determine if we need to get the parent transaction as the
           // transaction type requested is a dependent transaction and cannot
           // be modified directly in a UI form. (e.g. EARMARK_MEMO)
