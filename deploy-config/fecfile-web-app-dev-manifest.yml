@@ -1,11 +1,11 @@
 applications:
- - name: fecfile-web-app
-   instances: 2
-   memory: 128M
-   buildpack: nginx_buildpack
+  - name: fecfile-web-app
+    instances: 2
+    memory: 128M
+    buildpack: https://github.com/cloudfoundry/nginx-buildpack.git
 
-   routes:
-     - route:  fecfile-web-app-dev.app.cloud.gov
+    routes:
+      - route: fecfile-web-app-dev.app.cloud.gov
 
-   env:
-     EXAMPLE: example
+    env:
+      EXAMPLE: example
