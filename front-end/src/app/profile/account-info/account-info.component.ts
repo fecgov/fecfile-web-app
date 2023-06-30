@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
 import { FecFiling } from 'app/shared/models/fec-filing.model';
 import { FecApiService } from 'app/shared/services/fec-api.service';
+import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
 import { Observable, Subject, switchMap, takeUntil } from 'rxjs';
@@ -17,6 +18,7 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
   committeeAccount$: Observable<CommitteeAccount> | undefined;
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
   destroy$: Subject<boolean> = new Subject<boolean>();
+  stateOptions: PrimeOptions = [];
   form: FormGroup = this.fb.group({});
   formProperties: string[] = [
     'name',
@@ -43,6 +45,7 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
   constructor(private store: Store, private fecApiService: FecApiService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
+    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.committeeAccount$
@@ -52,12 +55,29 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
       });
 
     this.committeeAccount$.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {
+      this.form.enable();
       const entries = Object.entries(committee);
       for (const [key, value] of entries) {
         if (this.formProperties.includes(key)) {
-          this.form.get(key)?.setValue(value);
+          if (key.includes('phone')) {
+            let prefix = '';
+            if (value.length > 0 && value[0] !== '+') {
+              if (value.length < 11) {
+                prefix = '1';
+              }
+              prefix = '+' + prefix;
+            }
+            const adjustedValue = prefix + ' ' + value;
+            this.form.get(key)?.setValue(adjustedValue);
+            console.log(key, adjustedValue);
+          } else {
+            this.form.get(key)?.setValue(value);
+          }
+          this.form.get(key)?.updateValueAndValidity();
+          console.log(this.form.get(key)?.value);
         }
       }
+      this.form.disable();
     });
   }
 

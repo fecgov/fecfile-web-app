@@ -1,31 +1,37 @@
-<h1>Account Info</h1>
+<h1>Account Information</h1>
 <p-divider></p-divider>
 <div>
-  <form id="form" [formGroup]="form">
+  <form id="form" p-disabled [formGroup]="form">
     <div class="grid">
       <div class="col-12">
         <div class="grid">
           <div class="col-12">
-            <h3>Committee Info</h3>
+            <h2>Contributor</h2>
           </div>
         </div>
         <div class="grid">
-          <div class="col-3">
-            <div class="field">
-              <label for="committee_id">COMMITTEE ID</label>
-              <input type="text" pInputText id="committee_id" formControlName="committee_id" />
-            </div>
-          </div>
-          <div class="col-3">
+          <div class="col-10">
             <div class="field">
               <label for="name">COMMITTEE NAME</label>
-              <input type="text" pInputText id="name" formControlName="name" />
+              <input class="p-disabled" type="text" pInputText id="name" formControlName="name" />
             </div>
           </div>
-          <div class="col-3">
+          <div class="col-2">
+            <div class="field">
+              <label for="committee_id">COMMITTEE ID</label>
+              <input class="p-disabled" type="text" pInputText id="committee_id" formControlName="committee_id" />
+            </div>
+          </div>
+          <div class="col-6">
             <div class="field">
               <label for="committee_type_full">TYPE OF COMMITTEE</label>
-              <input type="text" pInputText id="committee_type_full" formControlName="committee_type_full" />
+              <input
+                class="p-disabled"
+                type="text"
+                pInputText
+                id="committee_type_full"
+                formControlName="committee_type_full"
+              />
             </div>
           </div>
         </div>
@@ -35,50 +41,56 @@
         <div>
           <div class="grid">
             <div class="col-12">
-              <h3>Committee Address</h3>
+              <h2>Address</h2>
             </div>
           </div>
           <div class="grid">
-            <div class="col-3">
+            <div class="col-6">
               <div class="field">
                 <label for="street_1">STREET ADDRESS</label>
-                <input type="text" pInputText id="street_1" formControlName="street_1" />
+                <input class="p-disabled" type="text" pInputText id="street_1" formControlName="street_1" />
               </div>
             </div>
-            <div class="col-9">
+            <div class="col-6">
               <div class="field">
                 <label for="street_2">APARTMENT, SUITE, ETC.</label>
-                <input type="text" pInputText id="street_2" formControlName="street_2" />
+                <input class="p-disabled" type="text" pInputText id="street_2" formControlName="street_2" />
               </div>
             </div>
-            <div class="col-3">
+            <div class="col-6">
               <div class="field">
                 <label for="city">CITY</label>
-                <input type="text" pInputText id="city" formControlName="city" />
+                <input class="p-disabled" type="text" pInputText id="city" formControlName="city" />
               </div>
             </div>
             <div class="col-3">
               <div class="field">
                 <label for="state">STATE/PROVINCE</label>
-                <input type="text" pInputText id="state" formControlName="state" />
+                <p-dropdown
+                  inputId="state"
+                  formControlName="state"
+                  [options]="stateOptions"
+                  [autoDisplayFirst]="false"
+                  appendTo="body"
+                ></p-dropdown>
               </div>
             </div>
-            <div class="col-6">
+            <div class="col-3">
               <div class="field">
                 <label for="zip">ZIP/POSTAL CODE</label>
-                <input type="text" pInputText id="zip" formControlName="zip" />
+                <input class="p-disabled" type="text" pInputText id="zip" formControlName="zip" />
               </div>
             </div>
             <div class="col-3 long-word-value">
               <div class="field">
                 <label for="email">EMAIL</label>
-                <input type="text" pInputText id="email" formControlName="email" />
+                <input class="p-disabled" type="text" pInputText id="email" formControlName="email" />
               </div>
             </div>
             <div class="col-9 long-word-value">
               <div class="field">
                 <label for="website">WEBSITE</label>
-                <input type="text" pInputText id="website" formControlName="website" />
+                <input class="p-disabled" type="text" pInputText id="website" formControlName="website" />
               </div>
             </div>
           </div>
@@ -89,56 +101,87 @@
         <div>
           <div class="grid">
             <div class="col-12">
-              <h3>Treasurer</h3>
+              <h2>Treasurer</h2>
             </div>
           </div>
           <div class="grid">
             <div class="col-3">
               <div class="field">
                 <label for="treasurer_name_1">FIRST NAME</label>
-                <input type="text" pInputText id="treasurer_name_1" formControlName="treasurer_name_1" />
+                <input
+                  class="p-disabled"
+                  type="text"
+                  pInputText
+                  id="treasurer_name_1"
+                  formControlName="treasurer_name_1"
+                />
               </div>
             </div>
             <div class="col-9">
               <div class="field">
                 <label for="treasurer_name_2">LAST NAME</label>
-                <input type="text" pInputText id="treasurer_name_2" formControlName="treasurer_name_2" />
+                <input
+                  class="p-disabled"
+                  type="text"
+                  pInputText
+                  id="treasurer_name_2"
+                  formControlName="treasurer_name_2"
+                />
               </div>
             </div>
             <div class="col-3">
               <div class="field">
                 <label for="treasurer_street_1">STREET ADDRESS</label>
-                <input type="text" pInputText id="treasurer_street_1" formControlName="treasurer_street_1" />
+                <input
+                  class="p-disabled"
+                  type="text"
+                  pInputText
+                  id="treasurer_street_1"
+                  formControlName="treasurer_street_1"
+                />
               </div>
             </div>
             <div class="col-9">
               <div class="field">
                 <label for="treasurer_street_2">APARTMENT, SUITE, ETC.</label>
-                <input type="text" pInputText id="treasurer_street_2" formControlName="treasurer_street_2" />
+                <input
+                  class="p-disabled"
+                  type="text"
+                  pInputText
+                  id="treasurer_street_2"
+                  formControlName="treasurer_street_2"
+                />
               </div>
             </div>
             <div class="col-3">
               <div class="field">
                 <label for="treasurer_city">CITY</label>
-                <input type="text" pInputText id="treasurer_city" formControlName="treasurer_city" />
+                <input class="p-disabled" type="text" pInputText id="treasurer_city" formControlName="treasurer_city" />
               </div>
             </div>
             <div class="col-3">
               <div class="field">
                 <label for="treasurer_state">STATE/PROVINCE</label>
-                <input type="text" pInputText id="treasurer_state" formControlName="treasurer_state" />
+                <p-dropdown
+                  inputId="treasurer_state"
+                  formControlName="treasurer_state"
+                  [options]="stateOptions"
+                  [autoDisplayFirst]="false"
+                  appendTo="body"
+                ></p-dropdown>
               </div>
             </div>
             <div class="col-6">
               <div class="field">
                 <label for="treasurer_zip">ZIP/POSTAL CODE</label>
-                <input type="text" pInputText id="treasurer_zip" formControlName="treasurer_zip" />
+                <input class="p-disabled" type="text" pInputText id="treasurer_zip" formControlName="treasurer_zip" />
               </div>
             </div>
             <div class="col-3">
               <div class="field">
                 <label for="treasurer_phone">TELEPHONE</label>
-                <input type="text" pInputText id="treasurer_phone" formControlName="treasurer_phone" />
+                <app-fec-international-phone-input id="treasurer_phone" formControlName="treasurer_phone">
+                </app-fec-international-phone-input>
               </div>
             </div>
           </div>
@@ -149,14 +192,20 @@
         <div>
           <div class="grid">
             <div class="col-12">
-              <h3>Custodian</h3>
+              <h2>Custodian</h2>
             </div>
           </div>
           <div class="grid">
             <div class="col-3">
               <div class="field">
                 <label for="custodian_name_full">CUSTODIAN OF RECORDS</label>
-                <input type="text" pInputText id="custodian_name_full" formControlName="custodian_name_full" />
+                <input
+                  class="p-disabled"
+                  type="text"
+                  pInputText
+                  id="custodian_name_full"
+                  formControlName="custodian_name_full"
+                />
               </div>
             </div>
           </div>

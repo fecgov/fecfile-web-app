@@ -62,6 +62,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     DividerModule,
     ConfirmDialogModule,
     OverlayPanelModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     LabelPipe,
