@@ -188,9 +188,9 @@ describe('TransactionResolver', () => {
       return of(
         SchATransaction.fromJSON({
           id: id,
-          transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+          transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
           transactionType: TransactionTypeUtils.factory(
-            ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
+            ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
           ),
           contact_id: '123',
           contact_1: Contact.fromJSON({ id: 123 }),
@@ -210,9 +210,9 @@ describe('TransactionResolver', () => {
         return of(
           SchATransaction.fromJSON({
             id: id,
-            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             transactionType: TransactionTypeUtils.factory(
-              ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
+              ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
             ),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
@@ -224,9 +224,9 @@ describe('TransactionResolver', () => {
         return of(
           SchATransaction.fromJSON({
             id: id,
-            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             transactionType: TransactionTypeUtils.factory(
-              ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
+              ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
             ),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
@@ -237,9 +237,9 @@ describe('TransactionResolver', () => {
         return of(
           SchATransaction.fromJSON({
             id: id,
-            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+            transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
             transactionType: TransactionTypeUtils.factory(
-              ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
+              ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
             ),
             contact_id: '123',
             contact_1: Contact.fromJSON({ id: 123 }),
