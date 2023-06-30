@@ -1,12 +1,12 @@
-import { PARTNERSHIP_MEMO } from './PARTNERSHIP_MEMO.model';
+import { PARTNERSHIP_ATTRIBUTION } from './PARTNERSHIP_ATTRIBUTION.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
-describe('PARTNERSHIP_MEMO', () => {
-  let transactionType: PARTNERSHIP_MEMO;
+describe('PARTNERSHIP_ATTRIBUTION', () => {
+  let transactionType: PARTNERSHIP_ATTRIBUTION;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_MEMO();
+    transactionType = new PARTNERSHIP_ATTRIBUTION();
   });
 
   it('should create an instance', () => {
@@ -18,7 +18,7 @@ describe('PARTNERSHIP_MEMO', () => {
   it('#factory() should return a SchATransaction', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA11AI');
-    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_MEMO);
+    expect(txn.transaction_type_identifier).toBe(ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION);
   });
 
   it('#generatePurposeDescription() should generate a string', () => {

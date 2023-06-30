@@ -1,20 +1,20 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO';
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
-export class PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType {
+export class PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO extends SchATransactionType {
   transactionGroup = new TransactionGroupA();
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO
+    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO
   );
   override updateParentOnSave = true;
   schema = schema;
-  override shortName = 'Partnership Individual';
+  override shortName = 'Partnership Attribution';
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(transaction: SchATransaction): string {
@@ -31,7 +31,7 @@ export class PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO extends SchATransactionType
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA12',
-      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_INDIVIDUAL_JF_TRANSFER_MEMO,
+      transaction_type_identifier: ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_JF_TRANSFER_MEMO,
       aggregation_group: AggregationGroups.GENERAL,
     });
   }

@@ -13,16 +13,18 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionT
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT
   );
   schema = schema;
-  override subTransactionConfig = [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO];
+  override subTransactionConfig = [
+    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_ACCOUNT_MEMO,
+  ];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override purposeDescriptionLabelNotice =
-    'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not require itemization". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
+    'If Partnership Receipt is saved without a Partnership Memo, this will read "Partnership attributions do not meet itemization threshold". If a Partnership Memo is added, it will read "See Partnership Attribution(s) below".';
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (transaction?.children && transaction?.children.length > 0) {
       return 'Recount/Legal Proceedings Account (See Partnership Attribution(s) below)';
     }
-    return 'Recount/Legal Proceedings Account (Partnership attributions do not require itemization)';
+    return 'Recount/Legal Proceedings Account (Partnership attributions do not meet itemization threshold)';
   }
 
   getNewTransaction() {
