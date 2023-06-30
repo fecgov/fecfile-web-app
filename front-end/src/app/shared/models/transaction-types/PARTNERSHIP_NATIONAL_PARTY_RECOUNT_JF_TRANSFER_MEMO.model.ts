@@ -33,19 +33,21 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATra
   }
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    let committeeClause = `Recount/Legal Proceedings Account JF Memo: ${
+    const committeeClause = `Recount/Legal Proceedings Account JF Memo: ${
       (transaction.parent_transaction as SchATransaction).contributor_organization_name
     }`;
     const hasChildren = transaction.children && transaction.children.length > 0;
     const parenthetical = hasChildren
       ? ' (See Partnership Attribution(s) below)'
-      : ' (Partnership attributions do not require itemization)';
-    if ((committeeClause + parenthetical).length > 100) {
-      committeeClause = committeeClause.slice(0, 97 - parenthetical.length) + '...';
+      : ' (Partnership attributions do not meet itemization threshold)';
+    const purposeDescription = committeeClause + parenthetical;
+
+    if (purposeDescription.length > 100) {
+      return purposeDescription.slice(0, 97) + '...';
     }
-    return committeeClause + parenthetical;
+    return purposeDescription;
   }
 
   override purposeDescriptionLabelNotice =
-    'If transaction has no associated Partnership memos, reads "Recount/Legal Proceedings Account JF Memo: XX (Partnership attributions do not require itemization)". Otherwise, reads "Recount/Legal Proceedings Account JF Memo: XX (See Partnership Attribution(s) below)"';
+    'If transaction has no associated Partnership memos, reads "Recount/Legal Proceedings Account JF Memo: XX (Partnership attributions do not meet itemization threshold)". Otherwise, reads "Recount/Legal Proceedings Account JF Memo: XX (See Partnership Attribution(s) below)"';
 }

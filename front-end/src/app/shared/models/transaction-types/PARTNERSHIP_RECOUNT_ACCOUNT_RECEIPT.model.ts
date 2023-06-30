@@ -13,12 +13,12 @@ export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT extends SchATransactionType {
   override subTransactionConfig = [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override purposeDescriptionLabelNotice =
-    'If Partnership Receipt is saved without a Partnership Memo, this will read "Recount Account (Partnership attributions do not require itemization)". If a Partnership Memo is added, it will read "Recount Account (See Partnership Attribution(s) below)".';
+    'If Partnership Receipt is saved without a Partnership Memo, this will read "Recount Account (Partnership attributions do not meet itemization threshold)". If a Partnership Memo is added, it will read "Recount Account (See Partnership Attribution(s) below)".';
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (transaction.children && transaction.children.length > 0) {
       return 'Recount Account (See Partnership Attribution(s) below)';
     }
-    return 'Recount Account (Partnership attributions do not require itemization)';
+    return 'Recount Account (Partnership attributions do not meet itemization threshold)';
   }
 
   getNewTransaction() {

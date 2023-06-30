@@ -26,7 +26,7 @@ describe('PARTNERSHIP_JF_TRANSFER_MEMO', () => {
 
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('JF Memo: Test Org (Partnership attributions do not require itemization)');
+    expect(descrip).toBe('JF Memo: Test Org (Partnership attributions do not meet itemization threshold)');
   });
 
   it('#generatePurposeDescription() should shrink long description', () => {
@@ -34,7 +34,7 @@ describe('PARTNERSHIP_JF_TRANSFER_MEMO', () => {
       'Super Duper Long Committee Name That Needs to Shrink';
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'JF Memo: Super Duper Long Committee Name Th... (Partnership attributions do not require itemization)'
+      'JF Memo: Super Duper Long Committee ... (Partnership attributions do not meet itemization threshold)'
     );
   });
 });

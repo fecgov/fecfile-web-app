@@ -26,7 +26,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT', () => {
 
   it('#generatePurposeDescription() should generate a string', () => {
     let descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Headquarters Buildings Account (Partnership attributions do not require itemization)');
+    expect(descrip).toBe('Headquarters Buildings Account (Partnership attributions do not meet itemization threshold)');
 
     transaction.children = [transaction.transactionType?.getNewTransaction() as SchATransaction];
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
