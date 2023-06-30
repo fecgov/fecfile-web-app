@@ -4,6 +4,8 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { AccountInfoComponent } from './account-info.component';
 import { DividerModule } from 'primeng/divider';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { DropdownModule } from 'primeng/dropdown';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('AccountInfoComponent', () => {
   let component: AccountInfoComponent;
@@ -13,7 +15,7 @@ describe('AccountInfoComponent', () => {
     await TestBed.configureTestingModule({
       providers: [provideMockStore(testMockStore)],
       declarations: [AccountInfoComponent],
-      imports: [DividerModule, HttpClientTestingModule],
+      imports: [DividerModule, DropdownModule, HttpClientTestingModule, FormsModule, ReactiveFormsModule],
     }).compileComponents();
   });
 
