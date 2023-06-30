@@ -155,6 +155,9 @@ export enum ScheduleBTransactionTypes {
   IN_KIND_TRANSFER_OUT = 'IN_KIND_TRANSFER_OUT',
   IN_KIND_TRANSFER_FEA_OUT = 'IN_KIND_TRANSFER_FEA_OUT',
   PAC_IN_KIND_OUT = 'PAC_IN_KIND_OUT',
+  PAC_CONDUIT_EARMARK_OUT = 'PAC_CONDUIT_EARMARK_OUT',
+  PAC_CONDUIT_EARMARK_OUT_DEPOSITED = 'PAC_CONDUIT_EARMARK_OUT_DEPOSITED',
+  PAC_CONDUIT_EARMARK_OUT_UNDEPOSITED = 'PAC_CONDUIT_EARMARK_OUT_UNDEPOSITED',
   CONDUIT_EARMARK_OUT = 'CONDUIT_EARMARK_OUT',
   CONDUIT_EARMARK_OUT_DEPOSITED = 'CONDUIT_EARMARK_OUT_DEPOSITED',
   CONDUIT_EARMARK_OUT_UNDEPOSITED = 'CONDUIT_EARMARK_OUT_UNDEPOSITED',
@@ -288,7 +291,10 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
     'Credit Card Payment for 100% Federal Election Activity',
   ],
-  [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO, 'Credit Card Corresponding Memo'],
+  [
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO, 
+    'Credit Card Memo for 100% Federal Election Activity'
+  ],
   [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
     'Staff Reimbursement for 100% Federal Election Activity',
@@ -301,7 +307,10 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
     'Payment to Payroll for 100% Federal Election Activity',
   ],
-  [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo'],
+  [
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO, 
+    'Payroll Memo for 100% Federal Election Activity'
+  ],
   [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID, 'Void of 100% Federal Election Activity Payment'],
   [
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
@@ -319,6 +328,9 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT, 'In-kind Transfer Out'],
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT, 'In-kind Transfer Federal Election Activity Out'],
   [ScheduleBTransactionTypes.PAC_IN_KIND_OUT, 'PAC In-kind Out'],
+  [ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT, 'PAC Conduit Earmark Out'],
+  [ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT_DEPOSITED, 'PAC Conduit Earmark Out (Deposited)'],
+  [ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT_UNDEPOSITED, 'PAC Conduit Earmark Out (Undeposited)'],
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT, 'Conduit Earmark Out'],
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED, 'Conduit Earmark Out (Deposited)'],
   [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out (Undeposited)'],

@@ -46,6 +46,6 @@ export abstract class SchBTransactionType extends TransactionType {
     dateLabel: 'DATE',
     amountInputHeader: 'Expenditure Information',
     purposeDescripLabel: 'PURPOSE OF DISBURSEMENT',
-    candidateInputHeader: 'Beneficiary Information',
+    candidateInputHeader: 'Committee/Candidate Information',
   };
 }

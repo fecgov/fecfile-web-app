@@ -11,7 +11,7 @@ export class TRIBAL_REFUND_NP_RECOUNT_ACCOUNT extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT);
   schema = schema;
   override showAggregate = false;
-  override isRefundAggregate = true;
+  override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

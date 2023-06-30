@@ -1,12 +1,12 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
-import { PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO } from './PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO.model';
+import { PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO } from './PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO.model';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO', () => {
-  let transactionType: PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO;
+  let transactionType: PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO;
 
   beforeEach(() => {
-    transactionType = new PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO();
+    transactionType = new PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO();
   });
 
   it('should create an instance', () => {
@@ -19,7 +19,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO', () => {
     const txn: SchATransaction = transactionType.getNewTransaction();
     expect(txn.form_type).toBe('SA17');
     expect(txn.transaction_type_identifier).toBe(
-      ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO
+      ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_MEMO
     );
   });
 

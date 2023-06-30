@@ -13,7 +13,9 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransacti
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT
   );
   schema = schema;
-  override subTransactionConfig = [ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO];
+  override subTransactionConfig = [
+    ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO,
+  ];
 
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
   override purposeDescriptionLabelNotice =

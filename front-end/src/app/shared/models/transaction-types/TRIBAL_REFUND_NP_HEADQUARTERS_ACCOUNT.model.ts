@@ -14,7 +14,7 @@ export class TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT extends SchBTransactionType {
   );
   schema = schema;
   override showAggregate = false;
-  override isRefundAggregate = true;
+  override isRefund = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

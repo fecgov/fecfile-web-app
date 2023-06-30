@@ -25,17 +25,12 @@ export class TransactionGroupO extends TransactionGroup {
       templateMap.aggregate,
       templateMap.purpose_description,
       templateMap.category_code,
-      templateMap.committee_fec_id,
-      templateMap.committee_name,
       templateMap.candidate_fec_id,
       templateMap.candidate_last_name,
       templateMap.candidate_first_name,
       templateMap.candidate_middle_name,
       templateMap.candidate_prefix,
       templateMap.candidate_suffix,
-      templateMap.candidate_office,
-      templateMap.candidate_state,
-      templateMap.candidate_district,
       templateMap.memo_code,
       templateMap.text4000,
     ].filter((val) => !!val);
@@ -66,6 +61,10 @@ export class TransactionGroupO extends TransactionGroup {
   }
 
   hasCandidateCommitteeInput(): boolean {
+    return false;
+  }
+
+  hasCandidateOfficeInput(): boolean {
     return false;
   }
 }
