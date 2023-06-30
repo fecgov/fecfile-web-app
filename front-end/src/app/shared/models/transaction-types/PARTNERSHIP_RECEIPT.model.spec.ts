@@ -24,7 +24,7 @@ describe('PARTNERSHIP_RECEIPT', () => {
 
   it('#generatePurposeDescription() should generate a string', () => {
     let descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Partnership attributions do not require itemization');
+    expect(descrip).toBe('Partnership attributions do not meet itemization threshold');
 
     transaction.children = [{ ...transaction } as SchATransaction];
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);

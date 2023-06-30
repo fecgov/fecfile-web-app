@@ -58,7 +58,7 @@
         [transaction]="transaction"
       ></app-amount-input>
       <p-divider></p-divider>
-      <ng-container *ngIf="this.hasCandidateInformationInput">
+      <ng-container *ngIf="this.hasCandidateInformationInput || !!transaction?.transactionType?.hasCandidateLookup">
         <h3>{{ templateMap['candidateInputHeader'] }}</h3>
         <app-committee-input *ngIf="this.hasCandidateCommitteeInput"
           [form]="form"
@@ -79,6 +79,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
+            [hasCandidateOfficeInput]="hasCandidateOfficeInput"
           ></app-candidate-input>
         </ng-container>
         <p-divider></p-divider>

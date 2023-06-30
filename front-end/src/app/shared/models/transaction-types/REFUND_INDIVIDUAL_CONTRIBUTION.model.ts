@@ -12,7 +12,7 @@ export class REFUND_INDIVIDUAL_CONTRIBUTION extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION);
   schema = schema;
   override showAggregate = false;
-  override isRefundAggregate = true;
+  override isRefund = true;
   override contactTypeOptions = [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 

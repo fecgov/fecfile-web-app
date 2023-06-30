@@ -15,7 +15,7 @@ export class INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT extends SchBTransactionType
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override showAggregate = false;
-  override isRefundAggregate = true;
+  override isRefund = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

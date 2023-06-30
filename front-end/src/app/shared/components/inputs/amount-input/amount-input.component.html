@@ -24,49 +24,51 @@
           [transaction]="transaction"
         ></app-memo-code>
       </div>
-      <div class="col-6">
-        <div class="field">
-          <label for="amount">AMOUNT</label>
-          <p-inputNumber
-            #amountInput
-            inputId="amount"
-            [formControlName]="templateMap['amount']"
-            mode="currency"
-            currency="USD"
-            locale="en-US"
-            [readonly]="contributionAmountReadOnly"
-            inputStyleClass="{{ contributionAmountInputStyleClass }}"
-            (onInput)="onInputAmount()"
-          ></p-inputNumber>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['amount']"
-            [formSubmitted]="formSubmitted"
-            patternErrorMessage="This field must be a number"
-            maxLengthErrorMessage="The amount can be 12 digits max"
-          ></app-error-messages>
-        </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="amount">AMOUNT</label>
+        <p-inputNumber
+          #amountInput
+          inputId="amount"
+          [formControlName]="templateMap['amount']"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          [readonly]="contributionAmountReadOnly"
+          inputStyleClass="{{ contributionAmountInputStyleClass }}"
+          (onInput)="onInputAmount()"
+        ></p-inputNumber>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['amount']"
+          [formSubmitted]="formSubmitted"
+          patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The amount can be 12 digits max"
+        ></app-error-messages>
       </div>
-      <div class="col-6">
-        <div class="field" *ngIf="showAggregate">
-          <label for="aggregate">AGGREGATE</label>
-          <p-inputNumber
-            inputId="aggregate"
-            [formControlName]="templateMap['aggregate']"
-            mode="currency"
-            currency="USD"
-            locale="en-US"
-            [readonly]="true"
-            inputStyleClass="readonly"
-          ></p-inputNumber>
-          <app-error-messages
-            [form]="form"
-            [fieldName]="templateMap['aggregate']"
-            [formSubmitted]="formSubmitted"
-            patternErrorMessage="This field must be a number"
-            maxLengthErrorMessage="The aggregate can be 12 digits max"
-          ></app-error-messages>
-        </div>
+    </div>
+    <div class="col-6">
+      <div class="field" *ngIf="showAggregate">
+        <label for="aggregate">AGGREGATE</label>
+        <p-inputNumber
+          inputId="aggregate"
+          [formControlName]="templateMap['aggregate']"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          [readonly]="true"
+          inputStyleClass="readonly"
+        ></p-inputNumber>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['aggregate']"
+          [formSubmitted]="formSubmitted"
+          patternErrorMessage="This field must be a number"
+          maxLengthErrorMessage="The aggregate can be 12 digits max"
+        ></app-error-messages>
       </div>
     </div>
   </div>
