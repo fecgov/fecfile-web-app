@@ -6,9 +6,11 @@ import { TransactionGroupO } from '../transaction-groups/transaction-group-o.mod
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { PurposeDescriptionLabelSuffix } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_O } from 'app/shared/utils/transaction-type-properties';
 
 export class FEDERAL_ELECTION_ACTIVITY_VOID extends SchBTransactionType {
   transactionGroup = new TransactionGroupO();
+  formProperties = GROUP_O;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;

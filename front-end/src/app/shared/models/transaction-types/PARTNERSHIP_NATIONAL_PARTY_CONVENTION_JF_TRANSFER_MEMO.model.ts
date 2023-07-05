@@ -6,9 +6,11 @@ import { TransactionGroupD } from '../transaction-groups/transaction-group-d.mod
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchATransactionType {
   transactionGroup = new TransactionGroupD();
+  formProperties = GROUP_D;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO

@@ -5,9 +5,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 
 export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATransactionType {
   transactionGroup = new TransactionGroupA();
+  formProperties = GROUP_A;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO

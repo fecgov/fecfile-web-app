@@ -9,9 +9,11 @@ import {
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionGroupEE } from '../transaction-groups/transaction-group-ee.model';
+import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_IN_KIND_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupEE();
+  formProperties = GROUP_EFI;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT);
   schema = schema;
   override apiEndpoint = '/transactions/save-pair';

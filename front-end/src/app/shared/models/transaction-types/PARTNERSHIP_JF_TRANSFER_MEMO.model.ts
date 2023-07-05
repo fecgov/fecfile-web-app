@@ -7,9 +7,11 @@ import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../tran
 import { ContactTypes } from '../contact.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
+import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
   transactionGroup = new TransactionGroupD();
+  formProperties = GROUP_D;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
   schema = schema;
   override shortName = 'Partnership Receipt';

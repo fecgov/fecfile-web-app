@@ -5,9 +5,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class UNREGISTERED_RECEIPT_FROM_PERSON extends SchATransactionType {
   transactionGroup = new TransactionGroupD();
+  formProperties = GROUP_D;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

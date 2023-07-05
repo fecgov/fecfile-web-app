@@ -5,17 +5,17 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupR } from '../transaction-groups/transaction-group-r.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_R } from 'app/shared/utils/transaction-type-properties';
 
 export class FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL extends SchBTransactionType {
   transactionGroup = new TransactionGroupR();
+  formProperties = GROUP_R;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL
   );
   schema = schema;
-  override subTransactionConfig = [
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO,
-  ];
+  override subTransactionConfig = [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   getNewTransaction() {

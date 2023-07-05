@@ -5,9 +5,11 @@ import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLab
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 
 export class IN_KIND_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupAA();
+  formProperties = GROUP_A;
   override isDependentChild = true;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);
   schema = schema;

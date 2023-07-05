@@ -4,9 +4,11 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionGroupM } from '../transaction-groups/transaction-group-m.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
 
 export class CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   transactionGroup = new TransactionGroupM();
+  formProperties = GROUP_M;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE);
   schema = schema;
   override showAggregate = false;

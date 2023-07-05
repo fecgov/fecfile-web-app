@@ -6,9 +6,11 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 
 export class NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT extends SchBTransactionType {
   transactionGroup = new TransactionGroupA();
+  formProperties = GROUP_A;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT

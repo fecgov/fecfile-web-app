@@ -9,9 +9,11 @@ import {
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionGroupAA } from '../transaction-groups/transaction-group-aa.model';
+import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 
 export class IN_KIND_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupAA();
+  formProperties = GROUP_A;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.IN_KIND_RECEIPT);
   schema = schema;
   override apiEndpoint = '/transactions/save-pair';

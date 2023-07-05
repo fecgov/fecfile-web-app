@@ -4,9 +4,11 @@ import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.
 import { TransactionGroupPM } from '../transaction-groups/transaction-group-pm.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransaction } from '../scha-transaction.model';
+import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_CONDUIT_EARMARK_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupPM();
+  formProperties = GROUP_M;
   title = 'PAC Conduit Earmark Out';
   schema = schema;
   override isDependentChild = true;

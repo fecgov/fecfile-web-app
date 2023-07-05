@@ -5,9 +5,11 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupO } from '../transaction-groups/transaction-group-o.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_O } from 'app/shared/utils/transaction-type-properties';
 
 export class FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT extends SchBTransactionType {
   transactionGroup = new TransactionGroupO();
+  formProperties = GROUP_O;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT

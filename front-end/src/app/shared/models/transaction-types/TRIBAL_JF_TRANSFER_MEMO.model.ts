@@ -5,9 +5,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class TRIBAL_JF_TRANSFER_MEMO extends SchATransactionType {
   transactionGroup = new TransactionGroupD();
+  formProperties = GROUP_D;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRIBAL_JF_TRANSFER_MEMO);
   override shortName = 'Tribal';
   schema = schema;

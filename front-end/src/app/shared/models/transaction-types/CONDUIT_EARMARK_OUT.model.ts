@@ -5,9 +5,11 @@ import { TemplateMapKeyType } from '../transaction-type.model';
 import { ContactTypes } from '../contact.model';
 import { SchATransaction } from '../scha-transaction.model';
 import { TransactionGroupNM } from '../transaction-groups/transaction-group-nm.model';
+import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
 
 export class CONDUIT_EARMARK_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupNM();
+  formProperties = GROUP_M;
   title = 'Conduit Earmark Out';
   schema = schema;
   override isDependentChild = true;

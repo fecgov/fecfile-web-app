@@ -6,9 +6,11 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OTHER_DISBURSEMENT extends SchBTransactionType {
   transactionGroup = new TransactionGroupB();
+  formProperties = GROUP_B;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.OTHER_DISBURSEMENT);
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;

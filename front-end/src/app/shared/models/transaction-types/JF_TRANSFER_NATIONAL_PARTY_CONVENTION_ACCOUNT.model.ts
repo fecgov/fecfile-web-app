@@ -6,9 +6,11 @@ import { TransactionGroupE } from '../transaction-groups/transaction-group-e.mod
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType {
   transactionGroup = new TransactionGroupE();
+  formProperties = GROUP_EFI;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.JF_TRANSFER_NATIONAL_PARTY_CONVENTION_ACCOUNT

@@ -5,9 +5,11 @@ import { TransactionGroupFG } from '../transaction-groups/transaction-group-fg.m
 import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_EARMARK_MEMO extends SchATransactionType {
   transactionGroup = new TransactionGroupFG();
+  formProperties = GROUP_EFI;
   override isDependentChild = true;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_MEMO);
   schema = schema;

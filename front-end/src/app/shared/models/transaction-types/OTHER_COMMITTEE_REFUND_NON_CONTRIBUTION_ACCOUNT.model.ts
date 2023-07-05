@@ -6,9 +6,11 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransactionType {
   transactionGroup = new TransactionGroupE();
+  formProperties = GROUP_EFI;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT

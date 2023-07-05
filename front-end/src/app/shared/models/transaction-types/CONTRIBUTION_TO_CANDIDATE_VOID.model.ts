@@ -5,9 +5,11 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupM } from '../transaction-groups/transaction-group-m.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { PurposeDescriptionLabelSuffix } from '../transaction-type.model';
+import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
 
 export class CONTRIBUTION_TO_CANDIDATE_VOID extends SchBTransactionType {
   transactionGroup = new TransactionGroupM();
+  formProperties = GROUP_M;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;

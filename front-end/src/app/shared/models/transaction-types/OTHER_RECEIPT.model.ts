@@ -5,9 +5,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { TransactionGroupC } from '../transaction-groups/transaction-group-c.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_C } from 'app/shared/utils/transaction-type-properties';
 
 export class OTHER_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupC();
+  formProperties = GROUP_C;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OTHER_RECEIPTS);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

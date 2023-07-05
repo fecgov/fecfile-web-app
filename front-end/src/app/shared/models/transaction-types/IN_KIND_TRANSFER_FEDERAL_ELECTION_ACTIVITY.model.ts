@@ -9,9 +9,11 @@ import {
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionGroupEE } from '../transaction-groups/transaction-group-ee.model';
+import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY extends SchATransactionType {
   transactionGroup = new TransactionGroupEE();
+  formProperties = GROUP_EFI;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY

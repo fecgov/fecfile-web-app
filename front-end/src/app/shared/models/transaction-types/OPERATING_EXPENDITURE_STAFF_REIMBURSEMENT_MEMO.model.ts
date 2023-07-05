@@ -6,9 +6,11 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO extends SchBTransactionType {
   transactionGroup = new TransactionGroupB();
+  formProperties = GROUP_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT_MEMO

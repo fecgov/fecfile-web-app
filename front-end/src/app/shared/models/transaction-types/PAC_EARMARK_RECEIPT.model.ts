@@ -10,9 +10,11 @@ import {
 } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
+import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_EARMARK_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupFG();
+  formProperties = GROUP_EFI;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
   schema = schema;
   override dependentChildTransactionType = ScheduleATransactionTypes.PAC_EARMARK_MEMO;

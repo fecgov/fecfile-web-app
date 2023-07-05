@@ -5,9 +5,11 @@ import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../tran
 import { AggregationGroups } from '../transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
+import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupD();
+  formProperties = GROUP_D;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT);
   schema = schema;
   override subTransactionConfig = [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO];

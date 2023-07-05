@@ -5,9 +5,11 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class TRIBAL_REFUND_NP_RECOUNT_ACCOUNT extends SchBTransactionType {
   transactionGroup = new TransactionGroupD();
+  formProperties = GROUP_D;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT);
   schema = schema;
   override showAggregate = false;

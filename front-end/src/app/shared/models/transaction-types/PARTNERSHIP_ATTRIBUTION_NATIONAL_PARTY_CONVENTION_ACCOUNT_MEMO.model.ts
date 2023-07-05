@@ -5,9 +5,11 @@ import { getChildNavigationControls, TransactionNavigationControls } from '../tr
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
+import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO extends SchATransactionType {
   transactionGroup = new TransactionGroupA();
+  formProperties = GROUP_A;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO

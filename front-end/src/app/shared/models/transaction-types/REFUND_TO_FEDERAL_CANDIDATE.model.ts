@@ -5,9 +5,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { TransactionGroupH } from '../transaction-groups/transaction-group-h.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_H } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
   transactionGroup = new TransactionGroupH();
+  formProperties = GROUP_H;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

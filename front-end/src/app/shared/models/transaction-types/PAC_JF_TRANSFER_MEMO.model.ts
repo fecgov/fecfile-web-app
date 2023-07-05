@@ -5,9 +5,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
+import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_JF_TRANSFER_MEMO extends SchATransactionType {
   transactionGroup = new TransactionGroupE();
+  formProperties = GROUP_EFI;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   override shortName = 'PAC';
   schema = schema;

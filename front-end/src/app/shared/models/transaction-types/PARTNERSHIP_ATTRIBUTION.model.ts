@@ -5,9 +5,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
+import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_ATTRIBUTION extends SchATransactionType {
   transactionGroup = new TransactionGroupA();
+  formProperties = GROUP_A;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION);
   schema = schema;
   override updateParentOnSave = true;
