@@ -326,3 +326,28 @@ label.disabled {
   width: 100%;
   text-align: inherit;
 }
+
+.p-button-primary {
+  border-width: 2px;
+  padding: 8px 20px;
+  font-size: 14px;
+}
+
+.p-button-primary:hover {
+  background-color: #164F85 !important;
+  border-color: #164F85 !important;
+}
+
+.p-button-secondary {
+  background-color: #AEB0B5 !important;
+  border-color:  #AEB0B5 !important;
+  border-width: 2px !important;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: #212121 !important;
+}
+
+.p-button-secondary:hover {
+  background-color: #E8E8E8 !important;
+  border-color: #E8E8E8 !important;
+}

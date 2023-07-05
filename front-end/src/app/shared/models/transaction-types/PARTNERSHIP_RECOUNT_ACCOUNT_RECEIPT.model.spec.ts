@@ -26,7 +26,7 @@ describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT', () => {
 
   it('#generatePurposeDescription() should generate a string', () => {
     let descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Recount Account (Partnership attributions do not require itemization)');
+    expect(descrip).toBe('Recount Account (Partnership attributions do not meet itemization threshold)');
 
     transaction.children = [transaction.transactionType?.getNewTransaction() as Transaction];
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);

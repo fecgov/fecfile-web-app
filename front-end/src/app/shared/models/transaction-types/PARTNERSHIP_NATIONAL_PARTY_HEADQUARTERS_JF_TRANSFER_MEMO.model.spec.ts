@@ -29,7 +29,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'Headquarters Buildings Account JF Memo: Tes... (Partnership attributions do not require itemization)'
+      'Headquarters Buildings Account JF Memo: Test Org (Partnership attributions do not meet itemizatio...'
     );
   });
 
@@ -38,7 +38,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO', () => {
       'Super Duper Long Committee Name That Needs to Shrink';
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'Headquarters Buildings Account JF Memo: Sup... (Partnership attributions do not require itemization)'
+      'Headquarters Buildings Account JF Memo: Super Duper Long Committee Name That Needs to Shrink (Par...'
     );
   });
 });
