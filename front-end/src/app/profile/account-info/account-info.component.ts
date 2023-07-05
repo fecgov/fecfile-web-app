@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -7,14 +7,14 @@ import { FecApiService } from 'app/shared/services/fec-api.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { Observable, Subject, switchMap, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './account-info.component.html',
   styleUrls: ['./account-info.component.scss'],
 })
-export class AccountInfoComponent implements OnInit, OnDestroy {
+export class AccountInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   committeeAccount$: Observable<CommitteeAccount> | undefined;
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -42,19 +42,15 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
     'custodian_name_full',
   ];
 
-  constructor(private store: Store, private fecApiService: FecApiService, private fb: FormBuilder) {}
-
-  ngOnInit(): void {
-    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-    this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+  constructor(private store: Store, private fecApiService: FecApiService, private fb: FormBuilder) { }
+  ngAfterViewInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
-    this.committeeAccount$
-      .pipe(switchMap((committeeAccount) => this.fecApiService.getCommitteeRecentFiling(committeeAccount.committee_id)))
-      .subscribe((mostRecentFiling: FecFiling | undefined) => {
-        this.mostRecentFilingPdfUrl = mostRecentFiling?.pdf_url;
-      });
+    this.committeeAccount$?.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {
+      this.fecApiService.getCommitteeRecentFiling(committee.committee_id)
+        .subscribe((mostRecentFiling: FecFiling | undefined) => {
+          this.mostRecentFilingPdfUrl = mostRecentFiling?.pdf_url;
+        });
 
-    this.committeeAccount$.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {
       this.form.enable();
       const entries = Object.entries(committee);
       for (const [key, value] of entries) {
@@ -69,16 +65,19 @@ export class AccountInfoComponent implements OnInit, OnDestroy {
             }
             const adjustedValue = prefix + ' ' + value;
             this.form.get(key)?.setValue(adjustedValue);
-            console.log(key, adjustedValue);
           } else {
             this.form.get(key)?.setValue(value);
           }
           this.form.get(key)?.updateValueAndValidity();
-          console.log(this.form.get(key)?.value);
         }
       }
       this.form.disable();
     });
+  }
+
+  ngOnInit(): void {
+    this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+    this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
   }
 
   ngOnDestroy(): void {

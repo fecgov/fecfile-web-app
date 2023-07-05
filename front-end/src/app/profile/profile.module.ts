@@ -9,6 +9,7 @@ import { DividerModule } from 'primeng/divider';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { SharedModule } from 'app/shared/shared.module';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   declarations: [AccountInfoComponent],
@@ -21,6 +22,7 @@ import { SharedModule } from 'app/shared/shared.module';
     ReactiveFormsModule,
     DropdownModule,
     SharedModule,
+    InputTextModule,
   ],
 })
 export class ProfileModule {}
