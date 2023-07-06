@@ -60,20 +60,7 @@ export class AccountInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       const entries = Object.entries(committee);
       for (const [key, value] of entries) {
         if (this.formProperties.includes(key)) {
-          if (key.includes('phone')) {
-            let prefix = '';
-            if (value.length > 0 && value[0] !== '+') {
-              if (value.length < 11) {
-                prefix = '1';
-              }
-              prefix = '+' + prefix;
-            }
-            const adjustedValue = prefix + ' ' + value;
-            this.form.get(key)?.setValue(adjustedValue);
-          } else {
-            this.form.get(key)?.setValue(value);
-          }
-          this.form.get(key)?.updateValueAndValidity();
+          this.form.get(key)?.setValue(value);
         }
       }
       this.form.disable();
