@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -42,7 +42,12 @@ export class AccountInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     'custodian_name_full',
   ];
 
-  constructor(private store: Store, private fecApiService: FecApiService, private fb: FormBuilder) { }
+  constructor(
+    private store: Store,
+    private fecApiService: FecApiService,
+    private fb: FormBuilder,
+    private readonly changeDetectorRef: ChangeDetectorRef
+  ) { }
   ngAfterViewInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.committeeAccount$?.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {
@@ -73,6 +78,7 @@ export class AccountInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       this.form.disable();
     });
+    this.changeDetectorRef.detectChanges();
   }
 
   ngOnInit(): void {

@@ -1,11 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import { testMockStore } from 'app/shared/utils/unit-test.utils';
-import { AccountInfoComponent } from './account-info.component';
-import { DividerModule } from 'primeng/divider';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { DropdownModule } from 'primeng/dropdown';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { provideMockStore } from '@ngrx/store/testing';
+import { FecInternationalPhoneInputComponent } from 'app/shared/components/fec-international-phone-input/fec-international-phone-input.component';
+import { testMockStore } from 'app/shared/utils/unit-test.utils';
+import { SharedModule } from 'primeng/api';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { AccountInfoComponent } from './account-info.component';
 
 describe('AccountInfoComponent', () => {
   let component: AccountInfoComponent;
@@ -14,8 +16,8 @@ describe('AccountInfoComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [provideMockStore(testMockStore)],
-      declarations: [AccountInfoComponent],
-      imports: [DividerModule, DropdownModule, HttpClientTestingModule, FormsModule, ReactiveFormsModule],
+      declarations: [AccountInfoComponent, FecInternationalPhoneInputComponent],
+      imports: [DividerModule, DropdownModule, HttpClientTestingModule, FormsModule, ReactiveFormsModule, SharedModule],
     }).compileComponents();
   });
 
