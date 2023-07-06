@@ -23,8 +23,10 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
       const transactionType = this.transaction.transactionType;
       const transactionGroup = transactionType.transactionGroup as TransactionGroup;
 
-      this.contactTypeOptions = transactionGroup.getContactTypeOptions();
-      this.formProperties = transactionGroup.getFormProperties(transactionType.templateMap, transactionType.scheduleId);
+      //this.contactTypeOptions = transactionGroup.getContactTypeOptions();
+      this.contactTypeOptions = transactionType.formProperties.getContactTypeOptions();
+      //this.formProperties = transactionGroup.getFormProperties(transactionType.templateMap, transactionType.scheduleId);
+      this.formProperties = transactionType.formProperties.getFormControlNames(transactionType.templateMap);
       this.hasCommitteeFecIdInput = transactionGroup.hasCommitteeFecIdInput();
       this.hasElectionInformationInput = transactionGroup.hasElectionInformationInput();
       this.hasCandidateInformationInput = transactionGroup.hasCandidateInformationInput();

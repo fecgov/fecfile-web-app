@@ -1,5 +1,6 @@
-import { ContactTypes } from '../models/contact.model';
-import { TemplateMapKeyType } from '../models/transaction-type.model';
+import { ContactTypeLabels, ContactTypes } from '../models/contact.model';
+import { TemplateMapKeyType, TransactionTemplateMapType } from '../models/transaction-type.model';
+import { LabelUtils, PrimeOptions } from './label.utils';
 
 /**
  * CONTACT TYPE OPTIONS
@@ -25,7 +26,6 @@ export const ORGANIZATION_INDIVIDUAL_COMMITTEE = [
  */
 
 export const CORE_FIELDS: string[] = [
-  'entity_type',
   'street_1',
   'street_2',
   'city',
@@ -62,48 +62,48 @@ export const CAN_FIELDS: string[] = [
 
 export const ELECTION_FIELDS: string[] = ['election_code', 'election_other_description'];
 
-// GROUP A
-export const IND_ONLY: string[] = [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...EMPLOYEE_INFO_FIELDS];
-// GROUP B
-export const IND_ORG_COM_NO_EMP_OR_COM_INFO: string[] = [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS];
-// GROUP C
-export const IND_ORG_COM_ONLY: string[] = [
-  ...CORE_FIELDS,
-  ...INDIVIDUAL_FIELDS,
-  ...EMPLOYEE_INFO_FIELDS,
-  ...ORG_FIELDS,
-];
-// GROUP D
-export const ORG_ONLY: string[] = [...CORE_FIELDS, ...ORG_FIELDS];
-// GROUP E/F/I
-export const COM_ONLY: string[] = [...CORE_FIELDS, ...COM_FIELDS];
-// GROUP G
-export const IND_ORG_COM: string[] = [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...EMPLOYEE_INFO_FIELDS, ...COM_FIELDS];
-// GROUP H
-export const COM_WITH_CAN: string[] = [...CORE_FIELDS, ...COM_FIELDS, ...CAN_FIELDS];
-// GROUP L
-export const IND_ORG_WITH_CAN: string[] = [
-  ...CORE_FIELDS,
-  ...INDIVIDUAL_FIELDS,
-  ...COM_FIELDS,
-  ...CAN_FIELDS,
-  ...ELECTION_FIELDS,
-];
-// GROUP M
-export const COM_WITH_CAN_NO_AGG: string[] = [...COM_WITH_CAN, ...ELECTION_FIELDS].filter(
-  (field) => 'aggregate' != field
-);
-// GROUP N
-export const IND_NO_AGG: string[] = IND_ONLY.filter((field) => 'aggregate' != field);
-// GROUP O
-export const IND_ORG_COM_WITH_CAN_ELEC_NO_COM: string[] = [...IND_ORG_ONLY, ...CAN_FIELDS, ...ELECTION_FIELDS];
-// GROUP P
-export const COM_NO_AGG: string[] = COM_ONLY.filter((field) => 'aggregate' != field);
-// GROUP R
-export const ORG_WITH_CAN: string[] = [...ORG_ONLY, ...ELECTION_FIELDS].filter((field) => 'aggregate' != field);
-// GROUP S
-export const IND_ORG_COM_NO_COM: string[] = [...IND_ORG_ONLY, ...ELECTION_FIELDS];
-);
+// // GROUP A
+// export const IND_ONLY: string[] = [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...EMPLOYEE_INFO_FIELDS];
+// // GROUP B
+// export const IND_ORG_COM_NO_EMP_OR_COM_INFO: string[] = [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS];
+// // GROUP C
+// export const IND_ORG_COM_ONLY: string[] = [
+//   ...CORE_FIELDS,
+//   ...INDIVIDUAL_FIELDS,
+//   ...EMPLOYEE_INFO_FIELDS,
+//   ...ORG_FIELDS,
+// ];
+// // GROUP D
+// export const ORG_ONLY: string[] = [...CORE_FIELDS, ...ORG_FIELDS];
+// // GROUP E/F/I
+// export const COM_ONLY: string[] = [...CORE_FIELDS, ...COM_FIELDS];
+// // GROUP G
+// export const IND_ORG_COM: string[] = [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...EMPLOYEE_INFO_FIELDS, ...COM_FIELDS];
+// // GROUP H
+// export const COM_WITH_CAN: string[] = [...CORE_FIELDS, ...COM_FIELDS, ...CAN_FIELDS];
+// // GROUP L
+// export const IND_ORG_WITH_CAN: string[] = [
+//   ...CORE_FIELDS,
+//   ...INDIVIDUAL_FIELDS,
+//   ...COM_FIELDS,
+//   ...CAN_FIELDS,
+//   ...ELECTION_FIELDS,
+// ];
+// // GROUP M
+// export const COM_WITH_CAN_NO_AGG: string[] = [...COM_WITH_CAN, ...ELECTION_FIELDS].filter(
+//   (field) => 'aggregate' != field
+// );
+// // GROUP N
+// export const IND_NO_AGG: string[] = IND_ONLY.filter((field) => 'aggregate' != field);
+// // GROUP O
+// export const IND_ORG_COM_WITH_CAN_ELEC_NO_COM: string[] = [...IND_ORG_ONLY, ...CAN_FIELDS, ...ELECTION_FIELDS];
+// // GROUP P
+// export const COM_NO_AGG: string[] = COM_ONLY.filter((field) => 'aggregate' != field);
+// // GROUP R
+// export const ORG_WITH_CAN: string[] = [...ORG_ONLY, ...ELECTION_FIELDS].filter((field) => 'aggregate' != field);
+// // GROUP S
+// export const IND_ORG_COM_NO_COM: string[] = [...IND_ORG_ONLY, ...ELECTION_FIELDS];
+// );
 
 export class TransactionTypeFormProperties {
   contactTypeOptions: ContactTypes[] = [];
@@ -112,6 +112,17 @@ export class TransactionTypeFormProperties {
   constructor(contactTypeOptions: ContactTypes[], formControlNames: string[]) {
     this.contactTypeOptions = contactTypeOptions;
     this.formControlNames = formControlNames;
+  }
+
+  getFormControlNames(templateMap: TransactionTemplateMapType): string[] {
+    const templateFields = this.formControlNames
+      .map((name: string) => templateMap[name as TemplateMapKeyType])
+      .filter((field) => !!field);
+    return ['entity_type', ...templateFields];
+  }
+
+  getContactTypeOptions(): PrimeOptions {
+    return LabelUtils.getPrimeOptions(ContactTypeLabels, this.contactTypeOptions);
   }
 }
 

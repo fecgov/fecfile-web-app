@@ -75,11 +75,17 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
         this.childAccordionTitle = doubleTransactionGroup.getChildAccordionTitle();
         this.childAccordionSubTitle = doubleTransactionGroup.getChildAccordionSubTitle();
 
-        this.formProperties = doubleTransactionGroup.getFormProperties(transactionType.templateMap);
-        this.childFormProperties = doubleTransactionGroup.getChildFormProperties(childTransactionType.templateMap);
+        //this.formProperties = doubleTransactionGroup.getFormProperties(transactionType.templateMap);
+        this.formProperties = transactionType.formProperties.getFormControlNames(transactionType.templateMap);
+        //this.childFormProperties = doubleTransactionGroup.getChildFormProperties(childTransactionType.templateMap);
+        this.childFormProperties = childTransactionType.formProperties.getFormControlNames(
+          childTransactionType.templateMap
+        );
 
-        this.contactTypeOptions = doubleTransactionGroup.getContactTypeOptions();
-        this.childContactTypeOptions = doubleTransactionGroup.getChildContactTypeOptions();
+        //this.contactTypeOptions = doubleTransactionGroup.getContactTypeOptions();
+        this.contactTypeOptions = transactionType.formProperties.getContactTypeOptions();
+        //this.childContactTypeOptions = doubleTransactionGroup.getChildContactTypeOptions();
+        this.contactTypeOptions = childTransactionType.formProperties.getContactTypeOptions();
 
         this.hasEmployerInput = doubleTransactionGroup.hasEmployerInput();
         this.childHasEmployerInput = doubleTransactionGroup.childHasEmployerInput();
