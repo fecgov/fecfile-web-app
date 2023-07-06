@@ -28,9 +28,11 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
       //this.formProperties = transactionGroup.getFormProperties(transactionType.templateMap, transactionType.scheduleId);
       this.formProperties = transactionType.formProperties.getFormControlNames(transactionType.templateMap);
       this.hasCommitteeFecIdInput = transactionGroup.hasCommitteeFecIdInput();
-      this.hasElectionInformationInput = transactionGroup.hasElectionInformationInput();
-      this.hasCandidateInformationInput = transactionGroup.hasCandidateInformationInput();
-      this.hasCandidateCommitteeInput = transactionGroup.hasCandidateCommitteeInput();
+      //this.hasElectionInformationInput = transactionGroup.hasElectionInformationInput();
+      this.hasElectionInformationInput = transactionType.formProperties.hasElectionInformation();
+      //this.hasCandidateInformationInput = transactionGroup.hasCandidateInformationInput();
+      this.hasCandidateInformationInput = transactionType.formProperties.hasCandidateInformation();
+      this.hasCandidateCommitteeInput = transactionType.hasCandidateComittee;
       this.hasCandidateOfficeInput = transactionGroup.hasCandidateOfficeInput();
 
       super.ngOnInit();

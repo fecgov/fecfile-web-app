@@ -10,6 +10,7 @@ export const ORGANIZATION = [ContactTypes.ORGANIZATION];
 export const COMMITTEE = [ContactTypes.COMMITTEE];
 export const COMMITTEE_INDIVIDUAL = [ContactTypes.COMMITTEE, ContactTypes.INDIVIDUAL];
 export const ORGANIZATION_INDIVIDUAL = [ContactTypes.ORGANIZATION, ContactTypes.INDIVIDUAL];
+export const INDIVIDUAL_ORGANIZATION = [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION];
 export const INDIVIDUAL_ORGANIZATION_COMMITTEE = [
   ContactTypes.INDIVIDUAL,
   ContactTypes.ORGANIZATION,
@@ -20,6 +21,10 @@ export const ORGANIZATION_INDIVIDUAL_COMMITTEE = [
   ContactTypes.INDIVIDUAL,
   ContactTypes.COMMITTEE,
 ];
+
+export function getContactTypeOptions(contactTypes: ContactTypes[]) {
+  return LabelUtils.getPrimeOptions(ContactTypeLabels, contactTypes);
+}
 
 /**
  * FORM CONTROL PRESETS
@@ -48,7 +53,7 @@ export const COM_FIELDS: string[] = ['organization_name', 'committee_fec_id', 'c
 
 export const EMPLOYEE_INFO_FIELDS: string[] = ['employer', 'occupation'];
 
-export const CAN_FIELDS: string[] = [
+export const CANDIDATE_FIELDS: string[] = [
   'candidate_fec_id',
   'candidate_last_name',
   'candidate_first_name',
@@ -124,6 +129,18 @@ export class TransactionTypeFormProperties {
   getContactTypeOptions(): PrimeOptions {
     return LabelUtils.getPrimeOptions(ContactTypeLabels, this.contactTypeOptions);
   }
+  hasElectionInformation(): boolean {
+    return ELECTION_FIELDS.reduce(
+      (result, election_field) => result && this.formControlNames.includes(election_field),
+      true
+    );
+  }
+  hasCandidateInformation(): boolean {
+    return CANDIDATE_FIELDS.reduce(
+      (result, candidate_field) => result && this.formControlNames.includes(candidate_field),
+      true
+    );
+  }
 }
 
 export const GROUP_A: TransactionTypeFormProperties = new TransactionTypeFormProperties(INDIVIDUAL, [
@@ -154,18 +171,18 @@ export const GROUP_G: TransactionTypeFormProperties = new TransactionTypeFormPro
 export const GROUP_H: TransactionTypeFormProperties = new TransactionTypeFormProperties(COMMITTEE, [
   ...CORE_FIELDS,
   ...COM_FIELDS,
-  ...CAN_FIELDS,
+  ...CANDIDATE_FIELDS,
 ]);
 export const GROUP_L: TransactionTypeFormProperties = new TransactionTypeFormProperties(ORGANIZATION_INDIVIDUAL, [
   ...CORE_FIELDS,
   ...INDIVIDUAL_FIELDS,
   ...COM_FIELDS,
-  ...CAN_FIELDS,
+  ...CANDIDATE_FIELDS,
   ...ELECTION_FIELDS,
 ]);
 export const GROUP_M: TransactionTypeFormProperties = new TransactionTypeFormProperties(
   COMMITTEE,
-  [...CORE_FIELDS, ...COM_FIELDS, ...CAN_FIELDS, ...ELECTION_FIELDS].filter((field) => 'aggregate' != field)
+  [...CORE_FIELDS, ...COM_FIELDS, ...CANDIDATE_FIELDS, ...ELECTION_FIELDS].filter((field) => 'aggregate' != field)
 );
 export const GROUP_N: TransactionTypeFormProperties = new TransactionTypeFormProperties(
   INDIVIDUAL,
@@ -173,7 +190,14 @@ export const GROUP_N: TransactionTypeFormProperties = new TransactionTypeFormPro
 );
 export const GROUP_O: TransactionTypeFormProperties = new TransactionTypeFormProperties(
   ORGANIZATION_INDIVIDUAL_COMMITTEE,
-  [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS, ...EMPLOYEE_INFO_FIELDS, ...CAN_FIELDS, ...ELECTION_FIELDS]
+  [
+    ...CORE_FIELDS,
+    ...INDIVIDUAL_FIELDS,
+    ...ORG_FIELDS,
+    ...EMPLOYEE_INFO_FIELDS,
+    ...CANDIDATE_FIELDS,
+    ...ELECTION_FIELDS,
+  ]
 );
 export const GROUP_P: TransactionTypeFormProperties = new TransactionTypeFormProperties(
   COMMITTEE,
