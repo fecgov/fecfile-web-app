@@ -327,27 +327,27 @@ label.disabled {
   text-align: inherit;
 }
 
-.p-button-primary {
+.p-button-primary.p-button {
   border-width: 2px;
   padding: 8px 20px;
   font-size: 14px;
 }
 
-.p-button-primary:hover {
-  background-color: #164F85 !important;
-  border-color: #164F85 !important;
+.p-button-primary.p-button:enabled:hover {
+  background-color: #164F85;
+  border-color: #164F85;
 }
 
-.p-button-secondary {
-  background-color: #AEB0B5 !important;
-  border-color:  #AEB0B5 !important;
-  border-width: 2px !important;
+.p-button-secondary.p-button {
+  background-color: #AEB0B5;
+  border-color:  #AEB0B5;
+  border-width: 2px;
   padding: 8px 20px;
   font-size: 14px;
-  color: #212121 !important;
+  color: #212121;
 }
 
-.p-button-secondary:hover {
-  background-color: #E8E8E8 !important;
-  border-color: #E8E8E8 !important;
+.p-button-secondary.p-button:enabled:hover {
+  background-color: #E8E8E8;
+  border-color: #E8E8E8;
 }
