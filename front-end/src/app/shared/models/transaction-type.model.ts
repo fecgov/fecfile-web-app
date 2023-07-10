@@ -79,6 +79,12 @@ export abstract class TransactionType {
     }
     return '';
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  // Template variables to be integrated with #1193
+  hasAmountInput = true;
+  hasLoanInfoInput = false;
+  hasLoanTermsInput = false;
 }
 
 export enum PurposeDescriptionLabelSuffix {

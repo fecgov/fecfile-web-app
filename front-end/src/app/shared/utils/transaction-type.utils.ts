@@ -86,6 +86,7 @@ import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model
 import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOUNT_RECEIPT.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
+import { LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT } from '../models/transaction-types/LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
@@ -160,6 +161,10 @@ import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-typ
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO.model';
 import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO.model';
+
+// Schedule C /////////////////////////////////////////////////////
+
+import { LOAN_RECEIVED_FROM_INDIVIDUAL } from '../models/transaction-types/LOAN_RECEIVED_FROM_INDIVIDUAL.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -255,6 +260,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONDUIT_EARMARK_RECEIPT,
   CONDUIT_EARMARK_RECEIPT_DEPOSITED: CONDUIT_EARMARK_RECEIPT,
   CONDUIT_EARMARK_RECEIPT_UNDEPOSITED: CONDUIT_EARMARK_RECEIPT,
+  LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,
   // Schedule B /////////////////////////////////////////////////////
   PAC_CONDUIT_EARMARK_OUT,
   PAC_CONDUIT_EARMARK_OUT_DEPOSITED: PAC_CONDUIT_EARMARK_OUT,
@@ -326,6 +332,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONDUIT_EARMARK_OUT_UNDEPOSITED: CONDUIT_EARMARK_OUT,
   CONTRIBUTION_TO_CANDIDATE,
   CONTRIBUTION_TO_CANDIDATE_VOID,
+  // Schedule C /////////////////////////////////////////////////////
+  LOAN_RECEIVED_FROM_INDIVIDUAL,
 }
 
 export class TransactionTypeUtils {

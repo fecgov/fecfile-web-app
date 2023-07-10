@@ -1,26 +1,30 @@
 <div [formGroup]="form">
   <div class="grid">
-    <div class="col-12">
-      <label for="purpose_description"> {{ templateMap['purposeDescripLabel'] }} {{ purposeDescriptionLabel }} </label>
-      <em *ngIf="purposeDescriptionLabelNotice">{{ purposeDescriptionLabelNotice }}</em>
-      <div>
-        <textarea
-          id="purpose_description"
-          [rows]="4"
-          [cols]="30"
-          pInputTextarea
-          [autoResize]="true"
-          [formControlName]="templateMap['purpose_description']"
-          [ngClass]="{ readonly: descriptionIsSystemGenerated }"
-          [readonly]="descriptionIsSystemGenerated"
-        ></textarea>
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['purpose_description']"
-          [formSubmitted]="formSubmitted"
-        ></app-error-messages>
+    <ng-container *ngIf="templateMap.purpose_description">
+      <div class="col-12">
+        <label for="purpose_description">
+          {{ templateMap['purposeDescripLabel'] }} {{ purposeDescriptionLabel }}
+        </label>
+        <em *ngIf="purposeDescriptionLabelNotice">{{ purposeDescriptionLabelNotice }}</em>
+        <div>
+          <textarea
+            id="purpose_description"
+            [rows]="4"
+            [cols]="30"
+            pInputTextarea
+            [autoResize]="true"
+            [formControlName]="templateMap['purpose_description']"
+            [ngClass]="{ readonly: descriptionIsSystemGenerated }"
+            [readonly]="descriptionIsSystemGenerated"
+          ></textarea>
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['purpose_description']"
+            [formSubmitted]="formSubmitted"
+          ></app-error-messages>
+        </div>
       </div>
-    </div>
+    </ng-container>
   </div>
   <div class="grid">
     <div class="col-12">

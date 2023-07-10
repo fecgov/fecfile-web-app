@@ -70,11 +70,11 @@ export enum ScheduleCTransactionGroups {
 export type ScheduleCTransactionGroupsType = ScheduleCTransactionGroups.LOANS | ScheduleCTransactionGroups.DEBTS;
 
 export enum ScheduleCTransactionTypes {
-  LOANS_RECEIVED_FROM_INDIVIDUAL = 'LOANS_RECEIVED_FROM_INDIVIDUAL',
-  LOANS_RECEIVED_FROM_BANK = 'LOANS_RECEIVED_FROM_BANK',
+  LOAN_RECEIVED_FROM_INDIVIDUAL = 'LOAN_RECEIVED_FROM_INDIVIDUAL',
+  LOAN_RECEIVED_FROM_BANK = 'LOAN_RECEIVED_FROM_BANK',
 }
 
 export const ScheduleCTransactionTypeLabels: LabelList = [
-  [ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_INDIVIDUAL, 'Loan Received from Individual'],
-  [ScheduleCTransactionTypes.LOANS_RECEIVED_FROM_BANK, 'Loan Received from Bank'],
+  [ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL, 'Loan Received from Individual'],
+  [ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK, 'Loan Received from Bank'],
 ];

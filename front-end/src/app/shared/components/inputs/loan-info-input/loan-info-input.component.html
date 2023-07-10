@@ -1,0 +1,77 @@
+<div [formGroup]="form">
+  <div class="grid">
+    <div class="col-4">
+      <div class="field">
+        <label for="amount">AMOUNT (ORIGINAL)</label>
+        <p-inputNumber
+          inputId="amount"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          [formControlName]="templateMap['amount']"
+          inputStyleClass="{{ inputStyleClass }}"
+          [readonly]="readonly"
+        ></p-inputNumber>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['amount']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="field">
+        <label for="loan_payment_to_date">PAYMENT TO DATE</label>
+        <p-inputNumber
+          inputId="loan_payment_to_date"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          formControlName="loan_payment_to_date"
+          inputStyleClass="readonly"
+          [readonly]="true"
+        ></p-inputNumber>
+        <app-error-messages
+          [form]="form"
+          fieldName="loan_payment_to_date"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="field">
+        <label for="balance">BALANCE OUTSTANDING</label>
+        <p-inputNumber
+          inputId="balance"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+          [formControlName]="templateMap['balance']"
+          inputStyleClass="readonly"
+          [readonly]="true"
+        ></p-inputNumber>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['balance']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <div class="field">
+        <app-memo-code
+          [form]="form"
+          [formSubmitted]="formSubmitted"
+          [templateMap]="templateMap"
+          [overrideMemoCodeReadOnly]="memoCodeReadOnly"
+          [overrideMemoItemHelpText]="memoItemHelpText"
+          [transaction]="transaction"
+          checkboxLabel="MEMO ITEM (OPTIONAL)"
+          [doDateCheck]="false"
+        ></app-memo-code>
+      </div>
+    </div>
+  </div>
+</div>
