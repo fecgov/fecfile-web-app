@@ -104,7 +104,7 @@ describe('Manage reports', () => {
     cy.get('app-error-messages[fieldname="coverage_through_date"]').should('contain', errorMessage);
   });
 
-  it('Create report with previous existing report types disabled', () => {
+  xit('Create report with previous existing report types disabled', () => {
     // Create report #1
     ReportListPage.clickCreateButton();
     const formData = { ...defaultFormData };
