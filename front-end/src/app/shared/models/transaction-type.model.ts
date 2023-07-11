@@ -85,6 +85,8 @@ export abstract class TransactionType {
   hasAmountInput = true;
   hasLoanInfoInput = false;
   hasLoanTermsInput = false;
+  contactHeaderLabel = 'Contact';
+  contactDropdownLabel = 'CONTACT TYPE';
 }
 
 export enum PurposeDescriptionLabelSuffix {

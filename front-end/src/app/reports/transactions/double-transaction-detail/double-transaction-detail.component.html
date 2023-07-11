@@ -10,11 +10,11 @@
     >
     <div class="p-fluid">
       <h2 *ngIf="parentTransactionTitle">{{ parentTransactionTitle }}</h2>
-      <h3>Contact</h3>
+      <h3>{{ transaction?.transactionType?.contactHeaderLabel }}</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid" *ngIf="isEditable">
           <div class="col-12">
-            <label for="entity_type">CONTACT TYPE</label>
+            <label for="entity_type">{{ transaction?.transactionType?.contactDropdownLabel }}</label>
             <app-transaction-contact-lookup
               [contactTypeFormControl]="$any(form).controls['entity_type']"
               [contactTypeOptions]="contactTypeOptions"
@@ -124,7 +124,7 @@
             ></app-election-input>
             <p-divider></p-divider>
           </ng-container>
-          <h3>Additional Information</h3>
+          <h3>Additional information</h3>
           <app-additional-info-input
             [form]="form"
             [formSubmitted]="formSubmitted"
@@ -281,7 +281,7 @@
             ></app-loan-info-input>
             <p-divider></p-divider>
           </ng-container>
-          <h3>Additional Information</h3>
+          <h3>Additional information</h3>
           <app-additional-info-input
             [form]="childForm"
             [formSubmitted]="formSubmitted"

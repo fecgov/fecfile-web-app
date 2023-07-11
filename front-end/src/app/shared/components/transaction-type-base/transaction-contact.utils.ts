@@ -88,9 +88,10 @@ export class TransactionContactUtils {
       return Object.entries(ContactFields)
         .map(([field, label]: string[]) => {
           const contactValue = contact[field as keyof typeof contact];
+          const value = contactValue === '' ? null : contactValue; // Convert '' to null to match form field values.
           const formField = getFormField(form, field, templateMap);
 
-          if (formField && formField?.value !== contactValue) {
+          if (formField && formField?.value !== value) {
             contact[field as keyof typeof contact] = (formField.value || '') as never;
             if (!formField.value) {
               return `Removed ${label.toLowerCase()}`;

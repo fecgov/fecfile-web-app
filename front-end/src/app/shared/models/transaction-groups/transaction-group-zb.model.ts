@@ -88,11 +88,11 @@ export class TransactionGroupZB extends DoubleTransactionGroup {
   }
 
   getChildTransactionSubTitle(): string {
-    return 'To update any errors found, return to the previous step to update the in-kind receipt.';
+    return 'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.';
   }
 
   getGroupDescription(): string {
-    return 'This receipt type automatically creates an associated transaction. Saving an in-kind receipt will automatically create an in-kind out.';
+    return 'This loan type automatically creates an associated transaction. Saving a loan received from individual will automatically create an associated receipt.';
   }
 
   getParentAccordionTitle(): string {
@@ -100,7 +100,7 @@ export class TransactionGroupZB extends DoubleTransactionGroup {
   }
 
   getParentAccordionSubTitle(): string {
-    return 'Add contact and receipt information';
+    return 'Add contact and loan information';
   }
 
   getChildAccordionTitle(): string {
@@ -108,7 +108,7 @@ export class TransactionGroupZB extends DoubleTransactionGroup {
   }
 
   getChildAccordionSubTitle(): string {
-    return 'Review disbursement information';
+    return 'Review receipt information';
   }
 
   getChildContactLabel(): string {

@@ -13,7 +13,7 @@ export class LoanTermsInputComponent extends BaseInputComponent implements OnIni
     }
 
     // Set empty values until ticket #1156 implemented
-    this.form.get('loan_due_date')?.setValue(' ');
-    this.form.get('loan_interest_rate')?.setValue(' ');
+    this.form.get('loan_due_date')?.setValue('-');
+    this.form.get('loan_interest_rate')?.setValue('-');
   }
 }

@@ -1,5 +1,8 @@
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
+import { SchCTransaction } from '../models/schc-transaction.model';
+import { SchC1Transaction } from '../models/schc1-transaction.model';
+import { SchC2Transaction } from '../models/schc2-transaction.model';
 import { ScheduleTransaction } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
@@ -367,6 +370,9 @@ export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // esli
     const transactionType = TransactionTypeUtils.factory(json.transaction_type_identifier);
     if (transactionType.scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
     if (transactionType.scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'C') return SchCTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'C1') return SchC1Transaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'C2') return SchC2Transaction.fromJSON(json, depth);
   }
   return SchATransaction.fromJSON(json, depth); // Until 404 resolved
   // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');
