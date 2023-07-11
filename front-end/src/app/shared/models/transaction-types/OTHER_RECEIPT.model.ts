@@ -17,12 +17,7 @@ import {
 
 export class OTHER_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupC();
-  formProperties = new TransactionTypeFormProperties(INDIVIDUAL_ORGANIZATION_COMMITTEE, [
-    ...CORE_FIELDS,
-    ...INDIVIDUAL_FIELDS,
-    ...ORG_FIELDS,
-    ...EMPLOYEE_INFO_FIELDS,
-  ]);
+  formProperties = GROUP_C;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OTHER_RECEIPTS);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

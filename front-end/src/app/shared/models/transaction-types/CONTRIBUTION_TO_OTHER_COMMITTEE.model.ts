@@ -4,11 +4,11 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_EFI, GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class CONTRIBUTION_TO_OTHER_COMMITTEE extends SchBTransactionType {
   transactionGroup = new TransactionGroupE();
-  formProperties = GROUP_EFI;
+  formProperties = GROUP_EFI_FOR_B;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE);
   schema = schema;
   override showAggregate = false;

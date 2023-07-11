@@ -7,9 +7,11 @@ import { TransactionGroupC } from '../transaction-groups/transaction-group-c.mod
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import {
+  CATEGORY_CODE,
   CORE_FIELDS,
   EMPLOYEE_INFO_FIELDS,
   GROUP_C,
+  GROUP_C_FOR_B,
   INDIVIDUAL_FIELDS,
   INDIVIDUAL_ORGANIZATION,
   ORG_FIELDS,
@@ -18,12 +20,7 @@ import {
 
 export class NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
   transactionGroup = new TransactionGroupC();
-  formProperties = new TransactionTypeFormProperties(INDIVIDUAL_ORGANIZATION, [
-    ...CORE_FIELDS,
-    ...INDIVIDUAL_FIELDS,
-    ...ORG_FIELDS,
-    ...EMPLOYEE_INFO_FIELDS,
-  ]);
+  formProperties = GROUP_C_FOR_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO

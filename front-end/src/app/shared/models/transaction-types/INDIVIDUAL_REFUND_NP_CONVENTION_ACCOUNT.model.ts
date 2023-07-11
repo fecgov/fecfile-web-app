@@ -5,11 +5,11 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_A, GROUP_A_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT extends SchBTransactionType {
   transactionGroup = new TransactionGroupA();
-  formProperties = GROUP_A;
+  formProperties = GROUP_A_FOR_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT

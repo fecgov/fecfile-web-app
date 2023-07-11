@@ -6,11 +6,19 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
+import {
+  CORE_FIELDS,
+  GROUP_B,
+  GROUP_B_FOR_A,
+  INDIVIDUAL_FIELDS,
+  INDIVIDUAL_ORGANIZATION_COMMITTEE,
+  ORG_FIELDS,
+  TransactionTypeFormProperties,
+} from 'app/shared/utils/transaction-type-properties';
 
 export class OFFSET_TO_OPERATING_EXPENDITURES extends SchATransactionType {
   transactionGroup = new TransactionGroupB();
-  formProperties = GROUP_B;
+  formProperties = GROUP_B_FOR_A;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;

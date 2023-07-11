@@ -38,7 +38,9 @@
       <h3>Address</h3>
       <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-address-input>
       <p-divider></p-divider>
-      <ng-container *ngIf="hasEmployerInput">
+      {{ hasEmployerInput }}
+      {{ entityTypeControl?.value }}
+      <ng-container *ngIf="hasEmployerInput && entityTypeControl?.value == ContactTypes.INDIVIDUAL">
         <h3>Employer</h3>
         <app-employer-input
           [form]="form"

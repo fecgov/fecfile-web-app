@@ -18,12 +18,7 @@ import {
 
 export class RETURN_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupC();
-  formProperties = new TransactionTypeFormProperties(INDIVIDUAL_ORGANIZATION, [
-    ...CORE_FIELDS,
-    ...INDIVIDUAL_FIELDS,
-    ...ORG_FIELDS,
-    ...EMPLOYEE_INFO_FIELDS,
-  ]);
+  formProperties = GROUP_C;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
   schema = schema;
   override negativeAmountValueOnly = true;

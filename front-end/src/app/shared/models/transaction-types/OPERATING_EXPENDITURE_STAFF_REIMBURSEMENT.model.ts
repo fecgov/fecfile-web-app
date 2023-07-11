@@ -6,11 +6,11 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_A, GROUP_A_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT extends SchBTransactionType {
   transactionGroup = new TransactionGroupA();
-  formProperties = GROUP_A;
+  formProperties = GROUP_A_FOR_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_STAFF_REIMBURSEMENT

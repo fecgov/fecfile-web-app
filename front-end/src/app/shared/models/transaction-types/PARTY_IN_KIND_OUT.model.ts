@@ -5,11 +5,11 @@ import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLab
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_EFI, GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTY_IN_KIND_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupEE();
-  formProperties = GROUP_EFI;
+  formProperties = GROUP_EFI_FOR_B;
   override isDependentChild = true;
   override showAggregate = false;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.PARTY_IN_KIND_OUT);

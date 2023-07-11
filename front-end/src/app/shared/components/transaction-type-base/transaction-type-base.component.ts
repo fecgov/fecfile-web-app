@@ -34,6 +34,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   abstract formProperties: string[];
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
+  entityTypeControl?: FormControl;
   candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
   candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
@@ -65,6 +66,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       throw new Error('Fecfile: Template map not found for transaction component');
     }
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
+    this.entityTypeControl = this.form.get('entity_type') as FormControl;
     this.parentOnInit();
     this.store
       .select(selectActiveReport)
