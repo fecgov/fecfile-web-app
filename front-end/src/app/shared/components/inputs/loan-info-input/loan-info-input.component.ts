@@ -6,7 +6,6 @@ import { Transaction } from 'app/shared/models/transaction.model';
 @Component({
   selector: 'app-loan-info-input',
   templateUrl: './loan-info-input.component.html',
-  styleUrls: ['./loan-info-input.component.scss'],
 })
 export class LoanInfoInputComponent extends BaseInputComponent implements OnInit {
   @Input() readonly = false;
