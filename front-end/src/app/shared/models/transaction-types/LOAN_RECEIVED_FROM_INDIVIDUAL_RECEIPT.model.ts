@@ -30,6 +30,7 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
     'zip',
     'date',
     'amount',
+    'memo_item',
   ] as TemplateMapKeyType[];
 
   getNewTransaction() {
