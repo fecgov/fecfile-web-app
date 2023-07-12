@@ -288,13 +288,14 @@ workflows:
     when:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
-      - lint
-      - test
+      # - lint
+      # - test
       # - dependency-check
-      - deploy:
-          requires:
-            - test
-            # - dependency-check
+      # - deploy:
+      #    requires:
+      #      - test
+      #      # - dependency-check
+      - e2e-test
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>

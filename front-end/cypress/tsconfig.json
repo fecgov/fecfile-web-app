@@ -4,6 +4,6 @@
   "compilerOptions": {
     "sourceMap": false,
     "types": ["cypress"],
-    "target": "ES6"
+    "target": "ES2022"
   }
 }
