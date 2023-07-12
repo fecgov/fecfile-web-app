@@ -5,6 +5,7 @@ import * as fs from 'fs';
 export default defineConfig({
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
+  video: false,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
   screenshotOnRunFailure: true,
