@@ -110,7 +110,7 @@ jobs:
       - run:
           name: start fecfile-web-api
           command: |
-            git checkout ${E2E_BRANCH_NAME}
+            git checkout develop
             docker-compose down
             DB_DOCKERFILE="Dockerfile-e2e" WORKER_DOCKERFILE="Worker_Dockerfile-e2e" API_DOCKERFILE="Dockerfile-e2e" FECFILE_TEST_DB_NAME="postgres"  DJANGO_SECRET_KEY=${E2E_DJANGO_SECRET_KEY} DATABASE_URL=${E2E_DATABASE_URL} docker-compose up --build -d
             docker container run --network container:fecfile-api \
@@ -122,7 +122,7 @@ jobs:
       - run:
           name: execute e2e tests
           command: |
-            docker container run --name fecfile-web-app-e2e -e E2E_BRANCH_NAME=${E2E_BRANCH_NAME} -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
+            docker container run --name fecfile-web-app-e2e -e E2E_BRANCH_NAME='feature/1194-e2e-updates-sprint-27' -e CYPRESS_EMAIL=${CYPRESS_EMAIL} -e CYPRESS_COMMITTEE_ID=${CYPRESS_COMMITTEE_ID} -e CYPRESS_PASSWORD=${CYPRESS_PASSWORD} --network container:fecfile-api cypress/browsers:node18.12.0-chrome107 /bin/bash -c '\
               cd ~; \
               git clone https://github.com/fecgov/fecfile-web-app.git; \
               cd fecfile-web-app/front-end; \
