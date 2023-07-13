@@ -1,6 +1,5 @@
 import { PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO } from './PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO', () => {
   let transactionType: PARTNERSHIP_ATTRIBUTION_RECOUNT_ACCOUNT_RECEIPT_MEMO;
@@ -12,7 +11,6 @@ describe('PARTNERSHIP_RECOUNT_ACCOUNT_RECEIPT_MEMO', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupA);
   });
 
   it('#factory() should return a SchATransaction', () => {

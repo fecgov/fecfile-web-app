@@ -4,13 +4,10 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
-import { ContactTypes } from '../contact.model';
 import { SubTransactionGroup } from '../transaction-type.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATransactionType {
-  transactionGroup = new TransactionGroupD();
   formProperties = GROUP_D;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,

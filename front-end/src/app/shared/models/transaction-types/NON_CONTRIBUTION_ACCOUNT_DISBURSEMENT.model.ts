@@ -3,13 +3,11 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NON_CONTRIBUTI
 import { ContactTypes } from '../contact.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
 
 export class NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
-  transactionGroup = new TransactionGroupB();
   formProperties = GROUP_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

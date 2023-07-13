@@ -3,13 +3,11 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_P
 import { ContactTypes } from '../contact.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_D, GROUP_D_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_D_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL extends SchBTransactionType {
-  transactionGroup = new TransactionGroupD();
   formProperties = GROUP_D_FOR_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

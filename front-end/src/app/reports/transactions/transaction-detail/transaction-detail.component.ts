@@ -1,8 +1,5 @@
 import { Component, OnChanges } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
-import { ContactTypes } from 'app/shared/models/contact.model';
-import { TransactionGroup } from 'app/shared/models/transaction-groups/transaction-group.model';
-import { startWith, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-transaction-detail',

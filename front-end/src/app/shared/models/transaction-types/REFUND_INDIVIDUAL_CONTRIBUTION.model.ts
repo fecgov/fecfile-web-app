@@ -4,12 +4,9 @@ import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
-import { ContactTypes } from '../contact.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
-import { GROUP_B, GROUP_B_NO_COM } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_B_NO_COM } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_INDIVIDUAL_CONTRIBUTION extends SchBTransactionType {
-  transactionGroup = new TransactionGroupB();
   formProperties = GROUP_B_NO_COM;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION);
   schema = schema;

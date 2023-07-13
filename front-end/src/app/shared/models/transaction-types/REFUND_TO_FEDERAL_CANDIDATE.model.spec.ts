@@ -1,6 +1,5 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupH } from '../transaction-groups/transaction-group-h.model';
 import { REFUND_TO_FEDERAL_CANDIDATE } from './REFUND_TO_FEDERAL_CANDIDATE.model';
 
 describe('REFUND_TO_FEDERAL_CANDIDATE', () => {
@@ -13,7 +12,6 @@ describe('REFUND_TO_FEDERAL_CANDIDATE', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupH);
   });
 
   it('#factory() should return a SchATransaction', () => {

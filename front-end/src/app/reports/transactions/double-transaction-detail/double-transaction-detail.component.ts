@@ -8,7 +8,6 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { DoubleTransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/double-transaction-type-base.component';
-import { DoubleTransactionGroup } from 'app/shared/models/transaction-groups/double-transaction-group.model';
 
 @Component({
   selector: 'app-double-transaction-detail',

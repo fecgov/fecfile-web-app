@@ -3,13 +3,11 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NON_CONTRIBUTI
 import { ContactTypes } from '../contact.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_D, GROUP_D_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_D_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransactionType {
-  transactionGroup = new TransactionGroupD();
   formProperties = GROUP_D_FOR_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

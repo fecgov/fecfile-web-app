@@ -3,13 +3,11 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_M
 import { ContactTypes } from '../contact.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupO } from '../transaction-groups/transaction-group-o.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { GROUP_O } from 'app/shared/utils/transaction-type-properties';
 
 export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO extends SchBTransactionType {
-  transactionGroup = new TransactionGroupO();
   formProperties = GROUP_O;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

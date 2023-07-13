@@ -1,14 +1,12 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARK_OUTS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupPM } from '../transaction-groups/transaction-group-pm.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransaction } from '../scha-transaction.model';
 import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
-import { CONDUIT_EARMARK_OUT, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
+import { CONDUIT_EARMARK_OUT } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PAC_CONDUIT_EARMARK_OUT extends SchBTransactionType {
-  transactionGroup = new TransactionGroupPM();
   formProperties = GROUP_M;
   override labelConfig = CONDUIT_EARMARK_OUT;
   title = 'PAC Conduit Earmark Out';

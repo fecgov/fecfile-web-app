@@ -3,7 +3,6 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_RE
 import { ContactTypes } from '../contact.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupFG } from '../transaction-groups/transaction-group-fg.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
   TransactionNavigationControls,
@@ -14,7 +13,6 @@ import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 import { EARMARK, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PAC_EARMARK_RECEIPT extends SchATransactionType {
-  transactionGroup = new TransactionGroupFG();
   formProperties = GROUP_EFI;
   override labelConfig = EARMARK;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);

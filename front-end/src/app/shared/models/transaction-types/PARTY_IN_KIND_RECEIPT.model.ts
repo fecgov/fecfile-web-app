@@ -8,12 +8,10 @@ import {
 } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupEE } from '../transaction-groups/transaction-group-ee.model';
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 import { IN_KIND } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PARTY_IN_KIND_RECEIPT extends SchATransactionType {
-  transactionGroup = new TransactionGroupEE();
   formProperties = GROUP_EFI;
   override labelConfig = IN_KIND;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_IN_KIND_RECEIPT);

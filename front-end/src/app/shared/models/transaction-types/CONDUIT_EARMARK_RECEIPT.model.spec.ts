@@ -1,7 +1,6 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { ContactTypes } from '../contact.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { TransactionGroupNM } from '../transaction-groups/transaction-group-nm.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 
 describe('CONDUIT_EARMARK_RECEIPT', () => {
@@ -14,7 +13,6 @@ describe('CONDUIT_EARMARK_RECEIPT', () => {
   it('should create an instance', () => {
     expect(transaction.transactionType).toBeTruthy();
     expect(transaction.transactionType?.scheduleId).toBe('A');
-    expect(transaction?.transactionType?.transactionGroup).toBeInstanceOf(TransactionGroupNM);
   });
 
   it('#factory() should return a SchATransaction', () => {

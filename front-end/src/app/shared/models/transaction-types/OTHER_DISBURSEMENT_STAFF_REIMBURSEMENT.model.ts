@@ -3,13 +3,11 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_P
 import { ContactTypes } from '../contact.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_A, GROUP_A_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_A_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OTHER_DISBURSEMENT_STAFF_REIMBURSEMENT extends SchBTransactionType {
-  transactionGroup = new TransactionGroupA();
   formProperties = GROUP_A_FOR_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

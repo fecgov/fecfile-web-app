@@ -2,13 +2,11 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_INDIVIDUAL_REFUNDS';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_A, GROUP_A_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_A_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class INDIVIDUAL_REFUND_NP_CONVENTION_ACCOUNT extends SchBTransactionType {
-  transactionGroup = new TransactionGroupA();
   formProperties = GROUP_A_FOR_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

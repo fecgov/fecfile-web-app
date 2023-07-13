@@ -2,8 +2,6 @@ import { JsonSchema } from '../interfaces/json-schema.interface';
 import { LabelConfig } from '../utils/transaction-type-labels.utils';
 import { TransactionTypeFormProperties } from '../utils/transaction-type-properties';
 import { ContactType } from './contact.model';
-import { DoubleTransactionGroup } from './transaction-groups/double-transaction-group.model';
-import { TransactionGroup } from './transaction-groups/transaction-group.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { Transaction, TransactionTypes } from './transaction.model';
 
@@ -14,7 +12,6 @@ import { Transaction, TransactionTypes } from './transaction.model';
 export abstract class TransactionType {
   abstract scheduleId: string;
   abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
-  abstract transactionGroup: TransactionGroup | DoubleTransactionGroup; // Transaction group used to render UI form entry page
   abstract formProperties: TransactionTypeFormProperties;
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema

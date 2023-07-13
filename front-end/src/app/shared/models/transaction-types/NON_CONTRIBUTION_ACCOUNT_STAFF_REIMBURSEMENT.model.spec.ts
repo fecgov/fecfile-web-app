@@ -1,5 +1,4 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 import { NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT } from './NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT.model';
 
 describe('NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT', () => {
@@ -12,7 +11,6 @@ describe('NON_CONTRIBUTION_ACCOUNT_STAFF_REIMBURSEMENT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupA);
   });
 
   it('#factory() should return a SchBTransaction', () => {

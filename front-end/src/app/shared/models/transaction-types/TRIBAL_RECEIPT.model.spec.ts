@@ -1,5 +1,4 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { TRIBAL_RECEIPT } from './TRIBAL_RECEIPT.model';
 
 describe('TRIBAL_RECEIPT', () => {
@@ -12,7 +11,6 @@ describe('TRIBAL_RECEIPT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchATransaction', () => {

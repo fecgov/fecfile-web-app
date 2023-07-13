@@ -1,7 +1,6 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_EARMARK_MEMOS';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
-import { TransactionGroupAG } from '../transaction-groups/transaction-group-ag.model';
 import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from '../../utils/label.utils';
@@ -9,7 +8,6 @@ import { GROUP_G } from 'app/shared/utils/transaction-type-properties';
 import { EARMARK_MEMO } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class EARMARK_MEMO_CONVENTION_ACCOUNT extends SchATransactionType {
-  transactionGroup = new TransactionGroupAG();
   formProperties = GROUP_G;
   override labelConfig = EARMARK_MEMO;
   override isDependentChild = true;

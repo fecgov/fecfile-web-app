@@ -1,15 +1,13 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_MEMO';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
-import { TransactionGroupFG } from '../transaction-groups/transaction-group-fg.model';
 import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
-import { EARMARK_MEMO, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
+import { EARMARK_MEMO } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PAC_EARMARK_MEMO extends SchATransactionType {
-  transactionGroup = new TransactionGroupFG();
   formProperties = GROUP_EFI;
   override labelConfig = EARMARK_MEMO;
   override isDependentChild = true;

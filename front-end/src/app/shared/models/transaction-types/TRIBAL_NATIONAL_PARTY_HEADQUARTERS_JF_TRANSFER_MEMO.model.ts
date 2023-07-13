@@ -2,13 +2,11 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class TRIBAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchATransactionType {
-  transactionGroup = new TransactionGroupD();
   formProperties = GROUP_D;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,

@@ -2,13 +2,11 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENT_PARENTS_FEA';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupR } from '../transaction-groups/transaction-group-r.model';
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { GROUP_R } from 'app/shared/utils/transaction-type-properties';
 
 export class FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT extends SchBTransactionType {
-  transactionGroup = new TransactionGroupR();
   formProperties = GROUP_R;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

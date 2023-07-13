@@ -1,6 +1,5 @@
 import { TransactionType } from 'app/shared/models/transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupO } from '../transaction-groups/transaction-group-o.model';
 import { FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT } from './FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT.model';
 
 describe('FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT', () => {
@@ -13,7 +12,6 @@ describe('FEDERAL_ELECTION_ACTIVITY_100PCT_PAYMENT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupO);
   });
 
   it('#factory() should return a SchATransaction', () => {

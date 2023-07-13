@@ -6,13 +6,11 @@ import {
   TransactionNavigationControls,
 } from '../transaction-navigation-controls.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupPM } from '../transaction-groups/transaction-group-pm.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { GROUP_P } from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PAC_CONDUIT_EARMARK extends SchATransactionType {
-  transactionGroup = new TransactionGroupPM();
   formProperties = GROUP_P;
   override labelConfig = CONDUIT_EARMARK;
   title = 'PAC Conduit Earmark';
