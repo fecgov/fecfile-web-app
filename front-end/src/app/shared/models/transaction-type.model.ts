@@ -1,4 +1,5 @@
 import { JsonSchema } from '../interfaces/json-schema.interface';
+import { LabelConfig } from '../utils/transaction-type-labels.utils';
 import { TransactionTypeFormProperties } from '../utils/transaction-type-properties';
 import { ContactType } from './contact.model';
 import { DoubleTransactionGroup } from './transaction-groups/double-transaction-group.model';
@@ -27,7 +28,6 @@ export abstract class TransactionType {
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
-  hasCandidateComittee = false;
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
@@ -51,6 +51,9 @@ export abstract class TransactionType {
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
   purposeDescriptionLabelSuffix?: string; // Additional text that will appear after the purpose_description input label. If this is not set, '(SYSTEM-GENERATED)', '(REQUIRED)', or '(OPTIONAL)' will be diplayed
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
+
+  //
+  labelConfig?: LabelConfig;
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];

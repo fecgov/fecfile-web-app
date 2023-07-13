@@ -6,17 +6,16 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_B, GROUP_B_NO_COM } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_INDIVIDUAL_CONTRIBUTION_VOID extends SchBTransactionType {
   transactionGroup = new TransactionGroupB();
-  formProperties = GROUP_B;
+  formProperties = GROUP_B_NO_COM;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;
   override showAggregate = false;
   override isRefund = true;
-  override contactTypeOptions = [ContactTypes.INDIVIDUAL, ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

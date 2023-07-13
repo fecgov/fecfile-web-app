@@ -32,7 +32,7 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
       //this.hasCandidateInformationInput = transactionGroup.hasCandidateInformationInput();
       this.hasCandidateInformationInput = transactionType.formProperties.hasCandidateInformation();
       // this.hasCandidateCommitteeInput = transactionGroup.hasCandidateCommitteeInput();
-      this.hasCandidateCommitteeInput = transactionType.hasCandidateComittee;
+      this.hasCandidateCommitteeInput = transactionType.formProperties.hasCandidateCommittee();
       this.hasEmployerInput = transactionType.formProperties.hasEmployeeFields();
 
       super.ngOnInit();

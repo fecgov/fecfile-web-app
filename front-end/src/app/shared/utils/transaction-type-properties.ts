@@ -147,6 +147,9 @@ export class TransactionTypeFormProperties {
   hasEmployeeFields(): boolean {
     return hasFields(this.formControlNames, EMPLOYEE_INFO_FIELDS);
   }
+  hasCandidateCommittee(): boolean {
+    return hasFields(this.formControlNames, CANDIDATE_OFFICE_FIELDS);
+  }
 }
 
 export const GROUP_A: TransactionTypeFormProperties = new TransactionTypeFormProperties(INDIVIDUAL, [
@@ -165,6 +168,10 @@ export const GROUP_B_FOR_A: TransactionTypeFormProperties = new TransactionTypeF
 );
 export const GROUP_B: TransactionTypeFormProperties = new TransactionTypeFormProperties(
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
+  [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS, ...CATEGORY_CODE]
+);
+export const GROUP_B_NO_COM: TransactionTypeFormProperties = new TransactionTypeFormProperties(
+  INDIVIDUAL_ORGANIZATION,
   [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS, ...CATEGORY_CODE]
 );
 export const GROUP_C: TransactionTypeFormProperties = new TransactionTypeFormProperties(

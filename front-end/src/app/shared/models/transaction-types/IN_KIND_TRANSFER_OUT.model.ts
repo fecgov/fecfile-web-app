@@ -6,10 +6,12 @@ import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { GROUP_EFI, GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { IN_KIND_OUT } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class IN_KIND_TRANSFER_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupEE();
   formProperties = GROUP_EFI_FOR_B;
+  override labelConfig = IN_KIND_OUT;
   override isDependentChild = true;
   override showAggregate = false;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT);

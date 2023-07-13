@@ -6,9 +6,11 @@ import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { GROUP_EFI, GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { IN_KIND_OUT, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class IN_KIND_TRANSFER_FEA_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupEE();
+  override labelConfig = IN_KIND_OUT;
   formProperties = GROUP_EFI_FOR_B;
   override isDependentChild = true;
   override showAggregate = false;

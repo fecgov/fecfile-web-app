@@ -5,10 +5,12 @@ import { TransactionGroupPM } from '../transaction-groups/transaction-group-pm.m
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransaction } from '../scha-transaction.model';
 import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
+import { CONDUIT_EARMARK_OUT, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PAC_CONDUIT_EARMARK_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupPM();
   formProperties = GROUP_M;
+  override labelConfig = CONDUIT_EARMARK_OUT;
   title = 'PAC Conduit Earmark Out';
   schema = schema;
   override isDependentChild = true;

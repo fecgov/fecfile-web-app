@@ -12,7 +12,6 @@ export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
   formProperties = GROUP_H;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE);
   schema = schema;
-  override hasCandidateComittee = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

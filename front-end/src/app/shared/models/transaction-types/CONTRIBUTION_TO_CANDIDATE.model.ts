@@ -11,7 +11,6 @@ export class CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   formProperties = GROUP_M;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE);
   schema = schema;
-  override hasCandidateComittee = true;
   override showAggregate = false;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 

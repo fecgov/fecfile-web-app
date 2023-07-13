@@ -11,10 +11,12 @@ import {
 import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
+import { EARMARK } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class EARMARK_RECEIPT_RECOUNT_ACCOUNT extends SchATransactionType {
   transactionGroup = new TransactionGroupAG();
   formProperties = GROUP_A;
+  override labelConfig = EARMARK;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.EARMARK_RECEIPT_FOR_RECOUNT_ACCOUNT_CONTRIBUTION

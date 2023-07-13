@@ -6,10 +6,12 @@ import { ContactTypes } from '../contact.model';
 import { SchATransaction } from '../scha-transaction.model';
 import { TransactionGroupNM } from '../transaction-groups/transaction-group-nm.model';
 import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
+import { CONDUIT_EARMARK_OUT as LABEL_CONFIG } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class CONDUIT_EARMARK_OUT extends SchBTransactionType {
   transactionGroup = new TransactionGroupNM();
   formProperties = GROUP_M;
+  CONDUIT_EARMARK = LABEL_CONFIG;
   title = 'Conduit Earmark Out';
   schema = schema;
   override isDependentChild = true;

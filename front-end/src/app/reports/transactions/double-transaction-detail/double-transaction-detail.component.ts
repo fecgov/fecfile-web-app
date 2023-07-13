@@ -24,14 +24,14 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
   hasChildCandidateInformationInput = false;
   hasParentElectionInformationInput = false;
   hasChildElectionInformationInput = false;
-  parentTransactionTitle = '';
-  parentFooter = '';
-  childTransactionSubTitle = '';
-  groupDescription = '';
-  parentAccordionTitle = '';
-  parentAccordionSubTitle = '';
-  childAccordionTitle = '';
-  childAccordionSubTitle = '';
+  parentTransactionTitle? = '';
+  parentFooter? = '';
+  childTransactionSubTitle? = '';
+  groupDescription? = '';
+  parentAccordionTitle? = '';
+  parentAccordionSubTitle? = '';
+  childAccordionTitle? = '';
+  childAccordionSubTitle? = '';
   childContactLabel = '';
   accordionActiveIndex = 0; // Value determines which accordion pane to open by default
 
@@ -66,14 +66,18 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
       if (childTransaction?.transactionType?.templateMap) {
         const transactionType = this.transaction.transactionType;
         const childTransactionType = childTransaction.transactionType;
-        const doubleTransactionGroup = transactionType.transactionGroup as DoubleTransactionGroup;
 
-        this.groupDescription = doubleTransactionGroup.getGroupDescription();
+        // this.groupDescription = doubleTransactionGroup.getGroupDescription();
+        this.groupDescription = transactionType.labelConfig?.description;
 
-        this.parentAccordionTitle = doubleTransactionGroup.getParentAccordionTitle();
-        this.parentAccordionSubTitle = doubleTransactionGroup.getParentAccordionSubTitle();
-        this.childAccordionTitle = doubleTransactionGroup.getChildAccordionTitle();
-        this.childAccordionSubTitle = doubleTransactionGroup.getChildAccordionSubTitle();
+        // this.parentAccordionTitle = doubleTransactionGroup.getParentAccordionTitle();
+        // this.parentAccordionSubTitle = doubleTransactionGroup.getParentAccordionSubTitle();
+        // this.childAccordionTitle = doubleTransactionGroup.getChildAccordionTitle();
+        // this.childAccordionSubTitle = doubleTransactionGroup.getChildAccordionSubTitle();
+        this.parentAccordionTitle = transactionType.labelConfig?.accordionTitle;
+        this.parentAccordionSubTitle = transactionType.labelConfig?.accordionSubText;
+        this.childAccordionTitle = childTransactionType.labelConfig?.accordionTitle;
+        this.childAccordionSubTitle = childTransactionType.labelConfig?.accordionSubText;
 
         //this.formProperties = doubleTransactionGroup.getFormProperties(transactionType.templateMap);
         this.formProperties = transactionType.formProperties.getFormControlNames(transactionType.templateMap);
@@ -85,26 +89,31 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
         //this.contactTypeOptions = doubleTransactionGroup.getContactTypeOptions();
         this.contactTypeOptions = transactionType.formProperties.getContactTypeOptions();
         //this.childContactTypeOptions = doubleTransactionGroup.getChildContactTypeOptions();
-        this.contactTypeOptions = childTransactionType.formProperties.getContactTypeOptions();
+        this.childContactTypeOptions = childTransactionType.formProperties.getContactTypeOptions();
 
-        this.hasEmployerInput = doubleTransactionGroup.hasEmployerInput();
-        this.childHasEmployerInput = doubleTransactionGroup.childHasEmployerInput();
-        this.parentTransactionTitle = doubleTransactionGroup.getParentTransactionTitle();
-        this.parentFooter = doubleTransactionGroup.getParentFooter();
-        this.childTransactionSubTitle = doubleTransactionGroup.getChildTransactionSubTitle();
+        // this.hasEmployerInput = doubleTransactionGroup.hasEmployerInput();
+        this.hasEmployerInput = transactionType.formProperties.hasEmployeeFields();
+        //this.childHasEmployerInput = doubleTransactionGroup.childHasEmployerInput();
+        this.childHasEmployerInput = childTransactionType.formProperties.hasEmployeeFields();
+        // this.parentTransactionTitle = doubleTransactionGroup.getParentTransactionTitle();
+        this.parentTransactionTitle = transactionType.labelConfig?.formTitle;
+        // this.parentFooter = doubleTransactionGroup.getParentFooter();
+        this.parentFooter = transactionType.labelConfig?.footer;
+        this.childTransactionSubTitle = childTransactionType.labelConfig?.description;
 
-        this.hasParentCandidateInformationInput = doubleTransactionGroup.hasParentCandidateInformationInput();
-        this.hasChildCandidateInformationInput = doubleTransactionGroup.hasChildCandidateInformationInput();
-        this.hasParentElectionInformationInput = doubleTransactionGroup.hasParentElectionInformationInput();
-        this.hasChildElectionInformationInput = doubleTransactionGroup.hasChildElectionInformationInput();
+        // this.hasParentCandidateInformationInput = doubleTransactionGroup.hasParentCandidateInformationInput();
+        // this.hasChildCandidateInformationInput = doubleTransactionGroup.hasChildCandidateInformationInput();
+        // this.hasParentElectionInformationInput = doubleTransactionGroup.hasParentElectionInformationInput();
+        // this.hasChildElectionInformationInput = doubleTransactionGroup.hasChildElectionInformationInput();
 
-        this.childContactLabel = doubleTransactionGroup.getChildContactLabel();
+        this.hasParentCandidateInformationInput = transactionType.formProperties.hasCandidateInformation();
+        this.hasChildCandidateInformationInput = childTransactionType.formProperties.hasCandidateInformation();
+        this.hasParentElectionInformationInput = transactionType.formProperties.hasElectionInformation();
+        this.hasChildElectionInformationInput = childTransactionType.formProperties.hasElectionInformation();
+
+        //this.childContactLabel = doubleTransactionGroup.getChildContactLabel();
+        this.childContactLabel = childTransactionType.labelConfig?.contact || '';
         super.ngOnInit();
-        doubleTransactionGroup
-          .getAutoGeneratedChildFields(childTransactionType.templateMap)
-          .forEach((autoGeneratedField) => {
-            this.childForm.get(autoGeneratedField)?.disable();
-          });
 
         // Determine which accordion pane to open initially based on transaction id in page URL
         const transactionId = this.route.snapshot.params['transactionId'];

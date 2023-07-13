@@ -9,10 +9,12 @@ import {
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { TransactionGroupNM } from '../transaction-groups/transaction-group-nm.model';
 import { GROUP_N } from 'app/shared/utils/transaction-type-properties';
+import { CONDUIT_EARMARK, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class CONDUIT_EARMARK_RECEIPT extends SchATransactionType {
   transactionGroup = new TransactionGroupNM();
   formProperties = GROUP_N;
+  override labelConfig = CONDUIT_EARMARK;
   title = 'Conduit Earmark';
   schema = schema;
   override dependentChildTransactionType = ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT;

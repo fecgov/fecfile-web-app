@@ -78,14 +78,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   parentOnInit() {
-    // Override contact type options if present in transactionType
-    if (this.transaction?.transactionType?.contactTypeOptions) {
-      this.contactTypeOptions = LabelUtils.getPrimeOptions(
-        ContactTypeLabels,
-        this.transaction.transactionType.contactTypeOptions
-      );
-    }
-
     // Determine if amount should always be negative and then force it to be so if needed
     if (this.transaction?.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
       this.form

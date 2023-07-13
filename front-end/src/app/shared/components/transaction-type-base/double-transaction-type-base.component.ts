@@ -58,14 +58,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   childOnInit() {
-    // Override contact type options if present in transactionType
-    if (this.childTransaction?.transactionType?.contactTypeOptions) {
-      this.childContactTypeOptions = LabelUtils.getPrimeOptions(
-        ContactTypeLabels,
-        this.childTransaction?.transactionType?.contactTypeOptions
-      );
-    }
-
     // Determine if amount should always be negative and then force it to be so if needed
     if (this.childTransaction?.transactionType?.negativeAmountValueOnly && this.childTemplateMap?.amount) {
       this.childForm
@@ -124,7 +116,7 @@ export abstract class DoubleTransactionTypeBaseComponent
         .subscribe((value) => {
           this.childForm.get(this.childTemplateMap[inherittedField])?.setValue(value);
         });
-      this.childForm.get(inherittedField)?.disable();
+      this.childForm.get(this.childTemplateMap[inherittedField])?.disable();
     });
   }
 

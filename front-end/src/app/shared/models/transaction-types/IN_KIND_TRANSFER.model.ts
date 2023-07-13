@@ -10,10 +10,12 @@ import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TransactionGroupEE } from '../transaction-groups/transaction-group-ee.model';
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
+import { IN_KIND } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class IN_KIND_TRANSFER extends SchATransactionType {
   transactionGroup = new TransactionGroupEE();
   formProperties = GROUP_EFI;
+  override labelConfig = IN_KIND;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.IN_KIND_TRANSFER);
   schema = schema;
   override apiEndpoint = '/transactions/save-pair';

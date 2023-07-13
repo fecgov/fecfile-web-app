@@ -18,7 +18,6 @@ export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATra
   );
   schema = schema;
   override shortName = 'Partnership Receipt';
-  override contactTypeOptions = [ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   override subTransactionConfig = new SubTransactionGroup(
