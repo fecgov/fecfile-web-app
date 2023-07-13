@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Contact, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Contact, ContactTypeLabels, ContactTypes, FecApiLookupData } from 'app/shared/models/contact.model';
 import { ContactService } from 'app/shared/services/contact.service';
-import { PrimeOptions } from 'app/shared/utils/label.utils';
+import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { SelectItemGroup } from 'primeng/api';
 
 @Component({
@@ -10,9 +10,13 @@ import { SelectItemGroup } from 'primeng/api';
   templateUrl: './contact-lookup.component.html',
   styleUrls: ['./contact-lookup.component.scss'],
 })
-export class ContactLookupComponent implements OnChanges {
+export class ContactLookupComponent implements OnInit {
+  @Input() form: FormGroup = new FormGroup([]);
+  @Input() formSubmitted = false;
+
   @Input() contactTypeOptions: PrimeOptions = [];
   @Input() contactTypeFormControl: FormControl = new FormControl();
+  @Input() selectedContactFormControlName = '';
   @Input() contactTypeReadOnly = false;
   @Input() showSearchBox = true;
   @Input() showCreateNewContactButton = true;
@@ -26,23 +30,20 @@ export class ContactLookupComponent implements OnChanges {
   @Output() contactLookupSelect = new EventEmitter<Contact | FecApiLookupData>();
   @Output() createNewContactSelect = new EventEmitter<void>();
 
-  contactLookupForm: FormGroup = this.formBuilder.group({
-    selectedContactType: this.contactTypeFormControl,
-    selectedContact: new FormControl(''),
-  });
-
   contactLookupList: SelectItemGroup[] = [];
 
   searchTerm = '';
+  requiredErrorMessage = '';
 
   constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private formBuilder: FormBuilder,
     private contactService: ContactService
-  ) {}
-
-  ngOnChanges(): void {
-    this.changeDetectorRef.detectChanges();
+  ) { }
+  ngOnInit(): void {
+    this.contactTypeFormControl.valueChanges.subscribe((contactType) => {
+      this.requiredErrorMessage = LabelUtils.get(
+        ContactTypeLabels, contactType) + ' information is required';
+    });
+    this.contactTypeFormControl.setValue(this.contactTypeOptions[0].value);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -86,10 +87,8 @@ export class ContactLookupComponent implements OnChanges {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onContactLookupSelect(event: any) {
     this.contactLookupSelect.emit(event);
-    this.contactLookupForm.patchValue({ selectedContact: '' });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onCreateNewContactSelect() {
     this.createNewContactSelect.emit();
   }

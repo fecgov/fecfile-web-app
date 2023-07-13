@@ -26,6 +26,7 @@ export abstract class TransactionType {
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
   hasCandidateLookup = false; // Boolean flag to cause candidate lookup to display
+  contact2IsRequired = false; // Boolean flag to cause contact_2 required to be added to the form validation
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page

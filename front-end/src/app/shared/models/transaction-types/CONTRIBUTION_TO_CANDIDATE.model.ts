@@ -11,6 +11,7 @@ export class CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
   schema = schema;
   override showAggregate = false;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override contact2IsRequired = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

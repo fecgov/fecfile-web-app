@@ -11,6 +11,7 @@ export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override contact2IsRequired = true;
 
   getNewTransaction() {
     return SchATransaction.fromJSON({
