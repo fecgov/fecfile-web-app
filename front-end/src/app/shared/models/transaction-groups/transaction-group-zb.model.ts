@@ -84,7 +84,7 @@ export class TransactionGroupZB extends DoubleTransactionGroup {
   }
 
   getParentFooter(): string {
-    return 'The information in this loan will automatically populate a related transaction. Review the associated loan and enter a purpose of receipt or note/memo text; or click "Save both transactions" to record these transactions.';
+    return 'The information in this loan will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and “Save transactions.”';
   }
 
   getChildTransactionSubTitle(): string {
@@ -92,7 +92,7 @@ export class TransactionGroupZB extends DoubleTransactionGroup {
   }
 
   getGroupDescription(): string {
-    return 'This loan type automatically creates an associated transaction. Saving a loan received from individual will automatically create an associated receipt.';
+    return 'Saving a loan received from individual will automatically create a related receipt.';
   }
 
   getParentAccordionTitle(): string {
@@ -100,7 +100,7 @@ export class TransactionGroupZB extends DoubleTransactionGroup {
   }
 
   getParentAccordionSubTitle(): string {
-    return 'Add contact and loan information';
+    return 'Enter lender, loan, and terms information for a loan received from individual';
   }
 
   getChildAccordionTitle(): string {
@@ -108,7 +108,7 @@ export class TransactionGroupZB extends DoubleTransactionGroup {
   }
 
   getChildAccordionSubTitle(): string {
-    return 'Review receipt information';
+    return 'Review information and enter purpose of description or note/memo text';
   }
 
   getChildContactLabel(): string {
