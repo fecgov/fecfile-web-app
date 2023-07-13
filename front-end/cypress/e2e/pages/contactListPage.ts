@@ -86,17 +86,13 @@ export class ContactListPage {
     if (formData['contact_type'] == 'Candidate') {
       cy.get(alias).find('#candidate_id').safeType(formData['candidate_id']);
 
-      PageUtils.dropdownSetValue("p-dropdown[formcontrolname='candidate_office']", formData['candidate_office'], alias);
+      PageUtils.dropdownSetValue("p-dropdown[inputid='candidate_office']", formData['candidate_office'], alias);
 
       if (formData['candidate_office'] != 'Presidential') {
-        PageUtils.dropdownSetValue("p-dropdown[formcontrolname='candidate_state']", formData['candidate_state'], alias);
+        PageUtils.dropdownSetValue("p-dropdown[inputid='candidate_state']", formData['candidate_state'], alias);
 
         if (formData['candidate_office'] == 'House') {
-          PageUtils.dropdownSetValue(
-            "p-dropdown[formcontrolname='candidate_district']",
-            formData['candidate_district'],
-            alias
-          );
+          PageUtils.dropdownSetValue("p-dropdown[inputid='candidate_district']", formData['candidate_district'], alias);
         }
       }
     }

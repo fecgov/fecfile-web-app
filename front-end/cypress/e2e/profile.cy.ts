@@ -7,7 +7,7 @@ describe('Manage profile', () => {
     LoginPage.login();
   });
 
-  xit('Can view the Account Info page', () => {
+  it('Can view the Account Info page', () => {
     ProfileAccountPage.goToPage();
     cy.runLighthouse('profile', 'account-info');
 
