@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { CommitteeAccount } from 'app/shared/models/committee-account.model';
@@ -7,17 +7,17 @@ import { FecApiService } from 'app/shared/services/fec-api.service';
 import { LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectCommitteeAccount } from 'app/store/committee-account.selectors';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
+import { DestroyerComponent } from 'app/shared/components/app-destroyer.component';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './account-info.component.html',
   styleUrls: ['./account-info.component.scss'],
 })
-export class AccountInfoComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AccountInfoComponent extends DestroyerComponent implements OnInit, AfterViewInit {
   committeeAccount$: Observable<CommitteeAccount> | undefined;
   mostRecentFilingPdfUrl: string | null | undefined = undefined;
-  destroy$: Subject<boolean> = new Subject<boolean>();
   stateOptions: PrimeOptions = [];
   form: FormGroup = this.fb.group({});
   formProperties: string[] = [
@@ -47,11 +47,14 @@ export class AccountInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     private fecApiService: FecApiService,
     private fb: FormBuilder,
     private readonly changeDetectorRef: ChangeDetectorRef
-  ) { }
+  ) {
+    super();
+  }
   ngAfterViewInit(): void {
     this.committeeAccount$ = this.store.select(selectCommitteeAccount);
     this.committeeAccount$?.pipe(takeUntil(this.destroy$)).subscribe((committee: CommitteeAccount) => {
-      this.fecApiService.getCommitteeRecentFiling(committee.committee_id)
+      this.fecApiService
+        .getCommitteeRecentFiling(committee.committee_id)
         .subscribe((mostRecentFiling: FecFiling | undefined) => {
           this.mostRecentFilingPdfUrl = mostRecentFiling?.pdf_url;
         });
@@ -71,11 +74,6 @@ export class AccountInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
   }
 
   /**
