@@ -57,6 +57,9 @@
           Name <p-sortIcon field="sort_name"></p-sortIcon>
         </th>
         <th pSortableColumn="type" id="type-column" role="columnheader">Type <p-sortIcon field="type"></p-sortIcon></th>
+        <th pSortableColumn="sort_fec_id" id="fec-id-column" role="columnheader">
+          FEC ID <p-sortIcon field="sort_fec_id"></p-sortIcon>
+        </th>
         <th pSortableColumn="employer" id="employer-column" role="columnheader">
           Employer <p-sortIcon field="employer"></p-sortIcon>
         </th>
@@ -72,6 +75,7 @@
           <a (click)="editItem(item)">{{ displayName(item) }}</a>
         </td>
         <td>{{ item.type | label : contactTypeLabels }}</td>
+        <td>{{ item.candidate_id || item.committee_id }}</td>
         <td>{{ item.employer }}</td>
         <td>{{ item.occupation }}</td>
         <td style="text-align: center">

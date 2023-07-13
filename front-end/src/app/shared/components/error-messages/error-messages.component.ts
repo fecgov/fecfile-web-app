@@ -13,6 +13,7 @@ export class ErrorMessagesComponent implements OnInit {
   @Input() requiredErrorMessage = 'This is a required field.';
   @Input() requiredTrueErrorMessage = 'This is a required field.';
   @Input() patternErrorMessage = 'This field contains characters that are not allowed.';
+  @Input() uniqueFecIdMessage = 'FEC IDs must be unique';
 
   private _emailErrorMessage = '';
   @Input() set emailErrorMessage(value: string) {

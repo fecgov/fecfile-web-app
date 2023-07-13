@@ -32,6 +32,12 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'transactions',
+    resolve: { sidebar: SidebarStateResolver },
+    data: { sidebarState: new SidebarState(ReportSidebarState.TRANSACTIONS) },
+    loadChildren: () => import('./transactions/transactions.module').then((m) => m.TransactionsModule),
+  },
+  {
     path: 'f3x/create/cash-on-hand/:reportId',
     title: 'Cash on hand',
     component: CashOnHandComponent,

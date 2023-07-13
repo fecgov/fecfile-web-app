@@ -9,7 +9,9 @@ export abstract class TransactionGroup {
   ): string[];
   abstract getContactTypeOptions(): PrimeOptions;
   abstract hasEmployerInput(entityType: ContactTypes, scheduleId: string): boolean;
-  abstract hasCommitteeFecIdInput(): boolean;
+  abstract hasCommitteeFecIdInput(entityType?: ContactTypes): boolean;
   abstract hasElectionInformationInput(): boolean;
   abstract hasCandidateInformationInput(): boolean;
+  abstract hasCandidateCommitteeInput(): boolean;
+  abstract hasCandidateOfficeInput(): boolean;
 }

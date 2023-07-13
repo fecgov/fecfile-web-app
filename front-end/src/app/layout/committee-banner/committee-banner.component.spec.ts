@@ -24,5 +24,4 @@ describe('CommitteeBannerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 });

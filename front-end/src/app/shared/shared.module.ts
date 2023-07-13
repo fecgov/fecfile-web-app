@@ -39,12 +39,15 @@ import { ReportCodeLabelPipe } from './utils/report-code.utils';
 import { CalculationOverlayComponent } from './components/calculation-overlay/calculation-overlay.component';
 import { CandidateInputComponent } from './components/inputs/candidate-input/candidate-input.component';
 import { CandidateOfficeInputComponent } from './components/inputs/candidate-office-input/candidate-office-input.component';
+import { MemoCodeInputComponent } from './components/inputs/amount-input/memo-code/memo-code.component';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     ButtonModule,
+    SelectButtonModule,
     TooltipModule,
     DropdownModule,
     AutoFocusModule,
@@ -81,6 +84,7 @@ import { CandidateOfficeInputComponent } from './components/inputs/candidate-off
     EmployerInputComponent,
     CommitteeInputComponent,
     AmountInputComponent,
+    MemoCodeInputComponent,
     AdditionalInfoInputComponent,
     ElectionInputComponent,
     NavigationControlComponent,

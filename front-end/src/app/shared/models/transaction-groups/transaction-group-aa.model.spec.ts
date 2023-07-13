@@ -71,5 +71,9 @@ describe('TransactionGroupAA', () => {
     expect(component.getChildTransactionSubTitle()).toBe(
       'To update any errors found, return to the previous step to update the in-kind receipt.'
     );
+    expect(component.hasChildCandidateInformationInput()).toBeFalse();
+    expect(component.hasChildElectionInformationInput()).toBeFalse();
+    expect(component.hasParentCandidateInformationInput()).toBeFalse();
+    expect(component.hasParentElectionInformationInput()).toBeFalse();
   });
 });

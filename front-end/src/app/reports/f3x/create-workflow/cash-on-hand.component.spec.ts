@@ -66,6 +66,6 @@ describe('CashOnHandComponent', () => {
 
     component.save();
 
-    expect(navigateSpy).toHaveBeenCalledWith('/transactions/report/999/list');
+    expect(navigateSpy).toHaveBeenCalledWith('/reports/transactions/report/999/list');
   });
 });

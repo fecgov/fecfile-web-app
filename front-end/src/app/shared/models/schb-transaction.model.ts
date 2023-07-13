@@ -48,7 +48,12 @@ export class SchBTransaction extends Transaction {
   reference_to_si_or_sl_system_code_that_identifies_the_account: string | undefined;
 
   override getFieldsNotToValidate(): string[] {
-    return ['back_reference_tran_id_number', 'back_reference_sched_name', ...super.getFieldsNotToValidate()];
+    return [
+      'back_reference_tran_id_number',
+      'back_reference_sched_name',
+      //'beneficiary_committee_name',
+      ...super.getFieldsNotToValidate(),
+    ];
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static fromJSON(json: any, depth = 2): SchBTransaction {
@@ -124,14 +129,8 @@ export enum ScheduleBTransactionTypes {
   RECOUNT_ACCOUNT_DISBURSEMENT = 'RECOUNT_ACCOUNT_DISBURSEMENT',
   NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT = 'NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT',
   NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT = 'NATIONAL_PARTY_CONVENTION_ACCOUNT_DISBURSEMENT',
-  OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_INDIVIDUAL_REFUND = 'OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_INDIVIDUAL_REFUND',
-  OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_REGULAR_REFUND = 'OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_REGULAR_REFUND',
   TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT = 'TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT',
-  OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_INDIVIDUAL_REFUND = 'OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_INDIVIDUAL_REFUND',
-  OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_REGULAR_REFUND = 'OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_REGULAR_REFUND',
   TRIBAL_REFUND_NP_CONVENTION_ACCOUNT = 'TRIBAL_REFUND_NP_CONVENTION_ACCOUNT',
-  OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND = 'OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND',
-  OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_REGULAR_REFUND = 'OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_REGULAR_REFUND',
   TRIBAL_REFUND_NP_RECOUNT_ACCOUNT = 'TRIBAL_REFUND_NP_RECOUNT_ACCOUNT',
   REFUND_INDIVIDUAL_CONTRIBUTION = 'REFUND_INDIVIDUAL_CONTRIBUTION',
   REFUND_INDIVIDUAL_CONTRIBUTION_VOID = 'REFUND_INDIVIDUAL_CONTRIBUTION_VOID',
@@ -156,6 +155,12 @@ export enum ScheduleBTransactionTypes {
   IN_KIND_TRANSFER_OUT = 'IN_KIND_TRANSFER_OUT',
   IN_KIND_TRANSFER_FEA_OUT = 'IN_KIND_TRANSFER_FEA_OUT',
   PAC_IN_KIND_OUT = 'PAC_IN_KIND_OUT',
+  PAC_CONDUIT_EARMARK_OUT = 'PAC_CONDUIT_EARMARK_OUT',
+  PAC_CONDUIT_EARMARK_OUT_DEPOSITED = 'PAC_CONDUIT_EARMARK_OUT_DEPOSITED',
+  PAC_CONDUIT_EARMARK_OUT_UNDEPOSITED = 'PAC_CONDUIT_EARMARK_OUT_UNDEPOSITED',
+  CONDUIT_EARMARK_OUT = 'CONDUIT_EARMARK_OUT',
+  CONDUIT_EARMARK_OUT_DEPOSITED = 'CONDUIT_EARMARK_OUT_DEPOSITED',
+  CONDUIT_EARMARK_OUT_UNDEPOSITED = 'CONDUIT_EARMARK_OUT_UNDEPOSITED',
 }
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
@@ -259,36 +264,12 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     'National Party Pres. Nominating Convention Account Disbursement',
   ],
   [
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_INDIVIDUAL_REFUND,
-    'Headquarters Account - Individual Refund',
-  ],
-  [
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_HEADQUARTERS_ACCOUNT_REGULAR_REFUND,
-    'Headquarters Account - Regular Filer Refund',
-  ],
-  [
     ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT,
     'Tribal Refund - National Party Headquarters Buildings Account',
   ],
   [
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_INDIVIDUAL_REFUND,
-    'Convention Account - Individual Refund',
-  ],
-  [
-    ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CONVENTION_ACCOUNT_REGULAR_REFUND,
-    'Convention Account - Regular Filer Refund',
-  ],
-  [
     ScheduleBTransactionTypes.TRIBAL_REFUND_NP_CONVENTION_ACCOUNT,
     'Tribal Refund - National Party Pres. Nominating Convention Account',
-  ],
-  [
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_INDIVIDUAL_REFUND,
-    'National Party Recount Account - Individual Refund',
-  ],
-  [
-    ScheduleBTransactionTypes.OTHER_DISBURSEMENT_NATIONAL_PARTY_RECOUNT_REGULAR_REFUND,
-    'National Party Recount Account - Regular Filer Refund',
   ],
   [
     ScheduleBTransactionTypes.TRIBAL_REFUND_NP_RECOUNT_ACCOUNT,
@@ -310,18 +291,27 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT,
     'Credit Card Payment for 100% Federal Election Activity',
   ],
-  [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO, 'Credit Card Corresponding Memo'],
+  [
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO, 
+    'Credit Card Memo for 100% Federal Election Activity'
+  ],
   [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
     'Staff Reimbursement for 100% Federal Election Activity',
   ],
-  [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO, 'Reimbursement Corresponding Memo'],
+  [
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT_MEMO,
+    'Staff Reimbursement Memo for 100% Federal Election Activity',
+  ],
   [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL,
     'Payment to Payroll for 100% Federal Election Activity',
   ],
-  [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO, 'Payroll Memo'],
-  [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID, 'Void of 100% Federal Election Activity'],
+  [
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO, 
+    'Payroll Memo for 100% Federal Election Activity'
+  ],
+  [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID, 'Void of 100% Federal Election Activity Payment'],
   [
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT,
     'Other Committee Refund - National Party Headquarters Buildings Account',
@@ -338,4 +328,10 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT, 'In-kind Transfer Out'],
   [ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT, 'In-kind Transfer Federal Election Activity Out'],
   [ScheduleBTransactionTypes.PAC_IN_KIND_OUT, 'PAC In-kind Out'],
+  [ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT, 'PAC Conduit Earmark Out'],
+  [ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT_DEPOSITED, 'PAC Conduit Earmark Out (Deposited)'],
+  [ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT_UNDEPOSITED, 'PAC Conduit Earmark Out (Undeposited)'],
+  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT, 'Conduit Earmark Out'],
+  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED, 'Conduit Earmark Out (Deposited)'],
+  [ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED, 'Conduit Earmark Out (Undeposited)'],
 ];

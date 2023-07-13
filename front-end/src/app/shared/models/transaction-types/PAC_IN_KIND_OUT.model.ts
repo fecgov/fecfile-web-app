@@ -13,7 +13,7 @@ export class PAC_IN_KIND_OUT extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.PAC_IN_KIND_OUT);
   schema = schema;
   override useParentContact = true;
-  override inherittedFields = [
+  override inheritedFields = [
     'organization_name',
     'street_1',
     'street_2',
