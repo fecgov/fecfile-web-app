@@ -9,7 +9,7 @@
           currency="USD"
           locale="en-US"
           [formControlName]="templateMap['amount']"
-          inputStyleClass="{{ inputStyleClass }}"
+          [inputStyleClass]="readonly ? 'readonly' : ''"
           [readonly]="readonly"
         ></p-inputNumber>
         <app-error-messages

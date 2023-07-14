@@ -14,13 +14,7 @@ export class LoanInfoInputComponent extends BaseInputComponent implements OnInit
   @Input() memoItemHelpText: string | undefined;
   @Input() transaction: Transaction | undefined;
 
-  inputStyleClass = '';
-
   ngOnInit(): void {
-    if (this.readonly) {
-      this.inputStyleClass = 'readonly';
-    }
-
     // Set value to zero until ticket #1103 implemented
     this.form.get('loan_payment_to_date')?.setValue(0);
 
