@@ -79,14 +79,14 @@ export class TransactionService implements TableListService<Transaction> {
   }
 
   public create(transaction: Transaction): Observable<Transaction> {
-    const payload = transaction.toJson();
+    const payload = this.preparePayload(transaction);
     return this.apiService
       .post<Transaction>(`${transaction.transactionType?.apiEndpoint}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
   }
 
   public update(transaction: Transaction): Observable<Transaction> {
-    const payload = transaction.toJson();
+    const payload = this.preparePayload(transaction);
     return this.apiService
       .put<Transaction>(`${transaction.transactionType?.apiEndpoint}/${transaction.id}/`, payload)
       .pipe(map((response) => getFromJSON(response)));
@@ -105,5 +105,35 @@ export class TransactionService implements TableListService<Transaction> {
         }
       })
     );
+  }
+
+  /**
+   * Update and prepare a transaction payload as a JSON object to be received by the API.
+   * This involves removing excess properties such and transactionType while
+   * moving needed data points (such as schedule_id) to the top level of the payload.
+   *
+   * We do this here because otherwise we are redefining data values in the
+   * transaction model that we already have in the transactionType object
+   * @param transaction
+   */
+  private preparePayload(transaction: Transaction) {
+    const payload = transaction.toJson();
+
+    // Add flags to the payload used for API processing
+    if (transaction.transactionType?.scheduleId) {
+      payload['schedule_id'] = transaction.transactionType.scheduleId;
+    }
+    if (transaction.transactionType?.useParentContact) {
+      payload['use_parent_contact'] = transaction.transactionType.useParentContact;
+    }
+
+    delete payload['transactionType'];
+    delete payload['report'];
+
+    if (transaction.children) {
+      payload['children'] = transaction.children.map(this.preparePayload);
+    }
+
+    return payload;
   }
 }
