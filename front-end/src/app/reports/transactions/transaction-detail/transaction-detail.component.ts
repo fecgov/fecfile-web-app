@@ -1,5 +1,6 @@
 import { Component, OnChanges } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
+import { TransactionTypeFormProperties } from 'app/shared/utils/transaction-type-properties';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -8,17 +9,17 @@ import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-
 })
 export class TransactionDetailComponent extends TransactionTypeBaseComponent implements OnChanges {
   override formProperties: string[] = [];
-  hasEmployerInput = false;
+  formFieldsConfig?: TransactionTypeFormProperties;
   hasCommitteeFecIdInput = false;
   hasElectionInformationInput = false;
   hasCandidateInformationInput = false;
-  hasCandidateCommitteeInput = false;
   hasCandidateOfficeInput = true;
 
   ngOnChanges(): void {
     if (this.transaction?.transactionType?.templateMap) {
       const transactionType = this.transaction.transactionType;
 
+      this.formFieldsConfig = transactionType.formProperties;
       //this.contactTypeOptions = transactionGroup.getContactTypeOptions();
       this.contactTypeOptions = transactionType.formProperties.getContactTypeOptions();
       //this.formProperties = transactionGroup.getFormProperties(transactionType.templateMap, transactionType.scheduleId);
@@ -29,8 +30,8 @@ export class TransactionDetailComponent extends TransactionTypeBaseComponent imp
       //this.hasCandidateInformationInput = transactionGroup.hasCandidateInformationInput();
       this.hasCandidateInformationInput = transactionType.formProperties.hasCandidateInformation();
       // this.hasCandidateCommitteeInput = transactionGroup.hasCandidateCommitteeInput();
-      this.hasCandidateCommitteeInput = transactionType.formProperties.hasCandidateCommittee();
-      this.hasEmployerInput = transactionType.formProperties.hasEmployeeFields();
+      //this.hasCandidateCommitteeInput = transactionType.formProperties.hasCandidateCommittee();
+      //this.hasEmployerInput = transactionType.formProperties.hasEmployeeFields();
 
       super.ngOnInit();
     } else {
