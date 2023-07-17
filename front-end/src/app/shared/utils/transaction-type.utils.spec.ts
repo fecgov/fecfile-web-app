@@ -1,4 +1,4 @@
-import { TransactionTypeUtils } from './transaction-type.utils';
+import { TransactionTypeUtils, getFromJSON } from './transaction-type.utils';
 
 describe('LabelUtils', () => {
   it('should create an instance', () => {
@@ -9,5 +9,14 @@ describe('LabelUtils', () => {
     expect(() => {
       TransactionTypeUtils.factory('DOES_NOT_EXIST');
     }).toThrow(new Error("Fecfile: Class transaction type of 'DOES_NOT_EXIST' is not found"));
+  });
+
+  it('should return the correct schedule object given a scheduleId', () => {
+    const testJSON = {
+      transaction_type_identifier: 'LOAN_RECEIVED_FROM_INDIVIDUAL',
+    };
+
+    const scheduleObject = getFromJSON(testJSON);
+    expect(scheduleObject.constructor.name).toBe('SchCTransaction');
   });
 });

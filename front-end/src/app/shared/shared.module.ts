@@ -41,6 +41,8 @@ import { CandidateInputComponent } from './components/inputs/candidate-input/can
 import { CandidateOfficeInputComponent } from './components/inputs/candidate-office-input/candidate-office-input.component';
 import { MemoCodeInputComponent } from './components/inputs/amount-input/memo-code/memo-code.component';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { LoanInfoInputComponent } from './components/inputs/loan-info-input/loan-info-input.component';
+import { LoanTermsInputComponent } from './components/inputs/loan-terms-input/loan-terms-input.component';
 
 @NgModule({
   imports: [
@@ -92,6 +94,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     NavigationControlBarComponent,
     TableActionsButtonComponent,
     CalculationOverlayComponent,
+    LoanInfoInputComponent,
+    LoanTermsInputComponent,
   ],
   exports: [
     FecDatePipe,
@@ -118,6 +122,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     ElectionInputComponent,
     TableActionsButtonComponent,
     CalculationOverlayComponent,
+    LoanInfoInputComponent,
+    LoanTermsInputComponent,
   ],
   providers: [DatePipe],
 })

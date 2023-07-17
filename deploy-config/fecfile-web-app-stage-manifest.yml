@@ -3,6 +3,7 @@ applications:
     instances: 2
     memory: 128M
     buildpack: https://github.com/cloudfoundry/nginx-buildpack.git
+    stack: cflinuxfs4
 
     routes:
       - route: fecfile-web-app-stage.app.cloud.gov

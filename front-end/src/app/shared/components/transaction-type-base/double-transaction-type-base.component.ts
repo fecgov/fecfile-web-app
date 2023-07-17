@@ -124,7 +124,7 @@ export abstract class DoubleTransactionTypeBaseComponent
         .subscribe((value) => {
           this.childForm.get(this.childTemplateMap[inherittedField])?.setValue(value);
         });
-      this.childForm.get(inherittedField)?.disable();
+      this.childForm.get(this.childTemplateMap[inherittedField])?.disable();
     });
   }
 
@@ -132,6 +132,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.onContactLookupSelect(selectItem);
     if (this.useParentContact && this.childTransaction && this.transaction?.contact_1) {
       this.childTransaction.contact_1 = this.transaction.contact_1;
+      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
     }
   }
 

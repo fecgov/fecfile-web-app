@@ -155,10 +155,6 @@ export class TransactionFormUtils {
       payload.children = payload.updateChildren();
     }
 
-    if (transaction.transactionType?.useParentContact) {
-      payload.use_parent_contact = transaction.transactionType.useParentContact;
-    }
-
     return payload;
   }
 
