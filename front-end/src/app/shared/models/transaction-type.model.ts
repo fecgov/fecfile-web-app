@@ -88,6 +88,7 @@ export abstract class TransactionType {
   hasLoanTermsInput = false;
   contactHeaderLabel = 'Contact';
   contactDropdownLabel = 'CONTACT TYPE';
+  alternateTitle?: string; // Alternate title for the transaction displayed on input form
 }
 
 export enum PurposeDescriptionLabelSuffix {

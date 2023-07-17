@@ -9,7 +9,9 @@
       <p style="font-weight: normal">{{ parentAccordionSubTitle }}</p></ng-template
     >
     <div class="p-fluid">
-      <h2 *ngIf="parentTransactionTitle">{{ parentTransactionTitle }}</h2>
+      <h2 *ngIf="parentTransactionTitle">
+        {{ transaction?.transactionType?.alternateTitle || parentTransactionTitle }}
+      </h2>
       <h3>{{ transaction?.transactionType?.contactHeaderLabel }}</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid" *ngIf="isEditable">
@@ -162,7 +164,7 @@
       <p style="font-weight: normal">{{ childAccordionSubTitle }}</p></ng-template
     >
     <div class="p-fluid">
-      <h2>{{ childTransaction?.transactionType?.title }}</h2>
+      <h2>{{ childTransaction?.transactionType?.alternateTitle || childTransaction?.transactionType?.title }}</h2>
       <p *ngIf="childTransactionSubTitle">
         <em>{{ childTransactionSubTitle }}</em>
       </p>
