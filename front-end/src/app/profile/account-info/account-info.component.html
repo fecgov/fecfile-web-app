@@ -1,224 +1,235 @@
-<h1>Account Info</h1>
+<h1>Account Information</h1>
 <p-divider></p-divider>
-<div>
+<form id="form" p-disabled [formGroup]="form" class="p-fluid">
   <div class="grid">
     <div class="col-12">
-      <h3>Committee Info</h3>
+      <h2>Contributor</h2>
     </div>
   </div>
   <div class="grid">
-    <div class="col-3">
-      <div class="field">
-        <h4>COMMITTEE ID</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.committee_id }}
-        </p>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="field">
-        <h4>COMMITTEE NAME</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.name }}
-        </p>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="field">
-        <h4>TYPE OF COMMITTEE</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.committee_type_full }}
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<p-divider></p-divider>
-
-<div>
-  <div class="grid">
-    <div class="col-12">
-      <h3>Committee Address</h3>
-    </div>
-  </div>
-  <div class="grid">
-    <div class="col-3">
-      <div class="field">
-        <h4>STREET ADDRESS</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.street_1 }}
-        </p>
-      </div>
-    </div>
     <div class="col-9">
       <div class="field">
-        <h4>APARTMENT, SUITE, ETC.</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.street_2 }}
-        </p>
+        <label for="name">COMMITTEE NAME</label>
+        <input class="p-disabled" type="text" pInputText id="name" formControlName="name" />
       </div>
     </div>
     <div class="col-3">
       <div class="field">
-        <h4>CITY</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.city }}
-        </p>
+        <label for="committee_id">COMMITTEE ID</label>
+        <input class="p-disabled" type="text" pInputText id="committee_id" formControlName="committee_id" />
       </div>
     </div>
-    <div class="col-3">
+  </div>
+  <div class="grid">
+    <div class="col-6">
       <div class="field">
-        <h4>STATE/PROVINCE</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.state }}
-        </p>
+        <label for="committee_type_full">TYPE OF COMMITTEE</label>
+        <input
+          class="p-disabled"
+          type="text"
+          pInputText
+          id="committee_type_full"
+          formControlName="committee_type_full"
+        />
+      </div>
+    </div>
+  </div>
+  <p-divider></p-divider>
+  <div class="grid">
+    <div class="col-12">
+      <h2>Address</h2>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="street_1">STREET ADDRESS</label>
+        <input class="p-disabled" type="text" pInputText id="street_1" formControlName="street_1" />
       </div>
     </div>
     <div class="col-6">
       <div class="field">
-        <h4>ZIP/POSTAL CODE</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.zip }}
-        </p>
-      </div>
-    </div>
-    <div class="col-3 long-word-value">
-      <div class="field">
-        <h4>EMAIL</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.email }}
-        </p>
-      </div>
-    </div>
-    <div class="col-9 long-word-value">
-      <div class="field">
-        <h4>WEBSITE</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.website }}
-        </p>
+        <label for="street_2">APARTMENT, SUITE, ETC.</label>
+        <input class="p-disabled" type="text" pInputText id="street_2" formControlName="street_2" />
       </div>
     </div>
   </div>
-</div>
-
-<p-divider></p-divider>
-
-<div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="city">CITY</label>
+        <input class="p-disabled" type="text" pInputText id="city" formControlName="city" />
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label for="state">STATE/PROVINCE</label>
+        <p-dropdown
+          inputId="state"
+          formControlName="state"
+          [options]="stateOptions"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-dropdown>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label for="zip">ZIP/POSTAL CODE</label>
+        <input class="p-disabled" type="text" pInputText id="zip" formControlName="zip" />
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6 long-word-value">
+      <div class="field">
+        <label for="email">EMAIL</label>
+        <input class="p-disabled" type="text" pInputText id="email" formControlName="email" />
+      </div>
+    </div>
+    <div class="col-6 long-word-value">
+      <div class="field">
+        <label for="website">WEBSITE</label>
+        <input class="p-disabled" type="text" pInputText id="website" formControlName="website" />
+      </div>
+    </div>
+  </div>
+  <p-divider></p-divider>
   <div class="grid">
     <div class="col-12">
-      <h3>Treasurer</h3>
+      <h2>Treasurer</h2>
     </div>
   </div>
   <div class="grid">
-    <div class="col-3">
+    <div class="col-6">
       <div class="field">
-        <h4>FIRST NAME</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.treasurer_name_1 }}
-        </p>
-      </div>
-    </div>
-    <div class="col-9">
-      <div class="field">
-        <h4>LAST NAME</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.treasurer_name_2 }}
-        </p>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="field">
-        <h4>STREET ADDRESS</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.treasurer_street_1 }}
-        </p>
-      </div>
-    </div>
-    <div class="col-9">
-      <div class="field">
-        <h4>APPARTMENT, SUITE, ETC.</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.treasurer_street_2 }}
-        </p>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="field">
-        <h4>CITY</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.treasurer_city }}
-        </p>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="field">
-        <h4>STATE/PROVINCE</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.treasurer_state }}
-        </p>
+        <label for="treasurer_name_1">FIRST NAME</label>
+        <input
+          class="p-disabled"
+          type="text"
+          pInputText
+          id="treasurer_name_1"
+          formControlName="treasurer_name_1"
+        />
       </div>
     </div>
     <div class="col-6">
       <div class="field">
-        <h4>ZIP/POSTAL CODE</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.treasurer_zip }}
-        </p>
+        <label for="treasurer_name_2">LAST NAME</label>
+        <input
+          class="p-disabled"
+          type="text"
+          pInputText
+          id="treasurer_name_2"
+          formControlName="treasurer_name_2"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="treasurer_street_1">STREET ADDRESS</label>
+        <input
+          class="p-disabled"
+          type="text"
+          pInputText
+          id="treasurer_street_1"
+          formControlName="treasurer_street_1"
+        />
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="field">
+        <label for="treasurer_street_2">APARTMENT, SUITE, ETC.</label>
+        <input
+          class="p-disabled"
+          type="text"
+          pInputText
+          id="treasurer_street_2"
+          formControlName="treasurer_street_2"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-6">
+      <div class="field">
+        <label for="treasurer_city">CITY</label>
+        <input class="p-disabled" type="text" pInputText id="treasurer_city" formControlName="treasurer_city" />
       </div>
     </div>
     <div class="col-3">
       <div class="field">
-        <h4>TELEPHONE</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.treasurer_phone }}
-        </p>
+        <label for="treasurer_state">STATE/PROVINCE</label>
+        <p-dropdown
+          inputId="treasurer_state"
+          formControlName="treasurer_state"
+          [options]="stateOptions"
+          [autoDisplayFirst]="false"
+          appendTo="body"
+        ></p-dropdown>
+      </div>
+    </div>
+    <div class="col-3">
+      <div class="field">
+        <label for="treasurer_zip">ZIP/POSTAL CODE</label>
+        <input class="p-disabled" type="text" pInputText id="treasurer_zip" formControlName="treasurer_zip" />
       </div>
     </div>
   </div>
-</div>
-
-<p-divider></p-divider>
-
-<div>
+  <div class="grid">
+    <div class="col-3">
+      <div class="field">
+        <label for="treasurer_phone">TELEPHONE</label>
+        <app-fec-international-phone-input [disabled]="true" id="treasurer_phone" formControlName="treasurer_phone">
+        </app-fec-international-phone-input>
+      </div>
+    </div>
+  </div>
+  <p-divider></p-divider>
   <div class="grid">
     <div class="col-12">
-      <h3>Custodian</h3>
+      <h2>Custodian</h2>
     </div>
   </div>
   <div class="grid">
     <div class="col-3">
       <div class="field">
-        <h4>CUSTODIAN OF RECORDS</h4>
-        <p>
-          {{ (committeeAccount$ | async)?.custodian_name_full }}
-        </p>
+        <label for="custodian_name_full">CUSTODIAN OF RECORDS</label>
+        <input
+          class="p-disabled"
+          type="text"
+          pInputText
+          id="custodian_name_full"
+          formControlName="custodian_name_full"
+        />
       </div>
     </div>
   </div>
-</div>
-<p-divider></p-divider>
-<div class="account-info-footer grid">
-  <div class="col-12">
-    <p>You can only view your committee's information on this page.</p>
-  </div>
-  <div class="col-12">
-    <div class="px-2">
-      <button
-        pButton
-        label="View full committee info from Form 1"
-        class="p-button-secondary"
-        (click)="viewForm1()"
-      ></button>
+  <p-divider></p-divider>
+  <div class="account-info-footer grid">
+    <div class="col-12">
+      <p class="text-center">You can only view your committee's information on this page.</p>
     </div>
-    <div class="px-2">
-      <button
-        pButton
-        id="update-form-1-link"
-        label="Update committee info using Form 1"
-        class="p-button-primary"
-        (click)="updateForm1()"
-      ></button>
+    <div class="col-12">
+      <div class="px-2">
+        <button
+          pButton
+          label="View full committee info from Form 1"
+          class="p-button-secondary"
+          (click)="viewForm1()"
+        ></button>
+      </div>
+      <div class="px-2">
+        <button
+          pButton
+          id="update-form-1-link"
+          label="Update committee info using Form 1"
+          class="p-button-primary"
+          (click)="updateForm1()"
+        ></button>
+      </div>
     </div>
   </div>
-</div>
+</form>

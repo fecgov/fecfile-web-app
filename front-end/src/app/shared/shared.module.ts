@@ -64,6 +64,7 @@ import { LoanTermsInputComponent } from './components/inputs/loan-terms-input/lo
     DividerModule,
     ConfirmDialogModule,
     OverlayPanelModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     LabelPipe,
