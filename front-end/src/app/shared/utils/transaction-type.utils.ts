@@ -160,6 +160,7 @@ import { TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT } from '../models/transaction-typ
 import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TRIBAL_REFUND_NP_RECOUNT_ACCOUNT.model';
 import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO.model';
 import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO.model';
+import { IN_KIND_CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_CANDIDATE.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -320,6 +321,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   PARTY_IN_KIND_OUT,
   IN_KIND_TRANSFER_OUT,
   IN_KIND_TRANSFER_FEA_OUT,
+  IN_KIND_CONTRIBUTION_TO_CANDIDATE,
   PAC_IN_KIND_OUT,
   CONDUIT_EARMARK_OUT,
   CONDUIT_EARMARK_OUT_DEPOSITED: CONDUIT_EARMARK_OUT,

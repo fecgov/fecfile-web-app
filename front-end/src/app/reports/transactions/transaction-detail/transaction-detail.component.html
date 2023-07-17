@@ -60,11 +60,13 @@
       <p-divider></p-divider>
       <ng-container *ngIf="this.hasCandidateInformationInput || !!transaction?.transactionType?.hasCandidateLookup">
         <h3>{{ templateMap['candidateInputHeader'] }}</h3>
-        <app-committee-input *ngIf="this.hasCandidateCommitteeInput"
+        <app-committee-input
+          *ngIf="this.hasCandidateCommitteeInput"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
           entityRole="COMMITTEE"
+          [nameField]="this.form.get('entity_type')?.value !== 'COMMITTEE' ? 'committee_name' : 'organization_name'"
           [includeFecId]="true"
           [readonly]="true"
         ></app-committee-input>

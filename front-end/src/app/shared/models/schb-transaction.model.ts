@@ -91,6 +91,7 @@ export type ScheduleBTransactionGroupsType =
 
 export enum ScheduleBTransactionTypes {
   IN_KIND_OUT = 'IN_KIND_OUT',
+  IN_KIND_CONTRIBUTION_TO_CANDIDATE = 'IN_KIND_CONTRIBUTION_TO_CANDIDATE',
   BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT = 'BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT',
   OPERATING_EXPENDITURE = 'OPERATING_EXPENDITURE',
   OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT = 'OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT',
@@ -165,6 +166,7 @@ export enum ScheduleBTransactionTypes {
 
 export const ScheduleBTransactionTypeLabels: LabelList = [
   [ScheduleBTransactionTypes.IN_KIND_OUT, 'In-kind Out'],
+  [ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE, 'In-kind Contribution to Candidate'],
   [
     ScheduleBTransactionTypes.BUSINESS_LABOR_REFUND_NON_CONTRIBUTION_ACCOUNT,
     'Business/Labor Organization Refund - Non-contribution Account',
@@ -292,8 +294,8 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     'Credit Card Payment for 100% Federal Election Activity',
   ],
   [
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO, 
-    'Credit Card Memo for 100% Federal Election Activity'
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO,
+    'Credit Card Memo for 100% Federal Election Activity',
   ],
   [
     ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_STAFF_REIMBURSEMENT,
@@ -308,8 +310,8 @@ export const ScheduleBTransactionTypeLabels: LabelList = [
     'Payment to Payroll for 100% Federal Election Activity',
   ],
   [
-    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO, 
-    'Payroll Memo for 100% Federal Election Activity'
+    ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO,
+    'Payroll Memo for 100% Federal Election Activity',
   ],
   [ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID, 'Void of 100% Federal Election Activity Payment'],
   [
