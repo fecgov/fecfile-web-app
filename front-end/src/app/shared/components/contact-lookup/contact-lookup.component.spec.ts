@@ -7,6 +7,7 @@ import {
   CandidateLookupResponse,
   CommitteeLookupResponse,
   Contact,
+  ContactTypeLabels,
   ContactTypes,
   FecApiCommitteeLookupData, FecfileCandidateLookupData, FecfileCommitteeLookupData,
   FecfileIndividualLookupData,
@@ -19,6 +20,7 @@ import { testMockStore } from 'app/shared/utils/unit-test.utils';
 import { DropdownModule } from 'primeng/dropdown';
 import { of } from 'rxjs';
 
+import { LabelUtils } from 'app/shared/utils/label.utils';
 import { SelectItem } from 'primeng/api';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { DialogModule } from 'primeng/dialog';
@@ -54,6 +56,15 @@ describe('ContactLookupComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('#ngOnInit', () => {
+    component.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels,
+      [ContactTypes.INDIVIDUAL]);
+    component.ngOnInit();
+    component.contactTypeFormControl.setValue(ContactTypes.CANDIDATE);
+    expect(component.contactTypeFormControl.value).toEqual(ContactTypes.CANDIDATE);
+    expect(component.requiredErrorMessage).toEqual('Candidate information is required');
   });
 
   it('#onDropdownSearch empty search', fakeAsync(() => {

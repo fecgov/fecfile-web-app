@@ -59,15 +59,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   ngOnInit(): void {
     const fields = ValidateUtils.getFormGroupFields(this.formProperties);
-    fields['contact_1'] = [''];
-    fields['contact_2'] = ['', () => {
+    this.form = this.fb.group(fields);
+    this.form.addControl('contact_1', new FormControl());
+    this.form.addControl('contact_2', new FormControl(null, () => {
       if ((!this.form.get('contact_2')?.value) &&
         this.transaction?.transactionType?.contact2IsRequired) {
         return { required: true };
       }
       return null;
-    }];
-    this.form = this.fb.group(fields);
+    }));
     if (this.transaction?.transactionType?.templateMap) {
       this.templateMap = this.transaction.transactionType.templateMap;
     } else {
