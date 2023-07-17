@@ -43,7 +43,9 @@ export class ContactLookupComponent implements OnInit {
       this.requiredErrorMessage = LabelUtils.get(
         ContactTypeLabels, contactType) + ' information is required';
     });
-    this.contactTypeFormControl.setValue(this.contactTypeOptions[0].value);
+    if (this.contactTypeOptions && this.contactTypeOptions.length > 0) {
+      this.contactTypeFormControl.setValue(this.contactTypeOptions[0].value);
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
