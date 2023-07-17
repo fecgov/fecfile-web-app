@@ -1,5 +1,9 @@
 @import 'intl-tel-input/build/css/intlTelInput.css';
 
+p {
+  max-width: 100%;
+}
+
 .grid {
   margin: 0;
 }
@@ -334,13 +338,13 @@ label.disabled {
 }
 
 .p-button-primary.p-button:enabled:hover {
-  background-color: #164F85;
-  border-color: #164F85;
+  background-color: #164f85;
+  border-color: #164f85;
 }
 
 .p-button-secondary.p-button {
-  background-color: #AEB0B5;
-  border-color:  #AEB0B5;
+  background-color: #aeb0b5;
+  border-color: #aeb0b5;
   border-width: 2px;
   padding: 8px 20px;
   font-size: 14px;
@@ -348,7 +352,7 @@ label.disabled {
 }
 
 .p-button-secondary.p-button:enabled:hover {
-  background-color: #E8E8E8;
-  border-color: #E8E8E8;
+  background-color: #e8e8e8;
+  border-color: #e8e8e8;
   color: #212121;
 }
