@@ -40,4 +40,8 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
       aggregation_group: AggregationGroups.GENERAL,
     });
   }
+
+  /////////////////////////////////////////////////////////////////////
+  // Template variables to be integrated with #1193
+  override doMemoCodeDateCheck = false;
 }
