@@ -9,8 +9,11 @@
       <div class="field">
         <label for="type">CONTACT TYPE</label>
         <app-contact-lookup
-          [contactTypeFormControl]="$any(form).controls['type']"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
           [contactTypeOptions]="contactTypeOptions"
+          [contactTypeFormControl]="$any(form).controls['type']"
+          selectedContactFormControlName="contact_1"
           [showSearchBox]="
             form.get('type')?.value === ContactTypes.CANDIDATE || form.get('type')?.value === ContactTypes.COMMITTEE
           "

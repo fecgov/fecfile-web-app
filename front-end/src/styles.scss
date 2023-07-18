@@ -40,7 +40,9 @@ p-dropdown.ng-invalid.ng-touched div.p-dropdown,
 .ng-submitted p-inputnumber.ng-invalid input.p-inputtext,
 p-inputnumber.ng-invalid.ng-touched input.p-inputtext,
 .ng-submitted p-calendar.ng-invalid input.p-inputtext,
-p-calendar.ng-invalid.ng-touched input.p-inputtext {
+p-calendar.ng-invalid.ng-touched input.p-inputtext,
+.ng-submitted p-autocomplete.ng-invalid input.p-inputtext,
+p-autocomplete.ng-invalid.ng-touched input.p-inputtext {
   border-color: #dc3545;
 }
 
