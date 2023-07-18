@@ -14,7 +14,7 @@ export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO ext
   );
   override updateParentOnSave = true;
   schema = schema;
-  override shortName = 'Partnership Individual';
+  override shortName = 'Partnership Attribution';
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   override generatePurposeDescription(transaction: SchATransaction): string {
