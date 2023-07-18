@@ -240,7 +240,7 @@ parameters:
     default: false
 
 workflows:
-  test:
+  main:
     when:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
