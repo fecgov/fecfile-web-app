@@ -7,11 +7,12 @@ import { PurposeDescriptionLabelSuffix } from '../transaction-type.model';
 import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
 
 export class CONTRIBUTION_TO_CANDIDATE_VOID extends SchBTransactionType {
-  formProperties = GROUP_M;
+  formFieldsConfig = GROUP_M;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;
   override showAggregate = false;
+  override hasCandidateCommittee = true;
   override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 

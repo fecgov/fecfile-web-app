@@ -9,7 +9,7 @@ import { IN_KIND_OUT } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class IN_KIND_TRANSFER_FEA_OUT extends SchBTransactionType {
   override labelConfig = IN_KIND_OUT;
-  formProperties = GROUP_EFI_FOR_B;
+  formFieldsConfig = GROUP_EFI_FOR_B;
   override isDependentChild = true;
   override showAggregate = false;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT);

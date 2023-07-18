@@ -10,11 +10,11 @@
     >
     <div class="p-fluid">
       <h2 *ngIf="parentTransactionTitle">{{ parentTransactionTitle }}</h2>
-      <h3>{{ transaction?.transactionType?.contactHeaderLabel }}</h3>
+      <h3>{{ transaction?.transactionType?.labelConfig?.contact }}</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid" *ngIf="isEditable">
           <div class="col-12">
-            <label for="entity_type">{{ transaction?.transactionType?.contactDropdownLabel }}</label>
+            <label for="entity_type">{{ transaction?.transactionType?.labelConfig?.contactLookupLabel }}</label>
             <app-transaction-contact-lookup
               [contactTypeFormControl]="$any(form).controls['entity_type']"
               [contactTypeOptions]="contactTypeOptions"
@@ -56,7 +56,7 @@
             ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transaction?.transactionType?.hasAmountInput">
+          <ng-container *ngIf="transaction?.transactionType?.showStandardAmount">
             <h3>{{ templateMap.amountInputHeader }}</h3>
             <app-amount-input
               [form]="form"
@@ -69,7 +69,7 @@
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transaction?.transactionType?.hasLoanInfoInput">
+          <ng-container *ngIf="transaction?.transactionType?.formFieldsConfig?.hasLoanFinanceFields()">
             <h3>Loan information</h3>
             <app-loan-info-input
               [form]="form"
@@ -81,7 +81,7 @@
             ></app-loan-info-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transaction?.transactionType?.hasLoanTermsInput">
+          <ng-container *ngIf="transaction?.transactionType?.formFieldsConfig?.hasLoanTermsFields()">
             <h3>Terms</h3>
             <app-loan-terms-input
               [form]="form"
@@ -166,7 +166,7 @@
       <p *ngIf="childTransactionSubTitle">
         <em>{{ childTransactionSubTitle }}</em>
       </p>
-      <h3>{{ childContactLabel }}</h3>
+      <h3>{{ childTransaction?.transactionType?.labelConfig?.contact }}</h3>
       <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid" *ngIf="isEditable && !useParentContact">
           <div class="col-12">
@@ -255,7 +255,7 @@
             ></app-election-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childTransaction?.transactionType?.hasAmountInput">
+          <ng-container *ngIf="childTransaction?.transactionType?.showStandardAmount">
             <h3>{{ childTemplateMap.amountInputHeader }}</h3>
             <app-amount-input
               [form]="childForm"
@@ -269,7 +269,7 @@
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childTransaction?.transactionType?.hasLoanInfoInput">
+          <ng-container *ngIf="childTransaction?.transactionType?.formFieldsConfig?.hasLoanFinanceFields()">
             <h3>Loan information</h3>
             <app-loan-info-input
               [form]="childForm"

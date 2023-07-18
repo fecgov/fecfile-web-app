@@ -8,7 +8,7 @@ import { GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
 import { IN_KIND_OUT } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class IN_KIND_TRANSFER_OUT extends SchBTransactionType {
-  formProperties = GROUP_EFI_FOR_B;
+  formFieldsConfig = GROUP_EFI_FOR_B;
   override labelConfig = IN_KIND_OUT;
   override isDependentChild = true;
   override showAggregate = false;

@@ -7,7 +7,7 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTY_JF_TRANSFER_MEMO extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO);
   override shortName = 'Party';
   schema = schema;

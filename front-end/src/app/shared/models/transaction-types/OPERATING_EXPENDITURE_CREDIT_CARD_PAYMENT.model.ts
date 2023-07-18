@@ -8,7 +8,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_D_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT extends SchBTransactionType {
-  formProperties = GROUP_D_FOR_B;
+  formFieldsConfig = GROUP_D_FOR_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT

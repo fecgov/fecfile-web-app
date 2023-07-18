@@ -12,7 +12,7 @@ import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 import { IN_KIND } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   override labelConfig = IN_KIND;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,

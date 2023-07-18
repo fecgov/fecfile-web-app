@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_TO_OTHER_POLITICAL_COMMITTEE extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.REFUND_TO_OTHER_POLITICAL_COMMITTEE);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

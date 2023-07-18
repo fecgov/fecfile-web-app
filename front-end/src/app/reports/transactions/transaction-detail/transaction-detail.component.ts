@@ -1,5 +1,6 @@
 import { Component, OnChanges } from '@angular/core';
 import { TransactionTypeBaseComponent } from 'app/shared/components/transaction-type-base/transaction-type-base.component';
+import { LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 import { TransactionTypeFormProperties } from 'app/shared/utils/transaction-type-properties';
 
 @Component({
@@ -10,28 +11,24 @@ import { TransactionTypeFormProperties } from 'app/shared/utils/transaction-type
 export class TransactionDetailComponent extends TransactionTypeBaseComponent implements OnChanges {
   override formProperties: string[] = [];
   formFieldsConfig?: TransactionTypeFormProperties;
-  hasCommitteeFecIdInput = false;
-  hasElectionInformationInput = false;
-  hasCandidateInformationInput = false;
-  hasCandidateOfficeInput = true;
+  labelConfig?: LabelConfig;
+
+  override ngOnInit(): void {
+    if (this.transaction?.transactionType?.templateMap) {
+      super.ngOnInit();
+    } else {
+      throw new Error('Fecfile: Template map not found for transaction component');
+    }
+  }
 
   ngOnChanges(): void {
     if (this.transaction?.transactionType?.templateMap) {
       const transactionType = this.transaction.transactionType;
-
-      this.formFieldsConfig = transactionType.formProperties;
-      //this.contactTypeOptions = transactionGroup.getContactTypeOptions();
-      this.contactTypeOptions = transactionType.formProperties.getContactTypeOptions();
-      //this.formProperties = transactionGroup.getFormProperties(transactionType.templateMap, transactionType.scheduleId);
-      this.formProperties = transactionType.formProperties.getFormControlNames(transactionType.templateMap);
-      this.hasCommitteeFecIdInput = transactionType.formProperties.hasCommitteeFecId();
-      //this.hasElectionInformationInput = transactionGroup.hasElectionInformationInput();
-      this.hasElectionInformationInput = transactionType.formProperties.hasElectionInformation();
-      //this.hasCandidateInformationInput = transactionGroup.hasCandidateInformationInput();
-      this.hasCandidateInformationInput = transactionType.formProperties.hasCandidateInformation();
-      // this.hasCandidateCommitteeInput = transactionGroup.hasCandidateCommitteeInput();
-      //this.hasCandidateCommitteeInput = transactionType.formProperties.hasCandidateCommittee();
-      //this.hasEmployerInput = transactionType.formProperties.hasEmployeeFields();
+      this.labelConfig = transactionType.labelConfig;
+      this.formFieldsConfig = transactionType.formFieldsConfig;
+      // SHOULD BE IN BASE
+      this.formProperties = this.formFieldsConfig.getFormControlNames(transactionType.templateMap);
+      this.contactTypeOptions = transactionType.formFieldsConfig.getContactTypeOptions();
 
       super.ngOnInit();
     } else {

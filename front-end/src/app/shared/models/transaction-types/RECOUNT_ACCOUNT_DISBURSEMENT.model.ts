@@ -8,7 +8,7 @@ import { ContactTypes } from '../contact.model';
 import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
 
 export class RECOUNT_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
-  formProperties = GROUP_B;
+  formFieldsConfig = GROUP_B;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.RECOUNT_ACCOUNT_DISBURSEMENT);
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;

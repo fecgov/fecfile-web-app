@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_JF_TRANSFER_MEMO extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_JF_TRANSFER_MEMO);
   override shortName = 'PAC';
   schema = schema;

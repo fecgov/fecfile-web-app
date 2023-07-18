@@ -13,7 +13,7 @@ import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 import { EARMARK } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class EARMARK_RECEIPT extends SchATransactionType {
-  formProperties = GROUP_A;
+  formFieldsConfig = GROUP_A;
   override labelConfig = EARMARK;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;

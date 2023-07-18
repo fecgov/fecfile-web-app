@@ -11,7 +11,7 @@ import { GROUP_P } from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PAC_CONDUIT_EARMARK extends SchATransactionType {
-  formProperties = GROUP_P;
+  formFieldsConfig = GROUP_P;
   override labelConfig = CONDUIT_EARMARK;
   title = 'PAC Conduit Earmark';
   schema = schema;

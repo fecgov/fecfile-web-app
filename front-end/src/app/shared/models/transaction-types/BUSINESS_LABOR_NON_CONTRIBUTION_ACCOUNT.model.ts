@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT extends SchATransactionType {
-  formProperties = GROUP_D;
+  formFieldsConfig = GROUP_D;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.BUSINESS_LABOR_NON_CONTRIBUTION_ACCOUNT

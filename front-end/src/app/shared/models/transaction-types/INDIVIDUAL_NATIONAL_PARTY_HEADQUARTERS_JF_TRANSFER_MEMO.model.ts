@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 
 export class INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchATransactionType {
-  formProperties = GROUP_A;
+  formFieldsConfig = GROUP_A;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO

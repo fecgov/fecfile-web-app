@@ -28,7 +28,7 @@
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
           [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
-          [includeFecId]="hasCommitteeFecIdInput"
+          [includeFecId]="!!formFieldsConfig?.hasCommitteeFecId()"
         ></app-committee-input>
       </ng-container>
       <ng-container *ngIf="getEntityType() === ContactTypes.INDIVIDUAL">
@@ -38,8 +38,6 @@
       <h3>Address</h3>
       <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-address-input>
       <p-divider></p-divider>
-      {{ formFieldsConfig?.hasEmployeeFields() }}
-      {{ entityTypeControl?.value }}
       <ng-container
         *ngIf="formFieldsConfig?.hasEmployeeFields() && entityTypeControl?.value == ContactTypes.INDIVIDUAL"
       >
@@ -51,7 +49,7 @@
         ></app-employer-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="transaction?.transactionType?.hasAmountInput">
+      <ng-container *ngIf="transaction?.transactionType?.showStandardAmount">
         <h3>{{ templateMap.amountInputHeader }}</h3>
         <app-amount-input
           [form]="form"
@@ -64,7 +62,7 @@
         ></app-amount-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="transaction?.transactionType?.hasLoanInfoInput">
+      <ng-container *ngIf="formFieldsConfig?.hasLoanFinanceFields()">
         <h3>Loan information</h3>
         <app-loan-info-input
           [form]="form"
@@ -76,7 +74,7 @@
         ></app-loan-info-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="transaction?.transactionType?.hasLoanTermsInput">
+      <ng-container *ngIf="formFieldsConfig?.hasLoanTermsFields()">
         <h3>Terms</h3>
         <app-loan-terms-input
           [form]="form"
@@ -85,10 +83,10 @@
         ></app-loan-terms-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="this.hasCandidateInformationInput || !!transaction?.transactionType?.hasCandidateLookup">
+      <ng-container *ngIf="formFieldsConfig?.hasCandidateInformation()">
         <h3>{{ templateMap['candidateInputHeader'] }}</h3>
         <app-committee-input
-          *ngIf="formFieldsConfig?.hasCandidateCommittee()"
+          *ngIf="transaction?.transactionType?.hasCandidateCommittee"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
@@ -107,12 +105,12 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
-            [hasCandidateOfficeInput]="hasCandidateOfficeInput"
+            [hasCandidateOfficeInput]="!!formFieldsConfig?.hasCandidateOffice()"
           ></app-candidate-input>
         </ng-container>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="hasElectionInformationInput">
+      <ng-container *ngIf="formFieldsConfig?.hasElectionInformation()">
         <h3>Election Information</h3>
         <app-election-input
           [form]="form"

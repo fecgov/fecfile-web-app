@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_D_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT extends SchBTransactionType {
-  formProperties = GROUP_D_FOR_B;
+  formFieldsConfig = GROUP_D_FOR_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.TRIBAL_REFUND_NP_HEADQUARTERS_ACCOUNT

@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class UNREGISTERED_RECEIPT_FROM_PERSON extends SchATransactionType {
-  formProperties = GROUP_D;
+  formFieldsConfig = GROUP_D;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.UNREGISTERED_RECEIPT_FROM_PERSON);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

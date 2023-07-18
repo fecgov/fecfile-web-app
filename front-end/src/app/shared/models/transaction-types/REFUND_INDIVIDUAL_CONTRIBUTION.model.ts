@@ -7,7 +7,7 @@ import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction
 import { GROUP_B_NO_COM } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_INDIVIDUAL_CONTRIBUTION extends SchBTransactionType {
-  formProperties = GROUP_B_NO_COM;
+  formFieldsConfig = GROUP_B_NO_COM;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION);
   schema = schema;
   override showAggregate = false;

@@ -7,7 +7,7 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_RECEIPT extends SchATransactionType {
-  formProperties = GROUP_D;
+  formFieldsConfig = GROUP_D;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_RECEIPT);
   schema = schema;
   override subTransactionConfig = [ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION];

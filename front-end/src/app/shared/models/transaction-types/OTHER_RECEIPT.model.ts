@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_C } from 'app/shared/utils/transaction-type-properties';
 
 export class OTHER_RECEIPT extends SchATransactionType {
-  formProperties = GROUP_C;
+  formFieldsConfig = GROUP_C;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OTHER_RECEIPTS);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

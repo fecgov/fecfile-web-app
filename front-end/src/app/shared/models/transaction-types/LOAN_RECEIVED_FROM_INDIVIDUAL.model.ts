@@ -13,11 +13,28 @@ import {
 import { hasNoContact } from '../transaction.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 import { ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupZB } from '../transaction-groups/transaction-group-zb.model';
+import {
+  COM_FIELDS,
+  CORE_FIELDS,
+  INDIVIDUAL_FIELDS,
+  INDIVIDUAL_ORGANIZATION_COMMITTEE,
+  LOAN_FINANCE_FIELDS,
+  LOAN_TERMS_FIELDS,
+  TransactionTypeFormProperties,
+} from 'app/shared/utils/transaction-type-properties';
+import { LOAN } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
-  transactionGroup = new TransactionGroupZB();
+  override formFieldsConfig = new TransactionTypeFormProperties(INDIVIDUAL_ORGANIZATION_COMMITTEE, [
+    ...CORE_FIELDS,
+    ...INDIVIDUAL_FIELDS,
+    ...COM_FIELDS,
+    ...LOAN_FINANCE_FIELDS,
+    ...LOAN_TERMS_FIELDS,
+  ]);
+  override showStandardAmount = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
+  override labelConfig = LOAN;
   schema = schema;
   override apiEndpoint = '/transactions/save-pair';
   override dependentChildTransactionType = ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT;
@@ -45,12 +62,4 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
       receipt_line_number: '13',
     });
   }
-
-  /////////////////////////////////////////////////////////////////////
-  // Template variables to be integrated with #1193
-  override hasAmountInput = false;
-  override hasLoanInfoInput = true;
-  override hasLoanTermsInput = true;
-  override contactHeaderLabel = 'Lender';
-  override contactDropdownLabel = 'LENDER TYPE';
 }

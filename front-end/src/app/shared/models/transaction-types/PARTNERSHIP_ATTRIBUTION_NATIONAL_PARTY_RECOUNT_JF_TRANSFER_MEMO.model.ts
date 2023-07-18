@@ -7,7 +7,7 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATransactionType {
-  formProperties = GROUP_A;
+  formFieldsConfig = GROUP_A;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO

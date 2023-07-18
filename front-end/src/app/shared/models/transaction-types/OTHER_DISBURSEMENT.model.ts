@@ -8,7 +8,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OTHER_DISBURSEMENT extends SchBTransactionType {
-  formProperties = GROUP_B;
+  formFieldsConfig = GROUP_B;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.OTHER_DISBURSEMENT);
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;

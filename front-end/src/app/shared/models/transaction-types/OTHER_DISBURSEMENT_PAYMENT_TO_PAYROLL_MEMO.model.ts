@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
-  formProperties = GROUP_B;
+  formFieldsConfig = GROUP_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OTHER_DISBURSEMENT_PAYMENT_TO_PAYROLL_MEMO

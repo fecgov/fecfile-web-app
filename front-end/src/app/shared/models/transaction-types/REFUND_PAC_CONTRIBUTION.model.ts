@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_PAC_CONTRIBUTION extends SchBTransactionType {
-  formProperties = GROUP_EFI_FOR_B;
+  formFieldsConfig = GROUP_EFI_FOR_B;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_PAC_CONTRIBUTION);
   schema = schema;
   override showAggregate = false;

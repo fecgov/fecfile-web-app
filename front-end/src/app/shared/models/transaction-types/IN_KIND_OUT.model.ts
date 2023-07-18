@@ -8,7 +8,7 @@ import { GROUP_A_FOR_B } from 'app/shared/utils/transaction-type-properties';
 import { IN_KIND_OUT as LABEL_CONFIG } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class IN_KIND_OUT extends SchBTransactionType {
-  formProperties = GROUP_A_FOR_B;
+  formFieldsConfig = GROUP_A_FOR_B;
   override labelConfig = LABEL_CONFIG;
   override isDependentChild = true;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);

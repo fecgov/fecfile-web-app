@@ -6,10 +6,11 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
 
 export class CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
-  formProperties = GROUP_M;
+  formFieldsConfig = GROUP_M;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE);
   schema = schema;
   override showAggregate = false;
+  override hasCandidateCommittee = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

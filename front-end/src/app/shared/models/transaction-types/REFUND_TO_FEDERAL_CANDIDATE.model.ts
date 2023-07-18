@@ -7,9 +7,10 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_H } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
-  formProperties = GROUP_H;
+  formFieldsConfig = GROUP_H;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE);
   schema = schema;
+  override hasCandidateCommittee = true;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

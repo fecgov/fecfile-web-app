@@ -8,7 +8,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_B_FOR_A } from 'app/shared/utils/transaction-type-properties';
 
 export class OFFSET_TO_OPERATING_EXPENDITURES extends SchATransactionType {
-  formProperties = GROUP_B_FOR_A;
+  formFieldsConfig = GROUP_B_FOR_A;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
   override defaultContactTypeOption = ContactTypes.ORGANIZATION;

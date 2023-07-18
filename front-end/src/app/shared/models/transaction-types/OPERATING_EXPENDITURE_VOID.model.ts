@@ -8,7 +8,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OPERATING_EXPENDITURE_VOID extends SchBTransactionType {
-  formProperties = GROUP_B;
+  formFieldsConfig = GROUP_B;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.OPERATING_EXPENDITURE_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;

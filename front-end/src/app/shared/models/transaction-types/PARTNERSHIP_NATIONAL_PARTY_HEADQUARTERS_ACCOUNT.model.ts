@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransactionType {
-  formProperties = GROUP_D;
+  formFieldsConfig = GROUP_D;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT

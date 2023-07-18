@@ -8,7 +8,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
 
 export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO extends SchBTransactionType {
-  formProperties = GROUP_B;
+  formFieldsConfig = GROUP_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO

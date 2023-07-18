@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class TRANSFER extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.TRANSFER);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

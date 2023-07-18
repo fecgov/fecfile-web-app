@@ -7,7 +7,7 @@ import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_RETURN extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RETURN);
   schema = schema;
   override negativeAmountValueOnly = true;

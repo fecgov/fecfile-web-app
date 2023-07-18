@@ -12,7 +12,7 @@ import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 import { IN_KIND } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PAC_IN_KIND_RECEIPT extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   override labelConfig = IN_KIND;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_IN_KIND_RECEIPT);
   schema = schema;

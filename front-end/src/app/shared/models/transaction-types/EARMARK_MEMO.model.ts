@@ -8,7 +8,7 @@ import { GROUP_G } from 'app/shared/utils/transaction-type-properties';
 import { EARMARK_MEMO as LABEL_CONFIG } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class EARMARK_MEMO extends SchATransactionType {
-  formProperties = GROUP_G;
+  formFieldsConfig = GROUP_G;
   override labelConfig = LABEL_CONFIG;
   override isDependentChild = true;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_MEMO);

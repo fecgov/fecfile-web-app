@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_D_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_UNREGISTERED_CONTRIBUTION extends SchBTransactionType {
-  formProperties = GROUP_D_FOR_B;
+  formFieldsConfig = GROUP_D_FOR_B;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_UNREGISTERED_CONTRIBUTION);
   schema = schema;
   override showAggregate = false;

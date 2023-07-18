@@ -7,7 +7,7 @@ import { TransactionNavigationControls, getChildNavigationControls } from '../tr
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO

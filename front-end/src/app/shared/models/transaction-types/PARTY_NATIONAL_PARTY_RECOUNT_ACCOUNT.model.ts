@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTY_NATIONAL_PARTY_RECOUNT_ACCOUNT

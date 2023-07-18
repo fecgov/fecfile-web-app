@@ -8,7 +8,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT extends SchBTransactionType {
-  formProperties = GROUP_EFI_FOR_B;
+  formFieldsConfig = GROUP_EFI_FOR_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_NON_CONTRIBUTION_ACCOUNT

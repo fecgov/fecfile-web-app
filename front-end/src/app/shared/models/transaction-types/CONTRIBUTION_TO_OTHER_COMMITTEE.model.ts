@@ -6,7 +6,7 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class CONTRIBUTION_TO_OTHER_COMMITTEE extends SchBTransactionType {
-  formProperties = GROUP_EFI_FOR_B;
+  formFieldsConfig = GROUP_EFI_FOR_B;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_OTHER_COMMITTEE);
   schema = schema;
   override showAggregate = false;

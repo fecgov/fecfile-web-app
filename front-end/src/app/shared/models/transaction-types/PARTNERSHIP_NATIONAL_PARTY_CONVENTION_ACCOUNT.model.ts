@@ -7,7 +7,7 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 
 export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType {
-  formProperties = GROUP_D;
+  formFieldsConfig = GROUP_D;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT

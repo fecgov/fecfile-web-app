@@ -12,7 +12,7 @@ import { Transaction, TransactionTypes } from './transaction.model';
 export abstract class TransactionType {
   abstract scheduleId: string;
   abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
-  abstract formProperties: TransactionTypeFormProperties;
+  abstract formFieldsConfig: TransactionTypeFormProperties;
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
@@ -25,6 +25,8 @@ export abstract class TransactionType {
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
+  showStandardAmount = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
+  hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
@@ -81,14 +83,6 @@ export abstract class TransactionType {
     }
     return '';
   }
-
-  ////////////////////////////////////////////////////////////////////////////////////////////
-  // Template variables to be integrated with #1193
-  hasAmountInput = true;
-  hasLoanInfoInput = false;
-  hasLoanTermsInput = false;
-  contactHeaderLabel = 'Contact';
-  contactDropdownLabel = 'CONTACT TYPE';
 }
 
 export enum PurposeDescriptionLabelSuffix {
@@ -127,6 +121,10 @@ export type TransactionTemplateMapType = {
   memo_code: string;
   amount: string;
   balance: string;
+  payment_to_date: string;
+  due_date: string;
+  interest_rate: string;
+  secured: string;
   aggregate: string;
   purpose_description: string;
   text4000: string;

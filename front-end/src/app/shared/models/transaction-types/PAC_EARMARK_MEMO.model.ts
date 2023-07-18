@@ -8,7 +8,7 @@ import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 import { EARMARK_MEMO } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PAC_EARMARK_MEMO extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   override labelConfig = EARMARK_MEMO;
   override isDependentChild = true;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_MEMO);

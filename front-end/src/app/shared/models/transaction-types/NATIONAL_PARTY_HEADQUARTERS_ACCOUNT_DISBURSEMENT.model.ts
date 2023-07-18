@@ -8,7 +8,7 @@ import { ContactTypes } from '../contact.model';
 import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
 
 export class NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
-  formProperties = GROUP_B;
+  formFieldsConfig = GROUP_B;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.NATIONAL_PARTY_HEADQUARTERS_ACCOUNT_DISBURSEMENT

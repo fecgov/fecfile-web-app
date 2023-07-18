@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_TO_UNREGISTERED_COMMITTEE extends SchATransactionType {
-  formProperties = GROUP_D;
+  formFieldsConfig = GROUP_D;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.REFUND_TO_UNREGISTERED_COMMITTEE);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

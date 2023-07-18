@@ -8,7 +8,7 @@ import { SubTransactionGroup } from '../transaction-type.model';
 import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
-  formProperties = GROUP_D;
+  formFieldsConfig = GROUP_D;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
   schema = schema;
   override shortName = 'Partnership Receipt';

@@ -7,7 +7,7 @@ import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_RECEIPT extends SchATransactionType {
-  formProperties = GROUP_EFI;
+  formFieldsConfig = GROUP_EFI;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_RECEIPT);
   schema = schema;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;

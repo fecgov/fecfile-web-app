@@ -7,7 +7,7 @@ import { AggregationGroups } from '../transaction.model';
 import { GROUP_C } from 'app/shared/utils/transaction-type-properties';
 
 export class RETURN_RECEIPT extends SchATransactionType {
-  formProperties = GROUP_C;
+  formFieldsConfig = GROUP_C;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
   schema = schema;
   override negativeAmountValueOnly = true;

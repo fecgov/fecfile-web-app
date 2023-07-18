@@ -31,7 +31,6 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
   parentAccordionSubTitle? = '';
   childAccordionTitle? = '';
   childAccordionSubTitle? = '';
-  childContactLabel = '';
   accordionActiveIndex = 0; // Value determines which accordion pane to open by default
 
   constructor(
@@ -79,21 +78,21 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
         this.childAccordionSubTitle = childTransactionType.labelConfig?.accordionSubText;
 
         //this.formProperties = doubleTransactionGroup.getFormProperties(transactionType.templateMap);
-        this.formProperties = transactionType.formProperties.getFormControlNames(transactionType.templateMap);
+        this.formProperties = transactionType.formFieldsConfig.getFormControlNames(transactionType.templateMap);
         //this.childFormProperties = doubleTransactionGroup.getChildFormProperties(childTransactionType.templateMap);
-        this.childFormProperties = childTransactionType.formProperties.getFormControlNames(
+        this.childFormProperties = childTransactionType.formFieldsConfig.getFormControlNames(
           childTransactionType.templateMap
         );
 
         //this.contactTypeOptions = doubleTransactionGroup.getContactTypeOptions();
-        this.contactTypeOptions = transactionType.formProperties.getContactTypeOptions();
+        this.contactTypeOptions = transactionType.formFieldsConfig.getContactTypeOptions();
         //this.childContactTypeOptions = doubleTransactionGroup.getChildContactTypeOptions();
-        this.childContactTypeOptions = childTransactionType.formProperties.getContactTypeOptions();
+        this.childContactTypeOptions = childTransactionType.formFieldsConfig.getContactTypeOptions();
 
         // this.hasEmployerInput = doubleTransactionGroup.hasEmployerInput();
-        this.hasEmployerInput = transactionType.formProperties.hasEmployeeFields();
+        this.hasEmployerInput = transactionType.formFieldsConfig.hasEmployeeFields();
         //this.childHasEmployerInput = doubleTransactionGroup.childHasEmployerInput();
-        this.childHasEmployerInput = childTransactionType.formProperties.hasEmployeeFields();
+        this.childHasEmployerInput = childTransactionType.formFieldsConfig.hasEmployeeFields();
         // this.parentTransactionTitle = doubleTransactionGroup.getParentTransactionTitle();
         this.parentTransactionTitle = transactionType.labelConfig?.formTitle;
         // this.parentFooter = doubleTransactionGroup.getParentFooter();
@@ -105,13 +104,11 @@ export class DoubleTransactionDetailComponent extends DoubleTransactionTypeBaseC
         // this.hasParentElectionInformationInput = doubleTransactionGroup.hasParentElectionInformationInput();
         // this.hasChildElectionInformationInput = doubleTransactionGroup.hasChildElectionInformationInput();
 
-        this.hasParentCandidateInformationInput = transactionType.formProperties.hasCandidateInformation();
-        this.hasChildCandidateInformationInput = childTransactionType.formProperties.hasCandidateInformation();
-        this.hasParentElectionInformationInput = transactionType.formProperties.hasElectionInformation();
-        this.hasChildElectionInformationInput = childTransactionType.formProperties.hasElectionInformation();
+        this.hasParentCandidateInformationInput = transactionType.formFieldsConfig.hasCandidateInformation();
+        this.hasChildCandidateInformationInput = childTransactionType.formFieldsConfig.hasCandidateInformation();
+        this.hasParentElectionInformationInput = transactionType.formFieldsConfig.hasElectionInformation();
+        this.hasChildElectionInformationInput = childTransactionType.formFieldsConfig.hasElectionInformation();
 
-        //this.childContactLabel = doubleTransactionGroup.getChildContactLabel();
-        this.childContactLabel = childTransactionType.labelConfig?.contact || '';
         super.ngOnInit();
 
         // Determine which accordion pane to open initially based on transaction id in page URL

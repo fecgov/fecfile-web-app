@@ -8,7 +8,7 @@ import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../tran
 import { SubTransactionGroup } from '../transaction-type.model';
 
 export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchATransactionType {
-  formProperties = GROUP_D;
+  formFieldsConfig = GROUP_D;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO

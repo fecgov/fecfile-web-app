@@ -5,21 +5,24 @@ export class LabelConfig {
   formTitle?: string; // Title of form within accordion section
   footer?: string; // Text at the end of form
   contact?: string; // Title for primary contact
+  contactLookupLabel?: string; //Label above contact lookup
 
   constructor(
     description?: string,
     accordionTitle?: string,
-    accordionSubTitle?: string,
+    accordionSubText?: string,
     formTitle?: string,
     footer?: string,
-    contact?: string
+    contact?: string,
+    contactLookupLabel?: string
   ) {
     this.description = description;
     this.accordionTitle = accordionTitle;
-    this.accordionSubText = accordionSubTitle;
+    this.accordionSubText = accordionSubText;
     this.formTitle = formTitle;
     this.footer = footer;
     this.contact = contact;
+    this.contactLookupLabel = contactLookupLabel;
   }
 }
 
@@ -29,7 +32,9 @@ export const IN_KIND = new LabelConfig(
   'ENTER DATA',
   'Add contact and receipt information',
   undefined,
-  'The information in this receipt will automatically populate a related transaction. Review the associated disbursement or click "Save both transactions" to record these transactions.'
+  'The information in this receipt will automatically populate a related transaction. Review the associated disbursement or click "Save both transactions" to record these transactions.',
+  'Contact',
+  'CONTACT LOOKUP'
 );
 
 export const IN_KIND_OUT = new LabelConfig(
@@ -38,14 +43,19 @@ export const IN_KIND_OUT = new LabelConfig(
   'Review disbursement information',
   undefined,
   undefined,
-  'Contact'
+  'Contact',
+  'CONTACT LOOKUP'
 );
 
 // EARMARK
 export const EARMARK = new LabelConfig(
   'This type of receipt requires a memo transaction. Follow this two-step process to create both an earmark receipt and an earmark memo:',
   'STEP ONE',
-  'Add receipt and contributor information'
+  'Add receipt and contributor information',
+  undefined,
+  undefined,
+  'Contact',
+  'CONTACT LOOKUP'
 );
 
 export const EARMARK_MEMO = new LabelConfig(
@@ -54,14 +64,19 @@ export const EARMARK_MEMO = new LabelConfig(
   'Add earmarked memo and conduit information (REQUIRED FOR EARMARKED RECEIPTS)',
   undefined,
   undefined,
-  'Conduit'
+  'Conduit',
+  'CONTACT LOOKUP'
 );
 
 // CONDUIT EARMARK
 export const CONDUIT_EARMARK = new LabelConfig(
   'This receipt type requires an associated transaction. Follow this two-step process to create both a conduit earmark receipt and a conduit earmark out:',
   'STEP ONE',
-  'Add contact and receipt information'
+  'Add contact and receipt information',
+  undefined,
+  undefined,
+  'Contact',
+  'CONTACT LOOKUP'
 );
 
 export const CONDUIT_EARMARK_OUT = new LabelConfig(
@@ -70,7 +85,29 @@ export const CONDUIT_EARMARK_OUT = new LabelConfig(
   'Add earmarked memo and conduit information (REQUIRED FOR CONDUIT EARMARKED RECEIPTS)',
   undefined,
   undefined,
-  'Contact'
+  'Contact',
+  'CONTACT LOOKUP'
+);
+
+//LOAN
+export const LOAN = new LabelConfig(
+  'Saving a loan received from individual will automatically create a related receipt.',
+  'ENTER DATA',
+  'Enter lender, loan, and terms information for a loan received from individual',
+  undefined,
+  'The information in this loan will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and “Save transactions.”',
+  'Lender',
+  'LENDER LOOKUP'
+);
+
+export const LOAN_RECEIPT = new LabelConfig(
+  'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.',
+  'AUTO-POPULATED',
+  'Review information and enter purpose of description or note/memo text',
+  undefined,
+  undefined,
+  'Contact',
+  'CONTACT LOOKUP'
 );
 
 //AA
