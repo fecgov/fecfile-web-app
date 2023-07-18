@@ -91,6 +91,7 @@ export const testUserLoginData: UserLoginData = {
 export const testActiveReport: F3xSummary = F3xSummary.fromJSON({
   id: '999',
   coverage_from_date: '2022-05-25',
+  coverage_through_date: '2022-06-30',
   form_type: 'F3XN',
   report_code: 'Q1',
   upload_submission: UploadSubmission.fromJSON({}),
@@ -242,5 +243,5 @@ export const testTemplateMap: TransactionTemplateMapType = {
   category_code: '',
   election_code: 'election_code',
   election_other_description: 'election_other_description',
-  candidateInputHeader: ''
+  candidateInputHeader: '',
 };
