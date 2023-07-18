@@ -62,7 +62,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.form = this.fb.group(fields);
     this.form.addControl('contact_1', new FormControl());
     this.form.addControl('contact_2', new FormControl(null, () => {
-      if ((!this.form.get('contact_2')?.value) &&
+      if ((!this.transaction?.contact_2) &&
         this.transaction?.transactionType?.contact2IsRequired) {
         return { required: true };
       }
