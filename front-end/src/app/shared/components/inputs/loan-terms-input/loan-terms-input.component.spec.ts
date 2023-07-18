@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { provideMockStore } from '@ngrx/store/testing';
 import { testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { LoanTermsInputComponent } from './loan-terms-input.component';
