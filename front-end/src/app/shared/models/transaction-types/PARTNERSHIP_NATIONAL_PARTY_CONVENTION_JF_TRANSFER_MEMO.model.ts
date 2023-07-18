@@ -32,11 +32,17 @@ export class PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO extends SchA
       committeeClause = committeeClause.slice(0, 97 - parenthetical.length) + '...';
       return committeeClause + parenthetical;
     }
-    return base + ' (Partnership attributions do not require itemization)';
+    const purposeDescription = committeeClause +
+      ' (Partnership attributions do not meet itemization threshold)';
+
+    if (purposeDescription.length > 100) {
+      return purposeDescription.slice(0, 97) + '...';
+    }
+    return purposeDescription;
   }
 
   override purposeDescriptionLabelNotice =
-    'If transaction has no associated Partnership memos, reads "Pres. Nominating Convention Account JF Memo: XX (Partnership attributions do not require itemization)". Otherwise, reads "Pres. Nominating Convention Account JF Memo: XX (See Partnership Attribution(s) below)"';
+    'If transaction has no associated Partnership memos, reads "Pres. Nominating Convention Account JF Memo: XX (Partnership attributions do not meet itemization threshold)". Otherwise, reads "Pres. Nominating Convention Account JF Memo: XX (See Partnership Attribution(s) below)"';
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

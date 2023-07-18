@@ -28,7 +28,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_CONVENTION_JF_TRANSFER_MEMO', () => {
   it('#generatePurposeDescription() should generate a string', () => {
     const descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
     expect(descrip).toBe(
-      'Pres. Nominating Convention Account JF Memo:  ' + '(Partnership attributions do not require itemization)'
+      'Pres. Nominating Convention Account JF Memo: Test ' + 'Committee (Partnership attributions do not meet...'
     );
   });
 

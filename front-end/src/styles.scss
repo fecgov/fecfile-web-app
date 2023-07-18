@@ -326,3 +326,29 @@ label.disabled {
   width: 100%;
   text-align: inherit;
 }
+
+.p-button-primary.p-button {
+  border-width: 2px;
+  padding: 8px 20px;
+  font-size: 14px;
+}
+
+.p-button-primary.p-button:enabled:hover {
+  background-color: #164F85;
+  border-color: #164F85;
+}
+
+.p-button-secondary.p-button {
+  background-color: #AEB0B5;
+  border-color:  #AEB0B5;
+  border-width: 2px;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: #212121;
+}
+
+.p-button-secondary.p-button:enabled:hover {
+  background-color: #E8E8E8;
+  border-color: #E8E8E8;
+  color: #212121;
+}

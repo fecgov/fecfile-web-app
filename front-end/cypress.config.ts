@@ -5,6 +5,7 @@ import * as fs from 'fs';
 export default defineConfig({
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
+  video: false,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
   screenshotOnRunFailure: true,
@@ -45,7 +46,6 @@ export default defineConfig({
       });
       return require('./cypress/plugins/index.ts')(on, config);
     },
-    baseUrl: 'http://localhost:4200',
-    experimentalSessionAndOrigin: true,
+    baseUrl: 'http://localhost:4200'
   },
 });

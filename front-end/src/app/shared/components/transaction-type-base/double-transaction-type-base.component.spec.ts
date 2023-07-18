@@ -147,7 +147,7 @@ describe('DoubleTransactionTypeBaseComponent', () => {
     component.childOnInit();
 
     component.childForm.patchValue({ contribution_amount: 2 });
-    expect(component.childForm.value.contribution_amount).toBe(-2);
+    expect(component.childForm.get('contribution_amount')?.value).toBe(-2);
   });
 
   it("should auto-generate the child transaction's purpose description", () => {

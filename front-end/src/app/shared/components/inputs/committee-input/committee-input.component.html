@@ -18,8 +18,7 @@
         ></app-error-messages>
       </div>
     </div>
-    {{ includeFecId }}
-    <div class="col-4" *ngIf="includeFecId">
+    <div class="col-4" *ngIf="includeFecId && form.get('entity_type')?.value === 'COM'">
       <div class="field">
         <label for="committee_fec_id">{{ entityRole }} FEC ID</label>
         <input

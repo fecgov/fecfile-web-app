@@ -124,6 +124,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.onContactLookupSelect(selectItem);
     if (this.useParentContact && this.childTransaction && this.transaction?.contact_1) {
       this.childTransaction.contact_1 = this.transaction.contact_1;
+      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
     }
   }
 

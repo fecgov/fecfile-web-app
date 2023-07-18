@@ -26,7 +26,7 @@ describe('PARTNERSHIP_NATIONAL_PARTY_RECOUNT_ACCOUNT', () => {
   it('#generatePurposeDescription() should generate a string', () => {
     const transaction = transactionType.getNewTransaction();
     let descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);
-    expect(descrip).toBe('Pres. Nominating Convention Account (Partnership attributions do not require itemization)');
+    expect(descrip).toBe('Pres. Nominating Convention Account (Partnership attributions do not meet itemization threshold)');
 
     transaction.children = [transactionType.getNewTransaction()];
     descrip = transaction.transactionType?.generatePurposeDescription?.(transaction);

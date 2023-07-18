@@ -3,9 +3,9 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_NA
 import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
-import { SubTransactionGroup } from '../transaction-type.model';
 import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
+import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
+import { SubTransactionGroup } from '../transaction-type.model';
 
 export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends SchATransactionType {
   formProperties = GROUP_D;
@@ -31,19 +31,21 @@ export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_JF_TRANSFER_MEMO extends Sc
   }
 
   override generatePurposeDescription(transaction: SchATransaction): string {
-    let committeeClause = `Headquarters Buildings Account JF Memo: ${
+    const committeeClause = `Headquarters Buildings Account JF Memo: ${
       (transaction.parent_transaction as SchATransaction).contributor_organization_name
     }`;
     const hasChildren = transaction.children && transaction.children.length > 0;
     const parenthetical = hasChildren
       ? ' (See Partnership Attribution(s) below)'
-      : ' (Partnership attributions do not require itemization)';
-    if ((committeeClause + parenthetical).length > 100) {
-      committeeClause = committeeClause.slice(0, 97 - parenthetical.length) + '...';
+      : ' (Partnership attributions do not meet itemization threshold)';
+    const purposeDescription = committeeClause + parenthetical;
+
+    if (purposeDescription.length > 100) {
+      return purposeDescription.slice(0, 97) + '...';
     }
-    return committeeClause + parenthetical;
+    return purposeDescription;
   }
 
   override purposeDescriptionLabelNotice =
-    'If transaction has no associated Partnership memos, reads "Headquarters Buildings Account JF Memo: XX (Partnership attributions do not require itemization)". Otherwise, reads "Headquarters Buildings Account JF Memo: XX (See Partnership Attribution(s) below)"';
+    'If transaction has no associated Partnership memos, reads "Headquarters Buildings Account JF Memo: XX (Partnership attributions do not meet itemization threshold)". Otherwise, reads "Headquarters Buildings Account JF Memo: XX (See Partnership Attribution(s) below)"';
 }

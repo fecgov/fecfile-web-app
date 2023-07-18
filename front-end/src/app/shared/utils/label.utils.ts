@@ -228,6 +228,7 @@ export const LineIdentifierLabels: LabelList = [
   // Schedule A
   ['SA11A', '11(a)'],
   ['SA11AI', '11(a)(i)'],
+  ['SA11AII', '11(a)(ii)'],
   ['SA11B', '11(b)'],
   ['SA11C', '11(c)'],
   ['SA12', '12'],
@@ -247,4 +248,7 @@ export const LineIdentifierLabels: LabelList = [
   ['SB28C', '28(c)'],
   ['SB29', '29'],
   ['SB30B', '30(b)'],
+  // Schedule C
+  ['SC/10', '10'],
+  ['SC/9', '9'],
 ];
