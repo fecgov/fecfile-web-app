@@ -34,5 +34,7 @@ describe('LoanTermsInputComponent', () => {
     expect(control?.status).toBe('VALID');
     control?.setValue(new Date('January 1, 2015 00:00:00'));
     expect(control?.status).toBe('INVALID');
+    control?.setValue(new Date('June 1, 2022 00:00:00'));
+    expect(control?.status).toBe('VALID');
   });
 });
