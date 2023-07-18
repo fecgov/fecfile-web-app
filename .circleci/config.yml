@@ -164,6 +164,50 @@ jobs:
             export PATH=$HOME/bin:$PATH
             curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&version=7.1.0" | tar xzv -C $HOME/bin
 
+      - restore_cache:
+          keys:
+            - v2-snyk-files
+
+      - run:
+          name: Verify Snyk auth token is present
+          command: |
+            if [ -z ${SNYK_AUTH_TOKEN} ]; then
+              echo "";
+              echo "You must set the SNYK_AUTH_TOKEN environment variable.";
+              echo "Go to https://app.snyk.io/account ";
+              echo "";
+              exit 15
+            fi
+
+      - run:
+          name: Download Snyk CLI
+          command: |
+            ls -l snyk-linux || echo cached snyk binary not found
+            ls -l snyk.version || echo cached snyk version not found
+            LATEST_SNYK_CLI_VERSION=$(curl https://static.snyk.io/cli/latest/version)
+            touch snyk.version
+            CACHE_SNYK_CLI_VERSION=$(cat snyk.version)
+            echo "Cached version is ${CACHE_SNYK_CLI_VERSION} "
+            if [[ ! "${CACHE_SNYK_CLI_VERSION}" == "${LATEST_SNYK_CLI_VERSION}"  ]]; then
+              echo "Downloading Snyk CLI version ${LATEST_SNYK_CLI_VERSION}"
+              curl -sO https://static.snyk.io/cli/v${LATEST_SNYK_CLI_VERSION}/snyk-linux
+              curl -sO https://static.snyk.io/cli/v${LATEST_SNYK_CLI_VERSION}/snyk-linux.sha256
+              sha256sum -c snyk-linux.sha256
+              echo $LATEST_SNYK_CLI_VERSION > snyk.version
+            else
+              echo "Using cached snyk version ${CACHE_SNYK_CLI_VERSION}"
+            fi
+            sudo cp snyk-linux /usr/local/bin/snyk
+            sudo chmod +x /usr/local/bin/snyk
+            snyk config set disableSuggestions=true
+            snyk auth $SNYK_AUTH_TOKEN
+
+      - save_cache:
+          key: v3-snyk-files
+          paths:
+            - snyk-linux
+            - snyk.version
+
       - run:
           name: run deploy script
           no_output_timeout: 15m
@@ -240,7 +284,7 @@ parameters:
     default: false
 
 workflows:
-  main:
+  develop:
     when:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
