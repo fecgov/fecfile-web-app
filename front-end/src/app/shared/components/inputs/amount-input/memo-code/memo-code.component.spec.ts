@@ -4,7 +4,12 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
 import { ErrorMessagesComponent } from '../../../error-messages/error-messages.component';
-import { getTestTransactionByType, testMockStore, testTemplateMap } from 'app/shared/utils/unit-test.utils';
+import {
+  getTestTransactionByType,
+  testMockStore,
+  testTemplateMap,
+  testScheduleATransaction,
+} from 'app/shared/utils/unit-test.utils';
 import { MemoCodeInputComponent } from './memo-code.component';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ConfirmationService } from 'primeng/api';
@@ -51,6 +56,7 @@ describe('MemoCodeInputComponent', () => {
     component.templateMap.memo_code = 'memo_code';
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
+    component.transaction = testScheduleATransaction;
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
     component.form.get('memo_code')?.patchValue(false);
@@ -96,6 +102,7 @@ describe('MemoCodeInputComponent', () => {
     component.report = new F3xSummary();
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
+    component.transaction = testScheduleATransaction;
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));
     expect(component.form.get('memo_code')?.hasValidator(Validators.requiredTrue)).toBeTrue();
@@ -111,6 +118,7 @@ describe('MemoCodeInputComponent', () => {
     component.report = new F3xSummary();
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
+    component.transaction = testScheduleATransaction;
 
     component.form.get('memo_code')?.addValidators(Validators.email);
 
@@ -127,6 +135,7 @@ describe('MemoCodeInputComponent', () => {
     component.report = new F3xSummary();
     component.report.coverage_from_date = new Date('01/01/2020');
     component.report.coverage_through_date = new Date('01/31/2020');
+    component.transaction = testScheduleATransaction;
     component.form.removeControl('memo_code');
 
     component.form.get('contribution_date')?.patchValue(new Date('12/25/2019'));

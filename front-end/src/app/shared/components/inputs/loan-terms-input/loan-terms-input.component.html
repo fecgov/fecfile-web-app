@@ -1,0 +1,64 @@
+<div [formGroup]="form">
+  <div class="grid">
+    <div class="col-4">
+      <div class="field">
+        <label for="date">DATE INCURRED</label>
+        <p-calendar inputId="date" name="date" [formControlName]="templateMap['date']"></p-calendar>
+        <app-error-messages
+          [form]="form"
+          [fieldName]="templateMap['date']"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="field">
+        <label for="loan_due_date">DATE DUE</label>
+        <input
+          type="text"
+          pInputText
+          id="loan_due_date"
+          formControlName="loan_due_date"
+          [readOnly]="true"
+          class="readonly"
+        />
+        <app-error-messages
+          [form]="form"
+          fieldName="loan_due_date"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="field">
+        <label for="loan_interest_rate">INTEREST RATE</label>
+        <input
+          type="text"
+          pInputText
+          id="loan_interest_rate"
+          formControlName="loan_interest_rate"
+          [readOnly]="true"
+          class="readonly"
+        />
+        <app-error-messages
+          [form]="form"
+          fieldName="loan_interest_rate"
+          [formSubmitted]="formSubmitted"
+        ></app-error-messages>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <p-checkbox
+        [binary]="true"
+        inputId="secured"
+        formControlName="secured"
+        label="THIS LOAN IS SECURED"
+        ariaLabel="loan is secured"
+        [trueValue]="true"
+        [falseValue]="false"
+      ></p-checkbox>
+    </div>
+  </div>
+</div>

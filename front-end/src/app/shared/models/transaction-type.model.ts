@@ -44,6 +44,7 @@ export abstract class TransactionType {
   // Memo Code settings
   memoCodeMap?: { true: string; false: string }; // Show a SelectButton for memo code where the labels are the values in this map
   memoCodeTransactionTypes?: { true: TransactionTypes; false: TransactionTypes }; // Change the transaction type based on the value of memo_code (when it's a SelectButton)
+  doMemoCodeDateCheck = true; // Flag activates the "Just checking..." pop-up check if the input transaction date is outside of the report date range.
 
   // Pupose description settings
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field
@@ -80,6 +81,15 @@ export abstract class TransactionType {
     }
     return '';
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  // Template variables to be integrated with #1193
+  hasAmountInput = true;
+  hasLoanInfoInput = false;
+  hasLoanTermsInput = false;
+  contactHeaderLabel = 'Contact';
+  contactDropdownLabel = 'CONTACT TYPE';
+  alternateTitle?: string; // Alternate title for the transaction displayed on input form
 }
 
 export enum PurposeDescriptionLabelSuffix {
