@@ -11,6 +11,8 @@ import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { TransactionTypeFormProperties } from 'app/shared/utils/transaction-type-properties';
+import { LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -30,7 +32,9 @@ export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
-  abstract childFormProperties: string[];
+  childFormProperties: string[] = [];
+  childFormFieldsConfig?: TransactionTypeFormProperties;
+  childLabelConfig?: LabelConfig;
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
@@ -44,17 +48,19 @@ export abstract class DoubleTransactionTypeBaseComponent
     super.ngOnInit();
 
     // Initialize child form.
-    this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
-    if (this.transaction?.children) {
-      this.childTransaction = this.transaction?.children[0];
-      if (this.childTransaction.transactionType?.templateMap) {
-        this.childTemplateMap = this.childTransaction.transactionType.templateMap;
-      } else {
-        throw new Error('Fecfile: Template map not found for double transaction component');
-      }
-      TransactionFormUtils.onInit(this, this.childForm, this.childTransaction, this.childContactId$);
-      this.childOnInit();
+    this.childTransaction = (this.transaction?.children || [])[0];
+    const childTransactionType = this.childTransaction?.transactionType;
+    if (!childTransactionType?.templateMap) {
+      throw new Error('Fecfile: Template map not found for double transaction component');
     }
+    this.childTemplateMap = childTransactionType.templateMap;
+    this.childLabelConfig = childTransactionType.labelConfig;
+    this.childFormFieldsConfig = childTransactionType.formFieldsConfig;
+    this.childContactTypeOptions = childTransactionType.formFieldsConfig.getContactTypeOptions();
+    this.childFormProperties = this.childFormFieldsConfig?.getFormControlNames(this.childTemplateMap);
+    this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
+    TransactionFormUtils.onInit(this, this.childForm, this.childTransaction, this.childContactId$);
+    this.childOnInit();
   }
 
   childOnInit() {

@@ -24,6 +24,8 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
+import { TransactionTypeFormProperties } from 'app/shared/utils/transaction-type-properties';
+import { LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 @Component({
   template: '',
@@ -31,7 +33,9 @@ import { TransactionFormUtils } from './transaction-form.utils';
 export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy {
   @Input() transaction: Transaction | undefined;
 
-  abstract formProperties: string[];
+  formProperties: string[] = [];
+  formFieldsConfig?: TransactionTypeFormProperties;
+  labelConfig?: LabelConfig;
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   entityTypeControl?: FormControl;
@@ -59,12 +63,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   ) {}
 
   ngOnInit(): void {
-    this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
-    if (this.transaction?.transactionType?.templateMap) {
-      this.templateMap = this.transaction.transactionType.templateMap;
-    } else {
+    if (!this.transaction?.transactionType?.templateMap) {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
+    const transactionType = this.transaction.transactionType;
+    this.templateMap = transactionType.templateMap;
+    this.labelConfig = transactionType.labelConfig;
+    this.formFieldsConfig = transactionType.formFieldsConfig;
+    this.formProperties = this.formFieldsConfig.getFormControlNames(this.templateMap);
+    this.contactTypeOptions = transactionType.formFieldsConfig.getContactTypeOptions();
+
+    this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
     this.entityTypeControl = this.form.get('entity_type') as FormControl;
     this.parentOnInit();
@@ -78,8 +87,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   parentOnInit() {
+    const transactionType = this.transaction?.transactionType;
     // Determine if amount should always be negative and then force it to be so if needed
-    if (this.transaction?.transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
+    if (transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
       this.form
         .get(this.templateMap.amount)
         ?.valueChanges.pipe(takeUntil(this.destroy$))
@@ -90,8 +100,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         });
     }
 
-    if (this.transaction?.transactionType?.generatePurposeDescriptionLabel) {
-      this.purposeDescriptionLabel = this.transaction?.transactionType.generatePurposeDescriptionLabel();
+    if (transactionType?.generatePurposeDescriptionLabel) {
+      this.purposeDescriptionLabel = transactionType.generatePurposeDescriptionLabel();
     }
   }
 
