@@ -40,6 +40,47 @@ export const CandidateOfficeTypeLabels = [
   [CandidateOfficeTypes.SENATE, 'Senate'],
 ];
 
+export const ContactTypeFields = {
+  [ContactTypes.CANDIDATE]: [
+    'type',
+    'candidate_id',
+    'first_name',
+    'last_name',
+    'middle_name',
+    'prefix',
+    'suffix',
+    'street_1',
+    'street_2',
+    'city',
+    'state',
+    'zip',
+    'candidate_office',
+    'candidate_state',
+    'candidate_district',
+    'telephone',
+    'country',
+  ],
+  [ContactTypes.COMMITTEE]: [],
+  [ContactTypes.INDIVIDUAL]: [
+    'type',
+    'candidate_id',
+    'first_name',
+    'last_name',
+    'middle_name',
+    'prefix',
+    'suffix',
+    'street_1',
+    'street_2',
+    'city',
+    'state',
+    'zip',
+    '',
+    'telephone',
+    'country',
+  ],
+  [ContactTypes.ORGANIZATION]: [],
+};
+
 export enum ContactFields {
   type = 'Type',
   candidate_id = 'Candidate Id',

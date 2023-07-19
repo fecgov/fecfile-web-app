@@ -91,6 +91,7 @@ export class TransactionContactUtils {
           const formField = getFormField(form, field, templateMap);
 
           if (formField && formField?.value !== contactValue) {
+            console.log('Hey-o', field, formField?.value);
             contact[field as keyof typeof contact] = (formField.value || '') as never;
             if (!formField.value) {
               return `Removed ${label.toLowerCase()}`;
