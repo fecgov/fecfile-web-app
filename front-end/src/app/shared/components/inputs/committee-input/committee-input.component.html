@@ -6,8 +6,8 @@
         <input
           type="text"
           pInputText
-          id="organization_name"
-          [formControlName]="this.committee_field_name"
+          [id]="committee_field_name"
+          [formControlName]="committee_field_name"
           [ngClass]="{ readonly: readonly }"
           [readonly]="readonly"
         />

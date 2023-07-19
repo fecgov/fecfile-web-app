@@ -58,18 +58,37 @@
         [transaction]="transaction"
       ></app-amount-input>
       <p-divider></p-divider>
-      <ng-container *ngIf="this.hasCandidateInformationInput || !!transaction?.transactionType?.hasCandidateLookup">
+      <ng-container
+        *ngIf="
+          this.hasCandidateInformationInput ||
+          !!transaction?.transactionType?.hasCandidateLookup ||
+          this.hasCandidateCommitteeInput
+        "
+      >
         <h3>{{ templateMap['candidateInputHeader'] }}</h3>
+      </ng-container>
+      <ng-container *ngIf="this.hasCandidateCommitteeInput">
+        <app-transaction-contact-lookup
+          *ngIf="this.form.get('entity_type')?.value !== ContactTypes.COMMITTEE"
+          [contactTypeFormControl]="committeeContactTypeFormControl"
+          [contactTypeOptions]="committeeContactTypeOption"
+          [contactTypeReadOnly]="true"
+          (contactSelect)="onTertiaryContactLookupSelect($event)"
+        ></app-transaction-contact-lookup>
         <app-committee-input
-          *ngIf="this.hasCandidateCommitteeInput"
+          *ngIf="this.transaction?.contact_3 || this.form.get('entity_type')?.value === ContactTypes.COMMITTEE"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
           entityRole="COMMITTEE"
-          [nameField]="this.form.get('entity_type')?.value !== 'COMMITTEE' ? 'committee_name' : 'organization_name'"
+          [nameField]="
+            this.form.get('entity_type')?.value !== ContactTypes.COMMITTEE ? 'committee_name' : 'organization_name'
+          "
           [includeFecId]="true"
-          [readonly]="true"
+          [readonly]="this.form.get('entity_type')?.value === ContactTypes.COMMITTEE"
         ></app-committee-input>
+      </ng-container>
+      <ng-container *ngIf="this.hasCandidateInformationInput || !!transaction?.transactionType?.hasCandidateLookup">
         <app-transaction-contact-lookup
           [contactTypeFormControl]="candidateContactTypeFormControl"
           [contactTypeOptions]="candidateContactTypeOption"

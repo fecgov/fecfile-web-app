@@ -164,4 +164,19 @@ export class TransactionContactUtils {
       transaction.contact_2 = contact;
     }
   }
+
+  static onTertiaryContactLookupSelect(
+    selectItem: SelectItem<Contact>,
+    form: FormGroup,
+    transaction: Transaction | undefined
+  ) {
+    const contact: Contact = selectItem?.value;
+    const templateMap = transaction?.transactionType?.templateMap;
+    if (!(contact && templateMap)) return;
+    form.get(templateMap.committee_fec_id)?.setValue(contact.committee_id);
+    form.get(templateMap.committee_name)?.setValue(contact.name);
+    if (transaction) {
+      transaction.contact_3 = contact;
+    }
+  }
 }

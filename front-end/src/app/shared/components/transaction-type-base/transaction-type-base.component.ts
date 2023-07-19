@@ -36,6 +36,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
   candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
+  committeeContactTypeFormControl: FormControl = new FormControl(ContactTypes.COMMITTEE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  committeeContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
   destroy$: Subject<boolean> = new Subject<boolean>();
   contactId$: Subject<string> = new BehaviorSubject<string>('');
@@ -111,6 +113,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.formSubmitted = true;
 
     if (this.form.invalid) {
+      console.log(this.form, this.transaction);
       return;
     }
 
@@ -298,6 +301,9 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
   onSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.form, this.transaction);
+  }
+  onTertiaryContactLookupSelect(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.onTertiaryContactLookupSelect(selectItem, this.form, this.transaction);
   }
 
   getEntityType(): string {

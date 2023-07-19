@@ -23,7 +23,9 @@ export class CommitteeInputComponent extends BaseInputComponent implements OnIni
       .get(this.templateMap.organization_name)
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((value) => {
-        this.form.get(this.templateMap.committee_name)?.setValue(value);
+        if (this.committee_field_name === this.templateMap.organization_name) {
+          this.form.get(this.templateMap.committee_name)?.setValue(value);
+        }
       });
   }
 }
