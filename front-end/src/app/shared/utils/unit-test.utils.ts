@@ -138,6 +138,8 @@ export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
   contributor_city: 'city',
   contributor_state: 'VA',
   contributor_zip: '20001',
+  contributor_employer: 'employer',
+  contributor_occupation: 'occupation',
   memo_text: MemoText.fromJSON({ text4000: 'Memo!' }),
   contact_1_id: '456',
   contact_1: Contact.fromJSON({
@@ -239,4 +241,8 @@ export const testTemplateMap: TransactionTemplateMapType = {
   category_code: '',
   election_code: 'election_code',
   election_other_description: 'election_other_description',
+  payment_to_date: '',
+  due_date: '',
+  secured: '',
+  interest_rate: '',
 };

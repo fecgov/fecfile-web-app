@@ -8,7 +8,7 @@ import {
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { GROUP_P } from 'app/shared/utils/transaction-type-properties';
-import { CONDUIT_EARMARK, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
+import { CONDUIT_EARMARK } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PAC_CONDUIT_EARMARK extends SchATransactionType {
   formFieldsConfig = GROUP_P;

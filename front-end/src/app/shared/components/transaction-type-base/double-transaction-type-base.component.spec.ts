@@ -22,7 +22,7 @@ import { Contact } from 'app/shared/models/contact.model';
 import { ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 
 class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseComponent {
-  formProperties: string[] = [
+  override formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
     'contributor_last_name',
@@ -44,8 +44,7 @@ class TestDoubleTransactionTypeBaseComponent extends DoubleTransactionTypeBaseCo
     'memo_code',
     'text4000',
   ];
-
-  childFormProperties: string[] = [
+  override childFormProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
     'contributor_last_name',

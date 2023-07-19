@@ -10,7 +10,7 @@ import {
 import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
-import { EARMARK, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
+import { EARMARK } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class PAC_EARMARK_RECEIPT extends SchATransactionType {
   formFieldsConfig = GROUP_EFI;

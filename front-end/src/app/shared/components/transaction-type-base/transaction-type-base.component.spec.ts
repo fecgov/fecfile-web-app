@@ -24,7 +24,7 @@ import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 
 class TestTransactionTypeBaseComponent extends TransactionTypeBaseComponent {
-  formProperties: string[] = [
+  override formProperties: string[] = [
     'entity_type',
     'contributor_organization_name',
     'contributor_last_name',
@@ -178,6 +178,15 @@ describe('TransactionTypeBaseComponent', () => {
         return confirmation.accept();
       }
     });
+    console.log(`AHOY${component.form.invalid}`);
+    console.log(`templatemap ${component.templateMap['employer']}`);
+    for (let control in component.form.controls) {
+      console.log(control);
+      console.log(component.form.get(control)?.value);
+      if (component.form.get(control)?.errors) {
+        console.log(`error ${control} ${component.form.get(control)?.errors}`);
+      }
+    }
     component.save(listSaveEvent);
     component.form = new FormGroup([]);
     component.save(listSaveEvent);

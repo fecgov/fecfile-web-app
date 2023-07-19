@@ -9,7 +9,7 @@ import {
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
-import { IN_KIND, LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
+import { IN_KIND } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class IN_KIND_RECEIPT extends SchATransactionType {
   formFieldsConfig = GROUP_A;
