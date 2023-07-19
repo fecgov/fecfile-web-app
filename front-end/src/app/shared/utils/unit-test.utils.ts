@@ -230,17 +230,13 @@ export const testTemplateMap: TransactionTemplateMapType = {
   candidate_state: 'donor_candidate_state',
   candidate_district: 'donor_candidate_district',
   date: 'contribution_date',
-  dateLabel: 'DATE RECEIVED',
   memo_code: 'memo_code',
   amount: 'contribution_amount',
   balance: 'loan_balance',
-  amountInputHeader: 'Receipt Information',
   aggregate: 'contribution_aggregate',
   purpose_description: 'contribution_purpose_descrip',
-  purposeDescripLabel: 'CONTRIBUTION PURPOSE DESCRIPTION',
   text4000: 'text4000',
   category_code: '',
   election_code: 'election_code',
   election_other_description: 'election_other_description',
-  candidateInputHeader: ''
 };

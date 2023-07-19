@@ -57,7 +57,7 @@
             <p-divider></p-divider>
           </ng-container>
           <ng-container *ngIf="transaction?.transactionType?.showStandardAmount">
-            <h3>{{ templateMap.amountInputHeader }}</h3>
+            <h3>{{ transaction?.transactionType?.amountInputHeader }}</h3>
             <app-amount-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -91,7 +91,7 @@
             <p-divider></p-divider>
           </ng-container>
           <ng-container *ngIf="formFieldsConfig?.hasCandidateInformation()">
-            <h3>{{ templateMap['candidateInputHeader'] }}</h3>
+            <h3>Committee/Candidate Information</h3>
             <app-committee-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -129,6 +129,7 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
+            [transaction]="transaction"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
             [purposeDescriptionLabel]="purposeDescriptionLabel"
             [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
@@ -225,7 +226,7 @@
             <p-divider></p-divider>
           </ng-container>
           <ng-container *ngIf="childFormFieldsConfig?.hasCandidateInformation()">
-            <h3>{{ templateMap['candidateInputHeader'] }}</h3>
+            <h3>Committee/Candidate Information</h3>
             <app-committee-input
               [form]="childForm"
               [formSubmitted]="formSubmitted"
@@ -259,7 +260,7 @@
             <p-divider></p-divider>
           </ng-container>
           <ng-container *ngIf="childTransaction?.transactionType?.showStandardAmount">
-            <h3>{{ childTemplateMap.amountInputHeader }}</h3>
+            <h3>{{ childTransaction?.transactionType?.amountInputHeader }}</h3>
             <app-amount-input
               [form]="childForm"
               [formSubmitted]="formSubmitted"
@@ -289,6 +290,7 @@
             [form]="childForm"
             [formSubmitted]="formSubmitted"
             [templateMap]="childTemplateMap"
+            [transaction]="transaction"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(childTransaction?.transactionType)"
             [purposeDescriptionLabel]="childPurposeDescriptionLabel"
             [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"

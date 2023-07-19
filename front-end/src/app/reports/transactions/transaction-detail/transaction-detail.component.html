@@ -50,7 +50,7 @@
         <p-divider></p-divider>
       </ng-container>
       <ng-container *ngIf="transaction?.transactionType?.showStandardAmount">
-        <h3>{{ templateMap.amountInputHeader }}</h3>
+        <h3>{{ transaction?.transactionType?.amountInputHeader }}</h3>
         <app-amount-input
           [form]="form"
           [formSubmitted]="formSubmitted"
@@ -84,7 +84,7 @@
         <p-divider></p-divider>
       </ng-container>
       <ng-container *ngIf="formFieldsConfig?.hasCandidateInformation()">
-        <h3>{{ templateMap['candidateInputHeader'] }}</h3>
+        <h3>Committee/Candidate Information</h3>
         <app-committee-input
           *ngIf="transaction?.transactionType?.hasCandidateCommittee"
           [form]="form"
@@ -124,6 +124,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         [templateMap]="templateMap"
+        [transaction]="transaction"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
         [purposeDescriptionLabel]="purposeDescriptionLabel"
         [purposeDescriptionLabelNotice]="transaction?.transactionType?.purposeDescriptionLabelNotice"

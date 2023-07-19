@@ -51,8 +51,11 @@ export abstract class TransactionType {
   purposeDescriptionLabelSuffix?: string; // Additional text that will appear after the purpose_description input label. If this is not set, '(SYSTEM-GENERATED)', '(REQUIRED)', or '(OPTIONAL)' will be diplayed
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
 
-  //
+  // Labels
   labelConfig?: LabelConfig;
+  dateLabel = 'DATE';
+  amountInputHeader = '';
+  purposeDescripLabel = '';
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
@@ -131,12 +134,6 @@ export type TransactionTemplateMapType = {
   category_code: string;
   election_code: string;
   election_other_description: string;
-
-  // Labels and text strings
-  dateLabel: string;
-  amountInputHeader: string;
-  purposeDescripLabel: string;
-  candidateInputHeader: string;
 };
 
 export type TemplateMapKeyType = keyof TransactionTemplateMapType;
