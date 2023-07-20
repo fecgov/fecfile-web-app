@@ -1,4 +1,5 @@
 import { FormGroup } from '@angular/forms';
+import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { PrimeOptions } from 'app/shared/utils/label.utils';
@@ -7,10 +8,9 @@ import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
+import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { TransactionContactUtils } from './transaction-contact.utils';
-import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 
 export class TransactionFormUtils {
   /**
@@ -188,4 +188,10 @@ export class TransactionFormUtils {
     const memoCodeSchema = transactionType?.schema.properties['memo_code'];
     return memoCodeSchema?.const as boolean | undefined;
   }
+
+  static isMemoCodeReadOnly(transactionType?: TransactionType): boolean {
+    // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
+    return TransactionFormUtils.getMemoCodeConstant(transactionType) !== undefined;
+  }
+
 }

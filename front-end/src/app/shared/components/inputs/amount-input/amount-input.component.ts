@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { InputNumber } from 'primeng/inputnumber';
 import { BaseInputComponent } from '../base-input.component';
-import { Transaction } from 'app/shared/models/transaction.model';
 
 @Component({
   selector: 'app-amount-input',
@@ -14,7 +14,7 @@ export class AmountInputComponent extends BaseInputComponent implements OnInit, 
   @Input() negativeAmountValueOnly = false;
   @Input() showAggregate = true;
 
-  @Input() memoCodeReadOnly: boolean | undefined;
+  @Input() memoCodeCheckboxLabel = '';
   @Input() memoItemHelpText: string | undefined;
   @Input() transaction: Transaction | undefined;
 

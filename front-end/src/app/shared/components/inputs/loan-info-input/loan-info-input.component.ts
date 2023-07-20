@@ -10,7 +10,6 @@ import { Transaction } from 'app/shared/models/transaction.model';
 export class LoanInfoInputComponent extends BaseInputComponent implements OnInit {
   @Input() readonly = false;
 
-  @Input() memoCodeReadOnly: boolean | undefined;
   @Input() memoItemHelpText: string | undefined;
   @Input() transaction: Transaction | undefined;
 

@@ -58,10 +58,10 @@
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
-          [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
           [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
           [showAggregate]="!!transaction?.transactionType?.showAggregate"
           [transaction]="transaction"
+          [memoCodeCheckboxLabel]="memoCodeCheckboxLabel"
         ></app-amount-input>
         <p-divider></p-divider>
       </ng-container>
@@ -72,7 +72,6 @@
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
           [readonly]="false"
-          [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
           [transaction]="transaction"
         ></app-loan-info-input>
         <p-divider></p-divider>
