@@ -77,43 +77,6 @@ export function hasFields(formFields: string[], fieldsToHave: string[]): boolean
   return fieldsToHave.reduce((result, election_field) => result && formFields.includes(election_field), true);
 }
 
-export class TransactionFormFieldsConfig {
-  formControlNames: string[] = [];
-
-  constructor(formControlNames: string[]) {
-    this.formControlNames = formControlNames;
-  }
-
-  getFormControlNames(templateMap: TransactionTemplateMapType): string[] {
-    const templateFields = this.formControlNames
-      .map((name: string) => templateMap[name as TemplateMapKeyType])
-      .filter((field) => !!field);
-    return ['entity_type', ...templateFields];
-  }
-
-  hasElectionInformation(): boolean {
-    return hasFields(this.formControlNames, ELECTION_FIELDS);
-  }
-  hasCandidateInformation(): boolean {
-    return hasFields(this.formControlNames, CANDIDATE_FIELDS);
-  }
-  hasCommitteeFecId(): boolean {
-    return hasFields(this.formControlNames, ['committee_fec_id']);
-  }
-  hasEmployeeFields(): boolean {
-    return hasFields(this.formControlNames, EMPLOYEE_INFO_FIELDS);
-  }
-  hasCandidateOffice(): boolean {
-    return hasFields(this.formControlNames, CANDIDATE_OFFICE_FIELDS);
-  }
-  hasLoanFinanceFields(): boolean {
-    return hasFields(this.formControlNames, LOAN_FINANCE_FIELDS);
-  }
-  hasLoanTermsFields(): boolean {
-    return hasFields(this.formControlNames, LOAN_TERMS_FIELDS);
-  }
-}
-
 export const INDIVIDUAL_FORM_FIELDS = [...CORE_FIELDS, ...AGGREGATE, ...INDIVIDUAL_FIELDS, ...EMPLOYEE_INFO_FIELDS];
 export const INDIVIDUAL_B_FORM_FIELDS = [...CORE_FIELDS, ...AGGREGATE, ...INDIVIDUAL_FIELDS, ...CATEGORY_CODE];
 export const INDIVIDUAL_ORGANIZATION_FORM_FIELDS = [...CORE_FIELDS, ...AGGREGATE, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS];
