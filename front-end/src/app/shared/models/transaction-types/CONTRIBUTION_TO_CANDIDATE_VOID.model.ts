@@ -15,6 +15,7 @@ export class CONTRIBUTION_TO_CANDIDATE_VOID extends SchBTransactionType {
   override hasCandidateCommittee = true;
   override purposeDescriptionLabelSuffix = PurposeDescriptionLabelSuffix.REQUIRED;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
+  override contact2IsRequired = true;
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

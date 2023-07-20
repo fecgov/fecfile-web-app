@@ -27,6 +27,7 @@ export abstract class TransactionType {
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
   showStandardAmount = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
   hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
+  contact2IsRequired = false; // Boolean flag to cause contact_2 required to be added to the form validation
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
@@ -44,6 +45,7 @@ export abstract class TransactionType {
   // Memo Code settings
   memoCodeMap?: { true: string; false: string }; // Show a SelectButton for memo code where the labels are the values in this map
   memoCodeTransactionTypes?: { true: TransactionTypes; false: TransactionTypes }; // Change the transaction type based on the value of memo_code (when it's a SelectButton)
+  doMemoCodeDateCheck = true; // Flag activates the "Just checking..." pop-up check if the input transaction date is outside of the report date range.
 
   // Pupose description settings
   generatePurposeDescription?(transaction: Transaction): string; // Dynamically generates the text in the CPD or EPD field

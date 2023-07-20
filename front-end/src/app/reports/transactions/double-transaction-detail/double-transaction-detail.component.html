@@ -16,8 +16,11 @@
           <div class="col-12">
             <label for="entity_type">{{ transaction?.transactionType?.labelConfig?.contactLookupLabel }}</label>
             <app-transaction-contact-lookup
-              [contactTypeFormControl]="$any(form).controls['entity_type']"
+              [form]="form"
+              [formSubmitted]="formSubmitted"
               [contactTypeOptions]="contactTypeOptions"
+              [contactTypeFormControl]="$any(form).controls['entity_type']"
+              selectedContactFormControlName="contact_1"
               [contactTypeReadOnly]="contactTypeOptions.length === 1"
               (contactSelect)="onContactLookupSelect($event)"
             >
@@ -101,8 +104,11 @@
               [readonly]="true"
             ></app-committee-input>
             <app-transaction-contact-lookup
-              [contactTypeFormControl]="candidateContactTypeFormControl"
+              [form]="form"
+              [formSubmitted]="formSubmitted"
               [contactTypeOptions]="candidateContactTypeOption"
+              [contactTypeFormControl]="candidateContactTypeFormControl"
+              selectedContactFormControlName="contact_2"
               [contactTypeReadOnly]="true"
               (contactSelect)="onSecondaryContactLookupSelect($event)"
             ></app-transaction-contact-lookup>
@@ -174,8 +180,11 @@
             <div class="field">
               <label for="entity_type">ENTITY TYPE</label>
               <app-transaction-contact-lookup
-                [contactTypeFormControl]="$any(childForm).controls['entity_type']"
+                [form]="form"
+                [formSubmitted]="formSubmitted"
                 [contactTypeOptions]="childContactTypeOptions"
+                [contactTypeFormControl]="$any(childForm).controls['entity_type']"
+                selectedContactFormControlName="contact_1"
                 [contactTypeReadOnly]="childContactTypeOptions.length === 1"
                 (contactSelect)="childOnContactLookupSelect($event)"
               >
@@ -236,8 +245,11 @@
               [readonly]="true"
             ></app-committee-input>
             <app-transaction-contact-lookup
-              [contactTypeFormControl]="candidateContactTypeFormControl"
+              [form]="form"
+              [formSubmitted]="formSubmitted"
               [contactTypeOptions]="candidateContactTypeOption"
+              [contactTypeFormControl]="candidateContactTypeFormControl"
+              selectedContactFormControlName="contact_2"
               [contactTypeReadOnly]="true"
               (contactSelect)="childOnSecondaryContactLookupSelect($event)"
             ></app-transaction-contact-lookup>

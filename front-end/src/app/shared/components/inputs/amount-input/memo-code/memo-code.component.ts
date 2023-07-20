@@ -17,7 +17,6 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   @Input() overrideMemoCodeReadOnly: boolean | undefined;
   @Input() transaction: Transaction | undefined;
   @Input() checkboxLabel = 'MEMO ITEM';
-  @Input() doDateCheck = true;
 
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
   memoCodeReadOnly = false;
@@ -107,7 +106,11 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   }
 
   updateMemoItemWithDate(date: Date) {
-    if (this.doDateCheck && this.report?.coverage_from_date && this.report?.coverage_through_date) {
+    if (
+      this.transaction?.transactionType?.doMemoCodeDateCheck &&
+      this.report?.coverage_from_date &&
+      this.report?.coverage_through_date
+    ) {
       if (date && (date < this.report.coverage_from_date || date > this.report.coverage_through_date)) {
         this.memoControl.addValidators(Validators.requiredTrue);
         this.memoControl.markAsTouched();

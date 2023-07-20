@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 
 <div class="p-fluid">
-  <h1>{{ transaction?.transactionType?.title }}</h1>
+  <h1>{{ transaction?.transactionType?.alternateTitle || transaction?.transactionType?.title }}</h1>
   <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
   <h3>Contact</h3>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
@@ -10,8 +10,11 @@
         <div class="field">
           <label for="entity_type">CONTACT TYPE</label>
           <app-transaction-contact-lookup
-            [contactTypeFormControl]="$any(form).controls['entity_type']"
+            [form]="form"
+            [formSubmitted]="formSubmitted"
             [contactTypeOptions]="contactTypeOptions"
+            [contactTypeFormControl]="$any(form).controls['entity_type']"
+            selectedContactFormControlName="contact_1"
             [contactTypeReadOnly]="contactTypeOptions.length === 1"
             (contactSelect)="onContactLookupSelect($event)"
           >
@@ -95,8 +98,11 @@
           [readonly]="true"
         ></app-committee-input>
         <app-transaction-contact-lookup
-          [contactTypeFormControl]="candidateContactTypeFormControl"
+          [form]="form"
+          [formSubmitted]="formSubmitted"
           [contactTypeOptions]="candidateContactTypeOption"
+          [contactTypeFormControl]="candidateContactTypeFormControl"
+          selectedContactFormControlName="contact_2"
           [contactTypeReadOnly]="true"
           (contactSelect)="onSecondaryContactLookupSelect($event)"
         ></app-transaction-contact-lookup>

@@ -1,4 +1,4 @@
-<form [formGroup]="contactLookupForm">
+<form [formGroup]="form">
   <div class="grid contact-lookup-container">
     <div class="col-2 pl-0 pr-0">
       <p-dropdown
@@ -21,7 +21,7 @@
         dropdownMode="current"
         dropdownIcon="pi pi-search"
         [suggestions]="contactLookupList"
-        formControlName="selectedContact"
+        [formControlName]="selectedContactFormControlName"
         placeholder="Search for a contact"
         [forceSelection]="true"
         (onSelect)="onContactLookupSelect($event)"
@@ -46,4 +46,10 @@
       </div>
     </div>
   </div>
+  <app-error-messages
+    [form]="form"
+    [fieldName]="selectedContactFormControlName"
+    [formSubmitted]="formSubmitted"
+    [requiredErrorMessage]="requiredErrorMessage"
+  ></app-error-messages>
 </form>

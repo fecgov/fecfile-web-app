@@ -74,7 +74,7 @@
               name="report_code"
               [value]="reportCode"
               label="{{ reportCode | reportCodeLabel }}"
-              [disabled]="usedReportCodes?.includes(reportCode) || false"
+              [class]="usedReportCodes?.includes(reportCode) ? 'p-disabled border-none bg-transparent aria-disabled=&quot;true&quot;' : ''"
               formControlName="report_code"
             ></p-radioButton>
           </div>

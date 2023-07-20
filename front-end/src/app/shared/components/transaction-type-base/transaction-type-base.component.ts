@@ -74,6 +74,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.contactTypeOptions = transactionType.formFieldsConfig.getContactTypeOptions();
 
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
+
+    this.form.addControl(
+      'contact_2',
+      new FormControl(null, () => {
+        if (!this.transaction?.contact_2 && this.transaction?.transactionType?.contact2IsRequired) {
+          return { required: true };
+        }
+        return null;
+      })
+    );
+
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
     this.entityTypeControl = this.form.get('entity_type') as FormControl;
     this.parentOnInit();
