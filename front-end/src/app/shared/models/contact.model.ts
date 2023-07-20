@@ -60,10 +60,20 @@ export const ContactTypeFields = {
     'telephone',
     'country',
   ],
-  [ContactTypes.COMMITTEE]: [],
+  [ContactTypes.COMMITTEE]: [
+    'type',
+    'name',
+    'street_1',
+    'street_2',
+    'city',
+    'state',
+    'zip',
+    'telephone',
+    'country',
+    'committee_id',
+  ],
   [ContactTypes.INDIVIDUAL]: [
     'type',
-    'candidate_id',
     'first_name',
     'last_name',
     'middle_name',
@@ -74,11 +84,12 @@ export const ContactTypeFields = {
     'city',
     'state',
     'zip',
-    '',
+    'employer',
+    'occupation',
     'telephone',
     'country',
   ],
-  [ContactTypes.ORGANIZATION]: [],
+  [ContactTypes.ORGANIZATION]: ['type', 'name', 'street_1', 'street_2', 'city', 'state', 'zip', 'telephone', 'country'],
 };
 
 export enum ContactFields {

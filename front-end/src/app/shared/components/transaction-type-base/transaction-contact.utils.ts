@@ -4,7 +4,7 @@ import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { Contact, ContactFields, ContactTypes } from '../../models/contact.model';
+import { Contact, ContactFields, ContactTypeFields, ContactTypes } from '../../models/contact.model';
 
 export class TransactionContactUtils {
   static getEditTransactionContactConfirmationMessage(
@@ -90,13 +90,15 @@ export class TransactionContactUtils {
           const contactValue = contact[field as keyof typeof contact];
           const formField = getFormField(form, field, templateMap);
 
-          if (formField && formField?.value !== contactValue) {
-            console.log('Hey-o', field, formField?.value);
-            contact[field as keyof typeof contact] = (formField.value || '') as never;
-            if (!formField.value) {
-              return `Removed ${label.toLowerCase()}`;
+          if (ContactTypeFields[contact.type].includes(field)) {
+            if (formField && formField?.value !== contactValue) {
+              console.log('Hey-o', field, formField?.value);
+              contact[field as keyof typeof contact] = (formField.value || '') as never;
+              if (!formField.value) {
+                return `Removed ${label.toLowerCase()}`;
+              }
+              return `Updated ${label.toLowerCase()} to ${formField.value}`;
             }
-            return `Updated ${label.toLowerCase()} to ${formField.value}`;
           }
           return '';
         })

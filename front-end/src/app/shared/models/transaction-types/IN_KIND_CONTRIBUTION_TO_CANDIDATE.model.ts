@@ -15,7 +15,7 @@ export class IN_KIND_CONTRIBUTION_TO_CANDIDATE extends SchBTransactionType {
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({
-      form_type: 'SA11AI',
+      form_type: 'SB23',
       transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
     });
   }
