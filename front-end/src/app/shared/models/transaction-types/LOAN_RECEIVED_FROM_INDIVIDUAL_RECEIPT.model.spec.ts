@@ -1,5 +1,4 @@
 import { LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT } from './LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT.model';
-import { TransactionGroupZB } from '../transaction-groups/transaction-group-zb.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
 
@@ -13,7 +12,6 @@ describe('LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupZB);
   });
 
   it('#factory() should return a SchATransaction', () => {

@@ -1,5 +1,4 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { REFUND_INDIVIDUAL_CONTRIBUTION } from './REFUND_INDIVIDUAL_CONTRIBUTION.model';
 
 describe('REFUND_INDIVIDUAL_CONTRIBUTION', () => {
@@ -12,7 +11,6 @@ describe('REFUND_INDIVIDUAL_CONTRIBUTION', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupB);
   });
 
   it('#factory() should return a SchBTransaction', () => {

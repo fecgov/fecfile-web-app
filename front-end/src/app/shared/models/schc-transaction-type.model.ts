@@ -4,6 +4,9 @@ export abstract class SchCTransactionType extends TransactionType {
   scheduleId = 'C';
   apiEndpoint = '/transactions/schedule-c';
 
+  // Labels
+  override amountInputHeader = 'Loan Information';
+
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
     // Form fields
@@ -35,17 +38,15 @@ export abstract class SchCTransactionType extends TransactionType {
     memo_code: 'memo_code',
     amount: 'loan_amount',
     balance: 'loan_balance',
+    payment_to_date: 'loan_payment_to_date',
+    due_date: 'loan_due_date',
+    interest_rate: 'loan_interest_rate',
+    secured: 'secured',
     aggregate: '',
     purpose_description: '',
     text4000: 'text4000',
     category_code: '',
     election_code: 'election_code',
     election_other_description: 'election_other_description',
-
-    // Labels and text strings
-    dateLabel: 'DATE',
-    amountInputHeader: 'Loan Information',
-    candidateInputHeader: '',
-    purposeDescripLabel: '',
   };
 }

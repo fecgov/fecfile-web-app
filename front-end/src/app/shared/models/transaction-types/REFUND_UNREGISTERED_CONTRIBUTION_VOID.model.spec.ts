@@ -1,5 +1,4 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { REFUND_UNREGISTERED_CONTRIBUTION_VOID } from './REFUND_UNREGISTERED_CONTRIBUTION_VOID.model';
 
 describe('REFUND_UNREGISTERED_CONTRIBUTION_VOID', () => {
@@ -12,7 +11,6 @@ describe('REFUND_UNREGISTERED_CONTRIBUTION_VOID', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchBTransaction', () => {

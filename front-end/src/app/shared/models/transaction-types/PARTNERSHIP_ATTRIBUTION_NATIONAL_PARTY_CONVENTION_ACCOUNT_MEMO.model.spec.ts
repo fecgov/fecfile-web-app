@@ -1,5 +1,4 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 import { PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO } from './PARTNERSHIP_ATTRIBUTION_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO.model';
 
 describe('PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO', () => {
@@ -12,7 +11,6 @@ describe('PARTNERSHIP_NATIONAL_PARTY_CONVENTION_ACCOUNT_MEMO', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupA);
   });
 
   it('#factory() should return a SchATransaction', () => {

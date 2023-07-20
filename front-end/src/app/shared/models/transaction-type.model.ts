@@ -1,7 +1,14 @@
 import { JsonSchema } from '../interfaces/json-schema.interface';
+import {
+  CANDIDATE_FIELDS,
+  CANDIDATE_OFFICE_FIELDS,
+  ELECTION_FIELDS,
+  EMPLOYEE_INFO_FIELDS,
+  LOAN_FINANCE_FIELDS,
+  LOAN_TERMS_FIELDS,
+  hasFields,
+} from '../utils/transaction-type-properties';
 import { ContactType } from './contact.model';
-import { DoubleTransactionGroup } from './transaction-groups/double-transaction-group.model';
-import { TransactionGroup } from './transaction-groups/transaction-group.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { Transaction, TransactionTypes } from './transaction.model';
 
@@ -12,7 +19,8 @@ import { Transaction, TransactionTypes } from './transaction.model';
 export abstract class TransactionType {
   abstract scheduleId: string;
   abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
-  abstract transactionGroup: TransactionGroup | DoubleTransactionGroup; // Transaction group used to render UI form entry page
+  abstract formFields: string[];
+  abstract contactTypeOptions?: ContactType[];
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
@@ -20,12 +28,11 @@ export abstract class TransactionType {
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
 
   // Form display settings
-  contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
-  defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
-  hasCandidateLookup = false; // Boolean flag to cause candidate lookup to display
+  showStandardAmount = true; // Boolean flag to show/hide the standard amount control.  This is typically hidden if an alternate is used, like in Loans
+  hasCandidateCommittee = false; //Boolean flag to show/hide committee inputs along side candidate info
   contact2IsRequired = false; // Boolean flag to cause contact_2 required to be added to the form validation
 
   // Double-entry settings
@@ -50,6 +57,19 @@ export abstract class TransactionType {
   purposeDescriptionLabelNotice?: string; // Additional italicized text that appears beneath the form input label
   purposeDescriptionLabelSuffix?: string; // Additional text that will appear after the purpose_description input label. If this is not set, '(SYSTEM-GENERATED)', '(REQUIRED)', or '(OPTIONAL)' will be diplayed
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
+
+  // Labels
+  dateLabel = 'DATE';
+  amountInputHeader = '';
+  purposeDescripLabel = '';
+
+  description?: string; // Prose describing transaction and filling out the form
+  accordionTitle?: string; // Title for accordion handle (does not include subtext)
+  accordionSubText?: string; // Text after title in accordion handle
+  formTitle?: string; // Title of form within accordion section
+  footer?: string; // Text at the end of form
+  contactTitle?: string; // Title for primary contact
+  contactLookupLabel?: string; //Label above contact lookup
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];
@@ -81,14 +101,34 @@ export abstract class TransactionType {
     return '';
   }
 
-  ////////////////////////////////////////////////////////////////////////////////////////////
-  // Template variables to be integrated with #1193
-  hasAmountInput = true;
-  hasLoanInfoInput = false;
-  hasLoanTermsInput = false;
-  contactHeaderLabel = 'Contact';
-  contactDropdownLabel = 'CONTACT TYPE';
-  alternateTitle?: string; // Alternate title for the transaction displayed on input form
+  getFormControlNames(templateMap: TransactionTemplateMapType): string[] {
+    const templateFields = this.formFields
+      .map((name: string) => templateMap[name as TemplateMapKeyType])
+      .filter((field) => !!field);
+    return ['entity_type', ...templateFields];
+  }
+
+  hasElectionInformation(): boolean {
+    return hasFields(this.formFields, ELECTION_FIELDS);
+  }
+  hasCandidateInformation(): boolean {
+    return hasFields(this.formFields, CANDIDATE_FIELDS);
+  }
+  hasCommitteeFecId(): boolean {
+    return hasFields(this.formFields, ['committee_fec_id']);
+  }
+  hasEmployeeFields(): boolean {
+    return hasFields(this.formFields, EMPLOYEE_INFO_FIELDS);
+  }
+  hasCandidateOffice(): boolean {
+    return hasFields(this.formFields, CANDIDATE_OFFICE_FIELDS);
+  }
+  hasLoanFinanceFields(): boolean {
+    return hasFields(this.formFields, LOAN_FINANCE_FIELDS);
+  }
+  hasLoanTermsFields(): boolean {
+    return hasFields(this.formFields, LOAN_TERMS_FIELDS);
+  }
 }
 
 export enum PurposeDescriptionLabelSuffix {
@@ -127,18 +167,16 @@ export type TransactionTemplateMapType = {
   memo_code: string;
   amount: string;
   balance: string;
+  payment_to_date: string;
+  due_date: string;
+  interest_rate: string;
+  secured: string;
   aggregate: string;
   purpose_description: string;
   text4000: string;
   category_code: string;
   election_code: string;
   election_other_description: string;
-
-  // Labels and text strings
-  dateLabel: string;
-  amountInputHeader: string;
-  purposeDescripLabel: string;
-  candidateInputHeader: string;
 };
 
 export type TemplateMapKeyType = keyof TransactionTemplateMapType;

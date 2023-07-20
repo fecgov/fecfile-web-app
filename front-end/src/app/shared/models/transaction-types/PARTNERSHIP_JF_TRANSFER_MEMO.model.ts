@@ -4,16 +4,15 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
-import { ContactTypes } from '../contact.model';
 import { SubTransactionGroup } from '../transaction-type.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
+import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_JF_TRANSFER_MEMO extends SchATransactionType {
-  transactionGroup = new TransactionGroupD();
+  formFields = ORGANIZATION_FORM_FIELDS;
+  contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_JF_TRANSFER_MEMO);
   schema = schema;
   override shortName = 'Partnership Receipt';
-  override contactTypeOptions = [ContactTypes.ORGANIZATION];
   override navigationControls: TransactionNavigationControls = STANDARD_PARENT_CONTROLS;
 
   override subTransactionConfig = new SubTransactionGroup('Partnership Receipt JF Transfer Memo', [
