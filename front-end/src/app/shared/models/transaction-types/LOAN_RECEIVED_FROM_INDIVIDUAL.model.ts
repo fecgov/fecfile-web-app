@@ -20,12 +20,12 @@ import {
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
-  TransactionTypeFormProperties,
+  TransactionFormFieldsConfig,
 } from 'app/shared/utils/transaction-type-properties';
 import { LOAN } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
-  override formFieldsConfig = new TransactionTypeFormProperties(INDIVIDUAL_ORGANIZATION_COMMITTEE, [
+  override formFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL_ORGANIZATION_COMMITTEE, [
     ...CORE_FIELDS,
     ...INDIVIDUAL_FIELDS,
     ...COM_FIELDS,

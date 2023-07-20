@@ -1,6 +1,6 @@
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { LabelConfig } from '../utils/transaction-type-labels.utils';
-import { TransactionTypeFormProperties } from '../utils/transaction-type-properties';
+import { TransactionFormFieldsConfig } from '../utils/transaction-type-properties';
 import { ContactType } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { Transaction, TransactionTypes } from './transaction.model';
@@ -12,7 +12,7 @@ import { Transaction, TransactionTypes } from './transaction.model';
 export abstract class TransactionType {
   abstract scheduleId: string;
   abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
-  abstract formFieldsConfig: TransactionTypeFormProperties;
+  abstract formFieldsConfig: TransactionFormFieldsConfig;
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates

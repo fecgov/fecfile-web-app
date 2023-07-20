@@ -24,7 +24,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { TransactionTypeFormProperties } from 'app/shared/utils/transaction-type-properties';
+import { TransactionFormFieldsConfig } from 'app/shared/utils/transaction-type-properties';
 import { LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 @Component({
@@ -34,7 +34,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   @Input() transaction: Transaction | undefined;
 
   formProperties: string[] = [];
-  formFieldsConfig?: TransactionTypeFormProperties;
+  formFieldsConfig?: TransactionFormFieldsConfig;
   labelConfig?: LabelConfig;
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);

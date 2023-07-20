@@ -11,7 +11,7 @@ import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { TransactionTypeFormProperties } from 'app/shared/utils/transaction-type-properties';
+import { TransactionFormFieldsConfig } from 'app/shared/utils/transaction-type-properties';
 import { LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 /**
@@ -33,7 +33,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   implements OnInit, OnDestroy
 {
   childFormProperties: string[] = [];
-  childFormFieldsConfig?: TransactionTypeFormProperties;
+  childFormFieldsConfig?: TransactionFormFieldsConfig;
   childLabelConfig?: LabelConfig;
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
