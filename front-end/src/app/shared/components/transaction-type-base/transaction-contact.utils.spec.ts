@@ -1,12 +1,8 @@
 import { FormControl, FormGroup } from '@angular/forms';
-import { SchATransaction, ScheduleATransactionTypes } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from 'app/shared/models/schb-transaction.model';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
-import { AggregationGroups } from 'app/shared/models/transaction.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { Contact, ContactTypes } from 'app/shared/models/contact.model';
-import { SchBTransactionType } from 'app/shared/models/schb-transaction-type.model';
-import { IN_KIND_CONTRIBUTION_TO_CANDIDATE } from 'app/shared/models/transaction-types/IN_KIND_CONTRIBUTION_TO_CANDIDATE.model';
 
 describe('FormUtils', () => {
   const component = new TransactionContactUtils();
