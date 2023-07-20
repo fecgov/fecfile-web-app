@@ -1,6 +1,5 @@
 import { ContactTypeLabels, ContactTypes } from '../models/contact.model';
-import { TemplateMapKeyType, TransactionTemplateMapType } from '../models/transaction-type.model';
-import { LabelUtils, PrimeOptions } from './label.utils';
+import { LabelUtils } from './label.utils';
 
 /**
  * CONTACT TYPE OPTIONS

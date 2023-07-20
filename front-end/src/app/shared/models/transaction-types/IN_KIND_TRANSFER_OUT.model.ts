@@ -2,7 +2,6 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/COM_IN_KIND_OU
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
-import { SchBTransactionType } from '../schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { IN_KIND_OUT } from './common-types/IN_KIND_OUT.model';
 

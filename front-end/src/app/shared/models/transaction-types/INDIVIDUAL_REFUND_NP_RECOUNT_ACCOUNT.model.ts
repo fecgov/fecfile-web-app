@@ -5,7 +5,6 @@ import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTy
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { INDIVIDUAL_B_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
-import { ContactType } from '../contact.model';
 
 export class INDIVIDUAL_REFUND_NP_RECOUNT_ACCOUNT extends SchBTransactionType {
   formFields = INDIVIDUAL_B_FORM_FIELDS;

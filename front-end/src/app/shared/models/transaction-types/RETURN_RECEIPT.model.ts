@@ -8,7 +8,6 @@ import {
   INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS,
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
 } from 'app/shared/utils/transaction-type-properties';
-import { ContactType } from '../contact.model';
 
 export class RETURN_RECEIPT extends SchATransactionType {
   formFields = INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS;
