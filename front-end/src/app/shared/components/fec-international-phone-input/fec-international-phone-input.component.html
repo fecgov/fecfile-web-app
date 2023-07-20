@@ -1,5 +1,5 @@
 <div>
-  <input #internationalPhoneInput
+  <input ngClass="{{ disabled ? 'p-disabled' : '' }}" #internationalPhoneInput
     type="tel"
     (keyup)="onKey($event)">
 </div>

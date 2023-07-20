@@ -62,8 +62,6 @@ export abstract class Transaction extends BaseModel {
 
   children: Transaction[] | undefined;
 
-  use_parent_contact: boolean | undefined;
-
   fields_to_validate: string[] | undefined; // Fields to run through validation in the API when creating or updating a transaction
   getFieldsNotToValidate(): string[] {
     return ['transaction_id', 'filer_committee_id_number'];

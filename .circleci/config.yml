@@ -37,7 +37,8 @@ jobs:
     steps:
       - checkout
 
-      - browser-tools/install-chrome
+      - browser-tools/install-chrome:
+          chrome-version: "114.0.5735.90"
       - browser-tools/install-chromedriver
       - run:
           command: |
@@ -284,17 +285,17 @@ parameters:
     default: false
 
 workflows:
-  test:
+  primary:
     when:
       not: << pipeline.parameters.is-nightly-run >>
     jobs:
       - lint
       - test
-      # - dependency-check
+      - dependency-check
       - deploy:
           requires:
             - test
-            # - dependency-check
+            - dependency-check
 
   nightly-run:
     when: << pipeline.parameters.is-nightly-run >>

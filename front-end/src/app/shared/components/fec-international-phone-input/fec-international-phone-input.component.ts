@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, Optional, Self, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, Optional, Self, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import * as intlTelInput from 'intl-tel-input';
 
@@ -7,13 +7,15 @@ import * as intlTelInput from 'intl-tel-input';
   templateUrl: './fec-international-phone-input.component.html',
   styleUrls: ['./fec-international-phone-input.component.scss'],
 })
-export class FecInternationalPhoneInputComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
+export class FecInternationalPhoneInputComponent implements AfterViewInit, OnChanges, OnDestroy, ControlValueAccessor {
+  @Input() disabled = false;
   @ViewChild('internationalPhoneInput') internationalPhoneInputChild: ElementRef<HTMLInputElement> | undefined;
 
   private intlTelInput: intlTelInput.Plugin | undefined;
   private intlTelInputOptions: intlTelInput.Options = {
     separateDialCode: true,
     preferredCountries: ['us'],
+    allowDropdown: !this.disabled
   };
   private countryCode: string | undefined;
   private number = '';
@@ -22,6 +24,10 @@ export class FecInternationalPhoneInputComponent implements AfterViewInit, OnDes
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+  }
+
+  ngOnChanges(): void {
+    this.intlTelInputOptions.allowDropdown = !this.disabled;
   }
 
   /**

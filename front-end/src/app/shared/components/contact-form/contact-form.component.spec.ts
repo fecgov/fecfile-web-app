@@ -68,7 +68,6 @@ describe('ContactFormComponent', () => {
     component.form.patchValue({
       candidate_office: CandidateOfficeTypes.PRESIDENTIAL,
     });
-    fixture.detectChanges();
 
     fixture
       .whenStable()

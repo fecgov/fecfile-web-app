@@ -1,5 +1,8 @@
 import { SchATransaction } from 'app/shared/models/scha-transaction.model';
 import { SchBTransaction } from '../models/schb-transaction.model';
+import { SchCTransaction } from '../models/schc-transaction.model';
+import { SchC1Transaction } from '../models/schc1-transaction.model';
+import { SchC2Transaction } from '../models/schc2-transaction.model';
 import { ScheduleTransaction } from '../models/transaction.model';
 
 // Schedule A /////////////////////////////////////////////////////
@@ -86,6 +89,7 @@ import { TRIBAL_RECEIPT } from '../models/transaction-types/TRIBAL_RECEIPT.model
 import { TRIBAL_RECOUNT_RECEIPT } from '../models/transaction-types/TRIBAL_RECOUNT_RECEIPT.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON.model';
 import { UNREGISTERED_RECEIPT_FROM_PERSON_RETURN } from '../models/transaction-types/UNREGISTERED_RECEIPT_FROM_PERSON_RETURN.model';
+import { LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT } from '../models/transaction-types/LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT.model';
 
 // Schedule B /////////////////////////////////////////////////////
 
@@ -161,6 +165,10 @@ import { TRIBAL_REFUND_NP_RECOUNT_ACCOUNT } from '../models/transaction-types/TR
 import { FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_CREDIT_CARD_PAYMENT_MEMO.model';
 import { FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO } from '../models/transaction-types/FEDERAL_ELECTION_ACTIVITY_PAYMENT_TO_PAYROLL_MEMO.model';
 import { IN_KIND_CONTRIBUTION_TO_CANDIDATE } from '../models/transaction-types/IN_KIND_CONTRIBUTION_TO_CANDIDATE.model';
+
+// Schedule C /////////////////////////////////////////////////////
+
+import { LOAN_RECEIVED_FROM_INDIVIDUAL } from '../models/transaction-types/LOAN_RECEIVED_FROM_INDIVIDUAL.model';
 
 // prettier-ignore
 const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -256,6 +264,7 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONDUIT_EARMARK_RECEIPT,
   CONDUIT_EARMARK_RECEIPT_DEPOSITED: CONDUIT_EARMARK_RECEIPT,
   CONDUIT_EARMARK_RECEIPT_UNDEPOSITED: CONDUIT_EARMARK_RECEIPT,
+  LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT,
   // Schedule B /////////////////////////////////////////////////////
   PAC_CONDUIT_EARMARK_OUT,
   PAC_CONDUIT_EARMARK_OUT_DEPOSITED: PAC_CONDUIT_EARMARK_OUT,
@@ -328,6 +337,8 @@ const transactionTypeClasses: any = { // eslint-disable-line @typescript-eslint/
   CONDUIT_EARMARK_OUT_UNDEPOSITED: CONDUIT_EARMARK_OUT,
   CONTRIBUTION_TO_CANDIDATE,
   CONTRIBUTION_TO_CANDIDATE_VOID,
+  // Schedule C /////////////////////////////////////////////////////
+  LOAN_RECEIVED_FROM_INDIVIDUAL,
 }
 
 export class TransactionTypeUtils {
@@ -361,6 +372,9 @@ export function getFromJSON(json: any, depth = 2): ScheduleTransaction { // esli
     const transactionType = TransactionTypeUtils.factory(json.transaction_type_identifier);
     if (transactionType.scheduleId === 'A') return SchATransaction.fromJSON(json, depth);
     if (transactionType.scheduleId === 'B') return SchBTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'C') return SchCTransaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'C1') return SchC1Transaction.fromJSON(json, depth);
+    if (transactionType.scheduleId === 'C2') return SchC2Transaction.fromJSON(json, depth);
   }
   return SchATransaction.fromJSON(json, depth); // Until 404 resolved
   // throw new Error('Fecfile: Missing transaction type identifier when creating a transaction object from a JSON record');
