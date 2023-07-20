@@ -60,7 +60,6 @@
         [showAggregate]="!!transaction?.transactionType?.showAggregate"
         [transaction]="transaction"
       ></app-amount-input>
-      <p-divider></p-divider>
       <ng-container *ngIf="transaction?.transactionType?.hasLoanInfoInput">
         <h3>Loan information</h3>
         <app-loan-info-input
