@@ -1,20 +1,24 @@
 <p-toast></p-toast>
 <h1>{{ transaction?.transactionType?.title }}</h1>
 <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
-<p class="group-description">{{ labelConfig?.description }}</p>
+<p class="group-description">{{ transactionType?.description }}</p>
 <p-accordion [activeIndex]="accordionActiveIndex">
   <p-accordionTab>
     <ng-template pTemplate="header">
-      <strong>{{ labelConfig?.accordionTitle }}:</strong>
-      <p style="font-weight: normal">{{ labelConfig?.accordionSubText }}</p></ng-template
+      <strong>{{ transactionType?.accordionTitle }}:</strong>
+      <p style="font-weight: normal">
+        {{ transactionType?.accordionSubText }}
+      </p></ng-template
     >
     <div class="p-fluid">
-      <h2 *ngIf="labelConfig?.formTitle">{{ labelConfig?.formTitle }}</h2>
-      <h3>{{ transaction?.transactionType?.labelConfig?.contact }}</h3>
+      <h2 *ngIf="transactionType?.formTitle">
+        {{ transactionType?.formTitle }}
+      </h2>
+      <h3>{{ transactionType?.contactTitle }}</h3>
       <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid" *ngIf="isEditable">
           <div class="col-12">
-            <label for="entity_type">{{ transaction?.transactionType?.labelConfig?.contactLookupLabel }}</label>
+            <label for="entity_type">{{ transactionType?.contactLookupLabel }}</label>
             <app-transaction-contact-lookup
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -156,7 +160,7 @@
             <p-divider></p-divider>
           </ng-container>
           <div class="grid" style="flex-direction: row-reverse">
-            <p style="font-style: italic">{{ labelConfig?.footer }}</p>
+            <p style="font-style: italic">{{ transactionType?.footer }}</p>
           </div>
         </ng-container>
       </form>
@@ -165,15 +169,17 @@
 
   <p-accordionTab>
     <ng-template pTemplate="header">
-      <strong>{{ childLabelConfig?.accordionTitle }}:</strong>
-      <p style="font-weight: normal">{{ childLabelConfig?.accordionSubText }}</p></ng-template
+      <strong>{{ childTransactionType?.accordionTitle }}:</strong>
+      <p style="font-weight: normal">
+        {{ childTransactionType?.accordionSubText }}
+      </p></ng-template
     >
     <div class="p-fluid">
       <h2>{{ childTransaction?.transactionType?.title }}</h2>
-      <p *ngIf="childLabelConfig?.description">
-        <em>{{ childLabelConfig?.description }}</em>
+      <p *ngIf="childTransactionType?.description">
+        <em>{{ childTransactionType?.description }}</em>
       </p>
-      <h3>{{ childTransaction?.transactionType?.labelConfig?.contact }}</h3>
+      <h3>{{ childTransactionType?.contactTitle }}</h3>
       <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
         <div class="grid" *ngIf="isEditable && !useParentContact">
           <div class="col-12">

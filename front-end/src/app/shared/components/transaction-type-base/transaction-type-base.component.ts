@@ -25,7 +25,6 @@ import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.m
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionFormFieldsConfig } from 'app/shared/utils/transaction-type-properties';
-import { LabelConfig } from 'app/shared/utils/transaction-type-labels.utils';
 
 @Component({
   template: '',
@@ -35,7 +34,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   formProperties: string[] = [];
   formFieldsConfig?: TransactionFormFieldsConfig;
-  labelConfig?: LabelConfig;
+  transactionType?: TransactionType;
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   entityTypeControl?: FormControl;
@@ -66,19 +65,19 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (!this.transaction?.transactionType?.templateMap) {
       throw new Error('Fecfile: Template map not found for transaction component');
     }
-    const transactionType = this.transaction.transactionType;
-    this.templateMap = transactionType.templateMap;
-    this.labelConfig = transactionType.labelConfig;
-    this.formFieldsConfig = transactionType.formFieldsConfig;
+    this.transactionType = this.transaction.transactionType;
+    this.templateMap = this.transactionType.templateMap;
+    this.formFieldsConfig = this.transactionType.formFieldsConfig;
     this.formProperties = this.formFieldsConfig.getFormControlNames(this.templateMap);
-    this.contactTypeOptions = transactionType.formFieldsConfig.getContactTypeOptions();
+    this.contactTypeOptions = this.transactionType.formFieldsConfig.getContactTypeOptions();
 
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
+    this.form.addControl('contact_1', new FormControl());
     this.form.addControl(
       'contact_2',
       new FormControl(null, () => {
-        if (!this.transaction?.contact_2 && this.transaction?.transactionType?.contact2IsRequired) {
+        if (!this.transaction?.contact_2 && this.transactionType?.contact2IsRequired) {
           return { required: true };
         }
         return null;
@@ -98,7 +97,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   parentOnInit() {
-    const transactionType = this.transaction?.transactionType;
+    const transactionType = this.transactionType;
     // Determine if amount should always be negative and then force it to be so if needed
     if (transactionType?.negativeAmountValueOnly && this.templateMap?.amount) {
       this.form
@@ -240,7 +239,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   getNavigationControls(): TransactionNavigationControls {
     if (!this.isEditable) return new TransactionNavigationControls([], [GO_BACK_CONTROL], []);
-    return this.transaction?.transactionType?.navigationControls || new TransactionNavigationControls([], [], []);
+    return this.transactionType?.navigationControls || new TransactionNavigationControls([], [], []);
   }
 
   getInlineControls(): NavigationControl[] {

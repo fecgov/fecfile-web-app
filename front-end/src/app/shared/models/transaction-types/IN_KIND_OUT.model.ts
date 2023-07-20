@@ -2,18 +2,14 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/IN_KIND_OUT';
 import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
-import { SchBTransactionType } from '../schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { GROUP_A_FOR_B } from 'app/shared/utils/transaction-type-properties';
-import { IN_KIND_OUT as LABEL_CONFIG } from 'app/shared/utils/transaction-type-labels.utils';
-
-export class IN_KIND_OUT extends SchBTransactionType {
-  formFieldsConfig = GROUP_A_FOR_B;
-  override labelConfig = LABEL_CONFIG;
-  override isDependentChild = true;
+import { IN_KIND_OUT as CommonInKindOut } from './common-types/IN_KIND_OUT.model';
+export class IN_KIND_OUT extends CommonInKindOut {
+  override formFieldsConfig = GROUP_A_FOR_B;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);
   schema = schema;
-  override useParentContact = true;
+  override showAggregate = true;
   override inheritedFields = [
     'last_name',
     'first_name',

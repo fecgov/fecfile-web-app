@@ -1,25 +1,14 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/EARMARK_RECEIPT';
 import { ContactTypes } from '../contact.model';
-import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import {
-  STANDARD_DOUBLE_ENTRY_CONTROLS,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { TemplateMapKeyType } from '../transaction-type.model';
-import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
-import { EARMARK } from 'app/shared/utils/transaction-type-labels.utils';
+import { EARMARK } from './common-types/EARMARK.model';
 
-export class EARMARK_RECEIPT extends SchATransactionType {
-  formFieldsConfig = GROUP_A;
-  override labelConfig = EARMARK;
+export class EARMARK_RECEIPT extends EARMARK {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_RECEIPT);
   schema = schema;
   override dependentChildTransactionType = ScheduleATransactionTypes.EARMARK_MEMO;
-  override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
-  override childTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
 
   override generatePurposeDescription(transaction: SchATransaction): string {
     if (!transaction.children) return '';

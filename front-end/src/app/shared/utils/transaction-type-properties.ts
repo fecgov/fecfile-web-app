@@ -182,7 +182,7 @@ export const GROUP_EFI_FOR_B: TransactionFormFieldsConfig = new TransactionFormF
   ...COM_FIELDS,
   ...CATEGORY_CODE,
 ]);
-export const GROUP_G: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL_ORGANIZATION_COMMITTEE, [
+export const GROUP_G: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(COMMITTEE_INDIVIDUAL, [
   ...CORE_FIELDS,
   ...AGGREGATE,
   ...INDIVIDUAL_FIELDS,

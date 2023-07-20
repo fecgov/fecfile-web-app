@@ -22,7 +22,6 @@ import {
   LOAN_TERMS_FIELDS,
   TransactionFormFieldsConfig,
 } from 'app/shared/utils/transaction-type-properties';
-import { LOAN } from 'app/shared/utils/transaction-type-labels.utils';
 
 export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
   override formFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL_ORGANIZATION_COMMITTEE, [
@@ -34,7 +33,16 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
   ]);
   override showStandardAmount = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
-  override labelConfig = LOAN;
+
+  override description = 'Saving a loan received from individual will automatically create a related receipt.';
+  override accordionTitle = 'ENTER DATA';
+  override accordionSubText = 'Enter lender, loan, and terms information for a loan received from individual';
+  override formTitle = undefined;
+  override footer =
+    'The information in this loan will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and “Save transactions.”';
+  override contactTitle = 'Lender';
+  override contactLookupLabel = 'LENDER LOOKUP';
+
   schema = schema;
   override apiEndpoint = '/transactions/save-pair';
   override dependentChildTransactionType = ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT;

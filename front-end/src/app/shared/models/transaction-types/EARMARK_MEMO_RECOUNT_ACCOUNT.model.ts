@@ -1,23 +1,12 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_EARMARK_MEMOS';
-import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
-import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { GROUP_G } from 'app/shared/utils/transaction-type-properties';
-import { EARMARK_MEMO } from 'app/shared/utils/transaction-type-labels.utils';
+import { EARMARK_MEMO } from './common-types/EARMARK_MEMO.model';
 
-export class EARMARK_MEMO_RECOUNT_ACCOUNT extends SchATransactionType {
-  formFieldsConfig = GROUP_G;
-  override labelConfig = EARMARK_MEMO;
-  override isDependentChild = true;
+export class EARMARK_MEMO_RECOUNT_ACCOUNT extends EARMARK_MEMO {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_MEMO_RECOUNT_ACCOUNT);
   schema = schema;
-  override inheritedFields = ['amount' as TemplateMapKeyType];
-
-  override generatePurposeDescription(): string {
-    return 'Total earmarked through conduit.';
-  }
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

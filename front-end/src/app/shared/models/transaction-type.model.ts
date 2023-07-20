@@ -1,5 +1,4 @@
 import { JsonSchema } from '../interfaces/json-schema.interface';
-import { LabelConfig } from '../utils/transaction-type-labels.utils';
 import { TransactionFormFieldsConfig } from '../utils/transaction-type-properties';
 import { ContactType } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
@@ -54,10 +53,17 @@ export abstract class TransactionType {
   purposeDescriptionPrefix?: string; // Additional text that appears at the start of the start of the purpose description field
 
   // Labels
-  labelConfig?: LabelConfig;
   dateLabel = 'DATE';
   amountInputHeader = '';
   purposeDescripLabel = '';
+
+  description?: string; // Prose describing transaction and filling out the form
+  accordionTitle?: string; // Title for accordion handle (does not include subtext)
+  accordionSubText?: string; // Text after title in accordion handle
+  formTitle?: string; // Title of form within accordion section
+  footer?: string; // Text at the end of form
+  contactTitle?: string; // Title for primary contact
+  contactLookupLabel?: string; //Label above contact lookup
 
   getSchemaName(): string {
     const schema_name = this?.schema?.$id?.split('/').pop()?.split('.')[0];

@@ -4,20 +4,11 @@ import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLab
 import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from '../../utils/label.utils';
-import { GROUP_G } from 'app/shared/utils/transaction-type-properties';
-import { EARMARK_MEMO } from 'app/shared/utils/transaction-type-labels.utils';
+import { EARMARK_MEMO } from './common-types/EARMARK_MEMO.model';
 
-export class EARMARK_MEMO_CONVENTION_ACCOUNT extends SchATransactionType {
-  formFieldsConfig = GROUP_G;
-  override labelConfig = EARMARK_MEMO;
-  override isDependentChild = true;
+export class EARMARK_MEMO_CONVENTION_ACCOUNT extends EARMARK_MEMO {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.EARMARK_MEMO_CONVENTION_ACCOUNT);
   schema = schema;
-  override inheritedFields = ['amount' as TemplateMapKeyType];
-
-  override generatePurposeDescription(): string {
-    return 'Total earmarked through conduit.';
-  }
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

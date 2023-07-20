@@ -4,18 +4,13 @@ import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransaction } from '../scha-transaction.model';
 import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
-import { CONDUIT_EARMARK_OUT } from 'app/shared/utils/transaction-type-labels.utils';
+import { CONDUIT_EARMARK_OUT } from './common-types/CONDUIT_EARMARK_OUT.model';
 
-export class PAC_CONDUIT_EARMARK_OUT extends SchBTransactionType {
+export class PAC_CONDUIT_EARMARK_OUT extends CONDUIT_EARMARK_OUT {
   formFieldsConfig = GROUP_M;
-  override labelConfig = CONDUIT_EARMARK_OUT;
   title = 'PAC Conduit Earmark Out';
   schema = schema;
-  override isDependentChild = true;
   override parentTriggerFields = ['organization_name'] as TemplateMapKeyType[];
-  override inheritedFields = ['amount', 'memo_code'] as TemplateMapKeyType[];
-  override showAggregate = false;
-  override hasCandidateCommittee = true;
   override memoCodeTransactionTypes = {
     true: ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT_UNDEPOSITED,
     false: ScheduleBTransactionTypes.PAC_CONDUIT_EARMARK_OUT_DEPOSITED,

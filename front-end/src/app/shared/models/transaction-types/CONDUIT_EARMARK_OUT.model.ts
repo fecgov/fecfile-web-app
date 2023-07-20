@@ -1,22 +1,16 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMARK_OUTS';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { SchBTransactionType } from '../schb-transaction-type.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { ContactTypes } from '../contact.model';
 import { SchATransaction } from '../scha-transaction.model';
 import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
-import { CONDUIT_EARMARK_OUT as LABEL_CONFIG } from 'app/shared/utils/transaction-type-labels.utils';
+import { CONDUIT_EARMARK_OUT as CommonConduitEarmarkOut } from './common-types/CONDUIT_EARMARK_OUT.model';
 
-export class CONDUIT_EARMARK_OUT extends SchBTransactionType {
+export class CONDUIT_EARMARK_OUT extends CommonConduitEarmarkOut {
   formFieldsConfig = GROUP_M;
-  CONDUIT_EARMARK = LABEL_CONFIG;
   title = 'Conduit Earmark Out';
   schema = schema;
-  override isDependentChild = true;
   override parentTriggerFields = ['organization_name', 'last_name', 'first_name'] as TemplateMapKeyType[];
-  override inheritedFields = ['amount', 'memo_code'] as TemplateMapKeyType[];
-  override showAggregate = false;
-  override hasCandidateCommittee = true;
   override memoCodeTransactionTypes = {
     true: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_UNDEPOSITED,
     false: ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED,
