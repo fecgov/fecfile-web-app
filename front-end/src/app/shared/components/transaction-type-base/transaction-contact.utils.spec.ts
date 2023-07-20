@@ -52,5 +52,40 @@ describe('FormUtils', () => {
 
       expect(ind.committee_id).toBeUndefined();
     });
+
+    it('tests the tertiary contact lookup', () => {
+      const transaction = SchBTransaction.fromJSON({
+        transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
+      });
+      const templateMap = transaction.transactionType?.templateMap as TransactionTemplateMapType;
+      const form = new FormGroup({
+        [templateMap.first_name]: new FormControl(),
+        [templateMap.last_name]: new FormControl(),
+        [templateMap.candidate_first_name]: new FormControl(),
+        [templateMap.candidate_last_name]: new FormControl(),
+        [templateMap.committee_name]: new FormControl(),
+        [templateMap.committee_fec_id]: new FormControl(),
+      });
+
+      form.get(templateMap.first_name)?.setValue('Bill');
+      form.get(templateMap.candidate_last_name)?.setValue('Testerman');
+      form.get(templateMap.committee_name)?.setValue('Tester Committee');
+
+      const ind = Contact.fromJSON({ type: ContactTypes.INDIVIDUAL, first_name: 'Bob', last_name: 'Testerson' });
+      const can = Contact.fromJSON({ type: ContactTypes.CANDIDATE, first_name: 'Phil', last_name: 'Testervan' });
+      const com = Contact.fromJSON({ type: ContactTypes.COMMITTEE, name: 'Test Committee', committee_id: 'C12345678' });
+
+      transaction.contact_1 = ind;
+      transaction.contact_2 = can;
+
+      const selected = {
+        value: com,
+      };
+
+      TransactionContactUtils.onTertiaryContactLookupSelect(selected, form, transaction);
+
+      expect(transaction.contact_3).toEqual(com);
+      expect(form.get(templateMap.committee_fec_id)?.value).toEqual(com.committee_id);
+    });
   });
 });
