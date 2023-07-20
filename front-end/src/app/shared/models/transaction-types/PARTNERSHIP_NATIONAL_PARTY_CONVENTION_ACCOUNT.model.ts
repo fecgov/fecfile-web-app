@@ -1,5 +1,5 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PARTNERSHIP_NATIONAL_PARTY_RECEIPTS';
+import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_PARTNERSHIP_RECEIPTS';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
 import { ORGANIZATION_FORM_FIELDS, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
