@@ -11,7 +11,7 @@ import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { TransactionFormFieldsConfig } from 'app/shared/utils/transaction-type-properties';
+import { TransactionFormFieldsConfig, getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -54,7 +54,7 @@ export abstract class DoubleTransactionTypeBaseComponent
     }
     this.childTemplateMap = this.childTransactionType?.templateMap;
     this.childFormFieldsConfig = this.childTransactionType?.formFieldsConfig;
-    this.childContactTypeOptions = this.childFormFieldsConfig?.getContactTypeOptions();
+    this.childContactTypeOptions = getContactTypeOptions(this.childTransactionType.contactTypeOptions ?? []);
     this.childFormProperties = this.childFormFieldsConfig?.getFormControlNames(this.childTemplateMap);
     this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
     TransactionFormUtils.onInit(this, this.childForm, this.childTransaction, this.childContactId$);

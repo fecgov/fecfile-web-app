@@ -4,10 +4,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_D, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT extends SchATransactionType {
   formFieldsConfig = GROUP_D;
+  contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_HEADQUARTERS_ACCOUNT

@@ -4,10 +4,11 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_A, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_ATTRIBUTION extends SchATransactionType {
   formFieldsConfig = GROUP_A;
+  contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTNERSHIP_ATTRIBUTION);
   schema = schema;
   override updateParentOnSave = true;

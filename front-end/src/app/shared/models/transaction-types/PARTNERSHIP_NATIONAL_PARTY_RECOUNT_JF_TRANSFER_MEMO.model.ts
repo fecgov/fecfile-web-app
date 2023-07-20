@@ -5,10 +5,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { TransactionNavigationControls, STANDARD_PARENT_CONTROLS } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
-import { GROUP_D } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_D, ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO extends SchATransactionType {
   formFieldsConfig = GROUP_D;
+  contactTypeOptions = ORGANIZATION;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PARTNERSHIP_NATIONAL_PARTY_RECOUNT_JF_TRANSFER_MEMO

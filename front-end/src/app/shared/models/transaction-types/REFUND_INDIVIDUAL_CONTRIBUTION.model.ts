@@ -4,10 +4,11 @@ import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { TransactionNavigationControls, STANDARD_CONTROLS } from '../transaction-navigation-controls.model';
-import { GROUP_B_NO_COM } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_B_NO_COM, INDIVIDUAL_ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_INDIVIDUAL_CONTRIBUTION extends SchBTransactionType {
   formFieldsConfig = GROUP_B_NO_COM;
+  contactTypeOptions = INDIVIDUAL_ORGANIZATION;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION);
   schema = schema;
   override showAggregate = false;

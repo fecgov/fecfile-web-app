@@ -3,10 +3,11 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_B, INDIVIDUAL_ORGANIZATION_COMMITTEE } from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
   override formFieldsConfig = GROUP_B;
+  override contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   override isDependentChild = true;
   title = 'Receipt';
   schema = schema;

@@ -5,16 +5,16 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_B, ORGANIZATION_INDIVIDUAL_COMMITTEE } from 'app/shared/utils/transaction-type-properties';
 
 export class NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO extends SchBTransactionType {
   formFieldsConfig = GROUP_B;
+  override contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_CREDIT_CARD_PAYMENT_MEMO
   );
   schema = schema;
-  override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = getChildNavigationControls();
 
   getNewTransaction() {

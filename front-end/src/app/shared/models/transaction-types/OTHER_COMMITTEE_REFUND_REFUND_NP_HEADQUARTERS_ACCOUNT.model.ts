@@ -4,10 +4,11 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
 
 export class OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT extends SchBTransactionType {
   formFieldsConfig = GROUP_EFI_FOR_B;
+  contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OTHER_COMMITTEE_REFUND_REFUND_NP_HEADQUARTERS_ACCOUNT

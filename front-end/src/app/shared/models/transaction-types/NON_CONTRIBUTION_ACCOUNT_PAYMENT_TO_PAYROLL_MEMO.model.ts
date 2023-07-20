@@ -4,10 +4,11 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_C_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_C_FOR_B, INDIVIDUAL_ORGANIZATION_COMMITTEE } from 'app/shared/utils/transaction-type-properties';
 
 export class NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
   formFieldsConfig = GROUP_C_FOR_B;
+  contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.NON_CONTRIBUTION_ACCOUNT_PAYMENT_TO_PAYROLL_MEMO

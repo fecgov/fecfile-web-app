@@ -1,8 +1,9 @@
-import { GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
 import { SchBTransactionType } from '../../schb-transaction-type.model';
 
 export abstract class IN_KIND_OUT extends SchBTransactionType {
   override formFieldsConfig = GROUP_EFI_FOR_B;
+  contactTypeOptions = COMMITTEE;
   override isDependentChild = true;
   override showAggregate = false;
   override useParentContact = true;

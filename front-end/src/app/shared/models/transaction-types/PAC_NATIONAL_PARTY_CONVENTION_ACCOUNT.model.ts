@@ -4,10 +4,11 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
-import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT extends SchATransactionType {
   formFieldsConfig = GROUP_EFI;
+  contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.PAC_NATIONAL_PARTY_CONVENTION_ACCOUNT

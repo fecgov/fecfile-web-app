@@ -4,10 +4,12 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_H } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, GROUP_H } from 'app/shared/utils/transaction-type-properties';
+import { ContactType } from '../contact.model';
 
 export class REFUND_TO_FEDERAL_CANDIDATE extends SchATransactionType {
   formFieldsConfig = GROUP_H;
+  contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.REFUND_TO_FEDERAL_CANDIDATE);
   schema = schema;
   override hasCandidateCommittee = true;

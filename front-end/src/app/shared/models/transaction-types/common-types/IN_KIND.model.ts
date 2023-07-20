@@ -1,4 +1,4 @@
-import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 import { SchATransactionType } from '../../scha-transaction-type.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
@@ -9,6 +9,7 @@ export abstract class IN_KIND extends SchATransactionType {
   override apiEndpoint = '/transactions/save-pair';
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
   formFieldsConfig = GROUP_EFI;
+  contactTypeOptions = COMMITTEE;
 
   override description =
     'This receipt type automatically creates an associated transaction. Saving an in-kind receipt will automatically create an in-kind out.'; // Prose describing transaction and filling out the form

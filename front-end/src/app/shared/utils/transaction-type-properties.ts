@@ -93,9 +93,6 @@ export class TransactionFormFieldsConfig {
     return ['entity_type', ...templateFields];
   }
 
-  getContactTypeOptions(): PrimeOptions {
-    return LabelUtils.getPrimeOptions(ContactTypeLabels, this.contactTypeOptions);
-  }
   hasElectionInformation(): boolean {
     return hasFields(this.formControlNames, ELECTION_FIELDS);
   }

@@ -4,10 +4,11 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_A, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
 
 export class INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT extends SchATransactionType {
   formFieldsConfig = GROUP_A;
+  contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.INDIVIDUAL_NATIONAL_PARTY_RECOUNT_ACCOUNT

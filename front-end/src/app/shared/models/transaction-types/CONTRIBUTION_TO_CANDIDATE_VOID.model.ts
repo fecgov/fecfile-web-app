@@ -4,10 +4,11 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { PurposeDescriptionLabelSuffix } from '../transaction-type.model';
-import { GROUP_M } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, GROUP_M } from 'app/shared/utils/transaction-type-properties';
 
 export class CONTRIBUTION_TO_CANDIDATE_VOID extends SchBTransactionType {
   formFieldsConfig = GROUP_M;
+  contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.CONTRIBUTION_TO_CANDIDATE_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;

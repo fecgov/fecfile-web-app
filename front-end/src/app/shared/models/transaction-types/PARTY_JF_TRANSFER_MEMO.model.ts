@@ -4,10 +4,11 @@ import { AggregationGroups } from '../transaction.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TransactionNavigationControls, getChildNavigationControls } from '../transaction-navigation-controls.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
 
 export class PARTY_JF_TRANSFER_MEMO extends SchATransactionType {
   formFieldsConfig = GROUP_EFI;
+  contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PARTY_JF_TRANSFER_MEMO);
   override shortName = 'Party';
   schema = schema;

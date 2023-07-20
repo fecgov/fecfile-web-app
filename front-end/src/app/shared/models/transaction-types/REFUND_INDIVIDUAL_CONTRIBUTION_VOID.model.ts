@@ -4,10 +4,11 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_B_NO_COM } from 'app/shared/utils/transaction-type-properties';
+import { GROUP_B_NO_COM, INDIVIDUAL_ORGANIZATION } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_INDIVIDUAL_CONTRIBUTION_VOID extends SchBTransactionType {
   formFieldsConfig = GROUP_B_NO_COM;
+  contactTypeOptions = INDIVIDUAL_ORGANIZATION;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_INDIVIDUAL_CONTRIBUTION_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;
