@@ -1,22 +1,24 @@
-import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
+import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { TransactionGroupAA } from '../transaction-groups/transaction-group-aa.model';
+import { TransactionGroupN } from '../transaction-groups/transaction-group-n.model';
 
-describe('IN_KIND_RECEIPT', () => {
-  let transaction: SchATransaction;
+describe('IN_KIND_CONTRIBUTION_TO_CANDIDATE', () => {
+  let transaction: SchBTransaction;
 
   beforeEach(() => {
-    transaction = getTestTransactionByType(ScheduleATransactionTypes.IN_KIND_RECEIPT) as SchATransaction;
+    transaction = getTestTransactionByType(
+      ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE
+    ) as SchBTransaction;
   });
 
   it('should create an instance', () => {
     expect(transaction.transactionType).toBeTruthy();
-    expect(transaction.transactionType?.scheduleId).toBe('A');
-    expect(transaction?.transactionType?.transactionGroup).toBeInstanceOf(TransactionGroupAA);
+    expect(transaction.transactionType?.scheduleId).toBe('B');
+    expect(transaction?.transactionType?.transactionGroup).toBeInstanceOf(TransactionGroupN);
   });
 
-  it('#factory() should return a SchATransaction', () => {
-    expect(transaction.form_type).toBe('SA11AI');
-    expect(transaction.transaction_type_identifier).toBe(ScheduleATransactionTypes.IN_KIND_RECEIPT);
+  it('#factory() should return a SchBTransaction', () => {
+    expect(transaction.form_type).toBe('SB23');
+    expect(transaction.transaction_type_identifier).toBe(ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE);
   });
 });

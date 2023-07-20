@@ -2,18 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { testTemplateMap } from 'app/shared/utils/unit-test.utils';
 import { ContactTypeLabels, ContactTypes } from '../contact.model';
-import { TransactionGroupM } from './transaction-group-m.model';
+import { TransactionGroupN } from './transaction-group-n.model';
 
-describe('TransactionGroupM', () => {
-  let component: TransactionGroupM;
+describe('TransactionGroupN', () => {
+  let component: TransactionGroupN;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [TransactionGroupM],
+      providers: [TransactionGroupN],
     });
 
-    component = TestBed.inject(TransactionGroupM);
+    component = TestBed.inject(TransactionGroupN);
   });
 
   it('should create', () => {
@@ -29,7 +29,10 @@ describe('TransactionGroupM', () => {
   });
 
   it('#getContactTypeOptions happy path', () => {
-    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.COMMITTEE]);
+    const expectedRetval = LabelUtils.getPrimeOptions(ContactTypeLabels, [
+      ContactTypes.ORGANIZATION,
+      ContactTypes.INDIVIDUAL,
+    ]);
     const retval = component.getContactTypeOptions();
     expect(JSON.stringify(expectedRetval) === JSON.stringify(retval)).toBeTruthy();
   });
@@ -39,7 +42,7 @@ describe('TransactionGroupM', () => {
   });
 
   it('#hasCommitteeFecIdInput happy path', () => {
-    expect(component.hasCommitteeFecIdInput()).toBeTrue();
+    expect(component.hasCommitteeFecIdInput()).toBeFalse();
   });
 
   it('#hasElectionInformationInput happy path', () => {
