@@ -53,5 +53,4 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
   override hasLoanTermsInput = true;
   override contactHeaderLabel = 'Lender';
   override contactDropdownLabel = 'LENDER LOOKUP';
-  override doMemoCodeDateCheck = false;
 }

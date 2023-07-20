@@ -43,6 +43,5 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
 
   /////////////////////////////////////////////////////////////////////
   // Template variables to be integrated with #1193
-  override doMemoCodeDateCheck = false;
   override alternateTitle = 'Receipt';
 }

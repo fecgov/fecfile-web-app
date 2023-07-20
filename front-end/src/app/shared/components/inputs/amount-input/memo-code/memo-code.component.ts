@@ -106,11 +106,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   }
 
   updateMemoItemWithDate(date: Date) {
-    if (
-      this.transaction?.transactionType?.doMemoCodeDateCheck &&
-      this.report?.coverage_from_date &&
-      this.report?.coverage_through_date
-    ) {
+    if (this.report?.coverage_from_date && this.report?.coverage_through_date) {
       if (date && (date < this.report.coverage_from_date || date > this.report.coverage_through_date)) {
         this.memoControl.addValidators(Validators.requiredTrue);
         this.memoControl.markAsTouched();
