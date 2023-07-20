@@ -69,7 +69,7 @@ export abstract class DoubleTransactionTypeBaseComponent
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((amount) => {
           if (+amount > 0) {
-            this.form.patchValue({ [this.childTemplateMap.amount]: -1 * amount });
+            this.childForm.get(this.childTemplateMap.amount)?.setValue(-1 * amount);
           }
         });
     }
