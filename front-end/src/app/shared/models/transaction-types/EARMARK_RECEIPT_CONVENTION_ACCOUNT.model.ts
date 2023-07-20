@@ -9,7 +9,7 @@ import {
 } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
-import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
+import { INDIVIDUAL_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { EARMARK } from './common-types/EARMARK.model';
 
 export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends EARMARK {

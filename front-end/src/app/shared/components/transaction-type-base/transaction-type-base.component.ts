@@ -24,7 +24,7 @@ import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
-import { TransactionFormFieldsConfig, getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
+import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 
 @Component({
   template: '',
@@ -33,7 +33,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   @Input() transaction: Transaction | undefined;
 
   formProperties: string[] = [];
-  formFieldsConfig?: TransactionFormFieldsConfig;
   transactionType?: TransactionType;
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
@@ -67,8 +66,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
     this.transactionType = this.transaction.transactionType;
     this.templateMap = this.transactionType.templateMap;
-    this.formFieldsConfig = this.transactionType.formFieldsConfig;
-    this.formProperties = this.formFieldsConfig.getFormControlNames(this.templateMap);
+    this.formProperties = this.transactionType.getFormControlNames(this.templateMap);
     this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));

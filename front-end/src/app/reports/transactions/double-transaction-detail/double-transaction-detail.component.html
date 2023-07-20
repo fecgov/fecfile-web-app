@@ -54,7 +54,7 @@
             [templateMap]="templateMap"
           ></app-address-input>
           <p-divider></p-divider>
-          <ng-container *ngIf="formFieldsConfig?.hasEmployeeFields() && getEntityType() === ContactTypes.INDIVIDUAL">
+          <ng-container *ngIf="transactionType?.hasEmployeeFields() && getEntityType() === ContactTypes.INDIVIDUAL">
             <h3>Employer</h3>
             <app-employer-input
               [form]="form"
@@ -76,7 +76,7 @@
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transaction?.transactionType?.formFieldsConfig?.hasLoanFinanceFields()">
+          <ng-container *ngIf="transactionType?.hasLoanFinanceFields()">
             <h3>Loan information</h3>
             <app-loan-info-input
               [form]="form"
@@ -88,7 +88,7 @@
             ></app-loan-info-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transaction?.transactionType?.formFieldsConfig?.hasLoanTermsFields()">
+          <ng-container *ngIf="transactionType?.hasLoanTermsFields()">
             <h3>Terms</h3>
             <app-loan-terms-input
               [form]="form"
@@ -97,7 +97,7 @@
             ></app-loan-terms-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="formFieldsConfig?.hasCandidateInformation()">
+          <ng-container *ngIf="transactionType?.hasCandidateInformation()">
             <h3>Committee/Candidate Information</h3>
             <app-committee-input
               [form]="form"
@@ -125,7 +125,7 @@
             </ng-container>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="formFieldsConfig?.hasElectionInformation()">
+          <ng-container *ngIf="transactionType?.hasElectionInformation()">
             <h3>Election Information</h3>
             <app-election-input
               [form]="form"
@@ -228,7 +228,7 @@
           <p-divider></p-divider>
           <ng-container
             *ngIf="
-              childFormFieldsConfig?.hasEmployeeFields() &&
+              childTransactionType?.hasEmployeeFields() &&
               childForm.get('entity_type')?.value === ContactTypes.INDIVIDUAL
             "
           >
@@ -240,7 +240,7 @@
             ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childFormFieldsConfig?.hasCandidateInformation()">
+          <ng-container *ngIf="childTransactionType?.hasCandidateInformation()">
             <h3>Committee/Candidate Information</h3>
             <app-committee-input
               [form]="childForm"
@@ -268,7 +268,7 @@
             </ng-container>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childFormFieldsConfig?.hasElectionInformation()">
+          <ng-container *ngIf="childTransactionType?.hasElectionInformation()">
             <h3>Election Information</h3>
             <app-election-input
               [form]="childForm"
@@ -291,7 +291,7 @@
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="childTransaction?.transactionType?.formFieldsConfig?.hasLoanFinanceFields()">
+          <ng-container *ngIf="childTransactionType?.hasLoanFinanceFields()">
             <h3>Loan information</h3>
             <app-loan-info-input
               [form]="childForm"

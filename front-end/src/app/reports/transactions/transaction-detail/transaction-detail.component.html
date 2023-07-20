@@ -31,7 +31,7 @@
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
           [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
-          [includeFecId]="!!formFieldsConfig?.hasCommitteeFecId()"
+          [includeFecId]="!!transactionType?.hasCommitteeFecId()"
         ></app-committee-input>
       </ng-container>
       <ng-container *ngIf="getEntityType() === ContactTypes.INDIVIDUAL">
@@ -41,9 +41,7 @@
       <h3>Address</h3>
       <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-address-input>
       <p-divider></p-divider>
-      <ng-container
-        *ngIf="formFieldsConfig?.hasEmployeeFields() && entityTypeControl?.value == ContactTypes.INDIVIDUAL"
-      >
+      <ng-container *ngIf="transactionType?.hasEmployeeFields() && entityTypeControl?.value == ContactTypes.INDIVIDUAL">
         <h3>Employer</h3>
         <app-employer-input
           [form]="form"
@@ -65,7 +63,7 @@
         ></app-amount-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="formFieldsConfig?.hasLoanFinanceFields()">
+      <ng-container *ngIf="transactionType?.hasLoanFinanceFields()">
         <h3>Loan information</h3>
         <app-loan-info-input
           [form]="form"
@@ -77,7 +75,7 @@
         ></app-loan-info-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="formFieldsConfig?.hasLoanTermsFields()">
+      <ng-container *ngIf="transactionType?.hasLoanTermsFields()">
         <h3>Terms</h3>
         <app-loan-terms-input
           [form]="form"
@@ -86,7 +84,7 @@
         ></app-loan-terms-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="formFieldsConfig?.hasCandidateInformation()">
+      <ng-container *ngIf="transactionType?.hasCandidateInformation()">
         <h3>Committee/Candidate Information</h3>
         <app-committee-input
           *ngIf="transaction?.transactionType?.hasCandidateCommittee"
@@ -111,12 +109,12 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
-            [hasCandidateOfficeInput]="!!formFieldsConfig?.hasCandidateOffice()"
+            [hasCandidateOfficeInput]="!!transactionType?.hasCandidateOffice()"
           ></app-candidate-input>
         </ng-container>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="formFieldsConfig?.hasElectionInformation()">
+      <ng-container *ngIf="transactionType?.hasElectionInformation()">
         <h3>Election Information</h3>
         <app-election-input
           [form]="form"

@@ -1,4 +1,4 @@
-import { COMMITTEE, GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { SchATransactionType } from '../../scha-transaction-type.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
@@ -8,7 +8,7 @@ import {
 export abstract class IN_KIND extends SchATransactionType {
   override apiEndpoint = '/transactions/save-pair';
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
-  formFieldsConfig = GROUP_EFI;
+  formFields = COMMITTEE_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
 
   override description =

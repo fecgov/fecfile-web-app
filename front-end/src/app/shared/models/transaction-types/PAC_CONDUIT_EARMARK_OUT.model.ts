@@ -2,11 +2,14 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/CONDUIT_EARMAR
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransaction } from '../scha-transaction.model';
-import { COMMITTEE, GROUP_M } from 'app/shared/utils/transaction-type-properties';
+import {
+  COMMITTEE,
+  COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
+} from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK_OUT } from './common-types/CONDUIT_EARMARK_OUT.model';
 
 export class PAC_CONDUIT_EARMARK_OUT extends CONDUIT_EARMARK_OUT {
-  formFieldsConfig = GROUP_M;
+  formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   title = 'PAC Conduit Earmark Out';
   schema = schema;

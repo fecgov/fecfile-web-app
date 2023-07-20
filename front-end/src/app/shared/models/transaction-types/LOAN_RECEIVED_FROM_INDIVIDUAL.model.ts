@@ -20,18 +20,16 @@ import {
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
-  TransactionFormFieldsConfig,
 } from 'app/shared/utils/transaction-type-properties';
-import { ContactType } from '../contact.model';
 
 export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
-  override formFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL_ORGANIZATION_COMMITTEE, [
+  override formFields = [
     ...CORE_FIELDS,
     ...INDIVIDUAL_FIELDS,
     ...COM_FIELDS,
     ...LOAN_FINANCE_FIELDS,
     ...LOAN_TERMS_FIELDS,
-  ]);
+  ];
   contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   override showStandardAmount = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);

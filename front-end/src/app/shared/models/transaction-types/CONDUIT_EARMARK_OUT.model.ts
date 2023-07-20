@@ -3,11 +3,14 @@ import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { ContactType, ContactTypes } from '../contact.model';
 import { SchATransaction } from '../scha-transaction.model';
-import { COMMITTEE, GROUP_M } from 'app/shared/utils/transaction-type-properties';
+import {
+  COMMITTEE,
+  COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS,
+} from 'app/shared/utils/transaction-type-properties';
 import { CONDUIT_EARMARK_OUT as CommonConduitEarmarkOut } from './common-types/CONDUIT_EARMARK_OUT.model';
 
 export class CONDUIT_EARMARK_OUT extends CommonConduitEarmarkOut {
-  formFieldsConfig = GROUP_M;
+  formFields = COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   title = 'Conduit Earmark Out';
   schema = schema;

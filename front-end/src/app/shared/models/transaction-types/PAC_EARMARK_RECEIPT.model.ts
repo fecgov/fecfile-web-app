@@ -3,11 +3,11 @@ import { schema } from 'fecfile-validate/fecfile_validate_js/dist/PAC_EARMARK_RE
 import { ContactTypes } from '../contact.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
-import { COMMITTEE, GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { EARMARK } from './common-types/EARMARK.model';
 
 export class PAC_EARMARK_RECEIPT extends EARMARK {
-  override formFieldsConfig = GROUP_EFI;
+  override formFields = COMMITTEE_FORM_FIELDS;
   override contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.PAC_EARMARK_RECEIPT);
   schema = schema;

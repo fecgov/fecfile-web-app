@@ -4,10 +4,13 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_B, ORGANIZATION_INDIVIDUAL_COMMITTEE } from 'app/shared/utils/transaction-type-properties';
+import {
+  INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS,
+  ORGANIZATION_INDIVIDUAL_COMMITTEE,
+} from 'app/shared/utils/transaction-type-properties';
 
 export class NON_CONTRIBUTION_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
-  formFieldsConfig = GROUP_B;
+  formFields = INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS;
   override contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

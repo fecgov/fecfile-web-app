@@ -8,10 +8,10 @@ import {
 } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { GROUP_A, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
+import { INDIVIDUAL_FORM_FIELDS, INDIVIDUAL } from 'app/shared/utils/transaction-type-properties';
 
 export class IN_KIND_RECEIPT extends IN_KIND {
-  override formFieldsConfig = GROUP_A;
+  override formFields = INDIVIDUAL_FORM_FIELDS;
   override contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.IN_KIND_RECEIPT);
   schema = schema;

@@ -4,10 +4,10 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { PurposeDescriptionLabelSuffix } from '../transaction-type.model';
-import { COMMITTEE, GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, COMMITTEE_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class CONTRIBUTION_TO_OTHER_COMMITTEE_VOID extends SchBTransactionType {
-  formFieldsConfig = GROUP_EFI_FOR_B;
+  formFields = COMMITTEE_B_FORM_FIELDS;
   contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,

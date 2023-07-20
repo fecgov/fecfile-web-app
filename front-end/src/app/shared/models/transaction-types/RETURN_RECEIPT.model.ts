@@ -4,11 +4,14 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_C, INDIVIDUAL_ORGANIZATION_COMMITTEE } from 'app/shared/utils/transaction-type-properties';
+import {
+  INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS,
+  INDIVIDUAL_ORGANIZATION_COMMITTEE,
+} from 'app/shared/utils/transaction-type-properties';
 import { ContactType } from '../contact.model';
 
 export class RETURN_RECEIPT extends SchATransactionType {
-  formFieldsConfig = GROUP_C;
+  formFields = INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS;
   contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
   schema = schema;

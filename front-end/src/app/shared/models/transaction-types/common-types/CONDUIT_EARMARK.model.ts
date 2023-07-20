@@ -1,4 +1,3 @@
-import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 import { SchATransactionType } from '../../scha-transaction-type.model';
 import {
   STANDARD_DOUBLE_ENTRY_CONTROLS,
