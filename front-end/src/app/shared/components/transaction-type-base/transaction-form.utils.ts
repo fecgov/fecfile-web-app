@@ -163,12 +163,7 @@ export class TransactionFormUtils {
     form.markAsPristine();
     form.markAsUntouched();
 
-    // Override the default entity_type value if called for by the defaultContactTypeOption
-    // in the TransactionType
-    let defaultContactTypeOption: string = contactTypeOptions[0]?.value;
-    if (transaction?.transactionType?.defaultContactTypeOption) {
-      defaultContactTypeOption = transaction.transactionType.defaultContactTypeOption;
-    }
+    const defaultContactTypeOption: string = contactTypeOptions[0]?.value;
 
     if (transaction?.transactionType) {
       form.patchValue({

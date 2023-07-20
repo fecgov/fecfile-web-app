@@ -3,10 +3,10 @@ import { AggregationGroups } from '../transaction.model';
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
-import { GROUP_A_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { INDIVIDUAL_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 import { IN_KIND_OUT as CommonInKindOut } from './common-types/IN_KIND_OUT.model';
 export class IN_KIND_OUT extends CommonInKindOut {
-  override formFieldsConfig = GROUP_A_FOR_B;
+  override formFields = INDIVIDUAL_B_FORM_FIELDS;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.IN_KIND_OUT);
   schema = schema;
   override showAggregate = true;

@@ -5,10 +5,11 @@ import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTy
 import { STANDARD_PARENT_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_EFI } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, COMMITTEE_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class JOINT_FUNDRAISING_TRANSFER extends SchATransactionType {
-  formFieldsConfig = GROUP_EFI;
+  formFields = COMMITTEE_FORM_FIELDS;
+  contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.JOINT_FUNDRAISING_TRANSFER);
   schema = schema;
   override subTransactionConfig = new SubTransactionGroup('Joint Fundraising Transfer Memo', [

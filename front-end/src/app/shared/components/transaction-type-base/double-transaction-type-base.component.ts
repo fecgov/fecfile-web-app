@@ -4,7 +4,7 @@ import { NavigationEvent } from 'app/shared/models/transaction-navigation-contro
 import { TemplateMapKeyType, TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { TransactionFormFieldsConfig } from 'app/shared/utils/transaction-type-properties';
+import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
@@ -31,7 +31,6 @@ export abstract class DoubleTransactionTypeBaseComponent
   extends TransactionTypeBaseComponent
   implements OnInit, OnDestroy {
   childFormProperties: string[] = [];
-  childFormFieldsConfig?: TransactionFormFieldsConfig;
   childTransactionType?: TransactionType;
   childTransaction?: Transaction;
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
@@ -52,10 +51,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     if (!this.childTransactionType?.templateMap) {
       throw new Error('Fecfile: Template map not found for double transaction component');
     }
-    this.childTemplateMap = this.childTransactionType?.templateMap;
-    this.childFormFieldsConfig = this.childTransactionType?.formFieldsConfig;
-    this.childContactTypeOptions = this.childFormFieldsConfig?.getContactTypeOptions();
-    this.childFormProperties = this.childFormFieldsConfig?.getFormControlNames(this.childTemplateMap);
+    this.childTemplateMap = this.childTransactionType.templateMap;
+    this.childContactTypeOptions = getContactTypeOptions(this.childTransactionType.contactTypeOptions ?? []);
+    this.childFormProperties = this.childTransactionType.getFormControlNames(this.childTemplateMap);
     this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
 
     if (this.childTransactionType?.inheritedFields?.includes(
@@ -79,7 +77,7 @@ export abstract class DoubleTransactionTypeBaseComponent
         ?.valueChanges.pipe(takeUntil(this.destroy$))
         .subscribe((amount) => {
           if (+amount > 0) {
-            this.form.patchValue({ [this.childTemplateMap.amount]: -1 * amount });
+            this.childForm.get(this.childTemplateMap.amount)?.setValue(-1 * amount);
           }
         });
     }

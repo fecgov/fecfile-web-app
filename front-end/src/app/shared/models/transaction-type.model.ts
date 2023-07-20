@@ -1,5 +1,13 @@
 import { JsonSchema } from '../interfaces/json-schema.interface';
-import { TransactionFormFieldsConfig } from '../utils/transaction-type-properties';
+import {
+  CANDIDATE_FIELDS,
+  CANDIDATE_OFFICE_FIELDS,
+  ELECTION_FIELDS,
+  EMPLOYEE_INFO_FIELDS,
+  LOAN_FINANCE_FIELDS,
+  LOAN_TERMS_FIELDS,
+  hasFields,
+} from '../utils/transaction-type-properties';
 import { ContactType } from './contact.model';
 import { TransactionNavigationControls } from './transaction-navigation-controls.model';
 import { Transaction, TransactionTypes } from './transaction.model';
@@ -11,7 +19,8 @@ import { Transaction, TransactionTypes } from './transaction.model';
 export abstract class TransactionType {
   abstract scheduleId: string;
   abstract apiEndpoint: string; // Root URL to API endpoint for CRUDing transaction
-  abstract formFieldsConfig: TransactionFormFieldsConfig;
+  abstract formFields: string[];
+  abstract contactTypeOptions?: ContactType[];
   abstract title: string;
   abstract schema: JsonSchema; // FEC validation JSON schema
   abstract templateMap: TransactionTemplateMapType; // Mapping of values between the schedule (A,B,C...) and the common identifiers in the HTML templates
@@ -19,8 +28,6 @@ export abstract class TransactionType {
   updateParentOnSave = false; // Set to true when the parent transaction may be affected by a change in the transaction
 
   // Form display settings
-  contactTypeOptions?: ContactType[]; // Override the default list of contact types in the transaction component
-  defaultContactTypeOption?: ContactType; // Set this to the default contact type (entity type) of the form select box if it is other than the first contact type in the contactTypeOptions list
   negativeAmountValueOnly = false; // Set to true if the amount for the transaction can only have a negative value
   isRefund = false; // Boolean flag to identify the transaction type as a refund
   showAggregate = true; // Boolean flag to show/hide the calculated aggregate input on the transaction forms
@@ -93,6 +100,35 @@ export abstract class TransactionType {
       return purpose;
     }
     return '';
+  }
+
+  getFormControlNames(templateMap: TransactionTemplateMapType): string[] {
+    const templateFields = this.formFields
+      .map((name: string) => templateMap[name as TemplateMapKeyType])
+      .filter((field) => !!field);
+    return ['entity_type', ...templateFields];
+  }
+
+  hasElectionInformation(): boolean {
+    return hasFields(this.formFields, ELECTION_FIELDS);
+  }
+  hasCandidateInformation(): boolean {
+    return hasFields(this.formFields, CANDIDATE_FIELDS);
+  }
+  hasCommitteeFecId(): boolean {
+    return hasFields(this.formFields, ['committee_fec_id']);
+  }
+  hasEmployeeFields(): boolean {
+    return hasFields(this.formFields, EMPLOYEE_INFO_FIELDS);
+  }
+  hasCandidateOffice(): boolean {
+    return hasFields(this.formFields, CANDIDATE_OFFICE_FIELDS);
+  }
+  hasLoanFinanceFields(): boolean {
+    return hasFields(this.formFields, LOAN_FINANCE_FIELDS);
+  }
+  hasLoanTermsFields(): boolean {
+    return hasFields(this.formFields, LOAN_TERMS_FIELDS);
   }
 }
 

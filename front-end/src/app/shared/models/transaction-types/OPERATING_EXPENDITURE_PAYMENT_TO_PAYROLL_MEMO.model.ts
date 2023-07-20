@@ -4,10 +4,14 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { getChildNavigationControls, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
+import {
+  INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS,
+  INDIVIDUAL_ORGANIZATION_COMMITTEE,
+} from 'app/shared/utils/transaction-type-properties';
 
 export class OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO extends SchBTransactionType {
-  formFieldsConfig = GROUP_B;
+  formFields = INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS;
+  override contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.OPERATING_EXPENDITURE_PAYMENT_TO_PAYROLL_MEMO

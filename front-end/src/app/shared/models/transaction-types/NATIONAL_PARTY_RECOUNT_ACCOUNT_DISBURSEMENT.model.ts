@@ -4,17 +4,19 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { ContactTypes } from '../contact.model';
-import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
+import {
+  INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS,
+  ORGANIZATION_INDIVIDUAL_COMMITTEE,
+} from 'app/shared/utils/transaction-type-properties';
 
 export class NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT extends SchBTransactionType {
-  formFieldsConfig = GROUP_B;
+  formFields = INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS;
+  override contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   title = LabelUtils.get(
     ScheduleBTransactionTypeLabels,
     ScheduleBTransactionTypes.NATIONAL_PARTY_RECOUNT_ACCOUNT_DISBURSEMENT
   );
   schema = schema;
-  override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
   override purposeDescriptionPrefix = 'Recount/Legal Proceedings Account: ';
 

@@ -1,17 +1,19 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/OFFSET_TO_OPERATING_EXPENDITURES';
-import { ContactTypes } from '../contact.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_B_FOR_A } from 'app/shared/utils/transaction-type-properties';
+import {
+  INDIVIDUAL_ORGANIZATION_FORM_FIELDS,
+  ORGANIZATION_INDIVIDUAL_COMMITTEE,
+} from 'app/shared/utils/transaction-type-properties';
 
 export class OFFSET_TO_OPERATING_EXPENDITURES extends SchATransactionType {
-  formFieldsConfig = GROUP_B_FOR_A;
+  formFields = INDIVIDUAL_ORGANIZATION_FORM_FIELDS;
+  contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES);
   schema = schema;
-  override defaultContactTypeOption = ContactTypes.ORGANIZATION;
   override navigationControls: TransactionNavigationControls = STANDARD_CONTROLS;
 
   getNewTransaction() {

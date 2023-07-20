@@ -1,6 +1,5 @@
 import { ContactTypeLabels, ContactTypes } from '../models/contact.model';
-import { TemplateMapKeyType, TransactionTemplateMapType } from '../models/transaction-type.model';
-import { LabelUtils, PrimeOptions } from './label.utils';
+import { LabelUtils } from './label.utils';
 
 /**
  * CONTACT TYPE OPTIONS
@@ -73,151 +72,60 @@ export const CATEGORY_CODE: string[] = ['category_code'];
 export const LOAN_FINANCE_FIELDS: string[] = ['loan_payment_to_date', 'balance'];
 export const LOAN_TERMS_FIELDS: string[] = ['loan_due_date', 'loan_interest_rate', 'secured'];
 
-function hasFields(formFields: string[], fieldsToHave: string[]): boolean {
+export function hasFields(formFields: string[], fieldsToHave: string[]): boolean {
   return fieldsToHave.reduce((result, election_field) => result && formFields.includes(election_field), true);
 }
 
-export class TransactionFormFieldsConfig {
-  contactTypeOptions: ContactTypes[] = [];
-  formControlNames: string[] = [];
-
-  constructor(contactTypeOptions: ContactTypes[], formControlNames: string[]) {
-    this.contactTypeOptions = contactTypeOptions;
-    this.formControlNames = formControlNames;
-  }
-
-  getFormControlNames(templateMap: TransactionTemplateMapType): string[] {
-    const templateFields = this.formControlNames
-      .map((name: string) => templateMap[name as TemplateMapKeyType])
-      .filter((field) => !!field);
-    return ['entity_type', ...templateFields];
-  }
-
-  getContactTypeOptions(): PrimeOptions {
-    return LabelUtils.getPrimeOptions(ContactTypeLabels, this.contactTypeOptions);
-  }
-  hasElectionInformation(): boolean {
-    return hasFields(this.formControlNames, ELECTION_FIELDS);
-  }
-  hasCandidateInformation(): boolean {
-    return hasFields(this.formControlNames, CANDIDATE_FIELDS);
-  }
-  hasCommitteeFecId(): boolean {
-    return hasFields(this.formControlNames, ['committee_fec_id']);
-  }
-  hasEmployeeFields(): boolean {
-    return hasFields(this.formControlNames, EMPLOYEE_INFO_FIELDS);
-  }
-  hasCandidateOffice(): boolean {
-    return hasFields(this.formControlNames, CANDIDATE_OFFICE_FIELDS);
-  }
-  hasLoanFinanceFields(): boolean {
-    return hasFields(this.formControlNames, LOAN_FINANCE_FIELDS);
-  }
-  hasLoanTermsFields(): boolean {
-    return hasFields(this.formControlNames, LOAN_TERMS_FIELDS);
-  }
-}
-
-export const GROUP_A: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL, [
-  ...CORE_FIELDS,
-  ...AGGREGATE,
-  ...INDIVIDUAL_FIELDS,
-  ...EMPLOYEE_INFO_FIELDS,
-]);
-export const GROUP_A_FOR_B: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL, [
-  ...CORE_FIELDS,
-  ...AGGREGATE,
-  ...INDIVIDUAL_FIELDS,
-  ...CATEGORY_CODE,
-]);
-export const GROUP_B_FOR_A: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(
-  INDIVIDUAL_ORGANIZATION_COMMITTEE,
-  [...CORE_FIELDS, ...AGGREGATE, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS]
-);
-export const GROUP_B: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL_ORGANIZATION_COMMITTEE, [
+export const INDIVIDUAL_FORM_FIELDS = [...CORE_FIELDS, ...AGGREGATE, ...INDIVIDUAL_FIELDS, ...EMPLOYEE_INFO_FIELDS];
+export const INDIVIDUAL_B_FORM_FIELDS = [...CORE_FIELDS, ...AGGREGATE, ...INDIVIDUAL_FIELDS, ...CATEGORY_CODE];
+export const INDIVIDUAL_ORGANIZATION_FORM_FIELDS = [...CORE_FIELDS, ...AGGREGATE, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS];
+export const INDIVIDUAL_ORGANIZATION_B_FORM_FIELDS = [
   ...CORE_FIELDS,
   ...AGGREGATE,
   ...INDIVIDUAL_FIELDS,
   ...ORG_FIELDS,
   ...CATEGORY_CODE,
-]);
-export const GROUP_B_NO_COM: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL_ORGANIZATION, [
-  ...CORE_FIELDS,
-  ...AGGREGATE,
-  ...INDIVIDUAL_FIELDS,
-  ...ORG_FIELDS,
-  ...CATEGORY_CODE,
-]);
-export const GROUP_C: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL_ORGANIZATION_COMMITTEE, [
+];
+export const INDIVIDUAL_ORGANIZATION_WITH_EMPLOYEE_FORM_FIELDS = [
   ...CORE_FIELDS,
   ...AGGREGATE,
   ...INDIVIDUAL_FIELDS,
   ...ORG_FIELDS,
   ...EMPLOYEE_INFO_FIELDS,
-]);
-export const GROUP_C_FOR_B: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(
-  INDIVIDUAL_ORGANIZATION_COMMITTEE,
-  [...CORE_FIELDS, ...AGGREGATE, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS, ...CATEGORY_CODE]
-);
-export const GROUP_D: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(ORGANIZATION, [
-  ...CORE_FIELDS,
-  ...AGGREGATE,
-  ...ORG_FIELDS,
-]);
-export const GROUP_D_FOR_B: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(ORGANIZATION, [
-  ...CORE_FIELDS,
-  ...AGGREGATE,
-  ...ORG_FIELDS,
-  ...CATEGORY_CODE,
-]);
-export const GROUP_EFI: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(COMMITTEE, [
-  ...CORE_FIELDS,
-  ...AGGREGATE,
-  ...COM_FIELDS,
-]);
-export const GROUP_EFI_FOR_B: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(COMMITTEE, [
-  ...CORE_FIELDS,
-  ...AGGREGATE,
-  ...COM_FIELDS,
-  ...CATEGORY_CODE,
-]);
-export const GROUP_G: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(COMMITTEE_INDIVIDUAL, [
+];
+export const ORGANIZATION_FORM_FIELDS = [...CORE_FIELDS, ...AGGREGATE, ...ORG_FIELDS];
+export const ORGANIZATION_B_FORM_FIELDS = [...CORE_FIELDS, ...AGGREGATE, ...ORG_FIELDS, ...CATEGORY_CODE];
+export const COMMITTEE_FORM_FIELDS = [...CORE_FIELDS, ...AGGREGATE, ...COM_FIELDS];
+export const COMMITTEE_B_FORM_FIELDS = [...CORE_FIELDS, ...AGGREGATE, ...COM_FIELDS, ...CATEGORY_CODE];
+export const INDIVIDUAL_COMMITTEE_FORM_FIELDS = [
   ...CORE_FIELDS,
   ...AGGREGATE,
   ...INDIVIDUAL_FIELDS,
   ...EMPLOYEE_INFO_FIELDS,
   ...COM_FIELDS,
-]);
-export const GROUP_H: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(COMMITTEE, [
+];
+export const COMMITTEE_WITH_CANDIDATE_FORM_FIELDS = [
   ...CORE_FIELDS,
   ...AGGREGATE,
   ...COM_FIELDS,
   ...CANDIDATE_FIELDS,
   ...CANDIDATE_OFFICE_FIELDS,
-]);
-// export const GROUP_L: TransactionTypeFormProperties = new TransactionTypeFormProperties(ORGANIZATION_INDIVIDUAL, [
-//   ...CORE_FIELDS,
-//   ...INDIVIDUAL_FIELDS,
-//   ...COM_FIELDS,
-//   ...CANDIDATE_FIELDS,
-//   ...ELECTION_FIELDS,
-// ]);
-export const GROUP_M: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(COMMITTEE, [
+];
+export const COMMITTEE_WITH_CANDIDATE_AND_ELECTION_B_FORM_FIELDS = [
   ...CORE_FIELDS,
   ...COM_FIELDS,
   ...CANDIDATE_FIELDS,
   ...CANDIDATE_OFFICE_FIELDS,
   ...ELECTION_FIELDS,
   ...CATEGORY_CODE,
-]);
-export const GROUP_N: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL, [
+];
+export const INDIVIDUAL_WITH_EMPLOYEE_B_FORM_FIELDS = [
   ...CORE_FIELDS,
   ...INDIVIDUAL_FIELDS,
   ...EMPLOYEE_INFO_FIELDS,
   ...CATEGORY_CODE,
-]);
-export const GROUP_O: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(ORGANIZATION_INDIVIDUAL_COMMITTEE, [
+];
+export const INDIVIDUAL_ORGANIZATION_CANDIDATE_B_FORM_FIELDS = [
   ...CORE_FIELDS,
   ...AGGREGATE,
   ...INDIVIDUAL_FIELDS,
@@ -225,22 +133,19 @@ export const GROUP_O: TransactionFormFieldsConfig = new TransactionFormFieldsCon
   ...CANDIDATE_FIELDS,
   ...ELECTION_FIELDS,
   ...CATEGORY_CODE,
-]);
-export const GROUP_P: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(COMMITTEE, [
-  ...CORE_FIELDS,
-  ...COM_FIELDS,
-]);
-export const GROUP_R: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(ORGANIZATION, [
+];
+export const COMMITTEE_NO_AGGREGATE_FORM_FIELDS = [...CORE_FIELDS, ...COM_FIELDS];
+export const ORGANIZATION_NO_AGGREGATE_B_FORM_FIELDS = [
   ...CORE_FIELDS,
   ...ORG_FIELDS,
   ...ELECTION_FIELDS,
   ...CATEGORY_CODE,
-]);
-export const GROUP_S: TransactionFormFieldsConfig = new TransactionFormFieldsConfig(INDIVIDUAL_ORGANIZATION_COMMITTEE, [
+];
+export const INDIVIDUAL_ORGANIZATION_ELECTION_B_FORM_FIELDS = [
   ...CORE_FIELDS,
   ...AGGREGATE,
   ...INDIVIDUAL_FIELDS,
   ...ORG_FIELDS,
   ...ELECTION_FIELDS,
   ...CATEGORY_CODE,
-]);
+];

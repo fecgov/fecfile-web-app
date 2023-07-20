@@ -17,7 +17,7 @@ import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
 import { TransactionService } from 'app/shared/services/transaction.service';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
-import { TransactionFormFieldsConfig } from 'app/shared/utils/transaction-type-properties';
+import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
@@ -33,7 +33,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   @Input() transaction: Transaction | undefined;
 
   formProperties: string[] = [];
-  formFieldsConfig?: TransactionFormFieldsConfig;
   transactionType?: TransactionType;
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
@@ -68,9 +67,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     }
     this.transactionType = this.transaction.transactionType;
     this.templateMap = this.transactionType.templateMap;
-    this.formFieldsConfig = this.transactionType.formFieldsConfig;
-    this.formProperties = this.formFieldsConfig.getFormControlNames(this.templateMap);
-    this.contactTypeOptions = this.transactionType.formFieldsConfig.getContactTypeOptions();
+    this.formProperties = this.transactionType.getFormControlNames(this.templateMap);
+    this.contactTypeOptions = getContactTypeOptions(this.transactionType.contactTypeOptions ?? []);
 
     this.form = this.fb.group(ValidateUtils.getFormGroupFields(this.formProperties));
 
@@ -243,7 +241,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
 
   getNavigationControls(): TransactionNavigationControls {
     if (!this.isEditable) return new TransactionNavigationControls([], [GO_BACK_CONTROL], []);
-    return this.transactionType?.navigationControls || new TransactionNavigationControls([], [], []);
+    return this.transactionType?.navigationControls ?? new TransactionNavigationControls([], [], []);
   }
 
   getInlineControls(): NavigationControl[] {

@@ -1,15 +1,8 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_EARMARK_RECEIPTS';
 import { ContactTypes } from '../contact.model';
-import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import {
-  STANDARD_DOUBLE_ENTRY_CONTROLS,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { TemplateMapKeyType } from '../transaction-type.model';
-import { GROUP_A } from 'app/shared/utils/transaction-type-properties';
 import { EARMARK } from './common-types/EARMARK.model';
 
 export class EARMARK_RECEIPT_CONVENTION_ACCOUNT extends EARMARK {

@@ -140,10 +140,11 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   it('positive contribution_amount values should be overriden when the schema requires a negative value', () => {
-    component.childTransaction = getTestTransactionByType(
-      ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL
-    );
-    component.childOnInit();
+    component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED);
+    const childTransaction = getTestTransactionByType(ScheduleATransactionTypes.RETURNED_BOUNCED_RECEIPT_INDIVIDUAL);
+    childTransaction.parent_transaction = component.transaction;
+    component.transaction.children = [childTransaction];
+    component.ngOnInit();
 
     component.childForm.patchValue({ contribution_amount: 2 });
     expect(component.childForm.get('contribution_amount')?.value).toBe(-2);

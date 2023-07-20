@@ -4,10 +4,11 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
-import { GROUP_EFI_FOR_B } from 'app/shared/utils/transaction-type-properties';
+import { COMMITTEE, COMMITTEE_B_FORM_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class REFUND_PARTY_CONTRIBUTION extends SchBTransactionType {
-  formFieldsConfig = GROUP_EFI_FOR_B;
+  formFields = COMMITTEE_B_FORM_FIELDS;
+  contactTypeOptions = COMMITTEE;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.REFUND_PARTY_CONTRIBUTION);
   schema = schema;
   override showAggregate = false;

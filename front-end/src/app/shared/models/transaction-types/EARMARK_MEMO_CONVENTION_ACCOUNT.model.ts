@@ -1,8 +1,6 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/NATIONAL_PARTY_EARMARK_MEMOS';
-import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
 import { AggregationGroups } from '../transaction.model';
-import { TemplateMapKeyType } from '../transaction-type.model';
 import { LabelUtils } from '../../utils/label.utils';
 import { EARMARK_MEMO } from './common-types/EARMARK_MEMO.model';
 
