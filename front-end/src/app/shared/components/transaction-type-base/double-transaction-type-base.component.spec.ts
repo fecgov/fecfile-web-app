@@ -151,9 +151,10 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
   it("should auto-generate the child transaction's purpose description", () => {
     component.transaction = getTestTransactionByType(ScheduleATransactionTypes.CONDUIT_EARMARK_RECEIPT_DEPOSITED);
-    component.childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
-    component.childTransaction.parent_transaction = component.transaction;
-    component.childOnInit();
+    const childTransaction = getTestTransactionByType(ScheduleBTransactionTypes.CONDUIT_EARMARK_OUT_DEPOSITED);
+    childTransaction.parent_transaction = component.transaction;
+    component.transaction.children = [childTransaction];
+    component.ngOnInit();
 
     component.form.get(component.templateMap.first_name)?.setValue('First');
     component.form.get(component.templateMap.last_name)?.setValue('Last');
@@ -187,10 +188,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
 
     // Save valid form values
     component.form.patchValue({
-      entity_type: 'IND',
+      entity_type: 'COM',
       contributor_organization_name: 'org222 name',
-      contributor_last_name: 'fname',
-      contributor_first_name: 'lname',
       contributor_middle_name: '',
       contributor_prefix: '',
       contributor_suffix: '',
@@ -205,6 +204,8 @@ describe('DoubleTransactionTypeBaseComponent', () => {
       contribution_amount: 5,
       contribution_aggregate: 200,
       contribution_purpose_descrip: 'individual',
+      donor_committee_fec_id: 'C12345678',
+      donor_committee_name: 'name',
       memo_code: '',
       text4000: '',
     });

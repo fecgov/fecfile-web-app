@@ -132,7 +132,7 @@ export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
   report_id: '999',
   contribution_amount: '202.2',
   contribution_date: '2022-02-02',
-  entity_type: ContactTypes.ORGANIZATION,
+  entity_type: ContactTypes.INDIVIDUAL,
   contributor_organization_name: 'org name',
   contributor_street_1: '123 Main St',
   contributor_city: 'city',
@@ -162,7 +162,7 @@ export const testIndividualReceipt: SchATransaction = SchATransaction.fromJSON({
 
 export const testScheduleATransaction = SchATransaction.fromJSON({
   form_type: 'SA15',
-  transaction_type_identifier: 'PAC_JF_TRANSFER_MEMO',
+  transaction_type_identifier: ScheduleATransactionTypes.OFFSET_TO_OPERATING_EXPENDITURES,
   transaction_id: 'AAAAAAAAAAAAAAAAAAA',
   entity_type: ContactTypes.COMMITTEE,
   contributor_organization_name: 'org name',
