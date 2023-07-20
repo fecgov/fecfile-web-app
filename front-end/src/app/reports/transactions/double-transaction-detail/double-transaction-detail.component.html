@@ -172,7 +172,7 @@
     <div class="p-fluid">
       <h2>{{ childTransaction?.transactionType?.alternateTitle || childTransaction?.transactionType?.title }}</h2>
       <p *ngIf="childTransactionSubTitle">
-        <em>{{ childTransactionSubTitle }}</em>
+        <em [innerHTML]="childTransactionSubTitle"></em>
       </p>
       <h3>{{ childContactLabel }}</h3>
       <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">

@@ -11,9 +11,11 @@ export class LOAN_MADE extends SchBTransactionType {
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.LOAN_MADE);
   schema = schema;
   override useParentContact = true;
+  override showAggregate = false;
   override inheritedFields = [
     'entity_type',
     'organization_name',
+    'committee_fec_id',
     'street_1',
     'street_2',
     'city',
@@ -21,7 +23,16 @@ export class LOAN_MADE extends SchBTransactionType {
     'zip',
     'date',
     'amount',
+    'memo_code',
   ] as TemplateMapKeyType[];
+
+  constructor() {
+    super();
+    // No category code info collected for this transaction type.
+    // Hide the field in the additional-info component by removing
+    // its value in the templateMap.
+    this.templateMap['category_code'] = '';
+  }
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

@@ -21,7 +21,7 @@ export abstract class SchCTransactionType extends TransactionType {
     occupation: '',
     organization_name: 'lender_organization_name',
     committee_fec_id: 'lender_committee_id_number',
-    committee_name: '',
+    committee_name: 'lender_organization_name',
     candidate_fec_id: 'lender_candidate_id_number',
     candidate_last_name: 'lender_candidate_last_name',
     candidate_first_name: 'lender_candidate_first_name',

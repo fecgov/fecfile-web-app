@@ -35,6 +35,7 @@ export class TransactionGroupYB extends DoubleTransactionGroup {
     return [
       'entity_type',
       childTemplateMap.organization_name,
+      childTemplateMap.committee_fec_id,
       childTemplateMap.street_1,
       childTemplateMap.street_2,
       childTemplateMap.city,
@@ -45,7 +46,6 @@ export class TransactionGroupYB extends DoubleTransactionGroup {
       childTemplateMap.purpose_description,
       childTemplateMap.memo_code,
       childTemplateMap.text4000,
-      childTemplateMap.category_code,
     ].filter((field) => !!field);
   }
 
@@ -74,7 +74,7 @@ export class TransactionGroupYB extends DoubleTransactionGroup {
   }
 
   getChildTransactionSubTitle(): string {
-    return 'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.';
+    return 'Only the Purpose of Disbursement and Note/Memo Text are editable. To update any errors found, return to <b>ENTER DATA</b> to update loan information.';
   }
 
   getGroupDescription(): string {
@@ -98,7 +98,7 @@ export class TransactionGroupYB extends DoubleTransactionGroup {
   }
 
   getChildContactLabel(): string {
-    return 'Contact';
+    return 'Lendee';
   }
 
   hasChildCandidateInformationInput(): boolean {
