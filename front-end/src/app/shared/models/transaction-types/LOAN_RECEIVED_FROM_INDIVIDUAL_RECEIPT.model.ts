@@ -10,12 +10,10 @@ import { LOAN_RECEIPT } from 'app/shared/utils/transaction-type-labels.utils';
 export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
   override formFieldsConfig = GROUP_B;
   override isDependentChild = true;
-  title = LabelUtils.get(
-    ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT
-  );
+  title = 'Receipt';
   override labelConfig = LOAN_RECEIPT;
   schema = schema;
+  override doMemoCodeDateCheck = false;
   override useParentContact = true;
   override inheritedFields = [
     'entity_type',
@@ -42,9 +40,4 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
       aggregation_group: AggregationGroups.GENERAL,
     });
   }
-
-  /////////////////////////////////////////////////////////////////////
-  // Template variables to be integrated with #1193
-  override doMemoCodeDateCheck = false;
-  override alternateTitle = 'Receipt';
 }

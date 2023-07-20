@@ -104,7 +104,7 @@ export const LOAN_RECEIPT = new LabelConfig(
   'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.',
   'AUTO-POPULATED',
   'Review information and enter purpose of description or note/memo text',
-  undefined,
+  'Reciept',
   undefined,
   'Contact',
   'CONTACT LOOKUP'
