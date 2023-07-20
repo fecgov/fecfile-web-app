@@ -8,7 +8,7 @@ import {
   NavigationControl,
   NavigationDestination,
   NavigationEvent,
-  TransactionNavigationControls
+  TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
@@ -57,19 +57,21 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
     protected reportService: ReportService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const fields = ValidateUtils.getFormGroupFields(this.formProperties);
     this.form = this.fb.group(fields);
     this.form.addControl('contact_1', new FormControl());
-    this.form.addControl('contact_2', new FormControl(null, () => {
-      if ((!this.transaction?.contact_2) &&
-        this.transaction?.transactionType?.contact2IsRequired) {
-        return { required: true };
-      }
-      return null;
-    }));
+    this.form.addControl(
+      'contact_2',
+      new FormControl(null, () => {
+        if (!this.transaction?.contact_2 && this.transaction?.transactionType?.contact2IsRequired) {
+          return { required: true };
+        }
+        return null;
+      })
+    );
     if (this.transaction?.transactionType?.templateMap) {
       this.templateMap = this.transaction.transactionType.templateMap;
     } else {
@@ -122,7 +124,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.formSubmitted = true;
 
     if (this.form.invalid) {
-      console.log(this.form, this.transaction);
       return;
     }
 

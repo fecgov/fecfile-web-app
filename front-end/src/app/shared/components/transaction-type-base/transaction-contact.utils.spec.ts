@@ -21,7 +21,6 @@ describe('FormUtils', () => {
       const transaction = SchBTransaction.fromJSON({
         transaction_type_identifier: ScheduleBTransactionTypes.IN_KIND_CONTRIBUTION_TO_CANDIDATE,
       });
-      console.log('HEEELLLOOOOO', transaction);
       const templateMap = transaction.transactionType?.templateMap as TransactionTemplateMapType;
       const form = new FormGroup({
         [templateMap.first_name]: new FormControl(),
