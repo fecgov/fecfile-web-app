@@ -1,6 +1,5 @@
 import { TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT } from './TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 
 describe('TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT', () => {
   let transactionType: TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT;
@@ -12,7 +11,6 @@ describe('TRIBAL_NATIONAL_PARTY_CONVENTION_ACCOUNT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchATransaction', () => {

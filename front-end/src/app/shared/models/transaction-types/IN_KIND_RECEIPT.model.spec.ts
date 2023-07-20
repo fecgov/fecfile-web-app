@@ -1,6 +1,5 @@
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { getTestTransactionByType } from 'app/shared/utils/unit-test.utils';
-import { TransactionGroupAA } from '../transaction-groups/transaction-group-aa.model';
 
 describe('IN_KIND_RECEIPT', () => {
   let transaction: SchATransaction;
@@ -12,7 +11,6 @@ describe('IN_KIND_RECEIPT', () => {
   it('should create an instance', () => {
     expect(transaction.transactionType).toBeTruthy();
     expect(transaction.transactionType?.scheduleId).toBe('A');
-    expect(transaction?.transactionType?.transactionGroup).toBeInstanceOf(TransactionGroupAA);
   });
 
   it('#factory() should return a SchATransaction', () => {

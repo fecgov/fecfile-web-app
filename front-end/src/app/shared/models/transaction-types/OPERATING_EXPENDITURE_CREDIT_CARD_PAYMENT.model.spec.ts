@@ -1,5 +1,4 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT } from './OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT.model';
 
 describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
@@ -12,7 +11,6 @@ describe('OPERATING_EXPENDITURE_CREDIT_CARD_PAYMENT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchBTransaction', () => {

@@ -1,6 +1,6 @@
-<ng-container *ngIf="isTransactionGroup()">
-  <app-transaction-detail [transaction]="transaction"></app-transaction-detail>
-</ng-container>
-<ng-container *ngIf="isDoubleTransactionGroup()">
+<ng-container *ngIf="isDoubleTransaction(); else single">
   <app-double-transaction-detail [transaction]="transaction"></app-double-transaction-detail>
 </ng-container>
+<ng-template #single>
+  <app-transaction-detail [transaction]="transaction"></app-transaction-detail>
+</ng-template>

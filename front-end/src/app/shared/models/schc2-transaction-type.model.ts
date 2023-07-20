@@ -3,6 +3,7 @@ import { TransactionType, TransactionTemplateMapType } from './transaction-type.
 export abstract class SchC2TransactionType extends TransactionType {
   scheduleId = 'C1';
   apiEndpoint = '/transactions/schedule-c2';
+  override amountInputHeader = 'Loan Information';
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
@@ -22,6 +23,19 @@ export abstract class SchC2TransactionType extends TransactionType {
     organization_name: '',
     committee_fec_id: '',
     committee_name: '',
+    candidate_fec_id: '',
+    candidate_last_name: '',
+    candidate_first_name: '',
+    candidate_middle_name: '',
+    candidate_prefix: '',
+    candidate_suffix: '',
+    candidate_office: '',
+    candidate_state: '',
+    candidate_district: '',
+    payment_to_date: '',
+    interest_rate: '',
+    due_date: '',
+    secured: '',
     date: '',
     memo_code: '',
     amount: 'guaranteed_amount',
@@ -32,10 +46,5 @@ export abstract class SchC2TransactionType extends TransactionType {
     category_code: '',
     election_code: '',
     election_other_description: '',
-
-    // Labels and text strings
-    dateLabel: '',
-    amountInputHeader: 'Loan Information',
-    purposeDescripLabel: '',
   };
 }
