@@ -1,9 +1,8 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOANS_RECEIVED';
 import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { LabelUtils } from 'app/shared/utils/label.utils';
 import { GROUP_B } from 'app/shared/utils/transaction-type-properties';
 import { LOAN_RECEIPT } from 'app/shared/utils/transaction-type-labels.utils';
 
