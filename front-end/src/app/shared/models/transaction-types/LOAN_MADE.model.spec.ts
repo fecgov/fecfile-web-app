@@ -1,5 +1,4 @@
 import { LOAN_MADE } from './LOAN_MADE.model';
-import { TransactionGroupYB } from '../transaction-groups/transaction-group-yb.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 
 describe('LOAN_MADE', () => {
@@ -12,7 +11,6 @@ describe('LOAN_MADE', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupYB);
   });
 
   it('#factory() should return a SchBTransaction', () => {

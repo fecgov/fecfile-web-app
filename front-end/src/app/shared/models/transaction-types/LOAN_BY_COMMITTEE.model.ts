@@ -14,33 +14,47 @@ import { hasNoContact } from '../transaction.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
 import {
-  COM_FIELDS,
-  CORE_FIELDS,
-  INDIVIDUAL_FIELDS,
-  INDIVIDUAL_ORGANIZATION_COMMITTEE,
+  COMMITTEE,
   LOAN_FINANCE_FIELDS,
   LOAN_TERMS_FIELDS,
+  ORG_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_BY_COMMITTEE extends SchCTransactionType {
   override formFields = [
-    ...CORE_FIELDS,
-    ...INDIVIDUAL_FIELDS,
-    ...COM_FIELDS,
+    ...ORG_FIELDS,
     ...LOAN_FINANCE_FIELDS,
     ...LOAN_TERMS_FIELDS,
+    'committee_fec_id',
+    // 'last_name',
+    // 'first_name',
+    // 'middle_name',
+    // 'prefix',
+    // 'suffix',
+    'street_1',
+    'street_2',
+    'city',
+    'state',
+    'zip',
+    'date',
+    'amount',
+    'memo_code',
+    'text4000',
   ];
-  contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
+  contactTypeOptions = COMMITTEE;
+  override showStandardAmount = false;
+  override doMemoCodeDateCheck = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_BY_COMMITTEE);
 
-  override description = 'Saving a loan received from individual will automatically create a related receipt.';
+  override description =
+    'This loan type automatically creates an associated transaction. Saving a loan by committee will automatically create an associated disbursement.';
   override accordionTitle = 'ENTER DATA';
-  override accordionSubText = 'Enter lender, loan, and terms information for a loan received from individual';
+  override accordionSubText = 'Enter lendee, loan, and terms information for a loan by committee';
   override formTitle = undefined;
   override footer =
-    'The information in this loan will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and “Save transactions.”';
-  override contactTitle = 'Lender';
-  override contactLookupLabel = 'LENDER LOOKUP';
+    'The information in this loan will automatically populate a related transaction. Review the associated laon and enter a purpose of receipt or note/memo text; or click "Save transactions" to record these transactions.';
+  override contactTitle = 'Lendee';
+  override contactLookupLabel = 'LENDEE LOOKUP';
 
   schema = schema;
   override apiEndpoint = '/transactions/save-pair';

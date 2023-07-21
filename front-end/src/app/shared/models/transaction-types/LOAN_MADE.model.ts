@@ -1,16 +1,18 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOAN_MADE';
-import { TransactionGroupYB } from '../transaction-groups/transaction-group-yb.model';
 import { SchBTransaction, ScheduleBTransactionTypes, ScheduleBTransactionTypeLabels } from '../schb-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
+import { COMMITTEE, CORE_FIELDS } from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_MADE extends SchBTransactionType {
-  override formFields = INDIVIDUAL_B_FORM_FIELDS;
+  override formFields = [...CORE_FIELDS, 'organization_name', 'committee_fec_id'];
+  contactTypeOptions = COMMITTEE;
   override isDependentChild = true;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.LOAN_MADE);
   schema = schema;
   override useParentContact = true;
+  override doMemoCodeDateCheck = false;
   override showAggregate = false;
   override inheritedFields = [
     'entity_type',
@@ -34,14 +36,20 @@ export class LOAN_MADE extends SchBTransactionType {
     this.templateMap['category_code'] = '';
   }
 
+  override description =
+    'Only the Purpose of Disbursement and Note/Memo Text are editable. To update any errors found, return to <b>ENTER DATA</b> to update loan information.';
+  override accordionTitle = 'AUTO-POPULATED';
+  override accordionSubText = 'Review information and enter purpose of description or note/memo text for the loan made';
+  // override formTitle = undefined;
+  // override footer =
+  // 'The information in this loan will automatically populate a related transaction. Review the associated laon and enter a purpose of receipt or note/memo text; or click "Save transactions" to record these transactions.';
+  override contactTitle = 'Lendee';
+  // override contactLookupLabel = 'LENDEE LOOKUP';
+
   getNewTransaction() {
     return SchBTransaction.fromJSON({
       form_type: 'SB27',
       transaction_type_identifier: ScheduleBTransactionTypes.LOAN_MADE,
     });
   }
-
-  /////////////////////////////////////////////////////////////////////
-  // Template variables to be integrated with #1193
-  override doMemoCodeDateCheck = false;
 }
