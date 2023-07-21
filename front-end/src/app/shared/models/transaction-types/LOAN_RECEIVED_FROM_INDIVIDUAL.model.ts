@@ -32,6 +32,7 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL extends SchCTransactionType {
   ];
   contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   override showStandardAmount = false;
+  override doMemoCodeDateCheck = false;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL);
 
   override description = 'Saving a loan received from individual will automatically create a related receipt.';
