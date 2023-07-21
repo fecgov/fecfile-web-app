@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { startWith } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
   GO_BACK_CONTROL,
@@ -327,6 +328,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       map(() => {
         return memoControl.hasValidator(Validators.requiredTrue) ? requiredLabel : optionalLabel;
       }),
+      startWith(optionalLabel),
       takeUntil(this.destroy$)
     );
   }
