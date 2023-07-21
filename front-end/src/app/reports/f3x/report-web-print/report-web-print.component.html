@@ -6,7 +6,7 @@
 <div class="grid">
   <div class="col-12">
     <h3 class="no-vert-margins">
-      {{ report.form_type | label: f3xFormTypeLabels }}: {{ report.report_code | reportCodeLabel }}
+      {{ report.form_type | label : f3xFormTypeLabels }}: {{ report.report_code | reportCodeLabel }}
     </h3>
     <br />
   </div>
@@ -58,7 +58,7 @@
     </div>
   </ng-container>
   <ng-container *ngIf="webPrintStage === 'success'">
-    <h2 class="col-12 align-center">PDF Compiled<br />Submitted on: {{ submitDate }}</h2>
+    <h2 class="col-12 align-center">PDF compiled<br />Submitted on: {{ submitDate }}</h2>
     <div class="col-3"></div>
     <div class="col-2">
       <button pButton pRipple label="Open PDF" class="p-button-info button-full-width" (click)="downloadPDF()"></button>
