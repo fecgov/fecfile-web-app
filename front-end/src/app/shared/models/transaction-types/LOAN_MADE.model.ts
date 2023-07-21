@@ -40,11 +40,7 @@ export class LOAN_MADE extends SchBTransactionType {
     'Only the Purpose of Disbursement and Note/Memo Text are editable. To update any errors found, return to <b>ENTER DATA</b> to update loan information.';
   override accordionTitle = 'AUTO-POPULATED';
   override accordionSubText = 'Review information and enter purpose of description or note/memo text for the loan made';
-  // override formTitle = undefined;
-  // override footer =
-  // 'The information in this loan will automatically populate a related transaction. Review the associated laon and enter a purpose of receipt or note/memo text; or click "Save transactions" to record these transactions.';
   override contactTitle = 'Lendee';
-  // override contactLookupLabel = 'LENDEE LOOKUP';
 
   getNewTransaction() {
     return SchBTransaction.fromJSON({

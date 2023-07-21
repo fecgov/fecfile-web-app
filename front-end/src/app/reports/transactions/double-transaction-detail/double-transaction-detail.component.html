@@ -177,7 +177,7 @@
     <div class="p-fluid">
       <h2>{{ childTransaction?.transactionType?.title }}</h2>
       <p *ngIf="childTransactionType?.description">
-        <em>{{ childTransactionType?.description }}</em>
+        <em [innerHtml]="childTransactionType?.description"></em>
       </p>
       <h3>{{ childTransactionType?.contactTitle }}</h3>
       <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
@@ -308,7 +308,7 @@
             [form]="childForm"
             [formSubmitted]="formSubmitted"
             [templateMap]="childTemplateMap"
-            [transaction]="transaction"
+            [transaction]="childTransaction"
             [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(childTransaction?.transactionType)"
             [purposeDescriptionLabel]="childPurposeDescriptionLabel"
             [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"

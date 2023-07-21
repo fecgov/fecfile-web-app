@@ -6,6 +6,8 @@ import { SchATransactionType } from '../scha-transaction-type.model';
 import {
   INDIVIDUAL_ORGANIZATION_FORM_FIELDS,
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
+  INDIVIDUAL_FIELDS,
+  ORG_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
@@ -17,13 +19,9 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
   schema = schema;
   override useParentContact = true;
   override inheritedFields = [
+    ...INDIVIDUAL_FIELDS,
+    ...ORG_FIELDS,
     'entity_type',
-    'organization_name',
-    'first_name',
-    'last_name',
-    'middle_name',
-    'prefix',
-    'suffix',
     'street_1',
     'street_2',
     'city',
