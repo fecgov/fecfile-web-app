@@ -8,7 +8,7 @@ import {
   NavigationControl,
   NavigationDestination,
   NavigationEvent,
-  TransactionNavigationControls
+  TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
@@ -21,7 +21,7 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { BehaviorSubject, map, of, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, startWith, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -47,7 +47,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({});
   isEditable = true;
-  memoCodeCheckboxLabel = '';
+  memoCodeCheckboxLabel$ = of('');
 
   constructor(
     protected messageService: MessageService,
@@ -59,7 +59,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     protected fecDatePipe: FecDatePipe,
     protected store: Store,
     protected reportService: ReportService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     if (!this.transaction?.transactionType?.templateMap) {
@@ -83,8 +83,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       })
     );
 
-    this.getMemoCodeCheckboxLabel(this.form, this.transactionType)?.subscribe(
-      value => this.memoCodeCheckboxLabel = value);
+    this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
     this.entityTypeControl = this.form.get('entity_type') as FormControl;
@@ -315,18 +314,17 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     return this.form.get('entity_type')?.value || '';
   }
 
-  getMemoCodeCheckboxLabel(form: FormGroup, transactionType: TransactionType) {
+  getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {
     const requiredLabel = 'MEMO ITEM';
     const optionalLabel = requiredLabel + ' (OPTIONAL)';
 
-    if (TransactionFormUtils.isMemoCodeReadOnly(transactionType)) {
+    const memoControl = form.get(transactionType?.templateMap.memo_code);
+
+    if (TransactionFormUtils.isMemoCodeReadOnly(transactionType) || !memoControl) {
       return of(requiredLabel);
     }
-    const memoControl = form.get(transactionType?.templateMap.memo_code);
-    return memoControl?.valueChanges.pipe(map(() => {
-      return memoControl.hasValidator(
-        Validators.requiredTrue) ? requiredLabel : optionalLabel;
-    }), takeUntil(this.destroy$));
+    return memoControl.valueChanges.pipe(map(() => {
+        return memoControl.hasValidator(Validators.requiredTrue) ? requiredLabel : optionalLabel;
+      }), takeUntil(this.destroy$));
   }
-
 }

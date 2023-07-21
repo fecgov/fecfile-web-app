@@ -72,7 +72,7 @@
               [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
               [showAggregate]="!!transaction?.transactionType?.showAggregate"
               [transaction]="transaction"
-              [memoCodeCheckboxLabel]="memoCodeCheckboxLabel"
+              [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
@@ -286,7 +286,7 @@
               [negativeAmountValueOnly]="!!childTransaction?.transactionType?.negativeAmountValueOnly"
               [showAggregate]="!!childTransaction?.transactionType?.showAggregate"
               [transaction]="childTransaction"
-              [memoCodeCheckboxLabel]="childMemoCodeCheckboxLabel"
+              [memoCodeCheckboxLabel]="(childMemoCodeCheckboxLabel$ | async)!"
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
