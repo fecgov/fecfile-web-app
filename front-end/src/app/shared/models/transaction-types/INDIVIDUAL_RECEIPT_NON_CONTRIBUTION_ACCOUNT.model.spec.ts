@@ -1,6 +1,5 @@
 import { INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT } from './INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT', () => {
   let transactionType: INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT;
@@ -12,7 +11,6 @@ describe('INDIVIDUAL_RECEIPT_NON_CONTRIBUTION_ACCOUNT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupA);
   });
 
   it('#factory() should return a SchATransaction', () => {

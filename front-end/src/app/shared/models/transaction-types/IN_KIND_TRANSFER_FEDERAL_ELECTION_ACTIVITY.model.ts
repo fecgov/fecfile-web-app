@@ -1,26 +1,17 @@
 import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/COM_IN_KIND_RECEIPTS';
-import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypeLabels, ScheduleATransactionTypes } from '../scha-transaction.model';
-import {
-  STANDARD_DOUBLE_ENTRY_CONTROLS,
-  TransactionNavigationControls,
-} from '../transaction-navigation-controls.model';
 import { AggregationGroups } from '../transaction.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupEE } from '../transaction-groups/transaction-group-ee.model';
+import { IN_KIND } from './common-types/IN_KIND.model';
 
-export class IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY extends SchATransactionType {
-  transactionGroup = new TransactionGroupEE();
+export class IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY extends IN_KIND {
   title = LabelUtils.get(
     ScheduleATransactionTypeLabels,
     ScheduleATransactionTypes.IN_KIND_TRANSFER_FEDERAL_ELECTION_ACTIVITY
   );
   schema = schema;
-  override apiEndpoint = '/transactions/save-pair';
   override dependentChildTransactionType = ScheduleBTransactionTypes.IN_KIND_TRANSFER_FEA_OUT;
-  override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
-  override purposeDescriptionPrefix = 'In-Kind: ';
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

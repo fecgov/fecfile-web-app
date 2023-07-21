@@ -1,6 +1,5 @@
 import { PARTNERSHIP_ATTRIBUTION } from './PARTNERSHIP_ATTRIBUTION.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupA } from '../transaction-groups/transaction-group-a.model';
 
 describe('PARTNERSHIP_ATTRIBUTION', () => {
   let transactionType: PARTNERSHIP_ATTRIBUTION;
@@ -12,7 +11,6 @@ describe('PARTNERSHIP_ATTRIBUTION', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupA);
   });
 
   it('#factory() should return a SchATransaction', () => {

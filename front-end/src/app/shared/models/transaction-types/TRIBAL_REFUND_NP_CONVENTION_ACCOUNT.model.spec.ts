@@ -1,5 +1,4 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupD } from '../transaction-groups/transaction-group-d.model';
 import { TRIBAL_REFUND_NP_CONVENTION_ACCOUNT } from './TRIBAL_REFUND_NP_CONVENTION_ACCOUNT.model';
 
 describe('TRIBAL_REFUND_NP_CONVENTION_ACCOUNT', () => {
@@ -12,7 +11,6 @@ describe('TRIBAL_REFUND_NP_CONVENTION_ACCOUNT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupD);
   });
 
   it('#factory() should return a SchBTransaction', () => {

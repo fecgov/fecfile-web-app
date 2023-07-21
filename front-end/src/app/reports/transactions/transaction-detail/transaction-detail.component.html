@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 
 <div class="p-fluid">
-  <h1>{{ transaction?.transactionType?.alternateTitle || transaction?.transactionType?.title }}</h1>
+  <h1>{{ transaction?.transactionType?.title }}</h1>
   <h4 class="read-only-tag subtitle" *ngIf="!isEditable">READ ONLY</h4>
   <h3>Contact</h3>
   <form id="form" [formGroup]="form" [ngClass]="{ 'ng-submitted': formSubmitted }">
@@ -31,7 +31,7 @@
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
           [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
-          [includeFecId]="hasCommitteeFecIdInput"
+          [includeFecId]="!!transactionType?.hasCommitteeFecId()"
         ></app-committee-input>
       </ng-container>
       <ng-container *ngIf="getEntityType() === ContactTypes.INDIVIDUAL">
@@ -41,7 +41,7 @@
       <h3>Address</h3>
       <app-address-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-address-input>
       <p-divider></p-divider>
-      <ng-container *ngIf="hasEmployerInput">
+      <ng-container *ngIf="transactionType?.hasEmployeeFields() && entityTypeControl?.value == ContactTypes.INDIVIDUAL">
         <h3>Employer</h3>
         <app-employer-input
           [form]="form"
@@ -50,8 +50,8 @@
         ></app-employer-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="transaction?.transactionType?.hasAmountInput">
-        <h3>{{ templateMap.amountInputHeader }}</h3>
+      <ng-container *ngIf="transaction?.transactionType?.showStandardAmount">
+        <h3>{{ transaction?.transactionType?.amountInputHeader }}</h3>
         <app-amount-input
           [form]="form"
           [formSubmitted]="formSubmitted"
@@ -63,7 +63,7 @@
         ></app-amount-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="transaction?.transactionType?.hasLoanInfoInput">
+      <ng-container *ngIf="transactionType?.hasLoanFinanceFields()">
         <h3>Loan information</h3>
         <app-loan-info-input
           [form]="form"
@@ -75,7 +75,7 @@
         ></app-loan-info-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="transaction?.transactionType?.hasLoanTermsInput">
+      <ng-container *ngIf="transactionType?.hasLoanTermsFields()">
         <h3>Terms</h3>
         <app-loan-terms-input
           [form]="form"
@@ -84,10 +84,10 @@
         ></app-loan-terms-input>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="this.hasCandidateInformationInput || !!transaction?.transactionType?.hasCandidateLookup">
-        <h3>{{ templateMap['candidateInputHeader'] }}</h3>
+      <ng-container *ngIf="transactionType?.hasCandidateInformation()">
+        <h3>Committee/Candidate Information</h3>
         <app-committee-input
-          *ngIf="this.hasCandidateCommitteeInput"
+          *ngIf="transaction?.transactionType?.hasCandidateCommittee"
           [form]="form"
           [formSubmitted]="formSubmitted"
           [templateMap]="templateMap"
@@ -109,12 +109,12 @@
             [form]="form"
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
-            [hasCandidateOfficeInput]="hasCandidateOfficeInput"
+            [hasCandidateOfficeInput]="!!transactionType?.hasCandidateOffice()"
           ></app-candidate-input>
         </ng-container>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngIf="hasElectionInformationInput">
+      <ng-container *ngIf="transactionType?.hasElectionInformation()">
         <h3>Election Information</h3>
         <app-election-input
           [form]="form"
@@ -128,6 +128,7 @@
         [form]="form"
         [formSubmitted]="formSubmitted"
         [templateMap]="templateMap"
+        [transaction]="transaction"
         [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
         [purposeDescriptionLabel]="purposeDescriptionLabel"
         [purposeDescriptionLabelNotice]="transaction?.transactionType?.purposeDescriptionLabelNotice"

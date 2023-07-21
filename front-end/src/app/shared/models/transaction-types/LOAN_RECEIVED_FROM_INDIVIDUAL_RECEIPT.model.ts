@@ -1,19 +1,20 @@
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/LOANS_RECEIVED';
-import { TransactionGroupZB } from '../transaction-groups/transaction-group-zb.model';
 import { AggregationGroups } from '../transaction.model';
-import { SchATransaction, ScheduleATransactionTypes, ScheduleATransactionTypeLabels } from '../scha-transaction.model';
+import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
 import { TemplateMapKeyType } from '../transaction-type.model';
 import { SchATransactionType } from '../scha-transaction-type.model';
-import { LabelUtils } from 'app/shared/utils/label.utils';
+import {
+  INDIVIDUAL_ORGANIZATION_FORM_FIELDS,
+  INDIVIDUAL_ORGANIZATION_COMMITTEE,
+} from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
-  transactionGroup = new TransactionGroupZB();
+  override formFields = INDIVIDUAL_ORGANIZATION_FORM_FIELDS;
+  override contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   override isDependentChild = true;
-  title = LabelUtils.get(
-    ScheduleATransactionTypeLabels,
-    ScheduleATransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT
-  );
+  title = 'Receipt';
   schema = schema;
+  override doMemoCodeDateCheck = false;
   override useParentContact = true;
   override inheritedFields = [
     'entity_type',
@@ -33,6 +34,15 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
     'memo_code',
   ] as TemplateMapKeyType[];
 
+  override description =
+    'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.';
+  override accordionTitle = 'AUTO-POPULATED';
+  override accordionSubText = 'Review information and enter purpose of description or note/memo text';
+  override formTitle = 'Reciept';
+  override footer = undefined;
+  override contactTitle = 'Contact';
+  override contactLookupLabel = 'CONTACT LOOKUP';
+
   getNewTransaction() {
     return SchATransaction.fromJSON({
       form_type: 'SA13',
@@ -40,9 +50,4 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
       aggregation_group: AggregationGroups.GENERAL,
     });
   }
-
-  /////////////////////////////////////////////////////////////////////
-  // Template variables to be integrated with #1193
-  override doMemoCodeDateCheck = false;
-  override alternateTitle = 'Receipt';
 }

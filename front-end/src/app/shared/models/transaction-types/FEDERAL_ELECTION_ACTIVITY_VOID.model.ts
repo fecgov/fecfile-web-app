@@ -2,13 +2,17 @@ import { LabelUtils } from 'app/shared/utils/label.utils';
 import { schema } from 'fecfile-validate/fecfile_validate_js/dist/DISBURSEMENTS_FEA';
 import { SchBTransactionType } from '../schb-transaction-type.model';
 import { SchBTransaction, ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupO } from '../transaction-groups/transaction-group-o.model';
 import { STANDARD_CONTROLS, TransactionNavigationControls } from '../transaction-navigation-controls.model';
 import { PurposeDescriptionLabelSuffix } from '../transaction-type.model';
 import { AggregationGroups } from '../transaction.model';
+import {
+  INDIVIDUAL_ORGANIZATION_CANDIDATE_B_FORM_FIELDS,
+  ORGANIZATION_INDIVIDUAL_COMMITTEE,
+} from 'app/shared/utils/transaction-type-properties';
 
 export class FEDERAL_ELECTION_ACTIVITY_VOID extends SchBTransactionType {
-  transactionGroup = new TransactionGroupO();
+  formFields = INDIVIDUAL_ORGANIZATION_CANDIDATE_B_FORM_FIELDS;
+  contactTypeOptions = ORGANIZATION_INDIVIDUAL_COMMITTEE;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.FEDERAL_ELECTION_ACTIVITY_VOID);
   schema = schema;
   override negativeAmountValueOnly = true;

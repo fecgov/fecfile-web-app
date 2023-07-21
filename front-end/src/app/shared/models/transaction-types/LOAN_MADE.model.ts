@@ -6,7 +6,7 @@ import { SchBTransactionType } from '../schb-transaction-type.model';
 import { LabelUtils } from 'app/shared/utils/label.utils';
 
 export class LOAN_MADE extends SchBTransactionType {
-  transactionGroup = new TransactionGroupYB();
+  override formFields = INDIVIDUAL_B_FORM_FIELDS;
   override isDependentChild = true;
   title = LabelUtils.get(ScheduleBTransactionTypeLabels, ScheduleBTransactionTypes.LOAN_MADE);
   schema = schema;

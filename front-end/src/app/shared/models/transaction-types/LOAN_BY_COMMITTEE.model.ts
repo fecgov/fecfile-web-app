@@ -13,11 +13,35 @@ import {
 import { hasNoContact } from '../transaction.model';
 import { SubTransactionGroup } from '../transaction-type.model';
 import { ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupYB } from '../transaction-groups/transaction-group-yb.model';
+import {
+  COM_FIELDS,
+  CORE_FIELDS,
+  INDIVIDUAL_FIELDS,
+  INDIVIDUAL_ORGANIZATION_COMMITTEE,
+  LOAN_FINANCE_FIELDS,
+  LOAN_TERMS_FIELDS,
+} from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_BY_COMMITTEE extends SchCTransactionType {
-  transactionGroup = new TransactionGroupYB();
+  override formFields = [
+    ...CORE_FIELDS,
+    ...INDIVIDUAL_FIELDS,
+    ...COM_FIELDS,
+    ...LOAN_FINANCE_FIELDS,
+    ...LOAN_TERMS_FIELDS,
+  ];
+  contactTypeOptions = INDIVIDUAL_ORGANIZATION_COMMITTEE;
   title = LabelUtils.get(ScheduleCTransactionTypeLabels, ScheduleCTransactionTypes.LOAN_BY_COMMITTEE);
+
+  override description = 'Saving a loan received from individual will automatically create a related receipt.';
+  override accordionTitle = 'ENTER DATA';
+  override accordionSubText = 'Enter lender, loan, and terms information for a loan received from individual';
+  override formTitle = undefined;
+  override footer =
+    'The information in this loan will automatically create a related receipt. Review the receipt; enter a purpose of receipt or note/memo text; or continue without reviewing and “Save transactions.”';
+  override contactTitle = 'Lender';
+  override contactLookupLabel = 'LENDER LOOKUP';
+
   schema = schema;
   override apiEndpoint = '/transactions/save-pair';
   override dependentChildTransactionType = ScheduleBTransactionTypes.LOAN_MADE;
@@ -45,13 +69,4 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
       receipt_line_number: '27',
     });
   }
-
-  /////////////////////////////////////////////////////////////////////
-  // Template variables to be integrated with #1193
-  override hasAmountInput = false;
-  override hasLoanInfoInput = true;
-  override hasLoanTermsInput = true;
-  override contactHeaderLabel = 'Lendee';
-  override contactDropdownLabel = 'LENDEE TYPE';
-  override doMemoCodeDateCheck = false;
 }

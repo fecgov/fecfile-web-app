@@ -1,5 +1,4 @@
 import { IN_KIND_TRANSFER_OUT } from './IN_KIND_TRANSFER_OUT.model';
-import { TransactionGroupEE } from '../transaction-groups/transaction-group-ee.model';
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
 
 describe('IN_KIND_OUT', () => {
@@ -12,7 +11,6 @@ describe('IN_KIND_OUT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupEE);
   });
 
   it('#factory() should return a SchATransaction', () => {

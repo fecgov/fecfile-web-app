@@ -4,6 +4,11 @@ export abstract class SchATransactionType extends TransactionType {
   scheduleId = 'A';
   apiEndpoint = '/transactions/schedule-a';
 
+  //Labels
+  override dateLabel = 'DATE RECEIVED';
+  override amountInputHeader = 'Receipt Information';
+  override purposeDescripLabel = 'PURPOSE OF RECEIPT';
+
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {
     // Form fields
@@ -35,17 +40,15 @@ export abstract class SchATransactionType extends TransactionType {
     memo_code: 'memo_code',
     amount: 'contribution_amount',
     balance: '',
+    payment_to_date: '',
+    interest_rate: '',
+    due_date: '',
+    secured: '',
     aggregate: 'contribution_aggregate',
     purpose_description: 'contribution_purpose_descrip',
     text4000: 'text4000',
     category_code: '',
     election_code: 'election_code',
     election_other_description: 'election_other_description',
-
-    // Labels and text strings
-    dateLabel: 'DATE RECEIVED',
-    amountInputHeader: 'Receipt Information',
-    purposeDescripLabel: 'PURPOSE OF RECEIPT',
-    candidateInputHeader: 'Committee/Candidate information',
   };
 }

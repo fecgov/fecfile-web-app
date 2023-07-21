@@ -1,5 +1,4 @@
 import { SchBTransaction, ScheduleBTransactionTypes } from '../schb-transaction.model';
-import { TransactionGroupB } from '../transaction-groups/transaction-group-b.model';
 import { RECOUNT_ACCOUNT_DISBURSEMENT } from './RECOUNT_ACCOUNT_DISBURSEMENT.model';
 
 describe('RECOUNT_ACCOUNT_DISBURSEMENT', () => {
@@ -12,7 +11,6 @@ describe('RECOUNT_ACCOUNT_DISBURSEMENT', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('B');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupB);
   });
 
   it('#factory() should return a SchBTransaction', () => {

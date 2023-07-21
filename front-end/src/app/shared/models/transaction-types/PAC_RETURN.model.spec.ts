@@ -1,6 +1,5 @@
 import { SchATransactionType } from '../scha-transaction-type.model';
 import { SchATransaction, ScheduleATransactionTypes } from '../scha-transaction.model';
-import { TransactionGroupE } from '../transaction-groups/transaction-group-e.model';
 import { PAC_RETURN } from './PAC_RETURN.model';
 
 describe('PAC_RETURN', () => {
@@ -13,7 +12,6 @@ describe('PAC_RETURN', () => {
   it('should create an instance', () => {
     expect(transactionType).toBeTruthy();
     expect(transactionType.scheduleId).toBe('A');
-    expect(transactionType.transactionGroup).toBeInstanceOf(TransactionGroupE);
   });
 
   it('#factory() should return a SchATransaction', () => {
