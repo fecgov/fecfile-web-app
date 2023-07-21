@@ -21,7 +21,7 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { BehaviorSubject, map, Observable, of, startWith, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, map, of, Subject, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -323,8 +323,11 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (TransactionFormUtils.isMemoCodeReadOnly(transactionType) || !memoControl) {
       return of(requiredLabel);
     }
-    return memoControl.valueChanges.pipe(map(() => {
+    return memoControl.valueChanges.pipe(
+      map(() => {
         return memoControl.hasValidator(Validators.requiredTrue) ? requiredLabel : optionalLabel;
-      }), takeUntil(this.destroy$));
+      }),
+      takeUntil(this.destroy$)
+    );
   }
 }
