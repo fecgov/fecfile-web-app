@@ -63,8 +63,8 @@
             ></app-employer-input>
             <p-divider></p-divider>
           </ng-container>
-          <ng-container *ngIf="transaction?.transactionType?.showStandardAmount">
-            <h3>{{ transaction?.transactionType?.amountInputHeader }}</h3>
+          <ng-container *ngIf="transactionType?.showStandardAmount">
+            <h3>{{ transactionType?.amountInputHeader }}</h3>
             <app-amount-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -77,7 +77,7 @@
             <p-divider></p-divider>
           </ng-container>
           <ng-container *ngIf="transactionType?.hasLoanFinanceFields()">
-            <h3>Loan information</h3>
+            <h3>{{ transactionType?.amountInputHeader }}</h3>
             <app-loan-info-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -126,7 +126,7 @@
             <p-divider></p-divider>
           </ng-container>
           <ng-container *ngIf="transactionType?.hasElectionInformation()">
-            <h3>Election Information</h3>
+            <h3>Election information</h3>
             <app-election-input
               [form]="form"
               [formSubmitted]="formSubmitted"
@@ -269,7 +269,7 @@
             <p-divider></p-divider>
           </ng-container>
           <ng-container *ngIf="childTransactionType?.hasElectionInformation()">
-            <h3>Election Information</h3>
+            <h3>Election information</h3>
             <app-election-input
               [form]="childForm"
               [formSubmitted]="formSubmitted"
@@ -292,7 +292,7 @@
             <p-divider></p-divider>
           </ng-container>
           <ng-container *ngIf="childTransactionType?.hasLoanFinanceFields()">
-            <h3>Loan information</h3>
+            <h3>{{ childTransaction?.transactionType?.amountInputHeader }}</h3>
             <app-loan-info-input
               [form]="childForm"
               [formSubmitted]="formSubmitted"

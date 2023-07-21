@@ -5,7 +5,7 @@ export abstract class SchC1TransactionType extends TransactionType {
   apiEndpoint = '/transactions/schedule-c1';
 
   // Labels
-  override amountInputHeader = 'Loan Information';
+  override amountInputHeader = 'Loan information';
 
   // Mapping of schedule fields to the group input component form templates
   templateMap: TransactionTemplateMapType = {

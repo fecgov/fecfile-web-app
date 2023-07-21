@@ -5,7 +5,7 @@ export abstract class SchBTransactionType extends TransactionType {
   apiEndpoint = '/transactions/schedule-b';
 
   // Labels
-  override amountInputHeader = 'Expenditure Information';
+  override amountInputHeader = 'Expenditure information';
   override purposeDescripLabel = 'PURPOSE OF DISBURSEMENT';
 
   // Mapping of schedule fields to the group input component form templates
