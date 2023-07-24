@@ -236,6 +236,7 @@ export class TransactionTypePickerComponent extends DestroyerComponent implement
         return [
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_INDIVIDUAL,
           ScheduleCTransactionTypes.LOAN_RECEIVED_FROM_BANK,
+          ScheduleCTransactionTypes.LOAN_BY_COMMITTEE,
         ];
       case ScheduleCTransactionGroups.DEBTS:
         return [];

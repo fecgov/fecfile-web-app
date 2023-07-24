@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AutoFocusModule } from 'primeng/autofocus';
 import { ButtonModule } from 'primeng/button';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -49,6 +50,7 @@ import { LoanTermsInputComponent } from './components/inputs/loan-terms-input/lo
     CommonModule,
     ReactiveFormsModule,
     ButtonModule,
+    RadioButtonModule,
     SelectButtonModule,
     TooltipModule,
     DropdownModule,
