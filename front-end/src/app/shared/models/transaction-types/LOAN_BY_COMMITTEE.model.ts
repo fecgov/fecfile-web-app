@@ -47,7 +47,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
   override accordionSubText = 'Enter lendee, loan, and terms information for a loan by committee';
   override formTitle = undefined;
   override footer =
-    'The information in this loan will automatically populate a related transaction. Review the associated laon and enter a purpose of receipt or note/memo text; or click "Save transactions" to record these transactions.';
+    'The information in this loan will automatically create a related disbursement. Review the disbursement; enter a purpose of disbursement or note/memo text; or continue without reviewing and “Save transactions.”';
   override contactTitle = 'Lendee';
   override contactLookupLabel = 'LENDEE LOOKUP';
 
