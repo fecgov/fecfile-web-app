@@ -8,6 +8,7 @@ import {
   INDIVIDUAL_ORGANIZATION_COMMITTEE,
   INDIVIDUAL_FIELDS,
   ORG_FIELDS,
+  CORE_FIELDS,
 } from 'app/shared/utils/transaction-type-properties';
 
 export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
@@ -18,19 +19,7 @@ export class LOAN_RECEIVED_FROM_INDIVIDUAL_RECEIPT extends SchATransactionType {
   title = 'Receipt';
   schema = schema;
   override useParentContact = true;
-  override inheritedFields = [
-    ...INDIVIDUAL_FIELDS,
-    ...ORG_FIELDS,
-    'entity_type',
-    'street_1',
-    'street_2',
-    'city',
-    'state',
-    'zip',
-    'date',
-    'amount',
-    'memo_code',
-  ] as TemplateMapKeyType[];
+  override inheritedFields = [...CORE_FIELDS, ...INDIVIDUAL_FIELDS, ...ORG_FIELDS] as TemplateMapKeyType[];
 
   override description =
     'Only the Purpose of Receipt and Note/Memo Text are editable. To update any errors found, return to the previous step to update loan information.';
