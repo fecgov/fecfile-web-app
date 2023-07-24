@@ -69,10 +69,10 @@
               [form]="form"
               [formSubmitted]="formSubmitted"
               [templateMap]="templateMap"
-              [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
               [negativeAmountValueOnly]="!!transaction?.transactionType?.negativeAmountValueOnly"
               [showAggregate]="!!transaction?.transactionType?.showAggregate"
               [transaction]="transaction"
+              [memoCodeCheckboxLabel]="(memoCodeCheckboxLabel$ | async)!"
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
@@ -83,7 +83,6 @@
               [formSubmitted]="formSubmitted"
               [templateMap]="templateMap"
               [readonly]="false"
-              [memoCodeReadOnly]="isMemoCodeReadOnly(transaction?.transactionType)"
               [transaction]="transaction"
             ></app-loan-info-input>
             <p-divider></p-divider>
@@ -283,11 +282,11 @@
               [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
-              [memoCodeReadOnly]="isMemoCodeReadOnly(childTransaction?.transactionType)"
               [contributionAmountReadOnly]="true"
               [negativeAmountValueOnly]="!!childTransaction?.transactionType?.negativeAmountValueOnly"
               [showAggregate]="!!childTransaction?.transactionType?.showAggregate"
               [transaction]="childTransaction"
+              [memoCodeCheckboxLabel]="(childMemoCodeCheckboxLabel$ | async)!"
             ></app-amount-input>
             <p-divider></p-divider>
           </ng-container>
@@ -298,7 +297,6 @@
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
               [readonly]="false"
-              [memoCodeReadOnly]="isMemoCodeReadOnly(childTransaction?.transactionType)"
               [transaction]="childTransaction"
             ></app-loan-info-input>
             <p-divider></p-divider>

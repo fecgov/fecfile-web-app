@@ -3,7 +3,7 @@ import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angula
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CalendarModule } from 'primeng/calendar';
-import { ErrorMessagesComponent } from '../../../error-messages/error-messages.component';
+import { ErrorMessagesComponent } from '../../error-messages/error-messages.component';
 import {
   getTestTransactionByType,
   testMockStore,

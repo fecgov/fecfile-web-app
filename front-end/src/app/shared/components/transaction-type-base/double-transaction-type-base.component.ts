@@ -1,17 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
-import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
+import {
+  TemplateMapKeyType,
+  TransactionTemplateMapType,
+  TransactionType,
+} from 'app/shared/models/transaction-type.model';
 import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
 import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
+import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, of, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
-import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -40,6 +44,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childPurposeDescriptionLabel = '';
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   useParentContact = false;
+  childMemoCodeCheckboxLabel$ = of('');
 
   override ngOnInit(): void {
     // Initialize primary form.
@@ -55,6 +60,15 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.childContactTypeOptions = getContactTypeOptions(this.childTransactionType.contactTypeOptions ?? []);
     this.childFormProperties = this.childTransactionType.getFormControlNames(this.childTemplateMap);
     this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
+
+    if (
+      this.childTransactionType?.inheritedFields?.includes(
+        'memo_code' as TemplateMapKeyType) && this.transactionType) {
+      this.childMemoCodeCheckboxLabel$ = this.memoCodeCheckboxLabel$;
+    } else {
+      this.childMemoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.childForm, this.childTransactionType);
+    }
+
     TransactionFormUtils.onInit(this, this.childForm, this.childTransaction, this.childContactId$);
     this.childOnInit();
   }
