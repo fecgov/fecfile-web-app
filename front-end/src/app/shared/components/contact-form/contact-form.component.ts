@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { FecApiService } from 'app/shared/services/fec-api.service';
 import { CountryCodeLabels, LabelUtils, PrimeOptions, StatesCodeLabels } from 'app/shared/utils/label.utils';
@@ -16,7 +16,7 @@ import {
   ContactTypeLabels,
   ContactTypes,
   FecApiCandidateLookupData,
-  FecApiCommitteeLookupData,
+  FecApiCommitteeLookupData
 } from '../../models/contact.model';
 import { DestroyerComponent } from '../app-destroyer.component';
 
@@ -50,7 +50,6 @@ export class ContactFormComponent extends DestroyerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.form.addControl('contact_1', new FormControl());
     this.contactTypeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
     this.candidateOfficeTypeOptions = LabelUtils.getPrimeOptions(CandidateOfficeTypeLabels);
     this.stateOptions = LabelUtils.getPrimeOptions(StatesCodeLabels);

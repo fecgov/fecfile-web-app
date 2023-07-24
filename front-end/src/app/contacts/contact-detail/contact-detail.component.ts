@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
@@ -7,8 +7,8 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { MessageService } from 'primeng/api';
-import { Contact, ContactType } from '../../shared/models/contact.model';
 import { TableLazyLoadEvent } from 'primeng/table';
+import { Contact, ContactType } from '../../shared/models/contact.model';
 
 @Component({
   selector: 'app-contact-detail',
@@ -51,11 +51,12 @@ export class ContactDetailComponent {
     private messageService: MessageService,
     private contactService: ContactService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   public onOpenDetail() {
     this.resetForm();
     this.form.patchValue(this.contact);
+    this.form.setControl('contact_1', new FormControl(this.contact));
   }
 
   public saveItem(closeDetail = true) {

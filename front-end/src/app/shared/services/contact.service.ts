@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 import { schema as contactCandidateSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Candidate';
 import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Committee';
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
@@ -13,17 +14,16 @@ import {
   Contact,
   ContactTypes,
   IndividualLookupResponse,
-  OrganizationLookupResponse,
+  OrganizationLookupResponse
 } from '../models/contact.model';
 import { ListRestResponse } from '../models/rest-api.model';
 import { ApiService } from './api.service';
-import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
@@ -85,19 +85,25 @@ export class ContactService implements TableListService<Contact> {
       .pipe(map((response) => CommitteeLookupResponse.fromJSON(response)));
   }
 
-  public checkFecIdForUniqness(fec_id: string): Observable<boolean> {
-    return fec_id ? this.apiService.get<boolean>(`/contacts/fec_id_is_unique/${fec_id}/`) : of(true);
+  public checkFecIdForUniqness(fec_id: string, contact_id?: string): Observable<boolean> {
+    if (fec_id) {
+      const url = `/contacts/fec_id_is_unique/?fec_id=${fec_id}`.concat(
+        contact_id ? `&contact_id=${contact_id}` : '');
+      return this.apiService.get<boolean>(url);
+    }
+    return of(true);
   }
 
   public fecIdValidator: AsyncValidatorFn = (control: AbstractControl) => {
     return of(control.value).pipe(
       debounceTime(500),
       switchMap((fecId) =>
-        this.checkFecIdForUniqness(fecId).pipe(
-          map((isUnique: boolean) => {
-            return isUnique ? null : { fecIdMustBeUnique: true };
-          })
-        )
+        this.checkFecIdForUniqness(fecId, (control.parent?.get(
+          'contact_1')?.value as Contact)?.id).pipe(
+            map((isUnique: boolean) => {
+              return isUnique ? null : { fecIdMustBeUnique: true };
+            })
+          )
       )
     );
   };
@@ -144,7 +150,7 @@ export class ContactService implements TableListService<Contact> {
   providedIn: 'root',
 })
 export class DeletedContactService implements TableListService<Contact> {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   public getTableData(pageNumber = 1, ordering = ''): Observable<ListRestResponse> {
     if (!ordering) {
