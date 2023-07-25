@@ -96,7 +96,6 @@ export class ContactService implements TableListService<Contact> {
 
   public fecIdValidator: AsyncValidatorFn = (control: AbstractControl) => {
     return of(control.value).pipe(
-      delay(500),
       switchMap((fecId) =>
         this.checkFecIdForUniqness(fecId, (control.parent?.get(
           'contact_1')?.value as Contact)?.id).pipe(
