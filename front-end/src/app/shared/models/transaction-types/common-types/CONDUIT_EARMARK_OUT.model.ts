@@ -14,4 +14,8 @@ export abstract class CONDUIT_EARMARK_OUT extends SchBTransactionType {
   override footer = undefined;
   override contactTitle = 'Contact';
   override contactLookupLabel = 'CONTACT LOOKUP';
+  override memoCodeMap = {
+    true: '',
+    false: '',
+  };
 }

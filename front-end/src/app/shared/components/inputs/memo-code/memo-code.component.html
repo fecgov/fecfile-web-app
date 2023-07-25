@@ -29,16 +29,27 @@
       </div>
     </ng-container>
     <ng-container *ngIf="memoCodeMapOptions.length > 0">
-      <div class="col-3">
-        <p-selectButton
-          #memoCode
-          inputId="memo_code"
-          [formControlName]="templateMap['memo_code']"
-          [options]="memoCodeMapOptions"
-          optionLabel="label"
-          optionValue="value"
-        ></p-selectButton>
-      </div>
+      <ng-container *ngIf="memoCodeMapOptions[0].label.length > 0">
+        <div class="col-12">
+          <app-error-messages
+            [form]="form"
+            [fieldName]="templateMap['memo_code']"
+            [formSubmitted]="formSubmitted"
+            [patternErrorMessage]="'This is a required field.'"
+            requiredErrorMessage="This transaction must be undeposited because the date received is outside the coverage dates."
+          ></app-error-messages>
+        </div>
+        <div class="col-3">
+          <p-selectButton
+            #memoCode
+            inputId="memo_code"
+            [formControlName]="templateMap['memo_code']"
+            [options]="memoCodeMapOptions"
+            optionLabel="label"
+            optionValue="value"
+          ></p-selectButton>
+        </div>
+      </ng-container>
       <div class="col-12">
         <ng-container *ngIf="memoControl?.value === true">
           <span
@@ -46,23 +57,15 @@
             style="font-size: 1rem; margin-left: 0.5rem"
             pTooltip="{{ memoItemHelpText }}"
           ></span>
-          MEMO ITEM
+          <b>MEMO ITEM</b>
         </ng-container>
-        <ng-container *ngIf="memoControl?.value === false"> NOT A MEMO ITEM </ng-container>
+        <ng-container *ngIf="memoControl?.value === false"><b>NOT A MEMO ITEM</b></ng-container>
         <span
           *ngIf="memoControl?.value !== undefined"
           class="pi pi-info-circle"
           style="font-size: 1.5rem; margin-left: 0.5rem"
           pTooltip="{{ memoItemHelpText }}"
         ></span>
-      </div>
-      <div class="col-12">
-        <app-error-messages
-          [form]="form"
-          [fieldName]="templateMap['memo_code']"
-          [formSubmitted]="formSubmitted"
-          [patternErrorMessage]="'This is a required field.'"
-        ></app-error-messages>
       </div>
     </ng-container>
   </div>
