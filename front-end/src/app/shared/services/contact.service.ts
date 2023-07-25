@@ -5,7 +5,7 @@ import { schema as contactCommitteeSchema } from 'fecfile-validate/fecfile_valid
 import { schema as contactIndividualSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Individual';
 import { schema as contactOrganizationSchema } from 'fecfile-validate/fecfile_validate_js/dist/Contact_Organization';
 import { Observable, of } from 'rxjs';
-import { delay, map, switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { JsonSchema } from '../interfaces/json-schema.interface';
 import { TableListService } from '../interfaces/table-list-service.interface';
 import {
