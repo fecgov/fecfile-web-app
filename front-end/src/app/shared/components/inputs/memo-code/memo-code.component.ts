@@ -19,7 +19,6 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
   @Input() checkboxLabel = '';
 
   memoItemHelpText = 'The dollar amount in a memo item is not incorporated into the total figures for the schedule.';
-  memoCodeErrorMessage: string | undefined = undefined;
   memoCodeReadOnly = false;
 
   dateIsOutsideReport = false; // True if transaction date is outside the report dates
