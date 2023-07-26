@@ -78,6 +78,7 @@ export class MemoCodeInputComponent extends BaseInputComponent implements OnInit
     }
 
     this.updateTransactionTypeIdentifier();
+    this.closeOutOfDateDialog();
   }
 
   ngOnChanges(): void {
