@@ -5,7 +5,7 @@ import * as fs from 'fs';
 export default defineConfig({
   defaultCommandTimeout: 10000,
   projectId: 'x5egpz',
-  video: false,
+  video: true,
   videosFolder: 'cypress/videos',
   screenshotsFolder: 'cypress/screenshots',
   screenshotOnRunFailure: true,
@@ -16,10 +16,10 @@ export default defineConfig({
   reporter: 'mochawesome',
   reporterOptions: {
     reportDir: 'cypress/results',
-    reportFilename: "[status]_[datetime]-[name]",
+    reportFilename: '[status]_[datetime]-[name]',
     overwrite: false,
     html: true,
-    json: false
+    json: false,
   },
   lighthouse: {
     options: ['--chrome-flags="--no-sandbox --headless --disable-gpu"'],
@@ -46,6 +46,6 @@ export default defineConfig({
       });
       return require('./cypress/plugins/index.ts')(on, config);
     },
-    baseUrl: 'http://localhost:4200'
+    baseUrl: 'http://localhost:4200',
   },
 });
