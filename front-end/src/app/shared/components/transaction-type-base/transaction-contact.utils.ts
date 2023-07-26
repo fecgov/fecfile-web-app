@@ -2,7 +2,7 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 import { TransactionTemplateMapType } from 'app/shared/models/transaction-type.model';
 import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
-import { SelectItem } from 'primeng/api';
+import { ConfirmationService, SelectItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import { Contact, ContactFields, ContactTypes } from '../../models/contact.model';
 
@@ -68,7 +68,8 @@ export class TransactionContactUtils {
   static setTransactionContactFormChanges(
     form: FormGroup,
     contact: Contact | undefined,
-    templateMap: TransactionTemplateMapType
+    templateMap: TransactionTemplateMapType,
+    contactConfig: { [formField: string]: string }
   ): string[] {
     function getFormField(
       form: FormGroup,
@@ -85,25 +86,51 @@ export class TransactionContactUtils {
     }
 
     if (contact) {
-      return Object.entries(ContactFields)
-        .map(([field, label]: string[]) => {
-          const contactValue = contact[field as keyof typeof contact];
-          const value = contactValue === '' ? null : contactValue; // Convert '' to null to match form field values.
-          const formField = getFormField(form, field, templateMap);
+      return Object.entries(contactConfig).map(([field, property]: string[]) => {
+        const contactValue = contact[property as keyof Contact];
+        const value = contactValue === '' ? null : contactValue; // Convert '' to null to match form field values.
+        const formField = getFormField(form, field, templateMap);
 
-          if (formField && formField?.value !== value) {
-            contact[field as keyof typeof contact] = (formField.value || null) as never;
-            if (!formField.value) {
-              return `Removed ${label.toLowerCase()}`;
-            }
-            return `Updated ${label.toLowerCase()} to ${formField.value}`;
+        if (formField && formField?.value !== value) {
+          contact[property as keyof Contact] = (formField.value || null) as never;
+          if (!formField.value) {
+            return `Removed ${ContactFields[property as keyof typeof ContactFields].toLowerCase()}`;
           }
-          return '';
-        })
-        .filter((change) => change);
+          return `Updated ${ContactFields[property as keyof typeof ContactFields].toLowerCase()} to ${formField.value}`;
+        }
+        return '';
+      });
+      // return Object.entries(ContactFields)
+      //   .map(([field, label]: string[]) => {
+      //     const contactValue = contact[field as keyof typeof contact];
+      //     const value = contactValue === '' ? null : contactValue; // Convert '' to null to match form field values.
+      //     const formField = getFormField(form, field, templateMap);
+
+      //     if (formField && formField?.value !== value) {
+      //       contact[field as keyof typeof contact] = (formField.value || null) as never;
+      //       if (!formField.value) {
+      //         return `Removed ${label.toLowerCase()}`;
+      //       }
+      //       return `Updated ${label.toLowerCase()} to ${formField.value}`;
+      //     }
+      //     return '';
+      //   })
+      //   .filter((change) => change);
     }
     return [];
   }
+
+  // static promptConfirmations(
+  //   confirmationService: ConfirmationService,
+  //   fecDatePipe: FecDatePipe,
+  //   transaction: Transaction,
+  //   form: FormGroup,
+  //   contact: Contact
+  // ) {
+  //   if (contact.id) {
+
+  //   } else {}
+  // }
 
   static onContactLookupSelect(
     selectItem: SelectItem<Contact>,

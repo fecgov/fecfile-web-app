@@ -98,6 +98,56 @@ export class Contact extends BaseModel {
   }
 }
 
+export const STANDARD_SINGLE_CONTACT = {
+  contact_1: {
+    organization_name: 'name',
+    committee_name: 'name',
+    committee_fec_id: 'committee_id',
+    last_name: 'last_name',
+    first_name: 'first_name',
+    middle_name: 'middle_name',
+    prefix: 'prefix',
+    suffix: 'suffix',
+    street_1: 'street_1',
+    street_2: 'street_2',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+    employer: 'employer',
+    occupation: 'occupation',
+  },
+};
+export const STANDARD_AND_CANDIDATE = {
+  contact_1: {
+    organization_name: 'name',
+    committee_name: 'name',
+    committee_fec_id: 'committee_id',
+    last_name: 'last_name',
+    first_name: 'first_name',
+    middle_name: 'middle_name',
+    prefix: 'prefix',
+    suffix: 'suffix',
+    street_1: 'street_1',
+    street_2: 'street_2',
+    city: 'city',
+    state: 'state',
+    zip: 'zip',
+    employer: 'employer',
+    occupation: 'occupation',
+  },
+  contact_2: {
+    candidate_fec_id: 'candidate_id',
+    candidate_last_name: 'last_name',
+    candidate_first_name: 'first_name',
+    candidate_middle_name: 'middle_name',
+    candidate_prefix: 'prefix',
+    candidate_suffix: 'suffix',
+    candidate_office: 'candidate_office',
+    candidate_state: 'candidate_state',
+    candidate_district: 'candidate_district',
+  },
+};
+
 export class FecApiLookupData {}
 
 export class FecApiCandidateLookupData extends FecApiLookupData {

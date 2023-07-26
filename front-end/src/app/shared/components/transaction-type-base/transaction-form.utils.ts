@@ -137,14 +137,14 @@ export class TransactionFormUtils {
 
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
-    if (transaction.transactionType?.templateMap) {
-      // Update contact object in transaction with new form values
-      TransactionContactUtils.setTransactionContactFormChanges(
-        form,
-        transaction.contact_1,
-        transaction.transactionType.templateMap
-      );
-    }
+    // if (transaction.transactionType?.templateMap) {
+    //   // Update contact object in transaction with new form values
+    //   TransactionContactUtils.setTransactionContactFormChanges(
+    //     form,
+    //     transaction.contact_1,
+    //     transaction.transactionType.templateMap
+    //   );
+    // }
 
     const payload: ScheduleTransaction = getFromJSON({
       ...transaction,

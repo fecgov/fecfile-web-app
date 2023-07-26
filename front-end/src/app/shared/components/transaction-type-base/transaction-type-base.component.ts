@@ -154,7 +154,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       const transactionContactChanges = TransactionContactUtils.setTransactionContactFormChanges(
         form,
         confirmTransaction.contact_1,
-        confirmTransaction.transactionType.templateMap
+        confirmTransaction.transactionType.templateMap,
+        confirmTransaction.transactionType.contactConfig['contact_1']
       );
       if (transactionContactChanges?.length) {
         const confirmationMessage = TransactionContactUtils.getEditTransactionContactConfirmationMessage(
