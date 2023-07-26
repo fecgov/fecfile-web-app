@@ -30,15 +30,17 @@
     </ng-container>
     <ng-container *ngIf="memoCodeMapOptions.length > 0">
       <ng-container *ngIf="memoCodeMapOptions[0].label.length > 0">
-        <div class="col-12">
+        <div class="col-6 no-height">
           <app-error-messages
             [form]="form"
             [fieldName]="templateMap['memo_code']"
             [formSubmitted]="formSubmitted"
             [patternErrorMessage]="'This is a required field.'"
             requiredErrorMessage="This transaction must be undeposited because the date received is outside the coverage dates."
+            id="memo-code-errors"
           ></app-error-messages>
         </div>
+        <div class="col-6 no-height"></div>
         <div class="col-3">
           <p-selectButton
             #memoCode
