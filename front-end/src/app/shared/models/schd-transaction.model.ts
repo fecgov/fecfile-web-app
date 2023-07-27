@@ -1,11 +1,12 @@
 import { plainToClass } from 'class-transformer';
-import { Transaction } from './transaction.model';
+import { AggregationGroups, Transaction } from './transaction.model';
 import { LabelList } from '../utils/label.utils';
 import { getFromJSON, TransactionTypeUtils } from '../utils/transaction-type.utils';
 
 export class SchDTransaction extends Transaction {
   entity_type: string | undefined;
   receipt_line_number: string | undefined;
+  aggregation_group: AggregationGroups | undefined;
 
   creditor_organization_name: string | undefined;
   creditor_last_name: string | undefined;
