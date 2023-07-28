@@ -7,32 +7,6 @@ import { Subject } from 'rxjs';
 import { Contact, ContactFields, ContactTypes } from '../../models/contact.model';
 
 export class TransactionContactUtils {
-  static getEditTransactionContactConfirmationMessage(
-    contactChanges: string[],
-    contact: Contact | undefined,
-    form: FormGroup,
-    fecDatePipe: FecDatePipe,
-    templateMap: TransactionTemplateMapType
-  ): string | undefined {
-    if (contact) {
-      const changesMessage = 'Change(s): <ul class="contact-confirm-dialog">'.concat(
-        ...contactChanges.map((change) => `<li>${change}</li>`, '</ul>')
-      );
-      let contactName = contact.name;
-      if (contact.type === ContactTypes.INDIVIDUAL) {
-        contactName = `${contact.last_name}, ${contact.first_name}`;
-        contactName += contact.middle_name ? ' ' + contact.middle_name : '';
-      }
-      const dateReceived = fecDatePipe.transform(form.get(templateMap.date)?.value);
-      return (
-        `By saving this transaction, you are also updating the contact for ` +
-        `<b>${contactName}</b>. This change will only affect transactions with ` +
-        `receipt date on or after ${dateReceived}.<br><br>${changesMessage}`
-      );
-    }
-    return undefined;
-  }
-
   static getCreateTransactionContactConfirmationMessage(
     contactType: ContactTypes,
     form: FormGroup,
@@ -58,79 +32,52 @@ export class TransactionContactUtils {
     return `By saving this transaction, you're also creating a new ${confirmationContactTitle}.`;
   }
 
-  /**
-   * This method returns the differences between the transaction
-   * form's contact section and its database contact in prose
-   * for the UI as a string[] (one entry for each change) after
-   * first setting these values on the Contact object.
-   * @returns string[] containing the changes in prose for the UI.
-   */
-  static setTransactionContactFormChanges(
+  static getContactChanges(
     form: FormGroup,
-    contact: Contact | undefined,
+    contact: Contact,
     templateMap: TransactionTemplateMapType,
     contactConfig: { [formField: string]: string }
-  ): string[] {
-    function getFormField(
-      form: FormGroup,
-      field: string,
-      templateMap: TransactionTemplateMapType
-    ): AbstractControl | null {
-      if (field == 'committee_id') {
-        return form.get(templateMap.committee_fec_id);
-      }
-      if (field == 'name') {
-        return form.get(templateMap.organization_name);
-      }
-      return form.get(templateMap[field as keyof TransactionTemplateMapType]);
-    }
-
-    if (contact) {
-      return Object.entries(contactConfig).map(([field, property]: string[]) => {
+  ): any[] {
+    return Object.entries(contactConfig)
+      .map(([field, property]: string[]) => {
         const contactValue = contact[property as keyof Contact];
-        const value = contactValue === '' ? null : contactValue; // Convert '' to null to match form field values.
-        const formField = getFormField(form, field, templateMap);
-
-        if (formField && formField?.value !== value) {
-          contact[property as keyof Contact] = (formField.value || null) as never;
-          if (!formField.value) {
-            return `Removed ${ContactFields[property as keyof typeof ContactFields].toLowerCase()}`;
-          }
-          return `Updated ${ContactFields[property as keyof typeof ContactFields].toLowerCase()} to ${formField.value}`;
+        const formField = form.get(templateMap[field as keyof TransactionTemplateMapType]);
+        if (formField && formField?.value !== contactValue) {
+          return [property, formField.value];
         }
-        return '';
-      });
-      // return Object.entries(ContactFields)
-      //   .map(([field, label]: string[]) => {
-      //     const contactValue = contact[field as keyof typeof contact];
-      //     const value = contactValue === '' ? null : contactValue; // Convert '' to null to match form field values.
-      //     const formField = getFormField(form, field, templateMap);
-
-      //     if (formField && formField?.value !== value) {
-      //       contact[field as keyof typeof contact] = (formField.value || null) as never;
-      //       if (!formField.value) {
-      //         return `Removed ${label.toLowerCase()}`;
-      //       }
-      //       return `Updated ${label.toLowerCase()} to ${formField.value}`;
-      //     }
-      //     return '';
-      //   })
-      //   .filter((change) => change);
-    }
-    return [];
+        return undefined;
+      })
+      .filter((change) => !!change);
   }
 
-  // static promptConfirmations(
-  //   confirmationService: ConfirmationService,
-  //   fecDatePipe: FecDatePipe,
-  //   transaction: Transaction,
-  //   form: FormGroup,
-  //   contact: Contact
-  // ) {
-  //   if (contact.id) {
+  static updateContactWithForm(transaction: Transaction, templateMap: TransactionTemplateMapType, form: FormGroup) {
+    Object.entries(transaction.transactionType?.contactConfig ?? {}).forEach(
+      ([contactKey, config]: [string, { [formField: string]: string }]) => {
+        if (transaction[contactKey as keyof Transaction]) {
+          const contact = transaction[contactKey as keyof Transaction] as Contact;
+          const contactChanges = TransactionContactUtils.getContactChanges(form, contact, templateMap, config);
+          contactChanges.forEach(([property, value]: [keyof Contact, any]) => {
+            contact[property] = value as never;
+          });
+        }
+      }
+    );
+  }
 
-  //   } else {}
-  // }
+  static getContactChangesMessage(contact: Contact, dateString: string, contactChanges: [string, any][]) {
+    const changeMessages = contactChanges.map(([property, value]: [string, any]) => {
+      if (!value) {
+        return `<li>Removed ${ContactFields[property as keyof typeof ContactFields].toLowerCase()}</li>`;
+      }
+      return `<li>Updated ${ContactFields[property as keyof typeof ContactFields].toLowerCase()} to ${value}</li>`;
+    });
+    const changesMessage = 'Change(s): <ul class="contact-confirm-dialog">'.concat(...changeMessages.join(''), '</ul>');
+    return (
+      `By saving this transaction, you are also updating the contact for ` +
+      `<b>${contact.getNameString()}</b>. This change will only affect transactions with ` +
+      `receipt date on or after ${dateString}.<br><br>${changesMessage}`
+    );
+  }
 
   static onContactLookupSelect(
     selectItem: SelectItem<Contact>,

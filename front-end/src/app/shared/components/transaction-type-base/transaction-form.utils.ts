@@ -134,17 +134,20 @@ export class TransactionFormUtils {
     if (!transaction) {
       throw new Error('Fecfile: Payload transaction not found');
     }
+    // Remove parent transaction links within the parent-child hierarchy in the
+    // transaction objects to avoid a recursion overflow from the class-transformer
+    // plainToClass() converter
+    if (transaction?.parent_transaction) {
+      transaction.parent_transaction = undefined;
+    }
+    if (transaction?.children) {
+      transaction.children.forEach((child) => {
+        child.parent_transaction = undefined;
+      });
+    }
 
     let formValues = ValidateUtils.getFormValues(form, transaction.transactionType?.schema, formProperties);
     formValues = TransactionMemoUtils.retrieveMemoText(transaction, form, formValues);
-    // if (transaction.transactionType?.templateMap) {
-    //   // Update contact object in transaction with new form values
-    //   TransactionContactUtils.setTransactionContactFormChanges(
-    //     form,
-    //     transaction.contact_1,
-    //     transaction.transactionType.templateMap
-    //   );
-    // }
 
     const payload: ScheduleTransaction = getFromJSON({
       ...transaction,
@@ -188,5 +191,4 @@ export class TransactionFormUtils {
     // Memo Code is read-only if there is a constant value in the schema.  Otherwise, it's mutable
     return TransactionFormUtils.getMemoCodeConstant(transactionType) !== undefined;
   }
-
 }

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
+import { NavigationAction, NavigationEvent } from 'app/shared/models/transaction-navigation-controls.model';
 import {
   TemplateMapKeyType,
   TransactionTemplateMapType,
@@ -11,7 +11,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
-import { BehaviorSubject, Subject, of, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, forkJoin, of, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -62,8 +62,9 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
 
     if (
-      this.childTransactionType?.inheritedFields?.includes(
-        'memo_code' as TemplateMapKeyType) && this.transactionType) {
+      this.childTransactionType?.inheritedFields?.includes('memo_code' as TemplateMapKeyType) &&
+      this.transactionType
+    ) {
       this.childMemoCodeCheckboxLabel$ = this.memoCodeCheckboxLabel$;
     } else {
       this.childMemoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.childForm, this.childTransactionType);
@@ -172,41 +173,49 @@ export abstract class DoubleTransactionTypeBaseComponent
   override save(navigationEvent: NavigationEvent) {
     this.formSubmitted = true;
 
-    if (this.form.invalid || this.childForm.invalid) {
-      return;
-    }
-
-    // Remove parent transaction links within the parent-child hierarchy in the
-    // transaction objects to avoid a recursion overflow from the class-transformer
-    // plainToClass() converter.
-    if (this.transaction?.children) {
-      this.transaction.children[0].parent_transaction = undefined;
-    }
-    if (this.childTransaction?.parent_transaction) {
-      this.childTransaction.parent_transaction = undefined;
-    }
+    // update all contacts with changes from form.
+    TransactionContactUtils.updateContactWithForm(this.transaction!, this.templateMap, this.form);
+    TransactionContactUtils.updateContactWithForm(this.childTransaction!, this.childTemplateMap, this.childForm);
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.form,
       this.formProperties
     );
+
     payload.children = [
       TransactionFormUtils.getPayloadTransaction(this.childTransaction, this.childForm, this.childFormProperties),
     ];
     payload.children[0].report_id = payload.report_id;
 
-    // Confirm save for parent transaction
-    // No need to confirm child contact changes if it uses the parent contact info
-    const saveCallback = this.childTransactionType?.useParentContact ? this.doSave : this.childConfirmSave;
-    this.confirmSave(payload, this.form, saveCallback, navigationEvent, payload);
+    if (payload.transaction_type_identifier) {
+      const responseFromApi = this.writeToApi(payload);
+      responseFromApi.subscribe((transaction) => {
+        navigationEvent.transaction = this.transactionType?.updateParentOnSave ? payload : transaction;
+        this.navigateTo(navigationEvent);
+      });
+    }
   }
 
-  private childConfirmSave(navigationEvent: NavigationEvent, payload: Transaction) {
-    if (payload.children?.length === 1) {
-      this.confirmSave(payload.children[0], this.childForm, this.doSave, navigationEvent, payload, 'childDialog');
+  override handleNavigate(navigationEvent: NavigationEvent): void {
+    if (navigationEvent.action === NavigationAction.SAVE) {
+      if (this.childForm.invalid || this.form.invalid || !this.transaction || !this.childTransaction) {
+        return;
+      }
+      const confirmations$ = [...this.confirmWithUser(this.transaction, this.form)];
+      if (!this.childTransactionType?.useParentContact) {
+        confirmations$.push(...this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog'));
+      }
+      if (confirmations$.length > 0) {
+        forkJoin(confirmations$).subscribe((confirmations: boolean[]) => {
+          // if every confirmation was accepted
+          if (confirmations.every((confirmation) => confirmation)) this.save(navigationEvent);
+        });
+      } else {
+        this.save(navigationEvent);
+      }
     } else {
-      throw new Error('Fecfile: Parent transaction missing child transaction when trying to confirm save.');
+      this.navigateTo(navigationEvent);
     }
   }
 

@@ -96,6 +96,10 @@ export class Contact extends BaseModel {
   static fromJSON(json: any): Contact { // eslint-disable-line @typescript-eslint/no-explicit-any
     return plainToClass(Contact, json);
   }
+
+  getNameString(): string {
+    return this.name ? this.name : `${this.last_name}, ${this.first_name} ${this.middle_name ?? ''}`;
+  }
 }
 
 export const STANDARD_SINGLE_CONTACT = {
