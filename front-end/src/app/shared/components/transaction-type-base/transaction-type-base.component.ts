@@ -268,13 +268,15 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
         life: 3000,
       });
       if (event.transaction?.parent_transaction_id) {
+        // Append the sibling ID to the end of the URL so that the components are not cached from the existing page
+        // and used in the new transaction input page. The transaction form needs to be initialized from scratch when displayed
+        // which required a new URL from the current one when navigateByUrl is called. The URL is the same when
+        // "Save & add memo" is clicked to create a new sibiling transaction.
         this.router.navigateByUrl(
-          `${reportPath}/list/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}`
+          `${reportPath}/list/${event.transaction?.parent_transaction_id}/create-sub-transaction/${event.destinationTransactionType}/${event.transaction.id}`
         );
-        this.resetForm();
       } else {
         this.router.navigateByUrl(`${reportPath}/create/${event.destinationTransactionType}`);
-        this.resetForm();
       }
     } else if (event.destination === NavigationDestination.CHILD) {
       this.messageService.add({

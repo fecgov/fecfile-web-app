@@ -67,6 +67,17 @@ const routes: Routes = [
     },
     canActivate: [ReportIsEditableGuard],
   },
+  // The following route goes to the same component as above but provides the siblingId so that
+  // the page is recreated and all components call ngOnInit().
+  {
+    path: 'report/:reportId/list/:parentTransactionId/create-sub-transaction/:transactionType/:siblingId',
+    component: TransactionContainerComponent,
+    resolve: {
+      transaction: TransactionResolver,
+      sidebar: SidebarStateResolver,
+    },
+    canActivate: [ReportIsEditableGuard],
+  },
   { path: '**', redirectTo: '' },
 ];
 
