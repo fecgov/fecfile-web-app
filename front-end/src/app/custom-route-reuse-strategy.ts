@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
-import { BaseRouteReuseStrategy } from '@angular/router';
+import { ActivatedRouteSnapshot, BaseRouteReuseStrategy } from '@angular/router';
 
 /**
  * Code adapted from: https://blog.nativescript.org/how-to-extend-custom-router-reuse-strategy/
