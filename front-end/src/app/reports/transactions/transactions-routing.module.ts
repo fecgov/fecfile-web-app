@@ -66,17 +66,11 @@ const routes: Routes = [
       sidebar: SidebarStateResolver,
     },
     canActivate: [ReportIsEditableGuard],
-  },
-  // The following route goes to the same component as above but provides the siblingId so that
-  // the page is recreated and all components call ngOnInit().
-  {
-    path: 'report/:reportId/list/:parentTransactionId/create-sub-transaction/:transactionType/:siblingId',
-    component: TransactionContainerComponent,
-    resolve: {
-      transaction: TransactionResolver,
-      sidebar: SidebarStateResolver,
-    },
-    canActivate: [ReportIsEditableGuard],
+    // There is a scenario where a memo is saved and then navigates to create
+    // a sibling transaction of a different transaction type, the below setting ensures
+    // the transaction form components are destroyed and recreated so initialization
+    // happens correcty.
+    data: { noComponentReuse: true }, // Handled in src/app/custom-route-reuse-strategy.ts
   },
   { path: '**', redirectTo: '' },
 ];

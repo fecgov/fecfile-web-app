@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouteReuseStrategy } from '@angular/router';
 
 // NGRX
 import { EffectsModule } from '@ngrx/effects';
@@ -46,6 +47,7 @@ import { LoginComponent } from './login/login/login.component';
 import { HttpErrorInterceptor } from './shared/interceptors/http-error.interceptor';
 import { FecDatePipe } from './shared/pipes/fec-date.pipe';
 import { SharedModule } from './shared/shared.module';
+import { CustomRouteReuseStrategy } from './custom-route-reuse-strategy';
 
 // Save ngrx store to localStorage dynamically
 function localStorageSyncReducer(reducer: ActionReducer<AppState>): ActionReducer<AppState> {
@@ -103,7 +105,8 @@ const metaReducers: Array<MetaReducer<AppState, Action>> = [localStorageSyncRedu
     MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     FecDatePipe,
+    { provide: RouteReuseStrategy, useClass: CustomRouteReuseStrategy },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
