@@ -66,6 +66,11 @@ const routes: Routes = [
       sidebar: SidebarStateResolver,
     },
     canActivate: [ReportIsEditableGuard],
+    // There is a scenario where a memo is saved and then navigates to create
+    // a sibling transaction of a different transaction type, the below setting ensures
+    // the transaction form components are destroyed and recreated so initialization
+    // of the new transaction form happens correctly.
+    data: { noComponentReuse: true }, // Handled in src/app/custom-route-reuse-strategy.ts
   },
   { path: '**', redirectTo: '' },
 ];
