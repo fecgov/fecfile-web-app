@@ -199,7 +199,7 @@
         </div>
         <ng-container *ngIf="childTransaction?.contact_1">
           <ng-container
-            *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(form.get('entity_type')?.value)"
+            *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(childForm.get('entity_type')?.value)"
           >
             <app-committee-input
               [form]="childForm"
