@@ -8,7 +8,6 @@ import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { combineLatestWith, Observable, of, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { ContactTypes } from '../../models/contact.model';
 import { DoubleTransactionTypeBaseComponent } from './double-transaction-type-base.component';
-import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionMemoUtils } from './transaction-memo.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
 

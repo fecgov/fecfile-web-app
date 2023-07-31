@@ -11,7 +11,7 @@ import {
   TransactionNavigationControls,
 } from 'app/shared/models/transaction-navigation-controls.model';
 import { TransactionTemplateMapType, TransactionType } from 'app/shared/models/transaction-type.model';
-import { ScheduleTransaction, Transaction } from 'app/shared/models/transaction.model';
+import { Transaction } from 'app/shared/models/transaction.model';
 import { FecDatePipe } from 'app/shared/pipes/fec-date.pipe';
 import { ContactService } from 'app/shared/services/contact.service';
 import { ReportService } from 'app/shared/services/report.service';
@@ -21,7 +21,7 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { BehaviorSubject, map, of, Subject, takeUntil, startWith, Observable, forkJoin, first } from 'rxjs';
+import { BehaviorSubject, map, of, Subject, takeUntil, startWith, Observable, forkJoin } from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -140,8 +140,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   save(navigationEvent: NavigationEvent) {
-    this.formSubmitted = true;
-
     // update all contacts with changes from form.
     Object.entries(this.transactionType?.contactConfig ?? {}).forEach(
       ([contactKey, config]: [string, { [formField: string]: string }]) => {
@@ -160,7 +158,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       }
     );
 
-    let payload: Transaction = TransactionFormUtils.getPayloadTransaction(
+    const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
       this.form,
       this.formProperties
@@ -231,6 +229,8 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
 
   handleNavigate(navigationEvent: NavigationEvent): void {
+    this.formSubmitted = true;
+
     if (navigationEvent.action === NavigationAction.SAVE) {
       if (this.form.invalid || !this.transaction) {
         return;

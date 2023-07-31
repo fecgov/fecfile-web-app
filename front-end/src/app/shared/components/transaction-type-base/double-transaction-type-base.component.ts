@@ -174,8 +174,12 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.formSubmitted = true;
 
     // update all contacts with changes from form.
-    TransactionContactUtils.updateContactWithForm(this.transaction!, this.templateMap, this.form);
-    TransactionContactUtils.updateContactWithForm(this.childTransaction!, this.childTemplateMap, this.childForm);
+    if (this.transaction && this.childTransaction) {
+      TransactionContactUtils.updateContactWithForm(this.transaction, this.templateMap, this.form);
+      TransactionContactUtils.updateContactWithForm(this.childTransaction, this.childTemplateMap, this.childForm);
+    } else {
+      throw new Error('Fecfile: No transactions submitted for double-entry transaction form.');
+    }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
       this.transaction,
