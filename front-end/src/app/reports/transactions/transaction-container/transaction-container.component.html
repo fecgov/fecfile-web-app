@@ -1,6 +1,10 @@
-<ng-container *ngIf="isDoubleTransaction(); else single">
+<ng-container *ngIf="!transaction?.transactionType?.dependentChildTransactionType?.length">
+  <app-transaction-detail [transaction]="transaction"></app-transaction-detail>
+</ng-container>
+<ng-container *ngIf="transaction?.transactionType?.dependentChildTransactionType?.length === 1">
   <app-double-transaction-detail [transaction]="transaction"></app-double-transaction-detail>
 </ng-container>
-<ng-template #single>
-  <app-transaction-detail [transaction]="transaction"></app-transaction-detail>
-</ng-template>
+<ng-container *ngIf="transaction?.transactionType?.dependentChildTransactionType?.length === 2">
+  <app-triple-transaction-detail [transaction]="transaction"></app-triple-transaction-detail>
+</ng-container>
+

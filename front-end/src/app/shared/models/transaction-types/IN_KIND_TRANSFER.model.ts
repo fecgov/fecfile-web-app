@@ -8,7 +8,7 @@ import { IN_KIND } from './common-types/IN_KIND.model';
 export class IN_KIND_TRANSFER extends IN_KIND {
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.IN_KIND_TRANSFER);
   schema = schema;
-  override dependentChildTransactionType = ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT;
+  override dependentChildTransactionType = [ScheduleBTransactionTypes.IN_KIND_TRANSFER_OUT];
 
   getNewTransaction() {
     return SchATransaction.fromJSON({

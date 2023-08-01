@@ -37,7 +37,7 @@ export abstract class TransactionType {
 
   // Double-entry settings
   isDependentChild = false; // When set to true, the parent transaction of the transaction is used to generate UI form entry page
-  dependentChildTransactionType?: TransactionTypes; // For double-entry transaction forms, this property defines the transaction type of the dependent child transaction
+  dependentChildTransactionType?: TransactionTypes[]; // For multi-entry transaction forms, this property defines the transaction type of the dependent child transactions
   inheritedFields?: TemplateMapKeyType[]; // fields that are copied from parent to child
   useParentContact = false; // True if the primary contact of the child transaction inherits the primary contact of its parent
   childTriggerFields?: TemplateMapKeyType[]; // fields that when updated in the child, trigger the parent to regenerate its description

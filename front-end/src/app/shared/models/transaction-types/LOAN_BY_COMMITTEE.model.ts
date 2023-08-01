@@ -53,7 +53,7 @@ export class LOAN_BY_COMMITTEE extends SchCTransactionType {
 
   schema = schema;
   override apiEndpoint = '/transactions/save-pair';
-  override dependentChildTransactionType = ScheduleBTransactionTypes.LOAN_MADE;
+  override dependentChildTransactionType = [ScheduleBTransactionTypes.LOAN_MADE];
   override subTransactionConfig = new SubTransactionGroup('Guarantors', []);
   override navigationControls: TransactionNavigationControls = new TransactionNavigationControls(
     [

@@ -15,7 +15,7 @@ export class IN_KIND_RECEIPT extends IN_KIND {
   override contactTypeOptions = INDIVIDUAL;
   title = LabelUtils.get(ScheduleATransactionTypeLabels, ScheduleATransactionTypes.IN_KIND_RECEIPT);
   schema = schema;
-  override dependentChildTransactionType = ScheduleBTransactionTypes.IN_KIND_OUT;
+  override dependentChildTransactionType = [ScheduleBTransactionTypes.IN_KIND_OUT];
   override navigationControls: TransactionNavigationControls = STANDARD_DOUBLE_ENTRY_CONTROLS;
 
   getNewTransaction() {
