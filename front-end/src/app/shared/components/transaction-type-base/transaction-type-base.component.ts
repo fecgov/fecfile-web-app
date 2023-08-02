@@ -137,7 +137,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     acceptCallback: (navigationEvent: NavigationEvent, payload: Transaction) => void,
     navigationEvent: NavigationEvent,
     payload: Transaction,
-    targetDialog: 'dialog' | 'childDialog' = 'dialog'
+    targetDialog: 'dialog' | 'childDialog' | 'childDialog_2' = 'dialog'
   ) {
     if (
       confirmTransaction.contact_1_id &&

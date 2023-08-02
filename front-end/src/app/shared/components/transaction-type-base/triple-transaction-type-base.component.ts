@@ -82,9 +82,11 @@ export abstract class TripleTransactionTypeBaseComponent
     // plainToClass() converter.
     if (this.transaction?.children) {
       this.transaction.children[0].parent_transaction = undefined;
+      this.transaction.children[1].parent_transaction = undefined;
     }
-    if (this.childTransaction?.parent_transaction) {
+    if (this.childTransaction?.parent_transaction && this.childTransaction_2?.parent_transaction) {
       this.childTransaction.parent_transaction = undefined;
+      this.childTransaction_2.parent_transaction = undefined;
     }
 
     const payload: Transaction = TransactionFormUtils.getPayloadTransaction(
@@ -94,20 +96,22 @@ export abstract class TripleTransactionTypeBaseComponent
     );
     payload.children = [
       TransactionFormUtils.getPayloadTransaction(this.childTransaction, this.childForm, this.childFormProperties),
+      TransactionFormUtils.getPayloadTransaction(this.childTransaction_2, this.childForm_2, this.childFormProperties_2),
     ];
     payload.children[0].report_id = payload.report_id;
+    payload.children[1].report_id = payload.report_id;
 
     // Confirm save for parent transaction
     // No need to confirm child contact changes if it uses the parent contact info
-    const saveCallback = this.childTransactionType?.useParentContact ? this.doSave : this.childConfirmSave;
+    const saveCallback = this.childTransactionType_2?.useParentContact ? this.doSave : this.childConfirmSave_2;
     this.confirmSave(payload, this.form, saveCallback, navigationEvent, payload);
   }
 
-  private childConfirmSave(navigationEvent: NavigationEvent, payload: Transaction) {
-    if (payload.children?.length === 1) {
-      this.confirmSave(payload.children[0], this.childForm, this.doSave, navigationEvent, payload, 'childDialog');
+  private childConfirmSave_2(navigationEvent: NavigationEvent, payload: Transaction) {
+    if (payload.children?.length === 2) {
+      this.confirmSave(payload.children[1], this.childForm_2, this.doSave, navigationEvent, payload, 'childDialog_2');
     } else {
-      throw new Error('Fecfile: Parent transaction missing child transaction when trying to confirm save.');
+      throw new Error('Fecfile: Parent transaction missing child_2 transaction when trying to confirm save.');
     }
   }
 
@@ -118,40 +122,28 @@ export abstract class TripleTransactionTypeBaseComponent
 
   override onContactLookupSelect(selectItem: SelectItem<Contact>): void {
     super.onContactLookupSelect(selectItem);
-    if (
-      this.childTransaction?.transactionType?.useParentContact &&
-      this.childTransaction &&
-      this.transaction?.contact_1
-    ) {
-      this.childTransaction.contact_1 = this.transaction.contact_1;
-      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
+    if (this.childTransaction_2?.transactionType?.useParentContact && this.transaction?.contact_1) {
+      this.childTransaction_2.contact_1 = this.transaction.contact_1;
+      this.childForm_2.get('entity_type')?.setValue(selectItem.value.type);
     }
   }
 
-  childOnContactLookupSelect(selectItem: SelectItem<Contact>) {
+  childOnContactLookupSelect_2(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.onContactLookupSelect(
       selectItem,
-      this.childForm,
-      this.childTransaction,
-      this.childContactId$
+      this.childForm_2,
+      this.childTransaction_2,
+      this.childContactId_2$
     );
 
-    // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
-    // This happens most reliably when the user selects a contact for the child transaction.
-    // Afterwards, inheritted fields are updated to match parent values.
-    this.childTransactionType?.inheritedFields?.forEach((inherittedField) => {
-      const childFieldControl = this.childForm.get(this.childTemplateMap[inherittedField]);
-      childFieldControl?.enable();
-      const value = this.form.get(this.templateMap[inherittedField])?.value;
-      if (value !== undefined) {
-        childFieldControl?.setValue(value);
-        childFieldControl?.updateValueAndValidity();
-      }
-      childFieldControl?.disable();
-    });
+    if (this.childTransaction_2) {
+      this.updateInheritedFields(this.childForm_2, this.childTransaction_2);
+    } else {
+      throw new Error('Fecfile: Missing child_2 transaction.');
+    }
   }
 
-  childOnSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
-    TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.childForm, this.childTransaction);
+  childOnSecondaryContactLookupSelect_2(selectItem: SelectItem<Contact>) {
+    TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.childForm_2, this.childTransaction_2);
   }
 }

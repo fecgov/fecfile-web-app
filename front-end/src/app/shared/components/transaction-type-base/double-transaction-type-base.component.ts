@@ -73,18 +73,6 @@ export abstract class DoubleTransactionTypeBaseComponent
     TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
   }
 
-  override onContactLookupSelect(selectItem: SelectItem<Contact>): void {
-    super.onContactLookupSelect(selectItem);
-    if (
-      this.childTransaction?.transactionType?.useParentContact &&
-      this.childTransaction &&
-      this.transaction?.contact_1
-    ) {
-      this.childTransaction.contact_1 = this.transaction.contact_1;
-      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
-    }
-  }
-
   override ngOnDestroy(): void {
     super.ngOnDestroy();
     this.childContactId$.complete();
@@ -136,6 +124,14 @@ export abstract class DoubleTransactionTypeBaseComponent
     TransactionFormUtils.resetForm(this.childForm, this.childTransaction, this.childContactTypeOptions);
   }
 
+  override onContactLookupSelect(selectItem: SelectItem<Contact>): void {
+    super.onContactLookupSelect(selectItem);
+    if (this.childTransaction?.transactionType?.useParentContact && this.transaction?.contact_1) {
+      this.childTransaction.contact_1 = this.transaction.contact_1;
+      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
+    }
+  }
+
   childOnContactLookupSelect(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.onContactLookupSelect(
       selectItem,
@@ -144,18 +140,31 @@ export abstract class DoubleTransactionTypeBaseComponent
       this.childContactId$
     );
 
+    if (this.childTransaction) {
+      this.updateInheritedFields(this.childForm, this.childTransaction);
+    } else {
+      throw new Error('Fecfile: Missing child transaction.');
+    }
+  }
+
+  protected updateInheritedFields(childForm: FormGroup, childTransaction: Transaction): void {
     // Some inheritted fields (such as memo_code) cannot be set before the components are initialized.
     // This happens most reliably when the user selects a contact for the child transaction.
     // Afterwards, inheritted fields are updated to match parent values.
+
     this.childTransactionType?.inheritedFields?.forEach((inherittedField) => {
-      const childFieldControl = this.childForm.get(this.childTemplateMap[inherittedField]);
-      childFieldControl?.enable();
-      const value = this.form.get(this.templateMap[inherittedField])?.value;
-      if (value !== undefined) {
-        childFieldControl?.setValue(value);
-        childFieldControl?.updateValueAndValidity();
+      if (childTransaction.transactionType) {
+        const childFieldControl = childForm.get(childTransaction.transactionType.templateMap[inherittedField]);
+        childFieldControl?.enable();
+        const value = this.form.get(this.templateMap[inherittedField])?.value;
+        if (value !== undefined) {
+          childFieldControl?.setValue(value);
+          childFieldControl?.updateValueAndValidity();
+        }
+        childFieldControl?.disable();
+      } else {
+        throw new Error('Fecfile: Transaction missing transactionType.');
       }
-      childFieldControl?.disable();
     });
   }
 
