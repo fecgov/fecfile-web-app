@@ -16,6 +16,7 @@ import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
 import { TransactionTypeBaseComponent } from './transaction-type-base.component';
+import { TransactionChildFormUtils } from './transaction-child-form.utils';
 
 /**
  * This component is to help manage a form that contains 2 transactions that the
@@ -62,78 +63,16 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.childForm = this.fb.group(ValidateUtils.getFormGroupFields(this.childFormProperties));
 
     if (
-      this.childTransactionType?.inheritedFields?.includes(
-        'memo_code' as TemplateMapKeyType) && this.transactionType) {
+      this.childTransactionType?.inheritedFields?.includes('memo_code' as TemplateMapKeyType) &&
+      this.transactionType
+    ) {
       this.childMemoCodeCheckboxLabel$ = this.memoCodeCheckboxLabel$;
     } else {
       this.childMemoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.childForm, this.childTransactionType);
     }
 
     TransactionFormUtils.onInit(this, this.childForm, this.childTransaction, this.childContactId$);
-    this.childOnInit();
-  }
-
-  childOnInit() {
-    // Determine if amount should always be negative and then force it to be so if needed
-    if (this.childTransactionType?.negativeAmountValueOnly && this.childTemplateMap?.amount) {
-      this.childForm
-        .get(this.childTemplateMap.amount)
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((amount) => {
-          if (+amount > 0) {
-            this.childForm.get(this.childTemplateMap.amount)?.setValue(-1 * amount);
-          }
-        });
-    }
-
-    if (this.childTransactionType?.generatePurposeDescriptionLabel) {
-      this.childPurposeDescriptionLabel = this.childTransactionType?.generatePurposeDescriptionLabel();
-    }
-
-    // Parent contribution purpose description updates with configured child fields update.
-    this.transaction?.transactionType?.childTriggerFields?.forEach((triggerField) => {
-      this.childForm
-        .get(this.childTemplateMap[triggerField])
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          /** Before updating the parent description, manually update the child
-           * fields because they will not be updated by the time this hook is called
-           **/
-          const key = this.childTemplateMap[triggerField] as keyof ScheduleTransaction;
-          ((this.childTransaction as ScheduleTransaction)[key] as string) = value;
-          (this.childTransaction as ScheduleTransaction).entity_type = this.childForm.get('entity_type')?.value;
-          this.updateParentPurposeDescription();
-        });
-    });
-
-    // Child contribution purpose description updates with configured parent fields update.
-    this.childTransactionType?.parentTriggerFields?.forEach((triggerField) => {
-      this.form
-        .get(this.templateMap[triggerField])
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          /** Before updating the parent description, manually update the child
-           * fields because they will not be updated by the time this hook is called
-           **/
-          const key = this.templateMap[triggerField] as keyof ScheduleTransaction;
-          ((this.transaction as ScheduleTransaction)[key] as string) = value;
-          (this.transaction as ScheduleTransaction).entity_type = this.form.get('entity_type')?.value;
-          this.updateChildPurposeDescription();
-        });
-    });
-
-    this.useParentContact = !!this.childTransactionType?.useParentContact;
-
-    // Inheritted fields must match parent values
-    this.childTransactionType?.inheritedFields?.forEach((inherittedField) => {
-      this.form
-        .get(this.templateMap[inherittedField])
-        ?.valueChanges.pipe(takeUntil(this.destroy$))
-        .subscribe((value) => {
-          this.childForm.get(this.childTemplateMap[inherittedField])?.setValue(value);
-        });
-      this.childForm.get(this.childTemplateMap[inherittedField])?.disable();
-    });
+    TransactionChildFormUtils.childOnInit(this, this.childForm, this.childTransaction);
   }
 
   override onContactLookupSelect(selectItem: SelectItem<Contact>): void {

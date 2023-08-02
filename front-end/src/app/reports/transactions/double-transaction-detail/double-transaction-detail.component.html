@@ -185,7 +185,7 @@
             <div class="field">
               <label for="entity_type">ENTITY TYPE</label>
               <app-transaction-contact-lookup
-                [form]="form"
+                [form]="childForm"
                 [formSubmitted]="formSubmitted"
                 [contactTypeOptions]="childContactTypeOptions"
                 [contactTypeFormControl]="$any(childForm).controls['entity_type']"
@@ -250,7 +250,7 @@
               [readonly]="true"
             ></app-committee-input>
             <app-transaction-contact-lookup
-              [form]="form"
+              [form]="childForm"
               [formSubmitted]="formSubmitted"
               [contactTypeOptions]="candidateContactTypeOption"
               [contactTypeFormControl]="candidateContactTypeFormControl"

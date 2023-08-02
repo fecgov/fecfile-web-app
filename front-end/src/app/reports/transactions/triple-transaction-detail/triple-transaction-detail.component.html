@@ -185,7 +185,7 @@
             <div class="field">
               <label for="entity_type">ENTITY TYPE</label>
               <app-transaction-contact-lookup
-                [form]="form"
+                [form]="childForm"
                 [formSubmitted]="formSubmitted"
                 [contactTypeOptions]="childContactTypeOptions"
                 [contactTypeFormControl]="$any(childForm).controls['entity_type']"
@@ -199,7 +199,7 @@
         </div>
         <ng-container *ngIf="childTransaction?.contact_1">
           <ng-container
-            *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(form.get('entity_type')?.value)"
+            *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(childForm.get('entity_type')?.value)"
           >
             <app-committee-input
               [form]="childForm"
@@ -250,7 +250,7 @@
               [readonly]="true"
             ></app-committee-input>
             <app-transaction-contact-lookup
-              [form]="form"
+              [form]="childForm"
               [formSubmitted]="formSubmitted"
               [contactTypeOptions]="candidateContactTypeOption"
               [contactTypeFormControl]="candidateContactTypeFormControl"
@@ -315,6 +315,156 @@
       </form>
     </div>
   </p-accordionTab>
+
+  <p-accordionTab>
+    <ng-template pTemplate="header">
+      <strong>{{ childTransactionType_2?.accordionTitle }}:</strong>
+      <p style="font-weight: normal">
+        {{ childTransactionType_2?.accordionSubText }}
+      </p></ng-template
+    >
+    <div class="p-fluid">
+      <h2>{{ childTransaction_2?.transactionType?.title }}</h2>
+      <p *ngIf="childTransactionType_2?.description">
+        <em [innerHtml]="childTransactionType_2?.description"></em>
+      </p>
+      <h3>{{ childTransactionType_2?.contactTitle }}</h3>
+      <form id="childForm_2" [formGroup]="childForm_2" [ngClass]="{ 'ng-submitted': formSubmitted }">
+        <div class="grid" *ngIf="isEditable && !useParentContact_2">
+          <div class="col-12">
+            <div class="field">
+              <label for="entity_type">ENTITY TYPE</label>
+              <app-transaction-contact-lookup
+                [form]="childForm_2"
+                [formSubmitted]="formSubmitted"
+                [contactTypeOptions]="childContactTypeOptions_2"
+                [contactTypeFormControl]="$any(childForm_2).controls['entity_type']"
+                selectedContactFormControlName="contact_1"
+                [contactTypeReadOnly]="childContactTypeOptions_2.length === 1"
+                (contactSelect)="childOnContactLookupSelect($event)"
+              >
+              </app-transaction-contact-lookup>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="childTransaction_2?.contact_1">
+          <ng-container
+            *ngIf="[ContactTypes.ORGANIZATION, ContactTypes.COMMITTEE].includes(childForm_2.get('entity_type')?.value)"
+          >
+            <app-committee-input
+              [form]="childForm_2"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap_2"
+              [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
+              [includeFecId]="true"
+            ></app-committee-input>
+          </ng-container>
+          <ng-container *ngIf="childForm_2.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
+            <app-name-input
+              [form]="childForm_2"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap_2"
+            ></app-name-input>
+          </ng-container>
+          <p-divider></p-divider>
+          <h3>Address</h3>
+          <app-address-input
+            [form]="childForm_2"
+            [formSubmitted]="formSubmitted"
+            [templateMap]="childTemplateMap_2"
+            [stateOptions]="stateOptions"
+          ></app-address-input>
+          <p-divider></p-divider>
+          <ng-container
+            *ngIf="
+              childTransactionType_2?.hasEmployeeFields() &&
+              childForm_2.get('entity_type')?.value === ContactTypes.INDIVIDUAL
+            "
+          >
+            <h3>Employer</h3>
+            <app-employer-input
+              [form]="childForm_2"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap_2"
+            ></app-employer-input>
+            <p-divider></p-divider>
+          </ng-container>
+          <ng-container *ngIf="childTransactionType_2?.hasCandidateInformation()">
+            <h3>Committee/Candidate Information</h3>
+            <app-committee-input
+              [form]="childForm_2"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap_2"
+              entityRole="COMMITTEE"
+              [includeFecId]="true"
+              [readonly]="true"
+            ></app-committee-input>
+            <app-transaction-contact-lookup
+              [form]="childForm_2"
+              [formSubmitted]="formSubmitted"
+              [contactTypeOptions]="candidateContactTypeOption"
+              [contactTypeFormControl]="candidateContactTypeFormControl"
+              selectedContactFormControlName="contact_2"
+              [contactTypeReadOnly]="true"
+              (contactSelect)="childOnSecondaryContactLookupSelect($event)"
+            ></app-transaction-contact-lookup>
+            <ng-container *ngIf="childTransaction_2?.contact_2">
+              <app-candidate-input
+                [form]="childForm_2"
+                [formSubmitted]="formSubmitted"
+                [templateMap]="childTemplateMap_2"
+              ></app-candidate-input>
+            </ng-container>
+            <p-divider></p-divider>
+          </ng-container>
+          <ng-container *ngIf="childTransactionType_2?.hasElectionInformation()">
+            <h3>Election information</h3>
+            <app-election-input
+              [form]="childForm_2"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap_2"
+            ></app-election-input>
+            <p-divider></p-divider>
+          </ng-container>
+          <ng-container *ngIf="childTransaction_2?.transactionType?.showStandardAmount">
+            <h3>{{ childTransaction_2?.transactionType?.amountInputHeader }}</h3>
+            <app-amount-input
+              [form]="childForm_2"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap_2"
+              [contributionAmountReadOnly]="true"
+              [negativeAmountValueOnly]="!!childTransaction_2?.transactionType?.negativeAmountValueOnly"
+              [showAggregate]="!!childTransaction_2?.transactionType?.showAggregate"
+              [transaction]="childTransaction_2"
+              [memoCodeCheckboxLabel]="(childMemoCodeCheckboxLabel_2$ | async)!"
+            ></app-amount-input>
+            <p-divider></p-divider>
+          </ng-container>
+          <ng-container *ngIf="childTransactionType_2?.hasLoanFinanceFields()">
+            <h3>{{ childTransaction_2?.transactionType?.amountInputHeader }}</h3>
+            <app-loan-info-input
+              [form]="childForm_2"
+              [formSubmitted]="formSubmitted"
+              [templateMap]="childTemplateMap_2"
+              [readonly]="false"
+              [transaction]="childTransaction_2"
+            ></app-loan-info-input>
+            <p-divider></p-divider>
+          </ng-container>
+          <h3>Additional information</h3>
+          <app-additional-info-input
+            [form]="childForm_2"
+            [formSubmitted]="formSubmitted"
+            [templateMap]="childTemplateMap_2"
+            [transaction]="childTransaction_2"
+            [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(childTransaction_2?.transactionType)"
+            [purposeDescriptionLabel]="childPurposeDescriptionLabel_2"
+            [purposeDescriptionPrefix]="childTransaction_2?.transactionType?.purposeDescriptionPrefix"
+          ></app-additional-info-input>
+        </ng-container>
+      </form>
+    </div>
+  </p-accordionTab>
 </p-accordion>
 
 <div class="p-fluid">
@@ -328,3 +478,4 @@
 
 <p-confirmDialog key="dialog" [style]="{ width: '450px' }"></p-confirmDialog>
 <p-confirmDialog key="childDialog" [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog key="childDialog_2" [style]="{ width: '450px' }"></p-confirmDialog>
