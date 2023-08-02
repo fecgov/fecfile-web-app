@@ -152,8 +152,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   }
 
   override resetForm() {
-    this.formSubmitted = false;
-    TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions);
+    super.resetForm();
     TransactionFormUtils.resetForm(this.childForm, this.childTransaction, this.childContactTypeOptions);
   }
 

@@ -65,21 +65,9 @@ export abstract class TripleTransactionTypeBaseComponent
     TransactionChildFormUtils.childOnInit(this, this.childForm_2, this.childTransaction_2);
   }
 
-  override onContactLookupSelect(selectItem: SelectItem<Contact>): void {
-    super.onContactLookupSelect(selectItem);
-    if (
-      this.childTransaction?.transactionType?.useParentContact &&
-      this.childTransaction &&
-      this.transaction?.contact_1
-    ) {
-      this.childTransaction.contact_1 = this.transaction.contact_1;
-      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
-    }
-  }
-
   override ngOnDestroy(): void {
     super.ngOnDestroy();
-    this.childContactId$.complete();
+    this.childContactId_2$.complete();
   }
 
   override save(navigationEvent: NavigationEvent) {
@@ -124,9 +112,20 @@ export abstract class TripleTransactionTypeBaseComponent
   }
 
   override resetForm() {
-    this.formSubmitted = false;
-    TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions);
-    TransactionFormUtils.resetForm(this.childForm, this.childTransaction, this.childContactTypeOptions);
+    super.resetForm();
+    TransactionFormUtils.resetForm(this.childForm_2, this.childTransaction_2, this.childContactTypeOptions_2);
+  }
+
+  override onContactLookupSelect(selectItem: SelectItem<Contact>): void {
+    super.onContactLookupSelect(selectItem);
+    if (
+      this.childTransaction?.transactionType?.useParentContact &&
+      this.childTransaction &&
+      this.transaction?.contact_1
+    ) {
+      this.childTransaction.contact_1 = this.transaction.contact_1;
+      this.childForm.get('entity_type')?.setValue(selectItem.value.type);
+    }
   }
 
   childOnContactLookupSelect(selectItem: SelectItem<Contact>) {
