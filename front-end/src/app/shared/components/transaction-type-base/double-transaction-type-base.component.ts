@@ -11,7 +11,7 @@ import { LabelUtils, PrimeOptions } from 'app/shared/utils/label.utils';
 import { getContactTypeOptions } from 'app/shared/utils/transaction-type-properties';
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { SelectItem } from 'primeng/api';
-import { BehaviorSubject, Subject, forkJoin, of, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, concat, of, reduce, takeUntil } from 'rxjs';
 import { Contact, ContactTypeLabels } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -206,18 +206,17 @@ export abstract class DoubleTransactionTypeBaseComponent
       if (this.childForm.invalid || this.form.invalid || !this.transaction || !this.childTransaction) {
         return;
       }
-      const confirmations$ = [...this.confirmWithUser(this.transaction, this.form)];
+      let confirmation$ = this.confirmWithUser(this.transaction, this.form);
       if (!this.childTransactionType?.useParentContact) {
-        confirmations$.push(...this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog'));
+        confirmation$ = concat(
+          confirmation$,
+          this.confirmWithUser(this.childTransaction, this.childForm, 'childDialog')
+        ).pipe(reduce((accumulator, confirmed) => accumulator && confirmed));
       }
-      if (confirmations$.length > 0) {
-        forkJoin(confirmations$).subscribe((confirmations: boolean[]) => {
-          // if every confirmation was accepted
-          if (confirmations.every((confirmation) => confirmation)) this.save(navigationEvent);
-        });
-      } else {
-        this.save(navigationEvent);
-      }
+      confirmation$.subscribe((confirmed: any) => {
+        // if every confirmation was accepted
+        if (confirmed) this.save(navigationEvent);
+      });
     } else {
       this.navigateTo(navigationEvent);
     }

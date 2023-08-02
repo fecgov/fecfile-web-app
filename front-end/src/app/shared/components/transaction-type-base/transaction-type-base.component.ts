@@ -21,7 +21,19 @@ import { getContactTypeOptions } from 'app/shared/utils/transaction-type-propert
 import { ValidateUtils } from 'app/shared/utils/validate.utils';
 import { selectActiveReport } from 'app/store/active-report.selectors';
 import { ConfirmationService, MessageService, SelectItem } from 'primeng/api';
-import { BehaviorSubject, map, of, Subject, takeUntil, startWith, Observable, forkJoin } from 'rxjs';
+import {
+  BehaviorSubject,
+  map,
+  of,
+  Subject,
+  takeUntil,
+  startWith,
+  Observable,
+  delay,
+  from,
+  concatAll,
+  reduce,
+} from 'rxjs';
 import { Contact, ContactTypeLabels, ContactTypes } from '../../models/contact.model';
 import { TransactionContactUtils } from './transaction-contact.utils';
 import { TransactionFormUtils } from './transaction-form.utils';
@@ -177,7 +189,7 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     if (!templateMap) {
       throw new Error('Fecfile: Cannot find template map when confirming transaction');
     }
-    return Object.entries(transaction.transactionType?.contactConfig ?? {})
+    const confirmations$ = Object.entries(transaction.transactionType?.contactConfig ?? {})
       .map(([contactKey, config]: [string, { [formField: string]: string }]) => {
         if (transaction[contactKey as keyof Transaction]) {
           const contact = transaction[contactKey as keyof Transaction] as Contact;
@@ -198,25 +210,30 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       })
       .filter((message) => !!message)
       .map((message: string) => {
-        const confirmation$ = new Subject<boolean>();
-        this.confirmationService.confirm({
-          key: targetDialog,
-          header: 'Confirm',
-          icon: 'pi pi-info-circle',
-          message: message,
-          acceptLabel: 'Continue',
-          rejectLabel: 'Cancel',
-          accept: () => {
-            confirmation$.next(true);
-            confirmation$.complete();
-          },
-          reject: () => {
-            confirmation$.next(false);
-            confirmation$.complete();
-          },
-        });
-        return confirmation$.asObservable();
+        return new Observable<boolean>((subscriber) => {
+          this.confirmationService.confirm({
+            key: targetDialog,
+            header: 'Confirm',
+            icon: 'pi pi-info-circle',
+            message: message,
+            acceptLabel: 'Continue',
+            rejectLabel: 'Cancel',
+            accept: () => {
+              subscriber.next(true);
+              subscriber.complete();
+            },
+            reject: () => {
+              subscriber.next(false);
+              subscriber.complete();
+            },
+          });
+        }).pipe(delay(500));
       });
+
+    return from([of(true), ...confirmations$]).pipe(
+      concatAll(),
+      reduce((accumulator, confirmed) => accumulator && confirmed)
+    );
   }
 
   getNavigationControls(): TransactionNavigationControls {
@@ -235,15 +252,10 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
       if (this.form.invalid || !this.transaction) {
         return;
       }
-      const confirmations$ = this.confirmWithUser(this.transaction, this.form);
-      if (confirmations$.length > 0) {
-        forkJoin(confirmations$).subscribe((confirmations: boolean[]) => {
-          // if every confirmation was accepted
-          if (confirmations.every((confirmation) => confirmation)) this.save(navigationEvent);
-        });
-      } else {
-        this.save(navigationEvent);
-      }
+      this.confirmWithUser(this.transaction, this.form).subscribe((confirmed: any) => {
+        // if every confirmation was accepted
+        if (confirmed) this.save(navigationEvent);
+      });
     } else {
       this.navigateTo(navigationEvent);
     }
