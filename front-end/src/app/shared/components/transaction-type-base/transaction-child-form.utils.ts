@@ -34,10 +34,6 @@ export class TransactionChildFormUtils {
         });
     }
 
-    if (childTransaction.transactionType?.generatePurposeDescriptionLabel) {
-      this.childPurposeDescriptionLabel = childTransaction.transactionType?.generatePurposeDescriptionLabel();
-    }
-
     // Parent contribution purpose description updates with configured child fields update.
     component.transaction?.transactionType?.childTriggerFields?.forEach((triggerField) => {
       if (childTransaction.transactionType) {
@@ -71,8 +67,6 @@ export class TransactionChildFormUtils {
           this.updateChildPurposeDescription();
         });
     });
-
-    this.useParentContact = !!childTransaction.transactionType?.useParentContact;
 
     // Inheritted fields must match parent values
     childTransaction.transactionType?.inheritedFields?.forEach((inherittedField) => {

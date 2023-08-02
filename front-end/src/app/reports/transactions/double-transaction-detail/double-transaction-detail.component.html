@@ -139,9 +139,6 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="templateMap"
             [transaction]="transaction"
-            [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
-            [purposeDescriptionLabel]="purposeDescriptionLabel"
-            [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
           <ng-container *ngIf="isEditable">
             <p-divider></p-divider>
@@ -180,7 +177,7 @@
       </p>
       <h3>{{ childTransactionType?.contactTitle }}</h3>
       <form id="childForm" [formGroup]="childForm" [ngClass]="{ 'ng-submitted': formSubmitted }">
-        <div class="grid" *ngIf="isEditable && !useParentContact">
+        <div class="grid" *ngIf="isEditable && !!!childTransaction?.transactionType?.useParentContact">
           <div class="col-12">
             <div class="field">
               <label for="entity_type">ENTITY TYPE</label>
@@ -307,9 +304,6 @@
             [formSubmitted]="formSubmitted"
             [templateMap]="childTemplateMap"
             [transaction]="childTransaction"
-            [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(childTransaction?.transactionType)"
-            [purposeDescriptionLabel]="childPurposeDescriptionLabel"
-            [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
           ></app-additional-info-input>
         </ng-container>
       </form>

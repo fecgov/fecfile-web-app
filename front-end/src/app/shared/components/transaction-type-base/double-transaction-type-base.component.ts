@@ -42,9 +42,7 @@ export abstract class DoubleTransactionTypeBaseComponent
   childContactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
   childForm: FormGroup = this.fb.group({});
   childContactId$: Subject<string> = new BehaviorSubject<string>('');
-  childPurposeDescriptionLabel = '';
   childTemplateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
-  useParentContact = false;
   childMemoCodeCheckboxLabel$ = of('');
 
   override ngOnInit(): void {
@@ -77,7 +75,11 @@ export abstract class DoubleTransactionTypeBaseComponent
 
   override onContactLookupSelect(selectItem: SelectItem<Contact>): void {
     super.onContactLookupSelect(selectItem);
-    if (this.useParentContact && this.childTransaction && this.transaction?.contact_1) {
+    if (
+      this.childTransaction?.transactionType?.useParentContact &&
+      this.childTransaction &&
+      this.transaction?.contact_1
+    ) {
       this.childTransaction.contact_1 = this.transaction.contact_1;
       this.childForm.get('entity_type')?.setValue(selectItem.value.type);
     }

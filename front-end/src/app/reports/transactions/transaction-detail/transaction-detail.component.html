@@ -130,10 +130,6 @@
         [formSubmitted]="formSubmitted"
         [templateMap]="templateMap"
         [transaction]="transaction"
-        [descriptionIsSystemGenerated]="isDescriptionSystemGenerated(transaction?.transactionType)"
-        [purposeDescriptionLabel]="purposeDescriptionLabel"
-        [purposeDescriptionLabelNotice]="transaction?.transactionType?.purposeDescriptionLabelNotice"
-        [purposeDescriptionPrefix]="transaction?.transactionType?.purposeDescriptionPrefix"
       ></app-additional-info-input>
       <div class="grid" *ngIf="isEditable">
         <ng-template ngFor let-navigationControl [ngForOf]="getInlineControls()">

@@ -123,9 +123,11 @@ describe('DoubleTransactionTypeBaseComponent', () => {
   });
 
   it("should set the child transaction's contact when its shared with the parent", () => {
-    component.useParentContact = true;
     component.transaction = testTransaction;
     component.childTransaction = testTransaction.children?.[0] as SchATransaction;
+    if (component.childTransaction?.transactionType?.useParentContact) {
+      component.childTransaction.transactionType.useParentContact = true;
+    }
 
     const contact = new Contact();
     contact.name = 'Name';

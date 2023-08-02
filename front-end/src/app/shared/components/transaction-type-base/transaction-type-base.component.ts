@@ -43,7 +43,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   destroy$: Subject<boolean> = new Subject<boolean>();
   contactId$: Subject<string> = new BehaviorSubject<string>('');
   formSubmitted = false;
-  purposeDescriptionLabel = '';
   templateMap: TransactionTemplateMapType = {} as TransactionTemplateMapType;
   form: FormGroup = this.fb.group({});
   isEditable = true;
@@ -109,10 +108,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
             this.form.patchValue({ [this.templateMap.amount]: -1 * amount });
           }
         });
-    }
-
-    if (transactionType?.generatePurposeDescriptionLabel) {
-      this.purposeDescriptionLabel = transactionType.generatePurposeDescriptionLabel();
     }
   }
 
@@ -294,11 +289,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   resetForm() {
     this.formSubmitted = false;
     TransactionFormUtils.resetForm(this.form, this.transaction, this.contactTypeOptions);
-  }
-
-  isDescriptionSystemGenerated(transactionType?: TransactionType): boolean {
-    // Description is system generated if there is a defined function.  Otherwise, it's mutable
-    return transactionType?.generatePurposeDescription !== undefined;
   }
 
   onContactLookupSelect(selectItem: SelectItem<Contact>) {
