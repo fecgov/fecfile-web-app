@@ -39,11 +39,11 @@
               [form]="form"
               [formSubmitted]="formSubmitted"
               [templateMap]="templateMap"
-              [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
+              [entityRole]="form.get('entity_type')?.value === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
               [includeFecId]="true"
             ></app-committee-input>
           </ng-container>
-          <ng-container *ngIf="getEntityType() === ContactTypes.INDIVIDUAL">
+          <ng-container *ngIf="form.get('entity_type')?.value === ContactTypes.INDIVIDUAL">
             <app-name-input [form]="form" [formSubmitted]="formSubmitted" [templateMap]="templateMap"></app-name-input>
           </ng-container>
           <p-divider></p-divider>
@@ -54,7 +54,9 @@
             [templateMap]="templateMap"
           ></app-address-input>
           <p-divider></p-divider>
-          <ng-container *ngIf="transactionType?.hasEmployeeFields() && getEntityType() === ContactTypes.INDIVIDUAL">
+          <ng-container
+            *ngIf="transactionType?.hasEmployeeFields() && form.get('entity_type')?.value === ContactTypes.INDIVIDUAL"
+          >
             <h3>Employer</h3>
             <app-employer-input
               [form]="form"
@@ -202,7 +204,9 @@
               [form]="childForm"
               [formSubmitted]="formSubmitted"
               [templateMap]="childTemplateMap"
-              [entityRole]="getEntityType() === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'"
+              [entityRole]="
+                childForm.get('entity_type')?.value === ContactTypes.ORGANIZATION ? 'ORGANIZATION' : 'COMMITTEE'
+              "
               [includeFecId]="true"
             ></app-committee-input>
           </ng-container>

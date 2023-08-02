@@ -36,7 +36,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   transactionType?: TransactionType;
   ContactTypes = ContactTypes;
   contactTypeOptions: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels);
-  entityTypeControl?: FormControl;
   candidateContactTypeFormControl: FormControl = new FormControl(ContactTypes.CANDIDATE); // eslint-disable-next-line @typescript-eslint/no-unused-vars
   candidateContactTypeOption: PrimeOptions = LabelUtils.getPrimeOptions(ContactTypeLabels, [ContactTypes.CANDIDATE]);
   stateOptions: PrimeOptions = LabelUtils.getPrimeOptions(LabelUtils.getStateCodeLabelsWithoutMilitary());
@@ -85,7 +84,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
     this.memoCodeCheckboxLabel$ = this.getMemoCodeCheckboxLabel$(this.form, this.transactionType);
 
     TransactionFormUtils.onInit(this, this.form, this.transaction, this.contactId$);
-    this.entityTypeControl = this.form.get('entity_type') as FormControl;
     this.parentOnInit();
     this.store
       .select(selectActiveReport)
@@ -296,10 +294,6 @@ export abstract class TransactionTypeBaseComponent implements OnInit, OnDestroy 
   }
   onSecondaryContactLookupSelect(selectItem: SelectItem<Contact>) {
     TransactionContactUtils.onSecondaryContactLookupSelect(selectItem, this.form, this.transaction);
-  }
-
-  getEntityType(): string {
-    return this.form.get('entity_type')?.value || '';
   }
 
   getMemoCodeCheckboxLabel$(form: FormGroup, transactionType: TransactionType) {

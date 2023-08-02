@@ -90,26 +90,6 @@ export abstract class DoubleTransactionTypeBaseComponent
     this.childContactId$.complete();
   }
 
-  private updateParentPurposeDescription() {
-    if (this.transaction?.transactionType?.generatePurposeDescription) {
-      this.form.patchValue({
-        [this.templateMap.purpose_description]: this.transaction.transactionType.generatePurposeDescriptionWrapper(
-          this.transaction
-        ),
-      });
-    }
-  }
-
-  private updateChildPurposeDescription() {
-    if (this.childTransaction?.transactionType?.generatePurposeDescription) {
-      this.childForm.patchValue({
-        [this.childTemplateMap.purpose_description]: this.childTransactionType?.generatePurposeDescriptionWrapper(
-          this.childTransaction
-        ),
-      });
-    }
-  }
-
   override save(navigationEvent: NavigationEvent) {
     this.formSubmitted = true;
 

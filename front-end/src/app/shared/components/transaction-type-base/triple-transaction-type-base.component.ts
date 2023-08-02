@@ -73,7 +73,7 @@ export abstract class TripleTransactionTypeBaseComponent
   override save(navigationEvent: NavigationEvent) {
     this.formSubmitted = true;
 
-    if (this.form.invalid || this.childForm.invalid) {
+    if (this.form.invalid || this.childForm.invalid || this.childForm_2.invalid) {
       return;
     }
 
